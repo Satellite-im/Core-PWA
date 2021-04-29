@@ -26,14 +26,10 @@ export default Vue.extend({
       default: () => {},
     },
     // Supported fontawesome icon
+    // eslint-disable-next-line vue/require-default-prop
     icon: {
       type: Object as PropType<Icon>,
-      default() {
-        return {
-          style: 'far',
-          name: 'arrow-circle-right',
-        }
-      },
+      required: false,
     },
     // Button body text
     text: {

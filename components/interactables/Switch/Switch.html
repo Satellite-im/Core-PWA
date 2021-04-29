@@ -1,4 +1,4 @@
-<div class="switch-button-control">
+<div :class="`switch-button-control ${small ? 'is-small' : ''}`">
   <div
     class="switch-button"
     :class="{ enabled: isEnabled }"

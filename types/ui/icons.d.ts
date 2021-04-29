@@ -2,7 +2,7 @@
 // Valid icons can be added & found in plugins/fontawesome.ts
 
 export type IconStyle = 'fas' | 'far'
-export type IconName = 'spinner-third' | 'arrow-circle-right'
+export type IconName = 'spinner-third' | 'arrow-circle-right' | 'lock-open'
 export type Icon = {
   style: IconStyle
   name: IconName
