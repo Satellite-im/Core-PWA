@@ -1,0 +1,18 @@
+<button 
+  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''}`"
+  v-on:click="action" :disabled="loading">
+  <!-- If the button is in the loading state -->
+  <div v-if="loading">
+    <!-- Loading Spinner -->
+    <UiSpinner spinning :class="`${loadingText ? 'button-icon' : ''}`" />
+    <!-- Loading Text -->
+    <span v-if="loadingText">
+      {{ loadingText }}
+    </span>
+  </div>
+  <!-- Default button state -->
+  <div v-else>
+    <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" class="button-icon" />
+    {{ text }}
+  </div>
+</button>
