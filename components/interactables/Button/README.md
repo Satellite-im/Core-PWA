@@ -16,10 +16,17 @@ Generic button component.
 # Props
 
 **text** Button display text
+
 **size** Button display size, honors bulma.io sizes
+
 **type** Button style, honors bumla.io styles
+
 **icon** Optional inclusion of a fontawesome icon
+
 **outlined** Add the outline style to the button
+
 **action** Funciton or method to be called when the button is clicked
+
 **loading** Optionall loading state for the button (useful for async tasks)
+
 **loadingText** Ability to add custom loading texts into the button
