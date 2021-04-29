@@ -10,6 +10,13 @@
         text="Test Button"
         size="normal"
         type="primary"
+        :outlined="true"
+        :action="testAction"
+      />
+      <InteractablesButton
+        text="Test Button"
+        size="normal"
+        type="primary"
         :icon="{ style: 'far', name: 'arrow-circle-right' }"
         :outlined="false"
         :action="testAction"
@@ -25,7 +32,7 @@
 
       <!-- Switches -->
       <h3>Switches</h3>
-      <InteractablesSwitch v-model="switch1State" />
+      <InteractablesSwitch v-model="switch1State" small />
       <br />
       <InteractablesSwitch v-model="switch2State" />
 
@@ -49,6 +56,20 @@
         input-kind="number"
         type="dark"
       />
+      <p>Grouped Input</p>
+      <InteractablesInputGroup
+        v-model="input2Text"
+        size="small"
+        input-kind="number"
+        type="dark"
+        :loading="inputGroupLoading"
+        :action="
+          () => {
+            inputGroupLoading = true
+          }
+        "
+        :icon="{ style: 'far', name: 'lock-open' }"
+      />
     </div>
   </div>
 </template>
@@ -63,6 +84,7 @@ export default Vue.extend({
       switch2State: true,
       input1Text: '',
       input2Text: 0,
+      inputGroupLoading: false,
     }
   },
   methods: {

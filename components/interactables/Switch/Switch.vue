@@ -15,6 +15,7 @@ export default Vue.extend({
       required: false,
       default: '#0984e3',
     },
+    small: Boolean,
   },
   methods: {
     toggle() {

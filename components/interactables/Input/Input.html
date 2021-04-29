@@ -1,0 +1,8 @@
+<input
+  v-model="internalText"
+  :class="`input is-${size} is-${type}`"
+  :readonly="readonly"
+  :type="inputKind"
+  :placeholder="placeholder"
+  @input="update"
+  />
