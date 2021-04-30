@@ -1,13 +1,16 @@
-<div :class="`switch-button-control ${small ? 'is-small' : ''}`">
-  <div
-    class="switch-button"
-    :class="{ enabled: isEnabled }"
-    @click="toggle"
-    :style="{ '--color': color }"
-  >
-    <div class="sw-button"></div>
+<div class="switch-container">
+  <div :class="`switch-button-control ${small ? 'is-small' : ''}`">
+    <div
+      class="switch-button"
+      :class="{ enabled: isEnabled }"
+      @click="toggle"
+      :style="{ '--color': color }"
+    >
+      <div class="sw-button"></div>
+    </div>
+    <div class="switch-button-label">
+      <slot></slot>
+    </div>
   </div>
-  <div class="switch-button-label">
-    <slot></slot>
-  </div>
+  <p :class="`switch-label ${small ? 'is-small-label' : ''}`" v-if="label.length"> {{ label }}</p>
 </div>

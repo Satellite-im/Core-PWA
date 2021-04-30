@@ -18,3 +18,5 @@ Generic input component.
 **size** Input display size, honors bulma.io sizes
 
 **input-kind** Abstracts generic input type attribute
+
+**label-text** Optional label appended to input

@@ -12,7 +12,7 @@ export default Vue.extend({
   props: {
     // Default text can be included here
     text: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     // Used for display only inputs
@@ -40,6 +40,12 @@ export default Vue.extend({
       type: String as PropType<InputStyle>,
       default: 'normal',
     },
+    // Add a label to the top of the input
+    labelText: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   data() {
     return {
@@ -53,4 +59,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less" src="./Input.less"></style>

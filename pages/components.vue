@@ -1,11 +1,15 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">Satellite-Absolute</h1>
+      <TypographyTitle :size="1" text="Satellite-Absolute" />
+      <TypographySubtitle
+        :size="6"
+        text="Generic compoment list for use building Satellite."
+      />
       <br />
 
       <!-- Buttons -->
-      <h3>Buttons</h3>
+      <TypographyTitle :size="4" text="Buttons" />
       <InteractablesButton
         text="Test Button"
         size="normal"
@@ -31,13 +35,21 @@
       />
 
       <!-- Switches -->
-      <h3>Switches</h3>
+      <TypographyTitle :size="4" text="Switches" />
       <InteractablesSwitch v-model="switch1State" small />
+      <InteractablesSwitch
+        v-model="switch1State"
+        small
+        label="Switch Label Goes Here"
+      />
       <br />
       <InteractablesSwitch v-model="switch2State" />
-
+      <InteractablesSwitch
+        v-model="switch1State"
+        label="Switch Label Goes Here"
+      />
       <!-- Meter -->
-      <h3>Meter</h3>
+      <TypographyTitle :size="4" text="Meter" />
       <p>Gradient</p>
       <UiMeter :value="15" />
       <UiMeter :value="19" />
@@ -46,9 +58,8 @@
       <UiMeter :value="25" :solid="true" />
 
       <!-- Inputs -->
-      <h3>Inputs</h3>
-      <p>Text: {{ input1Text }}</p>
-      <InteractablesInput v-model="input1Text" />
+      <TypographyTitle :size="4" text="Inputs" />
+      <InteractablesInput v-model="input1Text" :label-text="input1Text" />
       <p>Text: {{ input2Text }}</p>
       <InteractablesInput
         v-model="input2Text"
@@ -62,14 +73,37 @@
         size="small"
         input-kind="number"
         type="dark"
+        :label-text="input2Text"
         :loading="inputGroupLoading"
         :action="
           () => {
-            inputGroupLoading = true
+            inputGroupLoading = !inputGroupLoading
           }
         "
         :icon="{ style: 'far', name: 'lock-open' }"
       />
+
+      <TypographyTitle :size="4" text="Typography" />
+
+      <TypographyTitle :size="1" text="Title 1" />
+      <TypographySubtitle :size="1" text="Subtitle 1" />
+
+      <TypographyTitle :size="2" text="Title 2" />
+      <TypographySubtitle :size="2" text="Subtitle 2" />
+
+      <TypographyTitle :size="3" text="Title 3" />
+      <TypographySubtitle :size="3" text="Subtitle 3" />
+
+      <TypographyTitle :size="4" text="Title 4" />
+      <TypographySubtitle :size="4" text="Subtitle 4" />
+
+      <TypographyTitle :size="5" text="Title 5" />
+      <TypographySubtitle :size="5" text="Subtitle 5" />
+
+      <TypographyTitle :size="6" text="Title 6" />
+      <TypographySubtitle :size="6" text="Subtitle 6" />
+
+      <TypographyLabel text="Label Component" />
     </div>
   </div>
 </template>

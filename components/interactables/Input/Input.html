@@ -1,8 +1,11 @@
-<input
-  v-model="internalText"
-  :class="`input is-${size} is-${type}`"
-  :readonly="readonly"
-  :type="inputKind"
-  :placeholder="placeholder"
-  @input="update"
-  />
+<div>
+  <TypographyLabel class="input-label" v-if="labelText.length" :text="labelText" />
+  <input
+    v-model="internalText"
+    :class="`input is-${size} is-${type}`"
+    :readonly="readonly"
+    :type="inputKind"
+    :placeholder="placeholder"
+    @input="update"
+    />
+</div>
