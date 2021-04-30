@@ -16,6 +16,11 @@ export default Vue.extend({
       default: '#0984e3',
     },
     small: Boolean,
+    label: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   methods: {
     toggle() {

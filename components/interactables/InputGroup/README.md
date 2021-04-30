@@ -33,3 +33,5 @@ Generic input group component.
 **icon** Optional icon attached to the button
 
 **buttonText** Optional attached button text
+
+**label-text** Optional label appended to input

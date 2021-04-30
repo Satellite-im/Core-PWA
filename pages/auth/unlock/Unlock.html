@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="decryption-body">
+    <InteractablesInputGroup
+      v-model="pin"
+      size="small"
+      input-kind="password"
+      :type="`${error ? 'danger' : 'dark'}`"
+      :label-text="$t('pages.unlock.decrypt')"
+      :placeholder="$t('pages.unlock.placeholder')"
+      :loading="decrypting"
+      :action="decrypt"
+      :icon="{ style: 'far', name: 'lock-open' }"
+    />
+    <TypographyError v-if="error" :text="error" />
+    <InteractablesSwitch
+      v-model="storePin"
+      small
+      :label="$t('pages.unlock.store_pin')"
+    />
+  </div>
+</div>
