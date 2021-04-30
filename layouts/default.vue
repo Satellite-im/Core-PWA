@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <Nuxt />
   </div>
 </template>
@@ -29,4 +29,6 @@ p {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+
+@import url('~/assets/styles/base.less');
 </style>

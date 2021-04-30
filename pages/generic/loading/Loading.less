@@ -3,30 +3,20 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-content: flex-end;
-  flex-wrap: nowrap;
-  flex-direction: column;
 
-  .decryption-body {
+  .loading-body {
     min-width: 250px;
     align-self: center;
     margin-bottom: 25vh;
-  }
 
-  .version {
-    position: absolute;
-    bottom: 1rem;
-    justify-content: center;
-    width: 100%;
+    .subtitle {
+      float: right;
+    }
   }
 }
 
 @media only screen and (max-width: 768px) {
   .container {
     margin: 0 2rem;
-
-    .decryption-body {
-      width: 100%;
-    }
   }
 }

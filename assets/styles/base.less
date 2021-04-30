@@ -1,0 +1,50 @@
+@dark-gray: #16161e;
+@primary-color: #0984e3;
+@primary-color-alt: #087bd3;
+@text: #c6cefa;
+@text-muted: #979fc2;
+
+#app {
+  background: @dark-gray;
+  color: @text;
+}
+
+// UI Kit
+.loading-bar {
+  .bar {
+    background-color: @text;
+  }
+}
+
+.version {
+  color: @text-muted;
+}
+
+// Buttons
+.button.is-primary {
+  background-color: @primary-color;
+}
+.button.is-primary:hover {
+  background-color: @primary-color-alt;
+}
+
+// Inputs
+.input {
+  background-color: @dark-gray;
+  color: @text;
+}
+::placeholder {
+  color: @text-muted !important;
+}
+.is-primary.input {
+  border-color: @primary-color;
+}
+
+// Typography
+.title {
+  color: @text;
+}
+
+.subtitle {
+  color: @text-muted;
+}

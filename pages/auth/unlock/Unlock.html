@@ -4,7 +4,7 @@
       v-model="pin"
       size="small"
       input-kind="password"
-      :type="`${error ? 'danger' : 'dark'}`"
+      :type="`${error ? 'danger' : 'primary'}`"
       :label-text="$t('pages.unlock.decrypt')"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
@@ -18,4 +18,6 @@
       :label="$t('pages.unlock.store_pin')"
     />
   </div>
+
+  <UiVersion name version />
 </div>

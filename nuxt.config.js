@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -33,7 +35,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['nuxt-i18n'],
+  modules: ['nuxt-i18n', 'nuxt-vuex-localstorage'],
 
   i18n: {
     defaultLocale: 'en',
@@ -51,4 +53,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+  publicRuntimeConfig: {
+    clientName: pkg.name,
+    clientVersion: pkg.version,
+  },
 }
