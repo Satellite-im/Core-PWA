@@ -13,6 +13,7 @@ export default Vue.extend({
     }
   },
   methods: {
+    // Decrypt stored encrypted data into memory
     decrypt(): boolean {
       if (this.$data.pin.length < 5) {
         // @ts-ignore
@@ -28,4 +29,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Unlock.less"></style>
+<style lang="less" scoped src="./Unlock.less"></style>

@@ -6,5 +6,8 @@ export default {
       store_pin: 'Store Pin? (Less Secure)',
       invalid_pin: 'Pin must be at least 5 characters.',
     },
+    loading: {
+      loading: 'Linking Satellites...',
+    },
   },
 }
