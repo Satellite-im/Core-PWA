@@ -11,6 +11,7 @@ export default Vue.extend({})
 <style scoped lang="less">
 .loading-bar {
   display: inline-flex;
+  width: 100%;
 
   .bar {
     animation: loading 2s cubic-bezier(0.17, 0.37, 0.43, 0.67) infinite;

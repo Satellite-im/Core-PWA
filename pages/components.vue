@@ -8,6 +8,10 @@
       />
       <br />
 
+      <UiNumberedWord word="Elephant" :number="1" />
+      <UiNumberedWord word="Telephone" :number="2" />
+      <UiNumberedWord word="Rendered" :number="24" />
+
       <!-- Buttons -->
       <TypographyTitle :size="4" text="Buttons" />
       <InteractablesButton
@@ -73,7 +77,7 @@
         size="small"
         input-kind="number"
         type="dark"
-        :label-text="input2Text"
+        :label-text="input2Text.toString()"
         :loading="inputGroupLoading"
         :action="
           () => {
@@ -102,7 +106,7 @@
 
       <TypographyTitle :size="6" text="Title 6" />
       <TypographySubtitle :size="6" text="Subtitle 6" />
-
+      <br />
       <TypographyLabel text="Label Component" />
     </div>
   </div>

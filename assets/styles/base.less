@@ -1,4 +1,5 @@
 @dark-gray: #16161e;
+@dark: #27293b;
 @primary-color: #0984e3;
 @primary-color-alt: #087bd3;
 @text: #c6cefa;
@@ -16,8 +17,23 @@
   }
 }
 
+.menu-list a {
+  color: @text-muted;
+}
+.menu-label {
+  color: @text;
+}
+
 .version {
   color: @text-muted;
+}
+
+.tag:not(body).is-dark {
+  background: @dark;
+
+  .tag-number {
+    background: @primary-color-alt;
+  }
 }
 
 // Buttons

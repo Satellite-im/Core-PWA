@@ -5,11 +5,11 @@
       size="small"
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
-      :label-text="$t('pages.unlock.decrypt')"
+      :label-text="`${newAccount ? $t('pages.unlock.create') : $t('pages.unlock.decrypt')}`"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
-      :action="decrypt"
-      :icon="{ style: 'far', name: 'lock-open' }"
+      :action="decideAction"
+      :icon="getIcon()"
     />
     <TypographyError v-if="error" :text="error" />
     <InteractablesSwitch

@@ -1,0 +1,40 @@
+.container {
+  margin: 0 auto;
+  min-height: 100vh;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  .phrase-body {
+    min-width: 250px;
+    align-self: center;
+    margin-bottom: 25vh;
+    
+    .title {
+      margin: 0.25rem;
+    }
+
+    .columns {
+      margin: 0 -0.25rem;
+
+      .column {
+        padding: 0.25rem;
+
+        .tag, .tag-container {
+          width: 100%;
+        }
+
+        .tag {
+          margin: 0.25rem 0;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .container {
+    margin: 0 2rem;
+  }
+}

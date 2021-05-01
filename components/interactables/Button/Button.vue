@@ -45,6 +45,7 @@ export default Vue.extend({
       type: String,
       default: 'Loading...',
     },
+    fullWidth: Boolean,
   },
 })
 </script>
