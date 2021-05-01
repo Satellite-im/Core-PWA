@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Icon } from '~/types/ui/icons'
 
 export default Vue.extend({
   data() {
@@ -12,7 +13,27 @@ export default Vue.extend({
       decrypting: false,
     }
   },
+  computed: {
+    newAccount() {
+      return !this.$store.state.localStorage.encryptedPin
+    },
+  },
   methods: {
+    getIcon(): Icon {
+      if (this.newAccount) {
+        return { style: 'far', name: 'arrow-circle-right' }
+      } else {
+        return { style: 'far', name: 'lock-open' }
+      }
+    },
+    // Decide if we need to store a new pin
+    decideAction() {
+      if (this.newAccount) {
+        this.create()
+      } else {
+        this.decrypt()
+      }
+    },
     // Decrypt stored encrypted data into memory
     decrypt(): boolean {
       if (this.$data.pin.length < 5) {
@@ -23,6 +44,11 @@ export default Vue.extend({
 
       this.$data.error = false
       this.$data.decrypting = true
+      return true
+    },
+    // Create & store a new pin, then decrypt.
+    create(): Boolean {
+      this.decrypt()
       return true
     },
   },

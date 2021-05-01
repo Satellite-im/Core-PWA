@@ -2,12 +2,23 @@
   <div class="container">
     <div>
       <h1 class="title">Satellite-Absolute</h1>
-      <h3>Links</h3>
-      <ul>
-        <li><NuxtLink to="components">Browse Components</NuxtLink></li>
-        <li><NuxtLink to="generic/loading">Loading Screen</NuxtLink></li>
-        <li><NuxtLink to="auth/unlock">Unlock Screen</NuxtLink></li>
-      </ul>
+
+      <aside class="menu">
+        <p class="menu-label">General</p>
+        <ul class="menu-list">
+          <li><NuxtLink to="components">Components</NuxtLink></li>
+          <li><NuxtLink to="generic/loading">Loading Screen</NuxtLink></li>
+        </ul>
+        <p class="menu-label">Auth</p>
+        <ul class="menu-list">
+          <li><NuxtLink to="generic/loading">Loading Screen</NuxtLink></li>
+        </ul>
+        <p class="menu-label">setup</p>
+        <ul class="menu-list">
+          <li><NuxtLink to="setup/disclaimer">Account Creation</NuxtLink></li>
+          <li><NuxtLink to="setup/phrase">Account Phrase</NuxtLink></li>
+        </ul>
+      </aside>
     </div>
   </div>
 </template>

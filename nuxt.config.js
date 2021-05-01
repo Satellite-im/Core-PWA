@@ -35,7 +35,15 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['nuxt-i18n', 'nuxt-vuex-localstorage'],
+  modules: [
+    'nuxt-i18n',
+    [
+      'nuxt-vuex-localstorage',
+      {
+        localStorage: ['persistant-state'],
+      },
+    ],
+  ],
 
   i18n: {
     defaultLocale: 'en',

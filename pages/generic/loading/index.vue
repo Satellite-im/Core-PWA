@@ -6,17 +6,28 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      step: 'Building State',
-      totalSteps: 4,
+      step: 'Preloading',
+      totalSteps: 3,
       stepsCompleted: 0,
     }
   },
   computed: {
-    // We need to make sure we've loaded state from storage
+    // In the rare case our state isn't bound yet
+    // (Can happen with persistedStates)
+    // Go ahead and load it.
     loadedState(): Boolean {
       return (
-        this.$store.state.localStorage && this.$store.state.localStorage.status
+        this.$store.state.prerequisites &&
+        this.$store.state.prerequisites.stateLoaded
       )
+    },
+    // Ensure we're bound to the P2P servers
+    peer2peerBound(): Boolean {
+      return this.$store.state.prerequisites.peer2PeerBound
+    },
+    // Ensure the blockchain is bound
+    blockchainBound(): Boolean {
+      return this.$store.state.prerequisites.blockchainBound
     },
     // Helper method for prettier loading messages
     loadingStep(): String {
@@ -24,15 +35,37 @@ export default Vue.extend({
     },
   },
   watch: {
-    // In the rare case state isn't loaded yet, we watch it here
-    loadedState(val) {
-      if (val) this.$data.stepsCompleted += 1
+    peer2peerBound(val) {
+      if (val) {
+        this.completeP2P()
+      }
+    },
+    blockchainBound(val) {
+      if (val) {
+        this.$data.step = 'Blockchain Bound'
+        this.$data.stepsCompleted += 1
+      }
     },
   },
   mounted() {
-    if (this.loadedState) {
+    // Check on mount, this prevents race conditions.
+    if (this.loadedState) this.completeState()
+    if (this.peer2peerBound) this.completeP2P()
+    if (this.blockchainBound) this.completeBlockchain()
+  },
+  methods: {
+    completeP2P() {
+      this.$data.step = 'Peer 2 Peer Bound'
       this.$data.stepsCompleted += 1
-    }
+    },
+    completeBlockchain() {
+      this.$data.step = 'Blockchain Bound'
+      this.$data.stepsCompleted += 1
+    },
+    completeState() {
+      this.$data.step = 'State Initalized'
+      this.$data.stepsCompleted += 1
+    },
   },
 })
 </script>
