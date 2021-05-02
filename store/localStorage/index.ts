@@ -1,3 +1,5 @@
+import { InitalSettingsState } from './settings'
+
 interface PersistedState {
   pin: String
   encryptedPin: String
@@ -10,4 +12,5 @@ const InitalPersistedState: PersistedState = {
 
 export const state = () => ({
   ...InitalPersistedState,
+  ...InitalSettingsState,
 })

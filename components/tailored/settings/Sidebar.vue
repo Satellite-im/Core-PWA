@@ -38,8 +38,12 @@ export default Vue.extend({
               text: 'Profile',
             },
             {
-              to: 'audio-video',
+              to: 'audio',
               text: 'Audio & Video',
+            },
+            {
+              to: 'keybinds',
+              text: 'Keybinds',
             },
             {
               to: 'accounts',
