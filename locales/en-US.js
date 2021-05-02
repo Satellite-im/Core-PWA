@@ -1,4 +1,7 @@
 export default {
+  global: {
+    settings: 'Settings',
+  },
   pages: {
     unlock: {
       decrypt: 'Decrypt Account',

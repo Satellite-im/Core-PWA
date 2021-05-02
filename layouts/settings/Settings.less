@@ -29,6 +29,8 @@ p {
 .with-sidebar {
   display: flex;
   flex-wrap: wrap;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -42,7 +44,7 @@ p {
     position: absolute;
     transform: rotate(90deg);
     top: 8rem;
-    right: -2.75rem;
+    right: -2.6rem;
     letter-spacing: 7px;
     text-transform: uppercase;
     display: none;
@@ -76,7 +78,7 @@ p {
     margin-left: calc(-@sidebar-size + 3rem);
   }
   .menu-toggle {
-    right: 1rem !important;
+    right: 1.2rem !important;
   }
 }
 
@@ -85,11 +87,16 @@ p {
   .sidebar {
     flex-basis: @mobile-sidebar-width;
   }
+  .not-sidebar {
+    width: 100vw;
+    transform: translateX(calc(@mobile-sidebar-width + 3rem));
+  }
   .is-collapsed {
     .sidebar {
       transform: translateX(calc(-@mobile-sidebar-width + 3rem));
     }
     .not-sidebar {
+      transform: translateX(0);
       margin-left: calc(-@mobile-sidebar-width + 3rem);
     }
   }
