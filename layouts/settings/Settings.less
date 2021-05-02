@@ -1,4 +1,5 @@
 @sidebar-size: 18rem;
+@transition-all: all 0.2s ease;
 
 @import 'bulma/css/bulma.css';
 
@@ -34,7 +35,20 @@ p {
   flex-basis: 18rem;
   flex-grow: 1;
   height: 100vh;
-  transition: all 0.2s ease;
+  transition: @transition-all;
+  position: relative;
+
+  .sidebar-word {
+    position: absolute;
+    transform: rotate(90deg);
+    top: 8rem;
+    right: -2.75rem;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    display: none;
+    opacity: 0;
+    transition: @transition-all;
+  }
 }
 
 .not-sidebar {
@@ -43,22 +57,41 @@ p {
   height: 100vh;
   overflow-y: scroll;
   padding: 2rem;
-  transition: all 0.2s ease;
+  transition: @transition-all;
 }
 
 .menu-toggle {
-  transition: all 0.2s ease;
+  transition: @transition-all;
 }
 
 .is-collapsed {
   .sidebar {
     transform: translateX(calc(-@sidebar-size + 3rem));
+    .sidebar-word {
+      display: inline-flex;
+      opacity: 1;
+    }
   }
   .not-sidebar {
     margin-left: calc(-@sidebar-size + 3rem);
   }
   .menu-toggle {
-    right: 1.25rem !important;
+    right: 1rem !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  @mobile-sidebar-width: 100vw;
+  .sidebar {
+    flex-basis: @mobile-sidebar-width;
+  }
+  .is-collapsed {
+    .sidebar {
+      transform: translateX(calc(-@mobile-sidebar-width + 3rem));
+    }
+    .not-sidebar {
+      margin-left: calc(-@mobile-sidebar-width + 3rem);
+    }
   }
 }
 
