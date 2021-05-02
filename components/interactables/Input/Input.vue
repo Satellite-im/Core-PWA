@@ -10,6 +10,7 @@ export default Vue.extend({
     event: 'update',
   },
   props: {
+    fullWidth: Boolean,
     // Default text can be included here
     text: {
       type: [String, Number],
