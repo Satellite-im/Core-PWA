@@ -1,0 +1,14 @@
+<div class="aside-menu">
+  <font-awesome-icon :icon="['far', 'bars']"  v-if="toggleable" v-on:click="toggle" class="menu-toggle" />
+  <TypographyTitle :size="4" :text="title" />
+  <aside class="menu">
+    <div v-for="group in menuContent">
+      <p class="menu-label">{{ group.title }}</p>
+      <ul class="menu-list">
+        <li v-for="link in group.links">
+          <NuxtLink :to="link.to">{{ link.text }}</NuxtLink>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</div>

@@ -1,0 +1,12 @@
+<div id="app" :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div class="sidebar is-secondary-background">
+    <TailoredSettingsSidebar
+      title="Settings"
+      toggleable
+      :toggle="toggleSidebar"
+    />
+  </div>
+  <div class="not-sidebar">
+    <Nuxt />
+  </div>
+</div>

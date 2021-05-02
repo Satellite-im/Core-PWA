@@ -10,11 +10,13 @@ import {
   faSpinnerThird,
   faArrowCircleRight,
   faLockOpen,
+  faBars,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
 library.add(faLockOpen)
+library.add(faBars)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)

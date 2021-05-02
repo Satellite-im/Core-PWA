@@ -23,5 +23,38 @@ export default {
       done: 'I Saved It',
       write_down: 'Write this down.',
     },
+    settings: {
+      audio: {
+        input: {
+          title: 'Audio Input',
+          subtitle:
+            "Select which input device you'd like people to hear your silky smooth voice from.",
+        },
+        output: {
+          title: 'Audio Output',
+          subtitle:
+            "Select the device that you'd like to deliver sound to your ear holes with.",
+        },
+        bitrate: {
+          title: 'Audio Bitrate',
+          subtitle:
+            'Higher bitrates will transmit better quality audio, lowering the bitrate can help with slower connection speeds.',
+        },
+        sampleSize: {
+          title: 'Sample Size',
+          subtitle:
+            'A higher sample size will give you a broader dynamic range of audio. Higher samples require better connections.',
+        },
+        echo: {
+          title: 'Echo Cancellation',
+          subtitle:
+            'Enable to help cancel out some slight echo & feedback from your mic.',
+        },
+        noise: {
+          title: 'Noise Suppression',
+          subtitle: 'Enable to help hide background noise in your environment.',
+        },
+      },
+    },
   },
 }

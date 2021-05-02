@@ -8,6 +8,41 @@
       />
       <br />
 
+      <TypographyLabel :text="`Select: ${selectValue}`" />
+      <br />
+      <InteractablesSelect
+        v-model="selectValue"
+        size="small"
+        type="primary"
+        :options="[
+          { text: 'Option 1', value: 1 },
+          { text: 'Option 2', value: 2 },
+          { text: 'Option 3', value: 3 },
+        ]"
+      />
+      <InteractablesSelect
+        v-model="selectValue"
+        size="normal"
+        type="primary"
+        :options="[
+          { text: 'Option 1', value: 1 },
+          { text: 'Option 2', value: 2 },
+          { text: 'Option 3', value: 3 },
+        ]"
+      />
+      <br />
+      <InteractablesSelect
+        v-model="selectValue"
+        type="primary"
+        full-width
+        :options="[
+          { text: 'Option 1', value: 1 },
+          { text: 'Option 2', value: 2 },
+          { text: 'Option 3', value: 3 },
+        ]"
+      />
+      <br />
+      <br />
       <UiNumberedWord word="Elephant" :number="1" />
       <UiNumberedWord word="Telephone" :number="2" />
       <UiNumberedWord word="Rendered" :number="24" />
@@ -108,6 +143,8 @@
       <TypographySubtitle :size="6" text="Subtitle 6" />
       <br />
       <TypographyLabel text="Label Component" />
+
+      <br />
     </div>
   </div>
 </template>
@@ -123,6 +160,7 @@ export default Vue.extend({
       input1Text: '',
       input2Text: 0,
       inputGroupLoading: false,
+      selectValue: 1,
     }
   },
   methods: {

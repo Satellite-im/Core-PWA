@@ -1,13 +1,26 @@
 @dark-gray: #16161e;
 @dark: #27293b;
+@dark-hover: #2e303d;
+@darker: #101016;
+
 @primary-color: #0984e3;
 @primary-color-alt: #087bd3;
+
 @text: #c6cefa;
 @text-muted: #979fc2;
 
 #app {
   background: @dark-gray;
   color: @text;
+  min-height: 100vh;
+}
+
+.is-secondary-background {
+  background-color: @darker;
+}
+
+.is-collapsed .menu-toggle {
+  color: @primary-color;
 }
 
 // UI Kit
@@ -17,11 +30,26 @@
   }
 }
 
-.menu-list a {
-  color: @text-muted;
+.menu-list {
+  li {
+    margin: 0.25rem;
+
+    a {
+      color: @text;
+  
+      &.is-active {
+        background-color: @primary-color;
+      }
+      
+      &:hover:not(.is-active) {
+        background: @dark-hover;
+        color: @text;
+      }
+    }
+  }
 }
 .menu-label {
-  color: @text;
+  color: @text-muted;
 }
 
 .version {
@@ -49,6 +77,10 @@
   background-color: @dark-gray;
   color: @text;
 }
+.select select{
+  background-color: @dark-gray;
+  color: @text;
+}
 ::placeholder {
   color: @text-muted !important;
 }
@@ -56,6 +88,19 @@
   border-color: @primary-color;
 }
 
+.select.is-primary select {
+  border-color: @primary-color;
+}
+.select.is-primary:not(:hover)::after {
+  border-color: @primary-color;
+}
+
+.select.is-primary select:hover {
+  border-color: @primary-color-alt;
+}
+.select.is-primary:hover::after {
+  border-color: @primary-color-alt;
+}
 // Typography
 .title {
   color: @text;

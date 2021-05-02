@@ -1,0 +1,65 @@
+@sidebar-size: 18rem;
+
+@import 'bulma/css/bulma.css';
+
+@font-face {
+  font-family: 'SpaceMono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('~/assets/fonts/SpaceMono-Regular.ttf');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('~/assets/fonts/Poppins-Regular.ttf');
+}
+p {
+  font-family: 'Poppins';
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+.with-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sidebar {
+  flex-basis: 18rem;
+  flex-grow: 1;
+  height: 100vh;
+  transition: all 0.2s ease;
+}
+
+.not-sidebar {
+  flex-basis: 0;
+  flex-grow: 999;
+  height: 100vh;
+  overflow-y: scroll;
+  padding: 2rem;
+  transition: all 0.2s ease;
+}
+
+.menu-toggle {
+  transition: all 0.2s ease;
+}
+
+.is-collapsed {
+  .sidebar {
+    transform: translateX(calc(-@sidebar-size + 3rem));
+  }
+  .not-sidebar {
+    margin-left: calc(-@sidebar-size + 3rem);
+  }
+  .menu-toggle {
+    right: 1.25rem !important;
+  }
+}
+
+@import url('~/assets/styles/base.less');

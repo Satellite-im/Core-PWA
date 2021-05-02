@@ -11,7 +11,7 @@
         </ul>
         <p class="menu-label">Auth</p>
         <ul class="menu-list">
-          <li><NuxtLink to="generic/loading">Loading Screen</NuxtLink></li>
+          <li><NuxtLink to="auth/unlock">Unlok Screen</NuxtLink></li>
         </ul>
         <p class="menu-label">setup</p>
         <ul class="menu-list">
@@ -41,7 +41,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .container {
   margin: 0 auto;
   min-height: 100vh;
