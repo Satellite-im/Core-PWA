@@ -5,7 +5,7 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.input.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.input.subtitle')" />
       <br />
-      <InteractablesSelect :options="[{text: 'Default Microphone', value: 'default'}]" selected="default" />
+      <InteractablesSelect :options="audioInputs" selected="default" />
     </div>
   </div>
   <!--Audio Output-->
@@ -14,7 +14,7 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.output.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.output.subtitle')" />
       <br />
-      <InteractablesSelect :options="[{text: 'Default Audio Output', value: 'default'}]" selected="default" />
+      <InteractablesSelect :options="audioOutputs" selected="default" />
     </div>
   </div>
   <!--Audio Bitrate & Sample-->
@@ -23,13 +23,13 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.bitrate.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.bitrate.subtitle')" />
       <br />
-      <InteractablesSelect :options="[{text: '96kbps', value: '96000'}]" selected="96000" />
+      <InteractablesSelect :options="Bitrates" selected="96000" />
     </div>
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.sampleSize.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.sampleSize.subtitle')" />
       <br />
-      <InteractablesSelect :options="[{text: '24 Bits', value: '24'}]" selected="24" />
+      <InteractablesSelect :options="SampleSizes" selected="24" />
     </div>
   </div>
   <!--Echo Cancellation & Noise Suppression-->
@@ -38,13 +38,13 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.echo.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.echo.subtitle')" />
       <br />
-      <InteractablesSwitch />
+      <InteractablesSwitch :isEnabled="$store.state.localStorage.echoCancellation" />
     </div>
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.noise.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.noise.subtitle')" />
       <br />
-      <InteractablesSwitch is-enabled />
+      <InteractablesSwitch :isEnabled="$store.state.localStorage.noiseSuppression"  />
     </div>
   </div>
 </div>
