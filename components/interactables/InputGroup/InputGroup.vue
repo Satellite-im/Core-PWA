@@ -77,6 +77,11 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+    copyContent: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   data() {
     return {

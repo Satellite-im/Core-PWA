@@ -35,3 +35,5 @@ Generic input group component.
 **buttonText** Optional attached button text
 
 **label-text** Optional label appended to input
+
+**copy-content** If provided, the button will also copy the content to clipboard

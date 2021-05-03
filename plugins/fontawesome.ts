@@ -11,6 +11,7 @@ import {
   faArrowCircleRight,
   faLockOpen,
   faBars,
+  faClipboard,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -18,5 +19,6 @@ library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
 library.add(faLockOpen)
 library.add(faBars)
+library.add(faClipboard)
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('FontAwesomeIcon', FontAwesomeIcon)

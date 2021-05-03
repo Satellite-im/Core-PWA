@@ -1,4 +1,5 @@
 import { InitalSettingsState } from './settings'
+import { InitalAccountsState } from './accounts'
 
 interface PersistedState {
   pin: String
@@ -13,4 +14,5 @@ const InitalPersistedState: PersistedState = {
 export const state = () => ({
   ...InitalPersistedState,
   ...InitalSettingsState,
+  ...InitalAccountsState,
 })

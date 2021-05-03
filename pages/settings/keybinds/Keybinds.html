@@ -1,0 +1,30 @@
+<div id="keybinds-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.keybinds.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.keybinds.subtitle')" />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.keybinds.mute')" />
+      <InteractablesInput readonly type="primary" text="ALT + M" />
+    </div>
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.keybinds.settings')" />
+      <InteractablesInput readonly type="primary" text="ALT + S" />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.keybinds.deafen')" />
+      <InteractablesInput readonly type="primary" text="ALT + D" />
+    </div>
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.keybinds.call')" />
+      <InteractablesInput readonly type="primary" text="ALT + C" />
+    </div>
+  </div>
+</div>

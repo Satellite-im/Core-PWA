@@ -23,7 +23,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '~/plugins/fontawesome.ts' }],
+  plugins: [
+    { src: '~/plugins/fontawesome.ts' },
+    { src: '~/plugins/clipboard.ts' },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -44,7 +47,14 @@ export default {
         localStorage: ['persistant-state'],
       },
     ],
+    '@nuxtjs/toast',
   ],
+
+  toast: {
+    position: 'top-center',
+    duration: 1000,
+    containerClass: 'toasty-container',
+  },
 
   i18n: {
     defaultLocale: 'en',

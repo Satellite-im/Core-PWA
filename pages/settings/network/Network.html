@@ -1,0 +1,24 @@
+<div id="network-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.network.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.network.subtitle')" />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.network.chain')" />
+      <br />
+      <InteractablesSelect :options="[{ text: 'Solana', value: 'solana' }]" selected="solana" />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.network.network')" />
+      <br />
+      <InteractablesSelect :options="[{ text: 'Testnet', value: 'testnet' }]" selected="testnet" />
+    </div>
+  </div>
+</div>

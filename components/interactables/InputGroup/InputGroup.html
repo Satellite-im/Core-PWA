@@ -17,6 +17,20 @@
         :disabled="disabled"
         :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
         v-on:click="action"
+        v-if="!copyContent.length"
+      >
+        <UiSpinner v-if="loading" spinning />
+        <span v-else>
+          <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" class="button-icon" />
+          {{ buttonText }}
+        </span>
+      </a>
+      <a
+        :disabled="disabled"
+        :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
+        v-on:click="action"
+        v-clipboard:copy="copyContent"
+        v-else
       >
         <UiSpinner v-if="loading" spinning />
         <span v-else>
