@@ -27,6 +27,22 @@ export default Vue.extend({
         return this.settings.echoCancellation
       },
     },
+    isBitrate: {
+      set(state) {
+        this.$store.commit('bitrate', state)
+      },
+      get() {
+        return this.settings.bitrate
+      },
+    },
+    isSampleSize: {
+      set(state) {
+        this.$store.commit('sampleSize', state)
+      },
+      get() {
+        return this.settings.sampleSize
+      },
+    },
   },
   mounted() {
     // TODO: Request permissions fist

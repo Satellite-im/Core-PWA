@@ -23,13 +23,13 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.bitrate.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.bitrate.subtitle')" />
       <br />
-      <InteractablesSelect :options="Bitrates" selected="96000" />
+      <InteractablesSelect :options="Bitrates" v-model="isBitrate" :selected="settings.bitrate" />
     </div>
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.sampleSize.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.sampleSize.subtitle')" />
       <br />
-      <InteractablesSelect :options="SampleSizes" selected="24" />
+      <InteractablesSelect :options="SampleSizes" v-model="isSampleSize" :selected="settings.sampleSize" />
     </div>
   </div>
   <!--Echo Cancellation & Noise Suppression-->
