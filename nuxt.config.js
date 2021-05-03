@@ -39,16 +39,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    'nuxt-i18n',
-    [
-      'nuxt-vuex-localstorage',
-      {
-        localStorage: ['persistant-state'],
-      },
-    ],
-    '@nuxtjs/toast',
-  ],
+  modules: ['nuxt-i18n', '@nuxtjs/toast'],
 
   toast: {
     position: 'top-center',

@@ -25,6 +25,7 @@ export default Vue.extend({
   methods: {
     toggle() {
       this.$emit('toggle', !this.isEnabled)
+      this.$emit('change', !this.isEnabled)
     },
   },
 })

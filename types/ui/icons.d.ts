@@ -7,6 +7,8 @@ export type IconName =
   | 'arrow-circle-right'
   | 'lock-open'
   | 'bars'
+  | 'lock'
+  | 'times-circle'
 export type Icon = {
   style: IconStyle
   name: IconName
