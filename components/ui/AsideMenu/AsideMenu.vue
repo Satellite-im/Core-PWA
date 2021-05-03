@@ -6,6 +6,10 @@ import { SidebarGrouping } from '~/types/ui/sidebar'
 
 export default Vue.extend({
   props: {
+    active: {
+      type: String,
+      default: '',
+    },
     toggleable: Boolean,
     toggle: {
       type: Function,

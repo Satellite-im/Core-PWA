@@ -4,6 +4,7 @@
     :title="title"
     :toggleable="toggleable"
     :toggle="toggle"
+    :active="$route.path.split('/')[2]"
   />
 </template>
 <script lang="ts">

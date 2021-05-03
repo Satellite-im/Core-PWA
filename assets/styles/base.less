@@ -6,6 +6,7 @@
 @primary-color: #0984e3;
 @primary-color-alt: #087bd3;
 
+@bright-text: #fff;
 @text: #c6cefa;
 @text-muted: #979fc2;
 
@@ -23,6 +24,15 @@
   color: @primary-color;
 }
 // UI Kit
+.toasted-container.top-center {
+  top: 0 !important;
+}
+
+.toasted-container .toasted {
+  background-color: @primary-color !important;
+  color: @bright-text !important;
+  font-family: 'Space Mono';
+}
 .loading-bar {
   .bar {
     background-color: @text;
@@ -71,6 +81,16 @@
   background-color: @primary-color-alt;
 }
 
+.button.is-primary.is-outlined {
+  color: @primary-color;
+  border-color: @primary-color;
+
+  &:hover, &:focus {
+    background-color: @primary-color;
+    border-color: @primary-color;
+    color: @bright-text;
+  }
+}
 // Inputs
 .input {
   background-color: @dark-gray;

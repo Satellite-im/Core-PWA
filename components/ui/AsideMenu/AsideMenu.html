@@ -6,7 +6,7 @@
       <p class="menu-label">{{ group.title }}</p>
       <ul class="menu-list">
         <li v-for="link in group.links">
-          <NuxtLink :to="link.to">{{ link.text }}</NuxtLink>
+          <NuxtLink :to="link.to" :class="`${active === link.to ? 'is-active' : 'is-inactive'}`">{{ link.text }}</NuxtLink>
         </li>
       </ul>
     </div>

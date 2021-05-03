@@ -1,6 +1,7 @@
 export default {
   global: {
     settings: 'Settings',
+    copied: 'ATTN: Copied to clipboard.',
   },
   pages: {
     unlock: {
@@ -56,6 +57,54 @@ export default {
         noise: {
           title: 'Noise Suppression',
           subtitle: 'Enable to help hide background noise in your environment.',
+        },
+      },
+      keybinds: {
+        title: 'Default Keybinds',
+        subtitle:
+          'A list of the default keybinds for quickly navigating and using Satellite.',
+        mute: 'Toggle Mute',
+        settings: 'Open Settings',
+        deafen: 'Toggle Deafen',
+        call: 'Call Active Chat',
+      },
+      accounts: {
+        title: 'Accounts & Devices',
+        subtitle:
+          "Select with account you'd prefer to default transactions from.",
+        active: 'Active Account',
+        gas_price: 'Transaction Fee Limit',
+        devices: 'Connected Devices',
+        no_devices: 'No connected devices found.',
+      },
+      personalize: {
+        title: 'Personalize Satellite',
+        subtitle: 'Make it your own and chose cusotm colors & themes.',
+        theme: 'Color Theme',
+        language: 'Language',
+      },
+      network: {
+        title: 'Network',
+        subtitle:
+          'Customize the chain Satellite will operate on. You can also choose different networks. Please note that any network other than Testnet will operate with REAL funds.',
+        chain: 'Blockchain',
+        network: 'Network',
+      },
+      storage: {
+        title: 'Storage',
+        subtitle:
+          'Control how your data is stored. You can export your local storage information as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+        clear: {
+          title: 'Clear Storage',
+          subtitle:
+            'Reset Satellite. This will clear any saved accounts. Do not do this without backing up your account first.',
+          button: 'Clear Local Storage',
+        },
+        export: {
+          title: 'Export Storage',
+          subtitle:
+            "Export your local storage, it's your data you can do whatever you'd like with it.",
+          button: 'Export Local Storage',
         },
       },
     },
