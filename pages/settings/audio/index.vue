@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { Bitrates, SampleSizes } from './options/audio'
 
 export default Vue.extend({
@@ -13,6 +14,19 @@ export default Vue.extend({
       audioInputs: [],
       audioOutputs: [],
     }
+  },
+  computed: {
+    ...mapState(['settings']),
+    // React to v-model changes to echoCancellation and update
+    // the state accordingly with the mutation
+    isEchoCancellation: {
+      set(state) {
+        this.$store.commit('echoCancellation', state)
+      },
+      get() {
+        return this.settings.echoCancellation
+      },
+    },
   },
   mounted() {
     // TODO: Request permissions fist

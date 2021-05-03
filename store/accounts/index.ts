@@ -7,3 +7,7 @@ export const InitalAccountsState: AccountsState = {
   activeAccount: '0x0000000000000000000000000000000000000000',
   gasPrice: '31',
 }
+
+export const state = () => ({
+  ...InitalAccountsState,
+})

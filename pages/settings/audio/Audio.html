@@ -38,13 +38,13 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.echo.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.echo.subtitle')" />
       <br />
-      <InteractablesSwitch :isEnabled="$store.state.localStorage.echoCancellation" />
+      <InteractablesSwitch v-model="isEchoCancellation" :isEnabled="settings.echoCancellation"/>
     </div>
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.noise.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.noise.subtitle')" />
       <br />
-      <InteractablesSwitch :isEnabled="$store.state.localStorage.noiseSuppression"  />
+      <InteractablesSwitch :isEnabled="settings.noiseSuppression"  />
     </div>
   </div>
 </div>
