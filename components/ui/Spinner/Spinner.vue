@@ -6,6 +6,9 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    /**
+     * Should the loading spinner be animated
+     */
     spinning: Boolean,
   },
 })

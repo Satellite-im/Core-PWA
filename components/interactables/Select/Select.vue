@@ -11,11 +11,20 @@ export default Vue.extend({
     event: 'change',
   },
   props: {
+    /**
+     * If provided the select will cover 100% of the parent
+     */
     fullWidth: Boolean,
+    /**
+     * The default selected value out of the options provided
+     */
     selected: {
       type: [String, Number, Boolean],
       default: false,
     },
+    /**
+     * List of options for the select box
+     */
     options: {
       type: Array as PropType<Array<SelectOption>>,
       default: () => [
@@ -25,14 +34,20 @@ export default Vue.extend({
         },
       ],
     },
-    // Determines the size of the button
-    // e.g. small, regular, medium, large..
+    /**
+     * Determines the size of the select
+     *
+     * @remarks - Common values are small, regular, medium, large
+     */
     size: {
       type: String as PropType<SelectSize>,
       default: 'normal',
     },
-    // Determines the type of the button
-    // e.g. primary, default, dark..
+    /**
+     * Determines the style type of the select
+     *
+     * @remarks - Common values are primary, dark, danger, etc.
+     */
     type: {
       type: String as PropType<SelectStyle>,
       default: 'primary',

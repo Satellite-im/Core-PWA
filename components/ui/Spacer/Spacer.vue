@@ -6,6 +6,9 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    /**
+     * Height of the spacer (in pixels)
+     */
     height: {
       type: Number,
       default: 40,

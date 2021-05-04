@@ -7,32 +7,42 @@ import { CircleType } from './types'
 
 export default Vue.extend({
   props: {
-    // Pixel diameter size of the circle
+    /**
+     * Pixel diameter size of the circle
+     */
     size: {
       type: Number,
       default: 45,
       required: false,
     },
-    // Type of Circle, this determines what content we
-    // load into the circle itself.
+    /**
+     * Type of Circle, this determines what content we
+     * load into the circle itself.
+     */
     type: {
       type: String as PropType<CircleType>,
       default: 'random',
       required: true,
     },
-    // Supported fontawesome icon
+    /**
+     * Supported fontawesome icon
+     */
     // eslint-disable-next-line vue/require-default-prop
     icon: {
       type: Object as PropType<Icon>,
       required: false,
     },
-    // If provided the "circle" will have hard corners
+    /**
+     * If provided the "circle" will have hard corners
+     */
     square: {
       type: Boolean,
       default: false,
       required: false,
     },
-    // Seed used to generate the random images
+    /**
+     * Seed used to generate the random images
+     */
     seed: {
       type: String,
       default: '0x0',

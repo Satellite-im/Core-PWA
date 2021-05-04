@@ -6,10 +6,16 @@ import Vue from 'vue'
 // You can also pass a "solid" prop which will disable the color scale of the ticks
 export default Vue.extend({
   props: {
+    /**
+     * Amount of 'ticks' to be filled in the meter.
+     */
     value: {
       type: Number,
       default: 0,
     },
+    /**
+     * Should the meter support a single color scheme
+     */
     solid: {
       type: Boolean,
       default: false,

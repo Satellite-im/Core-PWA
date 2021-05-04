@@ -22,6 +22,9 @@ export default Vue.extend({
   },
   methods: {
     IsMobile,
+    /**
+     * Opens and closes the left hand sidebar
+     */
     toggleSidebar() {
       this.$data.sidebar = !this.$data.sidebar
     },
