@@ -4,6 +4,9 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    /**
+     * Text to be included in the label
+     */
     text: {
       type: String,
       default: 'Missing prop `text`.',

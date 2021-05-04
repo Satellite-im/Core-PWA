@@ -8,14 +8,27 @@ export default Vue.extend({
     event: 'toggle',
   },
   props: {
+    /**
+     * Should the toggle switch be 'on'
+     */
     isEnabled: Boolean,
-    // Allows for background color overrides
+    /**
+     * Allows you to override the switch colors
+     */
     color: {
       type: String,
       required: false,
       default: '#0984e3',
     },
+    /**
+     * Size of the switch
+     *
+     * @remarks - currently supports 'normal' and 'small'
+     */
     small: Boolean,
+    /**
+     * If provided, a label will be attached to the right of the switch
+     */
     label: {
       type: String,
       required: false,
@@ -25,7 +38,6 @@ export default Vue.extend({
   methods: {
     toggle() {
       this.$emit('toggle', !this.isEnabled)
-      this.$emit('change', !this.isEnabled)
     },
   },
 })
