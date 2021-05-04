@@ -107,6 +107,10 @@ export default {
           button: 'Export Local Storage',
         },
       },
+      profile: {
+        title: 'Profile',
+        subtitle: 'Update your profile photo, status, banners and more.',
+      },
     },
   },
 }
