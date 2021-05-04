@@ -27,6 +27,7 @@ export default {
     { src: '~/plugins/fontawesome.ts' },
     { src: '~/plugins/clipboard.ts' },
     { src: '~/plugins/notifications.ts' },
+    { src: '~/plugins/persist.ts', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
