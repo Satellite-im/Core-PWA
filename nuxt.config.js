@@ -26,6 +26,7 @@ export default {
   plugins: [
     { src: '~/plugins/fontawesome.ts' },
     { src: '~/plugins/clipboard.ts' },
+    { src: '~/plugins/notifications.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,12 +40,27 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['nuxt-i18n', '@nuxtjs/toast'],
+  modules: ['nuxt-i18n', '@nuxtjs/toast', '@nuxtjs/pwa'],
 
   toast: {
     position: 'top-center',
     duration: 1000,
     containerClass: 'toasty-container',
+  },
+
+  pwa: {
+    manifest: {
+      name: 'Satellite.im',
+      short_name: 'Satellite.im',
+      description: 'A decentralized chat & filesharing application',
+      lang: 'en',
+      useWebmanifestExtension: false,
+      display: 'standalone',
+      background_color: '#16161e',
+      theme_color: '#16161e',
+      orientation: 'portrait',
+      prefer_related_applications: false,
+    },
   },
 
   i18n: {
