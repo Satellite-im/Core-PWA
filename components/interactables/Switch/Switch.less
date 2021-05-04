@@ -1,3 +1,5 @@
+@import '/assets/styles/variables.less';
+
 .switch-container {
   display: inline-flex;
   align-content: flex-end;
@@ -27,7 +29,7 @@
       border: 2px solid var(--color);
       box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
       border-radius: 1.6em;
-      transition: all 0.05s ease-in-out;
+      transition: all @animation-speed-micro ease-in-out;
       cursor: pointer;
 
       .sw-button {
@@ -36,7 +38,7 @@
         border: 2px solid var(--color);
         border-radius: calc(1.6em - (2 * 2px));
         background: var(--color);
-        transition: all 0.05s ease-in-out;
+        transition: all @animation-speed-micro ease-in-out;
       }
     }
     .switch-button.enabled {
