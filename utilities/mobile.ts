@@ -1,3 +1,6 @@
+/**
+ * @deprecated - Use $device instead
+ */
 export const IsMobile = () => {
   let check = false
   ;(function (a) {

@@ -10,6 +10,4 @@ const InitalPrerequisitesState: PrerequisiteState = {
   blockchainBound: false,
 }
 
-export const state = () => ({
-  ...InitalPrerequisitesState,
-})
+export default InitalPrerequisitesState

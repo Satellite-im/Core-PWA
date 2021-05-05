@@ -1,8 +1,4 @@
-import { SettingsMutations } from './settings'
-
-export const state = () => ({
-  counter: 0,
-})
+import SettingsMutations from './settings/mutations'
 
 export const mutations = {
   ...SettingsMutations,
