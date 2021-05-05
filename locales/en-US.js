@@ -110,6 +110,17 @@ export default {
       profile: {
         title: 'Profile',
         subtitle: 'Update your profile photo, status, banners and more.',
+        info: {
+          title: 'Account Info',
+          subtitle:
+            'Below is a list of helpful information regaurding your account.',
+          accountID: 'Account Identifier',
+        },
+        phrase: {
+          title: 'Recovery Phrase',
+          subtitle:
+            'Do not share this phrase with anyone. This phrase is used to recover your account. Anyone with access to this has access to your account.',
+        },
       },
     },
   },
