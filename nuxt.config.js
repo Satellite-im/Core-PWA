@@ -38,15 +38,36 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     '@nuxtjs/ngrok',
+    '@nuxtjs/style-resources',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['nuxt-i18n', '@nuxtjs/toast', '@nuxtjs/pwa'],
+  modules: [
+    'nuxt-i18n',
+    '@nuxtjs/toast',
+    '@nuxtjs/pwa',
+    [
+      'nuxt-mq',
+      {
+        // Default breakpoint for SSR
+        defaultBreakpoint: 'sm',
+        breakpoints: {
+          sm: 450,
+          md: 1250,
+          lg: Infinity,
+        },
+      },
+    ],
+  ],
 
   toast: {
     position: 'top-center',
     duration: 1000,
     containerClass: 'toasty-container',
+  },
+
+  styleResources: {
+    less: './assets/styles/vars/*.less',
   },
 
   pwa: {
