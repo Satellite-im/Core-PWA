@@ -1,4 +1,5 @@
 @size: 75px;
+@size-mobile: 55px;
 .profile-photo-column {
   max-width: 100px;
   .profile-photo {
@@ -37,6 +38,16 @@
   
     .tag {
       width: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .profile-photo-column {
+    max-width: 75px;
+    .profile-photo {
+      height: @size-mobile;
+      width: @size-mobile;
     }
   }
 }

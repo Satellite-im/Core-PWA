@@ -8,7 +8,7 @@
   <div class="columns is-mobile">
     <div class="column profile-photo-column">
       <div class="profile-photo">
-        <UiCircle type="random" seed="0x0000000000000000000000000000000000000000" :size="75"/>
+        <UiCircle type="random" seed="0x0000000000000000000000000000000000000000" :size="$mq === 'sm' ? 55 : 75"/>
         <UiCircle 
           type="icon" 
           :icon="{ style: 'far', name: 'plus'}" 
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="column username-column">
-      <TypographyTitle :size="4" text="RetroPronghorn" class="less-margin" />
+      <TypographyTitle :size="$mq === 'sm' ? 6 : 4" text="RetroPronghorn" :class="$mq === 'sm' ? 'mg-quarter' : 'mg-half'" />
       <InteractablesInputGroup
         class="username"
         v-model="status"
@@ -31,7 +31,7 @@
       />
     </div>
   </div>
-  <UiSpacer :height="24" />
+  <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
   <div class="columns is-desktop">
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
@@ -46,7 +46,7 @@
         :text="$store.state.accounts.activeAccount" />
     </div>
   </div>
-  <UiSpacer :height="24" />
+  <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
   <div class="columns is-desktop">
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.profile.phrase.title')" />
