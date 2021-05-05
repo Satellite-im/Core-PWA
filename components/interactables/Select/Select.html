@@ -1,5 +1,5 @@
 <div :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`">
-  <select @change="change" v-model="selected">
+  <select @change="change" v-model="selectedValue">
     <option 
       v-for="option in options"
       :value="option.value">{{ option.text }}</option>

@@ -53,9 +53,14 @@ export default Vue.extend({
       default: 'primary',
     },
   },
+  data() {
+    return {
+      selectedValue: this.selected,
+    }
+  },
   methods: {
     change() {
-      this.$emit('change', this.selected)
+      this.$emit('change', this.selectedValue)
     },
   },
 })
