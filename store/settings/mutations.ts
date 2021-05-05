@@ -1,24 +1,6 @@
 import { NuxtState } from '@nuxt/types/app'
 
-interface SettingsState {
-  audioInput: string
-  audioOutut: string
-  noiseSuppression: Boolean
-  echoCancellation: Boolean
-  bitrate: Number
-  sampleSize: Number
-}
-
-export const InitalSettingsState: SettingsState = {
-  audioInput: 'default',
-  audioOutut: 'default',
-  noiseSuppression: true,
-  echoCancellation: true,
-  bitrate: 96000,
-  sampleSize: 24,
-}
-
-export const SettingsMutations = {
+export default {
   echoCancellation(state: NuxtState, enabled: Boolean) {
     // We clone a new object here since vuex
     // will not react to deep values
@@ -40,7 +22,3 @@ export const SettingsMutations = {
     }
   },
 }
-
-export const state = () => ({
-  ...InitalSettingsState,
-})

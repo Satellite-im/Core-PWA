@@ -2,8 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IsMobile } from '~/utilities/mobile'
-
 export default Vue.extend({
   data() {
     return {
@@ -15,13 +13,13 @@ export default Vue.extend({
     // selects a setting group. This watches route changes and toggles
     // the sidebar if it's on a mobile device.
     $route() {
-      if (this.$route.name?.includes('settings') && this.IsMobile()) {
+      // @ts-ignore
+      if (this.$route.name?.includes('settings') && this.$device.isMobile) {
         this.sidebar = false
       }
     },
   },
   methods: {
-    IsMobile,
     /**
      * Opens and closes the left hand sidebar
      */

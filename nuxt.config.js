@@ -39,6 +39,7 @@ export default {
     '@nuxt/typescript-build',
     '@nuxtjs/ngrok',
     '@nuxtjs/style-resources',
+    '@nuxtjs/device',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
