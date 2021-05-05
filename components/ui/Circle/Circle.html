@@ -1,3 +1,20 @@
-<div class="circle">
-  
+<div 
+  :class="`${square ? 'is-square' : 'is-rounded'} ${type === 'icon' ? 'circle-flex' : 'circle'}`"
+  :style="`font-size: ${size * 0.85}px; height: ${size}px; width: ${size}px; background: ${color};`"
+  >
+  <img
+    :src="source"
+    v-if="type === 'image'"
+    alt="Cirlce Image"
+    :class="`${square ? 'is-square' : 'is-rounded'} image`">
+  <jazzicon
+    v-else-if="type === 'random'"
+    class="jazzicon"
+    :address="seed"
+    :diameter="size"
+  />
+  <font-awesome-icon
+    v-else-if="type === 'icon'"
+    :icon="[icon.style, icon.name]"
+    class="circle-icon" />
 </div>

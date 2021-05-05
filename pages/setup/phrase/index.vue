@@ -2,17 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
-  data() {
-    return {
-      phrase:
-        'truth brown crater taste unable cup modify brass today valley opera moment',
-    }
-  },
   computed: {
+    ...mapState(['accounts']),
     splitPhrase(): Array<String> {
-      return this.$data.phrase.split(' ')
+      return this.accounts.phrase.split(' ')
     },
   },
   methods: {

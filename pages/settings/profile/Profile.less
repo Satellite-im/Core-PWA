@@ -1,0 +1,42 @@
+@size: 75px;
+.profile-photo-column {
+  max-width: 100px;
+  .profile-photo {
+    position: relative;
+    height: @size;
+    width: @size;
+    cursor: pointer;
+  
+    .plus-button {
+      z-index: 2;
+      right: 0;
+      position: absolute;
+      color: #fff;
+    }
+  }
+}
+
+.username-column {
+  overflow: hidden;
+
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+}
+
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  .tag-container {
+    display: inline-block;
+    margin: 0.25rem;
+    flex: 1;
+  
+    .tag {
+      width: 100%;
+    }
+  }
+}

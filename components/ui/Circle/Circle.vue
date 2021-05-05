@@ -1,11 +1,16 @@
 <template src="./Circle.html"></template>
 <script lang="ts">
+// @ts-ignore
+import Jazzicon from 'vue-jazzicon'
 import Vue, { PropType } from 'vue'
 
 import { Icon } from '@/types/ui/icons'
 import { CircleType } from './types'
 
 export default Vue.extend({
+  components: {
+    Jazzicon,
+  },
   props: {
     /**
      * Pixel diameter size of the circle
@@ -47,6 +52,21 @@ export default Vue.extend({
       type: String,
       default: '0x0',
       required: false,
+    },
+    /**
+     * Provided source if image icon type
+     */
+    source: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    /**
+     * Color of the circles background
+     */
+    color: {
+      type: String,
+      default: 'transparent',
     },
   },
 })

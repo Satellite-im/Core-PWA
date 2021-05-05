@@ -5,4 +5,66 @@
       <TypographySubtitle :size="6" :text="$t('pages.settings.profile.subtitle')" />
     </div>
   </div>
+  <div class="columns is-mobile">
+    <div class="column profile-photo-column">
+      <div class="profile-photo">
+        <UiCircle type="random" seed="0x0000000000000000000000000000000000000000" :size="75"/>
+        <UiCircle 
+          type="icon" 
+          :icon="{ style: 'far', name: 'plus'}" 
+          color="#000" 
+          :size="18"
+          class="plus-button" />
+      </div>
+    </div>
+    <div class="column username-column">
+      <TypographyTitle :size="4" text="RetroPronghorn" class="less-margin" />
+      <InteractablesInputGroup
+        class="username"
+        v-model="status"
+        size="small"
+        input-kind="text"
+        type="primary"
+        placeholder="Enter Status"
+        :action="() => {}"
+        :icon="{ style: 'far', name: 'save'}"
+      />
+    </div>
+  </div>
+  <UiSpacer :height="24" />
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
+      <InteractablesInputGroup
+        :copy-content="$store.state.accounts.activeAccount"
+        readonly
+        type="primary"
+        :label-text="$t('pages.settings.profile.info.accountID')"
+        :icon="{ style: 'far', name: 'clipboard' }"
+        :action="() => $toast.show($t('global.copied'))"
+        :text="$store.state.accounts.activeAccount" />
+    </div>
+  </div>
+  <UiSpacer :height="24" />
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.profile.phrase.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.profile.phrase.subtitle')" />
+      <div v-if="showPhrase" class="tag-wrap">
+        <div v-for="word, i in splitPhrase" class="tag-container">
+          <UiNumberedWord :word="word" :number="i + 1" />
+        </div>
+      </div>
+      <div v-else>
+        <InteractablesButton
+          text="Reveal Phrase"
+          size="normal"
+          type="primary"
+          outlined
+          :action="togglePhrase"
+        />
+      </div>
+    </div>
+  </div>
 </div>

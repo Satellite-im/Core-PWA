@@ -145,6 +145,22 @@
       <TypographyLabel text="Label Component" />
 
       <br />
+      <UiCircle
+        type="random"
+        seed="0x0000000000000000000000000000000000000000"
+        :size="152"
+      />
+      <UiCircle
+        type="image"
+        source="https://i.pinimg.com/originals/8c/13/bf/8c13bf23627ae9188968fadf541cf1f9.jpg"
+        :size="152"
+      />
+      <UiCircle
+        type="icon"
+        :icon="{ style: 'far', name: 'arrow-circle-right' }"
+        :size="152"
+        color="#3498db"
+      />
     </div>
   </div>
 </template>
