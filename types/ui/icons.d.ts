@@ -11,6 +11,7 @@ export type IconName =
   | 'times-circle'
   | 'plus'
   | 'save'
+  | 'user'
 export type Icon = {
   style: IconStyle
   name: IconName

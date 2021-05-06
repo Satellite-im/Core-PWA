@@ -13,10 +13,18 @@
         <ul class="menu-list">
           <li><NuxtLink to="auth/unlock">Unlok Screen</NuxtLink></li>
         </ul>
-        <p class="menu-label">setup</p>
+        <p class="menu-label">Setup</p>
         <ul class="menu-list">
           <li><NuxtLink to="setup/disclaimer">Account Creation</NuxtLink></li>
           <li><NuxtLink to="setup/phrase">Account Phrase</NuxtLink></li>
+        </ul>
+        <p class="menu-label">Settings</p>
+        <ul class="menu-list">
+          <li><NuxtLink to="settings/profile">Profile</NuxtLink></li>
+          <li><NuxtLink to="settings/account">Account</NuxtLink></li>
+          <li><NuxtLink to="settings/audio">Audio</NuxtLink></li>
+          <li><NuxtLink to="settings/storage">Storage</NuxtLink></li>
+          <li><NuxtLink to="settings/personalize">Personalize</NuxtLink></li>
         </ul>
       </aside>
     </div>

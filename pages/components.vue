@@ -8,6 +8,30 @@
       />
       <br />
 
+      <TypographyLabel text="Badged Icons" />
+      <br />
+      <UiSpacer :height="12" />
+
+      <UiBadgedIcon
+        :icon="{ style: 'far', name: 'user' }"
+        :size="26"
+        :badge-count="0"
+      />
+
+      <UiBadgedIcon
+        :icon="{ style: 'far', name: 'user' }"
+        :size="26"
+        :badge-count="33"
+      />
+
+      <UiBadgedIcon
+        :icon="{ style: 'far', name: 'user' }"
+        :size="16"
+        :badge-count="3"
+      />
+
+      <UiSpacer :height="1" />
+
       <TypographyLabel :text="`Select: ${selectValue}`" />
       <br />
       <InteractablesSelect
