@@ -27,6 +27,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'Main',
   data() {
     return {
       switch1State: false,

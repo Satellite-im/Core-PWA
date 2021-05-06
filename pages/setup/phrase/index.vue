@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
+  name: 'PhraseScreen',
   computed: {
     ...mapState(['accounts']),
     splitPhrase(): Array<String> {

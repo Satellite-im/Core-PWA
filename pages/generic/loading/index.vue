@@ -4,6 +4,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'LoadingScreen',
   data() {
     return {
       step: 'Preloading',
