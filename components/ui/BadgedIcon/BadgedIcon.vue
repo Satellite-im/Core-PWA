@@ -1,8 +1,38 @@
 <template src="./BadgedIcon.html"></template>
 <script lang="ts">
-// @ts-ignore
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 
-export default Vue.extend({})
+import { Icon } from '@/types/ui/icons'
+
+export default Vue.extend({
+  props: {
+    /**
+     * Supported fontawesome icon
+     *
+     * @remarks
+     * You must make sure we have imported the icon before using it. See /plugins/fontawesome.ts
+     */
+    // eslint-disable-next-line vue/require-default-prop
+    icon: {
+      type: Object as PropType<Icon>,
+      required: false,
+    },
+    /**
+     * Number to display on the top right of the icon
+     */
+    badgeCount: {
+      type: Number,
+      required: true,
+    },
+    /**
+     * Font size of the icon
+     */
+    size: {
+      type: Number,
+      default: 12,
+      required: false,
+    },
+  },
+})
 </script>
 <style scoped lang="less" src="./BadgedIcon.less"></style>

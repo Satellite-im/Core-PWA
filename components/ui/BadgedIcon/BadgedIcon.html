@@ -1,0 +1,15 @@
+<div class="badged-icon">
+  <span
+    v-if="badgeCount > 0"
+    class="tag is-primary"
+    :style="`font-size: ${size * 0.4}pt; height: calc(${size * 0.4}pt + 0.25rem);`">
+    {{ badgeCount }}
+  </span>
+  <p :style="`font-size: ${size}pt;`">
+    <font-awesome-icon
+      v-if="icon"
+      :icon="[icon.style, icon.name]"
+      class="button-icon"
+    />
+  </p>
+</div>

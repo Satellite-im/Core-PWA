@@ -15,6 +15,7 @@ import {
   faTimesCircle,
   faPlus,
   faSave,
+  faUser,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -26,5 +27,6 @@ library.add(faClipboard)
 library.add(faTimesCircle)
 library.add(faPlus)
 library.add(faSave)
+library.add(faUser)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
