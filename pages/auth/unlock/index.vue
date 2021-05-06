@@ -16,7 +16,7 @@ export default Vue.extend({
   },
   computed: {
     newAccount() {
-      return !this.$store.state.localStorage.encryptedPin
+      return !this.$store.state.encryptedPin
     },
   },
   methods: {
