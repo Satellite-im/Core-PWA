@@ -6,6 +6,7 @@ import { mapState } from 'vuex'
 import { Bitrates, SampleSizes } from './options/audio'
 
 export default Vue.extend({
+  name: 'AudioSettings',
   layout: 'settings',
   data() {
     return {

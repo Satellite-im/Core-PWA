@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { Icon } from '~/types/ui/icons'
 
 export default Vue.extend({
+  name: 'UnlockScreen',
   data() {
     return {
       pin: '',
