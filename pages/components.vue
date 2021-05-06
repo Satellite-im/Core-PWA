@@ -9,182 +9,233 @@
       <br />
 
       <TypographyLabel text="Badged Icons" />
-      <br />
-      <UiSpacer :height="12" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiBadgedIcon
+              :icon="{ style: 'far', name: 'user' }"
+              :size="26"
+              :badge-count="0"
+            />
 
-      <UiBadgedIcon
-        :icon="{ style: 'far', name: 'user' }"
-        :size="26"
-        :badge-count="0"
-      />
+            <UiBadgedIcon
+              :icon="{ style: 'far', name: 'user' }"
+              :size="26"
+              :badge-count="33"
+            />
 
-      <UiBadgedIcon
-        :icon="{ style: 'far', name: 'user' }"
-        :size="26"
-        :badge-count="33"
-      />
+            <UiBadgedIcon
+              :icon="{ style: 'far', name: 'user' }"
+              :size="16"
+              :badge-count="3"
+            />
+          </div>
+        </div>
+      </div>
 
-      <UiBadgedIcon
-        :icon="{ style: 'far', name: 'user' }"
-        :size="16"
-        :badge-count="3"
-      />
+      <TypographyLabel text="Selects" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <TypographyLabel :text="`Select: ${selectValue}`" />
+            <br />
+            <InteractablesSelect
+              v-model="selectValue"
+              size="small"
+              type="primary"
+              :options="[
+                { text: 'Option 1', value: 1 },
+                { text: 'Option 2', value: 2 },
+                { text: 'Option 3', value: 3 },
+              ]"
+            />
+            <InteractablesSelect
+              v-model="selectValue"
+              size="normal"
+              type="primary"
+              :options="[
+                { text: 'Option 1', value: 1 },
+                { text: 'Option 2', value: 2 },
+                { text: 'Option 3', value: 3 },
+              ]"
+            />
+            <br />
+            <InteractablesSelect
+              v-model="selectValue"
+              type="primary"
+              full-width
+              :options="[
+                { text: 'Option 1', value: 1 },
+                { text: 'Option 2', value: 2 },
+                { text: 'Option 3', value: 3 },
+              ]"
+            />
+          </div>
+        </div>
+      </div>
 
-      <UiSpacer :height="1" />
-
-      <TypographyLabel :text="`Select: ${selectValue}`" />
-      <br />
-      <InteractablesSelect
-        v-model="selectValue"
-        size="small"
-        type="primary"
-        :options="[
-          { text: 'Option 1', value: 1 },
-          { text: 'Option 2', value: 2 },
-          { text: 'Option 3', value: 3 },
-        ]"
-      />
-      <InteractablesSelect
-        v-model="selectValue"
-        size="normal"
-        type="primary"
-        :options="[
-          { text: 'Option 1', value: 1 },
-          { text: 'Option 2', value: 2 },
-          { text: 'Option 3', value: 3 },
-        ]"
-      />
-      <br />
-      <InteractablesSelect
-        v-model="selectValue"
-        type="primary"
-        full-width
-        :options="[
-          { text: 'Option 1', value: 1 },
-          { text: 'Option 2', value: 2 },
-          { text: 'Option 3', value: 3 },
-        ]"
-      />
-      <br />
-      <br />
-      <UiNumberedWord word="Elephant" :number="1" />
-      <UiNumberedWord word="Telephone" :number="2" />
-      <UiNumberedWord word="Rendered" :number="24" />
+      <TypographyLabel text="Numbered Words" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiNumberedWord word="Elephant" :number="1" />
+            <UiNumberedWord word="Telephone" :number="2" />
+            <UiNumberedWord word="Rendered" :number="24" />
+          </div>
+        </div>
+      </div>
 
       <!-- Buttons -->
-      <TypographyTitle :size="4" text="Buttons" />
-      <InteractablesButton
-        text="Test Button"
-        size="normal"
-        type="primary"
-        :outlined="true"
-        :action="testAction"
-      />
-      <InteractablesButton
-        text="Test Button"
-        size="normal"
-        type="primary"
-        :icon="{ style: 'far', name: 'arrow-circle-right' }"
-        :outlined="false"
-        :action="testAction"
-      />
-      <InteractablesButton
-        text="Test Button"
-        size="normal"
-        type="dark"
-        :action="() => {}"
-        :loading="true"
-        loading-text="Loading..."
-      />
-
+      <TypographyLabel text="Buttons" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <InteractablesButton
+              text="Test Button"
+              size="normal"
+              type="primary"
+              :outlined="true"
+              :action="testAction"
+            />
+            <InteractablesButton
+              text="Test Button"
+              size="normal"
+              type="primary"
+              :icon="{ style: 'far', name: 'arrow-circle-right' }"
+              :outlined="false"
+              :action="testAction"
+            />
+            <InteractablesButton
+              text="Test Button"
+              size="normal"
+              type="dark"
+              :action="() => {}"
+              :loading="true"
+              loading-text="Loading..."
+            />
+          </div>
+        </div>
+      </div>
       <!-- Switches -->
-      <TypographyTitle :size="4" text="Switches" />
-      <InteractablesSwitch v-model="switch1State" small />
-      <InteractablesSwitch
-        v-model="switch1State"
-        small
-        label="Switch Label Goes Here"
-      />
-      <br />
-      <InteractablesSwitch v-model="switch2State" />
-      <InteractablesSwitch
-        v-model="switch1State"
-        label="Switch Label Goes Here"
-      />
+      <TypographyLabel text="Switches" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <InteractablesSwitch v-model="switch1State" small />
+            <InteractablesSwitch
+              v-model="switch1State"
+              small
+              label="Switch Label Goes Here"
+            />
+            <br />
+            <InteractablesSwitch v-model="switch2State" />
+            <InteractablesSwitch
+              v-model="switch1State"
+              label="Switch Label Goes Here"
+            />
+          </div>
+        </div>
+      </div>
+
       <!-- Meter -->
-      <TypographyTitle :size="4" text="Meter" />
-      <p>Gradient</p>
-      <UiMeter :value="15" />
-      <UiMeter :value="19" />
-      <UiMeter :value="25" />
-      <p>Solid</p>
-      <UiMeter :value="25" :solid="true" />
+      <TypographyLabel text="Meter" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <p>Gradient</p>
+            <UiMeter :value="15" />
+            <UiMeter :value="19" />
+            <UiMeter :value="25" />
+            <p>Solid</p>
+            <UiMeter :value="25" :solid="true" />
+          </div>
+        </div>
+      </div>
 
       <!-- Inputs -->
-      <TypographyTitle :size="4" text="Inputs" />
-      <InteractablesInput v-model="input1Text" :label-text="input1Text" />
-      <p>Text: {{ input2Text }}</p>
-      <InteractablesInput
-        v-model="input2Text"
-        size="small"
-        input-kind="number"
-        type="dark"
-      />
-      <p>Grouped Input</p>
-      <InteractablesInputGroup
-        v-model="input2Text"
-        size="small"
-        input-kind="number"
-        type="dark"
-        :label-text="input2Text.toString()"
-        :loading="inputGroupLoading"
-        :action="
-          () => {
-            inputGroupLoading = !inputGroupLoading
-          }
-        "
-        :icon="{ style: 'far', name: 'lock-open' }"
-      />
+      <TypographyLabel text="Inputs" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <InteractablesInput v-model="input1Text" :label-text="input1Text" />
+            <p>Text: {{ input2Text }}</p>
+            <InteractablesInput
+              v-model="input2Text"
+              size="small"
+              input-kind="number"
+              type="dark"
+            />
+            <p>Grouped Input</p>
+            <InteractablesInputGroup
+              v-model="input2Text"
+              size="small"
+              input-kind="number"
+              type="dark"
+              :label-text="input2Text.toString()"
+              :loading="inputGroupLoading"
+              :action="
+                () => {
+                  inputGroupLoading = !inputGroupLoading
+                }
+              "
+              :icon="{ style: 'far', name: 'lock-open' }"
+            />
+          </div>
+        </div>
+      </div>
 
-      <TypographyTitle :size="4" text="Typography" />
+      <TypographyLabel text="Typography" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <TypographyTitle :size="4" text="Typography" />
 
-      <TypographyTitle :size="1" text="Title 1" />
-      <TypographySubtitle :size="1" text="Subtitle 1" />
+            <TypographyTitle :size="1" text="Title 1" />
+            <TypographySubtitle :size="1" text="Subtitle 1" />
 
-      <TypographyTitle :size="2" text="Title 2" />
-      <TypographySubtitle :size="2" text="Subtitle 2" />
+            <TypographyTitle :size="2" text="Title 2" />
+            <TypographySubtitle :size="2" text="Subtitle 2" />
 
-      <TypographyTitle :size="3" text="Title 3" />
-      <TypographySubtitle :size="3" text="Subtitle 3" />
+            <TypographyTitle :size="3" text="Title 3" />
+            <TypographySubtitle :size="3" text="Subtitle 3" />
 
-      <TypographyTitle :size="4" text="Title 4" />
-      <TypographySubtitle :size="4" text="Subtitle 4" />
+            <TypographyTitle :size="4" text="Title 4" />
+            <TypographySubtitle :size="4" text="Subtitle 4" />
 
-      <TypographyTitle :size="5" text="Title 5" />
-      <TypographySubtitle :size="5" text="Subtitle 5" />
+            <TypographyTitle :size="5" text="Title 5" />
+            <TypographySubtitle :size="5" text="Subtitle 5" />
 
-      <TypographyTitle :size="6" text="Title 6" />
-      <TypographySubtitle :size="6" text="Subtitle 6" />
-      <br />
-      <TypographyLabel text="Label Component" />
+            <TypographyTitle :size="6" text="Title 6" />
+            <TypographySubtitle :size="6" text="Subtitle 6" />
+            <br />
+            <TypographyLabel text="Label Component" />
+          </div>
+        </div>
+      </div>
 
-      <br />
-      <UiCircle
-        type="random"
-        seed="0x0000000000000000000000000000000000000000"
-        :size="152"
-      />
-      <UiCircle
-        type="image"
-        source="https://i.pinimg.com/originals/8c/13/bf/8c13bf23627ae9188968fadf541cf1f9.jpg"
-        :size="152"
-      />
-      <UiCircle
-        type="icon"
-        :icon="{ style: 'far', name: 'arrow-circle-right' }"
-        :size="152"
-        color="#3498db"
-      />
+      <TypographyLabel text="Circles" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiCircle
+              type="random"
+              seed="0x0000000000000000000000000000000000000000"
+              :size="152"
+            />
+            <UiCircle
+              type="image"
+              source="https://i.pinimg.com/originals/8c/13/bf/8c13bf23627ae9188968fadf541cf1f9.jpg"
+              :size="152"
+            />
+            <UiCircle
+              type="icon"
+              :icon="{ style: 'far', name: 'arrow-circle-right' }"
+              :size="152"
+              color="#3498db"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
