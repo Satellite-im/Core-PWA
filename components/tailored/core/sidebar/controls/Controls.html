@@ -1,0 +1,28 @@
+<div id="controls">
+  <InteractablesButton
+    outlined
+    :type="audio.muted ? 'danger' : 'dark'"
+    size="small"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    data-tooltip="Mute"
+    :action="() => $store.commit('mute')"
+    :icon="{ style: 'far', name: 'microphone-alt' }"
+    :text="$t('controls.mic')" />
+  <InteractablesButton
+    outlined
+    :type="audio.deafened ? 'danger' : 'dark'"
+    size="small"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    data-tooltip="Deafen"
+    :action="() => $store.commit('deafen')"
+    :icon="{ style: 'far', name: 'headphones-alt' }"
+    :text="$t('controls.headphones')" />
+  <InteractablesButton
+    outlined
+    type="dark"
+    size="small"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    data-tooltip="Settings"
+    :action="() => $router.push('/settings/personalize')"
+    :icon="{ style: 'far', name: 'cog' }"/>
+</div>

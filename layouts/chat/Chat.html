@@ -1,0 +1,9 @@
+<div id="app" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <TailoredCoreServersList />
+  <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
+  <div class="dynamic-content">
+    <TailoredCoreStatusbar
+      :user="{ name: 'Generic User', status: 'Orbiting at high speeds', state: 'online' }"/>
+    <Nuxt />
+  </div>
+</div>

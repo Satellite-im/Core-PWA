@@ -1,0 +1,41 @@
+@sidebar-size: 250px;
+
+#sidebar {
+  width: @sidebar-size;
+  min-width: @sidebar-size;
+  position: relative;
+  display: inline-flex;
+  height: 100vh;
+  background-color: @dark-gray;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .toggle-sidebar {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: @primary-color;
+  }
+
+  .tabs {
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-selector {
+    .button:nth-child(1) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .button:nth-child(2) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .scrolling {
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}

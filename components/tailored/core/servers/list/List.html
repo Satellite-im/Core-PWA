@@ -1,0 +1,15 @@
+<div id="servers-vertical-list">
+  <div class="servers">
+    <div
+      class="server has-tooltip-right has-tooltip-primary"
+      v-for="server in servers"
+      :data-tooltip="server.name">
+      <UiCircle type="random" :size="40" :seed="server.address" />
+    </div>
+    <div 
+      class="circle-group has-tooltip-right has-tooltip-primary"
+      :data-tooltip="$t('global.new_server')">
+      <UiCircle type="icon" :icon="{ style: 'far', name: 'plus' }" :size="40" />
+    </div>
+  </div>
+</div>
