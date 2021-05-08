@@ -8,6 +8,18 @@ import { Server } from './types'
 export default Vue.extend({
   data() {
     return {
+      unread_users: [
+        {
+          name: 'RetroPronghorn',
+          address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          count: 4,
+        },
+        {
+          name: 'Hogan',
+          address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+          count: 1,
+        },
+      ],
       servers: [
         {
           name: 'Solana Fans',
