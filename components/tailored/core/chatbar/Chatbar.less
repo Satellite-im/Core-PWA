@@ -1,0 +1,60 @@
+#chatbar {
+  width: 100%;
+
+  .charlimit {
+    float: right;
+    margin-right: 2rem;
+    font-size: 8pt;
+    &.is-error {
+      color: @red;
+    }
+  }
+
+  .chatbar-wrap {
+    background-color: @dark-gray;
+    margin: 0 1rem;
+    border-radius: 40px;
+    padding: 0.5rem 0.75rem;
+    display: inline-flex;
+    flex-direction: row;
+    width: calc(100% - 2rem);
+    border: 1px solid transparent;
+
+    &.is-error {
+      border: 1px solid @red;
+
+      .control-icon {
+        &:nth-child(4) {
+          color: @red;
+        }
+      }
+    }
+
+    input {
+      flex: 1;
+      padding: 0.25rem 1rem;
+      background-color: transparent;
+      border: none;
+      font-family: 'Poppins';
+      color: @text;
+      outline: none;
+    }
+
+    .control-icon {
+      justify-self: center;
+      align-self: center;
+      font-size: 16pt;
+      margin: 0 0.5rem;
+
+      &:nth-child(1) {
+        margin-right: 0;
+      }
+      &:nth-child(3) {
+        margin-left: 0;
+      }
+      &:nth-child(4) {
+        color: @primary-color;
+      }
+    }
+  }
+}

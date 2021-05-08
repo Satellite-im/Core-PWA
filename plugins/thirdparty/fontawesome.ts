@@ -26,6 +26,8 @@ import {
   faCog,
   faPhone,
   faVideo,
+  faFilePlus,
+  faGrinTongueWink,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -51,5 +53,7 @@ library.add(faCog)
 library.add(faCircle)
 library.add(faPhone)
 library.add(faVideo)
+library.add(faFilePlus)
+library.add(faGrinTongueWink)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
