@@ -29,6 +29,7 @@ export default {
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
     { src: '~/plugins/local/config.ts' },
+    { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
