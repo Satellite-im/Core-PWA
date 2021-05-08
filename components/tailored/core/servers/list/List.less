@@ -17,4 +17,32 @@
       margin: 0.25rem 0;
     }
   }
+
+  .unread {
+    position: relative;
+    .circle {
+      margin: 0.25rem 0;
+    }
+    .notification-count {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      font-size: 8pt;
+      font-weight: bold;
+      text-align: center;
+    }
+    .notification-badge {
+      position: absolute;
+      top: 30px;
+      left: 25px;
+      font-size: 13pt;
+      text-shadow: 0 0 3px #000;
+  
+      path {
+        stroke: @dark-gray;
+        stroke-width: 100;
+        color: @primary-color;
+      }
+    }
+  }
 }
