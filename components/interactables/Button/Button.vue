@@ -57,7 +57,7 @@ export default Vue.extend({
      */
     text: {
       type: String,
-      default: 'Button',
+      default: '',
     },
     /**
      * Should this button be outlined

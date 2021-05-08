@@ -1,0 +1,54 @@
+<div id="sidebar" class="collapsed">
+  <TypographyTitle :size="6" :text="$t('global.name')" />
+  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
+  <InteractablesInput
+    :placeholder="`${$t('global.search')}...`"
+    size="small"
+    input-kind="text"
+    type="dark"
+  />
+  <UiSpacer :height="15" />
+  <div class="columns is-mobile">
+    <div class="column" style="padding-right: 0.5rem;">
+      <InteractablesButton
+        full-width
+        outlined
+        type="dark"
+        size="small"
+        :icon="{ style: 'far', name: 'user-friends' }"
+        :text="$t('global.friends')" />
+    </div>
+    <div class="column" style="padding-left: 0.5rem;">
+      <InteractablesButton
+        full-width
+        outlined
+        type="dark"
+        size="small"
+        :icon="{ style: 'far', name: 'folder' }"
+        :text="$t('global.files')" />
+    </div>
+  </div>  
+
+  <div class="tabs sidebar-selector">
+    <InteractablesButton
+      full-width
+      type="primary"
+      size="small"
+      :icon="{ style: 'far', name: 'comment-alt-lines' }"
+      :text="$t('global.messages')" />
+    <InteractablesButton
+      full-width
+      outlined
+      type="primary"
+      size="small"
+      :icon="{ style: 'far', name: 'users' }"
+      :text="$t('global.groups')" />
+  </div>
+
+  <div class="scrolling">
+    <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+  </div>
+
+  <TailoredCoreSidebarControls />
+  <TailoredCoreSidebarStatus />
+</div>

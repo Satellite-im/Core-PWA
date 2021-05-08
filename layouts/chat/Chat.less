@@ -1,0 +1,34 @@
+@sidebar-size: 250px;
+@servers-size: 60px;
+
+#app {
+  display: flex;
+  background-color: @darker;
+  user-select: none;
+
+  .dynamic-content {
+    background-color: @darker;
+    width: 100%;
+    user-select: text;
+  }
+
+  #sidebar, #servers-vertical-list, .dynamic-content, #sidebar .toggle-sidebar, #statusbar {
+    transition: @transition-all;
+  }
+
+  &.is-collapsed {
+    #sidebar, #servers-vertical-list {
+      transform: translateX(calc(-@sidebar-size + -@servers-size));
+    }
+    .dynamic-content {
+      margin-left: calc(-@sidebar-size + -@servers-size);
+    }
+    #sidebar .toggle-sidebar {
+      right: -2rem;
+      z-index: 1;
+    }
+    #statusbar {
+      padding-left: 3rem;
+    }
+  }
+}

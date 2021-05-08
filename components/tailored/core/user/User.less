@@ -1,0 +1,71 @@
+.user {
+  display: inline-flex;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  padding: 0.35rem;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+
+  .status {
+    position: absolute;
+    top: 33.5px;
+    left: 30px;
+    font-size: 10pt;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 100;
+    }
+    &.is-online {
+      color: @green;
+    }
+    &.is-offline {
+      color: @offline;
+    }
+    &.is-idle {
+      color: @yellow;
+    }
+  }
+
+  &:hover {
+    background-color: @darker;
+  }
+  
+  .circle {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .user-info {
+    min-width: 0;
+    padding-left: 0.5rem;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+    .title {
+      margin: 0 0 1.25rem 0;
+      text-overflow: ellipsis;
+      min-width: 0;
+      font-size: 10pt;
+    }
+    
+    .subtitle {
+      height: 30px;
+      display: inline-block;
+      min-width: 0;
+      opacity: 0.75;
+    }
+  
+    .subtitle {
+      font-size: 9pt;
+    }
+  }
+}

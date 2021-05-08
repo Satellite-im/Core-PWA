@@ -9,6 +9,19 @@
     top: -0.25rem;
     border-radius: 2px;
     text-align: right;
-    font-family: 'SpaceMono';
+    font-family: @primary-font;
+
+    &:not(body).is-dark {
+      background: @dark;
+    
+      .tag-number {
+        background: @primary-color-alt;
+      }
+    }
+    
+    &:not(body).is-primary {
+      background-color: @primary-color;
+    }
+    
   }
 }

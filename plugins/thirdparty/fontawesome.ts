@@ -16,7 +16,19 @@ import {
   faPlus,
   faSave,
   faUser,
+  faGlobeAmericas,
+  faUserFriends,
+  faUsers,
+  faFolder,
+  faCommentAltLines,
+  faMicrophoneAlt,
+  faHeadphonesAlt,
+  faCog,
+  faPhone,
+  faVideo,
 } from '@fortawesome/pro-regular-svg-icons'
+
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faSpinnerThird)
@@ -28,5 +40,16 @@ library.add(faTimesCircle)
 library.add(faPlus)
 library.add(faSave)
 library.add(faUser)
+library.add(faGlobeAmericas)
+library.add(faUsers)
+library.add(faFolder)
+library.add(faUserFriends)
+library.add(faCommentAltLines)
+library.add(faMicrophoneAlt)
+library.add(faHeadphonesAlt)
+library.add(faCog)
+library.add(faCircle)
+library.add(faPhone)
+library.add(faVideo)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

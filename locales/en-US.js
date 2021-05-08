@@ -1,7 +1,19 @@
 export default {
   global: {
+    name: 'Satellite.im',
     settings: 'Settings',
     copied: 'ATTN: Copied to clipboard.',
+    home: 'Home',
+    search: 'Search',
+    new_server: 'New Community',
+    friends: 'Friends',
+    files: 'Files',
+    messages: 'Messages',
+    groups: 'Groups',
+  },
+  controls: {
+    mic: 'Mic',
+    headphones: 'Audio',
   },
   pages: {
     unlock: {

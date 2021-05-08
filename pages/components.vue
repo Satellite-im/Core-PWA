@@ -163,14 +163,14 @@
               v-model="input2Text"
               size="small"
               input-kind="number"
-              type="dark"
+              type="primary"
             />
             <p>Grouped Input</p>
             <InteractablesInputGroup
               v-model="input2Text"
               size="small"
               input-kind="number"
-              type="dark"
+              type="primary"
               :label-text="input2Text.toString()"
               :loading="inputGroupLoading"
               :action="
