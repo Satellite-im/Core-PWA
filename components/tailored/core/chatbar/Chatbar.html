@@ -1,0 +1,9 @@
+<div id="chatbar">
+  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`">
+    <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
+    <input placeholder="Speak Freely..." v-model="text"/>
+    <font-awesome-icon :icon="['far', 'grin-tongue-wink']" class="control-icon" />
+    <font-awesome-icon :icon="['far', 'arrow-circle-right']" class="control-icon" />
+  </div>
+  <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{ `${text.length}/${maxChars}` }}</span>
+</div>

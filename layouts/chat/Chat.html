@@ -3,7 +3,9 @@
   <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
   <div class="dynamic-content">
     <TailoredCoreStatusbar
+      id="statusbar"
       :user="{ name: 'Generic User', status: 'Orbiting at high speeds', state: 'online' }"/>
-    <Nuxt />
+    <Nuxt class="chat" />
+    <TailoredCoreChatbar />
   </div>
 </div>

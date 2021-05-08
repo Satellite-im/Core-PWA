@@ -1,6 +1,16 @@
 @sidebar-size: 18rem;
+@statusbar-height: 45px;
+@chatbar-size: 65px;
 @transition-all: all @animation-speed ease;
 @primary-font: 'SpaceMono', monospace;
 @secondary-font: 'Poppins';
+
+body, html {
+  caret-color: @primary-color;
+}
+
+::selection {
+  background: @primary-color;
+}
 
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');
