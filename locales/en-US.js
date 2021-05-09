@@ -10,6 +10,9 @@ export default {
     files: 'Files',
     messages: 'Messages',
     groups: 'Groups',
+    glyphs: 'Glyphs',
+    upload: 'Upload',
+    talk: 'Speak Freely...',
   },
   controls: {
     mic: 'Mic',

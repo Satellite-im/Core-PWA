@@ -2,15 +2,12 @@
   <div class="servers">
     <div
       class="unread has-tooltip-right has-tooltip-primary"
-      v-for="user in unread_users"
+      v-for="user in unreads"
       :data-tooltip="user.name">
       <UiCircle type="random" :size="40" :seed="user.address" />
-      <font-awesome-icon
-        :icon="['fas', 'circle']"
-        class="notification-badge" />
-      <span class="notification-count">{{user.count}}</span>
+      <span class="label">{{user.count}}</span>
     </div>
-    <UiHorizontalRule v-if="unread_users.length > 0" />
+    <UiHorizontalRule v-if="unreads.length > 0" />
     <div
       class="server has-tooltip-right has-tooltip-primary"
       v-for="server in servers"

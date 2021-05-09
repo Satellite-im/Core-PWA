@@ -5,7 +5,7 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.input.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.input.subtitle')" />
       <br />
-      <InteractablesSelect :options="audioInputs" selected="default" />
+      <InteractablesSelect :options="audioInputs" size="small" selected="default" />
     </div>
   </div>
   <!--Audio Output-->
@@ -14,7 +14,7 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.output.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.output.subtitle')" />
       <br />
-      <InteractablesSelect :options="audioOutputs" selected="default" />
+      <InteractablesSelect :options="audioOutputs" size="small" selected="default" />
     </div>
   </div>
   <!--Audio Bitrate & Sample-->
@@ -23,13 +23,13 @@
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.bitrate.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.bitrate.subtitle')" />
       <br />
-      <InteractablesSelect :options="Bitrates" v-model="isBitrate" />
+      <InteractablesSelect :options="Bitrates" size="small" v-model="isBitrate" />
     </div>
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.audio.sampleSize.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.settings.audio.sampleSize.subtitle')" />
       <br />
-      <InteractablesSelect :options="SampleSizes" v-model="isSampleSize" />
+      <InteractablesSelect :options="SampleSizes" size="small" v-model="isSampleSize" />
     </div>
   </div>
   <!--Echo Cancellation & Noise Suppression-->

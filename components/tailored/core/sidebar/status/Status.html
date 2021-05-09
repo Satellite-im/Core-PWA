@@ -2,13 +2,13 @@
   <UiCircle type="random" :seed="accounts.active" :size="35" />
   <div class="user-info">
     <TypographyTitle 
-      text="RetroPronghorn" 
+      :text="$mock.user.name" 
       :size="6"
       class="has-tooltip has-tooltip-top has-tooltip-primary"
       data-tooltip="Copy ID"
       v-clipboard:copy="$store.state.accounts.active"
       v-on:click="() => $toast.show($t('global.copied'))"
       />
-    <TypographySubtitle text="Some interesting status message goes here" :size="6" />
+    <TypographySubtitle :text="$mock.user.status" :size="6" />
   </div>
 </div>

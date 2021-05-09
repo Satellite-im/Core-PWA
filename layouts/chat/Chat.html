@@ -1,10 +1,10 @@
 <div id="app" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
-  <TailoredCoreServersList />
-  <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
+  <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+  <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users"/>
   <div class="dynamic-content">
     <TailoredCoreStatusbar
       id="statusbar"
-      :user="{ name: 'Generic User', status: 'Orbiting at high speeds', state: 'online' }"/>
+      :user="$mock.users[0]"/>
     <Nuxt class="chat" />
     <TailoredCoreChatbar />
   </div>

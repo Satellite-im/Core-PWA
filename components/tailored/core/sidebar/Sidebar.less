@@ -22,6 +22,19 @@
     margin-bottom: 1rem;
   }
 
+  .label {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: @micro-text-size;
+    background-color: @primary-color;
+    border-radius: 2px;
+    line-height: 1.2;
+    padding: 0.15rem 0.25rem;
+    color: @text;
+    font-family: 'SpaceMono';
+  }
+
   .sidebar-selector {
     .button:nth-child(1) {
       border-top-right-radius: 0;
@@ -37,5 +50,9 @@
     flex: 1;
     overflow-y: scroll;
     overflow-x: hidden;
+    ::-webkit-scrollbar {
+      display: none;
+      scrollbar-width: none;
+    }
   }
 }

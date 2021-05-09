@@ -16,7 +16,8 @@
     .control-icon {
       margin: 0 0.5rem;
       cursor: pointer;
-
+      font-size: @icon-size;
+      
       &:nth-child(2) {
         margin-right: 1rem;
       }
@@ -47,20 +48,19 @@
     padding-top: 0.45rem;
 
     .title {
-      font-size: 10pt;
       margin: 0 0 -0.4rem 0;
     }
     .subtitle {
       margin: 0;
       padding: 0;
-      font-size: 9pt;
+      font-size: @mini-text-size;
     }
   }
   .status {
     position: absolute;
-    top: 28px;
-    left: 19px;
-    font-size: 8pt;
+    top: 27px;
+    left: 18px;
+    font-size: @mini-text-size;
     text-shadow: 0 0 3px #000;
 
     path {
@@ -76,5 +76,18 @@
     &.is-idle {
       color: @yellow;
     }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #statusbar {
+    min-width: 100vw;
+    padding-right: 0;
+  }
+  .controls {
+    margin-right: 0;
+  }
+  .statusbar-spacer {
+    flex: 1;
   }
 }
