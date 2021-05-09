@@ -32,6 +32,7 @@ export default {
     // Local
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },
+    { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
   ],
 

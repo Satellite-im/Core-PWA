@@ -13,7 +13,6 @@ export default Vue.extend({
     },
     users: {
       type: Array as PropType<Array<User>>,
-      // @ts-ignore
       default: () => [],
     },
   },

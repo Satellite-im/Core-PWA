@@ -10,6 +10,7 @@ export type Message = {
 export const Messages = [
   {
     id: '00-00-01',
+    at: 1620515543000,
     type: 'group',
     from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
@@ -36,6 +37,7 @@ export const Messages = [
   },
   {
     id: '00-00-02',
+    at: 1620515543000,
     type: 'group',
     from: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     to: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -44,7 +46,7 @@ export const Messages = [
         id: '00-00-13',
         at: 1620515545000,
         type: 'text',
-        payload: 'Nice, this is a test response',
+        payload: 'I am a ~~tast~~ **test**. :smile:',
       },
       {
         id: '00-20-04',
@@ -56,6 +58,7 @@ export const Messages = [
   },
   {
     id: '00-00-03',
+    at: 1620515543000,
     type: 'group',
     from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
@@ -82,6 +85,7 @@ export const Messages = [
   },
   {
     id: '00-00-08',
+    at: 1620515543000,
     type: 'group',
     from: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     to: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -106,6 +110,7 @@ export const Messages = [
   },
   {
     id: '00-00-03',
+    at: 1620515543000,
     type: 'group',
     from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
