@@ -24,11 +24,15 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    // Third Party
     { src: '~/plugins/thirdparty/fontawesome.ts' },
+    { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clipboard.ts' },
-    { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
+    // Local
+    { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },
+    { src: '~/plugins/local/mock.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

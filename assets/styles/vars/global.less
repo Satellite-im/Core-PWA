@@ -1,16 +1,34 @@
 @sidebar-size: 18rem;
 @statusbar-height: 45px;
 @chatbar-size: 65px;
+@mini-text-size: 9pt;
+@micro-text-size: 8pt;
 @transition-all: all @animation-speed ease;
 @primary-font: 'SpaceMono', monospace;
 @secondary-font: 'Poppins';
+@icon-size: 14pt;
+@larger-icon-size: 16pt;
 
-body, html {
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  overscroll-behavior: none;
   caret-color: @primary-color;
 }
 
 ::selection {
   background: @primary-color;
+}
+
+.title.is-6 {
+  margin-bottom: 0.25rem;
+}
+
+.is-6 {
+  font-size: 11pt;
 }
 
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');

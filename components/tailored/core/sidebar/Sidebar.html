@@ -1,5 +1,6 @@
 <div id="sidebar" class="collapsed">
   <TypographyTitle :size="6" :text="$t('global.name')" />
+  <UiSpacer :height="15" />
   <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
   <InteractablesInput
     :placeholder="`${$t('global.search')}...`"
@@ -8,8 +9,8 @@
     type="dark"
   />
   <UiSpacer :height="15" />
-  <div class="columns is-mobile">
-    <div class="column" style="padding-right: 0.5rem;">
+  <div class="columns is-mobile tab-menu">
+    <div class="column" style="padding-right: 0.5rem; position: relative;">
       <InteractablesButton
         full-width
         outlined
@@ -17,6 +18,9 @@
         size="small"
         :icon="{ style: 'far', name: 'user-friends' }"
         :text="$t('global.friends')" />
+      <span class="label">
+        14
+      </span>
     </div>
     <div class="column" style="padding-left: 0.5rem;">
       <InteractablesButton
@@ -45,7 +49,7 @@
       :text="$t('global.groups')" />
   </div>
 
-  <div class="scrolling">
+  <div class="scrolling" v-scroll-lock="true">
     <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
   </div>
 
