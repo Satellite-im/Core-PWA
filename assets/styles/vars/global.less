@@ -1,6 +1,8 @@
 @sidebar-size: 18rem;
 @statusbar-height: 45px;
 @chatbar-size: 65px;
+@title-text: 10pt;
+@text-size: 10pt;
 @mini-text-size: 9pt;
 @micro-text-size: 8pt;
 @transition-all: all @animation-speed ease;
@@ -21,14 +23,7 @@ body {
 
 ::selection {
   background: @primary-color;
-}
-
-.title.is-6 {
-  margin-bottom: 0.25rem;
-}
-
-.is-6 {
-  font-size: 11pt;
+  color: @bright-text;
 }
 
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');
