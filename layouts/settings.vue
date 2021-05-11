@@ -2,8 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {mobileSwipe} from '../components/mixins/Swipe'
+import { mobileSwipe } from '../components/mixins/Swipe'
 export default Vue.extend({
+  mixins: [mobileSwipe],
   data() {
     return {
       sidebar: true,
@@ -20,7 +21,6 @@ export default Vue.extend({
       }
     },
   },
-  mixins: [mobileSwipe],
   methods: {
     /**
      * Opens and closes the left hand sidebar
