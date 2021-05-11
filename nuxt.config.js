@@ -44,7 +44,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    '@nuxtjs/ngrok',
+    // '@nuxtjs/ngrok',
     '@nuxtjs/style-resources',
     '@nuxtjs/device',
   ],
