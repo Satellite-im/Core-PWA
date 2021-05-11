@@ -1,0 +1,22 @@
+<div id="file-upload">
+  <div class="file-preview" v-if="file">
+    <img v-if="url" :src="url" />
+    <div class="file-info">
+      <TypographyTitle :size="6" :text="file.name" />
+      <TypographySubtitle :size="6" :text="file.type" />
+      <TypographySubtitle :size="6" :text="file.size.toString()" />
+      <div class="is-controls">
+        <InteractablesButton type="primary" size="small" text="Send" outlined />
+        <InteractablesButton type="danger" size="small" text="Cancel" outlined :action="cancelUpload" />
+      </div>
+    </div>
+  </div>
+  <input type="file" id="quick-upload" @change="handleFile"/>
+  <label for="quick-upload"
+    :data-tooltip="$t('global.upload')"
+    class="has-tooltip has-tooltip-top has-tooltip-primary">
+    <font-awesome-icon
+      :icon="['far', 'plus']"
+      class="control-icon"/>
+  </label>
+</div>

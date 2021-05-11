@@ -17,6 +17,11 @@ export default Vue.extend({
       default: '404.png',
     },
   },
+  data() {
+    return {
+      showfull: false,
+    }
+  },
 })
 </script>
 <style scoped lang="less" src="./Image.less"></style>

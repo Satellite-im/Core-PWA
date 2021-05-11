@@ -2,7 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import FileUpload from './fileupload/FileUpload.vue'
+
 export default Vue.extend({
+  components: {
+    FileUpload,
+  },
   data() {
     return {
       text: '',
@@ -10,6 +16,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    /**
+     * Computes the amount of characters left
+     */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },

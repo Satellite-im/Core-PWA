@@ -1,0 +1,55 @@
+#file-upload {
+  margin-top: 0.15rem;
+  #quick-upload {
+    width: 0;
+    height: 0;
+    border: none;
+    position: absolute;
+  }
+
+  .control-icon {
+    justify-self: center;
+    align-self: center;
+    font-size: @larger-icon-size;
+    margin: 0 0.5rem;
+  }
+
+  .file-preview {
+    position: absolute;
+    bottom: calc(4.6rem - 1px);
+    right: 1rem;
+    width: calc(100% - @sidebar-size - 40px - 1rem);
+    background: @dark-gray;
+    border-radius: 2px;
+    padding: 1rem;
+    display: inline-flex;
+
+    .file-info {
+      width: 100%;
+    }
+
+    .title {
+      font-size: @text-size;
+    }
+    .subtitle {
+      font-size: @mini-text-size;
+      margin-bottom: 0.75rem;
+    }
+    
+    .is-controls {
+      align-content: flex-end;
+
+      .button {
+        float: right;
+        margin-left: 0.5rem;
+      }
+    }
+
+    img {
+      max-width: 15vw;
+      max-height: 10vh;
+      border-radius: 2px;
+      margin-right: 1rem;
+    }
+  }
+}

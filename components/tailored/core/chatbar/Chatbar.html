@@ -1,11 +1,8 @@
 <div id="chatbar">
   <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`">
     <div
-      :data-tooltip="$t('global.upload')"
-      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
-      <font-awesome-icon
-        :icon="['far', 'plus']"
-        class="control-icon"/>
+      class="control-wrap">
+      <FileUpload />
     </div>
     <input :placeholder="$t('global.talk')" v-model="text"/>
     <div
