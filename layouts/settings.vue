@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {myMixin} from '../components/mixins/Swipe'
+import {mobileSwipe} from '../components/mixins/Swipe'
 export default Vue.extend({
   data() {
     return {
@@ -20,7 +20,7 @@ export default Vue.extend({
       }
     },
   },
-  mixins: [myMixin],
+  mixins: [mobileSwipe],
   methods: {
     /**
      * Opens and closes the left hand sidebar

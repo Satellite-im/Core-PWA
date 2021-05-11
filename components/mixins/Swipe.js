@@ -1,10 +1,18 @@
-export const myMixin = {
+export const mobileSwipe = {
     created: function () {
-      this.hello()
+    //can add functions here on start-up if needed
     },
     methods: {
-      hello: function () {
-        console.log('hello from mixin!')
-      }
+        settingsSwipeHandler (direction) {
+            if (this.$route.name?.includes('settings') && this.$device.isMobile) {
+
+            if (direction === 'left') {
+                this.sidebar = false
+            }
+            if (direction === 'right') {
+                this.sidebar = true
+            }
+            }
+        }  
     }
-  }
+}
