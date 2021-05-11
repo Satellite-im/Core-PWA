@@ -28,6 +28,7 @@ export default {
     { src: '~/plugins/thirdparty/fontawesome.ts' },
     { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clipboard.ts' },
+    { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
     // Local
     { src: '~/plugins/local/notifications.ts' },

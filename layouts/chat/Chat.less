@@ -13,6 +13,10 @@
     display: flex;
     flex-direction: column;
 
+    .file-preview {
+      transition: @transition-all;
+    }
+
     #statusbar {
       max-height: @statusbar-height;
     }
@@ -37,6 +41,9 @@
   }
 
   &.is-collapsed {
+    .file-preview {
+      width: calc(100% - 2rem) !important;
+    }
     #sidebar, #servers-vertical-list {
       transform: translateX(calc(-@sidebar-size + -@servers-size));
     }
