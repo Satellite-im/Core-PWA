@@ -1,4 +1,4 @@
-<div id="app" :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`" v-touch:swipe="settingsSwipeHandler">
+<div id="app" :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`" v-touch:swipe="settingsSwipeHandler(this.sidebar)">
   <div class="sidebar is-secondary-background">
     <TypographyTitle :size="6" :text="$t('global.settings')" class="sidebar-word" />
     <TailoredSettingsSidebar
