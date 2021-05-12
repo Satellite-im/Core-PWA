@@ -3,22 +3,16 @@ export const mobileSwipe = {
       // can add functions here on start-up if needed
     },
     methods: {
-      // swipe handler for settings
-      settingsSwipeHandler(sidebar: any, direction: string){
-        // console.log(this)
-        console.log(sidebar)
-        // console.log(direction)
-        // if (this.$route.name?.includes('settings') && this.$device.isMobile) {
+      settingsSwipeHandler (currThis: any) {
+        return function (direction: any) {
           if (direction === 'left') {
-            // console.log("left")
-            sidebar = false
-          }
-          if (direction === 'right') {
-            sidebar = true
-            // console.log("right")
-          }
-        // }
-      },
-    },
+                  currThis.sidebar = false
+                }
+                if (direction === 'right') {
+                  currThis.sidebar = true
+                }
+        }
+    }
   }
+}
   
