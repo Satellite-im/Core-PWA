@@ -35,6 +35,7 @@ import {
   faSort,
   faEllipsisV,
   faSync,
+  faImage,
   faHome,
 } from '@fortawesome/pro-regular-svg-icons'
 
@@ -71,5 +72,6 @@ library.add(faEllipsisV)
 library.add(faLock)
 library.add(faSync)
 library.add(faHome)
+library.add(faImage)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

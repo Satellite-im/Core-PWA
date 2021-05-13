@@ -5,11 +5,15 @@
         Name
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
-      <th>
+      <th v-if="!$device.isMobile">
         Modified
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
-      <th>
+      <th v-if="!$device.isMobile">
+        Type
+        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+      </th>
+      <th v-if="!$device.isMobile">
         Encrypted
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
@@ -25,13 +29,15 @@
           <span class="icon">
             <font-awesome-icon :icon="['far', 'folder']" v-if="item.children" />
             <font-awesome-icon :icon="['far', 'archive']" v-else-if="item.type && item.type.includes('archive')" />
+            <font-awesome-icon :icon="['far', 'image']" v-else-if="item.type && item.type.includes('image')" />
             <font-awesome-icon :icon="['far', 'file-alt']" v-else />
           </span>
           {{ item.name }}
         </td>
-        <td>{{ $dayjs(item.modified).from() }}</td>
+        <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
+        <td v-if="!$device.isMobile">{{ item.type ? item.type : '-' }}</td>
         <td class="has-tooltip has-tooltip-primary has-tooltip-top"
-          :data-tooltip="(item.encrypted) ? 'Encrypted' : 'Unencrypted'">
+          :data-tooltip="(item.encrypted) ? 'Encrypted' : 'Unencrypted'" v-if="!$device.isMobile">
           <font-awesome-icon
             :icon="['far', 'lock']"
             v-if="item.encrypted" />
