@@ -27,6 +27,7 @@
     "core-js": "^3.9.1",
     "dayjs": "^1.10.4",
     "dotenv-cli": "^4.0.0",
+    "filesize": "^6.3.0",
     "less": "^4.1.1",
     "less-loader": "^7.1.1",
     "nuxt": "^2.15.3",

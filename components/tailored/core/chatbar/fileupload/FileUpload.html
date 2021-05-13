@@ -4,7 +4,7 @@
     <div class="file-info">
       <TypographyTitle :size="6" :text="file.name" />
       <TypographySubtitle :size="6" :text="file.type" />
-      <TypographySubtitle :size="6" :text="file.size.toString()" />
+      <TypographySubtitle :size="6" :text="$filesize(file.size)" />
       <div class="is-controls">
         <InteractablesButton type="primary" size="small" text="Send" outlined />
         <InteractablesButton type="danger" size="small" text="Cancel" outlined :action="cancelUpload" />

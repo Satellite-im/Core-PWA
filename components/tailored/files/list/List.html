@@ -1,0 +1,49 @@
+<div id="file-list">
+  <table class="table">
+    <thead>
+      <th>
+        Name
+        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+      </th>
+      <th>
+        Modified
+        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+      </th>
+      <th>
+        Encrypted
+        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+      </th>
+      <th>
+        Size
+        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+      </th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr class="item" v-for="item in path">
+        <td class="filename" v-on:click="() => push(item)">
+          <span class="icon">
+            <font-awesome-icon :icon="['far', 'folder']" v-if="item.children" />
+            <font-awesome-icon :icon="['far', 'archive']" v-else-if="item.type && item.type.includes('archive')" />
+            <font-awesome-icon :icon="['far', 'file-alt']" v-else />
+          </span>
+          {{ item.name }}
+        </td>
+        <td>{{ $dayjs(item.modified).from() }}</td>
+        <td class="has-tooltip has-tooltip-primary has-tooltip-top"
+          :data-tooltip="(item.encrypted) ? 'Encrypted' : 'Unencrypted'">
+          <font-awesome-icon
+            :icon="['far', 'lock']"
+            v-if="item.encrypted" />
+          <font-awesome-icon
+            :icon="['far', 'lock-open']"
+            v-else="item.encrypted" />
+        </td>
+        <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
+        <td class="options">
+          <font-awesome-icon :icon="['far', 'ellipsis-v']" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
