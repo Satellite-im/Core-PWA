@@ -13,6 +13,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * Allows you to get the current path file object
+     */
     getPath(): any {
       if (this.$data.path.length === 0) {
         // @ts-ignore
@@ -28,16 +31,25 @@ export default Vue.extend({
       }
       return files
     },
+    /**
+     * Push a new child name to the path array
+     */
     push(item: any) {
       if (item.children) {
         this.$data.path.push(item.name)
       }
     },
+    /**
+     * Pull n items from the file path array
+     */
     pull(count: number = 1) {
       for (let i = 0; i < count; i++) {
         this.$data.path.pop()
       }
     },
+    /**
+     * Manually override the path array from a child component
+     */
     setPath(pth: Array<String>) {
       this.$data.path = pth
     },

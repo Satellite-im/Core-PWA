@@ -122,7 +122,7 @@ export const Files = {
         {
           name: 'Some File 1',
           modified: 1620871715645,
-          type: 'image/png',
+          type: 'file/markdown',
           size: 8203451,
           location: 'https://ifps.io/ipfs/12jfa9sdf01234',
         },
