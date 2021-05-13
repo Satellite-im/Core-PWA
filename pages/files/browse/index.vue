@@ -6,6 +6,42 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
+  data() {
+    return {
+      root: 'root',
+      path: [],
+    }
+  },
+  methods: {
+    getPath(): any {
+      if (this.$data.path.length === 0) {
+        // @ts-ignore
+        return this.$mock.files
+      }
+      // @ts-ignore
+      let files = this.$mock.files
+      for (let i = 0; i < this.$data.path.length; i++) {
+        // @ts-ignore
+        files = files.children.filter(
+          (item: any) => item.name === this.$data.path[i]
+        )[0]
+      }
+      return files
+    },
+    push(item: any) {
+      if (item.children) {
+        this.$data.path.push(item.name)
+      }
+    },
+    pull(count: number = 1) {
+      for (let i = 0; i < count; i++) {
+        this.$data.path.pop()
+      }
+    },
+    setPath(pth: Array<String>) {
+      this.$data.path = pth
+    },
+  },
 })
 </script>
 

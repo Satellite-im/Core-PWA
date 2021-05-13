@@ -3,7 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  middleware: 'authenticated',
+  data() {
+    return {
+      sidebar: true,
+    }
+  },
+})
 </script>
 
 <style lang="less" src="./files/Files.less"></style>
