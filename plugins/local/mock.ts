@@ -16,7 +16,7 @@ const mock = {
 
 declare module '@nuxt/types' {
   interface Context {
-    $mock: object
+    $mock: any
   }
 }
 
