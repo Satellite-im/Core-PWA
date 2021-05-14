@@ -1,0 +1,12 @@
+<div class="is-group">
+  <UiCircle type="random" :seed="group.from" :size="35" />
+  <div class="group-body">
+    <div class="group-heading">
+      <TypographyTitle :size="6" :text="$mock.users.filter(u => u.address === group.from)[0].name" />
+      <TypographyText :text="$dayjs(group.at).from()" />
+    </div>
+    <div class="group-messages">
+      <TailoredMessagingMessage v-for="message in group.messages" :message="message" :key="message.id" />
+    </div>
+  </div>
+</div>

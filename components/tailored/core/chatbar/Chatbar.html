@@ -1,0 +1,16 @@
+<div id="chatbar">
+  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`">
+    <div
+      class="control-wrap">
+      <FileUpload />
+    </div>
+    <input :placeholder="$t('global.talk')" v-model="text"/>
+    <div
+      :data-tooltip="$t('global.glyphs')"
+      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
+      <font-awesome-icon :icon="['far', 'grin-tongue-wink']" class="control-icon" />
+    </div>  
+    <font-awesome-icon :icon="['far', 'arrow-circle-right']" class="control-icon" />
+  </div>
+  <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{ `${text.length}/${maxChars}` }}</span>
+</div>

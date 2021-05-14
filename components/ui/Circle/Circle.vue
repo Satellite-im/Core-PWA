@@ -66,7 +66,7 @@ export default Vue.extend({
      */
     color: {
       type: String,
-      default: 'transparent',
+      default: '#16161e',
     },
   },
 })

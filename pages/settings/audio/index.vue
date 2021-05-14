@@ -2,7 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 import { mapState } from 'vuex'
+import { UserPermissions } from '../../../components/mixins/UserPermissions'
 import { Bitrates, SampleSizes } from './options/audio'
 
 export default Vue.extend({
@@ -14,6 +16,9 @@ export default Vue.extend({
       SampleSizes,
       audioInputs: [],
       audioOutputs: [],
+      userHasGivenAudioAccess: false,
+      userDeniedAudioAccess: false,
+      browserAllowsAudioOut: true,
     }
   },
   computed: {
@@ -26,6 +31,14 @@ export default Vue.extend({
       },
       get() {
         return this.settings.echoCancellation
+      },
+    },
+    isNoiseSuppression: {
+      set(state) {
+        this.$store.commit('noiseSuppression', state)
+      },
+      get() {
+        return this.settings.noiseSuppression
       },
     },
     isBitrate: {
@@ -44,29 +57,70 @@ export default Vue.extend({
         return this.settings.sampleSize
       },
     },
+    isAudioInput: {
+      set(state) {
+        this.$store.commit('audioInput', state)
+      },
+      get() {
+        return this.settings.audioInput
+      },
+    },
+    isAudioOutput: {
+      set(state) {
+        this.$store.commit('audioOutput', state)
+      },
+      get() {
+        return this.settings.audioOutput
+      },
+    },
   },
   mounted() {
-    // TODO: Request permissions fist
-    window.navigator.mediaDevices.enumerateDevices().then((devices) => {
-      devices.forEach((device) => {
-        switch (device.kind) {
-          case 'audioinput':
-            this.$data.audioInputs.push({
-              text: device.label,
-              value: device.deviceId,
-            })
-            break
-          case 'audiooutput':
-            this.$data.audioOutputs.push({
-              text: device.label,
-              value: device.deviceId,
-            })
-            break
-          default:
-            break
+    // Get the users permissions - if they had granted our origin access this will return granted, prompt, or denied.
+    // @ts-ignore
+    this.setupDefaults()
+  },
+  methods: {
+    ...UserPermissions.methods,
+    async setupDefaults() {
+      // @ts-ignore
+      const permissionsObject: any = await this.getUserPermissions()
+      // Toggles the show/hide on the button to request permissions
+      this.$data.userHasGivenAudioAccess =
+        permissionsObject.permissions.microphone
+
+      if (permissionsObject.permissions.microphone) {
+        // Get the arrays of devices formtted in the name/value format the select tool wants
+        this.$data.audioInputs = permissionsObject.devices.audioIn
+        this.$data.audioOutputs = permissionsObject.devices.audioOut
+
+        // Setting defaults on mount if one isn't already present in local storage
+        if (!this.settings.audioInput) {
+          this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
         }
-      })
-    })
+        if (!this.settings.audioOutput) {
+          this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+        }
+      }
+
+      if (permissionsObject.browser !== 'Chrome') {
+        this.$data.browserAllowsAudioOut = false
+      } else if (!this.settings.audioOutput) {
+        this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+      }
+    },
+    async enableAudio() {
+      // Check to see if the user has permission
+      try {
+        // @ts-ignore
+        await this.requestUserPermissions('audio')
+        this.$data.userHasGivenAudioAccess = true
+        // @ts-ignore
+        this.setupDefaults()
+      } catch (_: any) {
+        // Error is returned if user selects Block/Deny
+        this.$data.userDeniedAudioAccess = true
+      }
+    },
   },
 })
 </script>

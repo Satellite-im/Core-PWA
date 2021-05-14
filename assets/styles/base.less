@@ -12,13 +12,10 @@
   color: @primary-color;
 }
 // UI Kit
+
 .card {
   background-color: black;
   color: @text;
-}
-
-.close-button {
-  color: @primary-color;
 }
 
 .toasted-container.top-center {
@@ -34,6 +31,14 @@
   .bar {
     background-color: @text;
   }
+}
+
+.title.is-6 {
+  margin-bottom: 0.25rem;
+}
+
+.is-6 {
+  font-size: 11pt;
 }
 
 .menu-list {
@@ -62,18 +67,6 @@
   color: @text-muted;
 }
 
-.tag:not(body).is-dark {
-  background: @dark;
-
-  .tag-number {
-    background: @primary-color-alt;
-  }
-}
-
-.tag:not(body).is-primary {
-  background-color: @primary-color;
-}
-
 // Buttons
 .button.is-primary {
   background-color: @primary-color;
@@ -92,7 +85,41 @@
     color: @bright-text;
   }
 }
+
+.button.is-dark.is-outlined {
+  color: @text;
+  border-color: @light-gray;
+
+  &:hover, &:focus {
+    background-color: @light-gray;
+    border-color: @light-gray;
+    color: @bright-text;
+  }
+
+  &.active {
+    background-color: @primary-color;
+    border-color: @light-gray;
+    color: @bright-text;
+  }
+}
+
+.button.is-dark {
+  background-color: @light-gray;
+  color: @text;
+}
+.button.is-dark:hover {
+  background-color: @light-gray-alt;
+  color: @bright-text;
+}
+
 // Inputs
+.has-tooltip-primary {
+  &:before {
+    background-color: @black !important;
+    font-family: 'SpaceMono', monospace !important;
+    color: @bright-text !important;
+  }
+}
 .input {
   background-color: @dark-gray;
   color: @text;
@@ -107,7 +134,10 @@
 .is-primary.input {
   border-color: @primary-color;
 }
-
+.is-dark.input {
+  border-color: @light-gray;
+  background: @darker;
+}
 .select.is-primary select {
   border-color: @primary-color;
 }
@@ -121,6 +151,7 @@
 .select.is-primary:hover::after {
   border-color: @primary-color-alt;
 }
+
 
 // Typography
 .title {

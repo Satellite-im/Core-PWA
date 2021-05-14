@@ -1,0 +1,6 @@
+<div id="files">
+  <TailoredFilesControls />
+  <UiSpacer :height="20" />
+  <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
+  <TailoredFilesList :path="getPath().children" :push="push" />
+</div>

@@ -1,0 +1,10 @@
+<div id="conversation" v-scroll-lock="true" :key="updated">
+  <div class="group" v-for="group in messages">
+    <div v-if="group.type === 'group'">
+      <TailoredMessagingGroup :group="group" :key="group.id" />
+    </div>
+    <div v-else-if="group.type === 'divider'">
+      <UiHorizontalRuleText :value="group.at.toString()" />
+    </div>
+  </div>
+</div>
