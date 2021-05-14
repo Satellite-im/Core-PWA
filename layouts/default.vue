@@ -14,13 +14,13 @@
   src: url('~/assets/fonts/SpaceMono-Regular.ttf');
 }
 @font-face {
-  font-family: 'Poppins';
+  font-family: @secondary-font;
   font-style: normal;
   font-weight: 400;
   src: url('~/assets/fonts/Poppins-Regular.ttf');
 }
 p {
-  font-family: 'Poppins';
+  font-family: @secondary-font;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;

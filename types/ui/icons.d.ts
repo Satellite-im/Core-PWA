@@ -12,6 +12,12 @@ export type IconName =
   | 'plus'
   | 'save'
   | 'user'
+  | 'globle-americas'
+  | 'users'
+  | 'folder'
+  | 'user-friends'
+  | 'comment-alt-lines'
+  | 'cog'
 export type Icon = {
   style: IconStyle
   name: IconName

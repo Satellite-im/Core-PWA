@@ -1,0 +1,18 @@
+.breadcrumb {
+  font-family: @primary-font;
+  font-size: @text-size;
+  a {
+    text-transform: capitalize;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+  li + li::before {
+    color: @text;
+  }
+  
+  li.is-active a {
+    color: @text-muted;
+  }
+}

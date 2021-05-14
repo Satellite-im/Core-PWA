@@ -1,0 +1,85 @@
+#chatbar {
+  margin-top: 0.5rem;
+  width: 100%;
+  .charlimit {
+    float: right;
+    margin-right: 2rem;
+    font-size: @mini-text-size;
+    color: @text-muted;
+    &.is-error {
+      color: @red;
+    }
+  }
+
+  .chatbar-wrap {
+    background-color: @dark-gray;
+    margin: 0 1rem;
+    border-radius: 40px;
+    padding: 0.5rem 0.75rem;
+    display: inline-flex;
+    flex-direction: row;
+    width: calc(100% - 2rem);
+    border: 1px solid transparent;
+
+    .control-tooltip-wrap {
+      height: 16pt;
+      width: 16pt;
+      align-self: center;
+
+      &:nth-child(1) {
+        margin-right: 0.75rem;
+      }
+
+      &:nth-child(3) {
+        margin-right: 0.75rem;
+        margin-left: 0;
+      }
+    }
+    
+    &.is-error {
+      border: 1px solid @red;
+
+      .control-icon {
+        &:nth-child(4) {
+          color: @red;
+        }
+      }
+    }
+
+    input {
+      flex: 1;
+      padding: 0.25rem 0.5rem;
+      background-color: transparent;
+      border: none;
+      font-family: 'Poppins';
+      color: @text;
+      outline: none;
+    }
+
+    .control-icon {
+      justify-self: center;
+      align-self: center;
+      font-size: @larger-icon-size;
+      margin: 0 0.5rem;
+
+      &:nth-child(1) {
+        margin-right: 0;
+      }
+      &:nth-child(3) {
+        margin-left: 0;
+      }
+      &:nth-child(4) {
+        color: @primary-color;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #chatbar {
+    .chatbar-wrap {
+      margin: 0 0.5rem;
+      width: calc(100% - 1rem);
+    }
+  }
+}

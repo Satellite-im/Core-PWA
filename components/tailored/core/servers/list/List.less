@@ -1,0 +1,41 @@
+#servers-vertical-list {
+  height: 100vh;
+  width: 60px;
+  min-width: 60px;
+  background-color: @darker;
+  display: inline-flex;
+  justify-content: center;
+  padding-top: 1rem;
+
+  .circle-group {
+    margin: 1rem 0;
+    color: @text;
+  }
+
+  .servers {
+    .circle {
+      margin: 0.25rem 0;
+    }
+  }
+
+  .unread {
+    position: relative;
+    .circle {
+      margin: 0.25rem 0;
+    }
+    .label {
+      position: absolute;
+      bottom: 2px;
+      right: -2px;
+      font-size: @micro-text-size;
+      background-color: @primary-color;
+      border-radius: 50%;
+      line-height: 1.2;
+      padding: 0.1rem 0.27rem;
+      text-align: center;
+      color: @text;
+      font-family: 'SpaceMono';
+      border: 2px solid @darker;
+    }
+  }
+}
