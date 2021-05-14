@@ -1,6 +1,7 @@
 <template src="./List.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
   props: {
@@ -8,7 +9,7 @@ export default Vue.extend({
      * The array of children to path through
      */
     path: {
-      type: Array,
+      type: Array as PropType<Array<FileType | Folder>>,
       default: () => [],
     },
     /**
@@ -16,7 +17,22 @@ export default Vue.extend({
      */
     push: {
       type: Function,
-      default: () => {},
+      default: () => () => {},
+    },
+  },
+  data() {
+    return {
+      file: false,
+    }
+  },
+  methods: {
+    handle(item: FileType | Folder): void {
+      const hasChildren = ((<Folder>item).children)
+      if (hasChildren) {
+        this.push(item)
+      } else {
+        this.$data.file = item
+      }
     },
   },
 })

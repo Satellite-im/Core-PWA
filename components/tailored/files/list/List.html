@@ -1,4 +1,5 @@
 <div id="file-list">
+  <TailoredFilesView v-if="file" :file="file" />
   <table class="table">
     <thead>
       <th>
@@ -25,7 +26,7 @@
     </thead>
     <tbody>
       <tr class="item" v-for="item in path">
-        <td class="filename" v-on:click="() => push(item)">
+        <td class="filename" v-on:click="() => handle(item)">
           <span class="icon">
             <font-awesome-icon :icon="['far', 'folder']" v-if="item.children" />
             <font-awesome-icon :icon="['far', 'archive']" v-else-if="item.type && item.type.includes('archive')" />
