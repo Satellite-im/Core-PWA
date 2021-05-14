@@ -1,15 +1,15 @@
 <template src="./Audio.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import mixins from 'vue-typed-mixins'
+
 import { mapState } from 'vuex'
 import { UserPermissions } from '../../../components/mixins/UserPermissions'
 import { Bitrates, SampleSizes } from './options/audio'
 
-export default Vue.extend({
+export default mixins(UserPermissions).extend({
   name: 'AudioSettings',
   layout: 'settings',
-  mixins: [UserPermissions],
   data() {
     return {
       Bitrates,
@@ -40,7 +40,7 @@ export default Vue.extend({
       get() {
         return this.settings.noiseSuppression
       },
-    }, 
+    },
     isBitrate: {
       set(state) {
         this.$store.commit('bitrate', state)
@@ -77,45 +77,40 @@ export default Vue.extend({
   methods: {
     enableAudio() {
       // Check to see if the user has permission
-      UserPermissions.methods
-        .requestUserPermissions('audio')
-        .then((e) => {
+      // @ts-ignore
+      this.requestUserPermissions('audio')
+        .then((_: any) => {
           this.$data.userHasGivenAudioAccess = true
         })
         .then(() => {
-          UserPermissions.methods
-            .getUserPermissions()
-            .then((permissionsObject: any) => {
-              // Toggles the show/hide on the button to request permissions
-              this.$data.userHasGivenAudioAccess =
-                permissionsObject.permissions.microphone
+          // @ts-ignore
+          this.getUserPermissions().then((permissionsObject: any) => {
+            // Toggles the show/hide on the button to request permissions
+            this.$data.userHasGivenAudioAccess =
+              permissionsObject.permissions.microphone
 
-              if (permissionsObject.permissions.microphone) {
-                // Get the arrays of devices formtted in the name/value format the select tool wants
-                this.$data.audioInputs = permissionsObject.devices.audioIn
-                this.$data.audioOutputs = permissionsObject.devices.audioOut
+            if (permissionsObject.permissions.microphone) {
+              // Get the arrays of devices formtted in the name/value format the select tool wants
+              this.$data.audioInputs = permissionsObject.devices.audioIn
+              this.$data.audioOutputs = permissionsObject.devices.audioOut
 
-                // Setting defaults on mount if one isn't already present in local storage
-                if (!this.settings.audioInput) {
-                  this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
-                }
-                if (!this.settings.audioOutput) {
-                  this.isAudioOutput =
-                    permissionsObject.devices.audioOut[0].value
-                }
+              // Setting defaults on mount if one isn't already present in local storage
+              if (!this.settings.audioInput) {
+                this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
               }
-
-              if (permissionsObject.browser !== 'Chrome') {
-                this.$data.browserAllowsAudioOut = false
-              } else {
-                if (!this.settings.audioOutput) {
-                  this.isAudioOutput =
-                    permissionsObject.devices.audioOut[0].value
-                }
+              if (!this.settings.audioOutput) {
+                this.isAudioOutput = permissionsObject.devices.audioOut[0].value
               }
-            })
+            }
+
+            if (permissionsObject.browser !== 'Chrome') {
+              this.$data.browserAllowsAudioOut = false
+            } else if (!this.settings.audioOutput) {
+              this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+            }
+          })
         })
-        .catch((err) => {
+        .catch((_: any) => {
           // Error is returned if user selects Block/Deny
           this.$data.userDeniedAudioAccess = true
         })
@@ -143,10 +138,8 @@ export default Vue.extend({
 
         if (permissionsObject.browser !== 'Chrome') {
           this.$data.browserAllowsAudioOut = false
-        } else {
-          if (!this.settings.audioOutput) {
-            this.isAudioOutput = permissionsObject.devices.audioOut[0].value
-          }
+        } else if (!this.settings.audioOutput) {
+          this.isAudioOutput = permissionsObject.devices.audioOut[0].value
         }
       })
   },
