@@ -14,7 +14,6 @@ export default Vue.extend({
     // selects a setting group. This watches route changes and toggles
     // the sidebar if it's on a mobile device.
     $route() {
-      // @ts-ignore
       if (this.$route.name?.includes('settings') && this.$device.isMobile) {
         this.sidebar = false
       }
