@@ -16,22 +16,21 @@ export default Vue.extend({
      */
     pull: {
       type: Function,
-      default: () => {},
+      default: () => () => {},
     },
     /**
      * Set the path array manually
      */
     setPath: {
       type: Function,
-      default: () => {},
+      default: () => () => {},
     },
   },
   methods: {
     /**
      * Gets the data path attribute and manually updates parent path
      */
-    jumpTo(e: any) {
-      // @ts-ignore
+    jumpTo(e: Event | any) {
       this.setPath(JSON.parse(e.currentTarget.getAttribute('data-self-path')))
     },
   },
