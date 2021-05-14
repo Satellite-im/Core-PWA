@@ -2,7 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 export default Vue.extend({
+  mixins: [mobileSwipe],
   middleware: 'authenticated',
   data() {
     return {
