@@ -1,13 +1,13 @@
 <template src="./Audio.html"></template>
 
 <script lang="ts">
-import mixins from 'vue-typed-mixins'
+import Vue from 'vue'
 
 import { mapState } from 'vuex'
 import { UserPermissions } from '../../../components/mixins/UserPermissions'
 import { Bitrates, SampleSizes } from './options/audio'
 
-export default mixins(UserPermissions).extend({
+export default Vue.extend({
   name: 'AudioSettings',
   layout: 'settings',
   data() {
@@ -74,7 +74,13 @@ export default mixins(UserPermissions).extend({
       },
     },
   },
+  mounted() {
+    // Get the users permissions - if they had granted our origin access this will return granted, prompt, or denied.
+    // @ts-ignore
+    this.setupDefaults()
+  },
   methods: {
+    ...UserPermissions.methods,
     async setupDefaults() {
       // @ts-ignore
       const permissionsObject: any = await this.getUserPermissions()
@@ -115,11 +121,6 @@ export default mixins(UserPermissions).extend({
         this.$data.userDeniedAudioAccess = true
       }
     },
-  },
-  mounted() {
-    // Get the users permissions - if they had granted our origin access this will return granted, prompt, or denied.
-    // @ts-ignore
-    this.setupDefaults()
   },
 })
 </script>
