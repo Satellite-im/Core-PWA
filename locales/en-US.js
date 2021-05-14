@@ -50,7 +50,7 @@ export default {
           permissionButtonText: 'Request Permission',
           permissionRequestMessage: '',
           permissionDeniedMessage:
-            "You have denied microphone access so we can't see what devices you have. If you change your mind, yadda yadda yadda",
+            "You have denied microphone access so we can't see what devices you have. Please allow microphone access in your browser.",
           browserDoesNotSupportAudioOutChange:
             'Your Browser does not allow setting an audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
           input: {
