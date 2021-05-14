@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-scroll-lock="true" class="container">
     <div>
       <TypographyTitle :size="1" text="Satellite-Absolute" />
       <TypographySubtitle
@@ -265,9 +265,10 @@ export default Vue.extend({
 <style scoped lang="less">
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   text-align: center;
+  height: min-content;
+  overflow-y: scroll;
 }
 </style>
