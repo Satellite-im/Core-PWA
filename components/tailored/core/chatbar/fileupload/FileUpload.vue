@@ -30,9 +30,8 @@ export default Vue.extend({
       if (!file) return
       const self = this
       const reader = new FileReader()
-      reader.onload = function (e) {
-        // @ts-ignore
-        self.$data.url = e.target.result
+      reader.onload = function (e: Event | any) {
+        if (e.target) self.$data.url = e.target.result
       }
       reader.readAsDataURL(file)
     },

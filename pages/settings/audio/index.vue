@@ -116,32 +116,30 @@ export default mixins(UserPermissions).extend({
         })
     },
   },
-  mounted() {
+  async mounted() {
     // Get the users permissions - if they had granted our origin access this will return granted, prompt, or denied.
-    UserPermissions.methods
-      .getUserPermissions()
-      .then((permissionsObject: any) => {
-        // Toggles the show/hide on the button to request permissions
-        this.$data.userHasGivenAudioAccess =
-          permissionsObject.permissions.microphone
+    // @ts-ignore
+    const permissionsObject: any = await this.getUserPermissions()
+    // Toggles the show/hide on the button to request permissions
+    this.$data.userHasGivenAudioAccess =
+      permissionsObject.permissions.microphone
 
-        if (permissionsObject.permissions.microphone) {
-          // Get the arrays of devices formtted in the name/value format the select tool wants
-          this.$data.audioInputs = permissionsObject.devices.audioIn
-          this.$data.audioOutputs = permissionsObject.devices.audioOut
+    if (permissionsObject.permissions.microphone) {
+      // Get the arrays of devices formtted in the name/value format the select tool wants
+      this.$data.audioInputs = permissionsObject.devices.audioIn
+      this.$data.audioOutputs = permissionsObject.devices.audioOut
 
-          // Setting defaults on mount if one isn't already present in local storage
-          if (!this.settings.audioInput) {
-            this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
-          }
-        }
+      // Setting defaults on mount if one isn't already present in local storage
+      if (!this.settings.audioInput) {
+        this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
+      }
+    }
 
-        if (permissionsObject.browser !== 'Chrome') {
-          this.$data.browserAllowsAudioOut = false
-        } else if (!this.settings.audioOutput) {
-          this.isAudioOutput = permissionsObject.devices.audioOut[0].value
-        }
-      })
+    if (permissionsObject.browser !== 'Chrome') {
+      this.$data.browserAllowsAudioOut = false
+    } else if (!this.settings.audioOutput) {
+      this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+    }
   },
 })
 </script>
