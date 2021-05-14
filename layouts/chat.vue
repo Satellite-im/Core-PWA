@@ -21,9 +21,7 @@ export default Vue.extend({
   },
   methods: {
     scrollToBottom() {
-      // @ts-ignore
-      const container = this.$refs.chat.$el
-      // @ts-ignore
+      const container = (this.$refs.chat as Vue).$el as Element
       container.scrollTop = container.scrollHeight
     },
   },

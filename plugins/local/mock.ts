@@ -14,6 +14,12 @@ const mock = {
   files: Files,
 }
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    $mock: any
+  }
+}
+
 declare module '@nuxt/types' {
   interface Context {
     $mock: any

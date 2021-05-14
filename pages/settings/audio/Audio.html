@@ -3,14 +3,19 @@
   <!-- Requires user permissions to see in most browsers -->
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.audio.sources.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.audio.sources.subtitle')" />
-      <br />
+      <div v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess">
+        <TypographyTitle :size="6" :text="$t('pages.settings.audio.sources.title')" />
+        <TypographySubtitle :size="6" :text="$t('pages.settings.audio.sources.subtitle')" />
+        <br>
+      </div>
 
       <!-- Ask for permissions block -->
       <span v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess">
-        <InteractablesButton :text="$t('pages.settings.audio.sources.permissionButtonText')" size="normal"
-          type="primary" :action="enableAudio" />
+        <InteractablesButton 
+          :text="$t('pages.settings.audio.sources.permissionButtonText')"
+          size="small"
+          type="primary"
+          :action="enableAudio" />
       </span>
 
       <!-- Permission Denied Block -->
