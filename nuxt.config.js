@@ -31,6 +31,7 @@ export default {
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
+    { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
     // Local
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },
