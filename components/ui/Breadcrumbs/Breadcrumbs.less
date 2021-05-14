@@ -1,0 +1,14 @@
+
+.breadcrumb {
+  font-family: @primary-font;
+  a {
+    text-transform: capitalize;
+  }
+  li + li::before {
+    color: @text;
+  }
+  
+  li.is-active a {
+    color: @text-muted;
+  }
+}

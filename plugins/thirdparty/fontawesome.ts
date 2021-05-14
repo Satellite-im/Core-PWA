@@ -10,13 +10,36 @@ import {
   faSpinnerThird,
   faArrowCircleRight,
   faLockOpen,
+  faLock,
   faBars,
   faClipboard,
   faTimesCircle,
   faPlus,
   faSave,
   faUser,
+  faGlobeAmericas,
+  faUserFriends,
+  faUsers,
+  faFolder,
+  faFolderPlus,
+  faCommentAltLines,
+  faMicrophoneAlt,
+  faHeadphonesAlt,
+  faCog,
+  faPhone,
+  faVideo,
+  faFilePlus,
+  faFileAlt,
+  faGrinTongueWink,
+  faArchive,
+  faSort,
+  faEllipsisV,
+  faSync,
+  faImage,
+  faHome,
 } from '@fortawesome/pro-regular-svg-icons'
+
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faSpinnerThird)
@@ -28,5 +51,27 @@ library.add(faTimesCircle)
 library.add(faPlus)
 library.add(faSave)
 library.add(faUser)
+library.add(faGlobeAmericas)
+library.add(faUsers)
+library.add(faFolder)
+library.add(faFolderPlus)
+library.add(faUserFriends)
+library.add(faCommentAltLines)
+library.add(faMicrophoneAlt)
+library.add(faHeadphonesAlt)
+library.add(faCog)
+library.add(faCircle)
+library.add(faPhone)
+library.add(faVideo)
+library.add(faFilePlus)
+library.add(faGrinTongueWink)
+library.add(faArchive)
+library.add(faFileAlt)
+library.add(faSort)
+library.add(faEllipsisV)
+library.add(faLock)
+library.add(faSync)
+library.add(faHome)
+library.add(faImage)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

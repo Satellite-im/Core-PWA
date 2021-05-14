@@ -1,0 +1,29 @@
+.is-normal-image {
+  max-width: 30vw;
+  border-radius: 4px;
+}
+
+.image-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 2;
+  display: flex;
+  .is-image-in-mask {
+    max-height: 80vh;
+    max-width: 80vw;
+    justify-content: center;
+    align-self: center;
+    margin: 0 auto;
+    border-radius: 4px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .is-normal-image {
+    width: 100%;
+  }
+}

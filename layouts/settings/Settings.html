@@ -11,8 +11,9 @@
       :toggle="toggleSidebar"
     />
   </div>
-  <div class="not-sidebar">
-    <InteractablesClose :action="() => {}" />
+  <div class="not-sidebar" v-scroll-lock="true">
+    <UiBreadcrumbs />
+    <InteractablesClose :action="() => $router.push('/chat/direct')" />
     <Nuxt />
   </div>
 </div>

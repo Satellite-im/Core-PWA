@@ -24,12 +24,19 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    // Third Party
     { src: '~/plugins/thirdparty/fontawesome.ts' },
+    { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clipboard.ts' },
-    { src: '~/plugins/local/notifications.ts' },
+    { src: '~/plugins/thirdparty/clickoutside.ts' },
+    { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
+    // Local
+    { src: '~/plugins/local/notifications.ts' },
+    { src: '~/plugins/local/config.ts' },
+    { src: '~/plugins/local/dayjs.ts' },
+    { src: '~/plugins/local/mock.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,7 +46,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    '@nuxtjs/ngrok',
+    // '@nuxtjs/ngrok',
     '@nuxtjs/style-resources',
     '@nuxtjs/device',
   ],
