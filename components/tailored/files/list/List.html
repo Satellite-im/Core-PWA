@@ -35,7 +35,7 @@
           {{ item.name }}
         </td>
         <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
-        <td v-if="!$device.isMobile">{{ item.type ? item.type : '-' }}</td>
+        <td v-if="!$device.isMobile">{{ item.type ? item.type : item.children ? 'Folder' : '-' }}</td>
         <td class="has-tooltip has-tooltip-primary has-tooltip-top"
           :data-tooltip="(item.encrypted) ? 'Encrypted' : 'Unencrypted'" v-if="!$device.isMobile">
           <font-awesome-icon
