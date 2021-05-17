@@ -1,4 +1,5 @@
 <div id="app" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <InteractablesContextMenu v-if="this.$store.state.ui.contextMenuStatus"/>
   <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
   <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users"/>
   <div class="dynamic-content">

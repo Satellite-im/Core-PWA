@@ -21,6 +21,31 @@ export default Vue.extend({
       }),
     },
   },
+  data() {
+    return {
+      disData: 'DataFromTheProperty'
+    }
+  },
+  methods: {
+    contextMenu(e: any) {
+      e.preventDefault()
+      let contextMenuStatus = this.$store.state.ui.contextMenuStatus
+      if(!contextMenuStatus) { this.$store.commit('toggleContextMenu', true) }
+      this.$store.commit('setContextMenuPosition', { x: e.x, y: e.y })
+      let data = [
+        { text: 'Add Reaction', func: this.testFunc },
+        { text: 'Reply', func: this.testFunc },
+        { text: 'Copy Message', func: this.testFunc },
+        { text: 'Copy Image', func: this.testFunc },
+        { text: 'Save Image', func: this.testFunc },
+        { text: 'Copy Link', func: this.testFunc }
+      ]
+      this.$store.commit('setContextMenuValues', data)
+    },
+    testFunc() {
+      console.log('Message Func Testing ' + this.$data.disData )
+    }
+  }
 })
 </script>
 <style lang="less" src="./Message.less"></style>
