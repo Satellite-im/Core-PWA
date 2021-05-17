@@ -1,6 +1,6 @@
 import { NuxtState } from '@nuxt/types/app'
 
-export default {
+const mutations = {
   echoCancellation(state: NuxtState, enabled: Boolean) {
     // We clone a new object here since vuex
     // will not react to deep values
@@ -40,3 +40,5 @@ export default {
     }
   },
 }
+
+export default mutations

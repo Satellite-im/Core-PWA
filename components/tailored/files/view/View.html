@@ -1,4 +1,53 @@
 <div id="view-file">
-  View File
-  {{ file.name }}
+  <div class="file-nav">
+    <div class="file-info">
+      <TypographyTitle :text="file.name" :size="6" />
+      <TypographyText :text="file.type" :size="6" />
+      <TypographyText :text="$filesize(file.size)" :size="6" />
+      <TypographyText :text="$dayjs(file.modified).from()" :size="6" />
+    </div>
+    <div class="controls">
+      <div
+        data-tooltip="Unpin"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        <font-awesome-icon :icon="['far', 'thumbtack']" />
+      </div>
+      <a 
+        data-tooltip="Download"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+        :href="file.location"
+        target="_blank"
+        :download="file.name">
+        <font-awesome-icon :icon="['far', 'download']" />
+      </a>
+      <div
+        data-tooltip="Share Link"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        <font-awesome-icon :icon="['far', 'link']" />
+      </div>
+      <div
+        data-tooltip="Close"
+        v-on:click="close"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        <font-awesome-icon :icon="['far', 'times-circle']" />
+      </div>
+    </div>
+  </div>
+  <div class="image-container" v-if="file.type.includes('image')">
+    <img class="file-image" :src="file.location" />
+  </div>
+  <div v-else class="no-preview">
+    <a 
+        data-tooltip="Download"
+        class="has-tooltip has-tooltip-primary has-tooltip-top"
+        :href="file.location"
+        target="_blank"
+        :download="file.name">
+      <font-awesome-icon :icon="['far', 'file-download']" class="file-icon" />
+    </a>
+    <TypographyTitle :size="4" :text="file.name" />
+    <TypographySubtitle :size="6" :text="file.type" />
+    <TypographySubtitle :text="$filesize(file.size)" :size="6" />
+    <TypographySubtitle :text="$dayjs(file.modified).from()" :size="6" />
+  </div>
 </div>

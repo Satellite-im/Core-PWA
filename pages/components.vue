@@ -8,6 +8,15 @@
       />
       <br />
 
+      <TypographyLabel text="Loading" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiLoadingInline text="Loading..." />
+          </div>
+        </div>
+      </div>
+
       <TypographyLabel text="Badged Icons" />
       <div class="card">
         <div class="card-content">
@@ -268,7 +277,11 @@ export default Vue.extend({
   display: flex;
   justify-content: center;
   text-align: center;
-  height: min-content;
-  overflow-y: scroll;
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>
