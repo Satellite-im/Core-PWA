@@ -1,6 +1,6 @@
 import { NuxtState } from '@nuxt/types/app'
 
-export default {
+const mutations = {
   mute(state: NuxtState) {
     // We clone a new object here since vuex
     // will not react to deep values
@@ -16,3 +16,5 @@ export default {
     }
   },
 }
+
+export default mutations

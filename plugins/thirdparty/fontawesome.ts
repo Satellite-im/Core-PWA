@@ -37,6 +37,13 @@ import {
   faSync,
   faImage,
   faHome,
+  faFile,
+  faLink,
+  faTimes,
+  faDownload,
+  faFileDownload,
+  faThumbtack,
+  faCircleNotch,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -73,5 +80,12 @@ library.add(faLock)
 library.add(faSync)
 library.add(faHome)
 library.add(faImage)
+library.add(faDownload)
+library.add(faLink)
+library.add(faTimes)
+library.add(faThumbtack)
+library.add(faFile)
+library.add(faFileDownload)
+library.add(faCircleNotch)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
