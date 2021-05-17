@@ -1,5 +1,5 @@
 <div id="file-list">
-  <TailoredFilesView v-if="file" :file="file" />
+  <TailoredFilesView v-if="file" :file="file" :close="() => this.file = false"/>
   <table class="table">
     <thead>
       <th>

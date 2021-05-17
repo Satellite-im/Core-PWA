@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 export default Vue.extend({
+  name: 'SettingsLayout',
   mixins: [mobileSwipe],
   middleware: 'authenticated',
   data() {

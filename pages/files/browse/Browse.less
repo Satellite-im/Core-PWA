@@ -1,3 +1,20 @@
 #files {
   padding: 1rem;
+
+  .two-thirds {
+    width: 66%;
+    float: left;
+  }
+  .one-third {
+    width: 33%;
+    float: left;
+    text-align: right;
+    color: @text-muted;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #files {
+    margin-top: 2rem;
+  }
 }

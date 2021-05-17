@@ -4,7 +4,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'Chat',
+  name: 'ChatLayout',
   middleware: 'authenticated',
   data() {
     return {

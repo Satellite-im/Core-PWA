@@ -9,6 +9,15 @@ export default Vue.extend({
       type: Object as PropType<FileType>,
       default: () => {},
     },
+    close: {
+      type: Function,
+      default: () => () => {},
+    },
+  },
+  methods: {
+    open(location: string): void {
+      window.open(location)
+    },
   },
 })
 </script>
