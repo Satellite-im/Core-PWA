@@ -5,7 +5,7 @@ import Vue from 'vue'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
-  name: 'Chat',
+  name: 'ChatLayout',
   mixins: [mobileSwipe],
   middleware: 'authenticated',
   data() {

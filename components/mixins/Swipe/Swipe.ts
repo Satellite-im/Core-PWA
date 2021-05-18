@@ -13,6 +13,6 @@ export const mobileSwipe = {
           }
         }
       }
-    }
+    },
+  },
 }
-  

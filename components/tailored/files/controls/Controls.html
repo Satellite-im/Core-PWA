@@ -5,12 +5,14 @@
     text="New Folder"
     :icon="{style: 'far', name: 'folder-plus'}"
     size="small" />
-  <InteractablesButton
-    outlined
-    type="primary"
-    text="Upload File"
-    :icon="{style: 'far', name: 'file-plus'}"
-    size="small" />
+  <input type="file" id="file-upload" @change="handleFile">
+  <label for="file-upload" class="button is-primary is-outlined is-small">
+    <font-awesome-icon
+      :icon="['far', 'file-plus']"
+      class="control-icon" />
+    &nbsp;
+    Upload File
+  </label>
   <InteractablesButton
     outlined
     type="primary"
