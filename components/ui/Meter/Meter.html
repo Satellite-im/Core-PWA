@@ -1,4 +1,4 @@
-<div class="meter">
+<div class="meter" :style="`height: ${height}px;`">
   <div 
     v-for="n in 25" 
     :class="`meter-tick ${getTickColor(n)}`"></div>

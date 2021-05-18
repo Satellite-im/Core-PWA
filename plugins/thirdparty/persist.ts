@@ -5,7 +5,7 @@
 import VuexPersistence from 'vuex-persist'
 
 // Add mutations here to blacklist saving to store
-const blacklist = ['setPin', 'setPhrase']
+const blacklist = ['setPin', 'setPhrase', 'files']
 
 // @ts-ignore
 export default ({ store }) => {

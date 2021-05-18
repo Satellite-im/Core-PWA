@@ -97,12 +97,14 @@ export const UserPermissions = {
     // can add functions here on start-up if needed
   },
   methods: {
-    async getUserPermissions() {
+    async getUserPermissions(): Promise<any> {
       // Todo: Firefox does not allow querying for Microphone https://github.com/mozilla/standards-positions/issues/19, and is spotty in it's implementation of the permissions api
       // https://bugzilla.mozilla.org/show_bug.cgi?id=1609427
       return await getRTC()
     },
-    async requestUserPermissions(permission: PermissionRequestOptions) {
+    async requestUserPermissions(
+      permission: PermissionRequestOptions
+    ): Promise<any> {
       const permissionValue: any = {
         [permission as any]: true,
       }
