@@ -38,7 +38,6 @@ export default Vue.extend({
     // Decrypt stored encrypted data into memory
     decrypt(): boolean {
       if (this.$data.pin.length < 5) {
-        // @ts-ignore
         this.$data.error = this.$t('pages.unlock.invalid_pin')
         return false
       }

@@ -1,7 +1,7 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-// @ts-ignore
+// @ts-ignore - Missing types
 import VueMarkdown from 'vue-markdown'
 
 import { Message } from '~/types/messaging'

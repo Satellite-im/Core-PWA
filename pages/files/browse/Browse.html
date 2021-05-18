@@ -1,3 +1,13 @@
-<div>
-  File Browser
+<div id="files">
+  <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" />
+  <TailoredFilesControls :handleFile="handleFile" />
+  <UiSpacer :height="20" />
+  <div class="two-thirds">
+    <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
+  </div>
+  <div class="one-third">
+    <TypographyText text="Usage 7.32/10GB" />
+  </div>
+  <TailoredFilesList :path="getPath().children" :push="push" />
+  <UiSpacer :height="20" />
 </div>
