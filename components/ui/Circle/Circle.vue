@@ -1,6 +1,6 @@
 <template src="./Circle.html"></template>
 <script lang="ts">
-// @ts-ignore
+// @ts-ignore - Missing Types
 import Jazzicon from 'vue-jazzicon'
 import Vue, { PropType } from 'vue'
 

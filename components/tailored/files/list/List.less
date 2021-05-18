@@ -1,0 +1,58 @@
+.table {
+  width: 100%;
+  font-size: @text-size;
+  background-color: transparent;
+  margin: 0;
+
+  thead {
+    th {
+      color: @bright-text;
+      border-bottom-width: 1px;
+      border-bottom-color: @text-muted;
+    }
+  }
+
+  tr {
+    td {
+      color: @text;
+      border-bottom-color: @light-gray;
+    }
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  .icon {
+    width: 30px;
+  }
+
+  .filename {
+    font-family: 'SpaceMono';
+    cursor: pointer;
+  }
+  .sort {
+    font-size: 9pt;
+    cursor: pointer;
+  }
+  
+  .options {
+    cursor: pointer;
+  }
+
+  .fa-folder {
+    color: @orange;
+  }
+
+  .fa-image {
+    color: @jade;
+  }
+
+  .fa-archive {
+    color: @red;
+  }
+
+  .fa-file-alt {
+    color: @pink;
+  }
+}

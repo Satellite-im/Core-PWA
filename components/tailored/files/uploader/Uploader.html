@@ -1,0 +1,14 @@
+<div id="uploader">
+  <div class="file-preview" v-if="file">
+    <img v-if="url.length" :src="url" />
+    <div class="file-info">
+      <TypographyTitle :size="6" :text="file.name" />
+      <TypographySubtitle :size="6" :text="file.type" />
+      <TypographySubtitle :size="6" :text="$filesize(file.size)" />
+      <div class="is-controls">
+        <InteractablesButton type="primary" size="small" text="Upload" outlined />
+        <InteractablesButton type="danger" size="small" text="Cancel" outlined :action="cancelUpload" />
+      </div>
+    </div>
+  </div>
+</div>
