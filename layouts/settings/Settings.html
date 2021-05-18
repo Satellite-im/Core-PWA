@@ -1,6 +1,6 @@
 <div id="app" 
   :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`" 
-  v-touch:swipe="settingsSwipeHandler(this)" 
+  v-touch:swipe="sidebarSwipeHandler(this)" 
   v-touch-options="{ swipeTolerance: 75 }"
   >
   <div class="sidebar is-secondary-background">
