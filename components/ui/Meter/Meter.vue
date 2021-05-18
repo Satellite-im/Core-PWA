@@ -20,6 +20,13 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    /**
+     * Custom meter height value
+     */
+    height: {
+      type: Number,
+      default: 20,
+    },
   },
   methods: {
     // Returns the designated tick color based on the increment value

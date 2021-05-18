@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 export default Vue.extend({
+  name: 'SettingsLayout',
   mixins: [mobileSwipe],
   middleware: 'authenticated',
   data() {
@@ -16,7 +17,6 @@ export default Vue.extend({
     // selects a setting group. This watches route changes and toggles
     // the sidebar if it's on a mobile device.
     $route() {
-      // @ts-ignore
       if (this.$route.name?.includes('settings') && this.$device.isMobile) {
         this.sidebar = false
       }
