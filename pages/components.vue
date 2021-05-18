@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-scroll-lock="true" class="container">
     <div>
       <TypographyTitle :size="1" text="Satellite-Absolute" />
       <TypographySubtitle
@@ -7,6 +7,15 @@
         text="Generic compoment list for use building Satellite."
       />
       <br />
+
+      <TypographyLabel text="Loading" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiLoadingInline text="Loading..." />
+          </div>
+        </div>
+      </div>
 
       <TypographyLabel text="Badged Icons" />
       <div class="card">
@@ -265,9 +274,14 @@ export default Vue.extend({
 <style scoped lang="less">
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   text-align: center;
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>

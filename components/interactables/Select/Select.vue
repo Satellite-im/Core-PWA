@@ -63,6 +63,14 @@ export default Vue.extend({
       this.$emit('change', this.selectedValue)
     },
   },
+  watch : {
+    selected : function (newValue, oldValue) {
+      // When the component is first created, if the user doesn't have a default value for the select, we set it here
+      if(!oldValue){
+        this.$data.selectedValue = newValue;
+      }
+    }
+  }
 })
 </script>
 <style scoped lang="less" src="./Select.less"></style>

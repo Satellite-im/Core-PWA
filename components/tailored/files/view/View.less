@@ -1,0 +1,74 @@
+#view-file {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1;
+  align-content: center;
+
+  .image-container {
+    width: 100vw;
+    display: inline-flex;
+    justify-content: center;
+  }
+  .file-image {
+    max-width: 80vw;
+    justify-self: center;
+    align-self: center;
+    max-height: 80vh;
+    border-radius: 4px;
+  }
+  .file-icon {
+    font-size: 50pt;
+    align-self: center;
+    justify-self: center;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
+  .no-preview {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    .subtitle {
+      display: block;
+      text-align: center;
+      margin-bottom: 0;
+    }
+  }
+
+  .file-nav {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+
+    .file-info {
+      margin: 1rem;
+      .title {
+        color: @bright-text;
+      }
+    }
+
+    .controls {
+      .control {
+        display: inline-flex;
+        font-size: @icon-size;
+        margin: 1rem 0.5rem;
+        color: @bright-text;
+  
+        &:nth-child(4) {
+          margin-right: 1rem;
+        }
+      }
+      justify-items: flex-end;
+      align-items: flex-end;
+      flex: 1;
+      text-align: right;
+      
+    }
+  }
+}

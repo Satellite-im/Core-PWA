@@ -44,15 +44,25 @@ export default {
     },
     settings: {
       audio: {
-        input: {
-          title: 'Audio Input',
-          subtitle:
-            "Select which input device you'd like people to hear your silky smooth voice from.",
-        },
-        output: {
-          title: 'Audio Output',
-          subtitle:
-            "Select the device that you'd like to deliver sound to your ear holes with.",
+        sources: {
+          title: 'Audio Sources',
+          subtitle: 'Input and Output devices you want Satellite to use.',
+          permissionButtonText: 'Request Permission',
+          permissionRequestMessage: '',
+          permissionDeniedMessage:
+            "You have denied microphone access so we can't see what devices you have. Please allow microphone access in your browser.",
+          browserDoesNotSupportAudioOutChange:
+            'Your Browser does not allow setting an audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
+          input: {
+            title: 'Audio Input',
+            subtitle:
+              "Select which input device you'd like people to hear your silky smooth voice from.",
+          },
+          output: {
+            title: 'Audio Output',
+            subtitle:
+              "Select the device that you'd like to deliver sound to your ear holes with.",
+          },
         },
         bitrate: {
           title: 'Audio Bitrate',
