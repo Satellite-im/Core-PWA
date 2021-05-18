@@ -4,8 +4,11 @@
 import Vue, { PropType } from 'vue'
 
 import { User } from '~/types/ui/core'
+import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
+
 
 export default Vue.extend({
+  mixins: [mobileSwipe],
   props: {
     toggle: {
       type: Function,
