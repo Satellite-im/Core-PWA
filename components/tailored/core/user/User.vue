@@ -3,8 +3,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/core'
+import { ContextMenu } from '../../../mixins/UI/ContextMenu'
 
 export default Vue.extend({
+  mixins: [ContextMenu],
   props: {
     user: {
       type: Object as PropType<User>,
@@ -16,24 +18,21 @@ export default Vue.extend({
       required: true,
     },
   },
-  methods: {
-    contextMenu(e: any) {
-      e.preventDefault()
-      let contextMenuStatus = this.$store.state.ui.contextMenuStatus
-      if(!contextMenuStatus) { this.$store.commit('toggleContextMenu', true) }
-      this.$store.commit('setContextMenuPosition', { x: e.x, y: e.y })
-      let data = [
-        { text: 'Send Message', func: this.testFunc.bind(this) },
+  data() {
+    return {
+      contextMenuValues: [
+        { text: 'Send Message', func: this.testFunc },
         { text: 'Voice Call', func: this.testFunc },
         { text: 'Video Call', func: this.testFunc },
-        { text: 'Remove Friend', func: this.testFunc }
-      ]
-      this.$store.commit('setContextMenuValues', data)
-    },
+        { text: 'Remove Friend', func: this.testFunc },
+      ],
+    }
+  },
+  methods: {
     testFunc() {
       console.log('User Func')
-    }
-  }
+    },
+  },
 })
 </script>
 

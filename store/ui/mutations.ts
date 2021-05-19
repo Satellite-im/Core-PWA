@@ -7,17 +7,17 @@ export default {
       contextMenuStatus: enabled,
     }
   },
-  setContextMenuValues(state: NuxtState, values: Boolean) {
+  setContextMenuValues(state: NuxtState, values: any) {
     state.ui = {
       ...state.ui,
       contextMenuValues: values,
     }
   },
-  setContextMenuPosition(state: NuxtState, position: Object) {
+  setContextMenuPosition(state: NuxtState, e: any) {
     state.ui = {
       ...state.ui,
       // @ts-ignore
-      contextMenuPosition: { x: position.x, y: position.y},
+      contextMenuPosition: { x: e.x, y: e.y},
     }
   },
 }
