@@ -27,12 +27,13 @@ export default Vue.extend({
     return {
       disData: 'DataFromTheProperty',
       contextMenuValues: [
+        // @ts-ignore
         { text: 'Add Reaction', func: this.testFunc },
-        { text: 'Reply', func: this.testFunc },
-        { text: 'Copy Message', func: this.testFunc },
-        { text: 'Copy Image', func: this.testFunc },
-        { text: 'Save Image', func: this.testFunc },
-        { text: 'Copy Link', func: this.testFunc }
+        // { text: 'Reply', func: this.testFunc },
+        // { text: 'Copy Message', func: this.testFunc },
+        // { text: 'Copy Image', func: this.testFunc },
+        // { text: 'Save Image', func: this.testFunc },
+        // { text: 'Copy Link', func: this.testFunc }
       ]
     }
   },
