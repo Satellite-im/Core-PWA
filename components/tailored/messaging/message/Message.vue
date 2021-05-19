@@ -3,10 +3,12 @@
 import Vue, { PropType } from 'vue'
 // @ts-ignore - Missing types
 import VueMarkdown from 'vue-markdown'
+import { ContextMenu } from '../../../mixins/UI/ContextMenu'
 
 import { Message } from '~/types/messaging'
 
 export default Vue.extend({
+  mixins: [ContextMenu],
   components: {
     VueMarkdown,
   },
@@ -23,16 +25,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      disData: 'DataFromTheProperty'
-    }
-  },
-  methods: {
-    contextMenu(e: any) {
-      e.preventDefault()
-      let contextMenuStatus = this.$store.state.ui.contextMenuStatus
-      if(!contextMenuStatus) { this.$store.commit('toggleContextMenu', true) }
-      this.$store.commit('setContextMenuPosition', { x: e.x, y: e.y })
-      let data = [
+      disData: 'DataFromTheProperty',
+      contextMenuValues: [
         { text: 'Add Reaction', func: this.testFunc },
         { text: 'Reply', func: this.testFunc },
         { text: 'Copy Message', func: this.testFunc },
@@ -40,8 +34,9 @@ export default Vue.extend({
         { text: 'Save Image', func: this.testFunc },
         { text: 'Copy Link', func: this.testFunc }
       ]
-      this.$store.commit('setContextMenuValues', data)
-    },
+    }
+  },
+  methods: {
     testFunc() {
       console.log('Message Func Testing ' + this.$data.disData )
     }
