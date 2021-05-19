@@ -21,10 +21,11 @@ export default Vue.extend({
   data() {
     return {
       contextMenuValues: [
+        // @ts-ignore
         { text: 'Send Message', func: this.testFunc },
-        { text: 'Voice Call', func: this.testFunc },
-        { text: 'Video Call', func: this.testFunc },
-        { text: 'Remove Friend', func: this.testFunc },
+        // { text: 'Voice Call', func: this.testFunc },
+        // { text: 'Video Call', func: this.testFunc },
+        // { text: 'Remove Friend', func: this.testFunc },
       ],
     }
   },
