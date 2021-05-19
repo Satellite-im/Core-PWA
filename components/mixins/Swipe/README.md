@@ -7,5 +7,5 @@ User Swipe Mixin.
     mixins: [mobileSwipe]
 
     Call in the function that you need
-    <div v-touch:swipe="settingsSwipeHandler(this)">
+    <div v-touch:swipe="sidebarSwipeHandler(this)">
 ```
