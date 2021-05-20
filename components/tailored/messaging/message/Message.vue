@@ -3,10 +3,12 @@
 import Vue, { PropType } from 'vue'
 // @ts-ignore - Missing types
 import VueMarkdown from 'vue-markdown'
+import { ContextMenu } from '../../../mixins/UI/ContextMenu'
 
 import { Message } from '~/types/messaging'
 
 export default Vue.extend({
+  mixins: [ContextMenu],
   components: {
     VueMarkdown,
   },
@@ -21,6 +23,30 @@ export default Vue.extend({
       }),
     },
   },
+  data() {
+    return {
+      disData: 'DataFromTheProperty',
+      contextMenuValues: [
+        // @ts-ignore
+        { text: 'Add Reaction', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Reply', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Message', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Image', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Save Image', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Link', func: this.testFunc }
+      ]
+    }
+  },
+  methods: {
+    testFunc() {
+      console.log('Message Func Testing ' + this.$data.disData )
+    }
+  }
 })
 </script>
 <style lang="less" src="./Message.less"></style>
