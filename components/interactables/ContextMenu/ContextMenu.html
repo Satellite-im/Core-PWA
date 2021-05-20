@@ -1,0 +1,13 @@
+<div
+  class="context-menu"
+  v-bind:style="{ left: this.$store.state.ui.contextMenuPosition.x + 'px', 
+  top: this.$store.state.ui.contextMenuPosition.y + 'px' }"
+  v-click-outside="close"
+>
+  <p
+    v-for="item of this.$store.state.ui.contextMenuValues"
+    @click="handle(item.func)"
+  >
+    {{ item.text }}
+  </p>
+</div>
