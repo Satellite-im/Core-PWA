@@ -29,11 +29,16 @@ export default Vue.extend({
       contextMenuValues: [
         // @ts-ignore
         { text: 'Add Reaction', func: this.testFunc },
-        // { text: 'Reply', func: this.testFunc },
-        // { text: 'Copy Message', func: this.testFunc },
-        // { text: 'Copy Image', func: this.testFunc },
-        // { text: 'Save Image', func: this.testFunc },
-        // { text: 'Copy Link', func: this.testFunc }
+        // @ts-ignore
+        { text: 'Reply', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Message', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Image', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Save Image', func: this.testFunc },
+        // @ts-ignore
+        { text: 'Copy Link', func: this.testFunc }
       ]
     }
   },
