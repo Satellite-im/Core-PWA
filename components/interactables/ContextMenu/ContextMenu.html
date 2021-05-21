@@ -1,5 +1,6 @@
 <div
   class="context-menu"
+  ref="contextMenu"
   v-bind:style="{ left: this.$store.state.ui.contextMenuPosition.x + 'px', 
   top: this.$store.state.ui.contextMenuPosition.y + 'px' }"
   v-click-outside="close"
