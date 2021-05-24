@@ -1,4 +1,4 @@
-<div class="is-message">
+<div class="is-message" @contextmenu="contextMenu">
   <VueMarkdown v-if="message.type === 'text'" :source="message.payload" class="markdown" />
   <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
 </div>
