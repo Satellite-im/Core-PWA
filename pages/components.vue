@@ -12,7 +12,25 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <UiLoadingInline text="Loading..." />
+            <UiLoadersGenericContent :count="3" />
+          </div>
+        </div>
+      </div>
+
+      <TypographyLabel text="Loading" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiLoadersMessage :count="3" />
+          </div>
+        </div>
+      </div>
+
+      <TypographyLabel text="Loading" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiLoadersLoadingInline text="Loading..." />
           </div>
         </div>
       </div>

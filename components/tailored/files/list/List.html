@@ -3,23 +3,23 @@
   <table class="table">
     <thead>
       <th>
-        Name
+        {{ $t('pages.files.browse.name') }}
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
       <th v-if="!$device.isMobile">
-        Modified
+        {{ $t('pages.files.browse.modified') }}
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
       <th v-if="!$device.isMobile">
-        Type
+        {{ $t('pages.files.browse.type') }}
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
       <th v-if="!$device.isMobile">
-        Encrypted
+        {{ $t('pages.files.browse.encrypted') }}
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
       <th>
-        Size
+        {{ $t('pages.files.browse.size') }}
         <font-awesome-icon class="sort" :icon="['far', 'sort']" />
       </th>
       <th></th>
@@ -38,7 +38,7 @@
         <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
         <td v-if="!$device.isMobile">{{ item.type ? item.type : item.children ? 'Folder' : '-' }}</td>
         <td class="has-tooltip has-tooltip-primary has-tooltip-top"
-          :data-tooltip="(item.encrypted) ? 'Encrypted' : 'Unencrypted'" v-if="!$device.isMobile">
+          :data-tooltip="(item.encrypted) ? $t('global.encrypted') : $t('global.unencrypted')" v-if="!$device.isMobile">
           <font-awesome-icon
             :icon="['far', 'lock']"
             v-if="item.encrypted" />

@@ -4,7 +4,7 @@
     :type="audio.muted ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    data-tooltip="Mute"
+    :data-tooltip="$t('global.mute')"
     :action="() => $store.commit('mute')"
     :icon="{ style: 'far', name: 'microphone-alt' }"
     :text="$t('controls.mic')" />
@@ -13,7 +13,7 @@
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    data-tooltip="Deafen"
+    :data-tooltip="$t('global.deafen')"
     :action="() => $store.commit('deafen')"
     :icon="{ style: 'far', name: 'headphones-alt' }"
     :text="$t('controls.headphones')" />
@@ -22,7 +22,7 @@
     type="dark"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    data-tooltip="Settings"
+    :data-tooltip="$t('global.settings')"
     :action="() => $router.push('/settings/personalize')"
     :icon="{ style: 'far', name: 'cog' }"/>
 </div>
