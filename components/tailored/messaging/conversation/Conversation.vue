@@ -6,6 +6,10 @@ import { MessageGroup } from '~/types/messaging'
 
 export default Vue.extend({
   props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     messages: {
       type: Array as PropType<MessageGroup>,
       default: () => [],

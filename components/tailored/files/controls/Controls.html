@@ -2,7 +2,7 @@
   <InteractablesButton
     outlined
     type="primary"
-    text="New Folder"
+    :text="$t('pages.files.new_folder')"
     :icon="{style: 'far', name: 'folder-plus'}"
     size="small" />
   <input type="file" id="file-upload" @change="handleFile">
@@ -11,12 +11,12 @@
       :icon="['far', 'file-plus']"
       class="control-icon" />
     &nbsp;
-    Upload File
+    {{ $t('pages.files.upload') }}
   </label>
   <InteractablesButton
     outlined
     type="primary"
-    text="Refresh"
+    :text="$t('pages.files.refresh')"
     :icon="{style: 'far', name: 'sync'}"
     size="small" />
 </div>

@@ -5,7 +5,7 @@
       :text="$mock.user.name" 
       :size="6"
       class="has-tooltip has-tooltip-top has-tooltip-primary"
-      data-tooltip="Copy ID"
+      :data-tooltip="$t('global.copy_id')"
       v-clipboard:copy="$store.state.accounts.active"
       v-on:click="() => $toast.show($t('global.copied'))"
       />

@@ -11,12 +11,16 @@
   </div>
   <div class="statusbar-spacer"></div>
   <div class="controls">
-    <font-awesome-icon
-      class="control-icon"
-      :icon="['far', 'phone']" />
-    <font-awesome-icon
-      class="control-icon"
-      :icon="['far', 'video']" />
-    <InteractablesInput v-if="!$device.isMobile" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." />
+    <div class="has-tooltip has-tooltip-bottom has-tooltip-primary" data-tooltip="Call">
+      <font-awesome-icon
+        class="control-icon"
+        :icon="['far', 'phone']" />
+    </div>
+    <div class="has-tooltip has-tooltip-bottom has-tooltip-primary" data-tooltip="Video">
+      <font-awesome-icon
+        class="control-icon"
+        :icon="['far', 'video']" />
+    </div>
+    <InteractablesInput v-if="!$device.isMobile" class="input-wrap" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." />
   </div>
 </div>

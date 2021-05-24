@@ -1,5 +1,6 @@
 <div id="conversation" v-scroll-lock="true" :key="updated">
-  <div class="group" v-for="group in messages">
+  <UiLoadersMessage :count="3" v-if="loading" />
+  <div class="group" v-for="group in messages" v-else>
     <div v-if="group.type === 'group'">
       <TailoredMessagingGroup :group="group" :key="group.id" />
     </div>
