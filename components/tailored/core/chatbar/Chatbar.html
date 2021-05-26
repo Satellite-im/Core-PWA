@@ -8,8 +8,12 @@
     <div
       :data-tooltip="$t('global.glyphs')"
       class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
-      <font-awesome-icon :icon="['far', 'grin-tongue-wink']" class="control-icon" />
+      <font-awesome-icon :icon="['far', 'grin-tongue-wink']" class="control-icon" @click="toggleEmojiPicker"/>
     </div>  
+    <picker :data="emojiIndex" class="emoji-picker" @select="addEmoji" v-if="showEmojiPicker"
+      ref="emojiPicker" v-click-outside="toggleEmojiPicker"
+      v-bind:style="{ left: emojiPos.x + 'px', top: emojiPos.y + 'px' }"
+    />
     <font-awesome-icon :icon="['far', 'arrow-circle-right']" class="control-icon" />
   </div>
   <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{ `${text.length}/${maxChars}` }}</span>
