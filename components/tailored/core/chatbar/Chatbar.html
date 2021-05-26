@@ -4,7 +4,12 @@
       class="control-wrap">
       <FileUpload />
     </div>
-    <input :placeholder="$t('global.talk')" v-model="text"/>
+    <input :placeholder="$t('global.talk')"
+            class="messageuser"
+            v-model="text"
+            @input="handleInputChange();"
+            @change="handleInputChange"
+            />
     <div
       :data-tooltip="$t('global.glyphs')"
       class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
