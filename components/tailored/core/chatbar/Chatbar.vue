@@ -20,17 +20,10 @@ export default Vue.extend({
       this.autoGrow ()
     },
     autoGrow () {
-      let messageBox = document.querySelector('.messageuser')!;
-      let messElem = messageBox.getBoundingClientRect();
-      let chatGroup = document.querySelector('#chatbar')!;
-      let chatElem = chatGroup.getBoundingClientRect();
-
-
-
+      let messageBox = document.querySelector('.messageuser') as HTMLElement;
+      let chatGroup = document.querySelector('#chatbar')as HTMLElement;
+      
       messageBox.style.height = 'auto'
-      console.log(chatElem.height)
-      console.log(messElem.height)
-
 
       if (messageBox.scrollHeight < 112) {
         messageBox.style.height = messageBox.scrollHeight + 2 + 'px'
@@ -39,7 +32,7 @@ export default Vue.extend({
         messageBox.style.height = '112px'
         chatGroup.style.height = '152px'
       }
-      messageBox.style.scrollTop = messageBox.style.scrollHeight
+      messageBox.scrollTop = messageBox.scrollHeight
     },
   },
   computed: {
