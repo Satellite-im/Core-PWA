@@ -28,9 +28,11 @@ export default Vue.extend({
       this.autoGrow()
     },
     autoGrow() {
+      // made const variables from finding html elements --> typecasting
       const messageBox = document.querySelector('.messageuser') as HTMLElement
       const chatGroup = document.querySelector('#chatbar') as HTMLElement
 
+      // set default height to be auto, so it will expand as needed
       messageBox.style.height = 'auto'
 
       if (messageBox.scrollHeight < 112) {
