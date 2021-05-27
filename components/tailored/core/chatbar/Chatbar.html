@@ -5,6 +5,7 @@
       <FileUpload />
     </div>
     <textarea :placeholder="$t('global.talk')"
+            rows="1"
             class="messageuser"
             v-model="text"
             @input="handleInputChange();"
