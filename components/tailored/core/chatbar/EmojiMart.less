@@ -6,9 +6,6 @@
   background-color: @dark-gray;
   border: @darker;
   color: @text;
-  :hover {
-    cursor: pointer;
-  }
 }
 
 .emoji-mart-category-label h3 {
@@ -18,6 +15,7 @@
 .emoji-mart-anchor:hover,
 .emoji-mart-anchor-selected {
   color: @primary-color-alt;
+  cursor: pointer;
 }
 
 .emoji-mart-search input {
@@ -34,5 +32,8 @@
 .emoji-mart-category .emoji-mart-emoji:hover:before,
 .emoji-mart-emoji-selected:before {
   background-color: @light-gray;
+}
+
+.emoji-mart-emoji span:hover {
   cursor: pointer;
 }
