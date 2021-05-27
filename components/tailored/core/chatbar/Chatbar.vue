@@ -15,14 +15,22 @@ export default Vue.extend({
       maxChars: 256,
     }
   },
-    methods: {
-    handleInputChange () {
-      this.autoGrow ()
+  computed: {
+    /**
+     * Computes the amount of characters left
+     */
+    charlimit() {
+      return this.$data.text.length > this.$data.maxChars
     },
-    autoGrow () {
-      let messageBox = document.querySelector('.messageuser') as HTMLElement;
-      let chatGroup = document.querySelector('#chatbar')as HTMLElement;
-      
+  },
+  methods: {
+    handleInputChange() {
+      this.autoGrow()
+    },
+    autoGrow() {
+      const messageBox = document.querySelector('.messageuser') as HTMLElement
+      const chatGroup = document.querySelector('#chatbar') as HTMLElement
+
       messageBox.style.height = 'auto'
 
       if (messageBox.scrollHeight < 112) {
@@ -33,14 +41,6 @@ export default Vue.extend({
         chatGroup.style.height = '152px'
       }
       messageBox.scrollTop = messageBox.scrollHeight
-    },
-  },
-  computed: {
-    /**
-     * Computes the amount of characters left
-     */
-    charlimit() {
-      return this.$data.text.length > this.$data.maxChars
     },
   },
 })
