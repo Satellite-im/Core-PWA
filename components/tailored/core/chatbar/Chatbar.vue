@@ -17,24 +17,29 @@ export default Vue.extend({
   },
     methods: {
     handleInputChange () {
-      this.autoGrow()
+      this.autoGrow ()
     },
     autoGrow () {
-      let messageBox = document.querySelector('.messageuser');
-      let chatGroup = document.querySelector('#chatbar');
+      let messageBox = document.querySelector('.messageuser')!;
+      let messElem = messageBox.getBoundingClientRect();
+      let chatGroup = document.querySelector('#chatbar')!;
+      let chatElem = chatGroup.getBoundingClientRect();
 
-      // console.log(messageBox);
-      // console.log(chatGroup);
 
 
-      // messageBox.style.height = 'auto'
-      // if (messageBox.scrollHeight < 112) {
-      //   messageBox.style.height = messageBox.scrollHeight + 2 + 'px'
-      //   chatGroup.style.height = messageBox.scrollHeight + 40 + 'px'
-      // } else {
-      //   messageBox.style.height = '112px'
-      //   chatGroup.style.height = '152px'
-      // }
+      messageBox.style.height = 'auto'
+      console.log(chatElem.height)
+      console.log(messElem.height)
+
+
+      if (messageBox.scrollHeight < 112) {
+        messageBox.style.height = messageBox.scrollHeight + 2 + 'px'
+        chatGroup.style.height = messageBox.scrollHeight + 42 + 'px'
+      } else {
+        messageBox.style.height = '112px'
+        chatGroup.style.height = '152px'
+      }
+      messageBox.style.scrollTop = messageBox.style.scrollHeight
     },
   },
   computed: {
