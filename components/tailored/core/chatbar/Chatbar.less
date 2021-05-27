@@ -10,12 +10,18 @@
       color: @red;
     }
   }
+  .control-wrap{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+  }
 
   .chatbar-wrap {
-    background-color: @dark-gray;
+    // background-color: @dark-gray;
+    background-color: darkolivegreen;
     margin: 0 1rem;
     border-radius: 40px;
-    padding: 0.5rem 0.75rem;
+    padding: 0.25rem 0.25rem;
     display: inline-flex;
     flex-direction: row;
     width: calc(100% - 2rem);
@@ -46,16 +52,16 @@
       }
     }
 
-    input {
+    .messageuser {
       flex: 1;
-      padding: 0.25rem 0.5rem;
+      // padding: 0.15rem 0.15rem;
       background-color: transparent;
       border: none;
       font-family: 'Poppins';
       color: @text;
       outline: none;
     }
-
+    
     .control-icon {
       justify-self: center;
       align-self: center;
