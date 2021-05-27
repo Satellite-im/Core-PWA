@@ -8,10 +8,10 @@ import { ContextMenu } from '../../../mixins/UI/ContextMenu'
 import { Message } from '~/types/messaging'
 
 export default Vue.extend({
-  mixins: [ContextMenu],
   components: {
     VueMarkdown,
   },
+  mixins: [ContextMenu],
   props: {
     message: {
       type: Object as PropType<Message>,
@@ -32,15 +32,15 @@ export default Vue.extend({
         { text: 'Copy Message', func: (this as any).testFunc },
         { text: 'Copy Image', func: (this as any).testFunc },
         { text: 'Save Image', func: (this as any).testFunc },
-        { text: 'Copy Link', func: (this as any).testFunc }
-      ]
+        { text: 'Copy Link', func: (this as any).testFunc },
+      ],
     }
   },
   methods: {
     testFunc() {
-      console.log('Message Func Testing ' + this.$data.disData )
-    }
-  }
+      console.log('Message Func Testing ' + this.$data.disData)
+    },
+  },
 })
 </script>
 <style lang="less" src="./Message.less"></style>

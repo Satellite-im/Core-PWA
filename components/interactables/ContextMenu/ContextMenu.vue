@@ -3,6 +3,12 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+  },
   mounted() {
     this.handleOverflow()
     const el = document.querySelector('body')

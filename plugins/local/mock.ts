@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 import { Users } from '~/mock/users'
+import { Groups, Group } from '~/mock/groups'
 import { Servers, Unreads } from '~/mock/servers'
 import { Messages } from '~/mock/messages'
 import { Files } from '~/mock/files'
@@ -8,6 +9,8 @@ import { Files } from '~/mock/files'
 const mock = {
   users: Users,
   user: Users[3],
+  groups: Groups,
+  group: Group,
   servers: Servers,
   unreads: Unreads,
   messages: Messages,
