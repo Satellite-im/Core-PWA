@@ -1,0 +1,38 @@
+.emoji-mart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: @dark-gray;
+  border: @darker;
+  color: @text;
+  :hover {
+    cursor: pointer;
+  }
+}
+
+.emoji-mart-category-label h3 {
+  background-color: @dark-gray;
+}
+
+.emoji-mart-anchor:hover,
+.emoji-mart-anchor-selected {
+  color: @primary-color-alt;
+}
+
+.emoji-mart-search input {
+  border: 1px solid @darker;
+  background-color: @light-gray;
+  color: @text;
+}
+
+.emoji-mart-bar {
+  border: 0 solid @darker;
+  background-color: @light-gray;
+}
+
+.emoji-mart-category .emoji-mart-emoji:hover:before,
+.emoji-mart-emoji-selected:before {
+  background-color: @light-gray;
+  cursor: pointer;
+}
