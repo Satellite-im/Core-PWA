@@ -5,13 +5,12 @@ import Vue from 'vue'
 
 import FileUpload from './fileupload/FileUpload.vue'
 
-// @ts-ignore
-import data from 'emoji-mart-vue-fast/data/all.json'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 // @ts-ignore
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
+// @ts-ignore
+import data from 'emoji-mart-vue-fast/data/all.json'
 let emojiIndex = new EmojiIndex(data)
-
 
 export default Vue.extend({
   components: {
@@ -38,31 +37,20 @@ export default Vue.extend({
   methods: {
     toggleEmojiPicker(e: any) {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
-      if (!this.$data.showEmojiPicker) {
-        let div = this.$refs.emojiPicker
-        // @ts-ignore
-        div.$el.style.opacity = 0
-      } else {
-        let divChecker = setInterval(() => {
-          let div = this.$refs.emojiPicker
-          if (div) {
-            // @ts-ignore
-            let divProps = div.$el.getBoundingClientRect()
-            this.$data.emojiPos.y = e.y - divProps.height - 24
-            this.$data.emojiPos.x = e.x - divProps.width + 36
-            // @ts-ignore
-             div.$el.style.opacity = 1
-            clearInterval(divChecker)
-          }
-        }, 10)
-      }
+      // @ts-ignore
+      let emojiDiv = this.$refs.emojiPicker.$el
+      // @ts-ignore
+      let chatbarDiv = this.$refs.chatbar.getBoundingClientRect()
+      this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 72
+      this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
     },
     addEmoji(emoji: any) {
-      this.$data.text += emoji.native
+      this.$data.text += emoji.native + ' '
       this.$data.showEmojiPicker = false
-    }
-  }
+    },
+  },
 })
 </script>
 
 <style scoped lang="less" src="./Chatbar.less"></style>
+<style lang="less" src="./EmojiMart.less"></style>
