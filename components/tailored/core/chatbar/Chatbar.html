@@ -11,7 +11,7 @@
       <font-awesome-icon :icon="['far', 'grin-tongue-wink']" class="control-icon emoji-icon" @click="toggleEmojiPicker"/>
     </div>  
     <picker :data="emojiIndex" ref="emojiPicker" class="emoji-picker" @select="addEmoji" 
-      :per-line="9" color="#087bd3" :emoji-size="32" :show-preview="false"
+      :per-line="9" color="#087bd3" :emoji-size="32" :show-preview="false" :skin="1"
       v-bind:style="{ 
         left: emojiPos.x + 'px', 
         top: emojiPos.y + 'px', 
