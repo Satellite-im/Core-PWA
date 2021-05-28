@@ -42,22 +42,29 @@
   <div class="tabs sidebar-selector">
     <InteractablesButton
       full-width
+      :outlined="!showUsers"
       type="primary"
       size="small"
       :icon="{ style: 'far', name: 'comment-alt-lines' }"
-      :text="$t('global.messages')" />
+      :text="$t('global.messages')"
+      :action="() => $data.showUsers = true" />
     <InteractablesButton
       full-width
-      outlined
+      :outlined="showUsers"
       type="primary"
       size="small"
       :icon="{ style: 'far', name: 'users' }"
-      :text="$t('global.groups')" />
+      :text="$t('global.groups')" 
+      :action="() => $data.showUsers = false" />
   </div>
 
-  <div class="scrolling" v-scroll-lock="true">
+  <div class="scrolling" v-scroll-lock="true" v-if="showUsers">
     <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
   </div>
+  <div class="scrolling" v-scroll-lock="true" v-else>
+    <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />
+  </div>
+  
 
   <TailoredCoreSidebarControls />
   <TailoredCoreSidebarStatus />

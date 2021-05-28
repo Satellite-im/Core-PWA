@@ -5,6 +5,7 @@
   top: this.$store.state.ui.contextMenuPosition.y + 'px' }"
   v-click-outside="close"
 >
+  <TypographySubtitle :size="6" :text="title" v-if="title.length" />
   <p
     v-for="item of this.$store.state.ui.contextMenuValues"
     @click="handle(item.func)"
