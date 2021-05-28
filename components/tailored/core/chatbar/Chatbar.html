@@ -1,10 +1,17 @@
-<div id="chatbar">
+<div id="chatbar" ref="chatbar">
   <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`">
     <div
       class="control-wrap">
       <FileUpload />
     </div>
-    <input :placeholder="$t('global.talk')" v-model="text"/>
+    <textarea :placeholder="$t('global.talk')"
+            rows="1"
+            class="messageuser"
+            ref="messageuser"
+            v-model="text"
+            @input="handleInputChange"
+            @change="handleInputChange"
+    ></textarea>
     <div
       :data-tooltip="$t('global.glyphs')"
       class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
