@@ -6,3 +6,9 @@ export type User = {
   status: string
   state: UserState
 }
+
+export type Group = {
+  name: string
+  address: string
+  motd: string
+}

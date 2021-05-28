@@ -1,19 +1,19 @@
-<template src="./User.html"></template>
+<template src="./Group.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-import { User } from '~/types/ui/core'
+import { Group } from '~/types/ui/core'
 
 export default Vue.extend({
   mixins: [ContextMenu],
   props: {
-    user: {
-      type: Object as PropType<User>,
+    group: {
+      type: Object as PropType<Group>,
       default: () => ({
         name: '',
         address: '',
-        status: '',
+        motd: '',
       }),
       required: true,
     },
@@ -36,11 +36,11 @@ export default Vue.extend({
     testFunc() {
       console.log('User Func')
     },
-    navigateToUser() {
+    navigateToGroup() {
       this.$router.push('/chat/direct')
     },
   },
 })
 </script>
 
-<style scoped lang="less" src="./User.less"></style>
+<style scoped lang="less" src="./Group.less"></style>
