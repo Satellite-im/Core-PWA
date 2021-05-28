@@ -10,6 +10,11 @@
       color: @red;
     }
   }
+  .control-wrap{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+  }
 
   .chatbar-wrap {
     background-color: @dark-gray;
@@ -35,7 +40,7 @@
         margin-left: 0;
       }
     }
-    
+
     &.is-error {
       border: 1px solid @red;
 
@@ -46,7 +51,7 @@
       }
     }
 
-    input {
+    .messageuser {
       flex: 1;
       padding: 0.25rem 0.5rem;
       background-color: transparent;
@@ -54,8 +59,9 @@
       font-family: 'Poppins';
       color: @text;
       outline: none;
+      resize: none;
     }
-
+    
     .control-icon {
       justify-self: center;
       align-self: center;
@@ -71,6 +77,11 @@
       &:nth-child(4) {
         color: @primary-color;
       }
+    }
+
+    .emoji-icon:hover {
+      transition: 200ms;
+      transform: rotate(1turn);
     }
   }
 }
