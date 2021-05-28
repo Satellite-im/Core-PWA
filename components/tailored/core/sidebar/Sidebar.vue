@@ -4,7 +4,7 @@
 import Vue, { PropType } from 'vue'
 
 import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
-import { User } from '~/types/ui/core'
+import { User, Group } from '~/types/ui/core'
 
 export default Vue.extend({
   mixins: [mobileSwipe],
@@ -17,6 +17,15 @@ export default Vue.extend({
       type: Array as PropType<Array<User>>,
       default: () => [],
     },
+    groups: {
+      type: Array as PropType<Array<Group>>,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      showUsers: false,
+    }
   },
 })
 </script>

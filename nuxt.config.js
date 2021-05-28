@@ -16,7 +16,31 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/static/favicon_16.png',
+        sizes: '16x16',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/static/favicon_32.png',
+        sizes: '32x32',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/static/favicon.png',
+        sizes: '96x96',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        href: '/static/favicon_32.png',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -92,6 +116,9 @@ export default {
       theme_color: '#16161e',
       orientation: 'portrait',
       prefer_related_applications: false,
+    },
+    icon: {
+      source: '/static/icon.png',
     },
   },
 
