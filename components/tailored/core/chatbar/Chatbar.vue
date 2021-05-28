@@ -24,23 +24,27 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
+     */
     handleInputChange() {
       this.autoGrow()
     },
     autoGrow() {
-      // made const variables from finding html elements --> typecasting
-      const messageBox = document.querySelector('.messageuser') as HTMLElement
-      const chatGroup = document.querySelector('#chatbar') as HTMLElement
+      // made const variables from this.$refs --> HTMLElement through typecasting
+      const messageBox = this.$refs.messageuser as HTMLElement
+      const chatbarGroup = this.$refs.chatbar as HTMLElement
 
-      // set default height to be auto, so it will expand as needed
+      // set default height to be auto, so it will expand as needed but NOT on every input
       messageBox.style.height = 'auto'
 
       if (messageBox.scrollHeight < 112) {
-        messageBox.style.height = messageBox.scrollHeight + 2 + 'px'
-        chatGroup.style.height = messageBox.scrollHeight + 42 + 'px'
+        messageBox.style.height = `${messageBox.scrollHeight + 2}px`
+        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
+
       } else {
         messageBox.style.height = '112px'
-        chatGroup.style.height = '152px'
+        chatbarGroup.style.height = '152px'
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },

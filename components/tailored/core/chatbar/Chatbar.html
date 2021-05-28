@@ -1,4 +1,4 @@
-<div id="chatbar">
+<div id="chatbar" ref="chatbar">
   <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`">
     <div
       class="control-wrap">
@@ -7,6 +7,7 @@
     <textarea :placeholder="$t('global.talk')"
             rows="1"
             class="messageuser"
+            ref="messageuser"
             v-model="text"
             @input="handleInputChange"
             @change="handleInputChange"
