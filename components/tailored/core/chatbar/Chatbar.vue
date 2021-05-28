@@ -35,6 +35,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * Toggles emoji div: <picker/>
+     * (e: any) Comes from <picker/> contextmenu event
+     */
     toggleEmojiPicker(e: any) {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
       // @ts-ignore
@@ -44,6 +48,10 @@ export default Vue.extend({
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 72
       this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
     },
+    /**
+     * Adds emoji to current text input
+     * (emoji: any) Comes from <picker/> select event
+     */
     addEmoji(emoji: any) {
       this.$data.text += emoji.native + ' '
       this.$data.showEmojiPicker = false
