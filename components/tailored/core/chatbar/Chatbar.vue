@@ -55,7 +55,7 @@ export default Vue.extend({
       this.$data.text += emoji.native + ' '
       this.$data.showEmojiPicker = false
     },
-    /*
+    /**
      * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
      */
     autoGrow() {
