@@ -31,19 +31,16 @@ export default Vue.extend({
       this.close()
     },
     handleOverflow() {
-      // @ts-ignore
-      const divHeight = this.$refs.contextMenu.clientHeight
-      // @ts-ignore
-      const divWidth = this.$refs.contextMenu.clientWidth
-      const pageHeight = window.innerHeight
-      const pageWidth = window.innerWidth
+      const contextMenu = this.$refs.contextMenu as HTMLElement
       const position = this.$store.state.ui.contextMenuPosition
       let clickX = position.x
       let clickY = position.y
-      const widthOverflow = clickX + divWidth - pageWidth
-      const heightOverflow = clickY + divHeight - pageHeight
+      const widthOverflow =
+        clickX + contextMenu.clientHeight - window.innerWidth
+      const heightOverflow =
+        clickY + contextMenu.clientWidth - window.innerWidth
       if (widthOverflow > -8) {
-        clickX -= divWidth
+        clickX -= contextMenu.clientWidth
         this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
       }
       if (heightOverflow > -8) {
