@@ -3,7 +3,8 @@
   v-touch:swipe="sidebarSwipeHandler(this)"
   v-touch-options="{ swipeTolerance: 75 }"
   >
-  <InteractablesContextMenu v-if="this.$store.state.ui.contextMenuStatus"/>
+  <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
+  <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
   <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
   <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
   <div class="dynamic-content">

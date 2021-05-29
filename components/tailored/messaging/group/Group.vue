@@ -11,6 +11,12 @@ export default Vue.extend({
       default: () => {},
     },
   },
+  methods: {
+    showQuickProfile(e: Event) {
+      this.$store.commit('setQuickProfilePosition', e)
+      this.$store.commit('quickProfile', true)
+    },
+  },
 })
 </script>
 <style scoped lang="less" src="./Group.less"></style>
