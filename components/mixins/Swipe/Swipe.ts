@@ -4,11 +4,11 @@ export const mobileSwipe = {
   },
   methods: {
     sidebarSwipeHandler(currThis: any) {
-      return function (direction: any) {
-        if (direction === 'left') {
+      return function (direction: string) {
+        if (direction === 'left' && currThis.$device.isMobile) {
           currThis.sidebar = false
         }
-        if (direction === 'right') {
+        if (direction === 'right' && currThis.$device.isMobile) {
           currThis.sidebar = true
         }
       }
