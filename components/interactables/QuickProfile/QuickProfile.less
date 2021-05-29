@@ -1,0 +1,30 @@
+#quick-profile {
+  position: fixed;
+  z-index: 3;
+  width: 250px;
+  top: 4rem;
+  left: 4rem;
+  padding: 1rem;
+  background: @black;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .header {
+    width: calc(100% + 2rem);
+    height: 3rem;
+    margin: -1rem -1rem calc(1rem + 20px) -1rem;
+    background: @primary-color;
+    position: relative;
+  }
+
+  .circle {
+    position: absolute;
+    bottom: -20px;
+    left: 1rem;
+    box-shadow: 0 4px 0 0 @black; /* Border bottom */
+    box-shadow: 0 -4px 0 0 @black; /* Border top */
+    box-shadow: -4px 0 0 0 @black; /* Border left */
+    box-shadow: 4px 0 0 0 @black; /* Border right */
+    box-shadow: 0 0 0 4px @black; /* All the borders by using the spread properties */
+  }
+}
