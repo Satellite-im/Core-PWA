@@ -17,6 +17,15 @@
         </div>
       </div>
 
+      <TypographyLabel text="Loading Logo" />
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <UiLoadersLogoLoader :size="64" />
+          </div>
+        </div>
+      </div>
+
       <TypographyLabel text="Loading" />
       <div class="card">
         <div class="card-content">

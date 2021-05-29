@@ -3,7 +3,7 @@ export const ContextMenu = {
   methods: {
     contextMenu(e: Object) {
       e.preventDefault()
-      let contextMenuStatus = this.$store.state.ui.contextMenuStatus
+      const contextMenuStatus = this.$store.state.ui.contextMenuStatus
       if (!contextMenuStatus) {
         this.$store.commit('toggleContextMenu', true)
       }
