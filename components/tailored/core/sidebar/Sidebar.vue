@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
 import { User, Group } from '~/types/ui/core'
@@ -22,10 +23,8 @@ export default Vue.extend({
       default: () => [],
     },
   },
-  data() {
-    return {
-      showUsers: false,
-    }
+  computed: {
+    ...mapState(['ui']),
   },
 })
 </script>

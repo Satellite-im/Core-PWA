@@ -1,13 +1,15 @@
 interface UIState {
-  contextMenuStatus: boolean
-  contextMenuValues: Array<object>
+  contextMenuStatus: Boolean
+  contextMenuValues: Array<Object>
   quickProfile: Object | Boolean
   contextMenuPosition: Object
   quickProfilePosition: Object
+  showSidebarUsers: Boolean
 }
 
 const InitalUIState: UIState = {
   contextMenuStatus: false,
+  showSidebarUsers: true,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
