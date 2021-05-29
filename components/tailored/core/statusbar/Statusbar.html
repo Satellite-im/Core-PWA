@@ -22,5 +22,17 @@
         :icon="['far', 'video']" />
     </div>
     <InteractablesInput v-if="!$device.isMobile" class="input-wrap" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." />
+    <div
+      class="token-balance has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      data-tooltip="Nanite Balance">
+      <InteractablesButton
+        outlined
+        type="dark"
+        size="small"
+        :action="() => {}"
+        :icon="{ style: 'far', name: 'users' }"
+        text="231,832" />
+    </div>
   </div>
 </div>

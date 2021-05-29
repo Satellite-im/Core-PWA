@@ -7,6 +7,12 @@ export default {
       contextMenuStatus: enabled,
     }
   },
+  showSidebarUsers(state: NuxtState, enabled: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showSidebarUsers: enabled,
+    }
+  },
   setContextMenuValues(state: NuxtState, values: any) {
     state.ui = {
       ...state.ui,

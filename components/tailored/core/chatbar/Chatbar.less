@@ -25,6 +25,11 @@
     flex-direction: row;
     width: calc(100% - 2rem);
     border: 1px solid transparent;
+    transition: border-radius 0.2s ease;
+
+    &.expanded {
+      border-radius: 5px;
+    }
 
     .control-tooltip-wrap {
       height: 16pt;

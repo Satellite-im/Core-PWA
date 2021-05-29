@@ -40,10 +40,9 @@ export default Vue.extend({
      */
     toggleEmojiPicker() {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
-      // @ts-ignore
-      const emojiDiv = this.$refs.emojiPicker.$el
-      // @ts-ignore
-      const chatbarDiv = this.$refs.chatbar.getBoundingClientRect()
+      const emojiDiv = (this.$refs.emojiPicker as Vue).$el as SVGElement
+      const chatbarDiv = (this.$refs
+        .chatbar as Element).getBoundingClientRect() as DOMRect
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 72
       this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
     },
@@ -62,10 +61,15 @@ export default Vue.extend({
       // made const variables from this.$refs --> HTMLElement through typecasting
       const messageBox = this.$refs.messageuser as HTMLElement
       const chatbarGroup = this.$refs.chatbar as HTMLElement
+      const wrap = this.$refs.wrap as HTMLElement
 
       // set default height to be auto, so it will expand as needed but NOT on every input
       messageBox.style.height = 'auto'
-
+      if (this.$data.text.split('\n').length > 1) {
+        wrap.classList.add('expanded')
+      } else {
+        wrap.classList.remove('expanded')
+      }
       if (messageBox.scrollHeight < 112) {
         messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
