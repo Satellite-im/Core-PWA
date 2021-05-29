@@ -17,7 +17,21 @@ export default {
     state.ui = {
       ...state.ui,
       // @ts-ignore
-      contextMenuPosition: { x: e.x, y: e.y},
+      contextMenuPosition: { x: e.x, y: e.y },
+    }
+  },
+  setQuickProfilePosition(state: NuxtState, e: any) {
+    state.ui = {
+      ...state.ui,
+      // @ts-ignore
+      quickProfilePosition: { x: e.x, y: e.y },
+    }
+  },
+  quickProfile(state: NuxtState, profile: Object | Boolean) {
+    state.ui = {
+      ...state.ui,
+      // @ts-ignore
+      quickProfile: profile,
     }
   },
 }
