@@ -2,15 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
-import FileUpload from './fileupload/FileUpload.vue'
-
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 // @ts-ignore
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
 import data from 'emoji-mart-vue-fast/data/all.json'
-let emojiIndex = new EmojiIndex(data)
+import FileUpload from './fileupload/FileUpload.vue'
+
+const emojiIndex = new EmojiIndex(data)
 
 export default Vue.extend({
   components: {
@@ -21,7 +20,7 @@ export default Vue.extend({
     return {
       text: '',
       maxChars: 256,
-      emojiIndex: emojiIndex,
+      emojiIndex,
       emojiPos: { x: 0, y: 0 },
       showEmojiPicker: false,
     }
@@ -39,12 +38,12 @@ export default Vue.extend({
      * Toggles emoji div: <picker/>
      * (e: any) Comes from <picker/> contextmenu event
      */
-    toggleEmojiPicker(e: any) {
+    toggleEmojiPicker() {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
       // @ts-ignore
-      let emojiDiv = this.$refs.emojiPicker.$el
+      const emojiDiv = this.$refs.emojiPicker.$el
       // @ts-ignore
-      let chatbarDiv = this.$refs.chatbar.getBoundingClientRect()
+      const chatbarDiv = this.$refs.chatbar.getBoundingClientRect()
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 72
       this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
     },
@@ -59,9 +58,6 @@ export default Vue.extend({
     /**
      * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
      */
-    handleInputChange() {
-      this.autoGrow()
-    },
     autoGrow() {
       // made const variables from this.$refs --> HTMLElement through typecasting
       const messageBox = this.$refs.messageuser as HTMLElement
@@ -78,6 +74,10 @@ export default Vue.extend({
         chatbarGroup.style.height = '152px'
       }
       messageBox.scrollTop = messageBox.scrollHeight
+    },
+    handleInputChange() {
+      // @ts-ignore
+      this.autoGrow()
     },
   },
 })
