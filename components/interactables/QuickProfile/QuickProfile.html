@@ -1,0 +1,11 @@
+<div id="quick-profile"
+  v-click-outside="close"
+  :style="`top: ${$store.state.ui.quickProfilePosition.y}px; left: ${$store.state.ui.quickProfilePosition.x}px;`">
+  <div class="header">
+    <UiCircle type="random" :seed="user.address" :size="45" />
+  </div>
+  <TypographyTitle :text="user.name" :size="6" />
+  <TypographyText :text="`${user.address.substr(0, 23)}...`" :size="6" />
+  <UiHorizontalRule />
+  <InteractablesInputGroup :icon="{ style: 'far', name: 'arrow-circle-right' }" type="primary" outlined size="small" :placeholder="`Message ${user.name}...`" />
+</div>
