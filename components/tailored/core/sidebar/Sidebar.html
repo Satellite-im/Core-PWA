@@ -21,6 +21,7 @@
         type="dark"
         size="small"
         :icon="{ style: 'far', name: 'user-friends' }"
+        :action="() => $router.push('/friends/list')"
         :text="$t('global.friends')" />
       <span class="label">
         14
