@@ -112,13 +112,13 @@ export default {
       lang: 'en',
       useWebmanifestExtension: false,
       display: 'standalone',
-      background_color: '#16161e',
-      theme_color: '#16161e',
+      background_color: '#101016',
+      theme_color: '#101016',
       orientation: 'portrait',
       prefer_related_applications: false,
     },
     icon: {
-      source: '/static/icon.png',
+      source: '/static/satellite.png',
     },
   },
 
