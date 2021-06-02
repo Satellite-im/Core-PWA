@@ -23,6 +23,14 @@ export default Vue.extend({
       default: () => [],
     },
   },
+  mounted() {
+      if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
+        this.$props.toggle()
+      }
+      if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
+        this.$props.toggle()
+      }
+    },
   computed: {
     ...mapState(['ui']),
   },
