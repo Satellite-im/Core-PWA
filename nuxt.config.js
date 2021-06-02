@@ -32,13 +32,13 @@ export default {
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/satellite.png',
+        href: '/static/favicon.png',
         sizes: '96x96',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/satellite.png',
+        href: '/static/favicon.png',
       },
     ],
   },
@@ -118,7 +118,7 @@ export default {
       prefer_related_applications: false,
     },
     icon: {
-      source: '/static/satellite.png',
+      source: '/static/favicon.png',
     },
   },
 
