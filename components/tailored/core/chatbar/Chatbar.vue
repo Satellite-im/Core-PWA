@@ -44,7 +44,7 @@ export default Vue.extend({
       const chatbarDiv = (this.$refs
         .chatbar as Element).getBoundingClientRect() as DOMRect
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 72
-      this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
+      this.$device.isMobile ? this.$data.emojiPos.x = 0 : this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
     },
     /**
      * Adds emoji to current text input
