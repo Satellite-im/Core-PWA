@@ -7,6 +7,12 @@ export type User = {
   state: UserState
 }
 
+export interface Friend extends User {
+  item: any
+  pending: Boolean
+  activeChat: Boolean
+}
+
 export type Group = {
   name: string
   address: string

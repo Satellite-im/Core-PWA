@@ -1,0 +1,31 @@
+<div id="friends-nav">
+  <InteractablesButton 
+    type="primary" 
+    size="small" 
+    text="Active" 
+    :outlined="route === 'active' ? false : true"
+    :action="() => setRoute('active')"
+    :icon="{ style: 'far', name: 'user-friends' }"    />
+  <InteractablesButton 
+    type="primary" 
+    size="small" 
+    text="Requests" 
+    :outlined="route === 'requests' ? false : true"
+    :action="() => setRoute('requests')"
+    :icon="{ style: 'far', name: 'people-arrows' }"    />
+  <InteractablesButton 
+    :icon="{ style: 'far', name: 'user-times' }"
+    type="danger"
+    size="small"
+    text="Blocked"
+    :outlined="route === 'blocked' ? false : true"
+    :action="() => setRoute('blocked')" />
+  <InteractablesButton 
+    :icon="{ style: 'far', name: 'user-plus' }"
+    type="success"
+    size="small"
+    text="Add Friend"
+    :outlined="route === 'add' ? false : true"
+    :action="() => setRoute('add')" />
+
+</div>

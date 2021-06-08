@@ -41,6 +41,30 @@ export const Friends = [
   },
 ]
 
+export const Requests = [
+  {
+    name: 'Viktor Flanigan',
+    address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+    status: 'Wondering the cosmodrome',
+    state: 'online',
+  },
+  {
+    name: 'Gareth Erikson',
+    address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    status: 'Just trying out Satellite!',
+    state: 'offline',
+  },
+]
+
+export const Blocked = [
+  {
+    name: 'Toxic McToxicson',
+    address: '0xdfeeb223bafbe5c5271415c75aecd68c21fe3d7f',
+    status: 'Reeeeeeeee',
+    state: 'online',
+  },
+]
+
 export const Friend = {
   name: 'Lyra Cassini',
   address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',

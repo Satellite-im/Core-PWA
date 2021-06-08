@@ -1,0 +1,57 @@
+<div class="friend">
+  <UiCircle type="random" :seed="friend.address" :size="35" />
+  <font-awesome-icon
+    :icon="['fas', 'circle']"
+    :class="`status is-${friend.state}`" />
+  <div class="description">
+    <TypographySubtitle :size="6" :text="friend.name" />
+    <TypographyText :text="friend.status" />
+  </div>
+  <div class="spacer"></div>
+  <div class="controls" v-if="request">
+    <InteractablesButton
+      outlined
+      type="success"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Accept"
+      :action="() => {}"
+      :icon="{ style: 'far', name: 'check' }" />
+    <InteractablesButton
+      outlined
+      type="danger"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Decline"
+      :action="() => {}"
+      :icon="{ style: 'far', name: 'times' }" />
+  </div>
+  <div class="controls" v-else-if="blocked">
+    <InteractablesButton
+      outlined
+      type="danger"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Unblock"
+      :action="() => {}"
+      :icon="{ style: 'far', name: 'times' }" />
+  </div>
+  <div class="controls" v-else>
+    <InteractablesButton
+      outlined
+      type="primary"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Message"
+      :action="() => {}"
+      :icon="{ style: 'far', name: 'comment-alt-dots' }" />
+    <InteractablesButton
+      outlined
+      type="primary"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Options"
+      :action="() => {}"
+      :icon="{ style: 'far', name: 'ellipsis-v' }" />
+  </div>
+</div>
