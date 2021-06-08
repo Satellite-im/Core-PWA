@@ -4,7 +4,9 @@
     type="primary"
     :text="$t('pages.files.new_folder')"
     :icon="{style: 'far', name: 'folder-plus'}"
-    size="small" />
+    size="small"
+    :action="testAction"
+    />
   <input type="file" id="file-upload" @change="handleFile">
   <label for="file-upload" class="button is-primary is-outlined is-small">
     <font-awesome-icon
