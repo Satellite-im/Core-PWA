@@ -5,7 +5,7 @@ import { Groups, Group } from '~/mock/groups'
 import { Servers, Unreads } from '~/mock/servers'
 import { Messages } from '~/mock/messages'
 import { Files } from '~/mock/files'
-import { Friends, Friend } from '~/mock/friends'
+import { Friends, Friend, Requests, Blocked } from '~/mock/friends'
 
 const mock = {
   users: Users,
@@ -18,6 +18,8 @@ const mock = {
   files: Files,
   friends: Friends,
   friend: Friend,
+  requests: Requests,
+  blocked: Blocked,
 }
 
 declare module 'vue/types/vue' {

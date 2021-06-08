@@ -12,7 +12,7 @@
   </div>
   <!-- Default button state -->
   <div v-else>
-    <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" class="button-icon" />
+    <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" :class="`button-icon ${text.length ? 'button-icon-padded' : ''}`" />
     <span v-if="text.length">{{ text }}</span>
   </div>
 </button>

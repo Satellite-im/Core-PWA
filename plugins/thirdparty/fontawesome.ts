@@ -20,6 +20,7 @@ import {
   faGlobeAmericas,
   faUserFriends,
   faUsers,
+  faUserPlus,
   faFolder,
   faFolderPlus,
   faCommentAltLines,
@@ -44,6 +45,10 @@ import {
   faFileDownload,
   faThumbtack,
   faCircleNotch,
+  faCommentAltDots,
+  faPeopleArrows,
+  faUserTimes,
+  faCheck,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -87,5 +92,10 @@ library.add(faThumbtack)
 library.add(faFile)
 library.add(faFileDownload)
 library.add(faCircleNotch)
+library.add(faCommentAltDots)
+library.add(faUserPlus)
+library.add(faPeopleArrows)
+library.add(faUserTimes)
+library.add(faCheck)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
