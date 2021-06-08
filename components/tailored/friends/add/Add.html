@@ -1,0 +1,28 @@
+<div id="add-friend">
+  <TypographyTitle :size="6" text="Add Friend" />
+  <TypographyText text="Enter your friends account ID, or nickname. Account IDs are case sensitive." />
+  <UiSpacer :height="10" />
+  <InteractablesInputGroup :icon="{ style: 'far', name: 'user-plus' }" type="primary" outlined size="small" :placeholder="`Some User...`" />
+  <UiSpacer :height="10" />
+  <UiHorizontalRuleText plaintext value="OR" />
+  <UiSpacer :height="10" />
+  <TypographyTitle :size="6" text="Add Via QR" />
+  <TypographyText text="You can also add a friend by having them scan your QR code, or by scanning theirs." />
+  <UiSpacer :height="10" />
+  <div class="card">
+    <div class="card-content">
+      <div class="content">
+        <div class="columns">
+          <div class="column">
+            <TypographyText text="Scan a Friends Code" />
+            <InteractablesButton type="primary" size="small" text="Scan" outlined />
+          </div>
+          <div class="column">
+            <TypographyText text="Your Friend Code" />
+            <qrcode-vue :value="value" :size="size" level="H" />
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+</div>

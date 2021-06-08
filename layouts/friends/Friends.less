@@ -9,6 +9,7 @@
   .dynamic-content {
     background-color: @darker;
     width: 100%;
+    height: 100vh;
     user-select: text;
     display: flex;
     flex-direction: column;
@@ -21,18 +22,11 @@
       max-height: @statusbar-height;
     }
 
-    #chat {
+    #friends {
       width: 100%;
       flex: 1;
-      overflow-y: scroll;
+      padding: 0.5rem;
       position: relative;
-    }
-
-    #chatbar {
-      height: @chatbar-size;
-      width: 100%;
-      min-width: 0;
-      justify-content: flex-end;
     }
   }
 

@@ -1,0 +1,64 @@
+
+.friend {
+  position: relative;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-content: center;
+  border-bottom: 1px solid @dark-gray;
+  user-select: none;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: @dark-gray;
+  }
+
+  .circle {
+    align-self: center;
+  }
+
+  .description {
+    margin-left: 1rem;
+    p, h1 {
+      margin: 0;
+      font-size: @mini-text-size;
+    }
+    h1 {
+      color: @bright-text;
+    }
+    p {
+      color: @text-muted;
+    }
+  }
+
+  .controls {
+    justify-self: flex-end;
+    align-self: center;
+    float: right;
+  }
+
+
+  .spacer {
+    flex: 1;
+  }
+  .status {
+    position: absolute;
+    top: calc(28px + 0.5rem);
+    left: calc(25px + 1rem);
+    font-size: @mini-text-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 100;
+    }
+    &.is-online {
+      color: @green;
+    }
+    &.is-offline {
+      color: @gray;
+    }
+    &.is-idle {
+      color: @yellow;
+    }
+  }
+}

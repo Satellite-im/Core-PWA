@@ -1,3 +1,23 @@
-<div id="friends-list">
-  Friends List
+<div id="friends-list" v-scroll-lock="true" >
+  <TailoredFriendsNav :setRoute="setRoute" :route="route" />
+  <div class="scrolling" v-scroll-lock="true">
+    <div v-if="$data.route === 'active'">
+      <div
+        v-for="entry in Object.entries(alphaSortedFriends)">
+        <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
+        <div v-for="friend in entry[1]">
+          <TailoredFriendsFriend :friend="friend" :key="friend.address" />
+        </div>
+      </div>
+    </div>
+    <div v-if="$data.route === 'requests'">
+      <TailoredFriendsFriend v-for="friend in $mock.requests" :friend="friend" :key="friend.address" request />
+    </div>
+    <div v-if="$data.route === 'blocked'">
+      <TailoredFriendsFriend v-for="friend in $mock.blocked" :friend="friend" :key="friend.address" blocked />
+    </div>
+    <div v-if="$data.route === 'add'">
+      <TailoredFriendsAdd />
+    </div>
+  </div>
 </div>
