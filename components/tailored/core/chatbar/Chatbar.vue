@@ -47,7 +47,7 @@ export default Vue.extend({
         this.$data.emojiPos.x = 0 
         // @ts-ignore
         let chatHeight = this.$refs.chatbar.previousElementSibling.clientHeight
-        emojiDiv.style.height = `${chatHeight+4}px`
+        emojiDiv.style.height = `${chatHeight + 4}px`
       } else {
         this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
       }
