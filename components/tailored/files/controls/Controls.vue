@@ -9,6 +9,11 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
+  methods: {
+    testAction() {
+      console.log("meow")
+    },
+  }
 })
 </script>
 <style scoped lang="less" src="./Controls.less"></style>
