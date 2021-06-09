@@ -6,7 +6,10 @@
     :icon="{style: 'far', name: 'folder-plus'}"
     size="small"
     :action="testAction"
+    @click="showModal = true"
     />
+  <modal @close="showModal = false"></modal>
+  <!-- <modal v-if="showModal" @close="showModal = false"></modal> -->
   <input type="file" id="file-upload" @change="handleFile">
   <label for="file-upload" class="button is-primary is-outlined is-small">
     <font-awesome-icon
