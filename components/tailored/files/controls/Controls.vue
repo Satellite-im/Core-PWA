@@ -9,9 +9,16 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
+  data() {
+    return {
+      showModal: false,
+    }
+  },
   methods: {
     testAction() {
       console.log("meow")
+      console.log(this.showModal)
+      this.showModal = !this.showModal
     },
   }
 })
