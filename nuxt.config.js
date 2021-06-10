@@ -56,6 +56,7 @@ export default {
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
     { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
+    { src: '~/plugins/thirdparty/vue-js-modal.ts'},
     // Local
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },
