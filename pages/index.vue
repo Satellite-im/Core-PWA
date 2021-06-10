@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">Satellite-Absolute</h1>
+      <UiSpacer :height="25" />
+      <img src="~/static/icon.png" alt="">
+      <TypographyTitle :size="5" text="Satellite Absolute" />
+      <TypographySubtitle :size="5" text="UI Preview" />
+      <UiSpacer :height="25" />
 
       <aside class="menu">
         <p class="menu-label">General</p>
@@ -56,5 +60,12 @@ export default Vue.extend({
   display: flex;
   justify-content: center;
   text-align: center;
+}
+.title {
+  margin: 0;
+}
+.is-6 {
+  margin: 0;
+  padding: 0;
 }
 </style>
