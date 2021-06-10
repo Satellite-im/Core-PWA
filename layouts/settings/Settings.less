@@ -1,3 +1,22 @@
+#app-wrap {
+  #app.mobile-app {
+    height: calc(100vh - @mobile-nav-size);
+    transition: height @animation-speed;
+  }
+  #mobile-nav {
+    transition: bottom @animation-speed;
+  }
+
+  &.is-collapsed {
+    #app.mobile-app {
+      height: 100vh;
+    }
+    #mobile-nav {
+      bottom: -@mobile-nav-size;
+    }
+  }
+}
+
 p {
   font-family: @secondary-font;
   font-size: 16px;

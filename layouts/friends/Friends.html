@@ -1,13 +1,18 @@
-<div id="app" 
-  :class="`${sidebar ? 'is-open' : 'is-collapsed'}`" 
-  v-touch:swipe="sidebarSwipeHandler(this)"
-  v-touch-options="{ swipeTolerance: 75 }"
-  >
-  <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
-  <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
-  <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-  <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
-  <div class="dynamic-content">
-    <Nuxt id="friends" ref="chat" />
+<div
+  id="app-wrap"
+  :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app" 
+    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${$device.isMobile ? 'mobile-app' : ''}`" 
+    v-touch:swipe="sidebarSwipeHandler(this)"
+    v-touch-options="{ swipeTolerance: 75 }"
+    >
+    <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
+    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
+    <div class="dynamic-content">
+      <Nuxt id="friends" ref="chat" />
+    </div>
   </div>
+  <TailoredCoreMobileNav v-if="$device.isMobile"/>
 </div>
