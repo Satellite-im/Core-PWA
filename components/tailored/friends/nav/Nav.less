@@ -1,5 +1,6 @@
 #friends-nav {
   padding: 0.5rem;
+  min-width: 100vw;
 
   /*
   .button {
@@ -23,4 +24,16 @@
     }
   }
   */
+  
+}
+@media only screen and (max-width: 768px) {
+  #friends-nav {
+    display: inline-flex;
+    .spacer {
+      flex: 1;
+    }
+    .button {
+      margin-left: 0.25rem;
+    }
+  }
 }

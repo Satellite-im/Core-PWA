@@ -1,10 +1,30 @@
 @sidebar-size: 250px;
 @servers-size: 60px;
 
+#app-wrap {
+  #app.mobile-app {
+    height: calc(100vh - @mobile-nav-size);
+    transition: height @animation-speed;
+  }
+  #mobile-nav {
+    transition: bottom @animation-speed;
+  }
+
+  &.is-collapsed {
+    #app.mobile-app {
+      height: 100vh;
+    }
+    #mobile-nav {
+      bottom: -@mobile-nav-size;
+    }
+  }
+}
+
 #app {
   display: flex;
   background-color: @darker;
   user-select: none;
+  height: 100vh;
 
   .dynamic-content {
     background-color: @darker;
