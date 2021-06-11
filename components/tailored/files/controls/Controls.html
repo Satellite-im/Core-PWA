@@ -8,7 +8,31 @@
     :action="testAction"
     @click="showModal = true"
     />
-  <modal name="my-first-modal">meow meow meow</modal>
+  <modal 
+    id="new-folder-modal"
+    name="new-folder-modal"
+    :min-width="200"
+    :min-height="300"
+    :scrollable="true"
+    :reset="true"
+    width="50%"
+    height="auto"
+  >
+  <div class="modal-div">
+  Name of New Folder:
+    <InteractablesInput
+    v-model="something"
+    size="small"
+    type="dark"
+    />
+    <InteractablesButton
+    outlined
+    type="primary"
+    :text="$t('pages.files.new_folder')"
+    :icon="{style: 'far', name: 'folder-plus'}"
+    size="small"/>
+  </div>
+  </modal>
   <input type="file" id="file-upload" @change="handleFile">
   <label for="file-upload" class="button is-primary is-outlined is-small">
     <font-awesome-icon
