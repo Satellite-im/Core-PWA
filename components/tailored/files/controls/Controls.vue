@@ -2,7 +2,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import vmodal from 'vue-js-modal'
-// import '@/plugins/thirdparty/vue-js-modal-style.css';
 
 export default Vue.extend({
   props: {
@@ -11,29 +10,29 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
-  data() {
+    data() {
     return {
-      // showModal: false,
-    }
-  },
-  mounted() {
-    // Updates time ago
-    console.log("mounted")
-  },
+      text: '',
+      }
+    },
   methods: {
-    testAction() {
-      console.log("meow")
+    showModal() {
+      // shows the createFolder modal
       this.show()
-
+      // shows what was in the user's input for a Folder Name
+      // console.log(this.$data.text)
+    },
+    createFolder() {
+      //hides the modal that the button is displayed on when pressed
+      console.log(this.$data.text)
+      this.hide()
     },
     show () {
       this.$modal.show('new-folder-modal')
-      console.log(this.$modal)
-
     },
     hide () {
         this.$modal.hide('new-folder-modal');
-    }
+    },
   }
 
 })
