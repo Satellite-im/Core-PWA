@@ -33,6 +33,7 @@ export default {
       upload: 'Upload File',
       refresh: 'Refresh',
       new_folder: 'New Folder',
+      new_folder_prompt: 'Name of the New Folder:',
       browse: {
         name: 'Name',
         modified: 'Modified',
