@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import vmodal from 'vue-js-modal'
+// import '@/plugins/thirdparty/vue-js-modal-style.css';
 
 export default Vue.extend({
   props: {
@@ -15,24 +16,24 @@ export default Vue.extend({
       // showModal: false,
     }
   },
-    mounted() {
+  mounted() {
     // Updates time ago
     console.log("mounted")
   },
   methods: {
     testAction() {
       console.log("meow")
-      // console.log(this.showModal)
-      // this.showModal = !this.showModal
       this.show()
 
     },
     show () {
-      this.$modal.show('my-first-modal');
-      },
+      this.$modal.show('new-folder-modal')
+      console.log(this.$modal)
+
+    },
     hide () {
-        this.$modal.hide('my-first-modal');
-      }
+        this.$modal.hide('new-folder-modal');
+    }
   }
 
 })
