@@ -17,7 +17,7 @@ import { Friend } from '~/types/ui/core'
  * @name getAlphaSorted
  * @param friends array of friends
  */
-export function getAlphaSorted (friends: Array<Friend>) {
+export function getAlphaSorted(friends: Array<Friend>) {
   const sorted = sortBy(friends, ['name'])
   const grouped = groupBy(sorted, (f: Friend) => {
     if (f.name && f.name.length) {
@@ -37,11 +37,11 @@ export function getAlphaSorted (friends: Array<Friend>) {
  * @param friends Array of friends to filter
  * @param keyword string keyword to search for
  */
-export function getFilteredFriends (friends: Array<Friend>, keyword: string) {
+export function getFilteredFriends(friends: Array<Friend>, keyword: string) {
   if (keyword) {
     const options = {
       includeScore: false,
-      keys: ['name']
+      keys: ['name'],
     }
     const fuse = new Fuse(friends, options)
     const result = fuse.search(keyword)
