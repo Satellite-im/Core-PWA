@@ -17,6 +17,9 @@
     #mobile-nav {
       bottom: -@mobile-nav-size;
     }
+    .dynamic-content {
+      width: 100%;
+    }
   }
 }
 
@@ -27,7 +30,7 @@
 
   .dynamic-content {
     background-color: @darker;
-    width: 100%;
+    width: calc(100% - @sidebar-size - @servers-size);
     user-select: text;
     display: flex;
     flex-direction: column;

@@ -10,21 +10,21 @@ type Route = 'active' | 'requests' | 'blocked' | 'add'
 export default Vue.extend({
   name: 'FriendsList',
   layout: 'friends',
-  computed: {
-    alphaSortedFriends() {
-      return getAlphaSorted(this.$mock.friends)
-    },
-  },
   data() {
     return {
       route: 'active',
     }
   },
+  computed: {
+    alphaSortedFriends() {
+      return getAlphaSorted(this.$mock.friends)
+    },
+  },
   methods: {
     setRoute(route: Route) {
       this.$data.route = route
-    }
-  }
+    },
+  },
 })
 </script>
 

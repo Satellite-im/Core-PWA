@@ -49,6 +49,9 @@ import {
   faPeopleArrows,
   faUserTimes,
   faCheck,
+  faDesktopAlt,
+  faPhoneSlash,
+  faExpand,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -97,5 +100,8 @@ library.add(faUserPlus)
 library.add(faPeopleArrows)
 library.add(faUserTimes)
 library.add(faCheck)
+library.add(faDesktopAlt)
+library.add(faPhoneSlash)
+library.add(faExpand)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
