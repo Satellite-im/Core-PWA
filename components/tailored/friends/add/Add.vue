@@ -5,14 +5,14 @@ import QrcodeVue from 'qrcode.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
+  components: {
+    QrcodeVue,
+  },
   data() {
     return {
       value: 'https://example.com',
       size: 150,
     }
-  },
-  components: {
-    QrcodeVue,
   },
 })
 </script>

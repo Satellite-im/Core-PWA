@@ -1,0 +1,43 @@
+<div id="actions">
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Video">
+    <InteractablesButton
+      class="left"
+      outlined
+      type="dark"
+      size="small"
+      :icon="{ style: 'far', name: 'video' }"
+      :action="() => {}" />
+  </div>
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Mute">
+    <InteractablesButton
+      outlined
+      type="dark"
+      size="small"
+      :icon="{ style: 'far', name: 'microphone-alt' }"
+      :action="() => {}" />
+  </div>
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Screenshare">
+    <InteractablesButton
+      outlined
+      type="dark"
+      size="small"
+      :icon="{ style: 'far', name: 'desktop-alt' }"
+      :action="() => {}" />
+  </div>
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Hangup">
+    <InteractablesButton
+      class="right"
+      type="danger"
+      size="small"
+      :icon="{ style: 'far', name: 'phone-slash' }"
+      :action="() => {}" />
+  </div>
+</div>

@@ -8,7 +8,7 @@ export default Vue.extend({
   props: {
     friend: {
       type: Object as PropType<Friend>,
-      default: {}
+      default: () => {},
     },
     request: {
       type: Boolean,
@@ -18,7 +18,7 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-  }
+  },
 })
 </script>
 <style scoped lang="less" src="./Friend.less"></style>

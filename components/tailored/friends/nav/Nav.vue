@@ -6,13 +6,13 @@ export default Vue.extend({
   props: {
     setRoute: {
       type: Function,
-      default: () => () => {}
+      default: () => () => {},
     },
     route: {
       type: String,
       default: 'active',
     },
-  }
+  },
 })
 </script>
 <style scoped lang="less" src="./Nav.less"></style>
