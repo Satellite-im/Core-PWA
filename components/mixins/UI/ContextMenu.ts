@@ -1,7 +1,7 @@
 // @ts-nocheck
 export const ContextMenu = {
   methods: {
-    contextMenu(e: Object) {
+    contextMenu(e: Event) {
       e.preventDefault()
       const contextMenuStatus = this.$store.state.ui.contextMenuStatus
       if (!contextMenuStatus) {
