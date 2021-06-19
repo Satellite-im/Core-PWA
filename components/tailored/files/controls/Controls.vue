@@ -26,9 +26,11 @@ export default Vue.extend({
       this.hide()
     },
     show() {
+      // @ts-ignore
       this.$modal.show('new-folder-modal')
     },
     hide() {
+      // @ts-ignore
       this.$modal.hide('new-folder-modal')
     },
   },
