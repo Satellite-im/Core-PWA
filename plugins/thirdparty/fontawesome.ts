@@ -52,6 +52,10 @@ import {
   faDesktopAlt,
   faPhoneSlash,
   faExpand,
+  faVolumeDown,
+  faVolumeUp,
+  faVolumeOff,
+  faVolumeMute,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -103,5 +107,9 @@ library.add(faCheck)
 library.add(faDesktopAlt)
 library.add(faPhoneSlash)
 library.add(faExpand)
+library.add(faVolumeOff)
+library.add(faVolumeUp)
+library.add(faVolumeMute)
+library.add(faVolumeDown)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
