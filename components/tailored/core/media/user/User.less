@@ -1,0 +1,44 @@
+#user {
+  background: @primary-color;
+  width: 16rem;
+  height: 9rem;
+  border-radius: 4px;
+  display: inline-flex;
+  margin: 0.5rem 0.25rem;
+  padding: 0.5rem;
+  position: relative;
+
+  .circle {
+    position: absolute;
+    top: calc(50% - 38.5px);
+    left: calc(50% - 32.5px);
+  }
+
+  .talking {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+  
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+  
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+
+  .tag {
+    justify-self: flex-end;
+    align-self: flex-end;
+  }
+}
