@@ -13,28 +13,22 @@
     :min-width="200"
     :min-height="300"
     :scrollable="true"
+    :shiftY="1.7"
     :reset="true"
     width="50%"
     height="auto"
   >
     <div class="modal-div">
-      <div class="modal-title">
-        {{ $t('pages.files.new_folder_prompt') }}
-      </div>
-      <InteractablesInput
-      class="modal-input"
-      size="small"
-      type="dark"
-      v-model="text"
+      <TypographySubtitle :size="6" :text="$t('pages.files.new_folder_prompt')" />
+      <InteractablesInputGroup
+        class="modal-input"
+        size="small"
+        type="primary"
+        outlined
+        v-model="text"
+        :icon="{style: 'far', name: 'folder-plus'}"
+        :action="createFolder"
       />
-      <InteractablesButton
-      class="modal-btn"
-      outlined
-      type="primary"
-      :text="$t('pages.files.new_folder')"
-      :icon="{style: 'far', name: 'folder-plus'}"
-      :action="createFolder"
-      size="small"/>
     </div>
   </modal>
   <input type="file" id="file-upload" @change="handleFile">
