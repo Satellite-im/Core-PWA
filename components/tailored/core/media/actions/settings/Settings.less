@@ -3,4 +3,33 @@
   bottom: 1rem;
   left: 1rem;
   cursor: pointer;
+
+  #settings-menu {
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.25rem;
+    border-radius: @corner-rounding;
+    min-width: 6rem;
+    background: @dark-gray;
+    font-size: @text-size;
+
+    li {
+      border-bottom: 1px solid @dark-gray-alt;
+      margin-bottom: 0.15rem;
+      user-select: none;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+    .word {
+      display: inline-block;
+      margin-right: 1rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .fa-chevron-right {
+      float: right;
+      margin-top: 0.25rem;
+    }
+  }
 }

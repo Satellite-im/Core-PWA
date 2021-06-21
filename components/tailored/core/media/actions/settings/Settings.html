@@ -1,3 +1,19 @@
 <div id="settings">
-  <font-awesome-icon :icon="['far', 'cog']"/>
+  <div id="settings-menu" v-if="menuOpen">
+    <ul>
+      <li>
+        <div class="word">Audio Quality</div>
+        <font-awesome-icon :icon="['far', 'chevron-right']"/>
+      </li>
+      <li>
+        <div class="word">Video Quality</div>
+        <font-awesome-icon :icon="['far', 'chevron-right']"/>
+      </li>
+      <li>
+        <div class="word">Stream Options</div>
+        <font-awesome-icon :icon="['far', 'chevron-right']"/>
+      </li>
+    </ul>
+  </div>
+  <font-awesome-icon :icon="['far', 'cog']" v-on:click="toggleMenu" />
 </div>
