@@ -8,7 +8,7 @@
   />
 </template>
 <script lang="ts">
-import Vue from 'vue' 
+import Vue from 'vue'
 
 import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
 
