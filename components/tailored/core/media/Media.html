@@ -4,7 +4,10 @@
     <TailoredCoreMediaUser :user="{ name: 'Taurus Nix' }" talking />
     <TailoredCoreMediaUser :user="{ name: 'Phoenix Kalindi' }" />
   </div>
-  <TailoredCoreMediaActionsVolume />
+  <TailoredCoreMediaActionsVolume
+    :volumeLevel="defaultVolumeLevel"
+    @volumeControlValueChange="returnedValue"
+  />
   <TailoredCoreMediaActionsSettings />
   <TailoredCoreMediaActions />
 </div>
