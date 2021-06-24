@@ -53,6 +53,7 @@ import {
   faPhoneSlash,
   faExpand,
   faVolumeDown,
+  faVolume,
   faVolumeUp,
   faVolumeOff,
   faVolumeMute,
@@ -110,6 +111,7 @@ library.add(faPhoneSlash)
 library.add(faExpand)
 library.add(faVolumeOff)
 library.add(faVolumeUp)
+library.add(faVolume)
 library.add(faVolumeMute)
 library.add(faVolumeDown)
 library.add(faChevronRight)
