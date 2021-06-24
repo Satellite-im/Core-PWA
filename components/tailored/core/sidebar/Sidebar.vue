@@ -32,7 +32,7 @@ export default Vue.extend({
      * when user is on a mobile device
      */
     if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-      this.$props.toggle()
+      this.$props.toggle() 
     }
     if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
       this.$props.toggle()
