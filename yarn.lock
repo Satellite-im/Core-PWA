@@ -4093,6 +4093,11 @@ core-js@^2.4.0, core-js@^2.5.7, core-js@^2.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
+core-js@^3.6.5:
+  version "3.15.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.15.1.tgz#6c08ab88abdf56545045ccf5fd81f47f407e7f1a"
+  integrity sha512-h8VbZYnc9pDzueiS2610IULDkpFFPunHwIpl8yRwFahAEEdSpHlTy3h3z3rKq5h11CaUdBEeRViu9AYvbxiMeg==
+
 core-js@^3.9.1:
   version "3.14.0"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.14.0.tgz#62322b98c71cc2018b027971a69419e2425c2a6c"
@@ -11896,6 +11901,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vue-class-component@^7.1.0:
+  version "7.2.6"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
+  integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
+
 vue-click-outside@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vue-click-outside/-/vue-click-outside-1.1.0.tgz#48b7680b518923e701643cccb3e165854aad99eb"
@@ -12019,6 +12029,13 @@ vue-observe-visibility@^0.4.4:
   resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.6.tgz#878cb8ebcf3078e40807af29774e97105ebd519e"
   integrity sha512-xo0CEVdkjSjhJoDdLSvoZoQrw/H2BlzB5jrCBKGZNXN2zdZgMuZ9BKrxXDjNP2AxlcCoKc8OahI3F3r3JGLv2Q==
 
+vue-property-decorator@^8.0.0:
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.5.1.tgz#571a91cf8d2b507f537d79bf8275af3184572fff"
+  integrity sha512-O6OUN2OMsYTGPvgFtXeBU3jPnX5ffQ9V4I1WfxFQ6dqz6cOUbR3Usou7kgFpfiXDvV7dJQSFcJ5yUPgOtPPm1Q==
+  dependencies:
+    vue-class-component "^7.1.0"
+
 vue-resize@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
@@ -12042,6 +12059,14 @@ vue-server-renderer@^2.6.12:
     resolve "^1.2.0"
     serialize-javascript "^3.1.0"
     source-map "0.5.6"
+
+vue-slider-component@^3.2.13:
+  version "3.2.13"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.2.13.tgz#1be85e6e822ca0997ecd10067c2351bd8e8d7a15"
+  integrity sha512-8Unr7YgVgf+IjJkbHHCloeWjtOyn4UMotFWX+5S5tUjpwU4OA7ADiaJ94/jFsuJt3JvpJm/vECrRvdSAVZjn9g==
+  dependencies:
+    core-js "^3.6.5"
+    vue-property-decorator "^8.0.0"
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.3:
   version "4.1.3"
