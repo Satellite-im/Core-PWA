@@ -42,3 +42,15 @@
     align-self: flex-end;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  #user {
+    height: 7rem;
+    .circle, .talking {
+      top: calc(50% - 30px);
+    }
+    .tag {
+      z-index: @base-z-index;
+    }
+  }
+}
