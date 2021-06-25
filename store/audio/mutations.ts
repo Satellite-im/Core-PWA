@@ -15,6 +15,12 @@ const mutations = {
       deafened: !state.audio.deafened,
     }
   },
+  setVolume(state: NuxtState, volume: Number) {
+    state.audio = {
+      ...state.audio,
+      volume,
+    }
+  },
 }
 
 export default mutations
