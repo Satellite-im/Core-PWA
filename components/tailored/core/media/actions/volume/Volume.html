@@ -1,29 +1,29 @@
 <div id="volume" ref="volumegroup" @mousedown="hideSlider" tabindex="0">
-  <TailoredCoreMediaVolume
+  <InteractablesVolume
     v-if="showSlider"
-    :volume="volume"
+    :volume="audio.volume"
     @returned-value="receivedValue"
   />
   <font-awesome-icon
-    v-if="volume >= 70"
+    v-if="audio.volume >= 70"
     :icon="['far', 'volume-up']"
     @click="toggleSlider"
     class="fa-fw"
   />
   <font-awesome-icon
-    v-if="volume > 30 && volume < 70"
+    v-if="audio.volume > 30 && audio.volume < 70"
     :icon="['far', 'volume']"
     @click="toggleSlider"
     class="fa-fw"
   />
   <font-awesome-icon
-    v-if="volume > 0 && volume <= 30"
+    v-if="audio.volume > 0 && audio.volume <= 30"
     :icon="['far', 'volume-down']"
     @click="toggleSlider"
     class="fa-fw"
   />
   <font-awesome-icon
-    v-if="volume == 0"
+    v-if="audio.volume == 0"
     :icon="['far', 'volume-off']"
     @click="toggleSlider"
     class="fa-fw"

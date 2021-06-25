@@ -7,11 +7,16 @@ import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
   name: 'AudioSettings',
-  props: ['volume'],
   components: {
     VueSlider,
   },
-  data: function () {
+  props: {
+    volume: {
+      type: Number,
+      default: 100,
+    },
+  },
+  data() {
     return {
       value: this.volume,
       percentageFormatter: (volumePercentage: number) => {
