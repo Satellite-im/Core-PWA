@@ -9,6 +9,13 @@
   .token-balance {
     margin-left: 1rem;
     color: @primary-color;
+    display: inline-flex;
+    flex-direction: row;
+    color: @bright-text;
+
+    img {
+      margin-right: 0.5rem;
+    }
     .subtitle {
       color: @primary-color;
     }
@@ -92,7 +99,7 @@
 
 @media only screen and (max-width: 768px) {
   #statusbar {
-    min-width: 100vw;
+    min-width: @viewport-width;
     padding-right: 0.5rem;
   }
   .controls {
