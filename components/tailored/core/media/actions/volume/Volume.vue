@@ -2,13 +2,23 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { mapState } from 'vuex'
+
 export default Vue.extend({
-  props: ['volumeLevel'],
+  props: {
+    volumeLevel: {
+      type: Number,
+      default: 100,
+    },
+  },
   data() {
     return {
-      volume: this.volumeLevel,
       showSlider: false,
     }
+  },
+  computed: {
+    ...mapState(['audio']),
   },
   mounted() {
     document.addEventListener('click', this.hideSlider)
@@ -26,8 +36,7 @@ export default Vue.extend({
       }
     },
     receivedValue(volume: Number) {
-      // console.log('received volume is ', volume)
-      this.volume = volume
+      this.$store.commit('setVolume', volume)
       this.$emit('volumeControlValueChange', volume)
     },
   },
