@@ -5,7 +5,9 @@
   >
   <TypographyTitle :size="6" :text="$t('global.name')" />
   <UiSpacer :height="15" />
-  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
+
+  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle"/>
+
   <InteractablesInput
     :placeholder="`${$t('global.search')}...`"
     size="small"
@@ -34,7 +36,7 @@
         type="dark"
         size="small"
         :class="`${$route.path.includes('/files') ? 'active' : ''}`"
-        :action="() => $router.push('/files/browse')"
+        :action="handleFiles"
         :icon="{ style: 'far', name: 'folder' }"
         :text="$t('global.files')" />
     </div>
