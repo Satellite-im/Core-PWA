@@ -48,6 +48,11 @@
       flex: 1;
       overflow-y: auto;
       position: relative;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     #chatbar {
