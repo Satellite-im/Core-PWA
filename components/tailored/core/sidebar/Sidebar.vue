@@ -34,42 +34,23 @@ export default Vue.extend({
 
   methods: {
       handleFiles (){
-      console.log(this.$data.sidebarOpen)
-
-    // this.$router.push('/files/browse')
-
-      // this.$props.toggle()
-
-      const foo = async () => {
-  const bar = await this.$router.push('/files/browse');
-  // do smt with bar
+      this.$router.push('/files/browse')
+      if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
       this.$props.toggle()
+      }
+    }
+  },
 
-}
-foo();
+  mounted() {
+    /**
+     * Opens and closes the left hand sidebar upon clicking on 'direct-chat' or 'files-browse'
+     * when user is on a mobile device
+     */
 
-  }
-  }
-
-  // mounted() {
-  //   /**
-  //    * Opens and closes the left hand sidebar upon clicking on 'direct-chat' or 'files-browse'
-  //    * when user is on a mobile device
-  //    */
-  //   // const { shadowRoot } = this.$parent.$options
-  //   if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-  //     // this.$props.toggle()
-  //     // let list = document.getElementById("sample")
-  //     console.log("in files area")
-  //     // document.getElementsByTagName('button')[0].click()
-  //     // console.log(typeof document.getElementsByTagName('button')[0])
-  //     // console.log(shadowRoot)
-  //     // list.click()
-  //   }
-  //   if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
-  //     this.$props.toggle()
-    // }
-  // },
+    if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
+      this.$props.toggle()
+    }
+  },
 })
 </script>
 
