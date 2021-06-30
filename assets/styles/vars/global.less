@@ -38,4 +38,16 @@ body {
   font-size: @micro-text-size !important;
 }
 
+.hidden-scroll {
+  overflow-y: auto;
+  position: relative;
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+    scrollbar-width: none;
+  }
+}
+
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');

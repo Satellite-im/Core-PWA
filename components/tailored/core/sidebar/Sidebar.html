@@ -59,10 +59,10 @@
       :action="() => $store.commit('showSidebarUsers', false)" />
   </div>
 
-  <div class="scrolling" v-scroll-lock="true" v-if="ui.showSidebarUsers">
+  <div class="scrolling hidden-scroll" v-scroll-lock="true" v-if="ui.showSidebarUsers">
     <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
   </div>
-  <div class="scrolling" v-scroll-lock="true" v-else>
+  <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
     <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />
   </div>
   
