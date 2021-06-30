@@ -45,6 +45,11 @@
       flex: 1;
       overflow-y: auto;
       position: relative;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     #chatbar {
