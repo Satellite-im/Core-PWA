@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Command } from '~/types/utils/commands'
 
 import { commands, containsCommand, parseCommand } from '~/utilities/commands'
 
@@ -29,6 +30,11 @@ export default Vue.extend({
       return cmds.includes(
         parseCommand(this.$store.state.ui.chatbarContent).name.toString()
       )
+    },
+  },
+  methods: {
+    completeCommand(command: Command) {
+      this.$store.commit('chatbarContent', `/${command.name}`)
     },
   },
 })
