@@ -41,16 +41,10 @@ export default Vue.extend({
     toggleEmojiPicker() {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
       const emojiDiv = (this.$refs.emojiPicker as Vue).$el as SVGElement
-      const chatbarDiv = (this.$refs
-        .chatbar as Element).getBoundingClientRect() as DOMRect
-      if (this.$device.isMobile) {
-        this.$data.emojiPos.x = 0 
-        // @ts-ignore
-        let chatHeight = this.$refs.chatbar.previousElementSibling.clientHeight
-        emojiDiv.style.height = `${chatHeight + 4}px`
-      } else {
-        this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
-      }
+      const chatbarDiv = (
+        this.$refs.chatbar as Element
+      ).getBoundingClientRect() as DOMRect
+      this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 78
     },
     /**
@@ -87,6 +81,7 @@ export default Vue.extend({
       messageBox.scrollTop = messageBox.scrollHeight
     },
     handleInputChange() {
+      this.$store.commit('chatbarContent', this.$data.text)
       // @ts-ignore
       this.autoGrow()
     },

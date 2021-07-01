@@ -9,14 +9,13 @@
     <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
+    <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
     <div class="dynamic-content">
       <TailoredCoreStatusbar
         id="statusbar"
+        :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
         :user="$mock.users[0]"/>
-      <TailoredCoreMedia /> 
-      <Nuxt id="chat" ref="chat" />
-      <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
+      <Nuxt id="server" ref="server" />
       <TailoredCoreChatbar />
     </div>
   </div>
