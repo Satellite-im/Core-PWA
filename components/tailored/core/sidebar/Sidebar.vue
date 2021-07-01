@@ -33,12 +33,14 @@ export default Vue.extend({
   },
 
   methods: {
-      handleFiles (){
-      this.$router.push('/files/browse')
-      if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-      this.$props.toggle()
-      }
-    }
+      handleFiles() {
+        this.$router.push('/files/browse');
+          if (this.$route.name?.includes('files-browse') && this.$device.isMobile){
+          this.$props.toggle()
+
+          }
+      // console.log("inside handleFiles")
+    },
   },
 
   mounted() {
