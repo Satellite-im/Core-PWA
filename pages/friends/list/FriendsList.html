@@ -1,6 +1,6 @@
 <div id="friends-list" v-scroll-lock="true" >
   <TailoredFriendsNav :setRoute="setRoute" :route="route" />
-  <div class="scrolling" v-scroll-lock="true">
+  <div class="scrolling hidden-scroll" v-scroll-lock="true">
     <div v-if="$data.route === 'active'">
       <div v-if="$store.state.loading.friends">
         <div
