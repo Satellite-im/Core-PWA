@@ -37,4 +37,10 @@ export default {
       quickProfile: profile,
     }
   },
+  chatbarContent(state: NuxtState, content: String) {
+    state.ui = {
+      ...state.ui,
+      chatbarContent: content,
+    }
+  },
 }

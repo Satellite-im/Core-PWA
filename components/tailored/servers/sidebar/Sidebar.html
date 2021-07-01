@@ -1,0 +1,19 @@
+<div id="sidebar" 
+  class="collapsed" 
+  v-touch:swipe="toggle"
+  v-touch-options="{ swipeTolerance: 75 }"
+  >
+  <TypographyTitle :size="6" :text="$t('global.name')" />
+  <UiSpacer :height="15" />
+  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
+  <InteractablesInput
+    :placeholder="`${$t('global.search')}...`"
+    size="small"
+    input-kind="text"
+    type="dark"
+  />
+  <UiSpacer :height="15" />
+
+  <TailoredCoreSidebarControls />
+  <TailoredCoreSidebarStatus />
+</div>

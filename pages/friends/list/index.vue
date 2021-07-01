@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import { getAlphaSorted } from '~/utilities/friends'
 
@@ -16,9 +17,13 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['friends']),
     alphaSortedFriends() {
-      return getAlphaSorted(this.$mock.friends)
+      return getAlphaSorted(this.friends.all)
     },
+  },
+  mounted() {
+    this.$store.dispatch('fetchFriends')
   },
   methods: {
     setRoute(route: Route) {

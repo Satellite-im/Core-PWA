@@ -8,6 +8,7 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
 import data from 'emoji-mart-vue-fast/data/all.json'
 import FileUpload from './fileupload/FileUpload.vue'
+import { containsCommand, parseCommand, commands } from '~/utilities/commands'
 
 const emojiIndex = new EmojiIndex(data)
 
@@ -32,6 +33,29 @@ export default Vue.extend({
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
+    hasCommand() {
+      return containsCommand(this.$store.state.ui.chatbarContent)
+    },
+    isValidCommand() {
+      const cmds = commands.map((c) => {
+        return c.name
+      })
+      return cmds.includes(
+        parseCommand(this.$store.state.ui.chatbarContent).name.toString()
+      )
+    },
+    value: {
+      get() {
+        // @ts-ignore
+        return this.$store.state.ui.chatbarContent
+      },
+      set(val) {
+        // @ts-ignore
+        this.$store.commit('chatbarContent', val)
+        // @ts-ignore
+        this.$data.text = val
+      },
+    },
   },
   methods: {
     /**
@@ -41,16 +65,10 @@ export default Vue.extend({
     toggleEmojiPicker() {
       this.$data.showEmojiPicker = !this.$data.showEmojiPicker
       const emojiDiv = (this.$refs.emojiPicker as Vue).$el as SVGElement
-      const chatbarDiv = (this.$refs
-        .chatbar as Element).getBoundingClientRect() as DOMRect
-      if (this.$device.isMobile) {
-        this.$data.emojiPos.x = 0 
-        // @ts-ignore
-        let chatHeight = this.$refs.chatbar.previousElementSibling.clientHeight
-        emojiDiv.style.height = `${chatHeight + 4}px`
-      } else {
-        this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
-      }
+      const chatbarDiv = (
+        this.$refs.chatbar as Element
+      ).getBoundingClientRect() as DOMRect
+      this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
       this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 78
     },
     /**

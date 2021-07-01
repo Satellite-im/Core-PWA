@@ -18,3 +18,9 @@ export type Group = {
   address: string
   motd: string
 }
+
+export type Server = {
+  name: string
+  address: string
+  desc: string
+}

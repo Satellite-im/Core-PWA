@@ -23,6 +23,9 @@ export default Vue.extend({
   mounted() {
     document.addEventListener('click', this.hideSlider)
   },
+  destroyed() {
+    document.removeEventListener('click', this.hideSlider)
+  },
   methods: {
     toggleSlider() {
       this.$data.showSlider = !this.$data.showSlider
