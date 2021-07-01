@@ -52,6 +52,7 @@ import {
   faDesktopAlt,
   faPhoneSlash,
   faExpand,
+  faCompress,
   faVolumeDown,
   faVolume,
   faVolumeUp,
@@ -117,5 +118,6 @@ library.add(faVolumeMute)
 library.add(faVolumeDown)
 library.add(faChevronRight)
 library.add(faTerminal)
+library.add(faCompress)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
