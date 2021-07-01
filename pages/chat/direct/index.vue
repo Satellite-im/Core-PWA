@@ -15,6 +15,7 @@ export default Vue.extend({
     setTimeout(() => {
       this.$data.loading = false
     }, 1500)
+    this.$store.dispatch('fetchFriends')
   },
 })
 </script>

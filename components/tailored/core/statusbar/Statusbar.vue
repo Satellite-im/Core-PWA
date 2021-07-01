@@ -2,13 +2,17 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/types/ui/core'
+import { User, Server } from '~/types/ui/core'
 
 export default Vue.extend({
   props: {
     collapsed: {
       type: Boolean,
       default: false,
+    },
+    server: {
+      type: Object as PropType<Server>,
+      default: () => {},
     },
     user: {
       type: Object as PropType<User>,

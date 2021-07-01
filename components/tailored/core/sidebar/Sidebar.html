@@ -60,7 +60,10 @@
   </div>
 
   <div class="scrolling" v-scroll-lock="true" v-if="ui.showSidebarUsers">
-    <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+    <div v-if="$store.state.loading.friends">
+      <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+    </div>
+    <UiLoadersGenericBlock v-else :count="5" inverted />
   </div>
   <div class="scrolling" v-scroll-lock="true" v-else>
     <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />

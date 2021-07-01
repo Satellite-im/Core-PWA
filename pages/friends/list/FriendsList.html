@@ -2,12 +2,17 @@
   <TailoredFriendsNav :setRoute="setRoute" :route="route" />
   <div class="scrolling" v-scroll-lock="true">
     <div v-if="$data.route === 'active'">
-      <div
-        v-for="entry in Object.entries(alphaSortedFriends)">
-        <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
-        <div v-for="friend in entry[1]">
-          <TailoredFriendsFriend :friend="friend" :key="friend.address" />
+      <div v-if="$store.state.loading.friends">
+        <div
+          v-for="entry in Object.entries(alphaSortedFriends)">
+          <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
+          <div v-for="friend in entry[1]">
+            <TailoredFriendsFriend :friend="friend" :key="friend.address" />
+          </div>
         </div>
+      </div>
+      <div v-else>
+        <UiLoadersGenericBlock :count="5" />
       </div>
     </div>
     <div v-if="$data.route === 'requests'">

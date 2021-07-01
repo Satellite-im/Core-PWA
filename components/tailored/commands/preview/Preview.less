@@ -1,0 +1,44 @@
+#command-preview {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: @chatbar-size + 1px;
+  margin: 0.5rem 1rem;
+  padding: 0.5rem 1rem 1rem 1rem;
+  border-radius: @corner-rounding;
+  min-height: 5rem;
+  background: @dark-gray;
+  z-index: @base-z-index;
+
+  .tag {
+    background: @black;
+    color: @bright-text;
+    border-radius: 2px;
+    font-family: @primary-font;
+    text-transform: lowercase;
+    padding: 0 0.5rem;
+  }
+
+  .red {
+    background: @red;
+  }
+
+  .green {
+    background: @green;
+  }
+
+  .red, .green {
+    color: @white;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    font-size: @mini-text-size;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .command-desc {
+    font-size: @mini-text-size;
+  }
+}
