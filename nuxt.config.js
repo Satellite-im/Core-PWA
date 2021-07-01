@@ -5,6 +5,10 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  router: {
+    mode: 'hash',
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Satellite-Absolute',
@@ -56,7 +60,7 @@ export default {
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
     { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
-    { src: '~/plugins/thirdparty/vue-js-modal.ts'},
+    { src: '~/plugins/thirdparty/vue-js-modal.ts' },
     // Local
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },

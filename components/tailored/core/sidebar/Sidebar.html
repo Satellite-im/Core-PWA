@@ -58,9 +58,11 @@
       :text="$t('global.groups')" 
       :action="() => $store.commit('showSidebarUsers', false)" />
   </div>
-
   <div class="scrolling hidden-scroll" v-scroll-lock="true" v-if="ui.showSidebarUsers">
-    <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+    <div v-if="$store.state.loading.friends">
+      <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+    </div>
+    <UiLoadersGenericBlock v-else :count="5" inverted />
   </div>
   <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
     <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />

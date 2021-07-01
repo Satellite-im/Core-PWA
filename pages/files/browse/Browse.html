@@ -9,6 +9,7 @@
     <TypographyText text="Usage 7.32/10GB" />
   </div>
   <UiHorizontalRule />
-  <TailoredFilesList :path="getPath().children" :push="push" />
+  <TailoredFilesList :path="getPath().children" v-if="$store.state.loading.files" :push="push" />
+  <UiLoadersGenericBlock :count="3" v-else />
   <UiSpacer :height="20" />
 </div>

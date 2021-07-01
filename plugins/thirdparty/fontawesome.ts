@@ -58,6 +58,7 @@ import {
   faVolumeOff,
   faVolumeMute,
   faChevronRight,
+  faTerminal,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -115,5 +116,6 @@ library.add(faVolume)
 library.add(faVolumeMute)
 library.add(faVolumeDown)
 library.add(faChevronRight)
+library.add(faTerminal)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

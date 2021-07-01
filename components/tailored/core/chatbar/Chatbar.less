@@ -1,6 +1,29 @@
 #chatbar {
   margin-top: 0.5rem;
   width: 100%;
+  .chat-label {
+    background: @primary-color;
+    font-size: @mini-text-size;
+    font-weight: bold;
+    height: 100%;
+    width: 1.8rem;
+    padding: 0.15rem;
+    text-align: center;
+    align-self: center;
+    border-radius: @corner-rounding-smaller;
+    cursor: pointer;
+  }
+  textarea.has-command {
+    font-family: @primary-font;
+  }
+  .green {
+    background: @primary-color;
+    color: @white;
+  }
+  .red {
+    background: @red;
+    color: @white;
+  }
   .charlimit {
     float: right;
     margin-right: 2rem;
@@ -35,6 +58,7 @@
       height: 16pt;
       width: 16pt;
       align-self: center;
+      margin: 0 0.75rem;
 
       &:nth-child(1) {
         margin-right: 0.75rem;
