@@ -32,6 +32,10 @@
     flex-direction: column;
     position: relative;
 
+    &:fullscreen, &:-moz-full-screen, &:-ms-fullscreen, &:-webkit-full-screen {
+      opacity: 0;
+    }
+
     .file-preview {
       transition: @transition-all;
     }

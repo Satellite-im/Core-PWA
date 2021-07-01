@@ -12,6 +12,8 @@ export default {
     groups: 'Groups',
     glyphs: 'Glyphs',
     cancel: 'Cancel',
+    exit_fullscreen: 'Exit fullscreen',
+    fullscreen: 'Fullscreen',
     upload: 'Upload',
     talk: 'Speak Freely...',
     encrypted: 'Encrypted',
