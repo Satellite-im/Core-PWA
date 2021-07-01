@@ -31,4 +31,84 @@ export const commands = [
     description: 'Send your account address',
     args: [],
   },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
+  {
+    name: 'placeholder',
+    description: 'Just a placeholder command',
+    args: [
+      {
+        name: 'nothing',
+        options: 'true | false',
+      },
+    ],
+  },
 ]

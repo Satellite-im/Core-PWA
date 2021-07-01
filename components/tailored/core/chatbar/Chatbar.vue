@@ -8,6 +8,7 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
 import data from 'emoji-mart-vue-fast/data/all.json'
 import FileUpload from './fileupload/FileUpload.vue'
+import { containsCommand, parseCommand, commands } from '~/utilities/commands'
 
 const emojiIndex = new EmojiIndex(data)
 
@@ -31,6 +32,29 @@ export default Vue.extend({
      */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
+    },
+    hasCommand() {
+      return containsCommand(this.$store.state.ui.chatbarContent)
+    },
+    isValidCommand() {
+      const cmds = commands.map((c) => {
+        return c.name
+      })
+      return cmds.includes(
+        parseCommand(this.$store.state.ui.chatbarContent).name.toString()
+      )
+    },
+    value: {
+      get() {
+        // @ts-ignore
+        return this.$store.state.ui.chatbarContent
+      },
+      set(val) {
+        // @ts-ignore
+        this.$store.commit('chatbarContent', val)
+        // @ts-ignore
+        this.$data.text = val
+      },
     },
   },
   methods: {
@@ -81,7 +105,6 @@ export default Vue.extend({
       messageBox.scrollTop = messageBox.scrollHeight
     },
     handleInputChange() {
-      this.$store.commit('chatbarContent', this.$data.text)
       // @ts-ignore
       this.autoGrow()
     },
