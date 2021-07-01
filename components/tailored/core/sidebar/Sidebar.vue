@@ -9,11 +9,6 @@ import { User, Group } from '~/types/ui/core'
 
 export default Vue.extend({
   mixins: [mobileSwipe],
-  data() {
-    return {
-      sidebarOpen: false,
-    }
-  },
   props: {
     toggle: {
       type: Function,
@@ -31,27 +26,27 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
-
-  methods: {
-      handleFiles() {
-        this.$router.push('/files/browse');
-          if (this.$route.name?.includes('files-browse') && this.$device.isMobile){
-          this.$props.toggle()
-
-          }
-      // console.log("inside handleFiles")
-    },
-  },
-
   mounted() {
     /**
-     * Opens and closes the left hand sidebar upon clicking on 'direct-chat' or 'files-browse'
+     * Opens and closes the left hand sidebar upon clicking on 'direct-chat'
      * when user is on a mobile device
      */
 
     if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
       this.$props.toggle()
     }
+  },
+  methods: {
+    handleFiles() {
+      /**
+       * Opens and closes the left hand sidebar upon clicking on 'files-browse'
+       * when user is on a mobile device
+       */
+      this.$router.push('/files/browse')
+      if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
+        this.$props.toggle()
+      }
+    },
   },
 })
 </script>
