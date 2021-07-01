@@ -4,13 +4,16 @@
       class="control-wrap">
       <FileUpload />
     </div>
+    <div :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"  v-if="hasCommand">
+      <font-awesome-icon :icon="['far', 'terminal']" />
+    </div>
     <textarea :placeholder="$t('global.talk')"
-            rows="1"
-            class="messageuser hidden-scroll"
-            ref="messageuser"
-            v-model="text"
-            @input="handleInputChange"
-            @change="handleInputChange"
+      rows="1"
+      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
+      ref="messageuser"
+      v-model="value"
+      @input="handleInputChange"
+      @change="handleInputChange"
     ></textarea>
     <div
       :data-tooltip="$t('global.glyphs')"
