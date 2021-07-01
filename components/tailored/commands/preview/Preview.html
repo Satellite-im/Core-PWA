@@ -1,0 +1,14 @@
+<div id="command-preview" v-if="hasCommand">
+  <TypographySubtitle :size="6" text="Commands" />
+  <div v-for="command in commands">
+    <span class="tag args">
+      /{{ command.name }}
+      <span v-if="command.args.length">
+        &nbsp;
+        <span v-for="arg in command.args"> &lt;{{ arg.name }} , {{ arg.options }}&gt;</span>
+      </span>
+    </span> - <span class="command-desc">{{ command.description }}</span>
+  </div>
+  <UiHorizontalRuleText value="Command" plaintext />
+  <UiTag :class="`${isValidCommand ? 'green' : 'red'}`" :text="`/${command.name}`" />
+</div>
