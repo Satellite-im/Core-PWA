@@ -22,7 +22,7 @@ export default Vue.extend({
       updateInterval: null,
       ops: {
         bar: {
-          opacity: '0'
+          opacity: '0',
         },
         vuescroll: {
           mode: 'slide',
@@ -32,11 +32,12 @@ export default Vue.extend({
               start: this.$t('scrolling.pull_down.active_message'), // Message shown while waiting for timeout/ajax retrieval
               active: this.$t('scrolling.pull_down.release_message'), // Message shown when user scrolls down far enough for method to be called, eg: let go to fire method
               deactive: this.$t('scrolling.pull_down.hint_message'), // Message that appears when use begins to pull down
-            }
+            },
           },
           pushLoad: {
             enable: true,
             auto: true,
+            autoLoadDistance: 0,
             start: this.$t('scrolling.pull_up.active_message'),
             active: this.$t('scrolling.pull_up.release_message'),
             deactive: this.$t('scrolling.pull_up.hint_message'),
@@ -44,7 +45,7 @@ export default Vue.extend({
         },
       },
       noData: false,
-      triggerType: 'load'
+      triggerType: 'load',
     }
   },
   mounted() {
@@ -60,23 +61,21 @@ export default Vue.extend({
     // TODO: In these pull up/down methods remove the timeouts once we are really pulling data async
     pullUpStart(vm: vuescroll, dom: Element, done: () => void) {
       setTimeout(() => {
-        this.noData = true;
-        done();
-      }, 3000);
+        this.noData = true
+        done()
+      }, 3000)
     },
     pullUpEnd(vm: vuescroll, dom: Element) {
-      setTimeout(() => {
-      }, 3000);
+      setTimeout(() => {}, 3000)
     },
     pullDownStart(vm: vuescroll, dom: Element, done: () => void) {
       setTimeout(() => {
-        this.noData = true;
-        done();
-      }, 3000);
+        this.noData = true
+        done()
+      }, 3000)
     },
     pullDownEnd(vm: vuescroll, dom: Element) {
-      setTimeout(() => {
-      }, 3000);
+      setTimeout(() => {}, 3000)
     },
   },
 })

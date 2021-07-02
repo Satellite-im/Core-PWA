@@ -23,6 +23,21 @@ export default Vue.extend({
       default: () => [],
     },
   },
+  data() {
+    return {
+      ops: {
+        bar: {
+          opacity: '0',
+        },
+        vuescroll: {
+          mode: 'slide',
+          zooming: false,
+          maxZoom: 1,
+          minZoom: 1,
+        },
+      },
+    }
+  },
   computed: {
     ...mapState(['ui']),
   },
