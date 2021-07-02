@@ -28,6 +28,18 @@ export default {
     mic: 'Mic',
     headphones: 'Audio',
   },
+  scrolling: {
+    pull_down: {
+      hint_message: 'Pull to load older messages',
+      release_message: 'Release to load older messages',
+      active_message: 'Pulling older messages...'
+    },
+    pull_up: {
+      hint_message: 'Pull to check for new messages',
+      release_message: 'Release to load new messages',
+      active_message: 'Loading new messages...'
+    }
+  },
   pages: {
     files: {
       upload: 'Upload File',

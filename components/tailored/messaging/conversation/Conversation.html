@@ -1,4 +1,13 @@
-<div id="conversation" v-scroll-lock="true" :key="updated">
+<vue-scroll
+  ref="conversation-scroll"
+  :ops="ops"
+  id="conversation"
+  :key="updated"
+  @load-deactivate="pullDownEnd"
+  @load-start="pullDownStart"
+  @refresh-start="pullUpStart"
+  @refresh-deactivate="pullUpEnd"
+>
   <UiLoadersMessage :count="3" v-if="loading" />
   <div class="group" v-for="group in messages" v-else>
     <div v-if="group.type === 'group'">
@@ -8,4 +17,4 @@
       <UiHorizontalRuleText :value="group.at.toString()" />
     </div>
   </div>
-</div>
+</vue-scroll>

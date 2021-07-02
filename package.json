@@ -48,6 +48,7 @@
     "vue-slider-component": "^3.2.13",
     "vue-typed-mixins": "^0.2.0",
     "vue2-touch-events": "^3.2.2",
+    "vuescroll": "^4.17.3",
     "vuex-persist": "^3.1.3"
   },
   "devDependencies": {

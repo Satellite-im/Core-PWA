@@ -1,4 +1,6 @@
 import Vue from 'vue'
-import VScrollLock from 'v-scroll-lock'
+//@ts-ignore
+import vuescroll from 'vuescroll/dist/vuescroll-slide';
+import './vscrolllock.less'
 
-Vue.use(VScrollLock)
+Vue.use(vuescroll)

@@ -28,6 +28,7 @@
       "@types/node",
       "nuxt-i18n",
       "@nuxtjs/device",
+      "vuescroll/types"
     ]
   },
   "exclude": [
