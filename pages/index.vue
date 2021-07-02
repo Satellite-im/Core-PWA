@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <vue-scroll class="container" :ops="ops" ref="menu-vs" id="menu-scroll">
     <div>
       <UiSpacer :height="25" />
       <img src="~/static/icon.png" alt="" />
@@ -15,7 +15,7 @@
         </ul>
         <p class="menu-label">Auth</p>
         <ul class="menu-list">
-          <li><NuxtLink to="auth/unlock">Unlok Screen</NuxtLink></li>
+          <li><NuxtLink to="auth/unlock">Unlock Screen</NuxtLink></li>
         </ul>
         <p class="menu-label">Setup</p>
         <ul class="menu-list">
@@ -31,7 +31,7 @@
         </ul>
       </aside>
     </div>
-  </div>
+  </vue-scroll>
 </template>
 
 <script lang="ts">
@@ -43,6 +43,24 @@ export default Vue.extend({
     return {
       switch1State: false,
       switch2State: true,
+      ops: {
+        bar: {
+          opacity: '0',
+        },
+        vuescroll: {
+          mode: 'slide',
+          zooming: false,
+          maxZoom: 1,
+          minZoom: 1,
+          locking: true,
+          bouncing: {
+            top: 100,
+            bottom: 100,
+            left: 0,
+            right: 0,
+          },
+        },
+      },
     }
   },
   methods: {

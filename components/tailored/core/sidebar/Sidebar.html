@@ -1,11 +1,16 @@
-<div id="sidebar" 
-  class="collapsed" 
+<div
+  id="sidebar"
+  class="collapsed"
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
-  >
+>
   <TypographyTitle :size="6" :text="$t('global.name')" />
   <UiSpacer :height="15" />
-  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
+  <font-awesome-icon
+    :icon="['far', 'bars']"
+    class="toggle-sidebar"
+    v-on:click="toggle"
+  />
   <InteractablesInput
     :placeholder="`${$t('global.search')}...`"
     size="small"
@@ -14,7 +19,7 @@
   />
   <UiSpacer :height="15" />
   <div class="columns is-mobile tab-menu">
-    <div class="column" style="padding-right: 0.5rem; position: relative;">
+    <div class="column" style="padding-right: 0.5rem; position: relative">
       <InteractablesButton
         full-width
         outlined
@@ -22,12 +27,11 @@
         size="small"
         :icon="{ style: 'far', name: 'user-friends' }"
         :action="() => $router.push('/friends/list')"
-        :text="$t('global.friends')" />
-      <span class="label">
-        14
-      </span>
+        :text="$t('global.friends')"
+      />
+      <span class="label"> 14 </span>
     </div>
-    <div class="column" style="padding-left: 0.5rem;">
+    <div class="column" style="padding-left: 0.5rem">
       <InteractablesButton
         full-width
         outlined
@@ -36,9 +40,10 @@
         :class="`${$route.path.includes('/files') ? 'active' : ''}`"
         :action="() => $router.push('/files/browse')"
         :icon="{ style: 'far', name: 'folder' }"
-        :text="$t('global.files')" />
+        :text="$t('global.files')"
+      />
     </div>
-  </div>  
+  </div>
 
   <div class="tabs sidebar-selector">
     <InteractablesButton
@@ -48,27 +53,40 @@
       size="small"
       :icon="{ style: 'far', name: 'comment-alt-lines' }"
       :text="$t('global.messages')"
-      :action="() => $store.commit('showSidebarUsers', true)" />
+      :action="() => $store.commit('showSidebarUsers', true)"
+    />
     <InteractablesButton
       full-width
       :outlined="ui.showSidebarUsers"
       type="primary"
       size="small"
       :icon="{ style: 'far', name: 'users' }"
-      :text="$t('global.groups')" 
-      :action="() => $store.commit('showSidebarUsers', false)" />
+      :text="$t('global.groups')"
+      :action="() => $store.commit('showSidebarUsers', false)"
+    />
   </div>
-  <vue-scroll class="scrolling hidden-scroll" v-if="ui.showSidebarUsers" :ops="ops"
-  ref="friends-vs">
+  <vue-scroll
+    class="scrolling hidden-scroll"
+    v-if="ui.showSidebarUsers"
+    :ops="ops"
+    ref="friends-vs"
+  >
     <div v-if="$store.state.loading.friends">
-      <TailoredCoreUser v-for="user in users" :user="user" :key="user.address" />
+      <TailoredCoreUser
+        v-for="user in users"
+        :user="user"
+        :key="user.address"
+      />
     </div>
     <UiLoadersGenericBlock v-else :count="5" inverted />
   </vue-scroll>
   <vue-scroll class="scrolling hidden-scroll" v-else :ops="ops" ref="groups-vs">
-    <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />
+    <TailoredCoreGroup
+      v-for="group in groups"
+      :group="group"
+      :key="group.address"
+    />
   </vue-scroll>
-  
 
   <TailoredCoreSidebarControls />
   <TailoredCoreSidebarStatus />
