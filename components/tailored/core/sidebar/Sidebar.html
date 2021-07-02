@@ -34,7 +34,7 @@
         type="dark"
         size="small"
         :class="`${$route.path.includes('/files') ? 'active' : ''}`"
-        :action="handleFiles"
+        :action="() => $router.push('/files/browse')"
         :icon="{ style: 'far', name: 'folder' }"
         :text="$t('global.files')" />
     </div>
