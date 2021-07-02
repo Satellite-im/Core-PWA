@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { Route } from 'vue-router'
 
 import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
 import { User, Group } from '~/types/ui/core'
