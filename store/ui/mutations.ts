@@ -43,4 +43,10 @@ export default {
       chatbarContent: content,
     }
   },
+  fullscreen(state: NuxtState, fullscreen: Boolean) {
+    state.ui = {
+      ...state.ui,
+      fullscreen,
+    }
+  },
 }
