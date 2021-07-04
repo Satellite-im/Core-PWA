@@ -2,27 +2,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
 // @ts-ignore
-import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
-// @ts-ignore
-import data from 'emoji-mart-vue-fast/data/all.json'
 import FileUpload from './fileupload/FileUpload.vue'
 import { containsCommand, parseCommand, commands } from '~/utilities/commands'
-
-const emojiIndex = new EmojiIndex(data)
 
 export default Vue.extend({
   components: {
     FileUpload,
-    Picker,
   },
   data() {
     return {
       text: '',
       maxChars: 256,
-      emojiIndex,
-      emojiPos: { x: 0, y: 0 },
       showEmojiPicker: false,
     }
   },
@@ -58,26 +49,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    /**
-     * Toggles emoji div: <picker/>
-     * (e: any) Comes from <picker/> contextmenu event
-     */
-    toggleEmojiPicker() {
-      this.$data.showEmojiPicker = !this.$data.showEmojiPicker
-      const emojiDiv = (this.$refs.emojiPicker as Vue).$el as SVGElement
-      const chatbarDiv = (
-        this.$refs.chatbar as Element
-      ).getBoundingClientRect() as DOMRect
-      this.$data.emojiPos.x = window.innerWidth - emojiDiv.clientWidth - 36
-      this.$data.emojiPos.y = chatbarDiv.bottom - emojiDiv.clientHeight - 78
-    },
-    /**
-     * Adds emoji to current text input
-     * (emoji: any) Comes from <picker/> select event
-     */
-    addEmoji(emoji: any) {
-      this.$data.text += emoji.native + ' '
-      this.$data.showEmojiPicker = false
+    toggleEnhancers() {
+      this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
     },
     /**
      * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
@@ -113,4 +86,3 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less" src="./Chatbar.less"></style>
-<style lang="less" src="./EmojiMart.less"></style>

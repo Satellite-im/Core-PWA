@@ -1,12 +1,13 @@
-#user {
+.user {
   background: @primary-color;
   width: 16rem;
-  height: 9rem;
+  aspect-ratio: 16/9;
   border-radius: @corner-rounding;
   display: inline-flex;
-  margin: @light-spacing 0.25rem;
-  padding: @light-spacing;
+  margin: 0.5rem 0.25rem;
+  padding: 0.5rem;
   position: relative;
+  transition: all .1s;
 
   .circle {
     position: absolute;
@@ -44,7 +45,7 @@
 }
 
 @media only screen and (max-width: 768px) {
-  #user {
+  .user {
     height: 7rem;
     .circle, .talking {
       top: calc(50% - 30px);
