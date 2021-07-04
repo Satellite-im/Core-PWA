@@ -8,10 +8,16 @@
   position: relative;
 
   #media {
-    display: inline-flex;
+    display: flex;
     justify-content: center;
+    align-items: center;
     flex: 1;
+    width: 100%;
   }
+}
+
+.fullscreen-media #media {
+  flex-wrap: wrap;
 }
 
 @media only screen and (max-width: 768px) {

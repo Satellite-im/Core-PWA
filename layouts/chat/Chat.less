@@ -43,6 +43,7 @@
     #chat {
       width: 100%;
       flex: 1;
+      transition: height .3s;
     }
 
     #chatbar {
@@ -50,6 +51,24 @@
       width: 100%;
       min-width: 0;
       justify-content: flex-end;
+      transition: height .3s;
+    }
+    
+    #mediastream {
+      transition: height .3s;
+    }
+    &.fullscreen-media {
+      #chat {
+        height: 0;
+        // display: none;
+      }
+      #chatbar {
+        height: 0;
+        // display: none;
+      }
+      #mediastream {
+        height: 100%;
+      }
     }
   }
 
