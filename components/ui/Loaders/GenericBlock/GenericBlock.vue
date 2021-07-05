@@ -26,7 +26,7 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .generic-block-loader {
-  padding: 0.5rem;
+  padding: @light-spacing;
   .generic-block-loader-item {
     width: 100%;
     display: flex;

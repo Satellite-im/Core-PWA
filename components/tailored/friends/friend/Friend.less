@@ -1,7 +1,7 @@
 
 .friend {
   position: relative;
-  padding: 0.5rem 1rem;
+  padding: @light-spacing @normal-spacing;
   display: flex;
   align-content: center;
   border-bottom: 1px solid @dark-gray;
@@ -17,7 +17,7 @@
   }
 
   .description {
-    margin-left: 1rem;
+    margin-left: @normal-spacing;
     p, h1 {
       margin: 0;
       font-size: @mini-text-size;
@@ -42,8 +42,8 @@
   }
   .status {
     position: absolute;
-    top: calc(28px + 0.5rem);
-    left: calc(25px + 1rem);
+    top: calc(28px + @light-spacing);
+    left: calc(25px + @normal-spacing);
     font-size: @mini-text-size;
     text-shadow: 0 0 3px #000;
 

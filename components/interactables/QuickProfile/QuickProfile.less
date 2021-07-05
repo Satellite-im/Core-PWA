@@ -4,7 +4,7 @@
   width: 250px;
   top: 4rem;
   left: 4rem;
-  padding: 1rem;
+  padding: @normal-spacing;
   background: @black;
   border-radius: @corner-rounding;
   overflow: hidden;
@@ -12,13 +12,13 @@
   .header {
     width: calc(100% + 2rem);
     height: 3rem;
-    margin: -1rem -1rem calc(1rem + 20px) -1rem;
+    margin: -@normal-spacing -@normal-spacing calc(@normal-spacing + 20px) -@normal-spacing;
     background: @primary-color;
     position: relative;
   }
 
   .is-text {
-    margin-bottom: 0.5rem;
+    margin-bottom: @light-spacing;
   }
 
   .address {
@@ -29,7 +29,7 @@
   .circle {
     position: absolute;
     bottom: -20px;
-    left: 1rem;
+    left: @normal-spacing;
     box-shadow: 0 4px 0 0 @black; /* Border bottom */
     box-shadow: 0 -4px 0 0 @black; /* Border top */
     box-shadow: -4px 0 0 0 @black; /* Border left */
