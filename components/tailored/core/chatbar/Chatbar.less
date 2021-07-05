@@ -1,5 +1,5 @@
 #chatbar {
-  margin-top: 0.5rem;
+  margin-top: @light-spacing;
   width: 100%;
   .chat-label {
     background: @primary-color;
@@ -41,9 +41,9 @@
 
   .chatbar-wrap {
     background-color: @dark-gray;
-    margin: 0 1rem;
+    margin: 0 @normal-spacing;
     border-radius: 40px;
-    padding: 0.5rem 0.75rem;
+    padding: @light-spacing 0.75rem;
     display: inline-flex;
     flex-direction: row;
     width: calc(100% - 2rem);
@@ -82,7 +82,7 @@
 
     .messageuser {
       flex: 1;
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem @light-spacing;
       background-color: transparent;
       border: none;
       font-family: 'Poppins';
@@ -95,7 +95,7 @@
       justify-self: center;
       align-self: center;
       font-size: @larger-icon-size;
-      margin: 0 0.5rem;
+      margin: 0 @light-spacing;
 
       &:nth-child(1) {
         margin-right: 0;
@@ -120,8 +120,8 @@
     min-width: @viewport-width;
 
     .chatbar-wrap {
-      margin: 0 0.5rem;
-      width: calc(100% - 1rem);
+      margin: 0 @light-spacing;
+      width: calc(100% - @normal-spacing);
     }
   }
 }

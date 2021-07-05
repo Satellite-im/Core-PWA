@@ -25,7 +25,7 @@
     align-self: center;
     justify-self: center;
     margin: 0 auto;
-    margin-bottom: 1rem;
+    margin-bottom: @normal-spacing;
   }
   .no-preview {
     display: flex;
@@ -47,7 +47,7 @@
     flex-direction: row;
 
     .file-info {
-      margin: 1rem;
+      margin: @normal-spacing;
       .title {
         color: @bright-text;
       }
@@ -57,11 +57,11 @@
       .control {
         display: inline-flex;
         font-size: @icon-size;
-        margin: 1rem 0.5rem;
+        margin: @normal-spacing @light-spacing;
         color: @bright-text;
   
         &:nth-child(4) {
-          margin-right: 1rem;
+          margin-right: @normal-spacing;
         }
       }
       justify-items: flex-end;
