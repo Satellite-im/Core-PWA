@@ -49,4 +49,10 @@ export default {
       fullscreen,
     }
   },
+  toggleEnhancers(state: NuxtState, show: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showEnhancers: show,
+    }
+  },
 }

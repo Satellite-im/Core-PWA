@@ -60,6 +60,7 @@ import {
   faVolumeMute,
   faChevronRight,
   faTerminal,
+  faCommentAltSmile,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -119,5 +120,6 @@ library.add(faVolumeDown)
 library.add(faChevronRight)
 library.add(faTerminal)
 library.add(faCompress)
+library.add(faCommentAltSmile)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
