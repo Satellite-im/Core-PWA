@@ -7,8 +7,6 @@
       <div class="right">
         <div class="placeholder-item shortest"></div>
         <div class="placeholder-item"></div>
-        <div class="placeholder-item bigger"></div>
-        <div class="placeholder-item shorter"></div>
       </div>
     </div>
   </div>
@@ -27,19 +25,28 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .message-loader {
+  &.spacing {
+    padding: @light-spacing;
+    .placeholder-profile {
+      margin-right: 0.75rem;
+    }
+    .placeholder-item {
+      margin-bottom: 0.6rem;
+    }
+  }
   .message-loader-item {
     width: 100%;
     display: flex;
+    padding: 0.4rem 0.35rem;
   }
 
   .placeholder-profile {
     position: relative;
     overflow: hidden;
-    width: 55px;
-    height: 55px;
+    width: 35px;
+    height: 35px;
     border-radius: 100%;
     background: @light-gray;
-    margin: 0.75rem;
     margin-left: 0;
 
     &::before {
@@ -64,23 +71,16 @@ export default Vue.extend({
   }
   .placeholder-item {
     border-radius: 2px;
-    height: 30px;
+    height: 24px;
     position: relative;
     overflow: hidden;
     background: @light-gray;
-    margin: 0.75rem;
-
-    &.bigger {
-      height: 55px;
-    }
-
-    &.shorter {
-      width: 73%;
-    }
+    margin-left: 0.5rem;
+    margin-bottom: 0.3rem;
 
     &.shortest {
       height: 15px;
-      width: 30%;
+      width: 70%;
     }
 
     &::before {
