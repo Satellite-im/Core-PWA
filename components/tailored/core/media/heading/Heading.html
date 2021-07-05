@@ -1,14 +1,17 @@
 <div id="media-heading">
   <UiTag text="Live 3:20" />
   <div class="spacer"></div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-left"
-    :data-tooltip="ui.fullscreen ? $t('global.exit_fullscreen') : $t('global.fullscreen')"
-    @click="toggleFullscreen"
-  >
-    <font-awesome-icon
-      :icon="ui.fullscreen ? ['far', 'compress'] : ['far', 'expand']"
-      class="compress-icon"
-    />
-  </div>
+  <transition name="media-fullscreen" mode="out-in">
+    <div
+      v-bind:key="ui.fullscreen"
+      class="has-tooltip has-tooltip-primary has-tooltip-left"
+      :data-tooltip="ui.fullscreen ? $t('global.exit_fullscreen') : $t('global.fullscreen')"
+      @click="toggleFullscreen"
+    >
+      <font-awesome-icon
+        :icon="ui.fullscreen ? ['far', 'compress'] : ['far', 'expand']"
+        class="expand-icon"
+      />
+    </div>
+  </transition>
 </div>
