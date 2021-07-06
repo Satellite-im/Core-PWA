@@ -1,4 +1,4 @@
-import { Command } from '~/types/utils/commands'
+import { Command, CurrentCommand } from '~/types/utils/commands'
 
 const commandPrefix = '/'
 
@@ -7,15 +7,34 @@ export function containsCommand(text: string) {
   return text.charAt(0) === commandPrefix && cmd.match(/^[a-z0-9]+$/i)
 }
 
-export function parseCommand(text: string): Command {
-  const splitMessage = text.split(' ')
+export function parseCommand(text: string): CurrentCommand {
+  const splitMessage = text.split(/\s+/)
   return {
     name: splitMessage[0].replace(commandPrefix, ''),
     args: splitMessage.slice(1, splitMessage.length),
   }
 }
 
-export const commands = [
+/**
+ * Returns true if currentArgs are valid for command, else false
+ * @param command command which arguments need to be checked
+ * @param currentArgs incoming args value
+ * @returns boolean if currentArgs are valid for command
+ */
+export function isArgsValid(
+  command: Command,
+  currentArgs: Array<String> = []
+): boolean {
+  return command.args.every((a, i) => {
+    const possibleValues = a.options.split(' | ')
+    return (
+      !currentArgs[i] || // Assuming args are optional
+      possibleValues.includes(currentArgs[i]?.toString())
+    )
+  })
+}
+
+export const commands: Command[] = [
   {
     name: 'reload',
     description: 'Reload the application',
