@@ -1,0 +1,15 @@
+<div id="file-topbar">
+  <div id="new-folder" v-click-outside="hide" v-if="$store.state.ui.modals.newfolder">
+    <!-- <TypographySubtitle :size="6" :text="$t('pages.files.new_folder_prompt')" /> -->
+    <InteractablesInputGroup
+      class="modal-input"
+      size="small"
+      type="primary"
+      outlined
+      v-model="text"
+      v-click-outside="hide"
+      :icon="{style: 'far', name: 'folder-plus'}"
+      :action="createFolder"
+    />
+  </div>
+</div>

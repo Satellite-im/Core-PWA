@@ -37,4 +37,8 @@ export default {
       quickProfile: profile,
     }
   },
+  toggleModal(state: NuxtState, modal: any) {
+    console.log(modal.name, modal.state)
+    state.ui.modals[modal.name] = modal.state
+  },
 }
