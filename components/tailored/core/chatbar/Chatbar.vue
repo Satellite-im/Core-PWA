@@ -4,7 +4,12 @@
 import Vue from 'vue'
 // @ts-ignore
 import FileUpload from './fileupload/FileUpload.vue'
-import { containsCommand, parseCommand, commands } from '~/utilities/commands'
+import {
+  containsCommand,
+  parseCommand,
+  commands,
+  isArgsValid,
+} from '~/utilities/commands'
 
 export default Vue.extend({
   components: {
@@ -28,12 +33,13 @@ export default Vue.extend({
       return containsCommand(this.$store.state.ui.chatbarContent)
     },
     isValidCommand() {
-      const cmds = commands.map((c) => {
-        return c.name
-      })
-      return cmds.includes(
-        parseCommand(this.$store.state.ui.chatbarContent).name.toString()
-      )
+      const currentText = parseCommand(
+        this.$store.state.ui.chatbarContent
+      ).name.toString()
+      const currentArgs = parseCommand(this.$store.state.ui.chatbarContent).args
+      const currentCommand = commands.find((c) => c.name === currentText)
+
+      return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
       get() {
