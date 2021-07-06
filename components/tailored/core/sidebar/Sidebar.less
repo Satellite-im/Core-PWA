@@ -7,20 +7,20 @@
   display: inline-flex;
   height: 100%;
   background-color: @dark-gray;
-  padding: 1rem;
+  padding: @normal-spacing;
   display: flex;
   flex-direction: column;
 
   .toggle-sidebar {
     position: absolute;
     z-index: @base-z-index;
-    top: 1rem;
-    right: 1rem;
+    top: @normal-spacing;
+    right: @normal-spacing;
     color: @primary-color;
   }
 
   .tabs {
-    margin-bottom: 1rem;
+    margin-bottom: @normal-spacing;
   }
 
   .label {
@@ -49,11 +49,5 @@
 
   .scrolling {
     flex: 1;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    ::-webkit-scrollbar {
-      display: none;
-      scrollbar-width: none;
-    }
   }
 }

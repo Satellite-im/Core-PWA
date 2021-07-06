@@ -1,0 +1,23 @@
+<div
+  id="app-wrap"
+  :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app" 
+    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${$device.isMobile ? 'mobile-app' : ''}`" 
+    v-touch:swipe="sidebarSwipeHandler(this)"
+    v-touch-options="{ swipeTolerance: 75 }"
+    >
+    <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
+    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+    <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
+    <div class="dynamic-content">
+      <TailoredCoreStatusbar
+        id="statusbar"
+        :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
+        :user="$mock.users[0]"/>
+      <Nuxt id="server" ref="server" />
+      <TailoredCoreChatbar />
+    </div>
+  </div>
+  <TailoredCoreMobileNav v-if="$device.isMobile"/>
+</div>

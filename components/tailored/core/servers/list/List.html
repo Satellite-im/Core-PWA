@@ -2,6 +2,7 @@
   <div class="servers">
     <div
       data-tooltip="Home"
+      v-on:click="$router.push('/chat/direct')"
       class="logo has-tooltip-right has-tooltip-primary">
       <img src="~/assets/img/icon_wht.png" alt="" />
     </div>
@@ -9,6 +10,7 @@
     <div
       class="unread has-tooltip-right has-tooltip-primary"
       v-for="user in unreads"
+      v-on:click="$router.push('/chat/direct')"
       :data-tooltip="user.name">
       <UiCircle type="random" :size="40" :seed="user.address" />
       <span class="label">{{user.count}}</span>
@@ -17,6 +19,7 @@
     <div
       class="server has-tooltip-right has-tooltip-primary"
       v-for="server in servers"
+      v-on:click="$router.push('/server/chat')"
       :data-tooltip="server.name">
       <UiCircle type="random" :size="40" :seed="server.address" />
     </div>

@@ -1,5 +1,5 @@
 #uploader {
-  margin-bottom: 1rem;
+  margin-bottom: @normal-spacing;
   .preview {
     max-width: 15vw;
     max-height: 15vh;
@@ -17,14 +17,14 @@
     justify-self: center;
     align-self: center;
     font-size: @larger-icon-size;
-    margin: 0 0.5rem;
+    margin: 0 @light-spacing;
   }
 
   .file-preview {
     background: @dark-gray;
     width: 100%;
     border-radius: 2px;
-    padding: 1rem;
+    padding: @normal-spacing;
     display: inline-flex;
 
     .file-info {
@@ -44,7 +44,7 @@
 
       .button {
         float: right;
-        margin-left: 0.5rem;
+        margin-left: @light-spacing;
       }
     }
 
@@ -52,7 +52,7 @@
       max-width: 15vw;
       max-height: 10vh;
       border-radius: 2px;
-      margin-right: 1rem;
+      margin-right: @normal-spacing;
     }
   }
 }
