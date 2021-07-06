@@ -15,23 +15,21 @@ export default Vue.extend({
     }
   },
   methods: {
-    showModal() {
-      // shows the createFolder modal
-      this.show()
-    },
     createFolder() {
       // shows what was in the user's input for a Folder Name
       // console.log(this.$data.text)
       // hides the modal that the button is displayed on when pressed
-      this.hide()
+      this.hide('newfolder')
     },
-    show() {
+    show(modalName: String) {
       // @ts-ignore
-      this.$modal.show('new-folder-modal')
+      // this.$modal.show('new-folder-modal')
+      this.$store.commit('toggleModal', {name: modalName, state: true})
     },
-    hide() {
+    hide(modalName: String) {
       // @ts-ignore
-      this.$modal.hide('new-folder-modal')
+      // this.$modal.hide('new-folder-modal')
+      this.$store.commit('toggleModal', {name: modalName, state: false})
     },
   },
 })
