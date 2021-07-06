@@ -37,8 +37,26 @@ export default {
       quickProfile: profile,
     }
   },
+  chatbarContent(state: NuxtState, content: String) {
+    state.ui = {
+      ...state.ui,
+      chatbarContent: content,
+    }
+  },
+  fullscreen(state: NuxtState, fullscreen: Boolean) {
+    state.ui = {
+      ...state.ui,
+      fullscreen,
+    }
+  },
+  toggleEnhancers(state: NuxtState, show: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showEnhancers: show,
+    }
+  },
   toggleModal(state: NuxtState, modal: any) {
     console.log(modal.name, modal.state)
     state.ui.modals[modal.name] = modal.state
-  },
+  }
 }

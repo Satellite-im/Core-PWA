@@ -10,12 +10,14 @@
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
-    <div class="dynamic-content">
+    <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar
         id="statusbar"
         :user="$mock.users[0]"/>
       <TailoredCoreMedia /> 
-      <Nuxt id="chat" ref="chat" />
+      <Nuxt id="chat" ref="chat" class="hidden-scroll" />
+      <TailoredMessagingEnhancers />
+      <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />
     </div>
   </div>
