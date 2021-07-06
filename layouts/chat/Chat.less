@@ -25,12 +25,12 @@
   background-color: @darker;
   user-select: none;
   height: 100vh;
-
   .dynamic-content {
     background-color: @darker;
     user-select: text;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .file-preview {
       transition: @transition-all;
@@ -43,8 +43,7 @@
     #chat {
       width: 100%;
       flex: 1;
-      overflow-y: scroll;
-      position: relative;
+      transition: flex 0.3s;
     }
 
     #chatbar {
@@ -52,10 +51,32 @@
       width: 100%;
       min-width: 0;
       justify-content: flex-end;
+      transition: height 0.3s;
+    }
+
+    #mediastream {
+      transition: flex 0.3s;
+    }
+    &.fullscreen-media {
+      #chat {
+        height: 0;
+        flex: 0;
+      }
+      #chatbar {
+        height: 0;
+        margin-top: 0;
+      }
+      #mediastream {
+        flex: 1;
+      }
     }
   }
 
-  #sidebar, #servers-vertical-list, .dynamic-content, #sidebar .toggle-sidebar, #statusbar {
+  #sidebar,
+  #servers-vertical-list,
+  .dynamic-content,
+  #sidebar .toggle-sidebar,
+  #statusbar {
     transition: @transition-all;
   }
 
@@ -63,7 +84,8 @@
     .file-preview {
       width: calc(100% - 2rem) !important;
     }
-    #sidebar, #servers-vertical-list {
+    #sidebar,
+    #servers-vertical-list {
       transform: translateX(calc(-@sidebar-size + -@servers-size));
     }
     .dynamic-content {

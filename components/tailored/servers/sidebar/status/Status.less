@@ -1,0 +1,32 @@
+#status {
+  height: @statusbar-height;
+  display: flex;
+  max-height: @statusbar-height;
+
+  .circle {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .user-info {
+    min-width: 0;
+    padding-left: @light-spacing;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .title {
+      margin-bottom: 1.25rem;
+      font-size: @title-text;
+    }
+
+    .subtitle {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: inline-block;
+      overflow-x: hidden;
+      min-width: 0;
+      font-size: @mini-text-size;
+    }
+  }
+}

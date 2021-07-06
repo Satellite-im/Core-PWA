@@ -6,6 +6,9 @@ interface UIState {
   quickProfilePosition: Object
   showSidebarUsers: Boolean
   modals: Object
+  chatbarContent: String
+  fullscreen: Boolean
+  showEnhancers: Boolean
 }
 
 const InitalUIState: UIState = {
@@ -17,7 +20,10 @@ const InitalUIState: UIState = {
   quickProfilePosition: { x: 0, y: 0 },
   modals: {
     newfolder: false
-  }
+  },
+  chatbarContent: '',
+  fullscreen: false,
+  showEnhancers: false,
 }
 
 export default InitalUIState

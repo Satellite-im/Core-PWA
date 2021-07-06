@@ -1,0 +1,53 @@
+#command-preview {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: @chatbar-size + 1px;
+  margin: @light-spacing @normal-spacing;
+  padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
+  border-radius: @corner-rounding;
+  min-height: 5rem;
+  background: @dark-gray;
+  z-index: @base-z-index;
+
+  #commands {
+    max-height: 7.5rem;
+    overflow-y: scroll;
+  }
+
+  .command {
+    cursor: pointer;
+  }
+
+  .tag {
+    background: @black;
+    color: @bright-text;
+    border-radius: 2px;
+    font-family: @primary-font;
+    text-transform: lowercase;
+    padding: 0 @light-spacing;
+  }
+
+  .red {
+    background: @red;
+  }
+
+  .green {
+    background: @green;
+  }
+
+  .red, .green {
+    color: @white;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    font-size: @mini-text-size;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: @light-spacing;
+  }
+
+  .command-desc {
+    font-size: @mini-text-size;
+  }
+}

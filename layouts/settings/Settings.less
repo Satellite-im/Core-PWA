@@ -59,7 +59,6 @@ p {
   flex-basis: 0;
   flex-grow: 999;
   height: 100vh;
-  overflow-y: scroll;
   padding: 2rem;
   transition: @transition-all;
 }
@@ -93,7 +92,7 @@ p {
     flex-basis: @mobile-sidebar-width;
   }
   .not-sidebar {
-    padding: 2rem 1rem;
+    padding: 2rem @normal-spacing;
     width: 100vw;
     transform: translateX(calc(@mobile-sidebar-width + 3rem));
   }
