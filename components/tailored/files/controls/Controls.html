@@ -1,13 +1,5 @@
 <div id="file-controls">
-  <InteractablesButton
-    outlined
-    type="primary"
-    :text="$t('pages.files.new_folder')"
-    :icon="{style: 'far', name: 'folder-plus'}"
-    size="small"
-    :action="showModal"
-    />
-  <modal 
+  <!-- <modal 
     id="new-folder-modal"
     name="new-folder-modal"
     :min-width="200"
@@ -30,8 +22,15 @@
         :action="createFolder"
       />
     </div>
-  </modal>
-  <input type="file" id="file-upload" @change="handleFile">
+  </modal> -->
+  <!-- <input type="file" id="file-upload" @change="handleFile"> -->
+  <InteractablesButton
+    outlined
+    type="primary"
+    :text="$t('pages.files.new_folder')"
+    :icon="{style: 'far', name: 'folder-plus'}"
+    size="small"
+    :action="()=>{show('newfolder')}" />
   <label for="file-upload" class="button is-primary is-outlined is-small">
     <font-awesome-icon
       :icon="['far', 'file-plus']"
