@@ -35,11 +35,12 @@ export default Vue.extend({
   .placeholder-profile {
     position: relative;
     overflow: hidden;
-    width: 55px;
-    height: 55px;
+    width: 35px;
+    height: 35px;
     border-radius: 100%;
     background: @light-gray;
-    margin: 0.75rem;
+    margin-top: 0.5rem;
+    margin-right: 0.3rem;
     margin-left: 0;
 
     &::before {
@@ -68,7 +69,7 @@ export default Vue.extend({
     position: relative;
     overflow: hidden;
     background: @light-gray;
-    margin: 0.75rem;
+    margin: 0.5rem;
 
     &.bigger {
       height: 55px;
