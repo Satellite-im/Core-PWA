@@ -22,7 +22,7 @@ export default Vue.extend({
       this.hide('newfolder')
     },
     hide(modalName: String) {
-      this.$store.commit('toggleModal', {name: modalName, state: false}) 
+      this.$store.commit('toggleModal', { name: modalName, state: false })
     },
   },
 })
