@@ -36,6 +36,16 @@ export default Vue.extend({
       reader.readAsDataURL(file)
     },
     /**
+     * Return if a file has an image extension
+     * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
+     */
+    isEmbedableImage(filename: string): boolean {
+      const imageFormatsRegex = new RegExp(
+        '^.*\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+      )
+      return imageFormatsRegex.test(filename)
+    },
+    /**
      * Clear local data
      * TODO: Clear input field, this currently breaks
      * when you upload the same file after cancelling
