@@ -14,7 +14,7 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.$data.loading = false
-    }, 1500)
+    }, 3000)
     this.$store.dispatch('fetchFriends')
   },
 })
