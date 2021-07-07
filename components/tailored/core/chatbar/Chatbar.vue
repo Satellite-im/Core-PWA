@@ -30,12 +30,19 @@ export default Vue.extend({
       return this.$data.text.length > this.$data.maxChars
     },
     hasCommand() {
-      return containsCommand(this.$store.state.ui.chatbarContent)
+      return (
+        containsCommand(this.$store.state.ui.chatbarContent) &&
+        commands.some((cmd) =>
+          cmd.name.startsWith(
+            parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+          )
+        )
+      )
     },
     isValidCommand() {
       const currentText = parseCommand(
         this.$store.state.ui.chatbarContent
-      ).name.toString()
+      ).name.toLowerCase()
       const currentArgs = parseCommand(this.$store.state.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
 
