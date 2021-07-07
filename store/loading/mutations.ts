@@ -7,6 +7,12 @@ const mutations = {
       [key]: true,
     }
   },
+  loading(state: NuxtState, key: string) {
+    state.loading = {
+      ...state.loading,
+      [key]: false,
+    }
+  },
 }
 
 export default mutations
