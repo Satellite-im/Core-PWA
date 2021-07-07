@@ -1,4 +1,6 @@
 #settings {
+  -webkit-tap-highlight-color: transparent;
+
   position: absolute;
   bottom: @normal-spacing;
   left: @normal-spacing;
@@ -6,31 +8,74 @@
   z-index: @base-z-index;
 
   #settings-menu {
-    padding: 0.25rem @light-spacing;
+    cursor: pointer;
     margin-bottom: 0.25rem;
     border-radius: @corner-rounding;
-    min-width: 6rem;
+    min-width: 8rem;
     background: @dark-gray;
     font-size: @text-size;
 
-    li {
-      border-bottom: 1px solid @dark-gray-alt;
-      margin-bottom: 0.15rem;
-      user-select: none;
-
+    .settings-item {
       &:last-of-type {
         border-bottom: none;
       }
+      .item-header {
+        padding: 0.1rem 0.5rem;
+        border-bottom: 1px solid @light-gray;
+        display: flex;
+        .word {
+          flex: 1;
+          margin-right: @normal-spacing;
+        }
+        .icon {
+          transition: transform 0.3s;
+        }
+      }
+      .item-body {
+        height: 0;
+        overflow: hidden;
+        transition: height 0.5s;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        & > div {
+          padding: 0.5rem 0.5rem;
+        }
+      }
+      &:last-child {
+        .item-header {
+          border-bottom-color: transparent;
+        }
+        .item-body {
+          border-top: 2px solid transparent;
+          border-bottom: 0;
+        }
+      }
+      &.open {
+        .item-body {
+          border-color: @light-gray;
+        }
+        .item-header {
+          .icon {
+            transform: rotate(90deg);
+          }
+        }
+      }
     }
-    .word {
-      display: inline-block;
-      margin-right: @normal-spacing;
-      margin-bottom: 0.15rem;
+  }
+  .form {
+    .form-group:not(:last-child) {
+      margin-bottom: 0.2rem;
     }
+    label {
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+  }
+  .columns {
+    margin: 0 -0.25rem;
 
-    .fa-chevron-right {
-      float: right;
-      margin-top: 0.25rem;
+    .column {
+      padding: 0.25rem;
     }
   }
 }
