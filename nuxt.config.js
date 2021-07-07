@@ -1,6 +1,10 @@
 import pkg from './package.json'
 
 export default {
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
   ssr: false,
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
