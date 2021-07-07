@@ -55,4 +55,7 @@ export default {
       showEnhancers: show,
     }
   },
+  toggleModal(state: NuxtState, modal: any) {
+    state.ui.modals[modal.name] = modal.state
+  }
 }
