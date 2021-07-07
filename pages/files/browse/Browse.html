@@ -1,11 +1,7 @@
 <div id="files">
-  <TailoredFilesUploader
-    v-if="file"
-    :file="file"
-    :url="url"
-    :cancelUpload="cancelUpload"
-  />
+  <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" />
   <TailoredFilesControls :handleFile="handleFile" />
+  <TailoredFilesTopbar />
   <UiSpacer :height="20" />
   <div class="two-thirds">
     <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
@@ -14,11 +10,7 @@
     <TypographyText text="Usage 7.32/10GB" />
   </div>
   <UiHorizontalRule />
-  <TailoredFilesList
-    v-if="$store.state.loading.files"
-    :path="getPath().children"
-    :push="push"
-  />
+  <TailoredFilesList :path="getPath().children" v-if="$store.state.loading.files" :push="push" />
   <UiLoadersTable v-else :rows="5" :cols="6" />
   <UiSpacer :height="20" />
 </div>
