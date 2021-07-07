@@ -14,13 +14,24 @@ export default Vue.extend({
   },
   computed: {
     hasCommand() {
-      return containsCommand(this.$store.state.ui.chatbarContent)
+      return (
+        containsCommand(this.$store.state.ui.chatbarContent) &&
+        commands.some((cmd) =>
+          cmd.name.startsWith(
+            parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+          )
+        )
+      )
     },
     command() {
       return parseCommand(this.$store.state.ui.chatbarContent)
     },
     commands() {
-      return commands
+      return commands.filter((cmd) =>
+        cmd.name.startsWith(
+          parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+        )
+      )
     },
   },
   methods: {
