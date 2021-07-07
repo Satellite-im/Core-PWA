@@ -4,7 +4,10 @@ const commandPrefix = '/'
 
 export function containsCommand(text: string) {
   const cmd = text.split(' ')[0].replace(commandPrefix, '')
-  return text.charAt(0) === commandPrefix && cmd.match(/^[a-z0-9]+$/i)
+  return (
+    text.charAt(0) === commandPrefix &&
+    (cmd.match(/^[a-z0-9]+$/i) || text.length === 1) // the || part is needed for showing all the available commands after writing the commandPrefix
+  )
 }
 
 export function parseCommand(text: string): CurrentCommand {
@@ -29,7 +32,7 @@ export function isArgsValid(
     const possibleValues = a.options.split(' | ')
     return (
       !currentArgs[i] || // Assuming args are optional
-      possibleValues.includes(currentArgs[i]?.toString())
+      possibleValues.includes(currentArgs[i]?.toLowerCase())
     )
   })
 }
