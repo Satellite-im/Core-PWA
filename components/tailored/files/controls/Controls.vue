@@ -15,12 +15,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    createFolder() {
-      // shows what was in the user's input for a Folder Name
-      // console.log(this.$data.text)
-      // hides the modal that the button is displayed on when pressed
-      this.hide('newfolder')
-    },
     show(modalName: String) {
       // @ts-ignore
       // this.$modal.show('new-folder-modal')
