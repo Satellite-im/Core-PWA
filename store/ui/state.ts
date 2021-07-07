@@ -19,7 +19,7 @@ const InitalUIState: UIState = {
   contextMenuPosition: { x: 0, y: 0 },
   quickProfilePosition: { x: 0, y: 0 },
   modals: {
-    newfolder: false
+    newfolder: false,
   },
   chatbarContent: '',
   fullscreen: false,
