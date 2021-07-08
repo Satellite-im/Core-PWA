@@ -43,4 +43,19 @@ export default {
       chatbarContent: content,
     }
   },
+  fullscreen(state: NuxtState, fullscreen: Boolean) {
+    state.ui = {
+      ...state.ui,
+      fullscreen,
+    }
+  },
+  toggleEnhancers(state: NuxtState, show: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showEnhancers: show,
+    }
+  },
+  toggleModal(state: NuxtState, modal: any) {
+    state.ui.modals[modal.name] = modal.state
+  }
 }

@@ -1,6 +1,7 @@
 <div id="file-upload">
   <div class="file-preview" v-if="file">
-    <img v-if="url" :src="url" />
+    <img v-if="isEmbedableImage(file.name)" :src="url" />
+    <font-awesome-icon v-if="!isEmbedableImage(file.name)" :icon="['far', 'file']" class="control-icon"/>
     <div class="file-info">
       <TypographyTitle :size="6" :text="file.name" />
       <TypographySubtitle :size="6" :text="file.type" />
