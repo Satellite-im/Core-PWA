@@ -16,13 +16,9 @@ export default Vue.extend({
   },
   methods: {
     show(modalName: String) {
-      // @ts-ignore
-      // this.$modal.show('new-folder-modal')
       this.$store.commit('toggleModal', { name: modalName, state: true })
     },
     hide(modalName: String) {
-      // @ts-ignore
-      // this.$modal.hide('new-folder-modal')
       this.$store.commit('toggleModal', { name: modalName, state: false })
     },
   },

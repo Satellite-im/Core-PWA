@@ -7,6 +7,14 @@ import { mapState } from 'vuex'
 import { UserPermissions } from '../../../components/mixins/UserPermissions'
 import { Bitrates, SampleSizes } from './options/audio'
 
+declare module 'vue/types/vue' {
+  // 3. Declare augmentation for Vue
+  interface Vue {
+    setupDefaults: () => void
+    getUserPermissions: () => Promise<any>
+    requestUserPermissions: (key: string) => Promise<any>
+  }
+}
 export default Vue.extend({
   name: 'AudioSettings',
   layout: 'settings',
@@ -75,14 +83,11 @@ export default Vue.extend({
     },
   },
   mounted() {
-    // Get the users permissions - if they had granted our origin access this will return granted, prompt, or denied.
-    // @ts-ignore
     this.setupDefaults()
   },
   methods: {
     ...UserPermissions.methods,
     async setupDefaults() {
-      // @ts-ignore
       const permissionsObject: any = await this.getUserPermissions()
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
@@ -111,10 +116,8 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        // @ts-ignore
         await this.requestUserPermissions('audio')
         this.$data.userHasGivenAudioAccess = true
-        // @ts-ignore
         this.setupDefaults()
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
