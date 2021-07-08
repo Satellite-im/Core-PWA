@@ -5,6 +5,11 @@ import Vue, { PropType } from 'vue'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/core'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    testFunc: () => void
+  }
+}
 export default Vue.extend({
   mixins: [ContextMenu],
   props: {
@@ -21,13 +26,9 @@ export default Vue.extend({
   data() {
     return {
       contextMenuValues: [
-        // @ts-ignore
         { text: 'Send Message', func: this.testFunc },
-        // @ts-ignore
         { text: 'Voice Call', func: this.testFunc },
-        // @ts-ignore
         { text: 'Video Call', func: this.testFunc },
-        // @ts-ignore
         { text: 'Remove Friend', func: this.testFunc },
       ],
     }

@@ -9,6 +9,13 @@ import {
 } from '../../../../../../pages/settings/audio/options/audio'
 import { UserPermissions } from '../../../../../mixins/UserPermissions'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    setupDefaults: () => void
+    getUserPermissions: () => Promise<any>
+    requestUserPermissions: (key: string) => Promise<any>
+  }
+}
 export default Vue.extend({
   data() {
     return {
@@ -40,14 +47,6 @@ export default Vue.extend({
         return this.settings.sampleSize
       },
     },
-  },
-  mounted() {
-    // @ts-ignore
-    // document.addEventListener('click', this.switchMenuItem)
-  },
-  destroyed() {
-    // @ts-ignore
-    // document.removeEventListener('click', this.switchMenuItem)
   },
   methods: {
     toggleMenu(event: Event): void {
@@ -105,7 +104,6 @@ export default Vue.extend({
     },
     ...UserPermissions.methods,
     async setupDefaults() {
-      // @ts-ignore
       const permissionsObject: any = await this.getUserPermissions()
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
@@ -143,10 +141,8 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        // @ts-ignore
         await this.requestUserPermissions('audio')
         this.$data.userHasGivenAudioAccess = true
-        // @ts-ignore
         this.setupDefaults()
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
