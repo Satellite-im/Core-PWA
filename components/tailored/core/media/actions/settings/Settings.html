@@ -1,19 +1,51 @@
 <div id="settings">
-  <div id="settings-menu" v-if="menuOpen">
-    <ul>
-      <li>
+  <ul id="settings-menu" v-if="menuOpen" ref="menu" v-click-outside="hideMenu">
+    <li class="settings-item">
+      <div class="item-header" @click="switchMenuItem">
         <div class="word">Audio Quality</div>
-        <font-awesome-icon :icon="['far', 'chevron-right']"/>
-      </li>
-      <li>
+        <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
+      </div>
+      <div class="item-body">
+        <div class="form">
+          <div class="form-group">
+            <label>Bitrate</label>
+            <InteractablesSelect
+              :options="Bitrates"
+              v-model="bitrate"
+              size="small"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label>Sample size</label>
+            <InteractablesSelect
+              :options="SampleSizes"
+              v-model="sampleSize"
+              size="small"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="settings-item">
+      <div class="item-header" @click="switchMenuItem">
         <div class="word">Video Quality</div>
-        <font-awesome-icon :icon="['far', 'chevron-right']"/>
-      </li>
-      <li>
+        <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
+      </div>
+      <div class="item-body">
+        <div>No options</div>
+      </div>
+    </li>
+    <li class="settings-item">
+      <div class="item-header" @click="switchMenuItem">
         <div class="word">Stream Options</div>
-        <font-awesome-icon :icon="['far', 'chevron-right']"/>
-      </li>
-    </ul>
-  </div>
-  <font-awesome-icon :icon="['far', 'cog']" v-on:click="toggleMenu" />
+        <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
+      </div>
+      <div class="item-body">
+        <div>No options</div>
+      </div>
+    </li>
+  </ul>
+  <font-awesome-icon :icon="['far', 'cog']" @click="toggleMenu" />
 </div>

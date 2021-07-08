@@ -2,15 +2,156 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import {
+  Bitrates,
+  SampleSizes,
+} from '../../../../../../pages/settings/audio/options/audio'
+import { UserPermissions } from '../../../../../mixins/UserPermissions'
+
 export default Vue.extend({
   data() {
     return {
+      Bitrates,
+      SampleSizes,
       menuOpen: false,
+      audioInputs: [],
+      audioOutputs: [],
+      userHasGivenAudioAccess: false,
+      userDeniedAudioAccess: false,
+      browserAllowsAudioOut: true,
     }
   },
+  computed: {
+    ...mapState(['settings']),
+    bitrate: {
+      set(state) {
+        this.$store.commit('bitrate', state)
+      },
+      get() {
+        return this.settings.bitrate
+      },
+    },
+    sampleSize: {
+      set(state) {
+        this.$store.commit('sampleSize', state)
+      },
+      get() {
+        return this.settings.sampleSize
+      },
+    },
+  },
+  mounted() {
+    // @ts-ignore
+    // document.addEventListener('click', this.switchMenuItem)
+  },
+  destroyed() {
+    // @ts-ignore
+    // document.removeEventListener('click', this.switchMenuItem)
+  },
   methods: {
-    toggleMenu() {
+    toggleMenu(event: Event): void {
       this.$data.menuOpen = !this.$data.menuOpen
+      event.stopPropagation()
+    },
+    hideMenu(event: Event): void {
+      this.$data.menuOpen = !this.$data.menuOpen
+      event.stopPropagation()
+    },
+    switchMenuItem(event: Event): void {
+      const menu = this.$refs.menu as HTMLElement
+      const target = event.target as HTMLElement
+      if (menu != null && menu.contains(target)) {
+        const items = menu.querySelectorAll('.settings-item')
+        let clickedHeader = null
+        let clickedItem = null
+        let clickedItemBody = null
+        for (let i = 0, ni = items.length; i < ni; i++) {
+          const item = items[i] as HTMLElement
+          const itemHeader = item.querySelector('.item-header') as HTMLElement
+          if (item.contains(target)) {
+            clickedItem = item
+            clickedItemBody = item.querySelector('.item-body') as HTMLElement
+          }
+          if (itemHeader.contains(target)) {
+            clickedHeader = itemHeader
+          }
+        }
+        if (
+          clickedHeader != null &&
+          clickedItem != null &&
+          clickedItemBody != null
+        ) {
+          if (clickedItem.classList.contains('open')) {
+            clickedItem.classList.remove('open')
+            clickedItemBody.style.height = '0'
+          } else {
+            clickedItem.classList.add('open')
+            clickedItemBody.style.height =
+              (clickedItemBody.children[0] as HTMLElement).offsetHeight +
+              2 +
+              'px'
+          }
+          for (let i = 0, ni = items.length; i < ni; i++) {
+            const item = items[i] as HTMLElement
+            if (item !== clickedItem) {
+              item.classList.remove('open')
+              const itemBody = item.querySelector('.item-body') as HTMLElement
+              itemBody.style.height = '0'
+            }
+          }
+        }
+      }
+    },
+    ...UserPermissions.methods,
+    async setupDefaults() {
+      // @ts-ignore
+      const permissionsObject: any = await this.getUserPermissions()
+      // Toggles the show/hide on the button to request permissions
+      this.$data.userHasGivenAudioAccess =
+        permissionsObject.permissions.microphone
+
+      if (permissionsObject.permissions.microphone) {
+        // Get the arrays of devices formtted in the name/value format the select tool wants
+        this.$data.audioInputs = permissionsObject.devices.audioIn
+        this.$data.audioOutputs = permissionsObject.devices.audioOut
+
+        // Setting defaults on mount if one isn't already present in local storage
+        if (!this.settings.audioInput) {
+          this.$store.commit(
+            'audioInput',
+            permissionsObject.devices.audioIn[0].value
+          )
+        }
+        if (!this.settings.audioOutput) {
+          this.$store.commit(
+            'audioOutput',
+            permissionsObject.devices.audioOut[0].value
+          )
+        }
+      }
+
+      if (permissionsObject.browser !== 'Chrome') {
+        this.$data.browserAllowsAudioOut = false
+      } else if (!this.settings.audioOutput) {
+        this.$store.commit(
+          'audioOutput',
+          permissionsObject.devices.audioOut[0].value
+        )
+      }
+    },
+    async enableAudio() {
+      // Check to see if the user has permission
+      try {
+        // @ts-ignore
+        await this.requestUserPermissions('audio')
+        this.$data.userHasGivenAudioAccess = true
+        // @ts-ignore
+        this.setupDefaults()
+      } catch (_: any) {
+        // Error is returned if user selects Block/Deny
+        this.$data.userDeniedAudioAccess = true
+      }
     },
   },
 })
