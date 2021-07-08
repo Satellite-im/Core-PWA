@@ -5,7 +5,10 @@ interface UIState {
   contextMenuPosition: Object
   quickProfilePosition: Object
   showSidebarUsers: Boolean
+  modals: Object
   chatbarContent: String
+  fullscreen: Boolean
+  showEnhancers: Boolean
 }
 
 const InitalUIState: UIState = {
@@ -15,7 +18,12 @@ const InitalUIState: UIState = {
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
   quickProfilePosition: { x: 0, y: 0 },
+  modals: {
+    newfolder: false,
+  },
   chatbarContent: '',
+  fullscreen: false,
+  showEnhancers: false,
 }
 
 export default InitalUIState

@@ -2,8 +2,8 @@
   width: calc(100% - 2rem);
   position: absolute;
   bottom: @chatbar-size + 1px;
-  margin: 0.5rem 1rem;
-  padding: 0.5rem 1rem 1rem 1rem;
+  margin: @light-spacing @normal-spacing;
+  padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
   border-radius: @corner-rounding;
   min-height: 5rem;
   background: @dark-gray;
@@ -24,7 +24,7 @@
     border-radius: 2px;
     font-family: @primary-font;
     text-transform: lowercase;
-    padding: 0 0.5rem;
+    padding: 0 @light-spacing;
   }
 
   .red {
@@ -44,7 +44,7 @@
     font-size: @mini-text-size;
     font-weight: bold;
     margin: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: @light-spacing;
   }
 
   .command-desc {

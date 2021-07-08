@@ -1,6 +1,7 @@
 <div id="files">
   <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" />
   <TailoredFilesControls :handleFile="handleFile" />
+  <TailoredFilesTopbar />
   <UiSpacer :height="20" />
   <div class="two-thirds">
     <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
@@ -10,6 +11,6 @@
   </div>
   <UiHorizontalRule />
   <TailoredFilesList :path="getPath().children" v-if="$store.state.loading.files" :push="push" />
-  <UiLoadersGenericBlock :count="3" v-else />
+  <UiLoadersTable v-else :rows="5" :cols="6" />
   <UiSpacer :height="20" />
 </div>
