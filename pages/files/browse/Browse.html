@@ -11,6 +11,6 @@
   </div>
   <UiHorizontalRule />
   <TailoredFilesList :path="getPath().children" v-if="$store.state.loading.files" :push="push" />
-  <UiLoadersTable v-else :rows="5" :cols="6" />
+  <UiLoadersFileTable v-else :rows="5" />
   <UiSpacer :height="20" />
 </div>

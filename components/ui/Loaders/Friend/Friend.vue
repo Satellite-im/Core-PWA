@@ -4,11 +4,13 @@
       <div class="left">
         <div class="placeholder-profile"></div>
       </div>
-      <div class="right">
+      <div class="center">
         <div class="placeholder-item shortest"></div>
         <div class="placeholder-item"></div>
-        <div class="placeholder-item bigger"></div>
-        <div class="placeholder-item shorter"></div>
+      </div>
+      <div class="right">
+        <div class="placeholder-item"></div>
+        <div class="placeholder-item"></div>
       </div>
     </div>
   </div>
@@ -27,9 +29,12 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .message-loader {
+  overflow: hidden;
+  padding: @light-spacing;
   .message-loader-item {
     width: 100%;
     display: flex;
+    padding: 0.4rem 0.35rem;
   }
 
   .placeholder-profile {
@@ -39,9 +44,8 @@ export default Vue.extend({
     height: 35px;
     border-radius: 100%;
     background: @light-gray;
-    margin-top: 0.5rem;
-    margin-right: 0.3rem;
     margin-left: 0;
+    margin-right: 0.75rem;
 
     &::before {
       content: '';
@@ -60,28 +64,30 @@ export default Vue.extend({
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
+  .center {
+    width: 60%;
+  }
   .right {
-    width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    .placeholder-item {
+      width: 36px;
+      height: 28px;
+    }
   }
   .placeholder-item {
     border-radius: 2px;
-    height: 30px;
+    height: 24px;
     position: relative;
     overflow: hidden;
     background: @light-gray;
-    margin: 0.5rem;
-
-    &.bigger {
-      height: 55px;
-    }
-
-    &.shorter {
-      width: 73%;
-    }
+    margin-left: 0.5rem;
+    margin-bottom: 0.6rem;
 
     &.shortest {
       height: 15px;
-      width: 30%;
+      width: 70%;
     }
 
     &::before {
