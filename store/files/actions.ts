@@ -1,9 +1,12 @@
+import { Commit } from 'vuex'
 import { Files } from '~/mock/files'
 
+interface FetchFilesArguments {
+  commit: Commit
+}
 export default {
   handler: () => {},
-  // @ts-ignore
-  async fetchFiles({ commit }) {
+  async fetchFiles({ commit }: FetchFilesArguments) {
     commit('loading', 'files')
     await new Promise((resolve) => setTimeout(resolve, 3000))
     commit('fetchFiles', Files)

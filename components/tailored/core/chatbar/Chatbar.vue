@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
 import FileUpload from './fileupload/FileUpload.vue'
 import {
   containsCommand,
@@ -50,13 +49,10 @@ export default Vue.extend({
     },
     value: {
       get() {
-        // @ts-ignore
         return this.$store.state.ui.chatbarContent
       },
       set(val) {
-        // @ts-ignore
         this.$store.commit('chatbarContent', val)
-        // @ts-ignore
         this.$data.text = val
       },
     },
@@ -91,7 +87,6 @@ export default Vue.extend({
       messageBox.scrollTop = messageBox.scrollHeight
     },
     handleInputChange() {
-      // @ts-ignore
       this.autoGrow()
     },
   },
