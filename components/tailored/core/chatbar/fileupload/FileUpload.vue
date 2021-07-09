@@ -10,11 +10,6 @@ export default Vue.extend({
       url: false,
     }
   },
-  computed: {
-    isImage() {
-      return this.$data.file && /\.(jpe?g|png|gif)$/i.test(this.$data.file.type)
-    },
-  },
   methods: {
     /**
      * Triggered when a file is changed on the input
@@ -43,7 +38,7 @@ export default Vue.extend({
       const imageFormatsRegex = new RegExp(
         '^.*\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
       )
-      return imageFormatsRegex.test(filename)
+      return imageFormatsRegex.test(filename.toLowerCase())
     },
     /**
      * Clear local data

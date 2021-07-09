@@ -21,6 +21,18 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
+  methods: {
+    /**
+     * Return if a file has an image extension
+     * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
+     */
+    isEmbedableImage(filename: string): boolean {
+      const imageFormatsRegex = new RegExp(
+        '^.*\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+      )
+      return imageFormatsRegex.test(filename.toLowerCase())
+    },
+  },
 })
 </script>
 <style scoped lang="less" src="./Uploader.less"></style>
