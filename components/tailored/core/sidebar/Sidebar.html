@@ -65,9 +65,9 @@
     <UiLoadersAddress v-else :count="5" inverted />
   </div>
   <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-    <template v-if="$store.state.loading.friends">
+    <div v-if="$store.state.loading.friends">
       <TailoredCoreGroup v-for="group in groups" :group="group" :key="group.address" />
-    </template>
+    </div>
     <UiLoadersAddress v-else :count="5" inverted />
   </div>
   
