@@ -1,7 +1,6 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-// @ts-ignore - Missing types
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '../../../mixins/UI/ContextMenu'
 
