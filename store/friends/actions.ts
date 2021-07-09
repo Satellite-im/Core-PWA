@@ -8,7 +8,6 @@ interface FetchFriendsArguments {
 export default {
   handler: () => {},
   async fetchFriends({ commit, state }: FetchFriendsArguments) {
-    // commit('loading', 'friends')
     if (!state.loading.friends) {
       await new Promise((resolve) => setTimeout(resolve, 3000))
       commit('fetchFriends', Friends)
