@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { DataStateType } from '~/store/dataState/state'
 
 export default Vue.extend({
   name: 'Files',
@@ -14,7 +15,10 @@ export default Vue.extend({
       url: '' as String,
     }
   },
-  mounted() {
+  computed: {
+    DataStateType: () => DataStateType,
+  },
+  mounted(): void {
     this.$store.dispatch('fetchFiles')
   },
   methods: {
