@@ -8,8 +8,8 @@
     >
     <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-    <TailoredCoreServersCreate/>
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
+    <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal"/>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar

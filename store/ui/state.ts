@@ -20,6 +20,7 @@ const InitalUIState: UIState = {
   quickProfilePosition: { x: 0, y: 0 },
   modals: {
     newfolder: false,
+    createServer: false,
   },
   chatbarContent: '',
   fullscreen: false,
