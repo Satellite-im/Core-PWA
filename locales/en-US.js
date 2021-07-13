@@ -69,6 +69,12 @@ export default {
       write_down: 'Write this down.',
     },
     settings: {
+      developer: {
+        title: 'Developer Settings',
+        subtitle:
+          'Mock data and tweak settings for testing. This page is really just for internal use.',
+        identifier: 'Identifier',
+      },
       audio: {
         sources: {
           title: 'Audio Sources',
