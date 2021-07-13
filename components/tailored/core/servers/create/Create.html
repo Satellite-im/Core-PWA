@@ -1,0 +1,49 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <section class="modal-card-body">
+            <div class="modal-heading">
+                <span class="close" v-on:click="close">×</span>
+                <h2 class="person">{{$t('servers.create.heading')}}</h2>
+            </div>
+            <ImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
+                :imageUrl="imageUrl" />
+            <div v-if="showCropper" class="cropper-mask" />
+            <div>
+                <hr class="divider">
+                <div class="columns">
+                    <div class="column" style="max-width: 175px;">
+                        <UiCircle type="image" :source="croppedImage" :size="150" />
+                    </div>
+                    <div class="column align">
+                        <p class="set-photo-title">{{$t('servers.create.photo_text')}}</p>
+                        <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
+                        <InteractablesButton :action="() => $refs.file.click()" type="primary" size="small"
+                            :text="$t('servers.create.photo_button')" class="button is-primary create-server-btn"
+                            outlined />
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+
+                <div class="input-container">
+                    <span class="label">{{$t('servers.create.server_name')}}</span>
+                    <InteractablesInput :placeholder="$t('servers.create.server_name_placeholder')" size="small" v-model="name"
+                        input-kind="text" type="dark" />
+                </div>
+
+                <div class="input-container">
+                    <span class="label">{{$t('servers.create.select_friends')}}</span>
+                    <InteractablesInput :placeholder="$t('servers.create.select_friends_placeholder')" size="small"
+                        input-kind="text" type="dark" />
+                </div>
+
+                <p class="red" v-if="error">{{error}}</p>
+                <!-- <hr class="divider"> -->
+                <div class="submit-container">
+                    <InteractablesButton type="primary" size="normal" :text="$t('servers.create.create_server')"
+                        class="button is-primary create-server-btn" outlined :action="confirm"/>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
