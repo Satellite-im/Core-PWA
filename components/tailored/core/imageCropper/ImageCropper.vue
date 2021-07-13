@@ -7,12 +7,13 @@ import 'croppie/croppie.css'
 
 Vue.use(VueCroppie)
 
+const options = {
+  type: 'base64',
+  size: { width: 600, height: 450 },
+  format: 'jpeg',
+}
+
 export default Vue.extend({
-  data() {
-    return {
-      selectedImage: false,
-    }
-  },
   props: {
     setCroppedImage: {
       type: Function,
@@ -30,6 +31,11 @@ export default Vue.extend({
       requierd: true,
     },
   },
+  data() {
+    return {
+      selectedImage: false,
+    }
+  },
   mounted() {
     this.$refs.croppieRef.bind({
       url: this.imageUrl,
@@ -39,11 +45,6 @@ export default Vue.extend({
     crop() {
       // Options can be updated.
       // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
-      let options = {
-        type: 'base64',
-        size: { width: 600, height: 450 },
-        format: 'jpeg',
-      }
       this.$refs.croppieRef.result(options, (output) => {
         this.setCroppedImage(output)
       })
