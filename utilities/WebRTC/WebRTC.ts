@@ -1,5 +1,7 @@
 import { WebRTCUser } from '~/types/webrtc/User'
 
+import { Config } from '~/config'
+
 export default class WebRTC {
   // Identifier to connect to signaling server with
   id: string | undefined
@@ -11,7 +13,8 @@ export default class WebRTC {
   // --- Internal ---
   //
   // List of functions to execute after init
-  _fnQueue: Array<Function>
+  protected _fnQueue: Array<Function>
+  protected _announceURLs: Array<string> = Config.webtorrent.announceURLs
 
   constructor() {
     this._fnQueue = []
@@ -54,6 +57,15 @@ export default class WebRTC {
     this._fnQueue.forEach((fn) => fn())
   }
 
+  /**
+   * @method setAnnounceURLs
+   * @description Allow to specify different WebTorrent announce URLs for the signaling
+   * @param announceURLs list of announce urls
+   */
+  setAnnounceURLs(announceURLs: Array<string>) {
+    this._announceURLs = announceURLs
+  }
+
   /** @method
    * Internal abstraction of connect to allow for
    * connection queueing
@@ -72,7 +84,7 @@ export default class WebRTC {
    * Check if we are connected to a given peer by ID
    * @peerId identifier of peer we're seeking
    */
-  connected(peerId: string): boolean {
+  exists(peerId: string): boolean {
     if (!this.peers) return false
     return this.peers.has(peerId)
   }
