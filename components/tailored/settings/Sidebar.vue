@@ -65,6 +65,15 @@ export default Vue.extend({
             },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
+        {
+          title: 'Developer',
+          links: [
+            {
+              to: 'developer',
+              text: 'Mock & Tweak',
+            },
+          ] as Array<SidebarLink>,
+        } as SidebarGrouping,
       ],
     }
   },
