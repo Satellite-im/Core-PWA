@@ -8,6 +8,13 @@ export default {
   components: {
     ImageCropper,
   },
+  props: {
+    closeModal: {
+      type: Function,
+      default: undefined,
+      required: true,
+    },
+  },
   data() {
     return {
       showCropper: false,
@@ -18,25 +25,17 @@ export default {
       error: '',
     }
   },
-  props: {
-    closeModal: {
-      type: Function,
-      default: undefined,
-      required: false,
-    },
-  },
   methods: {
     toggleCropper() {
-      console.log('show')
       this.showCropper = !this.showCropper
     },
 
     selectImage(e) {
       if (e.target.value !== null) {
-        var files = e.target.files || e.dataTransfer.files
+        const files = e.target.files || e.dataTransfer.files
         if (!files.length) return
 
-        var reader = new FileReader()
+        const reader = new FileReader()
         reader.onload = (e) => {
           this.imageUrl = e.target.result
           e.target.value = ''
@@ -57,7 +56,7 @@ export default {
       this.closeModal()
     },
 
-    async confirm() {
+    confirm() {
       if (this.name < 5) {
         this.error = 'Server name must be at least 5 characters.'
         return false
