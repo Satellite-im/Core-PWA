@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { DataStateType } from '~/store/dataState/state'
 
 import { getAlphaSorted } from '~/utilities/friends'
 
@@ -17,6 +18,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    DataStateType: () => DataStateType,
     ...mapState(['friends']),
     alphaSortedFriends() {
       return getAlphaSorted(this.friends.all)
