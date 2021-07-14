@@ -1,0 +1,322 @@
+import { Connection, clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js'
+import * as bip39 from 'bip39'
+import {
+  publicKeyFromSeed,
+  sleep,
+  getClusterFromNetworkConfig,
+} from '../solana'
+import { Config } from '~/config'
+import { SolanaWallet } from '~/types/solana/solana'
+
+export default class SolanaManager {
+  accounts: Array<SolanaWallet>
+  payerAccount?: Keypair
+  connection: Connection
+  mnemonic?: string
+  userAccount?: Keypair | null
+  networkIdentifier: string
+  clusterApiUrl: string
+  publicKeys: { [key: string]: PublicKey }
+
+  constructor() {
+    this.accounts = []
+    this.networkIdentifier = Config.solana.network
+    this.clusterApiUrl = clusterApiUrl(
+      getClusterFromNetworkConfig(Config.solana.network)
+    )
+    this.connection = new Connection(this.clusterApiUrl)
+    this.publicKeys = {}
+  }
+
+  /**
+   * @method getPath
+   * @param index index of the account to genenerate
+   * @returns the ethereum like path for generating a new deterministic account
+   */
+  getPath(index: number): string {
+    return `m/44'/60'/0'/0/${index}`
+  }
+
+  /**
+   * @method createRandomKeypair
+   * @description Generates a Solana keypair from a random generated
+   * bip39 mnemonic phrase
+   * @returns a SolanaWallet
+   */
+  async createRandomKeypair(): Promise<SolanaWallet> {
+    const mnemonic = bip39.generateMnemonic()
+
+    const seed = bip39.mnemonicToSeedSync(mnemonic)
+
+    const path = this.getPath(0)
+
+    const seedWithPath = `${seed.toString('utf-8')}${path}`
+
+    const hashBuffer = await crypto.subtle.digest(
+      'SHA-256',
+      Buffer.from(seedWithPath, 'utf-8')
+    )
+
+    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
+
+    const address = keypair.publicKey.toBase58()
+
+    return { keypair, mnemonic, path, address }
+  }
+
+  /**
+   * @method restoreKeypairFromMnemonic
+   * @description Restores a Solana keypair from a given mnemonic phrase
+   * @returns a SolanaWallet
+   */
+  async restoreKeypairFromMnemonic(
+    mnemonic: string,
+    accountIndex: number
+  ): Promise<SolanaWallet | null> {
+    if (!bip39.validateMnemonic(mnemonic)) {
+      return null
+    }
+
+    const path = this.getPath(accountIndex)
+
+    const seed = bip39.mnemonicToSeedSync(mnemonic)
+    const seedWithPath = `${seed.toString('utf-8')}${path}`
+
+    const hashBuffer = await crypto.subtle.digest(
+      'SHA-256',
+      Buffer.from(seedWithPath)
+    )
+    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
+
+    const address = keypair.publicKey.toBase58()
+
+    return { keypair, mnemonic, path, address }
+  }
+
+  /**
+   * @method generateUserKeypair
+   * @description Restores the Solana keypair that is used
+   * for storing user information from a given mnemonic phrase
+   * @returns a SolanaWallet
+   */
+  async generateUserKeypair(): Promise<Keypair | null> {
+    if (!this.mnemonic) {
+      return null
+    }
+
+    const path = 'user'
+
+    const seed = bip39.mnemonicToSeedSync(this.mnemonic)
+    const seedWithPath = `${seed.toString('utf-8')}${path}`
+
+    const hashBuffer = await crypto.subtle.digest(
+      'SHA-256',
+      Buffer.from(seedWithPath)
+    )
+    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
+
+    return keypair
+  }
+
+  /**
+   * @method generateDerivedPublicKey
+   * @description Derives a public key from the combination of a public key, a seed string
+   * and a program id. Useful to predict the derived friendsInfo Account public key
+   * @param identifier identifier string for storing the generated public key
+   * @param userPublicKey user pablic key to use as base for derivation
+   * @param seed seed string to use for derivation
+   * @param programId program id to use for derivation
+   * @returns a derived public key
+   */
+  async generateDerivedPublicKey(
+    identifier: string,
+    userPublicKey: PublicKey,
+    seed: string,
+    programId: PublicKey
+  ): Promise<PublicKey | null> {
+    const { key } = await publicKeyFromSeed(userPublicKey, seed, programId)
+
+    this.publicKeys[identifier] = key
+    return key
+  }
+
+  /**
+   * @method getDerivedPublicKey
+   * @description Returns the public key that is associated to the given
+   * identifier
+   * @param identifier identifier of the public key to retrieve
+   * @returns a solana public key
+   */
+  getDerivedPublicKey(identifier: string): PublicKey | undefined {
+    return this.publicKeys[identifier]
+  }
+
+  /**
+   * @method generateNewAccount
+   * @description Devrives a new account from the next path
+   */
+  async generateNewAccount(): Promise<SolanaWallet | null> {
+    if (!this.mnemonic) {
+      return null
+    }
+
+    const account = await this.restoreKeypairFromMnemonic(
+      this.mnemonic,
+      this.accounts.length
+    )
+
+    if (!account) {
+      return null
+    }
+
+    const { keypair, address, mnemonic, path } = account
+    this.accounts.push({ keypair, address, mnemonic, path })
+
+    return account
+  }
+
+  /**
+   * @method initializeRandom
+   * @description Initialize a Solana account by restoring the secret key
+   * or generates a new account if the key is not passed
+   */
+  async initializeRandom() {
+    const { keypair, mnemonic, address, path } =
+      await this.createRandomKeypair()
+    this.payerAccount = keypair
+    this.accounts.push({ keypair, address, mnemonic, path })
+    this.mnemonic = mnemonic
+
+    this.userAccount = await this.generateUserKeypair()
+  }
+
+  /**
+   * @method initializeFromKeypair
+   * @description Initialize a Solana account from a given Keypair
+   */
+  async initializeFromKeypair(keypair: Keypair) {
+    const address = keypair.publicKey.toBase58()
+    this.accounts.push({ keypair, address })
+    this.payerAccount = keypair
+
+    this.userAccount = await this.generateUserKeypair()
+  }
+
+  /**
+   * @method initializeFromMnemonic
+   * @description Initialize a Solana account from a mnemonic seed phrase
+   */
+  async initializeFromMnemonic(mnemonic: string) {
+    const solanaWallet = await this.restoreKeypairFromMnemonic(mnemonic, 0)
+
+    if (solanaWallet) {
+      const { keypair, address, path } = solanaWallet
+      this.accounts.push({ keypair, address, path, mnemonic })
+      this.payerAccount = keypair
+      this.mnemonic = mnemonic
+
+      this.userAccount = await this.generateUserKeypair()
+    }
+  }
+
+  /**
+   * @method initializeFromSolanaWallet
+   * @description Initialize a Solana account from a previously
+   * generated solana wallet object
+   */
+  async initializeFromSolanaWallet(solanaWallet: SolanaWallet) {
+    this.accounts.push(solanaWallet)
+    this.payerAccount = solanaWallet.keypair
+    this.mnemonic = solanaWallet.mnemonic
+    this.userAccount = await this.generateUserKeypair()
+  }
+
+  /**
+   * @method isInitialized
+   * @description Utility function to check if the account has been initialized
+   */
+  isInitialized(): boolean {
+    return Boolean(this.connection && this.payerAccount)
+  }
+
+  /**
+   * @method getAccounts
+   * @returns the list of available accounts
+   */
+  getAllAccounts() {
+    return this.accounts
+  }
+
+  /**
+   * @method getAccount
+   * @param address the account public key
+   * @returns
+   */
+  getAccount(address: string): SolanaWallet | undefined {
+    return this.accounts.find((account) => account.address === address)
+  }
+
+  /**
+   * @method getActiveAccount
+   * @returns the payer account keypair
+   */
+  getActiveAccount() {
+    return this.payerAccount
+  }
+
+  /**
+   * @method getUserAccount
+   * @returns the user account keypair
+   */
+  getUserAccount() {
+    return this.userAccount
+  }
+
+  /**
+   * @method getCurrentAccountBalance
+   * @returns The balance of the payer account
+   */
+  getCurrentAccountBalance() {
+    if (this.payerAccount) {
+      return this.connection.getBalance(this.payerAccount.publicKey)
+    }
+
+    return null
+  }
+
+  /**
+   * @method requestAirdrop
+   * @description Request an airdropfrom solana devnet
+   * 1 lamport = 0.000000001 SOL
+   * @returns
+   */
+  async requestAirdrop() {
+    if (this.payerAccount) {
+      const signature = await this.connection.requestAirdrop(
+        this.payerAccount?.publicKey,
+        1000000000
+      )
+      return this.connection.confirmTransaction(signature, 'finalized')
+    }
+
+    return null
+  }
+
+  /**
+   * @method waitForAccount
+   * @description continuously check the given account
+   * until it becomes available
+   * @param accountKey public key of the account to wait for
+   */
+  async waitForAccount(accountKey: PublicKey) {
+    while (true) {
+      const accountInfo = await this.connection.getAccountInfo(accountKey)
+      if (accountInfo === null) {
+        await sleep(3000)
+        continue
+      } else {
+        break
+      }
+    }
+  }
+}
