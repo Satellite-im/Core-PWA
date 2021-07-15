@@ -19,7 +19,7 @@ export default Vue.extend({
     },
     openModal: {
       type: Function,
-      default: undefined,
+      default: () => {},
       required: false,
     },
   },

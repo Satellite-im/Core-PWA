@@ -17,12 +17,12 @@ export default Vue.extend({
   props: {
     setCroppedImage: {
       type: Function,
-      default: undefined,
+      default: () => {},
       required: true,
     },
     toggleCropper: {
       type: Function,
-      default: undefined,
+      default: () => {},
       required: true,
     },
     imageUrl: {

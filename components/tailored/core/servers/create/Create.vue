@@ -8,13 +8,6 @@ export default {
   components: {
     ImageCropper,
   },
-  props: {
-    closeModal: {
-      type: Function,
-      default: undefined,
-      required: true,
-    },
-  },
   data() {
     return {
       showCropper: false,
@@ -50,10 +43,6 @@ export default {
     setCroppedImage(image) {
       this.croppedImage = image
       this.$refs.file.value = null
-    },
-
-    close() {
-      this.closeModal()
     },
 
     confirm() {
