@@ -29,4 +29,7 @@ export const Config = {
       'wss://tracker.novage.com.ua:443/announce',
     ],
   },
+  solana: {
+    network: 'devnet',
+  },
 }
