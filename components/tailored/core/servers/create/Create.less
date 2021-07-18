@@ -1,0 +1,72 @@
+input:focus,
+input:focus {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+input::placeholder {
+  color: #666;
+  opacity: 0.75;
+}
+.address {
+  font-size: 10pt;
+  color: #ccc;
+}
+.modal-card-title {
+  margin-left: 1rem;
+}
+
+.label {
+  font-size: 14pt;
+  color: @bright-text!important;
+}
+
+.column.align {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .set-photo-title {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-server-btn {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: calc(100% - 3rem);
+    height: 53px;
+  }
+}
+
+.input-file {
+  display: none;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
+.input-container {
+  margin-bottom: 20px;
+}
+
+.cropper-mask {
+  position: fixed;
+  background: @darker;
+  opacity: 0.6;
+  z-index: 9;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.red {
+  color: @red;
+}
