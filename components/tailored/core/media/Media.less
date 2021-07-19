@@ -18,7 +18,11 @@
 }
 
 .fullscreen-media #media {
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  align-content: center;
+  .user {
+    max-width: calc(50% - 1rem);
+  }
 }
 
 @media only screen and (max-width: 768px) {
