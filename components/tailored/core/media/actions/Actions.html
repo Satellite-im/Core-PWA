@@ -12,13 +12,13 @@
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
-    data-tooltip="Mute">
+    :data-tooltip="$t('global.mute')">
     <InteractablesButton
       outlined
-      type="dark"
+      :type="audio.muted ? 'danger' : 'dark'"
       size="small"
       :icon="{ style: 'far', name: 'microphone-alt' }"
-      :action="() => {}" />
+      :action="() => $store.commit('mute')" />
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
