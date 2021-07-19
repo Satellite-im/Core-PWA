@@ -42,7 +42,7 @@ export default Vue.extend({
      */
     isEmbedableImage(filename: string): boolean {
       const imageFormatsRegex = new RegExp(
-        '^.*\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
       )
       return imageFormatsRegex.test(filename.toLowerCase())
     },
