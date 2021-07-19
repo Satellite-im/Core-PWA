@@ -5,18 +5,14 @@
     :text="$t('pages.files.new_folder')"
     :icon="{style: 'far', name: 'folder-plus'}"
     size="small"
-    :action="()=>{show('newfolder')}" />
-  <label for="file-upload" class="button is-primary is-outlined is-small">
-    <font-awesome-icon
-      :icon="['far', 'file-plus']"
-      class="control-icon" />
-    &nbsp;
-    {{ $t('pages.files.upload') }}
-  </label>
+    :action="()=>{show('newfolder')}"
+  />
+  <FileUpload type="button" />
   <InteractablesButton
     outlined
     type="primary"
     :text="$t('pages.files.refresh')"
     :icon="{style: 'far', name: 'sync'}"
-    size="small" />
+    size="small"
+  />
 </div>

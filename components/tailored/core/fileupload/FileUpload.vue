@@ -10,6 +10,12 @@ export default Vue.extend({
       url: false,
     }
   },
+  props: {
+    type: {
+      type: String,
+      default: 'quick',
+    },
+  },
   methods: {
     /**
      * Triggered when a file is changed on the input

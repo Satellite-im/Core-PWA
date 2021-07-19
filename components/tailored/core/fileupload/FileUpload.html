@@ -1,0 +1,52 @@
+<span>
+  <span id="file-upload">
+    <div class="file-preview" v-if="file">
+      <img v-if="isEmbedableImage(file.name)" :src="url" />
+      <font-awesome-icon
+        v-if="!isEmbedableImage(file.name)"
+        :icon="['far', 'file']"
+        class="control-icon"
+      />
+      <div class="file-info">
+        <TypographyTitle :size="6" :text="file.name" />
+        <TypographySubtitle :size="6" :text="file.type" />
+        <TypographySubtitle :size="6" :text="$filesize(file.size)" />
+        <div class="is-controls">
+          <InteractablesButton
+            type="primary"
+            size="small"
+            text="Send"
+            outlined
+          />
+          <InteractablesButton
+            type="danger"
+            size="small"
+            text="Cancel"
+            outlined
+            :action="cancelUpload"
+          />
+        </div>
+      </div>
+    </div>
+    <input type="file" id="quick-upload" @change="handleFile" />
+  </span>
+  <span v-if="type == 'quick'">
+    <label
+      for="quick-upload"
+      :data-tooltip="$t('global.upload')"
+      class="has-tooltip has-tooltip-top has-tooltip-primary"
+    >
+      <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
+    </label>
+  </span>
+  <div v-if="type =='button'">
+    <label
+      for="quick-upload"
+      class="button is-button is-small is-primary is-outlined is-normal-width"
+      style="margin-left: 0.25rem"
+    >
+      <font-awesome-icon :icon="['far', 'file-plus']" class="control-icon" />
+      &nbsp; {{ $t('pages.files.upload') }}
+    </label>
+  </div>
+</span>
