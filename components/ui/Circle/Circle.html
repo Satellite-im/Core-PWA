@@ -4,7 +4,7 @@
   >
   <img
     :src="source"
-    v-if="type === 'image'"
+    v-if="type === 'image' && source"
     alt="Cirlce Image"
     :class="`${square ? 'is-square' : 'is-rounded'} image`">
   <jazzicon
