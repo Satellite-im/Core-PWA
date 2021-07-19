@@ -26,6 +26,12 @@ export default Vue.extend({
       const container = (this.$refs.chat as Vue).$el as Element
       container.scrollTop = container.scrollHeight
     },
+    toggleModal() {
+      this.$store.commit('toggleModal', {
+        name: 'createServer',
+        state: !this.$store.state.ui.modals.createServer,
+      })
+    },
   },
 })
 </script>
