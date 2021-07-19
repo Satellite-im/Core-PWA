@@ -4,7 +4,6 @@ export enum DataStateType {
   Updating = 'U',
   Ready = 'R',
 }
-
 interface DataState {
   files: DataStateType
   friends: DataStateType
