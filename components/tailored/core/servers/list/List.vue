@@ -17,6 +17,11 @@ export default Vue.extend({
         return []
       },
     },
+    openModal: {
+      type: Function,
+      default: () => {},
+      required: false,
+    },
   },
 })
 </script>

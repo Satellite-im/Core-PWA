@@ -1,8 +1,12 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import FileUpload from '../../core/fileupload/FileUpload.vue'
 
 export default Vue.extend({
+  components: {
+    FileUpload,
+  },
   props: {
     handleFile: {
       type: Function,
