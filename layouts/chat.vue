@@ -32,6 +32,12 @@ export default Vue.extend({
         state: !this.$store.state.ui.modals.createServer,
       })
     },
+    acceptCall() {
+      this.$store.dispatch('acceptCall')
+    },
+    denyCall() {
+      this.$store.dispatch('denyCall')
+    },
   },
 })
 </script>
