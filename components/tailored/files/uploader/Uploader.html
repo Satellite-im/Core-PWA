@@ -1,4 +1,4 @@
-<div id="uploader">
+<div id="uploader" :class="inline ? 'inline' : ''">
   <div class="file-preview" v-if="file">
     <img v-if="isEmbedableImage(file.name)" :src="url" />
     <font-awesome-icon v-if="!isEmbedableImage(file.name)" :icon="['far', 'file']" class="control-icon"/>

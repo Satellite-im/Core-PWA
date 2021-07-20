@@ -1,0 +1,24 @@
+.loading-updating {
+  display: inline-flex;
+  flex-direction: row;
+  margin: 0;
+  position: fixed;
+  z-index: @base-z-index + 2;
+  bottom: @normal-spacing;
+  right: @normal-spacing;
+  background:  @primary-color;
+  border-radius: @corner-rounding;
+  padding: calc(@normal-spacing / 2);
+  .loading-text {
+    margin-left: @light-spacing;
+    font-family: 'Space Mono', monospace;
+  }
+}
+
+.muted {
+  opacity: 0.15;
+}
+
+.spaced {
+  margin-top: 1rem;
+}
