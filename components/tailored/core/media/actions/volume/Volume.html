@@ -5,7 +5,7 @@
     v-bind:direction="direction"
     @returned-value="receivedValue"
   />
-  <div class="volume-icon">
+  <div class="volume-icon" v-if="!plain">
     <font-awesome-icon
       v-if="volume >= 70"
       :icon="['far', 'volume-up']"
