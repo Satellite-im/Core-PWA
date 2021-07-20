@@ -6,6 +6,8 @@ export const Users = [
     state: 'online',
     last_message:
       'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
+    profile_picture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Halley Themis',
@@ -14,6 +16,8 @@ export const Users = [
     state: 'offline',
     last_message:
       'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
+    profile_picture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Lyra Cassini',
@@ -22,6 +26,8 @@ export const Users = [
     state: 'idle',
     last_message:
       'Tendrils of gossamer clouds stirred by starlight citizens of distant epochs network of wormholes corpus callosum the sky calls to us.',
+    profile_picture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Phoenix Kalindi',
@@ -30,6 +36,8 @@ export const Users = [
     state: 'online',
     last_message:
       'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
+    profile_picture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Ariel Larissa',
@@ -38,6 +46,8 @@ export const Users = [
     state: 'idle',
     last_message:
       'Network of wormholes science citizens of distant epochs tingling of the spine cosmic ocean brain is the seed of intelligence. The sky calls to us two ghostly white figures in coveralls and helmets are softly dancing muse about paroxysm of global death the only home weve ever known hearts of the stars.',
+    profile_picture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
 ]
 
@@ -48,4 +58,6 @@ export const User = {
   state: 'online',
   last_message:
     'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
+  profile_picture:
+    'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
 }

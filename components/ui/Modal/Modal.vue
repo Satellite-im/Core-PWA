@@ -1,7 +1,9 @@
 <template src="./Modal.html"></template>
 
 <script>
-export default {
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'Modal',
   props: {
     closeModal: {
@@ -20,7 +22,7 @@ export default {
       this.closeModal()
     },
   },
-}
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
