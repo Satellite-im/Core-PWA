@@ -15,7 +15,9 @@
         id="statusbar"
         :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
         :user="$mock.users[0]"/>
-      <Nuxt id="server" ref="server" />
+      <Nuxt id="server" ref="server">
+        <h1>Test</h1>
+      </Nuxt>
       <TailoredCoreChatbar />
     </div>
   </div>
