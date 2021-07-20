@@ -12,8 +12,8 @@ export default Vue.extend({
   methods: {
     toggleMute() {
       const muted = this.$store.state.audio.muted
-      if (!muted) this.$sounds.playSound(Sounds.Mute)
-      if (muted) this.$sounds.playSound(Sounds.Unmute)
+      if (!muted) this.$Sounds.playSound(Sounds.MUTE)
+      else this.$Sounds.playSound(Sounds.UNMUTE)
 
       this.$store.commit('mute')
     },
