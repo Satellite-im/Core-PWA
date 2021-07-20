@@ -8,6 +8,14 @@ export default Vue.extend({
       type: String,
       default: 'Loading...',
     },
+    muted: {
+      type: Boolean,
+      default: false,
+    },
+    spaced: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
