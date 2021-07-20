@@ -107,6 +107,12 @@ export default {
           subtitle:
             'A higher sample size will give you a broader dynamic range of audio. Higher samples require better connections.',
         },
+        volume: {
+          title: 'Output Volume',
+        },
+        inputVolume: {
+          title: 'Input Volume',
+        },
         echo: {
           title: 'Echo Cancellation',
           subtitle:

@@ -1,8 +1,7 @@
-<div id="volume-slider">
+<div :class="`volume-slider volume-slider--${direction}`">
   <vue-slider
     v-model="value"
-    direction="btt"
-    width="5px"
+    v-bind:direction="direction"
     @change="returnValue"
     :tooltip-formatter="percentageFormatter"
   ></vue-slider>
