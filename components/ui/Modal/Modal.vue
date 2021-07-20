@@ -1,18 +1,20 @@
 <template src="./Modal.html"></template>
 
 <script>
-export default {
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'Modal',
   props: {
     closeModal: {
       type: Function,
       default: () => {},
-      required: true,
+      required: false,
     },
     title: {
       type: String,
       default: '',
-      required: true,
+      required: false,
     },
   },
   methods: {
@@ -20,7 +22,7 @@ export default {
       this.closeModal()
     },
   },
-}
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
