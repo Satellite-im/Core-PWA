@@ -2,23 +2,30 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
-import { mapState } from 'vuex'
-
+declare module 'vue/types/vue' {
+  interface Vue {
+    hideSlider: () => void
+  }
+}
 export default Vue.extend({
   props: {
-    volumeLevel: {
+    volume: {
       type: Number,
       default: 100,
+    },
+    isPopup: {
+      type: Boolean,
+      default: false,
+    },
+    direction: {
+      type: String,
+      default: 'btt',
     },
   },
   data() {
     return {
       showSlider: false,
     }
-  },
-  computed: {
-    ...mapState(['audio']),
   },
   mounted() {
     document.addEventListener('click', this.hideSlider)
@@ -39,7 +46,6 @@ export default Vue.extend({
       }
     },
     receivedValue(volume: Number) {
-      this.$store.commit('setVolume', volume)
       this.$emit('volumeControlValueChange', volume)
     },
   },
