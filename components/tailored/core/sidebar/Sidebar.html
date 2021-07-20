@@ -80,7 +80,7 @@
         class="loading-container"
         v-if="$store.state.dataState.friends === DataStateType.Updating"
       >
-        <UiLoadersLoadingInline text="Loading..." />
+        <UiLoadersUpdating />
       </div>
     </div>
     <UiLoadersAddress v-else :count="5" inverted />
@@ -96,7 +96,7 @@
         class="loading-container"
         v-if="$store.state.dataState.friends === DataStateType.Updating"
       >
-        <UiLoadersLoadingInline text="Loading..." />
+        <UiLoadersUpdating />
       </div>
     </div>
     <UiLoadersAddress v-else :count="5" inverted />
