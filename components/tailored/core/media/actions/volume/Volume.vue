@@ -17,6 +17,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    plain: {
+      type: Boolean,
+      default: false,
+    },
     direction: {
       type: String,
       default: 'btt',
