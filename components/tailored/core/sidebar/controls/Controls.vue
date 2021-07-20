@@ -13,15 +13,15 @@ export default Vue.extend({
   methods: {
     toggleMute() {
       const muted = this.$store.state.audio.muted
-      if (!muted) this.$sounds.playSound(Sounds.Mute)
-      if (muted) this.$sounds.playSound(Sounds.Unmute)
+      if (!muted) this.$Sounds.playSound(Sounds.MUTE)
+      else this.$Sounds.playSound(Sounds.UNMUTE)
 
       this.$store.commit('mute')
     },
     toggleDeafen() {
       const deafened = this.$store.state.audio.deafened
-      if (!deafened) this.$sounds.playSound(Sounds.Deafen)
-      if (deafened) this.$sounds.playSound(Sounds.Undeafen)
+      if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
+      else this.$Sounds.playSound(Sounds.UNDEAFEN)
 
       this.$store.commit('deafen')
     },

@@ -6,7 +6,7 @@ export const Config = {
     browser: 'https://hub.textile.io',
   },
   ipfs: {
-    browser: 'https://ipfs.io/ipfs/',
+    gateway: 'https://ipfs.io/ipfs/',
   },
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {

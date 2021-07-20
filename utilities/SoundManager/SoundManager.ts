@@ -3,19 +3,19 @@ import { Config } from '~/config'
 
 // Keep this type in sync with Config.sounds
 export enum Sounds {
-  NewMessage = 'newMessage',
-  Call = 'call',
-  Hangup = 'hangup',
-  Mute = 'mute',
-  Unmute = 'unmute',
-  Deafen = 'deafen',
-  Undeafen = 'undeafen',
-  Upload = 'upload',
-  Connected = 'connected',
+  NEW_MESSAGE = 'newMessage',
+  CALL = 'call',
+  HANGUP = 'hangup',
+  MUTE = 'mute',
+  UNMUTE = 'unmute',
+  DEAFEN = 'deafen',
+  UNDEAFEN = 'undeafen',
+  UPLOAD = 'upload',
+  CONNECTED = 'connected',
 }
 
 /**
- * Class representing a Soundmanager
+ * Class representing a SoundManager
  * @class SoundManager
  */
 export default class SoundManager {
@@ -30,11 +30,21 @@ export default class SoundManager {
       string
     ][]) {
       this.sounds[key] = new Howl({
-        src: [`${Config.ipfs.browser}${value}`],
+        src: [`${Config.ipfs.gateway}${value}`],
         loop: false,
         volume: 0.8,
         html5: true,
       })
+    }
+  }
+
+  /** @function
+   * Check if a specific sound exists
+   * @param sound Name of the sound to check
+   */
+  private existsSound(sound: Sounds) {
+    if (!this.sounds[sound]) {
+      throw new Error('Sound not found')
     }
   }
 
@@ -45,10 +55,7 @@ export default class SoundManager {
    * @returns null
    */
   playSound(sound: Sounds) {
-    if (!this.sounds[sound]) {
-      console.error('Sound not found')
-      return
-    }
+    this.existsSound(sound)
 
     this.sounds[sound].play()
   }
@@ -60,10 +67,7 @@ export default class SoundManager {
    * @returns null
    */
   stopSound(sound: Sounds) {
-    if (!this.sounds[sound]) {
-      console.error('Sound not found')
-      return
-    }
+    this.existsSound(sound)
 
     this.sounds[sound].stop()
   }
@@ -72,13 +76,10 @@ export default class SoundManager {
    * Checks if the sound is currently playing
    * @name isPlaying
    * @argument sound Name of the sound file to play.
-   * @returns boolean
+   * @returns boolean | error
    */
   isPlaying(sound: Sounds): boolean {
-    if (!this.sounds[sound]) {
-      console.error('Sound not found')
-      return false
-    }
+    this.existsSound(sound)
 
     return this.sounds[sound].playing()
   }
