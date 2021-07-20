@@ -10,6 +10,12 @@ export default Vue.extend({
       url: false,
     }
   },
+  props: {
+    type: {
+      type: String,
+      default: 'quick',
+    },
+  },
   methods: {
     /**
      * Triggered when a file is changed on the input
@@ -36,7 +42,7 @@ export default Vue.extend({
      */
     isEmbedableImage(filename: string): boolean {
       const imageFormatsRegex = new RegExp(
-        '^.*\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
       )
       return imageFormatsRegex.test(filename.toLowerCase())
     },

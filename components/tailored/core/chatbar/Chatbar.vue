@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import FileUpload from './fileupload/FileUpload.vue'
+import FileUpload from '../fileupload/FileUpload.vue'
 import {
   containsCommand,
   parseCommand,
