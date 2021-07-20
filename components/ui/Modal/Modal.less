@@ -1,14 +1,31 @@
+.modal-card-head {
+  background: @dark;
+  padding: 2rem 0;
+  width: 540px;
+  margin: 0 auto;
+  border-bottom: 2px solid @white;
+}
+
 .modal-card-body {
   font-weight: normal !important;
   font-size: 12pt;
+
+  width: 600px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 2rem;
+  background: @dark;
 }
 .modal {
   z-index: 101;
 }
 .close {
   position: absolute;
-  right: 35px;
-  top: 0.5rem;
+  right: -30px;
+  top: -30px;
+  bottom: 0;
+  margin: auto;
+  height: 30px;
   font-size: 14pt;
   cursor: pointer;
 }
@@ -16,16 +33,11 @@
   // margin: 0 !important;
   padding: 0 !important;
 }
-.modal-card-body {
-  width: 600px;
-  margin: 0 auto;
-  text-align: left;
-  padding: 2rem;
-  background: @dark;
-}
+
 .modal-card {
   border-radius: 5px;
   margin-top: -10%;
+  background: @dark;
 }
 
 .title {

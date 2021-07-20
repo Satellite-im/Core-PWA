@@ -1,9 +1,10 @@
 <template src="./Create.html"></template>
 
 <script>
+import Vue from 'vue'
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
 
-export default {
+export default Vue.extend({
   name: 'CreateServer',
   components: {
     ImageCropper,
@@ -54,7 +55,7 @@ export default {
       return true
     },
   },
-}
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

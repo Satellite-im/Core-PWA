@@ -1,28 +1,22 @@
-<div
-  id="app-wrap"
-  :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
-  <div id="app" 
-    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${$device.isMobile ? 'mobile-app' : ''}`" 
-    v-touch:swipe="sidebarSwipeHandler(this)"
-    v-touch-options="{ swipeTolerance: 75 }"
-    >
+<div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app" :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${$device.isMobile ? 'mobile-app' : ''}`"
+    v-touch:swipe="sidebarSwipeHandler(this)" v-touch-options="{ swipeTolerance: 75 }">
     <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
-    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
+    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
-      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal"/>
+      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" />
     </UiModal>
+    <TailoredCoreIncomingCall v-if="$store.state.media.incomingCall" :user="$mock.user" :accaptCall="() => $store.dispatch('acceptCall')" :denyCall="() => $store.dispatch('denyCall')"/>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
-      <TailoredCoreStatusbar
-        id="statusbar"
-        :user="$mock.users[0]"/>
-      <TailoredCoreMedia /> 
+      <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
+      <TailoredCoreMedia />
       <Nuxt id="chat" ref="chat" class="hidden-scroll" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />
     </div>
   </div>
-  <TailoredCoreMobileNav v-if="$device.isMobile"/>
+  <TailoredCoreMobileNav v-if="$device.isMobile" />
 </div>
