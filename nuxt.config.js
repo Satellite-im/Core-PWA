@@ -65,6 +65,7 @@ export default {
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
     { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
     // Local
+    { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts' },
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
