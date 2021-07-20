@@ -1,13 +1,19 @@
 <div id="chatbar" ref="chatbar">
-  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`" ref="wrap">
-    <div
-      class="control-wrap">
-      <FileUpload />
+  <div
+    :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
+    ref="wrap"
+  >
+    <div class="control-wrap">
+      <FileUpload type="quick" />
     </div>
-    <div :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"  v-if="hasCommand">
+    <div
+      :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"
+      v-if="hasCommand"
+    >
       <font-awesome-icon :icon="['far', 'terminal']" />
     </div>
-    <textarea :placeholder="$t('global.talk')"
+    <textarea
+      :placeholder="$t('global.talk')"
       rows="1"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
@@ -18,12 +24,22 @@
     <div
       :data-tooltip="$t('global.glyphs')"
       v-on:click="toggleEnhancers"
-      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary">
+      class="
+        control-tooltip-wrap
+        has-tooltip has-tooltip-top has-tooltip-primary
+      "
+    >
       <font-awesome-icon
         :icon="['far', 'grin-tongue-wink']"
-        :class="`control-icon emoji-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"/>
-    </div>  
-    <font-awesome-icon :icon="['far', 'arrow-circle-right']" class="control-icon" />
+        :class="`control-icon emoji-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
+      />
+    </div>
+    <font-awesome-icon
+      :icon="['far', 'arrow-circle-right']"
+      class="control-icon"
+    />
   </div>
-  <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{ `${text.length}/${maxChars}` }}</span>
+  <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
+    >{{ `${text.length}/${maxChars}` }}</span
+  >
 </div>

@@ -25,6 +25,7 @@ export default {
     mute: 'Mute',
     deafen: 'Deafen',
     copy_id: 'Copy ID',
+    crop: 'Crop',
   },
   controls: {
     mic: 'Mic',
@@ -179,6 +180,19 @@ export default {
             'Do not share this phrase with anyone. This phrase is used to recover your account. Anyone with access to this has access to your account.',
         },
       },
+    },
+  },
+  servers: {
+    create: {
+      heading: 'Create a server',
+      photo_text:
+        "Give your server a face. Chose a memorable photo to show it's members.",
+      photo_button: 'Set photo',
+      server_name: 'Enter a server name',
+      server_name_placeholder: 'Server name...',
+      create_server: 'Create server',
+      select_friends: 'Invite your friends to this server',
+      select_friends_placeholder: 'Search friends...',
     },
   },
 }
