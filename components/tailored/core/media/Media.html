@@ -5,8 +5,9 @@
     <TailoredCoreMediaUser :user="{ name: 'Phoenix Kalindi' }" />
   </div>
   <TailoredCoreMediaActionsVolume
-    :volumeLevel="defaultVolumeLevel"
-    @volumeControlValueChange="returnedValue"
+    :volume="audio.volume"
+    isPopup="true"
+    @volumeControlValueChange="volumeControlValueChange"
   />
   <TailoredCoreMediaActionsSettings />
   <TailoredCoreMediaActions />

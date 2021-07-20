@@ -1,31 +1,34 @@
-<div id="volume" ref="volumegroup" @mousedown="hideSlider" tabindex="0">
+<div :class="`volume-control ${isPopup? 'absolute': 'normal'} ${direction}`" ref="volumegroup" @mousedown="hideSlider" tabindex="0">
   <InteractablesVolume
-    v-if="showSlider"
-    :volume="audio.volume"
+    v-if="!isPopup || showSlider"
+    :volume="volume"
+    v-bind:direction="direction"
     @returned-value="receivedValue"
   />
-  <font-awesome-icon
-    v-if="audio.volume >= 70"
-    :icon="['far', 'volume-up']"
-    @click="toggleSlider"
-    class="fa-fw"
-  />
-  <font-awesome-icon
-    v-if="audio.volume > 30 && audio.volume < 70"
-    :icon="['far', 'volume']"
-    @click="toggleSlider"
-    class="fa-fw"
-  />
-  <font-awesome-icon
-    v-if="audio.volume > 0 && audio.volume <= 30"
-    :icon="['far', 'volume-down']"
-    @click="toggleSlider"
-    class="fa-fw"
-  />
-  <font-awesome-icon
-    v-if="audio.volume == 0"
-    :icon="['far', 'volume-off']"
-    @click="toggleSlider"
-    class="fa-fw"
-  />
+  <div class="volume-icon">
+    <font-awesome-icon
+      v-if="volume >= 70"
+      :icon="['far', 'volume-up']"
+      @click="toggleSlider"
+      class="fa-fw"
+    />
+    <font-awesome-icon
+      v-if="volume > 30 && volume < 70"
+      :icon="['far', 'volume']"
+      @click="toggleSlider"
+      class="fa-fw"
+    />
+    <font-awesome-icon
+      v-if="volume > 0 && volume <= 30"
+      :icon="['far', 'volume-down']"
+      @click="toggleSlider"
+      class="fa-fw"
+    />
+    <font-awesome-icon
+      v-if="volume == 0"
+      :icon="['far', 'volume-off']"
+      @click="toggleSlider"
+      class="fa-fw"
+    />
+  </div>
 </div>

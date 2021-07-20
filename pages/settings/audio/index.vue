@@ -30,7 +30,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'audio']),
     // React to v-model changes to echoCancellation and update
     // the state accordingly with the mutation
     isEchoCancellation: {
@@ -123,6 +123,12 @@ export default Vue.extend({
         // Error is returned if user selects Block/Deny
         this.$data.userDeniedAudioAccess = true
       }
+    },
+    volumeControlValueChange(volume: Number) {
+      this.$store.commit('setVolume', volume)
+    },
+    inputVolumeControlValueChange(volume: Number) {
+      this.$store.commit('setInputVolume', volume)
     },
   },
 })

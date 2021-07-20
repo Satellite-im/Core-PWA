@@ -21,6 +21,12 @@ const mutations = {
       volume,
     }
   },
+  setInputVolume(state: NuxtState, inputVolume: Number) {
+    state.audio = {
+      ...state.audio,
+      inputVolume,
+    }
+  },
 }
 
 export default mutations

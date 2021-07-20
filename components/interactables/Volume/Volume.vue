@@ -15,6 +15,10 @@ export default Vue.extend({
       type: Number,
       default: 100,
     },
+    direction: {
+      type: String,
+      default: 'btt',
+    },
   },
   data() {
     return {
