@@ -1,7 +1,9 @@
 .modal-card-head {
   background: @dark;
-  padding: 2rem 0;
-  width: 540px;
+  padding: 2rem;
+  // width: 540px;
+  // width: 300px;
+  width: calc(100% - 80px);
   margin: 0 auto;
   border-bottom: 2px solid @white;
 }
@@ -10,19 +12,25 @@
   font-weight: normal !important;
   font-size: 12pt;
 
-  width: 600px;
+  width: fit-content;
   margin: 0 auto;
   text-align: left;
   padding: 2rem;
   background: @dark;
+  padding: 0px;
 }
+
+.modal-card {
+  width: fit-content;
+}
+
 .modal {
   z-index: 101;
 }
 .close {
   position: absolute;
-  right: -30px;
-  top: -30px;
+  right: -20px;
+  top: -40px;
   bottom: 0;
   margin: auto;
   height: 30px;
@@ -42,4 +50,24 @@
 
 .title {
   font-size: 18pt;
+}
+
+@media only screen and (max-width: 768px) {
+  .modal {
+    height: 100%;
+  }
+  .modal-card {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    max-height: 100%;
+  }
+
+  .modal-card-body {
+    width: 100%;
+
+    & > div {
+      height: 100%;
+    }
+  }
 }

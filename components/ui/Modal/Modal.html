@@ -1,12 +1,11 @@
 <div class="modal is-active">
     <div class="modal-background"></div>
     <div class="modal-card">
-        <header class="modal-card-head">
+        <header v-if="title" class="modal-card-head">
             <span class="close" v-on:click="close">×</span>
             <h2 class="title">{{title}}</h2>
           </header>
         <section class="modal-card-body">
-            <!-- <hr class="divider"> -->
             <slot/>
         </section>
     </div>
