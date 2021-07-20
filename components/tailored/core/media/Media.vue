@@ -2,15 +2,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
-  data() {
-    return {
-      defaultVolumeLevel: 100,
-    }
+  computed: {
+    ...mapState(['audio']),
   },
   methods: {
-    returnedValue(volume: number) {
-      this.defaultVolumeLevel = volume
+    volumeControlValueChange(volume: number) {
+      this.$store.commit('setVolume', volume)
     },
   },
 })
