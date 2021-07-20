@@ -1,4 +1,4 @@
-<div class="loading-inline">
+<div :class="`loading-inline ${muted ? 'muted' : ''} ${spaced ? 'spaced' : ''}`">
   <font-awesome-icon :icon="['far', 'circle-notch']" spin class="spinner" />
   <TypographyText class="loading-text" :text="text" />
 </div>

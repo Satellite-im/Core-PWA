@@ -1,7 +1,7 @@
 <div id="files">
-  <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" />
   <TailoredFilesControls :handleFile="handleFile" />
   <TailoredFilesTopbar />
+  <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" />
   <UiSpacer :height="20" />
   <div class="two-thirds">
     <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
