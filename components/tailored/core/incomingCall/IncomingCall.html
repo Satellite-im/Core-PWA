@@ -1,17 +1,18 @@
-<div class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <section class="modal-card-body">
-            <div class="gradient-cover"></div>
-            <div class="user-profile-picture" v-bind:style="`background:url(${user.profile_picture})`"/>
-            <div class="user-info">
-                <p class="user-name">{{user.name}}</p>
-                <p class="user-status">{{user.status}}</p>
-            </div>
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-success" v-on:click="acceptCall"><font-awesome-icon :icon="['far', 'phone']" class="button-icon"/></button>
-            <button class="button is-danger" v-on:click="denyCall"><font-awesome-icon :icon="['far', 'phone-slash']" class="button-icon"/></button>
-        </footer>
+<div>
+    <div class="content">
+        <div class="gradient-cover"></div>
+        <div class="user-profile-picture" v-bind:style="`background:url(${user.profile_picture})`" />
+        <div class="user-info">
+            <p class="user-name">{{user.name}}</p>
+            <p class="user-status">{{user.status}}</p>
+        </div>
     </div>
+    <footer class="modal-card-foot">
+        <button class="button is-success" v-on:click="acceptCall">
+            <font-awesome-icon :icon="['far', 'phone']" class="button-icon" />
+        </button>
+        <button class="button is-danger" v-on:click="denyCall">
+            <font-awesome-icon :icon="['far', 'phone-slash']" class="button-icon" />
+        </button>
+    </footer>
 </div>
