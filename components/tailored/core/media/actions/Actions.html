@@ -18,7 +18,7 @@
       :type="audio.muted ? 'danger' : 'dark'"
       size="small"
       :icon="{ style: 'far', name: 'microphone-alt' }"
-      :action="() => $store.commit('mute')" />
+      :action="toggleMute" />
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
