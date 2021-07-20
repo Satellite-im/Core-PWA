@@ -7,7 +7,9 @@
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
       <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" />
     </UiModal>
-    <TailoredCoreIncomingCall v-if="$store.state.media.incomingCall" :user="$mock.user" :accaptCall="() => $store.dispatch('acceptCall')" :denyCall="() => $store.dispatch('denyCall')"/>
+    <UiModal v-if="$store.state.media.incomingCall">
+      <TailoredCoreIncomingCall v-if="$store.state.media.incomingCall" :user="$mock.user" :acceptCall="acceptCall" :denyCall="denyCall"/>
+    </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />

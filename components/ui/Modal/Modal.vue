@@ -9,12 +9,12 @@ export default Vue.extend({
     closeModal: {
       type: Function,
       default: () => {},
-      required: true,
+      required: false,
     },
     title: {
       type: String,
       default: '',
-      required: true,
+      required: false,
     },
   },
   methods: {

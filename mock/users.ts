@@ -6,8 +6,6 @@ export const Users = [
     state: 'online',
     last_message:
       'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Halley Themis',
@@ -16,8 +14,6 @@ export const Users = [
     state: 'offline',
     last_message:
       'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Lyra Cassini',
@@ -26,8 +22,6 @@ export const Users = [
     state: 'idle',
     last_message:
       'Tendrils of gossamer clouds stirred by starlight citizens of distant epochs network of wormholes corpus callosum the sky calls to us.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
     name: 'Phoenix Kalindi',
@@ -58,6 +52,4 @@ export const User = {
   state: 'online',
   last_message:
     'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
-  profile_picture:
-    'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
 }
