@@ -41,6 +41,7 @@ export default Vue.extend({
      * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
      */
     isEmbedableImage(filename: string): boolean {
+      // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(
         '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
       )
