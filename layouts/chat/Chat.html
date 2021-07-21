@@ -18,10 +18,7 @@
         id="statusbar"
         :user="$mock.users[0]"/>
       <TailoredCoreMedia /> 
-      <p>Hello</p>
       <Nuxt id="chat" ref="chat" class="hidden-scroll" />
-      <!-- <p>Hello2</p> -->
-
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />
