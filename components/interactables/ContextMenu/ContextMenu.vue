@@ -35,10 +35,9 @@ export default Vue.extend({
       const position = this.$store.state.ui.contextMenuPosition
       let clickX = position.x
       let clickY = position.y
-      const widthOverflow =
-        clickX + contextMenu.clientHeight - window.innerWidth
+      const widthOverflow = clickX + contextMenu.clientWidth - window.innerWidth
       const heightOverflow =
-        clickY + contextMenu.clientWidth - window.innerWidth
+        clickY + contextMenu.clientHeight - window.innerHeight
       if (widthOverflow > -8) {
         clickX -= contextMenu.clientWidth
         this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
