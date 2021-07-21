@@ -19,7 +19,7 @@ export default Vue.extend({
     }, 400)
   },
   updated() {
-    this.scrollToBottom()
+    // this.scrollToBottom()
   },
   methods: {
     scrollToBottom() {
