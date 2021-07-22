@@ -1,3 +1,7 @@
 <div id="direct">
+  <div class="yellow encrypted">
+    <i class="fas fa-key-skeleton"></i> &nbsp;
+    {{ $t('conversation.encrypted') }}
+  </div>
   <TailoredMessagingConversation :messages="$mock.messages" :loading="loading" />
 </div>
