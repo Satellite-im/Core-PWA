@@ -37,16 +37,6 @@ input::placeholder {
   }
 }
 
-@media (max-width: 768px) {
-  .create-server-btn {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: calc(100% - 3rem);
-    height: 53px;
-  }
-}
-
 .input-file {
   display: none;
 }
@@ -74,4 +64,17 @@ input::placeholder {
 
 .red {
   color: @red;
+}
+
+@media (max-width: 768px) {
+  .create-server-container {
+    width: 100%;
+  }
+  .create-server-btn {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: calc(100% - 3rem);
+    height: 53px;
+  }
 }

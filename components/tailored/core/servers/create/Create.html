@@ -11,7 +11,7 @@
                 <p class="set-photo-title">{{$t('servers.create.photo_text')}}</p>
                 <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
                 <InteractablesButton :action="() => $refs.file.click()" type="primary" size="small"
-                    :text="$t('servers.create.photo_button')" class="button is-primary create-server-btn"
+                    :text="$t('servers.create.photo_button')" class="button is-primary"
                     outlined />
             </div>
         </div>
