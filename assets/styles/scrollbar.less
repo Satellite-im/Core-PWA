@@ -45,12 +45,12 @@
   }
 
   .ps__thumb-x {
-    width: 10px;
+    width: 8px;
     background-color: @primary-color;
   }
 
   .ps__thumb-y {
-    width: 10px;
+    width: 8px;
     background-color: @primary-color;
   }
 
@@ -64,5 +64,15 @@
   .ps__rail-y:focus > .ps__thumb-y,
   .ps__rail-y.ps--clicking .ps__thumb-y {
     background-color: @primary-color;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ps__thumb-x {
+    width: 5px;
+  }
+
+  .ps__thumb-y {
+    width: 5px;
   }
 }

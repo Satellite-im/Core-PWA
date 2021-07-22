@@ -14,7 +14,10 @@
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia />
-      <Nuxt id="chat" ref="chat" class="hidden-scroll" />
+      <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll">
+        <Nuxt/>
+      </UiScroll>
+      <Nuxt ref="chat" id="chat"/>
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />

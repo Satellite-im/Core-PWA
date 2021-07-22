@@ -26,16 +26,6 @@ export default Vue.extend({
       default: '',
       required: false,
     },
-    width: {
-      type: Number,
-      default: 300,
-      requierd: false,
-    },
-    height: {
-      type: Number,
-      default: 100,
-      requierd: false,
-    },
     theme: {
       type: String,
       default: 'light',
