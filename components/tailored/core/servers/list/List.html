@@ -28,5 +28,10 @@
       :data-tooltip="$t('global.new_server')" v-on:click="openModal">
       <UiCircle type="icon" :icon="{ style: 'far', name: 'plus' }" :size="40" />
     </div>
+    <div 
+      class="circle-group has-tooltip-right has-tooltip-primary"
+      :data-tooltip="$t('global.new_server')" v-on:click="openIncomingCall">
+      <UiCircle type="icon" :icon="{ style: 'far', name: 'phone' }" :size="40" />
+    </div>
   </div>
 </div>
