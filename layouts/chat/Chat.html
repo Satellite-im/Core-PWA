@@ -5,7 +5,7 @@
       <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     </transition>
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" :openIncomingCall="toggleIncomingCall"/>
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
       <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" />
     </UiModal>
