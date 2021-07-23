@@ -61,11 +61,12 @@ import {
   faChevronRight,
   faTerminal,
   faCommentAltSmile,
-  faKeySkeleton,
+  // faKeySkeleton,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faKeySkeleton } from '@fortawesome/pro-solid-svg-icons'
 
 library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
