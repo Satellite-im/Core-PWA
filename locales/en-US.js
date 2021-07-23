@@ -196,6 +196,6 @@ export default {
     },
   },
   conversation: {
-    encrypted: "Messages are secured by end to end encryption.",
+    encrypted: 'Messages are secured by end to end encryption.',
   },
 }
