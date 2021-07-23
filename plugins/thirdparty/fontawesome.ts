@@ -61,7 +61,6 @@ import {
   faChevronRight,
   faTerminal,
   faCommentAltSmile,
-  // faKeySkeleton,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
