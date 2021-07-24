@@ -42,13 +42,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    classObject: function () {
+    classObject() {
       return {
         'scrollbar-visible': ['always', 'scroll'].includes(
           this.scrollbarVisibility
         ),
         always: this.scrollbarVisibility === 'always',
-        dark: this.theme == 'dark',
+        dark: this.theme === 'dark',
       }
     },
   },
