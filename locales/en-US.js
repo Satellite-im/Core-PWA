@@ -201,4 +201,7 @@ export default {
       select_friends_placeholder: 'Search friends...',
     },
   },
+  conversation: {
+    encrypted: 'Messages are secured by end to end encryption.',
+  },
 }
