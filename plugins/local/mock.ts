@@ -1,15 +1,15 @@
 import Vue from 'vue'
-
-import { Users } from '~/mock/users'
-import { Groups, Group } from '~/mock/groups'
-import { Servers, Unreads } from '~/mock/servers'
-import { Messages } from '~/mock/messages'
 import { Files } from '~/mock/files'
-import { Friends, Friend, Requests, Blocked } from '~/mock/friends'
+import { Blocked, Friend, Friends, Requests } from '~/mock/friends'
+import { Group, Groups } from '~/mock/groups'
+import { Messages } from '~/mock/messages'
+import { Servers, Unreads } from '~/mock/servers'
+import { CallUsers, Users } from '~/mock/users'
 
 const mock = {
   users: Users,
   user: Users[3],
+  callUsers: CallUsers,
   groups: Groups,
   group: Group,
   servers: Servers,
