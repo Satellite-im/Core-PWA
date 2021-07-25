@@ -37,3 +37,14 @@
     box-shadow: 0 0 0 4px @black; /* All the borders by using the spread properties */
   }
 }
+
+@media only screen and (max-width: 768px) {
+  #quick-profile {
+    position: fixed;
+    bottom: 0;
+    top: unset;
+    left: 1rem;
+    right: 1rem;
+    width: calc(100% - 2rem);
+  }
+}
