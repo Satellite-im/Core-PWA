@@ -5,12 +5,12 @@
       <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     </transition>
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" :openIncomingCall="toggleIncomingCall"/>
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
       <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" />
     </UiModal>
-    <UiModal v-if="$store.state.media.incomingCall">
-      <TailoredCoreIncomingCall v-if="$store.state.media.incomingCall" :user="$mock.user" :acceptCall="acceptCall" :denyCall="denyCall"/>
+    <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)">
+      <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)" :acceptCall="acceptCall" :denyCall="denyCall"/>
     </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">

@@ -32,11 +32,6 @@ export default Vue.extend({
         state: !this.$store.state.ui.modals.createServer,
       })
     },
-    toggleIncomingCall() {
-      this.$store.commit('toggleIncomingCall', {
-        toggle: true,
-      })
-    },
     acceptCall() {
       this.$store.dispatch('acceptCall')
     },
