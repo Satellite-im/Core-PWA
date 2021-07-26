@@ -22,11 +22,6 @@ export default Vue.extend({
       default: () => {},
       required: false,
     },
-    openIncomingCall: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
   },
 })
 </script>

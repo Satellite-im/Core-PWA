@@ -8,9 +8,9 @@ interface FetchCallsArguments {
 export default {
   handler: () => {},
   async acceptCall({ commit, state }: FetchCallsArguments) {
-    commit('toggleIncomingCall', false)
+    commit('toggleIncomingCall', '')
   },
   async denyCall({ commit, state }: FetchCallsArguments) {
-    commit('toggleIncomingCall', false)
+    commit('toggleIncomingCall', '')
   },
 }
