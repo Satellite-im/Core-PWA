@@ -61,6 +61,7 @@ import {
   faChevronRight,
   faTerminal,
   faCommentAltSmile,
+  faSearch,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -121,5 +122,7 @@ library.add(faChevronRight)
 library.add(faTerminal)
 library.add(faCompress)
 library.add(faCommentAltSmile)
+library.add(faSearch)
+library.add(faTimes)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
