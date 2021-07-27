@@ -1,6 +1,6 @@
 <div id="friends-list" v-scroll-lock="true">
   <TailoredFriendsNav :setRoute="setRoute" :route="route" />
-  <div class="scrolling hidden-scroll" v-scroll-lock="true">
+  <UiScroll verticalScroll scrollbarVisibility="scroll">
     <div v-if="$data.route === 'active'">
       <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
         <div v-for="entry in Object.entries(alphaSortedFriends)">
@@ -36,5 +36,5 @@
     <div v-if="$data.route === 'add'">
       <TailoredFriendsAdd />
     </div>
-  </div>
+  </UiScroll>
 </div>
