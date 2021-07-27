@@ -102,8 +102,6 @@ export default class Crypto {
 
     const recipientAddress = recipientPublicKey.toBase58()
 
-    console.log('[initializeRecipient/recipientAddress]: ', recipientAddress)
-
     // Check if the aes key for the given recipient is in cache
     if (this.aesKeys[recipientAddress]) {
       return this.aesKeys[recipientAddress]
@@ -116,8 +114,6 @@ export default class Crypto {
     if (!sharedSecret) throw new Error('Impossible to generate shared secret')
 
     const hashedSecret = await this.hash(sharedSecret)
-
-    console.log('[initializeRecipient/hashedSecret]: ', hashedSecret)
 
     this.hashedSecrets[recipientAddress] = hashedSecret
 
@@ -231,10 +227,6 @@ export default class Crypto {
     // Check if the instance has been initialized
     if (!this.isInitialized())
       throw new Error('Crypto Instance not initialized')
-
-    console.log('[encryptFor/recipientAddress]: ', recipientAddress)
-
-    console.log('[encryptFor/aesKey]: ', this.aesKeys)
 
     const aesKey = this.aesKeys[recipientAddress]
 
