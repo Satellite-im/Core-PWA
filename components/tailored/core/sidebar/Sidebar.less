@@ -7,9 +7,16 @@
   display: inline-flex;
   height: 100%;
   background-color: @dark-gray;
-  padding: @normal-spacing;
   display: flex;
   flex-direction: column;
+
+  .padded {
+    padding: @normal-spacing @normal-spacing 0 @normal-spacing;
+  }
+
+  .no-top-pad {
+    padding: 0 @normal-spacing;
+  }
 
   .toggle-sidebar {
     position: absolute;
@@ -49,6 +56,9 @@
 
   .scrolling {
     flex: 1;
+    .ps {
+      padding: 0 @normal-spacing;
+    }
   }
   .loading-container {
     display: inline-flex;
