@@ -15,7 +15,7 @@
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
-      <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.users"/>
+      <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.users" :maxViewableUsers="5" :fullscreenMaxViewableUsers="20"/>
       <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll">
         <Nuxt/>
       </UiScroll>
