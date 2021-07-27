@@ -1,13 +1,12 @@
 <div id="mediastream">
   <TailoredCoreMediaHeading />
   <div id="media" ref="media">
-    <TailoredCoreMediaUser v-for="item in users" :key="item.name" ref="user" :user="{ name: item.name }" :fullscren="fullscreen" />
+    <TailoredCoreMediaUser v-for="item in computedUsers" :key="item.name" ref="user" :user="{ name: item.name, profile_picture: item.profile_picture }" />
+    <div
+      v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
+      class="more-user" v-bind:class="{full: fullscreen}">...</div>
   </div>
-  <TailoredCoreMediaActionsVolume
-    :volume="audio.volume"
-    isPopup
-    @volumeControlValueChange="volumeControlValueChange"
-  />
+  <TailoredCoreMediaActionsVolume :volume="audio.volume" isPopup @volumeControlValueChange="volumeControlValueChange" />
   <!-- {{fullscreen}} -->
   <TailoredCoreMediaActionsSettings />
   <TailoredCoreMediaActions />
