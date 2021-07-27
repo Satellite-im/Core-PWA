@@ -1,7 +1,7 @@
 <div id="quick-profile"
   ref="quickProfile"
   v-click-outside="close"
-  :style="`top: ${$store.state.ui.quickProfilePosition.y}px; left: ${$store.state.ui.quickProfilePosition.x}px;`">
+  :style="$device.isDesktop ? `top: ${$store.state.ui.quickProfilePosition.y}px; left: ${$store.state.ui.quickProfilePosition.x}px;` : ''">
   <div class="header">
     <UiCircle type="random" :seed="user.address" :size="45" />
   </div>
