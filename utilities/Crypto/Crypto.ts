@@ -18,13 +18,14 @@ export default class Crypto {
   init(keypair: Keypair) {
     const publicKey = ed2curve.convertPublicKey(keypair.publicKey.toBytes())
     const secretKey = ed2curve.convertSecretKey(keypair.secretKey)
-    if (publicKey && secretKey) {
-      this.signingKey = {
-        publicKey,
-        secretKey,
-      }
-    } else {
-      throw new Error('Unable to convert keys')
+
+    if (!publicKey || !secretKey) {
+      throw new Error('Impossible to convert keypair')
+    }
+
+    this.signingKey = {
+      publicKey,
+      secretKey,
     }
   }
 
@@ -101,6 +102,8 @@ export default class Crypto {
 
     const recipientAddress = recipientPublicKey.toBase58()
 
+    console.log('[initializeRecipient/recipientAddress]: ', recipientAddress)
+
     // Check if the aes key for the given recipient is in cache
     if (this.aesKeys[recipientAddress]) {
       return this.aesKeys[recipientAddress]
@@ -113,6 +116,8 @@ export default class Crypto {
     if (!sharedSecret) throw new Error('Impossible to generate shared secret')
 
     const hashedSecret = await this.hash(sharedSecret)
+
+    console.log('[initializeRecipient/hashedSecret]: ', hashedSecret)
 
     this.hashedSecrets[recipientAddress] = hashedSecret
 
@@ -175,6 +180,7 @@ export default class Crypto {
     const encodedText = new TextEncoder().encode(data)
 
     const iv = window.crypto.getRandomValues(new Uint8Array(ivLen))
+
     const encryptedData = await window.crypto.subtle.encrypt(
       {
         name: 'AES-CBC',
@@ -225,6 +231,10 @@ export default class Crypto {
     // Check if the instance has been initialized
     if (!this.isInitialized())
       throw new Error('Crypto Instance not initialized')
+
+    console.log('[encryptFor/recipientAddress]: ', recipientAddress)
+
+    console.log('[encryptFor/aesKey]: ', this.aesKeys)
 
     const aesKey = this.aesKeys[recipientAddress]
 
@@ -287,8 +297,7 @@ export default class Crypto {
    * @returns Decrypted plaintext.
    *
    * @example
-   *   const plaintext = await decryptWithPassword(ciphertext, 'pw');
-   *   decryptWithPassword(ciphertext, 'pw').then(function(plaintext) { console.log(plaintext); });
+   *   const plaintext = await Crypto.decryptWithPassword(ciphertext, 'pw');
    */
   async decryptWithPassword(
     encryptedString: string,
@@ -296,23 +305,9 @@ export default class Crypto {
   ): Promise<string | null> {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
     const pwHash = await this.hash(pwUtf8) // hash the password
+    const aesKey = await this.aesKeyFromSharedSecret(pwHash)
 
-    const encodedText = new Uint8Array(Buffer.from(encryptedString, 'base64'))
-
-    const { iv } = this.separateIvFromData(encodedText)
-
-    const alg = { name: 'AES-GCM', iv } // specify algorithm to use
-
-    const key = await crypto.subtle.importKey(
-      'raw',
-      Buffer.from(pwHash, 'hex'),
-      alg,
-      false,
-      ['decrypt']
-    ) // use pw to generate key
-
-    const plaintext = await this.decrypt(encryptedString, key)
-    return plaintext // return the plaintext
+    return this.decrypt(encryptedString, aesKey)
   }
 
   /**
@@ -324,8 +319,7 @@ export default class Crypto {
    * @returns Encrypted ciphertext.
    *
    * @example
-   *   const ciphertext = await encryptWithPassword('my secret text', 'pw');
-   *   encryptWithPassword('my secret text', 'pw').then(function(ciphertext) { console.log(ciphertext); });
+   *   const encryptedText = await Crypto.encryptWithPassword('my secret text', 'pw');
    */
   async encryptWithPassword(
     plaintext: string,
@@ -334,18 +328,8 @@ export default class Crypto {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
     const pwHash = await this.hash(pwUtf8)
 
-    const iv = crypto.getRandomValues(new Uint8Array(ivLen)) // get 96-bit random iv
+    const aesKey = await this.aesKeyFromSharedSecret(pwHash)
 
-    const alg = { name: 'AES-GCM', iv } // specify algorithm to use
-
-    const key = await crypto.subtle.importKey(
-      'raw',
-      Buffer.from(pwHash, 'hex'),
-      alg,
-      false,
-      ['encrypt']
-    ) // generate key from pw
-
-    return this.encrypt(plaintext, key)
+    return this.encrypt(plaintext, aesKey)
   }
 }
