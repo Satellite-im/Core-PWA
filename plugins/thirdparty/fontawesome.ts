@@ -62,6 +62,7 @@ import {
   faTerminal,
   faCommentAltSmile,
   faSearch,
+  faKeySkeleton
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -124,5 +125,6 @@ library.add(faCompress)
 library.add(faCommentAltSmile)
 library.add(faSearch)
 library.add(faTimes)
+library.add(faKeySkeleton)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

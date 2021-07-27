@@ -20,6 +20,8 @@
 @enhancers-width: 20rem;
 @light-spacing: 0.5rem;
 @normal-spacing: 1rem;
+@scrollbar-width: 5px;
+@scrollbar-width-mobile: 3px;
 
 html,
 body {
@@ -36,11 +38,10 @@ body {
   color: @bright-text;
 }
 
-
 .hidden-scroll {
   overflow-y: auto;
   position: relative;
-  
+
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -50,3 +51,4 @@ body {
 }
 
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');
+@import url('~/assets/styles/scrollbar.less');
