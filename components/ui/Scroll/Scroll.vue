@@ -31,6 +31,11 @@ export default Vue.extend({
       default: 'light',
       required: false,
     },
+    padded: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   data() {
     return {
