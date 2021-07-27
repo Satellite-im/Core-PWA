@@ -1,3 +1,8 @@
 <div id="direct">
+  <div id="encrypted-yellow">
+    <font-awesome-icon :icon="['far', 'key-skeleton']" />
+    &nbsp;
+    {{$t('conversation.encrypted')}}
+  </div>
   <TailoredMessagingConversation :messages="$mock.messages" :loading="loading" />
 </div>

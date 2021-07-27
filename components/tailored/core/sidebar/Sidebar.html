@@ -4,21 +4,23 @@
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
 >
-  <TypographyTitle :size="6" :text="$t('global.name')" />
+  <div class="padded">
+    <TypographyTitle :size="6" :text="$t('global.name')" />
+    <UiSpacer :height="15" />
+    <font-awesome-icon
+      :icon="['far', 'bars']"
+      class="toggle-sidebar"
+      v-on:click="toggle"
+    />
+    <InteractablesInput
+      :placeholder="`${$t('global.search')}...`"
+      size="small"
+      input-kind="text"
+      type="dark"
+    />
+  </div>
   <UiSpacer :height="15" />
-  <font-awesome-icon
-    :icon="['far', 'bars']"
-    class="toggle-sidebar"
-    v-on:click="toggle"
-  />
-  <InteractablesInput
-    :placeholder="`${$t('global.search')}...`"
-    size="small"
-    input-kind="text"
-    type="dark"
-  />
-  <UiSpacer :height="15" />
-  <div class="columns is-mobile tab-menu">
+  <div class="columns is-mobile tab-menu padded no-top-pad">
     <div class="column" style="padding-right: 0.5rem; position: relative">
       <InteractablesButton
         full-width
@@ -45,7 +47,7 @@
     </div>
   </div>
 
-  <div class="tabs sidebar-selector">
+  <div class="tabs sidebar-selector padded no-top-pad">
     <InteractablesButton
       full-width
       :outlined="!ui.showSidebarUsers"
@@ -70,38 +72,44 @@
     v-scroll-lock="true"
     v-if="ui.showSidebarUsers"
   >
-    <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
-      <TailoredCoreUser
-        v-for="user in users"
-        :user="user"
-        :key="user.address"
-      />
-      <div
-        class="loading-container"
-        v-if="$store.state.dataState.friends === DataStateType.Updating"
-      >
-        <UiLoadersUpdating />
+    <UiScroll verticalScroll scrollbarVisibility="scroll">
+      <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+        <TailoredCoreUser
+          v-for="user in users"
+          :user="user"
+          :key="user.address"
+        />
+        <div
+          class="loading-container"
+          v-if="$store.state.dataState.friends === DataStateType.Updating"
+        >
+          <UiLoadersUpdating />
+        </div>
       </div>
-    </div>
-    <UiLoadersAddress v-else :count="5" inverted />
+      <UiLoadersAddress v-else :count="5" inverted />
+    </UiScroll>
   </div>
   <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-    <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
-      <TailoredCoreGroup
-        v-for="group in groups"
-        :group="group"
-        :key="group.address"
-      />
-      <div
-        class="loading-container"
-        v-if="$store.state.dataState.friends === DataStateType.Updating"
-      >
-        <UiLoadersUpdating />
+    <UiScroll verticalScroll scrollbarVisibility="scroll">
+      <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+        <TailoredCoreGroup
+          v-for="group in groups"
+          :group="group"
+          :key="group.address"
+        />
+        <div
+          class="loading-container"
+          v-if="$store.state.dataState.friends === DataStateType.Updating"
+        >
+          <UiLoadersUpdating />
+        </div>
       </div>
-    </div>
-    <UiLoadersAddress v-else :count="5" inverted />
+      <UiLoadersAddress v-else :count="5" inverted />
+    </UiScroll>
   </div>
 
-  <TailoredCoreSidebarControls />
-  <TailoredCoreSidebarStatus />
+  <div class="padded no-top-pad">
+    <TailoredCoreSidebarControls />
+    <TailoredCoreSidebarStatus />
+  </div>
 </div>
