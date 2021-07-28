@@ -1,6 +1,6 @@
 import DetectRTC from 'detectrtc'
 
-type PermissionRequestOptions = 'audio' | 'video'
+export type PermissionRequestOptions = MediaStreamConstraints | undefined
 
 interface permissionObject {
   hasWebcam: Boolean
@@ -105,10 +105,7 @@ export const UserPermissions = {
     async requestUserPermissions(
       permission: PermissionRequestOptions
     ): Promise<any> {
-      const permissionValue: any = {
-        [permission as any]: true,
-      }
-      return await navigator.mediaDevices.getUserMedia({ ...permissionValue })
+      return await navigator.mediaDevices.getUserMedia(permission)
     },
   },
 }

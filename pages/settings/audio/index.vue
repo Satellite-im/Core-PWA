@@ -4,7 +4,10 @@
 import Vue from 'vue'
 
 import { mapState } from 'vuex'
-import { UserPermissions } from '../../../components/mixins/UserPermissions'
+import {
+  PermissionRequestOptions,
+  UserPermissions,
+} from '../../../components/mixins/UserPermissions'
 import { Bitrates, SampleSizes } from './options/audio'
 
 declare module 'vue/types/vue' {
@@ -12,7 +15,9 @@ declare module 'vue/types/vue' {
   interface Vue {
     setupDefaults: () => void
     getUserPermissions: () => Promise<any>
-    requestUserPermissions: (key: string) => Promise<any>
+    requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>
+    getMicLevel: (stream: MediaStream) => void
+    setupMicMeter: (stream: MediaStream) => void
   }
 }
 export default Vue.extend({
@@ -27,6 +32,9 @@ export default Vue.extend({
       userHasGivenAudioAccess: false,
       userDeniedAudioAccess: false,
       browserAllowsAudioOut: true,
+      micLevel: 0,
+      stream: null,
+      updateInterval: null,
     }
   },
   computed: {
@@ -82,13 +90,88 @@ export default Vue.extend({
       },
     },
   },
+  watch: {
+    async '$store.state.settings.audioInput'(newValue, oldValue) {
+      // If there is an oldValue in the persisted state
+      if (oldValue !== '') {
+        // Close old MediaStream
+        if (this.$data.stream) {
+          this.$data.stream
+            .getAudioTracks()
+            .forEach(function (track: MediaStreamTrack) {
+              track.stop()
+            })
+        }
+
+        // Open new MediaStream
+        const stream = await this.requestUserPermissions({
+          audio: { deviceId: newValue },
+        })
+        this.setupMicMeter(stream)
+      }
+    },
+  },
   mounted() {
-    this.setupDefaults()
+    // Check for new input sources
+    this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
+  },
+  beforeDestroy() {
+    if (this.$data.stream) {
+      this.$data.stream
+        .getAudioTracks()
+        .forEach(function (track: MediaStreamTrack) {
+          track.stop()
+        })
+    }
+    clearInterval(this.$data.updateInterval)
   },
   methods: {
     ...UserPermissions.methods,
+    getMicLevel(stream: MediaStream) {
+      const audioContext = new AudioContext()
+      const gainNode = audioContext.createGain()
+      const analyser = audioContext.createAnalyser()
+      const microphone = audioContext.createMediaStreamSource(stream)
+      const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1)
+
+      microphone.connect(gainNode)
+      gainNode.connect(analyser)
+      analyser.connect(javascriptNode)
+      javascriptNode.connect(audioContext.destination)
+
+      const array = new Uint8Array(analyser.frequencyBinCount)
+
+      const draw = () => {
+        // Update gain based on inputVolume
+        gainNode.gain.setValueAtTime(
+          this.$store.state.audio.inputVolume / 100,
+          audioContext.currentTime
+        )
+        requestAnimationFrame(draw)
+
+        analyser.getByteFrequencyData(array)
+        let values = 0
+
+        const length = array.length
+        for (let i = 0; i < length; i++) {
+          values += array[i]
+        }
+
+        const average = values / length
+
+        // The micLevel can range between 0 and 100 approximately and we have 25 ticks on the meter, this is why we divide the value by 4.
+        this.$data.micLevel = Math.round(average / 4)
+      }
+
+      draw()
+    },
+    setupMicMeter(stream: MediaStream) {
+      this.$data.stream = stream
+      this.getMicLevel(stream)
+    },
     async setupDefaults() {
       const permissionsObject: any = await this.getUserPermissions()
+
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
         permissionsObject.permissions.microphone
@@ -105,6 +188,13 @@ export default Vue.extend({
         if (!this.settings.audioOutput) {
           this.isAudioOutput = permissionsObject.devices.audioOut[0].value
         }
+
+        if (!this.$data.stream) {
+          const stream = await this.requestUserPermissions({
+            audio: { deviceId: this.$store.state.settings.audioInput },
+          })
+          this.setupMicMeter(stream)
+        }
       }
 
       if (permissionsObject.browser !== 'Chrome') {
@@ -116,7 +206,8 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        await this.requestUserPermissions('audio')
+        const stream = await this.requestUserPermissions({ audio: true })
+        this.setupMicMeter(stream)
         this.$data.userHasGivenAudioAccess = true
         this.setupDefaults()
       } catch (_: any) {
