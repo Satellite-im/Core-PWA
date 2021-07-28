@@ -45,6 +45,7 @@ input::placeholder {
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
+  width: 100%;
 }
 
 .input-container {
@@ -66,15 +67,38 @@ input::placeholder {
   color: @red;
 }
 
+.modal-body {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.custom-modal-content {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .create-server-container {
     width: 100%;
   }
+
+  .custom-modal-content {
+    height: calc(100% - 90px);
+    overflow-y: scroll;
+  }
+
+  .submit-container {
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    margin-top: 0px;
+  }
+
   .create-server-btn {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: calc(100% - 3rem);
+    // position: absolute;
+    // bottom: 1.5rem;
+    // right: 1.5rem;
+    width: 100%;
     height: 53px;
   }
 }

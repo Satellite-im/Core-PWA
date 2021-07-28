@@ -2,7 +2,10 @@
     <ImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
         :imageUrl="imageUrl" />
     <div v-if="showCropper" class="cropper-mask" />
-    <div>
+    <div class='modal-body'>
+        <div class="custom-modal-content">
+        <UiScroll ref="chat" verticalScroll>
+
         <div class="columns">
             <div class="column" style="max-width: 175px;">
                 <UiCircle type="image" :source="croppedImage" :size="150" />
@@ -30,6 +33,9 @@
         </div>
 
         <p class="red" v-if="error">{{error}}</p>
+    </UiScroll>
+    </div>
+
         <!-- <hr class="divider"> -->
         <div class="submit-container">
             <InteractablesButton type="primary" size="normal" :text="$t('servers.create.create_server')"
