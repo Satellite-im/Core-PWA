@@ -1,4 +1,4 @@
-<div id="enhancers" v-if="$store.state.ui.showEnhancers">
+<div id="enhancers" v-if="$store.state.ui.showEnhancers" v-click-outside="outside">
   <div class="navbar">
     <InteractablesButton
       :outlined="route === 'glyphs' ? false : true"

@@ -23,6 +23,7 @@ export default Vue.extend({
     /**
      * Adds emoji to current text input
      * (emoji: any) Comes from <picker/> select event
+     *
      */
     addEmoji(emoji: any) {
       this.$store.commit(
@@ -32,6 +33,10 @@ export default Vue.extend({
     },
     setRoute(route: string) {
       this.$data.route = route
+    },
+
+    outside: function (e: Event) {
+      this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
     },
   },
 })
