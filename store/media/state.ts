@@ -1,9 +1,9 @@
 interface MediaState {
-  incomingCall: Boolean
+  incomingCall: String
 }
 
 const InitialMediaState: MediaState = {
-  incomingCall: false,
+  incomingCall: 'Phoenix Kalindi',
 }
 
 export default InitialMediaState
