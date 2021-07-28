@@ -8,11 +8,9 @@ interface FetchCallsArguments {
 export default {
   handler: () => {},
   async acceptCall({ commit, state }: FetchCallsArguments) {
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-    commit('toggleIncomingCall', false)
+    commit('toggleIncomingCall', '')
   },
   async denyCall({ commit, state }: FetchCallsArguments) {
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-    commit('toggleIncomingCall', false)
+    commit('toggleIncomingCall', '')
   },
 }
