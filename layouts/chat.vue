@@ -13,6 +13,7 @@ export default Vue.extend({
       sidebar: true,
     }
   },
+<<<<<<< HEAD
   mounted() {
     setTimeout(() => {
       this.scrollToBottom()
@@ -22,11 +23,9 @@ export default Vue.extend({
   updated() {
     // this.scrollToBottom()
   },
+=======
+>>>>>>> 7299f680bad499f0bc7159cb43a0944afcf51dda
   methods: {
-    scrollToBottom() {
-      const container = (this.$refs.chat as Vue).$el as Element
-      container.scrollTop = container.scrollHeight
-    },
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
