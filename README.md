@@ -2,6 +2,8 @@
 
 # Satellite-Absolute
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8dff7efb-8ce4-4eef-871a-cdf1f665d676/deploy-status)](https://app.netlify.com/sites/pensive-newton-4113d6/deploys)
+
 # Running
 
 ## Environment
