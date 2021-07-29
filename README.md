@@ -29,3 +29,8 @@ To start running locally complete the Environment setup and then run `npx dotenv
 
 Please lint your code before submitting. `npx dotenv yarn lint`. Lints must pass before submitting a PR.
 Please document all new methods and files.
+
+# Contributors
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=Satellite-im/Satellite-Absolute)
+
