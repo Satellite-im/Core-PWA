@@ -200,7 +200,7 @@ export default Vue.extend({
       if (permissionsObject.browser !== 'Chrome') {
         this.$data.browserAllowsAudioOut = false
       } else if (!this.settings.audioOutput) {
-        this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+        this.isAudioOutput = permissionsObject.devices.audioOut[0]?.value || ''
       }
     },
     async enableAudio() {
