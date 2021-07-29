@@ -7,7 +7,7 @@
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
-      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" />
+      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" v-click-outside="toggleModal" />
     </UiModal>
     <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)">
       <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)" :acceptCall="acceptCall" :denyCall="denyCall"/>
