@@ -139,6 +139,9 @@
         :size="6"
         :text="$t('pages.settings.audio.inputVolume.title')"
       />
+      <div class="meter-container">
+        <UiMeter :value="micLevel" :height="45"/>
+      </div>
       <TailoredCoreMediaActionsVolume
         :volume="audio.inputVolume"
         direction="ltr"
