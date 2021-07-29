@@ -2,7 +2,6 @@
 import * as nsfwjs from 'nsfwjs'
 
 export const isNSFW = (file: File) => {
-  console.log('Checking NSFW')
   const fileTypePrefix = file.type.split('/')[0]
   if (fileTypePrefix !== 'image') {
     return false
@@ -17,10 +16,8 @@ export const isNSFW = (file: File) => {
       return model.classify(imgElement)
     })
     .then((predictionsArr) => {
-      console.log('Results')
       const predictionObj = {}
       for (const prediction of predictionsArr) {
-        console.log(prediction)
         predictionObj[prediction.className] = prediction.probability
       }
 
@@ -29,7 +26,6 @@ export const isNSFW = (file: File) => {
         predictionObj.Hentai > 0.6 ||
         predictionObj.Sexy > 0.7
 
-      console.log(predictionResults)
       return predictionResults
     })
 }
