@@ -64,18 +64,18 @@ export default Vue.extend({
     /**
      * Triggered when a file is changed on the input
      */
-    handleFile(event: any) {
+    async handleFile(event: any) {
       this.$data.file = event.target.files[0]
+      this.$data.nsfw.checking = true
+      this.$data.nsfw.status = await isNSFW(this.$data.file)
+      this.$data.nsfw.checking = false
       this.loadPicture(this.$data.file)
     },
     /**
      * Load a picture into a data URL push to data
      */
-    async loadPicture(file: File) {
+    loadPicture(file: File) {
       if (!file) return
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await isNSFW(file)
-      this.$data.nsfw.checking = false
       const self = this
       const reader = new FileReader()
       reader.onload = function (e: Event | any) {
