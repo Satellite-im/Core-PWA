@@ -2,12 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { isNSFW } from '~/utilities/nsfw'
 
 export default Vue.extend({
   data() {
     return {
       file: false,
       url: false,
+      nsfw: { status: false, checking: false },
     }
   },
   props: {
@@ -27,8 +29,11 @@ export default Vue.extend({
     /**
      * Load a picture into a data URL push to data
      */
-    loadPicture(file: File) {
+    async loadPicture(file: File) {
       if (!file) return
+      this.$data.nsfw.checking = true
+      this.$data.nsfw.status = await isNSFW(file)
+      this.$data.nsfw.checking = false
       const self = this
       const reader = new FileReader()
       reader.onload = function (e: Event | any) {
