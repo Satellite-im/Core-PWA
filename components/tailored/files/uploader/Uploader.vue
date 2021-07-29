@@ -24,6 +24,11 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    nsfw: {
+      type: Object,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: { status: false, checking: false },
+    },
   },
   methods: {
     /**
