@@ -1,30 +1,19 @@
 .create-server-container {
-  width: 600px;
-  padding: 40px;
+  width: @normal-modal-size;
 }
 
-input:focus,
-input:focus {
-  outline: none !important;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-input::placeholder {
-  color: #666;
-  opacity: 0.75;
-}
 .address {
-  font-size: 10pt;
+  font-size: @text-size;
   color: #ccc;
 }
-.modal-card-title {
-  margin-left: 1rem;
+
+.is-rounded.circle {
+  background-color: @light-gray !important;
 }
 
 .label {
-  font-size: 14pt;
-  color: @bright-text!important;
+  font-size: @text-size;
+  color: @bright-text !important;
 }
 
 .column.align {
@@ -54,7 +43,7 @@ input::placeholder {
 
 .cropper-mask {
   position: fixed;
-  background: @darker;
+  background-color: @light-gray !important;
   opacity: 0.6;
   z-index: 9;
   height: 100%;
