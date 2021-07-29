@@ -16,7 +16,7 @@
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia />
-      <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll">
+      <UiScroll ref="chat" id="ui-scroll" verticalScroll scrollbarVisibility="scroll">
         <Nuxt/>
       </UiScroll>
       <Nuxt ref="chat" id="chat"/>
