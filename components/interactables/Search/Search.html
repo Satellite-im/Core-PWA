@@ -6,15 +6,6 @@
     <div class="search-icon">
       <font-awesome-icon :icon="['far', 'search']" />
     </div>
-    <!-- <input
-      ref="searchInput"
-      class="search-input"
-      v-model="text"
-      @keyup="keyup"
-      @keydown="keydown"
-      @change="change"
-      @focus="setFocus"
-    /> -->
     <div class="search-input-container">
       <div
         ref="searchInput"
@@ -24,18 +15,23 @@
         @keyup="keyup"
         @keypress="keypress"
         @input="input"
-      >
-      </div>
+      ></div>
     </div>
-    <button class="search-clear" @click="clearSearch">
+    <button class="search-clear" @click="clearSearch" v-if="!isEmpty">
       <font-awesome-icon :icon="['far', 'times']" />
     </button>
   </div>
   <div :class="{'search-options': true}" v-if="isFocus">
     <template v-if="isEmpty">
       <ul class="search-option-group">
-        Search Options
+        SEARCH OPTIONS
         <li>from: user</li>
+        <li>mentions: user</li>
+        <li>has: link, embed or file</li>
+        <li>before: specific date</li>
+        <li>during: specific date</li>
+        <li>after: user</li>
+        <li>in: channel</li>
       </ul>
     </template>
   </div>
