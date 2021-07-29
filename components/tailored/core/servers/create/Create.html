@@ -2,16 +2,22 @@
     <ImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
         :imageUrl="imageUrl" />
     <div v-if="showCropper" class="cropper-mask" />
-    <div>
+    <div class='modal-body'>
+        <div class="custom-modal-content">
+        <UiScroll ref="chat" verticalScroll>
+
         <div class="columns">
             <div class="column" style="max-width: 175px;">
-                <UiCircle type="image" :source="croppedImage" :size="150" />
+                <UiCircle type="image" :source="croppedImage" :size="120" />
             </div>
             <div class="column align">
-                <p class="set-photo-title">{{$t('servers.create.photo_text')}}</p>
+                <TypographyText class="set-photo-title" :text="$t('servers.create.photo_text')" />
                 <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
-                <InteractablesButton :action="() => $refs.file.click()" type="primary" size="small"
-                    :text="$t('servers.create.photo_button')" class="button is-primary"
+                <InteractablesButton 
+                    :action="() => $refs.file.click()" 
+                    type="primary" 
+                    size="small"
+                    :text="$t('servers.create.photo_button')" 
                     outlined />
             </div>
         </div>
@@ -19,21 +25,38 @@
 
         <div class="input-container">
             <span class="label">{{$t('servers.create.server_name')}}</span>
-            <InteractablesInput :placeholder="$t('servers.create.server_name_placeholder')" size="small" v-model="name"
-                input-kind="text" type="dark" />
+            <InteractablesInput 
+                :placeholder="$t('servers.create.server_name_placeholder')" 
+                size="small" 
+                v-model="name"
+                input-kind="text" 
+                outlined 
+                type="primary" />
         </div>
 
         <div class="input-container">
             <span class="label">{{$t('servers.create.select_friends')}}</span>
-            <InteractablesInput :placeholder="$t('servers.create.select_friends_placeholder')" size="small"
-                input-kind="text" type="dark" />
+            <InteractablesInput 
+                :placeholder="$t('servers.create.select_friends_placeholder')"
+                size="small"
+                input-kind="text" 
+                outlined 
+                type="primary" />
         </div>
 
         <p class="red" v-if="error">{{error}}</p>
+    </UiScroll>
+    </div>
+
         <!-- <hr class="divider"> -->
         <div class="submit-container">
-            <InteractablesButton type="primary" size="normal" :text="$t('servers.create.create_server')"
-                class="button is-primary create-server-btn" outlined :action="confirm"/>
+            <InteractablesButton 
+                type="primary"
+                size="small"
+                :text="$t('servers.create.create_server')"
+                class="create-server-btn"
+                outlined
+                :action="confirm"/>
         </div>
     </div>
 </div>
