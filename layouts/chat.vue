@@ -17,6 +17,7 @@ export default Vue.extend({
     setTimeout(() => {
       this.scrollToBottom()
     }, 400)
+    this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
   },
   updated() {
     // this.scrollToBottom()
