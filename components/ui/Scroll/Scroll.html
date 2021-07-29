@@ -1,4 +1,4 @@
-<vue-custom-scrollbar v-scroll-lock="true" :class="[padded ? 'padded scroll-area' : 'scroll-area', classObject]" 
-    :settings="settings">
+<vue-custom-scrollbar v-scroll-lock="true" :class="[padded ? 'padded scroll-area' : 'scroll-area', classObject]"
+    :settings="settings" v-bind:style="{ height: height + 'px', width: width + 'px', position: position }"">
     <slot />
 </vue-custom-scrollbar>
