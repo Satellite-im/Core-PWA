@@ -124,10 +124,11 @@ export default Vue.extend({
         this.$data.userDeniedAudioAccess = true
       }
     },
-    volumeControlValueChange(volume: Number) {
+    volumeControlValueChange(volume: number) {
+      this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('setVolume', volume)
     },
-    inputVolumeControlValueChange(volume: Number) {
+    inputVolumeControlValueChange(volume: number) {
       this.$store.commit('setInputVolume', volume)
     },
   },
