@@ -11,6 +11,7 @@ export default {
 
   router: {
     mode: 'hash',
+    middleware: ['authenticated'],
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head

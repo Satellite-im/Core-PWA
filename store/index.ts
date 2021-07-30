@@ -1,3 +1,5 @@
+import AccountsMutations from './accounts/mutations'
+import AccountsActions from './accounts/actions'
 import AudioVideoMutations from './audio/mutations'
 import DataStateMutations from './dataState/mutations'
 import FileActions from './files/actions'
@@ -17,10 +19,12 @@ export const mutations = {
   ...FriendsMutations,
   ...DataStateMutations,
   ...MediaMutations,
+  ...AccountsMutations,
 }
 
 export const actions = {
   ...FileActions,
   ...FriendActions,
   ...MediaActions,
+  ...AccountsActions,
 }
