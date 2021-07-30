@@ -7,13 +7,16 @@ import {
   Bitrates,
   SampleSizes,
 } from '../../../../../../pages/settings/audio/options/audio'
-import { UserPermissions } from '../../../../../mixins/UserPermissions'
+import {
+  PermissionRequestOptions,
+  UserPermissions,
+} from '../../../../../mixins/UserPermissions'
 
 declare module 'vue/types/vue' {
   interface Vue {
     setupDefaults: () => void
     getUserPermissions: () => Promise<any>
-    requestUserPermissions: (key: string) => Promise<any>
+    requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>
   }
 }
 export default Vue.extend({
@@ -141,7 +144,7 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        await this.requestUserPermissions('audio')
+        await this.requestUserPermissions({ audio: true })
         this.$data.userHasGivenAudioAccess = true
         this.setupDefaults()
       } catch (_: any) {
