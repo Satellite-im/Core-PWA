@@ -24,6 +24,9 @@
   .circle-group {
     margin: @normal-spacing 0;
     color: @text;
+    bottom: 0rem;
+    position: absolute;
+    margin-bottom: 0.7rem;
   }
 
   .servers {
@@ -50,6 +53,24 @@
       color: @text;
       font-family: @primary-font;
       border: 2px solid @darker;
+    }
+  }
+
+  .server,
+  .unread {
+    width: 50px;
+  }
+
+  #list-container {
+    height: calc(50% - 6.2rem);
+    position: relative;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #servers-vertical-list {
+    .circle-group {
+      bottom: 4.3rem;
     }
   }
 }
