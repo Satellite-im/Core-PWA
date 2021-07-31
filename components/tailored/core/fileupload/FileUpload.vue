@@ -2,12 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { isNSFW } from '~/utilities/nsfw'
 
 export default Vue.extend({
   data() {
     return {
       file: false,
       url: false,
+      nsfw: { status: false, checking: false },
     }
   },
   props: {
@@ -20,8 +22,11 @@ export default Vue.extend({
     /**
      * Triggered when a file is changed on the input
      */
-    handleFile(event: any) {
+    async handleFile(event: any) {
       this.$data.file = event.target.files[0]
+      this.$data.nsfw.checking = true
+      this.$data.nsfw.status = await isNSFW(this.$data.file)
+      this.$data.nsfw.checking = false
       this.loadPicture(this.$data.file)
     },
     /**
