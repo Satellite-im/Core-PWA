@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DataStateType } from '~/store/dataState/state'
+import { isNSFW } from '~/utilities/nsfw'
 
 export default Vue.extend({
   name: 'Files',
@@ -13,6 +14,7 @@ export default Vue.extend({
       path: [],
       file: false as File | Boolean,
       url: '' as String,
+      nsfw: { status: false, checking: false } as Object,
     }
   },
   computed: {
@@ -62,8 +64,11 @@ export default Vue.extend({
     /**
      * Triggered when a file is changed on the input
      */
-    handleFile(event: any) {
+    async handleFile(event: any) {
       this.$data.file = event.target.files[0]
+      this.$data.nsfw.checking = true
+      this.$data.nsfw.status = await isNSFW(this.$data.file)
+      this.$data.nsfw.checking = false
       this.loadPicture(this.$data.file)
     },
     /**
