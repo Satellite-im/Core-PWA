@@ -1,31 +1,30 @@
 <div id="servers-vertical-list">
   <div class="servers">
-    <div
-      data-tooltip="Home"
-      v-on:click="$router.push('/chat/direct')"
+    <div data-tooltip="Home" v-on:click="$router.push('/chat/direct')"
       class="logo has-tooltip-right has-tooltip-primary">
       <img src="~/assets/img/icon_wht.png" alt="" />
     </div>
     <UiHorizontalRule v-if="unreads.length > 0" />
-    <div
-      class="unread has-tooltip-right has-tooltip-primary"
-      v-for="user in unreads"
-      v-on:click="$router.push('/chat/direct')"
-      :data-tooltip="user.name">
-      <UiCircle type="random" :size="40" :seed="user.address" />
-      <span class="label">{{user.count}}</span>
+    <div id="list-container">
+      <UiScroll verticalScroll :width="200" position="absolute">
+        <div class="unread has-tooltip-right has-tooltip-primary" v-for="user in unreads"
+          v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">
+          <UiCircle type="random" :size="40" :seed="user.address" />
+          <span class="label">{{user.count}}</span>
+        </div>
+      </UiScroll>
     </div>
     <UiHorizontalRule v-if="unreads.length > 0" />
-    <div
-      class="server has-tooltip-right has-tooltip-primary"
-      v-for="server in servers"
-      v-on:click="$router.push('/server/chat')"
-      :data-tooltip="server.name">
-      <UiCircle type="random" :size="40" :seed="server.address" />
+    <div id="list-container">
+      <UiScroll verticalScroll :width="200" position="absolute">
+        <div class="server has-tooltip-right has-tooltip-primary" v-for="server in servers"
+          v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
+          <UiCircle type="random" :size="40" :seed="server.address" />
+        </div>
+      </UiScroll>
     </div>
-    <div 
-      class="circle-group has-tooltip-right has-tooltip-primary"
-      :data-tooltip="$t('global.new_server')" v-on:click="openModal">
+    <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('global.new_server')"
+      v-on:click="openModal">
       <UiCircle type="icon" :icon="{ style: 'far', name: 'plus' }" :size="40" />
     </div>
   </div>
