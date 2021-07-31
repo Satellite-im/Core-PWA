@@ -4,14 +4,14 @@
       v-model="pin"
       size="small"
       input-kind="password"
-      :type="`${error ? 'danger' : 'primary'}`"
+      :type="`${accountError ? 'danger' : 'primary'}`"
       :label-text="`${newAccount ? $t('pages.unlock.create') : $t('pages.unlock.decrypt')}`"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
       :action="decideAction"
       :icon="getIcon()"
     />
-    <TypographyError v-if="error" :text="error" />
+    <TypographyError v-if="accountError" :text="$t(accountError)" />
     <InteractablesSwitch
       v-model="storePin"
       small
