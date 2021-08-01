@@ -2,6 +2,7 @@
   position: fixed;
   z-index: 3;
   width: 250px;
+  max-width: calc(100% - 2rem);
   top: 4rem;
   left: 4rem;
   padding: @normal-spacing;
@@ -38,13 +39,9 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 440px) {
   #quick-profile {
-    position: fixed;
-    bottom: 0;
-    top: unset;
-    left: 1rem;
-    right: 1rem;
-    width: calc(100% - 2rem);
+    transform: translateX(-50%) !important;
+    left: 50% !important;
   }
 }

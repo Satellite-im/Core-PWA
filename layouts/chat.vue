@@ -13,6 +13,15 @@ export default Vue.extend({
       sidebar: true,
     }
   },
+  mounted() {
+    // setTimeout(() => {
+    //   this.scrollToBottom()
+    // }, 400)
+    this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
+  },
+  updated() {
+    // this.scrollToBottom()
+  },
   methods: {
     toggleModal() {
       this.$store.commit('toggleModal', {
