@@ -24,6 +24,11 @@ export default Vue.extend({
       required: true,
     },
   },
+  methods: {
+    change(value: String) {
+      console.log(value)
+    },
+  },
 })
 </script>
 

@@ -22,7 +22,8 @@
         class="control-icon"
         :icon="['far', 'video']" />
     </div>
-    <InteractablesInput v-if="!$device.isMobile" class="input-wrap" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." />
+    <!-- <InteractablesInput v-if="!$device.isMobile" class="input-wrap" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." /> -->
+    <InteractablesSearch @change="change" />
     <div
       class="token-balance has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
