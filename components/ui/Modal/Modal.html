@@ -3,7 +3,7 @@
     <div class="modal-card">
         <header v-if="title" class="modal-card-head">
             <span class="close" v-on:click="close">×</span>
-            <h2 class="title">{{title}}</h2>
+            <TypographyTitle :text="title" :size="6" />
           </header>
         <section class="modal-card-body">
             <slot/>

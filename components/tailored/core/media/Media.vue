@@ -10,6 +10,7 @@ export default Vue.extend({
   },
   methods: {
     volumeControlValueChange(volume: number) {
+      this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('setVolume', volume)
     },
   },
