@@ -124,54 +124,46 @@ export const SearchCommandList = [
 export const SearchItemList = [
   {
     command: SearchCommand.From,
-    value: 'Aling',
+    value: 'Halley Themis',
   },
   {
     command: SearchCommand.From,
-    value: 'Alo',
+    value: 'Tarus Nix',
   },
   {
     command: SearchCommand.From,
-    value: 'Gram',
+    value: 'Lyra Cassini',
   },
   {
     command: SearchCommand.From,
-    value: 'Tillow',
+    value: 'Phoenix Kalindi',
   },
   {
     command: SearchCommand.From,
-    value: 'xow',
-  },
-  {
-    command: SearchCommand.From,
-    value: 'pqw',
+    value: 'Ariel Larissa',
   },
   {
     command: SearchCommand.Mentions,
-    value: 'Zpw',
+    value: 'Tarus Nix',
   },
   {
     command: SearchCommand.Mentions,
-    value: 'Txs',
+    value: 'Lyra Cassini',
   },
   {
     command: SearchCommand.Mentions,
-    value: 'abc',
+    value: 'Phoenix Kalindi',
   },
   {
     command: SearchCommand.Mentions,
-    value: 'Prow',
+    value: 'Ariel Larissa',
   },
   {
     command: SearchCommand.In,
-    value: 'Access',
+    value: 'Satellite',
   },
   {
     command: SearchCommand.In,
-    value: 'Bright',
-  },
-  {
-    command: SearchCommand.In,
-    value: 'Wowa',
+    value: 'Solstice',
   },
 ]
