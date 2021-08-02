@@ -2,7 +2,7 @@
   position: relative;
 }
 .search-box {
-  display:inline-block;
+  display: inline-block;
   position: relative;
   width: 180px;
   font-size: 12px;
@@ -12,7 +12,7 @@
   align-items: center;
   overflow: hidden;
   border-radius: 3px;
-  transition: width .1s;
+  transition: width 0.1s;
   &.focus {
     width: 282px;
     .search-input {
@@ -92,17 +92,18 @@
 
 .search-option-group {
   padding: 5px;
-  
+
   li {
     font-size: 16px;
     padding: 5px 10px;
-    &:hover, &.active {
+    &:hover,
+    &.active {
       background-color: @black;
       border-radius: 2px;
     }
     span:last-child {
       font-weight: 100;
-      color: grey;
+      color: @text-muted;
     }
   }
 
@@ -125,11 +126,12 @@
 
 .search-result-group {
   padding: 5px;
-  
+
   li {
     font-size: 16px;
     padding: 5px 10px;
-    &:hover, &.active {
+    &:hover,
+    &.active {
       background-color: @black;
       border-radius: 2px;
     }
