@@ -271,12 +271,16 @@ export default Vue.extend({
       }
 
       this.searchFor = ''
-      let queryItems = [] as Array<string>
+      const queryItems = [] as Array<string>
       this.searchQuery.queryItems.forEach((queryItem) => {
-        queryItems.push(queryItem.command + (queryItem.command != '' ? ':' : '') + queryItem.value)
+        queryItems.push(
+          queryItem.command +
+            (queryItem.command !== '' ? ':' : '') +
+            queryItem.value
+        )
       })
-      this.searchFor = queryItems.join(" ")
-      
+      this.searchFor = queryItems.join(' ')
+
       this.searchResult = SearchItemList.filter((item) => {
         if (this.current != null) {
           if (this.current.command !== '') {
