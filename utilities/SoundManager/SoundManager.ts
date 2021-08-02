@@ -23,7 +23,7 @@ export default class SoundManager {
   /**
    * @constructs SoundManager
    */
-  constructor() {
+  constructor(volume: number = 1.0) {
     this.sounds = {} as Record<Sounds, Howl>
     for (const [key, value] of Object.entries(Config.sounds) as [
       Sounds,
@@ -32,7 +32,7 @@ export default class SoundManager {
       this.sounds[key] = new Howl({
         src: [`${Config.ipfs.gateway}${value}`],
         loop: false,
-        volume: 0.8,
+        volume,
         html5: true,
       })
     }
@@ -82,5 +82,11 @@ export default class SoundManager {
     this.existsSound(sound)
 
     return this.sounds[sound].playing()
+  }
+
+  changeLevels(volume: number) {
+    for (const [key] of Object.entries(Config.sounds) as [Sounds, string][]) {
+      this.sounds[key].volume(volume)
+    }
   }
 }

@@ -14,18 +14,15 @@ export default Vue.extend({
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.scrollToBottom()
-    }, 400)
+    // setTimeout(() => {
+    //   this.scrollToBottom()
+    // }, 400)
+    this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
   },
   updated() {
     // this.scrollToBottom()
   },
   methods: {
-    scrollToBottom() {
-      const container = (this.$refs.chat as Vue).$el as Element
-      container.scrollTop = container.scrollHeight
-    },
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
