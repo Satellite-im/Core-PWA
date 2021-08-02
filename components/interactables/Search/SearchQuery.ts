@@ -136,7 +136,7 @@ export default class SearchQuery {
       let command = SearchCommand.Empty
       let value = strQuery
       for (const commandText in TextCommandMap) {
-        if (strQuery.indexOf(commandText) === 0) {
+        if (strQuery.indexOf(commandText + ":") === 0) {
           const commandValue = strQuery.substr(commandText.length + 1)
           command = TextCommandMap[commandText]
           value = commandValue

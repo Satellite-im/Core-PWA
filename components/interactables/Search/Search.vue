@@ -99,14 +99,20 @@ export default Vue.extend({
     },
     _detectStatus() {
       const searchInput = this.$refs.searchInput as HTMLElement
-      this._setEmpty(searchInput.textContent === '')
+      if (searchInput.textContent === '') {
+        searchInput.innerHTML = ''
+        this.searchQuery.clear()
+        this._setEmpty(true)
+      } else {
+        this._setEmpty(false)
+      }
     },
     _insertBlank(after: number) {
       this.searchQuery.insertBlank(after)
       this._produceItems()
     },
     _insertOption() {
-      if (this.option < 0) {
+      if (this.option < 0 || !this.isEmpty) {
         return
       }
       const option = this.searchOptions[this.option]
@@ -117,7 +123,7 @@ export default Vue.extend({
         this.searchQuery.queryItems[this.searchQuery.queryItems.length - 1]
     },
     _insertHasOption() {
-      if (this.option < 0 || this.current == null) {
+      if (this.option < 0 || this.current == null || !this.isHas) {
         return
       }
       const option = this.hasOptions[this.option]
@@ -226,7 +232,7 @@ export default Vue.extend({
       }
     },
     _navigatePanel(down: boolean) {
-      if (this.isEmpty) {
+      if (this.isEmpty || this.isHas) {
         if (down === true) {
           if (this.option < this.searchOptions.length - 1) {
             this.option++
@@ -264,7 +270,13 @@ export default Vue.extend({
         return
       }
 
-      this.searchFor = this.current.command + ' ' + this.current.value
+      this.searchFor = ''
+      let queryItems = [] as Array<string>
+      this.searchQuery.queryItems.forEach((queryItem) => {
+        queryItems.push(queryItem.command + (queryItem.command != '' ? ':' : '') + queryItem.value)
+      })
+      this.searchFor = queryItems.join(" ")
+      
       this.searchResult = SearchItemList.filter((item) => {
         if (this.current != null) {
           if (this.current.command !== '') {
@@ -333,8 +345,10 @@ export default Vue.extend({
     input() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)
+      this.caretPosition = this._getCaretPosition()
       this._detectStatus()
-
+      this._produceItems()
+      this._setCaretPosition(this.caretPosition)
       this._prepareSearch()
     },
     keydown(event: KeyboardEvent) {
@@ -344,6 +358,7 @@ export default Vue.extend({
         this.caretPosition = this._getCaretPosition()
         this.$emit('change', searchInput.innerText)
         this._insertOption()
+        this._insertHasOption()
         this._insertSearch()
         this._produceItems()
         this._setCaretPosition(this.caretPosition)
