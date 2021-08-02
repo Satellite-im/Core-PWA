@@ -4,6 +4,7 @@ export enum SearchCommandType {
   Date = 'date',
   Channel = 'channel',
 }
+
 export enum SearchCommand {
   Empty = '',
   From = 'from',
@@ -26,7 +27,19 @@ export enum SearchValueHas {
 
 export type SearchQueryItem = {
   command: SearchCommand
-  value: String
+  value: string
+  index: number,
+  cursorStart: number,
+  cursorEnd: number
+}
+
+export type SearchResultItem = {
+  command: SearchCommand,
+  value: string
+}
+
+export type CalendarDateType = {
+  id: string
 }
 
 export const SearchCommandTypeParams = {
@@ -54,13 +67,13 @@ export const SearchCommandTypeParams = {
 }
 
 export const TextCommandMap = {
-  'from:': SearchCommand.From,
-  'mentions:': SearchCommand.Mentions,
-  'has:': SearchCommand.Has,
-  'before:': SearchCommand.Before,
-  'during:': SearchCommand.During,
-  'after:': SearchCommand.After,
-  'in:': SearchCommand.In,
+  'from': SearchCommand.From,
+  'mentions': SearchCommand.Mentions,
+  'has': SearchCommand.Has,
+  'before': SearchCommand.Before,
+  'during': SearchCommand.During,
+  'after': SearchCommand.After,
+  'in': SearchCommand.In,
 } as { [key: string]: SearchCommand }
 
 export const SearchCommandList = [
@@ -79,7 +92,7 @@ export const SearchCommandList = [
   {
     name: SearchCommand.Has,
     type: SearchCommandType.Has,
-    description: 'link,embed  or file',
+    description: 'link,embed or file',
     title: 'Message contains',
   },
   {
@@ -105,5 +118,60 @@ export const SearchCommandList = [
     type: SearchCommandType.Channel,
     description: 'channel',
     title: 'In Channel',
+  },
+]
+
+export const SearchItemList = [
+  {
+    command: SearchCommand.From,
+    value: "Aling"
+  },
+  {
+    command: SearchCommand.From,
+    value: "Alo"
+  },
+  {
+    command: SearchCommand.From,
+    value: "Gram"
+  },
+  {
+    command: SearchCommand.From,
+    value: "Tillow"
+  },
+  {
+    command: SearchCommand.From,
+    value: "xow"
+  },
+  {
+    command: SearchCommand.From,
+    value: "pqw"
+  },
+  {
+    command: SearchCommand.Mentions,
+    value: "Zpw"
+  },
+  {
+    command: SearchCommand.Mentions,
+    value: "Txs"
+  },
+  {
+    command: SearchCommand.Mentions,
+    value: "abc"
+  },
+  {
+    command: SearchCommand.Mentions,
+    value: "Prow"
+  },
+  {
+    command: SearchCommand.In,
+    value: "Access"
+  },
+  {
+    command: SearchCommand.In,
+    value: "Bright"
+  },
+  {
+    command: SearchCommand.In,
+    value: "Wowa"
   },
 ]
