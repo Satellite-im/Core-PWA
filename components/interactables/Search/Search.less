@@ -96,13 +96,12 @@
   li {
     font-size: 16px;
     padding: 5px 10px;
-    &:hover,
+    &:hover:not(:first-child),
     &.active {
       background-color: @black;
       border-radius: 2px;
     }
     span:last-child {
-      font-weight: 100;
       color: @text-muted;
     }
   }
@@ -130,7 +129,7 @@
   li {
     font-size: 16px;
     padding: 5px 10px;
-    &:hover,
+    &:hover:not(:first-child),
     &.active {
       background-color: @black;
       border-radius: 2px;
@@ -143,6 +142,13 @@
 
   li:first-child {
     font-size: 12px;
+  }
+
+  .search-for {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
   }
 }
 
