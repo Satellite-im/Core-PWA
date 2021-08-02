@@ -13,6 +13,77 @@ export default class SearchQuery {
     this.queryItems = []
   }
 
+  clear() {
+    this.query = ''
+    this.cursorPosition = 0
+    this.queryIndex = 0
+    this.queryItems = []
+  }
+
+  insertBlank(position: number) {
+    if (position >= this.queryItems.length) {
+      return
+    }
+    const target = this.queryItems[position]
+    const prepend = this.queryItems.slice(0, position + 1)
+    const append = this.queryItems.slice(position + 1)
+    const newItem = {
+      command: SearchCommand.Empty,
+      value: '',
+      index: position + 1,
+      cursorStart: target.cursorEnd + 1,
+      cursorEnd: target.cursorEnd + 2,
+    }
+    prepend.push(newItem)
+
+    const offset = newItem.cursorEnd - target.cursorStart
+    append.forEach((queryItem: SearchQueryItem) => {
+      queryItem.cursorStart += offset
+      queryItem.cursorEnd += offset
+      queryItem.index++
+      prepend.push(queryItem)
+    })
+
+    this.queryItems = prepend
+  }
+
+  appendCommand(command: SearchCommand, value: string) {
+    const last = this.queryItems[this.queryItems.length - 1]
+    const newItem = {
+      command,
+      value,
+      index: this.queryItems.length,
+      cursorStart: last ? last.cursorEnd + 1 : 0,
+      cursorEnd:
+        (last ? last.cursorEnd + 1 : 0) + command.length + value.length + 1,
+    } as SearchQueryItem
+    this.queryItems.push(newItem)
+  }
+
+  queryItemFrom(caretPositon: number): SearchQueryItem | null {
+    let found = null
+    this.queryItems.forEach((queryItem) => {
+      if (
+        queryItem.cursorStart <= caretPositon &&
+        queryItem.cursorEnd >= caretPositon
+      ) {
+        found = queryItem
+      }
+    })
+    return found
+  }
+
+  deleteItemFrom(caretPositon: number) {
+    this.queryItems.forEach((queryItem) => {
+      if (
+        queryItem.cursorStart <= caretPositon &&
+        queryItem.cursorEnd >= caretPositon
+      ) {
+        this.queryItems.splice(queryItem.index, 1)
+      }
+    })
+  }
+
   setQuery(query: string, cursorPosition: number) {
     this.query = query
     this.cursorPosition = cursorPosition
@@ -24,38 +95,11 @@ export default class SearchQuery {
   setQueryByHTML(html: HTMLElement) {
     this.setQuery(
       html.textContent ? html.textContent : '',
-      this._caretPosition(html)
+      this.caretPosition(html)
     )
   }
 
-  _parseQuery(query: string, cursorPosition: number) {
-    const strQuerySplits = query.split(' ')
-    let queryIndex = 0
-    let cursorStart = 0
-    const queryItems = strQuerySplits.map((strQuery: string, index: number) => {
-      let command = SearchCommand.Empty
-      let value = strQuery
-      for (const commandText in TextCommandMap) {
-        if (strQuery.indexOf(commandText) === 0) {
-          const commandValue = strQuery.substr(commandText.length)
-          command = TextCommandMap[commandText]
-          value = commandValue
-          break
-        }
-      }
-      if (
-        cursorPosition >= cursorStart &&
-        cursorPosition <= cursorStart + strQuery.length
-      ) {
-        queryIndex = index
-      }
-      cursorStart += strQuery.length + 1
-      return { command, value }
-    })
-    return { queryItems, queryIndex }
-  }
-
-  _caretPosition(htmlElement: HTMLElement): number {
+  caretPosition(htmlElement: HTMLElement): number {
     if (!window.getSelection) {
       return 0
     }
@@ -77,6 +121,45 @@ export default class SearchQuery {
       itemNode = itemNode.parentNode as Node
     }
     return caretPosInNode
+  }
+
+  _parseQuery(query: string, cursorPosition: number) {
+    const strQuerySplits = query.trim().split('\u00A0')
+    strQuerySplits.forEach((v, i) => {
+      if (v === '') {
+        strQuerySplits.splice(i, 1)
+      }
+    })
+    let queryIndex = 0
+    let cursorStart = 0
+    const queryItems = strQuerySplits.map((strQuery: string, index: number) => {
+      let command = SearchCommand.Empty
+      let value = strQuery
+      for (const commandText in TextCommandMap) {
+        if (strQuery.indexOf(commandText) === 0) {
+          const commandValue = strQuery.substr(commandText.length + 1)
+          command = TextCommandMap[commandText]
+          value = commandValue
+          break
+        }
+      }
+      if (
+        cursorPosition >= cursorStart &&
+        cursorPosition <= cursorStart + strQuery.length
+      ) {
+        queryIndex = index
+      }
+      const newItem = {
+        command,
+        value,
+        cursorStart,
+        cursorEnd: cursorStart + strQuery.length,
+        index,
+      }
+      cursorStart += strQuery.length + 1
+      return newItem
+    })
+    return { queryItems, queryIndex }
   }
 
   _caretPositionInParentNode(node: Node, caretPosInNode: number): number {
