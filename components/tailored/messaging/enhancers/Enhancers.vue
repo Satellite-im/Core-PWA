@@ -33,6 +33,9 @@ export default Vue.extend({
     setRoute(route: string) {
       this.$data.route = route
     },
+    toggleEnhancers() {
+      this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
+    },
   },
 })
 </script>

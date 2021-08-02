@@ -1,4 +1,8 @@
+<img src="https://i.imgur.com/PdJwuII.png" height="65px" />
+
 # Satellite-Absolute
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8dff7efb-8ce4-4eef-871a-cdf1f665d676/deploy-status)](https://app.netlify.com/sites/pensive-newton-4113d6/deploys)
 
 # Running
 
@@ -25,3 +29,8 @@ To start running locally complete the Environment setup and then run `npx dotenv
 
 Please lint your code before submitting. `npx dotenv yarn lint`. Lints must pass before submitting a PR.
 Please document all new methods and files.
+
+# Contributors
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=Satellite-im/Satellite-Absolute)
+
