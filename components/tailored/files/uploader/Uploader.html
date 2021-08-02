@@ -4,10 +4,16 @@
     <font-awesome-icon v-if="!isEmbedableImage(file.name)" :icon="['far', 'file']" class="control-icon"/>
     <div class="file-info">
       <TypographyTitle :size="6" :text="file.name" />
-      <TypographySubtitle :size="6" :text="file.type" />
-      <TypographySubtitle :size="6" :text="$filesize(file.size)" />
+      <div v-if="nsfw.status || nsfw.checking" >
+        <TypographySubtitle :size="6" text="Scanning Image..." v-if="nsfw.checking" />
+        <TypographySubtitle :size="6" text="Upload Blocked" v-if="nsfw.status" />
+      </div>
+      <div v-else>
+        <TypographySubtitle :size="6" :text="file.type" />
+        <TypographySubtitle :size="6" :text="$filesize(file.size)" />
+      </div>
       <div class="is-controls">
-        <InteractablesButton type="primary" size="small" :text="$t('pages.files.browse.upload')" outlined />
+        <InteractablesButton type="primary" size="small" :text="$t('pages.files.browse.upload')" outlined :disabled="this.$props.nsfw.status || this.$props.nsfw.checking" />
         <InteractablesButton type="danger" size="small" :text="$t('global.cancel')" outlined :action="cancelUpload" />
       </div>
     </div>

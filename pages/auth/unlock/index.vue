@@ -16,8 +16,18 @@ export default Vue.extend({
   },
   computed: {
     newAccount() {
-      return !this.$store.state.encryptedPin
+      return !this.$store.state.accounts.pinHash
     },
+    accountError() {
+      return this.$store.state.accounts.error
+    },
+  },
+  mounted() {
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === 'unlock') {
+        this.$router.replace('/')
+      }
+    })
   },
   methods: {
     getIcon(): Icon {
@@ -36,20 +46,16 @@ export default Vue.extend({
       }
     },
     // Decrypt stored encrypted data into memory
-    decrypt(): boolean {
-      if (this.$data.pin.length < 5) {
-        this.$data.error = this.$t('pages.unlock.invalid_pin')
-        return false
-      }
-
-      this.$data.error = false
+    async decrypt() {
       this.$data.decrypting = true
-      return true
+
+      await this.$store.dispatch('unlock', this.$data.pin)
+
+      this.$data.decrypting = false
     },
     // Create & store a new pin, then decrypt.
-    create(): Boolean {
-      this.decrypt()
-      return true
+    async create() {
+      await this.$store.dispatch('setPin', this.$data.pin)
     },
   },
 })

@@ -51,7 +51,6 @@ export default {
       create: 'Create Account Pin',
       placeholder: 'Enter Pin...',
       store_pin: 'Store Pin? (Less Secure)',
-      invalid_pin: 'Pin must be at least 5 characters.',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -203,5 +202,11 @@ export default {
   },
   conversation: {
     encrypted: 'Messages are secured by end to end encryption.',
+  },
+  errors: {
+    accounts: {
+      pin_too_short: 'Pin must be at least 5 characters.',
+      invalid_pin: 'Pin does not match',
+    },
   },
 }

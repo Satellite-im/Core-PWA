@@ -200,7 +200,7 @@ export default Vue.extend({
       if (permissionsObject.browser !== 'Chrome') {
         this.$data.browserAllowsAudioOut = false
       } else if (!this.settings.audioOutput) {
-        this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+        this.isAudioOutput = permissionsObject.devices.audioOut[0]?.value || ''
       }
     },
     async enableAudio() {
@@ -215,10 +215,11 @@ export default Vue.extend({
         this.$data.userDeniedAudioAccess = true
       }
     },
-    volumeControlValueChange(volume: Number) {
+    volumeControlValueChange(volume: number) {
+      this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('setVolume', volume)
     },
-    inputVolumeControlValueChange(volume: Number) {
+    inputVolumeControlValueChange(volume: number) {
       this.$store.commit('setInputVolume', volume)
     },
   },
