@@ -18,7 +18,7 @@ export enum SearchCommand {
 
 export enum SearchValueHas {
   Link = 'link',
-  Embeded = 'embeded',
+  Embed = 'embed',
   File = 'file',
   Video = 'video',
   Image = 'image',
@@ -47,7 +47,7 @@ export const SearchCommandTypeParams = {
   [SearchCommandType.Has]: {
     values: [
       SearchValueHas.Link,
-      SearchValueHas.Embeded,
+      SearchValueHas.Embed,
       SearchValueHas.File,
       SearchValueHas.Video,
       SearchValueHas.Image,
@@ -55,7 +55,7 @@ export const SearchCommandTypeParams = {
     ],
     options: [
       { key: SearchValueHas.Link, value: 'link' },
-      { key: SearchValueHas.Embeded, value: 'embeded' },
+      { key: SearchValueHas.Embed, value: 'embed' },
       { key: SearchValueHas.File, value: 'file' },
       { key: SearchValueHas.Video, value: 'video' },
       { key: SearchValueHas.Image, value: 'image' },
