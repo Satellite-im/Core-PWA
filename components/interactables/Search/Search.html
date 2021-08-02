@@ -35,7 +35,7 @@
   </div>
   <div :class="{'search-results': true}" v-if="isSearch">
     <ul class="search-result-group">
-      <li>SEARCH FOR {{searchFor}}</li>
+      <li class="search-for">SEARCH FOR {{searchFor}}</li>
       <li v-for="(sch, i) in searchResult" :class="{active:i==search}" @click="clickSearch(i)">
         <span>{{sch.command}}:</span> <span>{{sch.value.substring(0, searchFor.length - 1)}}</span><span>{{sch.value.substring(searchFor.length - 1)}}</span>
       </li>
