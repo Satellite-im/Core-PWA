@@ -172,10 +172,7 @@ export default Vue.extend({
         const newElement: HTMLElement = document.createElement('span')
         newElement.spellcheck = false
         if (queryItem.command !== '') {
-          newElement.style.backgroundColor = '#2e303d'
-          newElement.style.padding = '3px 2px 4px 2px'
-          newElement.style.borderRadius = '2px'
-          newElement.style.fontWeight = '700'
+          newElement.classList.add('search-query-highlight')
           newElement.innerHTML += [queryItem.command, queryItem.value].join(':')
         } else {
           newElement.innerHTML += queryItem.value
@@ -396,5 +393,5 @@ export default Vue.extend({
   },
 })
 </script>
-
+<style lang="less" src="./SearchGlobal.less"></style>
 <style scoped lang="less" src="./Search.less"></style>
