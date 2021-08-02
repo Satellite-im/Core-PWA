@@ -22,12 +22,20 @@
     <ul class="search-option-group">
       <li>SEARCH OPTIONS</li>
       <template v-if="isHas">
-        <li v-for="(opt, i) in hasOptions" :class="{active:i==option}" @click="clickHasOption(i)">
+        <li
+          v-for="(opt, i) in hasOptions"
+          :class="{active:i==option}"
+          @click="clickHasOption(i)"
+        >
           <span>{{opt}}</span>
         </li>
       </template>
       <template v-if="isEmpty">
-        <li v-for="(opt, i) in searchOptions" :class="{active:i==option}" @click="clickOption(i)">
+        <li
+          v-for="(opt, i) in searchOptions"
+          :class="{active:i==option}"
+          @click="clickOption(i)"
+        >
           <span>{{opt.name}}:</span> <span>{{opt.description}}</span>
         </li>
       </template>
@@ -36,15 +44,18 @@
   <div :class="{'search-results': true}" v-if="isSearch">
     <ul class="search-result-group">
       <li class="search-for">SEARCH FOR {{searchFor}}</li>
-      <li v-for="(sch, i) in searchResult" :class="{active:i==search}" @click="clickSearch(i)">
-        <span>{{sch.command}}:</span> <span>{{sch.value.substring(0, searchFor.length - 1)}}</span><span>{{sch.value.substring(searchFor.length - 1)}}</span>
+      <li
+        v-for="(sch, i) in searchResult"
+        :class="{active:i==search}"
+        @click="clickSearch(i)"
+      >
+        <span>{{sch.command}}:</span>
+        <span>{{sch.value.substring(0, searchFor.length - 1)}}</span
+        ><span>{{sch.value.substring(searchFor.length - 1)}}</span>
       </li>
     </ul>
   </div>
-  <div :class="{'date-selection': true}" v-if="isDate">
-    <v-calendar
-      color="red"
-      is-dark
-      @dayclick="clickDate"></v-calendar>
+  <div :class="{'date-selection': true}" v-if="isDate && isFocus">
+    <v-calendar color="red" is-dark @dayclick="clickDate"></v-calendar>
   </div>
 </div>
