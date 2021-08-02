@@ -5,21 +5,24 @@
       <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     </transition>
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
-      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" v-click-outside="toggleModal" />
+      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal"
+        v-click-outside="toggleModal" />
     </UiModal>
     <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)">
-      <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)" :acceptCall="acceptCall" :denyCall="denyCall"/>
+      <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)"
+        :acceptCall="acceptCall" :denyCall="denyCall" />
     </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
-      <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.users" :maxViewableUsers="5" :fullscreenMaxViewableUsers="20"/>
+      <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
+        :fullscreenMaxViewableUsers="20" />
       <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll">
-        <Nuxt/>
+        <Nuxt />
       </UiScroll>
-      <Nuxt ref="chat" id="chat"/>
+      <Nuxt ref="chat" id="chat" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />

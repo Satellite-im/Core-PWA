@@ -47,7 +47,7 @@ export default Vue.extend({
       required: false,
     },
     position: {
-      type: 'string',
+      type: String,
       default: '',
       required: false,
     },
