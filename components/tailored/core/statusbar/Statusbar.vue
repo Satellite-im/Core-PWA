@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { User, Server } from '~/types/ui/core'
 import { searchRecommend } from '~/mock/search'
+import { SearchQueryItem } from '~/types/search/search'
 
 export default Vue.extend({
   props: {
@@ -31,11 +32,11 @@ export default Vue.extend({
     }
   },
   methods: {
-    change(value: String) {
-      console.log(value)
+    change(value: String, item: SearchQueryItem) {
+      console.log(item)
     },
-    search(value: String) {
-      console.log(value)
+    search(value: String, items: SearchQueryItem[]) {
+      console.log(items)
     },
   },
 })
