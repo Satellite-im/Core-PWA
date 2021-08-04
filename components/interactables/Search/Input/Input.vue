@@ -393,12 +393,16 @@ export default Vue.extend({
     emitSearch() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)
-      this.$emit('search', this.searchQuery.getQueryString())
+      this.$emit(
+        'search',
+        this.searchQuery.getQueryString(),
+        this.searchQuery.queryItems
+      )
     },
     emitChange() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)
-      this.$emit('change', this.searchQuery.getQueryString())
+      this.$emit('change', this.searchQuery.getQueryString(), this.current)
     },
   },
 })

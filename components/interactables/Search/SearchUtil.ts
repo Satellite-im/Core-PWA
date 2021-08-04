@@ -161,7 +161,6 @@ const SearchUtil = {
       }
       return true
     })
-    console.log(result)
     return result
   },
 }
