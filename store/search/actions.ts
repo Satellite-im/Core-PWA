@@ -1,14 +1,14 @@
 import { Commit } from 'vuex'
 import { DataStateType } from '../dataState/state'
-import { Files } from '~/mock/files'
+import { searchResult } from '~/mock/search'
 
-interface FetchFilesArguments {
+interface SearchArgument {
   commit: Commit
   state: any
 }
 export default {
   handler: () => {},
-  async fetchFiles({ commit, state }: FetchFilesArguments) {
+  async search({ commit, state }: SearchArgument) {
     if (
       state.dataState.files === DataStateType.Loading ||
       state.dataState.files === DataStateType.Updating
@@ -16,12 +16,12 @@ export default {
       return
     }
     if (state.dataState.files === DataStateType.Empty) {
-      commit('setDataState', { key: 'files', value: DataStateType.Loading })
+      commit('setDataState', { key: 'search', value: DataStateType.Loading })
     } else {
-      commit('setDataState', { key: 'files', value: DataStateType.Updating })
+      commit('setDataState', { key: 'search', value: DataStateType.Updating })
     }
     await new Promise((resolve) => setTimeout(resolve, 3000))
-    commit('fetchFiles', Files)
-    commit('setDataState', { key: 'files', value: DataStateType.Ready })
+    commit('search', searchResult)
+    commit('setDataState', { key: 'search', value: DataStateType.Ready })
   },
 }

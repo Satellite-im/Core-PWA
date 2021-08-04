@@ -1,8 +1,8 @@
 import { NuxtState } from '@nuxt/types/app'
-import { FileType, Folder } from '~/types/files/file'
+import { SearchResult } from '~/types/search/search'
 
 const mutations = {
-  search(state: NuxtState, results: Array<FileType | Folder>) {
+  search(state: NuxtState, results: SearchResult) {
     state.search = {
       ...state.search,
       results,
