@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { User, Server } from '~/types/ui/core'
+import { searchRecommend } from '~/mock/search'
 
 export default Vue.extend({
   props: {
@@ -24,8 +25,16 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      searchRecommend,
+    }
+  },
   methods: {
     change(value: String) {
+      console.log(value)
+    },
+    search(value: String) {
       console.log(value)
     },
   },
