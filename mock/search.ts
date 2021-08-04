@@ -1,30 +1,101 @@
-import { FileType, Folder } from '~/types/files/file'
+import {
+  SearchChannel,
+  SearchOption,
+  SearchUser,
+  SearchValueHas,
+} from '~/types/search/search'
 
-export const Search = {
-  from: [
+export const searchRecommend = {
+  users: [
     {
       name: 'Taurus Nix',
+      value: 'taurus_nix',
       address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
-      status: 'Some important status message',
-      state: 'online',
     },
     {
       name: 'Halley Themis',
+      value: 'halley_themis',
       address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
-      status: 'Working on the space station',
-      state: 'offline',
-      last_message:
-        'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
     },
-  ],
-  mentions: [
+  ] as SearchOption[],
+  channels: [
     {
-      user: {
-        name: 'Taurus Nix',
-        address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
-        status: 'Some important status message',
-        state: 'online',
-      },
+      name: 'Satellite',
+      value: 'satellite',
+      address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
     },
-  ],
+    {
+      name: 'Solstice',
+      value: 'solstice',
+      address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    },
+  ] as SearchOption[],
+  has: [
+    { key: SearchValueHas.Link, value: 'link' },
+    { key: SearchValueHas.Embed, value: 'embed' },
+    { key: SearchValueHas.File, value: 'file' },
+    { key: SearchValueHas.Video, value: 'video' },
+    { key: SearchValueHas.Image, value: 'image' },
+    { key: SearchValueHas.Sound, value: 'sound' },
+  ] as SearchOption[],
+}
+
+export const searchResult = {
+  recommends: {
+    users: [
+      {
+        name: 'Taurus Nix',
+        value: 'taurus_nix',
+        address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      },
+      {
+        name: 'Halley Themis',
+        value: 'halley_themis',
+        address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+      },
+    ] as SearchUser[],
+    channels: [
+      {
+        name: 'Satellite',
+        value: 'satellite',
+        address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
+      },
+      {
+        name: 'Solstice',
+        value: 'solstice',
+        address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+      },
+    ] as SearchChannel[],
+    has: [
+      { key: SearchValueHas.Link, value: 'link' },
+      { key: SearchValueHas.Embed, value: 'embed' },
+      { key: SearchValueHas.File, value: 'file' },
+      { key: SearchValueHas.Video, value: 'video' },
+      { key: SearchValueHas.Image, value: 'image' },
+      { key: SearchValueHas.Sound, value: 'sound' },
+    ] as SearchOption[],
+  },
+  data: {
+    perPage: 10,
+    totalRows: 100,
+    page: 0,
+    list: [
+      {
+        id: '00-d0-10',
+        at: 1620515545000,
+        type: 'text',
+        payload:
+          'Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric',
+      },
+      {
+        id: '00-c0-11',
+        at: 1620515543400,
+        type: 'image',
+        payload: {
+          type: 'img/png',
+          url: 'https://i.redd.it/buk8te6ried61.png',
+        },
+      },
+    ],
+  },
 }
