@@ -6,25 +6,58 @@
     </div>
   </div>
 
-  <div class="columns is-desktop">
+  <div class="columns is-desktop" v-if="editingKeybind.status">
     <div class="column">
+      <InteractablesInput readonly type="primary" size="small" :text="editingKeybind.newString" placeholder="Type to record..." />
+    </div>
+    <div class="column">
+    <InteractablesButton
+      text="Clear"
+      size="small"
+      type="primary"
+      :action="clearKeybind"
+    />
+    <InteractablesButton
+      text="Save"
+      size="small"
+      type="primary"
+      :action="saveKeybind"
+    />
+    <InteractablesButton
+      text="Cancel"
+      size="small"
+      type="primary"
+      :action="cancelKeybind"
+    />
+  </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column" @click="editKeybind('toggleMute')" >
       <TypographyLabel :text="$t('pages.settings.keybinds.mute')" />
-      <InteractablesInput readonly type="primary" size="small" text="ALT + M" />
+      <InteractablesInput readonly type="primary" size="small" :text="keybinds.toggleMute" />
     </div>
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.keybinds.settings')" />
-      <InteractablesInput readonly type="primary" size="small" text="ALT + S" />
+      <InteractablesInput readonly type="primary" size="small" :text="keybinds.openSettings" />
     </div>
   </div>
 
   <div class="columns is-desktop">
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.keybinds.deafen')" />
-      <InteractablesInput readonly type="primary" size="small" text="ALT + D" />
+      <InteractablesInput readonly type="primary" size="small" :text="keybinds.toggleDeafen" />
     </div>
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.keybinds.call')" />
-      <InteractablesInput readonly type="primary" size="small" text="ALT + C" />
+      <InteractablesInput readonly type="primary" size="small" :text="keybinds.callActiveChat" />
     </div>
   </div>
+
+  <InteractablesButton
+    text="Reset All Keybinds"
+    size="small"
+    type="primary"
+    :action="resetKeybinds"
+  />
 </div>
