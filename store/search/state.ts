@@ -1,9 +1,9 @@
 interface SearchState {
-  searchQuery: string
+  query: string
 }
 
 const InitalSearchState: SearchState = {
-  searchQuery: '',
+  query: '',
 }
 
 export default InitalSearchState
