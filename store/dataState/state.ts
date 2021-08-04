@@ -7,11 +7,13 @@ export enum DataStateType {
 interface DataState {
   files: DataStateType
   friends: DataStateType
+  search: DataStateType
 }
 
 const InitialDataState: DataState = {
   files: DataStateType.Empty,
   friends: DataStateType.Empty,
+  search: DataStateType.Empty,
 }
 
 export default InitialDataState

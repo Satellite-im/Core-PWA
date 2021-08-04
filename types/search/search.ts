@@ -80,49 +80,19 @@ export type SearchCommandMeta = {
   title: string
 }
 
-export const SearchItemList = [
-  {
-    command: SearchCommand.From,
-    value: 'Halley_Themis',
-  },
-  {
-    command: SearchCommand.From,
-    value: 'Tarus_Nix',
-  },
-  {
-    command: SearchCommand.From,
-    value: 'Lyra_Cassini',
-  },
-  {
-    command: SearchCommand.From,
-    value: 'Phoenix_Kalindi',
-  },
-  {
-    command: SearchCommand.From,
-    value: 'Ariel_Larissa',
-  },
-  {
-    command: SearchCommand.Mentions,
-    value: 'Tarus_Nix',
-  },
-  {
-    command: SearchCommand.Mentions,
-    value: 'Lyra_Cassini',
-  },
-  {
-    command: SearchCommand.Mentions,
-    value: 'Phoenix_Kalindi',
-  },
-  {
-    command: SearchCommand.Mentions,
-    value: 'Ariel_Larissa',
-  },
-  {
-    command: SearchCommand.In,
-    value: 'Satellite',
-  },
-  {
-    command: SearchCommand.In,
-    value: 'Solstice',
-  },
-]
+export type SearchPageInfo = {
+  totalRows: number
+  perPage: number
+  pageIndex: number
+}
+
+export type SearchData = {
+  pageInfo: SearchPageInfo
+  list: any[]
+}
+
+export type SearchResult = {
+  query: string
+  recommend: SearchRecommend
+  data: SearchData
+}
