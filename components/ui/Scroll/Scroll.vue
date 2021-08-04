@@ -36,21 +36,6 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    width: {
-      type: Number,
-      default: undefined,
-      required: false,
-    },
-    height: {
-      type: Number,
-      default: undefined,
-      required: false,
-    },
-    position: {
-      type: String,
-      default: '',
-      required: false,
-    },
   },
   data() {
     return {
