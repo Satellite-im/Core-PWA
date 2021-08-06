@@ -4,7 +4,8 @@
   min-width: 60px;
   background-color: @darker;
   display: inline-flex;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 0.6rem;
   padding-top: @normal-spacing;
 
   .logo {
@@ -25,8 +26,10 @@
     margin: @normal-spacing 0;
     color: @text;
     bottom: 0rem;
-    position: absolute;
+    // position: absolute;
     margin-bottom: 0.7rem;
+    z-index: @base-z-index + 1;
+    width: 50px;
   }
 
   .servers {
@@ -58,20 +61,27 @@
 
   .server,
   .unread {
-    width: 50px;
+    // width: 50px;
     z-index: @base-z-index + 1;
   }
 
+  .scroll-area {
+    height: auto;
+    max-height: calc(100% - 10rem);
+    width: 200px;
+    display: flex;
+  }
   #list-container {
-    height: calc(50% - 6.2rem);
+    height: fit-content;
+    max-height: calc(100% - 10rem);
     position: relative;
   }
 }
 
-@media only screen and (max-width: 768px) {
-  #servers-vertical-list {
-    .circle-group {
-      bottom: 4.3rem;
-    }
-  }
-}
+// @media only screen and (max-width: 768px) {
+//   #servers-vertical-list {
+//     .circle-group {
+//       bottom: 4.3rem;
+//     }
+//   }
+// }
