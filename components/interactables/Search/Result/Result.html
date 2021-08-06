@@ -1,0 +1,39 @@
+<div class="search-result" v-if="show">
+  <div class="search-result-header">
+    Search results
+    <button class="search-result-close" @click="toggle">
+      <font-awesome-icon :icon="['far', 'times']" />
+    </button>
+  </div>
+  <div class="search-result-group">
+    <div
+      v-for="item in groupList"
+      :class="{'group-item': true, 'active': item.type === groupBy}"
+      @click="toggleGroupBy(item.type)"
+    >
+      {{item.title}}
+    </div>
+  </div>
+  <div class="search-result-filters">
+    <multiselect
+      :options="userOptions"
+      :multiple="true"
+      :close-on-select="false"
+      :clear-on-select="false"
+      :preserve-search="true"
+      placeholder="Pick some"
+      label="name"
+      track-by="name"
+      :preselect-first="true"
+    >
+    </multiselect>
+  </div>
+
+  <div class="search-result-content"></div>
+  <paginate
+    :page-count="10"
+    prev-text="«"
+    next-text="»"
+    container-class="search-result-pagination"
+  />
+</div>
