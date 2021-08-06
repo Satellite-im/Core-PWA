@@ -96,3 +96,33 @@ export type SearchResult = {
   recommend: SearchRecommend
   data: SearchData
 }
+
+export enum SearchResultGroupType {
+  Messages = 'messages',
+  Files = 'files',
+  Channels = 'channels',
+  People = 'people',
+}
+
+export enum SearchFilterType {
+  From = 'from',
+  Date = 'date',
+}
+
+export type SearchFilter = {
+  key: string
+  value: string
+}
+
+export enum SearchOrderType {
+  New = 'new',
+  Old = 'old',
+  Relevant = 'relevant',
+}
+
+export type SearchParam = {
+  query: string
+  groupby: SearchResultGroupType
+  filters: SearchFilter[]
+  orderby: SearchOrderType
+}

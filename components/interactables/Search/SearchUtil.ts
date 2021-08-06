@@ -7,6 +7,7 @@ import {
   SearchQueryItem,
   SearchRecommend,
   SearchRecommendResultItem,
+  SearchResultGroupType,
   SearchValueHas,
 } from '~/types/search/search'
 
@@ -96,10 +97,30 @@ export const searchCommandMetaList = [
   },
 ] as SearchCommandMeta[]
 
+const searchResultGroupList = [
+  {
+    type: SearchResultGroupType.Messages,
+    title: 'Messages',
+  },
+  {
+    type: SearchResultGroupType.Files,
+    title: 'Files',
+  },
+  {
+    type: SearchResultGroupType.Channels,
+    title: 'Channels',
+  },
+  {
+    type: SearchResultGroupType.People,
+    title: 'People',
+  },
+]
+
 const SearchUtil = {
   getTextCommandMap: () => textCommandMap,
   getCommandTypeParams: () => searchCommandTypeParams,
   getCommandMetaList: () => searchCommandMetaList,
+  getSearchResultGroupList: () => searchResultGroupList,
   getCommandMeta: (command: SearchCommand) => {
     let commandMeta = null
     searchCommandMetaList.every((item) => {

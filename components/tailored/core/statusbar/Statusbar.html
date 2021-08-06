@@ -32,10 +32,15 @@
       <font-awesome-icon class="control-icon" :icon="['far', 'video']" />
     </div>
     <InteractablesSearchInput
-      @search="search"
-      @change="change"
+      @search="handleSearch"
+      @change="handleChange"
       placeholder="Search..."
       :searchRecommend="searchRecommend"
+    />
+    <InteractablesSearchResult
+      :searchQuery="searchQuery"
+      :show="showSearchResult"
+      @toggle="toggleSearchResult"
     />
     <div
       class="token-balance has-tooltip has-tooltip-primary has-tooltip-bottom"
