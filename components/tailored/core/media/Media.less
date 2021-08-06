@@ -1,5 +1,6 @@
 #mediastream {
-  height: 16rem;
+  height: auto;
+  max-height: 25.5rem;
   width: 100%;
   background: @black;
   padding: 0.75rem;
@@ -9,19 +10,57 @@
 
   #media {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    // align-items: center;
     flex: 1;
     width: 100%;
     overflow: hidden;
-    justify-content: flex-end;
+    // justify-content: flex-end;
+    // flex-direction: row-reverse;
+    // flex-wrap: wrap-reverse;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .user {
+      &:nth-child(1) {
+        order: 1;
+      }
+      &:nth-child(2) {
+        order: 2;
+      }
+      &:nth-child(3) {
+        order: 3;
+      }
+      &:nth-child(4) {
+        order: 4;
+      }
+      &:nth-child(5) {
+        order: 5;
+      }
+      &:nth-child(6) {
+        order: 6;
+      }
+      &:nth-child(7) {
+        order: 7;
+      }
+      &:nth-child(8) {
+        order: 8;
+      }
+      &:nth-child(9) {
+        order: 9;
+      }
+      &:nth-child(10) {
+        order: 10;
+      }
+    }
   }
 }
 
 .fullscreen-media {
   #mediastream {
+    max-height: unset;
+    height: 16rem;
     #media {
       justify-content: center;
+      flex-direction: row;
     }
   }
 }
@@ -35,11 +74,19 @@
 }
 
 .more-user {
+  min-width: 16rem;
+  // height: 9rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 0.25rem 0.25rem;
+  // padding: 0.5rem;
+  position: relative;
+  transition: all 0.1s;
   align-self: flex-end;
   font-size: 30px;
   line-height: 28px;
-  // padding: 20px;
-  height: 30px;
+  padding-left: 0.5rem;
+  order: 11;
   &.full {
     line-height: 13px;
     width: 100%;
@@ -50,5 +97,29 @@
 @media only screen and (max-width: 768px) {
   #mediastream {
     min-width: @viewport-width;
+  }
+}
+
+@media only screen and (max-width: 1917px) {
+  .more-user {
+    order: 9;
+  }
+}
+
+@media only screen and (max-width: 1653px) {
+  .more-user {
+    order: 7;
+  }
+}
+
+@media only screen and (max-width: 1389px) {
+  .more-user {
+    order: 5;
+  }
+}
+
+@media only screen and (max-width: 1125px) {
+  .more-user {
+    order: 3;
   }
 }
