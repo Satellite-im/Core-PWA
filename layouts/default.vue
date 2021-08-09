@@ -31,4 +31,6 @@ p {
 }
 
 @import url('~/assets/styles/base.less');
+@import url('~/assets/styles/plugins/multiselect.less');
+@import url('~/assets/styles/plugins/v-calendar.less');
 </style>
