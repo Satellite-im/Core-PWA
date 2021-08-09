@@ -8,7 +8,11 @@ import { DataStateType } from '~/store/dataState/state'
 import { getAlphaSorted } from '~/utilities/friends'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
-
+declare module 'vue/types/vue' {
+  interface Vue {
+    friends: any
+  }
+}
 export default Vue.extend({
   name: 'FriendsList',
   layout: 'friends',
