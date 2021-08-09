@@ -56,6 +56,10 @@
     </ul>
   </div>
   <div :class="{'date-selection': true}" v-if="isDate && isFocus">
-    <v-calendar is-dark @dayclick="clickDateOption" :max-date='new Date()'></v-calendar>
+    <v-calendar
+      is-dark
+      @dayclick="clickDateOption"
+      :max-date="new Date()"
+    ></v-calendar>
   </div>
 </div>

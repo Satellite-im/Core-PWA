@@ -86,9 +86,20 @@ export type SearchPageInfo = {
   pageIndex: number
 }
 
+export type SearchResultItem = {
+  id: string
+  at: number
+  type: string
+  user?: {
+    id: string
+    name: string
+    address?: string
+  }
+}
+
 export type SearchData = {
   pageInfo: SearchPageInfo
-  list: any[]
+  list: SearchResultItem[]
 }
 
 export type SearchResult = {
