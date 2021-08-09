@@ -2,8 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-// @ts-ignore
-import VCalendar from 'v-calendar'
 import SearchQuery from '../SearchQuery'
 import SearchUtil from '../SearchUtil'
 import {
@@ -15,8 +13,6 @@ import {
   SearchRecommendResultItem,
   SearchOption,
 } from '~/types/search/search'
-
-Vue.use(VCalendar)
 
 declare module 'vue/types/vue' {
   interface Vue {

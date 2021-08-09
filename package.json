@@ -65,6 +65,7 @@
     "vue-slider-component": "^3.2.13",
     "vue-typed-mixins": "^0.2.0",
     "vue2-touch-events": "^3.2.2",
+    "vuejs-datepicker": "^1.6.2",
     "vuejs-paginate": "^2.1.0",
     "vuex-persist": "^3.1.3"
   },
