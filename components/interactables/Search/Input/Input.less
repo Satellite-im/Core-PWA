@@ -81,7 +81,7 @@
 .search-options {
   position: absolute;
   left: 0;
-  margin-top: 4px;
+  margin-top: 6px;
   z-index: 9999;
   background-color: @dark-gray;
   width: 100%;
@@ -111,7 +111,7 @@
   }
 }
 
-.search-results {
+.search-recommends {
   position: absolute;
   left: 0;
   margin-top: 4px;
@@ -123,7 +123,7 @@
   border: 1px solid @light-gray;
 }
 
-.search-result-group {
+.search-recommend-group {
   padding: 5px;
 
   li {
@@ -164,17 +164,4 @@
   border: 1px solid @light-gray;
   display: flex;
   justify-content: center;
-}
-
-.vc-container {
-  font-family: @primary-font;
-  &.vc-is-dark {
-    border: 0;
-    background-color: transparent;
-  }
-  --gray-800: @light-gray;
-  --accent-200: @text-muted;
-  --accent-600: @light-gray;
-  --accent-500: @light-gray;
-  --accent-400: @light-gray-alt;
 }

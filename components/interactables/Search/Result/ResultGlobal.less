@@ -1,0 +1,27 @@
+.search-result-pagination {
+  padding: 5px 10px;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  li {
+    display: block;
+    margin: 0;
+    padding: 2px;
+    a {
+      display: block;
+      padding: 5px 10px;
+      color: @bright-text;
+      border: 1px solid @primary-color;
+    }
+    &.active {
+      a {
+        background-color: @primary-color;
+      }
+    }
+    &.disabled {
+      a {
+        color: @text-muted;
+      }
+    }
+  }
+}
