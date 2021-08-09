@@ -13,6 +13,7 @@ import { Bitrates, SampleSizes } from './options/audio'
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
   interface Vue {
+    settings: any
     setupDefaults: () => void
     getUserPermissions: () => Promise<any>
     requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>

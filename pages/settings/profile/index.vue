@@ -3,7 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
+declare module 'vue/types/vue' {
+  interface Vue {
+    accounts: any
+  }
+}
 export default Vue.extend({
   name: 'ProfileSettings',
   layout: 'settings',

@@ -5,6 +5,7 @@ interface UIState {
   contextMenuPosition: Object
   quickProfilePosition: Object
   showSidebarUsers: Boolean
+  showSearchResult: Boolean
   modals: Object
   chatbarContent: String
   fullscreen: Boolean
@@ -14,6 +15,7 @@ interface UIState {
 const InitalUIState: UIState = {
   contextMenuStatus: false,
   showSidebarUsers: true,
+  showSearchResult: false,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
