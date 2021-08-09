@@ -1,0 +1,107 @@
+<template src="./Result.html"></template>
+
+<script lang="ts">
+import Vue from 'vue'
+// @ts-ignore
+import VuejsPaginate from 'vuejs-paginate'
+import { mapState } from 'vuex'
+import SearchUtil from '../SearchUtil'
+import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
+import { DataStateType } from '~/store/dataState/state'
+import { searchResult } from '~/mock/search'
+
+Vue.component('paginate', VuejsPaginate)
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    groupBy: SearchResultGroupType
+    orderBy: SearchOrderType
+    fetchResult: (query: string) => Promise<void>
+    result: any
+  }
+}
+export default Vue.extend({
+  props: {
+    searchQuery: {
+      type: String,
+      default: '',
+    },
+    show: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      groupList: SearchUtil.getSearchResultGroupList(),
+      orderTypeList: SearchUtil.getSearchOrderTypeList(),
+      query: '',
+      groupBy: SearchResultGroupType.Messages,
+      orderBy: SearchOrderType.New,
+      users: [],
+      channels: [],
+      date: null,
+      page: 0,
+      result: {} as any,
+    }
+  },
+  computed: {
+    DataStateType: () => DataStateType,
+    ...mapState(['dataState', 'search']),
+    loading: {
+      set(state: DataStateType) {
+        this.$store.commit('setDataState', { key: 'search', value: state })
+      },
+      get() {
+        return this.dataState.search
+      },
+    },
+    userOptions() {
+      return this.result &&
+        this.result.recommends &&
+        this.result.recommends.users &&
+        this.result.recommends.users.length > 0
+        ? this.result.recommends.users
+        : []
+    },
+    channelOptions() {
+      return this.result &&
+        this.result.recommends &&
+        this.result.recommends.channels &&
+        this.result.recommends.channels.length > 0
+        ? this.result.recommends.channels
+        : []
+    },
+  },
+  watch: {
+    searchQuery(query) {
+      if (!this.show || query !== this.searchQuery) {
+        return
+      }
+      this.fetchResult(query)
+    },
+    page(newPage) {
+      console.log(newPage)
+    },
+  },
+  methods: {
+    toggle() {
+      this.$emit('toggle')
+    },
+    toggleGroupBy(state: SearchResultGroupType) {
+      this.groupBy = state
+    },
+    toggleOrderBy(state: SearchOrderType) {
+      this.orderBy = state
+    },
+    async fetchResult(query: string): Promise<void> {
+      this.loading = DataStateType.Loading
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      this.result = searchResult
+      this.loading = DataStateType.Ready
+    },
+  },
+})
+</script>
+<style global lang="less" src="./ResultGlobal.less"></style>
+<style scoped lang="less" src="./Result.less"></style>

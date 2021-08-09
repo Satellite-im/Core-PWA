@@ -1,0 +1,104 @@
+<div
+  class="search-result"
+  v-if="show && ((result && result.data) || loading === DataStateType.Loading)"
+>
+  <div class="search-result-header">
+    Search results
+    <button class="search-result-close" @click="toggle">
+      <font-awesome-icon :icon="['far', 'times']" />
+    </button>
+  </div>
+  <div class="search-result-group">
+    <div
+      v-for="item in groupList"
+      :class="{'group-item': true, 'active': item.type === groupBy}"
+      @click="toggleGroupBy(item.type)"
+    >
+      {{item.title}}
+    </div>
+  </div>
+  <div class="search-result-filters">
+    <div>
+      <multiselect
+        :options="userOptions"
+        :multiple="true"
+        :clear-on-select="false"
+        :preserve-search="true"
+        placeholder="Users"
+        label="name"
+        track-by="name"
+        v-model="users"
+        :preselect-first="true"
+        selectLabel=""
+        deselectLabel=""
+        selectedLabel=""
+      >
+      </multiselect>
+    </div>
+    <div>
+      <multiselect
+        :options="channelOptions"
+        :multiple="true"
+        :clear-on-select="false"
+        :preserve-search="true"
+        placeholder="Conversations"
+        label="name"
+        track-by="name"
+        v-model="channels"
+        :preselect-first="true"
+        selectLabel=""
+        deselectLabel=""
+        selectedLabel=""
+      >
+      </multiselect>
+    </div>
+    <div>
+      <v-date-picker v-model="date" is-dark>
+        <template v-slot="{ inputValue, inputEvents }">
+          <input :value="inputValue" v-on="inputEvents" class="date-input" />
+        </template>
+      </v-date-picker>
+    </div>
+    <div>
+      <button class="add-more-filters">More filters</button>
+    </div>
+  </div>
+  <div
+    class="search-result-meta"
+    v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
+  >
+    <div class="result-count">{{result.data.totalRows}} Results</div>
+    <div class="result-orderby">
+      <div
+        v-for="item in orderTypeList"
+        :class="{'orderby-item': true, 'active': item.type === orderBy}"
+        @click="toggleOrderBy(item.type)"
+      >
+        {{item.title}}
+      </div>
+    </div>
+  </div>
+  <UiScroll
+    verticalScroll
+    scrollbarVisibility="scroll"
+    class="search-result-content"
+  >
+    <div class="search-result-inner">
+      <UiLoadersMessage :count="2" v-if="loading === DataStateType.Loading" />
+      <template v-else>
+        <InteractablesSearchResultItem
+          v-for="item in result.data.list"
+          :data="item"
+        ></InteractablesSearchResultItem>
+      </template>
+    </div>
+  </UiScroll>
+  <paginate
+    v-if="result && result.data && result.data.totalRows"
+    :page-count="Math.ceil(result.data.totalRows/result.data.perPage)"
+    v-model="page"
+    prev-text="«"
+    next-text="»"
+    container-class="search-result-pagination"
+  />
+</div>
