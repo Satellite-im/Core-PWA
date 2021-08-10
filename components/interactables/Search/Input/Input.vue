@@ -150,6 +150,7 @@ export default Vue.extend({
       if (date == null || this.current == null) {
         return
       }
+      this.current = this.searchQuery.queryItems[this.current.index]
       this.current.value = date
       this.current.cursorEnd += date.length
       this.caretPosition += date.length + 1
@@ -367,7 +368,22 @@ export default Vue.extend({
           this._navigatePanel(false)
           break
         case 'Backspace':
-          // event.preventDefault()
+          {
+            const caretPostion = this._getCaretPosition()
+            const queryItem = this.searchQuery.queryItemFrom(caretPostion)
+            if (queryItem != null && queryItem.command !== '') {
+              const sp = caretPostion - queryItem.cursorStart - 1
+              if (sp === queryItem.command.length) {
+                queryItem.command = SearchCommand.Empty
+                event.preventDefault()
+                this._detectStatus()
+                this._produceItems()
+                this._setCaretPosition(queryItem.cursorStart)
+                this._prepareSearch()
+                // this.emitSearch()
+              }
+            }
+          }
           break
         default:
           break
