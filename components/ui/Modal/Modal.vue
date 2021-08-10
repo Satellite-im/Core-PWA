@@ -6,6 +6,10 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'Modal',
   props: {
+    nopad: {
+      type: Boolean,
+      default: false,
+    },
     closeModal: {
       type: Function,
       default: () => {},

@@ -179,11 +179,11 @@
         <div class="card-content">
           <div class="content">
             <p>Gradient</p>
-            <UiMeter :value="15" />
-            <UiMeter :value="19" />
-            <UiMeter :value="25" />
+            <UiMeter :value="60" />
+            <UiMeter :value="75" />
+            <UiMeter :value="100" />
             <p>Solid</p>
-            <UiMeter :value="25" :solid="true" />
+            <UiMeter :value="100" :solid="true" />
           </div>
         </div>
       </div>

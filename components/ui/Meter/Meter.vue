@@ -7,7 +7,7 @@ import Vue from 'vue'
 export default Vue.extend({
   props: {
     /**
-     * Amount of 'ticks' to be filled in the meter.
+     * Percentage of Volume
      */
     value: {
       type: Number,
@@ -28,17 +28,45 @@ export default Vue.extend({
       default: 20,
     },
   },
+  data() {
+    return {
+      numberOfTicks: 0,
+    }
+  },
+  created() {
+    window.addEventListener('resize', this.resizeHandler)
+  },
+  mounted() {
+    this.$nextTick(() => {
+      /* update number of ticks after whole view is rendrered */
+      setTimeout(this.resizeHandler,50);
+    })
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.resizeHandler)
+  },
   methods: {
     // Returns the designated tick color based on the increment value
     getTickColor(increment: number): string {
-      if (increment > this.value) {
-        return ''
-      } else if (increment > 22) {
-        return this.solid ? 'green-tick' : 'red-tick'
-      } else if (increment > 18) {
-        return this.solid ? 'green-tick' : 'orange-tick'
-      } else {
-        return this.solid ? 'green-tick' : 'green-tick'
+      if (this.numberOfTicks) {
+        const curPercentage = Math.floor((increment * 100) / this.numberOfTicks)
+        if (curPercentage > this.value) {
+          return ''
+        } else if (curPercentage > 85) {
+          return this.solid ? 'green-tick' : 'red-tick'
+        } else if (curPercentage > 70) {
+          return this.solid ? 'green-tick' : 'orange-tick'
+        } else {
+          return this.solid ? 'green-tick' : 'green-tick'
+        }
+      }
+      return ''
+    },
+    resizeHandler() {
+      const meterElm: HTMLElement = this.$refs.meter as HTMLElement
+      if (meterElm) {
+        let width = meterElm.clientWidth
+        this.numberOfTicks = Math.floor(width / 20)
       }
     },
   },
