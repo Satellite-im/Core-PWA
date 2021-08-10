@@ -62,10 +62,10 @@ export default Vue.extend({
       }
       return ''
     },
-    resizeHandler(): number {
-      if (this.$refs.meter) {
-        console.log(this.$refs.meter.offsetWidth);
-        let width = this.$refs.meter.offsetWidth
+    resizeHandler() {
+      const meterElm: HTMLElement = this.$refs.meter as HTMLElement
+      if (meterElm) {
+        let width = meterElm.clientWidth
         this.numberOfTicks = Math.floor(width / 20)
       }
     },
