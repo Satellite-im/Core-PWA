@@ -10,7 +10,7 @@
       <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal"
         v-click-outside="toggleModal" />
     </UiModal>
-    <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)">
+    <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)" nopad>
       <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)"
         :acceptCall="acceptCall" :denyCall="denyCall" />
     </UiModal>
