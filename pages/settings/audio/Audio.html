@@ -91,10 +91,13 @@
         :size="6"
         :text="$t('pages.settings.audio.bitrate.title')"
       />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.audio.bitrate.subtitle')"
-      />
+      <UiTextWrap :allowWrap="true">
+        <TypographySubtitle
+          :size="6"
+          :text="$t('pages.settings.audio.bitrate.subtitle')"
+        />
+      </UiTextWrap>
+
       <br />
       <InteractablesSelect
         :options="Bitrates"
@@ -107,10 +110,13 @@
         :size="6"
         :text="$t('pages.settings.audio.sampleSize.title')"
       />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.audio.sampleSize.subtitle')"
-      />
+      <UiTextWrap :allowWrap="true">
+        <TypographySubtitle
+          :size="6"
+          :text="$t('pages.settings.audio.sampleSize.subtitle')"
+        />
+      </UiTextWrap>
+
       <br />
       <InteractablesSelect
         :options="SampleSizes"
@@ -128,7 +134,7 @@
         :text="$t('pages.settings.audio.volume.title')"
       />
       <div class="meter-container">
-        <UiMeter :value="0" :height="25"/>
+        <UiMeter :value="0" :height="25" />
       </div>
       <TailoredCoreMediaActionsVolume
         :volume="audio.volume"
@@ -143,7 +149,7 @@
         :text="$t('pages.settings.audio.inputVolume.title')"
       />
       <div class="meter-container">
-        <UiMeter :value="micLevel" :height="25"/>
+        <UiMeter :value="micLevel" :height="25" />
       </div>
       <TailoredCoreMediaActionsVolume
         :volume="audio.inputVolume"
