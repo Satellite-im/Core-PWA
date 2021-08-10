@@ -55,22 +55,22 @@ export const User = {
 }
 
 export const CallUsers = [
-  // {
-  //   name: 'Taurus Nix',
-  //   address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
-  //   status: 'Some important status message',
-  //   state: 'online',
-  //   last_message:
-  //     'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
-  // },
-  // {
-  //   name: 'Halley Themis',
-  //   address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
-  //   status: 'Working on the space station',
-  //   state: 'offline',
-  //   last_message:
-  //     'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
-  // },
+  {
+    name: 'Taurus Nix',
+    address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+    status: 'Some important status message',
+    state: 'online',
+    last_message:
+      'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
+  },
+  {
+    name: 'Halley Themis',
+    address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    status: 'Working on the space station',
+    state: 'offline',
+    last_message:
+      'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
+  },
   // {
   //   name: 'Lyra Cassini',
   //   address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
@@ -109,156 +109,6 @@ export const CallUsers = [
   // },
   // {
   //   name: 'Phoenix Kalindi test',
-  //   address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-  //   status: 'Working on the space station',
-  //   state: 'online',
-  //   last_message:
-  //     'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-  //   profile_picture:
-  //     'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  // },
-  {
-    name: '1',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '2',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '3',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '4',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '5',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '6',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '7',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '8',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '9',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '10',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  {
-    name: '11',
-    address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-    status: 'Working on the space station',
-    state: 'online',
-    last_message:
-      'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  },
-  // {
-  //   name: '12',
-  //   address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-  //   status: 'Working on the space station',
-  //   state: 'online',
-  //   last_message:
-  //     'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-  //   profile_picture:
-  //     'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  // },
-  // {
-  //   name: '13',
-  //   address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-  //   status: 'Working on the space station',
-  //   state: 'online',
-  //   last_message:
-  //     'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-  //   profile_picture:
-  //     'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  // },
-  // {
-  //   name: '14',
-  //   address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-  //   status: 'Working on the space station',
-  //   state: 'online',
-  //   last_message:
-  //     'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-  //   profile_picture:
-  //     'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
-  // },
-  // {
-  //   name: '15',
   //   address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
   //   status: 'Working on the space station',
   //   state: 'online',
