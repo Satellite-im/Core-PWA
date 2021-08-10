@@ -88,8 +88,9 @@
       <UiLoadersMessage :count="2" v-if="loading === DataStateType.Loading" />
       <template v-else>
         <InteractablesSearchResultItem
-          v-for="item in result.data.list"
+          v-for="item, i in result.data.list"
           :data="item"
+          :key="i"
         ></InteractablesSearchResultItem>
       </template>
     </div>
