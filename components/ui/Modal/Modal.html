@@ -5,7 +5,7 @@
             <span class="close" v-on:click="close">×</span>
             <TypographyTitle :text="title" :size="6" />
           </header>
-        <section class="modal-card-body">
+        <section :class="`modal-card-body ${nopad ? 'nopad' : ''}`">
             <slot/>
         </section>
     </div>
