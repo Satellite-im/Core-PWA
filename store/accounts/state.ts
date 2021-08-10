@@ -1,7 +1,7 @@
 import { AccountsState } from './types'
 
 const InitalAccountsState: AccountsState = {
-  locked: true,
+  locked: false,
   error: '',
   pinHash: '',
   active: '',
