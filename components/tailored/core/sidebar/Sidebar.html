@@ -72,7 +72,7 @@
     v-scroll-lock="true"
     v-if="ui.showSidebarUsers"
   >
-    <UiScroll verticalScroll scrollbarVisibility="scroll">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
       <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
         <TailoredCoreUser
           v-for="user in users"
@@ -90,7 +90,7 @@
     </UiScroll>
   </div>
   <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-    <UiScroll verticalScroll scrollbarVisibility="scroll">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
       <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
         <TailoredCoreGroup
           v-for="group in groups"

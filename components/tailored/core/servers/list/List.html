@@ -4,9 +4,9 @@
       class="logo has-tooltip-right has-tooltip-primary">
       <img src="~/assets/img/icon_wht.png" alt="" />
     </div>
-    <UiHorizontalRule v-if="unreads.length > 0" />
     <UiScroll verticalScroll>
       <div id="list-container">
+        <UiHorizontalRule v-if="unreads.length > 0" />
 
         <div class="unread has-tooltip-right has-tooltip-primary" v-for="user in unreads"
           v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">

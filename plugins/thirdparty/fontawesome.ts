@@ -64,6 +64,7 @@ import {
   faSearch,
   faKeySkeleton,
   faCalendarDay,
+  faSkull,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
@@ -128,5 +129,6 @@ library.add(faSearch)
 library.add(faTimes)
 library.add(faKeySkeleton)
 library.add(faCalendarDay)
+library.add(faSkull)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
