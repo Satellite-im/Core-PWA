@@ -1,15 +1,12 @@
-// .modal-card {
-//   width: 300px;
-// }
 
-// .modal-card-body {
-//   padding: 0;
-//   height: 400px;
-// }
+.modal-card-body {
+  padding: 0 !important;
+}
 
 .content {
   width: 300px;
   height: 400px;
+
 }
 
 .user-profile-picture {
@@ -37,10 +34,6 @@
   width: 100%;
 }
 
-.button.is-success {
-  margin-right: 0;
-}
-
 .user-info {
   position: absolute;
   width: 100%;
@@ -53,6 +46,7 @@
     color: #fff;
     font-size: 25px;
     font-family: @primary-font;
+    margin-bottom: 0;
   }
   .user-status {
     opacity: 0.5;
@@ -62,6 +56,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
+    margin-bottom: @normal-spacing;
+  }
+}
+.button {
+  width: 100%;
+  margin: @normal-spacing;
+
+  &:nth-child(1) {
+    margin-left: 0;
+  }
+  &:nth-child(2) {
+    margin-right: 0;
   }
 }
 
@@ -76,12 +82,7 @@
   }
 
   .button {
-    height: 80px;
-    width: 80px;
-
-    .button-icon {
-      font-size: 20pt;
-    }
+    margin: @normal-spacing !important;
   }
 
   .modal-card-foot {

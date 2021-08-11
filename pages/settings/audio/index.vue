@@ -13,6 +13,7 @@ import { Bitrates, SampleSizes } from './options/audio'
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
   interface Vue {
+    settings: any
     setupDefaults: () => void
     getUserPermissions: () => Promise<any>
     requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>
@@ -159,8 +160,8 @@ export default Vue.extend({
 
         const average = values / length
 
-        // The micLevel can range between 0 and 100 approximately and we have 25 ticks on the meter, this is why we divide the value by 4.
-        this.$data.micLevel = Math.round(average / 4)
+        // The micLevel can range between 0 and 100 approximately
+        this.$data.micLevel = Math.round(average)
       }
 
       draw()
