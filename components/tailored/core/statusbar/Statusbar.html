@@ -1,5 +1,5 @@
 <div id="statusbar">
-  <div class="circle-container">
+  <div class="circle-container" v-if="!$device.isMobile">
     <font-awesome-icon
       :icon="['fas', 'circle']"
       :class="`status is-${user.state}`"
@@ -11,7 +11,7 @@
       :size="28"
     />
   </div>
-  <div class="user-info">
+  <div class="user-info" v-if="!$device.isMobile">
     <TypographyTitle :size="6" :text="server ? server.name : user.name" />
     <TypographySubtitle :size="6" :text="server ? server.desc : user.status" />
   </div>

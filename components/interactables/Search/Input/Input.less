@@ -169,3 +169,24 @@
   display: flex;
   justify-content: center;
 }
+
+@media only screen and (max-width: 768px) {
+  .search-box {
+    width: 100px;
+    &.focus {
+      width: calc(100% - @light-spacing);
+      .search-input {
+        width: 250px;
+      }
+    }
+  }
+  
+  .search-recommends, .search-options {
+    margin: 0;
+    width: calc(100% - (@light-spacing * 2));
+    left: @light-spacing;
+    right: @light-spacing;
+    top: @statusbar-height + (@normal-spacing * 8);
+    position: fixed;
+  }
+}
