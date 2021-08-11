@@ -56,6 +56,7 @@ p {
 }
 
 .not-sidebar {
+  white-space: pre-line;
   flex-basis: 0;
   flex-grow: 999;
   height: 100vh;
@@ -63,6 +64,12 @@ p {
   .ps {
     padding: @normal-spacing * 2;
   }
+}
+.title {
+  white-space: pre-line;
+}
+.subtitle {
+  white-space: pre-line;
 }
 
 .menu-toggle {
@@ -94,7 +101,7 @@ p {
     flex-basis: @mobile-sidebar-width;
   }
   .not-sidebar {
-    padding: 2rem @normal-spacing;
+    padding: 1rem 0;
     width: 100vw;
     overflow-x: hidden;
     transform: translateX(calc(@mobile-sidebar-width + 3rem));
