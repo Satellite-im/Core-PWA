@@ -5,18 +5,18 @@ import Vue from 'vue'
 import { isNSFW } from '~/utilities/nsfw'
 
 export default Vue.extend({
+  props: {
+    type: {
+      type: String,
+      default: 'quick',
+    },
+  },
   data() {
     return {
       file: false,
       url: false,
       nsfw: { status: false, checking: false },
     }
-  },
-  props: {
-    type: {
-      type: String,
-      default: 'quick',
-    },
   },
   methods: {
     /**

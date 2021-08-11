@@ -50,7 +50,35 @@
       max-width: 15vw;
       max-height: 10vh;
       border-radius: 2px;
+      width: 100%;
+    }
+
+    .img-wrapper {
+      max-width: 15vw;
+      max-height: 10vh;
+      border-radius: 2px;
+      overflow: hidden;
       margin-right: @normal-spacing;
+    }
+
+    .img-blur {
+      filter: blur(8px);
+        -webkit-filter: blur(8px);
+        -moz-filter: blur(8px);
+        -o-filter: blur(8px);
+        -ms-filter: blur(8px);
+    }
+
+    .nsfw-text {
+      display: flex;
+      h1 {
+        padding-top: 4px;
+        align-self: flex-end;
+      }
+      .svg {
+        height: 22px;
+        margin-right: 8px;
+      }
     }
   }
 }
