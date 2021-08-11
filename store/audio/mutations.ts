@@ -11,7 +11,6 @@ const mutations = {
   },
   deafen(state: NuxtState) {
     const isDeafened = state.audio.deafened
-
     state.audio = {
       ...state.audio,
       previousVolume: isDeafened
@@ -25,7 +24,7 @@ const mutations = {
     state.audio = {
       ...state.audio,
       previousVolume: volume,
-      volume,
+      volume
     }
   },
   setInputVolume(state: NuxtState, inputVolume: Number) {
