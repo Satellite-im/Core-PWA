@@ -36,6 +36,11 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    enableWrap: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
   },
   data() {
     return {
@@ -52,6 +57,7 @@ export default Vue.extend({
         'scrollbar-visible': ['always', 'scroll'].includes(
           this.scrollbarVisibility
         ),
+        'enable-wrap': this.enableWrap ,
         always: this.scrollbarVisibility === 'always',
         dark: this.theme === 'dark',
       }
