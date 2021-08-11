@@ -4,16 +4,14 @@
     <div v-if="showCropper" class="cropper-mask" />
     <div class='modal-body'>
         <div class="custom-modal-content">
-        <UiScroll ref="chat" verticalScroll>
-
         <div class="columns">
-            <div class="column" style="max-width: 175px;">
+            <div class="column image">
                 <UiCircle type="image" :source="croppedImage" :size="120" />
             </div>
             <div class="column align">
                 <TypographyText class="set-photo-title" :text="$t('servers.create.photo_text')" />
                 <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
-                <InteractablesButton 
+                <InteractablesButton
                     :action="() => $refs.file.click()" 
                     type="primary" 
                     size="small"
@@ -45,7 +43,6 @@
         </div>
 
         <p class="red" v-if="error">{{error}}</p>
-    </UiScroll>
     </div>
 
         <!-- <hr class="divider"> -->
