@@ -7,6 +7,7 @@ interface SettingsState {
   sampleSize: Number
   userHasGivenAudioAccess: Boolean
   userDeniedAudioAccess: Boolean
+  keybinds: Object
 }
 
 const InitalSettingsState: SettingsState = {
@@ -18,6 +19,12 @@ const InitalSettingsState: SettingsState = {
   sampleSize: 24,
   userHasGivenAudioAccess: false,
   userDeniedAudioAccess: false,
+  keybinds: {
+    toggleMute: 'alt+m',
+    toggleDeafen: 'alt+d',
+    openSettings: 'alt+s',
+    callActiveChat: 'alt+c',
+  },
 }
 
 export default InitalSettingsState

@@ -75,6 +75,7 @@ export default {
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
+    { src: '~/plugins/local/keybindLoader.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
