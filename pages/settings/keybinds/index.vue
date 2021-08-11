@@ -1,64 +1,77 @@
 <template src="./Keybinds.html"></template>
 
 <script lang="ts">
+// @ts-nocheck
 import Vue from 'vue'
-// @ts-ignore
-import Mousetrap from 'mousetrap'
+import { Keybinds } from '~/components/mixins/UI/Keybinds'
 
 export default Vue.extend({
   name: 'KeybindSettings',
+  mixins: [Keybinds],
   layout: 'settings',
   data() {
     return {
-      keybinds: {
-        toggleMute: 'ALT+M',
-        toggleDeafen: 'ALT+D',
-        openSettings: 'ALT+S',
-        callActiveChat: 'ALT+C',
-      },
       editingKeybind: { name: '', status: false, newString: '' },
     }
   },
-  mounted() {
-    window.addEventListener('keydown', this.recordKeybind)
-  },
-  destroyed() {
-    window.removeEventListener('keydown', this.recordKeybind)
-  },
   methods: {
     editKeybind(keybind: String) {
+      this.clearKeybinds()
+      window.addEventListener('keydown', this.recordKeybind)
       this.$data.editingKeybind.name = keybind
       this.$data.editingKeybind.status = true
       this.$data.editingKeybind.newString =
-        this.$data.keybinds[this.$data.editingKeybind.name]
+        this.$store.state.settings.keybinds[this.$data.editingKeybind.name]
     },
     recordKeybind(e: any) {
-      if (this.$data.editingKeybind.status) {
-        this.$data.editingKeybind.newString.length === 0
-          ? (this.$data.editingKeybind.newString += e.key.toUpperCase())
-          : (this.$data.editingKeybind.newString += `+${e.key.toUpperCase()}`)
-      }
+      this.$data.editingKeybind.newString.length === 0
+        ? (this.$data.editingKeybind.newString += e.key.toLowerCase())
+        : (this.$data.editingKeybind.newString += `+${e.key.toLowerCase()}`)
     },
     saveKeybind() {
-      const currKeybind = this.$data.editingKeybind.name
-      this.$data.keybinds[currKeybind] = this.$data.editingKeybind.newString
+      window.removeEventListener('keydown', this.recordKeybind)
+      const keybindName = this.$data.editingKeybind.name
+      const newKeybind = this.$data.editingKeybind.newString
+      for (const key in this.$store.state.settings.keybinds) {
+        if (this.$store.state.settings.keybinds[key] === newKeybind) {
+          this.$store.commit('updateKeybinding', {
+            keybindName: key,
+            newKeybind: '',
+          })
+        }
+      }
+      this.$store.commit('updateKeybinding', { keybindName, newKeybind })
       this.$data.editingKeybind.newString = ''
       this.$data.editingKeybind.status = false
+      this.activateKeybinds()
     },
     cancelKeybind() {
+      window.removeEventListener('keydown', this.recordKeybind)
       this.$data.editingKeybind.newString = ''
       this.$data.editingKeybind.status = false
+      this.activateKeybinds()
     },
     clearKeybind() {
       this.$data.editingKeybind.newString = ''
     },
     resetKeybinds() {
-      this.$data.keybinds = {
-        toggleMute: 'ALT+M',
-        toggleDeafen: 'ALT+D',
-        openSettings: 'ALT+S',
-        callActiveChat: 'ALT+C',
-      }
+      this.$store.commit('updateKeybinding', {
+        keybindName: 'toggleMute',
+        newKeybind: 'alt+m',
+      })
+      this.$store.commit('updateKeybinding', {
+        keybindName: 'toggleDeafen',
+        newKeybind: 'alt+d',
+      })
+      this.$store.commit('updateKeybinding', {
+        keybindName: 'openSettings',
+        newKeybind: 'alt+s',
+      })
+      this.$store.commit('updateKeybinding', {
+        keybindName: 'callActiveChat',
+        newKeybind: 'alt+c',
+      })
+      this.activateKeybinds()
     },
   },
 })
