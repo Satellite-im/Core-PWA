@@ -65,6 +65,7 @@
     display: flex;
     flex-wrap: wrap;
     > div {
+      position: relative;
       @media screen and (max-width: 440px) {
         width: 100%;
       }
@@ -74,13 +75,21 @@
     .date-input {
       color: @text;
       background-color: @dark-gray-alt;
-      border-radius: @corner-rounding;
-      line-height: 32px;
+      border-radius: 16px;
+      height: 34px;
       font-size: @text-size;
       border: 1px solid @primary-color;
       outline: none;
-      padding: 0 10px;
+      line-height: 1.2;
+      padding: 0 10px 0 30px;
       width: 100%;
+    }
+    .date-icon {
+      color: @primary-color;
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      font-size: 16px;
     }
     .add-more-filters {
       outline: none;
