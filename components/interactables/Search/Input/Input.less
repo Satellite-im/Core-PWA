@@ -1,17 +1,21 @@
 .search-container {
   position: relative;
+  font-size: @text-size;
+}
+.search-option-heading {
+  color: @primary-color;
 }
 .search-box {
   display: inline-block;
   position: relative;
   width: 180px;
-  font-size: 12px;
+  font-size: @text-size;
   border: 1px solid @light-gray;
   background: @darker;
   display: flex;
   align-items: center;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: @corner-rounding;
   transition: width 0.1s;
   &.focus {
     width: 282px;
@@ -34,7 +38,7 @@
     outline: 0;
     border: 0;
     color: @text;
-    z-index: 1;
+    z-index: @base-z-index;
     scrollbar-width: 0;
   }
 }
@@ -82,10 +86,10 @@
   position: absolute;
   left: 0;
   margin-top: 6px;
-  z-index: 9999;
+  z-index: @base-z-index + 2;
   background-color: @dark-gray;
   width: 100%;
-  border-radius: 3px;
+  border-radius: @corner-rounding;
   padding: 3px 6px;
   border: 1px solid @light-gray;
 }
@@ -115,10 +119,10 @@
   position: absolute;
   left: 0;
   margin-top: 4px;
-  z-index: 9999;
+  z-index: @base-z-index + 2;
   background-color: @dark-gray;
   width: 100%;
-  border-radius: 3px;
+  border-radius: @corner-rounding;
   padding: 3px 6px;
   border: 1px solid @light-gray;
 }
@@ -156,10 +160,10 @@
   position: absolute;
   left: 0;
   margin-top: 4px;
-  z-index: 9999;
+  z-index: @base-z-index + 2;
   background-color: @dark-gray;
   width: 100%;
-  border-radius: 3px;
+  border-radius: @corner-rounding;
   padding: 12px 6px;
   border: 1px solid @light-gray;
   display: flex;
