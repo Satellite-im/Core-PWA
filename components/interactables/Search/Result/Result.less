@@ -6,13 +6,13 @@
   min-width: 300px;
   max-width: 800px;
   width: 80%;
-  top: 45px;
-  z-index: 9998;
-  box-shadow: 0 1px 5px 0 @light-gray;
+  top: 48px;
+  z-index: @base-z-index + 1;
+  border-radius: @corner-rounding;
   border: 1px solid @light-gray;
-  border-radius: 2px;
   font-size: @text-size;
   &-header {
+    color: @primary-color;
     font-size: @title-text;
     padding: 5px 10px;
     display: flex;
@@ -74,7 +74,7 @@
     .date-input {
       color: @text;
       background-color: @dark-gray-alt;
-      border-radius: 16px;
+      border-radius: @corner-rounding;
       line-height: 32px;
       font-size: @text-size;
       border: 1px solid @primary-color;
