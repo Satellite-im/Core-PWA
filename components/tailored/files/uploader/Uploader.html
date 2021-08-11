@@ -1,10 +1,13 @@
 <div id="uploader" :class="inline ? 'inline' : ''">
   <div class="file-preview" v-if="file">
-    <img v-if="isEmbedableImage(file.name)" :src="url" />
+    <div class="img-wrapper">
+      <img v-if="isEmbedableImage(file.name)" :src="url" v-bind:class="{ 'img-blur': nsfw.status  }"/>
+    </div>
     <font-awesome-icon v-if="!isEmbedableImage(file.name)" :icon="['far', 'file']" class="control-icon"/>
     <div class="file-info">
       <TypographyTitle :size="6" :text="file.name" />
-      <div v-if="nsfw.status || nsfw.checking" >
+      <div v-if="nsfw.status || nsfw.checking" class="nsfw-text" >
+        <img src="../../../../static/img/skull.svg" class="svg" v-if="nsfw.status" />
         <TypographySubtitle :size="6" text="Scanning Image..." v-if="nsfw.checking" />
         <TypographySubtitle :size="6" text="Upload Blocked" v-if="nsfw.status" />
       </div>
