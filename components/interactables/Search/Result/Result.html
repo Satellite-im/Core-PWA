@@ -57,7 +57,7 @@
       <v-date-picker v-model="date" is-dark>
         <template v-slot="{ inputValue, inputEvents }">
           <font-awesome-icon :icon="['fa', 'fa-times']" />
-          <input :value="inputValue" v-on="inputEvents" class="date-input" />
+          <input :value="inputValue" v-on="inputEvents" class="date-input" placeholder="Select Date" />
         </template>
       </v-date-picker>
     </div>
