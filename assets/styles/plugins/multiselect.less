@@ -58,6 +58,7 @@ fieldset[disabled] .multiselect {
   // min-height: 40px;
   text-align: left;
   color: @text;
+  border-radius: @corner-rounding;
 }
 .multiselect * {
   box-sizing: border-box;
@@ -74,6 +75,7 @@ fieldset[disabled] .multiselect {
   z-index: 50;
   .multiselect__tags {
     border-color: @primary-color;
+    border-radius: @corner-rounding;
   }
 }
 .multiselect--active .multiselect__select {
@@ -121,8 +123,8 @@ fieldset[disabled] .multiselect {
 }
 .multiselect__tags {
   display: block;
-  padding: 5px 40px 0 10px;
-  border-radius: 16px;
+  padding: 6px 0 5px 5px;
+  border-radius: @corner-rounding;
   border: 1px solid @primary-color;
   background: @dark-gray;
   font-size: @text-size;
@@ -131,13 +133,12 @@ fieldset[disabled] .multiselect {
 .multiselect__tag {
   position: relative;
   display: inline-block;
-  padding: 3px 26px 3px 10px;
-  border-radius: 5px;
+  padding: 3px 25px 3px 5px;
+  border-radius: @corner-rounding-smaller;
   margin-right: 10px;
   color: @white;
   line-height: 1.1;
   background: @primary-color;
-  margin-bottom: 6px;
   white-space: nowrap;
   overflow: hidden;
   max-width: 100%;
@@ -145,18 +146,15 @@ fieldset[disabled] .multiselect {
 }
 .multiselect__tag-icon {
   cursor: pointer;
-  margin-left: 7px;
   position: absolute;
-  right: 0;
+  right: 5px;
   top: 0;
   bottom: 0;
   font-weight: 700;
   font-style: normal;
-  width: 22px;
   text-align: center;
   transition: all 0.2s ease;
-  border-radius: 5px;
-  line-height: 18px;
+  line-height: 20px;
 }
 .multiselect__tag-icon:after {
   content: '\D7';
