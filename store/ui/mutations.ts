@@ -57,5 +57,11 @@ export default {
   },
   toggleModal(state: NuxtState, modal: any) {
     state.ui.modals[modal.name] = modal.state
-  }
+  },
+  showSearchResult(state: NuxtState, enabled: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showSearchResult: enabled,
+    }
+  },
 }

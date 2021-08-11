@@ -1,4 +1,5 @@
-import { SearchCommand, SearchQueryItem, TextCommandMap } from './Types'
+import SearchUtil from './SearchUtil'
+import { SearchCommand, SearchQueryItem } from '~/types/search/search'
 
 export default class SearchQuery {
   query: string
@@ -99,6 +100,18 @@ export default class SearchQuery {
     )
   }
 
+  getQueryString() {
+    const ret = this.queryItems
+      .map(
+        (queryItem) =>
+          queryItem.command +
+          (queryItem.command !== SearchCommand.Empty ? ':' : '') +
+          queryItem.value
+      )
+      .join(' ')
+    return ret
+  }
+
   caretPosition(htmlElement: HTMLElement): number {
     if (!window.getSelection) {
       return 0
@@ -135,10 +148,11 @@ export default class SearchQuery {
     const queryItems = strQuerySplits.map((strQuery: string, index: number) => {
       let command = SearchCommand.Empty
       let value = strQuery
-      for (const commandText in TextCommandMap) {
-        if (strQuery.indexOf(commandText + ":") === 0) {
+      const textCommandMap = SearchUtil.getTextCommandMap()
+      for (const commandText in textCommandMap) {
+        if (strQuery.indexOf(commandText + ':') === 0) {
           const commandValue = strQuery.substr(commandText.length + 1)
-          command = TextCommandMap[commandText]
+          command = textCommandMap[commandText]
           value = commandValue
           break
         }

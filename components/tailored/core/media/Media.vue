@@ -27,13 +27,28 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      componentKey: this.fullscreen,
+    }
+  },
+  computed: {
+    propsToWatch() {
+      return { users: this.users, fullscreen: this.fullscreen }
+    },
+    computedUsers() {
+      return this.fullscreen
+        ? this.users.slice(0, this.fullscreenMaxViewableUsers)
+        : this.users.slice(0, this.maxViewableUsers)
+    },
+    ...mapState(['audio']),
+  },
   watch: {
     propsToWatch({ fullscreen }) {
+      const media: HTMLElement = this.$refs.media as HTMLElement
       if (!fullscreen) {
-        const media: HTMLElement = this.$refs.media as HTMLElement
+        const blocks = media.querySelectorAll('.user, .more-user')
         if (!media) return
-        const blocks = media.querySelectorAll('.user') as NodeListOf<Element>
-        // console.log(blocks)
         for (let j = 0; j < blocks.length; j++) {
           const block = blocks[j] as HTMLElement
           block.style.width = '16rem'
@@ -57,12 +72,13 @@ export default Vue.extend({
               matrix: { cols, rows },
             }
           }
-
-          const media: HTMLElement = this.$refs.media as HTMLElement
           if (!media) return
-          const blocks = media.querySelectorAll('.user') as NodeListOf<Element>
-          if (blocks.length === 0) return
-          if (!document.querySelectorAll('.fullscreen-media')) return
+          const blocks = media.querySelectorAll('.user, .more-user')
+          if (
+            blocks.length === 0 ||
+            !document.querySelectorAll('.fullscreen-media')
+          )
+            return
 
           const viewportWidth = media.clientWidth
           const viewportHeight = media.clientHeight
@@ -111,22 +127,6 @@ export default Vue.extend({
         }, 400)
       }
     },
-  },
-  computed: {
-    propsToWatch() {
-      return { users: this.users, fullscreen: this.fullscreen }
-    },
-    computedUsers() {
-      return this.fullscreen
-        ? this.users.slice(0, this.fullscreenMaxViewableUsers)
-        : this.users.slice(0, this.maxViewableUsers)
-    },
-    ...mapState(['audio']),
-  },
-  data() {
-    return {
-      componentKey: this.fullscreen,
-    }
   },
   methods: {
     volumeControlValueChange(volume: number) {

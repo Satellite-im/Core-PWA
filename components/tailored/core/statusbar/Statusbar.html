@@ -3,8 +3,13 @@
     <font-awesome-icon
       :icon="['fas', 'circle']"
       :class="`status is-${user.state}`"
-      v-if="!server" />
-    <UiCircle type="random" :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`" :size="28" />
+      v-if="!server"
+    />
+    <UiCircle
+      type="random"
+      :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
+      :size="28"
+    />
   </div>
   <div class="user-info">
     <TypographyTitle :size="6" :text="server ? server.name : user.name" />
@@ -12,23 +17,37 @@
   </div>
   <div class="statusbar-spacer"></div>
   <div class="controls">
-    <div class="has-tooltip has-tooltip-bottom has-tooltip-primary" data-tooltip="Call" v-if="!server">
-      <font-awesome-icon
-        class="control-icon"
-        :icon="['far', 'phone']" />
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Call"
+      v-if="!server"
+    >
+      <font-awesome-icon class="control-icon" :icon="['far', 'phone']" />
     </div>
-    <div class="has-tooltip has-tooltip-bottom has-tooltip-primary" data-tooltip="Video" v-if="!server">
-      <font-awesome-icon
-        class="control-icon"
-        :icon="['far', 'video']" />
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Video"
+      v-if="!server"
+    >
+      <font-awesome-icon class="control-icon" :icon="['far', 'video']" />
     </div>
-    <!-- <InteractablesInput v-if="!$device.isMobile" class="input-wrap" mdv-model="input1Text" type="dark" outlined size="small" placeholder="Search..." /> -->
-    <InteractablesSearch @change="change" />
+    <InteractablesSearchInput
+      @search="handleSearch"
+      @change="handleChange"
+      placeholder="Search..."
+      :searchRecommend="searchRecommend"
+    />
+    <InteractablesSearchResult
+      :searchQuery="searchQuery"
+      :show="showSearchResult"
+      @toggle="toggleSearchResult"
+    />
     <div
       class="token-balance has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
-      data-tooltip="Nanite Balance">
-      <img src="~/static/img/nanites_blue.svg" alt="" width="25"/>
+      data-tooltip="Nanite Balance"
+    >
+      <img src="~/static/img/nanites_blue.svg" alt="" width="25" />
       <TypographyText text="231,832" />
     </div>
   </div>

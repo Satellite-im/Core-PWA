@@ -7,7 +7,6 @@ import { mapState } from 'vuex'
 import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
 import { DataStateType } from '../../../../store/dataState/state'
 import { User, Group } from '~/types/ui/core'
-// Vue.use(DataStateType)
 
 export default Vue.extend({
   mixins: [mobileSwipe],
