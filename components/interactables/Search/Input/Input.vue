@@ -150,6 +150,7 @@ export default Vue.extend({
       if (date == null || this.current == null) {
         return
       }
+      this.current = this.searchQuery.queryItems[this.current.index]
       this.current.value = date
       this.current.cursorEnd += date.length
       this.caretPosition += date.length + 1
@@ -335,29 +336,57 @@ export default Vue.extend({
       this.emitChange()
     },
     keydown(event: KeyboardEvent) {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        this.caretPosition = this._getCaretPosition()
-        this._insertOption()
-        this._insertHasOption()
-        this._insertSearch()
-        this._produceItems()
-        this._setCaretPosition(this.caretPosition)
-        this._detectStatus()
-        this._prepareSearch()
-        this.emitSearch()
-      } else if (event.key === ' ' || event.key === 'Spacebar') {
-        this.caretPosition = this._getCaretPosition()
-        if (this._prepareItem()) {
+      switch (event.key) {
+        case 'Enter':
           event.preventDefault()
-          this._setCaretPosition(this.caretPosition + 1)
-        }
-      } else if (event.key === 'Down' || event.key === 'ArrowDown') {
-        event.preventDefault()
-        this._navigatePanel(true)
-      } else if (event.key === 'Up' || event.key === 'ArrowUp') {
-        event.preventDefault()
-        this._navigatePanel(false)
+          this.caretPosition = this._getCaretPosition()
+          this._insertOption()
+          this._insertHasOption()
+          this._insertSearch()
+          this._produceItems()
+          this._setCaretPosition(this.caretPosition)
+          this._detectStatus()
+          this._prepareSearch()
+          this.emitSearch()
+          break
+        case ' ':
+        case 'Spacebar':
+          this.caretPosition = this._getCaretPosition()
+          if (this._prepareItem()) {
+            event.preventDefault()
+            this._setCaretPosition(this.caretPosition + 1)
+          }
+          break
+        case 'Down':
+        case 'ArrowDown':
+          event.preventDefault()
+          this._navigatePanel(true)
+          break
+        case 'Up':
+        case 'ArrowUp':
+          event.preventDefault()
+          this._navigatePanel(false)
+          break
+        case 'Backspace':
+          {
+            const caretPostion = this._getCaretPosition()
+            const queryItem = this.searchQuery.queryItemFrom(caretPostion)
+            if (queryItem != null && queryItem.command !== '') {
+              const sp = caretPostion - queryItem.cursorStart - 1
+              if (sp === queryItem.command.length) {
+                queryItem.command = SearchCommand.Empty
+                event.preventDefault()
+                this._detectStatus()
+                this._produceItems()
+                this._setCaretPosition(queryItem.cursorStart)
+                this._prepareSearch()
+                // this.emitSearch()
+              }
+            }
+          }
+          break
+        default:
+          break
       }
     },
     keyup(event: KeyboardEvent) {
