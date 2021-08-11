@@ -31,21 +31,30 @@ export default Vue.extend({
   data() {
     return {
       numberOfTicks: 0,
+      ro: new ResizeObserver(() => {}),
     }
   },
-  created() {
-    window.addEventListener('resize', this.resizeHandler)
+  beforeMount() {
+    this.resizeHandler()
+  },
+  beforeDestroy() {
+    this.ro.unobserve(this.$refs.meter as Element)
   },
   mounted() {
+    this.ro = new ResizeObserver((_) => {
+      this.resizeHandler()
+    })
+    this.ro.observe(this.$refs.meter as Element)
+
     this.$nextTick(() => {
       /* update number of ticks after whole view is rendrered */
-      setTimeout(this.resizeHandler,50);
+      setTimeout(this.resizeHandler, 50)
     })
   },
-  destroyed() {
-    window.removeEventListener('resize', this.resizeHandler)
-  },
   methods: {
+    onResize() {
+      this.resizeHandler()
+    },
     // Returns the designated tick color based on the increment value
     getTickColor(increment: number): string {
       if (this.numberOfTicks) {
@@ -65,7 +74,7 @@ export default Vue.extend({
     resizeHandler() {
       const meterElm: HTMLElement = this.$refs.meter as HTMLElement
       if (meterElm) {
-        let width = meterElm.clientWidth
+        const width = meterElm.clientWidth
         this.numberOfTicks = Math.floor(width / 20)
       }
     },

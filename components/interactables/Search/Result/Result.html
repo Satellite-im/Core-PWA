@@ -1,5 +1,6 @@
 <div
   class="search-result"
+  v-click-outside="toggle"
   v-if="show && ((result && result.data) || loading === DataStateType.Loading)"
 >
   <div class="search-result-header">

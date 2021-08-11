@@ -14,9 +14,6 @@ export default Vue.extend({
     }
   },
   mounted() {
-    // setTimeout(() => {
-    //   this.scrollToBottom()
-    // }, 400)
     this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
   },
   updated() {
