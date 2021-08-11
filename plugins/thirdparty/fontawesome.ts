@@ -63,6 +63,7 @@ import {
   faCommentAltSmile,
   faSearch,
   faKeySkeleton,
+  faCalendarDay,
   faSkull,
 } from '@fortawesome/pro-regular-svg-icons'
 
@@ -127,6 +128,7 @@ library.add(faCommentAltSmile)
 library.add(faSearch)
 library.add(faTimes)
 library.add(faKeySkeleton)
+library.add(faCalendarDay)
 library.add(faSkull)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
