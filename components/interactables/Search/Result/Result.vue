@@ -94,6 +94,7 @@ export default Vue.extend({
     toggleOrderBy(state: SearchOrderType) {
       this.orderBy = state
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async fetchResult(query: string): Promise<void> {
       this.loading = DataStateType.Loading
       await new Promise((resolve) => setTimeout(resolve, 3000))
