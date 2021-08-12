@@ -60,16 +60,14 @@ p {
   flex-basis: 0;
   flex-grow: 999;
   height: 100vh;
+  font-size: @text-size;
   transition: @transition-all;
+  .title, .subtitle {
+    font-size: @text-size;
+  }
   .ps {
     padding: @normal-spacing * 2;
   }
-}
-.title {
-  white-space: pre-line;
-}
-.subtitle {
-  white-space: pre-line;
 }
 
 .menu-toggle {
