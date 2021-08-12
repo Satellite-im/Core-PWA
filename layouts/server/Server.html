@@ -17,7 +17,8 @@
         id="statusbar"
         :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
         :user="$mock.users[0]"/>
-      <TailoredCoreMedia /> 
+        <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
+        :fullscreenMaxViewableUsers="20" />
       <Nuxt id="server" ref="server" class="hidden-scroll"/>
       <TailoredCoreChatbar />
     </div>
