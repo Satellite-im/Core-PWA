@@ -23,13 +23,13 @@
       <multiselect
         :options="userOptions"
         :multiple="true"
+        :close-on-select="false"
         :clear-on-select="false"
         :preserve-search="true"
         placeholder="Users"
         label="name"
         track-by="name"
         v-model="users"
-        :preselect-first="true"
         selectLabel=""
         deselectLabel=""
         selectedLabel=""
@@ -46,7 +46,6 @@
         label="name"
         track-by="name"
         v-model="channels"
-        :preselect-first="true"
         selectLabel=""
         deselectLabel=""
         selectedLabel=""
@@ -56,8 +55,16 @@
     <div>
       <v-date-picker v-model="date" is-dark>
         <template v-slot="{ inputValue, inputEvents }">
-          <font-awesome-icon :icon="['far', 'calendar-day']" class="date-icon" />
-          <input :value="inputValue" v-on="inputEvents" class="date-input" placeholder="Select Date" />
+          <font-awesome-icon
+            :icon="['far', 'calendar-day']"
+            class="date-icon"
+          />
+          <input
+            :value="inputValue"
+            v-on="inputEvents"
+            class="date-input"
+            placeholder="Select Date"
+          />
         </template>
       </v-date-picker>
     </div>

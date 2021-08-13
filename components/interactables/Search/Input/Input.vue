@@ -85,7 +85,7 @@ export default Vue.extend({
       if (this.isEmpty || !this.isFocus || this.current == null) {
         return false
       }
-      if (this.current.command !== '' && this.current.value === '') {
+      if (this.current.value.trim() === '') {
         return false
       }
       return true
@@ -376,11 +376,10 @@ export default Vue.extend({
               if (sp === queryItem.command.length) {
                 queryItem.command = SearchCommand.Empty
                 event.preventDefault()
-                this._detectStatus()
                 this._produceItems()
                 this._setCaretPosition(queryItem.cursorStart)
                 this._prepareSearch()
-                // this.emitSearch()
+                this._detectStatus()
               }
             }
           }
