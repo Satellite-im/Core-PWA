@@ -5,64 +5,63 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AutoScroll',
-  components: {
-  },
+  components: {},
   props: {
     height: {
       type: String,
-      default: '400px'
+      default: '400px',
     },
     speed: {
       type: Number,
-      default: 3
+      default: 3,
     },
     mouseOverStart: {
       type: Boolean,
       default: true,
-      required: false
+      required: false,
+    },
+  },
+  data() {
+    return {
+      scrollFn: null,
+      isScrolling: false,
     }
   },
   beforeDestroy() {
-    this.stopScroll();
+    this.stopScroll()
   },
   mounted() {
-    this.$nextTick(()=> {
-      if(!this.mouseOverStart) this.startScroll();
+    this.$nextTick(() => {
+      if (!this.mouseOverStart) this.startScroll()
     })
   },
   methods: {
     scroll() {
-      if(this.$refs.autoScroll && this.isScrolling) {
-        this.$refs.autoScroll.scrollTop += this.speed;
-      } 
+      if (this.$refs.autoScroll && this.isScrolling) {
+        this.$refs.autoScroll.scrollTop += this.speed
+      }
     },
     stopScroll() {
-      if(this.scrollFn) {
+      if (this.scrollFn) {
         clearInterval(this.scroll)
         this.isScrolling = false
       }
     },
     startScroll() {
       this.scrollFn = setInterval(this.scroll, 100)
-      this.isScrolling = true;
+      this.isScrolling = true
     },
     mouseOver() {
-      if(this.mouseOverStart && !this.isScrolling) this.startScroll();
+      if (this.mouseOverStart && !this.isScrolling) this.startScroll()
     },
     mouseClick() {
-      if(this.isScrolling) {
-        this.stopScroll();
-      }else {
-        this.startScroll();
+      if (this.isScrolling) {
+        this.stopScroll()
+      } else {
+        this.startScroll()
       }
-    }
+    },
   },
-  data() {
-    return {
-      scrollFn: null,
-      isScrolling: false
-    }
-  }
 })
 </script>
 
