@@ -11,13 +11,13 @@
   font-family: 'SpaceMono';
   font-style: normal;
   font-weight: 400;
-  src: url('~/assets/fonts/SpaceMono-Regular.ttf');
+  src: url('~assets/fonts/SpaceMono-Regular.ttf');
 }
 @font-face {
   font-family: @secondary-font;
   font-style: normal;
   font-weight: 400;
-  src: url('~/assets/fonts/Poppins-Regular.ttf');
+  src: url('~assets/fonts/Poppins-Regular.ttf');
 }
 p {
   font-family: @secondary-font;

@@ -4,8 +4,8 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-import { mobileSwipe } from '../../../../components/mixins/Swipe/Swipe'
-import { DataStateType } from '../../../../store/dataState/state'
+import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
+import { DataStateType } from '~/store/dataState/state'
 import { User, Group } from '~/types/ui/core'
 
 export default Vue.extend({

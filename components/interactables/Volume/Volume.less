@@ -14,7 +14,7 @@
   .vue-slider-dot-tooltip-inner {
     border-color: transparent;
     border-radius: 2px;
-    background-color: @primary-color;
+    background-color: @dark-gray;
     font-size: @micro-text-size;
 
     &::after {
@@ -22,7 +22,7 @@
       height: 0;
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
-      border-left: 5px solid @primary-color;
+      border-left: 5px solid @dark-gray;
       margin-left: -1px;
     }
   }
@@ -36,8 +36,16 @@
   }
 
   .vue-slider-dot-handle {
-    background-color: @bright-text;
+    height: 13px;
+    margin-left: 1px;
+    width: 13px;
+    background-color: @white;
     box-shadow: none;
+
+    &:hover {
+      box-shadow: 0 0 0 2pt rgba(255, 255, 255, 0.5);
+      border: 1px solid @gray;
+    }
   }
 
   &--btt,

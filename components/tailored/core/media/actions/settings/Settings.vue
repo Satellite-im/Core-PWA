@@ -3,14 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import {
-  Bitrates,
-  SampleSizes,
-} from '../../../../../../pages/settings/audio/options/audio'
+import { Bitrates, SampleSizes } from '~/pages/settings/audio/options/audio'
 import {
   PermissionRequestOptions,
   UserPermissions,
-} from '../../../../../mixins/UserPermissions'
+} from '~/components/mixins/UserPermissions'
 
 declare module 'vue/types/vue' {
   interface Vue {
