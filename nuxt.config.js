@@ -155,14 +155,7 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    babel: {
-      presets(_, [__, options]) {
-        return [['@babel/preset-env', options]]
-      },
-      plugins: ['@babel/plugin-transform-runtime'],
-    },
-  },
+  build: {},
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
