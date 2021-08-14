@@ -1,0 +1,6 @@
+[submodule "android"]
+	path = android
+	url = git@github.com:Satellite-im/Satellite-Build-Android.git
+[submodule "electron"]
+	path = electron
+	url = git@github.com:Satellite-im/Satellite-Build-Desktop.git

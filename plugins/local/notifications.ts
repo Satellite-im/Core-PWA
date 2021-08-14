@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 import { Notifications } from '~/libraries/ui/Notifications'
 
+
 declare module 'vue/types/vue' {
   interface Vue {
     $notifications: typeof Notifications
