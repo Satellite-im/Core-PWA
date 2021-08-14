@@ -22,7 +22,6 @@ export default Vue.extend({
     }
   },
   mounted() {
-    // Updates time ago
     this.$data.updateInterval = setInterval(() => {
       this.updated = Date.now()
     }, 60000)
