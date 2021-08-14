@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "node startup.js && nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -33,6 +33,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "bip39": "^3.0.4",
     "bulma": "^0.9.2",
+    "chalk": "^4.1.2",
     "core-js": "^3.9.1",
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.10.4",
@@ -76,7 +77,7 @@
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
-    "@nuxt/types": "^2.15.3",
+    "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",

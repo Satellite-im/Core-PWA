@@ -1,4 +1,4 @@
-<div>
+<div class="audio">
   <vue-plyr>
     <audio
       controls
@@ -12,4 +12,5 @@
       />
     </audio>
   </vue-plyr>
+  <TypographyText :size="6" :text="`${data.title} - ${data.filename}`" />
 </div>
