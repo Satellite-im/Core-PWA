@@ -3,12 +3,14 @@
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
         <div class="word">Audio Quality</div>
+        <!-- matches  -->
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
         <div class="form">
           <div class="form-group">
             <label>Bitrate</label>
+        <!-- matches  -->
             <InteractablesSelect
               :options="Bitrates"
               v-model="bitrate"
@@ -18,6 +20,7 @@
           </div>
           <div class="form-group">
             <label>Sample size</label>
+        <!-- matches  -->
             <InteractablesSelect
               :options="SampleSizes"
               v-model="sampleSize"
@@ -31,19 +34,23 @@
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
         <div class="word">Video Quality</div>
+        <!-- matches  -->
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
         <div>No options</div>
+        <!-- matches  -->
       </div>
     </li>
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
         <div class="word">Stream Options</div>
+        <!-- matches  -->
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
         <div>No options</div>
+        <!-- matches  -->
       </div>
     </li>
   </ul>

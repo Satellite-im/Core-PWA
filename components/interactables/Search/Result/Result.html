@@ -5,6 +5,8 @@
 >
   <div class="search-result-header">
     Search results
+        <!-- matches  -->
+
     <InteractablesClose class="close" :action="toggle" />
   </div>
   <div class="search-result-group">
@@ -61,6 +63,7 @@
     </div>
     <div>
       <button class="add-more-filters">More filters</button>
+        <!-- matches  -->
     </div>
   </div>
   <div
@@ -68,6 +71,7 @@
     v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
   >
     <div class="result-count">{{result.data.totalRows}} Results</div>
+        <!-- matches  -->
     <div class="result-orderby">
       <div
         v-for="item in orderTypeList"
