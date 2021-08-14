@@ -1,7 +1,7 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
+// import { Capacitor } from '@capacitor/core'
 import { MessageGroup } from '~/types/messaging'
 
 export default Vue.extend({
@@ -22,10 +22,9 @@ export default Vue.extend({
     }
   },
   mounted() {
-    // Updates time ago
     this.$data.updateInterval = setInterval(() => {
       this.updated = Date.now()
-    }, 60000)
+    }, 6000)
   },
   beforeDestroy() {
     clearInterval(this.$data.updateInterval)
