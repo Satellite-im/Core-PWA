@@ -16,7 +16,6 @@ export default Vue.extend({
 <style lang="less" src="./VideoPlayer.less"></style>
 <style scoped lang="less">
 .is-text {
-  margin-left: -1rem;
   font-size: @micro-text-size;
   padding: 0;
   line-height: 0.8;
@@ -24,5 +23,12 @@ export default Vue.extend({
   color: @text-muted;
   display: inline-block;
   text-align: left;
+}
+svg {
+  float: right;
+  font-size: @mini-text-size;
+  margin-top: 0.5rem;
+  color: @text-muted;
+  cursor: pointer;
 }
 </style>

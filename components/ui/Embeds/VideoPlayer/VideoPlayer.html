@@ -1,4 +1,4 @@
-<div>
+<div class="video">
   <vue-plyr>
     <video
       controls
@@ -13,4 +13,5 @@
     </video>
   </vue-plyr>
   <TypographyText :size="6" :text="`${data.title} - ${data.filename}`" />
+  <font-awesome-icon :icon="['far', 'download']" />
 </div>
