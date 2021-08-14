@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { mobileSwipe } from '../../../mixins/Swipe/Swipe'
+import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
   mixins: [mobileSwipe],
