@@ -24,10 +24,11 @@ export default Vue.extend({
   display: inline-block;
   text-align: left;
 }
-svg {
+.download {
   float: right;
+  font-family: @primary-font;
   font-size: @mini-text-size;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   color: @text-muted;
   cursor: pointer;
 }
