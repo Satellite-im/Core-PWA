@@ -1,0 +1,20 @@
+<div class="video">
+  <vue-plyr>
+    <video
+      controls
+      crossorigin
+      playsinline
+    >
+      <source
+        size="1080"
+        :src="data.src"
+        :type="data.type"
+      />
+    </video>
+  </vue-plyr>
+  <TypographyText :size="6" :text="`${data.title} - ${data.filename}`" />
+  <span class="download">
+    <font-awesome-icon :icon="['far', 'download']" />
+    Download
+  </span>
+</div>
