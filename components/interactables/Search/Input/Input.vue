@@ -119,30 +119,41 @@ export default Vue.extend({
       }
     },
     _insertBlank(after: number) {
-      this.current = this.searchQuery.insertBlank(after)
+      this.current = this.searchQuery.insertCommand(
+        SearchCommand.Empty,
+        '',
+        after
+      )
       this._produceItems()
     },
     _insertOption() {
       if (this.option < 0 || (!this.isEmpty && !this.isEmptyCommand)) {
         return
       }
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition)
       const option = this.searchOptions[this.option]
-      this.searchQuery.appendCommand(option.name, '')
+      if (this.current == null) {
+        this.current = this.searchQuery.appendCommand(option.name, '')
+      } else {
+        this.current = this.searchQuery.insertCommand(
+          option.name,
+          '',
+          this.current.index
+        )
+      }
+      if (this.current) {
+        this.caretPosition = this.current.cursorEnd
+      }
       this.option = -1
-      this.current =
-        this.searchQuery.queryItems[this.searchQuery.queryItems.length - 1]
-      this.caretPosition = this.current.cursorEnd
     },
     _insertHasOption() {
       if (this.option < 0 || this.current == null || !this.isHas) {
         return
       }
       const option = this.hasOptions[this.option]
-      this.caretPosition = this._getCaretPosition()
-      this.current = this.searchQuery.queryItemFrom(this.caretPosition - 1)
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition)
       if (this.current != null) {
-        this.current.value = option.value
-        this.current.cursorEnd += option.value.length
+        this.searchQuery.setCommandValue(this.current.index, option.value)
         this.caretPosition = this.current.cursorEnd
         this.option = -1
       }
@@ -151,7 +162,6 @@ export default Vue.extend({
       if (this.search < 0 || !this.searchResult) {
         return
       }
-      this.caretPosition = this._getCaretPosition()
       this.searchQuery.deleteItemFrom(this.caretPosition)
 
       const search = this.searchResult[this.search] as SearchRecommendResultItem
@@ -165,11 +175,9 @@ export default Vue.extend({
       if (date == null) {
         return
       }
-      this.caretPosition = this._getCaretPosition()
-      this.current = this.searchQuery.queryItemFrom(this.caretPosition - 1)
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition)
       if (this.current != null) {
-        this.current.value = date
-        this.current.cursorEnd += date.length
+        this.searchQuery.setCommandValue(this.current.index, date)
         this.caretPosition = this.current.cursorEnd
       }
     },
@@ -278,7 +286,7 @@ export default Vue.extend({
       }
     },
     _prepareSearch() {
-      this.caretPosition = this._getCaretPosition()
+      // this.caretPosition = this._getCaretPosition()
       this.current = this.searchQuery.queryItemFrom(
         this.caretPosition
       ) as SearchQueryItem
@@ -301,7 +309,6 @@ export default Vue.extend({
     clickOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.option = i
-      this.caretPosition = this._getCaretPosition()
       this._insertOption()
       this._produceItems()
       this._setCaretPosition(this.caretPosition)
@@ -311,7 +318,6 @@ export default Vue.extend({
     clickHasOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.option = i
-      this.caretPosition = this._getCaretPosition()
       this._insertHasOption()
       this._produceItems()
       this._setCaretPosition(this.caretPosition)
@@ -323,7 +329,6 @@ export default Vue.extend({
     clickSearchOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.search = i
-      this.caretPosition = this._getCaretPosition()
       this._insertSearch()
       this._produceItems()
       this._setCaretPosition(this.caretPosition)
@@ -334,7 +339,6 @@ export default Vue.extend({
     },
     clickDateOption(day: CalendarDateType) {
       const searchInput = this.$refs.searchInput as HTMLElement
-      this.caretPosition = this._getCaretPosition()
       this._insertDate(day.id)
       this._produceItems()
       this._setCaretPosition(this.caretPosition)
@@ -385,6 +389,13 @@ export default Vue.extend({
           event.preventDefault()
           this._navigatePanel(false)
           break
+        case 'Left':
+        case 'ArrowLeft':
+        case 'Right':
+        case 'ArrowRight':
+        case 'End':
+          this.caretPosition = this._getCaretPosition()
+          break
         case 'Backspace':
           {
             const caretPostion = this._getCaretPosition()
@@ -401,7 +412,6 @@ export default Vue.extend({
                 this._setCaretPosition(queryItem.cursorStart)
                 this._detectStatus()
                 this._prepareSearch()
-                // this.emitSearch()
               }
             }
           }
@@ -428,11 +438,14 @@ export default Vue.extend({
     setFocus() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.contentEditable = 'true'
+      searchInput.autocapitalize = 'off'
       this.isFocus = true
+      this.caretPosition = this._getCaretPosition()
     },
     lostFocus() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.contentEditable = 'false'
+      searchInput.autocapitalize = 'off'
       searchInput.blur()
       this.isFocus = false
     },
