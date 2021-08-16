@@ -126,15 +126,15 @@ export default Vue.extend({
       this._produceItems()
     },
     _insertOption() {
-      if (this.option < 0 || !this.isEmpty) {
+      if (this.option < 0 || (!this.isEmpty && !this.isEmptyCommand)) {
         return
       }
       const option = this.searchOptions[this.option]
       this.searchQuery.appendCommand(option.name, '')
-      this.caretPosition += option.name.length + 1
       this.option = -1
       this.current =
         this.searchQuery.queryItems[this.searchQuery.queryItems.length - 1]
+      this.caretPosition = this.current.cursorEnd
     },
     _insertHasOption() {
       if (this.option < 0 || this.current == null || !this.isHas) {
@@ -144,7 +144,7 @@ export default Vue.extend({
       const option = this.hasOptions[this.option]
       this.current.value = option.value
       this.current.cursorEnd += option.value.length
-      this.caretPosition += option.value.length + 1
+      this.caretPosition = this.current.cursorEnd
       this.option = -1
     },
     _insertSearch() {
@@ -156,11 +156,10 @@ export default Vue.extend({
 
       const search = this.searchResult[this.search] as SearchRecommendResultItem
       this.searchQuery.appendCommand(search.command, search.value.value)
-      this.caretPosition +=
-        search.command.length + search.value.value.length + 1
       this.search = -1
       this.current =
         this.searchQuery.queryItems[this.searchQuery.queryItems.length - 1]
+      this.caretPosition = this.current.cursorEnd
     },
     _insertDate(date: string) {
       if (date == null || this.current == null) {
@@ -169,7 +168,7 @@ export default Vue.extend({
       this.current = this.searchQuery.queryItems[this.current.index]
       this.current.value = date
       this.current.cursorEnd += date.length
-      this.caretPosition += date.length + 1
+      this.caretPosition = this.current.cursorEnd
     },
     _prepareItem() {
       const searchInput = this.$refs.searchInput as HTMLElement
