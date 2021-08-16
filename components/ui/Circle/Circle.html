@@ -1,6 +1,7 @@
 <div 
   :class="`${square ? 'is-square' : 'is-rounded'} ${type === 'icon' ? 'circle-flex' : 'circle'}`"
   :style="`font-size: ${size * 0.55}px; height: ${size}px; width: ${size}px; background: ${color};`"
+  @click="() => {$emit('click')}"
   >
   <img
     :src="source"
