@@ -1,6 +1,6 @@
 import { AccountsState } from './types'
 
-const InitalAccountsState: AccountsState = {
+const InitalAccountsState = (): AccountsState => ({
   locked: false,
   error: '',
   pinHash: '',
@@ -8,6 +8,6 @@ const InitalAccountsState: AccountsState = {
   gasPrice: '',
   phrase: '',
   encryptedPhrase: '',
-}
+})
 
 export default InitalAccountsState
