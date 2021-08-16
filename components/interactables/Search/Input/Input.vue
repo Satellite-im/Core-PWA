@@ -64,10 +64,7 @@ export default Vue.extend({
       return false
     },
     isOption() {
-      if (this.isFocus && (this.isEmpty || this.isHas)) {
-        return true
-      }
-      if (this.isEmptyCommand) {
+      if (this.isFocus && (this.isEmpty || this.isHas || this.isEmptyCommand)) {
         return true
       }
       return false
@@ -140,12 +137,15 @@ export default Vue.extend({
       if (this.option < 0 || this.current == null || !this.isHas) {
         return
       }
-      this.current = this.searchQuery.queryItems[this.current.index]
       const option = this.hasOptions[this.option]
-      this.current.value = option.value
-      this.current.cursorEnd += option.value.length
-      this.caretPosition = this.current.cursorEnd
-      this.option = -1
+      this.caretPosition = this._getCaretPosition()
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition - 1)
+      if (this.current != null) {
+        this.current.value = option.value
+        this.current.cursorEnd += option.value.length
+        this.caretPosition = this.current.cursorEnd
+        this.option = -1
+      }
     },
     _insertSearch() {
       if (this.search < 0 || !this.searchResult) {
@@ -162,13 +162,16 @@ export default Vue.extend({
       this.caretPosition = this.current.cursorEnd
     },
     _insertDate(date: string) {
-      if (date == null || this.current == null) {
+      if (date == null) {
         return
       }
-      this.current = this.searchQuery.queryItems[this.current.index]
-      this.current.value = date
-      this.current.cursorEnd += date.length
-      this.caretPosition = this.current.cursorEnd
+      this.caretPosition = this._getCaretPosition()
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition - 1)
+      if (this.current != null) {
+        this.current.value = date
+        this.current.cursorEnd += date.length
+        this.caretPosition = this.current.cursorEnd
+      }
     },
     _prepareItem() {
       const searchInput = this.$refs.searchInput as HTMLElement
@@ -248,7 +251,7 @@ export default Vue.extend({
       }
     },
     _navigatePanel(down: boolean) {
-      if (this.isEmpty || this.isHas) {
+      if (this.isEmpty || this.isEmptyCommand || this.isHas) {
         if (down === true) {
           if (this.option < this.searchOptions.length - 1) {
             this.option++
