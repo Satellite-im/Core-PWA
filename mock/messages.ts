@@ -80,6 +80,26 @@ export const Messages = [
     ],
   },
   {
+    id: '00-01-84',
+    at: 1620515543000,
+    type: 'group',
+    from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+    to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    messages: [
+      {
+        id: '00-00-10',
+        at: 1620515543000,
+        type: 'video',
+        payload: {
+          title: 'Big Buck Bunny',
+          author: 'The Blender Foundation',
+          filename: 'big_buck_bunny.mp4',
+          src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        },
+      },
+    ],
+  },
+  {
     type: 'divider',
     at: 1620515543800,
   },
@@ -121,6 +141,17 @@ export const Messages = [
         type: 'text',
         payload:
           'Mir local arm starlight day eccentricity Saturn falling star Mars astronomy gravitation',
+      },
+      {
+        id: '00-1293-10',
+        at: 1620515543000,
+        type: 'audio',
+        payload: {
+          title: 'Break Away',
+          author: 'Test Audio',
+          filename: 'breakaway.mp3',
+          src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
+        },
       },
     ],
   },
