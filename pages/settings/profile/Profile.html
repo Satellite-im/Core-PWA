@@ -5,12 +5,17 @@
       <TypographySubtitle :size="6" :text="$t('pages.settings.profile.subtitle')" />
     </div>
   </div>
+  <ImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
+        :imageUrl="imageUrl" />
+  <div v-if="showCropper" class="cropper-mask"></div> 
   <div class="columns is-mobile">
     <div class="column profile-photo-column">
       <div class="profile-photo">
-        <UiCircle type="random" seed="0x0000000000000000000000000000000000000000" :size="$mq === 'sm' ? 55 : 75"/>
+        <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
+        <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="$mq === 'sm' ? 55 : 75"/>
         <UiCircle 
           type="icon" 
+          @click="openFileDialog"
           :icon="{ style: 'far', name: 'plus'}" 
           color="#000" 
           :size="18"
