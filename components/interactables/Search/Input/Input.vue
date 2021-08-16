@@ -53,8 +53,21 @@ export default Vue.extend({
       return SearchUtil.getCommandTypeParams()[SearchCommandType.Has]
         .options as SearchOption[]
     },
+    isEmptyCommand() {
+      if (
+        this.current != null &&
+        this.current.command === '' &&
+        this.current.value === ''
+      ) {
+        return true
+      }
+      return false
+    },
     isOption() {
       if (this.isFocus && (this.isEmpty || this.isHas)) {
+        return true
+      }
+      if (this.isEmptyCommand) {
         return true
       }
       return false
@@ -85,6 +98,9 @@ export default Vue.extend({
       if (this.isEmpty || !this.isFocus || this.current == null) {
         return false
       }
+      if (this.current.command === '' && this.current.value === '') {
+        return false
+      }
       if (this.current.command !== '' && this.current.value === '') {
         return false
       }
@@ -106,7 +122,7 @@ export default Vue.extend({
       }
     },
     _insertBlank(after: number) {
-      this.searchQuery.insertBlank(after)
+      this.current = this.searchQuery.insertBlank(after)
       this._produceItems()
     },
     _insertOption() {
@@ -375,10 +391,13 @@ export default Vue.extend({
               const sp = caretPostion - queryItem.cursorStart - 1
               if (sp === queryItem.command.length) {
                 queryItem.command = SearchCommand.Empty
+                if (queryItem.value === '') {
+                  this.searchQuery.deleteItemAt(queryItem.index)
+                }
                 event.preventDefault()
-                this._detectStatus()
                 this._produceItems()
                 this._setCaretPosition(queryItem.cursorStart)
+                this._detectStatus()
                 this._prepareSearch()
                 // this.emitSearch()
               }

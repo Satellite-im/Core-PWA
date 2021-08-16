@@ -21,9 +21,9 @@ export default class SearchQuery {
     this.queryItems = []
   }
 
-  insertBlank(position: number) {
+  insertBlank(position: number): SearchQueryItem | null {
     if (position >= this.queryItems.length) {
-      return
+      return null
     }
     const target = this.queryItems[position]
     const prepend = this.queryItems.slice(0, position + 1)
@@ -46,6 +46,8 @@ export default class SearchQuery {
     })
 
     this.queryItems = prepend
+
+    return newItem
   }
 
   appendCommand(command: SearchCommand, value: string) {
@@ -75,12 +77,26 @@ export default class SearchQuery {
   }
 
   deleteItemFrom(caretPositon: number) {
+    let index = -1
     this.queryItems.forEach((queryItem) => {
       if (
         queryItem.cursorStart <= caretPositon &&
         queryItem.cursorEnd >= caretPositon
       ) {
         this.queryItems.splice(queryItem.index, 1)
+        index = queryItem.index
+      }
+      if (index > -1 && queryItem.index > index) {
+        queryItem.index--
+      }
+    })
+  }
+
+  deleteItemAt(index: number) {
+    this.queryItems.splice(index, 1)
+    this.queryItems.forEach((queryItem) => {
+      if (queryItem.index > index) {
+        queryItem.index--
       }
     })
   }
@@ -137,7 +153,8 @@ export default class SearchQuery {
   }
 
   _parseQuery(query: string, cursorPosition: number) {
-    const strQuerySplits = query.trim().split('\u00A0')
+    query = query.trim().replace(/\u00A0/g, '\u0020')
+    const strQuerySplits = query.split('\u0020')
     strQuerySplits.forEach((v, i) => {
       if (v === '') {
         strQuerySplits.splice(i, 1)
