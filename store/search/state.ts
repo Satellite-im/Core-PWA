@@ -5,9 +5,9 @@ interface SearchState {
   result: SearchResult | null
 }
 
-const InitalSearchState: SearchState = {
+const InitalSearchState = (): SearchState => ({
   query: '',
   result: null,
-}
+})
 
 export default InitalSearchState

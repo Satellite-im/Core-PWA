@@ -10,10 +10,10 @@ interface DataState {
   search: DataStateType
 }
 
-const InitialDataState: DataState = {
+const InitialDataState = (): DataState => ({
   files: DataStateType.Empty,
   friends: DataStateType.Empty,
   search: DataStateType.Empty,
-}
+})
 
 export default InitialDataState
