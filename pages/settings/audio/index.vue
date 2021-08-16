@@ -4,11 +4,11 @@
 import Vue from 'vue'
 
 import { mapState } from 'vuex'
+import { Bitrates, SampleSizes } from './options/audio'
 import {
   PermissionRequestOptions,
   UserPermissions,
-} from '../../../components/mixins/UserPermissions'
-import { Bitrates, SampleSizes } from './options/audio'
+} from '~/components/mixins/UserPermissions'
 
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
