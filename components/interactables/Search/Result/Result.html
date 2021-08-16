@@ -5,9 +5,7 @@
 >
   <div class="search-result-header">
     Search results
-    <button class="search-result-close" @click="toggle">
-      <font-awesome-icon :icon="['far', 'times']" />
-    </button>
+    <InteractablesClose class="close" :action="toggle" />
   </div>
   <div class="search-result-group">
     <div

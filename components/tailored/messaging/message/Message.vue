@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
-import { ContextMenu } from '../../../mixins/UI/ContextMenu'
+import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
 import { Message } from '~/types/messaging'
 

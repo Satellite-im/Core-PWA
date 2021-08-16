@@ -1,6 +1,5 @@
 <div class="aside-menu">
   <font-awesome-icon :icon="['far', 'bars']"  v-if="toggleable" v-on:click="toggle" class="menu-toggle" />
-  <TypographyTitle :size="4" :text="title" v-if="title.length" />
   <aside class="menu">
     <div v-for="group in menuContent">
       <p class="menu-label">{{ group.title }}</p>

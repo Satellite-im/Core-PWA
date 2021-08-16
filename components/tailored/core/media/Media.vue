@@ -51,8 +51,8 @@ export default Vue.extend({
         if (!media) return
         for (let j = 0; j < blocks.length; j++) {
           const block = blocks[j] as HTMLElement
-          block.style.width = '16rem'
-          block.style.height = '9rem'
+          block.style.width = this.$device.isMobile ? '160px' : '16rem'
+          block.style.height = this.$device.isMobile ? '90px' : '9rem'
         }
         media.style.paddingTop = ''
         media.style.paddingBottom = ''
@@ -87,18 +87,28 @@ export default Vue.extend({
           const blockMargin = Math.floor(
             parseInt(blockStyle.margin.replace('px', ''))
           )
-
+          const marginPerBlock = blockMargin * 2
+          // here we set the max block content size so that a block cannot be larger than half viewportWidth
+          const maxBlockContentWidth = viewportWidth / 2 - marginPerBlock
           const aspectRatio = 9 / 16
+
           let finalWidth = 160
           let finalHeight = 90
           let finalMatrix = { cols: 1, rows: 1 }
-          for (let i = 2; i <= 100; i++) {
-            const blockContentWidth = Math.floor((viewportWidth * i) / 100)
+          // if max block of a content is reach, stop the loop
+          let maxBlockContentWidthReached = false
+          for (let i = 2; i <= 100 && !maxBlockContentWidthReached; i++) {
+            maxBlockContentWidthReached =
+              Math.floor((viewportWidth * i) / 100) > maxBlockContentWidth
+            const blockContentWidth = maxBlockContentWidthReached
+              ? maxBlockContentWidth
+              : Math.floor((viewportWidth * i) / 100)
+
             const blockContentHeight = Math.floor(
               blockContentWidth * aspectRatio
             )
-            const blockWidth = blockContentWidth + blockMargin * 2
-            const blockHeight = blockContentHeight + blockMargin * 2
+            const blockWidth = blockContentWidth + marginPerBlock
+            const blockHeight = blockContentHeight + marginPerBlock
             const { fit, matrix } = isFit(
               viewportWidth,
               viewportHeight,

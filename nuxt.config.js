@@ -71,6 +71,7 @@ export default {
     { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
+    { src: '~/plugins/thirdparty/videoplayer.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts' },
