@@ -60,6 +60,7 @@ export default Vue.extend({
         suppressScrollX: !this.horizontalScroll,
         wheelPropagation: false,
       },
+      loaded: false,
     }
   },
   computed: {
@@ -82,15 +83,20 @@ export default Vue.extend({
       },
     },
   },
+  beforeDestroy() {
+    this.loaded = false
+  },
   methods: {
     autoScrollToBottom() {
+      const interval = this.loaded ? 100 : 1000
       const scrollRef = this.$refs.scrollRef
       if (scrollRef && this.autoScroll) {
         setTimeout(() => {
           this.$nextTick(() => {
             scrollRef.$el.scrollTop = scrollRef.$el.scrollHeight
+            this.loaded = true
           })
-        }, 100)
+        }, interval)
       }
     },
   },
