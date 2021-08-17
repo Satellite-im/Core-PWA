@@ -3,4 +3,5 @@
   <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
   <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
   <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
+  <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
 </div>
