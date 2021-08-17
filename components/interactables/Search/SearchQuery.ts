@@ -21,19 +21,27 @@ export default class SearchQuery {
     this.queryItems = []
   }
 
-  insertBlank(position: number) {
+  insertCommand(
+    command: SearchCommand,
+    value: string,
+    position: number
+  ): SearchQueryItem | null {
     if (position >= this.queryItems.length) {
-      return
+      return null
     }
     const target = this.queryItems[position]
     const prepend = this.queryItems.slice(0, position + 1)
     const append = this.queryItems.slice(position + 1)
     const newItem = {
-      command: SearchCommand.Empty,
-      value: '',
+      command,
+      value,
       index: position + 1,
       cursorStart: target.cursorEnd + 1,
-      cursorEnd: target.cursorEnd + 2,
+      cursorEnd:
+        target.cursorEnd +
+        (command.length > 0 ? command.length + 1 : 0) +
+        value.length +
+        1,
     }
     prepend.push(newItem)
 
@@ -46,19 +54,45 @@ export default class SearchQuery {
     })
 
     this.queryItems = prepend
+
+    return newItem
   }
 
-  appendCommand(command: SearchCommand, value: string) {
-    const last = this.queryItems[this.queryItems.length - 1]
+  appendCommand(command: SearchCommand, value: string): SearchQueryItem | null {
+    let last: SearchQueryItem | null =
+      this.queryItems[this.queryItems.length - 1]
+    if (last && last.command === '' && last.value === '') {
+      this.queryItems.splice(last.index, 1)
+      last =
+        this.queryItems.length > 0
+          ? this.queryItems[this.queryItems.length - 1]
+          : null
+    }
     const newItem = {
       command,
       value,
       index: this.queryItems.length,
       cursorStart: last ? last.cursorEnd + 1 : 0,
       cursorEnd:
-        (last ? last.cursorEnd + 1 : 0) + command.length + value.length + 1,
+        (last ? last.cursorEnd + 1 : 0) +
+        (command.length > 0 ? command.length + 1 : 0) +
+        value.length,
     } as SearchQueryItem
     this.queryItems.push(newItem)
+
+    return newItem
+  }
+
+  setCommandValue(index: number, value: string) {
+    this.queryItems.forEach((queryItem) => {
+      if (queryItem.index === index) {
+        queryItem.value = value
+        queryItem.cursorEnd += value.length
+      } else if (queryItem.index > index) {
+        queryItem.cursorStart += value.length
+        queryItem.cursorEnd += value.length
+      }
+    })
   }
 
   queryItemFrom(caretPositon: number): SearchQueryItem | null {
@@ -75,12 +109,26 @@ export default class SearchQuery {
   }
 
   deleteItemFrom(caretPositon: number) {
+    let index = -1
     this.queryItems.forEach((queryItem) => {
       if (
         queryItem.cursorStart <= caretPositon &&
         queryItem.cursorEnd >= caretPositon
       ) {
         this.queryItems.splice(queryItem.index, 1)
+        index = queryItem.index
+      }
+      if (index > -1 && queryItem.index > index) {
+        queryItem.index--
+      }
+    })
+  }
+
+  deleteItemAt(index: number) {
+    this.queryItems.splice(index, 1)
+    this.queryItems.forEach((queryItem) => {
+      if (queryItem.index > index) {
+        queryItem.index--
       }
     })
   }
@@ -118,7 +166,7 @@ export default class SearchQuery {
     }
 
     const sel = window.getSelection()
-    if (!sel || !sel.rangeCount) {
+    if (!sel || sel.rangeCount === 0) {
       return 0
     }
 
@@ -128,7 +176,6 @@ export default class SearchQuery {
     }
     let caretPosInNode = range.endOffset
     let itemNode = range.commonAncestorContainer
-
     while (itemNode !== htmlElement) {
       caretPosInNode = this._caretPositionInParentNode(itemNode, caretPosInNode)
       itemNode = itemNode.parentNode as Node
@@ -137,7 +184,8 @@ export default class SearchQuery {
   }
 
   _parseQuery(query: string, cursorPosition: number) {
-    const strQuerySplits = query.trim().split('\u00A0')
+    query = query.trim().replace(/\u00A0/g, '\u0020')
+    const strQuerySplits = query.split('\u0020')
     strQuerySplits.forEach((v, i) => {
       if (v === '') {
         strQuerySplits.splice(i, 1)
