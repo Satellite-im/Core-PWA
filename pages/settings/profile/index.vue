@@ -3,6 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
+
 declare module 'vue/types/vue' {
   interface Vue {
     accounts: any
@@ -10,11 +12,17 @@ declare module 'vue/types/vue' {
 }
 export default Vue.extend({
   name: 'ProfileSettings',
+  components: {
+    ImageCropper,
+  },
   layout: 'settings',
   data() {
     return {
       status: 'Some super interesting status message.',
       showPhrase: false,
+      imageUrl: '',
+      croppedImage: '',
+      showCropper: false,
     }
   },
   computed: {
@@ -26,6 +34,38 @@ export default Vue.extend({
   methods: {
     togglePhrase() {
       this.$data.showPhrase = !this.$data.showPhrase
+    },
+
+    toggleCropper() {
+      this.showCropper = !this.showCropper
+    },
+
+    openFileDialog() {
+      const fileInput = this.$refs.file as HTMLElement
+      fileInput.click()
+    },
+
+    setCroppedImage(image: any) {
+      const fileInput = this.$refs.file as HTMLInputElement
+      this.croppedImage = image
+      fileInput.value = ''
+    },
+
+    selectProfileImage(e: any) {
+      if (e.target && e.target.value !== null) {
+        const files = e.target.files || e.dataTransfer.files
+        if (!files.length) return
+
+        const reader = new FileReader()
+        reader.onload = (e: any) => {
+          this.imageUrl = e.target.result
+          e.target.value = ''
+
+          this.toggleCropper()
+        }
+
+        reader.readAsDataURL(files[0])
+      }
     },
   },
 })
