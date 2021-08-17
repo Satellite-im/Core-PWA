@@ -38,7 +38,7 @@
     "dotenv-cli": "^4.0.0",
     "ed2curve": "^0.3.0",
     "emoji-mart-vue-fast": "^10.0.1",
-    "filesize": "^6.3.0",
+    "filesize": "^7.0.0",
     "fuse.js": "^6.4.6",
     "howler": "^2.2.3",
     "less": "^4.1.1",

@@ -71,6 +71,17 @@ export const Messages = [
           'Uranus orbit seeing globular cluster Milky Way quasar total eclipse gas giant penumbra quarter moon sun Kirkwood gaps orbital eccentricity vacuum occultation background radiation helium Mir perihelion Neptune inclination Mars corona circumpolar terrestrial binary star perturbation nebula revolve ',
       },
       {
+        id: '00-123193-10',
+        at: 1620515543000,
+        type: 'file',
+        payload: {
+          filename: 'satellite.tar.gz',
+          type: 'application/tar',
+          size: 19203,
+          src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
+        },
+      },
+      {
         id: '00-00-11',
         at: 1620515543400,
         type: 'text',
