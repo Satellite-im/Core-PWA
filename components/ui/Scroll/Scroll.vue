@@ -75,8 +75,11 @@ export default Vue.extend({
     },
   },
   watch: {
-    contents(value) {
-      if (value) this.autoScrollToBottom()
+    contents: {
+      deep: true,
+      handler() {
+        this.autoScrollToBottom()
+      },
     },
   },
   methods: {
@@ -85,7 +88,7 @@ export default Vue.extend({
       if (scrollRef && this.autoScroll) {
         setTimeout(() => {
           this.$nextTick(() => {
-            scrollRef.$el.scrollTop = scrollRef.$el.clientHeight
+            scrollRef.$el.scrollTop = scrollRef.$el.scrollHeight
           })
         }, 100)
       }
