@@ -12,7 +12,7 @@ interface UIState {
   showEnhancers: Boolean
 }
 
-const InitalUIState: UIState = {
+const InitalUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
   showSearchResult: false,
@@ -27,6 +27,6 @@ const InitalUIState: UIState = {
   chatbarContent: '',
   fullscreen: false,
   showEnhancers: false,
-}
+})
 
 export default InitalUIState
