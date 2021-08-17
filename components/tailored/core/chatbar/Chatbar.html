@@ -37,6 +37,7 @@
     <font-awesome-icon
       :icon="['far', 'arrow-circle-right']"
       class="control-icon"
+      @click="sendMessage"
     />
   </div>
   <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"

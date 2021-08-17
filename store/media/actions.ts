@@ -16,4 +16,7 @@ export default {
   setMessages({ commit }: FetchCallsArguments, messages: any[]) {
     commit('setMessages', messages)
   },
+  sendMessage({ commit }: FetchCallsArguments, message: any) {
+    commit('sendMessage', message)
+  },
 }
