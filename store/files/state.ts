@@ -4,8 +4,8 @@ interface FilesState {
   tree: Array<FileType | Folder>
 }
 
-const InitalFilesState: FilesState = {
+const InitalFilesState = (): FilesState => ({
   tree: [],
-}
+})
 
 export default InitalFilesState

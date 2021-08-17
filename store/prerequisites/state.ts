@@ -4,10 +4,10 @@ interface PrerequisiteState {
   blockchainBound: Boolean
 }
 
-const InitalPrerequisitesState: PrerequisiteState = {
+const InitalPrerequisitesState = (): PrerequisiteState => ({
   stateLoaded: true,
   peer2PeerBound: false,
   blockchainBound: false,
-}
+})
 
 export default InitalPrerequisitesState

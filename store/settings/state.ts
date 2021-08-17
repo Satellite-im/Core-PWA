@@ -10,7 +10,7 @@ interface SettingsState {
   keybinds: Object
 }
 
-const InitalSettingsState: SettingsState = {
+const InitalSettingsState = (): SettingsState => ({
   audioInput: '',
   audioOutput: '',
   noiseSuppression: true,
@@ -25,6 +25,6 @@ const InitalSettingsState: SettingsState = {
     openSettings: 'alt+s',
     callActiveChat: 'alt+c',
   },
-}
+})
 
 export default InitalSettingsState

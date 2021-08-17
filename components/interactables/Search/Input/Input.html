@@ -30,7 +30,7 @@
           <span>{{opt.value}}</span>
         </li>
       </template>
-      <template v-if="isEmpty">
+      <template v-if="isEmpty || isEmptyCommand">
         <li
           v-for="(opt, i) in searchOptions"
           :class="{active:i==option}"

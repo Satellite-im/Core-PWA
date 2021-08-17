@@ -74,7 +74,9 @@ export default Vue.extend({
     resizeHandler() {
       const meterElm: HTMLElement = this.$refs.meter as HTMLElement
       if (meterElm) {
-        const width = meterElm.clientWidth
+        let width = meterElm.clientWidth
+        /* For Round Off Values i.e; 398.5px */
+        if (width > 0) width = width - 1
         this.numberOfTicks = Math.floor(width / 20)
       }
     },
