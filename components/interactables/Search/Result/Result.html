@@ -4,9 +4,7 @@
   v-if="show && ((result && result.data) || loading === DataStateType.Loading)"
 >
   <div class="search-result-header">
-    Search results
-        <!-- matches  -->
-
+    {{$t('search.result.search_results')}} 
     <InteractablesClose class="close" :action="toggle" />
   </div>
   <div class="search-result-group">
@@ -62,16 +60,14 @@
       </v-date-picker>
     </div>
     <div>
-      <button class="add-more-filters">More filters</button>
-        <!-- matches  -->
+      <button class="add-more-filters">{{$t('search.result.more_filters')}} </button>
     </div>
   </div>
   <div
     class="search-result-meta"
     v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
   >
-    <div class="result-count">{{result.data.totalRows}} Results</div>
-        <!-- matches  -->
+    <div class="result-count">{{result.data.totalRows}} {{$t('search.result.results')}} </div>
     <div class="result-orderby">
       <div
         v-for="item in orderTypeList"
