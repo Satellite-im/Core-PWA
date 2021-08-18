@@ -228,7 +228,6 @@ export default {
       video_quality: 'Video Quality',
       no_options: 'No options',
       stream_options: 'Stream Options',
-
     },
   },
 }
