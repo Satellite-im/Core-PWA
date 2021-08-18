@@ -1,6 +1,6 @@
-<div id="friends-list" v-scroll-lock="true">
-  <TailoredFriendsNav :setRoute="setRoute" :route="route" />
-  <UiScroll verticalScroll scrollbarVisibility="scroll">
+<div id="friends-list" v-scroll-lock="true" class="hidden-scroll">
+  <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+    <TailoredFriendsNav :setRoute="setRoute" :route="route" />
     <div v-if="$data.route === 'active'">
       <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
         <div v-for="entry in Object.entries(alphaSortedFriends)">
@@ -9,7 +9,10 @@
             <TailoredFriendsFriend :friend="friend" :key="friend.address" />
           </div>
         </div>
-        <div class="loading-container" v-if="$store.state.dataState.friends === DataStateType.Updating">
+        <div
+          class="loading-container"
+          v-if="$store.state.dataState.friends === DataStateType.Updating"
+        >
           <UiLoadersUpdating />
         </div>
       </div>
