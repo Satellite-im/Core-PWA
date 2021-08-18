@@ -2,13 +2,13 @@
   <ul id="settings-menu" v-if="menuOpen" ref="menu" v-click-outside="hideMenu">
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
-        <div class="word">Audio Quality</div>
+        <div class="word">{{$t('media.settings.audio_quality')}} </div>
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
         <div class="form">
           <div class="form-group">
-            <label>Bitrate</label>
+            <label> {{$t('media.settings.bitrate')}} </label>
             <InteractablesSelect
               :options="Bitrates"
               v-model="bitrate"
@@ -17,7 +17,7 @@
             />
           </div>
           <div class="form-group">
-            <label>Sample size</label>
+            <label>{{$t('media.settings.sample_size')}}</label>
             <InteractablesSelect
               :options="SampleSizes"
               v-model="sampleSize"
@@ -30,20 +30,20 @@
     </li>
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
-        <div class="word">Video Quality</div>
+        <div class="word">{{$t('media.settings.video_quality')}}</div>
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
-        <div>No options</div>
+        <div>{{$t('media.settings.no_options')}}</div>
       </div>
     </li>
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
-        <div class="word">Stream Options</div>
+        <div class="word">{{$t('media.settings.stream_options')}}</div>
         <font-awesome-icon :icon="['far', 'chevron-right']" class="icon" />
       </div>
       <div class="item-body">
-        <div>No options</div>
+        <div>{{$t('media.settings.no_options')}}</div>
       </div>
     </li>
   </ul>
