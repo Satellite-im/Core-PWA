@@ -231,7 +231,4 @@ export default {
 
     },
   },
-  sidebar: {
-    friends_label: '14'
-  },
 }
