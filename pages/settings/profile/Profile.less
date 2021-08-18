@@ -12,10 +12,14 @@
     height: @size;
     width: @size;
     cursor: pointer;
-
+    .is-rounded , .is-square {
+      max-width: 100% !important;
+      max-height: 100% !important;
+    }
     .plus-button {
       z-index: 2;
       right: 0;
+      top: 0;
       position: absolute;
       color: #fff;
     }
