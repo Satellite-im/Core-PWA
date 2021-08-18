@@ -5,9 +5,15 @@
       <TypographySubtitle :size="6" :text="$t('pages.settings.profile.subtitle')" />
     </div>
   </div>
-  <ImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
+  
+  <div class="profile-image-cropper" v-if="showCropper">
+    <div class="content">
+      <ImageCropper :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
         :imageUrl="imageUrl" />
-  <div v-if="showCropper" class="cropper-mask"></div> 
+      <div class="cropper-mask"></div> 
+    </div>  
+  </div>
+  
   <div class="columns is-mobile">
     <div class="column profile-photo-column">
       <div class="profile-photo">
