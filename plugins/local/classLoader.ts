@@ -5,6 +5,7 @@ import SolanaManager from '~/utilities/SolanaManager/SolanaManager'
 import SoundManager from '~/utilities/SoundManager/SoundManager'
 import WebRTC from '~/utilities/WebRTC/WebRTC'
 import Crypto from '~/utilities/Crypto/Crypto'
+import Security from '~/utilities/Security/Security'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -12,6 +13,7 @@ declare module 'vue/types/vue' {
     $SolanaManager: typeof SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
+    $Security: Security
   }
 }
 
@@ -21,6 +23,7 @@ declare module '@nuxt/types' {
     $SolanaManager: typeof SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
+    $Security: Security
   }
 }
 
@@ -28,3 +31,4 @@ Vue.prototype.$WebRTC = new WebRTC()
 Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
+Vue.prototype.$Security = new Security()
