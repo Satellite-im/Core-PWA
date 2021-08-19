@@ -27,9 +27,6 @@ Rules for Commit Message
 
 Summary of the changes made.
 
-Deis:
-> The subject line contains a succinct description of the change to the logic.
-
 - Must be present tense
 - Written in the imperative
 - First letter is not capitalized
@@ -53,10 +50,6 @@ Deis:
 #### Scope - {scope}
 
 Where the change was (i.e. the file, the component, the package).
-
-Deis:
-> It can be anything specifying place of the commit change e.g. the controller, the client, the logger, etc.
-
 
 #### Message Body - {body}
 
@@ -98,8 +91,6 @@ Reference issues it fixes, Jira tasks, etc.
 
 
 ## Examples
-
-From Deis:
 
 ```
 feat(webrtc): add user tracking
