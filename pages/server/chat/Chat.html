@@ -4,5 +4,5 @@
     &nbsp;
     {{$t('conversation.encrypted')}}
   </div>
-  <TailoredMessagingConversation :messages="$mock.messages" :loading="loading" />
+  <TailoredMessagingConversation :messages="$store.state.media.messages" :loading="loading" />
 </div>
