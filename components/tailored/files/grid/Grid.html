@@ -1,0 +1,12 @@
+<div id="grid-view">
+  <TailoredFilesView v-if="file" :file="file" :close="() => this.file = false"/>
+  <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <div class="files-container">
+      <TailoredFilesFile 
+        v-for="item in path" 
+        :item="item" 
+        :key="`${item.name}.${item.modified}`"
+        :handler="handle" />
+    </div>
+  </UiScroll>
+</div>

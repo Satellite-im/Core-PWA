@@ -4,6 +4,10 @@ export type FileType = {
   type: string
   size: number
   location: string
+  meta: {
+    liked: boolean
+    shared: boolean
+  }
 }
 
 export type Folder = {

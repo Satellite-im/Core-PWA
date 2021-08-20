@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import FileUpload from '../../core/fileupload/FileUpload.vue'
+import FileUpload from '~/components/tailored/core/fileupload/FileUpload.vue'
 
 export default Vue.extend({
   components: {
@@ -9,6 +9,10 @@ export default Vue.extend({
   },
   props: {
     handleFile: {
+      type: Function,
+      default: () => () => {},
+    },
+    changeView: {
       type: Function,
       default: () => () => {},
     },

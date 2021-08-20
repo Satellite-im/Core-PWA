@@ -15,6 +15,7 @@ export default Vue.extend({
       file: false as File | Boolean,
       url: '' as String,
       nsfw: { status: false, checking: false } as Object,
+      view: 'grid',
     }
   },
   computed: {
@@ -24,6 +25,9 @@ export default Vue.extend({
     this.$store.dispatch('fetchFiles')
   },
   methods: {
+    changeView(type: 'grid' | 'list') {
+      this.$data.view = type
+    },
     /**
      * Allows you to get the current path file object
      */

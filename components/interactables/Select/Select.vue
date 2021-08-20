@@ -11,6 +11,10 @@ export default Vue.extend({
     event: 'change',
   },
   props: {
+    placeholder: {
+      type: String,
+      default: '',
+    },
     /**
      * If provided the select will cover 100% of the parent
      */
@@ -55,7 +59,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      selectedValue: this.selected,
+      selectedValue: this.placeholder.length ? null : this.selected,
     }
   },
   watch: {

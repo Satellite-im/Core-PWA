@@ -1,0 +1,32 @@
+.files-aside {
+  width: 100%;
+  background-color: @dark-gray-alt;
+  border-radius: @corner-rounding;
+  padding: @light-spacing @normal-spacing;
+
+  .flex {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: @light-spacing;
+    .is-text {
+      width: 100%;
+    }
+    .upgrade-text {
+      align-self: flex-end;
+      text-align: right;
+      color: @green;
+      text-transform: uppercase;
+    }
+    .button {
+      height: 1.4rem;
+    }
+  }
+  .usage-text {
+    font-size: @text-size;
+    
+    .red {
+      color: @red;
+    }
+  }
+}
