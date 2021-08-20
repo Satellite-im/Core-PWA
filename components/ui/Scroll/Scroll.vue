@@ -36,11 +36,22 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    autoScroll: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
     enableWrap: {
       type: Boolean,
       default: false,
-      required: false
-    }
+      required: false,
+    },
+    contents: {
+      /* Content Type could be any value in below array */
+      type: [Array, Object, String, Number],
+      default: '',
+      required: false,
+    },
   },
   data() {
     return {
@@ -49,6 +60,7 @@ export default Vue.extend({
         suppressScrollX: !this.horizontalScroll,
         wheelPropagation: false,
       },
+      loaded: false,
     }
   },
   computed: {
@@ -57,9 +69,34 @@ export default Vue.extend({
         'scrollbar-visible': ['always', 'scroll'].includes(
           this.scrollbarVisibility
         ),
-        'enable-wrap': this.enableWrap ,
+        'enable-wrap': this.enableWrap,
         always: this.scrollbarVisibility === 'always',
         dark: this.theme === 'dark',
+      }
+    },
+  },
+  watch: {
+    contents: {
+      deep: true,
+      handler() {
+        this.autoScrollToBottom()
+      },
+    },
+  },
+  beforeDestroy() {
+    this.loaded = false
+  },
+  methods: {
+    autoScrollToBottom() {
+      const interval = this.loaded ? 100 : 1000
+      const scrollRef = this.$refs.scrollRef
+      if (scrollRef && this.autoScroll) {
+        setTimeout(() => {
+          this.$nextTick(() => {
+            scrollRef.$el.scrollTop = scrollRef.$el.scrollHeight
+            this.loaded = true
+          })
+        }, interval)
       }
     },
   },
