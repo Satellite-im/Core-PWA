@@ -1,0 +1,10 @@
+<div class="swithcher">
+  <font-awesome-icon
+    :icon="['far', 'th-large']"
+    :class="`control-icon ${view === 'grid' ? 'active' : ''}`" 
+    v-on:click="switchView('grid')" />
+  <font-awesome-icon
+    :icon="['far', 'th-list']"
+    :class="`control-icon ${view === 'list' ? 'active' : ''}`" 
+    v-on:click="switchView('list')" />
+</div>

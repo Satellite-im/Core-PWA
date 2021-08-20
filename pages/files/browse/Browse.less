@@ -1,6 +1,10 @@
 #files {
   padding: @normal-spacing;
 
+  .files-container {
+    display: flex;
+    flex-direction: row;
+  }
   .two-thirds {
     width: 66%;
     float: left;
@@ -10,6 +14,23 @@
     float: left;
     text-align: right;
     color: @text-muted;
+  }
+
+  .files-left {
+    width: 100%;
+  }
+  .files-right {
+    width: 350px;
+    padding: @normal-spacing;
+    padding-top: 0;
+  }
+  .files-top {
+    width: 100%;
+    display: inline-flex;
+    margin-bottom: @normal-spacing;
+  }
+  .input {
+    margin-bottom: @normal-spacing;
   }
 }
 

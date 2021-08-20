@@ -1,0 +1,57 @@
+.file {
+  width: 170px;
+  margin-right: @light-spacing;
+  margin-bottom: @light-spacing;
+  border-radius: @corner-rounding-smaller;
+  background-color: @dark-gray-alt;
+  float: left;
+  display: inline-flex;
+  flex-direction: column;
+  align-content: center;
+  padding-top: @normal-spacing * 2;
+  overflow: hidden;
+
+  .quick-actions {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: inline-block;
+    padding: @light-spacing @normal-spacing;
+
+    .like {
+      float: right;
+    }
+
+    svg:hover {
+      color: @bright-text;
+      cursor: pointer;
+    }
+  }
+
+  .file-icon {
+    font-size: 80px;
+    align-self: center;
+    justify-self: center;
+    margin-left: 45px;
+    color: @primary-color;
+  }
+
+  .image-preview {
+    margin-top: -(@normal-spacing * 2);
+    height: 112px;
+    background-size: cover;
+  }
+    
+  .file-display {
+    margin-left: 55px;
+  }
+  
+  .text-container {
+    padding: @normal-spacing;
+
+    .subtext {
+      color: @text-muted;
+    }
+  }
+
+}

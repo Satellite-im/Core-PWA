@@ -65,10 +65,21 @@ import {
   faKeySkeleton,
   faCalendarDay,
   faSkull,
+  faHistory,
+  faTrash,
+  faHeart,
+  faTh,
+  faThLarge,
+  faThList,
 } from '@fortawesome/pro-regular-svg-icons'
+
+import * as fal from '@fortawesome/pro-light-svg-icons'
 
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(fal.faFile)
+library.add(fal.faFolder)
 
 library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
@@ -130,5 +141,11 @@ library.add(faTimes)
 library.add(faKeySkeleton)
 library.add(faCalendarDay)
 library.add(faSkull)
+library.add(faHistory)
+library.add(faTrash)
+library.add(faHeart)
+library.add(faTh)
+library.add(faThList)
+library.add(faThLarge)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
