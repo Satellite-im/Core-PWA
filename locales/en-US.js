@@ -24,12 +24,14 @@ export default {
     close: 'Close',
     mute: 'Mute',
     deafen: 'Deafen',
+    toggle: 'Toggle',
     copy_id: 'Copy ID',
     crop: 'Crop',
   },
   controls: {
     mic: 'Mic',
     headphones: 'Audio',
+    video: 'Video',
   },
   pages: {
     files: {
@@ -218,7 +220,7 @@ export default {
       search_results: 'Search results',
       more_filters: 'More filters',
       results: 'Results',
-    }
+    },
   },
   media: {
     settings: {
