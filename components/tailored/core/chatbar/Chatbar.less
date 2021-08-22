@@ -16,6 +16,9 @@
   textarea.has-command {
     font-family: @primary-font;
   }
+  .quick-upload {
+    margin-left: @normal-spacing;
+  }
   .green {
     background: @green;
     color: @white;
@@ -32,6 +35,10 @@
     &.is-error {
       color: @red;
     }
+  }
+
+  .file-upload-wrap {
+    margin: 0 @light-spacing;
   }
   .control-wrap{
     display: flex;
@@ -62,6 +69,7 @@
 
       &:nth-child(1) {
         margin-right: 0.75rem;
+        margin-left: @light-spacing;
       }
 
       &:nth-child(3) {

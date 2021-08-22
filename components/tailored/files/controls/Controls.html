@@ -1,5 +1,5 @@
 <div id="file-controls">
-  <div class="file-third">
+  <div>
     <InteractablesSelect
       placeholder="File Type"
       :options="[
@@ -10,7 +10,7 @@
       size="small"
     />
   </div>
-  <div class="file-third">
+  <div class="file-flex">
     <InteractablesButton
       outlined
       type="primary"
@@ -27,7 +27,7 @@
     </label>
     <input type="file" id="quick-upload" @change="handleFile"/>
   </div>
-  <div class="file-third">
+  <div>
     <TailoredFilesViewSwitcher :changeView="changeView" />
   </div>
 </div>

@@ -22,6 +22,12 @@ export default Vue.extend({
       showfull: false,
     }
   },
+  methods: {
+    oepnImage() {
+      // @ts-ignore
+      window?.open(source, '_blank').focus()
+    },
+  },
 })
 </script>
 <style scoped lang="less" src="./Image.less"></style>
