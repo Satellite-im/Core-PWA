@@ -15,6 +15,10 @@ export default Vue.extend({
      */
     fullWidth: Boolean,
     /**
+     * If enabled, delete text icon will appear
+     */
+    deleteIcon: Boolean,
+    /**
      * Default text can be included here
      */
     text: {
@@ -73,6 +77,9 @@ export default Vue.extend({
   methods: {
     update() {
       this.$emit('update', this.internalText)
+    },
+    clearSearch() {
+      this.internalText = ''
     },
   },
 })
