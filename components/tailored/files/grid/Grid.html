@@ -1,4 +1,4 @@
-<div id="grid-view">
+<div id="grid-view" class="hidden-scroll" v-scroll-lock="true">
   <TailoredFilesView v-if="file" :file="file" :close="() => this.file = false"/>
   <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
     <div class="files-container">

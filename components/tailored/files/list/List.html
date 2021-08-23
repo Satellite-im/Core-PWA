@@ -1,56 +1,75 @@
-<div id="file-list">
-  <TailoredFilesView v-if="file" :file="file" :close="() => this.file = false"/>
-  <table class="table">
-    <thead>
-      <th>
-        {{ $t('pages.files.browse.name') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
-      </th>
-      <th v-if="!$device.isMobile">
-        {{ $t('pages.files.browse.modified') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
-      </th>
-      <th v-if="!$device.isMobile">
-        {{ $t('pages.files.browse.type') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
-      </th>
-      <th v-if="!$device.isMobile">
-        {{ $t('pages.files.browse.encrypted') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
-      </th>
-      <th>
-        {{ $t('pages.files.browse.size') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
-      </th>
-      <th></th>
-    </thead>
-    <tbody>
-      <tr class="item" v-for="item in path">
-        <td class="filename" v-on:click="() => handle(item)">
-          <span class="icon">
-            <font-awesome-icon :icon="['far', 'folder']" v-if="item.children" />
-            <font-awesome-icon :icon="['far', 'archive']" v-else-if="item.type && item.type.includes('archive')" />
-            <font-awesome-icon :icon="['far', 'image']" v-else-if="item.type && item.type.includes('image')" />
-            <font-awesome-icon :icon="['far', 'file-alt']" v-else />
-          </span>
-          {{ item.name }}
-        </td>
-        <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
-        <td v-if="!$device.isMobile">{{ item.type ? item.type : item.children ? 'Folder' : '-' }}</td>
-        <td class="has-tooltip has-tooltip-primary has-tooltip-top"
-          :data-tooltip="(item.encrypted) ? $t('global.encrypted') : $t('global.unencrypted')" v-if="!$device.isMobile">
-          <font-awesome-icon
-            :icon="['far', 'lock']"
-            v-if="item.encrypted" />
-          <font-awesome-icon
-            :icon="['far', 'lock-open']"
-            v-else="item.encrypted" />
-        </td>
-        <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
-        <td class="options">
-          <font-awesome-icon :icon="['far', 'ellipsis-v']" />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div id="file-list" class="hidden-scroll" v-scroll-lock="true">
+  <TailoredFilesView
+    v-if="file"
+    :file="file"
+    :close="() => this.file = false"
+  />
+  <UiScroll verticalScroll scrollbarVisibility="scroll">
+    <table class="table">
+      <thead>
+        <th>
+          {{ $t('pages.files.browse.name') }}
+          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        </th>
+        <th v-if="!$device.isMobile">
+          {{ $t('pages.files.browse.modified') }}
+          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        </th>
+        <th v-if="!$device.isMobile">
+          {{ $t('pages.files.browse.type') }}
+          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        </th>
+        <th v-if="!$device.isMobile">
+          {{ $t('pages.files.browse.encrypted') }}
+          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        </th>
+        <th>
+          {{ $t('pages.files.browse.size') }}
+          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        </th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr class="item" v-for="item in path">
+          <td class="filename" v-on:click="() => handle(item)">
+            <span class="icon">
+              <font-awesome-icon
+                :icon="['far', 'folder']"
+                v-if="item.children"
+              />
+              <font-awesome-icon
+                :icon="['far', 'archive']"
+                v-else-if="item.type && item.type.includes('archive')"
+              />
+              <font-awesome-icon
+                :icon="['far', 'image']"
+                v-else-if="item.type && item.type.includes('image')"
+              />
+              <font-awesome-icon :icon="['far', 'file-alt']" v-else />
+            </span>
+            {{ item.name }}
+          </td>
+          <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
+          <td v-if="!$device.isMobile">
+            {{ item.type ? item.type : item.children ? 'Folder' : '-' }}
+          </td>
+          <td
+            class="has-tooltip has-tooltip-primary has-tooltip-top"
+            :data-tooltip="(item.encrypted) ? $t('global.encrypted') : $t('global.unencrypted')"
+            v-if="!$device.isMobile"
+          >
+            <font-awesome-icon :icon="['far', 'lock']" v-if="item.encrypted" />
+            <font-awesome-icon
+              :icon="['far', 'lock-open']"
+              v-else="item.encrypted"
+            />
+          </td>
+          <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
+          <td class="options">
+            <font-awesome-icon :icon="['far', 'ellipsis-v']" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </UiScroll>
 </div>
