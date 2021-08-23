@@ -1,11 +1,20 @@
-<div class="aside-menu">
-  <font-awesome-icon :icon="['far', 'bars']"  v-if="toggleable" v-on:click="toggle" class="menu-toggle" />
+<div class="aside-menu hidden-scroll" v-scroll-lock="true">
+  <font-awesome-icon
+    :icon="['far', 'bars']"
+    v-if="toggleable"
+    v-on:click="toggle"
+    class="menu-toggle"
+  />
   <aside class="menu">
     <div v-for="group in menuContent">
       <p class="menu-label">{{ group.title }}</p>
       <ul class="menu-list">
         <li v-for="link in group.links">
-          <NuxtLink :to="link.to" :class="`${active === link.to ? 'is-active' : 'is-inactive'}`">{{ link.text }}</NuxtLink>
+          <NuxtLink
+            :to="link.to"
+            :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"
+            >{{ link.text }}</NuxtLink
+          >
         </li>
       </ul>
     </div>

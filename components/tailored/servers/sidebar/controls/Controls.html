@@ -17,12 +17,4 @@
     :action="() => $store.commit('deafen')"
     :icon="{ style: 'far', name: 'headphones-alt' }"
     :text="$t('controls.headphones')" />
-  <InteractablesButton
-    outlined
-    type="dark"
-    size="small"
-    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    :data-tooltip="$t('global.settings')"
-    :action="() => $router.push('/settings/personalize')"
-    :icon="{ style: 'far', name: 'cog' }"/>
 </div>

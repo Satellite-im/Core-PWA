@@ -41,13 +41,15 @@
     <input type="file" id="quick-upload" @change="handleFile" />
   </span>
   <span v-if="type == 'quick'">
-    <label
-      for="quick-upload"
-      :data-tooltip="$t('global.upload')"
-      class="has-tooltip has-tooltip-top has-tooltip-primary"
-    >
-      <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
-    </label>
+    <div class="upload-button">
+      <label
+        for="quick-upload"
+        :data-tooltip="$t('global.upload')"
+        class="has-tooltip has-tooltip-top has-tooltip-primary"
+      >
+        <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
+      </label>
+    </div>
   </span>
   <div v-if="type =='button'">
     <label

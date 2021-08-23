@@ -19,10 +19,10 @@
     :text="$t('controls.headphones')" />
   <InteractablesButton
     outlined
-    type="dark"
+    :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    :data-tooltip="$t('global.settings')"
-    :action="() => $router.push('/settings/personalize')"
-    :icon="{ style: 'far', name: 'cog' }"/>
+    :data-tooltip="$t('global.toggle')"
+    :icon="{ style: 'far', name: 'video' }"
+    :text="$t('controls.video')" />
 </div>

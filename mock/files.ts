@@ -7,6 +7,9 @@ export const Files = {
     {
       name: 'Uploads',
       modified: 1620871715645,
+      meta: {
+        liked: true,
+      },
       children: [
         {
           name: 'Some File',
@@ -29,6 +32,9 @@ export const Files = {
     {
       name: 'Favorites',
       modified: 1620871715645,
+      meta: {
+        shared: true,
+      },
       children: [
         {
           name: 'Some File',
@@ -174,6 +180,26 @@ export const Files = {
         'https://file-examples-com.github.io/uploads/2017/10/file_example_PNG_2100kB.png',
     } as FileType,
     {
+      name: 'Cyberpunk Image',
+      modified: 1620871715645,
+      type: 'image/png',
+      size: 8203451,
+      location:
+        'https://newretrowave.com/wp-content/uploads/2016/02/ecaa7bd5f2171ae94a2d50d91fd4bfe1-cyberpunk-le-style.jpg',
+    } as FileType,
+    {
+      name: 'Anime Image',
+      modified: 1620871715645,
+      type: 'image/png',
+      size: 8203451,
+      location:
+        'https://images.hdqwalls.com/download/anime-cyberpunk-girl-4k-9c-640x960.jpg',
+    } as FileType,
+    {
+      meta: {
+        shared: true,
+        liked: true,
+      },
       name: 'Some Zip',
       modified: 1620871715645,
       type: 'archive/zip',

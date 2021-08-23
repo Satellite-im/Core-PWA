@@ -11,6 +11,7 @@
     cursor: pointer;
     margin-bottom: 0.25rem;
     border-radius: @corner-rounding;
+    padding: (@light-spacing / 2) 0;
     min-width: 8rem;
     background: @dark-gray;
     font-size: @text-size;
@@ -20,8 +21,7 @@
         border-bottom: none;
       }
       .item-header {
-        padding: 0.1rem 0.5rem;
-        border-bottom: 1px solid @light-gray;
+        padding: (@light-spacing / 2) @light-spacing 0 @light-spacing;
         display: flex;
         .word {
           flex: 1;
@@ -35,25 +35,11 @@
         height: 0;
         overflow: hidden;
         transition: height @animation-speed;
-        border-top: 1px solid transparent;
-        border-bottom: 1px solid transparent;
         & > div {
           padding: 0.5rem 0.5rem;
         }
       }
-      &:last-child {
-        .item-header {
-          border-bottom-color: transparent;
-        }
-        .item-body {
-          border-top: 2px solid transparent;
-          border-bottom: 0;
-        }
-      }
       &.open {
-        .item-body {
-          border-color: @light-gray;
-        }
         .item-header {
           .icon {
             transform: rotate(90deg);

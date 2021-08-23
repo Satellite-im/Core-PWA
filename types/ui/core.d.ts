@@ -5,7 +5,7 @@ export type User = {
   address: string
   status: string
   state: UserState
-  profile_picture: string
+  profilePicture: string
 }
 
 export interface Friend extends User {

@@ -89,6 +89,13 @@ export default Vue.extend({
     handleInputChange() {
       this.autoGrow()
     },
+    sendMessage() {
+      this.$store.dispatch('sendMessage', {
+        value: this.value,
+        user: this.$mock.user,
+      })
+      this.value = ''
+    },
   },
 })
 </script>
