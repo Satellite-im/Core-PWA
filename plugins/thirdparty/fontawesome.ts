@@ -41,6 +41,7 @@ import {
   faFile,
   faLink,
   faTimes,
+  faBackspace,
   faDownload,
   faFileDownload,
   faThumbtack,
@@ -147,5 +148,6 @@ library.add(faHeart)
 library.add(faTh)
 library.add(faThList)
 library.add(faThLarge)
+library.add(faBackspace)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
