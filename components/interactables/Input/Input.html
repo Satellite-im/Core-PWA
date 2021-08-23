@@ -1,11 +1,17 @@
 <div>
   <TypographyLabel class="input-label" v-if="labelText.length" :text="labelText" />
-  <input
-    v-model="internalText"
-    :class="`input is-${size} is-${type}`"
-    :readonly="readonly"
-    :type="inputKind"
-    :placeholder="placeholder"
-    @input="update"
+  <div :class="{'search-box': true, 'right-icon': deleteIcon && internalText.length}" >
+    <input
+      v-model="internalText"
+      :class="`input is-${size} is-${type}`"
+      :readonly="readonly"
+      :type="inputKind"
+      :placeholder="placeholder"
+      @input="update"
     />
+    <button v-if="deleteIcon && internalText.length" class="search-clear" @click="clearSearch">
+      <font-awesome-icon :icon="['far', 'backspace']" />
+    </button>
+  </div>
+  
 </div>
