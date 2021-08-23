@@ -72,6 +72,10 @@ export default Vue.extend({
               to: 'developer',
               text: 'Mock & Tweak',
             },
+            {
+              to: 'notifications',
+              text: 'Notifications',
+            },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
       ],

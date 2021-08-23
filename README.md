@@ -25,6 +25,10 @@ To load your environemnt variables you need to prefix all yarn commands with `np
 
 To start running locally complete the Environment setup and then run `npx dotenv yarn dev`.
 
+## Building native versions
+
+Check out the [instructions in the wiki](https://github.com/Satellite-im/Satellite-Absolute/wiki/Build-Deploy). We use capacitorjs to integrate with the OS and build the native apps.
+
 # Contributing
 
 Please lint your code before submitting. `npx dotenv yarn lint`. Lints must pass before submitting a PR.
