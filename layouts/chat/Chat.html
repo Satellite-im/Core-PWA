@@ -14,6 +14,9 @@
       <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)"
         :acceptCall="acceptCall" :denyCall="denyCall" />
     </UiModal>
+    <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" :title="$t('market_place.title')" nopad>
+      <TailoredMarketplace />
+    </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
