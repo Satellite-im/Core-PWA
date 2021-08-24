@@ -1,4 +1,8 @@
-<div id="files">
+<div id="files"  class="hidden-scroll" v-scroll-lock="true">
+
+  <div :class="`${$device.isMobile ? 'mobile-file-aside' : 'hidden-file-aside'}`">
+    <TailoredFilesAside />
+  </div>
   
   <div class="files-top">
     <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
@@ -31,8 +35,8 @@
         </div>
       </UiScroll>
     </div>
-    <div class="files-right">
-      <TailoredFilesAside />
+    <div :class="`${$device.isMobile ? 'hidden-file-aside' : 'files-right'}`">
+      <TailoredFilesAside v-if="!$device.isMobile"/>
     </div>
   </div>
 </div>
