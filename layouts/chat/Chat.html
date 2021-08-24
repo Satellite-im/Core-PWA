@@ -14,12 +14,15 @@
       <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)"
         :acceptCall="acceptCall" :denyCall="denyCall" />
     </UiModal>
+    <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" :title="$t('market_place.title')">
+      <TailoredMarketplace />
+    </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll" :contents="$store.state.media.messages" autoScroll enableWrap>
         <Nuxt />
       </UiScroll>
       <Nuxt ref="chat" id="chat" />
