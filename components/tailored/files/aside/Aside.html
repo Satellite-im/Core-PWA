@@ -1,0 +1,28 @@
+<div class="files-aside">
+  <div class="flex">
+    <TypographyText :size="6" text="Free Tier" />
+    <InteractablesButton
+      text="Upgrade"
+      size="small"
+      type="success"
+      outlined
+      :action="() => {}"
+    />
+  </div>
+  <UiProgress :progress="80" />
+  <div>
+    <span class="usage-text">
+      <span class="red">3.8GB</span> of 4GB
+    </span>
+  </div>
+  <UiSpacer :height="10" />
+  <div>
+    <TypographyText :size="6" text="Quick Access" />
+    <UiSimpleList :menuContent="[{ text: 'Recent', icon: 'history', active: true }, { text: 'Deleted', icon: 'trash' }, { text: 'Favorited', icon: 'heart' }]" />
+  </div>
+  <UiSpacer :height="10" />
+  <div>
+    <TypographyText :size="6" text="Shared Items" />
+    <UiSimpleList :menuContent="[{ text: 'Shared Folders', icon: 'folder' }, { text: 'Links', icon: 'link' }]" />
+  </div>
+</div>

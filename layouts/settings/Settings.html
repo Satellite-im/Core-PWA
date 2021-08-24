@@ -8,11 +8,13 @@
     >
     <div class="sidebar is-secondary-background">
       <TypographyTitle :size="6" :text="$t('global.settings')" class="sidebar-word" />
-      <TailoredSettingsSidebar
-        :title="$t('global.settings')"
-        toggleable
-        :toggle="toggleSidebar"
-      />
+      <UiScroll verticalScroll>
+        <TailoredSettingsSidebar
+          :title="$t('global.settings')"
+          toggleable
+          :toggle="toggleSidebar"
+        />
+      </UiScroll> 
     </div>
     <div class="not-sidebar hidden-scroll" v-scroll-lock="true">
       <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">

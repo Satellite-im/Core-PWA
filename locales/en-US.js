@@ -24,12 +24,14 @@ export default {
     close: 'Close',
     mute: 'Mute',
     deafen: 'Deafen',
+    toggle: 'Toggle',
     copy_id: 'Copy ID',
     crop: 'Crop',
   },
   controls: {
     mic: 'Mic',
     headphones: 'Audio',
+    video: 'Video',
   },
   pages: {
     files: {
@@ -209,4 +211,28 @@ export default {
       invalid_pin: 'Pin does not match',
     },
   },
+  search: {
+    input: {
+      search_options: 'SEARCH OPTIONS',
+      search_for: 'SEARCH FOR',
+    },
+    result: {
+      search_results: 'Search results',
+      more_filters: 'More filters',
+      results: 'Results',
+    },
+  },
+  media: {
+    settings: {
+      audio_quality: 'Audio Quality',
+      bitrate: 'Bitrate',
+      sample_size: 'Sample size',
+      video_quality: 'Video Quality',
+      no_options: 'No options',
+      stream_options: 'Stream Options',
+    },
+  },
+  market_place: {
+    title: 'Market Place',
+  }
 }

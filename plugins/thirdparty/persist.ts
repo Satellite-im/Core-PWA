@@ -11,6 +11,8 @@ const blacklist = [
   'setPhrase',
   'files',
   'toggleIncomingCall',
+  'setMessages',
+  'sendMessage',
 ]
 
 export default ({ store }: { store: any }) => {

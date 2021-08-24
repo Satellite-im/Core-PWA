@@ -1,18 +1,38 @@
 <div id="files">
-  <TailoredFilesControls :handleFile="handleFile" />
-  <TailoredFilesTopbar />
-  <TailoredFilesUploader v-if="file" :file="file" :url="url" :cancelUpload="cancelUpload" :nsfw="nsfw" />
-  <UiSpacer :height="20" />
-  <div class="two-thirds">
+  
+  <div class="files-top">
     <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
   </div>
-  <div class="one-third">
-    <TypographyText text="Usage 7.32/10GB" />
+  <div class="files-container">
+    <div class="files-left">
+      <InteractablesInput
+        size="small"
+        input-kind="text"
+        type="dark"
+        placeholder="Search..."
+      />
+      <UiSpacer :height="10" />
+      <TailoredFilesControls :changeView="changeView" />
+      <UiSpacer :height="10" />
+      <TypographyText :size="6" text="Files" />
+      <UiScroll ref="files" verticalScroll scrollbarVisibility="scroll">
+        <div v-if="view === 'list'">
+          <TailoredFilesList 
+            :path="getPath().children"
+            v-if="$store.state.dataState.files !== DataStateType.Loading"
+            :push="push" />
+          <UiLoadersFileTable v-else :rows="5" />
+        </div>
+        <div v-else>
+          <TailoredFilesGrid
+            :path="getPath().children"
+            v-if="$store.state.dataState.files !== DataStateType.Loading"
+            :push="push" />
+        </div>
+      </UiScroll>
+    </div>
+    <div class="files-right">
+      <TailoredFilesAside />
+    </div>
   </div>
-  <UiHorizontalRule />
-  <UiScroll ref="files" verticalScroll scrollbarVisibility="scroll">
-    <TailoredFilesList :path="getPath().children" v-if="$store.state.dataState.files !== DataStateType.Loading" :push="push" />
-    <UiLoadersFileTable v-else :rows="5" />
-  </UiScroll>
-  <UiSpacer :height="20" />
 </div>

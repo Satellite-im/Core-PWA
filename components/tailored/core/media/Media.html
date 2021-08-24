@@ -2,7 +2,7 @@
   <TailoredCoreMediaHeading />
   <div id="media" ref="media">
     <TailoredCoreMediaUser v-for="item in computedUsers" :key="item.name" ref="user"
-      :user="{ name: item.name, profile_picture: item.profile_picture }" />
+      :user="{ name: item.name, profilePicture: item.profilePicture }" />
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
       class="more-user" v-bind:class="{full: fullscreen}">...</div>

@@ -31,5 +31,9 @@ export default Vue.extend({
   margin-top: 0.25rem;
   color: @text-muted;
   cursor: pointer;
+
+  &:hover {
+    color: @bright-text;
+  }
 }
 </style>

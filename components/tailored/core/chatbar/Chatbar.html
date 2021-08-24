@@ -3,7 +3,7 @@
     :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
     ref="wrap"
   >
-    <div class="control-wrap">
+    <div class="control-wrap file-upload-wrap">
       <FileUpload type="quick" />
     </div>
     <div
@@ -37,6 +37,7 @@
     <font-awesome-icon
       :icon="['far', 'arrow-circle-right']"
       class="control-icon"
+      @click="sendMessage"
     />
   </div>
   <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"

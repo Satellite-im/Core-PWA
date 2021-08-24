@@ -7,10 +7,16 @@ interface FetchCallsArguments {
 
 export default {
   handler: () => {},
-  async acceptCall({ commit, state }: FetchCallsArguments) {
+  async acceptCall({ commit }: FetchCallsArguments) {
     commit('toggleIncomingCall', '')
   },
-  async denyCall({ commit, state }: FetchCallsArguments) {
+  async denyCall({ commit }: FetchCallsArguments) {
     commit('toggleIncomingCall', '')
+  },
+  setMessages({ commit }: FetchCallsArguments, messages: any[]) {
+    commit('setMessages', messages)
+  },
+  sendMessage({ commit }: FetchCallsArguments, message: any) {
+    commit('sendMessage', message)
   },
 }

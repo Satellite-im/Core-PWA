@@ -1,0 +1,23 @@
+.menu-icon {
+  width: 15px;
+  margin-right: @light-spacing;
+}
+
+.active {
+  background-color: @primary-color;
+  color: @bright-text;
+  border-radius: @corner-rounding-smaller;
+
+  &:hover {
+    background-color: @primary-color;
+  }
+}
+
+li {
+  cursor: pointer;
+  padding: (@light-spacing / 2) @light-spacing;
+  margin: 0.2rem -@light-spacing;
+  &:hover {
+    background-color: @light-gray;
+  }
+}

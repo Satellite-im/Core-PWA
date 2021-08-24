@@ -30,7 +30,7 @@ export const Users = [
     state: 'online',
     last_message:
       'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profile_picture:
+    profilePicture:
       'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
   {
@@ -40,7 +40,7 @@ export const Users = [
     state: 'idle',
     last_message:
       'Network of wormholes science citizens of distant epochs tingling of the spine cosmic ocean brain is the seed of intelligence. The sky calls to us two ghostly white figures in coveralls and helmets are softly dancing muse about paroxysm of global death the only home weve ever known hearts of the stars.',
-    profile_picture:
+    profilePicture:
       'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
 ]
