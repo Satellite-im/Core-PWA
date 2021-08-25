@@ -54,7 +54,7 @@ export default Vue.extend({
       get() {
         return this.search.query
       },
-    },
+    }
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -69,6 +69,12 @@ export default Vue.extend({
     },
     toggleSearchResult() {
       this.showSearchResult = !this.showSearchResult
+    },
+    toggleMarketPlace() {
+      this.$store.commit('toggleModal', {
+        name: 'showMarketPlace',
+        state: !this.$store.state.ui.modals.showMarketPlace,
+      })
     },
   },
 })

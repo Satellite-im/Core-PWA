@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-image" :style="`background-image:url(${product.image})`">
+    <div v-if="product.new" class="badge-new">New</div>
+    <div class="favorite">
+      <font-awesome-icon :icon="[product.favorited ? 'fas' : 'far', 'heart']" />
+    </div>
+  </div>
+  <div class="card-text">
+    <div class="name">{{product.name}}</div>
+    <div class="description">{{product.description}}</div>
+    <div class="price">
+      ${{product.price.toFixed(2)}}
+      <div class="btn-buy">
+        <font-awesome-icon :icon="['fas', 'shopping-cart']" />
+      </div>
+    </div>
+  </div>
+</div>

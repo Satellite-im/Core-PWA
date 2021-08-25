@@ -118,18 +118,22 @@ const searchResultGroupList = [
   {
     type: SearchResultGroupType.Messages,
     title: 'Messages',
+    count: 5,
   },
   {
     type: SearchResultGroupType.Files,
     title: 'Files',
+    count: 3,
   },
   {
     type: SearchResultGroupType.Channels,
     title: 'Channels',
+    count: 0,
   },
   {
     type: SearchResultGroupType.People,
     title: 'People',
+    count: 0,
   },
 ]
 

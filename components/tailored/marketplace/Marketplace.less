@@ -1,0 +1,45 @@
+.market-place {
+    display: flex;
+    
+    .side-bar {
+        min-width: 312px;
+        background-color: #16161D;
+    }
+    .body-panel {
+        min-width: 784px;
+        background-color: #101017;
+        padding: 32px;
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            .search {
+                flex-grow: 1;
+                margin-right: 32px;
+            }
+            .filter {
+                flex-shrink: 0;
+                margin-right: 32px;
+            }
+            .action {
+                flex-shrink: 0;
+                .close-button {
+                    position: static !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 32px;
+                    height: 32px;
+                    left: 0px;
+                    top: 0px;
+                }
+            }
+        }
+
+        .buttons-bar {
+            margin: 16px 0px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
