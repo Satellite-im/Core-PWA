@@ -13,7 +13,6 @@ export const Users = [
     address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     status: 'Working on the space station',
     state: 'offline',
-    badge: 'community',
     last_message:
       'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
   },
