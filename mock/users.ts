@@ -4,6 +4,7 @@ export const Users = [
     address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     status: 'Some important status message',
     state: 'online',
+    badge: 'verified',
     last_message:
       'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
   },
@@ -12,6 +13,7 @@ export const Users = [
     address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     status: 'Working on the space station',
     state: 'offline',
+    badge: 'community',
     last_message:
       'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
   },
