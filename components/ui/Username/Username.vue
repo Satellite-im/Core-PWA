@@ -1,9 +1,7 @@
 <template src="./Username.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import badges from '~/config/badges'
-
-import { Badge } from '@/types/ui/core'
+import Vue from 'vue'
+import { Config } from '~/config'
 
 export default Vue.extend({
   props: {
@@ -13,6 +11,7 @@ export default Vue.extend({
     },
     badge: {
       type: String,
+      default: '',
       required: false,
     },
   },
@@ -20,11 +19,16 @@ export default Vue.extend({
     return {
       badgeIcon: this.badge
         ? {
-            style: badges[this.badge]?.[0],
-            name: badges[this.badge]?.[1],
+            style: this.getBadge(this.badge)?.[0],
+            name: this.getBadge(this.badge)?.[1],
           }
         : undefined,
     }
+  },
+  methods: {
+    getBadge(icon: Array<String>) {
+      return Config.badges[icon].icon
+    },
   },
 })
 </script>

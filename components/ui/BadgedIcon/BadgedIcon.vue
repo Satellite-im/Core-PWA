@@ -32,6 +32,11 @@ export default Vue.extend({
       default: 12,
       required: false,
     },
+    color: {
+      type: String,
+      default: '',
+      required: false,
+    },
   },
 })
 </script>

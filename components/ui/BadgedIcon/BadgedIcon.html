@@ -5,7 +5,14 @@
     :style="`font-size: ${size * 0.4}pt; height: calc(${size * 0.4}pt + 0.25rem);`">
     {{ badgeCount }}
   </span>
-  <p :style="`font-size: ${size}pt;`">
+  <p :style="`font-size: ${size}pt;`" v-if="!color">
+    <font-awesome-icon
+      v-if="icon"
+      :icon="[icon.style, icon.name]"
+      class="button-icon"
+    />
+  </p>
+  <p :style="`font-size: ${size}pt; background-color: ${color}`" class="squared" v-else>
     <font-awesome-icon
       v-if="icon"
       :icon="[icon.style, icon.name]"

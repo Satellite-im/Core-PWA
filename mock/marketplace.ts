@@ -1,4 +1,8 @@
-import { CategoryOption, FilterOption, ProductItem } from '~/types/marketplace/marketplace'
+import {
+  CategoryOption,
+  FilterOption,
+  ProductItem,
+} from '~/types/marketplace/marketplace'
 
 export const marketCategories = [
   { parentCategory: '', name: 'Personalize', icon: 'user' },
