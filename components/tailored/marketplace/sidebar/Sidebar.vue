@@ -72,4 +72,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./SideBar.less"></style>
+<style scoped lang="less" src="./Sidebar.less"></style>

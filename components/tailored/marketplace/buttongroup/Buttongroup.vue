@@ -1,4 +1,4 @@
-<template src="./ButtonGroup.html"></template>
+<template src="./Buttongroup.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -28,4 +28,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./ButtonGroup.less"></style>
+<style scoped lang="less" src="./Buttongroup.less"></style>
