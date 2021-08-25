@@ -1,4 +1,4 @@
-<template src="./Filterbox.html"></template>
+<template src="./FilterBox.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -26,4 +26,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Filterbox.less"></style>
+<style scoped lang="less" src="./FilterBox.less"></style>

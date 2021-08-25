@@ -1,4 +1,4 @@
-<template src="./Searchbox.html"></template>
+<template src="./SearchBox.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -14,4 +14,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Searchbox.less"></style>
+<style scoped lang="less" src="./SearchBox.less"></style>

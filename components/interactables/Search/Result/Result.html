@@ -13,7 +13,7 @@
       :class="{'group-item': true, 'active': item.type === groupBy}"
       @click="toggleGroupBy(item.type)"
     >
-      {{item.title}}
+      {{item.title}} {{item.count}}
     </div>
   </div>
   <div class="search-result-filters">
@@ -109,4 +109,7 @@
     next-text="»"
     container-class="search-result-pagination"
   />
+  <div class="search-result-history">
+    
+  </div>
 </div>

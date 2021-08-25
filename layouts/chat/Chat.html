@@ -15,7 +15,7 @@
         :acceptCall="acceptCall" :denyCall="denyCall" />
     </UiModal>
     <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
-      <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
+      <TailoredMarketPlace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
     </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
