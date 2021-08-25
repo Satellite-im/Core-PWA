@@ -250,6 +250,6 @@ export default {
     },
   },
   market_place: {
-    title: 'Market Place',
-  }
+    title: 'Marketplace',
+  },
 }
