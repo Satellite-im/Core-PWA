@@ -13,7 +13,7 @@
       :class="{'group-item': true, 'active': item.type === groupBy}"
       @click="toggleGroupBy(item.type)"
     >
-      {{item.title}}
+      {{item.title}} {{item.count}}
     </div>
   </div>
   <div class="search-result-filters">
@@ -21,6 +21,7 @@
       <multiselect
         :options="userOptions"
         :multiple="true"
+        :close-on-select="false"
         :clear-on-select="false"
         :preserve-search="true"
         placeholder="Users"
@@ -52,8 +53,16 @@
     <div>
       <v-date-picker v-model="date" is-dark>
         <template v-slot="{ inputValue, inputEvents }">
-          <font-awesome-icon :icon="['far', 'calendar-day']" class="date-icon" />
-          <input :value="inputValue" v-on="inputEvents" class="date-input" placeholder="Select Date" />
+          <font-awesome-icon
+            :icon="['far', 'calendar-day']"
+            class="date-icon"
+          />
+          <input
+            :value="inputValue"
+            v-on="inputEvents"
+            class="date-input"
+            placeholder="Select Date"
+          />
         </template>
       </v-date-picker>
     </div>
@@ -100,4 +109,7 @@
     next-text="»"
     container-class="search-result-pagination"
   />
+  <div class="search-result-history">
+    
+  </div>
 </div>
