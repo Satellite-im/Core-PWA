@@ -1,4 +1,4 @@
-<template src="./Marketplace.html"></template>
+<template src="./MarketPlace.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -20,4 +20,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Marketplace.less"></style>
+<style scoped lang="less" src="./MarketPlace.less"></style>

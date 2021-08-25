@@ -1,26 +1,26 @@
 <div class="market-place">
     <div class="side-bar">
-        <TailoredMarketplaceSidebar :categories="marketCategories" />
+        <TailoredMarketPlaceSideBar :categories="marketCategories" />
     </div>
     <div class="body-panel">
         <div class="top-bar">
             <div class="search">
-                <TailoredMarketplaceSearchbox />
+                <TailoredMarketPlaceSearchBox />
             </div>
             <div class="filter">
-                <TailoredMarketplaceFilterbox />
+                <TailoredMarketPlaceFilterBox />
             </div>
             <div class="action">
                 <InteractablesClose :action="closeModal" />
             </div>
         </div>
         <div class="buttons-bar">
-            <TailoredMarketplaceButtongroup>
+            <TailoredMarketPlaceButtonGroup>
                 <button>Skins</button><button>Glyphs</button><button>Themes</button>
-            </TailoredMarketplaceButtongroup>
+            </TailoredMarketPlaceButtonGroup>
         </div>
         <div class="listing">
-            <TailoredMarketplaceListing/>
+            <TailoredMarketPlaceListing/>
         </div>
     </div>
 </div>
