@@ -249,4 +249,7 @@ export default {
       stream_options: 'Stream Options',
     },
   },
+  market_place: {
+    title: 'Marketplace',
+  },
 }

@@ -1,0 +1,28 @@
+.filterbox {
+  position: relative;
+  .filter-label {
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  .filter-options {
+    display: none;
+    position: absolute;
+    background: #16161D;
+    border: 1px solid rgba(199, 206, 246, 0.25);
+    padding: 24px 34px;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    z-index: 10;
+    &.active {
+      display: inline-block;
+    }
+    li {
+      padding: 4px 0px;
+      input {
+        margin-right: 12px;
+      }
+    }
+  }
+}

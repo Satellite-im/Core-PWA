@@ -1,0 +1,36 @@
+<div class="side-bar">
+  <div class="header">
+    <font-awesome-icon :icon="['fas', 'shopping-bag']" />
+    <span>{{$t('market_place.title')}}</span>
+  </div>
+  <div class="body">
+    <ul class="category-tree">
+      <li
+        :class="['category-item', 'depth-'+item.depth, item.children.length > 0 ? 'parent' : '', item.hidden ? 'hidden' : '', item.selected ? 'active' : '']"
+        v-for="(item, i) in categoryTree"
+        :key="i"
+        v-on:click="clickCategory(item)"
+      >
+        <span class="category">
+          <span class="category-text">
+            <font-awesome-icon
+              v-if="item.self.icon!=''"
+              :icon="['far', item.self.icon]"
+            />
+            {{item.self.name}}
+          </span>
+          <span class="category-action">
+            <font-awesome-icon
+              v-if="item.children.length>0"
+              :icon="['far', item.collapsed ? 'chevron-right' : 'chevron-down']"
+            />
+            <font-awesome-icon
+              v-if="item.selected"
+              :icon="['fas', 'circle']"
+            />
+          </span>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
