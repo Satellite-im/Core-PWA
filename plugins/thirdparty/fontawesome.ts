@@ -74,12 +74,16 @@ import {
   faThLarge,
   faThList,
   faShoppingBag,
-  faBagsShopping,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
 
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCircle,
+  faShoppingBag as faShoppingBagFull,
+  faHeart as faHeartFull,
+  faShoppingCart,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(fal.faFile)
@@ -154,6 +158,8 @@ library.add(faThList)
 library.add(faThLarge)
 library.add(faBackspace)
 library.add(faShoppingBag)
-library.add(faBagsShopping)
+library.add(faShoppingBagFull)
+library.add(faShoppingCart)
+library.add(faHeartFull)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

@@ -14,3 +14,18 @@ export type CategoryTreeItem = {
   hidden: boolean
   children: CategoryTreeItem[]
 }
+
+export type FilterOption = {
+  field: string
+  ascending: boolean
+  text: string
+}
+
+export type ProductItem = {
+  name: string
+  description: string
+  price: number
+  new: boolean
+  image: string
+  favorited: boolean
+}

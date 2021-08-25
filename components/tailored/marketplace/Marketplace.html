@@ -4,13 +4,23 @@
     </div>
     <div class="body-panel">
         <div class="top-bar">
-
+            <div class="search">
+                <TailoredMarketplaceSearchbox />
+            </div>
+            <div class="filter">
+                <TailoredMarketplaceFilterbox />
+            </div>
+            <div class="action">
+                <InteractablesClose :action="closeModal" />
+            </div>
         </div>
         <div class="buttons-bar">
-
+            <TailoredMarketplaceButtongroup>
+                <button>Skins</button><button>Glyphs</button><button>Themes</button>
+            </TailoredMarketplaceButtongroup>
         </div>
         <div class="listing">
-
+            <TailoredMarketplaceListing/>
         </div>
     </div>
 </div>

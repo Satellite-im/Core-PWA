@@ -4,7 +4,12 @@
 import Vue from 'vue'
 import { marketCategories } from '~/mock/marketplace'
 export default Vue.extend({
-  props: {},
+  props: {
+    closeModal: {
+      type: Function,
+      default: () => {},
+    },
+  },
   data() {
     return {
       marketCategories,
