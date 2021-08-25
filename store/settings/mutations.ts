@@ -39,6 +39,12 @@ const mutations = {
       audioOutput: value,
     }
   },
+  setKeybinds(state: NuxtState, value: String) {
+    state.settings = {
+      ...state.settings,
+      keybinds: value,
+    }
+  },
   updateKeybinding(state: NuxtState, value: Object) {
     // @ts-ignore
     state.settings.keybinds[value.keybindName] = value.newKeybind
