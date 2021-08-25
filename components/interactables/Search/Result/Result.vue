@@ -80,9 +80,7 @@ export default Vue.extend({
       }
       this.fetchResult(query)
     },
-    page(newPage) {
-      console.log(newPage)
-    },
+    page(newPage) {},
   },
   methods: {
     toggle() {

@@ -32,6 +32,12 @@ export default Vue.extend({
     denyCall() {
       this.$store.dispatch('denyCall')
     },
+    toggleMarketPlace() {
+      this.$store.commit('toggleModal', {
+        name: 'showMarketPlace',
+        state: !this.$store.state.ui.modals.showMarketPlace,
+      })
+    },
   },
 })
 </script>

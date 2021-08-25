@@ -1,0 +1,31 @@
+.button-group {
+  display: inline;
+  button {
+    display: inline-block;
+    font-family: @primary-font;
+    font-size: 12px;
+    color: #3D83DB;
+    border: 1px solid #3D83DB;
+    margin: 0px;
+    padding: 8px 44px;
+    background-color: #101017;
+    outline: none;
+    cursor: pointer;
+    &:first-child {
+      border-radius: 4px 0px 0px 4px;
+    }
+    &:last-child {
+      border-radius: 0px 4px 4px 0px;
+    }
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+    &:hover {
+      color: white;
+    }
+    &.active {
+      color: white;
+      background-color: #3D83DB;
+    }
+  }
+}
