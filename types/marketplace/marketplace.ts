@@ -5,7 +5,7 @@ export type CategoryOption = {
 }
 
 export type CategoryTreeItem = {
-  index: number,
+  index: number
   parent: CategoryTreeItem | null
   self: CategoryOption
   depth: number

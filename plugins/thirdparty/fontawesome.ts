@@ -75,7 +75,6 @@ import {
   faThList,
   faShoppingBag,
   faBagsShopping,
-  faDotCircle,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -156,6 +155,5 @@ library.add(faThLarge)
 library.add(faBackspace)
 library.add(faShoppingBag)
 library.add(faBagsShopping)
-library.add(faDotCircle)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

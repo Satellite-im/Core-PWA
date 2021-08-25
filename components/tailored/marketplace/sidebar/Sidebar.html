@@ -12,8 +12,13 @@
         v-on:click="clickCategory(item)"
       >
         <span class="category">
-          <span class="category-icon"></span>
-          <span class="category-text">{{item.self.name}}</span>
+          <span class="category-text">
+            <font-awesome-icon
+              v-if="item.self.icon!=''"
+              :icon="['far', item.self.icon]"
+            />
+            {{item.self.name}}
+          </span>
           <span class="category-action">
             <font-awesome-icon
               v-if="item.children.length>0"
@@ -21,7 +26,7 @@
             />
             <font-awesome-icon
               v-if="item.selected"
-              :icon="['far', item.collapsed ? 'chevron-right' : 'dot-circle']"
+              :icon="['fas', 'circle']"
             />
           </span>
         </span>

@@ -1,7 +1,7 @@
 import { CategoryOption } from '~/types/marketplace/marketplace'
 
 export const marketCategories = [
-  { parentCategory: '', name: 'Personalize', icon: '' },
+  { parentCategory: '', name: 'Personalize', icon: 'user' },
   { parentCategory: 'Personalize', name: 'Customizations', icon: '' },
   { parentCategory: 'Personalize', name: 'Upgrades', icon: '' },
   { parentCategory: 'Upgrades', name: 'Upgrade1', icon: '' },
