@@ -1,5 +1,6 @@
 .file {
-  width: 170px;
+  width: 20%;
+  min-width: 160px;
   margin-right: @light-spacing;
   margin-bottom: @light-spacing;
   border-radius: @corner-rounding-smaller;
@@ -54,4 +55,14 @@
     }
   }
 
+}
+
+@media only screen and (max-width: 768px) {
+  .mobile-file {
+    width: 47%;
+    min-width: 100px;
+    .file-icon {
+      margin-left: 10vw;
+    }
+  }
 }

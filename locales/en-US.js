@@ -77,6 +77,23 @@ export default {
           'Mock data and tweak settings for testing. This page is really just for internal use.',
         identifier: 'Identifier',
       },
+      notifications: {
+        title: 'Notifications Settings',
+        notes:
+          'Notifications work different on every platform. On Web, you need to request noticications. On Desktop and Android notications are enabled by default.',
+        enabled: 'Enable or Disable Notifications',
+        labels: {
+          current_platform: 'Your current platform is:',
+        },
+        web: {
+          granted:
+            'In the web version of Satellite, you need to disable notifications inyour browser for this site.',
+          denied:
+            "We cannot re-prompt you for notification permission in the web version of Satellite. You need to set notifications for this site to 'ask' or 'allow'",
+        },
+        send_label: 'Send Notification',
+        send_placeholder: 'Content you want to appear in local notification',
+      },
       audio: {
         sources: {
           title: 'Audio Sources',
