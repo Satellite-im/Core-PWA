@@ -1,4 +1,4 @@
-<div class="file">
+<div :class="`${$device.isMobile ? 'file mobile-file' : 'file'}`">
   <div class="quick-actions">
     <font-awesome-icon :icon="['far', 'link']" class="share" v-if="item.meta && item.meta.shared" />
     <font-awesome-icon :icon="['far', 'heart']" class="like" v-if="item.meta && item.meta.liked" />
