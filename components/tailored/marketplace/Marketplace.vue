@@ -2,10 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { marketCategories } from '~/mock/marketplace'
 export default Vue.extend({
   props: {},
   data() {
-    return {}
+    return {
+      marketCategories,
+    }
   },
   computed: {},
   methods: {},

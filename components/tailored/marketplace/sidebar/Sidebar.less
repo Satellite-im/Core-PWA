@@ -1,15 +1,79 @@
 .side-bar {
+    font-family: @primary-font !important;
     .header {
         display: flex;
         align-items: center;
-        padding: 32px;
-        font-family: @primary-font;
+        padding: 32px 32px 24px 32px;
         font-size: 24px;
         font-weight: 400 !important;
 
         .fa-shopping-bag {
             color: #F6CC6B;
             margin-right: 16px;
+        }
+    }
+    .body {
+        padding: 8px 32px 24px 32px;
+        .category-tree {
+            font-size: 12px;
+            .category-item {
+                &.hidden {
+                    display: none;
+                }
+                &.active, :hover {
+                    font-weight: 600;
+                    cursor: pointer;
+                    color: #F6CC6B;
+                }
+                display: flex;
+                align-items: baseline;
+                margin: 0px;
+                padding: 4px 0px;
+                &.parent {
+                    margin-bottom: 8px;
+                }
+                &.depth-0 {
+                    .category {
+                        font-size: 14px;
+                        padding-left: 0px;
+                    }
+                    .category::before {
+                        content: '' !important;
+                        width: 0px;
+                        height: 0px;
+                        border: none;
+                        margin-right: 0px;
+                    }
+                }
+                &.depth-1 {
+                    padding-left: 4px;
+                }
+                &.depth-2 {
+                    padding-left: 36px;
+                }
+                .category {
+                    position: relative;
+                    display: inline-block;
+                    width: 100%;
+                    padding-left: 24px;
+                    &::before {
+                        position: absolute;
+                        top: -12px;
+                        left: 0px;
+                        display: inline-block;
+                        content: ' ';
+                        width: 8px;
+                        height: 24px;
+                        border-left: 2px solid #C4C4C4;
+                        border-bottom: 2px solid #C4C4C4;
+                    }
+                    .category-action {
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                    }
+                }
+            }
         }
     }
 }

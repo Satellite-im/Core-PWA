@@ -60,6 +60,7 @@ import {
   faVolumeOff,
   faVolumeMute,
   faChevronRight,
+  faChevronDown,
   faTerminal,
   faCommentAltSmile,
   faSearch,
@@ -74,6 +75,7 @@ import {
   faThList,
   faShoppingBag,
   faBagsShopping,
+  faDotCircle,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -136,6 +138,7 @@ library.add(faVolume)
 library.add(faVolumeMute)
 library.add(faVolumeDown)
 library.add(faChevronRight)
+library.add(faChevronDown)
 library.add(faTerminal)
 library.add(faCompress)
 library.add(faCommentAltSmile)
@@ -153,5 +156,6 @@ library.add(faThLarge)
 library.add(faBackspace)
 library.add(faShoppingBag)
 library.add(faBagsShopping)
+library.add(faDotCircle)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
