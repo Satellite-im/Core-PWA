@@ -20,9 +20,9 @@ export default Vue.extend({
       badgeIcon: this.badge
         ? {
             // @ts-ignore
-            style: Config.badges[this.badge]?.[0],
+            style: Config.badges[this.badge].icon[0],
             // @ts-ignore
-            name: Config.badges[this.badge]?.[1],
+            name: Config.badges[this.badge].icon[1],
           }
         : undefined,
     }
