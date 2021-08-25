@@ -19,16 +19,13 @@ export default Vue.extend({
     return {
       badgeIcon: this.badge
         ? {
-            style: this.getBadge(this.badge)?.[0],
-            name: this.getBadge(this.badge)?.[1],
+            // @ts-ignore
+            style: Config.badges[this.badge]?.[0],
+            // @ts-ignore
+            name: Config.badges[this.badge]?.[1],
           }
         : undefined,
     }
-  },
-  methods: {
-    getBadge(icon: Array<String>) {
-      return Config.badges[icon].icon
-    },
   },
 })
 </script>
