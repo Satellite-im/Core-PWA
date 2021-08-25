@@ -17,15 +17,9 @@
       :text="$t('pages.files.new_folder')"
       :icon="{style: 'far', name: 'folder-plus'}"
       size="small"
-      :action="()=>{show('newfolder')}" />
-    <label for="quick-upload" class="button is-primary is-outlined is-small" v-on:change="(e) => handleFile(e)">
-      <font-awesome-icon
-        :icon="['far', 'file-plus']"
-        class="control-icon" />
-      &nbsp;
-      {{ $t('pages.files.upload') }}
-    </label>
-    <input type="file" id="quick-upload" @change="handleFile"/>
+      :action="()=>{show('newfolder')}"
+    />
+    <FileUpload type="button" />
   </div>
   <div>
     <TailoredFilesViewSwitcher :changeView="changeView" />
