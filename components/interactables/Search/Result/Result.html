@@ -110,6 +110,6 @@
     container-class="search-result-pagination"
   />
   <div class="search-result-history">
-    
+    <InteractablesSearchResultChip v-for="(item, i) in givenQueryItems" :key="i" :text="item" />
   </div>
 </div>

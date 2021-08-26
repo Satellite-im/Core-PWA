@@ -1,7 +1,7 @@
 <template>
-  <div class="chip-item">
+  <div v-if="show" class="chip-item">
     {{ text }}
-    <font-awesome-icon :icon="['far', 'close']" />
+    <font-awesome-icon :icon="['far', 'times']" @click="hide" />
   </div>
 </template>
 
@@ -14,17 +14,31 @@ export default Vue.extend({
       default: '',
     },
   },
+  data() {
+    return {
+      show: true,
+    }
+  },
+  methods: {
+    hide() {
+      this.show = false
+    },
+  },
 })
 </script>
 
 <style scoped lang="less">
 .chip-item {
+  display: inline-block;
+  margin-right: 5px;
   padding: 4px 8px;
   border-radius: 24px;
   background-color: @primary-color;
   color: white;
-  .fa-close {
-    margin-left: 12px;
+  .fa-times {
+    margin-bottom: -2px;
+    margin-left: 8px;
+    cursor: pointer;
   }
 }
 </style>
