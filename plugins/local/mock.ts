@@ -5,6 +5,11 @@ import { Group, Groups } from '~/mock/groups'
 import { Messages } from '~/mock/messages'
 import { Servers, Unreads } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
+import {
+  marketCategories,
+  marketFilters,
+  marketProducts,
+} from '~/mock/marketplace'
 
 const mock = {
   users: Users,
@@ -15,6 +20,11 @@ const mock = {
   servers: Servers,
   unreads: Unreads,
   messages: Messages,
+  marketplace: {
+    marketCategories,
+    marketFilters,
+    marketProducts,
+  },
   files: Files,
   friends: Friends,
   friend: Friend,

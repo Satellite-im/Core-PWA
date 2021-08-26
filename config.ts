@@ -33,4 +33,18 @@ export const Config = {
   solana: {
     network: 'devnet',
   },
+  badges: {
+    verified: {
+      color: '#55efc4',
+      icon: ['far', 'check'],
+    },
+    community: {
+      color: '#a29bfe',
+      icon: ['far', 'users'],
+    },
+    cameraman: {
+      color: '#d63031',
+      icon: ['far', 'video'],
+    },
+  },
 }

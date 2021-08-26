@@ -4,6 +4,7 @@ export const Users = [
     address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     status: 'Some important status message',
     state: 'online',
+    badge: 'verified',
     last_message:
       'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
   },
