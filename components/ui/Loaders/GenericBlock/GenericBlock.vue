@@ -67,7 +67,7 @@ export default Vue.extend({
     height: 30px;
     position: relative;
     overflow: hidden;
-    background: @light-gray;
+    background: @dark-gray;
     margin: 0.75rem;
 
     &.shortest {
@@ -89,7 +89,7 @@ export default Vue.extend({
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt 50%,
+        @dark-gray-alt 50%,
         transparent 100%
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
