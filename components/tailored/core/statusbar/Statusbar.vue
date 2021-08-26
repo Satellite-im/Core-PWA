@@ -54,7 +54,7 @@ export default Vue.extend({
       get() {
         return this.search.query
       },
-    }
+    },
   },
   methods: {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,7 +63,6 @@ export default Vue.extend({
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleSearch(value: string, items: SearchQueryItem[]) {
-      console.log('search-input:', value, items)
       this.showSearchResult = true
       this.searchQuery = value
     },
