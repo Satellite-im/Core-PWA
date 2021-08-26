@@ -4,11 +4,11 @@
     display: inline-block;
     font-family: @primary-font;
     font-size: 12px;
-    color: #3D83DB;
-    border: 1px solid #3D83DB;
+    color: @primary-color;
+    border: 1px solid @primary-color;
     margin: 0px;
     padding: 8px 44px;
-    background-color: #101017;
+    background-color: @darker;
     outline: none;
     cursor: pointer;
     &:first-child {
@@ -21,11 +21,11 @@
       margin-left: -1px;
     }
     &:hover {
-      color: white;
+      color: @white;
     }
     &.active {
-      color: white;
-      background-color: #3D83DB;
+      color: @white;
+      background-color: @primary-color;
     }
   }
 }
