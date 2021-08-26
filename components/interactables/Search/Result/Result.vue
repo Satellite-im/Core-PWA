@@ -72,6 +72,9 @@ export default Vue.extend({
         ? this.result.recommends.channels
         : []
     },
+    givenQueryItems() {
+      return this.$store.state.search.query.split(' ')
+    },
   },
   watch: {
     searchQuery(query) {
@@ -80,7 +83,6 @@ export default Vue.extend({
       }
       this.fetchResult(query)
     },
-    page(newPage) {},
   },
   methods: {
     toggle() {

@@ -55,10 +55,14 @@ export default Vue.extend({
         item.collapsed = !item.collapsed
         for (let i = item.index + 1; i < this.categoryTree.length; i++) {
           const child = this.categoryTree[i]
-          if (child.depth !== item.depth + 1) {
+          if (child.depth === item.depth) {
             break
           }
-          child.hidden = item.collapsed
+          if (item.collapsed) {
+            child.hidden = true
+          } else if (child.parent) {
+            child.hidden = child.parent.collapsed
+          }
         }
       } else {
         if (this.category != null) {
