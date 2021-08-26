@@ -1,4 +1,4 @@
-import { Cluster, PublicKey } from '@solana/web3.js'
+import { Cluster, Connection, PublicKey } from '@solana/web3.js'
 
 /**
  * Utility function to convert the string from config into a
@@ -49,8 +49,53 @@ export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+/**
+ * Utility function to convert a string into a fixed length buffer
+ * @param stringToConvert string to be converted
+ * @param length fixed length of the final buffer
+ * @returns the buffer representation of the given string
+ */
+export function stringToBuffer(stringToConvert: string, length: number) {
+  return Buffer.from(stringToConvert.padEnd(length, String.fromCharCode(0)))
+}
+
+/**
+ * Utility function to convert a buffer into string
+ * @param bufferToConvert buffer to be converted
+ * @returns the string representation of the given buffer
+ */
+export function stringFromBuffer(bufferToConvert: Buffer) {
+  return Buffer.from(bufferToConvert).toString('utf-8').replace(/\0.*$/g, '')
+}
+
+/**
+ * Waits until a given Solana account exists on the network
+ * @param connection Solana connection instance
+ * @param accountKey Account public key to wait for
+ */
+export async function waitForAccount(
+  connection: Connection,
+  accountKey: PublicKey
+) {
+  while (true) {
+    await sleep(3000)
+    const accountInfo = await connection.getAccountInfo(accountKey)
+    if (accountInfo === null) {
+      continue
+    } else {
+      break
+    }
+  }
+}
+
+/**
+ * Seeds to be used for deriving accounts
+ */
 export enum Seeds {
   FriendInfo = 'friendinfo',
   OutgoingRequest = 'outgoing',
   IncomingRequest = 'incoming',
+  User = 'user',
+  DwellerServer = 'DwellerServer',
+  ServerMember = 'ServerMember',
 }

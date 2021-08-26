@@ -32,6 +32,7 @@ export const Config = {
   },
   solana: {
     network: 'devnet',
+    serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
   },
   badges: {
     verified: {
