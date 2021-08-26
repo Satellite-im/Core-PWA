@@ -1,5 +1,7 @@
 export interface AccountsState {
+  loading?: boolean
   locked: boolean
+  pin?: string
   pinHash: string
   active: string
   gasPrice: string
