@@ -5,6 +5,18 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'DisclaimerScreen',
+  computed: {
+    isLoading() {
+      return this.$store.state.accounts.loading
+    },
+  },
+  methods: {
+    async generateWallet() {
+      await this.$store.dispatch('generateWallet')
+
+      this.$router.push('phrase')
+    },
+  },
 })
 </script>
 

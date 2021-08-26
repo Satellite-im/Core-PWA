@@ -23,9 +23,12 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$store.subscribe((mutation) => {
-      if (mutation.type === 'unlock') {
+    this.$store.subscribe((mutation, state) => {
+      const { phrase } = state.accounts
+      if (mutation.type === 'unlock' && phrase) {
         this.$router.replace('/')
+      } else if (mutation.type === 'unlock' && phrase === '') {
+        this.$router.replace('/setup/disclaimer')
       }
     })
   },

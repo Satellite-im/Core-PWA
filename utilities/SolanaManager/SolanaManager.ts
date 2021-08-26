@@ -46,7 +46,7 @@ export default class SolanaManager {
   async createRandomKeypair(): Promise<SolanaWallet> {
     const mnemonic = bip39.generateMnemonic()
 
-    const seed = bip39.mnemonicToSeedSync(mnemonic)
+    const seed = await bip39.mnemonicToSeed(mnemonic)
 
     const path = this.getPath(0)
 
@@ -79,7 +79,7 @@ export default class SolanaManager {
 
     const path = this.getPath(accountIndex)
 
-    const seed = bip39.mnemonicToSeedSync(mnemonic)
+    const seed = await bip39.mnemonicToSeed(mnemonic)
     const seedWithPath = `${seed.toString('utf-8')}${path}`
 
     const hashBuffer = await crypto.subtle.digest(
@@ -106,7 +106,7 @@ export default class SolanaManager {
 
     const path = 'user'
 
-    const seed = bip39.mnemonicToSeedSync(this.mnemonic)
+    const seed = await bip39.mnemonicToSeed(this.mnemonic)
     const seedWithPath = `${seed.toString('utf-8')}${path}`
 
     const hashBuffer = await crypto.subtle.digest(
