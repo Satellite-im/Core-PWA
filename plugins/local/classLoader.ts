@@ -10,7 +10,7 @@ import Security from '~/utilities/Security/Security'
 declare module 'vue/types/vue' {
   interface Vue {
     $WebRTC: typeof WebRTC
-    $SolanaManager: typeof SolanaManager
+    $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
     $Security: Security
@@ -20,7 +20,7 @@ declare module 'vue/types/vue' {
 declare module '@nuxt/types' {
   interface Context {
     $WebRTC: typeof WebRTC
-    $SolanaManager: typeof SolanaManager
+    $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
     $Security: Security

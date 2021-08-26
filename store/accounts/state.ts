@@ -8,6 +8,7 @@ const InitalAccountsState = (): AccountsState => ({
   gasPrice: '',
   phrase: '',
   encryptedPhrase: '',
+  loading: false,
 })
 
 export default InitalAccountsState
