@@ -70,6 +70,7 @@ export default Vue.extend({
           this.scrollbarVisibility
         ),
         'enable-wrap': this.enableWrap,
+        'auto-scroll': this.autoScroll,
         always: this.scrollbarVisibility === 'always',
         dark: this.theme === 'dark',
       }
@@ -82,6 +83,11 @@ export default Vue.extend({
         this.autoScrollToBottom()
       },
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.autoScrollToBottom()
+    })
   },
   beforeDestroy() {
     this.loaded = false
