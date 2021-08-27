@@ -5,7 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { DataStateType } from '~/store/dataState/state'
 
-import { getAlphaSorted } from '~/utilities/friends'
+import { getAlphaSorted } from '~/libraries/ui/Friends'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {

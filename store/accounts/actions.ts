@@ -1,8 +1,9 @@
 import Vue from 'vue'
+// eslint-disable-next-line import/named
 import { Commit, Dispatch } from 'vuex'
 import { AccountsError } from './types'
-import Crypto from '~/utilities/Crypto/Crypto'
-import SolanaManager from '~/utilities/SolanaManager/SolanaManager'
+import Crypto from '~/libraries/Crypto/Crypto'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 interface ActionsArguments {
   commit: Commit

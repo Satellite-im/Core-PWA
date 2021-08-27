@@ -8,7 +8,7 @@ import {
   parseCommand,
   commands,
   isArgsValid,
-} from '~/utilities/commands'
+} from '~/libraries/ui/Commands'
 
 export default Vue.extend({
   components: {
