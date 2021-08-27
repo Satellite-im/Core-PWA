@@ -12,19 +12,6 @@ export default Vue.extend({
     }
   },
   computed: {},
-  mounted() {
-    const btns = this.$refs.btns as HTMLElement
-    btns.querySelectorAll('button').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (this.active != null) {
-          this.active.classList.remove('active')
-        }
-        button.classList.add('active')
-        this.active = button
-      })
-    })
-  },
-  methods: {},
 })
 </script>
 

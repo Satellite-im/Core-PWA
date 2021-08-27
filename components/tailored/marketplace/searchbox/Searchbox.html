@@ -1,8 +1,9 @@
 <div class="search-box">
-  <input
-      v-model="internalText"
-      class="input"
-      placeholder="Search..."
-    />
-    <font-awesome-icon :icon="['far', 'search']"/>
+  <InteractablesInput 
+    :placeholder="$t('global.search')" 
+    size="small" 
+    v-model="name"
+    input-kind="text" 
+    outlined 
+    type="primary" />
 </div>
