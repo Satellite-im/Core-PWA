@@ -1,31 +1,20 @@
 .button-group {
   display: inline;
-  button {
+  .is-button {
     display: inline-block;
-    font-family: @primary-font;
-    font-size: 12px;
-    color: @primary-color;
-    border: 1px solid @primary-color;
-    margin: 0px;
-    padding: 8px 44px;
-    background-color: @darker;
-    outline: none;
     cursor: pointer;
+    border-radius: 0;
+    margin: 0;
     &:first-child {
-      border-radius: 4px 0px 0px 4px;
+      border-radius: @corner-rounding 0px 0px @corner-rounding;
+    }
+    &:nth-child(2) {
+      border-right: none;
+      border-left: none;
+      margin: 0 -3px;
     }
     &:last-child {
-      border-radius: 0px 4px 4px 0px;
-    }
-    &:not(:first-child) {
-      margin-left: -1px;
-    }
-    &:hover {
-      color: @white;
-    }
-    &.active {
-      color: @white;
-      background-color: @primary-color;
+      border-radius: 0px @corner-rounding @corner-rounding 0px;
     }
   }
 }

@@ -16,11 +16,36 @@
         </div>
         <div class="buttons-bar">
             <TailoredMarketplaceButtongroup>
-                <button>Skins</button><button>Glyphs</button><button>Themes</button>
+                <InteractablesButton
+                    text="Glyphs"
+                    size="small"
+                    type="primary"
+                    :icon="{ style: 'far', name: 'grin-tongue-wink' }"
+                    outlined
+                    :action="testAction"
+                />
+                <InteractablesButton
+                    text="Themes"
+                    size="small"
+                    type="primary"
+                    :icon="{ style: 'far', name: 'palette' }"
+                    outlined
+                    :action="testAction"
+                />
+                <InteractablesButton
+                    text="NFTs"
+                    size="small"
+                    type="primary"
+                    :icon="{ style: 'far', name: 'cubes' }"
+                    outlined
+                    :action="testAction"
+                />
             </TailoredMarketplaceButtongroup>
         </div>
         <div class="listing-panel">
-            <TailoredMarketplaceListing/>
+            <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap noPadding>
+                <TailoredMarketplaceListing/>
+            </UiScroll>
         </div>
     </div>
 </div>

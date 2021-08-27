@@ -1,19 +1,13 @@
 .side-bar {
     font-family: @primary-font !important;
     .header {
+        margin-top: @normal-spacing;
         display: flex;
         align-items: center;
-        padding: 32px 32px 24px 32px;
-        font-size: 24px;
-        font-weight: 400 !important;
-
-        .fa-shopping-bag {
-            color: @orange;
-            margin-right: 16px;
-        }
+        padding: @normal-spacing (@normal-spacing * 2) 0 (@normal-spacing * 2);
     }
     .body {
-        padding: 8px 32px 24px 32px;
+        padding: @normal-spacing (@normal-spacing * 2);
         .category-tree {
             font-size: 12px;
             .category-item {
@@ -21,9 +15,8 @@
                     display: none;
                 }
                 &.active, :hover {
-                    font-weight: 600;
                     cursor: pointer;
-                    color: @orange;
+                    color: @primary-color;
                     .fa-circle {
                         color: @green;
                         width: 0.5rem;
