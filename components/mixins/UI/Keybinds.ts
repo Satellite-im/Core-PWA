@@ -1,6 +1,6 @@
 // @ts-nocheck
 import Mousetrap from 'mousetrap'
-import { Sounds } from '~/utilities/SoundManager/SoundManager'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export const Keybinds = {
   mounted() {

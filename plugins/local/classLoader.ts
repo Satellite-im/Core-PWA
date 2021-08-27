@@ -1,11 +1,11 @@
 // This file is used to bind local classes to vue global context
 
 import Vue from 'vue'
-import SolanaManager from '~/utilities/SolanaManager/SolanaManager'
-import SoundManager from '~/utilities/SoundManager/SoundManager'
-import WebRTC from '~/utilities/WebRTC/WebRTC'
-import Crypto from '~/utilities/Crypto/Crypto'
-import Security from '~/utilities/Security/Security'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import SoundManager from '~/libraries/SoundManager/SoundManager'
+import WebRTC from '~/libraries/WebRTC/WebRTC'
+import Crypto from '~/libraries/Crypto/Crypto'
+import Security from '~/libraries/Security/Security'
 
 declare module 'vue/types/vue' {
   interface Vue {

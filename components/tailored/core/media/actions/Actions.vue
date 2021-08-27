@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Sounds } from '~/utilities/SoundManager/SoundManager'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   computed: {

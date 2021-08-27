@@ -3,7 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { CurrentCommand } from '~/types/utils/commands'
-import { commands, containsCommand, parseCommand } from '~/utilities/commands'
+import {
+  commands,
+  containsCommand,
+  parseCommand,
+} from '~/libraries/ui/Commands'
 
 export default Vue.extend({
   props: {

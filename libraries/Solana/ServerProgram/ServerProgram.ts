@@ -7,6 +7,7 @@ import {
   SYSVAR_RENT_PUBKEY,
   Keypair,
   Connection,
+  // eslint-disable-next-line import/named
   ConfirmOptions,
 } from '@solana/web3.js'
 import {
@@ -14,9 +15,13 @@ import {
   dwellerAccountLayout,
 } from './ServerProgram.layout'
 import { CreateDerivedAccountParams } from './ServerProgram.types'
-import { Seeds, stringFromBuffer, stringToBuffer } from '~/utilities/solana'
+import {
+  Seeds,
+  stringFromBuffer,
+  stringToBuffer,
+} from '~/libraries/Solana/Solana'
 import { Config } from '~/config'
-import Solana from '~/utilities/SolanaManager/SolanaManager'
+import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 const SERVER_PROGRAM_ID = new PublicKey(Config.solana.serverProgramId)
 
