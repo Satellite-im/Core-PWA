@@ -5,6 +5,29 @@
   position: relative;
 }
 
+.profile-layout {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-left {
+  flex-shrink: 0;
+  width: 350px;
+  padding: @normal-spacing;
+  margin-top: -200px;
+}
+
+.profile-right {
+  flex-grow: 1;
+  margin-top: 32px;
+}
+
+.profile-main {
+  background-color: @dark-gray-alt;
+  padding: @normal-spacing;
+  border-radius: @corner-rounding;
+}
+
 .profile-photo-column {
   max-width: 100px;
   .profile-photo {

@@ -30,7 +30,8 @@ export default Vue.extend({
 <style scoped lang="less">
 .chip-item {
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   padding: 4px 8px;
   border-radius: 24px;
   background-color: @primary-color;

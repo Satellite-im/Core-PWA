@@ -5,6 +5,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
 
+import { sampleProfileInfo } from '~/mock/profile'
+
 declare module 'vue/types/vue' {
   interface Vue {
     accounts: any
@@ -18,10 +20,9 @@ export default Vue.extend({
   layout: 'settings',
   data() {
     return {
-      status: 'Some super interesting status message.',
-      showPhrase: false,
-      imageUrl: '',
+      profileInfo: sampleProfileInfo,
       croppedImage: '',
+      showPhrase: false,
       showCropper: false,
     }
   },
