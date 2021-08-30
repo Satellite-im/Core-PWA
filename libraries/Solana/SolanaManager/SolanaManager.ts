@@ -4,7 +4,7 @@ import {
   publicKeyFromSeed,
   sleep,
   getClusterFromNetworkConfig,
-} from '../solana'
+} from '../Solana'
 import { Config } from '~/config'
 import { SolanaWallet } from '~/types/solana/solana'
 

@@ -1,8 +1,7 @@
 // plugins/notifications.ts
 import Vue from 'vue'
 
-import { Notifications } from '~/libraries/ui/Notifications'
-
+import { Notifications } from '~/utilities/Notifications'
 
 declare module 'vue/types/vue' {
   interface Vue {

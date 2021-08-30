@@ -1,5 +1,5 @@
-import { stripEXIF } from '../Security/exif'
-import { isNSFW } from '../Security/nsfw'
+import { stripEXIF } from '../../utilities/EXIF'
+import { isNSFW } from '../../utilities/NSFW'
 
 export default class Security {
   stripEXIF: Function = stripEXIF

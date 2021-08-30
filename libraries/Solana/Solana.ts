@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import { Cluster, Connection, PublicKey } from '@solana/web3.js'
 
 /**
