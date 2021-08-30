@@ -22,7 +22,7 @@
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiChatScroll ref="chat" :contents="$store.state.media.messages" enableWrap>
+      <UiChatScroll ref="chat" :contents="$store.state.media.messages" preventScrollOffset="500" enableWrap>
         <Nuxt />
       </UiChatScroll>
       <Nuxt ref="chat" id="chat" />

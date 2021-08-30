@@ -37,6 +37,7 @@ export default Vue.extend({
         right: 30,
         width: 0,
       },
+      ro: new ResizeObserver(() => {}),
     }
   },
   computed: {
@@ -63,12 +64,16 @@ export default Vue.extend({
   },
   mounted() {
     this.$nextTick(() => {
-      this.calcNewMessageAlertPos()
+      this.ro = new ResizeObserver((_) => {
+        this.calcNewMessageAlertPos()
+      })
+      this.ro.observe(this.$el)
       this.autoScrollToBottom()
     })
   },
   beforeDestroy() {
     this.loaded = false
+    this.ro.unobserve(this.$el)
   },
   methods: {
     autoScrollToBottom() {
