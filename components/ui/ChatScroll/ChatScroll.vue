@@ -62,10 +62,11 @@ export default Vue.extend({
   methods: {
     autoScrollToBottom() {
       const interval = this.loaded ? 100 : 1000
-      if (this.$el && this.autoScroll) {
+      const scrollRef = this.$refs.scrollRef
+      if (scrollRef && this.autoScroll) {
         setTimeout(() => {
           this.$nextTick(() => {
-            this.$el.scrollTop = this.$el.scrollHeight
+            scrollRef.scrollTop = scrollRef.scrollHeight
             this.loaded = true
           })
         }, interval)

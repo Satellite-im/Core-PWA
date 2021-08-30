@@ -22,9 +22,9 @@
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiScroll ref="chat" verticalScroll scrollbarVisibility="scroll" :contents="$store.state.media.messages" autoScroll enableWrap>
+      <UiChatScroll ref="chat" :contents="$store.state.media.messages" enableWrap>
         <Nuxt />
-      </UiScroll>
+      </UiChatScroll>
       <Nuxt ref="chat" id="chat" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />

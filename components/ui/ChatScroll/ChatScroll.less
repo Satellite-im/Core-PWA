@@ -6,7 +6,7 @@
 }
 
 .enable-wrap {
-  white-space: normal!important;
+  white-space: normal !important;
 }
 
 .auto-scroll {
@@ -14,4 +14,27 @@
   flex-direction: column-reverse;
   overflow-y: auto;
   overflow-x: hidden;
+  /* width */
+  &::-webkit-scrollbar {
+    width: 5px;
+    &:hover {
+      width: 11px;
+    }
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    border-radius: 6px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #0984e3;
+    border-radius: 6px;
+  }
+}
+
+.new-message-alert {
+  position: fixed;
+  //top: 310px;
 }

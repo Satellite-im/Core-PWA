@@ -16,7 +16,7 @@ export default Vue.extend({
     setTimeout(() => {
       this.$data.loading = false
       this.$store.dispatch('setMessages', this.$mock.messages)
-      /* Add temporarily new message per 5 seconds */
+      /* Add new message per 5 seconds temporarily */
       this.$data.updateInterval = setInterval(
         this.sendMessageAutomatically,
         5000
