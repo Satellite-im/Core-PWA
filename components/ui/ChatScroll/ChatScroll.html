@@ -1,4 +1,13 @@
 <div :class="classObject" ref="scrollRef">
   <slot />
-  <!-- <div class="new-message-alert">new messages</div> -->
+  <div
+    v-if="$store.state.media.unreadMessage>0"
+    class="new-message-alert"
+    :style="{ right: newMessageAlertPos.right + 'px', 
+    top: newMessageAlertPos.top + 'px', width: newMessageAlertPos.width + 'px' }"
+    @click="autoScrollToBottom"
+  >
+   {{$store.state.media.unreadMessage}} new messages
+    <span>MARK AS READ</span>
+  </div>
 </div>

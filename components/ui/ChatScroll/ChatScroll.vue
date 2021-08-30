@@ -27,6 +27,11 @@ export default Vue.extend({
     return {
       loaded: false,
       newMessageAlert: false,
+      newMessageAlertPos: {
+        top: 0,
+        right: 30,
+        width: 0,
+      },
     }
   },
   computed: {
@@ -53,6 +58,7 @@ export default Vue.extend({
   },
   mounted() {
     this.$nextTick(() => {
+      this.calcNewMessageAlertPos()
       this.autoScrollToBottom()
     })
   },
@@ -62,14 +68,20 @@ export default Vue.extend({
   methods: {
     autoScrollToBottom() {
       const interval = this.loaded ? 100 : 1000
-      const scrollRef = this.$refs.scrollRef
-      if (scrollRef && this.autoScroll) {
+      if (this.$el && this.autoScroll) {
         setTimeout(() => {
           this.$nextTick(() => {
-            scrollRef.scrollTop = scrollRef.scrollHeight
+            this.$el.scrollTop = this.$el.scrollHeight
             this.loaded = true
+            this.$store.dispatch('initUnreadMessage')
           })
         }, interval)
+      }
+    },
+    calcNewMessageAlertPos() {
+      if (this.$el) {
+        this.newMessageAlertPos.top = this.$el.offsetTop + 15
+        this.newMessageAlertPos.width = this.$el.offsetWidth - 60
       }
     },
   },

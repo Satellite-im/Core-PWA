@@ -7,7 +7,10 @@ export default {
   setMessages(state: NuxtState, messages: any[]) {
     state.media.messages = messages
   },
-  sendMessage(state: NuxtState, message: any) {
+  initUnreadMessage(state: NuxtState) {
+    state.media.unreadMessage = 0
+  },
+  sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.media.messages]
     const lastIndex = messages.length - 1
     const lastMessage = messages[lastIndex]
@@ -36,6 +39,7 @@ export default {
           ],
         })
       }
+      if (!isOwner) state.media.unreadMessage++
     }
   },
 }

@@ -35,6 +35,7 @@ export default Vue.extend({
       this.$store.dispatch('sendMessage', {
         value: 'Test Message',
         user: this.$mock.friend,
+        isOwner: false,
       })
     },
   },
