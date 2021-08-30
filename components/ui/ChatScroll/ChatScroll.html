@@ -1,4 +1,4 @@
-<div :class="classObject" ref="scrollRef">
+<div :class="classObject" ref="scrollRef" v-on:scroll="onScrolled">
   <slot />
   <div
     v-if="$store.state.media.unreadMessage>0"

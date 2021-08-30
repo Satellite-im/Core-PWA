@@ -7,8 +7,9 @@ export default {
   setMessages(state: NuxtState, messages: any[]) {
     state.media.messages = messages
   },
-  initUnreadMessage(state: NuxtState) {
-    state.media.unreadMessage = 0
+  setIsScrollOver(state: NuxtState, status: boolean) {
+    state.media.isScrollOver = status
+    if (!status) state.media.unreadMessage = 0
   },
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.media.messages]
@@ -39,7 +40,7 @@ export default {
           ],
         })
       }
-      if (!isOwner) state.media.unreadMessage++
+      if (!isOwner && state.media.isScrollOver) state.media.unreadMessage++
     }
   },
 }

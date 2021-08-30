@@ -11,6 +11,11 @@ export default Vue.extend({
       default: true,
       required: false,
     },
+    preventScrollOffset: {
+      type: Number,
+      default: 500,
+      required: false,
+    },
     enableWrap: {
       type: Boolean,
       default: false,
@@ -71,9 +76,9 @@ export default Vue.extend({
       if (this.$el && this.autoScroll) {
         setTimeout(() => {
           this.$nextTick(() => {
-            this.$el.scrollTop = this.$el.scrollHeight
+            this.$el.scrollTop = 0
             this.loaded = true
-            this.$store.dispatch('initUnreadMessage')
+            this.$store.dispatch('setIsScrollOver', false)
           })
         }, interval)
       }
@@ -82,6 +87,15 @@ export default Vue.extend({
       if (this.$el) {
         this.newMessageAlertPos.top = this.$el.offsetTop + 15
         this.newMessageAlertPos.width = this.$el.offsetWidth - 60
+      }
+    },
+    onScrolled() {
+      if (this.$el) {
+        if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {
+          this.$store.dispatch('setIsScrollOver', true)
+        } else {
+          this.$store.dispatch('setIsScrollOver', false)
+        }
       }
     },
   },

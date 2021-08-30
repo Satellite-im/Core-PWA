@@ -19,7 +19,7 @@ export default {
   sendMessage({ commit }: FetchCallsArguments, message: any) {
     commit('sendMessage', message)
   },
-  initUnreadMessage({ commit }: FetchCallsArguments) {
-    commit('initUnreadMessage')
+  setIsScrollOver({ commit }: FetchCallsArguments, status: boolean) {
+    commit('setIsScrollOver', status)
   },
 }
