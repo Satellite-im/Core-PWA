@@ -14,7 +14,12 @@
   flex-direction: column-reverse;
   overflow-y: auto;
   overflow-x: hidden;
-  /* width */
+
+  /* Custom Scroll for Firefox */
+  scrollbar-color: #0984e3 transparent;
+  scrollbar-width: thin;
+
+  /* Scroll Width */
   &::-webkit-scrollbar {
     width: 5px;
     &:hover {
@@ -22,12 +27,12 @@
     }
   }
 
-  /* Track */
+  /* Scroll Track */
   &::-webkit-scrollbar-track {
     border-radius: 6px;
   }
 
-  /* Handle */
+  /* Scroll Handle */
   &::-webkit-scrollbar-thumb {
     background: #0984e3;
     border-radius: 6px;
