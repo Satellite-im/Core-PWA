@@ -7,7 +7,7 @@
     top: newMessageAlertPos.top + 'px', width: newMessageAlertPos.width + 'px' }"
     @click="autoScrollToBottom"
   >
-   {{$store.state.media.unreadMessage}} new messages
-    <span>MARK AS READ</span>
+   {{$store.state.media.unreadMessage}} {{ $t('pages.chat.new_message') }}
+    <span>{{ $t('pages.chat.mark_as_read') }}</span>
   </div>
 </div>

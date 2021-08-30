@@ -205,6 +205,10 @@ export default {
         },
       },
     },
+    chat: {
+      new_message: 'new messages',
+      mark_as_read: 'MARK AS READ',
+    },
   },
   servers: {
     create: {
