@@ -6,6 +6,10 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
+  watchQuery: ['group'],
+  asyncData({ query, store }) {
+    store.dispatch('setSelectedGroup', query.group)
+  },
   data() {
     return {
       loading: true,

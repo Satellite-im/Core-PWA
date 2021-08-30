@@ -105,4 +105,31 @@
       padding-left: 3rem;
     }
   }
+
+  &.is-collapsed-aside {
+    #aside {
+      transform: translateX(calc(@sidebar-size));
+    }
+    .dynamic-content {
+      margin-right: -250px;
+    }
+
+    &.group {
+      #statusbar {
+        padding-right: 3rem;
+      }
+    }
+
+    &.direct {
+      .info-toggle {
+        display: none !important;
+      }
+    }
+  }
+}
+
+&.is-open-aside {
+  .info-toggle {
+    display: none !important;
+  }
 }
