@@ -1,0 +1,59 @@
+.group-icon {
+    .group-multi {
+        width: 75px;
+        height: 70px;
+        position: relative;
+
+        & > div {
+            position: absolute;
+        }
+
+        .group-el-1 {
+            right: 0px;
+            top: 10px;
+        }
+        
+        .group-el-2 {
+            bottom: 5px;
+            left: 22px;
+        }
+    }
+
+    .group-double {
+        width: 75px;
+        height: 75px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .group-single {
+        width: 75px;
+        height: 75px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.unread {
+        position: relative;
+        z-index: @base-z-index + 1;
+
+        .label {
+            position: absolute;
+            bottom: -4px;
+            right: 0px;
+            font-size: @micro-text-size;
+            background-color: @primary-color;
+            border-radius: 50%;
+            line-height: 1.2;
+            padding: 0.1rem 0.27rem;
+            text-align: center;
+            color: @text;
+            font-family: @primary-font;
+        }
+    }
+}
