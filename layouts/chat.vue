@@ -16,9 +16,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters({
-      selectedGroup: 'groups/getSelectedGroup',
-    }),
+    selectedGroup() {
+      return this.$route.params.id
+    },
   },
   mounted() {
     this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)

@@ -1,10 +1,10 @@
-<template src="./Direct.html"></template>
+<template src="./Group.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'DirectMessages',
+  name: 'GroupMessages',
   layout: 'chat',
   data() {
     return {
@@ -21,4 +21,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Direct.less"></style>
+<style lang="less" src="./Group.less"></style>
