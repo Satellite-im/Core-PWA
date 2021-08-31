@@ -12,11 +12,20 @@ export default Vue.extend({
   },
   data() {
     return {
+      subject: '',
       marketCategories,
     }
   },
-  computed: {},
-  methods: {},
+  watch: {
+    subject(newVal, oldVal) {
+      console.log(newVal, oldVal)
+    },
+  },
+  methods: {
+    changeSubject(subject: String) {
+      console.log(subject)
+    },
+  },
 })
 </script>
 

@@ -59,7 +59,7 @@ export default Vue.extend({
 
         const reader = new FileReader()
         reader.onload = (e: any) => {
-          this.imageUrl = e.target.result
+          this.profileInfo.imageUrl = e.target.result
           e.target.value = ''
 
           this.toggleCropper()
