@@ -207,7 +207,7 @@ export default {
     },
     chat: {
       new_message: 'new messages',
-      mark_as_read: 'MARK AS READ',
+      jump_to_current: 'Jump To Current',
     },
   },
   servers: {

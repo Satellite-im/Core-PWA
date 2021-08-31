@@ -1,5 +1,7 @@
 <div id="direct">
-  
   <UiTailoredEncrypted />
-  <TailoredMessagingConversation :messages="$store.state.media.messages" :loading="loading" />
+  <TailoredMessagingConversation
+    :messages="$store.state.ui.messages"
+    :loading="loading"
+  />
 </div>

@@ -10,6 +10,9 @@ interface UIState {
   chatbarContent: String
   fullscreen: Boolean
   showEnhancers: Boolean
+  messages: any[]
+  unreadMessage: number
+  isScrollOver: boolean
 }
 
 const InitalUIState = (): UIState => ({
@@ -27,6 +30,9 @@ const InitalUIState = (): UIState => ({
   chatbarContent: '',
   fullscreen: false,
   showEnhancers: false,
+  messages: [],
+  unreadMessage: 0,
+  isScrollOver: false,
 })
 
 export default InitalUIState
