@@ -33,7 +33,7 @@ export default Vue.extend({
   margin-right: @light-spacing;
   margin-bottom: @light-spacing;
   padding: @xlight-spacing @light-spacing;
-  border-radius: @corner-rounding-xxl;
+  border-radius: @corner-rounding-xxlarge;
   background-color: @primary-color;
   color: white;
   .fa-times {
