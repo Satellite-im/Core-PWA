@@ -7,23 +7,23 @@ import {
 export const profileBadges = [
   {
     type: ProfileBadgeType.Type1,
-    imageUrl: require('~/assets/img/icon_badge1.svg'),
+    badge: { color: 'red', icon: ['fas', 'id-badge'] },
   },
   {
     type: ProfileBadgeType.Type2,
-    imageUrl: require('~/assets/img/icon_badge2.svg'),
+    badge: { color: 'blue', icon: ['fas', 'ribbon'] },
   },
   {
     type: ProfileBadgeType.Type3,
-    imageUrl: require('~/assets/img/icon_badge3.svg'),
+    badge: { color: 'green', icon: ['fas', 'certificate'] },
   },
   {
     type: ProfileBadgeType.Type4,
-    imageUrl: require('~/assets/img/icon_badge4.svg'),
+    badge: { color: 'yellow', icon: ['fas', 'otter'] },
   },
   {
     type: ProfileBadgeType.Type5,
-    imageUrl: require('~/assets/img/icon_badge5.svg'),
+    badge: { color: 'purple', icon: ['far', 'id-badge'] },
   },
 ] as ProfileBadge[]
 

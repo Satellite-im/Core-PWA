@@ -30,15 +30,15 @@ export default Vue.extend({
 <style scoped lang="less">
 .chip-item {
   display: inline-block;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  padding: 4px 8px;
-  border-radius: 24px;
+  margin-right: @light-spacing;
+  margin-bottom: @light-spacing;
+  padding: @xlight-spacing @light-spacing;
+  border-radius: @corner-rounding-xxl;
   background-color: @primary-color;
   color: white;
   .fa-times {
     margin-bottom: -2px;
-    margin-left: 8px;
+    margin-left: @light-spacing;
     cursor: pointer;
   }
 }

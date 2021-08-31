@@ -1,3 +1,5 @@
+import { Badge } from '~/types/ui/badge'
+
 export enum ProfileBadgeType {
   Type1 = 'badge1',
   Type2 = 'badge2',
@@ -8,7 +10,7 @@ export enum ProfileBadgeType {
 
 export type ProfileBadge = {
   type: ProfileBadgeType
-  imageUrl: string
+  badge: Badge
 }
 
 export type ProfileInfo = {

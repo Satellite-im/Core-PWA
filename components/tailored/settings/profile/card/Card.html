@@ -3,7 +3,9 @@
   <div class="profile-card-body">
     <div class="profile-badges">
       <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.badges')" />
-      <img v-for="(badge, i) in info.badges" :key="i" :src="badge.imageUrl"/>
+      <span class="profile-badge" v-for="(badge, i) in info.badges" :key="i">
+        <font-awesome-icon :class="badge.badge.color" :icon="badge.badge.icon"/>
+      </span>
     </div>
     <div class="profile-preferences">
       <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.preferences')" />
