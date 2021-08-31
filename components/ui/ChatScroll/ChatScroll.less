@@ -16,7 +16,7 @@
   overflow-x: hidden;
 
   /* Custom Scroll for Firefox */
-  scrollbar-color: #0984e3 transparent;
+  scrollbar-color: @primary-color transparent;
   scrollbar-width: thin;
 
   /* Scroll Width */
@@ -29,19 +29,19 @@
 
   /* Scroll Track */
   &::-webkit-scrollbar-track {
-    border-radius: 6px;
+    border-radius: @corner-rounding;
   }
 
   /* Scroll Handle */
   &::-webkit-scrollbar-thumb {
-    background: #0984e3;
-    border-radius: 6px;
+    background: @primary-color;
+    border-radius: @corner-rounding;
   }
 }
 
 .new-message-alert {
   position: fixed;
-  background: #0984e3;
+  background: @primary-color;
   cursor: pointer;
   padding: 2px 20px;
   font-size: 14px;
