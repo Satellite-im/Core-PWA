@@ -79,6 +79,7 @@ export default Vue.extend({
      * This will make the button take up 100% of the parent container
      */
     fullWidth: Boolean,
+    inactive: Boolean,
   },
 })
 </script>
