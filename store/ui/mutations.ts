@@ -70,4 +70,10 @@ export default {
       showSearchResult: enabled,
     }
   },
+  setTypingUser(state: NuxtState, user: Object | Boolean) {
+    state.ui = {
+      ...state.ui,
+      isTyping: user,
+    }
+  },
 }

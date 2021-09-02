@@ -15,9 +15,11 @@ export default Vue.extend({
   },
   mounted() {
     this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
+    this.$store.commit('setTypingUser', this.$mock.users[0])
   },
   updated() {
     // this.scrollToBottom()
+    console.log(this.$store.state.ui)
   },
   methods: {
     toggleModal() {

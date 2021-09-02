@@ -11,6 +11,7 @@ interface UIState {
   chatbarContent: String
   fullscreen: Boolean
   showEnhancers: Boolean
+  isTyping: Object | Boolean
 }
 
 const InitalUIState = (): UIState => ({
@@ -29,6 +30,7 @@ const InitalUIState = (): UIState => ({
   chatbarContent: '',
   fullscreen: false,
   showEnhancers: false,
+  isTyping: false,
 })
 
 export default InitalUIState
