@@ -77,6 +77,7 @@ import {
   faPalette,
   faCubes,
   faIdBadge,
+  faClock,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -175,5 +176,6 @@ library.add(faIdBadge2)
 library.add(faCertificate)
 library.add(faOtter)
 library.add(faRibbon)
+library.add(faClock)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
