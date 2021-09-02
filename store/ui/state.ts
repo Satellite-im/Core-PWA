@@ -4,6 +4,7 @@ interface UIState {
   quickProfile: Object | Boolean
   contextMenuPosition: Object
   quickProfilePosition: Object
+  showSettings: Boolean
   showSidebarUsers: Boolean
   showSearchResult: Boolean
   modals: Object
@@ -16,6 +17,7 @@ const InitalUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
   showSearchResult: false,
+  showSettings: false,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },

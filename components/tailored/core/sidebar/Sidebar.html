@@ -4,112 +4,100 @@
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
 >
-  <div class="padded">
-    <TypographyTitle :size="6" :text="$t('global.name')" />
-    <UiSpacer :height="15" />
-    <font-awesome-icon
-      :icon="['far', 'bars']"
-      class="toggle-sidebar"
-      v-on:click="toggle"
-    />
-    <InteractablesInput
-      :placeholder="`${$t('global.search')}...`"
-      size="small"
-      input-kind="text"
-      :delete-icon="true"
-      type="dark"
-    />
-  </div>
-  <UiSpacer :height="15" />
-  <div class="columns is-mobile tab-menu padded no-top-pad">
-    <div class="column" style="padding-right: 0.5rem; position: relative">
-      <InteractablesButton
+  <div class="sidebar-inner">
+    <div class="sidebar-search">
+      <font-awesome-icon
+        :icon="['far', 'bars']"
+        class="toggle-sidebar"
+        v-on:click="toggle"
         full-width
-        outlined
-        type="dark"
-        size="small"
-        :icon="{ style: 'far', name: 'user-friends' }"
-        :action="() => $router.push('/friends/list')"
-        :text="$t('global.friends')"
       />
-      <span class="label"> 14 </span>
-    </div>
-    <div class="column" style="padding-left: 0.5rem">
-      <InteractablesButton
-        full-width
-        outlined
-        type="dark"
+      <InteractablesInput
+        :placeholder="`${$t('global.search')}...`"
         size="small"
-        :class="`${$route.path.includes('/files') ? 'active' : ''}`"
+        input-kind="text"
+        :delete-icon="true"
+        type="dark"
+        full-width
+      />
+    </div>
+    <div class="sidebar-nav">
+      <div style="position: relative;">
+        <InteractablesButton
+          :inactive="$route.path.includes('/friends/list') ? false : true"
+          class="sidebar-full-btn"
+          :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
+          size="small"
+          :icon="{ style: 'far', name: 'user-friends' }"
+          :action="() => $router.push('/friends/list')"
+          :text="$t('global.friends')"
+        />
+        <span :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
+          14
+        </span>
+      </div>
+      <InteractablesButton
+        :inactive="$route.path.includes('/files') ? false : true"
+        class="sidebar-full-btn"
+        :type="$route.path.includes('/files') ? 'primary' : 'dark'"
+        size="small"
         :action="() => $router.push('/files/browse')"
         :icon="{ style: 'far', name: 'folder' }"
         :text="$t('global.files')"
       />
     </div>
+
+    <div class="tabs sidebar-selector padded no-top-pad">
+      <InteractablesButton
+        full-width
+        :type="ui.showSidebarUsers ? 'primary' : 'dark'"
+        size="small"
+        :icon="{ style: 'far', name: 'comment-alt-lines' }"
+        :text="$t('global.messages')"
+        :action="() => $store.commit('showSidebarUsers', true)"
+      />
+      <InteractablesButton
+        full-width
+        :type="!ui.showSidebarUsers ? 'primary' : 'dark'"
+        size="small"
+        :icon="{ style: 'far', name: 'users' }"
+        :text="$t('global.groups')"
+        :action="() => $store.commit('showSidebarUsers', false)"
+      />
+    </div>
+    <div
+      class="scrolling hidden-scroll"
+      v-scroll-lock="true"
+      v-if="ui.showSidebarUsers"
+    >
+      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+        <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+          <TailoredCoreUser
+            v-for="user in users"
+            :user="user"
+            :key="user.address"
+          />
+        </div>
+        <UiLoadersAddress v-else :count="4" inverted />
+      </UiScroll>
+    </div>
+    <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
+      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+        <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+          <TailoredCoreGroup
+            v-for="group in groups"
+            :group="group"
+            :key="group.address"
+          />
+        </div>
+        <UiLoadersAddress v-else :count="4" inverted />
+      </UiScroll>
+    </div>
   </div>
 
-  <div class="tabs sidebar-selector padded no-top-pad">
-    <InteractablesButton
-      full-width
-      :outlined="!ui.showSidebarUsers"
-      type="primary"
-      size="small"
-      :icon="{ style: 'far', name: 'comment-alt-lines' }"
-      :text="$t('global.messages')"
-      :action="() => $store.commit('showSidebarUsers', true)"
-    />
-    <InteractablesButton
-      full-width
-      :outlined="ui.showSidebarUsers"
-      type="primary"
-      size="small"
-      :icon="{ style: 'far', name: 'users' }"
-      :text="$t('global.groups')"
-      :action="() => $store.commit('showSidebarUsers', false)"
-    />
-  </div>
-  <div
-    class="scrolling hidden-scroll"
-    v-scroll-lock="true"
-    v-if="ui.showSidebarUsers"
-  >
-    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-      <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
-        <TailoredCoreUser
-          v-for="user in users"
-          :user="user"
-          :key="user.address"
-        />
-        <div
-          class="loading-container"
-          v-if="$store.state.dataState.friends === DataStateType.Updating"
-        >
-          <UiLoadersUpdating />
-        </div>
-      </div>
-      <UiLoadersAddress v-else :count="5" inverted />
-    </UiScroll>
-  </div>
-  <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-      <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
-        <TailoredCoreGroup
-          v-for="group in groups"
-          :group="group"
-          :key="group.address"
-        />
-        <div
-          class="loading-container"
-          v-if="$store.state.dataState.friends === DataStateType.Updating"
-        >
-          <UiLoadersUpdating />
-        </div>
-      </div>
-      <UiLoadersAddress v-else :count="5" inverted />
-    </UiScroll>
-  </div>
+  <div class="filler"></div>
 
-  <div class="padded no-top-pad">
+  <div class="controls">
     <TailoredCoreSidebarControls />
     <TailoredCoreSidebarStatus />
   </div>

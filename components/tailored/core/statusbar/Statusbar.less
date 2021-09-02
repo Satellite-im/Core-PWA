@@ -1,36 +1,31 @@
 #statusbar {
   flex: 1;
   display: flex;
-  height: 45px;
-  background: @dark-gray;
+  height: @statusbar-height;
   padding: 0 @normal-spacing;
   min-width: 500px;
   user-select: none;
-  .token-balance {
-    margin-left: @normal-spacing;
-    color: @primary-color;
-    display: inline-flex;
-    flex-direction: row;
-    color: @bright-text;
 
-    img {
-      margin-right: @light-spacing;
-    }
-    .subtitle {
-      color: @primary-color;
-    }
+  .vertical-divider {
+    height: 30px;
+    width: 1px;
+    display: inline-block;
+    background: @splash-radial;
+    margin: 0 @light-spacing;
   }
-  .market-place {
-    margin-left: @normal-spacing;
-    color: @primary-color;
-  }
+
   .controls {
-    height: 45px;
+    background: @semitransparent-light-gradient;
+    border-radius: @corner-rounding;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    align-self: flex-end;
+    justify-self: center;
+    align-self: center;
     font-size: @icon-size;
+    padding: @light-spacing;
+    box-shadow: @ui-shadow;
+
 
     .input-wrap {
       margin-left: @normal-spacing !important;
@@ -38,7 +33,8 @@
     .control-icon {
       margin: 0 @light-spacing;
       cursor: pointer;
-      font-size: @icon-size;
+      font-size: @small-icon-size;
+      filter: @white-text-glow;
       
       &:nth-child(2) {
         margin-right: @normal-spacing;
@@ -55,7 +51,7 @@
   }
 
   .circle-container {
-    height: 45px;
+    height: @statusbar-height;
     display: inline-flex;
     position: relative;
   }
@@ -81,7 +77,7 @@
   }
   .status {
     position: absolute;
-    top: 27px;
+    top: @statusbar-height - 34px;
     left: 18px;
     font-size: @mini-text-size;
     text-shadow: 0 0 3px #000;

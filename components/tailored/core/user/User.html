@@ -8,4 +8,8 @@
     <TypographySubtitle v-if="user.last_message.length > 0" :size="6" :text="user.last_message" />
     <TypographySubtitle v-else :size="6" :text="user.status" />
   </div>
+  <div class="user-chat-details">
+    <TypographyText :size="6" text="12:03" />
+    <UiTag :text="user.unreads.toString()" v-if="user.unreads > 0" />
+  </div>
 </div>

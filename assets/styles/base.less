@@ -1,5 +1,5 @@
 #app {
-  background: @dark-gray;
+  background: @background-gradient;
   color: @text;
 }
 
@@ -49,6 +49,7 @@
   
       &.is-active {
         background-color: @primary-color;
+        box-shadow: @primary-glow;
       }
       
       &:hover:not(.is-active) {
@@ -67,22 +68,62 @@
 }
 
 // Buttons
-.button.is-primary {
-  background-color: @primary-color;
-}
-.button.is-primary:hover {
-  background-color: @primary-color-alt;
-}
+.button {
+  
+  &.is-primary, .is-primary{
+    background: @primary-gradient;
+    box-shadow: @primary-glow;
+    border: none !important;
+    outline: none;
 
-.button.is-primary.is-outlined {
-  color: @primary-color;
-  border-color: @primary-color;
-
-  &:hover, &:focus {
-    background-color: @primary-color;
-    border-color: @primary-color;
-    color: @bright-text;
+    &:hover, &:focus, &:active {
+      background: @primary-gradient;
+      color: @bright-text;
+      border: none;
+      box-shadow: @primary-glow;
+    }
   }
+
+  &.is-primary.is-outlined {
+    color: @primary-color;
+    box-shadow: @primary-glow;
+  
+    &:hover, &:focus {
+      background: @primary-gradient;
+      color: @bright-text;
+      box-shadow: @primary-glow;
+    }
+  }
+
+  &.is-danger, .is-danger {
+    background: @danger-gradient !important;
+    box-shadow: @danger-glow !important;
+    
+    &:hover {
+      box-shadow: @danger-glow;
+      background: @danger-gradient;
+    }
+  }
+
+  &.is-danger.is-outlined {
+    color: @red;
+    box-shadow: @danger-glow;
+
+    &:hover, &:focus {
+      background: @danger-gradient;
+      color: @bright-text;
+      box-shadow: @danger-glow;
+    }
+  }
+}
+
+button {
+  outline: none !important;
+  border: none !important;
+}
+
+.tabs {
+  overflow: unset !important;
 }
 
 .button.is-dark.is-outlined {
@@ -103,25 +144,46 @@
 }
 
 .button.is-dark {
-  background-color: @light-gray;
-  color: @text;
+  background: @semitransparent-lighter-gradient;
+  color: @bright-text;
 }
 .button.is-dark:hover {
   background-color: @light-gray-alt;
   color: @bright-text;
 }
 
+
+.button {
+  &.is-inactive {
+    background-color: transparent !important;
+  }
+}
 // Inputs
+
+#sidebar {
+  .search-box {
+    input.input.is-small.is-dark {
+      background: @input-gradient !important;
+    }
+  }
+}
 .has-tooltip-primary {
   &:before {
-    background-color: @black !important;
+    background-color: transparent;
+    background: @semitransparent-dark-gradient !important;
+    backdrop-filter: @light-blur;
     font-family: @primary-font !important;
     color: @bright-text !important;
+    z-index: 100000;
   }
 }
 .input {
-  background-color: @dark-gray;
+  background-color: @input-gradient;
   color: @text;
+  box-shadow: none !important;
+  &:active, &:focus {
+    background: @semitransparent-lightest-gradient !important;
+  }
 }
 .select select{
   background-color: @dark-gray;
@@ -130,25 +192,36 @@
 ::placeholder {
   color: @text-muted !important;
 }
-.is-primary.input {
-  border-color: @primary-color;
-}
+.is-primary.input,
 .is-dark.input {
-  border-color: @light-gray;
-  background: @darker;
+  background: @input-gradient;
+  color: @text;
+  border: none;
+
+  &:active, &:focus {
+    border: none;
+    outline: none;
+  }
 }
 .select.is-primary select {
-  border-color: @primary-color;
-}
-.select.is-primary:not(:hover)::after {
-  border-color: @primary-color;
+  background: @primary-gradient;
+  border: none;
+  outline: none;
+  box-shadow: @primary-glow;
+  &::after, &::before {
+    border-color: @bright-text;
+  }
 }
 
-.select.is-primary select:hover {
-  border-color: @primary-color-alt;
+.select.is-primary:not(:hover)::after,
+.select:not(.is-multiple):not(.is-loading):hover::after  {
+  border-color: @bright-text;
 }
-.select.is-primary:hover::after {
-  border-color: @primary-color-alt;
+
+.select.is-primary:hover::after,
+.select.is-primary:active::after,
+.select.is-primary select:hover  {
+  border-color: @bright-text;
 }
 
 
@@ -173,4 +246,16 @@
 
 .mg-half {
   margin: @light-spacing 0 !important;
+}
+
+li.active {
+  background-color: @primary-gradient;
+}
+
+*:focus {
+  outline: none;
+}
+
+*:active {
+  outline: none;
 }

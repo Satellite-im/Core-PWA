@@ -1,5 +1,5 @@
 <button 
-  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'full-width' : 'normal-width'}`"
+  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'full-width' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
   v-on:click="action" :disabled="loading">
   <!-- If the button is in the loading state -->
   <div v-if="loading">

@@ -31,6 +31,14 @@
     >
       <font-awesome-icon class="control-icon" :icon="['far', 'video']" />
     </div>
+    <div class="vertical-divider"></div>
+    <div
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      data-tooltip="Market Place">
+      <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']" v-on:click="toggleMarketPlace"/>
+    </div>
+    <div class="vertical-divider"></div>
     <InteractablesSearchInput
       @search="handleSearch"
       @change="handleChange"
@@ -42,19 +50,5 @@
       :show="showSearchResult"
       @toggle="toggleSearchResult"
     />
-    <div
-      class="token-balance has-tooltip has-tooltip-primary has-tooltip-bottom"
-      v-if="$device.isDesktop"
-      data-tooltip="Nanite Balance"
-    >
-      <img src="~/static/img/nanites_blue.svg" alt="" width="25" />
-      <TypographyText text="231,832" />
-    </div>
-    <div
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
-      v-if="$device.isDesktop"
-      data-tooltip="Market Place">
-      <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']" v-on:click="toggleMarketPlace"/>
-    </div>
   </div>
 </div>
