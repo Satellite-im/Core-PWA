@@ -1,16 +1,18 @@
 .search-result {
   font-family: @primary-font;
-  background-color: @dark-gray;
+  background: @semitransparent-light-gradient;
+  backdrop-filter: @blur;
   position: fixed;
   right: 10px;
   min-width: 300px;
   max-width: 800px;
   width: 80%;
-  top: 48px;
-  z-index: @base-z-index + 1;
+  top: @statusbar-height - 9rem;
+  border: @light-border !important;
+  z-index: @base-z-index + 3;
   border-radius: @corner-rounding;
-  border: 1px solid @light-gray;
   font-size: @text-size;
+  padding: @light-spacing;
   &-header {
     color: @primary-color;
     font-size: @title-text;
@@ -18,19 +20,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid @light-gray;
-  }
-  &-close {
-    font-size: @title-text;
-    width: 30px;
-    height: 30px;
-    background-color: @dark-gray;
-    border-color: transparent;
-    color: @text;
-    z-index: 2;
-    &:focus {
-      background-color: @dark;
-    }
   }
   &-group {
     position: relative;
@@ -40,7 +29,6 @@
     color: @text-muted;
     & .group-item {
       padding: 5px 10px;
-      border-bottom: 2px solid @dark-gray;
       &:hover {
         color: @bright-text;
       }
@@ -49,19 +37,9 @@
         border-color: @primary-color;
       }
     }
-    &:after {
-      position: absolute;
-      content: '';
-      height: 1px;
-      background-color: @light-gray;
-      bottom: 0;
-      left: 10px;
-      right: 10px;
-    }
   }
   &-filters {
     padding: 5px 10px;
-    border-bottom: 1px solid @light-gray;
     display: flex;
     flex-wrap: wrap;
     > div {
@@ -73,8 +51,9 @@
       padding: 4px;
     }
     .date-input {
-      color: @text;
-      background-color: @dark-gray-alt;
+      color: @bright-text;
+      background: @primary-gradient;
+      box-shadow: @primary-glow;
       border-radius: 1rem;
       height: 28px;
       font-size: @text-size;
@@ -83,9 +62,13 @@
       line-height: 1.2;
       padding: 0 10px 0 38px;
       width: 100%;
+
+      &::placeholder {
+        color: @bright-text !important;
+      }
     }
     .date-icon {
-      color: @primary-color;
+      color: @bright-text;
       position: absolute;
       top: 10px;
       left: 20px;
@@ -100,10 +83,10 @@
       border-radius: 16px;
       padding: 0 10px;
       &:hover {
-        background-color: @light-gray;
+        background-color: @primary-color;
       }
       &:active {
-        background-color: @light-gray-alt;
+        background-color: @primary-color;
       }
     }
   }
@@ -112,7 +95,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid @light-gray;
     margin: 0px 12px;
     .result-count {
       font-size: @text-size;
@@ -129,8 +111,7 @@
     }
   }
   &-content {
-    border-bottom: 1px solid @light-gray;
-    max-height: calc(100vh - 450px);
+    max-height: calc(100vh - 650px);
   }
   &-inner {
     padding: 5px 10px;

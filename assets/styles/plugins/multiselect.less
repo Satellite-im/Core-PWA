@@ -20,7 +20,7 @@ fieldset[disabled] .multiselect {
   height: 16px;
   border-radius: 100%;
   border: 2px solid transparent;
-  border-top-color: @primary-color;
+  border-top-color: @bright-text;
   box-shadow: 0 0 0 1px transparent;
   z-index: @base-z-index + 4;
 }
@@ -44,12 +44,14 @@ fieldset[disabled] .multiselect {
 .multiselect,
 .multiselect__input,
 .multiselect__single {
+  border-radius: 20px;
   font-family: inherit;
   font-size: @title-text;
   color: @text-muted;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
-  background-color: @dark-gray;
+  box-shadow: @primary-glow;
+  background: @primary-gradient;
 }
 .multiselect {
   box-sizing: content-box;
@@ -59,7 +61,7 @@ fieldset[disabled] .multiselect {
   // min-height: 40px;
   text-align: left;
   color: @text;
-  border-radius: @corner-rounding;
+  border-radius: 20px;
 }
 .multiselect * {
   box-sizing: border-box;
@@ -75,7 +77,6 @@ fieldset[disabled] .multiselect {
 .multiselect--active {
   z-index: @base-z-index + 3;
   .multiselect__tags {
-    border-color: @primary-color;
     border-radius: @corner-rounding;
   }
 
@@ -129,7 +130,8 @@ fieldset[disabled] .multiselect {
   padding: 2px 0 2px 5px;
   border-radius: @corner-rounding;
   border: 1px solid @primary-color;
-  background: @dark-gray;
+  background: @primary-gradient;
+  color: @bright-text;
   font-size: @text-size;
   line-height: 1;
   border-radius: 1rem;
@@ -143,7 +145,7 @@ fieldset[disabled] .multiselect {
   color: @white;
   font-size: @mini-text-size;
   line-height: 1.1;
-  background: @primary-color;
+  background: @light-gray;
   white-space: nowrap;
   overflow: hidden;
   max-width: 100%;
@@ -206,14 +208,14 @@ fieldset[disabled] .multiselect {
   left: 11px;
   top: 8px;
   color: @white;
-  border-color: @primary-color-alt;
+  border-color: @bright-text;
   border-style: solid;
   transform: rotate(45deg);
   border-width: 0 2px 2px 0;
   content: '';
 }
 .multiselect__placeholder {
-  color: @text-muted;
+  color: @bright-text;
   display: inline-block;
   margin-bottom: 5px;
   padding-top: 4px;
@@ -382,8 +384,12 @@ fieldset[disabled] .multiselect {
   }
 }
 
+.vc-container {
+  backdrop-filter: @blur !important;
+}
 .vc-is-dark {
-  background-color: @dark-gray-alt !important;
+  background: @semitransparent-light-gradient !important;
+  backdrop-filter: @blur !important;
   font-family: @primary-font !important;
   border: none !important;
   border-radius: @corner-rounding !important;
@@ -392,5 +398,9 @@ fieldset[disabled] .multiselect {
 
   .vc-weekday {
     color: @primary-color !important;
+  }
+  .vc-highlight {
+    background: @primary-gradient !important;
+    box-shadow: @primary-glow;
   }
 }

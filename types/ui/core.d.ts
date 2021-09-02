@@ -7,6 +7,7 @@ export type User = {
   address: string
   status: string
   state: UserState
+  unreadCount: Number
   profilePicture: string
   badge?: Badge
 }
