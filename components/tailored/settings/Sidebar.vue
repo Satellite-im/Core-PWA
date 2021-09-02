@@ -4,7 +4,9 @@
     :title="title"
     :toggleable="toggleable"
     :toggle="toggle"
-    :active="$route.path.split('/')[2]"
+    :active="route"
+    custom
+    :custom-action="customAction"
   />
 </template>
 <script lang="ts">
@@ -23,9 +25,14 @@ export default Vue.extend({
       type: String,
       default: 'Title',
     },
+    handleRouteChange: {
+      type: Function,
+      default: () => () => {},
+    },
   },
   data() {
     return {
+      route: 'personalize',
       sidebarLayout: [
         {
           title: 'General',
@@ -80,6 +87,12 @@ export default Vue.extend({
         } as SidebarGrouping,
       ],
     }
+  },
+  methods: {
+    customAction(link: string) {
+      this.$data.route = link
+      this.$props.handleRouteChange(link)
+    },
   },
 })
 </script>

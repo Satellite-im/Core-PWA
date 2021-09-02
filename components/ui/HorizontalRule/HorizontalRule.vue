@@ -1,5 +1,7 @@
 <template>
-  <hr />
+  <div>
+    <hr />
+  </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
@@ -10,6 +12,11 @@ export default Vue.extend({})
 hr {
   height: 0px;
   border: none;
-  border-bottom: 1px solid @light-gray;
+  border-bottom: transparents;
+}
+div {
+  height: 1px;
+  background: @splash-radial;
+  margin: @normal-spacing 0;
 }
 </style>

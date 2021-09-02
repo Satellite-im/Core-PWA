@@ -1,12 +1,17 @@
 #mediastream {
+  position: absolute;
+  z-index: @base-z-index + 1;
+  top: @statusbar-height;
   height: auto;
   max-height: 25.5rem;
-  width: 100%;
-  background: @black;
+  margin: 0 @normal-spacing;
+  width: 100% - (@normal-spacing * 2);
+  background: @semitransparent-dark-gradient;
+  backdrop-filter: @blur;
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  position: relative;
+  border-radius: @corner-rounding;
 
   #media {
     display: flex;

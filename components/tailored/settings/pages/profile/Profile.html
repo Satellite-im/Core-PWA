@@ -33,7 +33,6 @@
       <InteractablesInputGroup
         class="username"
         v-model="status"
-        size="small"
         input-kind="text"
         type="primary"
         placeholder="Enter Status"
@@ -51,7 +50,6 @@
         :copy-content="$store.state.accounts.active"
         readonly
         type="primary"
-        size="small"
         :label-text="$t('pages.settings.profile.info.accountID')"
         :icon="{ style: 'far', name: 'clipboard' }"
         :action="() => $toast.show($t('global.copied'))"
@@ -73,7 +71,6 @@
           text="Reveal Phrase"
           size="normal"
           type="primary"
-          outlined
           :action="togglePhrase"
         />
       </div>
