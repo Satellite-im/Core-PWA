@@ -40,13 +40,17 @@ export default Vue.extend({
   computed: {},
   mounted() {
     this.$el.querySelectorAll('.button').forEach((button) => {
+      const text = button.querySelector('span')?.textContent
+      if (text === this.value) {
+        button.classList.add(this.activeClass)
+        this.active = button as HTMLElement
+      }
       button.addEventListener('click', () => {
         if (this.active != null) {
           this.active.classList.remove(this.activeClass)
         }
         this.active = button as HTMLElement
         this.active.classList.add(this.activeClass)
-        const text = button.querySelector('span')?.textContent
         this.$emit('input', text)
         if (this.action != null) {
           this.action(text)

@@ -12,7 +12,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      subject: '',
+      subject: 'Themes',
       marketCategories,
     }
   },
