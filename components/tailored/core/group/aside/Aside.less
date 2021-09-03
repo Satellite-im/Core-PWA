@@ -7,19 +7,29 @@
   position: relative;
   display: inline-flex;
   height: 100%;
-  background-color: @dark-gray;
+  // background-color: @dark-gray;
   display: flex;
   flex-direction: column;
   padding-bottom: @light-spacing;
   z-index: @base-z-index;
   align-items: center;
 
+  #aside-box {
+    border-radius: @corner-rounding;
+    margin-top: @normal-spacing;
+    background: @semitransparent-light-gradient;
+    box-shadow: @ui-shadow;
+    margin-right: @normal-spacing;
+    margin-left: @light-spacing;
+  }
+
   .info-toggle {
     font-size: 20px;
     color: @primary-color;
     position: absolute;
-    left: -2.3rem;
-    top: 0.9rem;
+    left: -5rem;
+    top: 1.8rem;
+    z-index: 999;
   }
 
   #top-info {
@@ -47,18 +57,15 @@
     align-items: center;
     justify-content: space-between;
     .action-icon {
-      background: red;
       padding: 10px;
       height: 10px;
       width: 20px;
       font-size: 10px;
     }
     .circle-flex {
-      background: @light-gray !important;
+      background: @semitransparent-lightest-gradient !important;
+      box-shadow: @ui-shadow;
       cursor: pointer;
-      .fa-user-plus {
-        background: red;
-      }
     }
   }
 

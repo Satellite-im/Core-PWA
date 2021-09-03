@@ -6,29 +6,29 @@ export const Groups: Group[] = [
     address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
     motd: 'Chatting privatley with the world',
     members: [
-      '0x0ED3B01FAF2002beD1434Fce6E47aDa3bD43d213',
-      '0xca8d2554190310F0DdAcF8647b700ceAABc4Cb10',
+      '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     ],
-    creator: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    creator: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
   },
   {
     name: 'Solstice',
     address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     motd: "Chillin'n in the sun",
     members: [
+      '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
       '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
-      '0x0ED3B01FAF2002beD1434Fce6E47aDa3bD43d213',
-      '0x7cFbE9977E6577117B589e15CeF2f2F6d18F64ff',
-      '0xca8d2554190310F0DdAcF8647b700ceAABc4Cb10',
+      '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
     ],
-    creator: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
+    creator: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
   },
   {
     name: 'Urania',
     address: '0x07ee55aa48bb72dcc6e9d71256648910de513eca',
     motd: 'Amusing universe',
-    members: ['0xb2D822e05176563498901682202A1f9c0F68C93c'],
-    creator: '0xb2D822e05176563498901682202A1f9c0F68C93c',
+    members: ['0xdc76cd25977e0a5ae17155770273ad58648900d3'],
+    creator: '0xdc76cd25977e0a5ae17155770273ad58648900d3',
   },
 ]
 
