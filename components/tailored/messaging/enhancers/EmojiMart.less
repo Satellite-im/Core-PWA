@@ -1,5 +1,5 @@
 .emoji-mart {
-  background-color: @black;
+  background-color: transparent !important;
   width: 100% !important;
   height: calc(@enhancers-height - 3.5rem) !important;
   border-radius: none !important;
@@ -8,7 +8,7 @@
 }
 
 .emoji-mart-category-label h3 {
-  background-color: @black;
+  background-color: transparent;
 }
 
 .emoji-mart-category-label {
@@ -17,7 +17,7 @@
 
 .emoji-mart-anchor:hover,
 .emoji-mart-anchor-selected {
-  color: @primary-color-alt;
+  color: @primary-color;
   cursor: pointer;
 }
 .emoji-mart-anchor {
@@ -25,22 +25,22 @@
 }
 
 .emoji-mart-search input {
-  border: 1px solid @primary-color;
-  background-color: @black;
+  border: @light-border;
+  background: @input-gradient;
   color: @text;
   border-radius: @corner-rounding;
   padding: 0.4rem;
 }
 
 .emoji-mart-bar {
-  border: 0 solid @dark-gray;
-  background-color: @black;
+  border: @light-border;
+  background-color: transparent;
   margin-bottom: 0.3rem;
 }
 
 .emoji-mart-category .emoji-mart-emoji:hover:before,
 .emoji-mart-emoji-selected:before {
-  background-color: @black;
+  background-color: transparent;
 }
 
 .emoji-mart-emoji span:hover {

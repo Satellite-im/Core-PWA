@@ -1,14 +1,16 @@
 #quick-profile {
   position: fixed;
   z-index: 3;
-  width: 250px;
+  width: 350px;
   max-width: calc(100% - 2rem);
   top: 4rem;
   left: 4rem;
   padding: @normal-spacing;
-  background: @black;
+  background: @semitransparent-dark-gradient;
+  backdrop-filter: @blur;
   border-radius: @corner-rounding;
   overflow: hidden;
+  border: @light-border;
 
   .header {
     width: calc(100% + 2rem);

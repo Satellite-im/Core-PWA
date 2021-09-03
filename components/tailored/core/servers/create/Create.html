@@ -15,8 +15,7 @@
                     :action="() => $refs.file.click()" 
                     type="primary" 
                     size="small"
-                    :text="$t('servers.create.photo_button')" 
-                    outlined />
+                    :text="$t('servers.create.photo_button')" />
             </div>
         </div>
         <div style="clear: both;"></div>
@@ -25,10 +24,8 @@
             <span class="label">{{$t('servers.create.server_name')}}</span>
             <InteractablesInput 
                 :placeholder="$t('servers.create.server_name_placeholder')" 
-                size="small" 
                 v-model="name"
                 input-kind="text" 
-                outlined 
                 type="primary" />
         </div>
 
@@ -36,11 +33,10 @@
             <span class="label">{{$t('servers.create.select_friends')}}</span>
             <!-- <InteractablesInput 
                 :placeholder="$t('servers.create.select_friends_placeholder')"
-                size="small"
                 input-kind="text" 
                 outlined 
                 type="primary" /> -->
-            <TailoredCoreUserSearch
+            <TailoredSettingsPagesUserSearch
                 v-model="friends"
                 :placeholder="$t('servers.create.select_friends_placeholder')"
                 size="small" type="primary" drop="top" />
@@ -56,7 +52,6 @@
                 size="small"
                 :text="$t('servers.create.create_server')"
                 class="create-server-btn"
-                outlined
                 :action="confirm"/>
         </div>
     </div>

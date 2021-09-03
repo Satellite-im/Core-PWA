@@ -255,6 +255,18 @@ export default {
       stream_options: 'Stream Options',
     },
   },
+  user: {
+    registration: {
+      create: 'Registration',
+      sign_in: 'Sign in',
+      photo_text:
+        'Give your account a face. Chose a memorable photo to show your profile',
+      email: 'Enter an email',
+      email_placeholder: 'Email...',
+      password: 'Enter a password',
+      password_placeholder: 'Password...',
+    },
+  },
   market_place: {
     title: 'Marketplace',
   },

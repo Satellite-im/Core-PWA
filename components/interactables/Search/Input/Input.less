@@ -10,13 +10,15 @@
   position: relative;
   width: 180px;
   font-size: @text-size;
-  border: 1px solid @light-gray;
-  background: @darker;
+  background: @input-gradient;
+  border:@light-border;
   display: flex;
   align-items: center;
   overflow: hidden;
   border-radius: @corner-rounding;
   transition: width 0.1s;
+  padding-left: 1.5rem;
+  padding-right: 40px;
   &.focus {
     width: 282px;
     .search-input {
@@ -38,7 +40,6 @@
     font-size: @text-size;
     background-color: transparent;
     outline: 0;
-    border: 0;
     color: @text;
     z-index: @base-z-index;
     scrollbar-width: 0;
@@ -47,23 +48,20 @@
 .search-clear {
   position: absolute;
   font-size: @tiny-icon-size;
-  top: 0;
-  right: 0;
-  width: 34px;
-  height: 30px;
-  background-color: @dark-gray;
+  top: 5px;
+  right: 8px;
+  width: 30px;
+  height: 20px;
+  background: transparent;
   border-color: transparent;
   color: @text;
   z-index: 2;
   cursor: pointer;
-  &:focus {
-    background-color: @dark;
-  }
 }
 .search-icon {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -81,6 +79,7 @@
   font-size: @text-size;
   color: @text-muted;
   padding: 0 5px;
+  padding-left: 1.8rem;
 }
 .hide {
   display: none;
@@ -89,25 +88,33 @@
 .search-options {
   position: absolute;
   left: 0;
-  margin-top: 6px;
+  margin-top: @light-spacing * 1.5;
+  border: @light-border;
   z-index: @base-z-index + 2;
-  background-color: @dark-gray;
+  background: @semitransparent-light-gradient;
+  backdrop-filter: @blur;
   width: 100%;
   border-radius: @corner-rounding;
   padding: 3px 6px;
-  border: 1px solid @light-gray;
 }
 
 .search-option-group {
   padding: 5px;
 
+  
   li {
     font-size: 16px;
     padding: 5px 10px;
     &:hover:not(:first-child),
     &.active {
-      background-color: @black;
-      border-radius: 2px;
+      background: @primary-color;
+      box-shadow: @primary-glow;
+      color: @bright-text;
+      cursor: pointer;
+      border-radius: @corner-rounding;
+      span:last-child {
+        color: @bright-text;
+      }
     }
     span:last-child {
       color: @text-muted;
@@ -122,13 +129,14 @@
 .search-recommends {
   position: absolute;
   left: 0;
-  margin-top: 4px;
+  margin-top: @light-spacing * 1.5;
   z-index: @base-z-index + 2;
-  background-color: @dark-gray;
+  border: @light-border;
+  background: @semitransparent-light-gradient;
+  backdrop-filter: @blur;
   width: 100%;
   border-radius: @corner-rounding;
   padding: 3px 6px;
-  border: 1px solid @light-gray;
 }
 
 .search-recommend-group {
@@ -165,7 +173,7 @@
   left: 0;
   margin-top: 4px;
   z-index: @base-z-index + 2;
-  background-color: @dark-gray;
+  background: @semitransparent-lighter-gradient !important;
   width: 100%;
   border-radius: @corner-rounding;
   padding: 12px 6px;

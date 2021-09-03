@@ -1,6 +1,5 @@
 <div id="controls">
   <InteractablesButton
-    outlined
     :type="audio.muted ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
@@ -9,7 +8,6 @@
     :icon="{ style: 'far', name: 'microphone-alt' }"
     :text="$t('controls.mic')" />
   <InteractablesButton
-    outlined
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"

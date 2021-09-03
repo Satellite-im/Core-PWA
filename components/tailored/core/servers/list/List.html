@@ -27,7 +27,7 @@
       <UiCircle type="icon" :icon="{ style: 'far', name: 'plus' }" :size="40" />
     </div>
     <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('global.settings')"
-    v-on:click="() => $router.push('/settings/personalize')">
+      v-on:click="$store.commit('toggleSettings', true)">
       <UiCircle type="icon" :icon="{ style: 'far', name: 'cog' }" :size="40" />
     </div>
   </div>

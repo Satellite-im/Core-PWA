@@ -3,12 +3,22 @@
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
+  margin: 0 -0.35rem;
   padding: 0.4rem 0.35rem;
   border-radius: @corner-rounding;
   cursor: pointer;
   position: relative;
   user-select: none;
-  width: 100%;
+  width: calc(100% + 0.7rem);
+
+  .tag {
+    background-color: @primary-color;
+    height: 18px;
+    padding: 0.35rem;
+    align-self: flex-end;
+    float: right;
+    margin: 0.5rem 0 0 0;
+  }
 
   .status {
     position: absolute;
@@ -30,10 +40,6 @@
     &.is-idle {
       color: @yellow;
     }
-  }
-
-  &:hover {
-    background-color: @darker;
   }
   
   .circle {
@@ -66,6 +72,14 @@
   
     .subtitle {
       font-size: @mini-text-size;
+    }
+  }
+
+  .user-chat-details {
+    .is-text {
+      margin: 0;
+      padding: 0;
+      font-size: @micro-text-size;
     }
   }
 }

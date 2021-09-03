@@ -11,10 +11,18 @@
       <ul class="menu-list">
         <li v-for="link in group.links">
           <NuxtLink
+            v-if="!custom"
             :to="link.to"
             :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"
             >{{ link.text }}</NuxtLink
           >
+          <a 
+            v-else
+            v-on:click="customAction(link.to)"
+            :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"
+          >
+            {{ link.text }}
+          </a>
         </li>
       </ul>
     </div>

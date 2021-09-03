@@ -3,7 +3,7 @@
     <div :class="{'search-placeholder': true, hide: !isEmpty}">
       {{placeholder}}
     </div>
-    <div v-if="isEmpty" class="search-icon">
+    <div class="search-icon">
       <font-awesome-icon :icon="['far', 'search']" />
     </div>
     <button v-if="!isEmpty" class="search-clear" @click="clearSearch">
