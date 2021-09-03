@@ -6,7 +6,9 @@
   bottom: @chatbar-size;
   margin-bottom: @light-spacing;
   border-radius: @corner-rounding;
-  background: @black;
+  background: @semitransparent-light-gradient;
+  overflow: hidden;
+  backdrop-filter: @blur;
 
   #container {
     position: relative;
@@ -17,7 +19,7 @@
     width: 100%;
     display: inline-flex;
     padding: 0.75rem 0.5rem 0.5rem 0.5rem;
-    background: @dark-gray;
+    background: @semitransparent-dark-gradient;
     .button {
       width: 100%;
 

@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Bitrates, SampleSizes } from '~/pages/settings/audio/options/audio'
+import { Bitrates, SampleSizes } from '~/components/tailored/settings/pages/audio/options/audio'
 import {
   PermissionRequestOptions,
   UserPermissions,

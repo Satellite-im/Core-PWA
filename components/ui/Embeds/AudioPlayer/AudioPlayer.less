@@ -9,12 +9,19 @@
 
   .plyr__controls {
     border-radius: @corner-rounding;
-    background-color: @dark-gray !important;
+    background: @semitransparent-light-gradient !important;
     color: @bright-text !important;
+    border: @light-border;
   }
 
   .plyr__progress__buffer {
     color: @text-muted !important;
   }
-  
+}
+
+@media only screen and (max-width: 768px) {
+  .audio {
+    max-width: 100%;
+    width: 100%;
+  }
 }

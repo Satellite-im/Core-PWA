@@ -1,16 +1,46 @@
-@sidebar-size: 250px;
-
 #sidebar {
   width: @sidebar-size;
   min-width: @sidebar-size;
   position: relative;
   display: inline-flex;
   height: 100%;
-  background-color: @dark-gray;
   display: flex;
   flex-direction: column;
-  padding-bottom: @light-spacing;
+  padding-bottom: @normal-spacing;
   z-index: @base-z-index;
+
+  .sidebar-inner {
+    border-radius: @corner-rounding;
+    margin-top: @normal-spacing;
+    padding-bottom: @normal-spacing;
+    background: @semitransparent-light-gradient;
+    box-shadow: @ui-shadow;
+    .sidebar-search {
+      width: 100%;
+      padding: @normal-spacing;
+      padding-right: @normal-spacing * 3;
+    }
+
+    .toggle-sidebar {
+      position: absolute;
+      z-index: @base-z-index;
+      top: @normal-spacing * 2.5;
+      right: @normal-spacing;
+      color: @primary-color;
+      filter: @primary-text-glow;
+    }
+  }
+
+  .controls {
+    background: @semitransparent-light-gradient;
+    border-radius: @corner-rounding;
+    padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
+    box-shadow: @ui-shadow;
+  }
+
+  .filler {
+    flex: 1;
+  }
 
   .padded {
     padding: @normal-spacing @normal-spacing 0 @normal-spacing;
@@ -18,14 +48,6 @@
 
   .no-top-pad {
     padding: 0 @normal-spacing;
-  }
-
-  .toggle-sidebar {
-    position: absolute;
-    z-index: @base-z-index;
-    top: @normal-spacing;
-    right: @normal-spacing;
-    color: @primary-color;
   }
 
   .tabs {
@@ -71,3 +93,24 @@
     width: 100%;
   }
 }
+
+.sidebar-full-btn {
+  width: 100%;
+  margin-bottom: @light-spacing;
+  justify-content: flex-start;
+  &.is-inactive {
+    background-color: transparent !important;
+    &:hover {
+      background: @semitransparent-lighter-gradient;
+    }
+  }
+}
+
+
+
+
+.sidebar-nav {
+  padding: 0 @normal-spacing;
+  margin-bottom: @light-spacing;
+}
+

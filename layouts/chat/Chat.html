@@ -4,6 +4,7 @@
     <transition :name="$device.isMobile ? 'slide' : ''">
       <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
     </transition>
+    <TailoredSettingsModal v-if="$store.state.ui.showSettings" />
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
     <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
@@ -22,7 +23,7 @@
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiChatScroll ref="chat" :contents="$store.state.ui.messages" preventScrollOffset="500" enableWrap>
+      <UiChatScroll ref="chat" :contents="$store.state.ui.messages" preventScrollOffset="500" enableWrap :class="$store.state.media.activeCall ? 'media-open' : ''">
         <Nuxt />
       </UiChatScroll>
       <Nuxt ref="chat" id="chat" />
