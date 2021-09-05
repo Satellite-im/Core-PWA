@@ -43,7 +43,6 @@ export default Vue.extend({
       reader.onload = (e) => {
         if (e.target?.result) {
           this.imageUrl = e.target.result.toString()
-          // e.target.value = ''
 
           this.toggleCropper()
         }
@@ -54,8 +53,11 @@ export default Vue.extend({
 
     setCroppedImage(image: string) {
       this.croppedImage = image
-      if (this.$refs.file) {
-        this.$refs.file.value = null
+
+      const fileInputRef = this.$refs.file as HTMLInputElement
+
+      if (fileInputRef) {
+        fileInputRef.value = ''
       }
     },
 
