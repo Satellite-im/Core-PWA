@@ -18,15 +18,15 @@
             <div style="clear: both;"></div>
 
             <div class="input-container">
-                <span class="label">{{$t('user.registration.email')}}</span>
-                <InteractablesInput :placeholder="$t('user.registration.email_placeholder')" size="small" v-model="name"
+                <span class="label">{{$t('user.registration.username')}}</span>
+                <InteractablesInput :placeholder="$t('user.registration.username_placeholder')" size="small" v-model="name"
                     input-kind="text" outlined type="primary" />
             </div>
 
             <div class="input-container">
-                <span class="label">{{$t('user.registration.password')}}</span>
-                <InteractablesInput :placeholder="$t('user.registration.password_placeholder')" size="small"
-                    input-kind="password" outlined type="primary" />
+                <span class="label">{{$t('user.registration.status')}}</span>
+                <InteractablesInput :placeholder="$t('user.registration.status_placeholder')" size="small" v-model="status"
+                    input-kind="text" outlined type="primary" />
             </div>
 
             <p class="red" v-if="error">{{error}}</p>

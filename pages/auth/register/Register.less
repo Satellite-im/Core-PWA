@@ -1,0 +1,25 @@
+.container {
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-content: flex-end;
+  flex-wrap: nowrap;
+  flex-direction: column;
+
+  .registration-body {
+    min-width: 250px;
+    align-self: center;
+    margin-bottom: 25vh;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .container {
+    margin: 0 2rem;
+
+    .registration-body {
+      width: 100%;
+    }
+  }
+}
