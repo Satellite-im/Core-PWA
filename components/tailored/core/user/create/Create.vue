@@ -1,13 +1,20 @@
 <template src="./Create.html"></template>
 
-<script>
-import Vue from 'vue'
+<script lang="ts">
+import Vue, { PropType } from 'vue'
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
+import { UserRegistrationData } from '~/types/user/user'
 
 export default Vue.extend({
-  name: 'CreateServer',
+  name: 'CreateUser',
   components: {
     ImageCropper,
+  },
+  props: {
+    onConfirm: {
+      type: Function as PropType<(userData: UserRegistrationData) => void>,
+      required: true,
+    },
   },
   data() {
     return {
@@ -17,6 +24,7 @@ export default Vue.extend({
       imageUrl: '',
       name: '',
       error: '',
+      status: '',
     }
   },
   methods: {
@@ -24,34 +32,45 @@ export default Vue.extend({
       this.showCropper = !this.showCropper
     },
 
-    selectImage(e) {
-      if (e.target.value !== null) {
-        const files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
+    selectImage(e: Event) {
+      const target = e.target as HTMLInputElement
+      if (target.value === null) return
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = e.target.result
-          e.target.value = ''
+      const files = target.files
+      if (!files?.length) return
+
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          this.imageUrl = e.target.result.toString()
+          // e.target.value = ''
 
           this.toggleCropper()
         }
-
-        reader.readAsDataURL(files[0])
       }
+
+      reader.readAsDataURL(files[0])
     },
 
-    setCroppedImage(image) {
+    setCroppedImage(image: string) {
       this.croppedImage = image
-      this.$refs.file.value = null
+      if (this.$refs.file) {
+        this.$refs.file.value = null
+      }
     },
 
     confirm() {
-      if (this.name < 5) {
-        this.error = 'Server name must be at least 5 characters.'
+      if (this.name.length < 5) {
+        this.error = 'Username name must be at least 5 characters.'
         return false
       }
-      this.error = false
+      this.error = ''
+
+      this.onConfirm({
+        username: this.name,
+        imageURI: this.croppedImage,
+        status: this.status,
+      })
       return true
     },
   },
