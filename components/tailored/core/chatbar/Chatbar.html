@@ -40,7 +40,10 @@
       @click="sendMessage"
     />
   </div>
-  <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
-    >{{ `${text.length}/${maxChars}` }}</span
-  >
+  <div id="bottom-bar-container">
+    <UiTypingIndicator v-if="$store.state.ui.isTyping" :userName="$store.state.ui.isTyping.name"/>
+    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
+      >{{ `${text.length}/${maxChars}` }}</span
+    >
+  </div>
 </div>

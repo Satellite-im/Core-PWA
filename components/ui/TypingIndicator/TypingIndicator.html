@@ -1,0 +1,7 @@
+<div id="typing-badge-container">
+    <div id="typing-loader"></div>
+    <div id="text-container" v-if="userName">
+        <TypographyText :text="userName" :size="6" />
+        <TypographyText text="is typing..." :size="6" />
+    </div>
+</div>
