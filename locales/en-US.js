@@ -211,6 +211,10 @@ export default {
         },
       },
     },
+    chat: {
+      new_message: 'new messages',
+      jump_to_current: 'Jump To Current',
+    },
   },
   servers: {
     create: {
