@@ -1,11 +1,20 @@
-import { NuxtState } from '@nuxt/types/app'
+import { RootState } from '../store.types'
 
 const getters = {
-  getPinHash: (state: NuxtState) => {
+  getPinHash: (state: RootState) => {
     return state.accounts.pinHash
   },
-  getError: (state: NuxtState) => {
-    return state.accounts.error
+  getEncryptedPhrase: (state: RootState) => {
+    return state.accounts.encryptedPhrase
+  },
+  getPhrase: (state: RootState) => {
+    return state.accounts.phrase
+  },
+  getRegistrationStatus: (state: RootState) => {
+    return state.accounts.registrationStatus
+  },
+  getActiveAccount: (state: RootState) => {
+    return state.accounts.active
   },
 }
 
