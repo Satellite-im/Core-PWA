@@ -5,6 +5,60 @@
   }
 }
 
-select {
-  border-radius: 4rem;
+.is-primary {
+  .custom-select {
+    .selected {
+      background: @primary-gradient;
+      border: none;
+      outline: none;
+      box-shadow: @primary-glow;
+      &::after,
+      &::before {
+        border-color: @bright-text;
+      }
+    }
+  }
+}
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  outline: none;
+  color: @text;
+  .selected {
+    height: @select-height;
+    line-height: @select-height;
+    border-radius: 4rem;
+    background-color: @dark-gray;
+    color: @text;
+    padding-left: @normal-spacing;
+    padding-right: @normal-spacing * 2;
+    cursor: pointer;
+    user-select: none;
+  }
+  .items {
+    color: #fff;
+    overflow: hidden;
+    position: absolute;
+    background: @semitransparent-dark-gradient;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    div {
+      height: @normal-spacing * 2;
+      line-height: @normal-spacing * 2;
+      padding-left: @normal-spacing;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        background: @semitransparent-lighter-gradient;
+      }
+    }
+  }
+}
+
+.selectHide {
+  display: none;
 }
