@@ -1,5 +1,6 @@
 <template src="./Select.html"></template>
 <script lang="ts">
+// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 
 import { SelectSize, SelectStyle } from './types.d'
@@ -60,6 +61,7 @@ export default Vue.extend({
   data() {
     return {
       selectedValue: this.placeholder.length ? null : this.selected,
+      open: false,
     }
   },
   watch: {
@@ -71,8 +73,19 @@ export default Vue.extend({
     },
   },
   methods: {
-    change() {
+    change(value: any) {
+      this.selectedValue = value
       this.$emit('change', this.selectedValue)
+      this.open = false
+    },
+    getSelectLabel() {
+      if (this.selectedValue) {
+        const item: any = (this.options as Array<SelectOption>).find(
+          (opt: SelectOption) => opt.value === this.selectedValue
+        )
+        if (item) return item.text
+      }
+      return this.placeholder
     },
   },
 })
