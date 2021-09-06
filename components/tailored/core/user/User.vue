@@ -22,6 +22,11 @@ export default Vue.extend({
       }),
       required: true,
     },
+    isTyping: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   data() {
     return {
