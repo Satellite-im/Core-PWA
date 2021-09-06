@@ -1,13 +1,8 @@
 <div
   :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`"
+  v-click-outside="() => open = false"
 >
-  <!-- <select @change="change" v-model="selectedValue">
-    <option :value="null" disabled v-if="placeholder && placeholder.length">{{placeholder}}</option>
-    <option 
-      v-for="option in options"
-      :value="option.value">{{ option.text }}</option>
-  </select> -->
-  <div class="custom-select" @blur="open = false">
+  <div class="custom-select">
     <div class="selected" :class="{ open: open }" @click="open = !open">
       {{ getSelectLabel() }}
     </div>
