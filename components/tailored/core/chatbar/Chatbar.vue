@@ -51,7 +51,7 @@ export default Vue.extend({
       get() {
         return this.$store.state.ui.chatbarContent
       },
-      set(val) {
+      set(val: string) {
         this.$store.commit('chatbarContent', val)
         this.$data.text = val
       },
@@ -88,6 +88,23 @@ export default Vue.extend({
     },
     handleInputChange() {
       this.autoGrow()
+    },
+    handleInputKeydown(event: KeyboardEvent) {
+      switch (event.key) {
+        case 'Backspace':
+          {
+            const parsedCommand = parseCommand(this.value)
+            const currentCommand = commands.find(
+              (c) => c.name === parsedCommand.name.toLowerCase()
+            )
+            if (currentCommand && parsedCommand.args.length === 0) {
+              this.value = ''
+              return false
+            }
+          }
+          break
+      }
+      return true
     },
     sendMessage() {
       this.$store.dispatch('sendMessage', {

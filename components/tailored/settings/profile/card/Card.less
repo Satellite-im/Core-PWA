@@ -1,0 +1,32 @@
+.profile-card {
+  width: 100%;
+  border: 1px solid @light-gray;
+  border-radius: @corner-rounding;
+
+  &-body {
+    padding: @normal-spacing;
+
+    .profile-badges {
+      margin-top: @normal-spacing;
+      .profile-badge {
+        font-size: @xl-icon-size;
+        margin-right: @normal-spacing;
+        color: @green;
+      }
+    }
+
+    .profile-preferences {
+      margin-top: @normal-spacing;
+
+      &-location {
+        margin-top: @normal-spacing;
+        margin-bottom: @normal-spacing;
+      }
+
+      &-language {
+        margin-top: @normal-spacing;
+        margin-bottom: @normal-spacing;
+      }
+    }
+  }
+}

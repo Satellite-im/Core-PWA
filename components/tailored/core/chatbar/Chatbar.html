@@ -20,6 +20,7 @@
       v-model="value"
       @input="handleInputChange"
       @change="handleInputChange"
+      @keydown="handleInputKeydown"
     ></textarea>
     <div
       :data-tooltip="$t('global.glyphs')"
