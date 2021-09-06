@@ -10,6 +10,7 @@ interface UIState {
   chatbarContent: String
   fullscreen: Boolean
   showEnhancers: Boolean
+  settingReaction: Object
 }
 
 const InitalUIState = (): UIState => ({
@@ -27,6 +28,7 @@ const InitalUIState = (): UIState => ({
   chatbarContent: '',
   fullscreen: false,
   showEnhancers: false,
+  settingReaction: { status: false, groupID: null, messageID: null },
 })
 
 export default InitalUIState

@@ -152,6 +152,7 @@ export const Messages = [
         type: 'text',
         payload:
           'Mir local arm starlight day eccentricity Saturn falling star Mars astronomy gravitation',
+        reactions: [],
       },
       {
         id: '00-1293-10',
@@ -163,6 +164,33 @@ export const Messages = [
           filename: 'breakaway.mp3',
           src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
+        reactions: [{ emoji: '😤', reactors: ['user3'] }],
+      },
+    ],
+  },
+  {
+    id: '00-01-84',
+    at: 1620515543000,
+    type: 'group',
+    from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+    to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    messages: [
+      {
+        id: '00-00-44',
+        at: 1620515543000,
+        type: 'text',
+        payload: 'Is satellite going to the moon?',
+        reactions: [],
+      },
+      {
+        id: '00-00-45',
+        at: 1620515543000,
+        type: 'text',
+        payload: 'Thumbs up if yes',
+        reactions: [
+          { emoji: '👍', reactors: ['user1'] },
+          { emoji: '🚀', reactors: ['user1', 'user2', 'user3'] },
+        ],
       },
     ],
   },

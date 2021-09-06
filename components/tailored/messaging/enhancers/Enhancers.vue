@@ -25,16 +25,35 @@ export default Vue.extend({
      * (emoji: any) Comes from <picker/> select event
      */
     addEmoji(emoji: any) {
-      this.$store.commit(
-        'chatbarContent',
-        this.$store.state.ui.chatbarContent + emoji.native
-      )
+      if (this.$store.state.ui.settingReaction.status) {
+        this.$store.dispatch('addReaction', {
+          emoji: emoji.native,
+          reactor: 'user1',
+          groupID: this.$store.state.ui.settingReaction.groupID,
+          messageID: this.$store.state.ui.settingReaction.messageID,
+        })
+        this.$store.commit('settingReaction', {
+          status: false,
+          groupID: null,
+          messageID: null,
+        })
+        this.$store.commit('toggleEnhancers', false)
+      } else {
+        this.$store.commit(
+          'chatbarContent',
+          this.$store.state.ui.chatbarContent + emoji.native
+        )
+      }
     },
     setRoute(route: string) {
       this.$data.route = route
     },
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
+      this.$store.commit('settingReaction', {
+        status: false,
+        messageID: null,
+      })
     },
   },
 })

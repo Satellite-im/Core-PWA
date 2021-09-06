@@ -10,6 +10,7 @@ import MediaActions from './media/actions'
 import MediaMutations from './media/mutations'
 import SettingsMutations from './settings/mutations'
 import UIMuatations from './ui/mutations'
+import UIActions from './ui/actions'
 import SearchMutations from './search/mutations'
 
 export const mutations = {
@@ -29,4 +30,5 @@ export const actions = {
   ...FriendActions,
   ...MediaActions,
   ...AccountsActions,
+  ...UIActions,
 }
