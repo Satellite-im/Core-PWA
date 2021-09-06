@@ -12,7 +12,6 @@
       <InteractablesInputGroup
         :copy-content="$store.state.accounts.active"
         readonly
-        size="small"
         type="primary"
         :icon="{ style: 'far', name: 'clipboard' }"
         :action="() => $toast.show($t('global.copied'))"
@@ -25,7 +24,6 @@
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
       <InteractablesInput 
         readonly
-        size="small"
         type="primary"
         :text="$store.state.accounts.gasPrice" />
     </div>

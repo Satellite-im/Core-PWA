@@ -20,7 +20,9 @@
     bottom: calc(4.6rem + @light-spacing);
     right: @normal-spacing;
     width: calc(100% - @sidebar-size - 40px - @normal-spacing);
-    background: @dark-gray;
+    backdrop-filter: @blur;
+    background: @semitransparent-light-gradient;
+    border: @light-border;
     border-radius: @corner-rounding;
     padding: @normal-spacing;
     display: inline-flex;

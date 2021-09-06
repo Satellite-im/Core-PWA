@@ -135,6 +135,8 @@ export default Vue.extend({
       const microphone = audioContext.createMediaStreamSource(stream)
       const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1)
 
+      analyser.smoothingTimeConstant = 0
+
       microphone.connect(gainNode)
       gainNode.connect(analyser)
       analyser.connect(javascriptNode)

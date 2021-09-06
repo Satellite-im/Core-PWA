@@ -1,17 +1,26 @@
 video {
   border-radius: @corner-rounding;
   overflow: hidden;
+  box-shadow: @primary-glow;
+}
+
+.plyr__video-wrapper, .plyr__poster, .plyr {
+  border-radius: @corner-rounding;
+}
+
+.plyr {
+  border: @light-border;
 }
 
 .video {
   max-width: 540px;
   min-width: 200px;
   width: 70%;
-  margin: @normal-spacing 0;
 }
 
 .plyr__menu__container {
-  background-color: @dark-gray !important;
+  background: @semitransparent-dark-gradient !important;
+  backdrop-filter: @blur;
   color: @bright-text !important;
   padding: 0;
   border-radius: @corner-rounding;
@@ -25,7 +34,8 @@ video {
 }
 
 .plyr__tooltip {
-  background: @dark-gray !important;
+  background: @semitransparent-dark-gradient !important;
+  backdrop-filter: @blur;
   color: @bright-text !important;
   
   &::before {
@@ -39,17 +49,22 @@ video {
   }
 }
 .plyr__control--overlaid {
-  background-color: @primary-color;
+  background: @primary-color !important;
+  box-shadow: @primary-glow;
 
   &:hover {
-    background-color: @primary-color-alt;
+    background: @primary-color-alt !important;
+    box-shadow: @primary-glow;
   }
 }
 
-.plyr__control--overlaid {
-  background-color: @primary-color;
+.plyr--full-ui input[type=range] {
+  color: @primary-color !important;
 }
 
-.plyr--full-ui input[type=range] {
-  color: @primary-color;
+@media only screen and (max-width: 768px) {
+  .video {
+    max-width: 100%;
+    width: 100%;
+  }
 }

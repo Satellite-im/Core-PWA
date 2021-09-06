@@ -24,7 +24,6 @@
         </ul>
         <p class="menu-label">General</p>
         <ul class="menu-list">
-          <li><NuxtLink to="settings/profile">Settings</NuxtLink></li>
           <li><NuxtLink to="chat/direct">Chat</NuxtLink></li>
           <li><NuxtLink to="friends/list">Friends</NuxtLink></li>
           <li><NuxtLink to="files/browse">Files</NuxtLink></li>
