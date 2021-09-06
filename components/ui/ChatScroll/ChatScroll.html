@@ -1,0 +1,13 @@
+<div :class="classObject" ref="scrollRef" v-on:scroll="onScrolled">
+  <slot />
+  <div
+    v-if="$store.state.ui.unreadMessage>0"
+    class="new-message-alert"
+    :style="{ right: newMessageAlertPos.right + 'px', 
+    top: newMessageAlertPos.top + 'px', width: newMessageAlertPos.width + 'px' }"
+    @click="autoScrollToBottom"
+  >
+    {{ $store.state.ui.unreadMessage }} {{ $t('pages.chat.new_message') }}
+    <span>{{ $t('pages.chat.jump_to_current') }}</span>
+  </div>
+</div>
