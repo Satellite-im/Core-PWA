@@ -197,6 +197,12 @@ export default {
           subtitle:
             'Below is a list of helpful information regaurding your account.',
           accountID: 'Account Identifier',
+          badges: 'Badges',
+          preferences: 'Preferences',
+          location: 'Location',
+          selectLocation: 'Select Location',
+          language: 'Language',
+          selectLanguage: 'Select Language',
         },
         phrase: {
           title: 'Recovery Phrase',

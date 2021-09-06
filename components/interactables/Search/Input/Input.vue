@@ -468,3 +468,14 @@ export default Vue.extend({
 </script>
 <style lang="less" src="./InputGlobal.less"></style>
 <style scoped lang="less" src="./Input.less"></style>
+<style lang="less">
+.search-container {
+  .vc-popover-content-wrapper {
+    height: 0px !important;
+    .vc-popover-content {
+      height: 0px !important;
+    }
+    z-index: -1;
+  }
+}
+</style>
