@@ -76,6 +76,8 @@ import {
   faShoppingBag,
   faPalette,
   faCubes,
+  faIdBadge,
+  faClock,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -85,6 +87,10 @@ import {
   faShoppingBag as faShoppingBagFull,
   faHeart as faHeartFull,
   faShoppingCart,
+  faIdBadge as faIdBadge2,
+  faRibbon,
+  faCertificate,
+  faOtter,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -165,5 +171,11 @@ library.add(faShoppingCart)
 library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
+library.add(faIdBadge)
+library.add(faIdBadge2)
+library.add(faCertificate)
+library.add(faOtter)
+library.add(faRibbon)
+library.add(faClock)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

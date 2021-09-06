@@ -1,44 +1,42 @@
 import Vue from 'vue'
 // eslint-disable-next-line import/named
 import { Commit, Dispatch } from 'vuex'
-import { AccountsError } from './types'
+import { RootState } from '../store.types'
+import {
+  AccountsError,
+  RegistrationStatus,
+  UserRegistrationPayload,
+} from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 interface ActionsArguments {
   commit: Commit
-  state: any
+  state: RootState
   dispatch: Dispatch
 }
 
 export default {
-  async setPin({ commit, dispatch }: ActionsArguments, pin: string) {
-    commit('setAccountError', '')
-
+  async setPin({ commit }: ActionsArguments, pin: string) {
     if (pin.length < 5) {
-      commit('setAccountError', AccountsError.PIN_TOO_SHORT)
-      return
+      throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
     const pinHash = await $Crypto.hash(pin)
 
-    // Wait for the pinHash to be stored in the state
-    await commit('setPinHash', pinHash)
-
-    // Dispatch the unlock action in order to reuse the same
-    // decryption logic for the mnemonic phrase
-    dispatch('unlock', pin)
+    // The cleartext version of the pin will not be
+    // persisted
+    commit('setPin', pin)
+    commit('setPinHash', pinHash)
   },
   async unlock({ commit, state }: ActionsArguments, pin: string) {
     const { pinHash, encryptedPhrase } = state.accounts
 
-    commit('setAccountError', '')
-
     if (pin.length < 5) {
-      commit('setAccountError', AccountsError.PIN_TOO_SHORT)
-      return
+      throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
@@ -46,8 +44,7 @@ export default {
     const computedPinHash = await $Crypto.hash(pin)
 
     if (computedPinHash !== pinHash) {
-      commit('setAccountError', AccountsError.INVALID_PIN)
-      return
+      throw new Error(AccountsError.INVALID_PIN)
     }
 
     if (encryptedPhrase !== '') {
@@ -62,27 +59,101 @@ export default {
     commit('unlock', pin)
   },
   async generateWallet({ commit, state }: ActionsArguments) {
+    const { pin } = state.accounts
+
+    if (!pin) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
-
-    commit('setLoading', true)
 
     const solanaWallet = await $SolanaManager.createRandomKeypair()
 
     if (!solanaWallet.mnemonic) {
-      commit('setLoading', false)
-      return
+      throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
     await commit('setPhrase', solanaWallet.mnemonic)
 
     const encryptedPhrase = await $Crypto.encryptWithPassword(
       solanaWallet.mnemonic,
-      state.accounts.pin
+      pin
     )
 
     commit('setEncryptedPhrase', encryptedPhrase)
+  },
+  async loadAccount({ commit, state }: ActionsArguments) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
-    commit('setLoading', false)
+    const mnemonic = state.accounts.phrase
+
+    if (mnemonic === '') {
+      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+    }
+
+    await $SolanaManager.initializeFromMnemonic(mnemonic)
+
+    const userAccount = await $SolanaManager.getUserAccount()
+
+    if (!userAccount) {
+      throw new Error(AccountsError.USER_DERIVATION_FAILED)
+    }
+
+    commit('setActiveAccount', userAccount?.publicKey.toBase58())
+
+    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+
+    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+
+    if (userInfo === null) {
+      throw new Error(AccountsError.USER_NOT_REGISTERED)
+    }
+  },
+  async registerUser(
+    { commit }: ActionsArguments,
+    userData: UserRegistrationPayload
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
+
+    const balance = await $SolanaManager.getCurrentAccountBalance()
+
+    if (balance === 0) {
+      commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
+      await $SolanaManager.requestAirdrop()
+    }
+
+    const payerAccount = await $SolanaManager.getActiveAccount()
+
+    if (!payerAccount) {
+      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
+      throw new Error(AccountsError.PAYER_NOT_PRESENT)
+    }
+
+    const userAccount = await $SolanaManager.getUserAccount()
+
+    if (!userAccount) {
+      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
+      throw new Error(AccountsError.USER_DERIVATION_FAILED)
+    }
+
+    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+
+    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+
+    if (userInfo) {
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      throw new Error(AccountsError.USER_ALREADY_REGISTERED)
+    }
+
+    commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
+
+    await serverProgram.createUser(userData.name, '', userData.status)
+
+    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+
+    commit('setActiveAccount', userAccount.publicKey.toBase58())
   },
 }

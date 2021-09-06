@@ -108,5 +108,11 @@ export default {
       }
       if (!isOwner && state.ui.isScrollOver) state.ui.unreadMessage++
     }
+  }
+  setTypingUser(state: NuxtState, user: Object | Boolean) {
+    state.ui = {
+      ...state.ui,
+      isTyping: user,
+    }
   },
 }

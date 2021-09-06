@@ -4,14 +4,14 @@
       v-model="pin"
       size="small"
       input-kind="password"
-      :type="`${accountError ? 'danger' : 'primary'}`"
-      :label-text="`${newAccount ? $t('pages.unlock.create') : $t('pages.unlock.decrypt')}`"
+      :type="`${error ? 'danger' : 'primary'}`"
+      :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : $t('pages.unlock.create')}`"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
-      :action="decideAction"
+      :action="getPinHash ? decrypt : create"
       :icon="getIcon()"
     />
-    <TypographyError v-if="accountError" :text="$t(accountError)" />
+    <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"
       small

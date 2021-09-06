@@ -15,29 +15,29 @@
             </div>
         </div>
         <div class="buttons-bar">
-            <TailoredMarketplaceButtongroup>
+            <InteractablesButtonGroup v-model="subject" :action="changeSubject">
                 <InteractablesButton
                     text="Glyphs"
                     size="small"
                     type="dark"
                     :icon="{ style: 'far', name: 'grin-tongue-wink' }"
-                    :action="() => {}"
+                    outlined
                 />
                 <InteractablesButton
                     text="Themes"
                     size="small"
-                    type="primary"
+                    type="dark"
                     :icon="{ style: 'far', name: 'palette' }"
-                    :action="() => {}"
+                    outlined
                 />
                 <InteractablesButton
                     text="NFTs"
                     size="small"
                     type="dark"
                     :icon="{ style: 'far', name: 'cubes' }"
-                    :action="() => {}"
+                    outlined
                 />
-            </TailoredMarketplaceButtongroup>
+            </InteractablesButtonGroup>
         </div>
         <div class="listing-panel">
             <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap noPadding>
