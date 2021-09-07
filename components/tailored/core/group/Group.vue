@@ -37,8 +37,8 @@ export default Vue.extend({
     testFunc(): void {
       console.log('User Func')
     },
-    navigateToGroup() {
-      this.$router.push('/chat/direct')
+    navigateToGroup(address: string) {
+      this.$router.push(`/chat/groups/${address}`)
     },
   },
 })
