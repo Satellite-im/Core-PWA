@@ -53,7 +53,11 @@
     }
   }
 
-  #sidebar, #servers-vertical-list, .dynamic-content, #sidebar .toggle-sidebar, #statusbar {
+  #sidebar,
+  #servers-vertical-list,
+  .dynamic-content,
+  #sidebar .toggle-sidebar,
+  #statusbar {
     transition: @transition-all;
   }
 
@@ -61,7 +65,8 @@
     .file-preview {
       width: calc(100% - 2rem) !important;
     }
-    #sidebar, #servers-vertical-list {
+    #sidebar,
+    #servers-vertical-list {
       transform: translateX(calc(-@sidebar-size + -@servers-size));
     }
     .dynamic-content {
