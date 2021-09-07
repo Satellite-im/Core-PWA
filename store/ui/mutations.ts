@@ -70,4 +70,49 @@ export default {
       showSearchResult: enabled,
     }
   },
+  setMessages(state: NuxtState, messages: any[]) {
+    state.ui.messages = messages
+  },
+  setIsScrollOver(state: NuxtState, status: boolean) {
+    state.ui.isScrollOver = status
+    if (!status) state.ui.unreadMessage = 0
+  },
+  sendMessage(state: NuxtState, message: any, isOwner: boolean) {
+    const messages: any[] = [...state.ui.messages]
+    const lastIndex = messages.length - 1
+    const lastMessage = messages[lastIndex]
+    if (lastMessage) {
+      const messageContent = {
+        id: Date.now(),
+        at: Date.now(),
+        type: 'text',
+        payload: message.value,
+      }
+      if (lastMessage.from === message.user.address) {
+        state.ui.messages[lastIndex].messages.push({
+          ...messageContent,
+        })
+      } else {
+        state.ui.messages.push({
+          id: Date.now(),
+          at: Date.now(),
+          type: 'group',
+          from: message.user.address,
+          to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+          messages: [
+            {
+              ...messageContent,
+            },
+          ],
+        })
+      }
+      if (!isOwner && state.ui.isScrollOver) state.ui.unreadMessage++
+    }
+  },
+  setTypingUser(state: NuxtState, user: Object | Boolean) {
+    state.ui = {
+      ...state.ui,
+      isTyping: user,
+    }
+  },
 }

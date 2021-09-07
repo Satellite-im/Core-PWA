@@ -67,11 +67,11 @@
         height: 0;
         margin-top: 0;
       }
-      #mediastream {
-        flex: 1;
-      }
       .scroll-area {
         height: 0;
+      }
+      #mediastream {
+        height: calc(100% -  @statusbar-height);
       }
     }
   }
@@ -98,11 +98,37 @@
     #sidebar .toggle-sidebar {
       right: -2rem;
       z-index: @base-z-index;
-      top: @normal-spacing;
-
+      top: 1.8rem;
     }
     #statusbar {
       padding-left: 3rem;
     }
+  }
+
+  &.is-collapsed-aside {
+    #aside {
+      transform: translateX(calc(@sidebar-size));
+    }
+    .dynamic-content {
+      margin-right: -250px;
+    }
+
+    &.group {
+      #statusbar {
+        padding-right: 3rem;
+      }
+    }
+
+    &.direct {
+      .info-toggle {
+        display: none !important;
+      }
+    }
+  }
+}
+
+&.is-open-aside {
+  .info-toggle {
+    display: none !important;
   }
 }

@@ -23,6 +23,7 @@ const propertiesBlacklist = [
   'accounts.locked',
   'accounts.error',
   'accounts.loading',
+  'accounts.registrationStatus',
 ]
 
 export default ({ store }: { store: any }) => {

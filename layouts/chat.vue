@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
@@ -11,13 +12,21 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
+      asidebar: true,
     }
+  },
+  computed: {
+    selectedGroup() {
+      return this.$route.params.id
+    },
   },
   mounted() {
     this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
+    this.$store.commit('setTypingUser', this.$mock.users[0])
   },
   updated() {
     // this.scrollToBottom()
+    console.log(this.$store.state.ui)
   },
   methods: {
     toggleModal() {

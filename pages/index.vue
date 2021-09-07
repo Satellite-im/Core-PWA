@@ -1,76 +1,73 @@
 <template>
-  <div class="container hidden-scroll">
-    <div>
-      <UiSpacer :height="25" />
-      <img src="~/static/icon.png" alt="" />
-      <TypographyTitle :size="5" text="Satellite Absolute" />
-      <TypographySubtitle :size="5" text="UI Preview" />
-      <UiSpacer :height="25" />
-
-      <aside class="menu">
-        <p class="menu-label">General</p>
-        <ul class="menu-list">
-          <li><NuxtLink to="components">Components</NuxtLink></li>
-          <li><NuxtLink to="generic/loading">Loading Screen</NuxtLink></li>
-        </ul>
-        <p class="menu-label">Auth</p>
-        <ul class="menu-list">
-          <li><NuxtLink to="auth/unlock">Unlok Screen</NuxtLink></li>
-        </ul>
-        <p class="menu-label">Setup</p>
-        <ul class="menu-list">
-          <li><NuxtLink to="setup/disclaimer">Account Creation</NuxtLink></li>
-          <li><NuxtLink to="setup/phrase">Account Phrase</NuxtLink></li>
-        </ul>
-        <p class="menu-label">General</p>
-        <ul class="menu-list">
-          <li><NuxtLink to="chat/direct">Chat</NuxtLink></li>
-          <li><NuxtLink to="friends/list">Friends</NuxtLink></li>
-          <li><NuxtLink to="files/browse">Files</NuxtLink></li>
-        </ul>
-      </aside>
+  <div class="container">
+    <div class="loader-container">
+      <UiLoadersLoadingBar />
+      <TypographyTitle :size="5" :text="$t('pages.loading.loading')" />
+      <TypographySubtitle :size="6" :text="loadingStep" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { AccountsError } from '~/store/accounts/types'
 
 export default Vue.extend({
   name: 'Main',
   data() {
-    return {
-      switch1State: false,
-      switch2State: true,
+    return {}
+  },
+  computed: {
+    ...mapGetters(['getEncryptedPhrase', 'getActiveAccount']),
+    // Helper method for prettier loading messages
+    loadingStep(): string {
+      switch (this.getActiveAccount) {
+        default:
+          return this.$i18n.t('user.loading.loading_account').toString()
+      }
+    },
+  },
+  mounted() {
+    if (this.getEncryptedPhrase === '') {
+      this.$router.replace('/setup/disclaimer')
+    } else {
+      this.loadAccount()
     }
   },
   methods: {
-    testAction(): void {
-      alert('test')
+    async loadAccount() {
+      try {
+        await this.$store.dispatch('loadAccount')
+
+        this.$router.replace('/allcomponents')
+      } catch (error) {
+        if (error.message === AccountsError.USER_NOT_REGISTERED) {
+          this.$router.replace('/auth/register')
+        }
+      }
     },
   },
 })
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
 .container {
   margin: 0 auto;
-  max-height: 100vh;
   display: flex;
   justify-content: center;
   text-align: center;
-}
-@media only screen and (max-width: 768px) {
-  /* due to vh issue on mobile devices */
-  .container {
-    max-height: calc(100vh - 60px);
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .loader-container {
+    min-width: 250px;
+    align-self: center;
+    margin-bottom: 25vh;
   }
-}
-.title {
-  margin: 0;
-}
-.is-6 {
-  margin: 0;
-  padding: 0;
 }
 </style>

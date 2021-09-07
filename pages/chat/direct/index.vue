@@ -9,14 +9,35 @@ export default Vue.extend({
   data() {
     return {
       loading: true,
+      updateInterval: null,
     }
   },
   mounted() {
     setTimeout(() => {
       this.$data.loading = false
       this.$store.dispatch('setMessages', this.$mock.messages)
+      /* Add new message per 5 seconds temporarily */
+      this.$data.updateInterval = setInterval(
+        this.sendMessageAutomatically,
+        5000
+      )
     }, 3000)
     this.$store.dispatch('fetchFriends')
+  },
+  beforeDestroy() {
+    if (this.$data.updateInterval) {
+      clearInterval(this.$data.updateInterval)
+      this.updateInterval = null
+    }
+  },
+  methods: {
+    sendMessageAutomatically() {
+      this.$store.dispatch('sendMessage', {
+        value: 'Test Message',
+        user: this.$mock.friend,
+        isOwner: false,
+      })
+    },
   },
 })
 </script>

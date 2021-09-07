@@ -3,96 +3,98 @@
 // Add any icons you need in this plugin file and they will be loaded into the icon libary.
 
 // For implementation examples see components/ui/Spinner/Spinner.vue
-import Vue from 'vue'
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faSpinnerThird,
-  faArrowCircleRight,
-  faLockOpen,
-  faLock,
-  faBars,
-  faClipboard,
-  faTimesCircle,
-  faPlus,
-  faSave,
-  faUser,
-  faGlobeAmericas,
-  faUserFriends,
-  faUsers,
-  faUserPlus,
-  faFolder,
-  faFolderPlus,
-  faCommentAltLines,
-  faMicrophoneAlt,
-  faHeadphonesAlt,
-  faCog,
-  faPhone,
-  faVideo,
-  faFilePlus,
-  faFileAlt,
-  faGrinTongueWink,
-  faArchive,
-  faSort,
-  faEllipsisV,
-  faSync,
-  faImage,
-  faHome,
-  faFile,
-  faLink,
-  faTimes,
-  faBackspace,
-  faDownload,
-  faFileDownload,
-  faThumbtack,
-  faCircleNotch,
-  faCommentAltDots,
-  faPeopleArrows,
-  faUserTimes,
-  faCheck,
-  faDesktopAlt,
-  faPhoneSlash,
-  faExpand,
-  faCompress,
-  faVolumeDown,
-  faVolume,
-  faVolumeUp,
-  faVolumeOff,
-  faVolumeMute,
-  faChevronRight,
-  faChevronDown,
-  faTerminal,
-  faCommentAltSmile,
-  faSearch,
-  faKeySkeleton,
-  faCalendarDay,
-  faSkull,
-  faHistory,
-  faTrash,
-  faHeart,
-  faTh,
-  faThLarge,
-  faThList,
-  faShoppingBag,
-  faPalette,
-  faCubes,
-  faIdBadge,
-  faClock,
-} from '@fortawesome/pro-regular-svg-icons'
-
-import * as fal from '@fortawesome/pro-light-svg-icons'
-
-import {
   faCircle,
-  faShoppingBag as faShoppingBagFull,
+  faCrown,
+  faEllipsisH,
   faHeart as faHeartFull,
+  faShoppingBag as faShoppingBagFull,
   faShoppingCart,
-  faIdBadge as faIdBadge2,
   faRibbon,
   faCertificate,
   faOtter,
 } from '@fortawesome/free-solid-svg-icons'
+
+import * as fal from '@fortawesome/pro-light-svg-icons'
+
+import {
+  faArchive,
+  faArrowCircleRight,
+  faBackspace,
+  faBars,
+  faCalendarDay,
+  faCheck,
+  faChevronDown,
+  faChevronRight,
+  faCircleNotch,
+  faClipboard,
+  faCog,
+  faCommentAltDots,
+  faCommentAltLines,
+  faCommentAltSmile,
+  faCompress,
+  faCubes,
+  faDesktopAlt,
+  faDownload,
+  faEllipsisV,
+  faExpand,
+  faFile,
+  faFileAlt,
+  faFileDownload,
+  faFilePlus,
+  faFolder,
+  faFolderPlus,
+  faGlobeAmericas,
+  faGrinTongueWink,
+  faHeadphonesAlt,
+  faHeart,
+  faHistory,
+  faHome,
+  faImage,
+  faInfoCircle,
+  faKeySkeleton,
+  faLink,
+  faLock,
+  faLockOpen,
+  faMicrophoneAlt,
+  faPalette,
+  faPeopleArrows,
+  faPhone,
+  faPhoneSlash,
+  faPlus,
+  faSave,
+  faSearch,
+  faShoppingBag,
+  faSkull,
+  faSort,
+  faSpinnerThird,
+  faSync,
+  faTerminal,
+  faTh,
+  faThLarge,
+  faThList,
+  faThumbtack,
+  faTimes,
+  faTimesCircle,
+  faTrash,
+  faUser,
+  faUserFriends,
+  faUserPlus,
+  faUsers,
+  faUserTimes,
+  faVideo,
+  faVolume,
+  faVolumeDown,
+  faVolumeMute,
+  faVolumeOff,
+  faVolumeUp,
+  faIdBadge,
+  faClock,
+} from '@fortawesome/pro-regular-svg-icons'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Vue from 'vue'
 
 library.add(fal.faFile)
 library.add(fal.faFolder)
@@ -171,11 +173,13 @@ library.add(faShoppingCart)
 library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
+library.add(faCrown)
+library.add(faEllipsisH)
+library.add(faInfoCircle)
 library.add(faIdBadge)
-library.add(faIdBadge2)
+library.add(faRibbon)
 library.add(faCertificate)
 library.add(faOtter)
-library.add(faRibbon)
 library.add(faClock)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

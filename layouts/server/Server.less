@@ -64,7 +64,7 @@
         margin-top: 0;
       }
       #mediastream {
-        flex: 1;
+        height: calc(100% -  @statusbar-height);
       }
     }
   }
@@ -91,8 +91,7 @@
     #sidebar .toggle-sidebar {
       right: -2rem;
       z-index: @base-z-index;
-      top: @normal-spacing;
-
+      top: 1.8rem;
     }
     #statusbar {
       padding-left: 3rem;

@@ -89,7 +89,7 @@ export default Vue.extend({
           )
           const marginPerBlock = blockMargin * 2
           // here we set the max block content size so that a block cannot be larger than half viewportWidth
-          const maxBlockContentWidth = viewportWidth / 2 - marginPerBlock
+          const maxBlockContentWidth = viewportWidth / 2 - marginPerBlock * 1.5
           const aspectRatio = 9 / 16
 
           let finalWidth = 160

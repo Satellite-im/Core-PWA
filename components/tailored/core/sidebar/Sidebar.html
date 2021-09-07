@@ -76,6 +76,7 @@
             v-for="user in users"
             :user="user"
             :key="user.address"
+            :isTyping="$store.state.ui.isTyping.address === user.address"
           />
         </div>
         <UiLoadersAddress v-else :count="4" inverted />

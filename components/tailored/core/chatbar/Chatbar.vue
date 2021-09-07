@@ -110,6 +110,7 @@ export default Vue.extend({
       this.$store.dispatch('sendMessage', {
         value: this.value,
         user: this.$mock.user,
+        isOwner: true,
       })
       this.value = ''
     },
