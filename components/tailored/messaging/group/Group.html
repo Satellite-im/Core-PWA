@@ -12,7 +12,7 @@
       <TypographyText :text="$dayjs(group.at).from()" />
     </div>
     <div class="group-messages">
-      <TailoredMessagingMessage v-for="message in group.messages" :message="message" :key="message.id" />
+      <TailoredMessagingMessage v-for="message in group.messages" :message="message" :key="message.id" :group="group" />
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <template src="./Group.html"></template>
 <script lang="ts">
+// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-
 import { Group } from '~/types/messaging'
 
 export default Vue.extend({

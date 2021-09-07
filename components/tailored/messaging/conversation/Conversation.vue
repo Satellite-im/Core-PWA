@@ -1,5 +1,6 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
+// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 
 import { MessageGroup } from '~/types/messaging'

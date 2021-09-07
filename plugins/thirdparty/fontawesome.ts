@@ -88,6 +88,8 @@ import {
   faVolumeUp,
   faIdBadge,
   faClock,
+  faSmilePlus,
+  faReply,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -175,5 +177,7 @@ library.add(faEllipsisH)
 library.add(faInfoCircle)
 library.add(faIdBadge)
 library.add(faClock)
+library.add(faSmilePlus)
+library.add(faReply)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

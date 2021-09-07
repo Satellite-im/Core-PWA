@@ -17,4 +17,7 @@ export default {
   setIsScrollOver({ commit }: ActionsArguments, status: boolean) {
     commit('setIsScrollOver', status)
   },
+  addReaction({ commit }: ActionsArguments, reaction: any) {
+    commit('addReaction', reaction)
+  },
 }

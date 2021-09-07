@@ -15,6 +15,7 @@ interface UIState {
   unreadMessage: number
   isScrollOver: boolean
   isTyping: Object | Boolean
+  settingReaction: Object
 }
 
 const InitalUIState = (): UIState => ({
@@ -37,6 +38,7 @@ const InitalUIState = (): UIState => ({
   unreadMessage: 0,
   isScrollOver: false,
   isTyping: false,
+  settingReaction: { status: false, groupID: null, messageID: null },
 })
 
 export default InitalUIState
