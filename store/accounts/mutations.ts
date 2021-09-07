@@ -1,25 +1,31 @@
-import { NuxtState } from '@nuxt/types/app'
-import { AccountsError } from './types'
+import { RootState } from '../store.types'
+import { RegistrationStatus } from './types'
 
 const mutations = {
-  setPinHash(state: NuxtState, pinHash: string) {
+  setPin(state: RootState, pin: string) {
+    state.accounts.pin = pin
+  },
+  setPinHash(state: RootState, pinHash: string) {
     state.accounts.pinHash = pinHash
   },
-  unlock(state: NuxtState, pin: string) {
+  unlock(state: RootState, pin: string) {
     state.accounts.locked = false
     state.accounts.pin = pin
   },
-  setAccountError(state: NuxtState, error: AccountsError) {
-    state.accounts.error = error
-  },
-  setEncryptedPhrase(state: NuxtState, encryptedPhrase: string) {
+  setEncryptedPhrase(state: RootState, encryptedPhrase: string) {
     state.accounts.encryptedPhrase = encryptedPhrase
   },
-  setPhrase(state: NuxtState, decryptedPhrase: string) {
+  setPhrase(state: RootState, decryptedPhrase: string) {
     state.accounts.phrase = decryptedPhrase
   },
-  setLoading(state: NuxtState, loading: boolean) {
-    state.accounts.loading = loading
+  setActiveAccount(state: RootState, activeAccountPubkey: string) {
+    state.accounts.active = activeAccountPubkey
+  },
+  setRegistrationStatus(
+    state: RootState,
+    registrationStates: RegistrationStatus
+  ) {
+    state.accounts.registrationStatus = registrationStates
   },
 }
 

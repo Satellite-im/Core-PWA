@@ -17,7 +17,13 @@ export default Vue.extend({
       imageUrl: '',
       name: '',
       error: '',
+      friends: [],
     }
+  },
+  watch: {
+    friends(newFriends) {
+      console.log(newFriends)
+    },
   },
   methods: {
     toggleCropper() {
