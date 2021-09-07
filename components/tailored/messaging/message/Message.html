@@ -1,7 +1,28 @@
 <div class="is-message" @contextmenu="contextMenu">
-  <VueMarkdown v-if="message.type === 'text'" :source="message.payload" class="markdown" />
-  <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
-  <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
-  <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
-  <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
+  <div @mouseenter="mouseOver" @mouseleave="mouseOver" class="message-container">
+    <div v-if="showReplyButton" class="reply-button">
+      <div class="reply-command" :data-tooltip="$t('global.glyphs')">
+        <font-awesome-icon
+          :icon="['far', 'grin-tongue-wink']"
+          :class="`control-icon emoji-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
+        />
+      </div>
+      <div class="reply-command" :data-tooltip="$t('global.reply')">
+        <font-awesome-icon :icon="['fas', 'reply']" :class="'control-icon'" />
+      </div>
+      <div class="reply-command" :data-tooltip="$t('global.more')">
+        <font-awesome-icon :icon="['far', 'ellipsis-h']" :class="'control-icon'" />
+      </div>
+    </div>
+    <VueMarkdown v-if="message.type === 'text'" :source="message.payload" class="markdown" />
+    <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
+    <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
+    <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
+    <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
+  </div>
+  <div v-if="message.replies.length" class="reply-container">
+    <div v-if="!showReplies" class="reply-preview" @click="toggleReplies"> {{message.replies.length}} {{$tc('conversation.reply', message.replies.length)}} > </div>
+    <TailoredMessagingMessageReply v-if="showReplies" v-for="reply in message.replies" :reply="reply" :key="reply.id"/>
+    <div v-if="showReplies" @click="toggleReplies" class="reply-close"> Collapse < </div>
+  </div>
 </div>

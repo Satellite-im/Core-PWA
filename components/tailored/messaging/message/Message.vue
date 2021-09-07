@@ -24,6 +24,8 @@ export default Vue.extend({
   },
   data() {
     return {
+      showReplies: false,
+      showReplyButton: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
         { text: 'Add Reaction', func: (this as any).testFunc },
@@ -38,6 +40,12 @@ export default Vue.extend({
   methods: {
     testFunc() {
       console.log('Message Func Testing ' + this.$data.disData)
+    },
+    mouseOver() {
+      this.$data.showReplyButton = !this.$data.showReplyButton
+    },
+    toggleReplies() {
+      this.$data.showReplies = !this.$data.showReplies
     },
   },
 })

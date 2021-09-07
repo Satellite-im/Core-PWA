@@ -27,6 +27,8 @@ export default {
     toggle: 'Toggle',
     copy_id: 'Copy ID',
     crop: 'Crop',
+    reply: 'Reply',
+    more: 'More',
   },
   controls: {
     mic: 'Mic',
@@ -231,6 +233,7 @@ export default {
   },
   conversation: {
     encrypted: 'Messages are secured by end to end encryption.',
+    reply: 'reply | replies',
   },
   errors: {
     accounts: {

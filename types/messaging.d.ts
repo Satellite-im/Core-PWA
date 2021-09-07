@@ -5,11 +5,21 @@ export type ImagePayload = {
   url: string
 }
 
+export type Reply = {
+  id: string
+  at: number
+  to: string
+  from: string
+  type: string
+  payload: TextPayload | ImagePayload
+}
+
 export type Message = {
   id: string
   at: number
   type: string
   payload: TextPayload | ImagePayload
+  replies: Array<Reply>
 }
 
 export type Group = {
