@@ -1,5 +1,5 @@
-import AccountsMutations from './accounts/mutations'
 import AccountsActions from './accounts/actions'
+import AccountsMutations from './accounts/mutations'
 import AccountsGetters from './accounts/getters'
 import AudioVideoMutations from './audio/mutations'
 import DataStateMutations from './dataState/mutations'

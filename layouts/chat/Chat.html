@@ -1,5 +1,7 @@
-<div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
-  <div id="app" :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${$device.isMobile ? 'mobile-app' : ''}`"
+<div id="app-wrap"
+  :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${this.asidebar && this.selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'} ${this.selectedGroup ? 'active-group' : null}`">
+  <div id="app"
+    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${this.asidebar && this.selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'} ${this.selectedGroup ? 'group' : 'direct'} ${$device.isMobile ? 'mobile-app' : ''}`"
     v-touch:swipe="sidebarSwipeHandler(this)" v-touch-options="{ swipeTolerance: 75 }">
     <transition :name="$device.isMobile ? 'slide' : ''">
       <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
@@ -31,6 +33,8 @@
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
       <TailoredCoreChatbar />
     </div>
+    <TailoredCoreGroupAside :toggle="() => $data.asidebar = !$data.asidebar"
+      :selectedGroup="$mock.groups.find(group => group.address === this.selectedGroup)" :friends="$mock.friends" />
   </div>
   <TailoredCoreMobileNav v-if="$device.isMobile" />
 </div>
