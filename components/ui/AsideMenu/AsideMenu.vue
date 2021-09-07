@@ -38,6 +38,14 @@ export default Vue.extend({
       type: Array as PropType<Array<SidebarGrouping>>,
       default: () => [],
     },
+    custom: {
+      type: Boolean,
+      default: false,
+    },
+    customAction: {
+      type: Function,
+      default: () => () => {},
+    },
   },
 })
 </script>
