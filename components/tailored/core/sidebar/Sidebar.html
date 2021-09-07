@@ -31,6 +31,7 @@
           :icon="{ style: 'far', name: 'user-friends' }"
           :action="() => $router.push('/friends/list')"
           :text="$t('global.friends')"
+          :glow="true"
         />
         <span :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
           14
@@ -44,6 +45,7 @@
         :action="() => $router.push('/files/browse')"
         :icon="{ style: 'far', name: 'folder' }"
         :text="$t('global.files')"
+        :glow="true"
       />
     </div>
 
@@ -55,6 +57,7 @@
         :icon="{ style: 'far', name: 'comment-alt-lines' }"
         :text="$t('global.messages')"
         :action="() => $store.commit('showSidebarUsers', true)"
+        :glow="true"
       />
       <InteractablesButton
         full-width
@@ -63,6 +66,7 @@
         :icon="{ style: 'far', name: 'users' }"
         :text="$t('global.groups')"
         :action="() => $store.commit('showSidebarUsers', false)"
+        :glow="true"
       />
     </div>
     <div

@@ -80,6 +80,12 @@ export default Vue.extend({
      */
     fullWidth: Boolean,
     inactive: Boolean,
+
+    //glowing effetc
+    glow: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>

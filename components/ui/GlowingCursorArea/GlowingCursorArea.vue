@@ -1,0 +1,29 @@
+<template src="./GlowingCursorArea.html"></template>
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  data() {
+    return { xChild: 0, yChild: 0, hideCursor: true }
+  },
+  computed: {
+    cursorPoint(): string {
+      return `transform: translateX(${this.xChild - 25}px) translateY(${
+        this.yChild - 25
+      }px) translateZ(0) translate3d(0, 0, 0);`
+    },
+  },
+  methods: {
+    moveCursor(e: Event | any) {
+      let bounds = e.target.getBoundingClientRect()
+
+      this.xChild = e.clientX - bounds.left
+      this.yChild = e.clientY - bounds.top
+    },
+  },
+  mounted() {
+    // document.addEventListener('mousemove', this.moveCursor)
+  },
+})
+</script>
+<style scoped lang="less" src="./GlowingCursorArea.less"></style>

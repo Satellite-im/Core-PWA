@@ -1,6 +1,7 @@
 <button 
   :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'full-width' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
   v-on:click="action" :disabled="loading">
+  <UiGlowingCursorArea :class="`${!glow ? 'hide' : ''}`">
   <!-- If the button is in the loading state -->
   <div v-if="loading">
     <!-- Loading Spinner -->
@@ -15,4 +16,5 @@
     <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" :class="`button-icon ${text.length ? 'button-icon-padded' : ''}`" />
     <span v-if="text.length">{{ text }}</span>
   </div>
+</UiGlowingCursorArea>
 </button>
