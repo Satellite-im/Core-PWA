@@ -43,9 +43,14 @@
     overflow: hidden;
     position: absolute;
     background: @semitransparent-dark-gradient;
+    border-radius: @corner-rounding;
+    border: @light-border;
     left: 0;
     right: 0;
     z-index: 1;
+    backdrop-filter: @blur;
+    z-index: @base-z-index + 100;
+    margin-top: @light-spacing;
     div {
       height: @normal-spacing * 2;
       line-height: @normal-spacing * 2;
