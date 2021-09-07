@@ -1,5 +1,5 @@
 <div class="is-message" @contextmenu="contextMenu" @mouseenter="toggleActions(true)" @mouseleave="toggleActions(false)">
-  <div class="message-actions" v-show="showActions"> 
+  <div class="message-actions" v-if="showActions && !$device.isMobile"> 
     <font-awesome-icon
       :icon="['far', 'smile-plus']"
       class="emoji-icon message-action"
