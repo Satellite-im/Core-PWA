@@ -62,14 +62,6 @@ export default Vue.extend({
       })
       this.$store.commit('toggleEnhancers', true)
     },
-    quickReaction(emoji: String) {
-      this.$store.dispatch('addReaction', {
-        emoji,
-        reactor: 'user1',
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
-      })
-    },
   },
 })
 </script>

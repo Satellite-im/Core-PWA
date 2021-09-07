@@ -122,8 +122,8 @@ export default {
     }
   },
   addReaction(state: NuxtState, reaction: any) {
-    // - break down and turn into util for finding specific message indicies & refactor to make cleaner
-    const messageGroups: any[] = [...state.media.messages]
+    // - break down and turn into util for finding specific message indicies
+    const messageGroups: any[] = [...state.ui.messages]
     // Find message group meant for reaction
     for (let i = 0; i < messageGroups.length; i++) {
       if (!messageGroups[i].messages) {
@@ -137,7 +137,7 @@ export default {
           if (currMessage.id === reaction.messageID) {
             // if reactions array doesnt exist create with new reaction
             if (!currMessage.reactions) {
-              state.media.messages[i].messages[j].reactions = [
+              currMessage.reactions = [
                 {
                   emoji: reaction.emoji,
                   reactors: [reaction.reactor],

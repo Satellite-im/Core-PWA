@@ -17,10 +17,10 @@ export default Vue.extend({
       this.$data.loading = false
       this.$store.dispatch('setMessages', this.$mock.messages)
       /* Add new message per 5 seconds temporarily */
-      this.$data.updateInterval = setInterval(
-        this.sendMessageAutomatically,
-        5000
-      )
+      // this.$data.updateInterval = setInterval(
+      //   this.sendMessageAutomatically,
+      //   5000
+      // )
     }, 3000)
     this.$store.dispatch('fetchFriends')
   },

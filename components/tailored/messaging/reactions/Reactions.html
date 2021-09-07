@@ -1,0 +1,19 @@
+<div class="emoji-reactions" v-if="this.$props.message.reactions">
+  <div v-for="reaction in this.$props.message.reactions">
+    <div class="emoji-reaction" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(true, reaction.emoji)" @mouseleave="toggleReactors(false, reaction.emoji)">
+      <span>{{reaction.emoji}}</span>
+      <span>{{reaction.reactors.length}}</span>
+    </div>
+    <div class="reactors" v-if="false">
+      <span v-for="reactor in reaction.reactors" class="reactor">
+        {{reactor}}
+      </span>
+    </div>
+  </div>
+  <font-awesome-icon
+    v-if="this.$props.message.reactions.length"
+    :icon="['far', 'smile-plus']"
+    class="emoji-icon"
+    @click="emojiReaction"
+  />
+</div>

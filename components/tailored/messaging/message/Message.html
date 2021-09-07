@@ -19,21 +19,5 @@
   <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
   <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
   <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
-  <div class="emoji-reactions" v-if="this.$props.message.reactions">
-    <div v-for="reaction in this.$props.message.reactions">
-      <div class="emoji-reaction" @click="quickReaction(reaction.emoji)">
-        <span>{{reaction.emoji}}</span>
-        <span>{{reaction.reactors.length}}</span>
-      </div>
-      <div class="reactors">
-        <span v-for="reactor in reaction.reactors" class="reactor">{{reactor}}</span>
-      </div>
-    </div>
-    <font-awesome-icon
-      v-if="this.$props.message.reactions.length"
-      :icon="['far', 'smile-plus']"
-      class="emoji-icon"
-      @click="emojiReaction"
-    />
-  </div>
+  <TailoredMessagingReactions :message="this.$props.message" :group="this.$props.group" />
 </div>
