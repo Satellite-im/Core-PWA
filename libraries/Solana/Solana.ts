@@ -42,6 +42,26 @@ export const publicKeyFromSeed = async (
 }
 
 /**
+ * Utility function to deterministically compute a public key from the
+ * given parameters
+ * @param seedKey a Solana public key
+ * @param seed a string that is used as seed
+ * @param programId the id of the solana program that needs to work
+ * with the computed public key
+ * @returns the base key and the computed public key
+ */
+export const publicKeyFromSeeds = async (
+  seeds: (Buffer | Uint8Array)[],
+  seed: string,
+  programId: PublicKey
+) => {
+  const base = await PublicKey.findProgramAddress(seeds, programId)
+
+  const key = await PublicKey.createWithSeed(base[0], seed, programId)
+  return { base, key }
+}
+
+/**
  * Utility function to convert a timeout into a promise
  * @param ms number of milliseconds to wait
  * @returns a promise that resolves after the given time
@@ -93,6 +113,7 @@ export async function waitForAccount(
  * Seeds to be used for deriving accounts
  */
 export enum Seeds {
+  Friend = 'friend',
   FriendInfo = 'friendinfo',
   OutgoingRequest = 'outgoing',
   IncomingRequest = 'incoming',

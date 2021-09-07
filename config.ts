@@ -33,6 +33,7 @@ export const Config = {
   solana: {
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
+    friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
   },
   // Realms are just different chains we support
   realms: [

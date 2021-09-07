@@ -9024,6 +9024,11 @@ mersenne-twister@^1.1.0:
   resolved "https://registry.yarnpkg.com/mersenne-twister/-/mersenne-twister-1.1.0.tgz#f916618ee43d7179efcf641bec4531eb9670978a"
   integrity sha1-+RZhjuQ9cXnvz2Qb7EUx65Zwl4o=
 
+micro-base58@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/micro-base58/-/micro-base58-0.5.0.tgz#d113d25d6df8e499e78739f9820687a4fbd5c02a"
+  integrity sha512-Gm4qJ1Y5PG0QhR4Vo/Nj4Ll9g/efuyK0w2hYjQaG34/Qtw9Ozpw8ANGNwhHjXfv+rjLlBm8Cd4xvvsI6/go97g==
+
 micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.10.tgz#70859bc95c9840952f359a068a3fc49f9ecfac23"
