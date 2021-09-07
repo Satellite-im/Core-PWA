@@ -31,10 +31,15 @@
 
         <div class="input-container">
             <span class="label">{{$t('servers.create.select_friends')}}</span>
-            <InteractablesInput 
+            <!-- <InteractablesInput 
                 :placeholder="$t('servers.create.select_friends_placeholder')"
                 input-kind="text" 
-                type="primary" />
+                outlined 
+                type="primary" /> -->
+            <TailoredSettingsPagesUserSearch
+                v-model="friends"
+                :placeholder="$t('servers.create.select_friends_placeholder')"
+                size="small" type="primary" drop="top" />
         </div>
 
         <p class="red" v-if="error">{{error}}</p>

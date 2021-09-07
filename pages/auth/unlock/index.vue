@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { Icon } from '~/types/ui/icons'
 
 export default Vue.extend({
@@ -9,56 +10,49 @@ export default Vue.extend({
   data() {
     return {
       pin: '',
-      error: false,
+      error: '',
       storePin: false,
       decrypting: false,
     }
   },
   computed: {
-    newAccount() {
-      return !this.$store.state.accounts.pinHash
-    },
-    accountError() {
-      return this.$store.state.accounts.error
-    },
-  },
-  mounted() {
-    this.$store.subscribe((mutation, state) => {
-      const { phrase } = state.accounts
-      if (mutation.type === 'unlock' && phrase) {
-        this.$router.replace('/')
-      } else if (mutation.type === 'unlock' && phrase === '') {
-        this.$router.replace('/setup/disclaimer')
-      }
-    })
+    ...mapGetters(['getPinHash']),
   },
   methods: {
     getIcon(): Icon {
-      if (this.newAccount) {
+      if (this.getPinHash) {
         return { style: 'far', name: 'arrow-circle-right' }
       } else {
         return { style: 'far', name: 'lock-open' }
       }
     },
-    // Decide if we need to store a new pin
-    decideAction() {
-      if (this.newAccount) {
-        this.create()
-      } else {
-        this.decrypt()
-      }
-    },
     // Decrypt stored encrypted data into memory
     async decrypt() {
       this.$data.decrypting = true
+      this.error = ''
 
-      await this.$store.dispatch('unlock', this.$data.pin)
+      try {
+        await this.$store.dispatch('unlock', this.$data.pin)
+      } catch (error) {
+        this.error = error
+      }
 
       this.$data.decrypting = false
+
+      if (this.$store.state.accounts.phrase === '') {
+        this.$router.replace('/setup/disclaimer')
+      } else {
+        this.$router.replace('/')
+      }
     },
     // Create & store a new pin, then decrypt.
     async create() {
-      await this.$store.dispatch('setPin', this.$data.pin)
+      try {
+        await this.$store.dispatch('setPin', this.$data.pin)
+        await this.decrypt()
+      } catch (error) {
+        this.error = error
+      }
     },
   },
 })

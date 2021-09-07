@@ -19,6 +19,8 @@ declare module 'vue/types/vue' {
     requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>
     getMicLevel: (stream: MediaStream) => void
     setupMicMeter: (stream: MediaStream) => void
+    hasConstraint: (prop: string) => Boolean
+    setConstraint: (prop: string, value: any) => void
   }
 }
 export default Vue.extend({
@@ -45,6 +47,7 @@ export default Vue.extend({
     isEchoCancellation: {
       set(state) {
         this.$store.commit('echoCancellation', state)
+        this.setConstraint('echoCancellation', state)
       },
       get() {
         return this.settings.echoCancellation
@@ -53,6 +56,7 @@ export default Vue.extend({
     isNoiseSuppression: {
       set(state) {
         this.$store.commit('noiseSuppression', state)
+        this.setConstraint('noiseSuppression', state)
       },
       get() {
         return this.settings.noiseSuppression
@@ -61,6 +65,7 @@ export default Vue.extend({
     isBitrate: {
       set(state) {
         this.$store.commit('bitrate', state)
+        this.setConstraint('bitrate', state)
       },
       get() {
         return this.settings.bitrate
@@ -69,6 +74,7 @@ export default Vue.extend({
     isSampleSize: {
       set(state) {
         this.$store.commit('sampleSize', state)
+        this.setConstraint('sampleSize', state)
       },
       get() {
         return this.settings.sampleSize
@@ -85,6 +91,7 @@ export default Vue.extend({
     isAudioOutput: {
       set(state) {
         this.$store.commit('audioOutput', state)
+        this.setConstraint('volume', state)
       },
       get() {
         return this.settings.audioOutput
@@ -224,6 +231,34 @@ export default Vue.extend({
     },
     inputVolumeControlValueChange(volume: number) {
       this.$store.commit('setInputVolume', volume)
+    },
+    hasConstraint(prop: string): Boolean {
+      const supports = navigator.mediaDevices.getSupportedConstraints() as {
+        [key: string]: Boolean
+      }
+      return supports[prop]
+    },
+    setConstraint(prop: string, value: any) {
+      if (this.hasConstraint(prop)) {
+        return
+      }
+      if (this.$data.userHasGivenAudioAccess) {
+        const track = this.$data.track as MediaStreamTrack
+        const constraints = track.getConstraints() as { [key: string]: any }
+        constraints[prop] = value
+        track.applyConstraints(constraints)
+      }
+      // navigator.mediaDevices
+      //   .getUserMedia({ video: false, audio: true })
+      //   .then(function (stream: MediaStream) {
+      //     const track = stream.getAudioTracks()[0]
+      //     const constraints = track.getConstraints() as { [key: string]: any }
+      //     constraints[prop] = value
+      //     track.applyConstraints(constraints)
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   })
     },
   },
 })
