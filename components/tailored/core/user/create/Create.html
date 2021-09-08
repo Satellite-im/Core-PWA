@@ -20,13 +20,13 @@
             <div class="input-container">
                 <span class="label">{{$t('user.registration.username')}}</span>
                 <InteractablesInput :placeholder="$t('user.registration.username_placeholder')" size="small" v-model="name"
-                    input-kind="text" outlined type="primary" />
+                    input-kind="text" type="primary" />
             </div>
 
             <div class="input-container">
                 <span class="label">{{$t('user.registration.status')}}</span>
                 <InteractablesInput :placeholder="$t('user.registration.status_placeholder')" size="small" v-model="status"
-                    input-kind="text" outlined type="primary" />
+                    input-kind="text" type="primary" />
             </div>
 
             <p class="red" v-if="error">{{error}}</p>
@@ -35,7 +35,7 @@
         <!-- <hr class="divider"> -->
         <div class="submit-container">
             <InteractablesButton type="primary" size="small" :text="$t('user.registration.sign_in')"
-                class="create-server-btn" outlined :action="confirm" />
+                class="create-server-btn" :action="confirm" />
         </div>
     </div>
 </div>

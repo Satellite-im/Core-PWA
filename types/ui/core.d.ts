@@ -23,6 +23,7 @@ export type Group = {
   address: string
   motd: string
   members: Array<string>
+  creator: string
 }
 
 export type Server = {

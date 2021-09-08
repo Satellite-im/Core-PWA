@@ -1,5 +1,5 @@
-import AccountsMutations from './accounts/mutations'
 import AccountsActions from './accounts/actions'
+import AccountsMutations from './accounts/mutations'
 import AccountsGetters from './accounts/getters'
 import AudioVideoMutations from './audio/mutations'
 import DataStateMutations from './dataState/mutations'
@@ -11,6 +11,7 @@ import MediaActions from './media/actions'
 import MediaMutations from './media/mutations'
 import SettingsMutations from './settings/mutations'
 import UIMuatations from './ui/mutations'
+import UIActions from './ui/actions'
 import SearchMutations from './search/mutations'
 
 export const mutations = {
@@ -30,6 +31,7 @@ export const actions = {
   ...FriendActions,
   ...MediaActions,
   ...AccountsActions,
+  ...UIActions,
 }
 
 export const getters = {

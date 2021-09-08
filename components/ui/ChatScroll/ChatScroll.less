@@ -1,0 +1,53 @@
+.scroll-area {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+}
+
+.enable-wrap {
+  white-space: normal !important;
+}
+
+.auto-scroll {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Custom Scroll for Firefox */
+  scrollbar-color: @primary-color transparent;
+  scrollbar-width: thin;
+
+  /* Scroll Width */
+  &::-webkit-scrollbar {
+    width: 5px;
+    &:hover {
+      width: 11px;
+    }
+  }
+
+  /* Scroll Track */
+  &::-webkit-scrollbar-track {
+    border-radius: @corner-rounding;
+  }
+
+  /* Scroll Handle */
+  &::-webkit-scrollbar-thumb {
+    background: @primary-color;
+    border-radius: @corner-rounding;
+  }
+}
+
+.new-message-alert {
+  position: fixed;
+  background: @primary-color;
+  cursor: pointer;
+  padding: 2px 20px;
+  font-size: 14px;
+  border-radius: 6px;
+  z-index: 1000;
+  span {
+    float: right;
+  }
+}
