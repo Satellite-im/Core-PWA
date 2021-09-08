@@ -1,7 +1,8 @@
 <button 
   :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'full-width' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
-  v-on:click="action" :disabled="loading">
-  <UiGlowingCursorArea :class="`${!glow ? 'hide' : ''}`">
+  v-on:click="action" :disabled="loading" ref="button">
+  <!-- {{$attrs['data-tooltip']}} -->
+  <UiGlowingCursorArea :hide="$attrs['data-tooltip'] ? true : false">
   <!-- If the button is in the loading state -->
   <div v-if="loading">
     <!-- Loading Spinner -->

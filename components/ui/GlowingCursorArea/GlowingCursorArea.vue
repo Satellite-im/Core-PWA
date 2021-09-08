@@ -3,6 +3,13 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  props: {
+    hide: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+  },
   data() {
     return { xChild: 0, yChild: 0, hideCursor: true }
   },
@@ -20,9 +27,6 @@ export default Vue.extend({
       this.xChild = e.clientX - bounds.left
       this.yChild = e.clientY - bounds.top
     },
-  },
-  mounted() {
-    // document.addEventListener('mousemove', this.moveCursor)
   },
 })
 </script>
