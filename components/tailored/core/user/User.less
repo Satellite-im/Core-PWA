@@ -3,12 +3,34 @@
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
+  margin: 0 -0.35rem;
   padding: 0.4rem 0.35rem;
   border-radius: @corner-rounding;
   cursor: pointer;
   position: relative;
   user-select: none;
-  width: 100%;
+  width: calc(100% + 0.7rem);
+
+  .tag {
+    background-color: @primary-color;
+    height: 18px;
+    padding: 0.35rem;
+    align-self: flex-end;
+    float: right;
+    margin: 0.5rem 0 0 0;
+  }
+
+  #typing-badge-container {
+    background: @primary-color;
+    width: 40px;
+    height: 18px;
+    position: absolute;
+    bottom: 6px;
+    left: 18px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 3px solid @dark-gray;
+  }
 
   .status {
     position: absolute;
@@ -51,7 +73,7 @@
   &:hover {
     background-color: @darker;
   }
-  
+
   .circle {
     align-self: center;
     justify-self: center;
@@ -66,22 +88,29 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-
     .title {
       margin: 0 0 1.25rem 0;
       text-overflow: ellipsis;
       min-width: 0;
       font-size: @title-text;
     }
-    
+
     .subtitle {
       height: 30px;
       display: inline-block;
       min-width: 0;
     }
-  
+
     .subtitle {
       font-size: @mini-text-size;
+    }
+  }
+
+  .user-chat-details {
+    .is-text {
+      margin: 0;
+      padding: 0;
+      font-size: @micro-text-size;
     }
   }
 }

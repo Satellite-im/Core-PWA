@@ -1,5 +1,5 @@
 .modal-card-head {
-  background: @darker;
+  background: transparent;
   width: 100%;
   border-bottom: none;
   font-size: @text-size;
@@ -9,6 +9,11 @@
   }
 }
 
+.modal-background {
+  background: transparent !important;
+  backdrop-filter: @light-blur;
+}
+
 .modal-card-body {
   font-weight: normal !important;
   font-size: @text-size;
@@ -16,6 +21,8 @@
   text-align: left;
   padding: @normal-spacing;
   background: transparent;
+  border: @light-border;
+  overflow: hidden;
 }
 
 .nopad {
@@ -45,8 +52,9 @@
 }
 
 .modal-card {
-  border-radius: 5px;
-  background: @dark-gray;
+  border-radius: @corner-rounding;
+  backdrop-filter: @heavy-blur;
+  background: @semitransparent-dark-gradient;
 }
 
 @media only screen and (max-width: 768px) {

@@ -1,5 +1,5 @@
 <template>
-  <span class="tag">
+  <span :class="inverted ? 'tag tag-inverted' : 'tag'">
     {{ text }}
   </span>
 </template>
@@ -13,12 +13,22 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    inverted: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
-<style scoped lang="less">
+<style lang="less">
 .tag {
-  background: @dark-gray;
+  background: @primary-gradient;
+  color: @bright-text !important;
+  box-shadow: @primary-glow;
+}
+.tag-inverted {
+  background: @light-gray !important;
   color: @bright-text;
+  box-shadow: none;
 }
 </style>

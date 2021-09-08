@@ -1,6 +1,3 @@
-@sidebar-size: 250px;
-@servers-size: 60px;
-
 #app-wrap {
   #app.mobile-app {
     height: calc(100vh - @mobile-nav-size);
@@ -22,12 +19,10 @@
 
 #app {
   display: flex;
-  background-color: @darker;
   user-select: none;
 
   .dynamic-content {
     position: relative;
-    background-color: @darker;
     user-select: text;
     display: flex;
     flex-direction: column;
@@ -55,7 +50,11 @@
     }
   }
 
-  #sidebar, #servers-vertical-list, .dynamic-content, #sidebar .toggle-sidebar, #statusbar {
+  #sidebar,
+  #servers-vertical-list,
+  .dynamic-content,
+  #sidebar .toggle-sidebar,
+  #statusbar {
     transition: @transition-all;
   }
 
@@ -63,7 +62,8 @@
     .file-preview {
       width: calc(100% - 2rem) !important;
     }
-    #sidebar, #servers-vertical-list {
+    #sidebar,
+    #servers-vertical-list {
       transform: translateX(calc(-@sidebar-size + -@servers-size));
     }
     .dynamic-content {
@@ -72,6 +72,7 @@
     #sidebar .toggle-sidebar {
       right: -2rem;
       z-index: @base-z-index;
+      top: 1.8rem;
     }
     #statusbar {
       padding-left: 3rem;

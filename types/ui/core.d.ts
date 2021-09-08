@@ -7,6 +7,7 @@ export type User = {
   address: string
   status: string
   state: UserState
+  unreadCount: Number
   profilePicture: string
   badge?: Badge
 }
@@ -21,6 +22,8 @@ export type Group = {
   name: string
   address: string
   motd: string
+  members: Array<string>
+  creator: string
 }
 
 export type Server = {

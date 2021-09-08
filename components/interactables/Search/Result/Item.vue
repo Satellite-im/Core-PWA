@@ -33,10 +33,11 @@ export default Vue.extend({
 <style scoped lang="less">
 .result-item {
   padding: 10px;
-  border: 2px solid @light-gray;
-  background-color: #101010;
   margin: 8px 0;
-  border-radius: 8px;
+  border-radius: @corner-rounding;
+  background: @semitransparent-light-gradient;
+  box-shadow: @light-blur;
+  border: @light-border !important;
   display: flex;
   width: 100%;
   .avatar {

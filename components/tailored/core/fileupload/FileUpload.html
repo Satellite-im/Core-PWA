@@ -25,14 +25,12 @@
             type="primary"
             size="small"
             text="Send"
-            outlined
             :disabled="nsfw.status || nsfw.checking"
           />
           <InteractablesButton
             type="danger"
             size="small"
             text="Cancel"
-            outlined
             :action="cancelUpload"
           />
         </div>
@@ -54,7 +52,7 @@
   <div v-if="type =='button'">
     <label
       for="quick-upload"
-      class="button is-button is-small is-primary is-outlined is-normal-width"
+      class="button is-button is-small is-primary is-normal-width"
       style="margin-left: 0.25rem"
     >
       <font-awesome-icon :icon="['far', 'file-plus']" class="control-icon" />

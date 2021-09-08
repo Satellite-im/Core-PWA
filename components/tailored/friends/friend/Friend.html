@@ -15,7 +15,6 @@
   <div class="spacer"></div>
   <div class="controls" v-if="request">
     <InteractablesButton
-      outlined
       type="success"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
@@ -23,7 +22,6 @@
       :action="() => {}"
       :icon="{ style: 'far', name: 'check' }" />
     <InteractablesButton
-      outlined
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
@@ -33,7 +31,6 @@
   </div>
   <div class="controls" v-else-if="blocked">
     <InteractablesButton
-      outlined
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
@@ -43,7 +40,6 @@
   </div>
   <div class="controls" v-else>
     <InteractablesButton
-      outlined
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
@@ -51,7 +47,6 @@
       :action="() => {}"
       :icon="{ style: 'far', name: 'comment-alt-dots' }" />
     <InteractablesButton
-      outlined
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"

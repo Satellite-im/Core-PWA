@@ -1,0 +1,62 @@
+<div id="developer-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.notifications.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.notifications.notes')"
+      />
+    </div>
+  </div>
+  <TypographyLabel :text="$t('pages.settings.notifications.labels.current_platform')"/><TypographyText :text="Platform"/>
+  <br />
+  
+  <div class="columns is-desktop">
+    <div class="column">
+
+      <span v-if="Platform === 'web' || Platform === 'electron'">
+        <span v-if="Platform === 'web'">
+          <TypographyLabel :text="$t('pages.settings.notifications.enabled')" />
+          <br />
+          <TypographyText v-if="NotificationStatus === 'granted'" :text="$t('pages.settings.notifications.web.granted')"/>
+          <TypographyText v-if="NotificationStatus === 'denied'" :text="$t('pages.settings.notifications.web.denied')"/>
+        </span>
+
+        <!-- 
+          // The request permissions auto fires on page load on web
+          <InteractablesButton
+          v-if="(NotificationStatus !== 'granted') && (NotificationStatus !== 'denied')"
+          :text="$t('pages.settings.audio.sources.permissionButtonText')"
+          size="small"
+          type="primary"
+          :action="requestPermission"
+        /> -->
+        <br />
+        <TypographyLabel :text="$t('pages.settings.notifications.send_label')" />
+        <InteractablesInputGroup
+          v-if="NotificationStatus === 'granted' || Platform === 'electron'"
+          class="modal-input"
+          size="small"
+          type="primary"
+          v-model="$data.NotificationText"
+          :icon="{style: 'far', name: 'chevron-right'}"
+          :placeholder="$t('pages.settings.notifications.send_placeholder')"
+          :action="sendNotification"
+        />
+      </span>
+      <span v-if="Platform === 'android'">
+        <InteractablesInputGroup
+          class="modal-input"
+          size="small"
+          type="primary"
+          v-model="NotificationText"
+          :icon="{style: 'far', name: 'chevron-right'}"
+          :action="sendNotification"
+        />
+      </span>
+    </div>
+  </div>
+</div>

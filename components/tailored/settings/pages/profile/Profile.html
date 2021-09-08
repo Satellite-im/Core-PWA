@@ -1,0 +1,95 @@
+<div id="profile-settings">
+  <div>
+    <TailoredSettingsProfilePicture :image="profileInfo.imageUrl" />
+  </div>
+  
+  <div class="profile-layout">
+    <div class="profile-left">
+      <TailoredSettingsProfileCard :info="profileInfo" />
+    </div>
+    <div class="profile-right">
+      <div class="profile-main">
+        <div class="columns is-desktop">
+          <div class="column">
+            <TypographyTitle :size="6" :text="$t('pages.settings.profile.title')" />
+            <TypographySubtitle :size="6" :text="$t('pages.settings.profile.subtitle')" />
+          </div>
+        </div>
+        
+        <div class="profile-image-cropper" v-if="showCropper">
+          <div class="content">
+            <ImageCropper :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
+              :imageUrl="imageUrl" />
+            <div class="cropper-mask"></div> 
+          </div>  
+        </div>
+        
+        <div class="columns is-mobile">
+          <div class="column profile-photo-column">
+            <div class="profile-photo">
+              <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
+              <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="$mq === 'sm' ? 55 : 75"/>
+              <UiCircle 
+                type="icon" 
+                @click="openFileDialog"
+                :icon="{ style: 'far', name: 'plus'}" 
+                color="#000" 
+                :size="18"
+                class="plus-button" />
+            </div>
+          </div>
+          <div class="column username-column">
+            <TypographyTitle :size="$mq === 'sm' ? 6 : 4" text="RetroPronghorn" :class="$mq === 'sm' ? 'mg-quarter' : 'mg-half'" />
+            <InteractablesInputGroup
+              class="username"
+              v-model="profileInfo.status"
+              size="small"
+              input-kind="text"
+              type="primary"
+              placeholder="Enter Status"
+              :action="() => {}"
+              :icon="{ style: 'far', name: 'save'}"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
+      <div class="columns is-desktop">
+        <div class="column">
+          <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
+          <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
+          <InteractablesInputGroup
+            :copy-content="$store.state.accounts.active"
+            readonly
+            type="primary"
+            size="small"
+            :label-text="$t('pages.settings.profile.info.accountID')"
+            :icon="{ style: 'far', name: 'clipboard' }"
+            :action="() => $toast.show($t('global.copied'))"
+            :text="$store.state.accounts.active" />
+        </div>
+      </div>
+      <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
+      <div class="columns is-desktop">
+        <div class="column">
+          <TypographyTitle :size="6" :text="$t('pages.settings.profile.phrase.title')" />
+          <TypographySubtitle :size="6" :text="$t('pages.settings.profile.phrase.subtitle')" />
+          <div v-if="showPhrase" class="tag-wrap">
+            <div v-for="word, i in splitPhrase" class="tag-container">
+              <UiNumberedWord :word="word" :number="i + 1" />
+            </div>
+          </div>
+          <div v-else>
+            <InteractablesButton
+              text="Reveal Phrase"
+              size="normal"
+              type="primary"
+              :action="togglePhrase"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

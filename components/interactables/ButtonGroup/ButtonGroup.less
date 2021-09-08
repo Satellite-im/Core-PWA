@@ -1,0 +1,24 @@
+.button-group {
+  display: inline;
+  .button {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 0;
+    margin: 0;
+    &:first-child {
+      border-radius: @corner-rounding 0px 0px @corner-rounding;
+      margin-right: -3px;
+    }
+    &:not(:first-child) {
+      margin: 0 -3px;
+      border-left: none;
+    }
+    &:last-child {
+      border-radius: 0px @corner-rounding @corner-rounding 0px;
+    }
+    &.active {
+      background: #0984e3;
+      color: #dae0ff;
+    }
+  }
+}

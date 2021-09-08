@@ -197,6 +197,12 @@ export default {
           subtitle:
             'Below is a list of helpful information regaurding your account.',
           accountID: 'Account Identifier',
+          badges: 'Badges',
+          preferences: 'Preferences',
+          location: 'Location',
+          selectLocation: 'Select Location',
+          language: 'Language',
+          selectLanguage: 'Select Language',
         },
         phrase: {
           title: 'Recovery Phrase',
@@ -204,6 +210,10 @@ export default {
             'Do not share this phrase with anyone. This phrase is used to recover your account. Anyone with access to this has access to your account.',
         },
       },
+    },
+    chat: {
+      new_message: 'new messages',
+      jump_to_current: 'Jump To Current',
     },
   },
   servers: {
@@ -247,6 +257,31 @@ export default {
       video_quality: 'Video Quality',
       no_options: 'No options',
       stream_options: 'Stream Options',
+    },
+  },
+  user: {
+    registration: {
+      create: 'Registration',
+      sign_in: 'Sign in',
+      photo_text:
+        'Give your account a face. Chose a memorable photo to show your profile',
+      username: 'Username',
+      username_placeholder: 'Enter your username here...',
+      status: 'Status',
+      status_placeholder: 'Ready to start...',
+      reg_status: {
+        unknown: 'Not registered',
+        in_progress: 'We are setting up your account...',
+        funding_account:
+          'We are giving you some SOL to register your account...',
+        sending_transaction:
+          'We are quite ready! Your transaction is ongoing...',
+        registered:
+          'Congratulations! Your account has been registered on the blockchain',
+      },
+    },
+    loading: {
+      loading_account: 'We are loading your account information...',
     },
   },
   market_place: {
