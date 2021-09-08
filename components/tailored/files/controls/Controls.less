@@ -25,10 +25,18 @@
   }
 }
 
-
 @media only screen and (max-width: 768px) {
   #file-controls {
+    display: block;
     min-width: @viewport-width - 20px;
-    justify-content: center;
+    .file-type {
+      .select {
+        width: 100%;
+      }
+    }
+    & > div {
+      display: block;
+      margin-bottom: @normal-spacing;
+    }
   }
 }
