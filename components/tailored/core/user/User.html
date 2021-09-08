@@ -1,7 +1,12 @@
 <div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
   <UiCircle type="random" :seed="user.address" :size="35" />
   <font-awesome-icon
+    :icon="['far', 'mobile-alt']"
+    v-if="user.state === 'mobile'"
+    :class="`mobile-status is-${user.state}`" />
+  <font-awesome-icon
     :icon="['fas', 'circle']"
+    v-if="user.state !== 'mobile'"
     :class="`status is-${user.state}`" />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />

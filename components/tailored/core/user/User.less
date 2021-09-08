@@ -14,7 +14,7 @@
     position: absolute;
     top: 33.5px;
     left: 30px;
-    font-size: 10pt;
+    font-size: @text-size;
     text-shadow: 0 0 3px #000;
 
     path {
@@ -29,6 +29,22 @@
     }
     &.is-idle {
       color: @yellow;
+    }
+  }
+
+  .mobile-status {
+    position: absolute;
+    top: 33.5px;
+    left: 30px;
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 30;
+    }
+    &.is-mobile {
+      color: @green;
     }
   }
 

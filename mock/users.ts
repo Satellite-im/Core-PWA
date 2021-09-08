@@ -44,6 +44,16 @@ export const Users = [
     profilePicture:
       'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
+  {
+    name: 'Lady Calliope',
+    address: '0xdc76cd25977e0a5ae17155770273ad58648913d3',
+    status: 'Working on the space station',
+    state: 'mobile',
+    last_message:
+      'To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?',
+    profilePicture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+  },
 ]
 
 export const User = {

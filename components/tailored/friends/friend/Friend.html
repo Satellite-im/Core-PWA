@@ -1,7 +1,12 @@
 <div class="friend">
   <UiCircle type="random" :seed="friend.address" :size="35" />
   <font-awesome-icon
+    :icon="['far', 'mobile-alt']"
+    v-if="friend.state === 'mobile'"
+    :class="`mobile-status is-${friend.state}`" />
+  <font-awesome-icon
     :icon="['fas', 'circle']"
+    v-if="friend.state !== 'mobile'"
     :class="`status is-${friend.state}`" />
   <div class="description">
     <TypographySubtitle :size="6" :text="friend.name" />

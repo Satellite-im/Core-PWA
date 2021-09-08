@@ -61,6 +61,22 @@
       color: @yellow;
     }
   }
+
+  .mobile-status {
+    position: absolute;
+    top: calc(28px + @light-spacing);
+    left: calc(25px + @normal-spacing);
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 30;
+    }
+    &.is-mobile {
+      color: @green;
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) {

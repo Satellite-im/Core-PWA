@@ -1,4 +1,4 @@
-export type UserState = 'online' | 'idle' | 'offline'
+export type UserState = 'online' | 'idle' | 'offline' | 'mobile'
 
 export type Badge = 'verified' | 'community' | 'cameraman'
 

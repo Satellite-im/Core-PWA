@@ -76,6 +76,7 @@ import {
   faShoppingBag,
   faPalette,
   faCubes,
+  faMobileAlt,
 } from '@fortawesome/pro-regular-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -165,5 +166,6 @@ library.add(faShoppingCart)
 library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
+library.add(faMobileAlt)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
