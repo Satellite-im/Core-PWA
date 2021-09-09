@@ -69,6 +69,9 @@ export default Vue.extend({
       const messageBox = this.$refs.messageuser as HTMLElement
       const chatbarGroup = this.$refs.chatbar as HTMLElement
       const wrap = this.$refs.wrap as HTMLElement
+      const hasReply = (this.$refs.chatbar as HTMLElement).classList.contains(
+        'has-reply'
+      )
 
       // set default height to be auto, so it will expand as needed but NOT on every input
       messageBox.style.height = 'auto'
@@ -79,10 +82,12 @@ export default Vue.extend({
       }
       if (messageBox.scrollHeight < 112) {
         messageBox.style.height = `${messageBox.scrollHeight + 2}px`
-        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
+        chatbarGroup.style.height = `${
+          messageBox.scrollHeight + 42 + (hasReply ? 0 : 0)
+        }px` // 36 is the .is-chatbar-reply height
       } else {
         messageBox.style.height = '112px'
-        chatbarGroup.style.height = '152px'
+        chatbarGroup.style.height = `${152 + (hasReply ? 0 : 0)}px` // 36 is the .is-chatbar-reply height
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },

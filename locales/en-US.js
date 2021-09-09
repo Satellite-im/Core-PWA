@@ -234,6 +234,8 @@ export default {
   conversation: {
     encrypted: 'Messages are secured by end to end encryption.',
     reply: 'reply | replies',
+    reply_to: 'You are replying to',
+    multimedia: 'Multimedia content',
   },
   errors: {
     accounts: {

@@ -9,6 +9,11 @@ interface UIState {
   showSearchResult: Boolean
   modals: Object
   chatbarContent: String
+  replyChatbarContent: {
+    id: String
+    from: String
+    payload: String
+  }
   fullscreen: Boolean
   showEnhancers: Boolean
   messages: any[]
@@ -31,6 +36,7 @@ const InitalUIState = (): UIState => ({
     createServer: false,
   },
   chatbarContent: '',
+  replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
   showEnhancers: false,
   messages: [],

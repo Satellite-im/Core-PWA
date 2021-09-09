@@ -1,4 +1,4 @@
-<div id="command-preview" v-if="hasCommand">
+<div id="command-preview" v-if="hasCommand" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
   <TypographySubtitle :size="6" text="Commands" />
   <div id="commands" class="hidden-scroll" v-scroll-lock="true">
     <UiScroll verticalScroll scrollbarVisibility="scroll">
