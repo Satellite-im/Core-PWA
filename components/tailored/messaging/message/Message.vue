@@ -71,10 +71,6 @@ export default Vue.extend({
     },
     mouseOver() {
       this.$data.messageHover = !this.$data.messageHover
-
-      if (this.$props.index === 0) {
-        this.$props.setMessageHover()
-      }
     },
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies

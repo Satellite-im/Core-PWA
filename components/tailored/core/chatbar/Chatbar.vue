@@ -79,10 +79,10 @@ export default Vue.extend({
       }
       if (messageBox.scrollHeight < 112) {
         messageBox.style.height = `${messageBox.scrollHeight + 2}px`
-        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px` // 36 is the .is-chatbar-reply height
+        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
         messageBox.style.height = '112px'
-        chatbarGroup.style.height = `152px` // 36 is the .is-chatbar-reply height
+        chatbarGroup.style.height = `152px`
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },

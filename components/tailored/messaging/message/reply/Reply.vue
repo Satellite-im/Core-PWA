@@ -9,7 +9,6 @@ export default Vue.extend({
   components: {
     VueMarkdown,
   },
-  //   mixins: [ContextMenu],
   props: {
     reply: {
       type: Object as PropType<Reply>,
@@ -21,19 +20,6 @@ export default Vue.extend({
       }),
     },
   },
-  //   data() {
-  //     return {
-  //       disData: 'DataFromTheProperty',
-  //       contextMenuValues: [
-  //         { text: 'Add Reaction', func: (this as any).testFunc },
-  //         { text: 'Reply', func: (this as any).testFunc },
-  //         { text: 'Copy Message', func: (this as any).testFunc },
-  //         { text: 'Copy Image', func: (this as any).testFunc },
-  //         { text: 'Save Image', func: (this as any).testFunc },
-  //         { text: 'Copy Link', func: (this as any).testFunc },
-  //       ],
-  //     }
-  //   },
   methods: {
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
