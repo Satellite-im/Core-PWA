@@ -106,11 +106,14 @@
   }
 }
 
-
-
-
 .sidebar-nav {
   padding: 0 @normal-spacing;
   margin-bottom: @light-spacing;
 }
 
+@media only screen and (max-width: 768px) {
+  #sidebar {
+    z-index: 3;
+    background: @dark-gradient;
+  }
+}

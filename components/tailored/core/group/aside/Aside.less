@@ -30,6 +30,7 @@
     left: -5rem;
     top: 1.8rem;
     z-index: 999;
+    transition: visibility 0.1s;
   }
 
   #top-info {
@@ -87,5 +88,20 @@
     width: 90%;
     height: 1px;
     background: @light-gray;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #aside {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 2;
+    background: @dark-gradient;
+  }
+  .is-open {
+    #aside {
+      transform: translateX(calc(@sidebar-size));
+    }
   }
 }
