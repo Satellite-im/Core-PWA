@@ -16,8 +16,17 @@ export default Vue.extend({
     toggleSidebar() {
       this.$data.sidebar = !this.$data.sidebar
     },
+    showSidebar() {
+      this.$data.sidebar = true
+    },
+    collapseSidebar() {
+      this.$data.sidebar = false
+    },
     changeRoute(route: string) {
       this.$data.page = route
+      if (this.$device.isMobile) {
+        this.collapseSidebar()
+      }
     },
     closeModal() {
       this.$store.commit('toggleSettings', false)
