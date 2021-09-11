@@ -15,8 +15,8 @@ export default Vue.extend({
   },
   computed: {
     cursorPoint(): string {
-      return `transform: translateX(${this.xChild - 25}px) translateY(${
-        this.yChild - 25
+      return `transform: translateX(${this.xChild + 10}px) translateY(${
+        this.yChild + 4
       }px) translateZ(0) translate3d(0, 0, 0);`
     },
   },

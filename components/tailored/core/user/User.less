@@ -3,13 +3,12 @@
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
-  margin: 0 -0.35rem;
   padding: 0.4rem 0.35rem;
   border-radius: @corner-rounding;
   cursor: pointer;
   position: relative;
   user-select: none;
-  width: calc(100% + 0.7rem);
+  width: 100%;
 
   .tag {
     background-color: @primary-color;
@@ -71,7 +70,7 @@
   }
 
   &:hover {
-    background-color: @darker;
+    background: @semitransparent-light-gradient;
   }
 
   .circle {
