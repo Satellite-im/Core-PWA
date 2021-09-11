@@ -1,0 +1,23 @@
+<div
+  :class="`server-sidebar-channel ${getChannelClass()}`"
+  v-on:click="setActiveChannel(channel)">
+  <span class="channel-name" v-if="channel.type === 'text'">
+    <font-awesome-icon :icon="['far', 'hashtag']" />
+    {{channel.name}}
+  </span>
+  <span class="channel-name" v-if="channel.type === 'label'">
+    <font-awesome-icon :icon="['far', 'tag']" />
+    {{channel.name}}
+  </span>
+  <span class="channel-name" v-else-if="channel.type === 'feed'">
+    <font-awesome-icon :icon="['far', 'rss']" />
+    {{channel.name}}
+  </span>
+  <span class="channel-name" v-else-if="channel.type === 'voice'">
+    <font-awesome-icon :icon="['far', 'volume']" />
+    {{channel.name}}
+  </span>
+  <div class="voice-group" v-for="user in channel.users">
+    <TailoredServersSidebarChannelsVoiceUser :user="user" />
+  </div>
+</div>

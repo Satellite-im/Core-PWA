@@ -1,0 +1,15 @@
+<div class="server-sidebar-group">
+  <h5 v-on:click="toggleCollapse">
+    <font-awesome-icon :icon="['far', 'chevron-right']" v-if="collapsed" />
+    <font-awesome-icon :icon="['far', 'chevron-down']" v-else />
+    <span class="server-sidebar-group-name">{{group.name}}</span>
+    <div class="has-tooltip has-tooltip-primary has-tooltip-top add-channel" data-tooltip="Add Channel">
+      <font-awesome-icon :icon="['far', 'plus']" />
+    </div>
+  </h5>
+  <div v-for="channel in group.channels" :class="`${collapsed ? 'collapsed' : 'expanded'}`">
+    <TailoredServersSidebarChannelsChannel
+    :channel="channels[channel]"
+    :setActiveChannel="setActiveChannel" />
+  </div>
+</div>

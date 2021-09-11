@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/named
 import { Commit, Dispatch } from 'vuex'
+import { Channel } from '~/types/ui/server'
 
 interface ActionsArguments {
   commit: Commit
@@ -17,4 +18,7 @@ export default {
   setIsScrollOver({ commit }: ActionsArguments, status: boolean) {
     commit('setIsScrollOver', status)
   },
+  setActiveChannel({ commit }: ActionsArguments, channel: Channel) {
+    commit('setActiveChannel', channel)
+  }
 }

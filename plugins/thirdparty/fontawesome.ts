@@ -44,6 +44,9 @@ import {
   faExpand,
   faFile,
   faFileAlt,
+  faRss,
+  faTag,
+  faHashtag,
   faFileDownload,
   faFilePlus,
   faFolder,
@@ -140,6 +143,9 @@ library.add(faLink)
 library.add(faTimes)
 library.add(faThumbtack)
 library.add(faFile)
+library.add(faTag)
+library.add(faHashtag)
+library.add(faRss)
 library.add(faFileDownload)
 library.add(faCircleNotch)
 library.add(faCommentAltDots)

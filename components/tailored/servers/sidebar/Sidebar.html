@@ -3,17 +3,29 @@
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
   >
-  <TypographyTitle :size="6" :text="$t('global.name')" />
-  <UiSpacer :height="15" />
-  <font-awesome-icon :icon="['far', 'bars']" class="toggle-sidebar" v-on:click="toggle" />
-  <InteractablesInput
-    :placeholder="`${$t('global.search')}...`"
-    size="small"
-    input-kind="text"
-    type="dark"
-  />
-  <UiSpacer :height="15" />
+  <div class="sidebar-inner">
+    <div class="sidebar-search">
+      <font-awesome-icon
+        :icon="['far', 'bars']"
+        class="toggle-sidebar"
+        v-on:click="toggle"
+        full-width
+      />
+      <InteractablesInput
+        :placeholder="`${$t('global.search')}...`"
+        size="small"
+        input-kind="text"
+        :delete-icon="true"
+        type="dark"
+        full-width
+      />
+    </div>
+    <TailoredServersSidebarChannels />
+  </div>
+  <div class="filler"></div>
 
-  <TailoredCoreSidebarControls />
-  <TailoredCoreSidebarStatus />
+  <div class="controls">
+    <TailoredCoreSidebarControls />
+    <TailoredCoreSidebarStatus />
+  </div>
 </div>
