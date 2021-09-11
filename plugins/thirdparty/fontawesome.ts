@@ -18,6 +18,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import * as fal from '@fortawesome/pro-light-svg-icons'
 import {
+  faPlusSquare,
+  faMinusSquare,
   faArchive,
   faArrowCircleRight,
   faBackspace,
@@ -116,6 +118,8 @@ library.add(faUserFriends)
 library.add(faCommentAltLines)
 library.add(faMicrophoneAlt)
 library.add(faHeadphonesAlt)
+library.add(faPlusSquare)
+library.add(faMinusSquare)
 library.add(faCog)
 library.add(faCircle)
 library.add(faPhone)
