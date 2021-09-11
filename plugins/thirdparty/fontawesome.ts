@@ -11,6 +11,9 @@ import {
   faHeart as faHeartFull,
   faShoppingBag as faShoppingBagFull,
   faShoppingCart,
+  faRibbon,
+  faCertificate,
+  faOtter,
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as fal from '@fortawesome/pro-light-svg-icons'
@@ -174,6 +177,9 @@ library.add(faCrown)
 library.add(faEllipsisH)
 library.add(faInfoCircle)
 library.add(faIdBadge)
+library.add(faRibbon)
+library.add(faCertificate)
+library.add(faOtter)
 library.add(faClock)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

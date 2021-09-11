@@ -2,7 +2,7 @@
     <div id="settings" 
     :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`"
     >
-    <div class="sidebar is-secondary-background">
+    <div class="sidebar is-secondary-background" v-touch:swipe.left="collapseSidebar" v-touch:swipe.right="showSidebar">
       <UiScroll verticalScroll>
         <TailoredSettingsSidebar
           :title="$t('global.settings')"
