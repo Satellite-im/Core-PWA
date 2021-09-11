@@ -1,23 +1,37 @@
+#custom-cursor-area {
+  width: 100%;
+  height: 100%;
+  > * {
+    pointer-events: none;
+  }
+  // &.hide {
+  //   #custom-cursor {
+  //     display: none;
+  //   }
+  // }
+}
+
 #custom-cursor {
   top: 0;
   left: 0;
-  position: fixed;
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  width: 80px;
+  height: 80px;
   pointer-events: none;
   user-select: none;
   border-radius: 100%;
   z-index: 55555555;
   backface-visibility: hidden;
   will-change: transform;
-  box-shadow: 0 0 8px #fff, inset 0 0 8px #fff;
-  -webkit-animation: pulse 2s linear 1s infinite;
+  // box-shadow: 0 0 8px #fff, inset 0 0 8px #fff;
+  // -webkit-animation: pulse 2s linear 1s infinite;
   background: -webkit-radial-gradient(
+    rgba(255, 255, 255, 1),
     rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.7)
+    rgba(134, 86, 86, 0.1)
   );
-  opacity: 0.4;
+  box-shadow: 120px 80px 40px 20px #000;
+  opacity: 0.1;
 }
 
 @-webkit-keyframes pulse {
