@@ -1,4 +1,5 @@
 import { NuxtState } from '@nuxt/types/app'
+import { Channel } from '~/types/ui/server'
 
 export default {
   toggleContextMenu(state: NuxtState, enabled: Boolean) {
@@ -114,6 +115,12 @@ export default {
     state.ui = {
       ...state.ui,
       isTyping: user,
+    }
+  },
+  setActiveChannel(state: NuxtState, channel: Channel) {
+    state.ui = {
+      ...state.ui,
+      activeChannel: channel,
     }
   },
   setReplyChatbarContent(

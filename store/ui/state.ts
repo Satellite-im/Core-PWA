@@ -1,3 +1,5 @@
+import { Channel } from "~/types/ui/server"
+
 interface UIState {
   contextMenuStatus: Boolean
   contextMenuValues: Array<Object>
@@ -20,6 +22,7 @@ interface UIState {
   unreadMessage: number
   isScrollOver: boolean
   isTyping: Object | Boolean
+  activeChannel: Channel | undefined
 }
 
 const InitalUIState = (): UIState => ({
@@ -43,6 +46,7 @@ const InitalUIState = (): UIState => ({
   unreadMessage: 0,
   isScrollOver: false,
   isTyping: false,
+  activeChannel: undefined,
 })
 
 export default InitalUIState

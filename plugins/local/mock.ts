@@ -8,7 +8,7 @@ import {
   marketProducts,
 } from '~/mock/marketplace'
 import { Messages } from '~/mock/messages'
-import { Servers, Unreads } from '~/mock/servers'
+import { Servers, Unreads, ServerInfo } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
 
 const mock = {
@@ -18,6 +18,9 @@ const mock = {
   groups: Groups,
   group: ExampleGroup,
   servers: Servers,
+  server: {
+    info: ServerInfo
+  },
   unreads: Unreads,
   messages: Messages,
   marketplace: {
