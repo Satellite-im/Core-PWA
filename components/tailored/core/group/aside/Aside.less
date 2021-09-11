@@ -7,6 +7,7 @@
   position: relative;
   display: inline-flex;
   height: 100%;
+  padding-left: @light-spacing;
   // background-color: @dark-gray;
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@
     box-shadow: @ui-shadow;
     margin-right: @normal-spacing;
     margin-left: @light-spacing;
+    padding: @light-spacing;
   }
 
   .info-toggle {
@@ -36,16 +38,10 @@
   #top-info {
     width: 100%;
     height: 46px;
-    padding: 1rem;
+    padding: 0 @light-spacing;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .toggle-asidebar {
-      font-size: 20px;
-      color: @primary-color;
-    }
-
     .title {
       margin-bottom: 0;
     }
@@ -53,7 +49,7 @@
 
   #actions {
     width: 100%;
-    padding: 1rem;
+    padding: 0 @light-spacing;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -61,33 +57,30 @@
       padding: 10px;
       height: 10px;
       width: 20px;
-      font-size: 10px;
+      font-size: @small-icon-size;
     }
     .circle-flex {
       background: @semitransparent-lightest-gradient !important;
-      box-shadow: @ui-shadow;
       cursor: pointer;
+      font-size: @tiny-icon-size !important;
+      
+      &:hover {
+        background: @primary-gradient !important;
+        box-shadow: @primary-glow;
+      }
     }
   }
 
   #members {
     width: 100%;
-    padding: 1rem;
     max-height: calc(100% - 8.5rem);
     #members-number {
       display: flex;
       margin-bottom: 0.5rem;
       .is-text {
         text-align: left;
-        margin-right: 0.4rem;
       }
     }
-  }
-
-  .separator {
-    width: 90%;
-    height: 1px;
-    background: @light-gray;
   }
 }
 
