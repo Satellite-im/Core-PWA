@@ -15,9 +15,7 @@
         <UiHorizontalRule />
         <div id="members">
             <div id="members-number">
-                <TypographyText :size="6" text="Members" />
-                <TypographyText :size="6" text="-" />
-                <TypographyText :size="6" :text="members.length.toString()" />
+                <TypographyText :size="6" :text="`Members - ${members.length.toString()}`"  />
             </div>
             <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
                 <UiUser v-for="member in members" :user="member" :key="member.address"
