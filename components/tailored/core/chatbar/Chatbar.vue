@@ -82,7 +82,7 @@ export default Vue.extend({
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
         messageBox.style.height = '112px'
-        chatbarGroup.style.height = '152px'
+        chatbarGroup.style.height = `152px`
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },

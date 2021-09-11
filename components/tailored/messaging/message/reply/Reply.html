@@ -1,0 +1,21 @@
+<div class="is-reply">
+    <span v-on:click="showQuickProfile">
+        <UiCircle type="random" :seed="reply.from" :size="35" />
+    </span>
+    <div class="reply-body">
+        <div class="reply-heading">
+            <span v-on:click="showQuickProfile">
+                <UiUsername :username="$mock.users.filter(u => u.address === reply.from)[0].name"
+                :badge="$mock.users.filter(u => u.address === reply.from)[0].badge" />
+            </span>
+            <TypographyText :text="$dayjs(reply.at).from()" />
+        </div>
+        <div class="reply-content">
+            <VueMarkdown v-if="reply.type === 'text'" :source="reply.payload" class="markdown" />
+            <UiImage v-else-if="reply.type === 'image'" :source="reply.payload.url" alt="" />
+            <UiEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
+            <UiEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
+            <UiEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
+        </div>
+    </div>
+</div>

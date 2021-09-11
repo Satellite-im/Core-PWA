@@ -6,6 +6,12 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
 import { Message } from '~/types/messaging'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    setReplyChatbarContent: () => void
+  }
+}
+
 export default Vue.extend({
   components: {
     VueMarkdown,
@@ -21,14 +27,38 @@ export default Vue.extend({
         payload: 'Invalid Message',
       }),
     },
+    from: {
+      type: String,
+      default: '',
+    },
+    index: {
+      type: Number,
+      default: -1,
+    },
+    setMessageHover: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     return {
+      showReplies: false,
+      messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
         { text: 'Add Reaction', func: (this as any).testFunc },
-        { text: 'Reply', func: (this as any).testFunc },
-        { text: 'Copy Message', func: (this as any).testFunc },
+        { text: 'Reply', func: this.setReplyChatbarContent },
+        {
+          text: 'Copy Message',
+          func: () => {
+            const { type, payload } = this.$props.message
+            let finalPayload = payload
+            if (['image', 'video', 'audio', 'file'].includes(type)) {
+              finalPayload = this.$t('conversation.multimedia')
+            }
+            navigator.clipboard.writeText(finalPayload)
+          },
+        },
         { text: 'Copy Image', func: (this as any).testFunc },
         { text: 'Save Image', func: (this as any).testFunc },
         { text: 'Copy Link', func: (this as any).testFunc },
@@ -38,6 +68,26 @@ export default Vue.extend({
   methods: {
     testFunc() {
       console.log('Message Func Testing ' + this.$data.disData)
+    },
+    mouseOver() {
+      this.$data.messageHover = !this.$data.messageHover
+    },
+    toggleReplies() {
+      this.$data.showReplies = !this.$data.showReplies
+    },
+    setReplyChatbarContent() {
+      this.$data.showReplies = true
+      const { id, type, payload } = this.$props.message
+      let finalPayload = payload
+      if (['image', 'video', 'audio', 'file'].includes(type)) {
+        finalPayload = `*${this.$t('conversation.multimedia')}*`
+      }
+
+      this.$store.commit('setReplyChatbarContent', {
+        id,
+        payload: finalPayload,
+        from: this.$props.from,
+      })
     },
   },
 })
