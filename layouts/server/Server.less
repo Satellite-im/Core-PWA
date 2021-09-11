@@ -49,6 +49,17 @@
       min-width: 0;
       justify-content: flex-end;
       transition: height 0.3s;
+
+      &.has-reply {
+        .chatbar-wrap {
+          margin-top: 0;
+          border-top: 0;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          border-bottom-left-radius: @corner-rounding;
+          border-bottom-right-radius: @corner-rounding;
+        }
+      }
     }
 
     #mediastream {

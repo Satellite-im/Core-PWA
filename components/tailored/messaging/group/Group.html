@@ -12,7 +12,7 @@
       <TypographyText :text="$dayjs(group.at).from()" />
     </div>
     <div class="group-messages">
-      <TailoredMessagingMessage v-for="message in group.messages" :message="message" :key="message.id" :group="group" />
+      <TailoredMessagingMessage v-for="message in group.messages" :group="group" :message="message" :from="$mock.users.filter(u => u.address === group.from)[0].name" :key="message.id" />
     </div>
   </div>
 </div>

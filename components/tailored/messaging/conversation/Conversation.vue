@@ -16,20 +16,6 @@ export default Vue.extend({
       default: () => [],
     },
   },
-  data() {
-    return {
-      updated: Date.now(),
-      updateInterval: null,
-    }
-  },
-  mounted() {
-    this.$data.updateInterval = setInterval(() => {
-      this.updated = Date.now()
-    }, 60000)
-  },
-  beforeDestroy() {
-    clearInterval(this.$data.updateInterval)
-  },
 })
 </script>
 <style scoped lang="less" src="./Conversation.less"></style>

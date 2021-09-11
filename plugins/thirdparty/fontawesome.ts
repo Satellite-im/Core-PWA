@@ -7,15 +7,19 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCircle,
   faCrown,
-  faEllipsisH,
+  faEllipsisH as faEllipsisHSolid,
   faHeart as faHeartFull,
+  faReply,
   faShoppingBag as faShoppingBagFull,
   faShoppingCart,
+  faRibbon,
+  faCertificate,
+  faOtter,
 } from '@fortawesome/free-solid-svg-icons'
-
 import * as fal from '@fortawesome/pro-light-svg-icons'
-
 import {
+  faPlusSquare,
+  faMinusSquare,
   faArchive,
   faArrowCircleRight,
   faBackspace,
@@ -26,6 +30,7 @@ import {
   faChevronRight,
   faCircleNotch,
   faClipboard,
+  faClock,
   faCog,
   faCommentAltDots,
   faCommentAltLines,
@@ -34,6 +39,7 @@ import {
   faCubes,
   faDesktopAlt,
   faDownload,
+  faEllipsisH,
   faEllipsisV,
   faExpand,
   faFile,
@@ -48,6 +54,7 @@ import {
   faHeart,
   faHistory,
   faHome,
+  faIdBadge,
   faImage,
   faInfoCircle,
   faKeySkeleton,
@@ -55,6 +62,7 @@ import {
   faLock,
   faLockOpen,
   faMicrophoneAlt,
+  faMobileAlt,
   faPalette,
   faPeopleArrows,
   faPhone,
@@ -86,12 +94,7 @@ import {
   faVolumeMute,
   faVolumeOff,
   faVolumeUp,
-  faIdBadge,
-  faClock,
-  faSmilePlus,
-  faReply,
 } from '@fortawesome/pro-regular-svg-icons'
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
 
@@ -115,6 +118,8 @@ library.add(faUserFriends)
 library.add(faCommentAltLines)
 library.add(faMicrophoneAlt)
 library.add(faHeadphonesAlt)
+library.add(faPlusSquare)
+library.add(faMinusSquare)
 library.add(faCog)
 library.add(faCircle)
 library.add(faPhone)
@@ -125,6 +130,7 @@ library.add(faArchive)
 library.add(faFileAlt)
 library.add(faSort)
 library.add(faEllipsisV)
+library.add(faEllipsisH)
 library.add(faLock)
 library.add(faSync)
 library.add(faHome)
@@ -172,12 +178,15 @@ library.add(faShoppingCart)
 library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
+library.add(faMobileAlt)
 library.add(faCrown)
-library.add(faEllipsisH)
+library.add(faEllipsisHSolid)
 library.add(faInfoCircle)
 library.add(faIdBadge)
+library.add(faRibbon)
+library.add(faCertificate)
+library.add(faOtter)
 library.add(faClock)
-library.add(faSmilePlus)
 library.add(faReply)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)

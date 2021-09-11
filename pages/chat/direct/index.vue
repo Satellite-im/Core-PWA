@@ -10,6 +10,7 @@ export default Vue.extend({
     return {
       loading: true,
       updateInterval: null,
+      testMsgSent: 0,
     }
   },
   mounted() {
@@ -32,6 +33,8 @@ export default Vue.extend({
   },
   methods: {
     sendMessageAutomatically() {
+      this.$data.testMsgSent += 1
+      if (this.$data.testMsgSent > 5) clearInterval(this.$data.updateInterval)
       this.$store.dispatch('sendMessage', {
         value: 'Test Message',
         user: this.$mock.friend,

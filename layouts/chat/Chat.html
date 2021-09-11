@@ -31,6 +31,7 @@
       <Nuxt ref="chat" id="chat" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="$store.state.ui.chatbarContent" />
+      <TailoredCoreChatbarReply />
       <TailoredCoreChatbar />
     </div>
     <TailoredCoreGroupAside :toggle="() => $data.asidebar = !$data.asidebar"

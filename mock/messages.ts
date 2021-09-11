@@ -21,6 +21,7 @@ export const Messages = [
         type: 'text',
         payload:
           'Cosmic ipsum probe solstice vernal equinox red dwarf libration double star perigee cosmos cislunar hyperbolic orbit pole star black body meteor shower Jupiter transparency',
+        replies: [],
       },
       {
         id: '00-00-11',
@@ -28,6 +29,7 @@ export const Messages = [
         type: 'text',
         payload:
           'Doppler shift quasar astronomer conjunction dark matter solar Pluto cosmonaut azimuth inner planets supernova new moon libration',
+        replies: [],
       },
     ],
   },
@@ -47,12 +49,14 @@ export const Messages = [
         at: 1620515545000,
         type: 'text',
         payload: 'I am a ~~tast~~ **test**. :smile:',
+        replies: [],
       },
       {
         id: '00-20-04',
         at: 1620515545000,
         type: 'text',
         payload: 'And a follow up to that response message',
+        replies: [],
       },
     ],
   },
@@ -69,6 +73,7 @@ export const Messages = [
         type: 'text',
         payload:
           'Uranus orbit seeing globular cluster Milky Way quasar total eclipse gas giant penumbra quarter moon sun Kirkwood gaps orbital eccentricity vacuum occultation background radiation helium Mir perihelion Neptune inclination Mars corona circumpolar terrestrial binary star perturbation nebula revolve ',
+        replies: [],
       },
       {
         id: '00-123193-10',
@@ -80,6 +85,7 @@ export const Messages = [
           size: 19203,
           src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
+        replies: [],
       },
       {
         id: '00-00-11',
@@ -87,6 +93,7 @@ export const Messages = [
         type: 'text',
         payload:
           'NASA precession cislunar dark matter terminator bolometer red shift yellow dwarf white giant north star transparency celestial probe azimuth ephemeris Venus albedo perigee star',
+        replies: [],
       },
     ],
   },
@@ -107,6 +114,7 @@ export const Messages = [
           filename: 'big_buck_bunny.mp4',
           src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         },
+        replies: [],
       },
     ],
   },
@@ -127,6 +135,16 @@ export const Messages = [
         type: 'text',
         payload:
           'Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric',
+        replies: [
+          {
+            id: '01-432-138',
+            from: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+            to: '00-d0-10',
+            type: 'text',
+            at: 1620515583000,
+            payload: 'This is a late message reply',
+          },
+        ],
       },
       {
         id: '00-c0-11',
@@ -136,6 +154,7 @@ export const Messages = [
           type: 'img/png',
           url: 'https://i.redd.it/buk8te6ried61.png',
         },
+        replies: [],
       },
     ],
   },
@@ -152,7 +171,28 @@ export const Messages = [
         type: 'text',
         payload:
           'Mir local arm starlight day eccentricity Saturn falling star Mars astronomy gravitation',
+<<<<<<< HEAD
         reactions: [],
+=======
+        replies: [
+          {
+            id: '02-432-138',
+            from: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+            to: '00-00-03',
+            type: 'text',
+            at: 1620515543000,
+            payload: 'This is a message reply',
+          },
+          {
+            id: '02-432-338',
+            from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+            to: '00-00-03',
+            type: 'text',
+            at: 1620515563000,
+            payload: 'This is a message reply',
+          },
+        ],
+>>>>>>> 1d4a93fa85efc00967d185b6cb078ea881d1abda
       },
       {
         id: '00-1293-10',
@@ -164,6 +204,7 @@ export const Messages = [
           filename: 'breakaway.mp3',
           src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
+<<<<<<< HEAD
         reactions: [{ emoji: '😤', reactors: ['user3'] }],
       },
     ],
@@ -191,6 +232,9 @@ export const Messages = [
           { emoji: '👍', reactors: ['user1'] },
           { emoji: '🚀', reactors: ['user1', 'user2', 'user3'] },
         ],
+=======
+        replies: [],
+>>>>>>> 1d4a93fa85efc00967d185b6cb078ea881d1abda
       },
     ],
   },

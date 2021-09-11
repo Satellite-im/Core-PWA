@@ -87,6 +87,7 @@ export default {
         at: Date.now(),
         type: 'text',
         payload: message.value,
+        replies: [],
       }
       if (lastMessage.from === message.user.address) {
         state.ui.messages[lastIndex].messages.push({
@@ -178,6 +179,19 @@ export default {
           }
         }
       }
+    }
+  },
+  setReplyChatbarContent(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    state.ui = {
+      ...state.ui,
+      replyChatbarContent: message,
     }
   },
 }

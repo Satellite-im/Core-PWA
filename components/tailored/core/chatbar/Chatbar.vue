@@ -82,7 +82,7 @@ export default Vue.extend({
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
         messageBox.style.height = '112px'
-        chatbarGroup.style.height = '152px'
+        chatbarGroup.style.height = `152px`
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },
@@ -103,6 +103,12 @@ export default Vue.extend({
             }
           }
           break
+        case 'Enter':
+          if (!event.shiftKey) {
+            event.preventDefault()
+            this.sendMessage()
+          }
+          break
       }
       return true
     },
@@ -113,6 +119,9 @@ export default Vue.extend({
         isOwner: true,
       })
       this.value = ''
+      this.$nextTick(() => {
+        this.autoGrow()
+      })
     },
   },
 })

@@ -3,13 +3,12 @@
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
-  margin: 0 -0.35rem;
   padding: 0.4rem 0.35rem;
   border-radius: @corner-rounding;
   cursor: pointer;
   position: relative;
   user-select: none;
-  width: calc(100% + 0.7rem);
+  width: 100%;
 
   .tag {
     background-color: @primary-color;
@@ -36,7 +35,7 @@
     position: absolute;
     top: 33.5px;
     left: 30px;
-    font-size: 10pt;
+    font-size: @text-size;
     text-shadow: 0 0 3px #000;
 
     path {
@@ -54,8 +53,24 @@
     }
   }
 
+  .mobile-status {
+    position: absolute;
+    top: 33.5px;
+    left: 30px;
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 30;
+    }
+    &.is-mobile {
+      color: @green;
+    }
+  }
+
   &:hover {
-    background-color: @darker;
+    background: @semitransparent-light-gradient;
   }
 
   .circle {

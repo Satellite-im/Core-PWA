@@ -1,4 +1,3 @@
-
 .friend {
   position: relative;
   padding: @light-spacing @normal-spacing;
@@ -18,7 +17,8 @@
 
   .description {
     margin-left: @normal-spacing;
-    p, h1 {
+    p,
+    h1 {
       margin: 0;
       font-size: @mini-text-size;
     }
@@ -34,8 +34,8 @@
     justify-self: flex-end;
     align-self: center;
     float: right;
+    min-width: 4.8rem;
   }
-
 
   .spacer {
     flex: 1;
@@ -59,6 +59,22 @@
     }
     &.is-idle {
       color: @yellow;
+    }
+  }
+
+  .mobile-status {
+    position: absolute;
+    top: calc(28px + @light-spacing);
+    left: calc(25px + @normal-spacing);
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 30;
+    }
+    &.is-mobile {
+      color: @green;
     }
   }
 }

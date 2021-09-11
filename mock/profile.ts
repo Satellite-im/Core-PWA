@@ -7,7 +7,7 @@ import {
 export const profileBadges = [
   {
     type: ProfileBadgeType.Type1,
-    badge: { color: 'red', icon: ['fas', 'id-badge'] },
+    badge: { color: 'red', icon: ['far', 'id-badge'] },
   },
   {
     type: ProfileBadgeType.Type2,
