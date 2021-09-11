@@ -103,6 +103,12 @@ export default Vue.extend({
             }
           }
           break
+        case 'Enter':
+          if (!event.shiftKey) {
+            event.preventDefault()
+            this.sendMessage()
+          }
+          break
       }
       return true
     },
@@ -113,6 +119,9 @@ export default Vue.extend({
         isOwner: true,
       })
       this.value = ''
+      this.$nextTick(() => {
+        this.autoGrow()
+      })
     },
   },
 })
