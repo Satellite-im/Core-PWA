@@ -109,3 +109,5 @@ export const UserPermissions = {
     },
   },
 }
+
+export default UserPermissions

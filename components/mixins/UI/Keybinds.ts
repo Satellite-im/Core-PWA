@@ -52,3 +52,5 @@ export const Keybinds = {
     callActiveChat() {},
   },
 }
+
+export default Keybinds

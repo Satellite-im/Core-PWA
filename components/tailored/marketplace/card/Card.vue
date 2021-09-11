@@ -10,11 +10,6 @@ export default Vue.extend({
       default: null as ProductItem | null,
     },
   },
-  data() {
-    return {}
-  },
-  computed: {},
-  methods: {},
 })
 </script>
 

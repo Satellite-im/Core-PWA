@@ -15,3 +15,5 @@ export const mobileSwipe = {
     },
   },
 }
+
+export default mobileSwipe

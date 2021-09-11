@@ -19,7 +19,6 @@ export default Vue.extend({
       recommendLocations,
     }
   },
-  methods() {},
 })
 </script>
 
