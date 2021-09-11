@@ -39,6 +39,14 @@ export const Friends = [
     last_message:
       'Network of wormholes science citizens of distant epochs tingling of the spine cosmic ocean brain is the seed of intelligence. The sky calls to us two ghostly white figures in coveralls and helmets are softly dancing muse about paroxysm of global death the only home weve ever known hearts of the stars.',
   },
+  {
+    name: 'Lady Calliope',
+    address: '0xdc76cd25977e0a5ae17155770273ad58648913d3',
+    status: 'Working on the space station',
+    state: 'mobile',
+    last_message:
+      'To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?',
+  },
 ]
 
 export const Requests = [
