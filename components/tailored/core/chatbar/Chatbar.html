@@ -1,4 +1,4 @@
-<div id="chatbar" ref="chatbar">
+<div id="chatbar" ref="chatbar" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
   <div
     :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
     ref="wrap"

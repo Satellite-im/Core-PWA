@@ -7,17 +7,16 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCircle,
   faCrown,
-  faEllipsisH,
+  faEllipsisH as faEllipsisHSolid,
   faHeart as faHeartFull,
+  faReply,
   faShoppingBag as faShoppingBagFull,
   faShoppingCart,
   faRibbon,
   faCertificate,
   faOtter,
 } from '@fortawesome/free-solid-svg-icons'
-
 import * as fal from '@fortawesome/pro-light-svg-icons'
-
 import {
   faArchive,
   faArrowCircleRight,
@@ -29,6 +28,7 @@ import {
   faChevronRight,
   faCircleNotch,
   faClipboard,
+  faClock,
   faCog,
   faCommentAltDots,
   faCommentAltLines,
@@ -37,6 +37,7 @@ import {
   faCubes,
   faDesktopAlt,
   faDownload,
+  faEllipsisH,
   faEllipsisV,
   faExpand,
   faFile,
@@ -51,6 +52,7 @@ import {
   faHeart,
   faHistory,
   faHome,
+  faIdBadge,
   faImage,
   faInfoCircle,
   faKeySkeleton,
@@ -89,10 +91,7 @@ import {
   faVolumeMute,
   faVolumeOff,
   faVolumeUp,
-  faIdBadge,
-  faClock,
 } from '@fortawesome/pro-regular-svg-icons'
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
 
@@ -126,6 +125,7 @@ library.add(faArchive)
 library.add(faFileAlt)
 library.add(faSort)
 library.add(faEllipsisV)
+library.add(faEllipsisH)
 library.add(faLock)
 library.add(faSync)
 library.add(faHome)
@@ -174,12 +174,13 @@ library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
 library.add(faCrown)
-library.add(faEllipsisH)
+library.add(faEllipsisHSolid)
 library.add(faInfoCircle)
 library.add(faIdBadge)
 library.add(faRibbon)
 library.add(faCertificate)
 library.add(faOtter)
 library.add(faClock)
+library.add(faReply)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
