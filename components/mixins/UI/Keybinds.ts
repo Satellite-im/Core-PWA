@@ -44,10 +44,8 @@ export const Keybinds = {
       this.$store.commit('deafen')
     },
     openSettings() {
-      const route = this.$router.currentRoute.path
-      route.includes('settings')
-        ? this.$router.back()
-        : this.$router.push('/settings/personalize')
+      const showSettings = this.$store.state.ui.showSettings
+      this.$store.commit('toggleSettings', !showSettings)
     },
     callActiveChat() {},
   },
