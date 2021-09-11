@@ -60,6 +60,7 @@ import {
   faLock,
   faLockOpen,
   faMicrophoneAlt,
+  faMobileAlt,
   faPalette,
   faPeopleArrows,
   faPhone,
@@ -173,6 +174,7 @@ library.add(faShoppingCart)
 library.add(faHeartFull)
 library.add(faCubes)
 library.add(faPalette)
+library.add(faMobileAlt)
 library.add(faCrown)
 library.add(faEllipsisHSolid)
 library.add(faInfoCircle)
