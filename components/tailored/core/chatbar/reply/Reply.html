@@ -1,5 +1,5 @@
 <div v-if="$store.state.ui.replyChatbarContent.id" class="is-chatbar-reply">
-    <VueMarkdown :source="`${$t('conversation.reply_to')} **${$store.state.ui.replyChatbarContent.from}**: ${$store.state.ui.replyChatbarContent.payload}`" class="markdown" />
+    <VueMarkdown :source="`${$t('conversation.reply_to')} **${$store.state.ui.replyChatbarContent.from}:** ${$store.state.ui.replyChatbarContent.payload}`" class="markdown" />
     <div class="reply-close" @click="setReplyChatbarContent">
         <font-awesome-icon :icon="['far', 'times-circle']" />
     </div>

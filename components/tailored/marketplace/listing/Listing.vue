@@ -10,8 +10,6 @@ export default Vue.extend({
       marketProducts,
     }
   },
-  computed: {},
-  methods: {},
 })
 </script>
 
