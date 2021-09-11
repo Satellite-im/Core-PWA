@@ -62,10 +62,6 @@ export default Vue.extend({
       color: @text;
     }
 
-    .emoji-icon:hover {
-      transition: 200ms;
-      transform: rotate(1turn);
-    }
   }
 }
 </style>
