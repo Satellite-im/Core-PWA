@@ -59,7 +59,8 @@
 .fullscreen-media {
   #mediastream {
     max-height: unset;
-    height: 16rem;
+    height: calc(100% - @statusbar-height - @light-spacing);
+    margin-bottom: 1rem;
     #media {
       justify-content: center;
       flex-direction: row;

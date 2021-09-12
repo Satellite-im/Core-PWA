@@ -57,6 +57,7 @@ export default Vue.extend({
         media.style.paddingTop = ''
         media.style.paddingBottom = ''
       } else {
+        // TODO: Listen to scroll event instead..
         setTimeout(() => {
           const isFit = function (
             viewportWidth: number,
