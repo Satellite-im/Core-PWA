@@ -5,6 +5,10 @@
   white-space: nowrap;
 }
 
+.offset {
+  top: 20.5rem;
+}
+
 .enable-wrap {
   white-space: normal !important;
 }
@@ -40,13 +44,15 @@
 }
 
 .new-message-alert {
-  position: fixed;
+  position: absolute;
   background: @primary-color;
   cursor: pointer;
-  padding: 2px 20px;
   font-size: 14px;
-  border-radius: 6px;
-  z-index: 1000;
+  width: calc(100% - 2.2rem);
+  margin-left: 1rem;
+  border-radius: 0 0 @corner-rounding @corner-rounding;
+  z-index: @base-z-index + 3;
+  padding: (@light-spacing / 2 ) @light-spacing;
   span {
     float: right;
   }

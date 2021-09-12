@@ -33,7 +33,7 @@ export default Vue.extend({
       loaded: false,
       newMessageAlert: false,
       newMessageAlertPos: {
-        top: 0,
+        top: this.$store.state.ui.mediaOpen ? 5 : 0,
         right: 30,
         width: 0,
       },
