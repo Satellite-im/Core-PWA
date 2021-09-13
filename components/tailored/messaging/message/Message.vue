@@ -4,7 +4,7 @@ import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
-import { Message } from '~/types/messaging'
+import { Message, Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -27,6 +27,10 @@ export default Vue.extend({
         payload: 'Invalid Message',
       }),
     },
+    group: {
+      type: Object as PropType<Group>,
+      default: () => {},
+    },
     from: {
       type: String,
       default: '',
@@ -46,7 +50,7 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
-        { text: 'Add Reaction', func: (this as any).testFunc },
+        { text: 'Add Reaction', func: (this as any).emojiReaction },
         { text: 'Reply', func: this.setReplyChatbarContent },
         {
           text: 'Copy Message',
@@ -88,6 +92,14 @@ export default Vue.extend({
         payload: finalPayload,
         from: this.$props.from,
       })
+    },
+    emojiReaction() {
+      this.$store.commit('settingReaction', {
+        status: true,
+        groupID: this.$props.group.id,
+        messageID: this.$props.message.id,
+      })
+      this.$store.commit('toggleEnhancers', true)
     },
   },
 })
