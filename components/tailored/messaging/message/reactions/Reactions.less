@@ -1,0 +1,30 @@
+.emoji-reactions {
+  display: flex;
+  .emoji-reaction {
+    background-color: @dark-gray;
+    border: 1px solid @gray;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 4px;
+    cursor: pointer;
+    text-align: center;
+    max-width: 3.5rem;
+  }
+  .emoji-icon {
+    font-size: 1.1rem;
+    margin: 12px 4px 4px 8px;
+    cursor: pointer;
+  }
+  .reactors {
+    display: none; 
+    position: absolute;
+    background-color: @dark-gray;
+    padding: 2px 4px;
+    border: 1px solid @gray;
+    border-radius: 4px;
+    z-index: @base-z-index + 2;
+    .reactor {
+      margin: 0px 4px;
+    }
+  }
+}

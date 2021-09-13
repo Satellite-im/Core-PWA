@@ -97,6 +97,7 @@ import {
   faVolumeMute,
   faVolumeOff,
   faVolumeUp,
+  faSmilePlus,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
@@ -194,5 +195,6 @@ library.add(faCertificate)
 library.add(faOtter)
 library.add(faClock)
 library.add(faReply)
+library.add(faSmilePlus)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
