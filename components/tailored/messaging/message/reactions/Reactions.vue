@@ -23,6 +23,7 @@ export default Vue.extend({
   data() {
     return {
       showReactors: {},
+      hovering: false,
     }
   },
   watch: {

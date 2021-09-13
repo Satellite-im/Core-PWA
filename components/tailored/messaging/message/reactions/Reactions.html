@@ -11,10 +11,11 @@
       </span>
     </div>
   </div>
-  <font-awesome-icon
-    v-if="this.$props.message.reactions.length"
-    :icon="['far', 'smile-plus']"
-    class="emoji-icon"
-    @click="emojiReaction"
-  />
+  <div class="react-button">
+    <font-awesome-icon
+      v-if="this.$props.message.reactions.length"
+      :icon="['far', 'smile-plus']"
+      class="emoji-icon"
+      @click="emojiReaction" />
+  </div>
 </div>
