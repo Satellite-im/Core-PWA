@@ -8,22 +8,5 @@
     <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
     <TailoredMessagingMessageReactions :message="this.$props.message" :group="this.$props.group" />
   </div>
-  <div v-if="message.replies.length" class="reply-container">
-    <!-- TODO: Move this all into the component. -->
-    <div v-if="!showReplies" class="reply-preview" @click="toggleReplies">
-      <font-awesome-icon
-        :icon="['far', 'plus-square']"
-      />
-      &nbsp;
-      {{message.replies.length}} {{$tc('conversation.reply', message.replies.length)}}
-    </div>
-    <TailoredMessagingMessageReply v-if="showReplies" v-for="reply in message.replies" :reply="reply" :key="reply.id"/>
-    <div v-if="showReplies" @click="toggleReplies" class="reply-close">
-      <font-awesome-icon
-        :icon="['far', 'minus-square']"
-      />
-      &nbsp;
-      Collapse
-    </div>
-  </div>
+  <TailoredMessagingMessageReply :message="message" />
 </div>
