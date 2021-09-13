@@ -23,6 +23,7 @@ interface UIState {
   isScrollOver: boolean
   isTyping: Object | Boolean
   activeChannel: Channel | undefined
+  settingReaction: Object
 }
 
 const InitalUIState = (): UIState => ({
@@ -47,6 +48,7 @@ const InitalUIState = (): UIState => ({
   isScrollOver: false,
   isTyping: false,
   activeChannel: undefined,
+  settingReaction: { status: false, groupID: null, messageID: null },
 })
 
 export default InitalUIState

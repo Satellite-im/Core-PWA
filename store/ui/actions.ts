@@ -20,5 +20,8 @@ export default {
   },
   setActiveChannel({ commit }: ActionsArguments, channel: Channel) {
     commit('setActiveChannel', channel)
-  }
+  },
+  addReaction({ commit }: ActionsArguments, reaction: any) {
+    commit('addReaction', reaction)
+  },
 }

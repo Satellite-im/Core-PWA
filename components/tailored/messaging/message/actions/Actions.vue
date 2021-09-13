@@ -1,16 +1,32 @@
 <template>
   <div class="message-actions">
-    <div class="reply-command has-tooltip has-tooltip-primary" :data-tooltip="$t('global.glyphs')">
+    <div
+      class="reply-command has-tooltip has-tooltip-primary"
+      :data-tooltip="$t('global.glyphs')"
+    >
       <font-awesome-icon
-          :icon="['far', 'grin-tongue-wink']"
-          :class="`control-icon emoji-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
+        :icon="['far', 'grin-tongue-wink']"
+        :class="`control-icon emoji-icon ${
+          $store.state.ui.showEnhancers ? 'primary' : ''
+        }`"
+        @click="emojiReaction"
       />
     </div>
-    <div class="reply-command has-tooltip has-tooltip-primary" :data-tooltip="$t('global.reply')" @click="setReplyChatbarContent">
+    <div
+      class="reply-command has-tooltip has-tooltip-primary"
+      :data-tooltip="$t('global.reply')"
+      @click="setReplyChatbarContent"
+    >
       <font-awesome-icon :icon="['fas', 'reply']" :class="'control-icon'" />
     </div>
-    <div class="reply-command has-tooltip has-tooltip-primary" :data-tooltip="$t('global.more')">
-      <font-awesome-icon :icon="['fas', 'ellipsis-h']" :class="'control-icon'" />
+    <div
+      class="reply-command has-tooltip has-tooltip-primary"
+      :data-tooltip="$t('global.more')"
+    >
+      <font-awesome-icon
+        :icon="['fas', 'ellipsis-h']"
+        :class="'control-icon'"
+      />
     </div>
   </div>
 </template>
@@ -19,6 +35,10 @@ import Vue from 'vue'
 export default Vue.extend({
   props: {
     setReplyChatbarContent: {
+      type: Function,
+      default: () => () => {},
+    },
+    emojiReaction: {
       type: Function,
       default: () => () => {},
     },
@@ -38,7 +58,6 @@ export default Vue.extend({
   display: flex;
   box-sizing: border-box;
   height: 36px;
-  
   .reply-command {
     width: 35px;
     // height: 35px;
@@ -49,7 +68,6 @@ export default Vue.extend({
 
     &:hover {
       background: @semitransparent-light-gradient;
-      
       .control-icon {
         color: @bright-text;
       }
@@ -61,7 +79,6 @@ export default Vue.extend({
       font-size: @small-icon-size;
       color: @text;
     }
-
   }
 }
 </style>
