@@ -12,7 +12,7 @@
     <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
-    <div class="dynamic-content">
+    <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar
         id="statusbar"
         :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
