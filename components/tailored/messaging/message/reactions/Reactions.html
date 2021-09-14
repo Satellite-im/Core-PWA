@@ -7,15 +7,15 @@
     </div>
     <div v-if="hovering === reaction.emoji">
       <div v-if="reaction.reactors.length > 3" class="reactors">
-        <span class="reactor">{{reaction.reactors[0]}}, </span>
-        <span class="reactor">{{reaction.reactors[1]}}, </span>
-        <span class="reactor">{{reaction.reactors[2]}} </span>
-        <span class="reactor"> & {{reaction.reactors.length - 3}} others...</span>
+        <span class="reactor">{{reaction.reactors[0]}},</span>
+        <span class="reactor">{{reaction.reactors[1]}},</span>
+        <span class="reactor">{{reaction.reactors[2]}},</span>
+        <span class="reactor">{{reaction.reactors.length - 3}} others...</span>
       </div>
       <div v-else class="reactors">
         <div v-for="reactor in reaction.reactors" class="reactor">
           <span v-if="reactor === reaction.reactors[reaction.reactors.length-1]">{{reactor}}</span>
-          <span v-else>{{reactor}}, </span>
+          <span v-else>{{reactor}},</span>
         </div>
       </div>
     </div>
