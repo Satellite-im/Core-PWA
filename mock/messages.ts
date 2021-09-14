@@ -207,9 +207,9 @@ export const Messages = [
         },
         replies: [],
         reactions: [
-          { emoji: '👍', reactors: ['Jpanay'] },
+          { emoji: '👍', reactors: ['Taurus Nix', 'Stephen Strange'] },
           { emoji: '🔥', reactors: ['Krombopulos Michael', 'Taurus Nix', 'Stephen Strange', 'John Thundergun', 'Halley Themis'] },
-          { emoji: '🤯', reactors: ['Taurus Nix', 'Halley Themis'] },
+          { emoji: '🤯', reactors: ['Taurus Nix', 'Halley Themis', 'Stephen Strange'] },
         ],
       },
     ],
