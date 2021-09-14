@@ -22,20 +22,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      showReactors: {},
       hovering: false,
     }
-  },
-  watch: {
-    message: {
-      handler() {
-        this.setShowReactors()
-      },
-      deep: true,
-    },
-  },
-  beforeMount() {
-    this.setShowReactors()
   },
   methods: {
     emojiReaction() {
@@ -49,20 +37,13 @@ export default Vue.extend({
     quickReaction(emoji: String) {
       this.$store.dispatch('addReaction', {
         emoji,
-        reactor: 'user1',
+        reactor: 'Jpanay',
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
     },
-    toggleReactors(status: Boolean, emoji: any) {
-      this.$data.showReactors[emoji] = status
-    },
-    setShowReactors() {
-      if (this.$props.message.reactions) {
-        for (const reaction of this.$props.message.reactions) {
-          this.$data.showReactors[`${reaction.emoji}`] = false
-        }
-      }
+    toggleReactors(emoji: any) {
+      this.$data.hovering = emoji
     },
   },
 })
