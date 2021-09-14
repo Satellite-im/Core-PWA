@@ -3,7 +3,7 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
-import { Reply } from '~/types/messaging'
+import { Reply, Message } from '~/types/messaging'
 
 export default Vue.extend({
   components: {
@@ -19,11 +19,26 @@ export default Vue.extend({
         payload: 'Invalid Reply',
       }),
     },
+    message: {
+      type: Object as PropType<Message>,
+      default: () => ({
+        id: '0',
+        at: 1620515543000,
+        type: 'text',
+        payload: 'Invalid Message',
+      }),
+    },
+  },
+  data() {
+    return { showReplies: false }
   },
   methods: {
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)
+    },
+    toggleReplies() {
+      this.$data.showReplies = !this.$data.showReplies
     },
   },
 })

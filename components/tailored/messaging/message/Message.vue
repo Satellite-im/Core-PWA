@@ -46,7 +46,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      showReplies: false,
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
@@ -76,11 +75,7 @@ export default Vue.extend({
     mouseOver() {
       this.$data.messageHover = !this.$data.messageHover
     },
-    toggleReplies() {
-      this.$data.showReplies = !this.$data.showReplies
-    },
     setReplyChatbarContent() {
-      this.$data.showReplies = true
       const { id, type, payload } = this.$props.message
       let finalPayload = payload
       if (['image', 'video', 'audio', 'file'].includes(type)) {
