@@ -8,6 +8,7 @@
     border-radius: @corner-rounding;
     padding: (@light-spacing / 2) @light-spacing;
     margin: 0 (@light-spacing / 2);
+    margin-left: 0;
     cursor: pointer;
     text-align: center;
     max-width: 3.5rem;
@@ -32,14 +33,42 @@
   }
   .reactors {
     display: flex; 
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
     position: absolute;
+    max-width: 240px;
+    bottom: 36px;
+    margin: 0px;
+    margin-left: -60px;
     background-color: @dark-gray;
-    padding: 2px 8px 2px 4px;
+    padding: 8px 12px;
     border: @light-border;
     border-radius: @corner-rounding;
     z-index: @base-z-index + 2;
-    .reactor {
-      margin-left: 4px;
+    animation: 1s fadeIn;
+    animation-fill-mode: both;
+    opacity: 0;
+    @keyframes fadeIn {
+      80% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    .reactors-emoji {
+      font-size: 2rem;
+      padding: 0px 4px;
+      text-shadow: -1px 0 1px @dark-gray, 0 1px 1px @dark-gray, 1px 0 1px @dark-gray, 0 -1px 1px @dark-gray, 0 0 12px @gray;
+    }
+    .reactors-list {
+      .reactor {
+        display: flex; 
+        flex-flow: row wrap;
+        margin-left: 8px;
+        font-size: 10pt;
+      }
     }
   }
 }
