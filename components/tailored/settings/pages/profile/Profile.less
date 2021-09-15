@@ -35,7 +35,8 @@
     height: @size;
     width: @size;
     cursor: pointer;
-    .is-rounded , .is-square {
+    .is-rounded,
+    .is-square {
       max-width: 100% !important;
       max-height: 100% !important;
     }
@@ -114,6 +115,22 @@
     .profile-photo {
       height: @size-mobile;
       width: @size-mobile;
+    }
+  }
+
+  #profile-settings {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    .profile-layout {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      .profile-left {
+        width: 100%;
+        margin-top: 0;
+      }
     }
   }
 }

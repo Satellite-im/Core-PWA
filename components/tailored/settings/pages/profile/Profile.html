@@ -19,7 +19,7 @@
         <div class="profile-image-cropper" v-if="showCropper">
           <div class="content">
             <ImageCropper :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
-              :imageUrl="imageUrl" />
+              :imageUrl="profileInfo.imageUrl" />
             <div class="cropper-mask"></div> 
           </div>  
         </div>
