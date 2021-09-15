@@ -3,23 +3,9 @@
   <div id="app"
     :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${this.asidebar && this.selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'} ${this.selectedGroup ? 'group' : 'direct'} ${$device.isMobile ? 'mobile-app' : ''}`"
     v-touch:swipe="sidebarSwipeHandler(this)" v-touch-options="{ swipeTolerance: 75 }">
-    <transition :name="$device.isMobile ? 'slide' : ''">
-      <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
-    </transition>
-    <TailoredSettingsModal v-if="$store.state.ui.showSettings" />
-    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus" />
+    <UiGlobal />
+
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
-    <UiModal v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
-      <TailoredCoreServersCreate v-if="$store.state.ui.modals.createServer" :closeModal="toggleModal"
-        v-click-outside="toggleModal" />
-    </UiModal>
-    <UiModal v-if="$mock.users.find(user => user.name === $store.state.media.incomingCall)" nopad>
-      <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === $store.state.media.incomingCall)"
-        :acceptCall="acceptCall" :denyCall="denyCall" />
-    </UiModal>
-    <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
-      <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
-    </UiModal>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />

@@ -56,6 +56,9 @@
       padding-left: @normal-spacing;
       cursor: pointer;
       user-select: none;
+      &[disabled] {
+        opacity: 0.5;
+      }
       &:hover {
         background: @semitransparent-lighter-gradient;
       }

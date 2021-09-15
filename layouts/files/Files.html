@@ -6,6 +6,8 @@
     v-touch:swipe="sidebarSwipeHandler(this)"
     v-touch-options="{ swipeTolerance: 75 }"
     >
+    <UiGlobal />
+
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups"/>
     <div class="dynamic-content">

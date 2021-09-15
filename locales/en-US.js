@@ -168,10 +168,10 @@ export default {
         language: 'Language',
       },
       network: {
-        title: 'Network',
+        title: 'Realms',
         subtitle:
-          'Customize the chain Satellite will operate on. You can also choose different networks. Please note that any network other than Testnet will operate with REAL funds.',
-        chain: 'Blockchain',
+          'Change the realm Satellite lives in. Changing a realm will mean you can only communicate with others in the same realm as you. Please only change if you know what you\'re doing.',
+        chain: 'Realm',
         network: 'Network',
       },
       storage: {
@@ -269,24 +269,24 @@ export default {
       create: 'Registration',
       sign_in: 'Sign in',
       photo_text:
-        'Give your account a face. Chose a memorable photo to show your profile',
+        'Customize how the world sees you, chose something memerable.',
       username: 'Username',
-      username_placeholder: 'Enter your username here...',
+      username_placeholder: 'Neil Spaceman...',
       status: 'Status',
-      status_placeholder: 'Ready to start...',
+      status_placeholder: 'Ready for launch...',
       reg_status: {
         unknown: 'Not registered',
-        in_progress: 'We are setting up your account...',
+        in_progress: 'We\'re transporting your data to the Realm...',
         funding_account:
-          'We are giving you some SOL to register your account...',
+          'Making contact, requesting entry to Realm...',
         sending_transaction:
-          'We are quite ready! Your transaction is ongoing...',
+          'Request Approved! Now entering the Realm...',
         registered:
-          'Congratulations! Your account has been registered on the blockchain',
+          'Grats! Your a brand new citizen on the Realm.',
       },
     },
     loading: {
-      loading_account: 'We are loading your account information...',
+      loading_account: 'Aligning satellites to retrieve your account...',
     },
   },
   market_place: {

@@ -7,9 +7,11 @@ import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/store/store.types'
+import { Config } from '~/config'
 
 declare module 'vue/types/vue' {
   interface Vue {
+    $Config: any
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
@@ -21,6 +23,7 @@ declare module 'vue/types/vue' {
 
 declare module '@nuxt/types' {
   interface Context {
+    $Config: any
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
@@ -35,6 +38,7 @@ Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
+Vue.prototype.$Config = Config
 
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {
