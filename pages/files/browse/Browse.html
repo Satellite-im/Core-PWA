@@ -19,21 +19,19 @@
       <TailoredFilesTopbar />
       <UiSpacer :height="10" />
       <TypographyText :size="6" text="Files" />
-      <UiScroll ref="files" verticalScroll scrollbarVisibility="scroll">
-        <div v-if="view === 'list'">
-          <TailoredFilesList 
-            :path="getPath().children"
-            v-if="$store.state.dataState.files !== DataStateType.Loading"
-            :push="push" />
-          <UiLoadersFileTable v-else :rows="5" />
-        </div>
-        <div v-else>
-          <TailoredFilesGrid
-            :path="getPath().children"
-            v-if="$store.state.dataState.files !== DataStateType.Loading"
-            :push="push" />
-        </div>
-      </UiScroll>
+      <div v-if="view === 'list'">
+        <TailoredFilesList 
+          :path="getPath().children"
+          v-if="$store.state.dataState.files !== DataStateType.Loading"
+          :push="push" />
+        <UiLoadersFileTable v-else :rows="5" />
+      </div>
+      <div v-else>
+        <TailoredFilesGrid
+          :path="getPath().children"
+          v-if="$store.state.dataState.files !== DataStateType.Loading"
+          :push="push" />
+      </div>
     </div>
     <div :class="`${$device.isMobile ? 'hidden-file-aside' : 'files-right'}`">
       <TailoredFilesAside v-if="!$device.isMobile"/>
