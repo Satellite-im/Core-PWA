@@ -62,7 +62,7 @@
       background: @semitransparent-lightest-gradient !important;
       cursor: pointer;
       font-size: @tiny-icon-size !important;
-      
+
       &:hover {
         background: @primary-gradient !important;
         box-shadow: @primary-glow;
@@ -88,7 +88,7 @@
     position: fixed;
     right: 0px;
     top: 0px;
-    z-index: 2;
+    z-index: @base-z-index + 101;
     background: @dark-gradient;
   }
   .is-open {

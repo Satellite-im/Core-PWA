@@ -3,7 +3,7 @@
         <font-awesome-icon :icon="['far', 'info-circle']" class="info-toggle" v-on:click="toggle" />
         <div id="top-info">
             <TypographyTitle :size="6" :text="selectedGroup.name" />
-            <InteractablesClose v-on:click="toggle" />
+            <InteractablesClose :action="toggle" />
         </div>
         <div id="actions">
             <!-- <font-awesome-icon :icon="['far', 'user-plus']" class="action-icon" /> -->
