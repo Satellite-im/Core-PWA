@@ -236,6 +236,7 @@ export default {
     reply: 'reply | replies',
     reply_to: 'Reply to',
     multimedia: 'Multimedia content',
+    collapse: 'Collapse',
   },
   errors: {
     accounts: {
