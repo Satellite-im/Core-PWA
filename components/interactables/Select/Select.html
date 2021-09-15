@@ -10,7 +10,8 @@
       <div
         v-for="(option, i) of options"
         :key="i"
-        @click="change(option.value)"
+        :disabled="option.disabled"
+        @click="change(option)"
       >
         {{ option.text }}
       </div>

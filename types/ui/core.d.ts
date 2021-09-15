@@ -31,3 +31,10 @@ export type Server = {
   address: string
   desc: string
 }
+
+
+export type Realm = {
+  id: string
+  nickname: string
+  disabled: boolean
+}

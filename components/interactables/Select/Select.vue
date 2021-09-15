@@ -73,8 +73,9 @@ export default Vue.extend({
     },
   },
   methods: {
-    change(value: any) {
-      this.selectedValue = value
+    change(option: any) {
+      if (option.disabled) return
+      this.selectedValue = option.value
       this.$emit('change', this.selectedValue)
       this.open = false
     },

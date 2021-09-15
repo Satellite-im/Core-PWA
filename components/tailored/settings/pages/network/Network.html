@@ -10,7 +10,7 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.network.chain')" />
       <br />
-      <InteractablesSelect size="small" :options="[{ text: 'Solana', value: 'solana' }]" selected="solana" />
+      <InteractablesSelect size="small" :options="realms" :selected="realms[0].id" :style="{ 'min-width': '170px' }" />
     </div>
   </div>
 

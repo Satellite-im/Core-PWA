@@ -6,10 +6,8 @@
     v-touch:swipe="sidebarSwipeHandler(this)"
     v-touch-options="{ swipeTolerance: 75 }"
     >
-    <transition :name="$device.isMobile ? 'slide' : ''">
-      <InteractablesQuickProfile v-if="$store.state.ui.quickProfile" :user="$mock.user" />
-    </transition>
-    <InteractablesContextMenu v-if="$store.state.ui.contextMenuStatus"/>
+    <UiGlobal />
+
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
     <div class="dynamic-content">

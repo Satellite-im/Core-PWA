@@ -34,6 +34,29 @@ export const Config = {
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
   },
+  // Realms are just different chains we support
+  realms: [
+    {
+      id: 'solana',
+      nickname: 'Helios',
+      disabled: false,
+    },
+    {
+      id: 'matic',
+      nickname: 'Dodecahedron',
+      disabled: true,
+    },
+    {
+      id: 'ethereum',
+      nickname: 'Ethereal',
+      disabled: true,
+    },
+    {
+      id: 'algorand',
+      nickname: 'Penumbra',
+      disabled: true,
+    }
+  ],
   badges: {
     verified: {
       color: '#55efc4',
