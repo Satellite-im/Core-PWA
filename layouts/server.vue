@@ -13,6 +13,14 @@ export default Vue.extend({
       sidebar: true,
     }
   },
+  methods: {
+    toggleMarketPlace() {
+      this.$store.commit('toggleModal', {
+        name: 'showMarketPlace',
+        state: !this.$store.state.ui.modals.showMarketPlace,
+      })
+    },
+  },
 })
 </script>
 

@@ -9,6 +9,9 @@
     <UiGlobal />
 
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+    <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
+      <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
+    </UiModal>
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
     <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar
