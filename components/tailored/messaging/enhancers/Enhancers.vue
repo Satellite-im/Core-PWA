@@ -28,7 +28,7 @@ export default Vue.extend({
       if (this.$store.state.ui.settingReaction.status) {
         this.$store.dispatch('addReaction', {
           emoji: emoji.native,
-          reactor: 'user1',
+          reactor: 'Jpanay',
           groupID: this.$store.state.ui.settingReaction.groupID,
           messageID: this.$store.state.ui.settingReaction.messageID,
         })

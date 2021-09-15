@@ -1,14 +1,21 @@
 <div class="emoji-reactions" v-if="this.$props.message.reactions">
   <div v-for="reaction in this.$props.message.reactions">
-    <div class="emoji-reaction" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(true, reaction.emoji)" @mouseleave="toggleReactors(false, reaction.emoji)">
+    <div v-if="hovering === reaction.emoji" class="reactors">
+      <div class="reactors-emoji">{{reaction.emoji}}</div>
+      <div class="reactors-list" v-if="reaction.reactors.length > 3">
+        <span class="reactor">{{reaction.reactors[0]}}, {{reaction.reactors[1]}}, {{reaction.reactors[2]}}, and {{reaction.reactors.length - 3}} others...</span>
+      </div>
+      <div class="reactors-list" v-else>
+        <div v-for="reactor in reaction.reactors" class="reactor">
+          <span v-if="reactor === reaction.reactors[reaction.reactors.length-1]">{{reactor}}</span>
+          <span v-else>{{reactor}},</span>
+        </div>
+      </div>
+    </div>
+    <div class="emoji-reaction" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(reaction.emoji)" @mouseleave="toggleReactors(null)">
       <span>{{reaction.emoji}}</span>
       <span>{{reaction.reactors.length}}</span>
       <div></div>
-    </div>
-    <div class="reactors" v-if="showReactors[reaction.emoji]">
-      <span v-for="reactor in reaction.reactors" class="reactor">
-        {{reactor}}
-      </span>
     </div>
   </div>
   <div class="react-button">
