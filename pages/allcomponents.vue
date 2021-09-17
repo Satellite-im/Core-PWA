@@ -29,13 +29,17 @@
           <li><NuxtLink to="friends/list">Friends</NuxtLink></li>
           <li><NuxtLink to="files/browse">Files</NuxtLink></li>
         </ul>
+        <div @click="createFriendRequest()">Send request</div>
+        <div @click="acceptFriendRequest()">Accept request</div>
+        <div @click="denyFriendRequest()">Deny request</div>
+        <div @click="removeFriendRequest()">Remove request</div>
+        <div @click="removeFriend()">Remove friend</div>
       </aside>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { PublicKey } from '@solana/web3.js'
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -46,30 +50,7 @@ export default Vue.extend({
       switch2State: true,
     }
   },
-  mounted() {
-    this.getFriendRequests()
-  },
   methods: {
-    async createFriendRequest() {
-      try {
-        await this.$store.dispatch('createFriendRequest', {
-          friendToKey: new PublicKey(
-            'EagHp2bc5fFBcNBFN8H79YajsjpAELHjwxvPjLf1yQEe'
-          ),
-          textileMailboxId:
-            'bafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq',
-        })
-      } catch (e) {
-        console.log('error', e)
-      }
-    },
-    async getFriendRequests() {
-      try {
-        await this.$store.dispatch('getFriendRequests')
-      } catch (e) {
-        console.log('error', e)
-      }
-    },
     testAction(): void {
       alert('test')
     },

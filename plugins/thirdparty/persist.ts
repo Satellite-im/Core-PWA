@@ -3,7 +3,7 @@
  */
 
 import { omit } from 'lodash'
-import VuexPersistence from 'vuex-persist'
+import { VuexPersistence } from 'vuex-persist'
 
 // Add mutations here to blacklist saving to store
 const mutationsBlacklist = [
@@ -38,5 +38,21 @@ export default ({ store }: { store: any }) => {
       // Allows blacklisting of data we don't want stored
       return !mutationsBlacklist.includes(mutation.type)
     },
+    // restoreState: (key, storage) => {
+    //   if (!storage) {
+    //     return null
+    //   }
+
+    //   const stringifiedState = storage.getItem(key)
+
+    //   if (!stringifiedState) {
+    //     return null
+    //   }
+
+    //   const parsedState: RootState = JSON.parse(stringifiedState)
+
+    //   return parsedState
+    // },
+    // saveState: (key, state, storage) => {},
   }).plugin(store)
 }

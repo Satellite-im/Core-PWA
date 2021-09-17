@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
-import { UserRegistrationData } from '~/types/user/user'
+import { UserRegistrationData } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'CreateUser',

@@ -4,3 +4,5 @@ export type Badge = {
 }
 
 export type BadgeIcon = Array<String>
+
+export type BadgeType = 'verified' | 'community' | 'cameraman'

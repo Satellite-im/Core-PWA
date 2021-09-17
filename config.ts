@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/named
+import { Commitment } from '@solana/web3.js'
+
 export const Config = {
   debug: false,
   textile: {
@@ -34,6 +37,8 @@ export const Config = {
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
+    defaultCommitment: 'confirmed' as Commitment,
+    defaultPreflightCommitment: 'confirmed' as Commitment,
   },
   // Realms are just different chains we support
   realms: [

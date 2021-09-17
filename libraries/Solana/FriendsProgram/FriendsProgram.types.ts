@@ -13,15 +13,15 @@ export interface InitAcceptFriendRequestParams {
 }
 
 export interface InitDenyFriendRequestParams {
-  denyRequest: { tex: [Uint8Array, Uint8Array, Uint8Array, Uint8Array] }
+  denyRequest: {}
 }
 
 export interface InitRemoveFriendRequestParams {
-  removeRequest: { tex: [Uint8Array, Uint8Array, Uint8Array, Uint8Array] }
+  removeRequest: {}
 }
 
 export interface InitRemoveFriendParams {
-  removeFriend: { tex: [Uint8Array, Uint8Array, Uint8Array, Uint8Array] }
+  removeFriend: {}
 }
 
 export type FriendsInstructionType =
@@ -38,4 +38,21 @@ export enum FriendStatus {
   ACCEPTED,
   REFUSED,
   REMOVED,
+}
+
+export enum FriendsEvents {
+  NEW_REQUEST = 'new_request',
+  NEW_FRIEND = 'new_friend',
+  REQUEST_DENIED = 'request_denied',
+  REQUEST_REMOVED = 'request_removed',
+  FRIEND_REMOVED = 'friend_removed',
+}
+
+export interface FriendAccount {
+  accountId: string
+  from: string
+  status: number
+  fromMailboxId: string
+  toMailboxId: string
+  to: string
 }

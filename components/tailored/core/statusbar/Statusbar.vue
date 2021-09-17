@@ -3,7 +3,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User, Server } from '~/types/ui/core'
+import { Server } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 declare module 'vue/types/vue' {
