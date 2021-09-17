@@ -1,23 +1,3 @@
-export type UserState = 'online' | 'idle' | 'offline' | 'mobile'
-
-export type Badge = 'verified' | 'community' | 'cameraman'
-
-export type User = {
-  name: string
-  address: string
-  status: string
-  state: UserState
-  unreadCount: Number
-  profilePicture: string
-  badge?: Badge
-}
-
-export interface Friend extends User {
-  item: any
-  pending: Boolean
-  activeChat: Boolean
-}
-
 export type Group = {
   name: string
   address: string
@@ -31,7 +11,6 @@ export type Server = {
   address: string
   desc: string
 }
-
 
 export type Realm = {
   id: string

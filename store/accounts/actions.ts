@@ -1,7 +1,6 @@
 import Vue from 'vue'
-// eslint-disable-next-line import/named
-import { Commit, Dispatch } from 'vuex'
-import { RootState } from '../store.types'
+import { Keypair } from '@solana/web3.js'
+import { ActionsArguments, RootState } from '../store.types'
 import {
   AccountsError,
   RegistrationStatus,
@@ -10,12 +9,6 @@ import {
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-
-interface ActionsArguments {
-  commit: Commit
-  state: RootState
-  dispatch: Dispatch
-}
 
 export default {
   async setPin({ commit }: ActionsArguments, pin: string) {
@@ -83,7 +76,7 @@ export default {
 
     commit('setEncryptedPhrase', encryptedPhrase)
   },
-  async loadAccount({ commit, state }: ActionsArguments) {
+  async loadAccount({ commit, state, dispatch }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
     const mnemonic = state.accounts.phrase
@@ -109,9 +102,12 @@ export default {
     if (userInfo === null) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
+
+    // Initialize Encryption Engine
+    dispatch('initializeEncryptionEngine', userAccount)
   },
   async registerUser(
-    { commit }: ActionsArguments,
+    { commit, dispatch }: ActionsArguments,
     userData: UserRegistrationPayload
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -155,5 +151,13 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
     commit('setActiveAccount', userAccount.publicKey.toBase58())
+
+    // Initialize Encryption Engine
+    dispatch('initializeEncryptionEngine', userAccount)
+  },
+  async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
+    // Initialize crypto engine
+    const $Crypto: Crypto = Vue.prototype.$Crypto
+    await $Crypto.init(userAccount)
   },
 }

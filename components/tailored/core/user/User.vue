@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-import { User } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 
 declare module 'vue/types/vue' {
   interface Vue {

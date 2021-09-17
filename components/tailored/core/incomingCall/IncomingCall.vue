@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'IncomingCall',

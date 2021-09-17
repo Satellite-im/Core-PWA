@@ -2,7 +2,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User, Group } from '~/types/ui/core'
+import { Group } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   props: {
