@@ -1,7 +1,7 @@
 import { RootState } from '../store.types'
 
 const getters = {
-  getPinHash: (state: RootState) => {
+  getPinHash: (state: RootState): string => {
     return state.accounts.pinHash
   },
   getEncryptedPhrase: (state: RootState) => {

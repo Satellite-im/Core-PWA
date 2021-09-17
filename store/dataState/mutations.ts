@@ -1,5 +1,5 @@
 import { NuxtState } from '@nuxt/types/app'
-import { DataStateType } from './state'
+import { DataStateType } from './types'
 const mutations = {
   setDataState(
     state: NuxtState,

@@ -33,17 +33,17 @@ export default Vue.extend({
 
       try {
         await this.$store.dispatch('unlock', this.$data.pin)
+
+        if (this.$store.state.accounts.phrase === '') {
+          this.$router.replace('/setup/disclaimer')
+        } else {
+          this.$router.replace('/')
+        }
       } catch (error) {
-        this.error = error
+        this.error = error.message
       }
 
       this.$data.decrypting = false
-
-      if (this.$store.state.accounts.phrase === '') {
-        this.$router.replace('/setup/disclaimer')
-      } else {
-        this.$router.replace('/')
-      }
     },
     // Create & store a new pin, then decrypt.
     async create() {
@@ -51,7 +51,7 @@ export default Vue.extend({
         await this.$store.dispatch('setPin', this.$data.pin)
         await this.decrypt()
       } catch (error) {
-        this.error = error
+        this.error = error.message
       }
     },
   },

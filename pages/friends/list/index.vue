@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { DataStateType } from '~/store/dataState/state'
+import { DataStateType } from '~/store/dataState/types'
 
 import { getAlphaSorted } from '~/libraries/ui/Friends'
 

@@ -1,14 +1,10 @@
-import { Commit } from 'vuex'
-import { DataStateType } from '../dataState/state'
+import { DataStateType } from '../dataState/types'
+import { ActionsArguments } from '../store.types'
 import { Files } from '~/mock/files'
 
-interface FetchFilesArguments {
-  commit: Commit
-  state: any
-}
 export default {
   handler: () => {},
-  async fetchFiles({ commit, state }: FetchFilesArguments) {
+  async fetchFiles({ commit, state }: ActionsArguments) {
     if (
       state.dataState.files === DataStateType.Loading ||
       state.dataState.files === DataStateType.Updating

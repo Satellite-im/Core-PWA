@@ -16,7 +16,6 @@ export default Vue.extend({
       this.$data.loading = false
       this.$store.dispatch('setMessages', this.$mock.messages)
     }, 3000)
-    this.$store.dispatch('fetchFriends')
   },
 })
 </script>
