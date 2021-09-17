@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="emoji-reaction" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(reaction.emoji)" @mouseleave="toggleReactors(null)">
+    <div :class="didIReact(reaction) ? 'emoji-reaction emoji-reacted' : 'emoji-reaction'" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(reaction.emoji)" @mouseleave="toggleReactors(null)">
       <span>{{reaction.emoji}}</span>
       <span>{{reaction.reactors.length}}</span>
       <div></div>
