@@ -57,7 +57,7 @@ export default Vue.extend({
     },
     searchResult() {
       this.result = Users.filter((user) =>
-        user.name.toLowerCase().startsWith(this.search)
+        user.name.toLowerCase().startsWith(this.search.toLowerCase())
       )
       this.selection = -1
     },
