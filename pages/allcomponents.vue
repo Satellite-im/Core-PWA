@@ -29,11 +29,6 @@
           <li><NuxtLink to="friends/list">Friends</NuxtLink></li>
           <li><NuxtLink to="files/browse">Files</NuxtLink></li>
         </ul>
-        <div @click="createFriendRequest()">Send request</div>
-        <div @click="acceptFriendRequest()">Accept request</div>
-        <div @click="denyFriendRequest()">Deny request</div>
-        <div @click="removeFriendRequest()">Remove request</div>
-        <div @click="removeFriend()">Remove friend</div>
       </aside>
     </div>
   </div>
