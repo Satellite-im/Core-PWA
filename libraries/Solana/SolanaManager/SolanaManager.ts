@@ -278,7 +278,10 @@ export default class SolanaManager {
    */
   getCurrentAccountBalance() {
     if (this.payerAccount) {
-      return this.connection.getBalance(this.payerAccount.publicKey)
+      return this.connection.getBalance(
+        this.payerAccount.publicKey,
+        Config.solana.defaultCommitment
+      )
     }
 
     return null
@@ -296,7 +299,10 @@ export default class SolanaManager {
         this.payerAccount?.publicKey,
         1000000000
       )
-      return this.connection.confirmTransaction(signature, 'finalized')
+      return this.connection.confirmTransaction(
+        signature,
+        Config.solana.defaultCommitment
+      )
     }
 
     return null
@@ -310,7 +316,10 @@ export default class SolanaManager {
    */
   async waitForAccount(accountKey: PublicKey) {
     while (true) {
-      const accountInfo = await this.connection.getAccountInfo(accountKey)
+      const accountInfo = await this.connection.getAccountInfo(
+        accountKey,
+        Config.solana.defaultCommitment
+      )
       if (accountInfo === null) {
         await sleep(3000)
         continue

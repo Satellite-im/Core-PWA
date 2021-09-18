@@ -26,9 +26,20 @@ import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 const SERVER_PROGRAM_ID = new PublicKey(Config.solana.serverProgramId)
 
 export default class ServerProgram {
-  solana: Solana
-  constructor(solana: Solana) {
+  solana?: Solana
+
+  constructor(solana?: Solana) {
+    if (solana) {
+      this.init(solana)
+    }
+  }
+
+  init(solana: Solana) {
     this.solana = solana
+  }
+
+  isInitialized() {
+    return Boolean(this.solana)
   }
 
   initializeUser(
@@ -68,6 +79,10 @@ export default class ServerProgram {
     status: string,
     confirmOptionsOverride?: ConfirmOptions
   ) {
+    if (!this.solana) {
+      throw new Error('Server program not initialized')
+    }
+
     const { connection } = this.solana
 
     const space = dwellerAccountLayout.span
@@ -96,8 +111,8 @@ export default class ServerProgram {
       transaction,
       [payerAccount, userAccount],
       {
-        commitment: 'finalized',
-        preflightCommitment: 'finalized',
+        commitment: Config.solana.defaultCommitment,
+        preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
       }
     )
@@ -120,8 +135,15 @@ export default class ServerProgram {
   }
 
   async getUser(userPubkey: PublicKey) {
+    if (!this.solana) {
+      throw new Error('Server program not initialized')
+    }
+
     const { connection } = this.solana
-    const accountInfo = await connection.getAccountInfo(userPubkey)
+    const accountInfo = await connection.getAccountInfo(
+      userPubkey,
+      Config.solana.defaultCommitment
+    )
 
     return accountInfo
       ? this.parseUserInfo(
@@ -172,8 +194,8 @@ export default class ServerProgram {
     const transaction = new Transaction().add(instruction)
 
     await sendAndConfirmTransaction(connection, transaction, [payerAccount], {
-      commitment: 'singleGossip',
-      preflightCommitment: 'singleGossip',
+      commitment: Config.solana.defaultCommitment,
+      preflightCommitment: Config.solana.defaultPreflightCommitment,
       ...confirmOptionsOverride,
     })
     return addressToCreate
