@@ -1,11 +1,9 @@
-import { Friend } from '~/types/ui/core'
+import { FriendsState } from '~/store/friends/types'
 
-interface FriendsState {
-  all: Array<Friend>
+const InitalFriendsState: FriendsState = {
+  incomingRequests: [],
+  outgoingRequests: [],
+  all: [],
 }
 
-const InitalFriendsState = (): FriendsState => ({
-  all: [],
-})
-
-export default InitalFriendsState
+export default () => InitalFriendsState

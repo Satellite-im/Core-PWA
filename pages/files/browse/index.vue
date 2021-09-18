@@ -2,8 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { DataStateType } from '~/store/dataState/state'
+
 import { mapState } from 'vuex'
+import { DataStateType } from '~/store/dataState/types'
 
 export default Vue.extend({
   name: 'Files',
