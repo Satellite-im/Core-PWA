@@ -1,9 +1,13 @@
 // @ts-nocheck
+import { mapState } from 'vuex'
 export const ContextMenu = {
+  computed: {
+    ...mapState(['ui']),
+  },
   methods: {
     contextMenu(e: Event) {
       e.preventDefault()
-      const contextMenuStatus = this.$store.state.ui.contextMenuStatus
+      const contextMenuStatus = this.ui.contextMenuStatus
       if (!contextMenuStatus) {
         this.$store.commit('toggleContextMenu', true)
       }
