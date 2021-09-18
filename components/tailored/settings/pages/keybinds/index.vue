@@ -3,6 +3,8 @@
 <script lang="ts">
 // @ts-nocheck
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 import { Keybinds } from '~/components/mixins/UI/Keybinds'
 
 export default Vue.extend({
@@ -20,6 +22,9 @@ export default Vue.extend({
       },
     }
   },
+  computed: {
+    ...mapState(['settings']),
+  },
   methods: {
     editKeybind(keybind: String) {
       this.clearKeybinds()
@@ -27,7 +32,7 @@ export default Vue.extend({
       this.$data.editingKeybind.name = keybind
       this.$data.editingKeybind.status = true
       this.$data.editingKeybind.newString =
-        this.$store.state.settings.keybinds[this.$data.editingKeybind.name]
+        this.settings.keybinds[this.$data.editingKeybind.name]
     },
     recordKeybind(e: any) {
       this.errorCheck(e)
@@ -41,8 +46,8 @@ export default Vue.extend({
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
       const newKeybind = this.$data.editingKeybind.newString
-      for (const key in this.$store.state.settings.keybinds) {
-        if (this.$store.state.settings.keybinds[key] === newKeybind) {
+      for (const key in this.settings.keybinds) {
+        if (this.settings.keybinds[key] === newKeybind) {
           this.$store.commit('updateKeybinding', {
             keybindName: key,
             newKeybind: '',

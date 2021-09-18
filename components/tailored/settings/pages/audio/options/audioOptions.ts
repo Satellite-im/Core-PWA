@@ -47,3 +47,7 @@ export const SampleSizes = [
     value: 32,
   },
 ]
+
+export default {
+  Bitrates,
+}

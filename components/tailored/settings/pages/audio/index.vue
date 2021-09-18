@@ -4,7 +4,7 @@
 import Vue from 'vue'
 
 import { mapState } from 'vuex'
-import { Bitrates, SampleSizes } from './options/audio'
+import { Bitrates, SampleSizes } from './options/audioOptions'
 import {
   PermissionRequestOptions,
   UserPermissions,
@@ -154,7 +154,7 @@ export default Vue.extend({
       const draw = () => {
         // Update gain based on inputVolume
         gainNode.gain.setValueAtTime(
-          this.$store.state.audio.inputVolume / 100,
+          this.audio.inputVolume / 100,
           audioContext.currentTime
         )
         requestAnimationFrame(draw)
@@ -201,7 +201,7 @@ export default Vue.extend({
 
         if (!this.$data.stream) {
           const stream = await this.requestUserPermissions({
-            audio: { deviceId: this.$store.state.settings.audioInput },
+            audio: { deviceId: this.settings.audioInput },
           })
           this.setupMicMeter(stream)
         }

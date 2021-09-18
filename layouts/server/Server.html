@@ -9,16 +9,16 @@
     <UiGlobal />
 
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-    <UiModal v-if="$store.state.ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
+    <UiModal v-if="ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
       <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
     </UiModal>
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
-    <div :class="`dynamic-content ${$store.state.ui.fullscreen ? 'fullscreen-media' : ''}`">
+    <div :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar
         id="statusbar"
         :server="{ name: 'Test Server', address: '0x0', desc: 'Just a test server' }"
         :user="$mock.users[0]"/>
-        <TailoredCoreMedia :fullscreen="$store.state.ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
+        <TailoredCoreMedia :fullscreen="ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
       <Nuxt id="server" ref="server" class="hidden-scroll"/>
       <TailoredCoreChatbar />

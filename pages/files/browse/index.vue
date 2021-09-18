@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DataStateType } from '~/store/dataState/state'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'Files',
@@ -18,6 +19,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['files', 'dataState']),
     DataStateType: () => DataStateType,
   },
   mounted(): void {
@@ -32,9 +34,9 @@ export default Vue.extend({
      */
     getPath(): any {
       if (this.$data.path.length === 0) {
-        return this.$store.state.files.tree
+        return this.files.tree
       }
-      let files = this.$store.state.files.tree
+      let files = this.files.tree
       for (let i = 0; i < this.$data.path.length; i++) {
         files = files.children.filter(
           (item: any) => item.name === this.$data.path[i]

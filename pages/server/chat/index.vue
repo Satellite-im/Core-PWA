@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'ServerChat',
@@ -17,6 +18,9 @@ export default Vue.extend({
       this.$store.dispatch('setMessages', this.$mock.messages)
     }, 3000)
     this.$store.dispatch('fetchFriends')
+  },
+  computed: {
+    ...mapState(['ui']),
   },
 })
 </script>

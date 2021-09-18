@@ -6,7 +6,7 @@
       :size="6"
       class="has-tooltip has-tooltip-top has-tooltip-primary"
       :data-tooltip="$t('global.copy_id')"
-      v-clipboard:copy="$store.state.accounts.active"
+      v-clipboard:copy="accounts.active"
       v-on:click="() => $toast.show($t('global.copied'))"
       />
     <TypographySubtitle :text="$mock.user.status" :size="6" />

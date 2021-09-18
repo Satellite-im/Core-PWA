@@ -1,13 +1,17 @@
 <template src="./Channel.html"></template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Channel',
-  props: ['channel', 'setActiveChannel'],
+  props: ['localChannel', 'setActiveChannel'],
+  computed: {
+    ...mapState(['channel']),
+  },
   methods: {
     getChannelClass () {
-      return this.$store.state.channel &&
-        this.$store.state.channel.id === this.channel.id
+      return this.channel &&
+        this.channel.id === this.localChannel.id
         ? 'active'
         : ''
     }

@@ -26,7 +26,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui']),
+    ...mapState(['ui', 'dataState']),
   },
   mounted() {
     /**

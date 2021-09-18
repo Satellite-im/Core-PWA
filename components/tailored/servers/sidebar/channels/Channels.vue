@@ -4,20 +4,24 @@
 import Vue from 'vue'
 
 import { Channel } from '~/types/ui/server'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   methods: {
-    setActiveChannel (channel: Channel) {
+    setActiveChannel (ch: Channel) {
       const nonText = ['voice', 'label']
-      if (!nonText.includes(channel.type)) {
-        this.$store.commit('setActiveChannel', channel)
+      if (!nonText.includes(ch.type)) {
+        this.$store.commit('setActiveChannel', ch)
       } else {
         // TODO: Join voice channel
       }
     }
   },
+  computed: {
+    ...mapState(['channel']),
+  },
   mounted () {
-    if (!this.$store.state.channel) {
+    if (!this.channel) {
       this.$store.commit('setActiveChannel', this.$mock.server.info.channels['0'])
     }
   }
