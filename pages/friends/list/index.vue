@@ -23,7 +23,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['friends']),
+    ...mapState(['friends', 'dataState']),
     alphaSortedFriends() {
       return getAlphaSorted(this.friends.all)
     },

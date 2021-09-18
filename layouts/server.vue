@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'ServerLayout',
@@ -13,11 +14,14 @@ export default Vue.extend({
       sidebar: true,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   methods: {
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',
-        state: !this.$store.state.ui.modals.showMarketPlace,
+        state: !this.ui.modals.showMarketPlace,
       })
     },
   },

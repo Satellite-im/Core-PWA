@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import FileUpload from '../fileupload/FileUpload.vue'
+import { mapState } from 'vuex'
 import {
   containsCommand,
   parseCommand,
@@ -40,7 +41,7 @@ export default Vue.extend({
     },
     isValidCommand() {
       const currentText = parseCommand(
-        this.$store.state.ui.chatbarContent
+        this.ui.chatbarContent
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.$store.state.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)

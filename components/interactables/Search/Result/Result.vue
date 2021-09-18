@@ -73,7 +73,7 @@ export default Vue.extend({
         : []
     },
     givenQueryItems() {
-      return this.$store.state.search.query.split(' ')
+      return this.search.query.split(' ')
     },
   },
   watch: {

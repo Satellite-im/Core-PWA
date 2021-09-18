@@ -1,6 +1,7 @@
 <template src="./Topbar.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   props: {
@@ -13,6 +14,9 @@ export default Vue.extend({
     return {
       text: '',
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     createFolder() {

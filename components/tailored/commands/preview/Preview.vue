@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { CurrentCommand } from '~/types/utils/commands'
+import { mapState } from 'vuex'
 import {
   commands,
   containsCommand,
@@ -17,23 +18,24 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapState(['ui']),
     hasCommand() {
       return (
-        containsCommand(this.$store.state.ui.chatbarContent) &&
+        containsCommand(this.ui.chatbarContent) &&
         commands.some((cmd) =>
           cmd.name.startsWith(
-            parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+            parseCommand(this.ui.chatbarContent).name.toLowerCase()
           )
         )
       )
     },
     command() {
-      return parseCommand(this.$store.state.ui.chatbarContent)
+      return parseCommand(this.ui.chatbarContent)
     },
     commands() {
       return commands.filter((cmd) =>
         cmd.name.startsWith(
-          parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+          parseCommand(this.ui.chatbarContent).name.toLowerCase()
         )
       )
     },

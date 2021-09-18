@@ -23,14 +23,14 @@
         <div v-if="view === 'list'">
           <TailoredFilesList 
             :path="getPath().children"
-            v-if="$store.state.dataState.files !== DataStateType.Loading"
+            v-if="dataState.files !== DataStateType.Loading"
             :push="push" />
           <UiLoadersFileTable v-else :rows="5" />
         </div>
         <div v-else>
           <TailoredFilesGrid
             :path="getPath().children"
-            v-if="$store.state.dataState.files !== DataStateType.Loading"
+            v-if="dataState.files !== DataStateType.Loading"
             :push="push" />
         </div>
       </UiScroll>

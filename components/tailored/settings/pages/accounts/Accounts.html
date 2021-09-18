@@ -10,12 +10,12 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.accounts.active')" />
       <InteractablesInputGroup
-        :copy-content="$store.state.accounts.active"
+        :copy-content="accounts.active"
         readonly
         type="primary"
         :icon="{ style: 'far', name: 'clipboard' }"
         :action="() => $toast.show($t('global.copied'))"
-        :text="$store.state.accounts.active" />
+        :text="accounts.active" />
     </div>
   </div>
 
@@ -25,7 +25,7 @@
       <InteractablesInput 
         readonly
         type="primary"
-        :text="$store.state.accounts.gasPrice" />
+        :text="accounts.gasPrice" />
     </div>
   </div>
 

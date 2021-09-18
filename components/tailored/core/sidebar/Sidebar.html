@@ -71,12 +71,12 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.friends !== DataStateType.Loading">
           <TailoredCoreUser
             v-for="user in users"
             :user="user"
             :key="user.address"
-            :isTyping="$store.state.ui.isTyping.address === user.address"
+            :isTyping="ui.isTyping.address === user.address"
           />
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
@@ -84,7 +84,7 @@
     </div>
     <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="$store.state.dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.friends !== DataStateType.Loading">
           <TailoredCoreGroup
             v-for="group in groups"
             :group="group"

@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters,  mapState } from 'vuex'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
@@ -16,19 +16,20 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['audio', 'ui', 'media']),
     selectedGroup() {
       return this.$route.params.id
     },
   },
   mounted() {
-    this.$Sounds.changeLevels(this.$store.state.audio.volume / 100)
+    this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('setTypingUser', this.$mock.users[0])
   },
   methods: {
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
-        state: !this.$store.state.ui.modals.createServer,
+        state: !this.ui.modals.createServer,
       })
     },
     acceptCall() {
@@ -40,7 +41,7 @@ export default Vue.extend({
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',
-        state: !this.$store.state.ui.modals.showMarketPlace,
+        state: !this.ui.modals.showMarketPlace,
       })
     },
   },

@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/core'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   props: {
@@ -13,6 +14,9 @@ export default Vue.extend({
   mounted() {
     this.handleOverflow()
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   methods: {
     close() {
       this.$store.commit('quickProfile', false)
@@ -20,7 +24,7 @@ export default Vue.extend({
     handleOverflow() {
       if (this.$device.isDesktop) {
         const quickProfile = this.$refs.quickProfile as HTMLElement
-        const position = this.$store.state.ui.quickProfilePosition
+        const position = this.ui.quickProfilePosition
         let clickX = position.x
         let clickY = position.y
         const widthOverflow =
