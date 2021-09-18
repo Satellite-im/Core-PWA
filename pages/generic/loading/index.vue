@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'LoadingScreen',
@@ -13,22 +14,23 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['prerequisites']),
     // In the rare case our state isn't bound yet
     // (Can happen with persistedStates)
     // Go ahead and load it.
     loadedState(): Boolean {
       return (
-        this.$store.state.prerequisites &&
-        this.$store.state.prerequisites.stateLoaded
+        this.prerequisites &&
+        this.prerequisites.stateLoaded
       )
     },
     // Ensure we're bound to the P2P servers
     peer2peerBound(): Boolean {
-      return this.$store.state.prerequisites.peer2PeerBound
+      return this.prerequisites.peer2PeerBound
     },
     // Ensure the blockchain is bound
     blockchainBound(): Boolean {
-      return this.$store.state.prerequisites.blockchainBound
+      return this.prerequisites.blockchainBound
     },
     // Helper method for prettier loading messages
     loadingStep(): String {

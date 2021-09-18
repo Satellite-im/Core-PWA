@@ -35,7 +35,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('unlock', this.$data.pin)
 
-        if (this.$store.state.accounts.phrase === '') {
+        if (this.accounts.phrase === '') {
           this.$router.replace('/setup/disclaimer')
         } else {
           this.$router.replace('/')

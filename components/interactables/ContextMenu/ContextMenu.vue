@@ -24,7 +24,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'ui']),
   },
   methods: {
     close() {
