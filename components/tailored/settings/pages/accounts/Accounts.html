@@ -37,4 +37,15 @@
       <TypographySubtitle :size="6" :text="$t('pages.settings.accounts.no_devices')" />
     </div>
   </div>
+
+  <UiSpacer :height="20" />
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <InteractablesSwitch
+        v-model="storePin"
+        :label="$t('pages.unlock.store_pin')"
+      />
+    </div>
+  </div>
 </div>

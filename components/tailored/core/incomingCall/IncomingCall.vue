@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
@@ -23,6 +24,12 @@ export default Vue.extend({
       required: false,
     },
   },
+  mounted() {
+    this.$Sounds.playSound(Sounds.CALL)
+  },
+  beforeDestroy() {
+    this.$Sounds.stopSound(Sounds.CALL)
+  }
 })
 </script>
 

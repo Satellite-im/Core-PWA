@@ -31,7 +31,7 @@ export default class SoundManager {
     ][]) {
       this.sounds[key] = new Howl({
         src: [`${Config.ipfs.gateway}${value}`],
-        loop: false,
+        loop: Config.sounds.doesLoop.includes(key),
         volume,
         html5: true,
       })

@@ -25,7 +25,7 @@ export default {
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
-  async unlock({ commit, state }: ActionsArguments, pin: string) {
+  async unlock({ commit, state, dispatch }: ActionsArguments, pin: string) {
     const { pinHash, encryptedPhrase } = state.accounts
 
     if (pin.length < 5) {
@@ -50,6 +50,7 @@ export default {
     }
 
     commit('unlock', pin)
+    dispatch('loadAccount')
   },
   async generateWallet({ commit, state }: ActionsArguments) {
     const { pin } = state.accounts
@@ -105,6 +106,7 @@ export default {
 
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
+    commit('setUserDetails', userInfo)
   },
   async registerUser(
     { commit, dispatch }: ActionsArguments,
@@ -154,6 +156,12 @@ export default {
 
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
+    commit('setUserDetails', {
+      name: userData.name,
+      status: userData.status,
+      photoHash: userData.photoHash,
+      address: userAccount.publicKey.toBase58(),
+    })
   },
   async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
     // Initialize crypto engine
