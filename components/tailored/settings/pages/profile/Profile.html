@@ -60,14 +60,14 @@
           <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
           <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
           <InteractablesInputGroup
-            :copy-content="$store.state.accounts.active"
+            :copy-content="accounts.active"
             readonly
             type="primary"
             size="small"
             :label-text="$t('pages.settings.profile.info.accountID')"
             :icon="{ style: 'far', name: 'clipboard' }"
             :action="() => $toast.show($t('global.copied'))"
-            :text="$store.state.accounts.active" />
+            :text="accounts.active" />
         </div>
       </div>
       <UiSpacer :height="$mq === 'sm' ? 10 : 24" />

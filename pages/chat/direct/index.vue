@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'DirectMessages',
@@ -23,13 +24,15 @@ export default Vue.extend({
         5000
       )
     }, 3000)
-    this.$store.dispatch('fetchFriends')
   },
   beforeDestroy() {
     if (this.$data.updateInterval) {
       clearInterval(this.$data.updateInterval)
       this.updateInterval = null
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     sendMessageAutomatically() {

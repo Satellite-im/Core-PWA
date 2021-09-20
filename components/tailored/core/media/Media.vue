@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   props: {

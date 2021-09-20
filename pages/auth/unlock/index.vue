@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Icon } from '~/types/ui/icons'
 
 export default Vue.extend({
@@ -17,6 +17,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters(['getPinHash']),
+    ...mapState(['accounts']),
   },
   methods: {
     getIcon(): Icon {
@@ -33,17 +34,17 @@ export default Vue.extend({
 
       try {
         await this.$store.dispatch('unlock', this.$data.pin)
+
+        if (this.accounts.phrase === '') {
+          this.$router.replace('/setup/disclaimer')
+        } else {
+          this.$router.replace('/')
+        }
       } catch (error) {
-        this.error = error
+        this.error = error.message
       }
 
       this.$data.decrypting = false
-
-      if (this.$store.state.accounts.phrase === '') {
-        this.$router.replace('/setup/disclaimer')
-      } else {
-        this.$router.replace('/')
-      }
     },
     // Create & store a new pin, then decrypt.
     async create() {
@@ -51,7 +52,7 @@ export default Vue.extend({
         await this.$store.dispatch('setPin', this.$data.pin)
         await this.decrypt()
       } catch (error) {
-        this.error = error
+        this.error = error.message
       }
     },
   },

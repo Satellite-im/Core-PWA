@@ -7,7 +7,7 @@ import VuejsPaginate from 'vuejs-paginate'
 import { mapState } from 'vuex'
 import SearchUtil from '../SearchUtil'
 import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
-import { DataStateType } from '~/store/dataState/state'
+import { DataStateType } from '~/store/dataState/types'
 import { searchResult } from '~/mock/search'
 
 Vue.component('paginate', VuejsPaginate)
@@ -73,7 +73,7 @@ export default Vue.extend({
         : []
     },
     givenQueryItems() {
-      return this.$store.state.search.query.split(' ')
+      return this.search.query.split(' ')
     },
   },
   watch: {

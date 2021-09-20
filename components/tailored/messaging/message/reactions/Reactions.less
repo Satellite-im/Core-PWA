@@ -17,6 +17,10 @@
       margin-left: 0;
     }
   }
+  .emoji-reacted {
+    background: @primary-gradient;
+    box-shadow: @primary-glow;
+  }
   .react-button {
     display: none;
   }
@@ -41,12 +45,13 @@
     bottom: 36px;
     margin: 0px;
     margin-left: -60px;
-    background-color: @dark-gray;
+    background: @semitransparent-dark-gradient;
+    backdrop-filter: @blur;
     padding: 8px 12px;
     border: @light-border;
     border-radius: @corner-rounding;
     z-index: @base-z-index + 2;
-    animation: 1s fadeIn;
+    animation: @animation-speed fadeIn;
     animation-fill-mode: both;
     opacity: 0;
     @keyframes fadeIn {

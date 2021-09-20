@@ -9,7 +9,6 @@ interface Arguments {
 export default function ({ store, route, redirect }: Arguments) {
   const { locked, phrase } = store.state.accounts
 
-  /*
   // If the user is not authenticated
   if (locked && route.path !== '/auth/unlock') {
     return redirect('/auth/unlock')
@@ -19,5 +18,4 @@ export default function ({ store, route, redirect }: Arguments) {
   if (!locked && phrase === '' && route.path !== '/setup/disclaimer') {
     return redirect('/setup/disclaimer')
   }
-  */
 }

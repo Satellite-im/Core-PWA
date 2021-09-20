@@ -1,6 +1,7 @@
 <template src="./ContextMenu.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   props: {
@@ -22,6 +23,9 @@ export default Vue.extend({
       el.removeEventListener('contextmenu', this.handleOverflow)
     }
   },
+  computed: {
+    ...mapState(['settings', 'ui']),
+  },
   methods: {
     close() {
       this.$store.commit('toggleContextMenu', false)
@@ -32,7 +36,7 @@ export default Vue.extend({
     },
     handleOverflow() {
       const contextMenu = this.$refs.contextMenu as HTMLElement
-      const position = this.$store.state.ui.contextMenuPosition
+      const position = this.ui.contextMenuPosition
       let clickX = position.x
       let clickY = position.y
       const widthOverflow = clickX + contextMenu.clientWidth - window.innerWidth

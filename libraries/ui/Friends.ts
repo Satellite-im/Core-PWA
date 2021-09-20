@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import Fuse from 'fuse.js'
 
-import { Friend } from '~/types/ui/core'
+import { Friend } from '~/types/ui/friends'
 
 /**
  * @ported

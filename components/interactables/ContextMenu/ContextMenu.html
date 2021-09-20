@@ -1,13 +1,13 @@
 <div
   class="context-menu"
   ref="contextMenu"
-  v-bind:style="{ left: this.$store.state.ui.contextMenuPosition.x + 'px', 
-  top: this.$store.state.ui.contextMenuPosition.y + 'px' }"
+  v-bind:style="{ left: ui.contextMenuPosition.x + 'px', 
+  top: ui.contextMenuPosition.y + 'px' }"
   v-click-outside="close"
 >
   <TypographySubtitle :size="6" :text="title" v-if="title.length" />
   <p
-    v-for="item of this.$store.state.ui.contextMenuValues"
+    v-for="item of ui.contextMenuValues"
     @click="handle(item.func)"
   >
     {{ item.text }}

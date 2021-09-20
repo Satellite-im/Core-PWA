@@ -37,13 +37,16 @@ export default Vue.extend({
     quickReaction(emoji: String) {
       this.$store.dispatch('addReaction', {
         emoji,
-        reactor: 'Jpanay',
+        reactor: this.$mock.user.name,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
     },
     toggleReactors(emoji: any) {
       this.$data.hovering = emoji
+    },
+    didIReact(reaction: any) {
+      return reaction.reactors.includes(this.$mock.user.name)
     },
   },
 })

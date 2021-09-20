@@ -9,11 +9,8 @@
     "generate": "nuxt generate",
     "android-generate": "yarn generate; npx cap copy; npx cap sync;",
     "electron-mac": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-mac",
-    "electron-windows": 
-      "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-windows",
-    "electron-linux": 
-      "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-linux"
-    ,
+    "electron-windows": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-windows",
+    "electron-linux": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-linux",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "test": "jest"
@@ -38,7 +35,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/toast": "^3.3.1",
-    "@solana/web3.js": "^1.21.0",
+    "@solana/web3.js": "^1.25.0",
     "@tensorflow/tfjs": "^3.8.0",
     "@types/howler": "^2.2.3",
     "@types/simple-peer": "^9.11.1",
@@ -54,12 +51,14 @@
     "dotenv-cli": "^4.0.0",
     "ed2curve": "^0.3.0",
     "emoji-mart-vue-fast": "^10.0.1",
+    "events": "^3.3.0",
     "filesize": "^7.0.0",
     "fuse.js": "^6.4.6",
     "howler": "^2.2.3",
     "less": "^4.1.1",
     "less-loader": "^7.1.1",
     "lodash": "^4.17.21",
+    "micro-base58": "^0.5.0",
     "mousetrap": "^1.6.5",
     "nsfwjs": "^2.4.1",
     "nuxt": "^2.15.3",

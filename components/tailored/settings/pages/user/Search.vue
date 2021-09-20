@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/types/ui/core'
+import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
 import { Users } from '~/mock/users'
 
@@ -57,7 +57,7 @@ export default Vue.extend({
     },
     searchResult() {
       this.result = Users.filter((user) =>
-        user.name.toLowerCase().startsWith(this.search)
+        user.name.toLowerCase().startsWith(this.search.toLowerCase())
       )
       this.selection = -1
     },

@@ -1,14 +1,4 @@
-export enum DataStateType {
-  Empty = 'E',
-  Loading = 'L',
-  Updating = 'U',
-  Ready = 'R',
-}
-interface DataState {
-  files: DataStateType
-  friends: DataStateType
-  search: DataStateType
-}
+import { DataState, DataStateType } from './types'
 
 const InitialDataState = (): DataState => ({
   files: DataStateType.Empty,

@@ -37,10 +37,18 @@ export default Vue.extend({
 
 <style scoped lang="less" src="./Modal.less"></style>
 <style lang="less">
-#settings.is-collapsed > div.sidebar.is-secondary-background > section > div.aside-menu.hidden-scroll > svg {
+#settings.is-collapsed
+  > div.sidebar.is-secondary-background
+  > section
+  > div.aside-menu.hidden-scroll
+  > svg {
   right: 0.9rem !important;
 }
-#settings.is-collapsed > div.sidebar.is-secondary-background > section > div.aside-menu.hidden-scroll > aside {
+#settings.is-collapsed
+  > div.sidebar.is-secondary-background
+  > section
+  > div.aside-menu.hidden-scroll
+  > aside {
   display: none;
 }
 </style>

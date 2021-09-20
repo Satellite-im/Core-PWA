@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { Friend } from '~/types/ui/core'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {

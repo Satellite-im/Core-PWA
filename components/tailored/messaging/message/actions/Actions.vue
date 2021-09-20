@@ -7,7 +7,7 @@
       <font-awesome-icon
         :icon="['far', 'grin-tongue-wink']"
         :class="`control-icon emoji-icon ${
-          $store.state.ui.showEnhancers ? 'primary' : ''
+          ui.showEnhancers ? 'primary' : ''
         }`"
         @click="emojiReaction"
       />
@@ -32,7 +32,12 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
+  computed: {
+    ...mapState(['ui']),
+  },
   props: {
     setReplyChatbarContent: {
       type: Function,

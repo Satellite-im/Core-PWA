@@ -32,12 +32,6 @@ export default Vue.extend({
     return {
       loaded: false,
       newMessageAlert: false,
-      newMessageAlertPos: {
-        top: this.$store.state.ui.mediaOpen ? 5 : 0,
-        right: 30,
-        width: 0,
-      },
-      ro: new ResizeObserver(() => {}),
     }
   },
   computed: {
@@ -64,16 +58,11 @@ export default Vue.extend({
   },
   mounted() {
     this.$nextTick(() => {
-      this.ro = new ResizeObserver((_) => {
-        this.calcNewMessageAlertPos()
-      })
-      this.ro.observe(this.$el)
       this.autoScrollToBottom()
     })
   },
   beforeDestroy() {
     this.loaded = false
-    this.ro.unobserve(this.$el)
   },
   methods: {
     autoScrollToBottom() {
@@ -86,12 +75,6 @@ export default Vue.extend({
             this.$store.dispatch('setIsScrollOver', false)
           })
         }, interval)
-      }
-    },
-    calcNewMessageAlertPos() {
-      if (this.$el) {
-        this.newMessageAlertPos.top = this.$el.offsetTop + 15
-        this.newMessageAlertPos.width = this.$el.offsetWidth - 60
       }
     },
     onScrolled() {

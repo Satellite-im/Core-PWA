@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { RegistrationStatus } from '~/store/accounts/types'
-import { UserRegistrationData } from '~/types/user/user'
+import { UserRegistrationData } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'RegisterScreen',
