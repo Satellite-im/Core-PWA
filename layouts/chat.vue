@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters,  mapState } from 'vuex'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
@@ -34,9 +35,11 @@ export default Vue.extend({
     },
     acceptCall() {
       this.$store.dispatch('acceptCall')
+      this.$Sounds.playSound(Sounds.CONNECTED)
     },
     denyCall() {
       this.$store.dispatch('denyCall')
+      this.$Sounds.playSound(Sounds.HANGUP)
     },
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {

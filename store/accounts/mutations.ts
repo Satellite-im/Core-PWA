@@ -1,3 +1,4 @@
+import { UserRegistrationData } from '~/types/ui/user'
 import { RootState } from '../store.types'
 import { RegistrationStatus } from './types'
 
@@ -20,6 +21,15 @@ const mutations = {
   },
   setActiveAccount(state: RootState, activeAccountPubkey: string) {
     state.accounts.active = activeAccountPubkey
+  },
+  setUserDetails(state: RootState, details: UserRegistrationData) {
+    state.accounts.details = { 
+      name: details.username,
+      status: details.status,
+      profilePicture: details.imageURI,
+      address: state.accounts.active,
+      state: 'online',
+    }
   },
   setRegistrationStatus(
     state: RootState,
