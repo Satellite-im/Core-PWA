@@ -106,7 +106,10 @@ export default {
 
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
-    commit('setUserDetails', userInfo)
+    commit('setUserDetails', {
+      username: userInfo.name,
+      ...userInfo,
+    })
   },
   async registerUser(
     { commit, dispatch }: ActionsArguments,
@@ -157,7 +160,7 @@ export default {
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
     commit('setUserDetails', {
-      name: userData.name,
+      username: userData.name,
       status: userData.status,
       photoHash: userData.photoHash,
       address: userAccount.publicKey.toBase58(),
