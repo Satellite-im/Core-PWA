@@ -1,5 +1,4 @@
 <div id="friends-list" v-scroll-lock="true" class="hidden-scroll">
-  
   <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
     <TailoredFriendsNav :setRoute="setRoute" :route="route" />
     <div v-if="$data.route === 'active'">
