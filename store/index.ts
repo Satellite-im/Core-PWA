@@ -13,6 +13,7 @@ import SettingsMutations from './settings/mutations'
 import UIMuatations from './ui/mutations'
 import UIActions from './ui/actions'
 import SearchMutations from './search/mutations'
+import VideoMutations from './video/mutations'
 
 export const mutations = {
   ...SettingsMutations,
@@ -24,6 +25,7 @@ export const mutations = {
   ...MediaMutations,
   ...AccountsMutations,
   ...SearchMutations,
+  ...VideoMutations,
 }
 
 export const actions = {
