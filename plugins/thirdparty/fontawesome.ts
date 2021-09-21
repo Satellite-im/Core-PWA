@@ -98,6 +98,7 @@ import {
   faVolumeOff,
   faVolumeUp,
   faSmilePlus,
+  faAngleDoubleDown,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
@@ -105,6 +106,7 @@ import Vue from 'vue'
 library.add(fal.faFile)
 library.add(fal.faFolder)
 
+library.add(faAngleDoubleDown)
 library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
 library.add(faLockOpen)
