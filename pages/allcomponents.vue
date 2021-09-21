@@ -61,7 +61,7 @@ export default Vue.extend({
   justify-content: center;
   text-align: center;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: @mobile-breakpoint) {
   /* due to vh issue on mobile devices */
   .container {
     max-height: calc(100vh - 60px);
