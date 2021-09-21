@@ -65,7 +65,7 @@ export default Vue.extend({
     isBitrate: {
       set(state) {
         this.$store.commit('bitrate', state)
-        this.setConstraint('bitrate', state)
+        this.setConstraint('sampleRate', state)
       },
       get() {
         return this.settings.bitrate
@@ -232,33 +232,24 @@ export default Vue.extend({
     inputVolumeControlValueChange(volume: number) {
       this.$store.commit('setInputVolume', volume)
     },
-    hasConstraint(prop: string): Boolean {
-      const supports = navigator.mediaDevices.getSupportedConstraints() as {
-        [key: string]: Boolean
-      }
-      return supports[prop]
+    hasConstraint(prop: keyof MediaTrackConstraintSet): Boolean {
+      const supports = navigator.mediaDevices.getSupportedConstraints()
+      return Boolean(supports[prop])
     },
-    setConstraint(prop: string, value: any) {
-      if (this.hasConstraint(prop)) {
+    setConstraint(prop: keyof MediaTrackConstraintSet, value: any) {
+      // hasConstraint is true only if the prop is supported by the browser
+      if (!this.hasConstraint(prop)) {
         return
       }
-      if (this.$data.userHasGivenAudioAccess) {
-        const track = this.$data.track as MediaStreamTrack
-        const constraints = track.getConstraints() as { [key: string]: any }
-        constraints[prop] = value
-        track.applyConstraints(constraints)
+      if (this.$data.userHasGivenAudioAccess && this.$data.stream) {
+        this.$data.stream
+          .getAudioTracks()
+          .forEach(function (track: MediaStreamTrack) {
+            const constraints = track.getConstraints()
+            constraints[prop] = value
+            track.applyConstraints(constraints)
+          })
       }
-      // navigator.mediaDevices
-      //   .getUserMedia({ video: false, audio: true })
-      //   .then(function (stream: MediaStream) {
-      //     const track = stream.getAudioTracks()[0]
-      //     const constraints = track.getConstraints() as { [key: string]: any }
-      //     constraints[prop] = value
-      //     track.applyConstraints(constraints)
-      //   })
-      //   .catch((error) => {
-      //     console.log(error)
-      //   })
     },
   },
 })
