@@ -31,7 +31,7 @@
     >
       <font-awesome-icon class="control-icon" :icon="['far', 'video']" />
     </div>
-    <div class="vertical-divider"></div>
+    <div class="vertical-divider" v-if="$device.isDesktop"></div>
     <div
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
