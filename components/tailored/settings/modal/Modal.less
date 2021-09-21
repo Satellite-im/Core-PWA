@@ -139,6 +139,7 @@ p {
       border: @light-border;
       backdrop-filter: none;
       background: @semitransparent-dark-gradient;
+      backdrop-filter: @blur;
       margin: 0;
       width: 20rem;
     }
@@ -174,7 +175,7 @@ p {
           position: absolute;
           left: 0px;
           top: 0px;
-          z-index: 1;
+          z-index: @base-z-index + 1;
         }
       }
       &.is-collapsed {
