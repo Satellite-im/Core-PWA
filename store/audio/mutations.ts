@@ -24,7 +24,7 @@ const mutations = {
     state.audio = {
       ...state.audio,
       previousVolume: volume,
-      volume
+      volume,
     }
   },
   setInputVolume(state: NuxtState, inputVolume: Number) {
