@@ -5,6 +5,12 @@ export type ImagePayload = {
   url: string
 }
 
+export type Reaction = {
+  emoji: string
+  reactors: string[]
+  showReactors: boolean
+}
+
 export type Reply = {
   id: string
   at: number
@@ -12,6 +18,7 @@ export type Reply = {
   from: string
   type: string
   payload: TextPayload | ImagePayload
+  reactions: Array<Reaction>
 }
 
 export type Message = {
@@ -20,6 +27,7 @@ export type Message = {
   type: string
   payload: TextPayload | ImagePayload
   replies: Array<Reply>
+  reactions: Array<Reaction>
 }
 
 export type Group = {
