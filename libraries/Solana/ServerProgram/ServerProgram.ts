@@ -34,14 +34,34 @@ export default class ServerProgram {
     }
   }
 
+  /**
+   * @method init
+   * Initializes the class with the SolanaManager instance
+   * @param solana SolanaManager instance
+   */
   init(solana: Solana) {
     this.solana = solana
   }
 
+  /**
+   * @method isInitialized
+   * Checks if the ServerProgram instance is properly initialized
+   * @returns true | false
+   */
   isInitialized() {
     return Boolean(this.solana)
   }
 
+  /**
+   * @method initializeUser
+   * Generate the transaction object to be sent
+   * for the user initialization
+   * @param userAccount the account that will contain the user information
+   * @param name the username
+   * @param photoHash the profile picture IPFS hash
+   * @param status the status string
+   * @returns the transaction object to be sent
+   */
   initializeUser(
     userAccount: Keypair,
     name: string,
@@ -65,6 +85,13 @@ export default class ServerProgram {
     })
   }
 
+  /**
+   * @method getUserPublicKey
+   * Deterministically computes the user public key starting
+   * from the payer account keypair
+   * @param payerAccount the payer account keypair
+   * @returns the computed user public key
+   */
   getUserPublicKey(payerAccount: Keypair) {
     return PublicKey.createWithSeed(
       payerAccount.publicKey,
@@ -73,6 +100,17 @@ export default class ServerProgram {
     )
   }
 
+  /**
+   * @method createUser
+   * Generates and sends the transaction to register a new
+   * user on the network
+   * @param name the username
+   * @param photoHash profile picture IPFS hash
+   * @param status the status string
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns
+   */
   async createUser(
     name: string,
     photoHash: string,
@@ -120,7 +158,13 @@ export default class ServerProgram {
     return userAccount
   }
 
-  // TODO: use strong type
+  /**
+   * @method parseUserInfo
+   * @param userInfo raw account info related to the user that has
+   * been retrieved from the network
+   * @returns a parsed object representing the user information
+   * //TODO: use strong type
+   */
   parseUserInfo(userInfo: any) {
     if (!userInfo) {
       return null
@@ -134,6 +178,12 @@ export default class ServerProgram {
     }
   }
 
+  /**
+   * @method getUser
+   * Retrieves and parses the user information from the network
+   * @param userPubkey the userAccount public key
+   * @returns an object representing the user information
+   */
   async getUser(userPubkey: PublicKey) {
     if (!this.solana) {
       throw new Error('Server program not initialized')
@@ -152,6 +202,19 @@ export default class ServerProgram {
       : null
   }
 
+  /**
+   * @method createDerivedAccount
+   * Utility function to create derived accounts that are owned by the server program
+   * @param connection Solana connection
+   * @param payerAccount payer account keypair
+   * @param seedKey the seed key to generate the account
+   * @param seedString the seed string to generate the account
+   * @param index index of the derived account
+   * @param addressTypeValue type of account to create
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the public key of the generated account
+   */
   async createDerivedAccount(
     connection: Connection,
     payerAccount: Keypair,
