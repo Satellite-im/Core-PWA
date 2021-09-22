@@ -3,22 +3,14 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
-import { Reply, Message } from '~/types/messaging'
+import { Reply, Message, Group } from '~/types/messaging'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
     VueMarkdown,
   },
   props: {
-    reply: {
-      type: Object as PropType<Reply>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Reply',
-      }),
-    },
     message: {
       type: Object as PropType<Message>,
       default: () => ({
@@ -28,11 +20,28 @@ export default Vue.extend({
         payload: 'Invalid Message',
       }),
     },
+    group: {
+      type: Object as PropType<Group>,
+      default: () => {},
+    },
   },
   data() {
-    return { showReplies: false }
+    return { showReplies: false, replyHover: '' }
   },
   methods: {
+    mouseOver(replyId: string) {
+      this.$data.replyHover = replyId
+    },
+
+    emojiReaction(replyID: string) {
+      this.$store.commit('settingReaction', {
+        status: true,
+        groupID: this.$props.group.id,
+        messageID: this.$props.message.id,
+        replyID: replyID,
+      })
+      this.$store.commit('toggleEnhancers', true)
+    },
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)

@@ -22,6 +22,7 @@ export const Messages = [
         payload:
           'Cosmic ipsum probe solstice vernal equinox red dwarf libration double star perigee cosmos cislunar hyperbolic orbit pole star black body meteor shower Jupiter transparency',
         replies: [],
+        reactions: [],
       },
       {
         id: '00-00-11',
@@ -30,6 +31,7 @@ export const Messages = [
         payload:
           'Doppler shift quasar astronomer conjunction dark matter solar Pluto cosmonaut azimuth inner planets supernova new moon libration',
         replies: [],
+        reactions: [],
       },
     ],
   },
@@ -50,6 +52,7 @@ export const Messages = [
         type: 'text',
         payload: 'I am a ~~tast~~ **test**. :smile:',
         replies: [],
+        reactions: [],
       },
       {
         id: '00-20-04',
@@ -57,6 +60,7 @@ export const Messages = [
         type: 'text',
         payload: 'And a follow up to that response message',
         replies: [],
+        reactions: [],
       },
     ],
   },
@@ -74,6 +78,7 @@ export const Messages = [
         payload:
           'Uranus orbit seeing globular cluster Milky Way quasar total eclipse gas giant penumbra quarter moon sun Kirkwood gaps orbital eccentricity vacuum occultation background radiation helium Mir perihelion Neptune inclination Mars corona circumpolar terrestrial binary star perturbation nebula revolve ',
         replies: [],
+        reactions: [],
       },
       {
         id: '00-123193-10',
@@ -86,6 +91,7 @@ export const Messages = [
           src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
         replies: [],
+        reactions: [],
       },
       {
         id: '00-00-11',
@@ -94,6 +100,7 @@ export const Messages = [
         payload:
           'NASA precession cislunar dark matter terminator bolometer red shift yellow dwarf white giant north star transparency celestial probe azimuth ephemeris Venus albedo perigee star',
         replies: [],
+        reactions: [],
       },
     ],
   },
@@ -144,6 +151,7 @@ export const Messages = [
             type: 'text',
             at: 1620515583000,
             payload: 'This is a late message reply',
+            reactions: [],
           },
         ],
         reactions: [],
@@ -162,18 +170,19 @@ export const Messages = [
     ],
   },
   {
-    id: '00-00-03',
+    id: '00-CX-03',
     at: 1620515543000,
     type: 'group',
     from: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
     to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     messages: [
       {
-        id: '00-00-10',
+        id: '00-UM-10',
         at: 1620515543000,
         type: 'text',
         payload:
           'Mir local arm starlight day eccentricity Saturn falling star Mars astronomy gravitation',
+        reactions: [],
         replies: [
           {
             id: '02-432-138',
@@ -182,7 +191,7 @@ export const Messages = [
             type: 'text',
             at: 1620515543000,
             payload: 'This is a message reply',
-            reactions: [],
+            reactions: [{ emoji: '🔥', reactors: ['Jpanay'] }],
           },
           {
             id: '02-432-338',
@@ -208,8 +217,20 @@ export const Messages = [
         replies: [],
         reactions: [
           { emoji: '👍', reactors: ['Taurus Nix', 'Stephen Strange'] },
-          { emoji: '🔥', reactors: ['Krombopulos Michael', 'Taurus Nix', 'Stephen Strange', 'John Thundergun', 'Halley Themis'] },
-          { emoji: '🤯', reactors: ['Taurus Nix', 'Halley Themis', 'Stephen Strange'] },
+          {
+            emoji: '🔥',
+            reactors: [
+              'Krombopulos Michael',
+              'Taurus Nix',
+              'Stephen Strange',
+              'John Thundergun',
+              'Halley Themis',
+            ],
+          },
+          {
+            emoji: '🤯',
+            reactors: ['Taurus Nix', 'Halley Themis', 'Stephen Strange'],
+          },
         ],
       },
     ],

@@ -1,5 +1,5 @@
-<div class="emoji-reactions" v-if="this.$props.message.reactions">
-  <div v-for="reaction in this.$props.message.reactions">
+<div class="emoji-reactions" v-if="reactions">
+  <div v-for="reaction in reactions">
     <div v-if="hovering === reaction.emoji" class="reactors">
       <div class="reactors-emoji">{{reaction.emoji}}</div>
       <div class="reactors-list" v-if="reaction.reactors.length > 3">
@@ -20,7 +20,7 @@
   </div>
   <div class="react-button">
     <font-awesome-icon
-      v-if="this.$props.message.reactions.length"
+      v-if="reactions.length"
       :icon="['far', 'smile-plus']"
       class="emoji-icon"
       @click="emojiReaction" />
