@@ -4,10 +4,10 @@
     data-tooltip="Video">
     <InteractablesButton
       class="left"
-      type="dark"
+      :type="video.disabled ? 'danger' : 'dark'"
       size="small"
       :icon="{ style: 'far', name: 'video' }"
-      :action="() => {}" />
+      :action="toggleVideo" />
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
