@@ -6,7 +6,8 @@
   padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
   border-radius: @corner-rounding;
   min-height: 5rem;
-  background: @dark-gray;
+  background: @semitransparent-light-gradient;
+  backdrop-filter: @blur;
   z-index: @base-z-index;
 
   #commands {
@@ -20,10 +21,13 @@
   .tag {
     background: @black;
     color: @bright-text;
-    border-radius: 2px;
+    border-radius: @corner-rounding;
+    border: @light-border;
+    box-shadow: none;
     font-family: @primary-font;
     text-transform: lowercase;
     padding: 0 @light-spacing;
+    background: @semitransparent-dark-gradient
   }
 
   .red {

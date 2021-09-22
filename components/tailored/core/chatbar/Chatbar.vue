@@ -41,7 +41,7 @@ export default Vue.extend({
     },
     isValidCommand() {
       const currentText = parseCommand(
-        this.ui.chatbarContent
+        this.$store.state.ui.chatbarContent
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.$store.state.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
