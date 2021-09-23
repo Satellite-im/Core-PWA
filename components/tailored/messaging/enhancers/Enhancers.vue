@@ -41,6 +41,7 @@ export default Vue.extend({
           reactor: 'Jpanay',
           groupID: this.ui.settingReaction.groupID,
           messageID: this.ui.settingReaction.messageID,
+          replyID: this.ui.settingReaction.replyID,
         })
         this.toggleEnhancers()
       } else {

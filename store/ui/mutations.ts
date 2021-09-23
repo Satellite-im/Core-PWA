@@ -1,4 +1,6 @@
 import { NuxtState } from '@nuxt/types/app'
+import { without } from 'lodash'
+import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
 export default {
@@ -149,6 +151,7 @@ export default {
       settingReaction: status,
     }
   },
+
   /**
    * @method
    * @description
@@ -157,61 +160,76 @@ export default {
    * @example
    */
   addReaction(state: NuxtState, reaction: any) {
-    // - break down and turn into util for finding specific message indicies
-    const messageGroups: any[] = [...state.ui.messages]
-    // Find message group meant for reaction
-    for (let i = 0; i < messageGroups.length; i++) {
-      if (!messageGroups[i].messages) {
-        continue
+    console.log(reaction)
+    const messageGroups: MessageGroup = [...state.ui.messages]
+
+    //Find message group meant for reaction
+    const currGroup = messageGroups?.find(
+      (group) => group.id === reaction.groupID
+    )
+
+    if (currGroup?.messages) {
+      // Find message in message group or reply in message meant for reaction
+      let currMessage
+      if (reaction.replyID) {
+        currMessage = currGroup?.messages
+          .find((message) => message.id === reaction.messageID)
+          ?.replies.find((reply) => reply.id === reaction.replyID)
+      } else {
+        currMessage = currGroup?.messages.find(
+          (message) => message.id === reaction.messageID
+        )
       }
-      if ((messageGroups[i].id = reaction.groupID)) {
-        const currGroup = messageGroups[i]
-        // Find message in message group meant for reaction
-        for (let j = 0; j < currGroup.messages.length; j++) {
-          const currMessage = currGroup.messages[j]
-          if (currMessage.id === reaction.messageID) {
-            // if reactions array doesnt exist create with new reaction
-            if (!currMessage.reactions) {
-              currMessage.reactions = [
-                {
-                  emoji: reaction.emoji,
-                  reactors: [reaction.reactor],
-                  showReactors: false,
-                },
-              ]
-              return
+
+      console.log(currMessage)
+
+      if (currMessage) {
+        // If reactions array doesnt exist create with new reaction
+        if (!currMessage.reactions) {
+          currMessage.reactions = [
+            {
+              emoji: reaction.emoji,
+              reactors: [reaction.reactor],
+              showReactors: false,
+            },
+          ]
+          return
+        } else {
+          // If reactions array exist
+          // Find selected reaction
+          const currReaction = currMessage.reactions.find(
+            (react) => react.emoji == reaction.emoji
+          )
+          if (currReaction) {
+            // If selected reaction already exist in reactions array
+            if (
+              currReaction?.reactors.includes(reaction.reactor) &&
+              currReaction.reactors.length === 1
+            ) {
+              // If the selected reactions already has the reactor and is the only one
+              currMessage.reactions = without(
+                currMessage.reactions,
+                currReaction
+              )
+            } else if (currReaction?.reactors.includes(reaction.reactor)) {
+              // If the selected reactions already has the reactor
+              currReaction.reactors = without(
+                currReaction.reactors,
+                reaction.reactor
+              )
+            } else {
+              // If the selected reactions doesnt have the reactor
+              currReaction?.reactors.push(reaction.reactor)
             }
-            // if reaction exists either add or remove reactor based on reaction.reactor
-            for (let k = 0; k < currMessage.reactions.length; k++) {
-              const currReaction = currMessage.reactions[k]
-              if (currReaction.emoji === reaction.emoji) {
-                if (currReaction.reactors.includes(reaction.reactor)) {
-                  for (let l = 0; l < currReaction.reactors.length; l++) {
-                    const currReactor = currReaction.reactors[l]
-                    if (currReactor === reaction.reactor) {
-                      // if reactor exists remove reactor
-                      currReaction.reactors.splice(l, 1)
-                    }
-                  }
-                  if (currReaction.reactors.length === 0) {
-                    // if reactors array has no reactors remove reaction
-                    currMessage.reactions.splice(k, 1)
-                  }
-                } else {
-                  currReaction.reactors.push(reaction.reactor)
-                }
-                return
-              }
-            }
-            // if reaction array exists and reaction emoji doesnt exist
-            if (currMessage.reactions) {
-              currMessage.reactions.push({
-                emoji: reaction.emoji,
-                reactors: [reaction.reactor],
-                showReactors: false,
-              })
-              return
-            }
+          } else {
+            // If selected reaction doesnt exist in reactions array
+            console.log('ENTER')
+            currMessage.reactions.push({
+              emoji: reaction.emoji,
+              reactors: [reaction.reactor],
+              showReactors: false,
+            })
+            return
           }
         }
       }

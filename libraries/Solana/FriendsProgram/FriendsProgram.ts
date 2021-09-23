@@ -45,10 +45,25 @@ export default class FriendsProgram extends EventEmitter {
     }
   }
 
+  /**
+   * @method init
+   * Initializes the class with the SolanaManager instance
+   * @param solana SolanaManager instance
+   */
   init(solana: Solana) {
     this.solana = solana
   }
 
+  /**
+   * @method createDerivedAccount
+   * Utility function to create derived accounts that are owned by the friends program
+   * @param seedKey the seed key to generate the account
+   * @param seedString the seed string to generate the account
+   * @param params instruction params containing the friend public key
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the public key of the generated account
+   */
   async createDerivedAccount(
     seedKey: PublicKey,
     seedString: string,
@@ -92,6 +107,16 @@ export default class FriendsProgram extends EventEmitter {
     return key
   }
 
+  /**
+   * @method createFriend
+   * Generates and initializes a friend account that represent the
+   * friendship of 2 accounts
+   * @param userFromKey the public key of the user that sent the request
+   * @param userToKey the public key of the recipient
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the public key of the generated friend account
+   */
   async createFriend(
     userFromKey: PublicKey,
     userToKey: PublicKey,
@@ -122,6 +147,19 @@ export default class FriendsProgram extends EventEmitter {
     return friendKey
   }
 
+  /**
+   * @method initFriendRequest
+   * Generate the transaction object for a new friend request to be sent
+   * @param friendKey the public key of the friend account that
+   * has been derived in straight order (fromKey first and toKey after)
+   * @param friend2Key the public key of the friend account that
+   * has been derived in mirrored order (toKey first and fromKey after)
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param fromPaddedBuffer the buffer representation of the encrypted textile
+   * mailbox id related to the sender
+   * @returns the generated transaction object
+   */
   initFriendRequest(
     friendKey: PublicKey,
     friend2Key: PublicKey,
@@ -151,6 +189,17 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
+  /**
+   * @method initAcceptFriendRequest
+   * Generate the transaction object to accept a friend request
+   * @param friendKey the public key of the friend account that contains the
+   * friend request to be accepted
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param toPaddedBuffer the buffer representation of the encrypted textile
+   * mailbox id related to the recipient
+   * @returns the generated transaction object
+   */
   initAcceptFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -178,6 +227,15 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
+  /**
+   * @method initDenyFriendRequest
+   * Generates the transaction object to be sent to deny an existing friend
+   * request
+   * @param friendKey the public key of the friend request to be denied
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @returns a transaction object ready to be sent through the network
+   */
   initDenyFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -197,6 +255,15 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
+  /**
+   * @method initRemoveFriendRequest
+   * Generates the transaction object to be sent to remove an existing friend
+   * request
+   * @param friendKey the public key of the friend request to be removed
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @returns a transaction object ready to be sent through the network
+   */
   initRemoveFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -216,6 +283,14 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
+  /**
+   * @method initRemoveFriend
+   * Generates the transaction object to be sent to remove an existing friend
+   * @param friendKey the public key of the friend account to be removed
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @returns a transaction object ready to be sent through the network
+   */
   initRemoveFriend(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -235,6 +310,22 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
+  /**
+   * @method createFriendRequest
+   * Generates and sends a transaction to create a new frend request and register
+   * it on the network
+   * @param friendKey the public key of the friend account that
+   * has been derived in straight order (fromKey first and toKey after)
+   * @param friend2Key the public key of the friend account that
+   * has been derived in mirrored order (toKey first and fromKey after)
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param fromPaddedBuffer the buffer representation of the encrypted textile
+   * mailbox id related to the sender
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the id of the transaction that has been sent
+   */
   createFriendRequest(
     friendKey: PublicKey,
     friend2Key: PublicKey,
@@ -273,6 +364,20 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method acceptFriendRequest
+   * Generates and sends a transaction to accept an existing friend request. It can
+   * be done only by the recipient of the request
+   * @param friendKey the public key of the friend account that contains the
+   * friend request to be accepted
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param toPaddedBuffer the buffer representation of the encrypted textile
+   * mailbox id related to the recipient
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the id of the transaction that has been sent
+   */
   acceptFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -309,6 +414,17 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method denyFriendRequest
+   * Generates and sends a transaction to deny an existing friend request. It can
+   * be done only by the recipient of the request
+   * @param friendKey the public key of the friend request to be denied
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the id of the transaction that has been sent
+   */
   denyFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
@@ -343,6 +459,17 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method removeFriendRequest
+   * Generates and sends a transaction to remove an existing friend request. It can
+   * be done only by the original sender of the request
+   * @param friendKey the public key of the friend account to be removed
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the id of the transaction that has been sent
+   */
   removeFriendRequest(
     friendKey: PublicKey,
     userFromAccount: Keypair,
@@ -377,6 +504,17 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method removeFriend
+   * Generates and sends a transaction to remove an existing friend. It can be
+   * done by both the sender and the recipient
+   * @param friendKey the public key of the friend account to be removed
+   * @param userFromKey the public key of the sender
+   * @param userToKey the public key of the recipient
+   * @param confirmOptionsOverride Solana confirm options to be eventually
+   * overwritten (eg. commitment, preflightCommitment)
+   * @returns the id of the transaction that has been sent
+   */
   removeFriend(
     friendKey: PublicKey,
     userFromAccount: Keypair,
@@ -407,6 +545,12 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method getFriend
+   * Retrieves a friend account from a given public key
+   * @param friendKey the public key of the friend account
+   * @returns the raw friend account object
+   */
   async getFriend(friendKey: PublicKey) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -425,6 +569,12 @@ export default class FriendsProgram extends EventEmitter {
     return friendLayout.decode(Buffer.from(accountInfo.data))
   }
 
+  /**
+   * @method getParsedFriend
+   * Retrieves a friend account from a given public key and parses it
+   * @param friendKey the public key of the friend account
+   * @returns the parsed friend object
+   */
   async getParsedFriend(friendKey: PublicKey) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -445,6 +595,13 @@ export default class FriendsProgram extends EventEmitter {
     return parseFriendAccount({ pubkey: friendKey, account: accountInfo })
   }
 
+  /**
+   * @method computeFriendAccountKey
+   * Computes the friend account key from 2 given public keys
+   * @param userFromKey the public key to be used at position 0
+   * @param userToKey the public key to be used at position 1
+   * @returns the computed public key
+   */
   async computeFriendAccountKey(userFromKey: PublicKey, userToKey: PublicKey) {
     const { key } = await publicKeyFromSeeds(
       [userFromKey.toBytes(), userToKey.toBytes()],
@@ -455,6 +612,14 @@ export default class FriendsProgram extends EventEmitter {
     return key
   }
 
+  /**
+   * @method getFriendAccountsByStatus
+   * Gets all the friend accounts related to the program, filtered by the
+   * given status code
+   * @param status the status code to filter
+   * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
+   * @returns a list of incoming and outgoing requests filtered by status
+   */
   async getFriendAccountsByStatus(status: FriendStatus) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -489,6 +654,14 @@ export default class FriendsProgram extends EventEmitter {
     }
   }
 
+  /**
+   * @method buildEventHandler
+   * Utility function that is used for building event handlers to
+   * be used together with the emit function inherited from the EventEmitter class
+   * @param friendEvent the friend event to listen
+   * new_request, new_friend, request_denied, request_removed, friend_removed
+   * @returns the event handler
+   */
   buildEventHandler(friendEvent: FriendsEvents) {
     return ({ accountId, accountInfo }: KeyedAccountInfo) => {
       const parsedFriend = parseFriendAccount({
@@ -499,6 +672,11 @@ export default class FriendsProgram extends EventEmitter {
     }
   }
 
+  /**
+   * @method subscribeToFriendsEvents
+   * Subscribes to all friends events internally
+   * External listeners can be registered using the addEventListener function
+   */
   subscribeToFriendsEvents() {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -603,6 +781,14 @@ export default class FriendsProgram extends EventEmitter {
     )
   }
 
+  /**
+   * @method addEventListener
+   * Adds a new event listener for a specific event. It's a wrapper to the
+   * inherited addListener function from EventEmitter
+   * @param type type of the event to subscribe
+   * @param callback callback function to be invoked when the
+   * event occours
+   */
   addEventListener(
     type: FriendsEvents,
     callback: (friendAccount?: FriendAccount) => void
@@ -610,6 +796,13 @@ export default class FriendsProgram extends EventEmitter {
     this.addListener(type, callback)
   }
 
+  /**
+   * @method removeEventListener
+   * Removes an event listener. It's a wrapper to the
+   * inherited removeListener function from EventEmitter
+   * @param type type of the event to subscribe
+   * @param listener callback function to be removed
+   */
   removeEventListener(
     type: FriendsEvents,
     listener: (friendAccount?: FriendAccount) => void

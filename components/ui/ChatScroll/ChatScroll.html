@@ -9,6 +9,8 @@
       {{ $store.state.ui.unreadMessage }} {{ $t('pages.chat.new_message') }}
     </b>
     since 2:20 AM
-    <span>{{ $t('pages.chat.jump_to_current') }}</span>
+    <span>
+      <font-awesome-icon :icon="['far', 'angle-double-down']" />
+    </span>
   </div>
 </div>

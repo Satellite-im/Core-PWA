@@ -7,7 +7,7 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   computed: {
-    ...mapState(['audio']),
+    ...mapState(['audio', 'video']),
   },
   methods: {
     /**
@@ -21,6 +21,13 @@ export default Vue.extend({
       else this.$Sounds.playSound(Sounds.UNMUTE)
 
       this.$store.commit('mute')
+    },
+    toggleVideo() {
+      const videoDisabled = this.video.disabled
+      if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
+      else this.$Sounds.playSound(Sounds.UNDEAFEN)
+
+      this.$store.commit('toggleCamera')
     },
   },
 })
