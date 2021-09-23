@@ -62,6 +62,9 @@ export default Vue.extend({
       this.selection = -1
     },
     selectUser(user: User, event: Event) {
+      if (!user) {
+        return
+      }
       event.stopPropagation()
       const exists = this.selected.find((item, i) => {
         if (item.name === user.name) {
