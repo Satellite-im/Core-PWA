@@ -12,6 +12,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method showQuickProfile DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)

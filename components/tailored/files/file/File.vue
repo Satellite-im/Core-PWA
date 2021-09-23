@@ -15,6 +15,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method isImage DocsTODO
+     * @description
+     * @param fileType
+     * @returns
+     * @example
+     */
     isImage(filetype: string) {
       const acceptableImages = ['image/png', 'image/jpg']
       return acceptableImages.includes(filetype)

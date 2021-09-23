@@ -28,6 +28,12 @@ export default Vue.extend({
      * Adds emoji to current text input
      * (emoji: any) Comes from <picker/> select event
      */
+    /**
+     * @method addEmoji DocsTODO
+     * @description
+     * @param emoji
+     * @example
+     */
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('addReaction', {
@@ -44,9 +50,20 @@ export default Vue.extend({
         )
       }
     },
+    /**
+     * @method setRoute DocsTODO
+     * @description
+     * @param route
+     * @example
+     */
     setRoute(route: string) {
       this.$data.route = route
     },
+    /**
+     * @method toggleEnhancers DocsTODO
+     * @description
+     * @example
+     */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
       if (this.ui.settingReaction.status) {

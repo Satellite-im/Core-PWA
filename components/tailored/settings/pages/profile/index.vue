@@ -33,25 +33,56 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     togglePhrase() {
       this.$data.showPhrase = !this.$data.showPhrase
     },
-
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     toggleCropper() {
       this.showCropper = !this.showCropper
     },
-
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     openFileDialog() {
       const fileInput = this.$refs.file as HTMLElement
       fileInput.click()
     },
-
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     setCroppedImage(image: any) {
       const fileInput = this.$refs.file as HTMLInputElement
       this.croppedImage = image
       fileInput.value = ''
     },
-
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     selectProfileImage(e: any) {
       if (e.target && e.target.value !== null) {
         const files = e.target.files || e.dataTransfer.files

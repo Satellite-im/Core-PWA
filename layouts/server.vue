@@ -18,6 +18,13 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',

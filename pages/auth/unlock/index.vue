@@ -20,6 +20,13 @@ export default Vue.extend({
     ...mapState(['accounts']),
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     getIcon(): Icon {
       if (this.getPinHash) {
         return { style: 'far', name: 'arrow-circle-right' }
@@ -28,6 +35,13 @@ export default Vue.extend({
       }
     },
     // Decrypt stored encrypted data into memory
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     async decrypt() {
       this.$data.decrypting = true
       this.error = ''
@@ -47,6 +61,13 @@ export default Vue.extend({
       this.$data.decrypting = false
     },
     // Create & store a new pin, then decrypt.
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     async create() {
       try {
         await this.$store.dispatch('setPin', this.$data.pin)

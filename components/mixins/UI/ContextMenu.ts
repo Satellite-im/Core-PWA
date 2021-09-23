@@ -5,6 +5,13 @@ export const ContextMenu = {
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method contextMenu DocsTODO
+     * @description
+     * @param e
+     * @returns
+     * @example
+     */
     contextMenu(e: Event) {
       e.preventDefault()
       const contextMenuStatus = this.ui.contextMenuStatus

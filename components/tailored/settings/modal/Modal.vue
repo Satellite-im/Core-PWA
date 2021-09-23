@@ -13,21 +13,47 @@ export default Vue.extend({
     /**
      * Opens and closes the left hand sidebar
      */
+    /**
+     * @method toggleSidebar DocsTODO
+     * @description
+     * @example
+     */
     toggleSidebar() {
       this.$data.sidebar = !this.$data.sidebar
     },
+    /**
+     * @method showSidebar DocsTODO
+     * @description
+     * @example
+     */
     showSidebar() {
       this.$data.sidebar = true
     },
+    /**
+     * @method collapseSidebar DocsTODO
+     * @description
+     * @example
+     */
     collapseSidebar() {
       this.$data.sidebar = false
     },
+    /**
+     * @method changeRoute DocsTODO
+     * @description
+     * @param route
+     * @example
+     */
     changeRoute(route: string) {
       this.$data.page = route
       if (this.$device.isMobile) {
         this.collapseSidebar()
       }
     },
+    /**
+     * @method closeModal DocsTODO
+     * @description
+     * @example
+     */
     closeModal() {
       this.$store.commit('toggleSettings', false)
     },

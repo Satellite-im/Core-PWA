@@ -36,6 +36,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggle DocsTODO
+     * @description
+     * @example
+     */
     toggle() {
       this.$emit('toggle', !this.isEnabled)
     },

@@ -291,6 +291,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     testAction(): void {
       alert('test')
     },

@@ -11,6 +11,11 @@ export default Vue.extend({
     this.$store.commit('fullscreen', false)
   },
   methods: {
+    /**
+     * @method toggleFullscreen DocsTODO
+     * @description
+     * @example
+     */
     toggleFullscreen() {
       this.$store.commit('fullscreen', !this.ui.fullscreen)
     },

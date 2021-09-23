@@ -12,6 +12,11 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method setReplyChatbarContent DocsTODO
+     * @description
+     * @example
+     */
     setReplyChatbarContent() {
       this.$store.commit('setReplyChatbarContent', {
         id: '',

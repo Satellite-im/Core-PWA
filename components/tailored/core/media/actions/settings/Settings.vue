@@ -50,14 +50,32 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggleMenu DocsTODO
+     * @description
+     * @param event
+     * @example
+     */
     toggleMenu(event: Event): void {
       this.$data.menuOpen = !this.$data.menuOpen
       event.stopPropagation()
     },
+    /**
+     * @method hideMenu DocsTODO
+     * @description
+     * @param event
+     * @example
+     */
     hideMenu(event: Event): void {
       this.$data.menuOpen = !this.$data.menuOpen
       event.stopPropagation()
     },
+    /**
+     * @method switchMenuItem DocsTODO
+     * @description
+     * @param event
+     * @example
+     */
     switchMenuItem(event: Event): void {
       const menu = this.$refs.menu as HTMLElement
       const target = event.target as HTMLElement
@@ -104,6 +122,11 @@ export default Vue.extend({
       }
     },
     ...UserPermissions.methods,
+    /**
+     * @method setupDefaults DocsTODO
+     * @description
+     * @example
+     */
     async setupDefaults() {
       const permissionsObject: any = await this.getUserPermissions()
       // Toggles the show/hide on the button to request permissions
@@ -139,6 +162,11 @@ export default Vue.extend({
         )
       }
     },
+    /**
+     * @method enableAudio DocsTODO
+     * @description
+     * @example
+     */
     async enableAudio() {
       // Check to see if the user has permission
       try {

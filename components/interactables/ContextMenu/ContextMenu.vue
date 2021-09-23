@@ -27,9 +27,19 @@ export default Vue.extend({
     ...mapState(['settings', 'ui']),
   },
   methods: {
+    /**
+     * @method close
+     * @description Closes context menu
+     */
     close() {
       this.$store.commit('toggleContextMenu', false)
     },
+    /**
+     * @method handle
+     * @description Executes callback
+     * @param func Function to execute
+     * @example handle(this.handleOverflow)
+     */
     handle(func: any) {
       func()
       this.close()

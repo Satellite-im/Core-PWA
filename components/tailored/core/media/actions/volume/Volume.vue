@@ -38,9 +38,20 @@ export default Vue.extend({
     document.removeEventListener('click', this.hideSlider)
   },
   methods: {
+    /**
+     * @method toggleSlider DocsTODO
+     * @description
+     * @example
+     */
     toggleSlider() {
       this.$data.showSlider = !this.$data.showSlider
     },
+    /**
+     * @method hideSlider DocsTODO
+     * @description
+     * @param event
+     * @example
+     */
     hideSlider(event: Event) {
       if (
         (this.$refs.volumegroup as Element).contains(event.target as Node) ===
@@ -49,6 +60,12 @@ export default Vue.extend({
         this.$data.showSlider = false
       }
     },
+    /**
+     * @method recievedValue DocsTODO
+     * @description
+     * @param volume
+     * @example
+     */
     receivedValue(volume: Number) {
       this.$emit('volumeControlValueChange', volume)
     },

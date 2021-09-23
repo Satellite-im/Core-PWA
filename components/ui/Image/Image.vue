@@ -23,6 +23,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     oepnImage() {
       // @ts-ignore
       window?.open(source, '_blank').focus()

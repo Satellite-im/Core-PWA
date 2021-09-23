@@ -26,6 +26,12 @@ export default Vue.extend({
     },
   },
   computed: {
+    /**
+     * @method members DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     members() {
       const filterFriends = (friends: User[], members: string[]) => {
         return friends.filter((friend: User) =>

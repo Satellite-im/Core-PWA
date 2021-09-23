@@ -36,6 +36,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     async loadAccount() {
       try {
         await this.$store.dispatch('loadAccount')

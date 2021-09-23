@@ -22,6 +22,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method changeSubject DocsTODO
+     * @description
+     * @param subject
+     * @returns
+     * @example
+     */
     changeSubject(subject: String) {
       console.log(subject)
     },

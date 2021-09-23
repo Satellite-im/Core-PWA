@@ -65,6 +65,13 @@ export default Vue.extend({
     this.loaded = false
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     autoScrollToBottom() {
       const interval = this.loaded ? 100 : 1000
       if (this.$el && this.autoScroll) {
@@ -77,6 +84,13 @@ export default Vue.extend({
         }, interval)
       }
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     onScrolled() {
       if (this.$el) {
         if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {

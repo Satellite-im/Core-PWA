@@ -4,16 +4,21 @@
 export default {
   name: 'Group',
   props: ['group', 'channels', 'setActiveChannel'],
-  data () {
+  data() {
     return {
-      collapsed: false
+      collapsed: false,
     }
   },
   methods: {
-    toggleCollapse () {
+    /**
+     * @method toggleCollapse DocsTODO
+     * @description
+     * @example
+     */
+    toggleCollapse() {
       this.collapsed = !this.collapsed
-    }
-  }
+    },
+  },
 }
 </script>
 

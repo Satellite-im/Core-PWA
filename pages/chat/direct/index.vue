@@ -35,6 +35,13 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     sendMessageAutomatically() {
       this.$data.testMsgSent += 1
       if (this.$data.testMsgSent > 5) clearInterval(this.$data.updateInterval)

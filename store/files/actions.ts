@@ -4,6 +4,13 @@ import { Files } from '~/mock/files'
 
 export default {
   handler: () => {},
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async fetchFiles({ commit, state }: ActionsArguments) {
     if (
       state.dataState.files === DataStateType.Loading ||

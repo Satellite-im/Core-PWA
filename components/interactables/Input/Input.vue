@@ -75,9 +75,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method update
+     * @description Emits the update event with updated internalText string
+     */
     update() {
       this.$emit('update', this.internalText)
     },
+    /**
+     * @method clearSearch
+     * @description Sets internalText in data to an empty string
+     */
     clearSearch() {
       this.internalText = ''
     },

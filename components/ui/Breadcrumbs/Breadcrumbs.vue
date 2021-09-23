@@ -9,6 +9,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     buildLink(depth: number) {
       return `/${this.route.slice(0, depth + 1).join('/')}`
     },

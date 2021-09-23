@@ -48,10 +48,24 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     requestPermissions() {
       // @ts-ignore
       this.$notifications.requestNotificationPermission()
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     sendNotification() {
       this.$notifications
         // @ts-ignore

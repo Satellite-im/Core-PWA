@@ -32,6 +32,13 @@ export default Vue.extend({
     this.$store.dispatch('fetchFriends')
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     setRoute(route: Route) {
       this.$data.route = route
     },

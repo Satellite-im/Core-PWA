@@ -26,9 +26,21 @@ export default Vue.extend({
     /**
      * Computes the amount of characters left
      */
+    /**
+     * @method charlimit DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
+    /**
+     * @method hasCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     hasCommand() {
       return (
         containsCommand(this.$store.state.ui.chatbarContent) &&
@@ -39,6 +51,12 @@ export default Vue.extend({
         )
       )
     },
+    /**
+     * @method isValidCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     isValidCommand() {
       const currentText = parseCommand(
         this.ui.chatbarContent
@@ -49,9 +67,22 @@ export default Vue.extend({
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
+      /**
+       * @method get DocsTODO
+       * @description
+       * @returns
+       * @example
+       */
       get() {
         return this.$store.state.ui.chatbarContent
       },
+      /**
+       * @method set DocsTODO
+       * @description
+       * @param val
+       * @returns
+       * @example
+       */
       set(val: string) {
         this.$store.commit('chatbarContent', val)
         this.$data.text = val
@@ -59,11 +90,21 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggleEnhancers DocsTODO
+     * @description
+     * @example
+     */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
     },
     /**
      * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
+     */
+    /**
+     * @method autoGrow DocsTODO
+     * @description
+     * @example
      */
     autoGrow() {
       // made const variables from this.$refs --> HTMLElement through typecasting
@@ -87,9 +128,21 @@ export default Vue.extend({
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },
+    /**
+     * @method handleInputChange DocsTODO
+     * @description
+     * @example
+     */
     handleInputChange() {
       this.autoGrow()
     },
+    /**
+     * @method handleInputKeydown DocsTODO
+     * @description
+     * @param event
+     * @returns
+     * @example
+     */
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case 'Backspace':
@@ -113,6 +166,11 @@ export default Vue.extend({
       }
       return true
     },
+    /**
+     * @method sendMessage DocsTODO
+     * @description
+     * @example
+     */
     sendMessage() {
       this.$store.dispatch('sendMessage', {
         value: this.value,

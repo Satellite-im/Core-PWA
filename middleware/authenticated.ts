@@ -6,6 +6,14 @@ interface Arguments {
   redirect: (location: RawLocation) => void
   route: NuxtRouteConfig
 }
+
+/**
+ * @method
+ * @description
+ * @param
+ * @returns
+ * @example
+ */
 export default function ({ store, route, redirect }: Arguments) {
   const { locked, phrase } = store.state.accounts
 

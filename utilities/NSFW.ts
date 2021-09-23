@@ -1,6 +1,13 @@
 // @ts-nocheck
 import * as nsfwjs from 'nsfwjs'
 
+/**
+ * @method isNSFW DocsTODO
+ * @description
+ * @param file
+ * @returns
+ * @example
+ */
 export const isNSFW = (file: File) => {
   const fileTypePrefix = file.type.split('/')[0]
   if (fileTypePrefix !== 'image') {

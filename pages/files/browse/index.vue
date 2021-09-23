@@ -27,11 +27,25 @@ export default Vue.extend({
     this.$store.dispatch('fetchFiles')
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     changeView(type: 'grid' | 'list') {
       this.$data.view = type
     },
     /**
      * Allows you to get the current path file object
+     */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
      */
     getPath(): any {
       if (this.$data.path.length === 0) {
@@ -48,6 +62,13 @@ export default Vue.extend({
     /**
      * Push a new child name to the path array
      */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     push(item: any) {
       if (item.children) {
         this.$data.path.push(item.name)
@@ -55,6 +76,13 @@ export default Vue.extend({
     },
     /**
      * Pull n items from the file path array
+     */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
      */
     pull(count: number = 1) {
       for (let i = 0; i < count; i++) {
@@ -64,11 +92,25 @@ export default Vue.extend({
     /**
      * Manually override the path array from a child component
      */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     setPath(pth: Array<String>) {
       this.$data.path = pth
     },
     /**
      * Triggered when a file is changed on the input
+     */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
      */
     async handleFile(event: any) {
       this.$data.file = event.target.files[0]
@@ -79,6 +121,13 @@ export default Vue.extend({
     },
     /**
      * Load a picture into a data URL push to data
+     */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
      */
     loadPicture(file: File) {
       if (!file) return
@@ -93,6 +142,13 @@ export default Vue.extend({
      * Clear local data
      * TODO: Clear input field, this currently breaks
      * when you upload the same file after cancelling
+     */
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
      */
     cancelUpload() {
       this.$data.file = false

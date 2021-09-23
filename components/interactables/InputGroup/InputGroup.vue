@@ -116,6 +116,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method update
+     * @description Emits the update event with updated internalText string
+     */
     update() {
       this.$emit('update', this.$data.internalText)
     },

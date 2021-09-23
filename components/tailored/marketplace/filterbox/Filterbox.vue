@@ -16,9 +16,19 @@ export default Vue.extend({
   },
   computed: {},
   methods: {
+    /**
+     * @method toggleDrop DocsTODO
+     * @description
+     * @example
+     */
     toggleDrop() {
       this.showDrop = !this.showDrop
     },
+    /**
+     * @method hideDrop DocsTODO
+     * @description
+     * @example
+     */
     hideDrop() {
       this.showDrop = false
     },

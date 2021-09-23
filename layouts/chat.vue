@@ -27,20 +27,48 @@ export default Vue.extend({
     this.$store.commit('setTypingUser', this.$mock.users[0])
   },
   methods: {
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
       })
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     acceptCall() {
       this.$store.dispatch('acceptCall')
       this.$Sounds.playSound(Sounds.CONNECTED)
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     denyCall() {
       this.$store.dispatch('denyCall')
       this.$Sounds.playSound(Sounds.HANGUP)
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',

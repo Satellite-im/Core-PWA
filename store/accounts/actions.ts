@@ -11,6 +11,13 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 export default {
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async setPin({ commit }: ActionsArguments, pin: string) {
     if (pin.length < 5) {
       throw new Error(AccountsError.PIN_TOO_SHORT)
@@ -25,6 +32,13 @@ export default {
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async unlock({ commit, state, dispatch }: ActionsArguments, pin: string) {
     const { pinHash, encryptedPhrase } = state.accounts
 
@@ -52,6 +66,13 @@ export default {
     commit('unlock', pin)
     dispatch('loadAccount')
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async generateWallet({ commit, state }: ActionsArguments) {
     const { pin } = state.accounts
 
@@ -77,6 +98,13 @@ export default {
 
     commit('setEncryptedPhrase', encryptedPhrase)
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async loadAccount({ commit, state, dispatch }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -111,6 +139,13 @@ export default {
       ...userInfo,
     })
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async registerUser(
     { commit, dispatch }: ActionsArguments,
     userData: UserRegistrationPayload
@@ -166,6 +201,13 @@ export default {
       address: userAccount.publicKey.toBase58(),
     })
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto

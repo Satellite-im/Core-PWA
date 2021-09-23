@@ -21,6 +21,12 @@ export default Vue.extend({
     /**
      * Triggered when a file is changed on the input
      */
+    /**
+     * @method handleFile DocsTODO
+     * @description
+     * @param event
+     * @example
+     */
     async handleFile(event: any) {
       this.$data.file = event.target.files[0]
       this.$data.nsfw.checking = true
@@ -30,6 +36,12 @@ export default Vue.extend({
     },
     /**
      * Load a picture into a data URL push to data
+     */
+    /**
+     * @method loadPicture DocsTODO
+     * @description
+     * @param file
+     * @example
      */
     loadPicture(file: File) {
       if (!file) return
@@ -44,6 +56,13 @@ export default Vue.extend({
      * Return if a file has an image extension
      * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
      */
+    /**
+     * @method isEmbedableImage DocsTODO
+     * @description
+     * @param filename
+     * @returns
+     * @example
+     */
     isEmbedableImage(filename: string): boolean {
       // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(
@@ -55,6 +74,11 @@ export default Vue.extend({
      * Clear local data
      * TODO: Clear input field, this currently breaks
      * when you upload the same file after cancelling
+     */
+    /**
+     * @method cancelUpload DocsTODO
+     * @description
+     * @example
      */
     cancelUpload() {
       this.$data.file = false

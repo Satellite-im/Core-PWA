@@ -31,6 +31,13 @@ export default Vue.extend({
     /**
      * Gets the data path attribute and manually updates parent path
      */
+    /**
+     * @method jumpTo DocsTODO
+     * @description
+     * @param e
+     * @returns
+     * @example
+     */
     jumpTo(e: Event | any) {
       this.setPath(JSON.parse(e.currentTarget.getAttribute('data-self-path')))
     },

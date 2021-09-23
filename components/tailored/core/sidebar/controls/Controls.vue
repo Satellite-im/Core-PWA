@@ -11,6 +11,11 @@ export default Vue.extend({
     ...mapState(['audio', 'video']),
   },
   methods: {
+    /**
+     * @method toggleMute DocsTODO
+     * @description
+     * @example
+     */
     toggleMute() {
       const muted = this.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
@@ -18,6 +23,11 @@ export default Vue.extend({
 
       this.$store.commit('mute')
     },
+    /**
+     * @method toggleDeafen DocsTODO
+     * @description
+     * @example
+     */
     toggleDeafen() {
       const deafened = this.audio.deafened
       if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
@@ -25,6 +35,11 @@ export default Vue.extend({
 
       this.$store.commit('deafen')
     },
+    /**
+     * @method toggleVideo DocsTODO
+     * @description
+     * @example
+     */
     toggleVideo() {
       const videoDisabled = this.video.disabled
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)

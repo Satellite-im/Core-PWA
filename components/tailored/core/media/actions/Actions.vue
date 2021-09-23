@@ -10,6 +10,11 @@ export default Vue.extend({
     ...mapState(['audio']),
   },
   methods: {
+    /**
+     * @method toggleMute DocsTODO
+     * @description
+     * @example
+     */
     toggleMute() {
       const muted = this.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)

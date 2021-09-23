@@ -33,10 +33,21 @@ export default Vue.extend({
     return { showReplies: false }
   },
   methods: {
+    /**
+     * @method showQuickProfile DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)
     },
+    /**
+     * @method toggleReplies DocsTODO
+     * @description
+     * @example
+     */
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
     },

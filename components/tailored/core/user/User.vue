@@ -42,6 +42,11 @@ export default Vue.extend({
     testFunc() {
       console.log('User Func')
     },
+    /**
+     * @method navigateToUser DocsTODO
+     * @description
+     * @example
+     */
     navigateToUser() {
       this.$router.push('/chat/direct')
     },

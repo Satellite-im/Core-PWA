@@ -78,6 +78,13 @@ export default {
     state.ui.isScrollOver = status
     if (!status) state.ui.unreadMessage = 0
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.ui.messages]
     const lastIndex = messages.length - 1
@@ -142,6 +149,13 @@ export default {
       settingReaction: status,
     }
   },
+  /**
+   * @method
+   * @description
+   * @param
+   * @returns
+   * @example
+   */
   addReaction(state: NuxtState, reaction: any) {
     // - break down and turn into util for finding specific message indicies
     const messageGroups: any[] = [...state.ui.messages]

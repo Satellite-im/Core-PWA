@@ -1,3 +1,10 @@
+/**
+ * @method
+ * @description
+ * @param
+ * @returns
+ * @example
+ */
 export const stripEXIF = (file: File) => {
   if (file.type !== 'image/jpeg') {
     return file

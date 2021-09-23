@@ -23,9 +23,23 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method show DocsTODO
+     * @description
+     * @param modalName
+     * @returns
+     * @example
+     */
     show(modalName: String) {
       this.$store.commit('toggleModal', { name: modalName, state: true })
     },
+    /**
+     * @method
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     hide(modalName: String) {
       this.$store.commit('toggleModal', { name: modalName, state: false })
     },
