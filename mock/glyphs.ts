@@ -1,4 +1,4 @@
-export const glyphs = {
+export const Glyphs = {
   genshin: {
     name: 'Genshin Impact 1',
     artists: 'John Treanor',
