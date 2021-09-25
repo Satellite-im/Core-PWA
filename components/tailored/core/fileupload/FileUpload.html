@@ -54,8 +54,10 @@
       for="quick-upload"
       class="button is-button is-small is-primary is-normal-width"
     >
-      <font-awesome-icon :icon="['far', 'file-plus']" class="control-icon" />
-      &nbsp; {{ $t('pages.files.upload') }}
+      <UiGlowingCursorArea>
+        <font-awesome-icon :icon="['far', 'file-plus']" class="control-icon" />
+        &nbsp; {{ $t('pages.files.upload') }}
+      </UiGlowingCursorArea>
     </label>
   </div>
 </span>
