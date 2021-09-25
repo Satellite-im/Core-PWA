@@ -1,3 +1,5 @@
+import { User } from "~/types/ui/user";
+
 export enum RegistrationStatus {
   UKNOWN = 'unknown',
   IN_PROGRESS = 'in_progress',
@@ -17,6 +19,7 @@ export interface AccountsState {
   error: string
   encryptedPhrase: string
   registered: boolean
+  details?: User
   registrationStatus: RegistrationStatus
 }
 

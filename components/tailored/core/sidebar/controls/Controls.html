@@ -16,10 +16,12 @@
     :icon="{ style: 'far', name: 'headphones-alt' }"
     :text="$t('controls.headphones')" />
   <InteractablesButton
-    :type="audio.deafened ? 'danger' : 'dark'"
+    :type="video.disabled ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
     :data-tooltip="$t('global.toggle')"
     :icon="{ style: 'far', name: 'video' }"
-    :text="$t('controls.video')" />
+    :text="$t('controls.video')"
+    :action="toggleVideo"
+    />
 </div>

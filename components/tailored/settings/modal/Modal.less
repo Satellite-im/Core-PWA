@@ -139,6 +139,7 @@ p {
       border: @light-border;
       backdrop-filter: none;
       background: @semitransparent-dark-gradient;
+      backdrop-filter: @blur;
       margin: 0;
       width: 20rem;
     }
@@ -163,7 +164,7 @@ p {
       filter: @primary-text-glow;
     }
     
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: @mobile-breakpoint) {
       width: 100%;
       height: 100%;
       
@@ -174,7 +175,7 @@ p {
           position: absolute;
           left: 0px;
           top: 0px;
-          z-index: 1;
+          z-index: @base-z-index + 1;
         }
       }
       &.is-collapsed {
@@ -182,6 +183,9 @@ p {
         .sidebar {
           position: static;
           z-index: 0;
+        }
+        .not-sidebar {
+          min-width: calc(100% - 3rem);
         }
       }
     }

@@ -1,6 +1,9 @@
 // eslint-disable-next-line import/named
 import { Commit, Dispatch } from 'vuex'
 import { Channel } from '~/types/ui/server'
+import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+
+const $Sounds = new SoundManager()
 
 interface ActionsArguments {
   commit: Commit
@@ -12,7 +15,10 @@ export default {
   setMessages({ commit }: ActionsArguments, messages: any[]) {
     commit('setMessages', messages)
   },
-  sendMessage({ commit }: ActionsArguments, message: any) {
+  sendMessage({ commit, state }: ActionsArguments, message: any) {
+    if (message.user.address !== state.accounts.active) {
+      $Sounds.playSound(Sounds.NEW_MESSAGE)
+    }
     commit('sendMessage', message)
   },
   setIsScrollOver({ commit }: ActionsArguments, status: boolean) {

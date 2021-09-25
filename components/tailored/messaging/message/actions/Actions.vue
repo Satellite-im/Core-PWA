@@ -6,13 +6,12 @@
     >
       <font-awesome-icon
         :icon="['far', 'grin-tongue-wink']"
-        :class="`control-icon emoji-icon ${
-          ui.showEnhancers ? 'primary' : ''
-        }`"
+        :class="`control-icon emoji-icon ${ui.showEnhancers ? 'primary' : ''}`"
         @click="emojiReaction"
       />
     </div>
     <div
+      v-if="!hideReply"
       class="reply-command has-tooltip has-tooltip-primary"
       :data-tooltip="$t('global.reply')"
       @click="setReplyChatbarContent"
@@ -46,6 +45,11 @@ export default Vue.extend({
     emojiReaction: {
       type: Function,
       default: () => () => {},
+    },
+    hideReply: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
 })

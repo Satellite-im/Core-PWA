@@ -182,11 +182,11 @@
   justify-content: center;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: @mobile-breakpoint) {
   .search-box {
     width: 150px;
     &.focus {
-      width: calc(100% - @light-spacing);
+      max-width: calc(100vw - 180px);
       .search-input {
         width: 250px;
         max-width: calc(@viewport-width - 200px) !important;

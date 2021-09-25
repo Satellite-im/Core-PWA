@@ -137,7 +137,7 @@ export default Vue.extend({
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: @mobile-breakpoint) {
   .table {
     min-width: @viewport-width - 20px;
   }

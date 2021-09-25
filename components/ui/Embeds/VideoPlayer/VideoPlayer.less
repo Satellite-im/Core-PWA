@@ -62,9 +62,18 @@ video {
   color: @primary-color !important;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: @mobile-breakpoint) {
   .video {
     max-width: 100%;
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  .download {
+    display: none;
+  }
+  .is-text {
+    display: none !important;
   }
 }

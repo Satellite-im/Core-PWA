@@ -216,6 +216,7 @@ button {
 .select.is-primary:not(:hover)::after,
 .select:not(.is-multiple):not(.is-loading):hover::after  {
   border-color: @bright-text;
+  z-index: @base-z-index;
 }
 
 .select.is-primary:hover::after,
@@ -258,4 +259,11 @@ li.active {
 
 *:active {
   outline: none;
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .dynamic-content {
+    min-width: 100vw;
+    background: transparent;
+  }
 }

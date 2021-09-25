@@ -56,6 +56,32 @@ export const Users = [
     profilePicture:
       'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
   },
+  {
+    name: 'James Lightspeed',
+    address: '0x07ee55aa48bb72dcc6e9d88856648910de513eca',
+    status: 'Exploring deep space',
+    state: 'offline',
+    last_message:
+      'At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.',
+  },
+  {
+    name: 'Derek Wormhole',
+    address: '0x9bf4001de07dfd62b26a2f1307ee0c0307632d59',
+    status: 'Filling space',
+    state: 'online',
+    last_message:
+      'Tendrils of gossamer clouds stirred by starlight citizens of distant epochs network of wormholes corpus callosum the sky calls to us.',
+  },
+  {
+    name: 'Frank Meteor',
+    address: '0xdc76cd25977e015ae17155770273ad58648913d3',
+    status: 'Working on the space station',
+    state: 'mobile',
+    last_message:
+      'To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?',
+    profilePicture:
+      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+  },
 ]
 
 export const User = {
