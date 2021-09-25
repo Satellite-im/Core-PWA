@@ -1,0 +1,20 @@
+<div id="glyphs-nav">
+  <div class="account-list">
+    <div class="timer">
+      <font-awesome-icon class="control-icon" :icon="['far', 'clock']" />
+    </div>
+    <div v-for="user in $mock.unreads" :data-tooltip="user.name">
+      <UiCircle type="random" :size="28" :seed="user.address" />
+    </div>
+  </div>
+  <div class="pack-list">
+    <TailoredMessagingEnhancersGlyphsItem
+      v-for="pack in $mock.glyphs"
+      :key="pack.id"
+      :src="pack.stickerURLs[0]"
+    ></TailoredMessagingEnhancersGlyphsItem>
+  </div>
+  <div class="market-place">
+    <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']" />
+  </div>
+</div>
