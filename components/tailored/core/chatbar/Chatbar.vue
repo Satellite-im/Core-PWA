@@ -2,8 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import FileUpload from '../fileupload/FileUpload.vue'
 import { mapState } from 'vuex'
+import VueMarkdown from 'vue-markdown'
+import FileUpload from '../fileupload/FileUpload.vue'
 import {
   containsCommand,
   parseCommand,
@@ -11,8 +12,17 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    autoGrow: Function
+    sendMessage: Function
+    value: string
+  }
+}
+
 export default Vue.extend({
   components: {
+    VueMarkdown,
     FileUpload,
   },
   data() {
@@ -23,34 +33,32 @@ export default Vue.extend({
     }
   },
   computed: {
-    /**
-     * Computes the amount of characters left
-     */
+    ...mapState(['ui']),
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
     hasCommand() {
       return (
-        containsCommand(this.$store.state.ui.chatbarContent) &&
+        containsCommand(this.ui.chatbarContent) &&
         commands.some((cmd) =>
           cmd.name.startsWith(
-            parseCommand(this.$store.state.ui.chatbarContent).name.toLowerCase()
+            parseCommand(this.ui.chatbarContent).name.toLowerCase()
           )
         )
       )
     },
     isValidCommand() {
       const currentText = parseCommand(
-        this.$store.state.ui.chatbarContent
+        this.ui.chatbarContent
       ).name.toLowerCase()
-      const currentArgs = parseCommand(this.$store.state.ui.chatbarContent).args
+      const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
 
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
       get() {
-        return this.$store.state.ui.chatbarContent
+        return this.ui.chatbarContent
       },
       set(val: string) {
         this.$store.commit('chatbarContent', val)
@@ -60,7 +68,7 @@ export default Vue.extend({
   },
   methods: {
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
+      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
     },
     /**
      * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
