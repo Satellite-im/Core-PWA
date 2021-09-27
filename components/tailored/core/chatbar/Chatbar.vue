@@ -3,7 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import VueMarkdown from 'vue-markdown'
+import { NodeHtmlMarkdown } from 'node-html-markdown'
+import { Marked, Renderer } from '@ts-stack/markdown'
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
   containsCommand,
@@ -11,18 +12,30 @@ import {
   commands,
   isArgsValid,
 } from '~/libraries/ui/Commands'
+import { getCaretPosition, setCaretPosition } from '~/libraries/ui/Caret'
 
 declare module 'vue/types/vue' {
   interface Vue {
     autoGrow: Function
     sendMessage: Function
+    handleInputChange: Function
     value: string
   }
 }
 
+Marked.setOptions({
+  renderer: new Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+})
+
 export default Vue.extend({
   components: {
-    VueMarkdown,
     FileUpload,
   },
   data() {
@@ -30,6 +43,7 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
+      caretPosition: 0,
     }
   },
   computed: {
@@ -90,12 +104,52 @@ export default Vue.extend({
         messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
-        messageBox.style.height = '112px'
+        messageBox.style.height = `112px`
         chatbarGroup.style.height = `152px`
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },
     handleInputChange() {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      if (messageBox.textContent) {
+        let markDown =
+          messageBox.innerHTML.length > 1
+            ? NodeHtmlMarkdown.translate(messageBox.innerHTML)
+            : messageBox.innerHTML
+        markDown = markDown
+          .trim()
+          .replace(/\\#/g, '#')
+          .replace(/\\`/g, '`')
+          .replace(/\\=/g, '=')
+          .replace(/\\_/g, '_')
+          .split('\\*')
+          .join('*')
+          .replace(/_\*/g, '**')
+          .replace(/\*_/g, '**')
+        this.value = markDown
+        let caretPosition = getCaretPosition(messageBox)
+        let offset = messageBox.textContent.trim().length
+        messageBox.innerHTML = Marked.parse(markDown)
+          .replace(/<\/h1>/g, '<span>&nbsp;</span></h1>')
+          .replace(/<\/h2>/g, '<span>&nbsp;</span></h2>')
+          .replace(/<\/h3>/g, '<span>&nbsp;</span></h3>')
+          .replace(/<\/h4>/g, '<span>&nbsp;</span></h4>')
+          .replace(/<\/h5>/g, '<span>&nbsp;</span></h5>')
+          .replace(/<\/h6>/g, '<span>&nbsp;</span></h6>')
+          .replace(/<\/p>/g, '<span>&nbsp;</span></p>')
+        console.log(caretPosition, offset, messageBox.textContent.trim().length)
+        if (offset >= messageBox.textContent.trim().length + 2) {
+          offset -= messageBox.textContent.trim().length
+          caretPosition -= offset
+        } else if (
+          offset < messageBox.textContent.trim().length &&
+          caretPosition === offset
+        ) {
+          offset = messageBox.textContent.trim().length - offset
+          caretPosition += offset
+        }
+        setCaretPosition(messageBox, caretPosition)
+      }
       this.autoGrow()
     },
     handleInputKeydown(event: KeyboardEvent) {
@@ -107,7 +161,10 @@ export default Vue.extend({
               (c) => c.name === parsedCommand.name.toLowerCase()
             )
             if (currentCommand && parsedCommand.args.length === 0) {
+              const messageBox = this.$refs.messageuser as HTMLElement
+              messageBox.innerHTML = ''
               this.value = ''
+              this.autoGrow()
               return false
             }
           }
@@ -116,9 +173,30 @@ export default Vue.extend({
           if (!event.shiftKey) {
             event.preventDefault()
             this.sendMessage()
+          } else {
+            this.autoGrow()
           }
-          break
+          return true
+        case ' ':
+        case 'Spacebar':
+          {
+            event.preventDefault()
+            const messageBox = this.$refs.messageuser as HTMLElement
+            const caretPosition = getCaretPosition(messageBox)
+            setCaretPosition(messageBox, caretPosition + 1)
+          }
+          return true
+        case 'Left':
+        case 'ArrowLeft':
+        case 'Right':
+        case 'ArrowRight':
+        case 'End':
+        case 'Shift':
+          return true
       }
+      setTimeout(() => {
+        this.handleInputChange()
+      }, 10)
       return true
     },
     sendMessage() {
@@ -127,6 +205,8 @@ export default Vue.extend({
         user: this.$mock.user,
         isOwner: true,
       })
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerHTML = ''
       this.value = ''
       this.$nextTick(() => {
         this.autoGrow()
@@ -137,3 +217,9 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less" src="./Chatbar.less"></style>
+
+<style lang="less">
+.messageuser p {
+  font-size: @text-size !important;
+}
+</style>

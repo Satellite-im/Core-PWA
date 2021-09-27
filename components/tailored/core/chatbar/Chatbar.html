@@ -12,7 +12,11 @@
     >
       <font-awesome-icon :icon="['far', 'terminal']" />
     </div>
-    <textarea
+    <div contenteditable="true"
+      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
+      ref="messageuser"
+      @keydown="handleInputKeydown"></div>
+    <!-- <textarea
       :placeholder="$t('global.talk')"
       rows="1"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
@@ -21,7 +25,7 @@
       @input="handleInputChange"
       @change="handleInputChange"
       @keydown="handleInputKeydown"
-    ></textarea>
+    ></textarea> -->
     <div
       :data-tooltip="$t('global.glyphs')"
       v-on:click="toggleEnhancers"
