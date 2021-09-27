@@ -39,7 +39,6 @@ export function setCaretPosition(htmlElement: HTMLElement, position: number) {
       }
     })
   } else {
-    console.log(htmlElement, position)
     setSelection(htmlElement, position)
   }
 }

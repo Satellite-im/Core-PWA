@@ -137,7 +137,6 @@ export default Vue.extend({
           .replace(/<\/h5>/g, '<span>&nbsp;</span></h5>')
           .replace(/<\/h6>/g, '<span>&nbsp;</span></h6>')
           .replace(/<\/p>/g, '<span>&nbsp;</span></p>')
-        console.log(caretPosition, offset, messageBox.textContent.trim().length)
         if (offset >= messageBox.textContent.trim().length + 2) {
           offset -= messageBox.textContent.trim().length
           caretPosition -= offset
