@@ -1,4 +1,7 @@
-<div id="chatbar" ref="chatbar" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
+<div id="chatbar"
+  ref="chatbar"
+  :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''"
+  v-click-outside="lostFocus">
   <div
     :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
     ref="wrap"
@@ -15,7 +18,8 @@
     <div contenteditable="true"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
-      @keydown="handleInputKeydown"></div>
+      @mousedown="setFocus"
+      @keydown="handleInputKeydown">{{placeholder}}</div>
     <!-- <textarea
       :placeholder="$t('global.talk')"
       rows="1"

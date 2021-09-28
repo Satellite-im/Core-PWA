@@ -44,6 +44,7 @@ export default Vue.extend({
       maxChars: 256,
       showEmojiPicker: false,
       caretPosition: 0,
+      hasFocus: false,
     }
   },
   computed: {
@@ -79,13 +80,21 @@ export default Vue.extend({
         this.$data.text = val
       },
     },
+    placeholder() {
+      if (!this.$data.hasFocus && this.$data.text === '') {
+        return this.$t('global.talk')
+      } else {
+        return ''
+      }
+    },
   },
   methods: {
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
     },
     /**
-     * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
+     * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
+     * This is called after the typed inputed are processed in order to display markdown expression.
      */
     autoGrow() {
       // made const variables from this.$refs --> HTMLElement through typecasting
@@ -104,11 +113,16 @@ export default Vue.extend({
         messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
-        messageBox.style.height = `112px`
-        chatbarGroup.style.height = `152px`
+        messageBox.style.height = '112px'
+        chatbarGroup.style.height = '152px'
       }
       messageBox.scrollTop = messageBox.scrollHeight
     },
+    /**
+     * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
+     * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
+     * Once replaced current HTML content, move the caret to proper position.
+     */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
@@ -151,6 +165,11 @@ export default Vue.extend({
       }
       this.autoGrow()
     },
+    /**
+     * Called from chatbar's keydown event to process all key events for typing in chatbar.
+     * This interacts with handleInputChange in order to convert typed input to markdown expression.
+     * This controls the caret position when Backspace, Spacebar is pressed.
+     */
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case 'Backspace':
@@ -198,6 +217,9 @@ export default Vue.extend({
       }, 10)
       return true
     },
+    /**
+     * Called when user sends message by pressing Enter.
+     */
     sendMessage() {
       this.$store.dispatch('sendMessage', {
         value: this.value,
@@ -210,6 +232,12 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.autoGrow()
       })
+    },
+    setFocus() {
+      this.$data.hasFocus = true
+    },
+    lostFocus() {
+      this.$data.hasFocus = false
     },
   },
 })

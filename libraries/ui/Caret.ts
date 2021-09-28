@@ -1,3 +1,10 @@
+/**
+ * @method getCaretPosition
+ * @description Get the current position of caret in DOM element
+ * @param {HTMLElement} htmlElement - The DOM element
+ * @returns the current position of caret in DOM element
+ * @example console.log(getCaretPosition(document.getElementById('input')))
+ */
 export function getCaretPosition(htmlElement: HTMLElement): number {
   if (!window.getSelection) {
     return 0
@@ -18,6 +25,13 @@ export function getCaretPosition(htmlElement: HTMLElement): number {
   return caretPosInNode
 }
 
+/**
+ * @method setCaretPosition
+ * @description Set the current position of caret in DOM element
+ * @param {HTMLElement} htmlElement - The DOM element
+ * @param {number} position - the position of caret to set and must be less than the length of content
+ * @example setCaretPosition(document.getElementById('input'), 5) - if caret position exceeds the length of content, it will cause an exception
+ */
 export function setCaretPosition(htmlElement: HTMLElement, position: number) {
   if (htmlElement.textContent) {
     if (htmlElement.textContent.length <= position) {
@@ -43,6 +57,12 @@ export function setCaretPosition(htmlElement: HTMLElement, position: number) {
   }
 }
 
+/**
+ * @method setSelection
+ * @description Set the caret position in Node by using window's selection and range
+ * @param {Node} node - The DOM Node
+ * @param {number} position - The position of caret to set
+ */
 function setSelection(node: Node, position: number) {
   const selection = window.getSelection()
   if (!selection) {
@@ -55,6 +75,13 @@ function setSelection(node: Node, position: number) {
   selection?.addRange(range)
 }
 
+/**
+ * @method caretPositionInParentNode
+ * @description Get the caret position absolutely in Parent Node
+ * @param {Node} node - The DOM Node
+ * @param {number} caretPosInNode - The position of caret in node
+ * @returns the caret position in Parent Node
+ */
 function caretPositionInParentNode(node: Node, caretPosInNode: number): number {
   let itemNode = node.parentNode?.firstChild
   let caretPos = caretPosInNode
