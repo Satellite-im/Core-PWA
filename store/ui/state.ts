@@ -38,6 +38,7 @@ const InitalUIState = (): UIState => ({
   modals: {
     newfolder: false,
     createServer: false,
+    showMarketPlace: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
