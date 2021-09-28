@@ -44,7 +44,6 @@ export default Vue.extend({
       maxChars: 256,
       showEmojiPicker: false,
       caretPosition: 0,
-      hasFocus: false,
     }
   },
   computed: {
@@ -81,7 +80,7 @@ export default Vue.extend({
       },
     },
     placeholder() {
-      if (!this.$data.hasFocus && this.$data.text === '') {
+      if (this.$data.text === '') {
         return this.$t('global.talk')
       } else {
         return ''
@@ -190,12 +189,17 @@ export default Vue.extend({
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
-            this.sendMessage()
+            if (this.value !== '' && !this.hasCommand) {
+              this.sendMessage()
+            } else if (this.hasCommand && !this.isValidCommand) {
+              console.log('dispatch command')
+            } else {
+              return
+            }
           } else {
             this.autoGrow()
           }
           return true
-        case ' ':
         case 'Spacebar':
           {
             event.preventDefault()
@@ -204,13 +208,8 @@ export default Vue.extend({
             setCaretPosition(messageBox, caretPosition + 1)
           }
           return true
-        case 'Left':
-        case 'ArrowLeft':
-        case 'Right':
-        case 'ArrowRight':
-        case 'End':
-        case 'Shift':
-          return true
+        default:
+          break
       }
       setTimeout(() => {
         this.handleInputChange()
@@ -232,12 +231,6 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.autoGrow()
       })
-    },
-    setFocus() {
-      this.$data.hasFocus = true
-    },
-    lostFocus() {
-      this.$data.hasFocus = false
     },
   },
 })

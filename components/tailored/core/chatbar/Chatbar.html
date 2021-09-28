@@ -1,7 +1,6 @@
 <div id="chatbar"
   ref="chatbar"
-  :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''"
-  v-click-outside="lostFocus">
+  :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
   <div
     :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
     ref="wrap"
@@ -18,18 +17,8 @@
     <div contenteditable="true"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
-      @mousedown="setFocus"
-      @keydown="handleInputKeydown">{{placeholder}}</div>
-    <!-- <textarea
-      :placeholder="$t('global.talk')"
-      rows="1"
-      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
-      ref="messageuser"
-      v-model="value"
-      @input="handleInputChange"
-      @change="handleInputChange"
-      @keydown="handleInputKeydown"
-    ></textarea> -->
+      @keydown="handleInputKeydown"></div>
+    <span class="placeholder">{{ placeholder }}</span>
     <div
       :data-tooltip="$t('global.glyphs')"
       v-on:click="toggleEnhancers"

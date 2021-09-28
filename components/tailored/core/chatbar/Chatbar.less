@@ -1,7 +1,16 @@
 #chatbar {
   margin-top: @light-spacing;
   width: 100%;
-
+  .placeholder {
+    position: absolute;
+    left: 4.1rem;
+    opacity: 0.35;
+    font-size: @text-size;
+    pointer-events: none;
+    padding: 0.25rem @light-spacing;
+    padding-top: 6px;
+    padding-left: 1px;
+  }
   &.has-reply {
     margin-top: 0;
   }
@@ -104,6 +113,7 @@
       outline: none;
       resize: none;
       font-size: @text-size;
+      padding-top: 6px;
     }
 
     .control-icon {
