@@ -1,12 +1,12 @@
 <template src="./Volume.html"></template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
-  name: 'AudioSettings',
+  name: 'AudioVolume',
   components: {
     VueSlider,
   },
@@ -27,6 +27,7 @@ export default Vue.extend({
   data() {
     return {
       value: this.volume,
+<<<<<<< HEAD
       /**
        * @method
        * @description
@@ -35,6 +36,9 @@ export default Vue.extend({
        * @example
        */
       percentageFormatter: (volumePercentage: number) => {
+=======
+      percentageFormatter: (volumePercentage) => {
+>>>>>>> 8edd0a2566b17c5f092bfe3f614264f80a6411d2
         return volumePercentage + ' %'
       },
     }

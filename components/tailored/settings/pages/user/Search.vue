@@ -40,6 +40,14 @@ export default Vue.extend({
       selection: -1,
     }
   },
+  mounted() {
+    const searchSlot = this.$refs.searchSlot as HTMLElement
+    const searchResult = this.$refs.searchResult as HTMLElement
+    if (this.drop === 'top') {
+      searchResult.style.bottom =
+        searchSlot.getBoundingClientRect().height + 'px'
+    }
+  },
   methods: {
     /**
      * @method showDropDown DocsTODO
@@ -48,14 +56,18 @@ export default Vue.extend({
      */
     showDropDown() {
       this.dropDown = true
-      const searchSlot = this.$refs.searchSlot as HTMLElement
       const searchResult = this.$refs.searchResult as HTMLElement
-      if (this.drop === 'top') {
-        setTimeout(() => {
-          searchResult.style.bottom =
-            searchSlot.getBoundingClientRect().height + 'px'
-        }, 10)
-      }
+      setTimeout(() => {
+        const searchContent = searchResult.querySelector('.user-search-result')
+        if (searchContent) {
+          if (searchContent.getBoundingClientRect().height < 200) {
+            searchResult.style.height =
+              searchContent.getBoundingClientRect().height + 'px'
+          } else {
+            searchResult.style.height = '200px'
+          }
+        }
+      }, 10)
     },
     /**
      * @method hideDropDown DocsTODO
@@ -85,6 +97,9 @@ export default Vue.extend({
      * @example
      */
     selectUser(user: User, event: Event) {
+      if (!user) {
+        return
+      }
       event.stopPropagation()
       const exists = this.selected.find((item, i) => {
         if (item.name === user.name) {
@@ -135,6 +150,7 @@ export default Vue.extend({
           this.selectUser(this.result[this.selection], event)
           break
       }
+      this.showDropDown()
       return true
     },
     /**
@@ -148,7 +164,7 @@ export default Vue.extend({
       this.selected.splice(index, 1)
       this.showDropDown()
     },
-  },
+  }
 })
 </script>
 

@@ -1,0 +1,49 @@
+.caret_divider {
+  width: 100%;
+  border-bottom: 1px solid @red;
+  position: relative;
+  margin-top: @light-spacing;
+  margin-bottom: 0.5rem + @light-spacing;
+  pointer-events: none;
+
+  .caret_text {
+    user-select: none;
+    background: @red;
+    border-radius: @corner-rounding-smaller 0 0 @corner-rounding-smaller;
+    display: inline-block;
+    font-size: @mini-text-size;
+    position: absolute;
+    top: -9.5px;
+    padding: 0 0 0 @light-spacing;
+    height: 20px;
+    color: @bright-text;
+    box-shadow: @danger-glow;
+    .triangle, .triangle:before, .triangle:after { width: 20px; height: 20px; }
+    .triangle {
+      overflow: hidden;
+      position: absolute;
+      top: -5px;
+      right: -18.4px;
+      transform: translateY(50%) rotate(0deg) skewY(30deg) scaleX(.866);
+      cursor: pointer;
+      pointer-events: none;
+    } 
+    .triangle:before, .triangle:after {
+      position: absolute;
+      background: @red;
+      pointer-events: auto;
+      content: '';
+    }
+    .triangle:before {
+      transform: scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%) 
+          skewX(30deg) scaleY(.866) translateX(-24%);
+    }
+    .triangle:after {
+      transform: scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%) 
+          skewX(-30deg) scaleY(.866) translateX(24%);
+    }
+
+  }
+
+
+}

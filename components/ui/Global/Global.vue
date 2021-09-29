@@ -1,22 +1,42 @@
 <template>
-<div>
-  <TailoredSettingsModal v-if="ui.showSettings" />
-  <InteractablesContextMenu v-if="ui.contextMenuStatus"/>
-  <UiModal v-if="ui.modals.createServer" :closeModal="toggleModal" :title="$t('servers.create.heading')">
-    <TailoredCoreServersCreate v-if="ui.modals.createServer" :closeModal="toggleModal"
-      v-click-outside="toggleModal" />
-  </UiModal>
-  <UiModal v-if="$mock.users.find(user => user.name === media.incomingCall)" nopad>
-    <TailoredCoreIncomingCall :user="$mock.users.find(user => user.name === media.incomingCall)"
-      :acceptCall="acceptCall" :denyCall="denyCall" />
-  </UiModal>
-  <UiModal v-if="ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
-    <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
-  </UiModal>
-  <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
-  </transition>
-</div>
+  <div>
+    <TailoredSettingsModal v-if="ui.showSettings" />
+    <InteractablesContextMenu v-if="ui.contextMenuStatus" />
+    <UiModal
+      v-if="ui.modals.createServer"
+      :close-modal="toggleModal"
+      :title="$t('servers.create.heading')"
+    >
+      <TailoredCoreServersCreate
+        v-if="ui.modals.createServer"
+        v-click-outside="toggleModal"
+        :close-modal="toggleModal"
+      />
+    </UiModal>
+    <UiModal
+      v-if="$mock.users.find((user) => user.name === media.incomingCall)"
+      nopad
+    >
+      <TailoredCoreIncomingCall
+        :user="$mock.users.find((user) => user.name === media.incomingCall)"
+        :accept-call="acceptCall"
+        :deny-call="denyCall"
+      />
+    </UiModal>
+    <UiModal
+      v-if="ui.modals.showMarketPlace"
+      :close-modal="toggleMarketPlace"
+      nopad
+    >
+      <TailoredMarketplace
+        v-click-outside="toggleMarketPlace"
+        :close-modal="toggleMarketPlace"
+      />
+    </UiModal>
+    <transition :name="$device.isMobile ? 'slide' : ''">
+      <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
