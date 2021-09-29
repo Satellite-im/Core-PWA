@@ -89,9 +89,35 @@ export default Vue.extend({
             parseInt(blockStyle.margin.replace('px', ''))
           )
           const marginPerBlock = blockMargin * 2
-          // here we set the max block content size so that a block cannot be larger than half viewportWidth
-          const maxBlockContentWidth = viewportWidth / 2 - marginPerBlock * 1.5
-          const aspectRatio = 9 / 16
+
+          // Variables created that will either be declared if the user is in 'mobile fullscreen calls'
+          // Else, they are left undefined and use different logic for 'desktop fullscreen calls'
+          let mobileMaxBlockContentWidth
+          let mobileAspectRatio
+
+          if (this.$device.isMobile === true) {
+            if (blockCount === 1) {
+              mobileMaxBlockContentWidth =
+                viewportWidth - marginPerBlock * 1.5
+              mobileAspectRatio = 3 / 4
+            } else if (blockCount === 2) {
+              mobileMaxBlockContentWidth =
+                viewportWidth - marginPerBlock * 1.5
+              mobileAspectRatio = 1 / 2
+            } else if (blockCount <= 4) {
+              mobileMaxBlockContentWidth =
+                viewportWidth / 2 - marginPerBlock * 1.5
+              mobileAspectRatio = 4 / 3
+            } else {
+              mobileMaxBlockContentWidth =
+                viewportWidth / 2 - marginPerBlock * 1.5
+              mobileAspectRatio = 3 / 4
+            }
+          }
+
+          //logic for 'desktop fullscreen calls' where we set the max block content size so that a block cannot be larger than half viewportWidth
+          const maxBlockContentWidth = (typeof mobileMaxBlockContentWidth === 'undefined') ? viewportWidth / 2 - marginPerBlock * 1.5 : mobileMaxBlockContentWidth
+          const aspectRatio = (typeof mobileAspectRatio === 'undefined') ? 9 / 16 : mobileAspectRatio
 
           let finalWidth = 160
           let finalHeight = 90

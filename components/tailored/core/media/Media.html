@@ -5,7 +5,7 @@
       :user="{ name: item.name, profilePicture: item.profilePicture }" />
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
-      class="more-user" v-bind:class="{full: fullscreen}">...</div>
+      class="more-user" v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}">...</div>
   </div>
   <TailoredCoreMediaActionsVolume :volume="audio.volume" isPopup @volumeControlValueChange="volumeControlValueChange" />
   <!-- {{fullscreen}} -->
