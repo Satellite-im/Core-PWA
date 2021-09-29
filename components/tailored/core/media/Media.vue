@@ -142,9 +142,9 @@ export default Vue.extend({
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO
-     * @description
-     * @param volume
-     * @example
+     * @description Changes volume by setting new value using $Sounds.changeLevels and commiting new value to setVolume in state
+     * @param volume New volume level
+     * @examplexw
      */
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)

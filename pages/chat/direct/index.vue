@@ -36,10 +36,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method sendMessageAutomatically DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     sendMessageAutomatically() {

@@ -28,10 +28,9 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method changeView DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param type
      * @example
      */
     changeView(type: 'grid' | 'list') {
@@ -41,9 +40,8 @@ export default Vue.extend({
      * Allows you to get the current path file object
      */
     /**
-     * @method
+     * @method getPath DocsTODO
      * @description
-     * @param
      * @returns
      * @example
      */
@@ -63,10 +61,9 @@ export default Vue.extend({
      * Push a new child name to the path array
      */
     /**
-     * @method
+     * @method push DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param item
      * @example
      */
     push(item: any) {
@@ -78,10 +75,9 @@ export default Vue.extend({
      * Pull n items from the file path array
      */
     /**
-     * @method
+     * @method pull DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param count
      * @example
      */
     pull(count: number = 1) {
@@ -93,10 +89,9 @@ export default Vue.extend({
      * Manually override the path array from a child component
      */
     /**
-     * @method
+     * @method setPath DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param pth
      * @example
      */
     setPath(pth: Array<String>) {
@@ -106,10 +101,9 @@ export default Vue.extend({
      * Triggered when a file is changed on the input
      */
     /**
-     * @method
+     * @method handleFile DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param event
      * @example
      */
     async handleFile(event: any) {
@@ -123,10 +117,9 @@ export default Vue.extend({
      * Load a picture into a data URL push to data
      */
     /**
-     * @method
+     * @method loadPicture DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param file
      * @example
      */
     loadPicture(file: File) {
@@ -144,10 +137,8 @@ export default Vue.extend({
      * when you upload the same file after cancelling
      */
     /**
-     * @method
+     * @method cancelUpload DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     cancelUpload() {

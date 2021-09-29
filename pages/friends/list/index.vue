@@ -33,10 +33,9 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method setRoute DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param route
      * @example
      */
     setRoute(route: Route) {

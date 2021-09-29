@@ -38,10 +38,10 @@ export default Vue.extend({
       console.log('User Func')
     },
     /**
-     * @method navigateToGroup DocsTODO
-     * @description
-     * @param address
-     * @example
+     * @method navigateToGroup
+     * @description Navigates to a groups page by pushing "/chat/groups/" + groups address to router
+     * @param address The groups address you'd like to route to
+     * @example v-on:click="navigateToGroup(group.address)"
      */
     navigateToGroup(address: string) {
       this.$router.push(`/chat/groups/${address}`)

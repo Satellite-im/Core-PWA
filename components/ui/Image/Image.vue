@@ -24,10 +24,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method openImage DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     oepnImage() {

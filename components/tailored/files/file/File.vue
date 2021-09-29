@@ -16,10 +16,10 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method isImage DocsTODO
-     * @description
-     * @param fileType
-     * @returns
+     * @method isImage
+     * @description Checks if files filetype complies with Satellites accepted image types
+     * @param fileType Files MIME type (a.k.a filetype)
+     * @returns Boolean based on if the current image complies with Satellites accepted image types
      * @example
      */
     isImage(filetype: string) {

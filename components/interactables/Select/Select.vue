@@ -67,13 +67,12 @@ export default Vue.extend({
   watch: {
     /**
      * @method selected DocsTODO
-     * @description
+     * @description When the component is first created, if the user doesn't have a default value for the select, we set it here
      * @param newValue
      * @param oldValue
      * @example
      */
     selected(newValue, oldValue) {
-      // When the component is first created, if the user doesn't have a default value for the select, we set it here
       if (!oldValue) {
         this.$data.selectedValue = newValue
       }

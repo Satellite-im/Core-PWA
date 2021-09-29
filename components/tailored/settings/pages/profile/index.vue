@@ -34,30 +34,24 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method togglePhrase DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     togglePhrase() {
       this.$data.showPhrase = !this.$data.showPhrase
     },
     /**
-     * @method
+     * @method toggleCropper DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleCropper() {
       this.showCropper = !this.showCropper
     },
     /**
-     * @method
+     * @method openFileDialog DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     openFileDialog() {
@@ -65,10 +59,9 @@ export default Vue.extend({
       fileInput.click()
     },
     /**
-     * @method
+     * @method setCroppedImage DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param image
      * @example
      */
     setCroppedImage(image: any) {
@@ -77,9 +70,9 @@ export default Vue.extend({
       fileInput.value = ''
     },
     /**
-     * @method
+     * @method selectProfileImage DocsTODO
      * @description
-     * @param
+     * @param e
      * @returns
      * @example
      */

@@ -29,18 +29,21 @@ export default Vue.extend({
     return { showReplies: false, replyHover: '' }
   },
   methods: {
-<<<<<<< HEAD
     /**
-     * @method showQuickProfile DocsTODO
+     * @method mouseOver DocsTODO
      * @description
-     * @param e
+     * @param replyId
      * @example
      */
-=======
     mouseOver(replyId: string) {
       this.$data.replyHover = replyId
     },
-
+    /**
+     * @method emojiReaction DocsTODO
+     * @description
+     * @param replyId
+     * @example
+     */
     emojiReaction(replyID: string) {
       this.$store.commit('settingReaction', {
         status: true,
@@ -50,7 +53,12 @@ export default Vue.extend({
       })
       this.$store.commit('toggleEnhancers', true)
     },
->>>>>>> 8083cb27745ac38b8193d02480704d7bbb79b85e
+    /**
+     * @method showQuickProfile DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)

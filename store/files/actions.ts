@@ -5,10 +5,9 @@ import { Files } from '~/mock/files'
 export default {
   handler: () => {},
   /**
-   * @method
+   * @method fetchFiles DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   async fetchFiles({ commit, state }: ActionsArguments) {

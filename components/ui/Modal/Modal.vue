@@ -23,10 +23,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method close DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     close() {

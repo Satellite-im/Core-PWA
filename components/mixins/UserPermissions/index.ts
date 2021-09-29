@@ -52,10 +52,10 @@ const formatDevices = (devices: any[]) => {
 }
 
 /**
- * @method getRTC DocsTODO
- * @description
- * @returns
- * @example
+ * @method getRTC
+ * @description Gets users RTC info (devices, permissions, browser, etc.)
+ * @returns Promise that resolves to responseObject with RTC info
+ * @example const DeviceRTC = this.$props.getRTC()
  */
 const getRTC = async () => {
   const promise = await new Promise((resolve) => {
@@ -124,7 +124,7 @@ export const UserPermissions = {
     },
     /**
      * @method requestUserPermissions DocsTODO
-     * @description
+     * @description Requests user permission to access their media devices such as webcams and microphones
      * @param permission
      * @returns
      * @example

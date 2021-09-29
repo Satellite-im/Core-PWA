@@ -6,10 +6,9 @@ export const ContextMenu = {
   },
   methods: {
     /**
-     * @method contextMenu DocsTODO
-     * @description
-     * @param e
-     * @returns
+     * @method contextMenu
+     * @description Toggles ContextMenu mixin with related component ContextMenu values
+     * @param e Context menu event object
      * @example
      */
     contextMenu(e: Event) {

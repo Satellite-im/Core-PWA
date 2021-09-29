@@ -29,10 +29,11 @@ export default Vue.extend({
      * (emoji: any) Comes from <picker/> select event
      */
     /**
-     * @method addEmoji DocsTODO
-     * @description
-     * @param emoji
-     * @example
+     * @method addEmoji
+     * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
+     * TODO: Change reactor in dispatch addReaction to current users name instead of 'Jpanay'
+     * @param emoji Emoji-mart emoji event object
+     * @example v-on:select="addEmoji"
      */
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
@@ -62,8 +63,8 @@ export default Vue.extend({
     },
     /**
      * @method toggleEnhancers DocsTODO
-     * @description
-     * @example
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)

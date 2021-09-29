@@ -11,8 +11,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method toggleMute DocsTODO
-     * @description
+     * @method toggleMute
+     * @description Toggles mute for outgoing audio
      * @example
      */
     toggleMute() {
@@ -22,6 +22,11 @@ export default Vue.extend({
 
       this.$store.commit('mute')
     },
+    /**
+     * @method toggleVideo
+     * @description Toggles outgoing video
+     * @example
+     */
     toggleVideo() {
       const videoDisabled = this.video.disabled
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)

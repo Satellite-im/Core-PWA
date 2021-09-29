@@ -1,8 +1,8 @@
 /**
- * @method
- * @description
- * @param
- * @returns
+ * @method stripEXIF
+ * @description Strips jpeg file of all EXIF data
+ * @param file JPEG file
+ * @returns Blob stripped of EXIF data
  * @example
  */
 export const stripEXIF = (file: File) => {
@@ -29,6 +29,13 @@ export const stripEXIF = (file: File) => {
     })
 }
 
+/**
+ * @method strip
+ * @description Strips EXIF data from FileReader event object
+ * @param e FileReader event object
+ * @returns Blob stripped of EXIF data
+ * @example
+ */
 const strip = (e: any) => {
   const dv = new DataView(e.target.result)
   let offset = 0

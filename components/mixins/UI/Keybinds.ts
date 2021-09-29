@@ -10,8 +10,8 @@ export const Keybinds = {
   },
   methods: {
     /**
-     * @method activateKeybinds DocsTODO
-     * @description
+     * @method activateKeybinds
+     * @description Activates all keybindings with Mousetrap
      * @example
      */
     activateKeybinds() {
@@ -34,16 +34,16 @@ export const Keybinds = {
       )
     },
     /**
-     * @method clearKeybinds DocsTODO
-     * @description
+     * @method clearKeybinds
+     * @description Unbinds all current keybindings with Mousetrap
      * @example
      */
     clearKeybinds() {
       Mousetrap.reset()
     },
     /**
-     * @method toggleMute DocsTODO
-     * @description
+     * @method toggleMute
+     * @description Toggles mute for outgoing audio
      * @example
      */
     toggleMute() {
@@ -53,8 +53,8 @@ export const Keybinds = {
       this.$store.commit('mute')
     },
     /**
-     * @method toggleDeafen DocsTODO
-     * @description
+     * @method toggleDeafen
+     * @description Toggles deafen for incoming audio
      * @example
      */
     toggleDeafen() {
@@ -64,8 +64,8 @@ export const Keybinds = {
       this.$store.commit('deafen')
     },
     /**
-     * @method openSettings DocsTODO
-     * @description
+     * @method openSettings
+     * @description Opens setting page
      * @example
      */
     openSettings() {
@@ -73,7 +73,7 @@ export const Keybinds = {
       this.$store.commit('toggleSettings', !showSettings)
     },
     /**
-     * @method callActiveChat DocsTODO
+     * @method callActiveChat
      * @description
      * @example
      */

@@ -10,9 +10,9 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method buildLink DocsTODO
      * @description
-     * @param
+     * @param depth
      * @returns
      * @example
      */

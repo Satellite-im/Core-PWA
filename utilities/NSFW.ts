@@ -2,10 +2,10 @@
 import * as nsfwjs from 'nsfwjs'
 
 /**
- * @method isNSFW DocsTODO
- * @description
- * @param file
- * @returns
+ * @method isNSFW
+ * @description Checks if an image is NSFW using nsfwjs
+ * @param file Image or GIF
+ * @returns Boolean based on predictionResults
  * @example
  */
 export const isNSFW = (file: File) => {

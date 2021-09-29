@@ -28,9 +28,8 @@ export default Vue.extend({
   methods: {
     /**
      * @method handle DocsTODO
-     * @description
+     * @description 
      * @param item
-     * @returns
      * @example
      */
     handle(item: FileType | Folder): void {

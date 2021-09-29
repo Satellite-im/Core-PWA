@@ -37,11 +37,11 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
-     * @description
-     * @param
-     * @returns
-     * @example
+     * @method loadAccount
+     * @description Load user account by dispatching the loadAccount action in store/accounts/actions.ts,
+     * if successful route user to home page at /allcomponents,
+     * if an error is thrown route user to authentication at /auth/register
+     * @example mounted() { this.loadAccount() }
      */
     async loadAccount() {
       try {

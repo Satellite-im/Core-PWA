@@ -26,10 +26,9 @@ import { AccountsError } from '~/store/accounts/types'
 
 export default {
   /**
-   * @method
+   * @method fetchFriendRequests DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   async fetchFriendRequests({ commit }: ActionsArguments) {
@@ -52,10 +51,9 @@ export default {
     commit('setOutgoingRequests', outgoingRequests)
   },
   /**
-   * @method
+   * @method fetchFriends DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   async fetchFriends({ dispatch }: ActionsArguments) {
@@ -72,10 +70,9 @@ export default {
     )
   },
   /**
-   * @method
+   * @method fetchFriendDetails DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friendAccount
    * @example
    */
   async fetchFriendDetails(
@@ -143,10 +140,9 @@ export default {
     }
   },
   /**
-   * @method
+   * @method subscribeToFriendsEvents DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   subscribeToFriendsEvents({ dispatch, commit }: ActionsArguments) {
@@ -200,10 +196,10 @@ export default {
     })
   },
   /**
-   * @method
+   * @method createFriendRequest DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friendToKey
+   * @param textileMailboxId
    * @example
    */
   async createFriendRequest(
@@ -298,10 +294,10 @@ export default {
     }
   },
   /**
-   * @method
+   * @method acceptFriendRequest DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friendRequest
+   * @param textileMailboxId
    * @example
    */
   async acceptFriendRequest(
@@ -358,10 +354,9 @@ export default {
     }
   },
   /**
-   * @method
+   * @method denyFriendRequest DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friendRequest
    * @example
    */
   async denyFriendRequest(
@@ -408,10 +403,9 @@ export default {
     }
   },
   /**
-   * @method
+   * @method removeFriendRequest DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friendRequest
    * @example
    */
   async removeFriendRequest(
@@ -455,10 +449,9 @@ export default {
     }
   },
   /**
-   * @method
+   * @method removeFriend DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param friend
    * @example
    */
   async removeFriend({ commit }: ActionsArguments, friend: Friend) {

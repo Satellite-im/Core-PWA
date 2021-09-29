@@ -12,10 +12,9 @@ import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 export default {
   /**
-   * @method
+   * @method setPin DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param pin
    * @example
    */
   async setPin({ commit }: ActionsArguments, pin: string) {
@@ -33,10 +32,9 @@ export default {
     commit('setPinHash', pinHash)
   },
   /**
-   * @method
+   * @method unlock DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param pin
    * @example
    */
   async unlock({ commit, state, dispatch }: ActionsArguments, pin: string) {
@@ -67,10 +65,9 @@ export default {
     dispatch('loadAccount')
   },
   /**
-   * @method
+   * @method generateWallet DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   async generateWallet({ commit, state }: ActionsArguments) {
@@ -99,10 +96,9 @@ export default {
     commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method
+   * @method loadAccount DocsTODO
    * @description
    * @param
-   * @returns
    * @example
    */
   async loadAccount({ commit, state, dispatch }: ActionsArguments) {
@@ -140,10 +136,9 @@ export default {
     })
   },
   /**
-   * @method
+   * @method registerUser DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param userData
    * @example
    */
   async registerUser(
@@ -202,10 +197,9 @@ export default {
     })
   },
   /**
-   * @method
+   * @method initializeEncryptionEngine DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param userAccount
    * @example
    */
   async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {

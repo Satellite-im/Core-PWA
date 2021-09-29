@@ -58,10 +58,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method completeP2P DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     completeP2P() {
@@ -69,10 +67,8 @@ export default Vue.extend({
       this.$data.stepsCompleted += 1
     },
     /**
-     * @method
+     * @method completeBlockchain DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     completeBlockchain() {
@@ -80,10 +76,8 @@ export default Vue.extend({
       this.$data.stepsCompleted += 1
     },
     /**
-     * @method
+     * @method completeState DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     completeState() {

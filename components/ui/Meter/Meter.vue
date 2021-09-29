@@ -53,19 +53,17 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method onResize DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     onResize() {
       this.resizeHandler()
     },
     /**
-     * @method
+     * @method getTickColor DocsTODO
      * @description
-     * @param
+     * @param increment
      * @returns
      * @example
      */
@@ -86,10 +84,8 @@ export default Vue.extend({
       return ''
     },
     /**
-     * @method
+     * @method resizeHandler DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     resizeHandler() {

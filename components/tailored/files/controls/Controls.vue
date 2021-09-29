@@ -24,21 +24,19 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method show DocsTODO
-     * @description
-     * @param modalName
-     * @returns
-     * @example
+     * @method show
+     * @description Shows modals by commiting the modal name with status as true to toggleModal in state
+     * @param modalName Name of modal to show
+     * @example v-on:click="show('newfolder')"
      */
     show(modalName: String) {
       this.$store.commit('toggleModal', { name: modalName, state: true })
     },
     /**
-     * @method
-     * @description
-     * @param
-     * @returns
-     * @example
+     * @method hide
+     * @description Hides modals by commiting the modal name with status as false to toggleModal in state
+     * @param modalName Name of modal to hide
+     * @example v-on:click="hide('newfolder')"
      */
     hide(modalName: String) {
       this.$store.commit('toggleModal', { name: modalName, state: false })

@@ -19,10 +19,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method toggleMarketPlace DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleMarketPlace() {

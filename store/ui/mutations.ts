@@ -81,10 +81,10 @@ export default {
     if (!status) state.ui.unreadMessage = 0
   },
   /**
-   * @method
+   * @method sendMessage DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param message
+   * @param isOwner
    * @example
    */
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
@@ -153,10 +153,9 @@ export default {
   },
 
   /**
-   * @method
+   * @method addReaction DocsTODO
    * @description
-   * @param
-   * @returns
+   * @param reaction
    * @example
    */
   addReaction(state: NuxtState, reaction: any) {

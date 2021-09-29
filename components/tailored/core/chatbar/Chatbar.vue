@@ -28,8 +28,8 @@ export default Vue.extend({
      */
     /**
      * @method charlimit DocsTODO
-     * @description
-     * @returns
+     * @description Checks if current text is longer than the max character limit
+     * @returns Boolean based on if the current text length is longer than the max character limit
      * @example
      */
     charlimit() {
@@ -91,19 +91,16 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method toggleEnhancers DocsTODO
-     * @description
-     * @example
+     * @method toggleEnhancers
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.$store.state.ui.showEnhancers)
     },
     /**
-     * When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
-     */
-    /**
      * @method autoGrow DocsTODO
-     * @description
+     * @description When textarea for chat is changed, autoGrow handles chat section to grow to allow multiple line display
      * @example
      */
     autoGrow() {

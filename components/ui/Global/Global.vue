@@ -30,10 +30,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method toggleModal
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleModal() {
@@ -43,30 +41,24 @@ export default Vue.extend({
       })
     },
     /**
-     * @method
+     * @method acceptCall DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     acceptCall() {
       this.$store.dispatch('acceptCall')
     },
     /**
-     * @method
+     * @method denyCall DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     denyCall() {
       this.$store.dispatch('denyCall')
     },
     /**
-     * @method
+     * @method toggleMarketPlace DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleMarketPlace() {

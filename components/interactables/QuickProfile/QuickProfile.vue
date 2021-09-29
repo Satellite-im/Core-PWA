@@ -20,15 +20,15 @@ export default Vue.extend({
   methods: {
     /**
      * @method close
-     * @description Closes quickProfile by commiting quickProfile: false to state
+     * @description Closes quickProfile by commiting quickProfile false to state
      */
     close() {
       this.$store.commit('quickProfile', false)
     },
     /**
      * @method close
-     * @description Ensures quickProfile is positioned correctly by mesuring it's overflow and respositioning if needed
-     * by commiting an adjusted position to setQuickProfilePosition in state
+     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and respositioning as needed.
+     * Corrects position by commiting an adjusted position to setQuickProfilePosition in state
      */
     handleOverflow() {
       if (this.$device.isDesktop) {

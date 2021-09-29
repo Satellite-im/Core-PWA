@@ -21,9 +21,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method getIcon DocsTODO
      * @description
-     * @param
      * @returns
      * @example
      */
@@ -36,10 +35,8 @@ export default Vue.extend({
     },
     // Decrypt stored encrypted data into memory
     /**
-     * @method
+     * @method decrypt DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     async decrypt() {
@@ -62,10 +59,8 @@ export default Vue.extend({
     },
     // Create & store a new pin, then decrypt.
     /**
-     * @method
+     * @method create DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     async create() {

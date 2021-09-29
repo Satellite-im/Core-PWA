@@ -42,10 +42,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method showDropDown DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     showDropDown() {
@@ -60,20 +58,16 @@ export default Vue.extend({
       }
     },
     /**
-     * @method
+     * @method hideDropDown DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     hideDropDown() {
       this.dropDown = false
     },
     /**
-     * @method
+     * @method searchResult DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     searchResult() {
@@ -83,9 +77,10 @@ export default Vue.extend({
       this.selection = -1
     },
     /**
-     * @method
+     * @method selectUser DocsTODO
      * @description
-     * @param
+     * @param user
+     * @param event
      * @returns
      * @example
      */
@@ -105,9 +100,9 @@ export default Vue.extend({
       this.$emit('input', this.selected)
     },
     /**
-     * @method
+     * @method handleKeydown DocsTODO
      * @description
-     * @param
+     * @param event
      * @returns
      * @example
      */
@@ -143,9 +138,9 @@ export default Vue.extend({
       return true
     },
     /**
-     * @method
+     * @method removeSelected DocsTODO
      * @description
-     * @param
+     * @param index
      * @returns
      * @example
      */

@@ -77,9 +77,8 @@ export const Notifications = class Notifications {
   }
 
   /**
-   * @method
+   * @method registerNotificationWatch DocsTODO
    * @description
-   * @param
    * @returns
    * @example
    */
@@ -93,9 +92,8 @@ export const Notifications = class Notifications {
   }
 
   /**
-   * @method
+   * @method requestNotificationPermission DocsTODO
    * @description
-   * @param
    * @returns
    * @example
    */
@@ -132,7 +130,6 @@ export const Notifications = class Notifications {
    * @param type
    * @param titleText
    * @param message
-   * @returns
    * @example
    */
   async sendNotifications(

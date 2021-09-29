@@ -27,10 +27,9 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method editKeybind DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param keybind
      * @example
      */
     editKeybind(keybind: String) {
@@ -42,10 +41,9 @@ export default Vue.extend({
         this.settings.keybinds[this.$data.editingKeybind.name]
     },
     /**
-     * @method
+     * @method recordKeybind DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param e
      * @example
      */
     recordKeybind(e: any) {
@@ -57,10 +55,8 @@ export default Vue.extend({
       }
     },
     /**
-     * @method
+     * @method saveKeybind DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     saveKeybind() {
@@ -81,10 +77,8 @@ export default Vue.extend({
       this.activateKeybinds()
     },
     /**
-     * @method
+     * @method cancelKeybind DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     cancelKeybind() {
@@ -96,10 +90,8 @@ export default Vue.extend({
       this.activateKeybinds()
     },
     /**
-     * @method
+     * @method clearKeybind DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     clearKeybind() {
@@ -108,10 +100,8 @@ export default Vue.extend({
       this.$data.editingKeybind.error = false
     },
     /**
-     * @method
+     * @method resetKeybinds DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     resetKeybinds() {
@@ -134,10 +124,9 @@ export default Vue.extend({
       this.activateKeybinds()
     },
     /**
-     * @method
+     * @method errorCheck DocsTODO
      * @description
-     * @param
-     * @returns
+     * @param e
      * @example
      */
     errorCheck(e: any) {

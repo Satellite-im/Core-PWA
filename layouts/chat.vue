@@ -28,10 +28,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method toggleModal DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleModal() {
@@ -41,10 +39,8 @@ export default Vue.extend({
       })
     },
     /**
-     * @method
+     * @method acceptCall DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     acceptCall() {
@@ -52,10 +48,8 @@ export default Vue.extend({
       this.$Sounds.playSound(Sounds.CONNECTED)
     },
     /**
-     * @method
+     * @method denyCall DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     denyCall() {
@@ -63,10 +57,8 @@ export default Vue.extend({
       this.$Sounds.playSound(Sounds.HANGUP)
     },
     /**
-     * @method
+     * @method toggleMarketPlace DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     toggleMarketPlace() {

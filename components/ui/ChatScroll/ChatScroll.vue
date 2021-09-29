@@ -66,10 +66,8 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method
+     * @method autoScrollToBottom DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     autoScrollToBottom() {
@@ -85,10 +83,8 @@ export default Vue.extend({
       }
     },
     /**
-     * @method
+     * @method onScrolled DocsTODO
      * @description
-     * @param
-     * @returns
      * @example
      */
     onScrolled() {
