@@ -123,7 +123,7 @@ export default {
 
     if (balance === 0) {
       commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
-      //await $SolanaManager.requestAirdrop()
+      await $SolanaManager.requestAirdrop()
     }
 
     const payerAccount = await $SolanaManager.getActiveAccount()
@@ -151,7 +151,7 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
-    //await serverProgram.createUser(userData.name, '', userData.status)
+    await serverProgram.createUser(userData.name, '', userData.status)
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 

@@ -135,6 +135,7 @@ export default Vue.extend({
           .replace(/\\`/g, '`')
           .replace(/\\=/g, '=')
           .replace(/\\_/g, '_')
+          .replace(/\\>/g, '>')
           .split('\\*')
           .join('*')
           .replace(/_\*/g, '**')
@@ -153,6 +154,9 @@ export default Vue.extend({
         if (offset >= messageBox.textContent.trim().length + 2) {
           offset -= messageBox.textContent.trim().length
           caretPosition -= offset
+          if (messageBox.innerHTML.includes('blockquote')) {
+            caretPosition += 1
+          }
         } else if (
           offset < messageBox.textContent.trim().length &&
           caretPosition === offset
@@ -208,7 +212,17 @@ export default Vue.extend({
             setCaretPosition(messageBox, caretPosition + 1)
           }
           return true
-        default:
+        case 'Left':
+        case 'ArrowLeft':
+        case 'Right':
+        case 'ArrowRight':
+        case 'End':
+        case 'Shift':
+          return true
+        case 'a':
+          if (event.ctrlKey) {
+            return true
+          }
           break
       }
       setTimeout(() => {
