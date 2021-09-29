@@ -152,7 +152,6 @@ export default Vue.extend({
           }
           for (let i = 0; i < blockCount; i++) {
             const block = blocks[i] as HTMLElement
-
             block.style.width = finalWidth + 'px'
             block.style.height = finalHeight + 'px'
           }
