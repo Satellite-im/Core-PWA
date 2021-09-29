@@ -170,6 +170,11 @@ export const Messages = [
     ],
   },
   {
+    id: '00-WO-03',
+    at: 1620515543000,
+    type: 'caret_divider',
+  },
+  {
     id: '00-CX-03',
     at: 1620515543000,
     type: 'group',
