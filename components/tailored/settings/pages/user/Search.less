@@ -1,4 +1,6 @@
 .user-search {
+  position: relative;
+  
   &-slot {
     align-items: center;
     display: flex;
@@ -39,31 +41,40 @@
   }
 
   &-list {
-    position: relative;
-    z-index: 10;
-  }
-
-  &-result {
     display: none;
     position: absolute;
     width: 100%;
-    background-color: @darker;
-    border: 1px solid @dark;
-    
+    height: 200px;
+    overflow-y: auto;
+
     &.active {
-      display: inline-block;
+      display: flex;
     }
 
     &.top {
       left: 0px;
       bottom: 0px;
+      .user-search-result {
+        left: 0px;
+        bottom: 0px;
+      }
     }
 
     &.bottom {
       left: 0px;
       top: 0px;
+      .user-search-result {
+        left: 0px;
+        top: 0px;
+      }
     }
+  }
 
+  &-result {
+    width: 100%;
+    background-color: @darker;
+    border: 1px solid @dark;
+    
     li {
       display: flex;
       align-items: center;
