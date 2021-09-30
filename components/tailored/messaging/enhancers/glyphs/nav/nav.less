@@ -1,6 +1,9 @@
 #glyphs-nav {
-    background: @semitransparent-dark-gradient;
+    background: @semitransparent-light-gradient;
+    backdrop-filter: @blur;
+    border: @light-border;
     padding: @light-spacing;
+    border-radius: @corner-rounding;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -8,9 +11,11 @@
         display: flex;
         align-items: center;
         .timer {
+            cursor: pointer;
             margin-right: @light-spacing;
-            background: @semitransparent-light-gradient;
+            background: @semitransparent-dark-gradient;
             padding: @xlight-spacing @light-spacing;
+            border-radius: @corner-rounding;
         }
     }
     .pack-list {
@@ -25,6 +30,7 @@
         margin-right: @light-spacing;
     }
     .market-place {
+        cursor: pointer;
         padding: 0 @light-spacing;
     }
 }
