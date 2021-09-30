@@ -4,12 +4,14 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-    props: {
-        text: {
-            type: String,
-            default: 'Missing Text',
-        }
+  props: {
+    text: {
+      type: String,
+      default: function () {
+        return this.$t('internal.missing_text')
+      },
     }
+  }
 })
 </script>
 
