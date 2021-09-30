@@ -24,7 +24,11 @@
 
     .users {
       flex: 1;
+      position: relative;
       overflow: hidden;
+      .inline-notification {
+        width: @sidebar-size - (@normal-spacing * 2);
+      }
     }
     .sidebar-search {
       width: 100%;
