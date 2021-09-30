@@ -5,9 +5,10 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
+      searchText: '',
       selectedPack: null,
     }
   },
 })
 </script>
-<style scoped lang="less" src="./Glyphs.less"></style>
+<style lang="less" src="./Glyphs.less"></style>
