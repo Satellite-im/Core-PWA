@@ -1,4 +1,4 @@
-<template src="./Nav.html"></template>
+<template src="./nav.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
@@ -22,4 +22,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Nav.less"></style>
+<style scoped lang="less" src="./nav.less"></style>
