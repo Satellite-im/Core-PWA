@@ -4,3 +4,6 @@
 [submodule "electron"]
 	path = electron
 	url = git@github.com:Satellite-im/Satellite-Build-Desktop.git
+[submodule "locales"]
+	path = locales
+	url = git@github.com:Satellite-im/Satellite-Translations.git
