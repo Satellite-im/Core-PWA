@@ -25,5 +25,7 @@ export default Vue.extend({
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  border-top-left-radius: @corner-rounding;
+  border-top-right-radius: @corner-rounding;
 }
 </style>

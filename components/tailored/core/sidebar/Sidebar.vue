@@ -27,14 +27,13 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState']),
+    ...mapState(['ui', 'dataState', 'media']),
   },
   mounted() {
     /**
      * Opens and closes the left hand sidebar upon clicking on 'direct-chat', 'friends-list', and 'files-browse'
      * when user is on a mobile device
      */
-
     if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
       this.$props.toggle()
     }

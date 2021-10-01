@@ -4,7 +4,7 @@
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
 >
-  <div class="sidebar-inner">
+  <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
     <div class="sidebar-search">
       <font-awesome-icon
         :icon="['far', 'bars']"
@@ -100,6 +100,7 @@
   <div class="filler"></div>
 
   <div class="controls">
+    <TailoredCoreSidebarLive />
     <TailoredCoreSidebarControls />
     <TailoredCoreSidebarStatus />
   </div>
