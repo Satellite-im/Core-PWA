@@ -1,6 +1,6 @@
 <div id="glyphs-nav" class="glyph-list-box">
   <div class="account-list">
-    <div class="timer">
+    <div class="timer" @click="() => {$emit('navSelected', '')}">
       <font-awesome-icon class="control-icon" :icon="['far', 'clock']" />
     </div>
     <div v-for="user in $mock.unreads" :data-tooltip="user.name">
@@ -8,12 +8,13 @@
     </div>
   </div>
   <div class="pack-list">
-    <TailoredMessagingEnhancersGlyphsItem
-      v-for="pack in $mock.glyphs"
-      :key="pack.id"
-      :src="pack.stickerURLs[0]"
-      :pack="pack"
-    ></TailoredMessagingEnhancersGlyphsItem>
+    <div v-for="pack in $mock.glyphs" @click="() => {$emit('navSelected', pack.name)}">
+      <TailoredMessagingEnhancersGlyphsItem
+        :key="pack.id"
+        :src="pack.stickerURLs[0]"
+        :pack="pack"
+      ></TailoredMessagingEnhancersGlyphsItem>
+    </div>
   </div>
   <div class="market-place" v-on:click="toggleMarketPlace">
     <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']" />

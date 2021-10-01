@@ -8,12 +8,12 @@
       type="primary"
     />
   </div>
-  <TailoredMessagingEnhancersGlyphsNav></TailoredMessagingEnhancersGlyphsNav>
+  <TailoredMessagingEnhancersGlyphsNav @navSelected="(val) => {filter(val)}"></TailoredMessagingEnhancersGlyphsNav>
   <div class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
       <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
       <TailoredMessagingEnhancersGlyphsPack
-        v-for="pack in $mock.glyphs"
+        v-for="pack in filteredGlyphs"
         :key="pack.id"
         :pack="pack"
       ></TailoredMessagingEnhancersGlyphsPack>
