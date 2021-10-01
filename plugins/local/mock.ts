@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { Files } from '~/mock/files'
 import { Blocked, Friend, Friends, Requests } from '~/mock/friends'
+import { Glyphs } from '~/mock/glyphs'
 import { ExampleGroup, Groups } from '~/mock/groups'
 import {
   marketCategories,
@@ -33,6 +34,7 @@ const mock = {
   friend: Friend,
   requests: Requests,
   blocked: Blocked,
+  glyphs: Glyphs,
 }
 
 declare module 'vue/types/vue' {

@@ -1,0 +1,24 @@
+.live {
+	display: inline-flex;
+	align-content: center;
+	width: 100%;
+	flex-direction: row;
+	justify-content: space-between;
+	color: @bright-text;
+	border-bottom: @light-border;
+	padding-bottom: @light-spacing;
+	.fa-signal-stream {
+		color: @green
+	}
+  .subtitle {
+    margin: 0;
+		margin-left: @light-spacing;
+		font-family: @primary-font;
+		color: @bright-text;
+  }
+  .button {
+    padding: (@light-spacing / 3) @light-spacing;
+    height: unset;
+		justify-self: flex-end;
+  }
+}
