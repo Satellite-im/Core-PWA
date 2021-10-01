@@ -12,6 +12,7 @@
       v-for="pack in $mock.glyphs"
       :key="pack.id"
       :src="pack.stickerURLs[0]"
+      :pack="pack"
     ></TailoredMessagingEnhancersGlyphsItem>
   </div>
   <div class="market-place" v-on:click="toggleMarketPlace">

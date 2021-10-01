@@ -24,6 +24,7 @@ interface UIState {
   isTyping: Object | Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
+  hoveredGlyphInfo: Object | undefined
 }
 
 const InitalUIState = (): UIState => ({
@@ -49,6 +50,7 @@ const InitalUIState = (): UIState => ({
   isTyping: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
+  hoveredGlyphInfo: undefined,
 })
 
 export default InitalUIState

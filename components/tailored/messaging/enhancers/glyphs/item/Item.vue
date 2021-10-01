@@ -1,6 +1,8 @@
 <template src="./Item.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+// eslint-disable-next-line import/named
+import Vue, { PropType } from 'vue'
+import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
   props: {
@@ -18,6 +20,11 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    pack: {
+      type: Object as PropType<Glyph>,
+      default: null,
+      required: false,
+    },
   },
   methods: {
     getStyle() {
@@ -25,6 +32,20 @@ export default Vue.extend({
         'background-image': `url(${this.src})`,
         width: `${this.width}px`,
         height: `${this.height}px`,
+      }
+    },
+    mouseOver() {
+      /* Set hovered glyph info only pack property exist */
+      if (this.pack) {
+        this.$store.commit('setHoveredGlyphInfo', {
+          glyphSrc: this.src,
+          pack: this.pack,
+        })
+      }
+    },
+    mouseLeave() {
+      if (this.pack) {
+        this.$store.commit('setHoveredGlyphInfo', undefined)
       }
     },
   },
