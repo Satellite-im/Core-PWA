@@ -63,7 +63,8 @@ export default Vue.extend({
   left: 0;
   right: 0;
   bottom: 0;
-
+  overflow: hidden;
+  
   .loader-container {
     min-width: 250px;
     align-self: center;
