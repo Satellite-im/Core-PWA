@@ -1,5 +1,5 @@
 <div class="is-message" @contextmenu="contextMenu">
-  <div @mouseenter="mouseOver" @mouseleave="mouseOver"
+  <div @mouseenter="mouseOver"
     :class="`message-container ${messageHover ? 'message-hover' : '' }`">
     <TailoredMessagingMessageActions v-if="messageHover" :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction" />
