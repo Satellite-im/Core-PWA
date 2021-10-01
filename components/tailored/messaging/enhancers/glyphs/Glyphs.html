@@ -9,4 +9,13 @@
     />
   </div>
   <TailoredMessagingEnhancersGlyphsNav></TailoredMessagingEnhancersGlyphsNav>
+  <div class="glyph-content hidden-scroll">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
+      <TailoredMessagingEnhancersGlyphsPack
+        v-for="pack in $mock.glyphs"
+        :key="pack.id"
+        :pack="pack"
+      ></TailoredMessagingEnhancersGlyphsPack>
+    </UiScroll>
+  </div>
 </div>
