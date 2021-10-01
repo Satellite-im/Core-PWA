@@ -16,6 +16,7 @@ interface UIState {
     from: String
     payload: String
   }
+  showPinned: Boolean
   fullscreen: Boolean
   showEnhancers: Boolean
   messages: any[]
@@ -44,6 +45,7 @@ const InitalUIState = (): UIState => ({
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
+  showPinned: false,
   showEnhancers: false,
   messages: [],
   unreadMessage: 0,

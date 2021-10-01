@@ -1,6 +1,32 @@
 .is-message {
   color: @text;
   margin-bottom: 0.1rem;
+  .pinned-message {
+    border: 1px solid @primary-color;
+    border-radius: @corner-rounding;
+    padding: @normal-spacing;
+    margin-top: @normal-spacing;
+    margin-bottom: @light-spacing;
+
+    .pinned-badge {
+      top: -(@light-spacing);
+      left: @light-spacing;
+      padding: 0 @light-spacing;
+      background-color: @primary-color;
+      border-radius: @corner-rounding-smaller;
+      font-size: @mini-text-size;
+      position: absolute;
+    }
+  }
+  .inline-meta {
+    margin-bottom: @light-spacing;
+    display: inline-flex;
+    .is-text {
+      opacity: 0.8;
+      margin-top: 0.3rem;
+      margin-left: @light-spacing;
+    }
+  }
   .markdown {
     strong {
       color: @bright-text;
