@@ -221,4 +221,10 @@ export default {
       }
     }
   },
+  setHoveredGlyphInfo(state: NuxtState, values: Object | undefined) {
+    state.ui = {
+      ...state.ui,
+      hoveredGlyphInfo: values,
+    }
+  },
 }
