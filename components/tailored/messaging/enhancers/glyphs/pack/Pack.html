@@ -1,0 +1,14 @@
+<div class="pack-group">
+  <div class="pack-title">
+    <font-awesome-icon :icon="['far', 'image']" />
+    <span>{{ pack.name }}</span>
+    <font-awesome-icon :icon="['far', 'chevron-down']" />
+  </div>
+  <div class="glyph-list-box">
+    <TailoredMessagingEnhancersGlyphsItem
+      v-for="glyph in pack.stickerURLs"
+      :key="glyph"
+      :src="glyph"
+    ></TailoredMessagingEnhancersGlyphsItem>
+  </div>
+</div>
