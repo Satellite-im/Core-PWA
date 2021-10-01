@@ -1,6 +1,8 @@
 @sidebar-inner-offset: 175px;
 @mobile-sidebar-inner-offset: 245px;
 
+@sidebar-inner-streaming-pad: 2rem;
+
 #sidebar {
   width: @sidebar-size;
   min-width: @sidebar-size;
@@ -44,6 +46,11 @@
       color: @primary-color;
       filter: @primary-text-glow;
     }
+  }
+
+
+  .sidebar-inner-streaming {
+    max-height: calc(100vh - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
   }
 
   .controls {
@@ -114,12 +121,6 @@
   width: 100%;
   margin-bottom: @light-spacing;
   justify-content: flex-start;
-  &.is-inactive {
-    background-color: transparent !important;
-    &:hover {
-      background: @semitransparent-lighter-gradient;
-    }
-  }
 }
 
 .sidebar-nav {
