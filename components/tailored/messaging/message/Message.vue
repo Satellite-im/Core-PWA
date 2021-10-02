@@ -39,9 +39,18 @@ export default Vue.extend({
       type: Number,
       default: -1,
     },
+    hideActions: {
+      type: Boolean,
+      default: false,
+    },
     setMessageHover: {
       type: Function,
       default: () => {},
+    },
+  },
+  computed: {
+    hasReactions() {
+      return this.$props.message.reactions && this.$props.message.reactions.length
     },
   },
   data() {

@@ -8,7 +8,7 @@ import {
   marketFilters,
   marketProducts,
 } from '~/mock/marketplace'
-import { Messages } from '~/mock/messages'
+import { Messages, PinnedMessages } from '~/mock/messages'
 import { Servers, Unreads, ServerInfo } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
 
@@ -24,6 +24,7 @@ const mock = {
   },
   unreads: Unreads,
   messages: Messages,
+  pinnedMessages: PinnedMessages,
   marketplace: {
     marketCategories,
     marketFilters,

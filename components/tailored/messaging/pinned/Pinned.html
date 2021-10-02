@@ -1,0 +1,30 @@
+<div id="pinned-messages" v-click-outside="() => {
+  $store.commit('togglePinned', false)
+}">
+  <div class="pinned-wrap">
+    <UiScroll
+      verticalScroll
+      scrollbarVisibility="scroll"
+      enableWrap>
+      <div class="header">
+        <font-awesome-icon :icon="['far', 'thumbtack']" />
+        <TypographySubtitle :size="6" text="Pinned Messages" />
+      </div>
+      <div class="filters">
+        <span class="filter active-filter">New</span>
+        <span class="filter">Old</span>
+        <span class="filter">Files</span>
+      </div>
+      <UiHorizontalRule />
+      <div v-for="message in $mock.pinnedMessages" class="wrap">
+        <TailoredMessagingMessage
+          hide-actions
+          :message="message"
+          :from="$mock.users.filter(u => u.address === message.from)[0].name"
+          :key="message.id" />
+        <InteractablesButton size="small" type="dark" text="Jump" />
+        <font-awesome-icon :icon="['far', 'times']" />
+        </div>
+    </UiScroll>
+  </div>
+</div>
