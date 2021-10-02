@@ -28,6 +28,24 @@ export default Vue.extend({
   data() {
     return { showReplies: false, replyHover: '' }
   },
+  computed: {
+    makeReplyText() {
+      const replyLength = Object.keys(this.$props.message.replies).length
+      let baseReply = replyLength > 1 ? "Replies from " : "Reply from "
+      
+      const firstName = this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[0].from)[0].name
+      const secondName = replyLength > 1 ? this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[1].from)[0].name : ""
+
+      if (replyLength === 1) {
+        baseReply += firstName
+      } else if (replyLength === 2) {
+        baseReply += firstName + " and " + secondName
+      } else {
+       baseReply += firstName + ", " + secondName + ", and " + (replyLength - 2) + " more ..." 
+       }
+      return baseReply
+    }
+  },
   methods: {
     mouseOver(replyId: string) {
       this.$data.replyHover = replyId

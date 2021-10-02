@@ -207,6 +207,23 @@ export const Messages = [
             payload: 'This is a message reply',
             reactions: [],
           },
+          {
+            id: '02-432-338',
+            from: '0xdc76cd25977e0a5ae17155770273ad58648913d3',
+            to: '00-00-03',
+            type: 'text',
+            at: 1620515563000,
+            payload: 'This is a message reply 3',
+            reactions: [],
+          },          {
+            id: '02-432-338',
+            from: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
+            to: '00-00-03',
+            type: 'text',
+            at: 1620515563000,
+            payload: 'This is a message reply 4',
+            reactions: [],
+          },
         ],
       },
       {
