@@ -29,10 +29,14 @@ export default Vue.extend({
     return { showReplies: false, replyHover: '' }
   },
   computed: {
+  /**
+   * makeReplyText: generates the "Replies from _____" text in a chat
+   * depending on the number of users in the reply thread, it will generate a different replyText
+   */
     makeReplyText() {
       const replyLength = Object.keys(this.$props.message.replies).length
       let baseReply = replyLength > 1 ? "Replies from " : "Reply from "
-      
+
       const firstName = this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[0].from)[0].name
       const secondName = replyLength > 1 ? this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[1].from)[0].name : ""
 
