@@ -36,7 +36,7 @@ export const Config = {
     ],
   },
   solana: {
-    customFaucet: 'http://faucet.satellite.one:3000',
+    customFaucet: 'https://faucet.satellite.one',
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
