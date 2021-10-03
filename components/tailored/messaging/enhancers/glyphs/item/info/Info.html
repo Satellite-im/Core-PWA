@@ -1,0 +1,15 @@
+<div class="glyph-info" v-if="ui.hoveredGlyphInfo">
+  <TailoredMessagingEnhancersGlyphsItem
+    :src="ui.hoveredGlyphInfo.glyphSrc"
+    :width="32"
+    :height="32"
+  ></TailoredMessagingEnhancersGlyphsItem>
+  <div class="glyph-pack-info">
+      <div>
+        {{ui.hoveredGlyphInfo.pack.name}}  
+      </div>
+      <div>
+        {{ui.hoveredGlyphInfo.pack.artists}}  
+      </div>
+  </div>
+</div>

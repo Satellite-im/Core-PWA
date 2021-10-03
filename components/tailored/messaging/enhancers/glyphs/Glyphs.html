@@ -1,0 +1,23 @@
+<div id="glyphs">
+  <div class="search-glyph-box">
+    <InteractablesInput
+      :placeholder="$t('global.search')"
+      size="small"
+      v-model="searchText"
+      input-kind="text"
+      type="primary"
+    />
+  </div>
+  <TailoredMessagingEnhancersGlyphsNav @navSelected="(val) => {filter(val)}"></TailoredMessagingEnhancersGlyphsNav>
+  <div class="glyph-content hidden-scroll">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
+      <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
+      <TailoredMessagingEnhancersGlyphsPack
+        v-for="pack in filteredGlyphs"
+        :key="pack.id"
+        :pack="pack"
+      ></TailoredMessagingEnhancersGlyphsPack>
+    </UiScroll>
+  </div>
+  <TailoredMessagingEnhancersGlyphsItemInfo></TailoredMessagingEnhancersGlyphsItemInfo>
+</div>

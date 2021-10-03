@@ -4,7 +4,7 @@
   v-touch:swipe="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
 >
-  <div class="sidebar-inner">
+  <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
     <div class="sidebar-search">
       <font-awesome-icon
         :icon="['far', 'bars']"
@@ -72,6 +72,7 @@
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading">
+          <UiInlineNotification text="New Messages" />
           <TailoredCoreUser
             v-for="user in users"
             :user="user"
@@ -99,6 +100,7 @@
   <div class="filler"></div>
 
   <div class="controls">
+    <TailoredCoreSidebarLive />
     <TailoredCoreSidebarControls />
     <TailoredCoreSidebarStatus />
   </div>

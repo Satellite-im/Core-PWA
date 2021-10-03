@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import { Files } from '~/mock/files'
 import { Blocked, Friend, Friends, Requests } from '~/mock/friends'
+import { Glyphs } from '~/mock/glyphs'
 import { ExampleGroup, Groups } from '~/mock/groups'
 import {
   marketCategories,
   marketFilters,
   marketProducts,
 } from '~/mock/marketplace'
-import { Messages } from '~/mock/messages'
+import { Messages, PinnedMessages } from '~/mock/messages'
 import { Servers, Unreads, ServerInfo } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
 
@@ -23,6 +24,7 @@ const mock = {
   },
   unreads: Unreads,
   messages: Messages,
+  pinnedMessages: PinnedMessages,
   marketplace: {
     marketCategories,
     marketFilters,
@@ -33,6 +35,7 @@ const mock = {
   friend: Friend,
   requests: Requests,
   blocked: Blocked,
+  glyphs: Glyphs,
 }
 
 declare module 'vue/types/vue' {

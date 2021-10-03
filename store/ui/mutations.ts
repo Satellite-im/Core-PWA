@@ -4,6 +4,12 @@ import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
 export default {
+  togglePinned(state: NuxtState, visible: Boolean) {
+    state.ui = {
+      ...state.ui,
+      showPinned: visible,
+    }
+  },
   toggleContextMenu(state: NuxtState, enabled: Boolean) {
     state.ui = {
       ...state.ui,
@@ -232,6 +238,12 @@ export default {
           }
         }
       }
+    }
+  },
+  setHoveredGlyphInfo(state: NuxtState, values: Object | undefined) {
+    state.ui = {
+      ...state.ui,
+      hoveredGlyphInfo: values,
     }
   },
 }

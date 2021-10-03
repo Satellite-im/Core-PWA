@@ -20,6 +20,12 @@
     </div>
     <div
       class="reply-command has-tooltip has-tooltip-primary"
+      :data-tooltip="$t('global.pin')"
+    >
+      <font-awesome-icon :icon="['far', 'thumbtack']" :class="'control-icon'" />
+    </div>
+    <div
+      class="reply-command has-tooltip has-tooltip-primary"
       :data-tooltip="$t('global.more')"
     >
       <font-awesome-icon

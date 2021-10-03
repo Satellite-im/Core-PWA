@@ -16,6 +16,7 @@ interface UIState {
     from: String
     payload: String
   }
+  showPinned: Boolean
   fullscreen: Boolean
   showEnhancers: Boolean
   messages: any[]
@@ -24,6 +25,7 @@ interface UIState {
   isTyping: Object | Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
+  hoveredGlyphInfo: Object | undefined
 }
 
 const InitalUIState = (): UIState => ({
@@ -43,6 +45,7 @@ const InitalUIState = (): UIState => ({
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
+  showPinned: false,
   showEnhancers: false,
   messages: [],
   unreadMessage: 0,
@@ -50,6 +53,7 @@ const InitalUIState = (): UIState => ({
   isTyping: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
+  hoveredGlyphInfo: undefined,
 })
 
 export default InitalUIState

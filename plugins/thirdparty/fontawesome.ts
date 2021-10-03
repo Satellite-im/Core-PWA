@@ -99,6 +99,7 @@ import {
   faVolumeUp,
   faSmilePlus,
   faAngleDoubleDown,
+  faSignalStream,
 } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vue from 'vue'
@@ -111,6 +112,7 @@ library.add(faSpinnerThird)
 library.add(faArrowCircleRight)
 library.add(faLockOpen)
 library.add(faBars)
+library.add(faSignalStream)
 library.add(faClipboard)
 library.add(faTimesCircle)
 library.add(faPlus)
