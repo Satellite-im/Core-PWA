@@ -1,5 +1,5 @@
 <div class="is-message" @contextmenu="contextMenu">
-  <div @mouseenter="mouseOver"
+  <div @mouseenter="mouseOver" @mouseleave="mouseOver"
     :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`">
     <div v-if="message.pinned" class="pinned-badge">
       <font-awesome-icon :icon="['far', 'thumbtack']" />
