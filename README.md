@@ -20,6 +20,9 @@ Now simply fill in the required information in the `.env` file.
 
 To load your environemnt variables you need to prefix all yarn commands with `npx dotenv`.
 
+## Install Submodules
+
+Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android`, `electron`, and `locales` submodules. You need the locales module to run and develop locally.
 
 ## Running Locally
 
