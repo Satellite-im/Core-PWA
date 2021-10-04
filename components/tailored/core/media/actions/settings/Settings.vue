@@ -3,7 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Bitrates, SampleSizes } from '~/components/tailored/settings/pages/audio/options/audioOptions'
+
+// @ts-ignore
+import { SettingsIcon, ChevronRightIcon } from 'vue-feather-icons'
+
+import {
+  Bitrates,
+  SampleSizes,
+} from '~/components/tailored/settings/pages/audio/options/audioOptions'
 import {
   PermissionRequestOptions,
   UserPermissions,
@@ -18,6 +25,10 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    SettingsIcon,
+    ChevronRightIcon,
+  },
   data() {
     return {
       Bitrates,

@@ -2,6 +2,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+// @ts-ignore
+import { ArchiveIcon, XIcon } from 'vue-feather-icons'
+
+export default Vue.extend({
+  components: {
+    ArchiveIcon,
+    XIcon,
+  },
+})
 </script>
 <style lang="less" src="./Pinned.less"></style>

@@ -4,10 +4,10 @@
       {{placeholder}}
     </div>
     <div class="search-icon">
-      <font-awesome-icon :icon="['far', 'search']" />
+      <search-icon size="1.1x" />
     </div>
     <button v-if="!isEmpty" class="search-clear" @click="clearSearch">
-      <font-awesome-icon :icon="['far', 'backspace']" />
+      <delete-icon size="1.1x" />
     </button>
     <div
       ref="searchInput"

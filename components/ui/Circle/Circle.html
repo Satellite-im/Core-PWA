@@ -15,7 +15,8 @@
     :diameter="size"
   />
   <font-awesome-icon
-    v-else-if="type === 'icon'"
+    v-else-if="type === 'icon' && icon"
     :icon="[icon.style, icon.name]"
     class="circle-icon" />
+  <slot></slot>
 </div>
