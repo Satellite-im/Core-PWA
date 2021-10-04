@@ -22,14 +22,23 @@
       data-tooltip="Call"
       v-if="!server"
     >
-      <font-awesome-icon class="control-icon" :icon="['far', 'phone']" />
+      <phone-call-icon size="1x" class="control-icon" />
     </div>
     <div
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Video"
       v-if="!server"
     >
-      <font-awesome-icon class="control-icon" :icon="['far', 'video']" />
+      <video-icon size="1x" class="control-icon" />
+    </div>
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Archived Messages"
+      @click="() => {
+        $store.commit('togglePinned', !ui.showPinned)
+      }"
+    >
+      <archive-icon size="1x" class="control-icon" />
     </div>
     <div class="vertical-divider" v-if="$device.isDesktop"></div>
     <div
@@ -37,7 +46,7 @@
       v-if="$device.isDesktop"
       v-on:click="toggleMarketPlace"
       data-tooltip="Market Place">
-      <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']"/>
+      <shopping-bag-icon class="control-icon" size="1x" />
     </div>
     <div class="vertical-divider"></div>
     <InteractablesSearchInput
@@ -51,5 +60,8 @@
       :show="showSearchResult"
       @toggle="toggleSearchResult"
     />
+    <TailoredMessagingPinned 
+      v-if="ui.showPinned"
+      />
   </div>
 </div>

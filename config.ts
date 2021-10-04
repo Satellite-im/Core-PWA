@@ -14,7 +14,8 @@ export const Config = {
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
-    newMessage: 'QmSkZGMEJGDgsq1X3p72Rp9QScjHa2AoWRkMcSve4CmQS4/Notification.ogg',
+    newMessage:
+      'QmSkZGMEJGDgsq1X3p72Rp9QScjHa2AoWRkMcSve4CmQS4/Notification.ogg',
     call: 'QmSSLAFWdneYGBfX2JK7bJNhgpcLbeCABZXLHp1rEsAdaF',
     hangup: 'QmSkZGMEJGDgsq1X3p72Rp9QScjHa2AoWRkMcSve4CmQS4/Unused.ogg',
     mute: 'QmSkZGMEJGDgsq1X3p72Rp9QScjHa2AoWRkMcSve4CmQS4/Mute.ogg',
@@ -35,6 +36,7 @@ export const Config = {
     ],
   },
   solana: {
+    customFaucet: 'https://faucet.satellite.one',
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
@@ -62,7 +64,7 @@ export const Config = {
       id: 'algorand',
       nickname: 'Penumbra',
       disabled: true,
-    }
+    },
   ],
   badges: {
     verified: {

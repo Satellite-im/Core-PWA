@@ -3,12 +3,17 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
+// @ts-ignore
+import { PlusSquareIcon, MinusSquareIcon } from 'vue-feather-icons'
+
 import { Reply, Message, Group } from '~/types/messaging'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
     VueMarkdown,
+    PlusSquareIcon,
+    MinusSquareIcon,
   },
   props: {
     message: {
@@ -27,6 +32,28 @@ export default Vue.extend({
   },
   data() {
     return { showReplies: false, replyHover: '' }
+  },
+  computed: {
+  /**
+   * makeReplyText: generates the "Replies from _____" text in a chat
+   * depending on the number of users in the reply thread, it will generate a different replyText
+   */
+    makeReplyText() {
+      const replyLength = Object.keys(this.$props.message.replies).length
+      let baseReply = replyLength > 1 ? "Replies from " : "Reply from "
+
+      const firstName = this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[0].from)[0].name
+      const secondName = replyLength > 1 ? this.$mock.users.filter((u: any) => u.address === this.$props.message.replies[1].from)[0].name : ""
+
+      if (replyLength === 1) {
+        baseReply += firstName
+      } else if (replyLength === 2) {
+        baseReply += firstName + " and " + secondName
+      } else {
+       baseReply += firstName + ", " + secondName + ", and " + (replyLength - 2) + " more ..." 
+       }
+      return baseReply
+    }
   },
   methods: {
     mouseOver(replyId: string) {

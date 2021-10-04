@@ -2,8 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// @ts-ignore
+import { SettingsIcon, PlusIcon } from 'vue-feather-icons'
 
 export default Vue.extend({
+  components: {
+    SettingsIcon,
+    PlusIcon,
+  },
   props: {
     unreads: {
       type: Array,

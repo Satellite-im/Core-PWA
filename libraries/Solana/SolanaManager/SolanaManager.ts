@@ -295,10 +295,33 @@ export default class SolanaManager {
    */
   async requestAirdrop() {
     if (this.payerAccount) {
-      const signature = await this.connection.requestAirdrop(
-        this.payerAccount?.publicKey,
-        1000000000
-      )
+      let signature
+
+      if (Config.solana.customFaucet !== '') {
+        const result = await fetch(Config.solana.customFaucet, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            address: this.payerAccount?.publicKey.toBase58(),
+          }),
+        })
+
+        const jsonResult = await result.json()
+
+        if (jsonResult.status === 'success') {
+          signature = jsonResult.transactionSignature
+        } else {
+          return null
+        }
+      } else {
+        signature = await this.connection.requestAirdrop(
+          this.payerAccount?.publicKey,
+          1000000000
+        )
+      }
+
       return this.connection.confirmTransaction(
         signature,
         Config.solana.defaultCommitment

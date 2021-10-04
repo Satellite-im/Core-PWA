@@ -1,5 +1,8 @@
 #file-upload {
-  margin-top: 0.15rem;
+  display: inline-flex;
+  justify-self: flex-start;
+  align-self: flex-start;
+
   #quick-upload {
     width: 0;
     height: 0;
@@ -11,7 +14,7 @@
     justify-self: flex-start;
     align-self: flex-start;
     font-size: @larger-icon-size;
-    margin: 0 @light-spacing;
+    width: unset;
   }
 
 
@@ -78,4 +81,21 @@
   position: relative;
   overflow: hidden;
   margin-left: @xlight-spacing;
+}
+
+.upload-label {
+  display: inline-flex;
+}
+.upload-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  height: 20px;
+  width: 20px;
+}
+.feather {
+  height: 20px;
+  width: 20px;
 }

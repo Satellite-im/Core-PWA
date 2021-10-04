@@ -6,28 +6,28 @@
     @returned-value="receivedValue"
   />
   <div class="volume-icon" v-if="!plain">
-    <font-awesome-icon
+    <volume-2-icon
       v-if="volume >= 70"
-      :icon="['far', 'volume-up']"
       @click="toggleSlider"
+      size="1.2x"
       class="fa-fw"
     />
-    <font-awesome-icon
+    <volume-1-icon
       v-if="volume > 30 && volume < 70"
-      :icon="['far', 'volume']"
       @click="toggleSlider"
+      size="1.2x"
       class="fa-fw"
     />
-    <font-awesome-icon
+    <volume-icon
       v-if="volume > 0 && volume <= 30"
-      :icon="['far', 'volume-down']"
       @click="toggleSlider"
+      size="1.2x"
       class="fa-fw"
     />
-    <font-awesome-icon
+    <volume-x-icon
       v-if="volume == 0"
-      :icon="['far', 'volume-off']"
       @click="toggleSlider"
+      size="1.2x"
       class="fa-fw"
     />
   </div>

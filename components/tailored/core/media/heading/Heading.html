@@ -8,10 +8,8 @@
       :data-tooltip="ui.fullscreen ? $t('global.exit_fullscreen') : $t('global.fullscreen')"
       @click="toggleFullscreen"
     >
-      <font-awesome-icon
-        :icon="ui.fullscreen ? ['far', 'compress'] : ['far', 'expand']"
-        class="expand-icon"
-      />
+      <minimize-icon v-if="ui.fullscreen" size="1.2x" />
+      <maximize-icon v-else="ui.fullscreen" size="1.2x" />
     </div>
   </transition>
 </div>

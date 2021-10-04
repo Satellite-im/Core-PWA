@@ -2,7 +2,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// @ts-ignore
+import { XIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
+  components: {
+    XIcon,
+  },
   props: {
     /**
      * Function or method to be triggered when the close button is clicked.

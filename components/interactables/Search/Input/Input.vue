@@ -2,6 +2,10 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { DeleteIcon, SearchIcon } from 'vue-feather-icons'
+
 import SearchQuery from '../SearchQuery'
 import SearchUtil from '../SearchUtil'
 import {
@@ -22,6 +26,10 @@ declare module 'vue/types/vue' {
 }
 
 export default Vue.extend({
+  components: {
+    DeleteIcon,
+    SearchIcon,
+  },
   props: {
     placeholder: {
       type: String,
