@@ -2,12 +2,27 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+import {
+  VolumeIcon,
+  Volume1Icon,
+  Volume2Icon,
+  VolumeXIcon,
+  // @ts-ignore
+} from 'vue-feather-icons'
+
 declare module 'vue/types/vue' {
   interface Vue {
     hideSlider: () => void
   }
 }
 export default Vue.extend({
+  components: {
+    VolumeIcon,
+    Volume1Icon,
+    Volume2Icon,
+    VolumeXIcon,
+  },
   props: {
     volume: {
       type: Number,

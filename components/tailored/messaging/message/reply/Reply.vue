@@ -3,12 +3,17 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
+// @ts-ignore
+import { PlusSquareIcon, MinusSquareIcon } from 'vue-feather-icons'
+
 import { Reply, Message, Group } from '~/types/messaging'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
     VueMarkdown,
+    PlusSquareIcon,
+    MinusSquareIcon,
   },
   props: {
     message: {

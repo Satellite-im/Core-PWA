@@ -1,5 +1,5 @@
-<span>
-  <span id="file-upload">
+<div id="file-upload">
+  <div>
     <div class="file-preview" v-if="file">
       <div class="img-wrapper">
         <img v-if="isEmbedableImage(file.name)" :src="url" v-bind:class="{ 'img-blur': nsfw.status  }"/>
@@ -37,18 +37,15 @@
       </div>
     </div>
     <input type="file" id="quick-upload" @change="handleFile" />
-  </span>
-  <span v-if="type == 'quick'">
-    <div class="upload-button">
-      <label
-        for="quick-upload"
-        :data-tooltip="$t('global.upload')"
-        class="has-tooltip has-tooltip-top has-tooltip-primary"
-      >
-        <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
-      </label>
-    </div>
-  </span>
+  </div>
+  <label
+    v-if="type == 'quick'"
+    for="quick-upload"
+    :data-tooltip="$t('global.upload')"
+    class="has-tooltip has-tooltip-top has-tooltip-primary upload-label"
+  >
+    <plus-icon size="1.2x" class="control-icon" />
+  </label>
   <div v-if="type =='button'">
     <label
       for="quick-upload"
@@ -60,4 +57,4 @@
       </UiGlowingCursorArea>
     </label>
   </div>
-</span>
+</div>

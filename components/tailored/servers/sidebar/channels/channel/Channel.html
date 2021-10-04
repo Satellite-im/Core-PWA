@@ -2,7 +2,7 @@
   :class="`server-sidebar-channel ${getChannelClass()}`"
   v-on:click="setActiveChannel(localChannel)">
   <span class="channel-name" v-if="localChannel.type === 'text'">
-    <font-awesome-icon :icon="['far', 'hashtag']" />
+    <hash-icon size="0.8x" />
     {{localChannel.name}}
   </span>
   <span class="channel-name" v-if="localChannel.type === 'label'">

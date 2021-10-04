@@ -24,11 +24,15 @@
     </UiScroll>
     <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('global.new_server')"
       v-on:click="openModal">
-      <UiCircle type="icon" :icon="{ style: 'far', name: 'plus' }" :size="40" />
+      <UiCircle type="icon" :size="40">
+        <plus-icon size="0.75x" />
+      </UiCircle>
     </div>
     <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('global.settings')"
       v-on:click="$store.commit('toggleSettings', true)">
-      <UiCircle type="icon" :icon="{ style: 'far', name: 'cog' }" :size="40" />
+      <UiCircle type="icon" :size="40">
+        <settings-icon size="0.75x" />
+      </UiCircle>
     </div>
   </div>
 </div>
