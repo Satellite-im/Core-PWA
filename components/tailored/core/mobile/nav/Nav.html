@@ -1,21 +1,21 @@
 <div id="mobile-nav">
-  <font-awesome-icon 
-    :icon="['far', 'home']"
+  <home-icon
+    size="1x"
     v-on:click="() => $router.push('/chat/direct')" />
-  <font-awesome-icon
-    :icon="['far', 'comment-alt-dots']"
+  <message-square-icon
+    size="1x"
     :class="`${$route.path.includes('/chat') ? 'active' : ''}`"
     v-on:click="() => $router.push('/chat/direct')" />
-  <font-awesome-icon
-    :icon="['far', 'folder']"
+  <folder-icon
+    size="1x"
     :class="`${$route.path.includes('/files') ? 'active' : ''}`"
     v-on:click="() => $router.push('/files/browse')" />
-  <font-awesome-icon
-    :icon="['far', 'user-friends']"
+  <users-icon
+    size="1x"
     :class="`${$route.path.includes('/friends') ? 'active' : ''}`"
     v-on:click="() => $router.push('/friends/list')" />
-  <font-awesome-icon
-    :icon="['far', 'cog']"
+  <settings-icon
+    size="1x"
     :class="`${$route.path.includes('/settings') ? 'active' : ''}`"
     v-on:click="() => $router.push('/settings/personalize')" />
 </div>

@@ -4,22 +4,28 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+// @ts-ignore
+import { KeyIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
   name: 'ServerChat',
+  components: {
+    KeyIcon,
+  },
   layout: 'server',
   data() {
     return {
       loading: true,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   mounted() {
     setTimeout(() => {
       this.$data.loading = false
       this.$store.dispatch('setMessages', this.$mock.messages)
     }, 3000)
-  },
-  computed: {
-    ...mapState(['ui']),
   },
 })
 </script>

@@ -4,11 +4,11 @@
     :icon="['fas', 'circle']"
     v-if="user.state !== 'mobile' && !isTyping"
     :class="`status is-${user.state}`" />
-    <font-awesome-icon
+  <font-awesome-icon
     :icon="['far', 'mobile-alt']"
     v-else-if="user.state === 'mobile'"
     :class="`mobile-status is-${user.state}`" />
-    <UiTypingIndicator v-else />
+  <UiTypingIndicator v-else />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />
     <TypographySubtitle v-if="user.last_message.length > 0" :size="6" :text="user.last_message" />

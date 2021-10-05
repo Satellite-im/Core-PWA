@@ -2,10 +2,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+// @ts-ignore
+import { ChevronDownIcon } from 'vue-feather-icons'
+
 import { FilterOption } from '~/types/marketplace/marketplace'
 import { marketFilters } from '~/mock/marketplace'
 
 export default Vue.extend({
+  components: {
+    ChevronDownIcon,
+  },
   props: {},
   data() {
     return {

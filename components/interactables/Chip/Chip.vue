@@ -1,13 +1,20 @@
 <template>
   <div v-if="show" class="chip-item">
     {{ text }}
-    <font-awesome-icon :icon="['far', 'times']" @click="hide" />
+    <x-icon size="1x" @click="hide" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
+// @ts-ignore
+import { XIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
+  components: {
+    XIcon,
+  },
   props: {
     text: {
       type: String,

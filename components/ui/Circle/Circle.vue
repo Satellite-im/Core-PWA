@@ -4,12 +4,16 @@
 import Jazzicon from 'vue-jazzicon'
 import Vue, { PropType } from 'vue'
 
+// @ts-ignore
+import { CircleIcon } from 'vue-feather-icons'
+
 import { Icon } from '@/types/ui/icons'
 import { CircleType } from './types'
 
 export default Vue.extend({
   components: {
     Jazzicon,
+    CircleIcon,
   },
   props: {
     /**

@@ -2,7 +2,7 @@
   <div class="card-image" :style="`background-image:url(${product.image})`">
     <div v-if="product.new" class="badge-new">New</div>
     <div class="favorite">
-      <font-awesome-icon :icon="[product.favorited ? 'fas' : 'far', 'heart']" />
+      <heart-icon size="1x" />
     </div>
   </div>
   <div class="card-text">
@@ -11,7 +11,7 @@
     <div class="price">
       ${{product.price.toFixed(2)}}
       <div class="btn-buy">
-        <font-awesome-icon :icon="['fas', 'shopping-cart']" />
+        <tag-icon size="1x" />
       </div>
     </div>
   </div>

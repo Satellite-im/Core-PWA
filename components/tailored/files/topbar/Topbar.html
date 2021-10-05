@@ -7,8 +7,9 @@
       type="primary"
       v-model="text"
       v-click-outside="()=>{hide('newfolder')}"
-      :icon="{style: 'far', name: 'folder-plus'}"
       :action="createFolder"
-    />
+    >
+      <folder-plus-icon size="1x" />
+    </InteractablesInputGroup>
   </div>
 </div>

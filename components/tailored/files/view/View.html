@@ -10,7 +10,7 @@
       <div
         :data-tooltip="$t('global.unpin')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
-        <font-awesome-icon :icon="['far', 'thumbtack']" />
+        <archive-icon size="1x" />
       </div>
       <a 
         :data-tooltip="$t('global.download')"
@@ -18,18 +18,18 @@
         :href="file.location"
         target="_blank"
         :download="file.name">
-        <font-awesome-icon :icon="['far', 'download']" />
+        <download-icon size="1x" />
       </a>
       <div
         :data-tooltip="$t('global.share_link')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
-        <font-awesome-icon :icon="['far', 'link']" />
+        <link-icon size="1x" />
       </div>
       <div
         :data-tooltip="$t('global.close')"
         v-on:click="close"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
-        <font-awesome-icon :icon="['far', 'times-circle']" />
+        <x-icon size="1x" />
       </div>
     </div>
   </div>
@@ -43,7 +43,7 @@
         :href="file.location"
         target="_blank"
         :download="file.name">
-      <font-awesome-icon :icon="['far', 'file-download']" class="file-icon" />
+      <download-icon size="1x" class="file-icon" />
     </a>
     <TypographyTitle :size="4" :text="file.name" />
     <TypographySubtitle :size="6" :text="file.type" />

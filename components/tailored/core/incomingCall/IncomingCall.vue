@@ -2,11 +2,19 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { PhoneIcon, PhoneOffIcon } from 'vue-feather-icons'
+
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'IncomingCall',
+  components: {
+    PhoneIcon,
+    PhoneOffIcon,
+  },
   props: {
     user: {
       type: Object as PropType<User>,

@@ -2,11 +2,19 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { PlusIcon, XIcon } from 'vue-feather-icons'
+
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
 import { Users } from '~/mock/users'
 
 export default Vue.extend({
+  components: {
+    PlusIcon,
+    XIcon,
+  },
   props: {
     value: {
       type: Array as PropType<User[]>,

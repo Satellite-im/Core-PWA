@@ -5,7 +5,9 @@ import Vue from 'vue'
 
 import {
   VideoIcon,
+  VideoOffIcon,
   MicIcon,
+  MicOffIcon,
   MonitorIcon,
   PhoneOffIcon,
   // @ts-ignore
@@ -17,7 +19,9 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 export default Vue.extend({
   components: {
     VideoIcon,
+    VideoOffIcon,
     MicIcon,
+    MicOffIcon,
     MonitorIcon,
     PhoneOffIcon,
   },
