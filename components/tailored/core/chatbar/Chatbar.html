@@ -12,7 +12,7 @@
       :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"
       v-if="hasCommand"
     >
-      <font-awesome-icon :icon="['far', 'terminal']" />
+      <terminal-icon size="1x" />
     </div>
     <div contenteditable="true"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
@@ -27,16 +27,20 @@
         has-tooltip has-tooltip-top has-tooltip-primary
       "
     >
-      <font-awesome-icon
-        :icon="['far', 'grin-tongue-wink']"
-        :class="`control-icon emoji-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
+      <grid-icon size="1x"
+        :class="`control-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
       />
     </div>
-    <font-awesome-icon
-      :icon="['far', 'arrow-circle-right']"
-      class="control-icon"
-      @click="sendMessage"
-    />
+    <div
+      :data-tooltip="$t('global.send')"
+      class="
+        control-tooltip-wrap
+        has-tooltip has-tooltip-top has-tooltip-primary">
+      <arrow-right-icon size="1x"
+        class="control-icon"
+        @click="sendMessage"
+      />
+    </div>
   </div>
   <div id="bottom-bar-container">
     <UiTypingIndicator v-if="$store.state.ui.isTyping" :userName="$store.state.ui.isTyping.name"/>

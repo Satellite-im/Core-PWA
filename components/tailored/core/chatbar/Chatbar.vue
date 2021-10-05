@@ -5,6 +5,10 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 import { Marked, Renderer } from '@ts-stack/markdown'
+
+// @ts-ignore
+import { TerminalIcon, GridIcon, ArrowRightIcon } from 'vue-feather-icons'
+
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
   containsCommand,
@@ -37,6 +41,9 @@ Marked.setOptions({
 export default Vue.extend({
   components: {
     FileUpload,
+    TerminalIcon,
+    GridIcon,
+    ArrowRightIcon,
   },
   data() {
     return {

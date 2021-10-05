@@ -7,8 +7,8 @@
       scrollbarVisibility="scroll"
       enableWrap>
       <div class="header">
-        <font-awesome-icon :icon="['far', 'thumbtack']" />
-        <TypographySubtitle :size="6" text="Pinned Messages" />
+        <archive-icon size="0.85x" />
+        <TypographySubtitle :size="6" text="Archived Messages" />
       </div>
       <div class="filters">
         <span class="filter active-filter">New</span>
@@ -23,7 +23,7 @@
           :from="$mock.users.filter(u => u.address === message.from)[0].name"
           :key="message.id" />
         <InteractablesButton size="small" type="dark" text="Jump" />
-        <font-awesome-icon :icon="['far', 'times']" />
+        <x-icon size="1.2x" />
         </div>
     </UiScroll>
   </div>

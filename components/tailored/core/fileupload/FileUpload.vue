@@ -3,7 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// @ts-ignore
+import { FileIcon, PlusIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
+  components: {
+    FileIcon,
+    PlusIcon,
+  },
   props: {
     type: {
       type: String,

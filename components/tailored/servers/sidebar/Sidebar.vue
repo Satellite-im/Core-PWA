@@ -4,9 +4,15 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+// @ts-ignore
+import { MenuIcon } from 'vue-feather-icons'
+
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
+  components: {
+    MenuIcon,
+  },
   mixins: [mobileSwipe],
   props: {
     toggle: {

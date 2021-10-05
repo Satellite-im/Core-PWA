@@ -1,6 +1,6 @@
 <div v-if="message.replies.length" class="replies-container">
   <div v-if="!showReplies" class="reply-preview" @click="toggleReplies">
-    <font-awesome-icon :icon="['far', 'plus-square']" />
+    <plus-square-icon size="1.1x" />
     &nbsp;
     {{ makeReplyText }}
   </div>
@@ -30,7 +30,7 @@
     <TailoredMessagingMessageReactions :message="message" :group="group" :reply="reply"/>
   </div>
   <div v-if="showReplies" @click="toggleReplies" class="reply-close">
-    <font-awesome-icon :icon="['far', 'minus-square']" />
+    <minus-square-icon size="1.1x" />
     &nbsp;
     {{$t('conversation.collapse')}}
   </div>

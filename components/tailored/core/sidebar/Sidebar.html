@@ -6,10 +6,10 @@
 >
   <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
     <div class="sidebar-search">
-      <font-awesome-icon
-        :icon="['far', 'bars']"
+      <menu-icon
         class="toggle-sidebar"
         v-on:click="toggle"
+        size="1.2x"
         full-width
       />
       <InteractablesInput
@@ -28,10 +28,11 @@
           class="sidebar-full-btn"
           :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
           size="small"
-          :icon="{ style: 'far', name: 'user-friends' }"
           :action="() => $router.push('/friends/list')"
           :text="$t('global.friends')"
-        />
+        >
+          <users-icon size="1.2x" />
+        </InteractablesButton>
         <span :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
           14
         </span>
@@ -42,9 +43,10 @@
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
         :action="() => $router.push('/files/browse')"
-        :icon="{ style: 'far', name: 'folder' }"
         :text="$t('global.files')"
-      />
+      >
+        <folder-icon size="1.2x" />
+      </InteractablesButton>
     </div>
 
     <div class="tabs sidebar-selector padded no-top-pad">
@@ -52,18 +54,20 @@
         full-width
         :type="ui.showSidebarUsers ? 'primary' : 'dark'"
         size="small"
-        :icon="{ style: 'far', name: 'comment-alt-lines' }"
         :text="$t('global.messages')"
         :action="() => $store.commit('showSidebarUsers', true)"
-      />
+      >
+        <inbox-icon size="1.2x" />
+      </InteractablesButton>
       <InteractablesButton
         full-width
         :type="!ui.showSidebarUsers ? 'primary' : 'dark'"
         size="small"
-        :icon="{ style: 'far', name: 'users' }"
         :text="$t('global.groups')"
         :action="() => $store.commit('showSidebarUsers', false)"
-      />
+      >
+        <users-icon size="1.2x" />
+      </InteractablesButton>
     </div>
     <div
       class="scrolling hidden-scroll users"

@@ -2,8 +2,17 @@
 
 <script>
 import { mapState } from 'vuex'
+
+import { HashIcon, TagIcon, RssIcon, Volume2Icon } from 'vue-feather-icons'
+
 export default {
   name: 'Channel',
+  components: {
+    HashIcon,
+    TagIcon,
+    RssIcon,
+    Volume2Icon,
+  },
   props: ['localChannel', 'setActiveChannel'],
   computed: {
     ...mapState(['channel']),

@@ -1,11 +1,12 @@
 <div class="live">
-  <div>
-    <font-awesome-icon :icon="['far', 'signal-stream']" />
+  <div class="name-and-icon">
+    <monitor-icon size="1.2x" class="green" />
     <TypographySubtitle :size="6" text="Apex" />
   </div>
   <InteractablesButton 
     type="danger"
     size="small"
-    text="End Stream"
-    :icon="{ style: 'far', name: 'times' }" />
+    text="End Stream">
+    <x-icon size="1x"></x-icon>
+  </InteractablesButton> 
 </div>

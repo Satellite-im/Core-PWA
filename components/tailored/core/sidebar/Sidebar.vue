@@ -4,12 +4,21 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
+// @ts-ignore
+import { UsersIcon, FolderIcon, InboxIcon, MenuIcon } from 'vue-feather-icons'
+
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import { DataStateType } from '~/store/dataState/types'
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  components: {
+    UsersIcon,
+    FolderIcon,
+    InboxIcon,
+    MenuIcon,
+  },
   mixins: [mobileSwipe],
   props: {
     toggle: {

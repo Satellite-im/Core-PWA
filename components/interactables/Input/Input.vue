@@ -2,9 +2,15 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+// @ts-ignore
+import { DeleteIcon } from 'vue-feather-icons'
+
 import { InputTypes, InputStyle, InputSize } from './types.d'
 
 export default Vue.extend({
+  components: {
+    DeleteIcon,
+  },
   model: {
     prop: 'text',
     event: 'update',

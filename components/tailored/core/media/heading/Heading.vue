@@ -2,8 +2,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+// @ts-ignore
+import { MaximizeIcon, MinimizeIcon } from 'vue-feather-icons'
+
 import { mapState } from 'vuex'
 export default Vue.extend({
+  components: {
+    MaximizeIcon,
+    MinimizeIcon,
+  },
   computed: {
     ...mapState(['ui']),
   },

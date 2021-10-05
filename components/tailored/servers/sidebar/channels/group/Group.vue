@@ -1,8 +1,15 @@
 <template src="./Group.html"></template>
 
 <script>
+// @ts-ignore
+import { ChevronRightIcon, ChevronDownIcon } from 'vue-feather-icons'
+
 export default {
   name: 'Group',
+  components: {
+    ChevronRightIcon,
+    ChevronDownIcon,
+  },
   props: ['group', 'channels', 'setActiveChannel'],
   data() {
     return {
