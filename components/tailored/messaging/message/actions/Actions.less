@@ -1,0 +1,35 @@
+.message-actions {
+  position: absolute;
+  border: @light-border;
+  border-radius: @corner-rounding;
+  background: @semitransparent-light-gradient;
+  backdrop-filter: @blur;
+
+  top: -18px;
+  right: 0;
+  display: flex;
+  box-sizing: border-box;
+  height: 36px;
+  .reply-command {
+    width: 35px;
+    // height: 35px;
+    padding: 0.25rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: @semitransparent-light-gradient;
+      .control-icon {
+        color: @bright-text;
+      }
+    }
+
+    .control-icon {
+      justify-self: center;
+      align-self: center;
+      font-size: @small-icon-size;
+      color: @text;
+    }
+  }
+}

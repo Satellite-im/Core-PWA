@@ -4,6 +4,9 @@
 import Vue from 'vue'
 // @ts-ignore
 import VuejsPaginate from 'vuejs-paginate'
+// @ts-ignore
+import { CalendarIcon } from 'vue-feather-icons'
+
 import { mapState } from 'vuex'
 import SearchUtil from '../SearchUtil'
 import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
@@ -21,6 +24,9 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    CalendarIcon,
+  },
   props: {
     searchQuery: {
       type: String,

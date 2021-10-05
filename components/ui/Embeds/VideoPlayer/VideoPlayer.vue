@@ -2,9 +2,15 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+// @ts-ignore
+import { DownloadIcon } from 'vue-feather-icons'
+
 import { VideoData } from './types'
 
 export default Vue.extend({
+  components: {
+    DownloadIcon,
+  },
   props: {
     data: {
       type: Object as PropType<VideoData> | undefined,

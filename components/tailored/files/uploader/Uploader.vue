@@ -2,7 +2,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// @ts-ignore
+import { FileIcon, SlashIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
+  components: {
+    FileIcon,
+    SlashIcon,
+  },
   props: {
     file: {
       type: File,

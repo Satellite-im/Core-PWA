@@ -2,13 +2,14 @@
 
 <script>
 // @ts-ignore
-import { ChevronRightIcon, ChevronDownIcon } from 'vue-feather-icons'
+import { ChevronRightIcon, ChevronDownIcon, PlusIcon } from 'vue-feather-icons'
 
 export default {
   name: 'Group',
   components: {
     ChevronRightIcon,
     ChevronDownIcon,
+    PlusIcon,
   },
   props: ['group', 'channels', 'setActiveChannel'],
   data() {

@@ -9,8 +9,10 @@
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
       :action="getPinHash ? decrypt : create"
-      :icon="getIcon()"
-    />
+    >
+    <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
+    <chevron-right-icon size="1x" v-else />
+  </InteractablesInputGroup>
     <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"

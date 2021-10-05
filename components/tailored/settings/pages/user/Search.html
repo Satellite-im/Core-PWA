@@ -4,7 +4,7 @@
       <UiCircle type="random" :seed="user.address" :size="15"/>
       <span class="text">{{user.name}}</span>
       <span class="action">
-        <font-awesome-icon :icon="['far', 'times-circle']" @click="removeSelected(i)" />
+        <x-icon size="1x" @click="removeSelected(i)" />
       </span>
     </span>
     <input type="text" ref="searchInput" v-model="search" class="user-search-input" :placeholder="placeholder"
@@ -20,7 +20,7 @@
           <UiCircle type="random" :seed="user.address" :size="25"/>
           <span class="text">{{user.name}}</span>
           <span class="action">
-            <font-awesome-icon :icon="['far', 'plus']" @click="selectUser(user, $event)" />
+            <plus-icon size="1x" @click="selectUser(user, $event)" />
           </span>
         </li>
       </ul>

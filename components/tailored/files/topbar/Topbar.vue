@@ -3,7 +3,13 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+// @ts-ignore
+import { FolderPlusIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
+  components: {
+    FolderPlusIcon,
+  },
   props: {
     handleFile: {
       type: Function,

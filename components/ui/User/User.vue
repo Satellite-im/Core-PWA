@@ -2,9 +2,16 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { ZapIcon } from 'vue-feather-icons'
+
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  components: {
+    ZapIcon,
+  },
   props: {
     user: {
       type: Object as PropType<User>,

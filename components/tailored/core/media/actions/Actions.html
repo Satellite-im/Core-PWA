@@ -7,7 +7,8 @@
       :type="video.disabled ? 'danger' : 'dark'"
       size="small"
       :action="toggleVideo">
-      <video-icon size="1.2x" />
+      <video-off-icon v-if="video.disabled" size="1.2x" />
+      <video-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div 
@@ -17,7 +18,8 @@
       :type="audio.muted ? 'danger' : 'dark'"
       size="small"
       :action="toggleMute">
-      <mic-icon size="1.2x" />
+      <mic-icon v-if="!audio.muted" size="1.2x" />
+      <mic-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div 

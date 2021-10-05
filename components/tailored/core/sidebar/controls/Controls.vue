@@ -2,8 +2,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
-import { MicIcon, HeadphonesIcon, VideoIcon } from 'vue-feather-icons'
+
+import {
+  MicIcon,
+  MicOffIcon,
+  HeadphonesIcon,
+  VideoIcon,
+  VideoOffIcon,
+  // @ts-ignore
+} from 'vue-feather-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -11,8 +18,10 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 export default Vue.extend({
   components: {
     MicIcon,
+    MicOffIcon,
     HeadphonesIcon,
     VideoIcon,
+    VideoOffIcon,
   },
   computed: {
     ...mapState(['audio', 'video']),

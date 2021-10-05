@@ -2,13 +2,13 @@
 
 <script lang="ts">
 // @ts-ignore
-import { MonitorIcon, XIcon } from 'vue-feather-icons'
+import { RadioIcon, XIcon } from 'vue-feather-icons'
 
 import Vue from 'vue'
 
 export default Vue.extend({
   components: {
-    MonitorIcon,
+    RadioIcon,
     XIcon,
   },
 })
