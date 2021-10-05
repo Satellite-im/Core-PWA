@@ -12,7 +12,7 @@
   </div>
   <div class="user-search-list">
     <ul ref="searchResult" :class="`user-search-result ${drop} ${dropDown ? 'active' : ''}`">
-      <li :class="{'active':i==selection}" v-for="(user, i) in result" :key="i" @click="selectUser(user, $event)">
+      <li :class="{'active':i==selection}" v-for="(user, i) in filteredResult" :key="i" @click="selectUser(user, $event)">
         <UiCircle type="random" :seed="user.address" :size="25"/>
         <span class="text">{{user.name}}</span>
         <span class="action">

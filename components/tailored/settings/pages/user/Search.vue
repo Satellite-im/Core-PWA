@@ -1,6 +1,7 @@
 <template src="./Search.html"></template>
 
 <script lang="ts">
+// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
@@ -40,6 +41,17 @@ export default Vue.extend({
       selection: -1,
     }
   },
+  computed: {
+    filteredResult() {
+      return this.result.filter((user: User) => {
+        const isAlreadyExist = this.selected.find(
+          (selectedUser) => selectedUser.name === user.name
+        )
+        if (isAlreadyExist) return false
+        return true
+      })
+    },
+  },
   methods: {
     showDropDown() {
       this.dropDown = true
@@ -66,16 +78,7 @@ export default Vue.extend({
         return
       }
       event.stopPropagation()
-      const exists = this.selected.find((item, i) => {
-        if (item.name === user.name) {
-          this.selected.splice(i, 1)
-          return item
-        }
-        return null
-      })
-      if (!exists) {
-        this.selected.push(user)
-      }
+      this.selected.push(user)
       this.showDropDown()
       this.$emit('input', this.selected)
     },
@@ -93,7 +96,7 @@ export default Vue.extend({
         case 'Down':
         case 'ArrowDown':
           this.selection++
-          if (this.result.length <= this.selection) {
+          if (this.filteredResult.length <= this.selection) {
             this.selection = 0
           }
           break
@@ -101,11 +104,11 @@ export default Vue.extend({
         case 'ArrowUp':
           this.selection--
           if (this.selection < 0) {
-            this.selection = this.result.length - 1
+            this.selection = this.filteredResult.length - 1
           }
           break
         case 'Enter':
-          this.selectUser(this.result[this.selection], event)
+          this.selectUser(this.filteredResult[this.selection], event)
           break
       }
       return true
