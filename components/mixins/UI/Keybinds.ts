@@ -12,7 +12,7 @@ export const Keybinds = {
     /**
      * @method activateKeybinds
      * @description Activates all keybindings with Mousetrap
-     * @example
+     * @example mounted (){ activateKeybinds() }
      */
     activateKeybinds() {
       Mousetrap.reset()
@@ -36,7 +36,7 @@ export const Keybinds = {
     /**
      * @method clearKeybinds
      * @description Unbinds all current keybindings with Mousetrap
-     * @example
+     * @example destroyed (){ clearKeybinds() }
      */
     clearKeybinds() {
       Mousetrap.reset()
@@ -44,7 +44,7 @@ export const Keybinds = {
     /**
      * @method toggleMute
      * @description Toggles mute for outgoing audio
-     * @example
+     * @example Mousetrap.bind('ctrl+m', this.toggleMute )
      */
     toggleMute() {
       const muted = this.$store.state.audio.muted
@@ -55,7 +55,7 @@ export const Keybinds = {
     /**
      * @method toggleDeafen
      * @description Toggles deafen for incoming audio
-     * @example
+     * @example Mousetrap.bind('ctrl+d', this.toggleDeafen )
      */
     toggleDeafen() {
       const deafened = this.$store.state.audio.deafened
@@ -66,7 +66,7 @@ export const Keybinds = {
     /**
      * @method openSettings
      * @description Opens setting page
-     * @example
+     * @example Mousetrap.bind('ctrl+s', this.openSettings )
      */
     openSettings() {
       const showSettings = this.$store.state.ui.showSettings
@@ -74,8 +74,8 @@ export const Keybinds = {
     },
     /**
      * @method callActiveChat
-     * @description
-     * @example
+     * @description Makes P2P call to current chat
+     * @example Mousetrap.bind('ctrl+c', this.callActiveChat )
      */
     callActiveChat() {},
   },

@@ -54,6 +54,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['ui']),
     /**
      * Computes the amount of characters left
      */
@@ -63,7 +64,6 @@ export default Vue.extend({
      * @returns Boolean based on if the current text length is longer than the max character limit
      * @example
      */
-    ...mapState(['ui']),
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
@@ -100,20 +100,19 @@ export default Vue.extend({
     },
     value: {
       /**
-       * @method get DocsTODO
-       * @description
-       * @returns
-       * @example
+       * @method get
+       * @description Gets chatbars current text
+       * @returns String of chatbars current text
+       * @example const currText = this.get()
        */
       get() {
         return this.ui.chatbarContent
       },
       /**
-       * @method set DocsTODO
-       * @description
-       * @param val
-       * @returns
-       * @example
+       * @method set
+       * @description Sets current chatbar text to new value
+       * @param val Value to set the chatbar content to
+       * @example set('This is the new chatbar content')
        */
       set(val: string) {
         this.$store.commit('chatbarContent', val)
@@ -168,11 +167,10 @@ export default Vue.extend({
     },
     /**
      * @method handleInputChange DocsTODO
-     * @description
-     * @example
-     * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
+     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
+     * @example
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
@@ -222,13 +220,12 @@ export default Vue.extend({
     },
     /**
      * @method handleInputKeydown DocsTODO
-     * @description
-     * @param event
-     * @returns
-     * @example
-     * Called from chatbar's keydown event to process all key events for typing in chatbar.
+     * @description Called from chatbar's keydown event to process all key events for typing in chatbar.
      * This interacts with handleInputChange in order to convert typed input to markdown expression.
      * This controls the caret position when Backspace, Spacebar is pressed.
+     * @param event Keydown event object
+     * @returns Boolean
+     * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
@@ -288,10 +285,10 @@ export default Vue.extend({
       return true
     },
     /**
-     * @method sendMessage DocsTODO
-     * @description
-     * @example
-     * Called when user sends message by pressing Enter.
+     * @method sendMessage
+     * @description Sends message by calling the sendMessage action with current data and
+     * then setting all related feilds to their default (empty)
+     * @example v-on:click="sendMessage"
      */
     sendMessage() {
       this.$store.dispatch('sendMessage', {

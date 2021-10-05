@@ -9,7 +9,7 @@ export const ContextMenu = {
      * @method contextMenu
      * @description Toggles ContextMenu mixin with related component ContextMenu values
      * @param e Context menu event object
-     * @example
+     * @example v-on:context-menu="contextMenu"
      */
     contextMenu(e: Event) {
       e.preventDefault()

@@ -55,7 +55,7 @@ const formatDevices = (devices: any[]) => {
  * @method getRTC
  * @description Gets users RTC info (devices, permissions, browser, etc.)
  * @returns Promise that resolves to responseObject with RTC info
- * @example const DeviceRTC = this.$props.getRTC()
+ * @example const UserPermissions = await this.$props.getRTC()
  */
 const getRTC = async () => {
   const promise = await new Promise((resolve) => {
@@ -113,8 +113,8 @@ export const UserPermissions = {
   methods: {
     /**
      * @method getUserPermissions DocsTODO
-     * @description
-     * @returns
+     * @description Uses getRTC method to return users RTC info
+     * @returns Object with users RTC info
      * @example
      */
     async getUserPermissions(): Promise<any> {
@@ -125,8 +125,8 @@ export const UserPermissions = {
     /**
      * @method requestUserPermissions DocsTODO
      * @description Requests user permission to access their media devices such as webcams and microphones
-     * @param permission
-     * @returns
+     * @param permission Object with contraints for which permissions to request
+     * @returns Promise that resolves to a MediaStream object
      * @example
      */
     async requestUserPermissions(

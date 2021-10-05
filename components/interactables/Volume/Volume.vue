@@ -28,9 +28,9 @@ export default Vue.extend({
     return {
       value: this.volume,
       /**
-       * @method
+       * @method percentageFormatter DocsTODO
        * @description
-       * @param
+       * @param volumePercentage
        * @returns
        * @example
        */
@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method returnValue
+     * @method returnValue DocsTODO
      * @description
      * @example
      */
