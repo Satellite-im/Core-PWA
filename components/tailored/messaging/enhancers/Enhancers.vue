@@ -4,6 +4,8 @@ import Vue from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { mapState } from 'vuex'
 // @ts-ignore
+import { SmileIcon, GridIcon, ImageIcon } from 'vue-feather-icons'
+// @ts-ignore
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
 import data from 'emoji-mart-vue-fast/data/all.json'
@@ -13,6 +15,9 @@ const emojiIndex = new EmojiIndex(data)
 export default Vue.extend({
   components: {
     Picker,
+    SmileIcon,
+    GridIcon,
+    ImageIcon,
   },
   data() {
     return {

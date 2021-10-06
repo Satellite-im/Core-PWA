@@ -80,6 +80,7 @@ export default Vue.extend({
     },
     /**
      * Supported fontawesome icon
+     * @deprecated provide icons as slot
      */
     // eslint-disable-next-line vue/require-default-prop
     icon: {

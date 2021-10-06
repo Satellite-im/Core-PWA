@@ -2,9 +2,27 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+import {
+  XIcon,
+  CheckIcon,
+  MoreVerticalIcon,
+  MessageSquareIcon,
+  CircleIcon,
+  SmartphoneIcon,
+  // @ts-ignore
+} from 'vue-feather-icons'
+
 import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
+  components: {
+    XIcon,
+    CheckIcon,
+    MoreVerticalIcon,
+    MessageSquareIcon,
+    CircleIcon,
+    SmartphoneIcon,
+  },
   props: {
     friend: {
       type: Object as PropType<Friend>,

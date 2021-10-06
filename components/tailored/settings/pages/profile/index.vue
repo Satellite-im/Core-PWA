@@ -3,6 +3,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+
+// @ts-ignore
+import { ClipboardIcon } from 'vue-feather-icons'
+
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
 
 import { sampleProfileInfo } from '~/mock/profile'
@@ -16,6 +20,7 @@ export default Vue.extend({
   name: 'ProfileSettings',
   components: {
     ImageCropper,
+    ClipboardIcon,
   },
   layout: 'settings',
   data() {

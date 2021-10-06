@@ -14,10 +14,11 @@
     <InteractablesButton
       type="primary"
       :text="$t('pages.files.new_folder')"
-      :icon="{style: 'far', name: 'folder-plus'}"
       size="small"
       :action="()=>{show('newfolder')}"
-    />
+    >
+    <folder-plus-icon size="1x" />
+  </InteractablesButton>
     <FileUpload type="button" />
   </div>
   <div>

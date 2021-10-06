@@ -48,8 +48,9 @@
               type="primary"
               placeholder="Enter Status"
               :action="() => {}"
-              :icon="{ style: 'far', name: 'save'}"
-            />
+            >
+              <clipboard-icon size="1x" />
+            </InteractablesInputGroup>
           </div>
         </div>
       </div>
@@ -65,9 +66,10 @@
             type="primary"
             size="small"
             :label-text="$t('pages.settings.profile.info.accountID')"
-            :icon="{ style: 'far', name: 'clipboard' }"
             :action="() => $toast.show($t('global.copied'))"
-            :text="accounts.active" />
+            :text="accounts.active">
+            <clipboard-icon size="1x" />
+          </InteractablesInputGroup>
         </div>
       </div>
       <UiSpacer :height="$mq === 'sm' ? 10 : 24" />

@@ -1,11 +1,11 @@
 <div class="friend">
   <UiCircle type="random" :seed="friend.address" :size="35" />
-  <font-awesome-icon
-    :icon="['far', 'mobile-alt']"
+  <smartphone-icon
+    size="1x"
     v-if="friend.state === 'mobile'"
     :class="`mobile-status is-${friend.state}`" />
-  <font-awesome-icon
-    :icon="['fas', 'circle']"
+  <circle-icon
+    size="1x"
     v-if="friend.state !== 'mobile'"
     :class="`status is-${friend.state}`" />
   <div class="description">
@@ -20,14 +20,17 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Accept"
       :action="() => {}"
-      :icon="{ style: 'far', name: 'check' }" />
+      >
+      <check-icon size="1x" />
+    </InteractablesButton>
     <InteractablesButton
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Decline"
-      :action="() => {}"
-      :icon="{ style: 'far', name: 'times' }" />
+      :action="() => {}">
+      <x-icon size="1x" />
+    </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
     <InteractablesButton
@@ -35,8 +38,9 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Unblock"
-      :action="() => {}"
-      :icon="{ style: 'far', name: 'times' }" />
+      :action="() => {}">
+      <x-icon size="1x" />
+    </InteractablesButton>
   </div>
   <div class="controls" v-else>
     <InteractablesButton
@@ -44,14 +48,16 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Message"
-      :action="() => {}"
-      :icon="{ style: 'far', name: 'comment-alt-dots' }" />
+      :action="() => {}">
+      <message-square-icon size="1x" />
+    </InteractablesButton>
     <InteractablesButton
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Options"
-      :action="() => {}"
-      :icon="{ style: 'far', name: 'ellipsis-v' }" />
+      :action="() => {}">
+      <more-vertical-icon size="1x" />
+    </InteractablesButton>
   </div>
 </div>

@@ -8,6 +8,7 @@ import {
   VideoIcon,
   ArchiveIcon,
   ShoppingBagIcon,
+  CircleIcon,
   // @ts-ignore
 } from 'vue-feather-icons'
 
@@ -28,6 +29,7 @@ export default Vue.extend({
     VideoIcon,
     ArchiveIcon,
     ShoppingBagIcon,
+    CircleIcon,
   },
   props: {
     collapsed: {

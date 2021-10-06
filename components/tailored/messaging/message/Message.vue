@@ -53,11 +53,6 @@ export default Vue.extend({
       default: () => {},
     },
   },
-  computed: {
-    hasReactions() {
-      return this.$props.message.reactions && this.$props.message.reactions.length
-    },
-  },
   data() {
     return {
       messageHover: false,
@@ -81,6 +76,13 @@ export default Vue.extend({
         { text: 'Copy Link', func: (this as any).testFunc },
       ],
     }
+  },
+  computed: {
+    hasReactions() {
+      return (
+        this.$props.message.reactions && this.$props.message.reactions.length
+      )
+    },
   },
   methods: {
     testFunc() {

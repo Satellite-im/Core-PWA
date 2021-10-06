@@ -6,15 +6,15 @@
     {{localChannel.name}}
   </span>
   <span class="channel-name" v-if="localChannel.type === 'label'">
-    <font-awesome-icon :icon="['far', 'tag']" />
+    <tag-icon size="0.8x" />
     {{localChannel.name}}
   </span>
   <span class="channel-name" v-else-if="localChannel.type === 'feed'">
-    <font-awesome-icon :icon="['far', 'rss']" />
+    <rss-icon size="0.8x" />
     {{localChannel.name}}
   </span>
   <span class="channel-name" v-else-if="localChannel.type === 'voice'">
-    <font-awesome-icon :icon="['far', 'volume']" />
+    <volume-2-icon size="0.8x" />
     {{localChannel.name}}
   </span>
   <div class="voice-group" v-for="user in localChannel.users">

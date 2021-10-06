@@ -11,6 +11,7 @@ export default {
     ChevronDownIcon,
     PlusIcon,
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ['group', 'channels', 'setActiveChannel'],
   data() {
     return {
@@ -21,7 +22,7 @@ export default {
     toggleCollapse() {
       this.collapsed = !this.collapsed
     },
-  }
+  },
 }
 </script>
 

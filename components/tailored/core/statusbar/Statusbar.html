@@ -1,7 +1,7 @@
 <div id="statusbar">
   <div class="circle-container" v-if="!$device.isMobile">
-    <font-awesome-icon
-      :icon="['fas', 'circle']"
+    <circle-icon
+      size="1x"
       :class="`status is-${user.state}`"
       v-if="!server"
     />

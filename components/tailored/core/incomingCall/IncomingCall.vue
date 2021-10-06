@@ -37,7 +37,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     this.$Sounds.stopSound(Sounds.CALL)
-  }
+  },
 })
 </script>
 

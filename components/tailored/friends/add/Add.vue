@@ -3,10 +3,14 @@
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
 
+// @ts-ignore
+import { UserPlusIcon } from 'vue-feather-icons'
+
 import Vue from 'vue'
 export default Vue.extend({
   components: {
     QrcodeVue,
+    UserPlusIcon,
   },
   data() {
     return {
