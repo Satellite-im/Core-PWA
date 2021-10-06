@@ -135,7 +135,7 @@ export default Vue.extend({
       this.selected.splice(index, 1)
       this.showDropDown()
     },
-  }
+  },
 })
 </script>
 

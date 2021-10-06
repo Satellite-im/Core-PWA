@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
 import { ProfileInfo } from '~/types/profile/profile'
 import { recommendLocations } from '~/mock/profile'
 

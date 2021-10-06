@@ -4,13 +4,14 @@
 import Vue, { PropType } from 'vue'
 
 // @ts-ignore
-import { ZapIcon } from 'vue-feather-icons'
+import { ZapIcon, CircleIcon } from 'vue-feather-icons'
 
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
     ZapIcon,
+    CircleIcon,
   },
   props: {
     user: {

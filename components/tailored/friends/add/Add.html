@@ -2,7 +2,9 @@
   <TypographyTitle :size="6" text="Add Friend" />
   <TypographyText text="Enter your friends account ID, or nickname. Account IDs are case sensitive." />
   <UiSpacer :height="10" />
-  <InteractablesInputGroup :icon="{ style: 'far', name: 'user-plus' }" type="primary" size="small" :placeholder="`Some User...`" />
+  <InteractablesInputGroup type="primary" size="small" :placeholder="`Some User...`">
+    <user-plus-icon size="1x" />
+  </InteractablesInputGroup>
   <UiSpacer :height="10" />
   <UiHorizontalRuleText plaintext value="OR" />
   <UiSpacer :height="10" />

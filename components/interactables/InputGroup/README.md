@@ -14,7 +14,6 @@ Generic input group component.
       inputGroupLoading = true
     }
   "
-  :icon="{ style: 'far', name: 'lock-open' }"
 />
 ```
 
@@ -30,7 +29,7 @@ Generic input group component.
 
 **action** Action that should happen when the attached button is pressed
 
-**icon** Optional icon attached to the button
+**icon** Provide in component slot
 
 **buttonText** Optional attached button text
 

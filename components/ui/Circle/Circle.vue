@@ -7,8 +7,8 @@ import Vue, { PropType } from 'vue'
 // @ts-ignore
 import { CircleIcon } from 'vue-feather-icons'
 
-import { Icon } from '@/types/ui/icons'
 import { CircleType } from './types'
+import { Icon } from '@/types/ui/icons'
 
 export default Vue.extend({
   components: {
@@ -38,7 +38,7 @@ export default Vue.extend({
      */
     // eslint-disable-next-line vue/require-default-prop
     icon: {
-      type: Object as PropType<Icon>,
+      type: String,
       required: false,
     },
     /**

@@ -1,11 +1,11 @@
 <div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
   <UiCircle type="random" :seed="user.address" :size="35" />
-  <font-awesome-icon
-    :icon="['fas', 'circle']"
+  <circle-icon
+    size="1x"
     v-if="user.state !== 'mobile' && !isTyping"
     :class="`status is-${user.state}`" />
-  <font-awesome-icon
-    :icon="['far', 'mobile-alt']"
+  <smartphone-icon
+    size="1x"
     v-else-if="user.state === 'mobile'"
     :class="`mobile-status is-${user.state}`" />
   <UiTypingIndicator v-else />
