@@ -1,6 +1,9 @@
 @sidebar-inner-offset: 175px;
 @mobile-sidebar-inner-offset: 245px;
 
+@sidebar-inner-streaming-pad: 2rem;
+@mobile-sidebar-inner-streaming-pad: 6rem;
+
 #sidebar {
   width: @sidebar-size;
   min-width: @sidebar-size;
@@ -24,7 +27,11 @@
 
     .users {
       flex: 1;
+      position: relative;
       overflow: hidden;
+      .inline-notification {
+        width: @sidebar-size - (@normal-spacing * 2);
+      }
     }
     .sidebar-search {
       width: 100%;
@@ -40,6 +47,11 @@
       color: @primary-color;
       filter: @primary-text-glow;
     }
+  }
+
+
+  .sidebar-inner-streaming {
+    max-height: calc(100vh - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
   }
 
   .controls {
@@ -110,12 +122,6 @@
   width: 100%;
   margin-bottom: @light-spacing;
   justify-content: flex-start;
-  &.is-inactive {
-    background-color: transparent !important;
-    &:hover {
-      background: @semitransparent-lighter-gradient;
-    }
-  }
 }
 
 .sidebar-nav {
@@ -128,6 +134,14 @@
     z-index: 3;
     .sidebar-inner {
       max-height: calc(100vh - @mobile-sidebar-inner-offset);
+      .users {
+        .inline-notification {
+          width: 100vw - 30rem;
+        }
+      }
+    }
+    .sidebar-inner-streaming {
+      max-height: calc(100vh - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
     }
   }
 }
@@ -136,5 +150,13 @@
   #sidebar {
     min-width: unset;
     max-width: @sidebar-size;
+    sidebar-inner {
+      max-height: calc(100vh - @mobile-sidebar-inner-offset);
+      .users {
+        .inline-notification {
+          width: 100vw - 32rem !important;
+        }
+      }
+    }
   }
 }

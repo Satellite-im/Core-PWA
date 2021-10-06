@@ -1,0 +1,23 @@
+.inline-notification {
+    position: fixed;
+    z-index: @base-z-index + 101;
+    background: @red;
+    box-shadow: @danger-glow;
+    backdrop-filter: @blur;
+    border-radius: 14rem;
+    padding: (@light-spacing / 2) @normal-spacing;
+    font-size: @text-size;
+    margin: 0 auto;
+    color: @bright-text;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    .fill {
+        flex: 1;
+    }
+    .feather-x {
+        cursor: pointer;
+        justify-self: flex-end;
+    }
+}

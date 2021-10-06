@@ -1,17 +1,17 @@
 <div :class="`${$device.isMobile ? 'file mobile-file' : 'file'}`">
   <div class="quick-actions">
-    <font-awesome-icon :icon="['far', 'link']" class="share" v-if="item.meta && item.meta.shared" />
-    <font-awesome-icon :icon="['far', 'heart']" class="like" v-if="item.meta && item.meta.liked" />
+    <link-icon size="1x" class="share" v-if="item.meta && item.meta.shared" />
+    <heart-icon size="1x" class="like" v-if="item.meta && item.meta.liked" />
   </div>
   <div v-if="item.children" v-on:click="handler(item)">
-    <font-awesome-icon :icon="['fal', 'folder']" class="file-icon folder" />
+    <folder-icon size="1x" class="file-icon folder" />
     <div class="text-container">
       <TypographyText :size="6" :text="item.name" />
       <TypographyText :size="6" :text="`${item.children.length} items`" class="subtext" />
     </div>
   </div>
   <div v-else v-on:click="handler(item)">
-    <font-awesome-icon v-if="!isImage(item.type)" :icon="['fal', 'file']" class="file-icon file-display" />
+    <file-icon v-if="!isImage(item.type)" size="1x" class="file-icon file-display" />
     <div v-else class="image-preview" :style="`background-image: url('${item.location}')`">
     </div>
     <div class="text-container">

@@ -8,22 +8,25 @@
       :type="route === 'glyphs' ? 'primary' : 'dark'"
       size="small"
       :action="() => setRoute('glyphs')"
-      :icon="{ style: 'far', name: 'comment-alt-smile' }"
-      text="Glyphs" />
+      text="Glyphs">
+      <grid-icon size="1x" />
+    </InteractablesButton>
     <InteractablesButton
       :outlined="route === 'emoji' ? false : true"
       :type="route === 'emoji' ? 'primary' : 'dark'"
       size="small"
       :action="() => setRoute('emoji')"
-      :icon="{ style: 'far', name: 'grin-tongue-wink' }"
-      text="Emoji" />
+      text="Emoji">
+      <smile-icon size="1x" />
+    </InteractablesButton>
     <InteractablesButton
       :outlined="route === 'gif' ? false : true"
       :type="route === 'gif' ? 'primary' : 'dark'"
       size="small"
       :action="() => setRoute('gif')"
-      :icon="{ style: 'far', name: 'image' }"
-      text="Gifs" />
+      text="Gifs">
+      <image-icon size="1x" />
+    </InteractablesButton>
   </div>
   <div id="container">
     <picker 
@@ -36,5 +39,6 @@
       color="#087bd3"
       :emoji-size="26"
       :show-preview="false" />
+    <TailoredMessagingEnhancersGlyphs v-if="route === 'glyphs'"></TailoredMessagingEnhancersGlyphs>
   </div>
 </div>

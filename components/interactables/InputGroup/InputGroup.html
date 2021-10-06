@@ -21,7 +21,7 @@
       >
         <UiSpinner v-if="loading" spinning />
         <span v-else>
-          <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" class="button-icon" />
+          <slot></slot>
           {{ buttonText }}
         </span>
       </a>
@@ -34,7 +34,7 @@
       >
         <UiSpinner v-if="loading" spinning />
         <span v-else>
-          <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" class="button-icon" />
+          <slot></slot>
           {{ buttonText }}
         </span>
       </a>

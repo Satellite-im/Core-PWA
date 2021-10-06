@@ -6,8 +6,10 @@
       class="left"
       :type="video.disabled ? 'danger' : 'dark'"
       size="small"
-      :icon="{ style: 'far', name: 'video' }"
-      :action="toggleVideo" />
+      :action="toggleVideo">
+      <video-off-icon v-if="video.disabled" size="1.2x" />
+      <video-icon v-else size="1.2x" />
+    </InteractablesButton>
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
@@ -15,8 +17,10 @@
     <InteractablesButton
       :type="audio.muted ? 'danger' : 'dark'"
       size="small"
-      :icon="{ style: 'far', name: 'microphone-alt' }"
-      :action="toggleMute" />
+      :action="toggleMute">
+      <mic-icon v-if="!audio.muted" size="1.2x" />
+      <mic-off-icon v-else size="1.2x" />
+    </InteractablesButton>
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
@@ -24,8 +28,9 @@
     <InteractablesButton
       type="dark"
       size="small"
-      :icon="{ style: 'far', name: 'desktop-alt' }"
-      :action="() => {}" />
+      :action="() => {}">
+      <monitor-icon size="1.2x" />
+    </InteractablesButton>
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
@@ -34,7 +39,8 @@
       class="right"
       type="danger"
       size="small"
-      :icon="{ style: 'far', name: 'phone-slash' }"
-      :action="() => {}" />
+      :action="() => {}">
+      <phone-off-icon size="1.2x" />
+    </InteractablesButton>
   </div>
 </div>

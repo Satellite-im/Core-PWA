@@ -6,17 +6,9 @@
     {{ badgeCount }}
   </span>
   <p :style="`font-size: ${size}pt;`" v-if="!color">
-    <font-awesome-icon
-      v-if="icon"
-      :icon="[icon.style, icon.name]"
-      class="button-icon"
-    />
+    <UiDynamicIcon v-if="icon" size="1x" :icon="icon" />
   </p>
   <p :style="`font-size: ${size}pt; background-color: ${color}`" class="squared" v-else>
-    <font-awesome-icon
-      v-if="icon"
-      :icon="[icon.style, icon.name]"
-      class="button-icon"
-    />
+    <UiDynamicIcon v-if="icon" size="1x" :icon="icon" />
   </p>
 </div>

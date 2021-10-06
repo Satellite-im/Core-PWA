@@ -1,11 +1,19 @@
 #chatbar {
   margin-top: @light-spacing;
   width: 100%;
-
+  .placeholder {
+    position: absolute;
+    left: 4.5rem;
+    opacity: 1;
+    font-size: @text-size;
+    pointer-events: none;
+    padding: 0.25rem @light-spacing;
+    padding-top: 6px;
+    padding-left: 1px;
+  }
   &.has-reply {
     margin-top: 0;
   }
-  
   .chat-label {
     background: @primary-color;
     font-size: @mini-text-size;
@@ -56,7 +64,7 @@
     background: @semitransparent-light-gradient;
     margin: 0 @normal-spacing;
     border-radius: 40px;
-    padding: @light-spacing 0.75rem;
+    padding: (@light-spacing / 1.5) 0.75rem;
     display: inline-flex;
     flex-direction: row;
     width: calc(100% - 2rem);
@@ -72,15 +80,11 @@
       width: 16pt;
       align-self: center;
       margin: 0 0.75rem;
+      margin-left: 0;
 
       &:nth-child(1) {
         margin-right: 0.75rem;
         margin-left: @light-spacing;
-      }
-
-      &:nth-child(3) {
-        margin-right: 0.75rem;
-        margin-left: 0;
       }
     }
 
@@ -103,6 +107,8 @@
       color: @text;
       outline: none;
       resize: none;
+      font-size: @text-size;
+      padding-top: 6px;
     }
 
     .control-icon {

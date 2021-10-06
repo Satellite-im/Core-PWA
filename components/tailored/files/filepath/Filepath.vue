@@ -1,9 +1,16 @@
 <template src="./Filepath.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { HomeIcon } from 'vue-feather-icons'
+
 import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
+  components: {
+    HomeIcon,
+  },
   props: {
     /**
      * The array of children to path through

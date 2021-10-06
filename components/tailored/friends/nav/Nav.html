@@ -5,24 +5,30 @@
     :text="`${$device.isMobile ? '' : 'Active'}`" 
     :type="route === 'active' ? 'primary': 'dark'"
     :action="() => setRoute('active')"
-    :icon="{ style: 'far', name: 'user-friends' }"    />
+    >
+    <user-icon size="1x" />
+  </InteractablesButton>
   <InteractablesButton 
     size="small" 
     :text="`${$device.isMobile ? '' : 'Requests'}`" 
     :type="route === 'requests' ? 'primary' : 'dark'"
     :action="() => setRoute('requests')"
-    :icon="{ style: 'far', name: 'people-arrows' }"    />
+    >
+    <user-check-icon size="1x" />
+  </InteractablesButton>
   <InteractablesButton 
-    :icon="{ style: 'far', name: 'user-times' }"
     size="small"
     :text="`${$device.isMobile ? '' : 'Blocked'}`" 
     :type="route === 'blocked' ? 'primary' : 'dark'"
-    :action="() => setRoute('blocked')" />
+    :action="() => setRoute('blocked')">
+    <user-x-icon size="1x" />
+  </InteractablesButton>
   <InteractablesButton 
-    :icon="{ style: 'far', name: 'user-plus' }"
     size="small"
     :text="`${$device.isMobile ? 'Add' : 'Add Friend'}`" 
     :type="route === 'add' ? 'primary' : 'dark'"
-    :action="() => setRoute('add')" />
+    :action="() => setRoute('add')">
+    <user-plus-icon size="1x" />
+  </InteractablesButton>
 
 </div>

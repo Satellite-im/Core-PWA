@@ -3,10 +3,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { Icon } from '~/types/ui/icons'
+
+// @ts-ignore
+import { UnlockIcon, ChevronRightIcon } from 'vue-feather-icons'
 
 export default Vue.extend({
   name: 'UnlockScreen',
+  components: {
+    UnlockIcon,
+    ChevronRightIcon,
+  },
   data() {
     return {
       pin: '',
@@ -20,11 +26,11 @@ export default Vue.extend({
     ...mapState(['accounts']),
   },
   methods: {
-    getIcon(): Icon {
+    getIcon(): string {
       if (this.getPinHash) {
-        return { style: 'far', name: 'arrow-circle-right' }
+        return 'unlocked'
       } else {
-        return { style: 'far', name: 'lock-open' }
+        return 'locked'
       }
     },
     // Decrypt stored encrypted data into memory

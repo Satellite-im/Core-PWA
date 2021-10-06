@@ -152,12 +152,6 @@ button {
   color: @bright-text;
 }
 
-
-.button {
-  &.is-inactive {
-    background-color: transparent !important;
-  }
-}
 // Inputs
 
 #sidebar {
@@ -261,9 +255,34 @@ li.active {
   outline: none;
 }
 
+code {
+  background: @semitransparent-lighter-gradient;
+  color: @primary-color;
+}
+
+strong {
+  color: @bright-text;
+}
+
 @media only screen and (max-width: @mobile-breakpoint) {
   .dynamic-content {
     min-width: 100vw;
     background: transparent;
+  }
+}
+
+.spin {
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+}
+
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
   }
 }

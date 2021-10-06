@@ -1,19 +1,28 @@
 <template src="./Group.html"></template>
 
 <script>
+// @ts-ignore
+import { ChevronRightIcon, ChevronDownIcon, PlusIcon } from 'vue-feather-icons'
+
 export default {
   name: 'Group',
+  components: {
+    ChevronRightIcon,
+    ChevronDownIcon,
+    PlusIcon,
+  },
+  // eslint-disable-next-line vue/require-prop-types
   props: ['group', 'channels', 'setActiveChannel'],
-  data () {
+  data() {
     return {
-      collapsed: false
+      collapsed: false,
     }
   },
   methods: {
-    toggleCollapse () {
+    toggleCollapse() {
       this.collapsed = !this.collapsed
-    }
-  }
+    },
+  },
 }
 </script>
 

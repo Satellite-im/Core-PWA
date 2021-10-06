@@ -3,8 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// @ts-ignore
+import { ArrowRightIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
   name: 'NotificationsSettings',
+  components: {
+    ArrowRightIcon,
+  },
   layout: 'settings',
   data() {
     return {
@@ -19,9 +25,11 @@ export default Vue.extend({
       set(state: boolean) {
         // @ts-ignore
         this.$notifications.requestNotificationPermission()
+        // @ts-ignore
         this.$data.NotificationsEnabled = state
       },
       get() {
+        // @ts-ignore
         return this.$data.NotificationsEnabled
       },
     },

@@ -2,6 +2,16 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import {
+  PhoneCallIcon,
+  VideoIcon,
+  ArchiveIcon,
+  ShoppingBagIcon,
+  CircleIcon,
+  // @ts-ignore
+} from 'vue-feather-icons'
+
 import { mapState } from 'vuex'
 import { Server } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
@@ -14,6 +24,13 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    PhoneCallIcon,
+    VideoIcon,
+    ArchiveIcon,
+    ShoppingBagIcon,
+    CircleIcon,
+  },
   props: {
     collapsed: {
       type: Boolean,

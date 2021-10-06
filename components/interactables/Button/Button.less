@@ -1,9 +1,37 @@
 .button {
   min-width: 35px;
   overflow: hidden;
-  line-height: 1.7 !important;
+  display: inline-flex;
+  justify-content: center;
+  line-height: unset;
+
+  #custom-cursor-area {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: unset;
+  }
+
   .button-icon-padded {
     margin-right: 0.25rem;
+  }
+
+  .content {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    .feather {
+      height: 100%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 0.5rem;
+    }
+
+    .no-text-feather {
+      margin-right: 0;
+    }
   }
 }
 .is-full-width {

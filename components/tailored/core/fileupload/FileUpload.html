@@ -1,12 +1,12 @@
-<span>
-  <span id="file-upload">
+<div id="file-upload">
+  <div>
     <div class="file-preview" v-if="file">
       <div class="img-wrapper">
         <img v-if="isEmbedableImage(file.name)" :src="url" v-bind:class="{ 'img-blur': nsfw.status  }"/>
       </div>
-      <font-awesome-icon
+      <file-icon
+        size="1x"
         v-if="!isEmbedableImage(file.name)"
-        :icon="['far', 'file']"
         class="control-icon"
       />
       <div class="file-info">
@@ -14,7 +14,7 @@
         <div v-if="nsfw.status || nsfw.checking" class="nsfw-text" >
           <TypographySubtitle :size="6" text="Scanning Image..." v-if="nsfw.checking" />
           <TypographySubtitle :size="6" text="Upload Blocked" v-if="nsfw.status" />
-          <font-awesome-icon :icon="['far', 'skull']" v-if="nsfw.status"/>
+          <slash-icon size="1x" v-if="nsfw.status"/>
         </div>
         <div v-else>
           <TypographySubtitle :size="6" :text="file.type" />
@@ -37,27 +37,24 @@
       </div>
     </div>
     <input type="file" id="quick-upload" @change="handleFile" />
-  </span>
-  <span v-if="type == 'quick'">
-    <div class="upload-button">
-      <label
-        for="quick-upload"
-        :data-tooltip="$t('global.upload')"
-        class="has-tooltip has-tooltip-top has-tooltip-primary"
-      >
-        <font-awesome-icon :icon="['far', 'plus']" class="control-icon" />
-      </label>
-    </div>
-  </span>
+  </div>
+  <label
+    v-if="type == 'quick'"
+    for="quick-upload"
+    :data-tooltip="$t('global.upload')"
+    class="has-tooltip has-tooltip-top has-tooltip-primary upload-label"
+  >
+    <plus-icon size="1.2x" class="control-icon" />
+  </label>
   <div v-if="type =='button'">
     <label
       for="quick-upload"
       class="button is-button is-small is-primary is-normal-width"
     >
       <UiGlowingCursorArea>
-        <font-awesome-icon :icon="['far', 'file-plus']" class="control-icon" />
+        <file-plus-icon size="1.2x" class="control-icon" />
         &nbsp; {{ $t('pages.files.upload') }}
       </UiGlowingCursorArea>
     </label>
   </div>
-</span>
+</div>

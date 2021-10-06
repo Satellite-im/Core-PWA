@@ -1,6 +1,10 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { ArchiveIcon } from 'vue-feather-icons'
+
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
@@ -15,6 +19,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     VueMarkdown,
+    ArchiveIcon,
   },
   mixins: [ContextMenu],
   props: {
@@ -38,6 +43,10 @@ export default Vue.extend({
     index: {
       type: Number,
       default: -1,
+    },
+    hideActions: {
+      type: Boolean,
+      default: false,
     },
     setMessageHover: {
       type: Function,
@@ -67,6 +76,13 @@ export default Vue.extend({
         { text: 'Copy Link', func: (this as any).testFunc },
       ],
     }
+  },
+  computed: {
+    hasReactions() {
+      return (
+        this.$props.message.reactions && this.$props.message.reactions.length
+      )
+    },
   },
   methods: {
     testFunc() {

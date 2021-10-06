@@ -1,10 +1,10 @@
 <div class="server-sidebar-group">
   <h5 v-on:click="toggleCollapse">
-    <font-awesome-icon :icon="['far', 'chevron-right']" v-if="collapsed" />
-    <font-awesome-icon :icon="['far', 'chevron-down']" v-else />
+    <chevron-right-icon size="0.8x" v-if="collapsed" />
+    <chevron-down-icon size="0.8x" v-else />
     <span class="server-sidebar-group-name">{{group.name}}</span>
     <div class="has-tooltip has-tooltip-primary has-tooltip-top add-channel" data-tooltip="Add Channel">
-      <font-awesome-icon :icon="['far', 'plus']" />
+      <plus-icon size="1x" />
     </div>
   </h5>
   <div v-for="channel in group.channels" :class="`${collapsed ? 'collapsed' : 'expanded'}`">

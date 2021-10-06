@@ -3,11 +3,30 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
+
+// @ts-ignore
+import { PlusIcon, XIcon } from 'vue-feather-icons'
+
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
 import { Users } from '~/mock/users'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    selected: Array<User>
+    dropDown: boolean
+    showDropDown: () => void
+    selection: number
+    selectUser: (user: User, event: Event) => void
+    filteredResult: Array<User>
+  }
+}
+
 export default Vue.extend({
+  components: {
+    PlusIcon,
+    XIcon,
+  },
   props: {
     value: {
       type: Array as PropType<User[]>,
@@ -52,17 +71,29 @@ export default Vue.extend({
       })
     },
   },
+  mounted() {
+    const searchSlot = this.$refs.searchSlot as HTMLElement
+    const searchResult = this.$refs.searchResult as HTMLElement
+    if (this.drop === 'top') {
+      searchResult.style.bottom =
+        searchSlot.getBoundingClientRect().height + 'px'
+    }
+  },
   methods: {
     showDropDown() {
       this.dropDown = true
-      const searchSlot = this.$refs.searchSlot as HTMLElement
       const searchResult = this.$refs.searchResult as HTMLElement
-      if (this.drop === 'top') {
-        setTimeout(() => {
-          searchResult.style.bottom =
-            searchSlot.getBoundingClientRect().height + 'px'
-        }, 10)
-      }
+      setTimeout(() => {
+        const searchContent = searchResult.querySelector('.user-search-result')
+        if (searchContent) {
+          if (searchContent.getBoundingClientRect().height < 200) {
+            searchResult.style.height =
+              searchContent.getBoundingClientRect().height + 'px'
+          } else {
+            searchResult.style.height = '200px'
+          }
+        }
+      }, 10)
     },
     hideDropDown() {
       this.dropDown = false
@@ -111,6 +142,7 @@ export default Vue.extend({
           this.selectUser(this.filteredResult[this.selection], event)
           break
       }
+      this.showDropDown()
       return true
     },
     removeSelected(index: number) {

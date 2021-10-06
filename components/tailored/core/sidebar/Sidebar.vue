@@ -4,12 +4,26 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
+import {
+  UsersIcon,
+  FolderIcon,
+  MessageSquareIcon,
+  MenuIcon,
+  // @ts-ignore
+} from 'vue-feather-icons'
+
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import { DataStateType } from '~/store/dataState/types'
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  components: {
+    UsersIcon,
+    FolderIcon,
+    MessageSquareIcon,
+    MenuIcon,
+  },
   mixins: [mobileSwipe],
   props: {
     toggle: {
@@ -27,14 +41,13 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState']),
+    ...mapState(['ui', 'dataState', 'media']),
   },
   mounted() {
     /**
      * Opens and closes the left hand sidebar upon clicking on 'direct-chat', 'friends-list', and 'files-browse'
      * when user is on a mobile device
      */
-
     if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
       this.$props.toggle()
     }

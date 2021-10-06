@@ -3,8 +3,14 @@
 <script>
 import Vue from 'vue'
 
+// @ts-ignore
+import { ChevronDownIcon } from 'vue-feather-icons'
+
 export default Vue.extend({
   name: 'ChatScroll',
+  components: {
+    ChevronDownIcon,
+  },
   props: {
     autoScroll: {
       type: Boolean,
