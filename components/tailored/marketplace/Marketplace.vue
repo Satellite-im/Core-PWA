@@ -28,14 +28,9 @@ export default Vue.extend({
       marketCategories,
     }
   },
-  watch: {
-    subject(newVal, oldVal) {
-      console.log(newVal, oldVal)
-    },
-  },
   methods: {
-    changeSubject(subject: String) {
-      console.log(subject)
+    changeSubject(subject: string) {
+      this.subject = subject
     },
   },
 })

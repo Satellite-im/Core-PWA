@@ -82,3 +82,6 @@ export const marketProducts = [
     favorited: false,
   },
 ] as ProductItem[]
+
+export const marketGlyphs = []
+export const marketNfts = []

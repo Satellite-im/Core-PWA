@@ -40,7 +40,9 @@
         </div>
         <div class="listing-panel">
             <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap noPadding>
-                <TailoredMarketplaceListing/>
+                <TailoredMarketplaceListing v-if="subject==='Themes'"/>
+                <TailoredMarketplaceGlyphs v-if="subject==='Glyphs'"/>
+                <TailoredMarketplaceNfts v-if="subject==='NFTs'"/>
             </UiScroll>
         </div>
     </div>
