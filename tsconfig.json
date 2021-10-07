@@ -35,4 +35,8 @@
     ".nuxt",
     "dist"
   ],
+  "include": [
+    "./*",
+    "types/modules/satellite-lucide-icons.d.ts"
+  ]
 }

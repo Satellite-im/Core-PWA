@@ -1,11 +1,17 @@
 <div class="container">
   <div class="decryption-body">
+    <div v-if="!getPinHash" class="create_pin_section">
+      <info-icon size="0.8x" />
+      <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
+      <TypographyText text="Create a pin to protect your account." />
+      <TypographyText text="The pin can be anything you want, just don't foreget it." />
+    </div>
     <InteractablesInputGroup
       v-model="pin"
       size="small"
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
-      :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : $t('pages.unlock.create')}`"
+      :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'}`"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
       :action="getPinHash ? decrypt : create"

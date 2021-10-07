@@ -7,8 +7,7 @@ import {
   CornerDownRightIcon,
   ArchiveIcon,
   MoreVerticalIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 
 export default Vue.extend({

@@ -4,8 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { MenuIcon } from 'vue-feather-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 

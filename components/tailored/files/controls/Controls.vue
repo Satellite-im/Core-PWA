@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { FolderPlusIcon } from 'vue-feather-icons'
+import { FolderPlusIcon } from 'satellite-lucide-icons'
 import FileUpload from '~/components/tailored/core/fileupload/FileUpload.vue'
 
 export default Vue.extend({

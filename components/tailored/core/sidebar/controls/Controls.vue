@@ -9,8 +9,7 @@ import {
   HeadphonesIcon,
   VideoIcon,
   VideoOffIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'

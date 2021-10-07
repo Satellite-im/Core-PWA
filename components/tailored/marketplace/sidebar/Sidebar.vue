@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { ChevronDownIcon, CircleIcon } from 'vue-feather-icons'
+import { ChevronDownIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import {
   CategoryOption,

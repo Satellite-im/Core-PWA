@@ -3,8 +3,12 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { FileIcon, PlusIcon, FilePlusIcon, SlashIcon } from 'vue-feather-icons'
+import {
+  FileIcon,
+  PlusIcon,
+  FilePlusIcon,
+  SlashIcon,
+} from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

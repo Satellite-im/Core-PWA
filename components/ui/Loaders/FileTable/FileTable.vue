@@ -52,7 +52,7 @@
 import Vue from 'vue'
 
 // @ts-ignore
-import { FilterIcon } from 'vue-feather-icons'
+import { FilterIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

@@ -41,6 +41,7 @@ const InitalUIState = (): UIState => ({
     newfolder: false,
     createServer: false,
     showMarketPlace: false,
+    wallet: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },

@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { ArchiveIcon } from 'vue-feather-icons'
+import { ArchiveIcon } from 'satellite-lucide-icons'
 
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'

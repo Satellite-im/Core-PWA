@@ -10,8 +10,7 @@ import {
   MicOffIcon,
   MonitorIcon,
   PhoneOffIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'

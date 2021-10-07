@@ -5,7 +5,7 @@
 import Vue from 'vue'
 
 // @ts-ignore
-import { LoaderIcon } from 'vue-feather-icons'
+import { LoaderIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

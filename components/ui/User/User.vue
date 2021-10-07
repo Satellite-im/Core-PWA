@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { ZapIcon, CircleIcon } from 'vue-feather-icons'
+import { ZapIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { User } from '~/types/ui/user'
 

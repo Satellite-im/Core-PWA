@@ -4,8 +4,7 @@
 import Vue from 'vue'
 // @ts-ignore
 import VuejsPaginate from 'vuejs-paginate'
-// @ts-ignore
-import { CalendarIcon } from 'vue-feather-icons'
+import { CalendarIcon } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import SearchUtil from '../SearchUtil'

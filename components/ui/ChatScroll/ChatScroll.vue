@@ -3,8 +3,7 @@
 <script>
 import Vue from 'vue'
 
-// @ts-ignore
-import { ChevronDownIcon } from 'vue-feather-icons'
+import { ChevronDownIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ChatScroll',

@@ -3,8 +3,7 @@
 import Vue, { PropType } from 'vue'
 import filesize from 'filesize'
 
-// @ts-ignore
-import { DownloadIcon, FileIcon } from 'vue-feather-icons'
+import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
 
 import { FileData } from './types'
 

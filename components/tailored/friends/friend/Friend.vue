@@ -9,8 +9,7 @@ import {
   MessageSquareIcon,
   CircleIcon,
   SmartphoneIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { Friend } from '~/types/ui/friends'
 
