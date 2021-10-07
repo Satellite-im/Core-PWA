@@ -150,6 +150,19 @@ export default {
       settingReaction: status,
     }
   },
+  setEditChatbarContent(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    state.ui = {
+      ...state.ui,
+      editChatbarContent: message,
+    }
+  },
 
   addReaction(state: NuxtState, reaction: any) {
     console.log(reaction)
