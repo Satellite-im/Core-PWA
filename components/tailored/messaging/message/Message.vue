@@ -1,13 +1,13 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 // @ts-ignore
 import { ArchiveIcon } from 'vue-feather-icons'
 
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-
 import { Message, Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
@@ -58,6 +58,7 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
+        { text: 'Edit Message', func: (this as any).editMessage },
         { text: 'Add Reaction', func: (this as any).emojiReaction },
         { text: 'Reply', func: this.setReplyChatbarContent },
         {
@@ -78,10 +79,15 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['ui']),
+
     hasReactions() {
       return (
         this.$props.message.reactions && this.$props.message.reactions.length
       )
+    },
+    messageEdit() {
+      return this.ui.editMessage.id === this.$props.message.id
     },
   },
   methods: {
@@ -111,6 +117,33 @@ export default Vue.extend({
         messageID: this.$props.message.id,
       })
       this.$store.commit('toggleEnhancers', true)
+    },
+    /**
+     * Called when click the "Edit Message" on context menu
+     * Commit store mutation in order to notify the edit status
+     */
+    editMessage() {
+      const { id, payload } = this.$props.message
+      this.$store.commit('setEditMessage', {
+        id,
+        payload,
+        from: this.$props.group.id,
+      })
+    },
+    /**
+     * Called from MessageEdit component when complete to edit message
+     */
+    saveMessage(message: string) {
+      this.$store.commit('setEditMessage', {
+        id: '',
+        payload: message,
+        from: this.$props.group.id,
+      })
+      this.$store.commit('saveEditMessage', {
+        id: this.$props.message.id,
+        payload: message,
+        from: this.$props.group.id,
+      })
     },
   },
 })
