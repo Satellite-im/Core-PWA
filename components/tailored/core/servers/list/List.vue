@@ -2,12 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { SettingsIcon, PlusIcon } from 'satellite-lucide-icons'
+import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {
     SettingsIcon,
     PlusIcon,
+    SatelliteIcon,
   },
   props: {
     unreads: {
