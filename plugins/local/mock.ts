@@ -10,7 +10,7 @@ import {
 } from '~/mock/marketplace'
 import { RecentTransactions, LinkedAccounts, Details } from '~/mock/wallet'
 import { Messages, PinnedMessages } from '~/mock/messages'
-import { Servers, Unreads, ServerInfo } from '~/mock/servers'
+import { ServerInfo, Servers, Unreads } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
 
 const mock = {

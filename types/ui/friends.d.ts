@@ -22,6 +22,12 @@ export interface FriendRequest {
 
 export interface IncomingRequest extends FriendRequest {
   from: string
+  userInfo: {
+    name: string
+    servers: any
+    status: string
+    photoHash: string
+  } | null
 }
 
 export interface OutgoingRequest extends FriendRequest {

@@ -22,9 +22,15 @@
     </div>
     <div v-if="$data.route === 'requests'">
       <TailoredFriendsFriend
-        v-for="friend in $mock.requests"
-        :friend="friend"
-        :key="friend.address"
+        v-for="friend in friends.incomingRequests"
+        :friend="{
+          name: friend.userInfo.name,
+          address: friend.from,
+          state: 'offline',
+          status: friend.userInfo.status,
+          request: friend
+        }"
+        :key="friend.from"
         request
       />
     </div>
