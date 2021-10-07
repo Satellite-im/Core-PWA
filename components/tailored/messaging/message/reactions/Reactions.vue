@@ -2,8 +2,7 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-// @ts-ignore
-import { SmileIcon } from 'vue-feather-icons'
+import { SmileIcon } from 'satellite-lucide-icons'
 import { Message, Group, Reply } from '~/types/messaging'
 
 export default Vue.extend({

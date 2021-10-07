@@ -7,8 +7,7 @@ import {
   HeartIcon,
   FolderIcon,
   FileIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { FileType, Folder } from '~/types/files/file'
 

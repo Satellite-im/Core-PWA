@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { HeartIcon, TagIcon } from 'vue-feather-icons'
+import { HeartIcon, TagIcon } from 'satellite-lucide-icons'
 
 import { ProductItem } from '~/types/marketplace/marketplace'
 export default Vue.extend({

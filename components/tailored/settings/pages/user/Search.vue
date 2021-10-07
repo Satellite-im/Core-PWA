@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { PlusIcon, XIcon } from 'vue-feather-icons'
+import { PlusIcon, XIcon } from 'satellite-lucide-icons'
 
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'

@@ -4,8 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { ClipboardIcon } from 'vue-feather-icons'
+import { ClipboardIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'AccountsSettings',

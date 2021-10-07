@@ -9,8 +9,7 @@ import {
   FolderIcon,
   UsersIcon,
   SettingsIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

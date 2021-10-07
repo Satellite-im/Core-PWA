@@ -7,8 +7,7 @@ import {
   SlashIcon,
   ArchiveIcon,
   XIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 import { FileType } from '~/types/files/file'
 
 export default Vue.extend({

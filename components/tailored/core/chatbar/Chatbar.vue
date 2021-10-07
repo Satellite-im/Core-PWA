@@ -6,8 +6,7 @@ import { mapState } from 'vuex'
 import { NodeHtmlMarkdown } from 'node-html-markdown'
 import { Marked, Renderer } from '@ts-stack/markdown'
 
-// @ts-ignore
-import { TerminalIcon, GridIcon, ArrowRightIcon } from 'vue-feather-icons'
+import { TerminalIcon, GridIcon, ArrowRightIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {

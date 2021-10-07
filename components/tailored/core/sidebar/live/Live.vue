@@ -1,8 +1,7 @@
 <template src="./Live.html"></template>
 
 <script lang="ts">
-// @ts-ignore
-import { RadioIcon, XIcon } from 'vue-feather-icons'
+import { RadioIcon, XIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
 

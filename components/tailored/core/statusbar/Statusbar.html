@@ -48,6 +48,13 @@
       data-tooltip="Market Place">
       <shopping-bag-icon class="control-icon" size="1x" />
     </div>
+    <div
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      v-on:click="toggleWallet"
+      data-tooltip="Wallet">
+      <wallet-icon class="control-icon" size="1x" />
+    </div>
     <div class="vertical-divider"></div>
     <InteractablesSearchInput
       @search="handleSearch"

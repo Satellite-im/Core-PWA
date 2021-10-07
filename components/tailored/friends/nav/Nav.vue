@@ -7,8 +7,7 @@ import {
   UserCheckIcon,
   UserPlusIcon,
   UserXIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

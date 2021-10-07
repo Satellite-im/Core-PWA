@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { ChevronDownIcon, ImageIcon } from 'vue-feather-icons'
+import { ChevronDownIcon, ImageIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

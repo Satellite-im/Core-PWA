@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { HomeIcon } from 'vue-feather-icons'
+import { HomeIcon } from 'satellite-lucide-icons'
 
 import { FileType, Folder } from '~/types/files/file'
 

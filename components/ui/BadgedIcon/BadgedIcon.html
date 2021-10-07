@@ -8,7 +8,5 @@
   <p :style="`font-size: ${size}pt;`" v-if="!color">
     <UiDynamicIcon v-if="icon" size="1x" :icon="icon" />
   </p>
-  <p :style="`font-size: ${size}pt; background-color: ${color}`" class="squared" v-else>
-    <UiDynamicIcon v-if="icon" size="1x" :icon="icon" />
-  </p>
+  <UiDynamicIcon v-else size="0.8x" :icon="icon" />
 </div>

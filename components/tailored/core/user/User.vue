@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { SmartphoneIcon, CircleIcon } from 'vue-feather-icons'
+import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'

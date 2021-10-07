@@ -4,14 +4,14 @@
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 
-// @ts-ignore
-import { UnlockIcon, ChevronRightIcon } from 'vue-feather-icons'
+import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'UnlockScreen',
   components: {
     UnlockIcon,
     ChevronRightIcon,
+    InfoIcon,
   },
   data() {
     return {

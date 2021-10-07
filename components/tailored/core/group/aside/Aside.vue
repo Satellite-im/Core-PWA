@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { InfoIcon } from 'vue-feather-icons'
+import { InfoIcon } from 'satellite-lucide-icons'
 
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
