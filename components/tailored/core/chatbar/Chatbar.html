@@ -14,7 +14,7 @@
     >
       <terminal-icon size="1x" />
     </div>
-    <div contenteditable="true"
+    <div contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
       @keydown="handleInputKeydown"></div>

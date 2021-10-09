@@ -1,0 +1,26 @@
+.edit-message {
+  margin: @light-spacing 0px;
+  padding: @light-spacing;
+  background-color: @darker-alt;
+  border-radius: @corner-rounding;
+  &-body {
+    display: flex;
+    align-items: center;
+    border-radius: @corner-rounding-xxlarge;
+    background-color: @light-gray;
+    padding-top: @xlight-spacing;
+    padding-bottom: @xlight-spacing;
+    padding-left: @normal-spacing;
+    padding-right: @light-spacing;
+    &-input {
+      flex-grow: 1;
+      font-size: @text-size;
+    }
+    &-emoj {
+      flex-shrink: 0;
+    }
+  }
+  &-bottom {
+    font-size: @text-size;
+  }
+}
