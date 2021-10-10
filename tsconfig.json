@@ -28,6 +28,7 @@
       "@types/node",
       "nuxt-i18n",
       "@nuxtjs/device",
+      "types/modules/satellite-lucide-icons.d.ts",
     ]
   },
   "exclude": [
@@ -35,8 +36,4 @@
     ".nuxt",
     "dist"
   ],
-  "include": [
-    "./*",
-    "types/modules/satellite-lucide-icons.d.ts"
-  ]
 }

@@ -1,0 +1,38 @@
+.subtitle {
+  margin-bottom: 0;
+}
+
+
+.transaction-item {
+  display: inline-flex;
+  width: 100%;
+  margin-bottom: @light-spacing;
+  .tx-base {
+    display: inline-flex;
+    .circle-holder {
+      margin-right: @light-spacing;
+    }
+    .subtitle {
+      color: @bright-text;
+      font-size: @text-size;
+    }
+    .is-text {
+      opacity: 0.85;
+      font-size: @micro-text-size;
+    }
+  }
+  .tx-amount {
+    flex: 1;
+    text-align: right;
+    .is-text {
+      opacity: 0.85;
+      font-size: @micro-text-size;
+    }
+    .txamount {
+      opacity: 1;
+      font-family: @primary-font;
+      font-size: @text-size;
+    }
+  }
+}
+

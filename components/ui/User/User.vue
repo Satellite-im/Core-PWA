@@ -3,13 +3,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { ZapIcon, CircleIcon } from 'satellite-lucide-icons'
+import { CrownIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
-    ZapIcon,
+    CrownIcon,
     CircleIcon,
   },
   props: {
