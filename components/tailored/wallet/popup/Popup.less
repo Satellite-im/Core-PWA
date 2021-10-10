@@ -5,4 +5,27 @@
   max-height: 100%;
   overflow: hidden;
   border-radius: @corner-rounding;
+  padding: @normal-spacing;
+  flex-direction: column;
+  .close {
+    position: absolute;
+    top: @normal-spacing;
+    right: @normal-spacing;
+  }
+
+  .heading {
+    font-family: @primary-font;
+    display: inline-flex;
+    align-content: center;
+    .subtitle {
+      font-size: @text-size;
+      margin-left: @light-spacing;
+    }
+  }
+
+  .more-info {
+    display: inline-flex;
+    width: 100%;
+    margin-top: @normal-spacing;
+  }
 }

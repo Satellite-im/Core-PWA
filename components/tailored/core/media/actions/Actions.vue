@@ -8,7 +8,7 @@ import {
   VideoOffIcon,
   MicIcon,
   MicOffIcon,
-  MonitorIcon,
+  ScreenShareIcon,
   PhoneOffIcon,
 } from 'satellite-lucide-icons'
 
@@ -21,7 +21,7 @@ export default Vue.extend({
     VideoOffIcon,
     MicIcon,
     MicOffIcon,
-    MonitorIcon,
+    ScreenShareIcon,
     PhoneOffIcon,
   },
   computed: {
