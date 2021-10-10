@@ -13561,6 +13561,13 @@ vue-eslint-parser@^7.1.1, vue-eslint-parser@^7.10.0:
     lodash "^4.17.21"
     semver "^6.3.0"
 
+vue-feather-icons@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/vue-feather-icons/-/vue-feather-icons-5.1.0.tgz#db658aca5f4c088c2f725f8b1f2967d4a1e4d398"
+  integrity sha512-ZyM2yFGmL9DYLZYHm63KV1zCQOj8czC2LzDSkxoIp9o6zMAOY4yv1FkxbX+XNUwcH3RRrAuvf25Ij7CnUUsQVA==
+  dependencies:
+    babel-helper-vue-jsx-merge-props "^2.0.2"
+
 vue-fullscreen@^2.5.1:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/vue-fullscreen/-/vue-fullscreen-2.5.2.tgz#0953ad3ab3ec9219b969827cb3b23733d4025b33"
