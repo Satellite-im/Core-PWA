@@ -179,7 +179,7 @@ export default {
       return false
     })
     if (found) {
-      found = found.messages.find((item) => {
+      found = found.messages.find((item: any) => {
         if (item.id === message.id) {
           return true
         }
