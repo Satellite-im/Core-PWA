@@ -57,6 +57,8 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
+        // eslint-disable-next-line prettier/prettier
+        { text: this.ui.recentReactions[0], func() { (this as any).quickReaction((this as any).ui.recentReactions[0]) } },
         { text: 'Edit Message', func: (this as any).editMessage },
         { text: 'Add Reaction', func: (this as any).emojiReaction },
         { text: 'Reply', func: this.setReplyChatbarContent },
@@ -116,6 +118,15 @@ export default Vue.extend({
         messageID: this.$props.message.id,
       })
       this.$store.commit('toggleEnhancers', true)
+    },
+    quickReaction(emoji: String) {
+      this.$store.dispatch('addReaction', {
+        emoji,
+        reactor: this.$mock.user.name,
+        groupID: this.$props.group.id,
+        messageID: this.$props.message.id,
+        replyID: this.$props.reply.id,
+      })
     },
     /**
      * Called when click the "Edit Message" on context menu

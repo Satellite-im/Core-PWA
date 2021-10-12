@@ -29,5 +29,6 @@ export default {
   },
   addReaction({ commit }: ActionsArguments, reaction: any) {
     commit('addReaction', reaction)
+    commit('updateRecentReactions', reaction)
   },
 }

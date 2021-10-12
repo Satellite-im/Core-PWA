@@ -277,4 +277,12 @@ export default {
       hoveredGlyphInfo: values,
     }
   },
+  updateRecentReactions(state: NuxtState, emoji: String) {
+    const newRecentReactions = state.recentReactions.push(emoji).pop()
+    console.log(newRecentReactions)
+    state.ui = {
+      ...state.ui,
+      recentReactions: newRecentReactions,
+    }
+  },
 }
