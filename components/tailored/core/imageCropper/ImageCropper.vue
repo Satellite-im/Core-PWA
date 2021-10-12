@@ -42,6 +42,11 @@ export default Vue.extend({
     })
   },
   methods: {
+    /**
+     * @method crop DocsTODO
+     * @description
+     * @example
+     */
     crop() {
       // Options can be updated.
       // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.

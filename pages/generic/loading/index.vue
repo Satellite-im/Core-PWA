@@ -57,14 +57,29 @@ export default Vue.extend({
     if (this.blockchainBound) this.completeBlockchain()
   },
   methods: {
+    /**
+     * @method completeP2P DocsTODO
+     * @description
+     * @example
+     */
     completeP2P() {
       this.$data.step = 'Peer 2 Peer Bound'
       this.$data.stepsCompleted += 1
     },
+    /**
+     * @method completeBlockchain DocsTODO
+     * @description
+     * @example
+     */
     completeBlockchain() {
       this.$data.step = 'Blockchain Bound'
       this.$data.stepsCompleted += 1
     },
+    /**
+     * @method completeState DocsTODO
+     * @description
+     * @example
+     */
     completeState() {
       this.$data.step = 'State Initalized'
       this.$data.stepsCompleted += 1

@@ -28,10 +28,20 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method toggleCropper DocsTODO
+     * @description
+     * @example
+     */
     toggleCropper() {
       this.showCropper = !this.showCropper
     },
-
+    /**
+     * @method selectIamge DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     selectImage(e: Event) {
       const target = e.target as HTMLInputElement
       if (target.value === null) return
@@ -50,7 +60,13 @@ export default Vue.extend({
 
       reader.readAsDataURL(files[0])
     },
-
+    /**
+     * @method setCroppedImage
+     * @description
+     * @param image
+     * @returns
+     * @example
+     */
     setCroppedImage(image: string) {
       this.croppedImage = image
 
@@ -60,7 +76,12 @@ export default Vue.extend({
         fileInputRef.value = ''
       }
     },
-
+    /**
+     * @method confirm DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     confirm() {
       if (this.name.length < 5) {
         this.error = 'Username name must be at least 5 characters.'

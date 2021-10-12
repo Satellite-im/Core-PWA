@@ -11,11 +11,12 @@ import { Friend } from '~/types/ui/friends'
  * Ported from Satellite Legacy
  */
 
-/** @method
- * Sort friends by name and groups them by the first
- * letter of the name
- * @name getAlphaSorted
+/**
+ * @method getAlphaSorted
+ * @description Sort friends by name and groups them by the first letter of the name
  * @param friends array of friends
+ * @returns
+ * @example
  */
 export function getAlphaSorted(friends: Array<Friend>) {
   const sorted = sortBy(friends, ['name'])
@@ -30,12 +31,13 @@ export function getAlphaSorted(friends: Array<Friend>) {
   return grouped
 }
 
-/** @method
- * Filter friends by stored keyword and
- * rebind the friends data
- * @name filterFriends
+/**
+ * @method filterFriends
+ * @description Filter friends by stored keyword and rebind the friends data
  * @param friends Array of friends to filter
  * @param keyword string keyword to search for
+ * @returns
+ * @example
  */
 export function getFilteredFriends(friends: Array<Friend>, keyword: string) {
   if (keyword) {

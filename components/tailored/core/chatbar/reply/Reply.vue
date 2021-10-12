@@ -15,6 +15,11 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method setReplyChatbarContent
+     * @description Adds message reply by commiting chatbar content to setReplyChatbarContent in state
+     * @example @click="setReplyChatbarContent"
+     */
     setReplyChatbarContent() {
       this.$store.commit('setReplyChatbarContent', {
         id: '',

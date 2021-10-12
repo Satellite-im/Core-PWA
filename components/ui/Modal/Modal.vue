@@ -22,6 +22,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method close DocsTODO
+     * @description
+     * @example
+     */
     close() {
       this.closeModal()
     },

@@ -21,6 +21,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method switchView DocsTODO
+     * @description
+     * @param type
+     * @returns
+     * @example
+     */
     switchView(type: 'grid' | 'list') {
       this.$data.view = type
       this.changeView(type)

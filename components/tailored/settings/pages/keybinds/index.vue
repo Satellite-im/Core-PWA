@@ -26,6 +26,12 @@ export default Vue.extend({
     ...mapState(['settings']),
   },
   methods: {
+    /**
+     * @method editKeybind DocsTODO
+     * @description
+     * @param keybind
+     * @example
+     */
     editKeybind(keybind: String) {
       this.clearKeybinds()
       window.addEventListener('keydown', this.recordKeybind)
@@ -34,6 +40,12 @@ export default Vue.extend({
       this.$data.editingKeybind.newString =
         this.settings.keybinds[this.$data.editingKeybind.name]
     },
+    /**
+     * @method recordKeybind DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     recordKeybind(e: any) {
       this.errorCheck(e)
       if (!this.$data.editingKeybind.error) {
@@ -42,6 +54,11 @@ export default Vue.extend({
           : (this.$data.editingKeybind.newString += `+${e.key.toLowerCase()}`)
       }
     },
+    /**
+     * @method saveKeybind DocsTODO
+     * @description
+     * @example
+     */
     saveKeybind() {
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
@@ -59,6 +76,11 @@ export default Vue.extend({
       this.$data.editingKeybind.status = false
       this.activateKeybinds()
     },
+    /**
+     * @method cancelKeybind DocsTODO
+     * @description
+     * @example
+     */
     cancelKeybind() {
       window.removeEventListener('keydown', this.recordKeybind)
       this.$data.editingKeybind.newString = ''
@@ -67,11 +89,21 @@ export default Vue.extend({
       this.$data.editingKeybind.error = false
       this.activateKeybinds()
     },
+    /**
+     * @method clearKeybind DocsTODO
+     * @description
+     * @example
+     */
     clearKeybind() {
       this.$data.editingKeybind.newString = ''
       this.$data.editingKeybind.errorMessage = ''
       this.$data.editingKeybind.error = false
     },
+    /**
+     * @method resetKeybinds DocsTODO
+     * @description
+     * @example
+     */
     resetKeybinds() {
       this.$store.commit('updateKeybinding', {
         keybindName: 'toggleMute',
@@ -91,6 +123,12 @@ export default Vue.extend({
       })
       this.activateKeybinds()
     },
+    /**
+     * @method errorCheck DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     errorCheck(e: any) {
       const key = e.key.toLowerCase()
       const newString = this.$data.editingKeybind.newString

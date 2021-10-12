@@ -27,13 +27,29 @@ export default Vue.extend({
     ...mapState(['settings', 'ui']),
   },
   methods: {
+    /**
+     * @method close
+     * @description Closes context menu by setting toggleContextMenu in state to false
+     */
     close() {
       this.$store.commit('toggleContextMenu', false)
     },
+    /**
+     * @method handle
+     * @description Executes callback function and closes the ContextMenu component
+     * @param func Function to execute
+     * @example @click="handle(item.func)"
+     */
     handle(func: any) {
       func()
       this.close()
     },
+    /**
+     * @method handleOverflow
+     * @description Ensures contextMenu is positioned correctly by calculating if the div overflows the page and respositioning as needed.
+     * Corrects position by commiting an adjusted position to setContextMenuPosition in state
+     * @example
+     */
     handleOverflow() {
       const contextMenu = this.$refs.contextMenu as HTMLElement
       const position = this.ui.contextMenuPosition

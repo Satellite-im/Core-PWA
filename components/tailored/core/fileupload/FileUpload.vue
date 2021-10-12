@@ -32,7 +32,10 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * Triggered when a file is changed on the input
+     * @method handleFile
+     * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
+     * @param event Input event object
+     * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
       this.$data.file = event.target.files[0]
@@ -42,7 +45,10 @@ export default Vue.extend({
       this.loadPicture(this.$data.file)
     },
     /**
-     * Load a picture into a data URL push to data
+     * @method loadPicture
+     * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
+     * @param file File to load
+     * @example this.loadPicture(this.$data.file)
      */
     loadPicture(file: File) {
       if (!file) return
@@ -54,8 +60,12 @@ export default Vue.extend({
       reader.readAsDataURL(file)
     },
     /**
-     * Return if a file has an image extension
+     * @method isEmbedableImage
+     * @description Uses Regex to check if a files filename has a valid extension
      * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
+     * @param filename A files filename
+     * @returns Boolean based on if the filename has a valid extension or not
+     * @example v-if="isEmbedableImage(file.name)"
      */
     isEmbedableImage(filename: string): boolean {
       // eslint-disable-next-line prefer-regex-literals
@@ -65,9 +75,10 @@ export default Vue.extend({
       return imageFormatsRegex.test(filename.toLowerCase())
     },
     /**
-     * Clear local data
-     * TODO: Clear input field, this currently breaks
-     * when you upload the same file after cancelling
+     * @method cancelUpload
+     * @description Cancels file upload by setting file and url in local data to false
+     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling
+     * @example @click="cancelUpload"
      */
     cancelUpload() {
       this.$data.file = false

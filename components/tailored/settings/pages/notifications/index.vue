@@ -55,10 +55,23 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method requestPermissions DocsTODO
+     * @description Uses the local $notifcations plugins requestNotificationPermission method
+     * which prompts the platform to request the users permission to send notifications
+     * (Based on the Notification object in notifications.ts)
+     * @example ---
+     */
     requestPermissions() {
       // @ts-ignore
       this.$notifications.requestNotificationPermission()
     },
+    /**
+     * @method sendNotification DocsTODO
+     * @description Uses the local $notifcations plugins sendNotifications method to send the user a notification
+     * (Based on the Notification object in notifications.ts)
+     * @example ---
+     */
     sendNotification() {
       this.$notifications
         // @ts-ignore

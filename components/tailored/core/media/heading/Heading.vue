@@ -18,6 +18,11 @@ export default Vue.extend({
     this.$store.commit('fullscreen', false)
   },
   methods: {
+    /**
+     * @method toggleFullscreen
+     * @description Toggles fullscreen by commiting the opposite of it's current value (this.ui.fullscreen) to fullscreen in state
+     * @example @click="toggleFullscreen"
+     */
     toggleFullscreen() {
       this.$store.commit('fullscreen', !this.ui.fullscreen)
     },

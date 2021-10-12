@@ -22,6 +22,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * @method toggleCollapse DocsTODO
+     * @description
+     * @example
+     */
     toggleCollapse() {
       this.collapsed = !this.collapsed
     },

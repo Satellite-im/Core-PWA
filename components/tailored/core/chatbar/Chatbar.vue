@@ -45,9 +45,24 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    /**
+     * Computes the amount of characters left
+     */
+    /**
+     * @method charlimit DocsTODO
+     * @description Checks if current text is longer than the max character limit
+     * @returns Boolean based on if the current text length is longer than the max character limit
+     * @example
+     */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
+    /**
+     * @method hasCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     hasCommand() {
       return (
         containsCommand(this.ui.chatbarContent) &&
@@ -58,6 +73,12 @@ export default Vue.extend({
         )
       )
     },
+    /**
+     * @method isValidCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     isValidCommand() {
       const currentText = parseCommand(
         this.ui.chatbarContent
@@ -68,9 +89,21 @@ export default Vue.extend({
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
+      /**
+       * @method get
+       * @description Gets chatbars current text
+       * @returns String of chatbars current text
+       * @example const currText = this.get()
+       */
       get() {
         return this.ui.chatbarContent
       },
+      /**
+       * @method set
+       * @description Sets current chatbar text to new value
+       * @param val Value to set the chatbar content to
+       * @example set('This is the new chatbar content')
+       */
       set(val: string) {
         this.$store.commit('chatbarContent', val)
         this.$data.text = val
@@ -85,10 +118,18 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggleEnhancers
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @example v-on:click="toggleEnhancers"
+     */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
     },
     /**
+     * @method autoGrow DocsTODO
+     * @description When textarea for chat is changed, autoGrow handles chat section to grow and allow multi-line display
+     * @example
      * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
      * This is called after the typed inputed are processed in order to display markdown expression.
      */
@@ -115,9 +156,11 @@ export default Vue.extend({
       messageBox.scrollTop = messageBox.scrollHeight
     },
     /**
-     * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
+     * @method handleInputChange DocsTODO
+     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
+     * @example
      */
     handleInputChange(caretPosition: number | null) {
       const messageBox = this.$refs.messageuser as HTMLElement
@@ -148,9 +191,13 @@ export default Vue.extend({
       this.autoGrow()
     },
     /**
-     * Called from chatbar's keydown event to process all key events for typing in chatbar.
+     * @method handleInputKeydown DocsTODO
+     * @description Called from chatbar's keydown event to process all key events for typing in chatbar.
      * This interacts with handleInputChange in order to convert typed input to markdown expression.
      * This controls the caret position when Backspace, Spacebar is pressed.
+     * @param event Keydown event object
+     * @returns Boolean
+     * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageuser as HTMLElement
@@ -214,7 +261,10 @@ export default Vue.extend({
       return true
     },
     /**
-     * Called when user sends message by pressing Enter.
+     * @method sendMessage
+     * @description Sends message by calling the sendMessage action with current data and
+     * then setting all related feilds to their default (empty)
+     * @example v-on:click="sendMessage"
      */
     sendMessage() {
       this.$store.dispatch('sendMessage', {

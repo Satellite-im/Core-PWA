@@ -94,9 +94,19 @@ export default Vue.extend({
     testFunc() {
       console.log('Message Func Testing ' + this.$data.disData)
     },
+    /**
+     * @method mouseOver DocsTODO
+     * @description
+     * @example
+     */
     mouseOver() {
       this.$data.messageHover = !this.$data.messageHover
     },
+    /**
+     * @method setReplyChatbarContent DocsTODO
+     * @description
+     * @example
+     */
     setReplyChatbarContent() {
       const { id, type, payload } = this.$props.message
       let finalPayload = payload
@@ -110,6 +120,11 @@ export default Vue.extend({
         from: this.$props.from,
       })
     },
+    /**
+     * @method emojiReaction DocsTODO
+     * @description
+     * @example
+     */
     emojiReaction() {
       this.$store.commit('settingReaction', {
         status: true,

@@ -18,9 +18,18 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method close
+     * @description Closes quickProfile by commiting quickProfile false to state
+     */
     close() {
       this.$store.commit('quickProfile', false)
     },
+    /**
+     * @method close
+     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and respositioning as needed.
+     * Corrects position by commiting an adjusted position to setQuickProfilePosition in state
+     */
     handleOverflow() {
       if (this.$device.isDesktop) {
         const quickProfile = this.$refs.quickProfile as HTMLElement

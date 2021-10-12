@@ -86,6 +86,13 @@ export default {
     state.ui.isScrollOver = status
     if (!status) state.ui.unreadMessage = 0
   },
+  /**
+   * @method sendMessage DocsTODO
+   * @description
+   * @param message
+   * @param isOwner
+   * @example
+   */
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.ui.messages]
     const lastIndex = messages.length - 1
@@ -195,6 +202,12 @@ export default {
     }
   },
 
+  /**
+   * @method addReaction DocsTODO
+   * @description
+   * @param reaction
+   * @example
+   */
   addReaction(state: NuxtState, reaction: any) {
     const messageGroups: MessageGroup = [...state.ui.messages]
 
