@@ -173,7 +173,7 @@ export default {
       network: {
         title: 'Realms',
         subtitle:
-          'Change the realm Satellite lives in. Changing a realm will mean you can only communicate with others in the same realm as you. Please only change if you know what you\'re doing.',
+          "Change the realm Satellite lives in. Changing a realm will mean you can only communicate with others in the same realm as you. Please only change if you know what you're doing.",
         chain: 'Realm',
         network: 'Network',
       },
