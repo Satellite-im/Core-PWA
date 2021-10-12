@@ -196,7 +196,6 @@ export default {
   },
 
   addReaction(state: NuxtState, reaction: any) {
-    console.log(reaction)
     const messageGroups: MessageGroup = [...state.ui.messages]
 
     //Find message group meant for reaction
@@ -216,8 +215,6 @@ export default {
           (message) => message.id === reaction.messageID
         )
       }
-
-      console.log(currMessage)
 
       if (currMessage) {
         // If reactions array doesnt exist create with new reaction
@@ -275,6 +272,17 @@ export default {
     state.ui = {
       ...state.ui,
       hoveredGlyphInfo: values,
+    }
+  },
+  updateRecentReactions(state: NuxtState, emoji: String) {
+    const newRecentReactions = state.ui.recentReactions
+    if (!state.ui.recentReactions.includes(emoji)) {
+      newRecentReactions.unshift(emoji)
+      newRecentReactions.pop()
+    }
+    state.ui = {
+      ...state.ui,
+      recentReactions: newRecentReactions,
     }
   },
 }

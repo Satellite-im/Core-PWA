@@ -31,6 +31,7 @@ interface UIState {
     from: string
     payload: string
   }
+  recentReactions: Array<String>
 }
 
 const InitalUIState = (): UIState => ({
@@ -61,6 +62,7 @@ const InitalUIState = (): UIState => ({
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   editMessage: { id: '', from: '', payload: '' },
+  recentReactions: ['👍', '😂', '♥️'],
 })
 
 export default InitalUIState
