@@ -155,6 +155,7 @@ export default Vue.extend({
     },
     /**
      * Called from MessageEdit component when complete to edit message
+     * Called from MessageEdit component with changed message When save or cancel / Enter or Escape is pressed
      */
     saveMessage(message: string) {
       this.$store.commit('setEditMessage', {

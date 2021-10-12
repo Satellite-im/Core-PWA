@@ -157,6 +157,11 @@ export default {
       settingReaction: status,
     }
   },
+  /**
+   * Called when user click the Edit Message on Context Menu or Edit action in message listings
+   * @param {NuxtState} state - Vuex state
+   * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
+   */
   setEditMessage(
     state: NuxtState,
     message: {
@@ -170,6 +175,11 @@ export default {
       editMessage: message,
     }
   },
+  /**
+   * Called when user complete to edit message, then update the message in message listing
+   * @param {NuxtState} state - Vuex state
+   * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
+   */
   saveEditMessage(
     state: NuxtState,
     message: {
