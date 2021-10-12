@@ -280,13 +280,10 @@ export default {
       status_placeholder: 'Ready for launch...',
       reg_status: {
         unknown: 'Not registered',
-        in_progress: 'We\'re transporting your data to the Realm...',
-        funding_account:
-          'Making contact, requesting entry to Realm...',
-        sending_transaction:
-          'Request Approved! Now entering the Realm...',
-        registered:
-          'Grats! Your a brand new citizen on the Realm.',
+        in_progress: "We're transporting your data to the Realm...",
+        funding_account: 'Making contact, requesting entry to Realm...',
+        sending_transaction: 'Request Approved! Now entering the Realm...',
+        registered: 'Grats! Your a brand new citizen on the Realm.',
       },
     },
     loading: {
