@@ -36,7 +36,7 @@ export default Vue.extend({
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('addReaction', {
           emoji: emoji.native,
-          reactor: 'Jpanay',
+          reactor: this.$mock.user.name,
           groupID: this.ui.settingReaction.groupID,
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,
