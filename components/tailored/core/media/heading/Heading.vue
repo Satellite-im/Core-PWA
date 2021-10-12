@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { MaximizeIcon, MinimizeIcon } from 'vue-feather-icons'
+import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 export default Vue.extend({

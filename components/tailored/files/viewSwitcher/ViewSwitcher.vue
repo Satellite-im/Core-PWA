@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { GridIcon, ColumnsIcon } from 'vue-feather-icons'
+import { GridIcon, ColumnsIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

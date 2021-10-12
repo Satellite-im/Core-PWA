@@ -2,8 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-// @ts-ignore
-import { MenuIcon } from 'vue-feather-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 import { SidebarGrouping } from '~/types/ui/sidebar'
 
 export default Vue.extend({

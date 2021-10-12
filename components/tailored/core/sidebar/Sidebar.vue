@@ -9,8 +9,7 @@ import {
   FolderIcon,
   MessageSquareIcon,
   MenuIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import { DataStateType } from '~/store/dataState/types'

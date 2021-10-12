@@ -4,8 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import VueMarkdown from 'vue-markdown'
 
-// @ts-ignore
-import { XIcon } from 'vue-feather-icons'
+import { XIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

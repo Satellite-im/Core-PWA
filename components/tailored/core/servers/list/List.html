@@ -1,8 +1,10 @@
 <div id="servers-vertical-list">
   <div class="servers">
     <div data-tooltip="Home" v-on:click="$router.push('/chat/direct')"
-      class="logo has-tooltip-right has-tooltip-primary">
-      <img src="~/assets/img/icon_wht.png" alt="" />
+      class="circle-group has-tooltip-right has-tooltip-primary">
+      <UiCircle type="icon" :size="40">
+        <satellite-icon size="0.75x" />
+      </UiCircle>
     </div>
     <UiScroll verticalScroll>
       <div id="list-container">

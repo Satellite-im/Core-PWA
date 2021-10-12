@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { DownloadIcon } from 'vue-feather-icons'
+import { DownloadIcon } from 'satellite-lucide-icons'
 
 import { VideoData } from './types'
 

@@ -6,9 +6,9 @@ import {
   SmileIcon,
   CornerDownRightIcon,
   ArchiveIcon,
+  EditIcon,
   MoreVerticalIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
@@ -16,6 +16,7 @@ export default Vue.extend({
     SmileIcon,
     CornerDownRightIcon,
     ArchiveIcon,
+    EditIcon,
     MoreVerticalIcon,
   },
   props: {
@@ -31,6 +32,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
       required: false,
+    },
+    editMessage: {
+      type: Function,
+      default: () => () => {},
     },
   },
   computed: {

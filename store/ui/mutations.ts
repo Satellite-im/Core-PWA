@@ -150,6 +150,50 @@ export default {
       settingReaction: status,
     }
   },
+  setEditMessage(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    state.ui = {
+      ...state.ui,
+      editMessage: message,
+    }
+  },
+  saveEditMessage(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    const messages: any[] = [...state.ui.messages]
+    let found = messages.find((item) => {
+      if (item.id === message.from) {
+        return true
+      }
+      return false
+    })
+    if (found) {
+      found = found.messages.find((item: any) => {
+        if (item.id === message.id) {
+          return true
+        }
+        return false
+      })
+      if (found) {
+        found.payload = message.payload
+        state.ui = {
+          ...state.ui,
+          messages,
+        }
+      }
+    }
+  },
 
   addReaction(state: NuxtState, reaction: any) {
     console.log(reaction)

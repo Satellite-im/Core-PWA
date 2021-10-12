@@ -1,6 +1,16 @@
 .badged-icon {
   display: inline-flex;
   position: relative;
+  color: @primary-color;
+  .dynamic-icon {
+    filter: drop-shadow( 0px 3px 2px @primary-color);
+  }
+
+  .center {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+  }
 
   .squared {
     line-height: 1;

@@ -3,8 +3,7 @@
 import Vue from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { mapState } from 'vuex'
-// @ts-ignore
-import { SmileIcon, GridIcon, ImageIcon } from 'vue-feather-icons'
+import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 // @ts-ignore
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore

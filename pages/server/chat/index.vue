@@ -4,8 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { KeyIcon } from 'vue-feather-icons'
+import { KeyIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ServerChat',

@@ -8,10 +8,9 @@ import {
   VideoOffIcon,
   MicIcon,
   MicOffIcon,
-  MonitorIcon,
+  ScreenShareIcon,
   PhoneOffIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -22,7 +21,7 @@ export default Vue.extend({
     VideoOffIcon,
     MicIcon,
     MicOffIcon,
-    MonitorIcon,
+    ScreenShareIcon,
     PhoneOffIcon,
   },
   computed: {

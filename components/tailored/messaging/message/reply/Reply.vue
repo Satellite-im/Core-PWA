@@ -3,8 +3,7 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
-// @ts-ignore
-import { PlusSquareIcon, MinusSquareIcon } from 'vue-feather-icons'
+import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { Message, Group } from '~/types/messaging'
 

@@ -3,8 +3,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { ShoppingBagIcon, ClockIcon } from 'vue-feather-icons'
+import { ShoppingBagIcon, ClockIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

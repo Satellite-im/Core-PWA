@@ -10,7 +10,7 @@
     <phone-icon v-if="icon === 'phone'" :size="size" />
     <user-icon v-if="icon === 'user'" :size="size" />
     <search-icon v-if="icon === 'search'" :size="size" />
-    <check-icon v-if="icon === 'verified'" :size="size" />
+    <verified-icon v-if="icon === 'verified'" :size="size" />
     <check-icon v-if="icon === 'check'" :size="size" />
   </span>
 </template>
@@ -29,8 +29,8 @@ import {
   UserIcon,
   SearchIcon,
   CheckIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+  VerifiedIcon,
+} from 'satellite-lucide-icons'
 
 type Icon =
   | 'download'
@@ -59,6 +59,7 @@ export default Vue.extend({
     UserIcon,
     SearchIcon,
     CheckIcon,
+    VerifiedIcon,
   },
   props: {
     size: {

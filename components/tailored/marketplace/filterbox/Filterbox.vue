@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { ChevronDownIcon } from 'vue-feather-icons'
+import { ChevronDownIcon } from 'satellite-lucide-icons'
 
 import { FilterOption } from '~/types/marketplace/marketplace'
 import { marketFilters } from '~/mock/marketplace'
