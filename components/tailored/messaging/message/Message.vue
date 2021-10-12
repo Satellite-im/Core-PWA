@@ -57,7 +57,6 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
-        // eslint-disable-next-line prettier/prettier
         { text: 'quickReaction', func: (this as any).quickReaction },
         { text: 'Edit Message', func: (this as any).editMessage },
         { text: 'Add Reaction', func: (this as any).emojiReaction },
