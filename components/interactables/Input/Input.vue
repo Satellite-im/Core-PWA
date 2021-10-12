@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { DeleteIcon } from 'vue-feather-icons'
+import { DeleteIcon } from 'satellite-lucide-icons'
 
 import { InputTypes, InputStyle, InputSize } from './types.d'
 

@@ -3,7 +3,7 @@
 <script>
 import { mapState } from 'vuex'
 
-import { HashIcon, TagIcon, RssIcon, Volume2Icon } from 'vue-feather-icons'
+import { HashIcon, TagIcon, RssIcon, Volume2Icon } from 'satellite-lucide-icons'
 
 export default {
   name: 'Channel',

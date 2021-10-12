@@ -2,12 +2,19 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { ChevronDownIcon, CircleIcon } from 'satellite-lucide-icons'
+
 import {
   CategoryOption,
   CategoryTreeItem,
 } from '~/types/marketplace/marketplace'
 
 export default Vue.extend({
+  components: {
+    ChevronDownIcon,
+    CircleIcon,
+  },
   props: {
     categories: {
       type: Array as PropType<CategoryOption[]>,

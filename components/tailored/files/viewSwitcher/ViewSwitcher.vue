@@ -2,7 +2,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { GridIcon, ColumnsIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    GridIcon,
+    ColumnsIcon,
+  },
   props: {
     changeView: {
       type: Function,

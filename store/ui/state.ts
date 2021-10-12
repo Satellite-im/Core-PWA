@@ -1,4 +1,4 @@
-import { Channel } from "~/types/ui/server"
+import { Channel } from '~/types/ui/server'
 
 interface UIState {
   contextMenuStatus: Boolean
@@ -26,6 +26,12 @@ interface UIState {
   activeChannel: Channel | undefined
   settingReaction: Object
   hoveredGlyphInfo: Object | undefined
+  editMessage: {
+    id: string
+    from: string
+    payload: string
+  }
+  recentReactions: Array<String>
 }
 
 const InitalUIState = (): UIState => ({
@@ -41,6 +47,7 @@ const InitalUIState = (): UIState => ({
     newfolder: false,
     createServer: false,
     showMarketPlace: false,
+    wallet: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
@@ -54,6 +61,8 @@ const InitalUIState = (): UIState => ({
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
+  editMessage: { id: '', from: '', payload: '' },
+  recentReactions: ['👍', '😂', '♥️'],
 })
 
 export default InitalUIState

@@ -48,23 +48,11 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <UiBadgedIcon
-              :icon="{ style: 'far', name: 'user' }"
-              :size="26"
-              :badge-count="0"
-            />
+            <UiBadgedIcon icon="user" :size="26" :badge-count="0" />
 
-            <UiBadgedIcon
-              :icon="{ style: 'far', name: 'user' }"
-              :size="26"
-              :badge-count="33"
-            />
+            <UiBadgedIcon icon="user" :size="26" :badge-count="33" />
 
-            <UiBadgedIcon
-              :icon="{ style: 'far', name: 'user' }"
-              :size="16"
-              :badge-count="3"
-            />
+            <UiBadgedIcon icon="user" :size="16" :badge-count="3" />
           </div>
         </div>
       </div>

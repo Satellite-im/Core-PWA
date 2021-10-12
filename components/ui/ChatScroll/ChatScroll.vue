@@ -3,8 +3,13 @@
 <script>
 import Vue from 'vue'
 
+import { ChevronDownIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
   name: 'ChatScroll',
+  components: {
+    ChevronDownIcon,
+  },
   props: {
     autoScroll: {
       type: Boolean,

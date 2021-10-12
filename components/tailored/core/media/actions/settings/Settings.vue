@@ -4,8 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { SettingsIcon, ChevronRightIcon } from 'vue-feather-icons'
+import { SettingsIcon, ChevronRightIcon } from 'satellite-lucide-icons'
 
 import {
   Bitrates,

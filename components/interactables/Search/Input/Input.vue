@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { DeleteIcon, SearchIcon } from 'vue-feather-icons'
+import { DeleteIcon, SearchIcon } from 'satellite-lucide-icons'
 
 import SearchQuery from '../SearchQuery'
 import SearchUtil from '../SearchUtil'

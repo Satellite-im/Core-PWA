@@ -69,15 +69,15 @@ export const Config = {
   badges: {
     verified: {
       color: '#55efc4',
-      icon: ['far', 'check'],
+      icon: 'check',
     },
     community: {
       color: '#a29bfe',
-      icon: ['far', 'users'],
+      icon: 'users',
     },
     cameraman: {
       color: '#d63031',
-      icon: ['far', 'video'],
+      icon: 'video',
     },
   },
 }

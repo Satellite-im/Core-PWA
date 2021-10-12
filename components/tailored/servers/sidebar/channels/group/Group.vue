@@ -1,15 +1,20 @@
 <template src="./Group.html"></template>
 
 <script>
-// @ts-ignore
-import { ChevronRightIcon, ChevronDownIcon } from 'vue-feather-icons'
+import {
+  ChevronRightIcon,
+  ChevronDownIcon,
+  PlusIcon,
+} from 'satellite-lucide-icons'
 
 export default {
   name: 'Group',
   components: {
     ChevronRightIcon,
     ChevronDownIcon,
+    PlusIcon,
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ['group', 'channels', 'setActiveChannel'],
   data() {
     return {

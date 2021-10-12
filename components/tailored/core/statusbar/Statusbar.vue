@@ -8,8 +8,9 @@ import {
   VideoIcon,
   ArchiveIcon,
   ShoppingBagIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+  CircleIcon,
+  WalletIcon,
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Server } from '~/types/ui/core'
@@ -28,6 +29,8 @@ export default Vue.extend({
     VideoIcon,
     ArchiveIcon,
     ShoppingBagIcon,
+    CircleIcon,
+    WalletIcon,
   },
   props: {
     collapsed: {
@@ -113,6 +116,12 @@ export default Vue.extend({
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',
         state: !this.ui.modals.showMarketPlace,
+      })
+    },
+    toggleWallet() {
+      this.$store.commit('toggleModal', {
+        name: 'wallet',
+        state: !this.ui.modals.wallet,
       })
     },
   },

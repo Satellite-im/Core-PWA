@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { mapState } from 'vuex'
+import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 // @ts-ignore
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
@@ -13,6 +14,9 @@ const emojiIndex = new EmojiIndex(data)
 export default Vue.extend({
   components: {
     Picker,
+    SmileIcon,
+    GridIcon,
+    ImageIcon,
   },
   data() {
     return {
@@ -39,7 +43,7 @@ export default Vue.extend({
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('addReaction', {
           emoji: emoji.native,
-          reactor: 'Jpanay',
+          reactor: this.$mock.user.name,
           groupID: this.ui.settingReaction.groupID,
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,

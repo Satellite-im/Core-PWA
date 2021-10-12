@@ -17,7 +17,6 @@
     <div :class="`feather ${text.length ? '' : 'no-text-feather'}`" v-if="$slots.default">
       <slot></slot>
     </div>
-    <font-awesome-icon v-if="icon" :icon="[icon.style, icon.name]" :class="`button-icon ${text.length ? 'button-icon-padded' : ''}`" />
     <span v-if="text.length">{{ text }}</span>
   </div>
 </UiGlowingCursorArea>

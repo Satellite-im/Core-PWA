@@ -2,8 +2,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { Icon } from '@/types/ui/icons'
 import { ButtonType, ButtonSize } from './types.d'
+import { Icon } from '@/types/ui/icons'
 
 export default Vue.extend({
   props: {
@@ -40,7 +40,7 @@ export default Vue.extend({
     },
     /**
      * Supported fontawesome icon
-     *
+     * @deprecated provide icons as slot
      * @remarks
      * You must make sure we have imported the icon before using it. See /plugins/fontawesome.ts
      */

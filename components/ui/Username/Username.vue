@@ -1,7 +1,6 @@
 <template src="./Username.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { Config } from '~/config'
 
 export default Vue.extend({
   props: {
@@ -14,18 +13,6 @@ export default Vue.extend({
       default: '',
       required: false,
     },
-  },
-  data() {
-    return {
-      badgeIcon: this.badge
-        ? {
-            // @ts-ignore
-            style: Config.badges[this.badge].icon[0],
-            // @ts-ignore
-            name: Config.badges[this.badge].icon[1],
-          }
-        : undefined,
-    }
   },
 })
 </script>

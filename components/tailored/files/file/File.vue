@@ -1,9 +1,23 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import {
+  LinkIcon,
+  HeartIcon,
+  FolderIcon,
+  FileIcon,
+} from 'satellite-lucide-icons'
+
 import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
+  components: {
+    LinkIcon,
+    HeartIcon,
+    FolderIcon,
+    FileIcon,
+  },
   props: {
     item: {
       type: Object as PropType<FileType | Folder>,

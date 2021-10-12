@@ -2,7 +2,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { FileIcon, SlashIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    FileIcon,
+    SlashIcon,
+  },
   props: {
     file: {
       type: File,

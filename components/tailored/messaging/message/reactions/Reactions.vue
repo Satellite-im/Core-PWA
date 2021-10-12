@@ -2,9 +2,13 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
+import { SmileIcon } from 'satellite-lucide-icons'
 import { Message, Group, Reply } from '~/types/messaging'
 
 export default Vue.extend({
+  components: {
+    SmileIcon,
+  },
   props: {
     reply: {
       type: Object as PropType<Reply>,

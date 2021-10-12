@@ -2,11 +2,18 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { PhoneIcon, PhoneOffIcon } from 'satellite-lucide-icons'
+
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'IncomingCall',
+  components: {
+    PhoneIcon,
+    PhoneOffIcon,
+  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -29,7 +36,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     this.$Sounds.stopSound(Sounds.CALL)
-  }
+  },
 })
 </script>
 

@@ -2,6 +2,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
+
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 
@@ -11,6 +14,10 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    SmartphoneIcon,
+    CircleIcon,
+  },
   mixins: [ContextMenu],
   props: {
     user: {

@@ -38,18 +38,22 @@
     font-size: @text-size;
     text-shadow: 0 0 3px #000;
 
-    path {
+    circle {
       stroke: @dark-gray;
-      stroke-width: 100;
+      stroke-width: 5;
+      paint-order: stroke;
     }
     &.is-online {
       color: @green;
+      fill: @green;
     }
     &.is-offline {
       color: @gray;
+      fill: @gray;
     }
     &.is-idle {
       color: @yellow;
+      fill: @yellow;
     }
   }
 
@@ -60,9 +64,16 @@
     font-size: @small-icon-size;
     text-shadow: 0 0 3px #000;
 
-    path {
+    rect {
       stroke: @dark-gray;
-      stroke-width: 30;
+      stroke-width: 4;
+      paint-order: stroke;
+      fill: @green;
+    }
+    line {
+      fill: #000;
+      stroke: @dark-gray;
+      stroke-width: 4;
     }
     &.is-mobile {
       color: @green;

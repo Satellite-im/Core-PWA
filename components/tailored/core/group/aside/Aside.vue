@@ -2,10 +2,16 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { InfoIcon } from 'satellite-lucide-icons'
+
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  components: {
+    InfoIcon,
+  },
   props: {
     toggle: {
       type: Function,

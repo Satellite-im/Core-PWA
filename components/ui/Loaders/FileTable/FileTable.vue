@@ -3,23 +3,23 @@
     <thead>
       <th>
         {{ $t('pages.files.browse.name') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.modified') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.type') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.encrypted') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th>
         {{ $t('pages.files.browse.size') }}
-        <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th></th>
     </thead>
@@ -51,7 +51,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
+// @ts-ignore
+import { FilterIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    FilterIcon,
+  },
   props: {
     rows: {
       type: Number,

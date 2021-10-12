@@ -3,11 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { NodeHtmlMarkdown } from 'node-html-markdown'
-import { Marked, Renderer } from '@ts-stack/markdown'
 
-// @ts-ignore
-import { TerminalIcon, GridIcon, ArrowRightIcon } from 'vue-feather-icons'
+import { TerminalIcon, GridIcon, ArrowRightIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
@@ -16,7 +13,12 @@ import {
   commands,
   isArgsValid,
 } from '~/libraries/ui/Commands'
-import { getCaretPosition, setCaretPosition } from '~/libraries/ui/Caret'
+import {
+  htmlToMarkdown,
+  markDownToHtml,
+  getCaretPosition,
+  setCaretPosition,
+} from '~/libraries/ui/Chatbar'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -26,17 +28,6 @@ declare module 'vue/types/vue' {
     value: string
   }
 }
-
-Marked.setOptions({
-  renderer: new Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false,
-})
 
 export default Vue.extend({
   components: {
@@ -50,7 +41,6 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
-      caretPosition: 0,
     }
   },
   computed: {
@@ -172,35 +162,16 @@ export default Vue.extend({
      * Once replaced current HTML content, move the caret to proper position.
      * @example
      */
-    handleInputChange() {
+    handleInputChange(caretPosition: number | null) {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
-        let markDown =
-          messageBox.innerHTML.length > 1
-            ? NodeHtmlMarkdown.translate(messageBox.innerHTML)
-            : messageBox.innerHTML
-        markDown = markDown
-          .trim()
-          .replace(/\\#/g, '#')
-          .replace(/\\`/g, '`')
-          .replace(/\\=/g, '=')
-          .replace(/\\_/g, '_')
-          .replace(/\\>/g, '>')
-          .split('\\*')
-          .join('*')
-          .replace(/_\*/g, '**')
-          .replace(/\*_/g, '**')
+        const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.value = markDown
-        let caretPosition = getCaretPosition(messageBox)
+        if (caretPosition == null) {
+          caretPosition = getCaretPosition(messageBox)
+        }
         let offset = messageBox.textContent.trim().length
-        messageBox.innerHTML = Marked.parse(markDown)
-          .replace(/<\/h1>/g, '<span>&nbsp;</span></h1>')
-          .replace(/<\/h2>/g, '<span>&nbsp;</span></h2>')
-          .replace(/<\/h3>/g, '<span>&nbsp;</span></h3>')
-          .replace(/<\/h4>/g, '<span>&nbsp;</span></h4>')
-          .replace(/<\/h5>/g, '<span>&nbsp;</span></h5>')
-          .replace(/<\/h6>/g, '<span>&nbsp;</span></h6>')
-          .replace(/<\/p>/g, '<span>&nbsp;</span></p>')
+        messageBox.innerHTML = markDownToHtml(markDown)
         if (offset >= messageBox.textContent.trim().length + 2) {
           offset -= messageBox.textContent.trim().length
           caretPosition -= offset
@@ -215,6 +186,7 @@ export default Vue.extend({
           caretPosition += offset
         }
         setCaretPosition(messageBox, caretPosition)
+        messageBox.focus()
       }
       this.autoGrow()
     },
@@ -228,6 +200,8 @@ export default Vue.extend({
      * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
           {
@@ -236,12 +210,12 @@ export default Vue.extend({
               (c) => c.name === parsedCommand.name.toLowerCase()
             )
             if (currentCommand && parsedCommand.args.length === 0) {
-              const messageBox = this.$refs.messageuser as HTMLElement
               messageBox.innerHTML = ''
               this.value = ''
               this.autoGrow()
               return false
             }
+            caretPosition = getCaretPosition(messageBox) - 1
           }
           break
         case 'Enter':
@@ -251,19 +225,20 @@ export default Vue.extend({
               this.sendMessage()
             } else if (this.hasCommand && !this.isValidCommand) {
               console.log('dispatch command')
-            } else {
-              return
             }
           } else {
             this.autoGrow()
           }
           return true
         case 'Spacebar':
+        case ' ':
           {
             event.preventDefault()
-            const messageBox = this.$refs.messageuser as HTMLElement
             const caretPosition = getCaretPosition(messageBox)
-            setCaretPosition(messageBox, caretPosition + 1)
+            setTimeout(() => {
+              setCaretPosition(messageBox, caretPosition + 1)
+              messageBox.focus()
+            }, 10)
           }
           return true
         case 'Left':
@@ -274,13 +249,14 @@ export default Vue.extend({
         case 'Shift':
           return true
         case 'a':
+        case 'A':
           if (event.ctrlKey) {
             return true
           }
           break
       }
       setTimeout(() => {
-        this.handleInputChange()
+        this.handleInputChange(caretPosition)
       }, 10)
       return true
     },

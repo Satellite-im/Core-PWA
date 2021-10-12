@@ -14,9 +14,9 @@
     :address="seed"
     :diameter="size"
   />
-  <font-awesome-icon
-    v-else-if="type === 'icon' && icon"
-    :icon="[icon.style, icon.name]"
-    class="circle-icon" />
+  <UiDynamicIcon
+    size="1x"
+    :icon="icon"
+    v-else-if="icon" />
   <slot></slot>
 </div>

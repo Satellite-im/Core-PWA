@@ -2,6 +2,9 @@
   <div>
     <TailoredSettingsModal v-if="ui.showSettings" />
     <InteractablesContextMenu v-if="ui.contextMenuStatus" />
+    <UiModal v-if="ui.modals.wallet" :close-modal="toggleWallet" nopad>
+      <TailoredWalletPopup />
+    </UiModal>
     <UiModal
       v-if="ui.modals.createServer"
       :close-modal="toggleModal"
@@ -85,6 +88,12 @@ export default Vue.extend({
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',
         state: !this.ui.modals.showMarketPlace,
+      })
+    },
+    toggleWallet() {
+      this.$store.commit('toggleModal', {
+        name: 'wallet',
+        state: !this.ui.modals.wallet,
       })
     },
   },

@@ -1,11 +1,14 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+
+import { FolderPlusIcon } from 'satellite-lucide-icons'
 import FileUpload from '~/components/tailored/core/fileupload/FileUpload.vue'
 
 export default Vue.extend({
   components: {
     FileUpload,
+    FolderPlusIcon,
   },
   props: {
     handleFile: {

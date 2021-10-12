@@ -1,9 +1,31 @@
 <template src="./List.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import {
+  FilterIcon,
+  FolderIcon,
+  ArchiveIcon,
+  FileIcon,
+  ImageIcon,
+  LockIcon,
+  UnlockIcon,
+  MoreVerticalIcon,
+} from 'satellite-lucide-icons'
+
 import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
+  components: {
+    FilterIcon,
+    FileIcon,
+    FolderIcon,
+    ArchiveIcon,
+    ImageIcon,
+    LockIcon,
+    UnlockIcon,
+    MoreVerticalIcon,
+  },
   props: {
     /**
      * The array of children to path through

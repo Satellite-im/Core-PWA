@@ -3,7 +3,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+import { FolderPlusIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    FolderPlusIcon,
+  },
   props: {
     handleFile: {
       type: Function,

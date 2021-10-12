@@ -4,12 +4,14 @@
 import Jazzicon from 'vue-jazzicon'
 import Vue, { PropType } from 'vue'
 
-import { Icon } from '@/types/ui/icons'
+import { CircleIcon } from 'satellite-lucide-icons'
+
 import { CircleType } from './types'
 
 export default Vue.extend({
   components: {
     Jazzicon,
+    CircleIcon,
   },
   props: {
     /**
@@ -34,7 +36,7 @@ export default Vue.extend({
      */
     // eslint-disable-next-line vue/require-default-prop
     icon: {
-      type: Object as PropType<Icon>,
+      type: String,
       required: false,
     },
     /**

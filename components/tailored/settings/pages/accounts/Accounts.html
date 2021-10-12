@@ -13,9 +13,10 @@
         :copy-content="accounts.active"
         readonly
         type="primary"
-        :icon="{ style: 'far', name: 'clipboard' }"
         :action="() => $toast.show($t('global.copied'))"
-        :text="accounts.active" />
+        :text="accounts.active">
+        <clipboard-icon size="1x" />
+      </InteractablesInputGroup>
     </div>
   </div>
 

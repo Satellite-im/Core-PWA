@@ -8,8 +8,7 @@ import {
   Volume1Icon,
   Volume2Icon,
   VolumeXIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 declare module 'vue/types/vue' {
   interface Vue {
