@@ -41,6 +41,7 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
+      // lastEdited: 0,
     }
   },
   computed: {
@@ -116,6 +117,9 @@ export default Vue.extend({
         return ''
       }
     },
+    // editStatus() {
+    //   return Date.now() - this.$data.lastEdited <= 1000
+    // },
   },
   methods: {
     /**
@@ -139,21 +143,16 @@ export default Vue.extend({
       const chatbarGroup = this.$refs.chatbar as HTMLElement
       const wrap = this.$refs.wrap as HTMLElement
 
-      // set default height to be auto, so it will expand as needed but NOT on every input
-      messageBox.style.height = 'auto'
       if (this.$data.text.split('\n').length > 1) {
         wrap.classList.add('expanded')
       } else {
         wrap.classList.remove('expanded')
       }
       if (messageBox.scrollHeight < 112) {
-        messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
-        messageBox.style.height = '112px'
         chatbarGroup.style.height = '152px'
       }
-      messageBox.scrollTop = messageBox.scrollHeight
     },
     /**
      * @method handleInputChange DocsTODO
@@ -162,14 +161,12 @@ export default Vue.extend({
      * Once replaced current HTML content, move the caret to proper position.
      * @example
      */
-    handleInputChange(caretPosition: number | null) {
+    handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.value = markDown
-        if (caretPosition == null) {
-          caretPosition = getCaretPosition(messageBox)
-        }
+        let caretPosition = getCaretPosition(messageBox)
         let offset = messageBox.textContent.trim().length
         messageBox.innerHTML = markDownToHtml(markDown)
         if (offset >= messageBox.textContent.trim().length + 2) {
@@ -201,7 +198,6 @@ export default Vue.extend({
      */
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageuser as HTMLElement
-      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
           {
@@ -212,12 +208,13 @@ export default Vue.extend({
             if (currentCommand && parsedCommand.args.length === 0) {
               messageBox.innerHTML = ''
               this.value = ''
-              this.autoGrow()
-              return false
             }
-            caretPosition = getCaretPosition(messageBox) - 1
+            this.autoGrow()
           }
-          break
+          return
+        case 'Delete':
+          this.autoGrow()
+          return
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
@@ -229,7 +226,7 @@ export default Vue.extend({
           } else {
             this.autoGrow()
           }
-          return true
+          return
         case 'Spacebar':
         case ' ':
           {
@@ -240,25 +237,37 @@ export default Vue.extend({
               messageBox.focus()
             }, 10)
           }
-          return true
+          return
         case 'Left':
         case 'ArrowLeft':
         case 'Right':
         case 'ArrowRight':
         case 'End':
         case 'Shift':
-          return true
+          return
         case 'a':
         case 'A':
           if (event.ctrlKey) {
-            return true
+            return
           }
           break
       }
       setTimeout(() => {
-        this.handleInputChange(caretPosition)
+        this.handleInputChange()
       }, 10)
-      return true
+      // this.$data.lastEdited = Date.now()
+    },
+    handleInputKeyup(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      switch (event.key) {
+        case 'Backspace':
+        case 'Delete':
+          if (messageBox.textContent && messageBox.textContent.trim() === '') {
+            messageBox.innerHTML = ''
+            this.autoGrow()
+          }
+          break
+      }
     },
     /**
      * @method sendMessage

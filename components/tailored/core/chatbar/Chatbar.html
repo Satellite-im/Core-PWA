@@ -17,7 +17,8 @@
     <div contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
-      @keydown="handleInputKeydown"></div>
+      @keydown="handleInputKeydown"
+      @keyup="handleInputKeyup"></div>
     <span class="placeholder">{{ placeholder }}</span>
     <div
       :data-tooltip="$t('global.glyphs')"

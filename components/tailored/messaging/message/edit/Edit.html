@@ -3,7 +3,9 @@
     <div
       ref="messageBox"
       class="edit-message-body-input"
-      @keydown="handleInputKeydown" contenteditable></div>
+      @keydown="handleInputKeydown"
+      @keyup="handleInputKeyup"
+      contenteditable></div>
     <SmileIcon class="edit-message-body-emoj" size="1.5x" />
   </div>
   <div class="edit-message-bottom">
