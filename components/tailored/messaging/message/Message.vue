@@ -120,7 +120,6 @@ export default Vue.extend({
       this.$store.commit('toggleEnhancers', true)
     },
     quickReaction(emoji: String) {
-      console.log((this as any).disData)
       this.$store.dispatch('addReaction', {
         emoji,
         reactor: this.$mock.user.name,

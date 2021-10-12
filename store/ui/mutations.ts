@@ -196,7 +196,6 @@ export default {
   },
 
   addReaction(state: NuxtState, reaction: any) {
-    console.log(reaction)
     const messageGroups: MessageGroup = [...state.ui.messages]
 
     //Find message group meant for reaction
@@ -216,8 +215,6 @@ export default {
           (message) => message.id === reaction.messageID
         )
       }
-
-      console.log(currMessage)
 
       if (currMessage) {
         // If reactions array doesnt exist create with new reaction
