@@ -278,8 +278,11 @@ export default {
     }
   },
   updateRecentReactions(state: NuxtState, emoji: String) {
-    const newRecentReactions = state.recentReactions.push(emoji).pop()
-    console.log(newRecentReactions)
+    const newRecentReactions = state.ui.recentReactions
+    if (!state.ui.recentReactions.includes(emoji)) {
+      newRecentReactions.unshift(emoji)
+      newRecentReactions.pop()
+    }
     state.ui = {
       ...state.ui,
       recentReactions: newRecentReactions,

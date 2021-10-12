@@ -58,7 +58,7 @@ export default Vue.extend({
       disData: 'DataFromTheProperty',
       contextMenuValues: [
         // eslint-disable-next-line prettier/prettier
-        { text: this.ui.recentReactions[0], func() { (this as any).quickReaction((this as any).ui.recentReactions[0]) } },
+        { text: 'quickReaction', func: (this as any).quickReaction },
         { text: 'Edit Message', func: (this as any).editMessage },
         { text: 'Add Reaction', func: (this as any).emojiReaction },
         { text: 'Reply', func: this.setReplyChatbarContent },
@@ -120,12 +120,12 @@ export default Vue.extend({
       this.$store.commit('toggleEnhancers', true)
     },
     quickReaction(emoji: String) {
+      console.log((this as any).disData)
       this.$store.dispatch('addReaction', {
         emoji,
         reactor: this.$mock.user.name,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
-        replyID: this.$props.reply.id,
       })
     },
     /**

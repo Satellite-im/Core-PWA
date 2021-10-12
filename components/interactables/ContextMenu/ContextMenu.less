@@ -25,4 +25,24 @@
     background: @primary-color;
     color: @bright-text;
   }
+  .quickReactions {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 3rem;
+    border-bottom: 1px solid;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    justify-content: center;
+    p {
+      display: flex;
+      flex-grow: 1;
+      font-size: 2rem;
+      justify-content: center;
+      align-items: center;
+    }
+    p:hover {
+      background: none;
+      text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color, 1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
+    }
+  }
 }
