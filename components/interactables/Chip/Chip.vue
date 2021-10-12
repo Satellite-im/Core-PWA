@@ -26,6 +26,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method hide
+     * @description Hides chip element
+     */
     hide() {
       this.show = false
     },

@@ -52,9 +52,21 @@ export default Vue.extend({
     })
   },
   methods: {
+    /**
+     * @method onResize DocsTODO
+     * @description
+     * @example
+     */
     onResize() {
       this.resizeHandler()
     },
+    /**
+     * @method getTickColor DocsTODO
+     * @description
+     * @param increment
+     * @returns
+     * @example
+     */
     // Returns the designated tick color based on the increment value
     getTickColor(increment: number): string {
       if (this.numberOfTicks) {
@@ -71,6 +83,11 @@ export default Vue.extend({
       }
       return ''
     },
+    /**
+     * @method resizeHandler DocsTODO
+     * @description
+     * @example
+     */
     resizeHandler() {
       const meterElm: HTMLElement = this.$refs.meter as HTMLElement
       if (meterElm) {

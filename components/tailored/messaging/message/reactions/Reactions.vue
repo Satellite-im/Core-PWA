@@ -46,6 +46,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method emojiReaction DocsTODO
+     * @description
+     * @example
+     */
     emojiReaction() {
       this.$store.commit('settingReaction', {
         status: true,
@@ -55,6 +60,12 @@ export default Vue.extend({
       })
       this.$store.commit('toggleEnhancers', true)
     },
+    /**
+     * @method quickReaction DocsTODO
+     * @description
+     * @param emoji
+     * @example
+     */
     quickReaction(emoji: String) {
       this.$store.dispatch('addReaction', {
         emoji,
@@ -64,9 +75,22 @@ export default Vue.extend({
         replyID: this.$props.reply.id,
       })
     },
+    /**
+     * @method toggleReactors DocsTODO
+     * @description
+     * @param emoji
+     * @example
+     */
     toggleReactors(emoji: any) {
       this.$data.hovering = emoji
     },
+    /**
+     * @method didIReact DocsTODO
+     * @description
+     * @param reaction
+     * @returns
+     * @example
+     */
     didIReact(reaction: any) {
       return reaction.reactors.includes(this.$mock.user.name)
     },

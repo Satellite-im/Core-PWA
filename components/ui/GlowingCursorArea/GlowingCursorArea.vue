@@ -21,6 +21,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method moveCursor DocsTODO
+     * @description
+     * @param e
+     * @returns
+     * @example
+     */
     moveCursor(e: Event | any) {
       let bounds = e.target.getBoundingClientRect()
 

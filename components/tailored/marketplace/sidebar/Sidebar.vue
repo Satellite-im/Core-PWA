@@ -57,6 +57,12 @@ export default Vue.extend({
     })
   },
   methods: {
+    /**
+     * @method clickCategory DocsTODO
+     * @description
+     * @param item
+     * @example
+     */
     clickCategory(item: CategoryTreeItem) {
       if (item.children.length > 0) {
         item.collapsed = !item.collapsed

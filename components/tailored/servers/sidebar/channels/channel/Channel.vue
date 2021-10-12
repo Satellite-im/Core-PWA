@@ -18,6 +18,12 @@ export default {
     ...mapState(['channel']),
   },
   methods: {
+    /**
+     * @method getChannelClass DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     getChannelClass() {
       return this.channel && this.channel.id === this.localChannel.id
         ? 'active'

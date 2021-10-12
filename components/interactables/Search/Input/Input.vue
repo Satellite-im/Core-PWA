@@ -53,13 +53,30 @@ export default Vue.extend({
     }
   },
   computed: {
+    /**
+     * @method searchOptions DocsTODO
+     * @description
+     * @returns
+     */
     searchOptions() {
       return SearchUtil.getCommandMetaList()
     },
+
+    /**
+     * @method hasOptions DocsTODO
+     * @description
+     * @returns
+     */
     hasOptions(): SearchOption[] {
       return SearchUtil.getCommandTypeParams()[SearchCommandType.Has]
         .options as SearchOption[]
     },
+
+    /**
+     * @method isEmptyCommand DocsTODO
+     * @description
+     * @returns
+     */
     isEmptyCommand() {
       if (
         this.current != null &&
@@ -70,12 +87,24 @@ export default Vue.extend({
       }
       return false
     },
+
+    /**
+     * @method isOption DocsTODO
+     * @description
+     * @returns
+     */
     isOption() {
       if (this.isFocus && (this.isEmpty || this.isHas || this.isEmptyCommand)) {
         return true
       }
       return false
     },
+
+    /**
+     * @method isHas DocsTODO
+     * @description
+     * @returns
+     */
     isHas() {
       if (this.current == null || this.current.value !== '') {
         return false
@@ -85,6 +114,12 @@ export default Vue.extend({
       }
       return false
     },
+
+    /**
+     * @method isDate DocsTODO
+     * @description
+     * @returns
+     */
     isDate() {
       if (this.current == null || this.current.value !== '') {
         return false
@@ -98,6 +133,12 @@ export default Vue.extend({
       }
       return false
     },
+
+    /**
+     * @method isSearch DocsTODO
+     * @description
+     * @returns
+     */
     isSearch() {
       if (this.isEmpty || !this.isFocus || this.current == null) {
         return false
@@ -112,9 +153,19 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method _setEmpty DocsTODO
+     * @description
+     * @param isEmpty
+     */
     _setEmpty(isEmpty: boolean) {
       this.isEmpty = isEmpty
     },
+
+    /**
+     * @method _desectStatus DocsTODO
+     * @description
+     */
     _detectStatus() {
       const searchInput = this.$refs.searchInput as HTMLElement
       if (searchInput.textContent === '') {
@@ -125,6 +176,13 @@ export default Vue.extend({
         this._setEmpty(false)
       }
     },
+
+    /**
+     * @method _insertBlank DocsTODO
+     * @description
+     * @param after
+     * @returns
+     */
     _insertBlank(after: number) {
       this.current = this.searchQuery.insertCommand(
         SearchCommand.Empty,
@@ -133,6 +191,12 @@ export default Vue.extend({
       )
       this._produceItems()
     },
+
+    /**
+     * @method _insertOption DocsTODO
+     * @description
+     * @returns
+     */
     _insertOption() {
       if (this.option < 0 || (!this.isEmpty && !this.isEmptyCommand)) {
         return
@@ -153,6 +217,12 @@ export default Vue.extend({
       }
       this.option = -1
     },
+
+    /**
+     * @method _insertHasOption DocsTODO
+     * @description
+     * @returns
+     */
     _insertHasOption() {
       if (this.option < 0 || this.current == null || !this.isHas) {
         return
@@ -165,6 +235,11 @@ export default Vue.extend({
         this.option = -1
       }
     },
+
+    /**
+     * @method _insertSearch DocsTODO
+     * @description
+     */
     _insertSearch() {
       if (this.search < 0 || !this.searchResult) {
         return
@@ -178,6 +253,12 @@ export default Vue.extend({
         this.searchQuery.queryItems[this.searchQuery.queryItems.length - 1]
       this.caretPosition = this.current.cursorEnd
     },
+
+    /**
+     * @method _insertDate DocsTODO
+     * @description
+     * @param date
+     */
     _insertDate(date: string) {
       if (date == null) {
         return
@@ -188,6 +269,12 @@ export default Vue.extend({
         this.caretPosition = this.current.cursorEnd
       }
     },
+
+    /**
+     * @method _prepareItem DocsTODO
+     * @description
+     * @returns
+     */
     _prepareItem() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.caretPosition = this.searchQuery.caretPosition(searchInput)
@@ -200,6 +287,11 @@ export default Vue.extend({
       })
       return happens
     },
+
+    /**
+     * @method _produceItems DocsTODO
+     * @description
+     */
     _produceItems() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.innerHTML = ''
@@ -220,11 +312,23 @@ export default Vue.extend({
         searchInput.appendChild(newElement)
       })
     },
+
+    /**
+     * @method _getCaretPosition DocsTODO
+     * @description
+     * @returns
+     */
     _getCaretPosition() {
       const searchInput = this.$refs.searchInput as HTMLElement
       const caretPosition = this.searchQuery.caretPosition(searchInput)
       return caretPosition
     },
+
+    /**
+     * @method _setCaretPosition DocsTODO
+     * @description
+     * @param position
+     */
     _setCaretPosition(position: number) {
       const selection = window.getSelection()
       if (!selection) {
@@ -265,6 +369,12 @@ export default Vue.extend({
         searchInput.focus()
       }
     },
+
+    /**
+     * @method _navigatePanel DocsTODO
+     * @description
+     * @param down
+     */
     _navigatePanel(down: boolean) {
       if (this.isEmpty || this.isEmptyCommand || this.isHas) {
         if (down === true) {
@@ -292,6 +402,11 @@ export default Vue.extend({
         }
       }
     },
+
+    /**
+     * @method _prepareSearch DocsTODO
+     * @description
+     */
     _prepareSearch() {
       // this.caretPosition = this._getCaretPosition()
       this.current = this.searchQuery.queryItemFrom(
@@ -307,12 +422,23 @@ export default Vue.extend({
       this.searchFor = this.searchQuery.getQueryString()
       this._filterSearchResult()
     },
+
+    /**
+     * @method _filterSearchResult DocsTODO
+     * @description
+     */
     _filterSearchResult() {
       this.searchResult = SearchUtil.filterSearchRecommendResult(
         this.searchRecommend,
         this.current
       )
     },
+
+    /**
+     * @method clickOption DocsTODO
+     * @description
+     * @param i
+     */
     clickOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.option = i
@@ -322,6 +448,12 @@ export default Vue.extend({
       this._detectStatus()
       searchInput.focus()
     },
+
+    /**
+     * @method clickHasOption DocsTODO
+     * @description
+     * @param i
+     */
     clickHasOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.option = i
@@ -333,6 +465,12 @@ export default Vue.extend({
       this._prepareSearch()
       this.emitSearch()
     },
+
+    /**
+     * @method clickSearchOption DocsTODO
+     * @description
+     * @param i
+     */
     clickSearchOption(i: number) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.search = i
@@ -344,6 +482,12 @@ export default Vue.extend({
       this._prepareSearch()
       this.emitSearch()
     },
+
+    /**
+     * @method clickDateOption DocsTODO
+     * @description
+     * @param day
+     */
     clickDateOption(day: CalendarDateType) {
       const searchInput = this.$refs.searchInput as HTMLElement
       this._insertDate(day.id)
@@ -354,6 +498,11 @@ export default Vue.extend({
       this._prepareSearch()
       this.emitSearch()
     },
+
+    /**
+     * @method input DocsTODO
+     * @description
+     */
     input() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)
@@ -364,6 +513,12 @@ export default Vue.extend({
       this._prepareSearch()
       this.emitChange()
     },
+
+    /**
+     * @method keydown DocsTODO
+     * @description
+     * @param event
+     */
     keydown(event: KeyboardEvent) {
       switch (event.key) {
         case 'Enter':
@@ -427,6 +582,12 @@ export default Vue.extend({
           break
       }
     },
+
+    /**
+     * @method keyup DocsTODO
+     * @description
+     * @param event
+     */
     keyup(event: KeyboardEvent) {
       if (event.key === ':') {
         this.caretPosition = this._getCaretPosition()
@@ -434,6 +595,11 @@ export default Vue.extend({
         this._setCaretPosition(this.caretPosition)
       }
     },
+
+    /**
+     * @method clearSearch DocsTODO
+     * @description
+     */
     clearSearch() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.innerHTML = ''
@@ -442,6 +608,11 @@ export default Vue.extend({
       searchInput.focus()
       this.current = null
     },
+
+    /**
+     * @method setFocus DocsTODO
+     * @description
+     */
     setFocus() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.contentEditable = 'true'
@@ -449,6 +620,11 @@ export default Vue.extend({
       this.isFocus = true
       this.caretPosition = this._getCaretPosition()
     },
+
+    /**
+     * @method lostFocus DocsTODO
+     * @description
+     */
     lostFocus() {
       const searchInput = this.$refs.searchInput as HTMLElement
       searchInput.contentEditable = 'false'
@@ -456,6 +632,11 @@ export default Vue.extend({
       searchInput.blur()
       this.isFocus = false
     },
+
+    /**
+     * @method emitSearch DocsTODO
+     * @description
+     */
     emitSearch() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)
@@ -465,6 +646,11 @@ export default Vue.extend({
         this.searchQuery.queryItems
       )
     },
+
+    /**
+     * @method emitChange DocsTODO
+     * @description
+     */
     emitChange() {
       const searchInput = this.$refs.searchInput as HTMLElement
       this.searchQuery.setQueryByHTML(searchInput)

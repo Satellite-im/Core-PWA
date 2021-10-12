@@ -21,9 +21,11 @@ export default class WebRTC {
     this.peers = new Map()
   }
 
-  /** @method
-   * Bind required startup data to the WebRTC class
-   * @id identifier to connect to the signaling server with
+  /**
+   * @method init
+   * @description Bind required startup data to the WebRTC class
+   * @param id identifier to connect to the signaling server with
+   * @example
    */
   init(id: string) {
     this.id = id
@@ -32,8 +34,11 @@ export default class WebRTC {
     this._runQueue()
   }
 
-  /** @computed
-   * Get the total count of connected peers
+  /**
+   * @computed peerCount
+   * @description Get the total count of connected peers
+   * @returns
+   * @example
    */
   get peerCount(): number {
     return this.peers ? this.peers.size : 0
@@ -43,15 +48,18 @@ export default class WebRTC {
   //
   // Methods reserved for internal use
 
-  /** @method
-   * Queue functions that are exectued before init for execution later
+  /**
+   * @method _queue
+   * @description Queue functions that are exectued before init for execution later
+   * @param fn
    */
   protected _queue(fn: Function) {
     this._fnQueue.push(fn)
   }
 
-  /** @method
-   * Execute all queued functions
+  /**
+   * @method _runQueue
+   * @description Execute all queued functions
    */
   protected _runQueue() {
     this._fnQueue.forEach((fn) => fn())
@@ -61,15 +69,18 @@ export default class WebRTC {
    * @method setAnnounceURLs
    * @description Allow to specify different WebTorrent announce URLs for the signaling
    * @param announceURLs list of announce urls
+   * @example
    */
   setAnnounceURLs(announceURLs: Array<string>) {
     this._announceURLs = announceURLs
   }
 
-  /** @method
-   * Internal abstraction of connect to allow for
-   * connection queueing
-   * @peerId identifier of peer we're connecting to
+  /**
+   * @method _connect
+   * @description Internal abstraction of connect to allow for connection queueing
+   * @param peerId identifier of peer we're connecting to
+   * @returns
+   * @example
    */
   protected _connect(peerId: string): void {
     console.log('connecting to', peerId)
@@ -80,26 +91,34 @@ export default class WebRTC {
   //
   // Methods who are exposed for interaction
 
-  /** @method
-   * Check if we are connected to a given peer by ID
-   * @peerId identifier of peer we're seeking
+  /**
+   * @method exists
+   * @description Check if we are connected to a given peer by ID
+   * @param peerId identifier of peer we're seeking
+   * @returns
+   * @example
    */
   exists(peerId: string): boolean {
     if (!this.peers) return false
     return this.peers.has(peerId)
   }
 
-  /** @method
-   * Get a WebRTCUser from the list of connected peers
-   * @peerId identifier of peer we're seeking
+  /**
+   * @method getPeer
+   * @description Get a WebRTCUser from the list of connected peers
+   * @param peerId identifier of peer we're seeking
+   * @returns
+   * @example
    */
   getPeer(peerId: string): WebRTCUser | undefined {
     return this.peers?.get(peerId)
   }
 
-  /** @method
-   * Connect to a new peer
-   * @peerId identifier of peer we're connecting to
+  /**
+   * @method connect
+   * @description Connect to a new peer
+   * @param peerId identifier of peer we're connecting to
+   * @example
    */
   connect(peerId: string) {
     if (!this.initalized) {

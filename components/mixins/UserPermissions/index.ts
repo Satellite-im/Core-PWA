@@ -27,6 +27,13 @@ interface Device {
   value: string
 }
 
+/**
+ * @method formatDevices DocsTODO
+ * @description
+ * @param devices
+ * @returns
+ * @example
+ */
 const formatDevices = (devices: any[]) => {
   const responsearray: Device[] = []
   devices.forEach((device) => {
@@ -43,6 +50,13 @@ const formatDevices = (devices: any[]) => {
   })
   return responsearray
 }
+
+/**
+ * @method getRTC
+ * @description Gets users RTC info (devices, permissions, browser, etc.)
+ * @returns Promise that resolves to responseObject with RTC info
+ * @example const UserPermissions = await this.$props.getRTC()
+ */
 const getRTC = async () => {
   const promise = await new Promise((resolve) => {
     const responseObject: permissionObject = {
@@ -97,11 +111,24 @@ export const UserPermissions = {
     // can add functions here on start-up if needed
   },
   methods: {
+    /**
+     * @method getUserPermissions DocsTODO
+     * @description Uses getRTC method to return users RTC info
+     * @returns Object with users RTC info
+     * @example
+     */
     async getUserPermissions(): Promise<any> {
       // Todo: Firefox does not allow querying for Microphone https://github.com/mozilla/standards-positions/issues/19, and is spotty in it's implementation of the permissions api
       // https://bugzilla.mozilla.org/show_bug.cgi?id=1609427
       return await getRTC()
     },
+    /**
+     * @method requestUserPermissions DocsTODO
+     * @description Requests user permission to access their media devices such as webcams and microphones
+     * @param permission Object with contraints for which permissions to request
+     * @returns Promise that resolves to a MediaStream object
+     * @example
+     */
     async requestUserPermissions(
       permission: PermissionRequestOptions
     ): Promise<any> {

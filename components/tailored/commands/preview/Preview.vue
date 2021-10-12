@@ -19,6 +19,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    /**
+     * @method hasCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     hasCommand() {
       return (
         containsCommand(this.ui.chatbarContent) &&
@@ -29,9 +35,21 @@ export default Vue.extend({
         )
       )
     },
+    /**
+     * @method command DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     command() {
       return parseCommand(this.ui.chatbarContent)
     },
+    /**
+     * @method commands DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     commands() {
       return commands.filter((cmd) =>
         cmd.name.startsWith(
@@ -41,6 +59,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method completeCommand DocsTODO
+     * @description
+     * @param command
+     * @example
+     */
     completeCommand(command: CurrentCommand) {
       this.$store.commit('chatbarContent', `/${command.name}`)
     },

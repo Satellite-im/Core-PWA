@@ -14,6 +14,10 @@ export default class SearchQuery {
     this.queryItems = []
   }
 
+  /**
+   * @method clear
+   * @description Resets all properties on the SearchQuery object
+   */
   clear() {
     this.query = ''
     this.cursorPosition = 0
@@ -21,6 +25,14 @@ export default class SearchQuery {
     this.queryItems = []
   }
 
+  /**
+   * @method insertCommand DocsTODO
+   * @description
+   * @param command
+   * @param value
+   * @param position
+   * @returns
+   */
   insertCommand(
     command: SearchCommand,
     value: string,
@@ -58,6 +70,13 @@ export default class SearchQuery {
     return newItem
   }
 
+  /**
+   * @method appendCommand DocsTODO
+   * @description
+   * @param command
+   * @param value
+   * @returns
+   */
   appendCommand(command: SearchCommand, value: string): SearchQueryItem | null {
     let last: SearchQueryItem | null =
       this.queryItems[this.queryItems.length - 1]
@@ -83,6 +102,13 @@ export default class SearchQuery {
     return newItem
   }
 
+  /**
+   * @method setCommandValue DocsTODO
+   * @description
+   * @param index
+   * @param value
+   * @returns
+   */
   setCommandValue(index: number, value: string) {
     this.queryItems.forEach((queryItem) => {
       if (queryItem.index === index) {
@@ -95,6 +121,12 @@ export default class SearchQuery {
     })
   }
 
+  /**
+   * @method queryItemFrom DocsTODO
+   * @description
+   * @param caretPosition
+   * @returns
+   */
   queryItemFrom(caretPositon: number): SearchQueryItem | null {
     let found = null
     this.queryItems.forEach((queryItem) => {
@@ -108,6 +140,11 @@ export default class SearchQuery {
     return found
   }
 
+  /**
+   * @method deleteItemFrom DocsTODO
+   * @description
+   * @param caretPosition
+   */
   deleteItemFrom(caretPositon: number) {
     let index = -1
     this.queryItems.forEach((queryItem) => {
@@ -124,6 +161,11 @@ export default class SearchQuery {
     })
   }
 
+  /**
+   * @method deleteItemAt DocsTODO
+   * @description
+   * @param index
+   */
   deleteItemAt(index: number) {
     this.queryItems.splice(index, 1)
     this.queryItems.forEach((queryItem) => {
@@ -133,6 +175,13 @@ export default class SearchQuery {
     })
   }
 
+  /**
+   * @method setQuery DocsTODO
+   * @description
+   * @param queury
+   * @param cursorPosition
+   * @example
+   */
   setQuery(query: string, cursorPosition: number) {
     this.query = query
     this.cursorPosition = cursorPosition
@@ -141,6 +190,11 @@ export default class SearchQuery {
     this.queryItems = queryItems
   }
 
+  /**
+   * @method setQueryByHTML DocsTODO
+   * @description
+   * @param html
+   */
   setQueryByHTML(html: HTMLElement) {
     this.setQuery(
       html.textContent ? html.textContent : '',
@@ -148,6 +202,11 @@ export default class SearchQuery {
     )
   }
 
+  /**
+   * @method getQueryString DocsTODO
+   * @description
+   * @returns
+   */
   getQueryString() {
     const ret = this.queryItems
       .map(
@@ -160,6 +219,12 @@ export default class SearchQuery {
     return ret
   }
 
+  /**
+   * @method caretPosition DocsTODO
+   * @description
+   * @param htmlElement
+   * @returns
+   */
   caretPosition(htmlElement: HTMLElement): number {
     if (!window.getSelection) {
       return 0
@@ -183,6 +248,13 @@ export default class SearchQuery {
     return caretPosInNode
   }
 
+  /**
+   * @method _parseQuery DocsTODO
+   * @description
+   * @param query
+   * @param cursorPosition
+   * @returns
+   */
   _parseQuery(query: string, cursorPosition: number) {
     query = query.trim().replace(/\u00A0/g, '\u0020')
     const strQuerySplits = query.split('\u0020')
@@ -224,6 +296,13 @@ export default class SearchQuery {
     return { queryItems, queryIndex }
   }
 
+  /**
+   * @method _caretPositionInParentNode DocsTODO
+   * @description
+   * @param node
+   * @param caretPosInNode
+   * @returns
+   */
   _caretPositionInParentNode(node: Node, caretPosInNode: number): number {
     let itemNode = node.parentNode?.firstChild
     let caretPos = caretPosInNode
@@ -235,6 +314,13 @@ export default class SearchQuery {
     return caretPos
   }
 
+  /**
+   * @method _hasAncestor DocsTODO
+   * @description
+   * @param node
+   * @param parentNode
+   * @returns
+   */
   _hasAncestor(node: Node, parentNode: Node) {
     let tempNode: Node | null = node
     do {

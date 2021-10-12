@@ -11,6 +11,12 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 export default {
+  /**
+   * @method setPin DocsTODO
+   * @description
+   * @param pin
+   * @example
+   */
   async setPin({ commit }: ActionsArguments, pin: string) {
     if (pin.length < 5) {
       throw new Error(AccountsError.PIN_TOO_SHORT)
@@ -25,6 +31,12 @@ export default {
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
+  /**
+   * @method unlock DocsTODO
+   * @description
+   * @param pin
+   * @example
+   */
   async unlock({ commit, state, dispatch }: ActionsArguments, pin: string) {
     const { pinHash, encryptedPhrase } = state.accounts
 
@@ -52,6 +64,12 @@ export default {
     commit('unlock', pin)
     dispatch('loadAccount')
   },
+  /**
+   * @method generateWallet DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   async generateWallet({ commit, state }: ActionsArguments) {
     const { pin } = state.accounts
 
@@ -77,6 +95,12 @@ export default {
 
     commit('setEncryptedPhrase', encryptedPhrase)
   },
+  /**
+   * @method loadAccount DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   async loadAccount({ commit, state, dispatch }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -111,6 +135,12 @@ export default {
       ...userInfo,
     })
   },
+  /**
+   * @method registerUser DocsTODO
+   * @description
+   * @param userData
+   * @example
+   */
   async registerUser(
     { commit, dispatch }: ActionsArguments,
     userData: UserRegistrationPayload
@@ -166,6 +196,12 @@ export default {
       address: userAccount.publicKey.toBase58(),
     })
   },
+  /**
+   * @method initializeEncryptionEngine DocsTODO
+   * @description
+   * @param userAccount
+   * @example
+   */
   async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto

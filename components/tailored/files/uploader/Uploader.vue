@@ -41,6 +41,13 @@ export default Vue.extend({
      * Return if a file has an image extension
      * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
      */
+    /**
+     * @method isEmbedableImage DocsTODO
+     * @description
+     * @param filename
+     * @returns
+     * @example
+     */
     isEmbedableImage(filename: string): boolean {
       // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(

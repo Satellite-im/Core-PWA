@@ -49,6 +49,12 @@ export default Vue.extend({
     testFunc() {
       console.log('User Func')
     },
+    /**
+     * @method navigateToUser
+     * @description Navigates to chat with specific user by pushing "/chat/direct/" + users ID to the router
+     * Pretty sure this is just a placeholder for what will be the actual function?
+     * @example ---
+     */
     navigateToUser() {
       this.$router.push('/chat/direct')
     },

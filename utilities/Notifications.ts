@@ -76,6 +76,12 @@ export const Notifications = class Notifications {
     }
   }
 
+  /**
+   * @method registerNotificationWatch DocsTODO
+   * @description
+   * @returns
+   * @example
+   */
   registerNotificationWatch(): any {
     return LocalNotifications.addListener(
       'localNotificationReceived',
@@ -85,6 +91,12 @@ export const Notifications = class Notifications {
     )
   }
 
+  /**
+   * @method requestNotificationPermission DocsTODO
+   * @description
+   * @returns
+   * @example
+   */
   requestNotificationPermission(): any {
     // @ts-ignore
     if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
@@ -112,6 +124,14 @@ export const Notifications = class Notifications {
   //   }
   // }
 
+  /**
+   * @method sendNotifications DocsTODO
+   * @description
+   * @param type
+   * @param titleText
+   * @param message
+   * @example
+   */
   async sendNotifications(
     type: string,
     titleText: string,
