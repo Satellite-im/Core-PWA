@@ -32,8 +32,8 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Decline"
       :loading="loading === 'decline'"
-      :action="declineFriendRequest"
-      <x-icon size="1x" />
+      :action="declineFriendRequest">
+      <x-icon size="1x"/>
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
@@ -53,8 +53,9 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Send"
       :loading="loading === 'sending'"
-      :action="createFriendRequest"
-      :icon="{ style: 'far', name: 'check' }" />
+      :action="createFriendRequest">
+      <check-icon size="1x" />
+    </InteractablesButton>
   </div>
   <div class="controls" v-else>
     <InteractablesButton

@@ -55,6 +55,7 @@ export default Vue.extend({
         }
         this.friend = {
           ...friend,
+          state: 'offline',
           friendAccount: {
             accountId: this.accountID,
           },
