@@ -46,6 +46,16 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
+  <div class="controls" v-else-if="send">
+    <InteractablesButton
+      type="primary"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Send"
+      :loading="loading === 'sending'"
+      :action="createFriendRequest"
+      :icon="{ style: 'far', name: 'check' }" />
+  </div>
   <div class="controls" v-else>
     <InteractablesButton
       type="primary"

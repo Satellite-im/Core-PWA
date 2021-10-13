@@ -2,9 +2,17 @@
   <TypographyTitle :size="6" text="Add Friend" />
   <TypographyText text="Enter your friends account ID, or nickname. Account IDs are case sensitive." />
   <UiSpacer :height="10" />
-  <InteractablesInputGroup type="primary" size="small" :placeholder="`Some User...`">
+  <InteractablesInputGroup class="search-container"
+    type="primary"
+    size="small"
+    :placeholder="`Some User...`"
+    :action="searchFriend"
+    v-model="accountID"
+    :loading="searching">
     <user-plus-icon size="1x" />
   </InteractablesInputGroup>
+  <TypographyError v-if="error" :text="error" class="error" />
+  <TailoredFriendsFriend v-if="friend" :friend="friend" @requestSent="onFriendRequestSent" send/>
   <UiSpacer :height="10" />
   <UiHorizontalRuleText plaintext value="OR" />
   <UiSpacer :height="10" />

@@ -16,6 +16,7 @@ import {
   IncomingRequest,
   OutgoingRequest,
 } from '~/types/ui/friends'
+import { RawUser } from '~/types/ui/user'
 import { ActionsArguments } from '../store.types'
 import {
   AcceptFriendRequestArguments,
@@ -533,12 +534,7 @@ export default {
  */
 function friendAccountToIncomingRequest(
   friendAccount: FriendAccount,
-  userInfo: {
-    name: string
-    servers: any
-    status: string
-    photoHash: string
-  } | null
+  userInfo: RawUser | null
 ): IncomingRequest {
   return {
     requestId: friendAccount.accountId,

@@ -1,5 +1,6 @@
 <template src="./Friend.html"></template>
 <script lang="ts">
+import { PublicKey } from '@solana/web3.js'
 import Vue, { PropType } from 'vue'
 
 import {
@@ -11,7 +12,7 @@ import {
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
 
-import { Friend, IncomingRequest } from '~/types/ui/friends'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   components: {
@@ -35,13 +36,33 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    send: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      loading: '' as '' | 'accept' | 'decline',
+      loading: '' as '' | 'accept' | 'decline' | 'sending',
     }
   },
   methods: {
+    async createFriendRequest() {
+      this.loading = 'sending'
+      try {
+        await this.$store.dispatch('createFriendRequest', {
+          friendToKey: new PublicKey(this.friend.friendAccount.accountId),
+          textileMailboxId:
+            'cafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq', // TO DO : change textileMailboxId when it'll be available
+        })
+        this.$emit('requestSent', '')
+      } catch (e) {
+        console.log('error', e)
+        this.$emit('requestSent', e.message)
+      } finally {
+        this.loading = ''
+      }
+    },
     async acceptFriendRequest() {
       this.loading = 'accept'
       try {
@@ -58,7 +79,6 @@ export default Vue.extend({
     },
     async declineFriendRequest() {
       this.loading = 'decline'
-      console.log(this.$props.friend.request)
       try {
         await this.$store.dispatch(
           'denyFriendRequest',
@@ -69,12 +89,6 @@ export default Vue.extend({
       } finally {
         this.loading = ''
       }
-      // await new Promise((resolve) => {
-      //   setTimeout(() => {
-      //     this.loading = ''
-      //     return resolve('DECLINE')
-      //   }, 2000)
-      // })
     },
   },
 })
