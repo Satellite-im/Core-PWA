@@ -131,7 +131,7 @@ export default Vue.extend({
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
-      this.$store.commit('toggleEnhancers', true)
+      this.$store.commit('toggleEnhancers', { show: true, floating: true })
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('addReaction', {

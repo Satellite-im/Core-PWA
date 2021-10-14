@@ -4,7 +4,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { TerminalIcon, GridIcon, ArrowRightIcon } from 'satellite-lucide-icons'
+import {
+  TerminalIcon,
+  GridIcon,
+  ArrowRightIcon,
+  BanknoteIcon,
+} from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
@@ -33,6 +38,7 @@ export default Vue.extend({
   components: {
     FileUpload,
     TerminalIcon,
+    BanknoteIcon,
     GridIcon,
     ArrowRightIcon,
   },
@@ -120,11 +126,11 @@ export default Vue.extend({
   methods: {
     /**
      * @method toggleEnhancers
-     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
+      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
     },
     /**
      * @method autoGrow DocsTODO
