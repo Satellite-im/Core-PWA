@@ -33,8 +33,8 @@
         >
           <users-icon size="1.2x" />
         </InteractablesButton>
-        <span :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
-          {{$store.state.friends.incomingRequests.length}}
+        <span v-if="friends.incomingRequests.length" :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
+          {{friends.incomingRequests.length}}
         </span>
       </div>
       <InteractablesButton

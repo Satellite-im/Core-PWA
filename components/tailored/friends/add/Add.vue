@@ -32,7 +32,7 @@ export default Vue.extend({
       this.searching = true
       const accountID = this.accountID.trim()
       if (accountID === this.$store.state.accounts.active) {
-        this.error = "You can't add yourself you silly goose."
+        this.error = this.$t('friends.self_add') as string
         return
       }
       if (
@@ -40,7 +40,7 @@ export default Vue.extend({
           (f: Friend) => f.friendAccount.accountId === accountID
         ).length === 1
       ) {
-        this.error = "You're already friends with this user."
+        this.error = this.$t('friends.already_friend') as string
         return
       }
       this.error = ''
@@ -50,7 +50,7 @@ export default Vue.extend({
 
         const friend = await serverProgram.getUser(new PublicKey(accountID))
         if (!friend) {
-          this.error = "Hmm, we couldn't find a user at that address"
+          this.error = this.$t('friends.not_found') as string
           return
         }
         this.friend = {
@@ -62,7 +62,7 @@ export default Vue.extend({
         }
       } catch (error) {
         console.error(error)
-        this.error = 'Invalid account ID'
+        this.error = this.$t('friends.invalid_id') as string
       }
 
       this.searching = false
@@ -70,7 +70,7 @@ export default Vue.extend({
     onFriendRequestSent(error: string) {
       this.friend = null
       if (!error) {
-        this.$toast.show('Friend request successfully sent!')
+        this.$toast.show(this.$t('friends.request_sent'))
       } else {
         this.error = error
       }

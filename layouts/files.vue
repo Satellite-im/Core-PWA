@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -12,6 +13,9 @@ export default Vue.extend({
     return {
       sidebar: true,
     }
+  },
+  computed: {
+    ...mapState(['friends']),
   },
 })
 </script>
