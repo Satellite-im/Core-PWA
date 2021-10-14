@@ -19,6 +19,7 @@ interface UIState {
   showPinned: Boolean
   fullscreen: Boolean
   showEnhancers: Boolean
+  enhancersFloating: Boolean
   messages: any[]
   unreadMessage: number
   isScrollOver: boolean
@@ -54,6 +55,7 @@ const InitalUIState = (): UIState => ({
   fullscreen: false,
   showPinned: false,
   showEnhancers: false,
+  enhancersFloating: false,
   messages: [],
   unreadMessage: 0,
   isScrollOver: false,

@@ -25,6 +25,13 @@ export default Vue.extend({
       enhancerPos: {x: 0, y: 0}
     }
   },
+  mounted() {
+  console.log(this.$state.ui.enhancersFloating)
+  // if (this.$state.ui.enhancersFloating)  {
+  //     console.log("testing")
+  // }
+    // set enhancers top and left position according to the mouse pointer
+  },
   computed: {
     ...mapState(['ui']),
   },
@@ -49,7 +56,7 @@ export default Vue.extend({
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,
         })
-        this.toggleEnhancers(e)
+        this.toggleEnhancers(false)
       } else {
         this.$store.commit(
           'chatbarContent',
@@ -71,15 +78,13 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers(e: Event | any) {
-      console.log(e.clientX, e.clientY)
-
-      if (!this.ui.showEnhancers) {
-
-        this.handleOverflow(e)
-      }
-
-      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
+    toggleEnhancers(floating: Boolean) {
+      // console.log(e.clientX, e.clientY)
+      // if (!this.ui.showEnhancers) {
+      //   this.handleOverflow(e)
+      // }
+      console.log(floating)
+      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers, floating)
       if (this.ui.settingReaction.status) {
         this.$store.commit('settingReaction', {
           status: false,
@@ -88,9 +93,6 @@ export default Vue.extend({
         })
       }
     },
-    handleOverflow(e: any) {
-        this.$data.enhancerPos = {x: e.clientX, y: e.clientY}
-    }
   },
 })
 </script>

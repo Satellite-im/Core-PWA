@@ -1,7 +1,7 @@
 <div
   id="enhancers"
   v-if="ui.showEnhancers"
-  v-click-outside="toggleEnhancers"
+  v-on:click="toggleEnhancers(!$store.state.ui.showEnhancers, false)"
   v-bind:style="{bottom: enhancerPos.x, right: enhancerPos.y}"
   >
   <div class="navbar">

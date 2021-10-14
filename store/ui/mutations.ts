@@ -58,10 +58,11 @@ export default {
       fullscreen,
     }
   },
-  toggleEnhancers(state: NuxtState, show: Boolean) {
+  toggleEnhancers(state: NuxtState, show: Boolean, isFloating: Boolean) {
     state.ui = {
       ...state.ui,
       showEnhancers: show,
+      enhancersFloating: isFloating,
     }
   },
   toggleSettings(state: NuxtState, show: Boolean) {
@@ -70,8 +71,9 @@ export default {
       showSettings: show,
     }
   },
-  toggleModal(state: NuxtState, modal: any) {
+  toggleModal(state: NuxtState, modal: any, modalMeta: any) {
     state.ui.modals[modal.name] = modal.state
+    state.ui.modalMeta[modal.name] = modalMeta
   },
   showSearchResult(state: NuxtState, enabled: Boolean) {
     state.ui = {
