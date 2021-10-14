@@ -22,6 +22,7 @@ export default Vue.extend({
     return {
       emojiIndex,
       route: 'emoji',
+      enhancerPos: {x: 0, y: 0}
     }
   },
   computed: {
@@ -48,7 +49,7 @@ export default Vue.extend({
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,
         })
-        this.toggleEnhancers()
+        this.toggleEnhancers(e)
       } else {
         this.$store.commit(
           'chatbarContent',
@@ -70,7 +71,14 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers() {
+    toggleEnhancers(e: Event | any) {
+      console.log(e.clientX, e.clientY)
+
+      if (!this.ui.showEnhancers) {
+
+        this.handleOverflow(e)
+      }
+
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
       if (this.ui.settingReaction.status) {
         this.$store.commit('settingReaction', {
@@ -80,6 +88,9 @@ export default Vue.extend({
         })
       }
     },
+    handleOverflow(e: any) {
+        this.$data.enhancerPos = {x: e.clientX, y: e.clientY}
+    }
   },
 })
 </script>

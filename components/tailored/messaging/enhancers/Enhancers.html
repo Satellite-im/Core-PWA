@@ -1,7 +1,9 @@
 <div
   id="enhancers"
   v-if="ui.showEnhancers"
-  v-click-outside="toggleEnhancers">
+  v-click-outside="toggleEnhancers"
+  v-bind:style="{bottom: enhancerPos.x, right: enhancerPos.y}"
+  >
   <div class="navbar">
     <InteractablesButton
       :outlined="route === 'glyphs' ? false : true"
