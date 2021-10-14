@@ -1,6 +1,6 @@
 <div
   id="enhancers"
-  v-if="ui.showEnhancers"
+  v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers">
   <div class="navbar">
     <InteractablesButton
@@ -29,6 +29,7 @@
     </InteractablesButton>
   </div>
   <div id="container">
+    Floating: {{ $store.state.ui.enhancers.floating }}
     <picker 
       v-if="route === 'emoji'"
       :data="emojiIndex"

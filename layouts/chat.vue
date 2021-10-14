@@ -25,6 +25,7 @@ export default Vue.extend({
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('setTypingUser', this.$mock.users[0])
+    document.title = 'Satellite.im - Chat'
   },
   methods: {
     /**
