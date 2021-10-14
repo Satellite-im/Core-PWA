@@ -18,10 +18,13 @@ interface UIState {
   }
   showPinned: Boolean
   fullscreen: Boolean
-  showEnhancers: Boolean
+  enhancers: {
+    show: Boolean
+    floating: Boolean
+  }
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
+  isScrollOver: Boolean
   isTyping: Object | Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
@@ -53,7 +56,10 @@ const InitalUIState = (): UIState => ({
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
   showPinned: false,
-  showEnhancers: false,
+  enhancers: {
+    show: false,
+    floating: false,
+  },
   messages: [],
   unreadMessage: 0,
   isScrollOver: false,
