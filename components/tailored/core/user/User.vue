@@ -2,6 +2,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
+
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 
@@ -11,6 +14,10 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    SmartphoneIcon,
+    CircleIcon,
+  },
   mixins: [ContextMenu],
   props: {
     user: {
@@ -42,6 +49,12 @@ export default Vue.extend({
     testFunc() {
       console.log('User Func')
     },
+    /**
+     * @method navigateToUser
+     * @description Navigates to chat with specific user by pushing "/chat/direct/" + users ID to the router
+     * Pretty sure this is just a placeholder for what will be the actual function?
+     * @example ---
+     */
     navigateToUser() {
       this.$router.push('/chat/direct')
     },

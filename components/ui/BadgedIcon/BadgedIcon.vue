@@ -1,9 +1,6 @@
 <template src="./BadgedIcon.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-
-import { Icon } from '@/types/ui/icons'
-
+import Vue from 'vue'
 export default Vue.extend({
   props: {
     /**
@@ -14,7 +11,7 @@ export default Vue.extend({
      */
     // eslint-disable-next-line vue/require-default-prop
     icon: {
-      type: Object as PropType<Icon>,
+      type: String,
       required: false,
     },
     /**

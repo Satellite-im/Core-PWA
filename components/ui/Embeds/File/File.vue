@@ -3,9 +3,15 @@
 import Vue, { PropType } from 'vue'
 import filesize from 'filesize'
 
+import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
+
 import { FileData } from './types'
 
 export default Vue.extend({
+  components: {
+    DownloadIcon,
+    FileIcon,
+  },
   props: {
     data: {
       type: Object as PropType<FileData> | undefined,

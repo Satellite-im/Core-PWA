@@ -143,6 +143,12 @@ const SearchUtil = {
   getCommandMetaList: () => searchCommandMetaList,
   getSearchResultGroupList: () => searchResultGroupList,
   getSearchOrderTypeList: () => searchOrderTypeList,
+  /**
+   * @method getCommandMeta DocsTODO
+   * @description
+   * @param command
+   * @returns
+   */
   getCommandMeta: (command: SearchCommand) => {
     let commandMeta = null
     searchCommandMetaList.every((item) => {
@@ -154,6 +160,12 @@ const SearchUtil = {
     })
     return commandMeta
   },
+  /**
+   * @method getCommandTypeParam DocsTODO
+   * @description
+   * @param command
+   * @returns
+   */
   getCommandTypeParam: (command: SearchCommand) => {
     const commandMeta = SearchUtil.getCommandMeta(command)
     if (!commandMeta) {
@@ -162,6 +174,13 @@ const SearchUtil = {
     const commandType = (commandMeta as SearchCommandMeta).type
     return searchCommandTypeParams[commandType] as SearchCommandTypeParam
   },
+  /**
+   * @method filterSearchRecommendResult DocsTODO
+   * @description
+   * @param recommends
+   * @param queryItem
+   * @returns
+   */
   filterSearchRecommendResult(
     recommends: SearchRecommend,
     queryItem: SearchQueryItem | null

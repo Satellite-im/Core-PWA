@@ -2,9 +2,14 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+import { DownloadIcon } from 'satellite-lucide-icons'
+
 import { VideoData } from './types'
 
 export default Vue.extend({
+  components: {
+    DownloadIcon,
+  },
   props: {
     data: {
       type: Object as PropType<VideoData> | undefined,

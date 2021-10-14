@@ -2,7 +2,20 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import {
+  UserIcon,
+  UserCheckIcon,
+  UserPlusIcon,
+  UserXIcon,
+} from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    UserIcon,
+    UserCheckIcon,
+    UserPlusIcon,
+    UserXIcon,
+  },
   props: {
     setRoute: {
       type: Function,

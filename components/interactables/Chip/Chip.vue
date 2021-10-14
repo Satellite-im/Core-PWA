@@ -1,13 +1,19 @@
 <template>
   <div v-if="show" class="chip-item">
     {{ text }}
-    <font-awesome-icon :icon="['far', 'times']" @click="hide" />
+    <x-icon size="1x" @click="hide" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
+import { XIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    XIcon,
+  },
   props: {
     text: {
       type: String,
@@ -20,6 +26,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method hide
+     * @description Hides chip element
+     */
     hide() {
       this.show = false
     },

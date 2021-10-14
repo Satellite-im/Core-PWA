@@ -25,6 +25,12 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { AccountsError } from '~/store/accounts/types'
 
 export default {
+  /**
+   * @method fetchFriendRequests DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   async fetchFriendRequests({ commit }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -44,6 +50,12 @@ export default {
     commit('setIncomingRequests', incomingRequests)
     commit('setOutgoingRequests', outgoingRequests)
   },
+  /**
+   * @method fetchFriends DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   async fetchFriends({ dispatch }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
@@ -57,6 +69,12 @@ export default {
       dispatch('fetchFriendDetails', friendData)
     )
   },
+  /**
+   * @method fetchFriendDetails DocsTODO
+   * @description
+   * @param friendAccount
+   * @example
+   */
   async fetchFriendDetails(
     { commit, state }: ActionsArguments,
     friendAccount: FriendAccount
@@ -121,6 +139,12 @@ export default {
       )
     }
   },
+  /**
+   * @method subscribeToFriendsEvents DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   subscribeToFriendsEvents({ dispatch, commit }: ActionsArguments) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -171,6 +195,13 @@ export default {
       }
     })
   },
+  /**
+   * @method createFriendRequest DocsTODO
+   * @description
+   * @param friendToKey
+   * @param textileMailboxId
+   * @example
+   */
   async createFriendRequest(
     { commit }: ActionsArguments,
     { friendToKey, textileMailboxId }: CreateFriendRequestArguments
@@ -262,6 +293,13 @@ export default {
       commit('addOutgoingRequest', parsedFriendRequest)
     }
   },
+  /**
+   * @method acceptFriendRequest DocsTODO
+   * @description
+   * @param friendRequest
+   * @param textileMailboxId
+   * @example
+   */
   async acceptFriendRequest(
     { commit, dispatch }: ActionsArguments,
     { friendRequest, textileMailboxId }: AcceptFriendRequestArguments
@@ -315,6 +353,12 @@ export default {
       dispatch('fetchFriendDetails', friendAccount)
     }
   },
+  /**
+   * @method denyFriendRequest DocsTODO
+   * @description
+   * @param friendRequest
+   * @example
+   */
   async denyFriendRequest(
     { commit }: ActionsArguments,
     friendRequest: FriendRequest
@@ -358,6 +402,12 @@ export default {
       })
     }
   },
+  /**
+   * @method removeFriendRequest DocsTODO
+   * @description
+   * @param friendRequest
+   * @example
+   */
   async removeFriendRequest(
     { commit }: ActionsArguments,
     friendRequest: OutgoingRequest
@@ -398,6 +448,12 @@ export default {
       commit('removeOutgoingRequest', friendRequest)
     }
   },
+  /**
+   * @method removeFriend DocsTODO
+   * @description
+   * @param friend
+   * @example
+   */
   async removeFriend({ commit }: ActionsArguments, friend: Friend) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 

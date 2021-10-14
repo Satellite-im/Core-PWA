@@ -28,6 +28,7 @@
       "@types/node",
       "nuxt-i18n",
       "@nuxtjs/device",
+      "types/modules/satellite-lucide-icons.d.ts",
     ]
   },
   "exclude": [

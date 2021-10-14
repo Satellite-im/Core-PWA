@@ -3,11 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { NodeHtmlMarkdown } from 'node-html-markdown'
-import { Marked, Renderer } from '@ts-stack/markdown'
 
-// @ts-ignore
-import { TerminalIcon, GridIcon, ArrowRightIcon } from 'vue-feather-icons'
+import { TerminalIcon, GridIcon, ArrowRightIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
@@ -16,7 +13,12 @@ import {
   commands,
   isArgsValid,
 } from '~/libraries/ui/Commands'
-import { getCaretPosition, setCaretPosition } from '~/libraries/ui/Caret'
+import {
+  htmlToMarkdown,
+  markDownToHtml,
+  getCaretPosition,
+  setCaretPosition,
+} from '~/libraries/ui/Chatbar'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -26,17 +28,6 @@ declare module 'vue/types/vue' {
     value: string
   }
 }
-
-Marked.setOptions({
-  renderer: new Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: true,
-  smartypants: false,
-})
 
 export default Vue.extend({
   components: {
@@ -50,14 +41,28 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
-      caretPosition: 0,
     }
   },
   computed: {
     ...mapState(['ui']),
+    /**
+     * Computes the amount of characters left
+     */
+    /**
+     * @method charlimit DocsTODO
+     * @description Checks if current text is longer than the max character limit
+     * @returns Boolean based on if the current text length is longer than the max character limit
+     * @example
+     */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
+    /**
+     * @method hasCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     hasCommand() {
       return (
         containsCommand(this.ui.chatbarContent) &&
@@ -68,6 +73,12 @@ export default Vue.extend({
         )
       )
     },
+    /**
+     * @method isValidCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     isValidCommand() {
       const currentText = parseCommand(
         this.ui.chatbarContent
@@ -78,9 +89,21 @@ export default Vue.extend({
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
+      /**
+       * @method get
+       * @description Gets chatbars current text
+       * @returns String of chatbars current text
+       * @example const currText = this.get()
+       */
       get() {
         return this.ui.chatbarContent
       },
+      /**
+       * @method set
+       * @description Sets current chatbar text to new value
+       * @param val Value to set the chatbar content to
+       * @example set('This is the new chatbar content')
+       */
       set(val: string) {
         this.$store.commit('chatbarContent', val)
         this.$data.text = val
@@ -95,10 +118,18 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggleEnhancers
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @example v-on:click="toggleEnhancers"
+     */
     toggleEnhancers() {
       this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
     },
     /**
+     * @method autoGrow DocsTODO
+     * @description When textarea for chat is changed, autoGrow handles chat section to grow and allow multi-line display
+     * @example
      * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
      * This is called after the typed inputed are processed in order to display markdown expression.
      */
@@ -125,39 +156,22 @@ export default Vue.extend({
       messageBox.scrollTop = messageBox.scrollHeight
     },
     /**
-     * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
+     * @method handleInputChange DocsTODO
+     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
+     * @example
      */
-    handleInputChange() {
+    handleInputChange(caretPosition: number | null) {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
-        let markDown =
-          messageBox.innerHTML.length > 1
-            ? NodeHtmlMarkdown.translate(messageBox.innerHTML)
-            : messageBox.innerHTML
-        markDown = markDown
-          .trim()
-          .replace(/\\#/g, '#')
-          .replace(/\\`/g, '`')
-          .replace(/\\=/g, '=')
-          .replace(/\\_/g, '_')
-          .replace(/\\>/g, '>')
-          .split('\\*')
-          .join('*')
-          .replace(/_\*/g, '**')
-          .replace(/\*_/g, '**')
+        const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.value = markDown
-        let caretPosition = getCaretPosition(messageBox)
+        if (caretPosition == null) {
+          caretPosition = getCaretPosition(messageBox)
+        }
         let offset = messageBox.textContent.trim().length
-        messageBox.innerHTML = Marked.parse(markDown)
-          .replace(/<\/h1>/g, '<span>&nbsp;</span></h1>')
-          .replace(/<\/h2>/g, '<span>&nbsp;</span></h2>')
-          .replace(/<\/h3>/g, '<span>&nbsp;</span></h3>')
-          .replace(/<\/h4>/g, '<span>&nbsp;</span></h4>')
-          .replace(/<\/h5>/g, '<span>&nbsp;</span></h5>')
-          .replace(/<\/h6>/g, '<span>&nbsp;</span></h6>')
-          .replace(/<\/p>/g, '<span>&nbsp;</span></p>')
+        messageBox.innerHTML = markDownToHtml(markDown)
         if (offset >= messageBox.textContent.trim().length + 2) {
           offset -= messageBox.textContent.trim().length
           caretPosition -= offset
@@ -172,15 +186,22 @@ export default Vue.extend({
           caretPosition += offset
         }
         setCaretPosition(messageBox, caretPosition)
+        messageBox.focus()
       }
       this.autoGrow()
     },
     /**
-     * Called from chatbar's keydown event to process all key events for typing in chatbar.
+     * @method handleInputKeydown DocsTODO
+     * @description Called from chatbar's keydown event to process all key events for typing in chatbar.
      * This interacts with handleInputChange in order to convert typed input to markdown expression.
      * This controls the caret position when Backspace, Spacebar is pressed.
+     * @param event Keydown event object
+     * @returns Boolean
+     * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
           {
@@ -189,12 +210,12 @@ export default Vue.extend({
               (c) => c.name === parsedCommand.name.toLowerCase()
             )
             if (currentCommand && parsedCommand.args.length === 0) {
-              const messageBox = this.$refs.messageuser as HTMLElement
               messageBox.innerHTML = ''
               this.value = ''
               this.autoGrow()
               return false
             }
+            caretPosition = getCaretPosition(messageBox) - 1
           }
           break
         case 'Enter':
@@ -204,19 +225,20 @@ export default Vue.extend({
               this.sendMessage()
             } else if (this.hasCommand && !this.isValidCommand) {
               console.log('dispatch command')
-            } else {
-              return
             }
           } else {
             this.autoGrow()
           }
           return true
         case 'Spacebar':
+        case ' ':
           {
             event.preventDefault()
-            const messageBox = this.$refs.messageuser as HTMLElement
             const caretPosition = getCaretPosition(messageBox)
-            setCaretPosition(messageBox, caretPosition + 1)
+            setTimeout(() => {
+              setCaretPosition(messageBox, caretPosition + 1)
+              messageBox.focus()
+            }, 10)
           }
           return true
         case 'Left':
@@ -227,18 +249,22 @@ export default Vue.extend({
         case 'Shift':
           return true
         case 'a':
+        case 'A':
           if (event.ctrlKey) {
             return true
           }
           break
       }
       setTimeout(() => {
-        this.handleInputChange()
+        this.handleInputChange(caretPosition)
       }, 10)
       return true
     },
     /**
-     * Called when user sends message by pressing Enter.
+     * @method sendMessage
+     * @description Sends message by calling the sendMessage action with current data and
+     * then setting all related feilds to their default (empty)
+     * @example v-on:click="sendMessage"
      */
     sendMessage() {
       this.$store.dispatch('sendMessage', {

@@ -2,7 +2,12 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { LoaderIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    LoaderIcon,
+  },
   props: {
     text: {
       type: String,

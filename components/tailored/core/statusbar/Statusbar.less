@@ -84,18 +84,22 @@
     font-size: @mini-text-size;
     text-shadow: 0 0 3px #000;
 
-    path {
+    circle {
       stroke: @dark-gray;
-      stroke-width: 100;
+      stroke-width: 4;
+      paint-order: stroke;
     }
     &.is-online {
       color: @green;
+      fill: @green;
     }
     &.is-offline {
       color: @gray;
+      fill: @gray;
     }
     &.is-idle {
       color: @yellow;
+      fill: @yellow;
     }
   }
 }

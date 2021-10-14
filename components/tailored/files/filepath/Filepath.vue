@@ -1,9 +1,15 @@
 <template src="./Filepath.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { HomeIcon } from 'satellite-lucide-icons'
+
 import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
+  components: {
+    HomeIcon,
+  },
   props: {
     /**
      * The array of children to path through
@@ -30,6 +36,13 @@ export default Vue.extend({
   methods: {
     /**
      * Gets the data path attribute and manually updates parent path
+     */
+    /**
+     * @method jumpTo DocsTODO
+     * @description
+     * @param e
+     * @returns
+     * @example
      */
     jumpTo(e: Event | any) {
       this.setPath(JSON.parse(e.currentTarget.getAttribute('data-self-path')))

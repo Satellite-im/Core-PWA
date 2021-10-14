@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { XIcon } from 'vue-feather-icons'
+import { XIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

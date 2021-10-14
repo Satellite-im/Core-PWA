@@ -7,11 +7,7 @@
     v-touch-options="{ swipeTolerance: 75 }"
     >
     <UiGlobal />
-
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-    <UiModal v-if="ui.modals.showMarketPlace" :closeModal="toggleMarketPlace" nopad>
-      <TailoredMarketplace :closeModal="toggleMarketPlace" v-click-outside="toggleMarketPlace" />
-    </UiModal>
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
     <TailoredMessagingEnhancers />
     <div :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">

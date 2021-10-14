@@ -4,8 +4,12 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-// @ts-ignore
-import { UsersIcon, FolderIcon, InboxIcon, MenuIcon } from 'vue-feather-icons'
+import {
+  UsersIcon,
+  FolderIcon,
+  MessageSquareIcon,
+  MenuIcon,
+} from 'satellite-lucide-icons'
 
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import { DataStateType } from '~/store/dataState/types'
@@ -16,7 +20,7 @@ export default Vue.extend({
   components: {
     UsersIcon,
     FolderIcon,
-    InboxIcon,
+    MessageSquareIcon,
     MenuIcon,
   },
   mixins: [mobileSwipe],

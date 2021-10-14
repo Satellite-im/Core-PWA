@@ -3,7 +3,7 @@
 <script>
 import { mapState } from 'vuex'
 
-import { HashIcon, TagIcon, RssIcon, Volume2Icon } from 'vue-feather-icons'
+import { HashIcon, TagIcon, RssIcon, Volume2Icon } from 'satellite-lucide-icons'
 
 export default {
   name: 'Channel',
@@ -18,6 +18,12 @@ export default {
     ...mapState(['channel']),
   },
   methods: {
+    /**
+     * @method getChannelClass DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     getChannelClass() {
       return this.channel && this.channel.id === this.localChannel.id
         ? 'active'

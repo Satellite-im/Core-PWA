@@ -89,6 +89,12 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method customAction DocsTODO
+     * @description
+     * @param link
+     * @example
+     */
     customAction(link: string) {
       this.$data.route = link
       this.$props.handleRouteChange(link)

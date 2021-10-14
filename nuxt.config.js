@@ -62,7 +62,6 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Third Party
-    { src: '~/plugins/thirdparty/fontawesome.ts' },
     { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clipboard.ts' },
     { src: '~/plugins/thirdparty/clickoutside.ts' },

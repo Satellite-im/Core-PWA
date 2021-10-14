@@ -2,8 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
-import { MicIcon, HeadphonesIcon, VideoIcon } from 'vue-feather-icons'
+
+import {
+  MicIcon,
+  MicOffIcon,
+  HeadphonesIcon,
+  VideoIcon,
+  VideoOffIcon,
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -11,13 +17,20 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 export default Vue.extend({
   components: {
     MicIcon,
+    MicOffIcon,
     HeadphonesIcon,
     VideoIcon,
+    VideoOffIcon,
   },
   computed: {
     ...mapState(['audio', 'video']),
   },
   methods: {
+    /**
+     * @method toggleMute DocsTODO
+     * @description
+     * @example
+     */
     toggleMute() {
       const muted = this.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
@@ -25,6 +38,11 @@ export default Vue.extend({
 
       this.$store.commit('mute')
     },
+    /**
+     * @method toggleDeafen DocsTODO
+     * @description
+     * @example
+     */
     toggleDeafen() {
       const deafened = this.audio.deafened
       if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
@@ -32,6 +50,11 @@ export default Vue.extend({
 
       this.$store.commit('deafen')
     },
+    /**
+     * @method toggleVideo DocsTODO
+     * @description
+     * @example
+     */
     toggleVideo() {
       const videoDisabled = this.video.disabled
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)

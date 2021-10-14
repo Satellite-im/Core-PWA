@@ -5,6 +5,12 @@ export const ContextMenu = {
     ...mapState(['ui']),
   },
   methods: {
+    /**
+     * @method contextMenu
+     * @description Toggles ContextMenu mixin with related component ContextMenu values
+     * @param e Context menu event object
+     * @example v-on:context-menu="contextMenu"
+     */
     contextMenu(e: Event) {
       e.preventDefault()
       const contextMenuStatus = this.ui.contextMenuStatus

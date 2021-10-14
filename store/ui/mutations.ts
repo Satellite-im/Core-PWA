@@ -86,6 +86,13 @@ export default {
     state.ui.isScrollOver = status
     if (!status) state.ui.unreadMessage = 0
   },
+  /**
+   * @method sendMessage DocsTODO
+   * @description
+   * @param message
+   * @param isOwner
+   * @example
+   */
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.ui.messages]
     const lastIndex = messages.length - 1
@@ -150,9 +157,58 @@ export default {
       settingReaction: status,
     }
   },
+  setEditMessage(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    state.ui = {
+      ...state.ui,
+      editMessage: message,
+    }
+  },
+  saveEditMessage(
+    state: NuxtState,
+    message: {
+      id: String
+      from: String
+      payload: String
+    }
+  ) {
+    const messages: any[] = [...state.ui.messages]
+    let found = messages.find((item) => {
+      if (item.id === message.from) {
+        return true
+      }
+      return false
+    })
+    if (found) {
+      found = found.messages.find((item: any) => {
+        if (item.id === message.id) {
+          return true
+        }
+        return false
+      })
+      if (found) {
+        found.payload = message.payload
+        state.ui = {
+          ...state.ui,
+          messages,
+        }
+      }
+    }
+  },
 
+  /**
+   * @method addReaction DocsTODO
+   * @description
+   * @param reaction
+   * @example
+   */
   addReaction(state: NuxtState, reaction: any) {
-    console.log(reaction)
     const messageGroups: MessageGroup = [...state.ui.messages]
 
     //Find message group meant for reaction
@@ -172,8 +228,6 @@ export default {
           (message) => message.id === reaction.messageID
         )
       }
-
-      console.log(currMessage)
 
       if (currMessage) {
         // If reactions array doesnt exist create with new reaction
@@ -231,6 +285,17 @@ export default {
     state.ui = {
       ...state.ui,
       hoveredGlyphInfo: values,
+    }
+  },
+  updateRecentReactions(state: NuxtState, emoji: String) {
+    const newRecentReactions = state.ui.recentReactions
+    if (!state.ui.recentReactions.includes(emoji)) {
+      newRecentReactions.unshift(emoji)
+      newRecentReactions.pop()
+    }
+    state.ui = {
+      ...state.ui,
+      recentReactions: newRecentReactions,
     }
   },
 }

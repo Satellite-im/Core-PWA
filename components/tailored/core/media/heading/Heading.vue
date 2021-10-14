@@ -3,8 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// @ts-ignore
-import { MaximizeIcon, MinimizeIcon } from 'vue-feather-icons'
+import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 export default Vue.extend({
@@ -19,6 +18,11 @@ export default Vue.extend({
     this.$store.commit('fullscreen', false)
   },
   methods: {
+    /**
+     * @method toggleFullscreen
+     * @description Toggles fullscreen by commiting the opposite of it's current value (this.ui.fullscreen) to fullscreen in state
+     * @example @click="toggleFullscreen"
+     */
     toggleFullscreen() {
       this.$store.commit('fullscreen', !this.ui.fullscreen)
     },

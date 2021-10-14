@@ -2,7 +2,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import { GridIcon, ColumnsIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    GridIcon,
+    ColumnsIcon,
+  },
   props: {
     changeView: {
       type: Function,
@@ -15,6 +21,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method switchView DocsTODO
+     * @description
+     * @param type
+     * @returns
+     * @example
+     */
     switchView(type: 'grid' | 'list') {
       this.$data.view = type
       this.changeView(type)

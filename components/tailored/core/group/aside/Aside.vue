@@ -2,10 +2,16 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
+import { InfoIcon } from 'satellite-lucide-icons'
+
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  components: {
+    InfoIcon,
+  },
   props: {
     toggle: {
       type: Function,
@@ -26,6 +32,12 @@ export default Vue.extend({
     },
   },
   computed: {
+    /**
+     * @method members DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     members() {
       const filterFriends = (friends: User[], members: string[]) => {
         return friends.filter((friend: User) =>

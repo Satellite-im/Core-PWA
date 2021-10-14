@@ -12,18 +12,15 @@
       >
         <span class="category">
           <span class="category-text">
-            <font-awesome-icon
-              v-if="item.self.icon!=''"
-              :icon="['far', item.self.icon]"
-            />
             {{item.self.name}}
           </span>
           <span class="category-action">
-            <font-awesome-icon
+            <chevron-down-icon
+              size="1x"
               v-if="item.children.length>0"
-              :icon="['far', item.collapsed ? 'chevron-right' : 'chevron-down']"
             />
-            <font-awesome-icon
+            <circle-icon
+              size="1x"
               v-if="item.selected"
               :icon="['fas', 'circle']"
             />

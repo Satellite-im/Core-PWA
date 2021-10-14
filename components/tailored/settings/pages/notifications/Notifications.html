@@ -42,10 +42,11 @@
           size="small"
           type="primary"
           v-model="$data.NotificationText"
-          :icon="{style: 'far', name: 'chevron-right'}"
           :placeholder="$t('pages.settings.notifications.send_placeholder')"
           :action="sendNotification"
-        />
+          >
+          <arrow-right-icon size="1x" />
+        </InteractablesInputGroup>
       </span>
       <span v-if="Platform === 'android'">
         <InteractablesInputGroup
@@ -53,9 +54,10 @@
           size="small"
           type="primary"
           v-model="NotificationText"
-          :icon="{style: 'far', name: 'chevron-right'}"
           :action="sendNotification"
-        />
+        >
+          <arrow-right-icon size="1x" />
+        </InteractablesInputGroup>
       </span>
     </div>
   </div>

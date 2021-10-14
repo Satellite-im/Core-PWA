@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-// @ts-ignore
-import { DeleteIcon } from 'vue-feather-icons'
+import { DeleteIcon } from 'satellite-lucide-icons'
 
 import { InputTypes, InputStyle, InputSize } from './types.d'
 
@@ -81,9 +80,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method update
+     * @description Emits the update event with updated internalText string
+     */
     update() {
       this.$emit('update', this.internalText)
     },
+    /**
+     * @method clearSearch
+     * @description Sets internalText in data to an empty string
+     */
     clearSearch() {
       this.internalText = ''
     },

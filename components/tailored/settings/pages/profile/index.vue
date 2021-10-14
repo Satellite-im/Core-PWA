@@ -3,6 +3,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+
+import { ClipboardIcon } from 'satellite-lucide-icons'
+
 import ImageCropper from '~/components/tailored/core/imageCropper/ImageCropper.vue'
 
 import { sampleProfileInfo } from '~/mock/profile'
@@ -16,6 +19,7 @@ export default Vue.extend({
   name: 'ProfileSettings',
   components: {
     ImageCropper,
+    ClipboardIcon,
   },
   layout: 'settings',
   data() {
@@ -33,25 +37,49 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method togglePhrase DocsTODO
+     * @description
+     * @example
+     */
     togglePhrase() {
       this.$data.showPhrase = !this.$data.showPhrase
     },
-
+    /**
+     * @method toggleCropper DocsTODO
+     * @description
+     * @example
+     */
     toggleCropper() {
       this.showCropper = !this.showCropper
     },
-
+    /**
+     * @method openFileDialog DocsTODO
+     * @description
+     * @example
+     */
     openFileDialog() {
       const fileInput = this.$refs.file as HTMLElement
       fileInput.click()
     },
-
+    /**
+     * @method setCroppedImage DocsTODO
+     * @description
+     * @param image
+     * @example
+     */
     setCroppedImage(image: any) {
       const fileInput = this.$refs.file as HTMLInputElement
       this.croppedImage = image
       fileInput.value = ''
     },
-
+    /**
+     * @method selectProfileImage DocsTODO
+     * @description
+     * @param e
+     * @returns
+     * @example
+     */
     selectProfileImage(e: any) {
       if (e.target && e.target.value !== null) {
         const files = e.target.files || e.dataTransfer.files

@@ -2,9 +2,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { MenuIcon } from 'satellite-lucide-icons'
 import { SidebarGrouping } from '~/types/ui/sidebar'
 
 export default Vue.extend({
+  components: {
+    MenuIcon,
+  },
   props: {
     /**
      * Set the active route

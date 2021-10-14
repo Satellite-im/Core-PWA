@@ -3,8 +3,13 @@
 <script>
 import Vue from 'vue'
 
+import { ChevronDownIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
   name: 'ChatScroll',
+  components: {
+    ChevronDownIcon,
+  },
   props: {
     autoScroll: {
       type: Boolean,
@@ -65,6 +70,11 @@ export default Vue.extend({
     this.loaded = false
   },
   methods: {
+    /**
+     * @method autoScrollToBottom DocsTODO
+     * @description
+     * @example
+     */
     autoScrollToBottom() {
       const interval = this.loaded ? 100 : 1000
       if (this.$el && this.autoScroll) {
@@ -77,6 +87,11 @@ export default Vue.extend({
         }, interval)
       }
     },
+    /**
+     * @method onScrolled DocsTODO
+     * @description
+     * @example
+     */
     onScrolled() {
       if (this.$el) {
         if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {

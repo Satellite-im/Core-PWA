@@ -5,11 +5,12 @@ import Vue from 'vue'
 
 import {
   VideoIcon,
+  VideoOffIcon,
   MicIcon,
-  MonitorIcon,
+  MicOffIcon,
+  ScreenShareIcon,
   PhoneOffIcon,
-  // @ts-ignore
-} from 'vue-feather-icons'
+} from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -17,14 +18,21 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 export default Vue.extend({
   components: {
     VideoIcon,
+    VideoOffIcon,
     MicIcon,
-    MonitorIcon,
+    MicOffIcon,
+    ScreenShareIcon,
     PhoneOffIcon,
   },
   computed: {
     ...mapState(['audio', 'video']),
   },
   methods: {
+    /**
+     * @method toggleMute
+     * @description Toggles mute for outgoing audio
+     * @example
+     */
     toggleMute() {
       const muted = this.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
@@ -32,6 +40,11 @@ export default Vue.extend({
 
       this.$store.commit('mute')
     },
+    /**
+     * @method toggleVideo
+     * @description Toggles outgoing video
+     * @example
+     */
     toggleVideo() {
       const videoDisabled = this.video.disabled
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)

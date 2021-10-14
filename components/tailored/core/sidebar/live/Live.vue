@@ -1,14 +1,13 @@
 <template src="./Live.html"></template>
 
 <script lang="ts">
-// @ts-ignore
-import { MonitorIcon, XIcon } from 'vue-feather-icons'
+import { RadioIcon, XIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
 
 export default Vue.extend({
   components: {
-    MonitorIcon,
+    RadioIcon,
     XIcon,
   },
 })

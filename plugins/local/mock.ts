@@ -8,6 +8,7 @@ import {
   marketFilters,
   marketProducts,
 } from '~/mock/marketplace'
+import { RecentTransactions, LinkedAccounts, Details } from '~/mock/wallet'
 import { Messages, PinnedMessages } from '~/mock/messages'
 import { Servers, Unreads, ServerInfo } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
@@ -19,8 +20,13 @@ const mock = {
   groups: Groups,
   group: ExampleGroup,
   servers: Servers,
+  wallet: {
+    RecentTransactions,
+    LinkedAccounts,
+    Details,
+  },
   server: {
-    info: ServerInfo
+    info: ServerInfo,
   },
   unreads: Unreads,
   messages: Messages,

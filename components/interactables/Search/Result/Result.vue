@@ -4,6 +4,8 @@
 import Vue from 'vue'
 // @ts-ignore
 import VuejsPaginate from 'vuejs-paginate'
+import { CalendarIcon } from 'satellite-lucide-icons'
+
 import { mapState } from 'vuex'
 import SearchUtil from '../SearchUtil'
 import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
@@ -21,6 +23,9 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
+  components: {
+    CalendarIcon,
+  },
   props: {
     searchQuery: {
       type: String,
@@ -46,6 +51,11 @@ export default Vue.extend({
     }
   },
   computed: {
+    /**
+     * @method DataStateType DocsTODO
+     * @description
+     * @returns
+     */
     DataStateType: () => DataStateType,
     ...mapState(['dataState', 'search']),
     loading: {
@@ -56,6 +66,11 @@ export default Vue.extend({
         return this.dataState.search
       },
     },
+    /**
+     * @method userOptions DocsTODO
+     * @description
+     * @returns
+     */
     userOptions() {
       return this.result &&
         this.result.recommends &&
@@ -64,6 +79,11 @@ export default Vue.extend({
         ? this.result.recommends.users
         : []
     },
+    /**
+     * @method channelOptions DocsTODO
+     * @description
+     * @returns
+     */
     channelOptions() {
       return this.result &&
         this.result.recommends &&
@@ -72,11 +92,22 @@ export default Vue.extend({
         ? this.result.recommends.channels
         : []
     },
+    /**
+     * @method givenQueryItems DocsTODO
+     * @description
+     * @returns
+     */
     givenQueryItems() {
       return this.search.query.split(' ')
     },
   },
   watch: {
+    /**
+     * @method saerchQuery DocsTODO
+     * @description
+     * @param
+     * @returns
+     */
     searchQuery(query) {
       if (!this.show || query !== this.searchQuery) {
         return
@@ -85,15 +116,34 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method toggle DocsTODO
+     * @description
+     */
     toggle() {
       this.$emit('toggle')
     },
+    /**
+     * @method toggleGroupBy DocsTODO
+     * @description
+     * @param state
+     */
     toggleGroupBy(state: SearchResultGroupType) {
       this.groupBy = state
     },
+    /**
+     * @method toggleOrderBy DocsTODO
+     * @description
+     * @param state
+     */
     toggleOrderBy(state: SearchOrderType) {
       this.orderBy = state
     },
+    /**
+     * @method fetchResult DocsTODO
+     * @description
+     * @param query
+     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async fetchResult(query: string): Promise<void> {
       this.loading = DataStateType.Loading

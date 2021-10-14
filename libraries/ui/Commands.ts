@@ -2,6 +2,13 @@ import { Command, CurrentCommand } from '~/types/utils/commands'
 
 const commandPrefix = '/'
 
+/**
+ * @method containsCommand
+ * @description
+ * @param text
+ * @returns
+ * @example
+ */
 export function containsCommand(text: string) {
   const cmd = text.split(' ')[0].replace(commandPrefix, '')
   return (
@@ -10,6 +17,13 @@ export function containsCommand(text: string) {
   )
 }
 
+/**
+ * @method parseCommand
+ * @description
+ * @param text
+ * @returns
+ * @example
+ */
 export function parseCommand(text: string): CurrentCommand {
   const splitMessage = text.split(/\s+/)
   return {
@@ -19,7 +33,8 @@ export function parseCommand(text: string): CurrentCommand {
 }
 
 /**
- * Returns true if currentArgs are valid for command, else false
+ * @method isArgsValid
+ * @description Returns true if currentArgs are valid for command, else false
  * @param command command which arguments need to be checked
  * @param currentArgs incoming args value
  * @returns boolean if currentArgs are valid for command

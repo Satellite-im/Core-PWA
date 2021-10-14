@@ -3,10 +3,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { Icon } from '~/types/ui/icons'
+
+import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'UnlockScreen',
+  components: {
+    UnlockIcon,
+    ChevronRightIcon,
+    InfoIcon,
+  },
   data() {
     return {
       pin: '',
@@ -20,14 +26,25 @@ export default Vue.extend({
     ...mapState(['accounts']),
   },
   methods: {
-    getIcon(): Icon {
+    /**
+     * @method getIcon DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
+    getIcon(): String {
       if (this.getPinHash) {
-        return { style: 'far', name: 'arrow-circle-right' }
+        return 'unlocked'
       } else {
-        return { style: 'far', name: 'lock-open' }
+        return 'locked'
       }
     },
     // Decrypt stored encrypted data into memory
+    /**
+     * @method decrypt DocsTODO
+     * @description
+     * @example
+     */
     async decrypt() {
       this.$data.decrypting = true
       this.error = ''
@@ -47,6 +64,11 @@ export default Vue.extend({
       this.$data.decrypting = false
     },
     // Create & store a new pin, then decrypt.
+    /**
+     * @method create DocsTODO
+     * @description
+     * @example
+     */
     async create() {
       try {
         await this.$store.dispatch('setPin', this.$data.pin)

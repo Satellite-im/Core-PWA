@@ -9,23 +9,23 @@
       <thead>
         <th>
           {{ $t('pages.files.browse.name') }}
-          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+          <filter-icon size="0.8x" class="sort" />
         </th>
         <th v-if="!$device.isMobile">
           {{ $t('pages.files.browse.modified') }}
-          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+          <filter-icon size="0.8x" class="sort" />
         </th>
         <th v-if="!$device.isMobile">
           {{ $t('pages.files.browse.type') }}
-          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+          <filter-icon size="0.8x" class="sort" />
         </th>
         <th v-if="!$device.isMobile">
           {{ $t('pages.files.browse.encrypted') }}
-          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+          <filter-icon size="0.8x" class="sort" />
         </th>
         <th>
           {{ $t('pages.files.browse.size') }}
-          <font-awesome-icon class="sort" :icon="['far', 'sort']" />
+          <filter-icon size="0.8x" class="sort" />
         </th>
         <th></th>
       </thead>
@@ -33,19 +33,19 @@
         <tr class="item" v-for="item in path">
           <td class="filename" v-on:click="() => handle(item)">
             <span class="icon">
-              <font-awesome-icon
-                :icon="['far', 'folder']"
+              <folder-icon
+                size="1x"
                 v-if="item.children"
               />
-              <font-awesome-icon
-                :icon="['far', 'archive']"
+              <archive-icon
+                size="1x"
                 v-else-if="item.type && item.type.includes('archive')"
               />
-              <font-awesome-icon
-                :icon="['far', 'image']"
+              <image-icon
+                size="1x"
                 v-else-if="item.type && item.type.includes('image')"
               />
-              <font-awesome-icon :icon="['far', 'file-alt']" v-else />
+              <file-icon size="1x" v-else />
             </span>
             {{ item.name }}
           </td>
@@ -58,15 +58,17 @@
             :data-tooltip="(item.encrypted) ? $t('global.encrypted') : $t('global.unencrypted')"
             v-if="!$device.isMobile"
           >
-            <font-awesome-icon :icon="['far', 'lock']" v-if="item.encrypted" />
-            <font-awesome-icon
-              :icon="['far', 'lock-open']"
-              v-else="item.encrypted"
+            <lock-icon
+              size="1x"
+              v-if="item.encrypted" />
+            <unlock-icon
+              size="1x"
+              v-else
             />
           </td>
           <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
           <td class="options">
-            <font-awesome-icon :icon="['far', 'ellipsis-v']" />
+            <more-vertical-icon size="1x" />
           </td>
         </tr>
       </tbody>

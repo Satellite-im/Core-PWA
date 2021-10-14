@@ -7,7 +7,6 @@ Generic button component.
     text="Test Button"
     size="normal"
     type="primary"
-    :icon="{ style: 'far', name: 'arrow-circle-right' }"
     :outlined="false"
     :action="testAction"
   />
@@ -21,7 +20,7 @@ Generic button component.
 
 **type** Button style, honors bumla.io styles
 
-**icon** Optional inclusion of a fontawesome icon
+**icon** Provide icons as a slot
 
 **outlined** Add the outline style to the button
 

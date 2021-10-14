@@ -27,12 +27,24 @@ export default Vue.extend({
   data() {
     return {
       value: this.volume,
+      /**
+       * @method percentageFormatter DocsTODO
+       * @description
+       * @param volumePercentage
+       * @returns
+       * @example
+       */
       percentageFormatter: (volumePercentage) => {
         return volumePercentage + ' %'
       },
     }
   },
   methods: {
+    /**
+     * @method returnValue DocsTODO
+     * @description
+     * @example
+     */
     returnValue() {
       this.$emit('returned-value', this.value)
     },

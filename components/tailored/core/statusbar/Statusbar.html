@@ -1,7 +1,7 @@
 <div id="statusbar">
   <div class="circle-container" v-if="!$device.isMobile">
-    <font-awesome-icon
-      :icon="['fas', 'circle']"
+    <circle-icon
+      size="1x"
       :class="`status is-${user.state}`"
       v-if="!server"
     />
@@ -47,6 +47,13 @@
       v-on:click="toggleMarketPlace"
       data-tooltip="Market Place">
       <shopping-bag-icon class="control-icon" size="1x" />
+    </div>
+    <div
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      v-on:click="toggleWallet"
+      data-tooltip="Wallet">
+      <wallet-icon class="control-icon" size="1x" />
     </div>
     <div class="vertical-divider"></div>
     <InteractablesSearchInput

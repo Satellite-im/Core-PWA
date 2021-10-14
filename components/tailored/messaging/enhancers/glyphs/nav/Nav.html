@@ -1,7 +1,7 @@
 <div id="glyphs-nav" class="glyph-list-box">
   <div class="account-list">
     <div class="timer" @click="() => {$emit('navSelected', '')}">
-      <font-awesome-icon class="control-icon" :icon="['far', 'clock']" />
+      <clock-icon class="control-icon" size="1x" />
     </div>
     <div v-for="user in $mock.unreads" :data-tooltip="user.name">
       <UiCircle type="random" :size="28" :seed="user.address" />
@@ -17,6 +17,6 @@
     </div>
   </div>
   <div class="market-place" v-on:click="toggleMarketPlace">
-    <font-awesome-icon class="control-icon" :icon="['far', 'shopping-bag']" />
+    <shopping-bag-icon class="control-icon" size="1x" />
   </div>
 </div>
