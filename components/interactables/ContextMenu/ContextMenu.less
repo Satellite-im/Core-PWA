@@ -28,20 +28,27 @@
   .quickReactions {
     display: flex;
     flex-flow: row nowrap;
-    height: 3rem;
-    border-bottom: 1px solid;
-    padding-bottom: 4px;
-    margin-bottom: 4px;
+    margin-bottom: @light-spacing;
     justify-content: center;
+    .reaction {
+      background: @semitransparent-light-gradient;
+    }
     p {
       display: flex;
       flex-grow: 1;
-      font-size: 2rem;
+      font-size: 1.25rem;
       justify-content: center;
       align-items: center;
+      border-radius: unset;
+    }
+    p:first-of-type {
+      border-radius: @corner-rounding 0 0 @corner-rounding;
+    }
+    p:last-of-type {
+      border-radius: 0 @corner-rounding @corner-rounding 0;
     }
     p:hover {
-      background: none;
+      background: @semitransparent-lighter-gradient;
       text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color, 1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
     }
   }

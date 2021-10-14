@@ -136,7 +136,10 @@ export default Vue.extend({
 
 <style lang="less" src="./Edit.less"></style>
 <style lang="less">
-.edit-message-body-input p {
-  font-size: @text-size !important;
+.edit-message-body-input {
+  border-radius: @corner-rounding;
+  p {
+    font-size: @text-size !important;
+  }
 }
 </style>

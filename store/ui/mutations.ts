@@ -58,10 +58,13 @@ export default {
       fullscreen,
     }
   },
-  toggleEnhancers(state: NuxtState, show: Boolean) {
+  toggleEnhancers(state: NuxtState, options: any) {
     state.ui = {
       ...state.ui,
-      showEnhancers: show,
+      enhancers: {
+        show: options.show,
+        floating: options.floating || false,
+      },
     }
   },
   toggleSettings(state: NuxtState, show: Boolean) {
@@ -221,7 +224,7 @@ export default {
   addReaction(state: NuxtState, reaction: any) {
     const messageGroups: MessageGroup = [...state.ui.messages]
 
-    //Find message group meant for reaction
+    // Find message group meant for reaction
     const currGroup = messageGroups?.find(
       (group) => group.id === reaction.groupID
     )
@@ -249,12 +252,11 @@ export default {
               showReactors: false,
             },
           ]
-          return
         } else {
           // If reactions array exist
           // Find selected reaction
           const currReaction = currMessage.reactions.find(
-            (react) => react.emoji == reaction.emoji
+            (react) => react.emoji === reaction.emoji
           )
           if (currReaction) {
             // If selected reaction already exist in reactions array
@@ -279,13 +281,11 @@ export default {
             }
           } else {
             // If selected reaction doesnt exist in reactions array
-            console.log('ENTER')
             currMessage.reactions.push({
               emoji: reaction.emoji,
               reactors: [reaction.reactor],
               showReactors: false,
             })
-            return
           }
         }
       }

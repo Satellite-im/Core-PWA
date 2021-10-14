@@ -21,6 +21,18 @@
       @keyup="handleInputKeyup"></div>
     <span class="placeholder">{{ placeholder }}</span>
     <div
+      :data-tooltip="$t('wallet.send_money')"
+      v-on:click="toggleEnhancers"
+      class="
+        control-tooltip-wrap
+        has-tooltip has-tooltip-top has-tooltip-primary
+      "
+    >
+      <banknote-icon size="1x"
+        :class="`control-icon `"
+      />
+    </div>
+    <div
       :data-tooltip="$t('global.glyphs')"
       v-on:click="toggleEnhancers"
       class="
@@ -29,7 +41,7 @@
       "
     >
       <grid-icon size="1x"
-        :class="`control-icon ${$store.state.ui.showEnhancers ? 'primary' : ''}`"
+        :class="`control-icon ${$store.state.ui.enhancers.show ? 'primary' : ''}`"
       />
     </div>
     <div

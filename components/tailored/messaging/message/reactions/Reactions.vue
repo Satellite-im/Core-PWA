@@ -58,7 +58,7 @@ export default Vue.extend({
         messageID: this.$props.message.id,
         replyID: this.$props.reply.id,
       })
-      this.$store.commit('toggleEnhancers', true)
+      this.$store.commit('toggleEnhancers', { show: true })
     },
     /**
      * @method quickReaction DocsTODO

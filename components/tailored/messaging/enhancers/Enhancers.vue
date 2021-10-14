@@ -67,11 +67,11 @@ export default Vue.extend({
     },
     /**
      * @method toggleEnhancers DocsTODO
-     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.showEnhancers) to toggleEnhancers in state
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
+      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
       if (this.ui.settingReaction.status) {
         this.$store.commit('settingReaction', {
           status: false,

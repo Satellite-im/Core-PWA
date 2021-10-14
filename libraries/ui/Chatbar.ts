@@ -34,6 +34,7 @@ export function htmlToMarkdown(htmlString: string) {
     .join('*')
     .replace(/_\*/g, '**')
     .replace(/\*_/g, '**')
+
   return markDown
 }
 

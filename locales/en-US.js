@@ -33,6 +33,9 @@ export default {
     send: 'Send',
     more: 'More',
   },
+  wallet: {
+    send_money: 'Send Money',
+  },
   controls: {
     mic: 'Mic',
     headphones: 'Audio',
