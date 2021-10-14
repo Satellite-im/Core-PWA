@@ -1,12 +1,12 @@
-import { Connection, clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js'
+import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
-import {
-  publicKeyFromSeed,
-  sleep,
-  getClusterFromNetworkConfig,
-} from '../Solana'
 import { Config } from '~/config'
 import { SolanaWallet } from '~/types/solana/solana'
+import {
+  getClusterFromNetworkConfig,
+  publicKeyFromSeed,
+  sleep,
+} from '../Solana'
 
 export default class SolanaManager {
   accounts: Array<SolanaWallet>
@@ -309,7 +309,6 @@ export default class SolanaManager {
         })
 
         const jsonResult = await result.json()
-
         if (jsonResult.status === 'success') {
           signature = jsonResult.transactionSignature
         } else {

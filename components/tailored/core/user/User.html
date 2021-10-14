@@ -11,7 +11,7 @@
   <UiTypingIndicator v-else />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />
-    <TypographySubtitle v-if="user.last_message.length > 0" :size="6" :text="user.last_message" />
+    <TypographySubtitle v-if="user.last_message && user.last_message.length > 0" :size="6" :text="user.last_message" />
     <TypographySubtitle v-else :size="6" :text="user.status" />
   </div>
   <div class="user-chat-details">

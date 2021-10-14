@@ -45,6 +45,11 @@ export default Vue.extend({
       switch2State: true,
     }
   },
+  mounted() {
+    this.$store.dispatch('fetchFriends')
+    this.$store.dispatch('fetchFriendRequests')
+    this.$store.dispatch('subscribeToFriendsEvents')
+  },
   methods: {
     testAction(): void {
       alert('test')
