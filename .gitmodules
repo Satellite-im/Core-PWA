@@ -1,6 +1,9 @@
 [submodule "android"]
 	path = android
-	url = git@github.com:Satellite-im/Satellite-Build-Android.git
+	url = https://github.com/Satellite-im/Satellite-Build-Android.git
 [submodule "electron"]
 	path = electron
-	url = git@github.com:Satellite-im/Satellite-Build-Desktop.git
+	url = https://github.com/Satellite-im/Satellite-Build-Desktop.git
+[submodule "locales"]
+	path = locales
+	url = https://github.com/Satellite-im/Satellite-Translations.git
