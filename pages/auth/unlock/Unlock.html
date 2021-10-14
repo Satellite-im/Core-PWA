@@ -16,15 +16,19 @@
       :loading="decrypting"
       :action="getPinHash ? decrypt : create"
     >
-    <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
-    <chevron-right-icon size="1x" v-else />
-  </InteractablesInputGroup>
+      <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
+      <chevron-right-icon size="1x" v-else />
+    </InteractablesInputGroup>
     <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"
       small
       :label="$t('pages.unlock.store_pin')"
     />
+    <br>
+    <div class="realm-container">
+      <UiRealm />
+    </div>
   </div>
 
   <UiVersion name version />
