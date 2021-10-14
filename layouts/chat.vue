@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters,  mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
@@ -17,7 +17,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media']),
+    ...mapState(['audio', 'ui', 'media', 'friends']),
     selectedGroup() {
       return this.$route.params.id
     },

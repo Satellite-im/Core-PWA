@@ -1,5 +1,5 @@
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import { User } from '~/types/ui/user'
+import { RawUser, User } from '~/types/ui/user'
 
 export interface EncryptedFriend extends User {
   publicKey: string
@@ -22,6 +22,7 @@ export interface FriendRequest {
 
 export interface IncomingRequest extends FriendRequest {
   from: string
+  userInfo: RawUser | null
 }
 
 export interface OutgoingRequest extends FriendRequest {

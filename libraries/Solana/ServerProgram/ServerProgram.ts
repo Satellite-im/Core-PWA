@@ -1,27 +1,28 @@
 import {
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-  PublicKey,
-  sendAndConfirmTransaction,
-  SYSVAR_RENT_PUBKEY,
-  Keypair,
-  Connection,
   // eslint-disable-next-line import/named
   ConfirmOptions,
+  Connection,
+  Keypair,
+  PublicKey,
+  sendAndConfirmTransaction,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+  Transaction,
+  TransactionInstruction,
 } from '@solana/web3.js'
-import {
-  encodeInstructionData,
-  dwellerAccountLayout,
-} from './ServerProgram.layout'
-import { CreateDerivedAccountParams } from './ServerProgram.types'
+import { Config } from '~/config'
 import {
   Seeds,
   stringFromBuffer,
   stringToBuffer,
 } from '~/libraries/Solana/Solana'
-import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { RawUser } from '~/types/ui/user'
+import {
+  dwellerAccountLayout,
+  encodeInstructionData,
+} from './ServerProgram.layout'
+import { CreateDerivedAccountParams } from './ServerProgram.types'
 
 const SERVER_PROGRAM_ID = new PublicKey(Config.solana.serverProgramId)
 
@@ -165,7 +166,7 @@ export default class ServerProgram {
    * @returns a parsed object representing the user information
    * //TODO: use strong type
    */
-  parseUserInfo(userInfo: any) {
+  parseUserInfo(userInfo: any): RawUser | null {
     if (!userInfo) {
       return null
     }

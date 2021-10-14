@@ -9,7 +9,7 @@
     <UiGlobal />
 
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
-    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups"/>
+    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="friends.all" :groups="$mock.groups"/>
     <div class="dynamic-content">
       <Nuxt id="files" ref="files" />
     </div>

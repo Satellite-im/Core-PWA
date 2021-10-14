@@ -16,7 +16,7 @@
       <a
         :disabled="disabled"
         :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
-        v-on:click="action"
+        v-on:click="() => !disabled ? action() : null"
         v-if="!copyContent.length"
       >
         <UiSpinner v-if="loading" spinning />

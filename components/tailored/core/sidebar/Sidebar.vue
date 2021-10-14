@@ -40,7 +40,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media']),
+    ...mapState(['ui', 'dataState', 'media', 'friends']),
   },
   mounted() {
     /**

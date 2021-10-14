@@ -18,3 +18,10 @@ export interface UserRegistrationData {
   imageURI: string
   status: string
 }
+
+export interface RawUser {
+  name: string
+  servers: any
+  status: string
+  photoHash: string
+}

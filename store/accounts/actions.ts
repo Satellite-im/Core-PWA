@@ -1,14 +1,14 @@
-import Vue from 'vue'
 import { Keypair } from '@solana/web3.js'
+import Vue from 'vue'
+import Crypto from '~/libraries/Crypto/Crypto'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments, RootState } from '../store.types'
 import {
   AccountsError,
   RegistrationStatus,
   UserRegistrationPayload,
 } from './types'
-import Crypto from '~/libraries/Crypto/Crypto'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 export default {
   /**
