@@ -1,9 +1,4 @@
-import { SearchResult } from '~/types/search/search'
-
-interface SearchState {
-  query: string
-  result: SearchResult | null
-}
+import { SearchState } from './types'
 
 const InitalSearchState = (): SearchState => ({
   query: '',

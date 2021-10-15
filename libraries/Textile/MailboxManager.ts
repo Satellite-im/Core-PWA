@@ -13,34 +13,23 @@ import {
   MailboxCallback,
   MessageFromThread,
   MailboxSubscriptionType,
+  MessageCallback,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-
-function userMessageToThread(message: UserMessage): MessageFromThread {
-  const { body, createdAt, from, id, readAt, signature, to } = message
-  return {
-    _id: id,
-    body: Buffer.from(body).toString('base64'),
-    created_at: createdAt,
-    read_at: readAt,
-    _mod: createdAt,
-    from,
-    signature: Buffer.from(signature).toString('base64'),
-    to,
-  }
-}
-
 export class MailboxManager {
   senderAddress: string
   textile: TextileInitializationData
   mailboxID: string
-  inboxListener?: MailboxCallback
-  sentboxListener?: MailboxCallback
+  listeners: {
+    inbox?: MailboxCallback
+    sentbox?: MailboxCallback
+  }
 
   constructor(textile: TextileInitializationData, senderAddress: string) {
     this.textile = textile
     this.mailboxID = ''
     this.senderAddress = senderAddress
+    this.listeners = {}
   }
 
   /**
@@ -70,6 +59,13 @@ export class MailboxManager {
     }
   }
 
+  /**
+   * @method getConversation
+   * Retrieve a conversation with a specific user, filtered by the given query parameters
+   * @param friendIdentifier friend mailboxId
+   * @param query parameters for filtering
+   * @returns an array of messages
+   */
   async getConversation(
     friendIdentifier: string,
     query: ConversationQuery
@@ -89,7 +85,7 @@ export class MailboxManager {
 
     const encryptedInbox = await this.textile.client.find<any>(
       threadID,
-      'inbox',
+      MailboxSubscriptionType.inbox,
       inboxQuery
     )
 
@@ -108,7 +104,7 @@ export class MailboxManager {
 
     const encryptedSentbox = await this.textile.client.find<any>(
       threadID,
-      'sentbox',
+      MailboxSubscriptionType.sentbox,
       sentboxQuery
     )
 
@@ -120,45 +116,58 @@ export class MailboxManager {
   }
 
   /**
-   * @method listenToInboxMessages
-   * @description Starts a watcher on inbox messages
-   * @param cb Callback function to be called
+   * @method buildCallback
+   * Generates a MailboxCallback from MessageCallback and the unsubscribe function
+   * @param onMessage the callback for the onMessage event
+   * @param onUnsubscribe the event to be fired when the Textile subscription is closed
+   * @returns the generated MailboxCallback
    */
-  listenToInboxMessages(cb: (message?: DecryptedMessage) => void) {
-    this.inboxListener = (reply, err) => {
+  buildCallback(
+    onMessage: MessageCallback,
+    onUnsubscribe: CallableFunction
+  ): MailboxCallback {
+    return (reply, err) => {
+      // If the reply is undefined means that the subscription
+      // has been closed by the Textile library
+      if (reply === undefined && err === undefined) {
+        onUnsubscribe()
+        return
+      }
+
       if (reply?.message) {
         this.decodeMessage(userMessageToThread(reply?.message)).then(
           (decrypted) => {
-            cb(decrypted)
+            onMessage(decrypted)
           }
         )
       }
-      if (reply === undefined && err === undefined) {
-        this.inboxListener = undefined
-      }
     }
-    this.textile.users.watchInbox(this.mailboxID, this.inboxListener)
+  }
+
+  /**
+   * @method listenToInboxMessages
+   * @description Starts a watcher on inbox messages
+   * @param onMessage Callback function to be called
+   */
+  listenToInboxMessages(onMessage: MessageCallback) {
+    this.listeners.inbox = this.buildCallback(onMessage, () => {
+      delete this.listeners.inbox
+    })
+
+    this.textile.users.watchInbox(this.mailboxID, this.listeners.inbox)
   }
 
   /**
    * @method listenToSentboxMessages
    * @description Starts a watcher on Sentbox messages
-   * @param cb Callback function to be called
+   * @param onMessage Callback function to be called
    */
-  listenToSentboxMessages(cb: (message?: DecryptedMessage) => void) {
-    this.sentboxListener = (reply, err) => {
-      if (reply?.message) {
-        this.decodeMessage(userMessageToThread(reply?.message)).then(
-          (decrypted) => {
-            cb(decrypted)
-          }
-        )
-      }
-      if (reply === undefined && err === undefined) {
-        this.sentboxListener = undefined
-      }
-    }
-    this.textile.users.watchSentbox(this.mailboxID, this.sentboxListener)
+  listenToSentboxMessages(onMessage: MessageCallback) {
+    this.listeners.sentbox = this.buildCallback(onMessage, () => {
+      delete this.listeners.sentbox
+    })
+
+    this.textile.users.watchSentbox(this.mailboxID, this.listeners.sentbox)
   }
 
   /**
@@ -167,12 +176,12 @@ export class MailboxManager {
    * @param to Recipient
    * @param message Message to be sent
    */
-  async sendMessage(to: string, message: string) {
+  sendMessage(to: string, message: string) {
     const recipient: PublicKey = PublicKey.fromString(to)
 
     const encoder = new TextEncoder()
     const body = encoder.encode(message)
-    return await this.textile.users.sendMessage(
+    return this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
       body
@@ -217,13 +226,26 @@ export class MailboxManager {
    * @returns true | false
    */
   isSubscribed(type: MailboxSubscriptionType): boolean {
-    switch (type) {
-      case 'inbox':
-        return Boolean(this.inboxListener)
-      case 'sentbox':
-        return Boolean(this.sentboxListener)
-      default:
-        return false
-    }
+    return Boolean(this.listeners[type])
+  }
+}
+
+/**
+ * @function userMessageToThread
+ * Converts the UserMessage type into its threadDB representation
+ * @param message the user message to convert
+ * @returns the converted message
+ */
+function userMessageToThread(message: UserMessage): MessageFromThread {
+  const { body, createdAt, from, id, readAt, signature, to } = message
+  return {
+    _id: id,
+    body: Buffer.from(body).toString('base64'),
+    created_at: createdAt,
+    read_at: readAt,
+    _mod: createdAt,
+    from,
+    signature: Buffer.from(signature).toString('base64'),
+    to,
   }
 }

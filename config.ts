@@ -5,7 +5,7 @@ export const Config = {
   debug: false,
   textile: {
     localURI: 'http://localhost:6007',
-    key: process.env.TEXTILE_API_KEY,
+    key: process.env.NUXT_ENV_TEXTILE_API_KEY,
     browser: 'https://hub.textile.io',
   },
   ipfs: {

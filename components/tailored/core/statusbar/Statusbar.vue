@@ -60,7 +60,7 @@ export default Vue.extend({
     ...mapState(['ui', 'search']),
     showSearchResult: {
       set(state) {
-        this.$store.commit('showSearchResult', state)
+        this.$store.commit('ui/showSearchResult', state)
       },
       get() {
         return this.ui.showSearchResult
@@ -68,7 +68,7 @@ export default Vue.extend({
     },
     searchQuery: {
       set(state) {
-        this.$store.commit('setSearchQuery', state)
+        this.$store.commit('search/setSearchQuery', state)
       },
       get() {
         return this.search.query
@@ -113,7 +113,7 @@ export default Vue.extend({
      * @example
      */
     toggleMarketPlace() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'showMarketPlace',
         state: !this.ui.modals.showMarketPlace,
       })

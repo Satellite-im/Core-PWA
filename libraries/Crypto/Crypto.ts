@@ -328,7 +328,9 @@ export default class Crypto {
   signMessageWithKey(privateKey: Uint8Array, message: string) {
     const utf8Message = new TextEncoder().encode(message)
 
-    return signMessage(privateKey, utf8Message, [])
+    const secretKey = ed2curve.convertSecretKey(privateKey)
+
+    return signMessage(secretKey, utf8Message, undefined)
   }
 
   signMessage(message: string) {

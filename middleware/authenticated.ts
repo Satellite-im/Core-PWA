@@ -1,6 +1,8 @@
 import { NuxtRouteConfig } from '@nuxt/types/config/router'
+// TODO: verify why we got the import/named error for RawLocation import
+// eslint-disable-next-line import/named
 import { RawLocation } from 'vue-router'
-import { RootStore } from '~/store/store.types'
+import { RootStore } from '~/types/store/store'
 interface Arguments {
   store: RootStore
   redirect: (location: RawLocation) => void

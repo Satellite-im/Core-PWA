@@ -33,7 +33,7 @@ export default Vue.extend({
      * @example v-on:click="show('newfolder')"
      */
     show(modalName: String) {
-      this.$store.commit('toggleModal', { name: modalName, state: true })
+      this.$store.commit('ui/toggleModal', { name: modalName, state: true })
     },
     /**
      * @method hide
@@ -42,7 +42,7 @@ export default Vue.extend({
      * @example v-on:click="hide('newfolder')"
      */
     hide(modalName: String) {
-      this.$store.commit('toggleModal', { name: modalName, state: false })
+      this.$store.commit('ui/toggleModal', { name: modalName, state: false })
     },
   },
 })

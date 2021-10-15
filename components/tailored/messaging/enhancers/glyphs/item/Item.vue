@@ -37,7 +37,7 @@ export default Vue.extend({
     mouseOver() {
       /* Set hovered glyph info only pack property exist */
       if (this.pack) {
-        this.$store.commit('setHoveredGlyphInfo', {
+        this.$store.commit('ui/setHoveredGlyphInfo', {
           glyphSrc: this.src,
           pack: this.pack,
         })
@@ -45,7 +45,7 @@ export default Vue.extend({
     },
     mouseLeave() {
       if (this.pack) {
-        this.$store.commit('setHoveredGlyphInfo', undefined)
+        this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
   },

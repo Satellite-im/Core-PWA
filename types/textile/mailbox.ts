@@ -40,9 +40,14 @@ export type MailboxCallback = (
   err?: Error | undefined
 ) => void
 
-export type MailboxSubscriptionType = 'inbox' | 'sentbox'
+export enum MailboxSubscriptionType {
+  inbox = 'inbox',
+  sentbox = 'sentbox',
+}
 
 export interface ConversationQuery {
   limit?: number
   skip?: number
 }
+
+export type MessageCallback = (message?: DecryptedMessage) => void

@@ -44,7 +44,7 @@ export default Vue.extend({
     ...mapState(['settings']),
     bitrate: {
       set(state) {
-        this.$store.commit('bitrate', state)
+        this.$store.commit('settings/bitrate', state)
       },
       get() {
         return this.settings.bitrate
@@ -52,7 +52,7 @@ export default Vue.extend({
     },
     sampleSize: {
       set(state) {
-        this.$store.commit('sampleSize', state)
+        this.$store.commit('settings/sampleSize', state)
       },
       get() {
         return this.settings.sampleSize

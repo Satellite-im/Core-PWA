@@ -83,13 +83,13 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(replyID: string) {
-      this.$store.commit('settingReaction', {
+      this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
         replyID,
       })
-      this.$store.commit('toggleEnhancers', { show: true })
+      this.$store.commit('ui/toggleEnhancers', { show: true })
     },
     /**
      * @method showQuickProfile DocsTODO
@@ -98,8 +98,8 @@ export default Vue.extend({
      * @example
      */
     showQuickProfile(e: Event) {
-      this.$store.commit('setQuickProfilePosition', e)
-      this.$store.commit('quickProfile', true)
+      this.$store.commit('ui/setQuickProfilePosition', e)
+      this.$store.commit('ui/quickProfile', true)
     },
     /**
      * @method toggleReplies DocsTODO

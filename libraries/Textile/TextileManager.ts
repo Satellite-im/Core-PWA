@@ -27,7 +27,8 @@ export default class TextileManager {
       throw new Error('Wallet is mandatory for textile')
     }
 
-    const identity = await this.identityManager.fromWallet(wallet)
+    const identity = await this.identityManager.initFromWallet(wallet)
+
     const { client, users } = await this.identityManager.authorize(identity)
 
     this.creds = {

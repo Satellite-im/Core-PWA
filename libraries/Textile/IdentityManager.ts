@@ -143,30 +143,19 @@ export default class IdentityManager {
     }
 
     const client = await Client.withKeyInfo({ key: Config.textile.key })
-    // const context = new Context(Config.textile.localURI)
-    // const client =
-    //   Config.env === 'dev'
-    //     ? new Client(context)
-    //     : await Client.withKeyInfo({
-    //         key: config.textile.key,
-    //       })
 
     const users = await Users.withKeyInfo({
       key: Config.textile.key,
     })
 
-    try {
-      await users.getToken(identity)
+    await users.getToken(identity)
 
-      const token = await client.getToken(identity)
+    const token = await client.getToken(identity)
 
-      return {
-        client,
-        token,
-        users,
-      }
-    } catch (_) {
-      throw new Error("Couldn't connect to Textile.io")
+    return {
+      client,
+      token,
+      users,
     }
   }
 

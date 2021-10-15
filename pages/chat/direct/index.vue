@@ -17,7 +17,7 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.$data.loading = false
-      this.$store.dispatch('setMessages', this.$mock.messages)
+      this.$store.dispatch('ui/setMessages', this.$mock.messages)
       /* Add new message per 5 seconds temporarily */
       this.$data.updateInterval = setInterval(
         this.sendMessageAutomatically,
@@ -43,7 +43,7 @@ export default Vue.extend({
     sendMessageAutomatically() {
       this.$data.testMsgSent += 1
       if (this.$data.testMsgSent > 5) clearInterval(this.$data.updateInterval)
-      this.$store.dispatch('sendMessage', {
+      this.$store.dispatch('ui/sendMessage', {
         value: 'Test Message',
         user: this.$mock.friend,
         isOwner: false,
