@@ -76,7 +76,7 @@
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading">
-          <UiInlineNotification text="New Messages" />
+          <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
           <TailoredCoreUser
             v-for="(user, i) in users"
             :key="i"
