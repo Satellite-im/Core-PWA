@@ -2,6 +2,7 @@
 <script lang="ts">
 // @ts-ignore
 import { PublicKey } from '@solana/web3.js'
+// @ts-ignore
 import QrcodeVue from 'qrcode.vue'
 
 import { UserPlusIcon } from 'satellite-lucide-icons'
@@ -9,7 +10,8 @@ import { UserPlusIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import { Friend } from '~/types/ui/friends'
-import SolanaManager from '~/utilities/SolanaManager/SolanaManager'
+
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 export default Vue.extend({
   components: {
@@ -37,7 +39,7 @@ export default Vue.extend({
       }
       if (
         this.$store.state.friends.all.filter(
-          (f: Friend) => f.friendAccount.accountId === accountID
+          (f: Friend) => f.account.accountId === accountID
         ).length === 1
       ) {
         this.error = this.$t('friends.already_friend') as string
@@ -56,12 +58,13 @@ export default Vue.extend({
         this.friend = {
           ...friend,
           state: 'offline',
-          friendAccount: {
+          // @ts-ignore
+          // TODO: fix
+          account: {
             accountId: this.accountID,
           },
         }
       } catch (error) {
-        console.error(error)
         this.error = this.$t('friends.invalid_id') as string
       }
 
@@ -70,6 +73,7 @@ export default Vue.extend({
     onFriendRequestSent(error: string) {
       this.friend = null
       if (!error) {
+        // @ts-ignore
         this.$toast.show(this.$t('friends.request_sent'))
       } else {
         this.error = error

@@ -110,7 +110,7 @@ export default {
 
     const friend: Friend = {
       publicKey: friendKey,
-      friendAccount,
+      account: friendAccount,
       name: rawUser.name,
       profilePicture: rawUser.photoHash,
       status: rawUser.status,
@@ -345,15 +345,15 @@ export default {
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
-    const { friendAccount } = friendRequest
+    const { account } = friendRequest
 
     const computedFriendAccountKey =
       await friendsProgram.computeFriendAccountKey(
-        new PublicKey(friendAccount.from),
+        new PublicKey(account.from),
         userAccount.publicKey
       )
 
-    const friendFromKey = friendRequest.friendAccount.from
+    const friendFromKey = friendRequest.account.from
 
     // Initialize current recipient for encryption
     await $Crypto.initializeRecipient(new PublicKey(friendFromKey))
@@ -366,13 +366,13 @@ export default {
 
     const transactionId = await friendsProgram.acceptFriendRequest(
       computedFriendAccountKey,
-      new PublicKey(friendAccount.from),
+      new PublicKey(account.from),
       userAccount,
       Buffer.from(encryptedMailboxId.padStart(128, '0'))
     )
 
     if (transactionId) {
-      dispatch('fetchFriendDetails', friendAccount)
+      dispatch('fetchFriendDetails', account)
     }
   },
   /**
@@ -403,24 +403,24 @@ export default {
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
 
-    const { friendAccount } = friendRequest
+    const { account } = friendRequest
 
     const computedFriendAccountKey =
       await friendsProgram.computeFriendAccountKey(
-        new PublicKey(friendAccount.from),
+        new PublicKey(account.from),
         userAccount.publicKey
       )
 
     const transactionId = await friendsProgram.denyFriendRequest(
       computedFriendAccountKey,
-      new PublicKey(friendAccount.from),
+      new PublicKey(account.from),
       userAccount
     )
 
     if (transactionId) {
       commit(
         'removeIncomingRequest',
-        friendAccountToIncomingRequest(friendAccount, null).requestId
+        friendAccountToIncomingRequest(account, null).requestId
       )
     }
   },
@@ -452,24 +452,24 @@ export default {
 
     commit('updateOutgoingRequest', { ...friendRequest, pending: true })
 
-    const { friendAccount } = friendRequest
+    const { account } = friendRequest
 
     const computedFriendAccountMirroredKey =
       await friendsProgram.computeFriendAccountKey(
         userAccount.publicKey,
-        new PublicKey(friendAccount.to)
+        new PublicKey(account.to)
       )
 
     const transactionId = await friendsProgram.removeFriendRequest(
       computedFriendAccountMirroredKey,
       userAccount,
-      new PublicKey(friendAccount.to)
+      new PublicKey(account.to)
     )
 
     if (transactionId) {
       commit(
         'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(friendAccount).requestId
+        friendAccountToOutgoingRequest(account).requestId
       )
     }
   },
@@ -496,11 +496,11 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { friendAccount } = friend
+    const { account } = friend
 
-    const sentByMe = friendAccount.from !== userAccount.publicKey.toBase58()
+    const sentByMe = account.from !== userAccount.publicKey.toBase58()
 
-    const friendKey = sentByMe ? friendAccount.from : friendAccount.to
+    const friendKey = sentByMe ? account.from : account.to
 
     const computedFriendAccountKey =
       await friendsProgram.computeFriendAccountKey(
@@ -539,7 +539,7 @@ function friendAccountToIncomingRequest(
   return {
     requestId: friendAccount.accountId,
     from: friendAccount.from,
-    friendAccount,
+    account: friendAccount,
     pending: false,
     userInfo,
   }
@@ -557,7 +557,7 @@ function friendAccountToOutgoingRequest(
   return {
     requestId: friendAccount.accountId,
     to: friendAccount.to,
-    friendAccount,
+    account: friendAccount,
     pending: false,
   }
 }

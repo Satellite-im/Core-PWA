@@ -11,18 +11,19 @@ export interface Friend extends EncryptedFriend {
   item: any // TODO remove unnecessary properties
   pending: Boolean
   activeChat: Boolean
-  friendAccount: FriendAccount
+  account: FriendAccount
 }
 
 export interface FriendRequest {
   requestId: string
-  friendAccount: FriendAccount
+  account: FriendAccount
   pending: boolean
 }
 
 export interface IncomingRequest extends FriendRequest {
   from: string
   userInfo: RawUser | null
+  account: FriendAccount
 }
 
 export interface OutgoingRequest extends FriendRequest {
