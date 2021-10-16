@@ -33,6 +33,9 @@ export default {
     send: 'Send',
     more: 'More',
   },
+  wallet: {
+    send_money: 'Send Money',
+  },
   controls: {
     mic: 'Mic',
     headphones: 'Audio',
@@ -289,6 +292,22 @@ export default {
     loading: {
       loading_account: 'Aligning satellites to retrieve your account...',
     },
+  },
+  friends: {
+    self_add: "You can't add yourself you silly goose.",
+    already_friend: "You're already friends with this user.",
+    not_found: "Hmm, we couldn't find a user at that address",
+    invalid_id: 'Invalid account ID',
+    request_sent: 'Friend request successfully sent!',
+    search_placeholder: 'Some User...',
+    add: 'Add Friend',
+    add_description:
+      'Enter your friends account ID, or nickname. Account IDs are case sensitive.',
+    add_qrcode_description:
+      'You can also add a friend by having them scan your QR code, or by scanning theirs.',
+    scan_code: 'Scan a Friend Code',
+    camera_scan: 'Allow Camera Scan',
+    friend_code: 'Your Friend Code',
   },
   market_place: {
     title: 'Marketplace',

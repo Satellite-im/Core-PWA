@@ -3,6 +3,13 @@ export const mobileSwipe = {
     // can add functions here on start-up if needed
   },
   methods: {
+    /**
+     * @method sidebarSwipeHandler DocsTODO
+     * @description
+     * @param currThis
+     * @returns
+     * @example
+     */
     sidebarSwipeHandler(currThis: any) {
       return function (direction: string) {
         if (direction === 'left' && currThis.$device.isMobile) {

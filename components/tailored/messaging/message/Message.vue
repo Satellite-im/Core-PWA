@@ -57,6 +57,7 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
+        { text: 'quickReaction', func: (this as any).quickReaction },
         { text: 'Edit Message', func: (this as any).editMessage },
         { text: 'Add Reaction', func: (this as any).emojiReaction },
         { text: 'Reply', func: this.setReplyChatbarContent },
@@ -93,9 +94,19 @@ export default Vue.extend({
     testFunc() {
       console.log('Message Func Testing ' + this.$data.disData)
     },
+    /**
+     * @method mouseOver DocsTODO
+     * @description
+     * @example
+     */
     mouseOver() {
       this.$data.messageHover = !this.$data.messageHover
     },
+    /**
+     * @method setReplyChatbarContent DocsTODO
+     * @description
+     * @example
+     */
     setReplyChatbarContent() {
       const { id, type, payload } = this.$props.message
       let finalPayload = payload
@@ -109,13 +120,26 @@ export default Vue.extend({
         from: this.$props.from,
       })
     },
+    /**
+     * @method emojiReaction DocsTODO
+     * @description
+     * @example
+     */
     emojiReaction() {
       this.$store.commit('settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
-      this.$store.commit('toggleEnhancers', true)
+      this.$store.commit('toggleEnhancers', { show: true, floating: true })
+    },
+    quickReaction(emoji: String) {
+      this.$store.dispatch('addReaction', {
+        emoji,
+        reactor: this.$mock.user.name,
+        groupID: this.$props.group.id,
+        messageID: this.$props.message.id,
+      })
     },
     /**
      * Called when click the "Edit Message" on context menu
@@ -131,6 +155,7 @@ export default Vue.extend({
     },
     /**
      * Called from MessageEdit component when complete to edit message
+     * Called from MessageEdit component with changed message When save or cancel / Enter or Escape is pressed
      */
     saveMessage(message: string) {
       this.$store.commit('setEditMessage', {

@@ -65,20 +65,39 @@ export default Vue.extend({
     }
   },
   watch: {
+    /**
+     * @method selected DocsTODO
+     * @description When the component is first created, if the user doesn't have a default value for the select, we set it here
+     * @param newValue
+     * @param oldValue
+     * @example
+     */
     selected(newValue, oldValue) {
-      // When the component is first created, if the user doesn't have a default value for the select, we set it here
       if (!oldValue) {
         this.$data.selectedValue = newValue
       }
     },
   },
   methods: {
+    /**
+     * @method change DocsTODO
+     * @description
+     * @param option
+     * @example
+     */
     change(option: any) {
       if (option.disabled) return
       this.selectedValue = option.value
       this.$emit('change', this.selectedValue)
       this.open = false
     },
+    /**
+     * @method getSelectLabel DocsTODO
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
     getSelectLabel() {
       if (this.selectedValue) {
         const item: any = (this.options as Array<SelectOption>).find(

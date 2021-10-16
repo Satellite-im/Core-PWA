@@ -58,10 +58,13 @@ export default {
       fullscreen,
     }
   },
-  toggleEnhancers(state: NuxtState, show: Boolean) {
+  toggleEnhancers(state: NuxtState, options: any) {
     state.ui = {
       ...state.ui,
-      showEnhancers: show,
+      enhancers: {
+        show: options.show,
+        floating: options.floating || false,
+      },
     }
   },
   toggleSettings(state: NuxtState, show: Boolean) {
@@ -86,6 +89,13 @@ export default {
     state.ui.isScrollOver = status
     if (!status) state.ui.unreadMessage = 0
   },
+  /**
+   * @method sendMessage DocsTODO
+   * @description
+   * @param message
+   * @param isOwner
+   * @example
+   */
   sendMessage(state: NuxtState, message: any, isOwner: boolean) {
     const messages: any[] = [...state.ui.messages]
     const lastIndex = messages.length - 1
@@ -150,6 +160,11 @@ export default {
       settingReaction: status,
     }
   },
+  /**
+   * Called when user click the Edit Message on Context Menu or Edit action in message listings
+   * @param {NuxtState} state - Vuex state
+   * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
+   */
   setEditMessage(
     state: NuxtState,
     message: {
@@ -163,6 +178,11 @@ export default {
       editMessage: message,
     }
   },
+  /**
+   * Called when user complete to edit message, then update the message in message listing
+   * @param {NuxtState} state - Vuex state
+   * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
+   */
   saveEditMessage(
     state: NuxtState,
     message: {
@@ -195,11 +215,16 @@ export default {
     }
   },
 
+  /**
+   * @method addReaction DocsTODO
+   * @description
+   * @param reaction
+   * @example
+   */
   addReaction(state: NuxtState, reaction: any) {
-    console.log(reaction)
     const messageGroups: MessageGroup = [...state.ui.messages]
 
-    //Find message group meant for reaction
+    // Find message group meant for reaction
     const currGroup = messageGroups?.find(
       (group) => group.id === reaction.groupID
     )
@@ -217,8 +242,6 @@ export default {
         )
       }
 
-      console.log(currMessage)
-
       if (currMessage) {
         // If reactions array doesnt exist create with new reaction
         if (!currMessage.reactions) {
@@ -229,12 +252,11 @@ export default {
               showReactors: false,
             },
           ]
-          return
         } else {
           // If reactions array exist
           // Find selected reaction
           const currReaction = currMessage.reactions.find(
-            (react) => react.emoji == reaction.emoji
+            (react) => react.emoji === reaction.emoji
           )
           if (currReaction) {
             // If selected reaction already exist in reactions array
@@ -259,13 +281,11 @@ export default {
             }
           } else {
             // If selected reaction doesnt exist in reactions array
-            console.log('ENTER')
             currMessage.reactions.push({
               emoji: reaction.emoji,
               reactors: [reaction.reactor],
               showReactors: false,
             })
-            return
           }
         }
       }
@@ -275,6 +295,17 @@ export default {
     state.ui = {
       ...state.ui,
       hoveredGlyphInfo: values,
+    }
+  },
+  updateRecentReactions(state: NuxtState, emoji: String) {
+    const newRecentReactions = state.ui.recentReactions
+    if (!state.ui.recentReactions.includes(emoji)) {
+      newRecentReactions.unshift(emoji)
+      newRecentReactions.pop()
+    }
+    state.ui = {
+      ...state.ui,
+      recentReactions: newRecentReactions,
     }
   },
 }

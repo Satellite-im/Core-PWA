@@ -76,18 +76,42 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method handleChange DocsTODO
+     * @description
+     * @param value
+     * @param item
+     * @example
+     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleChange(value: string, item: SearchQueryItem) {
       // console.log('change-search-input:', value, item)
     },
+    /**
+     * @method handleSearch DocsTODO
+     * @description
+     * @param value
+     * @param item
+     * @example
+     */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleSearch(value: string, items: SearchQueryItem[]) {
       this.showSearchResult = true
       this.searchQuery = value
     },
+    /**
+     * @method toggleSearchResult DocsTODO
+     * @description
+     * @example
+     */
     toggleSearchResult() {
       this.showSearchResult = !this.showSearchResult
     },
+    /**
+     * @method toggleMarketPlace DocsTODO
+     * @description
+     * @example
+     */
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',

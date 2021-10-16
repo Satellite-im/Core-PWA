@@ -33,8 +33,8 @@
         >
           <users-icon size="1.2x" />
         </InteractablesButton>
-        <span :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
-          14
+        <span v-if="friends.incomingRequests.length" :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
+          {{friends.incomingRequests.length}}
         </span>
       </div>
       <InteractablesButton
@@ -76,11 +76,11 @@
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading">
-          <UiInlineNotification text="New Messages" />
+          <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
           <TailoredCoreUser
-            v-for="user in users"
+            v-for="(user, i) in users"
+            :key="i"
             :user="user"
-            :key="user.address"
             :isTyping="ui.isTyping.address === user.address"
           />
         </div>

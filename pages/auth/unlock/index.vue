@@ -26,7 +26,13 @@ export default Vue.extend({
     ...mapState(['accounts']),
   },
   methods: {
-    getIcon(): string {
+    /**
+     * @method getIcon DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
+    getIcon(): String {
       if (this.getPinHash) {
         return 'unlocked'
       } else {
@@ -34,6 +40,11 @@ export default Vue.extend({
       }
     },
     // Decrypt stored encrypted data into memory
+    /**
+     * @method decrypt DocsTODO
+     * @description
+     * @example
+     */
     async decrypt() {
       this.$data.decrypting = true
       this.error = ''
@@ -53,6 +64,11 @@ export default Vue.extend({
       this.$data.decrypting = false
     },
     // Create & store a new pin, then decrypt.
+    /**
+     * @method create DocsTODO
+     * @description
+     * @example
+     */
     async create() {
       try {
         await this.$store.dispatch('setPin', this.$data.pin)

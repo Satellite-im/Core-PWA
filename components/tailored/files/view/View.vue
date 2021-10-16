@@ -29,6 +29,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method open DocsTODO
+     * @description
+     * @param location
+     * @returns
+     * @example
+     */
     open(location: string): void {
       window.open(location)
     },

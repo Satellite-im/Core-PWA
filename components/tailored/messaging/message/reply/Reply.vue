@@ -67,10 +67,21 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method mouseOver DocsTODO
+     * @description
+     * @param replyId
+     * @example
+     */
     mouseOver(replyId: string) {
       this.$data.replyHover = replyId
     },
-
+    /**
+     * @method emojiReaction DocsTODO
+     * @description
+     * @param replyId
+     * @example
+     */
     emojiReaction(replyID: string) {
       this.$store.commit('settingReaction', {
         status: true,
@@ -78,12 +89,23 @@ export default Vue.extend({
         messageID: this.$props.message.id,
         replyID,
       })
-      this.$store.commit('toggleEnhancers', true)
+      this.$store.commit('toggleEnhancers', { show: true })
     },
+    /**
+     * @method showQuickProfile DocsTODO
+     * @description
+     * @param e
+     * @example
+     */
     showQuickProfile(e: Event) {
       this.$store.commit('setQuickProfilePosition', e)
       this.$store.commit('quickProfile', true)
     },
+    /**
+     * @method toggleReplies DocsTODO
+     * @description
+     * @example
+     */
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
     },

@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters,  mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 
@@ -17,7 +17,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media']),
+    ...mapState(['audio', 'ui', 'media', 'friends']),
     selectedGroup() {
       return this.$route.params.id
     },
@@ -27,20 +27,40 @@ export default Vue.extend({
     this.$store.commit('setTypingUser', this.$mock.users[0])
   },
   methods: {
+    /**
+     * @method toggleModal DocsTODO
+     * @description
+     * @example
+     */
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
       })
     },
+    /**
+     * @method acceptCall DocsTODO
+     * @description
+     * @example
+     */
     acceptCall() {
       this.$store.dispatch('acceptCall')
       this.$Sounds.playSound(Sounds.CONNECTED)
     },
+    /**
+     * @method denyCall DocsTODO
+     * @description
+     * @example
+     */
     denyCall() {
       this.$store.dispatch('denyCall')
       this.$Sounds.playSound(Sounds.HANGUP)
     },
+    /**
+     * @method toggleMarketPlace DocsTODO
+     * @description
+     * @example
+     */
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',

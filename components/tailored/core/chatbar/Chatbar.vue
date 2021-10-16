@@ -4,7 +4,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { TerminalIcon, GridIcon, ArrowRightIcon } from 'satellite-lucide-icons'
+import {
+  TerminalIcon,
+  GridIcon,
+  ArrowRightIcon,
+  BanknoteIcon,
+} from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
@@ -33,6 +38,7 @@ export default Vue.extend({
   components: {
     FileUpload,
     TerminalIcon,
+    BanknoteIcon,
     GridIcon,
     ArrowRightIcon,
   },
@@ -41,13 +47,29 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
+      // lastEdited: 0,
     }
   },
   computed: {
     ...mapState(['ui']),
+    /**
+     * Computes the amount of characters left
+     */
+    /**
+     * @method charlimit DocsTODO
+     * @description Checks if current text is longer than the max character limit
+     * @returns Boolean based on if the current text length is longer than the max character limit
+     * @example
+     */
     charlimit() {
       return this.$data.text.length > this.$data.maxChars
     },
+    /**
+     * @method hasCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     hasCommand() {
       return (
         containsCommand(this.ui.chatbarContent) &&
@@ -58,6 +80,12 @@ export default Vue.extend({
         )
       )
     },
+    /**
+     * @method isValidCommand DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
     isValidCommand() {
       const currentText = parseCommand(
         this.ui.chatbarContent
@@ -68,9 +96,21 @@ export default Vue.extend({
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
+      /**
+       * @method get
+       * @description Gets chatbars current text
+       * @returns String of chatbars current text
+       * @example const currText = this.get()
+       */
       get() {
         return this.ui.chatbarContent
       },
+      /**
+       * @method set
+       * @description Sets current chatbar text to new value
+       * @param val Value to set the chatbar content to
+       * @example set('This is the new chatbar content')
+       */
       set(val: string) {
         this.$store.commit('chatbarContent', val)
         this.$data.text = val
@@ -83,12 +123,23 @@ export default Vue.extend({
         return ''
       }
     },
+    // editStatus() {
+    //   return Date.now() - this.$data.lastEdited <= 1000
+    // },
   },
   methods: {
+    /**
+     * @method toggleEnhancers
+     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
+     * @example v-on:click="toggleEnhancers"
+     */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', !this.ui.showEnhancers)
+      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
     },
     /**
+     * @method autoGrow DocsTODO
+     * @description When textarea for chat is changed, autoGrow handles chat section to grow and allow multi-line display
+     * @example
      * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
      * This is called after the typed inputed are processed in order to display markdown expression.
      */
@@ -98,35 +149,30 @@ export default Vue.extend({
       const chatbarGroup = this.$refs.chatbar as HTMLElement
       const wrap = this.$refs.wrap as HTMLElement
 
-      // set default height to be auto, so it will expand as needed but NOT on every input
-      messageBox.style.height = 'auto'
       if (this.$data.text.split('\n').length > 1) {
         wrap.classList.add('expanded')
       } else {
         wrap.classList.remove('expanded')
       }
       if (messageBox.scrollHeight < 112) {
-        messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
-        messageBox.style.height = '112px'
         chatbarGroup.style.height = '152px'
       }
-      messageBox.scrollTop = messageBox.scrollHeight
     },
     /**
-     * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
+     * @method handleInputChange DocsTODO
+     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
+     * @example
      */
-    handleInputChange(caretPosition: number | null) {
+    handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.value = markDown
-        if (caretPosition == null) {
-          caretPosition = getCaretPosition(messageBox)
-        }
+        let caretPosition = getCaretPosition(messageBox)
         let offset = messageBox.textContent.trim().length
         messageBox.innerHTML = markDownToHtml(markDown)
         if (offset >= messageBox.textContent.trim().length + 2) {
@@ -148,13 +194,16 @@ export default Vue.extend({
       this.autoGrow()
     },
     /**
-     * Called from chatbar's keydown event to process all key events for typing in chatbar.
+     * @method handleInputKeydown DocsTODO
+     * @description Called from chatbar's keydown event to process all key events for typing in chatbar.
      * This interacts with handleInputChange in order to convert typed input to markdown expression.
      * This controls the caret position when Backspace, Spacebar is pressed.
+     * @param event Keydown event object
+     * @returns Boolean
+     * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageuser as HTMLElement
-      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
           {
@@ -165,12 +214,13 @@ export default Vue.extend({
             if (currentCommand && parsedCommand.args.length === 0) {
               messageBox.innerHTML = ''
               this.value = ''
-              this.autoGrow()
-              return false
             }
-            caretPosition = getCaretPosition(messageBox) - 1
+            this.autoGrow()
           }
-          break
+          return
+        case 'Delete':
+          this.autoGrow()
+          return
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
@@ -182,7 +232,7 @@ export default Vue.extend({
           } else {
             this.autoGrow()
           }
-          return true
+          return
         case 'Spacebar':
         case ' ':
           {
@@ -193,28 +243,43 @@ export default Vue.extend({
               messageBox.focus()
             }, 10)
           }
-          return true
+          return
         case 'Left':
         case 'ArrowLeft':
         case 'Right':
         case 'ArrowRight':
         case 'End':
         case 'Shift':
-          return true
+          return
         case 'a':
         case 'A':
           if (event.ctrlKey) {
-            return true
+            return
           }
           break
       }
       setTimeout(() => {
-        this.handleInputChange(caretPosition)
+        this.handleInputChange()
       }, 10)
-      return true
+      // this.$data.lastEdited = Date.now()
+    },
+    handleInputKeyup(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      switch (event.key) {
+        case 'Backspace':
+        case 'Delete':
+          if (messageBox.textContent && messageBox.textContent.trim() === '') {
+            messageBox.innerHTML = ''
+            this.autoGrow()
+          }
+          break
+      }
     },
     /**
-     * Called when user sends message by pressing Enter.
+     * @method sendMessage
+     * @description Sends message by calling the sendMessage action with current data and
+     * then setting all related feilds to their default (empty)
+     * @example v-on:click="sendMessage"
      */
     sendMessage() {
       this.$store.dispatch('sendMessage', {

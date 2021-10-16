@@ -1,9 +1,15 @@
+import { Files } from '~/mock/files'
 import { DataStateType } from '../dataState/types'
 import { ActionsArguments } from '../store.types'
-import { Files } from '~/mock/files'
 
 export default {
   handler: () => {},
+  /**
+   * @method fetchFiles DocsTODO
+   * @description
+   * @param
+   * @example
+   */
   async fetchFiles({ commit, state }: ActionsArguments) {
     if (
       state.dataState.files === DataStateType.Loading ||

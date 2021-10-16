@@ -52,18 +52,38 @@ export default Vue.extend({
     ...mapState(['ui', 'media']),
   },
   methods: {
+    /**
+     * @method toggleModal
+     * @description
+     * @example
+     */
     toggleModal() {
       this.$store.commit('toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
       })
     },
+    /**
+     * @method acceptCall DocsTODO
+     * @description
+     * @example
+     */
     acceptCall() {
       this.$store.dispatch('acceptCall')
     },
+    /**
+     * @method denyCall DocsTODO
+     * @description
+     * @example
+     */
     denyCall() {
       this.$store.dispatch('denyCall')
     },
+    /**
+     * @method toggleMarketPlace DocsTODO
+     * @description
+     * @example
+     */
     toggleMarketPlace() {
       this.$store.commit('toggleModal', {
         name: 'showMarketPlace',

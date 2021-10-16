@@ -135,6 +135,12 @@ export default Vue.extend({
   },
   methods: {
     ...UserPermissions.methods,
+    /**
+     * @method getMicLevel DocsTODO
+     * @description
+     * @param stream
+     * @example
+     */
     getMicLevel(stream: MediaStream) {
       const audioContext = new AudioContext()
       const gainNode = audioContext.createGain()
@@ -175,10 +181,21 @@ export default Vue.extend({
 
       draw()
     },
+    /**
+     * @method setupMicMeter DocsTODO
+     * @description
+     * @param stream
+     * @example
+     */
     setupMicMeter(stream: MediaStream) {
       this.$data.stream = stream
       this.getMicLevel(stream)
     },
+    /**
+     * @method setupDefaults DocsTODO
+     * @description
+     * @example
+     */
     async setupDefaults() {
       const permissionsObject: any = await this.getUserPermissions()
 
@@ -213,6 +230,11 @@ export default Vue.extend({
         this.isAudioOutput = permissionsObject.devices.audioOut[0]?.value || ''
       }
     },
+    /**
+     * @method enableAudio DocsTODO
+     * @description
+     * @example
+     */
     async enableAudio() {
       // Check to see if the user has permission
       try {
@@ -225,17 +247,44 @@ export default Vue.extend({
         this.$data.userDeniedAudioAccess = true
       }
     },
+    /**
+     * @method volumeControlValueChange DocsTODO
+     * @description
+     * @param volume
+     * @example
+     */
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('setVolume', volume)
     },
+    /**
+     * @method inputVolumeControlValueChange DocsTODO
+     * @description
+     * @param volume
+     * @example
+     */
     inputVolumeControlValueChange(volume: number) {
       this.$store.commit('setInputVolume', volume)
     },
+    /**
+     * @method hasConstraint DocsTODO
+     * @description
+     * @param prop
+     * @returns
+     * @example
+     */
     hasConstraint(prop: keyof MediaTrackConstraintSet): Boolean {
       const supports = navigator.mediaDevices.getSupportedConstraints()
       return Boolean(supports[prop])
     },
+    /**
+     * @method setContraint DocsTODO
+     * @description
+     * @param prop
+     * @param value
+     * @returns
+     * @example
+     */
     setConstraint(prop: keyof MediaTrackConstraintSet, value: any) {
       // hasConstraint is true only if the prop is supported by the browser
       if (!this.hasConstraint(prop)) {

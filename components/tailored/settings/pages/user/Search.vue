@@ -79,6 +79,11 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method showDropDown DocsTODO
+     * @description
+     * @example
+     */
     showDropDown() {
       this.dropDown = true
       const searchResult = this.$refs.searchResult as HTMLElement
@@ -94,15 +99,33 @@ export default Vue.extend({
         }
       }, 10)
     },
+    /**
+     * @method hideDropDown DocsTODO
+     * @description
+     * @example
+     */
     hideDropDown() {
       this.dropDown = false
     },
+    /**
+     * @method searchResult DocsTODO
+     * @description
+     * @example
+     */
     searchResult() {
       this.result = Users.filter((user) =>
         user.name.toLowerCase().startsWith(this.search.toLowerCase())
       )
       this.selection = -1
     },
+    /**
+     * @method selectUser DocsTODO
+     * @description
+     * @param user
+     * @param event
+     * @returns
+     * @example
+     */
     selectUser(user: User, event: Event) {
       if (!user) {
         return
@@ -112,6 +135,13 @@ export default Vue.extend({
       this.showDropDown()
       this.$emit('input', this.selected)
     },
+    /**
+     * @method handleKeydown DocsTODO
+     * @description
+     * @param event
+     * @returns
+     * @example
+     */
     handleKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case 'Backspace':
@@ -144,6 +174,13 @@ export default Vue.extend({
       this.showDropDown()
       return true
     },
+    /**
+     * @method removeSelected DocsTODO
+     * @description
+     * @param index
+     * @returns
+     * @example
+     */
     removeSelected(index: number) {
       this.selected.splice(index, 1)
       this.showDropDown()

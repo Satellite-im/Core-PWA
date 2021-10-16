@@ -18,10 +18,13 @@ interface UIState {
   }
   showPinned: Boolean
   fullscreen: Boolean
-  showEnhancers: Boolean
+  enhancers: {
+    show: Boolean
+    floating: Boolean
+  }
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
+  isScrollOver: Boolean
   isTyping: Object | Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
@@ -31,6 +34,7 @@ interface UIState {
     from: string
     payload: string
   }
+  recentReactions: Array<String>
 }
 
 const InitalUIState = (): UIState => ({
@@ -52,7 +56,10 @@ const InitalUIState = (): UIState => ({
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
   showPinned: false,
-  showEnhancers: false,
+  enhancers: {
+    show: false,
+    floating: false,
+  },
   messages: [],
   unreadMessage: 0,
   isScrollOver: false,
@@ -61,6 +68,7 @@ const InitalUIState = (): UIState => ({
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   editMessage: { id: '', from: '', payload: '' },
+  recentReactions: ['👍', '😂', '♥️'],
 })
 
 export default InitalUIState

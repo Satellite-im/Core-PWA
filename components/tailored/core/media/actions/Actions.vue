@@ -28,6 +28,11 @@ export default Vue.extend({
     ...mapState(['audio', 'video']),
   },
   methods: {
+    /**
+     * @method toggleMute
+     * @description Toggles mute for outgoing audio
+     * @example
+     */
     toggleMute() {
       const muted = this.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
@@ -35,6 +40,11 @@ export default Vue.extend({
 
       this.$store.commit('mute')
     },
+    /**
+     * @method toggleVideo
+     * @description Toggles outgoing video
+     * @example
+     */
     toggleVideo() {
       const videoDisabled = this.video.disabled
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
