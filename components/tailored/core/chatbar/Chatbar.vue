@@ -112,7 +112,7 @@ export default Vue.extend({
        * @example set('This is the new chatbar content')
        */
       set(val: string) {
-        this.$store.commit('chatbarContent', val)
+        this.$store.commit('ui/chatbarContent', val)
         this.$data.text = val
       },
     },
@@ -134,7 +134,7 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
+      this.$store.commit('ui/toggleEnhancers', !this.ui.showEnhancers)
     },
     /**
      * @method autoGrow DocsTODO
@@ -282,7 +282,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      this.$store.dispatch('sendMessage', {
+      this.$store.dispatch('ui/sendMessage', {
         value: this.value,
         user: this.$mock.user,
         isOwner: true,

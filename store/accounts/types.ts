@@ -1,4 +1,4 @@
-import { User } from "~/types/ui/user";
+import { User } from '~/types/ui/user'
 
 export enum RegistrationStatus {
   UKNOWN = 'unknown',

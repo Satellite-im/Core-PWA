@@ -55,7 +55,7 @@
         :type="ui.showSidebarUsers ? 'primary' : 'dark'"
         size="small"
         :text="$t('global.messages')"
-        :action="() => $store.commit('showSidebarUsers', true)"
+        :action="() => $store.commit('ui/showSidebarUsers', true)"
       >
         <message-square-icon size="1.2x" />
       </InteractablesButton>
@@ -64,7 +64,7 @@
         :type="!ui.showSidebarUsers ? 'primary' : 'dark'"
         size="small"
         :text="$t('global.groups')"
-        :action="() => $store.commit('showSidebarUsers', false)"
+        :action="() => $store.commit('ui/showSidebarUsers', false)"
       >
         <users-icon size="1.2x" />
       </InteractablesButton>

@@ -1,20 +1,20 @@
-import { RootState } from '../store.types'
+import { AccountsState } from './types'
 
 const getters = {
-  getPinHash: (state: RootState): string => {
-    return state.accounts.pinHash
+  getPinHash: (state: AccountsState): string => {
+    return state.pinHash
   },
-  getEncryptedPhrase: (state: RootState) => {
-    return state.accounts.encryptedPhrase
+  getEncryptedPhrase: (state: AccountsState) => {
+    return state.encryptedPhrase
   },
-  getPhrase: (state: RootState) => {
-    return state.accounts.phrase
+  getPhrase: (state: AccountsState) => {
+    return state.phrase
   },
-  getRegistrationStatus: (state: RootState) => {
-    return state.accounts.registrationStatus
+  getRegistrationStatus: (state: AccountsState) => {
+    return state.registrationStatus
   },
-  getActiveAccount: (state: RootState) => {
-    return state.accounts.active
+  getActiveAccount: (state: AccountsState) => {
+    return state.active
   },
 }
 

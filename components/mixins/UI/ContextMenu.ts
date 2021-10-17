@@ -15,10 +15,13 @@ export const ContextMenu = {
       e.preventDefault()
       const contextMenuStatus = this.ui.contextMenuStatus
       if (!contextMenuStatus) {
-        this.$store.commit('toggleContextMenu', true)
+        this.$store.commit('ui/toggleContextMenu', true)
       }
-      this.$store.commit('setContextMenuPosition', e)
-      this.$store.commit('setContextMenuValues', this.$data.contextMenuValues)
+      this.$store.commit('ui/setContextMenuPosition', e)
+      this.$store.commit(
+        'ui/setContextMenuValues',
+        this.$data.contextMenuValues
+      )
     },
   },
 }
