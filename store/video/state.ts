@@ -1,6 +1,4 @@
-interface VideoState {
-  disabled: boolean
-}
+import { VideoState } from './types'
 
 const InitalVideoState = (): VideoState => ({
   disabled: false,

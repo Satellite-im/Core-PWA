@@ -1,93 +1,58 @@
-import { NuxtState } from '@nuxt/types/app'
 import { without } from 'lodash'
+import { UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
 export default {
-  togglePinned(state: NuxtState, visible: Boolean) {
-    state.ui = {
-      ...state.ui,
-      showPinned: visible,
-    }
+  togglePinned(state: UIState, visible: boolean) {
+    state.showPinned = visible
   },
-  toggleContextMenu(state: NuxtState, enabled: Boolean) {
-    state.ui = {
-      ...state.ui,
-      contextMenuStatus: enabled,
-    }
+  toggleContextMenu(state: UIState, enabled: boolean) {
+    state.contextMenuStatus = enabled
   },
-  showSidebarUsers(state: NuxtState, enabled: Boolean) {
-    state.ui = {
-      ...state.ui,
-      showSidebarUsers: enabled,
-    }
+  showSidebarUsers(state: UIState, enabled: boolean) {
+    state.showSidebarUsers = enabled
   },
-  setContextMenuValues(state: NuxtState, values: any) {
-    state.ui = {
-      ...state.ui,
-      contextMenuValues: values,
-    }
+  setContextMenuValues(state: UIState, values: any) {
+    state.contextMenuValues = values
   },
-  setContextMenuPosition(state: NuxtState, e: any) {
-    state.ui = {
-      ...state.ui,
-      contextMenuPosition: { x: e.x, y: e.y },
-    }
+  setContextMenuPosition(state: UIState, e: any) {
+    state.contextMenuPosition = { x: e.x, y: e.y }
   },
-  setQuickProfilePosition(state: NuxtState, e: any) {
-    state.ui = {
-      ...state.ui,
-      quickProfilePosition: { x: e.x, y: e.y },
-    }
+  setQuickProfilePosition(state: UIState, e: any) {
+    state.quickProfilePosition = { x: e.x, y: e.y }
   },
-  quickProfile(state: NuxtState, profile: Object | Boolean) {
-    state.ui = {
-      ...state.ui,
-      quickProfile: profile,
-    }
+  quickProfile(state: UIState, profile: Object | boolean) {
+    state.quickProfile = profile
   },
-  chatbarContent(state: NuxtState, content: String) {
-    state.ui = {
-      ...state.ui,
-      chatbarContent: content,
-    }
+  chatbarContent(state: UIState, content: string) {
+    state.chatbarContent = content
   },
-  fullscreen(state: NuxtState, fullscreen: Boolean) {
-    state.ui = {
-      ...state.ui,
-      fullscreen,
-    }
+  fullscreen(state: UIState, fullscreen: boolean) {
+    state.fullscreen = fullscreen
   },
-  toggleEnhancers(state: NuxtState, options: any) {
-    state.ui = {
-      ...state.ui,
-      enhancers: {
-        show: options.show,
-        floating: options.floating || false,
-      },
-    }
+  toggleEnhancers(
+    state: UIState,
+    options: { show: boolean; floating: boolean }
+  ) {
+    state.enhancers = { show: options.show, floating: options.floating }
   },
-  toggleSettings(state: NuxtState, show: Boolean) {
-    state.ui = {
-      ...state.ui,
-      showSettings: show,
-    }
+  toggleSettings(state: UIState, show: boolean) {
+    state.showSettings = show
   },
-  toggleModal(state: NuxtState, modal: any) {
-    state.ui.modals[modal.name] = modal.state
+  toggleModal(state: UIState, modal: any) {
+    // @ts-ignore
+    state.modals[modal.name] = modal.state
   },
-  showSearchResult(state: NuxtState, enabled: Boolean) {
-    state.ui = {
-      ...state.ui,
-      showSearchResult: enabled,
-    }
+  showSearchResult(state: UIState, enabled: boolean) {
+    state.showSearchResult = enabled
   },
-  setMessages(state: NuxtState, messages: any[]) {
-    state.ui.messages = messages
+  setMessages(state: UIState, messages: any[]) {
+    state.messages = messages
   },
-  setIsScrollOver(state: NuxtState, status: boolean) {
-    state.ui.isScrollOver = status
-    if (!status) state.ui.unreadMessage = 0
+  setIsScrollOver(state: UIState, status: boolean) {
+    state.isScrollOver = status
+    if (!status) state.unreadMessage = 0
   },
   /**
    * @method sendMessage DocsTODO
@@ -96,8 +61,8 @@ export default {
    * @param isOwner
    * @example
    */
-  sendMessage(state: NuxtState, message: any, isOwner: boolean) {
-    const messages: any[] = [...state.ui.messages]
+  sendMessage(state: UIState, message: any, isOwner: boolean) {
+    const messages: any[] = [...state.messages]
     const lastIndex = messages.length - 1
     const lastMessage = messages[lastIndex]
     if (lastMessage) {
@@ -109,11 +74,11 @@ export default {
         replies: [],
       }
       if (lastMessage.from === message.user.address) {
-        state.ui.messages[lastIndex].messages.push({
+        state.messages[lastIndex].messages.push({
           ...messageContent,
         })
       } else {
-        state.ui.messages.push({
+        state.messages.push({
           id: Date.now(),
           at: Date.now(),
           type: 'group',
@@ -126,72 +91,57 @@ export default {
           ],
         })
       }
-      if (!isOwner && state.ui.isScrollOver) state.ui.unreadMessage++
+      if (!isOwner && state.isScrollOver) state.unreadMessage++
     }
   },
-  setTypingUser(state: NuxtState, user: Object | Boolean) {
-    state.ui = {
-      ...state.ui,
-      isTyping: user,
-    }
+  setTypingUser(state: UIState, user: Object | boolean) {
+    state.isTyping = user
   },
-  setActiveChannel(state: NuxtState, channel: Channel) {
-    state.ui = {
-      ...state.ui,
-      activeChannel: channel,
-    }
+  setActiveChannel(state: UIState, channel: Channel) {
+    state.activeChannel = channel
   },
   setReplyChatbarContent(
-    state: NuxtState,
+    state: UIState,
     message: {
       id: String
       from: String
       payload: String
     }
   ) {
-    state.ui = {
-      ...state.ui,
-      replyChatbarContent: message,
-    }
+    state.replyChatbarContent = message
   },
-  settingReaction(state: NuxtState, status: Boolean) {
-    state.ui = {
-      ...state.ui,
-      settingReaction: status,
-    }
+  settingReaction(state: UIState, status: boolean) {
+    state.settingReaction = status
   },
   /**
    * Called when user click the Edit Message on Context Menu or Edit action in message listings
-   * @param {NuxtState} state - Vuex state
+   * @param {UIState} state - Vuex state
    * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
    */
   setEditMessage(
-    state: NuxtState,
+    state: UIState,
     message: {
-      id: String
-      from: String
-      payload: String
+      id: string
+      from: string
+      payload: string
     }
   ) {
-    state.ui = {
-      ...state.ui,
-      editMessage: message,
-    }
+    state.editMessage = message
   },
   /**
    * Called when user complete to edit message, then update the message in message listing
-   * @param {NuxtState} state - Vuex state
+   * @param {UIState} state - Vuex state
    * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
    */
   saveEditMessage(
-    state: NuxtState,
+    state: UIState,
     message: {
       id: String
       from: String
       payload: String
     }
   ) {
-    const messages: any[] = [...state.ui.messages]
+    const messages: any[] = [...state.messages]
     let found = messages.find((item) => {
       if (item.id === message.from) {
         return true
@@ -207,24 +157,20 @@ export default {
       })
       if (found) {
         found.payload = message.payload
-        state.ui = {
-          ...state.ui,
-          messages,
-        }
+        state.messages = messages
       }
     }
   },
-
   /**
    * @method addReaction DocsTODO
    * @description
    * @param reaction
    * @example
    */
-  addReaction(state: NuxtState, reaction: any) {
-    const messageGroups: MessageGroup = [...state.ui.messages]
+  addReaction(state: UIState, reaction: any) {
+    const messageGroups: MessageGroup = [...state.messages]
 
-    // Find message group meant for reaction
+    // ßFind message group meant for reaction
     const currGroup = messageGroups?.find(
       (group) => group.id === reaction.groupID
     )
@@ -258,6 +204,7 @@ export default {
           const currReaction = currMessage.reactions.find(
             (react) => react.emoji === reaction.emoji
           )
+
           if (currReaction) {
             // If selected reaction already exist in reactions array
             if (
@@ -291,21 +238,16 @@ export default {
       }
     }
   },
-  setHoveredGlyphInfo(state: NuxtState, values: Object | undefined) {
-    state.ui = {
-      ...state.ui,
-      hoveredGlyphInfo: values,
-    }
+  setHoveredGlyphInfo(state: UIState, values: Object | undefined) {
+    state.hoveredGlyphInfo = values
   },
-  updateRecentReactions(state: NuxtState, emoji: String) {
-    const newRecentReactions = state.ui.recentReactions
-    if (!state.ui.recentReactions.includes(emoji)) {
+  updateRecentReactions(state: UIState, emoji: String) {
+    const newRecentReactions = state.recentReactions
+    if (!state.recentReactions.includes(emoji)) {
       newRecentReactions.unshift(emoji)
       newRecentReactions.pop()
     }
-    state.ui = {
-      ...state.ui,
-      recentReactions: newRecentReactions,
-    }
+
+    state.recentReactions = newRecentReactions
   },
 }

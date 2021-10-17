@@ -2,9 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { mapState } from 'vuex'
 import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -24,7 +24,7 @@ export default Vue.extend({
   },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
-    this.$store.commit('setTypingUser', this.$mock.users[0])
+    this.$store.commit('ui/setTypingUser', this.$mock.users[0])
   },
   methods: {
     /**
@@ -33,7 +33,7 @@ export default Vue.extend({
      * @example
      */
     toggleModal() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
       })
@@ -44,7 +44,7 @@ export default Vue.extend({
      * @example
      */
     acceptCall() {
-      this.$store.dispatch('acceptCall')
+      this.$store.dispatch('media/acceptCall')
       this.$Sounds.playSound(Sounds.CONNECTED)
     },
     /**
@@ -53,7 +53,7 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.dispatch('denyCall')
+      this.$store.dispatch('media/denyCall')
       this.$Sounds.playSound(Sounds.HANGUP)
     },
     /**
@@ -62,7 +62,7 @@ export default Vue.extend({
      * @example
      */
     toggleMarketPlace() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'showMarketPlace',
         state: !this.ui.modals.showMarketPlace,
       })

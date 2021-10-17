@@ -114,7 +114,7 @@ export default Vue.extend({
         finalPayload = `*${this.$t('conversation.multimedia')}*`
       }
 
-      this.$store.commit('setReplyChatbarContent', {
+      this.$store.commit('ui/setReplyChatbarContent', {
         id,
         payload: finalPayload,
         from: this.$props.from,
@@ -126,15 +126,15 @@ export default Vue.extend({
      * @example
      */
     emojiReaction() {
-      this.$store.commit('settingReaction', {
+      this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
-      this.$store.commit('toggleEnhancers', { show: true, floating: true })
+      this.$store.commit('ui/toggleEnhancers', { show: true, floating: true })
     },
     quickReaction(emoji: String) {
-      this.$store.dispatch('addReaction', {
+      this.$store.dispatch('ui/addReaction', {
         emoji,
         reactor: this.$mock.user.name,
         groupID: this.$props.group.id,
@@ -147,7 +147,7 @@ export default Vue.extend({
      */
     editMessage() {
       const { id, payload } = this.$props.message
-      this.$store.commit('setEditMessage', {
+      this.$store.commit('ui/setEditMessage', {
         id,
         payload,
         from: this.$props.group.id,
@@ -158,12 +158,12 @@ export default Vue.extend({
      * Called from MessageEdit component with changed message When save or cancel / Enter or Escape is pressed
      */
     saveMessage(message: string) {
-      this.$store.commit('setEditMessage', {
+      this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: message,
         from: this.$props.group.id,
       })
-      this.$store.commit('saveEditMessage', {
+      this.$store.commit('ui/saveEditMessage', {
         id: this.$props.message.id,
         payload: message,
         from: this.$props.group.id,

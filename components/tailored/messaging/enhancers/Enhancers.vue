@@ -41,7 +41,7 @@ export default Vue.extend({
      */
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
-        this.$store.dispatch('addReaction', {
+        this.$store.dispatch('ui/addReaction', {
           emoji: emoji.native,
           reactor: this.$mock.user.name,
           groupID: this.ui.settingReaction.groupID,
@@ -71,9 +71,11 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+      })
       if (this.ui.settingReaction.status) {
-        this.$store.commit('settingReaction', {
+        this.$store.commit('ui/settingReaction', {
           status: false,
           groupID: null,
           messageID: null,

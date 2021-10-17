@@ -65,13 +65,16 @@ export default Vue.extend({
       const newKeybind = this.$data.editingKeybind.newString
       for (const key in this.settings.keybinds) {
         if (this.settings.keybinds[key] === newKeybind) {
-          this.$store.commit('updateKeybinding', {
+          this.$store.commit('settings/updateKeybinding', {
             keybindName: key,
             newKeybind: '',
           })
         }
       }
-      this.$store.commit('updateKeybinding', { keybindName, newKeybind })
+      this.$store.commit('settings/updateKeybinding', {
+        keybindName,
+        newKeybind,
+      })
       this.$data.editingKeybind.newString = ''
       this.$data.editingKeybind.status = false
       this.activateKeybinds()
@@ -105,19 +108,19 @@ export default Vue.extend({
      * @example
      */
     resetKeybinds() {
-      this.$store.commit('updateKeybinding', {
+      this.$store.commit('settings/updateKeybinding', {
         keybindName: 'toggleMute',
         newKeybind: 'alt+m',
       })
-      this.$store.commit('updateKeybinding', {
+      this.$store.commit('settings/updateKeybinding', {
         keybindName: 'toggleDeafen',
         newKeybind: 'alt+d',
       })
-      this.$store.commit('updateKeybinding', {
+      this.$store.commit('settings/updateKeybinding', {
         keybindName: 'openSettings',
         newKeybind: 'alt+s',
       })
-      this.$store.commit('updateKeybinding', {
+      this.$store.commit('settings/updateKeybinding', {
         keybindName: 'callActiveChat',
         newKeybind: 'alt+c',
       })

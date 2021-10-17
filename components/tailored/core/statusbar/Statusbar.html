@@ -35,7 +35,7 @@
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Archived Messages"
       @click="() => {
-        $store.commit('togglePinned', !ui.showPinned)
+        $store.commit('ui/togglePinned', !ui.showPinned)
       }"
     >
       <archive-icon size="1x" class="control-icon" />

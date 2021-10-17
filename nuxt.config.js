@@ -158,5 +158,6 @@ export default {
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
+    textileKey: process.env.TEXTILE_API_KEY,
   },
 }

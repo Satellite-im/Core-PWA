@@ -1,14 +1,20 @@
 import { PublicKey } from '@solana/web3.js'
 import Vue from 'vue'
+import {
+  AcceptFriendRequestArguments,
+  CreateFriendRequestArguments,
+  FriendsError,
+  FriendsState,
+} from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import {
   FriendAccount,
   FriendsEvents,
   FriendStatus,
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { AccountsError } from '~/store/accounts/types'
 import {
   Friend,
@@ -16,13 +22,8 @@ import {
   IncomingRequest,
   OutgoingRequest,
 } from '~/types/ui/friends'
+import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
-import { ActionsArguments } from '../store.types'
-import {
-  AcceptFriendRequestArguments,
-  CreateFriendRequestArguments,
-  FriendsError,
-} from './types'
 
 export default {
   /**
@@ -31,7 +32,7 @@ export default {
    * @param
    * @example
    */
-  async fetchFriendRequests({ commit }: ActionsArguments) {
+  async fetchFriendRequests({ commit }: ActionsArguments<FriendsState>) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
@@ -63,7 +64,7 @@ export default {
    * @param
    * @example
    */
-  async fetchFriends({ dispatch }: ActionsArguments) {
+  async fetchFriends({ dispatch }: ActionsArguments<FriendsState>) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
@@ -83,7 +84,7 @@ export default {
    * @example
    */
   async fetchFriendDetails(
-    { commit, state }: ActionsArguments,
+    { commit, state, rootState }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -92,7 +93,7 @@ export default {
 
     // Check if the request was originally sent by the current user (outgoing)
     // and then accepted, or the other way round
-    const userKey = state.accounts.active
+    const userKey = rootState.accounts.active
     const sentByMe = friendAccount.from === userKey
     const friendKey = sentByMe ? friendAccount.to : friendAccount.from
     const encryptedMailboxId = sentByMe
@@ -124,7 +125,7 @@ export default {
       unreadCount: 0,
     }
 
-    const friendExists = state.friends.all.find(
+    const friendExists = state.all.find(
       (fr) => fr.publicKey === friend.publicKey
     )
 
@@ -150,7 +151,10 @@ export default {
    * @param
    * @example
    */
-  subscribeToFriendsEvents({ dispatch, commit }: ActionsArguments) {
+  subscribeToFriendsEvents({
+    dispatch,
+    commit,
+  }: ActionsArguments<FriendsState>) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
@@ -222,7 +226,7 @@ export default {
    * @example
    */
   async createFriendRequest(
-    { commit }: ActionsArguments,
+    { commit }: ActionsArguments<FriendsState>,
     { friendToKey, textileMailboxId }: CreateFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -324,7 +328,7 @@ export default {
    * @example
    */
   async acceptFriendRequest(
-    { commit, dispatch }: ActionsArguments,
+    { commit, dispatch }: ActionsArguments<FriendsState>,
     { friendRequest, textileMailboxId }: AcceptFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -382,7 +386,7 @@ export default {
    * @example
    */
   async denyFriendRequest(
-    { commit }: ActionsArguments,
+    { commit }: ActionsArguments<FriendsState>,
     friendRequest: FriendRequest
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -431,7 +435,7 @@ export default {
    * @example
    */
   async removeFriendRequest(
-    { commit }: ActionsArguments,
+    { commit }: ActionsArguments<FriendsState>,
     friendRequest: OutgoingRequest
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -479,7 +483,10 @@ export default {
    * @param friend
    * @example
    */
-  async removeFriend({ commit }: ActionsArguments, friend: Friend) {
+  async removeFriend(
+    { commit }: ActionsArguments<FriendsState>,
+    friend: Friend
+  ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
     const payerAccount = await $SolanaManager.getActiveAccount()

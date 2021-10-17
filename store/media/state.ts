@@ -1,8 +1,4 @@
-interface MediaState {
-  incomingCall: String
-  activeCall: String
-  streaming: Boolean
-}
+import { MediaState } from './types'
 
 const InitialMediaState = (): MediaState => ({
   incomingCall: 'Phoenix Kalindi',

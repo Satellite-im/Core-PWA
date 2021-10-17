@@ -52,13 +52,13 @@ export default Vue.extend({
      * @example
      */
     emojiReaction() {
-      this.$store.commit('settingReaction', {
+      this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
         replyID: this.$props.reply.id,
       })
-      this.$store.commit('toggleEnhancers', { show: true })
+      this.$store.commit('ui/toggleEnhancers', { show: true })
     },
     /**
      * @method quickReaction DocsTODO
@@ -67,7 +67,7 @@ export default Vue.extend({
      * @example
      */
     quickReaction(emoji: String) {
-      this.$store.dispatch('addReaction', {
+      this.$store.dispatch('ui/addReaction', {
         emoji,
         reactor: this.$mock.user.name,
         groupID: this.$props.group.id,
