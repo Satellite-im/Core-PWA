@@ -1,6 +1,7 @@
 export const Glyphs = {
   astrobunny: {
     name: 'Astrobunny',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
     id: '0123',
     stickerURLs: [
@@ -20,6 +21,7 @@ export const Glyphs = {
   },
   grimreaper: {
     name: 'Grim Reaper',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'LAM',
     id: '012312',
     stickerURLs: [
@@ -33,6 +35,7 @@ export const Glyphs = {
   },
   marshmellow: {
     name: 'Marshmello',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
     id: '012312',
     stickerURLs: [
@@ -57,6 +60,7 @@ export const Glyphs = {
   },
   food: {
     name: 'Food',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'Lya',
     id: 'jdsoer',
     stickerURLs: [
@@ -76,6 +80,7 @@ export const Glyphs = {
   },
   blackcat: {
     name: 'Black Cat',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'Dan Tavis',
     id: 'k321r',
     stickerURLs: [
@@ -89,6 +94,7 @@ export const Glyphs = {
   },
   genshin: {
     name: 'Genshin Impact 1',
+    description: 'Short description can go here. Lorem ipsum.',
     artists: 'John Treanor',
     id: '001',
     stickerURLs: [
@@ -107,6 +113,7 @@ export const Glyphs = {
   },
   genshinTwo: {
     name: 'Genshin Impact 2',
+    description: 'Short description can go here. Lorem ipsum.',
     artists: 'John Treanor',
     id: '002',
     stickerURLs: [
@@ -128,6 +135,7 @@ export const Glyphs = {
   },
   lamsEmoji: {
     name: 'LAM Collection',
+    description: 'Short description can go here. Lorem ipsum.',
     artists: 'LAM',
     id: '0103',
     stickerURLs: [
@@ -159,6 +167,7 @@ export const Glyphs = {
   },
   starWars: {
     name: 'Star Wars',
+    description: 'Short description can go here. Lorem ipsum.',
     artists: 'John Treanor',
     id: '0053',
     stickerURLs: [
@@ -175,6 +184,7 @@ export const Glyphs = {
   },
   birds: {
     name: 'Birds',
+    description: 'Short description can go here. Lorem ipsum.',
     artists: 'Dina Brodsky',
     id: '0903',
     stickerURLs: [
