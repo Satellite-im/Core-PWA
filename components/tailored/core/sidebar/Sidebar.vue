@@ -49,7 +49,7 @@ export default Vue.extend({
         return this.ui.showSidebarUsers
       },
       set(value: Boolean) {
-        this.$store.commit('showSidebarUsers', value)
+        this.$store.commit('ui/showSidebarUsers', value)
       },
     },
 >>>>>>> d77cadf (replaced NavButtons with ButtonGroup)
