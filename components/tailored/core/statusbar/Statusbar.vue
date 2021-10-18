@@ -119,7 +119,7 @@ export default Vue.extend({
       })
     },
     toggleWallet() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'wallet',
         state: !this.ui.modals.wallet,
       })

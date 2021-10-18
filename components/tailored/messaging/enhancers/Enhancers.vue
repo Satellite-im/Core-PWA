@@ -51,7 +51,7 @@ export default Vue.extend({
         this.toggleEnhancers()
       } else {
         this.$store.commit(
-          'chatbarContent',
+          'ui/chatbarContent',
           this.ui.chatbarContent + emoji.native
         )
       }

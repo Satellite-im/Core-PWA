@@ -12,7 +12,7 @@ export default Vue.extend({
   },
   methods: {
     async generateWallet() {
-      await this.$store.dispatch('generateWallet')
+      await this.$store.dispatch('accounts/generateWallet')
 
       this.$router.push('phrase')
     },
