@@ -60,7 +60,10 @@ export default Vue.extend({
     ...mapState(['dataState', 'search']),
     loading: {
       set(state: DataStateType) {
-        this.$store.commit('setDataState', { key: 'search', value: state })
+        this.$store.commit('dataState/setDataState', {
+          key: 'search',
+          value: state,
+        })
       },
       get() {
         return this.dataState.search

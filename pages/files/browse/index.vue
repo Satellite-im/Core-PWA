@@ -24,7 +24,7 @@ export default Vue.extend({
     DataStateType: () => DataStateType,
   },
   mounted(): void {
-    this.$store.dispatch('fetchFiles')
+    this.$store.dispatch('files/fetchFiles')
   },
   methods: {
     /**
