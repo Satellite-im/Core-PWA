@@ -1,6 +1,9 @@
-import { WebRTCEventBox, WebRTCEvents } from '~/libraries/WebRTC/types'
-
-type WebRTCEvent = keyof typeof WebRTCEvents
+import {
+  WebRTCEventBox,
+  WebRTCEvents,
+  WebRTCEvent,
+  WebRTCData,
+} from '~/libraries/WebRTC/types'
 
 export default class Emitter {
   private _events: typeof WebRTCEventBox = WebRTCEventBox
@@ -49,8 +52,13 @@ export default class Emitter {
       throw new Error(`Can't emit an event. Event "${event}" doesn't exits.`)
     }
 
-    const fireCallbacks = (callback: any) => {
-      callback(data)
+    const fireCallbacks = (callback: Function) => {
+      // eslint-disable-next-line node/no-callback-literal
+      callback({
+        at: Date.now(),
+        event: WebRTCEvents[event],
+        data,
+      } as Object as WebRTCData)
     }
 
     this._events[WebRTCEvents[event]].forEach(fireCallbacks)
