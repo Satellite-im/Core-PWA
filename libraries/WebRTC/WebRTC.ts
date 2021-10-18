@@ -1,8 +1,8 @@
 import { WebRTCUser } from '~/types/webrtc/User'
 
 import { Config } from '~/config'
-import Emitter from '~/libraries/WebRTC/Emitter'
 
+import Emitter from '~/libraries/WebRTC/Emitter'
 import { WebRTCEvents } from '~/libraries/WebRTC/types'
 
 export default class WebRTC extends Emitter {
