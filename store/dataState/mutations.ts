@@ -1,14 +1,10 @@
-import { NuxtState } from '@nuxt/types/app'
-import { DataStateType } from './types'
+import { DataState, DataStateType } from './types'
 const mutations = {
   setDataState(
-    state: NuxtState,
-    { key, value }: { key: string; value: DataStateType }
+    state: DataState,
+    { key, value }: { key: keyof DataState; value: DataStateType }
   ) {
-    state.dataState = {
-      ...state.dataState,
-      [key]: value,
-    }
+    state[key] = value
   },
 }
 

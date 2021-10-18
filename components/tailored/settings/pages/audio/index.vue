@@ -46,7 +46,7 @@ export default Vue.extend({
     // the state accordingly with the mutation
     isEchoCancellation: {
       set(state) {
-        this.$store.commit('echoCancellation', state)
+        this.$store.commit('settings/echoCancellation', state)
         this.setConstraint('echoCancellation', state)
       },
       get() {
@@ -55,7 +55,7 @@ export default Vue.extend({
     },
     isNoiseSuppression: {
       set(state) {
-        this.$store.commit('noiseSuppression', state)
+        this.$store.commit('settings/noiseSuppression', state)
         this.setConstraint('noiseSuppression', state)
       },
       get() {
@@ -64,7 +64,7 @@ export default Vue.extend({
     },
     isBitrate: {
       set(state) {
-        this.$store.commit('bitrate', state)
+        this.$store.commit('settings/bitrate', state)
         this.setConstraint('sampleRate', state)
       },
       get() {
@@ -73,7 +73,7 @@ export default Vue.extend({
     },
     isSampleSize: {
       set(state) {
-        this.$store.commit('sampleSize', state)
+        this.$store.commit('settings/sampleSize', state)
         this.setConstraint('sampleSize', state)
       },
       get() {
@@ -82,7 +82,7 @@ export default Vue.extend({
     },
     isAudioInput: {
       set(state) {
-        this.$store.commit('audioInput', state)
+        this.$store.commit('settings/audioInput', state)
       },
       get() {
         return this.settings.audioInput
@@ -90,7 +90,7 @@ export default Vue.extend({
     },
     isAudioOutput: {
       set(state) {
-        this.$store.commit('audioOutput', state)
+        this.$store.commit('settings/audioOutput', state)
         this.setConstraint('volume', state)
       },
       get() {
@@ -255,7 +255,7 @@ export default Vue.extend({
      */
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
-      this.$store.commit('setVolume', volume)
+      this.$store.commit('settings/setVolume', volume)
     },
     /**
      * @method inputVolumeControlValueChange DocsTODO
@@ -264,7 +264,7 @@ export default Vue.extend({
      * @example
      */
     inputVolumeControlValueChange(volume: number) {
-      this.$store.commit('setInputVolume', volume)
+      this.$store.commit('settings/setInputVolume', volume)
     },
     /**
      * @method hasConstraint DocsTODO

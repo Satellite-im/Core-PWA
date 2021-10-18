@@ -19,7 +19,7 @@ export default Vue.extend({
     return {}
   },
   computed: {
-    ...mapGetters(['getEncryptedPhrase', 'getActiveAccount']),
+    ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
     // Helper method for prettier loading messages
     loadingStep(): string {
       switch (this.getActiveAccount) {
@@ -45,7 +45,7 @@ export default Vue.extend({
      */
     async loadAccount() {
       try {
-        await this.$store.dispatch('loadAccount')
+        await this.$store.dispatch('accounts/loadAccount')
 
         this.$router.replace('/allcomponents')
       } catch (error) {

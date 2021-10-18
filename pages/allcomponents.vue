@@ -46,9 +46,9 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.$store.dispatch('fetchFriends')
-    this.$store.dispatch('fetchFriendRequests')
-    this.$store.dispatch('subscribeToFriendsEvents')
+    this.$store.dispatch('friends/fetchFriends')
+    this.$store.dispatch('friends/fetchFriendRequests')
+    this.$store.dispatch('friends/subscribeToFriendsEvents')
   },
   methods: {
     testAction(): void {

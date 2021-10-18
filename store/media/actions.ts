@@ -1,17 +1,12 @@
-// eslint-disable-next-line import/named
-import { Commit } from 'vuex'
-
-interface FetchCallsArguments {
-  commit: Commit
-  state: any
-}
+import { MediaState } from './types'
+import { ActionsArguments } from '~/types/store/store'
 
 export default {
   handler: () => {},
-  acceptCall({ commit }: FetchCallsArguments) {
+  acceptCall({ commit }: ActionsArguments<MediaState>) {
     commit('toggleIncomingCall', '')
   },
-  denyCall({ commit }: FetchCallsArguments) {
+  denyCall({ commit }: ActionsArguments<MediaState>) {
     commit('toggleIncomingCall', '')
   },
 }

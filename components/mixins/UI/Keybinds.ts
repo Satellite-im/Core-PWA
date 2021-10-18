@@ -70,7 +70,7 @@ export const Keybinds = {
      */
     openSettings() {
       const showSettings = this.$store.state.ui.showSettings
-      this.$store.commit('toggleSettings', !showSettings)
+      this.$store.commit('ui/toggleSettings', !showSettings)
     },
     /**
      * @method callActiveChat
