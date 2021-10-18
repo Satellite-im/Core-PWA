@@ -15,9 +15,9 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.$data.loading = false
-      this.$store.dispatch('setMessages', this.$mock.messages)
+      this.$store.dispatch('ui/setMessages', this.$mock.messages)
     }, 3000)
-    this.$store.dispatch('fetchFriends')
+    this.$store.dispatch('friends/fetchFriends')
   },
   computed: {
     ...mapState(['media']),

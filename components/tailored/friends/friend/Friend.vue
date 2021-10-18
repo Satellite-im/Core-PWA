@@ -50,7 +50,7 @@ export default Vue.extend({
     async createFriendRequest() {
       this.loading = 'sending'
       try {
-        await this.$store.dispatch('createFriendRequest', {
+        await this.$store.dispatch('friends/createFriendRequest', {
           friendToKey: new PublicKey(this.$props.friend.account.accountId),
           textileMailboxId:
             'cafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq', // TO DO : change textileMailboxId when it'll be available
@@ -65,7 +65,7 @@ export default Vue.extend({
     async acceptFriendRequest() {
       this.loading = 'accept'
       try {
-        await this.$store.dispatch('acceptFriendRequest', {
+        await this.$store.dispatch('friends/acceptFriendRequest', {
           friendRequest: this.$props.friend.request,
           textileMailboxId:
             'cafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq', // TO DO : change textileMailboxId when it'll be available

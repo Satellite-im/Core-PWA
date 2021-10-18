@@ -1,18 +1,12 @@
-import { NuxtState } from '@nuxt/types/app'
+import { SearchState } from './types'
 import { SearchResult } from '~/types/search/search'
 
 const mutations = {
-  search(state: NuxtState, result: SearchResult) {
-    state.search = {
-      ...state.search,
-      result,
-    }
+  search(state: SearchState, result: SearchResult) {
+    state.result = result
   },
-  setSearchQuery(state: NuxtState, query: string) {
-    state.search = {
-      ...state.search,
-      query,
-    }
+  setSearchQuery(state: SearchState, query: string) {
+    state.query = query
   },
 }
 

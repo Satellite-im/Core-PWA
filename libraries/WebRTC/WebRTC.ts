@@ -2,7 +2,10 @@ import { WebRTCUser } from '~/types/webrtc/User'
 
 import { Config } from '~/config'
 
-export default class WebRTC {
+import Emitter from '~/libraries/WebRTC/Emitter'
+import { WebRTCEvents } from '~/libraries/WebRTC/types'
+
+export default class WebRTC extends Emitter {
   // Identifier to connect to signaling server with
   id: string | undefined
   // If this is undefined, the WebRTC services cannot run
@@ -17,6 +20,7 @@ export default class WebRTC {
   protected _announceURLs: Array<string> = Config.webtorrent.announceURLs
 
   constructor() {
+    super()
     this._fnQueue = []
     this.peers = new Map()
   }
@@ -32,6 +36,7 @@ export default class WebRTC {
 
     this.initalized = true
     this._runQueue()
+    this.emit(WebRTCEvents.INIT, '')
   }
 
   /**

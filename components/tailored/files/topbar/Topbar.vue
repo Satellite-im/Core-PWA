@@ -44,7 +44,7 @@ export default Vue.extend({
      * @example
      */
     hide(modalName: String) {
-      this.$store.commit('toggleModal', { name: modalName, state: false })
+      this.$store.commit('ui/toggleModal', { name: modalName, state: false })
     },
   },
 })
