@@ -15,7 +15,7 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   mounted() {
-    this.$store.commit('fullscreen', false)
+    this.$store.commit('ui/fullscreen', false)
   },
   methods: {
     /**
@@ -24,7 +24,7 @@ export default Vue.extend({
      * @example @click="toggleFullscreen"
      */
     toggleFullscreen() {
-      this.$store.commit('fullscreen', !this.ui.fullscreen)
+      this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
     },
   },
 })

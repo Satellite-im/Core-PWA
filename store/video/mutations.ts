@@ -1,12 +1,8 @@
-import { NuxtState } from '@nuxt/types/app'
+import { VideoState } from './types'
 
 const mutations = {
-  toggleCamera(state: NuxtState) {
-    const isDisabled = state.video.disabled
-    state.video = {
-      ...state.video,
-      disabled: !isDisabled,
-    }
+  toggleCamera(state: VideoState) {
+    state.disabled = !state.disabled
   },
 }
 

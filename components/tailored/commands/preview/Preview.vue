@@ -66,7 +66,7 @@ export default Vue.extend({
      * @example
      */
     completeCommand(command: CurrentCommand) {
-      this.$store.commit('chatbarContent', `/${command.name}`)
+      this.$store.commit('ui/chatbarContent', `/${command.name}`)
     },
   },
 })

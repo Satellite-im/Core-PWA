@@ -23,7 +23,7 @@ export default Vue.extend({
      * @description Closes quickProfile by commiting quickProfile false to state
      */
     close() {
-      this.$store.commit('quickProfile', false)
+      this.$store.commit('ui/quickProfile', false)
     },
     /**
      * @method close
@@ -42,14 +42,14 @@ export default Vue.extend({
           clickY + quickProfile.clientHeight - window.innerHeight
         if (widthOverflow > -8) {
           clickX -= quickProfile.clientWidth
-          this.$store.commit('setQuickProfilePosition', {
+          this.$store.commit('ui/setQuickProfilePosition', {
             x: clickX,
             y: clickY,
           })
         }
         if (heightOverflow > -8) {
           clickY -= heightOverflow + 12
-          this.$store.commit('setQuickProfilePosition', {
+          this.$store.commit('ui/setQuickProfilePosition', {
             x: clickX,
             y: clickY,
           })

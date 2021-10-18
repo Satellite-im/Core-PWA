@@ -32,7 +32,7 @@ export default Vue.extend({
      * @description Closes context menu by setting toggleContextMenu in state to false
      */
     close() {
-      this.$store.commit('toggleContextMenu', false)
+      this.$store.commit('ui/toggleContextMenu', false)
     },
     /**
      * @method handle
@@ -60,11 +60,17 @@ export default Vue.extend({
         clickY + contextMenu.clientHeight - window.innerHeight
       if (widthOverflow > -8) {
         clickX -= contextMenu.clientWidth
-        this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+        this.$store.commit('ui/setContextMenuPosition', {
+          x: clickX,
+          y: clickY,
+        })
       }
       if (heightOverflow > -8) {
         clickY -= heightOverflow + 12
-        this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+        this.$store.commit('ui/setContextMenuPosition', {
+          x: clickX,
+          y: clickY,
+        })
       }
     },
   },

@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 
@@ -22,8 +22,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['getPinHash']),
-    ...mapState(['accounts']),
+    ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
   },
   methods: {
     /**
@@ -50,9 +49,9 @@ export default Vue.extend({
       this.error = ''
 
       try {
-        await this.$store.dispatch('unlock', this.$data.pin)
+        await this.$store.dispatch('accounts/unlock', this.$data.pin)
 
-        if (this.accounts.phrase === '') {
+        if (this.getPhrase === '') {
           this.$router.replace('/setup/disclaimer')
         } else {
           this.$router.replace('/')
@@ -71,7 +70,7 @@ export default Vue.extend({
      */
     async create() {
       try {
-        await this.$store.dispatch('setPin', this.$data.pin)
+        await this.$store.dispatch('accounts/setPin', this.$data.pin)
         await this.decrypt()
       } catch (error) {
         this.error = error.message
