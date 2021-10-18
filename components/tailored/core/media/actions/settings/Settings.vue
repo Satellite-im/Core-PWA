@@ -113,18 +113,12 @@ export default Vue.extend({
           if (clickedItem.classList.contains('open')) {
             clickedItem.classList.remove('open')
             clickedItemBody.style.height = '0'
-            clickedItemBody.style.overflow = 'hidden'
           } else {
             clickedItem.classList.add('open')
             clickedItemBody.style.height =
               (clickedItemBody.children[0] as HTMLElement).offsetHeight +
               2 +
               'px'
-            /* set item body overflow property unset after body is rendered */
-            setTimeout(() => {
-              // @ts-ignore
-              clickedItemBody.style.overflow = 'unset'
-            }, 100)
           }
           for (let i = 0, ni = items.length; i < ni; i++) {
             const item = items[i] as HTMLElement
@@ -132,7 +126,6 @@ export default Vue.extend({
               item.classList.remove('open')
               const itemBody = item.querySelector('.item-body') as HTMLElement
               itemBody.style.height = '0'
-              itemBody.style.overflow = 'hidden'
             }
           }
         }
@@ -199,4 +192,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Settings.less"></style>
+<style lang="less" src="./Settings.less"></style>
