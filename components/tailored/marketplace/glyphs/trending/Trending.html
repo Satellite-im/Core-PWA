@@ -1,6 +1,9 @@
 <div class="glyph-trending-section">
   <TypographySubtitle :size="6" text="Trending" />
   <div class="trending-list">
-    <TailoredMarketplaceGlyphsTrendingItem v-for="(item, i) in list" :item="item"></TailoredMarketplaceGlyphsTrendingItem>
+    <TailoredMarketplaceGlyphsTrendingItem
+      v-for="(item, i) in list"
+      :item="item"
+    ></TailoredMarketplaceGlyphsTrendingItem>
   </div>
 </div>
