@@ -40,10 +40,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-<<<<<<< HEAD
     ...mapState(['ui', 'dataState', 'media', 'friends']),
-=======
-    ...mapState(['ui', 'dataState', 'media']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -52,7 +49,6 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebarUsers', value)
       },
     },
->>>>>>> d77cadf (replaced NavButtons with ButtonGroup)
   },
   mounted() {
     /**
