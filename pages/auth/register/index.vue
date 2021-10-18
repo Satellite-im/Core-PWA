@@ -17,7 +17,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['getRegistrationStatus']),
+    ...mapGetters('accounts', ['getRegistrationStatus']),
     hasToRegister() {
       return this.getRegistrationStatus === RegistrationStatus.UKNOWN
     },
