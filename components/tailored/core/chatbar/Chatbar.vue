@@ -134,7 +134,9 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('ui/toggleEnhancers', !this.ui.showEnhancers)
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+      })
     },
     /**
      * @method autoGrow DocsTODO

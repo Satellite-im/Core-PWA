@@ -50,7 +50,7 @@ export const Keybinds = {
       const muted = this.$store.state.audio.muted
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
       else this.$Sounds.playSound(Sounds.UNMUTE)
-      this.$store.commit('mute')
+      this.$store.commit('audio/mute')
     },
     /**
      * @method toggleDeafen
@@ -61,7 +61,7 @@ export const Keybinds = {
       const deafened = this.$store.state.audio.deafened
       if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
       else this.$Sounds.playSound(Sounds.UNDEAFEN)
-      this.$store.commit('deafen')
+      this.$store.commit('audio/deafen')
     },
     /**
      * @method openSettings
