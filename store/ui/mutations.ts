@@ -116,10 +116,14 @@ export default {
   /**
    * Called when user click the Edit Message on Context Menu or Edit action in message listings
 <<<<<<< HEAD
+<<<<<<< HEAD
    * @param {NuxtState} state - Vuex state
 =======
    * @param {UIState} state - Vuex state
 >>>>>>> 07c4ffc5595c33c089c36e3452352577f5ea8d70
+=======
+   * @param {NuxtState} state - Vuex state
+>>>>>>> ed88410 (update(Chatbar): updated caret control and tested its flexibility)
    * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
    */
   setEditMessage(
@@ -135,10 +139,14 @@ export default {
   /**
    * Called when user complete to edit message, then update the message in message listing
 <<<<<<< HEAD
+<<<<<<< HEAD
    * @param {NuxtState} state - Vuex state
 =======
    * @param {UIState} state - Vuex state
 >>>>>>> 07c4ffc5595c33c089c36e3452352577f5ea8d70
+=======
+   * @param {NuxtState} state - Vuex state
+>>>>>>> ed88410 (update(Chatbar): updated caret control and tested its flexibility)
    * @param message  - Message to edit {id: message's id, from: group's id, payload: content}
    */
   saveEditMessage(
