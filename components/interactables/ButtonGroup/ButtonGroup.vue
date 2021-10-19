@@ -5,7 +5,12 @@ import Vue from 'vue'
 export default Vue.extend({
   props: {
     value: {
-      type: String,
+      type: [String, Boolean, Number],
+      required: false,
+      default: null,
+    },
+    values: {
+      type: Array,
       required: false,
       default: null,
     },
@@ -31,6 +36,7 @@ export default Vue.extend({
       required: false,
       default: 'active',
     },
+    fullWidth: Boolean,
   },
   data() {
     return {
@@ -39,9 +45,10 @@ export default Vue.extend({
   },
   computed: {},
   mounted() {
-    this.$el.querySelectorAll('.button').forEach((button) => {
+    this.$el.querySelectorAll('.button').forEach((button, index) => {
       const text = button.querySelector('span')?.textContent
-      if (text === this.value) {
+      const value = (this.values ? this.values[index] : text) as String
+      if (value === this.value) {
         button.classList.add(this.activeClass)
         this.active = button as HTMLElement
       }
@@ -51,7 +58,7 @@ export default Vue.extend({
         }
         this.active = button as HTMLElement
         this.active.classList.add(this.activeClass)
-        this.$emit('input', text)
+        this.$emit('input', value)
         if (this.action != null) {
           this.action(text)
         }

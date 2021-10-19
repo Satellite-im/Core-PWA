@@ -1,6 +1,6 @@
 import { Command, CurrentCommand } from '~/types/utils/commands'
 
-const commandPrefix = '/'
+export const commandPrefix = '/'
 
 /**
  * @method containsCommand
@@ -25,7 +25,7 @@ export function containsCommand(text: string) {
  * @example
  */
 export function parseCommand(text: string): CurrentCommand {
-  const splitMessage = text.split(/\s+/)
+  const splitMessage = text.trim().split(/\s+/)
   return {
     name: splitMessage[0].replace(commandPrefix, ''),
     args: splitMessage.slice(1, splitMessage.length),
@@ -44,6 +44,9 @@ export function isArgsValid(
   currentArgs: Array<String> = []
 ): boolean {
   return command.args.every((a, i) => {
+    if (a.name === currentArgs[i]) {
+      return true
+    }
     const possibleValues = a.options.split(' | ')
     return (
       !currentArgs[i] || // Assuming args are optional
