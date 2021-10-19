@@ -8,11 +8,10 @@
     v-if="type === 'image' && source"
     alt="Cirlce Image"
     :class="`${square ? 'is-square' : 'is-rounded'} image`">
-  <jazzicon
+  <UiSatelliteCircle 
     v-else-if="type === 'random'"
-    class="jazzicon"
     :address="seed"
-    :diameter="size"
+    :name="name"
   />
   <UiDynamicIcon
     size="1x"
