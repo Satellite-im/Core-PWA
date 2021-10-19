@@ -1,18 +1,10 @@
 <template src="./Circle.html"></template>
 <script lang="ts">
 // @ts-ignore - Missing Types
-import Jazzicon from 'vue-jazzicon'
 import Vue, { PropType } from 'vue'
-
-import { CircleIcon } from 'satellite-lucide-icons'
-
 import { CircleType } from './types'
 
 export default Vue.extend({
-  components: {
-    Jazzicon,
-    CircleIcon,
-  },
   props: {
     /**
      * Pixel diameter size of the circle
@@ -69,6 +61,13 @@ export default Vue.extend({
     color: {
       type: String,
       default: '#16161e',
+    },
+    /**
+     * String of the SatelliteCircle to be capitalized
+     */
+    name: {
+      type: String,
+      default: '',
     },
   },
 })
