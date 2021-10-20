@@ -11,6 +11,7 @@
   <div class="shop-list">
     <TailoredMarketplaceGlyphsShopItem
       v-for="item in marketGlyphs"
+      :key="item.id"
       :item="item"
     ></TailoredMarketplaceGlyphsShopItem>
   </div>

@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   methods: {
     goBack() {
-      this.$store.commit('setGlyphMarketplaceView', {
+      this.$store.commit('ui/setGlyphMarketplaceView', {
         view: GlyphMarketViewStatus.HOME,
         shopId: null,
       })

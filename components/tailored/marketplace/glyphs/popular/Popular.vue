@@ -22,7 +22,7 @@ export default Vue.extend({
   methods: {
     shopGlyph() {
       if (this.popularGlyph) {
-        this.$store.commit('setGlyphMarketplaceView', {
+        this.$store.commit('ui/setGlyphMarketplaceView', {
           view: GlyphMarketViewStatus.SHOP_DETAIL,
           // @ts-ignore
           shopId: this.popularGlyph.id,

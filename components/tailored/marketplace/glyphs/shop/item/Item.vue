@@ -19,7 +19,7 @@ export default Vue.extend({
   },
   methods: {
     goToShopItem() {
-      this.$store.commit('setGlyphMarketplaceView', {
+      this.$store.commit('ui/setGlyphMarketplaceView', {
         view: GlyphMarketViewStatus.SHOP_DETAIL,
         shopId: this.item.id,
       })

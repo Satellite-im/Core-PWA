@@ -250,10 +250,7 @@ export default {
 
     state.recentReactions = newRecentReactions
   },
-  setGlyphMarketplaceView(state: NuxtState, values: Object) {
-    state.ui = {
-      ...state.ui,
-      glyphMarketplaceView: values,
-    }
+  setGlyphMarketplaceView(state: UIState, values: Object) {
+    state.glyphMarketplaceView = values
   },
 }
