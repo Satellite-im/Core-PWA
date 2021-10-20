@@ -6,7 +6,7 @@
     <UiCircle type="random" :seed="user.address" :size="45" />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
-  <TypographyText :text="`${user.address.substr(0, 23)}...`" :size="6" class="address" />
+  <TypographyText :text="`${user.publicKey.substr(0, 23)}...`" :size="6" class="address" />
   <TypographyText :text="user.status" :size="6" />
   <UiHorizontalRule />
   <InteractablesInputGroup :icon="{ style: 'far', name: 'arrow-circle-right' }" type="primary" :placeholder="`Message ${user.name}...`" />
