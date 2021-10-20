@@ -38,6 +38,7 @@ export type GlyphShopFilterItem = {
 }
 
 export type GlyphShopItem = {
+  id: number
   glyph: Glyph
   price: number
   image: string

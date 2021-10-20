@@ -308,4 +308,10 @@ export default {
       recentReactions: newRecentReactions,
     }
   },
+  setGlyphMarketplaceView(state: NuxtState, values: Object) {
+    state.ui = {
+      ...state.ui,
+      glyphMarketplaceView: values,
+    }
+  },
 }
