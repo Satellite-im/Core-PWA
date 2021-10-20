@@ -1,10 +1,5 @@
+import { GlyphMarketViewStatus } from './types'
 import { Channel } from '~/types/ui/server'
-
-export enum GlyphMarketViewStatus {
-  HOME = 'unknown',
-  SHOP_ALL = 'shop_all',
-  SHOP_DETAIL = 'shop_detail',
-}
 
 interface UIState {
   contextMenuStatus: Boolean

@@ -1,4 +1,4 @@
-<div class="glyph-card">
+<div v-if="item" class="glyph-card">
   <div class="glyph-card-header" :style="`background-image:url(${item.image})`">
     <div class="btn-group">
       <div class="badges">
@@ -25,7 +25,7 @@
     <div class="description">{{ item.glyph.description }}</div>
     <div class="price">
       ${{item.price.toFixed(2)}}
-      <div class="btn-buy">
+      <div class="btn-buy" @click="goToShopItem()">
         <shopping-cart-icon size="1.4x" />
       </div>
     </div>

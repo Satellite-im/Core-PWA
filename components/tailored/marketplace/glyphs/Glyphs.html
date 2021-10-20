@@ -1,6 +1,21 @@
 <div class="marketplace-glyphs">
-  <TailoredMarketplaceGlyphsTrending
-    :list="$mock.glyphs"
-  ></TailoredMarketplaceGlyphsTrending>
-  <TailoredMarketplaceGlyphsShop></TailoredMarketplaceGlyphsShop>
+  <div
+    v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.HOME"
+    class="marketplace-glyphs-home"
+  >
+    <TailoredMarketplaceGlyphsTrending
+      :list="$mock.glyphs"
+    ></TailoredMarketplaceGlyphsTrending>
+    <TailoredMarketplaceGlyphsShop title="Shop"></TailoredMarketplaceGlyphsShop>
+  </div>
+  <div v-else class="marketplace-glyphs-detail">
+    <div class="go-back" @click="goBack()">
+      <chevron-left-icon size="1.5x"></chevron-left-icon>
+      <TypographySubtitle :size="6" text="Back" />
+    </div>
+    <TailoredMarketplaceGlyphsShop
+      v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_ALL"
+      title="Shop All Stickers"
+    ></TailoredMarketplaceGlyphsShop>
+  </div>
 </div>

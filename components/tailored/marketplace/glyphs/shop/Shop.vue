@@ -5,6 +5,12 @@ import Vue from 'vue'
 import { marketGlyphShopFilter, marketGlyphs } from '~/mock/marketplace'
 
 export default Vue.extend({
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       marketGlyphShopFilter,

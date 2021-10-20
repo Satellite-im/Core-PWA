@@ -2,12 +2,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
   props: {
     list: {
-      type: Array as PropType<Array<any>>,
-      default: () => [],
+      type: Object as PropType<Glyph>,
+      default: () => {},
     },
   },
 })

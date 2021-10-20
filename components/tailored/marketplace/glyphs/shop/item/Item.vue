@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { HeartIcon, ShoppingCartIcon } from 'satellite-lucide-icons'
 import { GlyphShopItem } from '~/types/marketplace/marketplace'
+import { GlyphMarketViewStatus } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -13,10 +14,17 @@ export default Vue.extend({
   props: {
     item: {
       type: Object as PropType<GlyphShopItem>,
-      default: () => {},
+      default: null,
     },
   },
-  data() {},
+  methods: {
+    goToShopItem() {
+      this.$store.commit('setGlyphMarketplaceView', {
+        view: GlyphMarketViewStatus.SHOP_DETAIL,
+        shopId: this.item.id,
+      })
+    },
+  },
 })
 </script>
 
