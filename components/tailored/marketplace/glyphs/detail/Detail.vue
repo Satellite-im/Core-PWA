@@ -6,7 +6,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ChevronLeftIcon, HeartIcon } from 'satellite-lucide-icons'
 
-import { marketGlyphs } from '~/mock/marketplace'
 import { GlyphShopItem } from '~/types/marketplace/marketplace'
 
 export default Vue.extend({
@@ -17,7 +16,6 @@ export default Vue.extend({
   props: {},
   data() {
     return {
-      marketGlyphs,
       glyphDetail: null,
     }
   },
@@ -27,7 +25,7 @@ export default Vue.extend({
   mounted() {
     if (this.ui.glyphMarketplaceView.shopId) {
       // @ts-ignore
-      this.glyphDetail = this.marketGlyphs.find(
+      this.glyphDetail = this.$mock.marketplace.marketGlyphs.find(
         (elm: GlyphShopItem) => elm.id === this.ui.glyphMarketplaceView.shopId
       )
     }

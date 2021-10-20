@@ -92,7 +92,7 @@ export const marketGlyphs = [
     glyph: Glyphs.genshin,
     image: require('~/assets/img/glyphShopBg2.png'),
     price: 7,
-    isNew: false,
+    isNew: true,
     isSale: true,
     like: true,
   },

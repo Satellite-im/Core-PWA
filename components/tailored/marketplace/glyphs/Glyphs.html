@@ -3,6 +3,12 @@
     v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.HOME"
     class="marketplace-glyphs-home"
   >
+    <div class="home-content">
+      <div class="featured-block">
+        <TailoredMarketplaceGlyphsFeatured></TailoredMarketplaceGlyphsFeatured>
+      </div>
+      <TailoredMarketplaceGlyphsPopular></TailoredMarketplaceGlyphsPopular>
+    </div>
     <TailoredMarketplaceGlyphsTrending
       :list="$mock.glyphs"
     ></TailoredMarketplaceGlyphsTrending>

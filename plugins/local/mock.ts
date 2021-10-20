@@ -6,6 +6,8 @@ import { ExampleGroup, Groups } from '~/mock/groups'
 import {
   marketCategories,
   marketFilters,
+  marketGlyphs,
+  marketGlyphShopFilter,
   marketProducts,
 } from '~/mock/marketplace'
 import { RecentTransactions, LinkedAccounts, Details } from '~/mock/wallet'
@@ -35,6 +37,8 @@ const mock = {
     marketCategories,
     marketFilters,
     marketProducts,
+    marketGlyphs,
+    marketGlyphShopFilter,
   },
   files: Files,
   friends: Friends,
