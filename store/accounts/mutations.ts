@@ -33,6 +33,14 @@ const mutations = {
       state: 'online',
     }
   },
+  updateMailboxId(state: AccountsState, mailboxId: string) {
+    if (state.details) {
+      state.details = {
+        ...state.details,
+        mailboxId,
+      }
+    }
+  },
   setRegistrationStatus(
     state: AccountsState,
     registrationStates: RegistrationStatus

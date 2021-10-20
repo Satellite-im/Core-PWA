@@ -35,10 +35,13 @@ export class MailboxManager {
   /**
    * @method init
    * @description Initializes the mailbox for the current user
+   * @returns the mailbox id
    */
-  async init() {
+  async init(): Promise<string> {
     const users: Users = this.textile.users
     this.mailboxID = await users.setupMailbox()
+
+    return this.mailboxID
   }
 
   /**

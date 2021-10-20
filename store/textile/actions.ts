@@ -11,8 +11,9 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    await $TextileManager.init(config)
+    const mailboxId = await $TextileManager.init(config)
 
     commit('textileInitialized', true)
+    commit('accounts/updateMailboxId', mailboxId, { root: true })
   },
 }

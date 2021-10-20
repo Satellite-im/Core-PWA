@@ -25,6 +25,7 @@ import {
 import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
 import { DataStateType } from '../dataState/types'
+import TextileManager from '~/libraries/Textile/TextileManager'
 
 export default {
   /**
@@ -238,10 +239,18 @@ export default {
    */
   async createFriendRequest(
     { commit }: ActionsArguments<FriendsState>,
-    { friendToKey, textileMailboxId }: CreateFriendRequestArguments
+    { friendToKey }: CreateFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (
+      !$TextileManager.mailboxManager ||
+      !$TextileManager.mailboxManager.isInitialized()
+    ) {
+      throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
+    }
 
     const payerAccount = await $SolanaManager.getActiveAccount()
 
@@ -308,7 +317,7 @@ export default {
     // Encrypt textile mailbox id for the recipient
     const encryptedMailboxId = await $Crypto.encryptFor(
       friendToKey.toBase58(),
-      textileMailboxId
+      $TextileManager.mailboxManager.mailboxID
     )
 
     const transactionHash = await friendsProgram.createFriendRequest(
@@ -340,10 +349,18 @@ export default {
    */
   async acceptFriendRequest(
     { commit, dispatch }: ActionsArguments<FriendsState>,
-    { friendRequest, textileMailboxId }: AcceptFriendRequestArguments
+    { friendRequest }: AcceptFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (
+      !$TextileManager.mailboxManager ||
+      !$TextileManager.mailboxManager.isInitialized()
+    ) {
+      throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
+    }
 
     const payerAccount = await $SolanaManager.getActiveAccount()
 
@@ -376,7 +393,7 @@ export default {
     // Encrypt textile mailbox id for the recipient
     const encryptedMailboxId = await $Crypto.encryptFor(
       friendFromKey,
-      textileMailboxId
+      $TextileManager.mailboxManager.mailboxID
     )
 
     const transactionId = await friendsProgram.acceptFriendRequest(
