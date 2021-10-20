@@ -6,7 +6,7 @@
   justify-content: flex-start;
   padding-left: 0.6rem;
   padding-top: @normal-spacing;
-  z-index: @base-z-index;
+  z-index: @base-z-index + 1;
 
   .circle-group {
     margin: @normal-spacing 0;
@@ -59,7 +59,6 @@
   .scroll-area {
     height: auto;
     max-height: calc(100% - 10rem);
-    width: 200px;
     display: flex;
   }
   #list-container {
