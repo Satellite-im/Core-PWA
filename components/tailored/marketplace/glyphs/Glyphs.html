@@ -15,7 +15,10 @@
     </div>
     <TailoredMarketplaceGlyphsShop
       v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_ALL"
-      title="Shop All Stickers"
+      title="Shop All Glyphs"
     ></TailoredMarketplaceGlyphsShop>
+    <TailoredMarketplaceGlyphsDetail
+      v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_DETAIL"
+    ></TailoredMarketplaceGlyphsDetail>
   </div>
 </div>

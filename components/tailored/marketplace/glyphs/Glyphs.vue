@@ -38,4 +38,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Glyphs.less"></style>
+<style lang="less" src="./Glyphs.less"></style>

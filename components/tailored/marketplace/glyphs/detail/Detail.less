@@ -1,0 +1,60 @@
+.glyph-marketplace-detail {
+  margin-top: @xlarge-spacing;
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .owner-name {
+      display: flex;
+      align-items: center;
+      .circle {
+        margin-right: @light-spacing;
+      }
+    }
+  }
+  .glyph-detail-card {
+    width: 100%;
+    max-width: 100%;
+    font-family: @primary-font;
+    border-radius: @corner-rounding;
+    overflow: hidden;
+    margin-top: @normal-spacing;
+    border: @light-border;
+    background: transparent;
+    .bg-header {
+      width: 100%;
+      height: 5rem;
+      background-position: center;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      padding: @normal-spacing;
+    }
+    .glyph-content {
+      width: 100%;
+      display: flex;
+      padding: @xlarge-spacing;
+      background: @semitransparent-dark-gradient;
+      .glyph-list {
+        flex-grow: 4;
+        flex-basis: 0;
+        padding: @light-spacing;
+        div {
+          display: inline-block;
+          margin: 0 @light-spacing @light-spacing 0;
+        }
+      }
+      .glyph-content-text {
+        flex-grow: 3;
+        flex-basis: 0;
+        .is-text {
+          margin-bottom: @xlarge-spacing;
+        }
+        .glyph-name {
+          .subtitle {
+            margin-right: @light-spacing;
+          }
+        }
+      }
+    }
+  }
+}

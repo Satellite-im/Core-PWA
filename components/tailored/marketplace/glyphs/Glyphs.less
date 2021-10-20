@@ -10,4 +10,22 @@
       color: @bright-text;
     }
   }
+  .badges {
+    display: flex;
+    align-items: center;
+    .badge-new,
+    .badge-sale {
+      color: @white;
+      background-color: @green;
+      padding: 8px 10px;
+      border-radius: 4px;
+      margin-right: @xlight-spacing;
+    }
+    .badge-new {
+      background-color: @green;
+    }
+    .badge-sale {
+      background-color: @red;
+    }
+  }
 }
