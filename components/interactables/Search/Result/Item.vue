@@ -3,7 +3,7 @@
     <UiCircle
       class="avatar"
       type="random"
-      :seed="data.user.address"
+      :seed="data.user.publicKey"
       :size="38"
       :source="data.user.avatar"
     />
