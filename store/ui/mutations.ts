@@ -250,4 +250,7 @@ export default {
 
     state.recentReactions = newRecentReactions
   },
+  setGlyphMarketplaceView(state: UIState, values: Object) {
+    state.glyphMarketplaceView = values
+  },
 }

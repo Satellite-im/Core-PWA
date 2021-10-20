@@ -1,3 +1,5 @@
+import { Glyph } from '../ui/glyph'
+
 export type CategoryOption = {
   parentCategory: string
   name: string
@@ -28,4 +30,19 @@ export type ProductItem = {
   new: boolean
   image: string
   favorited: boolean
+}
+
+export type GlyphShopFilterItem = {
+  name: string
+  id: string
+}
+
+export type GlyphShopItem = {
+  id: number
+  glyph: Glyph
+  price: number
+  image: string
+  isNew: boolean
+  isSale: boolean
+  like: boolean
 }
