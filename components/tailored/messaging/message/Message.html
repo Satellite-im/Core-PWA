@@ -17,6 +17,8 @@
       :editMessage="editMessage" />
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
     <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
+    <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
+    <UiEmbedsEmbeddedLinkContent v-if="message.type === 'text'" :data="message.payload" />
     <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
     <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
     <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
