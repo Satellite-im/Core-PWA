@@ -257,6 +257,14 @@ export default class SolanaManager {
   }
 
   /**
+   * @method getMainSolanaWalletInstance
+   * @returns the main solana wallet instance
+   */
+  getMainSolanaWalletInstance() {
+    return this.accounts?.[0]
+  }
+
+  /**
    * @method getActiveAccount
    * @returns the payer account keypair
    */

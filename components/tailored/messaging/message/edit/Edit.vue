@@ -32,7 +32,7 @@ export default Vue.extend({
     this.content = this.$props.message
     const messageBox = this.$refs.messageBox as HTMLElement
     messageBox.innerHTML = markDownToHtml(this.content)
-    messageBox.focus()
+    setCaretPosition(messageBox, this.content.length)
   },
   methods: {
     saveMessage() {
@@ -48,7 +48,7 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageBox as HTMLElement
-      if (messageBox.textContent) {
+      if (messageBox && messageBox.textContent) {
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.content = markDown
         let caretPosition = getCaretPosition(messageBox)
@@ -137,6 +137,10 @@ export default Vue.extend({
 <style lang="less" src="./Edit.less"></style>
 <style lang="less">
 .edit-message-body-input {
+  blockquote {
+    border-left: 4px solid @text-muted;
+    padding-left: @light-spacing;
+  }
   border-radius: @corner-rounding;
   p {
     font-size: @text-size !important;

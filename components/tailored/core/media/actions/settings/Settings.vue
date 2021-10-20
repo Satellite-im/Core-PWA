@@ -44,7 +44,7 @@ export default Vue.extend({
     ...mapState(['settings']),
     bitrate: {
       set(state) {
-        this.$store.commit('bitrate', state)
+        this.$store.commit('settings/bitrate', state)
       },
       get() {
         return this.settings.bitrate
@@ -52,7 +52,7 @@ export default Vue.extend({
     },
     sampleSize: {
       set(state) {
-        this.$store.commit('sampleSize', state)
+        this.$store.commit('settings/sampleSize', state)
       },
       get() {
         return this.settings.sampleSize
@@ -93,7 +93,7 @@ export default Vue.extend({
         const items = menu.querySelectorAll('.settings-item')
         let clickedHeader = null
         let clickedItem = null
-        let clickedItemBody = null
+        let clickedItemBody: any = null
         for (let i = 0, ni = items.length; i < ni; i++) {
           const item = items[i] as HTMLElement
           const itemHeader = item.querySelector('.item-header') as HTMLElement
@@ -192,4 +192,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Settings.less"></style>
+<style lang="less" src="./Settings.less"></style>

@@ -21,7 +21,7 @@ export default Vue.extend({
      * @example @click="setReplyChatbarContent"
      */
     setReplyChatbarContent() {
-      this.$store.commit('setReplyChatbarContent', {
+      this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
         from: '',

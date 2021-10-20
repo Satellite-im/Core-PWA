@@ -1,33 +1,27 @@
-// eslint-disable-next-line import/named
-import { Commit, Dispatch } from 'vuex'
+import { UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { ActionsArguments } from '~/types/store/store'
 
 const $Sounds = new SoundManager()
 
-interface ActionsArguments {
-  commit: Commit
-  state: any
-  dispatch: Dispatch
-}
-
 export default {
-  setMessages({ commit }: ActionsArguments, messages: any[]) {
+  setMessages({ commit }: ActionsArguments<UIState>, messages: any[]) {
     commit('setMessages', messages)
   },
-  sendMessage({ commit, state }: ActionsArguments, message: any) {
-    if (message.user.address !== state.accounts.active) {
+  sendMessage({ commit, rootState }: ActionsArguments<UIState>, message: any) {
+    if (message.user.address !== rootState.accounts.active) {
       $Sounds.playSound(Sounds.NEW_MESSAGE)
     }
     commit('sendMessage', message)
   },
-  setIsScrollOver({ commit }: ActionsArguments, status: boolean) {
+  setIsScrollOver({ commit }: ActionsArguments<UIState>, status: boolean) {
     commit('setIsScrollOver', status)
   },
-  setActiveChannel({ commit }: ActionsArguments, channel: Channel) {
+  setActiveChannel({ commit }: ActionsArguments<UIState>, channel: Channel) {
     commit('setActiveChannel', channel)
   },
-  addReaction({ commit }: ActionsArguments, reaction: any) {
+  addReaction({ commit }: ActionsArguments<UIState>, reaction: any) {
     commit('addReaction', reaction)
     commit('updateRecentReactions', reaction.emoji)
   },

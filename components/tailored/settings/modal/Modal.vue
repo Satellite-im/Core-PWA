@@ -55,7 +55,7 @@ export default Vue.extend({
      * @example
      */
     closeModal() {
-      this.$store.commit('toggleSettings', false)
+      this.$store.commit('ui/toggleSettings', false)
     },
   },
 })

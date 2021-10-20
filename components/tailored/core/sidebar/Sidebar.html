@@ -50,24 +50,22 @@
     </div>
 
     <div class="tabs sidebar-selector padded no-top-pad">
-      <InteractablesButton
-        full-width
-        :type="ui.showSidebarUsers ? 'primary' : 'dark'"
-        size="small"
-        :text="$t('global.messages')"
-        :action="() => $store.commit('showSidebarUsers', true)"
-      >
-        <message-square-icon size="1.2x" />
-      </InteractablesButton>
-      <InteractablesButton
-        full-width
-        :type="!ui.showSidebarUsers ? 'primary' : 'dark'"
-        size="small"
-        :text="$t('global.groups')"
-        :action="() => $store.commit('showSidebarUsers', false)"
-      >
-        <users-icon size="1.2x" />
-      </InteractablesButton>
+      <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
+        <InteractablesButton
+          :text="$t('global.messages')"
+          size="small"
+          type="dark"
+        >
+          <message-square-icon size="1.2x" />
+        </InteractablesButton>
+        <InteractablesButton
+          :text="$t('global.groups')"
+          size="small"
+          type="dark"
+        >
+          <users-icon size="1.2x" />
+        </InteractablesButton>
+      </InteractablesButtonGroup>
     </div>
     <div
       class="scrolling hidden-scroll users"

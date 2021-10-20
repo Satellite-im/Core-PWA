@@ -11,11 +11,11 @@ export default Vue.extend({
       default: () => {},
     },
   },
-  mounted() {
-    this.handleOverflow()
-  },
   computed: {
     ...mapState(['ui']),
+  },
+  mounted() {
+    this.handleOverflow()
   },
   methods: {
     /**
@@ -23,7 +23,7 @@ export default Vue.extend({
      * @description Closes quickProfile by commiting quickProfile false to state
      */
     close() {
-      this.$store.commit('quickProfile', false)
+      this.$store.commit('ui/quickProfile', false)
     },
     /**
      * @method close
@@ -33,26 +33,28 @@ export default Vue.extend({
     handleOverflow() {
       if (this.$device.isDesktop) {
         const quickProfile = this.$refs.quickProfile as HTMLElement
-        const position = this.ui.quickProfilePosition
-        let clickX = position.x
-        let clickY = position.y
-        const widthOverflow =
-          clickX + quickProfile.clientWidth - window.innerWidth
-        const heightOverflow =
-          clickY + quickProfile.clientHeight - window.innerHeight
-        if (widthOverflow > -8) {
-          clickX -= quickProfile.clientWidth
-          this.$store.commit('setQuickProfilePosition', {
-            x: clickX,
-            y: clickY,
-          })
-        }
-        if (heightOverflow > -8) {
-          clickY -= heightOverflow + 12
-          this.$store.commit('setQuickProfilePosition', {
-            x: clickX,
-            y: clickY,
-          })
+        if (quickProfile) {
+          const position = this.ui.quickProfilePosition
+          let clickX = position.x
+          let clickY = position.y
+          const widthOverflow =
+            clickX + quickProfile.clientWidth - window.innerWidth
+          const heightOverflow =
+            clickY + quickProfile.clientHeight - window.innerHeight
+          if (widthOverflow > -8) {
+            clickX -= quickProfile.clientWidth
+            this.$store.commit('ui/setQuickProfilePosition', {
+              x: clickX,
+              y: clickY,
+            })
+          }
+          if (heightOverflow > -8) {
+            clickY -= heightOverflow + 12
+            this.$store.commit('ui/setQuickProfilePosition', {
+              x: clickX,
+              y: clickY,
+            })
+          }
         }
       }
     },

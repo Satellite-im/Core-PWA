@@ -58,7 +58,7 @@ export default Vue.extend({
      * @example
      */
     toggleModal() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
       })
@@ -69,7 +69,7 @@ export default Vue.extend({
      * @example
      */
     acceptCall() {
-      this.$store.dispatch('acceptCall')
+      this.$store.dispatch('media/acceptCall')
     },
     /**
      * @method denyCall DocsTODO
@@ -77,7 +77,7 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.dispatch('denyCall')
+      this.$store.dispatch('media/denyCall')
     },
     /**
      * @method toggleMarketPlace DocsTODO
@@ -85,13 +85,13 @@ export default Vue.extend({
      * @example
      */
     toggleMarketPlace() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'showMarketPlace',
         state: !this.ui.modals.showMarketPlace,
       })
     },
     toggleWallet() {
-      this.$store.commit('toggleModal', {
+      this.$store.commit('ui/toggleModal', {
         name: 'wallet',
         state: !this.ui.modals.wallet,
       })

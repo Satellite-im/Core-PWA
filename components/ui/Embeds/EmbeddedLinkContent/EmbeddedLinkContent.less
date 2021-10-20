@@ -1,0 +1,50 @@
+@import '../VideoPlayer/VideoPlayer.less';
+
+
+.iframe-video-container {
+    padding-bottom: 5px;
+}
+.iframe-video {
+  max-width: 540px;
+  min-width: 200px;
+  width: 85%;
+}
+
+/* Start Aspect Ratios */
+.iframe-container-16-9 {
+  position: relative;
+  padding-bottom: 56.25%;
+}
+
+.iframe-container-1-1 {
+  position: relative;
+  padding-bottom: 100%;
+}
+.iframe-container-4-3 {
+  position: relative;
+  padding-bottom: 75%;
+}
+/* End Aspect Ratios */
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.aspect-ratio-switcher,
+.aspect-ratio-switcher-option {
+  float: right;
+  margin-top: 5px;
+}
+
+.aspect-ratio-switcher-option {
+  margin-left: 8px;
+}
+
+.selected-aspect-ratio-switcher-option {
+  font-weight: bold;
+  text-decoration: underline;
+}

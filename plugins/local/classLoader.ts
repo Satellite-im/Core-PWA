@@ -6,8 +6,9 @@ import SoundManager from '~/libraries/SoundManager/SoundManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
-import { RootStore } from '~/store/store.types'
+import { RootStore } from '~/types/store/store'
 import { Config } from '~/config'
+import TextileManager from '~/libraries/Textile/TextileManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -18,6 +19,7 @@ declare module 'vue/types/vue' {
     $Crypto: Crypto
     $Security: Security
     $typedStore: RootStore
+    $TextileManager: TextileManager
   }
 }
 
@@ -30,6 +32,7 @@ declare module '@nuxt/types' {
     $Crypto: Crypto
     $Security: Security
     $typedStore: RootStore
+    $TextileManager: TextileManager
   }
 }
 
@@ -38,8 +41,10 @@ Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
+Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 
+// Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {
     return this.$store

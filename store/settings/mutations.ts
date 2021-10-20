@@ -1,53 +1,37 @@
-import { NuxtState } from '@nuxt/types/app'
+import { SettingsState } from './types'
 
 const mutations = {
-  echoCancellation(state: NuxtState, enabled: Boolean) {
+  echoCancellation(state: SettingsState, enabled: boolean) {
     // We clone a new object here since vuex
     // will not react to deep values
-    state.settings = {
-      ...state.settings,
-      echoCancellation: enabled,
-    }
+    state.echoCancellation = enabled
   },
-  noiseSuppression(state: NuxtState, enabled: Boolean) {
-    state.settings = {
-      ...state.settings,
-      noiseSuppression: enabled,
-    }
+  noiseSuppression(state: SettingsState, enabled: boolean) {
+    state.noiseSuppression = enabled
   },
-  bitrate(state: NuxtState, value: Number) {
-    state.settings = {
-      ...state.settings,
-      bitrate: value,
-    }
+  bitrate(state: SettingsState, value: number) {
+    state.bitrate = value
   },
-  sampleSize(state: NuxtState, value: Number) {
-    state.settings = {
-      ...state.settings,
-      sampleSize: value,
-    }
+  sampleSize(state: SettingsState, value: number) {
+    state.sampleSize = value
   },
-  audioInput(state: NuxtState, value: String) {
-    state.settings = {
-      ...state.settings,
-      audioInput: value,
-    }
+  audioInput(state: SettingsState, value: string) {
+    state.audioInput = value
   },
-  audioOutput(state: NuxtState, value: String) {
-    state.settings = {
-      ...state.settings,
-      audioOutput: value,
-    }
+  audioOutput(state: SettingsState, value: string) {
+    state.audioOutput = value
   },
-  setKeybinds(state: NuxtState, value: String) {
-    state.settings = {
-      ...state.settings,
-      keybinds: value,
-    }
+  setKeybinds(state: SettingsState, value: string) {
+    state.keybinds = value
   },
-  updateKeybinding(state: NuxtState, value: Object) {
+  updateKeybinding(state: SettingsState, value: Object) {
     // @ts-ignore
-    state.settings.keybinds[value.keybindName] = value.newKeybind
+    state.keybinds[value.keybindName] = value.newKeybind
+  },
+  embeddedLinks(state: SettingsState, value: Boolean) {
+    // We clone a new object here since vuex
+    // will not react to deep values
+    state.embeddedLinks = value
   },
 }
 

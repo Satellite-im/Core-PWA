@@ -1,0 +1,44 @@
+<div class="video iframe-video-container">
+  <!-- We found embeddable iframe videos based on the url's provided -->
+  <div
+    v-if="videoLinksAsEmbeds.length > 0"
+    v-for="(item, index) in videoLinksAsEmbeds"
+  >
+    <div v-if="item.type === 'embed'">
+      <vue-plyr :ref="item.ref">
+        <div class="plyr__video-embed">
+          <iframe
+            :src="item.src"
+            allowfullscreen
+            allowtransparency
+            allow="autoplay"
+          ></iframe>
+        </div>
+      </vue-plyr>
+    </div>
+    <div v-if="item.type === 'iframe'">
+      {{ item.aspectRatioPadding }}
+      <div :class="item.aspectRatioClass">
+        <iframe
+          :ref="item.ref"
+          class="iframe-video responsive-iframe"
+          :src="item.src"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+      <span @click="resetAspectRatio(index, 4, 3)">
+        <TypographyText :size="5" :text="' 4:3 '" class="subtext aspect-ratio-switcher-option" :class="[item.aspectRatioClass === 'iframe-container-4-3' ? 'selected-aspect-ratio-switcher-option' : '']"/>
+      </span>
+      <span @click="resetAspectRatio(index, 16, 9)" >
+        <TypographyText :size="5" :text="' 16:9 '" class="subtext aspect-ratio-switcher-option" :class="[item.aspectRatioClass === 'iframe-container-16-9' ? 'selected-aspect-ratio-switcher-option' : '']"/>
+      </span>
+      <span @click="resetAspectRatio(index, 1, 1)">
+        <TypographyText :size="5" :text="' 1:1 '" class="subtext aspect-ratio-switcher-option" :class="[item.aspectRatioClass === 'iframe-container-1-1' ? 'selected-aspect-ratio-switcher-option' : '']"/>
+      </span>
+
+      <TypographyText :size="5" :text="$t('global.aspect_ratio_label')" class="subtext aspect-ratio-switcher" />
+    </div>
+    </br>
+  </div>
+</div>

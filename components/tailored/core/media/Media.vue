@@ -97,12 +97,10 @@ export default Vue.extend({
 
           if (this.$device.isMobile === true) {
             if (blockCount === 1) {
-              mobileMaxBlockContentWidth =
-                viewportWidth - marginPerBlock * 1.5
+              mobileMaxBlockContentWidth = viewportWidth - marginPerBlock * 1.5
               mobileAspectRatio = 3 / 4
             } else if (blockCount === 2) {
-              mobileMaxBlockContentWidth =
-                viewportWidth - marginPerBlock * 1.5
+              mobileMaxBlockContentWidth = viewportWidth - marginPerBlock * 1.5
               mobileAspectRatio = 1 / 2
             } else if (blockCount <= 4) {
               mobileMaxBlockContentWidth =
@@ -116,8 +114,14 @@ export default Vue.extend({
           }
 
           //logic for 'desktop fullscreen calls' where we set the max block content size so that a block cannot be larger than half viewportWidth
-          const maxBlockContentWidth = (typeof mobileMaxBlockContentWidth === 'undefined') ? viewportWidth / 2 - marginPerBlock * 1.5 : mobileMaxBlockContentWidth
-          const aspectRatio = (typeof mobileAspectRatio === 'undefined') ? 9 / 16 : mobileAspectRatio
+          const maxBlockContentWidth =
+            typeof mobileMaxBlockContentWidth === 'undefined'
+              ? viewportWidth / 2 - marginPerBlock * 1.5
+              : mobileMaxBlockContentWidth
+          const aspectRatio =
+            typeof mobileAspectRatio === 'undefined'
+              ? 9 / 16
+              : mobileAspectRatio
 
           let finalWidth = 160
           let finalHeight = 90
@@ -174,7 +178,7 @@ export default Vue.extend({
      */
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
-      this.$store.commit('setVolume', volume)
+      this.$store.commit('audio/setVolume', volume)
     },
   },
 })

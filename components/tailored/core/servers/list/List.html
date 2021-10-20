@@ -6,7 +6,7 @@
         <satellite-icon size="0.75x" />
       </UiCircle>
     </div>
-    <UiScroll verticalScroll>
+    <UiScroll verticalScroll  scrollbarVisibility="scroll">
       <div id="list-container">
         <UiHorizontalRule v-if="unreads.length > 0" />
 
@@ -19,7 +19,7 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
         <div class="server has-tooltip-right has-tooltip-primary" v-for="server in servers"
           v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
-          <UiCircle type="random" :size="40" :seed="server.address" />
+          <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
         </div>
 
       </div>
@@ -31,7 +31,7 @@
       </UiCircle>
     </div>
     <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('global.settings')"
-      v-on:click="$store.commit('toggleSettings', true)">
+      v-on:click="$store.commit('ui/toggleSettings', true)">
       <UiCircle type="icon" :size="40">
         <settings-icon size="0.75x" />
       </UiCircle>
