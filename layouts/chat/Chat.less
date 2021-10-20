@@ -46,11 +46,10 @@
       max-height: @statusbar-height;
     }
 
-    #chat {
+    .media-open {
       width: 100%;
       flex: 1;
-      transition: flex 0.3s;
-      overflow-x: hidden;
+      transition: flex .3s;
     }
 
     #chatbar {
@@ -76,8 +75,7 @@
       transition: flex 0.3s;
     }
     &.fullscreen-media {
-      #chat {
-        height: 0;
+      .media-open {
         flex: 0;
       }
       #chatbar {
