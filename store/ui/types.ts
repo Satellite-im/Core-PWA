@@ -1,5 +1,11 @@
 import { Channel } from '~/types/ui/server'
 
+export enum GlyphMarketViewStatus {
+  HOME = 'home',
+  SHOP_ALL = 'shop_all',
+  SHOP_DETAIL = 'shop_detail',
+}
+
 export interface UIState {
   contextMenuStatus: Boolean
   contextMenuValues: Array<Object>
@@ -29,6 +35,7 @@ export interface UIState {
   activeChannel: Channel | undefined
   settingReaction: Object
   hoveredGlyphInfo: Object | undefined
+  glyphMarketplaceView: Object
   editMessage: {
     id: string
     from: string

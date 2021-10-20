@@ -1,6 +1,7 @@
 export const Glyphs = {
   astrobunny: {
     name: 'Astrobunny',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
     id: '0123',
     stickerURLs: [
@@ -20,6 +21,7 @@ export const Glyphs = {
   },
   grimreaper: {
     name: 'Grim Reaper',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'LAM',
     id: '012312',
     stickerURLs: [
@@ -33,6 +35,7 @@ export const Glyphs = {
   },
   marshmellow: {
     name: 'Marshmello',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
     id: '012312',
     stickerURLs: [
@@ -57,6 +60,7 @@ export const Glyphs = {
   },
   food: {
     name: 'Food',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'Lya',
     id: 'jdsoer',
     stickerURLs: [
@@ -76,6 +80,7 @@ export const Glyphs = {
   },
   blackcat: {
     name: 'Black Cat',
+    description: 'Short description can go here. Lorem ipsum.',
     artist: 'Dan Tavis',
     id: 'k321r',
     stickerURLs: [
@@ -89,7 +94,8 @@ export const Glyphs = {
   },
   genshin: {
     name: 'Genshin Impact 1',
-    artists: 'John Treanor',
+    description: 'Short description can go here. Lorem ipsum.',
+    artist: 'John Treanor',
     id: '001',
     stickerURLs: [
       'https://ipfs.io/ipfs/QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_01.png',
@@ -107,7 +113,8 @@ export const Glyphs = {
   },
   genshinTwo: {
     name: 'Genshin Impact 2',
-    artists: 'John Treanor',
+    description: 'Short description can go here. Lorem ipsum.',
+    artist: 'John Treanor',
     id: '002',
     stickerURLs: [
       'https://ipfs.io/ipfs/QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_10.png',
@@ -128,7 +135,8 @@ export const Glyphs = {
   },
   lamsEmoji: {
     name: 'LAM Collection',
-    artists: 'LAM',
+    description: 'Short description can go here. Lorem ipsum.',
+    artist: 'LAM',
     id: '0103',
     stickerURLs: [
       'https://ipfs.io/ipfs/QmWdzaL2gUbdAZKLhwBFbiToNmYq9Bt6ALofpSpw3Aiuso/Untitled-1.png',
@@ -159,7 +167,8 @@ export const Glyphs = {
   },
   starWars: {
     name: 'Star Wars',
-    artists: 'John Treanor',
+    description: 'Short description can go here. Lorem ipsum.',
+    artist: 'John Treanor',
     id: '0053',
     stickerURLs: [
       'https://ipfs.io/ipfs/QmcgsWnhMUpactZZQk9CSQ9iXc7cri1aCcDbs6DEfVgcom/JohnTreanor_StarWarsPack_01.png',
@@ -175,7 +184,8 @@ export const Glyphs = {
   },
   birds: {
     name: 'Birds',
-    artists: 'Dina Brodsky',
+    description: 'Short description can go here. Lorem ipsum.',
+    artist: 'Dina Brodsky',
     id: '0903',
     stickerURLs: [
       'https://ipfs.io/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/hawk.png',

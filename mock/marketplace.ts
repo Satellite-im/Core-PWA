@@ -1,6 +1,9 @@
+import { Glyphs } from './glyphs'
 import {
   CategoryOption,
   FilterOption,
+  GlyphShopFilterItem,
+  GlyphShopItem,
   ProductItem,
 } from '~/types/marketplace/marketplace'
 
@@ -82,3 +85,117 @@ export const marketProducts = [
     favorited: false,
   },
 ] as ProductItem[]
+
+export const marketGlyphs = [
+  {
+    id: 1,
+    glyph: Glyphs.genshin,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 7,
+    isNew: true,
+    isSale: true,
+    like: true,
+  },
+  {
+    id: 2,
+    glyph: Glyphs.genshinTwo,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 2.99,
+    isNew: true,
+    isSale: false,
+    like: true,
+  },
+  {
+    id: 3,
+    glyph: Glyphs.astrobunny,
+    image: require('~/assets/img/glyphShopBg1.png'),
+    price: 1,
+    isNew: true,
+    isSale: false,
+    like: true,
+  },
+  {
+    id: 4,
+    glyph: Glyphs.birds,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 2.99,
+    isNew: false,
+    isSale: true,
+    like: false,
+  },
+  {
+    id: 5,
+    glyph: Glyphs.blackcat,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 3,
+    isNew: false,
+    isSale: false,
+    like: true,
+  },
+  {
+    id: 6,
+    glyph: Glyphs.food,
+    image: require('~/assets/img/glyphShopBg1.png'),
+    price: 10,
+    isNew: false,
+    isSale: true,
+    like: true,
+  },
+  {
+    id: 7,
+    glyph: Glyphs.grimreaper,
+    image: require('~/assets/img/glyphShopBg1.png'),
+    price: 3.5,
+    isNew: true,
+    isSale: false,
+    like: true,
+  },
+  {
+    id: 8,
+    glyph: Glyphs.lamsEmoji,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 1,
+    isNew: true,
+    isSale: false,
+    like: true,
+  },
+  {
+    id: 9,
+    glyph: Glyphs.marshmellow,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 1.2,
+    isNew: true,
+    isSale: true,
+    like: true,
+  },
+  {
+    id: 10,
+    glyph: Glyphs.starWars,
+    image: require('~/assets/img/glyphShopBg2.png'),
+    price: 7.1,
+    isNew: true,
+    isSale: true,
+    like: true,
+  },
+] as GlyphShopItem[]
+
+export const marketGlyphShopFilter = [
+  {
+    id: 'emoji',
+    name: 'Emoji',
+  },
+  {
+    id: 'gaming',
+    name: 'Gaming',
+  },
+  {
+    id: 'anime',
+    name: 'Anime',
+  },
+  {
+    id: 'art',
+    name: 'Art',
+  },
+] as GlyphShopFilterItem[]
+
+export const marketNfts = []
