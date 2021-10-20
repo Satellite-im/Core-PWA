@@ -1,0 +1,42 @@
+<div v-if="popularGlyph" class="glyph-popular">
+  <div class="glyph-detail-card">
+    <div
+      class="bg-header"
+      :style="`background-image:url(${popularGlyph.image})`"
+    >
+      <div class="badges">
+        <div v-if="popularGlyph.isNew" class="badge-new">New</div>
+        <div v-if="popularGlyph.isSale" class="badge-sale">Sale</div>
+      </div>
+    </div>
+    <div class="glyph-content">
+      <div class="glyph-content-text">
+        <div class="glyph-name">
+          <TypographySubtitle :size="4" :text="popularGlyph.glyph.name" />
+          <heart-icon size="1.5x" />
+        </div>
+        <TypographyText
+          :text="`${popularGlyph.glyph.stickerURLs.length} glyphs`"
+          :size="6"
+        />
+        <TypographyText :text="popularGlyph.glyph.description" :size="6" />
+        <TypographySubtitle :size="4" :text="`$${popularGlyph.price}`" />
+        <div>
+          <InteractablesButton type="primary" size="small" text="Buy Now">
+          </InteractablesButton>
+          <InteractablesButton type="dark" size="small" text="Add to cart">
+          </InteractablesButton>
+        </div>
+      </div>
+      <div class="glyph-list">
+        <TailoredMessagingEnhancersGlyphsItem
+          v-for="url in popularGlyph.glyph.stickerURLs"
+          :key="url"
+          :src="url"
+          :width="52"
+          :height="52"
+        ></TailoredMessagingEnhancersGlyphsItem>
+      </div>
+    </div>
+  </div>
+</div>
