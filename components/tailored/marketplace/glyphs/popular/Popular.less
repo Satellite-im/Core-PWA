@@ -19,12 +19,12 @@
     }
     .glyph-content {
       width: 100%;
-      display: flex;
-      padding: @xlarge-spacing;
+      padding: @normal-spacing;
       background: @semitransparent-dark-gradient;
       .glyph-list {
-        flex-grow: 3;
-        flex-basis: 0;
+        height: 16rem;
+        text-align: center;
+        overflow: hidden;
         padding: @light-spacing;
         div {
           display: inline-block;
@@ -32,15 +32,15 @@
         }
       }
       .glyph-content-text {
-        flex-grow: 5;
-        flex-basis: 0;
+        .subtitle,
         .is-text {
           margin-bottom: @xlarge-spacing;
         }
-        .glyph-name {
-          .subtitle {
-            margin-right: @light-spacing;
-          }
+        .btns {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 2rem;
         }
       }
     }

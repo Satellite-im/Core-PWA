@@ -4,14 +4,34 @@
   }
   .home-content {
     display: flex;
-    .featured-block {
+    margin-bottom: @large-spacing;
+    .left-content-block {
       flex-grow: 2;
       flex-basis: 0;
       margin-right: @normal-spacing;
+      .recommended-block {
+        margin-top: @normal-spacing;
+        display: flex;
+        .glyph-card:first-child {
+          margin-right: @normal-spacing!important;
+        }
+      }
     }
     .glyph-popular {
       flex-grow: 1;
       flex-basis: 0;
+    }
+    .badges {
+      .badge-new,
+      .badge-sale {
+        margin-right: @light-spacing;
+      }
+    }
+    .btns {
+      .navigator button{
+        font-size: 0.6rem;
+        border-radius: @corner-rounding;
+      }
     }
   }
   .marketplace-glyphs-detail {

@@ -4,8 +4,12 @@
     class="marketplace-glyphs-home"
   >
     <div class="home-content">
-      <div class="featured-block">
+      <div class="left-content-block">
         <TailoredMarketplaceGlyphsFeatured></TailoredMarketplaceGlyphsFeatured>
+        <div class="recommended-block">
+          <TailoredMarketplaceGlyphsRecommended :item="marketGlyphs[2]"></TailoredMarketplaceGlyphsRecommended>
+          <TailoredMarketplaceGlyphsRecommended :item="marketGlyphs[3]"></TailoredMarketplaceGlyphsRecommended>
+        </div>
       </div>
       <TailoredMarketplaceGlyphsPopular></TailoredMarketplaceGlyphsPopular>
     </div>

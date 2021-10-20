@@ -20,11 +20,23 @@ export default Vue.extend({
     this.featuredGlyph = this.$mock.marketplace.marketGlyphs[this.featuredIndex]
   },
   methods: {
-    shopAllStickers() {
+    shopAllGlyphs() {
       this.$store.commit('setGlyphMarketplaceView', {
         view: GlyphMarketViewStatus.SHOP_ALL,
         shopId: null,
       })
+    },
+    navigateGlyph(type: string) {
+      if (type === 'prev') {
+        this.featuredIndex = this.featuredIndex > 0 ? this.featuredIndex - 1 : 0
+      } else if (
+        this.featuredIndex <
+        this.$mock.marketplace.marketGlyphs.length - 1
+      ) {
+        this.featuredIndex++
+      }
+      this.featuredGlyph =
+        this.$mock.marketplace.marketGlyphs[this.featuredIndex]
     },
   },
 })

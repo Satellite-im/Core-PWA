@@ -20,6 +20,26 @@ export default Vue.extend({
     this.popularGlyph = this.$mock.marketplace.marketGlyphs[this.popularIndex]
   },
   methods: {
+    shopGlyph() {
+      if (this.popularGlyph) {
+        this.$store.commit('setGlyphMarketplaceView', {
+          view: GlyphMarketViewStatus.SHOP_DETAIL,
+          // @ts-ignore
+          shopId: this.popularGlyph.id,
+        })
+      }
+    },
+    navigateGlyph(type: string) {
+      if (type === 'prev') {
+        this.popularIndex = this.popularIndex > 0 ? this.popularIndex - 1 : 0
+      } else if (
+        this.popularIndex <
+        this.$mock.marketplace.marketGlyphs.length - 1
+      ) {
+        this.popularIndex++
+      }
+      this.popularGlyph = this.$mock.marketplace.marketGlyphs[this.popularIndex]
+    },
   },
 })
 </script>

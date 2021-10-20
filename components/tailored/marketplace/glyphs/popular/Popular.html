@@ -7,35 +7,52 @@
       <div class="badges">
         <div v-if="popularGlyph.isNew" class="badge-new">New</div>
         <div v-if="popularGlyph.isSale" class="badge-sale">Sale</div>
-      </div>
-    </div>
-    <div class="glyph-content">
-      <div class="glyph-content-text">
-        <div class="glyph-name">
-          <TypographySubtitle :size="4" :text="popularGlyph.glyph.name" />
-          <heart-icon size="1.5x" />
-        </div>
         <TypographyText
           :text="`${popularGlyph.glyph.stickerURLs.length} glyphs`"
           :size="6"
         />
-        <TypographyText :text="popularGlyph.glyph.description" :size="6" />
-        <TypographySubtitle :size="4" :text="`$${popularGlyph.price}`" />
-        <div>
-          <InteractablesButton type="primary" size="small" text="Buy Now">
-          </InteractablesButton>
-          <InteractablesButton type="dark" size="small" text="Add to cart">
-          </InteractablesButton>
-        </div>
       </div>
+    </div>
+    <div class="glyph-content">
       <div class="glyph-list">
         <TailoredMessagingEnhancersGlyphsItem
           v-for="url in popularGlyph.glyph.stickerURLs"
           :key="url"
           :src="url"
-          :width="52"
-          :height="52"
+          :width="38"
+          :height="38"
         ></TailoredMessagingEnhancersGlyphsItem>
+      </div>
+      <div class="glyph-content-text">
+        <div class="glyph-name">
+          <TypographySubtitle :size="6" :text="popularGlyph.glyph.name" />
+        </div>
+        <TypographyText :text="popularGlyph.glyph.description" :size="6" />
+        <div class="btns">
+          <InteractablesButton
+            type="primary"
+            size="small"
+            text="Shop Now"
+            :action="shopGlyph"
+          >
+          </InteractablesButton>
+          <div class="navigator">
+            <InteractablesButton
+              type="dark"
+              size="small"
+              :action="() => { navigateGlyph('prev') }"
+            >
+              <chevron-left-icon size="1.5x"></chevron-left-icon>
+            </InteractablesButton>
+            <InteractablesButton
+              type="dark"
+              size="small"
+              :action="() => { navigateGlyph('next') }"
+            >
+              <chevron-right-icon size="1.5x"></chevron-right-icon>
+            </InteractablesButton>
+          </div>
+        </div>
       </div>
     </div>
   </div>
