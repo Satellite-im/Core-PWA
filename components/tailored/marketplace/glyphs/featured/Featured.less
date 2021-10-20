@@ -1,0 +1,55 @@
+  .glyph-detail-card {
+    width: 100%;
+    max-width: 100%;
+    font-family: @primary-font;
+    border-radius: @corner-rounding;
+    overflow: hidden;
+    margin-top: @normal-spacing;
+    border: @light-border;
+    background: @semitransparent-dark-gradient;
+    .bg-header {
+      width: 100%;
+      height: 5rem;
+      background-position: center;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      padding: @normal-spacing;
+    }
+    .glyph-content {
+      width: 100%;
+      display: flex;
+      padding: @normal-spacing;
+      .glyph-list {
+        flex-grow: 3;
+        flex-basis: 0;
+        padding: 0 @light-spacing;
+        margin-top: -2.5rem;
+        max-height: 10rem;
+        overflow: hidden;
+        div {
+          display: inline-block;
+          margin: 0 @xlight-spacing @xlight-spacing 0;
+        }
+      }
+      .glyph-content-text {
+        flex-grow: 5;
+        flex-basis: 0;
+        .is-text {
+          margin-bottom: @xlarge-spacing;
+        }
+        .glyph-name {
+          .subtitle {
+            margin-right: @light-spacing;
+          }
+        }
+      }
+    }
+    .glyph-footer {
+      padding: 0 @normal-spacing;
+      margin-bottom: @normal-spacing;
+      .btns {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
