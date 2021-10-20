@@ -28,6 +28,11 @@ const mutations = {
     // @ts-ignore
     state.keybinds[value.keybindName] = value.newKeybind
   },
+  embeddedLinks(state: SettingsState, value: Boolean) {
+    // We clone a new object here since vuex
+    // will not react to deep values
+    state.embeddedLinks = value
+  },
 }
 
 export default mutations

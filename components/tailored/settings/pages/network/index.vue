@@ -2,13 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import { mapState } from 'vuex'
 import { Realm } from '~/types/ui/core'
 
 export default Vue.extend({
   name: 'NetworkSettings',
   layout: 'settings',
   computed: {
+    ...mapState(['settings']),
     realms() {
       return this.$Config.realms.map((r: Realm) => {
         const d: any = { ...r }
@@ -16,6 +17,14 @@ export default Vue.extend({
         d.value = r.id
         return d
       })
+    },
+    isAllowEmbeddedLinks: {
+      set(state) {
+        this.$store.commit('embeddedLinks', state)
+      },
+      get() {
+        return this.settings.embeddedLinks
+      },
     },
   },
 })
