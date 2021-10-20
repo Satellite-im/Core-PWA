@@ -13,10 +13,10 @@
         :fullscreenMaxViewableUsers="6" />
       <TailoredCoreMedia  v-else :fullscreen="ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiChatScroll ref="chat" :contents="ui.messages" :preventScrollOffset="500" :class="media.activeCall ? 'media-open' : ''" enableWrap>
+      <UiChatScroll :contents="ui.messages" :preventScrollOffset="500" :class="media.activeCall ? 'media-open' : ''" enableWrap>
         <Nuxt />
+        <Nuxt ref="chat" id="chat" />
       </UiChatScroll>
-      <Nuxt ref="chat" id="chat" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="ui.chatbarContent" />
       <TailoredCoreChatbarReply />
