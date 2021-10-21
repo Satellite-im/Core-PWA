@@ -15,7 +15,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'media']),
   },
   methods: {
     /**
