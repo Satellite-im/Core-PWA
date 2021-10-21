@@ -68,13 +68,20 @@
     padding-top: 0.45rem;
 
     .title {
-      margin: 0 0 -0.4rem 0;
+      margin: 0;
       font-size: @title-text;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
     .subtitle {
       margin: 0;
       padding: 0;
       font-size: @mini-text-size;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block;
+      white-space: nowrap;
     }
   }
   .status {

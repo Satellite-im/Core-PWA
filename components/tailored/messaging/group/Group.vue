@@ -20,8 +20,8 @@ export default Vue.extend({
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: Event) {
-      this.$store.commit('setQuickProfilePosition', e)
-      this.$store.commit('quickProfile', true)
+      this.$store.commit('ui/setQuickProfilePosition', e)
+      this.$store.commit('ui/quickProfile', true)
     },
   },
 })

@@ -29,7 +29,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$store.dispatch('fetchFriends')
+    this.$store.dispatch('friends/fetchFriends')
   },
   methods: {
     /**

@@ -32,7 +32,7 @@ export default Vue.extend({
     this.content = this.$props.message
     const messageBox = this.$refs.messageBox as HTMLElement
     messageBox.innerHTML = markDownToHtml(this.content)
-    messageBox.focus()
+    setCaretPosition(messageBox, this.content.length)
   },
   methods: {
     saveMessage() {
@@ -46,14 +46,12 @@ export default Vue.extend({
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
      */
-    handleInputChange(caretPosition: number | null) {
+    handleInputChange() {
       const messageBox = this.$refs.messageBox as HTMLElement
       if (messageBox && messageBox.textContent) {
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.content = markDown
-        if (caretPosition == null) {
-          caretPosition = getCaretPosition(messageBox)
-        }
+        let caretPosition = getCaretPosition(messageBox)
         let offset = messageBox.textContent.trim().length
         messageBox.innerHTML = markDownToHtml(markDown)
         if (offset >= messageBox.textContent.trim().length + 2) {
@@ -80,16 +78,15 @@ export default Vue.extend({
      */
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageBox as HTMLElement
-      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
-          caretPosition = getCaretPosition(messageBox) - 1
-          break
+        case 'Delete':
+          return
         case 'Enter':
           if (!event.shiftKey) {
             this.saveMessage()
           }
-          return true
+          return
         case 'Spacebar':
         case ' ':
           {
@@ -100,18 +97,18 @@ export default Vue.extend({
               messageBox.focus()
             }, 10)
           }
-          return true
+          return
         case 'Left':
         case 'ArrowLeft':
         case 'Right':
         case 'ArrowRight':
         case 'End':
         case 'Shift':
-          return true
+          return
         case 'a':
         case 'A':
           if (event.ctrlKey) {
-            return true
+            return
           }
           break
         case 'Escape':
@@ -119,9 +116,19 @@ export default Vue.extend({
           break
       }
       setTimeout(() => {
-        this.handleInputChange(caretPosition)
+        this.handleInputChange()
       }, 10)
-      return true
+    },
+    handleInputKeyup(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageBox as HTMLElement
+      switch (event.key) {
+        case 'Backspace':
+        case 'Delete':
+          if (messageBox.textContent && messageBox.textContent.trim() === '') {
+            messageBox.innerHTML = ''
+          }
+          break
+      }
     },
   },
 })
@@ -130,6 +137,10 @@ export default Vue.extend({
 <style lang="less" src="./Edit.less"></style>
 <style lang="less">
 .edit-message-body-input {
+  blockquote {
+    border-left: 4px solid @text-muted;
+    padding-left: @light-spacing;
+  }
   border-radius: @corner-rounding;
   p {
     font-size: @text-size !important;

@@ -82,7 +82,7 @@ export default Vue.extend({
           this.$nextTick(() => {
             this.$el.scrollTop = 0
             this.loaded = true
-            this.$store.dispatch('setIsScrollOver', false)
+            this.$store.dispatch('ui/setIsScrollOver', false)
           })
         }, interval)
       }
@@ -95,9 +95,9 @@ export default Vue.extend({
     onScrolled() {
       if (this.$el) {
         if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {
-          this.$store.dispatch('setIsScrollOver', true)
+          this.$store.dispatch('ui/setIsScrollOver', true)
         } else {
-          this.$store.dispatch('setIsScrollOver', false)
+          this.$store.dispatch('ui/setIsScrollOver', false)
         }
       }
     },

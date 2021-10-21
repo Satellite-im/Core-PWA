@@ -32,6 +32,7 @@ export default {
     pin: 'Pin',
     send: 'Send',
     more: 'More',
+    aspect_ratio_label: 'Aspect Ratio Off?',
   },
   wallet: {
     send_money: 'Send Money',
@@ -179,6 +180,9 @@ export default {
           "Change the realm Satellite lives in. Changing a realm will mean you can only communicate with others in the same realm as you. Please only change if you know what you're doing.",
         chain: 'Realm',
         network: 'Network',
+        allow_embeds: 'Allow Embeds',
+        allow_embeds_description:
+          'Have Satellite try to load videos and link previews. This sends a request to the URL someone shares with you to get more information/embed the content from the source and may allow the site to track you.',
       },
       storage: {
         title: 'Storage',
@@ -292,6 +296,22 @@ export default {
     loading: {
       loading_account: 'Aligning satellites to retrieve your account...',
     },
+  },
+  friends: {
+    self_add: "You can't add yourself you silly goose.",
+    already_friend: "You're already friends with this user.",
+    not_found: "Hmm, we couldn't find a user at that address",
+    invalid_id: 'Invalid account ID',
+    request_sent: 'Friend request successfully sent!',
+    search_placeholder: 'Some User...',
+    add: 'Add Friend',
+    add_description:
+      'Enter your friends account ID, or nickname. Account IDs are case sensitive.',
+    add_qrcode_description:
+      'You can also add a friend by having them scan your QR code, or by scanning theirs.',
+    scan_code: 'Scan a Friend Code',
+    camera_scan: 'Allow Camera Scan',
+    friend_code: 'Your Friend Code',
   },
   market_place: {
     title: 'Marketplace',

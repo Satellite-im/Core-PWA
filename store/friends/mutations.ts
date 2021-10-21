@@ -1,53 +1,59 @@
+import { FriendsState } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
-import { RootState } from '~/store/store.types'
 
 const mutations = {
-  setIncomingRequests(state: RootState, incomingRequests: IncomingRequest[]) {
-    state.friends.incomingRequests = incomingRequests
+  setIncomingRequests(
+    state: FriendsState,
+    incomingRequests: IncomingRequest[]
+  ) {
+    state.incomingRequests = incomingRequests
   },
-  addIncomingRequest(state: RootState, incomingRequest: IncomingRequest) {
-    state.friends.incomingRequests.push(incomingRequest)
+  addIncomingRequest(state: FriendsState, incomingRequest: IncomingRequest) {
+    state.incomingRequests.push(incomingRequest)
   },
-  updateIncomingRequest(state: RootState, incomingRequest: IncomingRequest) {
-    state.friends.incomingRequests.map((request) =>
+  updateIncomingRequest(state: FriendsState, incomingRequest: IncomingRequest) {
+    state.incomingRequests = state.incomingRequests.map((request) =>
       request.requestId !== incomingRequest.requestId
         ? request
         : incomingRequest
     )
   },
-  removeIncomingRequest(state: RootState, incomingRequest: IncomingRequest) {
-    state.friends.incomingRequests.filter(
-      (request) => request.requestId !== incomingRequest.requestId
+  removeIncomingRequest(state: FriendsState, requestId: string) {
+    state.incomingRequests = state.incomingRequests.filter(
+      (request) => request.requestId !== requestId
     )
   },
-  setOutgoingRequests(state: RootState, outgoingRequests: OutgoingRequest[]) {
-    state.friends.outgoingRequests = outgoingRequests
+  setOutgoingRequests(
+    state: FriendsState,
+    outgoingRequests: OutgoingRequest[]
+  ) {
+    state.outgoingRequests = outgoingRequests
   },
-  addOutgoingRequest(state: RootState, outgoingRequest: OutgoingRequest) {
-    state.friends.outgoingRequests.push(outgoingRequest)
+  addOutgoingRequest(state: FriendsState, outgoingRequest: OutgoingRequest) {
+    state.outgoingRequests.push(outgoingRequest)
   },
-  updateOutgoingRequest(state: RootState, outgoingRequest: OutgoingRequest) {
-    state.friends.outgoingRequests.map((request) =>
+  updateOutgoingRequest(state: FriendsState, outgoingRequest: OutgoingRequest) {
+    state.outgoingRequests = state.outgoingRequests.map((request) =>
       request.requestId !== outgoingRequest.requestId
         ? request
         : outgoingRequest
     )
   },
-  removeOutgoingRequest(state: RootState, outgoingRequest: OutgoingRequest) {
-    state.friends.outgoingRequests.filter(
-      (request) => request.requestId !== outgoingRequest.requestId
+  removeOutgoingRequest(state: FriendsState, requestId: string) {
+    state.outgoingRequests = state.outgoingRequests.filter(
+      (request) => request.requestId !== requestId
     )
   },
-  addFriend(state: RootState, friend: Friend) {
-    state.friends.all.push(friend)
+  addFriend(state: FriendsState, friend: Friend) {
+    state.all.push(friend)
   },
-  updateFriend(state: RootState, friend: Friend) {
-    state.friends.all.map((fr) =>
+  updateFriend(state: FriendsState, friend: Friend) {
+    state.all = state.all.map((fr) =>
       fr.publicKey === friend.publicKey ? friend : fr
     )
   },
-  removeFriend(state: RootState, friendPublicKey: string) {
-    state.friends.all.filter((fr) => fr.publicKey !== friendPublicKey)
+  removeFriend(state: FriendsState, friendPublicKey: string) {
+    state.all = state.all.filter((fr) => fr.publicKey !== friendPublicKey)
   },
 }
 

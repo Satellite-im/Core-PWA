@@ -38,7 +38,7 @@ export default Vue.extend({
       if (!muted) this.$Sounds.playSound(Sounds.MUTE)
       else this.$Sounds.playSound(Sounds.UNMUTE)
 
-      this.$store.commit('mute')
+      this.$store.commit('audio/mute')
     },
     /**
      * @method toggleVideo
@@ -50,7 +50,7 @@ export default Vue.extend({
       if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
       else this.$Sounds.playSound(Sounds.UNDEAFEN)
 
-      this.$store.commit('toggleCamera')
+      this.$store.commit('video/toggleCamera')
     },
   },
 })

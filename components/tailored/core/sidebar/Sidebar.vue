@@ -40,7 +40,15 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media']),
+    ...mapState(['ui', 'dataState', 'media', 'friends']),
+    toggleView: {
+      get() {
+        return this.ui.showSidebarUsers
+      },
+      set(value: Boolean) {
+        this.$store.commit('ui/showSidebarUsers', value)
+      },
+    },
   },
   mounted() {
     /**

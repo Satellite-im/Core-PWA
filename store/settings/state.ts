@@ -1,20 +1,4 @@
-export enum KeybindTypes {
-  toggleMute = 'alt+m',
-  toggleDeafen = 'alt+d',
-  openSettings = 'alt+s',
-  callActiveChat = 'alt+c',
-}
-interface SettingsState {
-  audioInput: string
-  audioOutput: string
-  noiseSuppression: Boolean
-  echoCancellation: Boolean
-  bitrate: Number
-  sampleSize: Number
-  userHasGivenAudioAccess: Boolean
-  userDeniedAudioAccess: Boolean
-  keybinds: Object
-}
+import { SettingsState, KeybindTypes } from './types'
 
 const InitalSettingsState = (): SettingsState => ({
   audioInput: '',
@@ -26,6 +10,7 @@ const InitalSettingsState = (): SettingsState => ({
   userHasGivenAudioAccess: false,
   userDeniedAudioAccess: false,
   keybinds: KeybindTypes,
+  embeddedLinks: true,
 })
 
 export default InitalSettingsState

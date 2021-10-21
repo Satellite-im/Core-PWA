@@ -22,6 +22,10 @@ import { LocalNotifications } from '@capacitor/local-notifications'
 //     minute?: number
 //   }
 // }
+const isSupported = (): boolean =>
+  'Notification' in window &&
+  'serviceWorker' in navigator &&
+  'PushManager' in window
 
 export const Notifications = class Notifications {
   currentPlatform: string = 'android' // 'ios', 'android', 'web'
@@ -32,7 +36,7 @@ export const Notifications = class Notifications {
     this.currentPlatform = Capacitor.getPlatform() // ios, web, android
     if (this.currentPlatform === 'web') {
       // all mount needs for web/pwa
-      if (this.notificationPermission !== 'granted') {
+      if (this.notificationPermission !== 'granted' && isSupported()) {
         Notification.requestPermission().then((result: any) => {
           this.notificationPermission = result
         })
@@ -99,7 +103,10 @@ export const Notifications = class Notifications {
    */
   requestNotificationPermission(): any {
     // @ts-ignore
-    if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
+    if (
+      (this.currentPlatform === 'web' || this.currentPlatform === 'electron') &&
+      isSupported()
+    ) {
       Notification.requestPermission()
     }
     if (this.currentPlatform === 'android') {

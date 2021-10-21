@@ -1,5 +1,5 @@
 <div class="friend">
-  <UiCircle type="random" :seed="friend.address" :size="35" />
+  <UiCircle type="random" :seed="friend.publicKey" :size="35" />
   <smartphone-icon
     size="1x"
     v-if="friend.state === 'mobile'"
@@ -15,21 +15,25 @@
   <div class="spacer"></div>
   <div class="controls" v-if="request">
     <InteractablesButton
+      v-if="loading !== 'decline'"
       type="success"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Accept"
-      :action="() => {}"
+      :loading="loading === 'accept'"
+      :action="acceptFriendRequest"
       >
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
+      v-if="loading !== 'accept'"
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Decline"
-      :action="() => {}">
-      <x-icon size="1x" />
+      :loading="loading === 'decline'"
+      :action="declineFriendRequest">
+      <x-icon size="1x"/>
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
@@ -40,6 +44,17 @@
       data-tooltip="Unblock"
       :action="() => {}">
       <x-icon size="1x" />
+    </InteractablesButton>
+  </div>
+  <div class="controls" v-else-if="send">
+    <InteractablesButton
+      type="primary"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-tooltip="Send"
+      :loading="loading === 'sending'"
+      :action="createFriendRequest">
+      <check-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else>

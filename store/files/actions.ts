@@ -1,5 +1,6 @@
 import { DataStateType } from '../dataState/types'
-import { ActionsArguments } from '../store.types'
+import { FilesState } from './types'
+import { ActionsArguments } from '~/types/store/store'
 import { Files } from '~/mock/files'
 
 export default {
@@ -10,20 +11,30 @@ export default {
    * @param
    * @example
    */
-  async fetchFiles({ commit, state }: ActionsArguments) {
-    if (
-      state.dataState.files === DataStateType.Loading ||
-      state.dataState.files === DataStateType.Updating
-    ) {
+  async fetchFiles({ commit, rootState }: ActionsArguments<FilesState>) {
+    const { files } = rootState.dataState
+    if (files === DataStateType.Loading || files === DataStateType.Updating) {
       return
     }
-    if (state.dataState.files === DataStateType.Empty) {
-      commit('setDataState', { key: 'files', value: DataStateType.Loading })
+    if (files === DataStateType.Empty) {
+      commit(
+        'dataState/setDataState',
+        { key: 'files', value: DataStateType.Loading },
+        { root: true }
+      )
     } else {
-      commit('setDataState', { key: 'files', value: DataStateType.Updating })
+      commit(
+        'dataState/setDataState',
+        { key: 'files', value: DataStateType.Updating },
+        { root: true }
+      )
     }
     await new Promise((resolve) => setTimeout(resolve, 3000))
     commit('fetchFiles', Files)
-    commit('setDataState', { key: 'files', value: DataStateType.Ready })
+    commit(
+      'dataState/setDataState',
+      { key: 'files', value: DataStateType.Ready },
+      { root: true }
+    )
   },
 }

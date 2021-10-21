@@ -1,6 +1,6 @@
 import { Keypair, PublicKey } from '@solana/web3.js'
 import ed2curve from 'ed2curve'
-import { sharedKey } from 'curve25519-js'
+import { sharedKey, signMessage } from 'curve25519-js'
 import { HashableData } from '~/types/crypto/crypto'
 
 const ivLen = 16 // the IV is always 16 bytes
@@ -323,5 +323,21 @@ export default class Crypto {
     const aesKey = await this.aesKeyFromSharedSecret(pwHash)
 
     return this.encrypt(plaintext, aesKey)
+  }
+
+  signMessageWithKey(privateKey: Uint8Array, message: string) {
+    const utf8Message = new TextEncoder().encode(message)
+
+    const secretKey = ed2curve.convertSecretKey(privateKey)
+
+    return signMessage(secretKey, utf8Message, undefined)
+  }
+
+  signMessage(message: string) {
+    if (!this.signingKey) {
+      return null
+    }
+
+    return this.signMessageWithKey(this.signingKey.secretKey, message)
   }
 }

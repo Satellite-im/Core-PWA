@@ -1,41 +1,40 @@
+import { AccountsState, RegistrationStatus } from './types'
 import { UserRegistrationData } from '~/types/ui/user'
-import { RootState } from '../store.types'
-import { RegistrationStatus } from './types'
 
 const mutations = {
-  setPin(state: RootState, pin: string) {
-    state.accounts.pin = pin
+  setPin(state: AccountsState, pin: string) {
+    state.pin = pin
   },
-  setPinHash(state: RootState, pinHash: string) {
-    state.accounts.pinHash = pinHash
+  setPinHash(state: AccountsState, pinHash: string) {
+    state.pinHash = pinHash
   },
-  unlock(state: RootState, pin: string) {
-    state.accounts.locked = false
-    state.accounts.pin = pin
+  unlock(state: AccountsState, pin: string) {
+    state.locked = false
+    state.pin = pin
   },
-  setEncryptedPhrase(state: RootState, encryptedPhrase: string) {
-    state.accounts.encryptedPhrase = encryptedPhrase
+  setEncryptedPhrase(state: AccountsState, encryptedPhrase: string) {
+    state.encryptedPhrase = encryptedPhrase
   },
-  setPhrase(state: RootState, decryptedPhrase: string) {
-    state.accounts.phrase = decryptedPhrase
+  setPhrase(state: AccountsState, decryptedPhrase: string) {
+    state.phrase = decryptedPhrase
   },
-  setActiveAccount(state: RootState, activeAccountPubkey: string) {
-    state.accounts.active = activeAccountPubkey
+  setActiveAccount(state: AccountsState, activeAccountPubkey: string) {
+    state.active = activeAccountPubkey
   },
-  setUserDetails(state: RootState, details: UserRegistrationData) {
-    state.accounts.details = { 
+  setUserDetails(state: AccountsState, details: UserRegistrationData) {
+    state.details = {
       name: details.username,
       status: details.status,
       profilePicture: details.imageURI,
-      address: state.accounts.active,
+      address: state.active,
       state: 'online',
     }
   },
   setRegistrationStatus(
-    state: RootState,
+    state: AccountsState,
     registrationStates: RegistrationStatus
   ) {
-    state.accounts.registrationStatus = registrationStates
+    state.registrationStatus = registrationStates
   },
 }
 

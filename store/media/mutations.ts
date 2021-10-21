@@ -1,7 +1,7 @@
-import { NuxtState } from '@nuxt/types/app'
+import { MediaState } from './types'
 
 export default {
-  toggleIncomingCall(state: NuxtState, id: String) {
-    state.media.incomingCall = id
+  toggleIncomingCall(state: MediaState, id: String) {
+    state.incomingCall = id
   },
 }

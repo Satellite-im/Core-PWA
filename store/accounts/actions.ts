@@ -1,14 +1,16 @@
-import Vue from 'vue'
 import { Keypair } from '@solana/web3.js'
-import { ActionsArguments, RootState } from '../store.types'
+import Vue from 'vue'
 import {
   AccountsError,
+  AccountsState,
   RegistrationStatus,
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+
+import { ActionsArguments, RootState } from '~/types/store/store'
 
 export default {
   /**
@@ -17,7 +19,7 @@ export default {
    * @param pin
    * @example
    */
-  async setPin({ commit }: ActionsArguments, pin: string) {
+  async setPin({ commit }: ActionsArguments<AccountsState>, pin: string) {
     if (pin.length < 5) {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
@@ -37,8 +39,11 @@ export default {
    * @param pin
    * @example
    */
-  async unlock({ commit, state, dispatch }: ActionsArguments, pin: string) {
-    const { pinHash, encryptedPhrase } = state.accounts
+  async unlock(
+    { commit, state }: ActionsArguments<AccountsState>,
+    pin: string
+  ) {
+    const { pinHash, encryptedPhrase } = state
 
     if (pin.length < 5) {
       throw new Error(AccountsError.PIN_TOO_SHORT)
@@ -62,7 +67,6 @@ export default {
     }
 
     commit('unlock', pin)
-    dispatch('loadAccount')
   },
   /**
    * @method generateWallet DocsTODO
@@ -70,8 +74,8 @@ export default {
    * @param
    * @example
    */
-  async generateWallet({ commit, state }: ActionsArguments) {
-    const { pin } = state.accounts
+  async generateWallet({ commit, state }: ActionsArguments<AccountsState>) {
+    const { pin } = state
 
     if (!pin) {
       throw new Error(AccountsError.INVALID_PIN)
@@ -101,10 +105,14 @@ export default {
    * @param
    * @example
    */
-  async loadAccount({ commit, state, dispatch }: ActionsArguments) {
+  async loadAccount({
+    commit,
+    state,
+    dispatch,
+  }: ActionsArguments<AccountsState>) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
-    const mnemonic = state.accounts.phrase
+    const mnemonic = state.phrase
 
     if (mnemonic === '') {
       throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
@@ -130,6 +138,19 @@ export default {
 
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
+
+    // Initialize textile
+    const { pin } = state
+    dispatch(
+      'textile/initialize',
+      {
+        id: userAccount?.publicKey.toBase58(),
+        pass: pin,
+        wallet: $SolanaManager.getMainSolanaWalletInstance(),
+      },
+      { root: true }
+    )
+
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
@@ -142,7 +163,7 @@ export default {
    * @example
    */
   async registerUser(
-    { commit, dispatch }: ActionsArguments,
+    { commit, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager

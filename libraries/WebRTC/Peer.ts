@@ -1,2 +1,1 @@
-export default class Peer {
-}
+export default class Peer {}

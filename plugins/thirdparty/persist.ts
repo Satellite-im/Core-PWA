@@ -7,13 +7,13 @@ import { VuexPersistence } from 'vuex-persist'
 
 // Add mutations here to blacklist saving to store
 const mutationsBlacklist = [
-  'unlock',
-  'setAccountError',
-  'setPhrase',
+  'accounts/unlock',
+  'accounts/setAccountError',
+  'accounts/setPhrase',
   'files',
   'toggleIncomingCall',
-  'setMessages',
-  'sendMessage',
+  'ui/setMessages',
+  'ui/sendMessage',
 ]
 
 // State properties path to blacklist saving to store

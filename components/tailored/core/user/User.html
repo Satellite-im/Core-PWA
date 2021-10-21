@@ -1,5 +1,5 @@
 <div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
-  <UiCircle type="random" :seed="user.address" :size="35" />
+  <UiCircle type="random" :seed="user.publicKey" :size="35" />
   <circle-icon
     size="1x"
     v-if="user.state !== 'mobile' && !isTyping"
@@ -11,7 +11,7 @@
   <UiTypingIndicator v-else />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />
-    <TypographySubtitle v-if="user.last_message.length > 0" :size="6" :text="user.last_message" />
+    <TypographySubtitle v-if="user.last_message && user.last_message.length > 0" :size="6" :text="user.last_message" />
     <TypographySubtitle v-else :size="6" :text="user.status" />
   </div>
   <div class="user-chat-details">

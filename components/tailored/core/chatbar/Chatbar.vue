@@ -13,6 +13,7 @@ import {
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
+  commandPrefix,
   containsCommand,
   parseCommand,
   commands,
@@ -47,6 +48,7 @@ export default Vue.extend({
       text: '',
       maxChars: 256,
       showEmojiPicker: false,
+      // lastEdited: 0,
     }
   },
   computed: {
@@ -70,14 +72,11 @@ export default Vue.extend({
      * @example
      */
     hasCommand() {
-      return (
-        containsCommand(this.ui.chatbarContent) &&
-        commands.some((cmd) =>
-          cmd.name.startsWith(
-            parseCommand(this.ui.chatbarContent).name.toLowerCase()
-          )
-        )
+      const parsedCommand = parseCommand(this.ui.chatbarContent)
+      const currentCommand = commands.find(
+        (cmd) => cmd.name === parsedCommand.name.toLowerCase()
       )
+      return currentCommand != null
     },
     /**
      * @method isValidCommand DocsTODO
@@ -91,7 +90,6 @@ export default Vue.extend({
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
-
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
     value: {
@@ -111,17 +109,20 @@ export default Vue.extend({
        * @example set('This is the new chatbar content')
        */
       set(val: string) {
-        this.$store.commit('chatbarContent', val)
+        this.$store.commit('ui/chatbarContent', val)
         this.$data.text = val
       },
     },
     placeholder() {
-      if (this.$data.text === '') {
+      if (!this.hasCommand && this.$data.text === '') {
         return this.$t('global.talk')
       } else {
         return ''
       }
     },
+    // editStatus() {
+    //   return Date.now() - this.$data.lastEdited <= 1000
+    // },
   },
   methods: {
     /**
@@ -130,7 +131,9 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+      })
     },
     /**
      * @method autoGrow DocsTODO
@@ -145,21 +148,16 @@ export default Vue.extend({
       const chatbarGroup = this.$refs.chatbar as HTMLElement
       const wrap = this.$refs.wrap as HTMLElement
 
-      // set default height to be auto, so it will expand as needed but NOT on every input
-      messageBox.style.height = 'auto'
       if (this.$data.text.split('\n').length > 1) {
         wrap.classList.add('expanded')
       } else {
         wrap.classList.remove('expanded')
       }
       if (messageBox.scrollHeight < 112) {
-        messageBox.style.height = `${messageBox.scrollHeight + 2}px`
         chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
       } else {
-        messageBox.style.height = '112px'
         chatbarGroup.style.height = '152px'
       }
-      messageBox.scrollTop = messageBox.scrollHeight
     },
     /**
      * @method handleInputChange DocsTODO
@@ -168,16 +166,32 @@ export default Vue.extend({
      * Once replaced current HTML content, move the caret to proper position.
      * @example
      */
-    handleInputChange(caretPosition: number | null) {
+    handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.value = markDown
-        if (caretPosition == null) {
-          caretPosition = getCaretPosition(messageBox)
-        }
+        let caretPosition = getCaretPosition(messageBox)
         let offset = messageBox.textContent.trim().length
-        messageBox.innerHTML = markDownToHtml(markDown)
+        let html = markDownToHtml(markDown)
+
+        const parsedCommand = parseCommand(this.value)
+        const currentCommand = commands.find(
+          (c) => c.name === parsedCommand.name.toLowerCase()
+        )
+        if (
+          currentCommand &&
+          currentCommand.args.length > 0 &&
+          parsedCommand.args.length > 0 &&
+          currentCommand.args[0].name === parsedCommand.args[0]
+        ) {
+          html = html.replace(
+            parsedCommand.args[0] as string,
+            "<span class='chatbar-tag'>" + parsedCommand.args[0] + '</span>'
+          )
+        }
+
+        messageBox.innerHTML = html
         if (offset >= messageBox.textContent.trim().length + 2) {
           offset -= messageBox.textContent.trim().length
           caretPosition -= offset
@@ -207,23 +221,32 @@ export default Vue.extend({
      */
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageuser as HTMLElement
-      let caretPosition: number | null = null
       switch (event.key) {
         case 'Backspace':
-          {
-            const parsedCommand = parseCommand(this.value)
-            const currentCommand = commands.find(
-              (c) => c.name === parsedCommand.name.toLowerCase()
-            )
-            if (currentCommand && parsedCommand.args.length === 0) {
-              messageBox.innerHTML = ''
-              this.value = ''
+          setTimeout(() => {
+            if (messageBox.textContent) {
+              const parsedCommand = parseCommand(messageBox.textContent)
+              const currentCommand = commands.find(
+                (c) => c.name === parsedCommand.name.toLowerCase()
+              )
+              if (
+                currentCommand &&
+                currentCommand.args.length > 0 &&
+                parsedCommand.args.length === 1 &&
+                currentCommand.args[0].name === parsedCommand.args[0]
+              ) {
+                const text = commandPrefix + currentCommand.name
+                messageBox.innerHTML = text
+                setCaretPosition(messageBox, text.length)
+              }
+              this.value = htmlToMarkdown(messageBox.innerHTML)
               this.autoGrow()
-              return false
             }
-            caretPosition = getCaretPosition(messageBox) - 1
-          }
-          break
+          }, 10)
+          return
+        case 'Delete':
+          this.autoGrow()
+          return
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
@@ -232,39 +255,98 @@ export default Vue.extend({
             } else if (this.hasCommand && !this.isValidCommand) {
               console.log('dispatch command')
             }
-          } else {
+          } else if (!this.hasCommand) {
             this.autoGrow()
+          } else {
+            event.preventDefault()
           }
-          return true
+          return
         case 'Spacebar':
         case ' ':
           {
             event.preventDefault()
-            const caretPosition = getCaretPosition(messageBox)
-            setTimeout(() => {
-              setCaretPosition(messageBox, caretPosition + 1)
-              messageBox.focus()
-            }, 10)
+            const parsedCommand = parseCommand(this.value)
+            const currentCommand = commands.find(
+              (c) => c.name === parsedCommand.name.toLowerCase()
+            )
+            if (
+              currentCommand &&
+              parsedCommand.args.length === 0 &&
+              currentCommand.args.length > 0 &&
+              messageBox.textContent
+            ) {
+              const tag = currentCommand.args[0]
+              messageBox.innerHTML =
+                '<p>' +
+                messageBox.textContent.trim() +
+                "<span>&nbsp;</span><span class='chatbar-tag'>" +
+                tag.name +
+                '</span><span>&nbsp;</span></p>'
+              this.value = commandPrefix + currentCommand.name + ' ' + tag.name
+              const caretPosition = messageBox.textContent.length
+              setCaretPosition(messageBox, caretPosition)
+            } else {
+              const caretPosition = getCaretPosition(messageBox)
+              setTimeout(() => {
+                setCaretPosition(messageBox, caretPosition + 1)
+                messageBox.focus()
+              }, 10)
+            }
           }
-          return true
+          return
         case 'Left':
         case 'ArrowLeft':
         case 'Right':
         case 'ArrowRight':
         case 'End':
         case 'Shift':
-          return true
+          return
         case 'a':
         case 'A':
           if (event.ctrlKey) {
-            return true
+            return
+          }
+          break
+        case 'ArrowUp':
+        case 'Up':
+          if (this.value === '') {
+            let bset = false
+            const messages = this.ui.messages
+            for (let i = messages.length - 1; i >= 0 && !bset; i--) {
+              if (messages[i].from === this.$mock.user.address) {
+                for (let j = messages[i].messages.length - 1; j >= 0; j--) {
+                  const lastMessage = messages[i].messages[j]
+                  if (lastMessage.type === 'text') {
+                    this.$store.commit('ui/setEditMessage', {
+                      id: lastMessage.id,
+                      payload: lastMessage.payload,
+                      from: messages[i].id,
+                    })
+                    bset = true
+                    break
+                  }
+                }
+              }
+            }
+          }
+          return
+      }
+      setTimeout(() => {
+        this.handleInputChange()
+      }, 10)
+      // this.$data.lastEdited = Date.now()
+    },
+    handleInputKeyup(event: KeyboardEvent) {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      switch (event.key) {
+        case 'Backspace':
+        case 'Delete':
+          if (messageBox.textContent && messageBox.textContent.trim() === '') {
+            messageBox.innerHTML = ''
+            this.autoGrow()
           }
           break
       }
-      setTimeout(() => {
-        this.handleInputChange(caretPosition)
-      }, 10)
-      return true
     },
     /**
      * @method sendMessage
@@ -273,7 +355,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      this.$store.dispatch('sendMessage', {
+      this.$store.dispatch('ui/sendMessage', {
         value: this.value,
         user: this.$mock.user,
         isOwner: true,
@@ -292,7 +374,18 @@ export default Vue.extend({
 <style scoped lang="less" src="./Chatbar.less"></style>
 
 <style lang="less">
-.messageuser p {
-  font-size: @text-size !important;
+.messageuser {
+  blockquote {
+    border-left: 4px solid @text-muted;
+    padding-left: @light-spacing;
+  }
+  p {
+    font-size: @text-size !important;
+    .chatbar-tag {
+      border-radius: @corner-rounding;
+      background-color: @dark-gray;
+      padding: @xlight-spacing;
+    }
+  }
 }
 </style>

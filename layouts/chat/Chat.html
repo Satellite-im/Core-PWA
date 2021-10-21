@@ -6,17 +6,16 @@
     <UiGlobal />
 
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
-    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="$mock.users" :groups="$mock.groups" />
+    <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="friends.all" :groups="$mock.groups" />
     <div :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
       <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
       <TailoredCoreMedia v-if="$device.isMobile" :fullscreen="ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="6" />
       <TailoredCoreMedia  v-else :fullscreen="ui.fullscreen" :users="$mock.callUsers" :maxViewableUsers="10"
         :fullscreenMaxViewableUsers="20" />
-      <UiChatScroll ref="chat" :contents="ui.messages" :preventScrollOffset="500" :class="media.activeCall ? 'media-open' : ''" enableWrap>
+      <UiChatScroll :contents="ui.messages" :preventScrollOffset="500" :class="media.activeCall ? 'media-open' : ''" enableWrap>
         <Nuxt />
       </UiChatScroll>
-      <Nuxt ref="chat" id="chat" />
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="ui.chatbarContent" />
       <TailoredCoreChatbarReply />

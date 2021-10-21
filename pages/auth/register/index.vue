@@ -17,7 +17,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['getRegistrationStatus']),
+    ...mapGetters('accounts', ['getRegistrationStatus']),
     hasToRegister() {
       return this.getRegistrationStatus === RegistrationStatus.UKNOWN
     },
@@ -43,7 +43,7 @@ export default Vue.extend({
   methods: {
     async confirm(userData: UserRegistrationData) {
       // TODO: upload picture to pinata first
-      await this.$store.dispatch('registerUser', {
+      await this.$store.dispatch('accounts/registerUser', {
         name: userData.username,
         photoHash: '',
         status: userData.status,
