@@ -43,7 +43,10 @@ export default Vue.extend({
           /*
             Parsing Youtube links, if we need to modify the regex do it in here.
           */
-          if (link.includes('youtube') || link.includes('youtu.be')) {
+          if (
+            link.match(/^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g) ||
+            link.match(/^https?:\/\/([a-z0-9-]+[.])*youtu.be?/g)
+          ) {
             let youtubeOutSource: string = ''
             if (link.includes('youtube')) {
               youtubeOutSource = `https://www.youtube.com/embed/${
@@ -98,7 +101,8 @@ export default Vue.extend({
               aspectRatioClass: 'iframe-container-1-1',
             }
           }
-          if (link.includes('twitch.tv')) {
+
+          if (link.match(/^https?:\/\/([a-z0-9-]+[.])twitch[.]tv\/?/g)) {
             let videoId: string = ''
             // check to see if it's an individual video
             if (link.includes('/videos/')) {
@@ -113,22 +117,33 @@ export default Vue.extend({
               }` // this splits the channek name out, and strips off any tracking/url params at the end
             }
             return {
-              src: `https://player.twitch.tv/?${videoId}&parent=localhost&autoplay=false`,
+              src: `https://player.twitch.tv/?${videoId}&parent=${window.location.hostname}&autoplay=false`,
               type: 'iframe',
               ref: this.setRefId(
-                `https://player.twitch.tv/?${videoId}&parent=localhost&autoplay=false`
+                `https://player.twitch.tv/?${videoId}&parent=${window.location.hostname}&autoplay=false`
               ),
-              aspectRatioClass: 'iframe-container-9-16',
+              aspectRatioClass: 'iframe-container-16-9',
             }
           }
-          if (link.includes('spotify') && !link.includes('embed')) {
-            const videoID = link.split('track/')[1].split('?')[0]
 
+          if (
+            link.match(
+              /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g
+            )
+          ) {
+            // get type and id
+            // https://open.spotify.com/playlist/46ffmNKBTEakwz0t625bbC?si=e878040ce04c460f => playlist/46ffmNKBTEakwz0t625bbC
+            // https://open.spotify.com/track/3s2RFp5hU6jEvAmfZrnrAi?si=a9bf555ede314a19 => track/3s2RFp5hU6jEvAmfZrnrAi
+            const spotifyEmbedType = link
+              .split(/^https?:\/\/([a-z0-9-]+[.])spotify[.]com\//g)[2]
+              .split('?')[0]
+
+            console.log(spotifyEmbedType)
             return {
-              src: `https://open.spotify.com/embed/track/${videoID}?utm_source=generator`,
+              src: `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`,
               type: 'iframe',
               ref: this.setRefId(
-                `https://open.spotify.com/embed/track/${videoID}?utm_source=generator`
+                `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`
               ),
               aspectRatioClass: 'iframe-container-16-9',
             }
