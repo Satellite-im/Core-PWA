@@ -15,7 +15,6 @@
         :fullscreenMaxViewableUsers="20" />
       <UiChatScroll :contents="ui.messages" :preventScrollOffset="500" :class="media.activeCall ? 'media-open' : ''" enableWrap>
         <Nuxt />
-        <Nuxt ref="chat" id="chat" />
       </UiChatScroll>
       <TailoredMessagingEnhancers />
       <TailoredCommandsPreview :message="ui.chatbarContent" />
