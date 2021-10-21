@@ -121,7 +121,7 @@ export default Vue.extend({
               aspectRatioClass: 'iframe-container-9-16',
             }
           }
-          if (link.includes('spotify')) {
+          if (link.includes('spotify') && !link.includes('embed')) {
             const videoID = link.split('track/')[1].split('?')[0]
 
             return {
@@ -130,7 +130,7 @@ export default Vue.extend({
               ref: this.setRefId(
                 `https://open.spotify.com/embed/track/${videoID}?utm_source=generator`
               ),
-              aspectRatioClass: 'iframe-container-9-16',
+              aspectRatioClass: 'iframe-container-16-9',
             }
           } else {
             return {}
