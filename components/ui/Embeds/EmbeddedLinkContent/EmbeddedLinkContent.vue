@@ -118,7 +118,19 @@ export default Vue.extend({
               ref: this.setRefId(
                 `https://player.twitch.tv/?${videoId}&parent=localhost&autoplay=false`
               ),
-              aspectRatioClass: 'iframe-container-16-9',
+              aspectRatioClass: 'iframe-container-9-16',
+            }
+          }
+          if (link.includes('spotify')) {
+            const videoID = link.split('track/')[1].split('?')[0]
+
+            return {
+              src: `https://open.spotify.com/embed/track/${videoID}?utm_source=generator`,
+              type: 'iframe',
+              ref: this.setRefId(
+                `https://open.spotify.com/embed/track/${videoID}?utm_source=generator`
+              ),
+              aspectRatioClass: 'iframe-container-9-16',
             }
           } else {
             return {}
