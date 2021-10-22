@@ -118,7 +118,6 @@ export default Vue.extend({
   },
   watch: {
     text() {
-      console.log('changed', this.text)
       this.internalText = this.text
     },
   },
