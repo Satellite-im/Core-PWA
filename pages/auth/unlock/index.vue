@@ -58,6 +58,7 @@ export default Vue.extend({
         }
       } catch (error) {
         this.error = error.message
+        this.$data.pin = ''
       }
 
       this.$data.decrypting = false

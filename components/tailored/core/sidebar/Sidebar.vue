@@ -6,6 +6,7 @@ import { mapState } from 'vuex'
 
 import {
   UsersIcon,
+  UserPlusIcon,
   FolderIcon,
   MessageSquareIcon,
   MenuIcon,
@@ -19,6 +20,7 @@ import { User } from '~/types/ui/user'
 export default Vue.extend({
   components: {
     UsersIcon,
+    UserPlusIcon,
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
