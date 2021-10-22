@@ -10,6 +10,9 @@ export default Vue.extend({
       default: '',
     },
   },
+  computed: {
+    ...mapState(['settings', 'ui']),
+  },
   mounted() {
     this.handleOverflow()
     const el = document.querySelector('body')
@@ -22,9 +25,6 @@ export default Vue.extend({
     if (el) {
       el.removeEventListener('contextmenu', this.handleOverflow)
     }
-  },
-  computed: {
-    ...mapState(['settings', 'ui']),
   },
   methods: {
     /**
