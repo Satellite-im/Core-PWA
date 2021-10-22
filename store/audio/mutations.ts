@@ -8,12 +8,9 @@ const mutations = {
   },
   deafen(state: AudioState) {
     const isDeafened = state.deafened
-    state = {
-      ...state,
-      previousVolume: isDeafened ? state.previousVolume : state.volume,
-      volume: isDeafened ? state.previousVolume : 0,
-      deafened: !isDeafened,
-    }
+    state.previousVolume = isDeafened ? state.previousVolume : state.volume
+    state.volume = isDeafened ? state.previousVolume : 0
+    state.deafened = !isDeafened
   },
   setVolume(state: AudioState, volume: Number) {
     state.previousVolume = volume
