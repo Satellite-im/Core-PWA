@@ -33,9 +33,9 @@ export default {
   },
   toggleEnhancers(
     state: UIState,
-    options: { show: boolean; floating: boolean }
+    options: { show: boolean; floating: boolean; position: Number[]}
   ) {
-    state.enhancers = { show: options.show, floating: options.floating }
+    state.enhancers = { show: options.show, floating: options.floating,  position: options.position}
   },
   toggleSettings(state: UIState, show: boolean) {
     state.showSettings = show
