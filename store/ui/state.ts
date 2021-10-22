@@ -21,6 +21,7 @@ interface UIState {
   enhancers: {
     show: Boolean
     floating: Boolean
+    position: number[]
   }
   messages: any[]
   unreadMessage: number
@@ -59,6 +60,7 @@ const InitalUIState = (): UIState => ({
   enhancers: {
     show: false,
     floating: false,
+    position: [],
   },
   messages: [],
   unreadMessage: 0,

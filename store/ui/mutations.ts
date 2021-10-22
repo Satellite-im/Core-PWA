@@ -58,12 +58,13 @@ export default {
       fullscreen,
     }
   },
-  toggleEnhancers(state: NuxtState, options: any) {
+  toggleEnhancers(state: NuxtState, options: any, position: Number[]| null) {
     state.ui = {
       ...state.ui,
       enhancers: {
         show: options.show,
         floating: options.floating || false,
+        position: options.position || null,
       },
     }
   },

@@ -8,6 +8,7 @@ import { ArchiveIcon } from 'satellite-lucide-icons'
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { Message, Group } from '~/types/messaging'
+// import EnhancersVue from '../enhancers/Enhancers.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -19,6 +20,7 @@ export default Vue.extend({
   components: {
     VueMarkdown,
     ArchiveIcon,
+    // EnhancersVue
   },
   mixins: [ContextMenu],
   props: {
@@ -125,13 +127,19 @@ export default Vue.extend({
      * @description
      * @example
      */
-    emojiReaction() {
+    emojiReaction(e: Event | any) {
       this.$store.commit('settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
-      this.$store.commit('toggleEnhancers', { show: true, floating: true })
+      // test setting location of the enhancer window off user click position
+      let currX = e.clientX - 800 
+      let currY = e.clientY - 230 
+
+       this.$store.commit('toggleEnhancers', { show: true, floating: true, position: [currX, currY] })
+       console.log("open the enhancers")
+
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('addReaction', {

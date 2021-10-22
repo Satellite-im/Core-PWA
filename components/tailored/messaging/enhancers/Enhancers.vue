@@ -24,6 +24,25 @@ export default Vue.extend({
       route: 'emoji',
     }
   },
+    mounted() {
+      console.log("mounted in Enhancers dot vue")
+      this.$store.commit('toggleEnhancers', { show: false, floating: true, position: [0,0] })
+      this.handleOverflow()
+    //    const el = document.querySelector('body')
+       
+    // if (el) {
+    //   el.addEventListener('tester', this.handleOverflow)
+
+    // }
+    
+  },
+  destroyed() {
+      console.log("destroyed")
+    const el = document.querySelector('body')
+    if (el) {
+      el.removeEventListener('tester', this.handleOverflow)
+    }
+  },
   computed: {
     ...mapState(['ui']),
   },
@@ -48,7 +67,9 @@ export default Vue.extend({
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,
         })
+        console.log("addEmoji in Enhancers.vue")
         this.toggleEnhancers()
+
       } else {
         this.$store.commit(
           'chatbarContent',
@@ -71,6 +92,9 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
+        console.log("toggleEnhancers in Enhancers.vue")
+        console.log(this.$refs.enhancers)
+  
       this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
       if (this.ui.settingReaction.status) {
         this.$store.commit('settingReaction', {
@@ -80,6 +104,13 @@ export default Vue.extend({
         })
       }
     },
+    handleOverflow(){
+      const testerRef = this.$refs.enhancers as HTMLElement
+
+      console.log(testerRef)
+
+      return
+    }
   },
 })
 </script>
