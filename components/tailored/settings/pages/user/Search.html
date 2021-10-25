@@ -10,7 +10,7 @@
     <input type="text" ref="searchInput" v-model="search" class="user-search-input" :placeholder="placeholder"
       @input="searchResult" @focus="showDropDown" @keydown="handleKeydown">
   </div>
-  <div ref="searchResult" :class="`user-search-list ${drop} ${dropDown ? 'active' : ''}`">
+  <div ref="searchResult" :class="`user-search-list ${drop} ${dropDown && filteredResult.length ? 'active' : ''}`">
     <UiScroll
       verticalScroll
       scrollbarVisibility="scroll"
