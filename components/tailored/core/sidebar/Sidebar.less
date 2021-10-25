@@ -26,6 +26,29 @@
     flex-direction: column;
     padding-bottom: @normal-spacing;
 
+    .mascot {
+      max-width: 50%;
+      padding-top: @normal-spacing;
+      pointer-events: none;
+    }
+
+    .mascot-container {
+      width: 100%;
+      display: inline-flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+
+      .button {
+        margin-top: @normal-spacing;
+        width: 75%;
+      }
+
+      .is-text {
+        text-align: center;
+      }
+    }
+
     .users {
       flex: 1;
       position: relative;

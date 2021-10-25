@@ -19,7 +19,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      subject: 'Themes',
+      subject: 'Glyphs',
       marketCategories,
     }
   },

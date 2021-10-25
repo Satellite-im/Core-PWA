@@ -73,7 +73,7 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.friends !== DataStateType.Loading && users.length">
           <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
           <TailoredCoreUser
             v-for="(user, i) in users"
@@ -81,6 +81,20 @@
             :user="user"
             :isTyping="ui.isTyping.address === user.address"
           />
+
+        </div>
+        <div v-else-if="dataState.friends && !users.length" class="mascot-container">
+          <TypographyTitle text="No Friends Yet" :size="6" />
+          <TypographyText text="The world doesn't have to be so lonely." />
+          <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
+          <InteractablesButton
+            :text="$t('friends.add') + 's'"
+            size="small"
+            type="primary"
+            :action="() => $router.push('/friends/list')"
+          >
+            <user-plus-icon size="1.2x" />
+          </InteractablesButton>
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>
