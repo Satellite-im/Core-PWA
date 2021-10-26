@@ -2,9 +2,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
+
+declare module 'vue/types/vue' {
+  // 3. Declare augmentation for Vue
+  interface Vue {
+    error: string
+    decrypt: () => Promise<any>
+  }
+}
 
 export default Vue.extend({
   name: 'UnlockScreen',
@@ -17,12 +25,21 @@ export default Vue.extend({
     return {
       pin: '',
       error: '',
-      storePin: false,
       decrypting: false,
     }
   },
   computed: {
     ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
+    ...mapState(['accounts']),
+    storePin: {
+      set(state) {
+        this.$store.commit('accounts/setStorePin', state)
+      },
+      get() {
+        console.log(this)
+        return !this.accounts ? false : this.accounts.storePin
+      },
+    },
   },
   methods: {
     /**
