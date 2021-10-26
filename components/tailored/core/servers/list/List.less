@@ -4,9 +4,10 @@
   min-width: 60px;
   display: inline-flex;
   justify-content: flex-start;
+  pointer-events: none;
   padding-left: 0.6rem;
   padding-top: @normal-spacing;
-  z-index: @base-z-index + 1;
+  z-index: @base-z-index + 3;
 
   .circle-group {
     margin: @normal-spacing 0;
@@ -16,6 +17,7 @@
     margin-bottom: 0.7rem;
     z-index: @base-z-index + 1;
     width: 50px;
+    pointer-events: auto;
   }
   .circle-group:nth-child(1) {
     fill: @bright-text;
@@ -59,12 +61,15 @@
   .scroll-area {
     height: auto;
     max-height: calc(100% - 10rem);
+    width: 200px;
+    overflow: hidden;
     display: flex;
   }
   #list-container {
     height: fit-content;
     max-height: calc(100% - 10rem);
     position: relative;
+    pointer-events: auto;
   }
 }
 
