@@ -5,11 +5,11 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { Keybinds } from '~/components/mixins/UI/Keybinds'
+// import { Keybinds } from '~/components/mixins/UI/Keybinds'
 
 export default Vue.extend({
   name: 'KeybindSettings',
-  mixins: [Keybinds],
+  /*  mixins: [Keybinds], */
   layout: 'settings',
   data() {
     return {
