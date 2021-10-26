@@ -14,4 +14,5 @@ export interface SettingsState {
   userHasGivenAudioAccess: Boolean
   userDeniedAudioAccess: Boolean
   keybinds: Object
+  embeddedLinks: Boolean
 }

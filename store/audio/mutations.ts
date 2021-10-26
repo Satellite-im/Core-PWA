@@ -1,37 +1,23 @@
-import { NuxtState } from '@nuxt/types/app'
+import { AudioState } from './types'
 
 const mutations = {
-  mute(state: NuxtState) {
+  mute(state: AudioState) {
     // We clone a new object here since vuex
     // will not react to deep values
-    state.audio = {
-      ...state.audio,
-      muted: !state.audio.muted,
-    }
+    state.muted = !state.muted
   },
-  deafen(state: NuxtState) {
-    const isDeafened = state.audio.deafened
-    state.audio = {
-      ...state.audio,
-      previousVolume: isDeafened
-        ? state.audio.previousVolume
-        : state.audio.volume,
-      volume: isDeafened ? state.audio.previousVolume : 0,
-      deafened: !isDeafened,
-    }
+  deafen(state: AudioState) {
+    const isDeafened = state.deafened
+    state.previousVolume = isDeafened ? state.previousVolume : state.volume
+    state.volume = isDeafened ? state.previousVolume : 0
+    state.deafened = !isDeafened
   },
-  setVolume(state: NuxtState, volume: Number) {
-    state.audio = {
-      ...state.audio,
-      previousVolume: volume,
-      volume,
-    }
+  setVolume(state: AudioState, volume: Number) {
+    state.previousVolume = volume
+    state.volume = volume
   },
-  setInputVolume(state: NuxtState, inputVolume: Number) {
-    state.audio = {
-      ...state.audio,
-      inputVolume,
-    }
+  setInputVolume(state: AudioState, inputVolume: Number) {
+    state.inputVolume = inputVolume
   },
 }
 

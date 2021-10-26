@@ -3,33 +3,28 @@
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers">
   <div class="navbar">
-    <InteractablesButton
-      :outlined="route === 'glyphs' ? false : true"
-      :type="route === 'glyphs' ? 'primary' : 'dark'"
-      size="small"
-      :action="() => setRoute('glyphs')"
-      text="Glyphs">
-      <grid-icon size="1x" />
-    </InteractablesButton>
-    <InteractablesButton
-      :outlined="route === 'emoji' ? false : true"
-      :type="route === 'emoji' ? 'primary' : 'dark'"
-      size="small"
-      :action="() => setRoute('emoji')"
-      text="Emoji">
-      <smile-icon size="1x" />
-    </InteractablesButton>
-    <InteractablesButton
-      :outlined="route === 'gif' ? false : true"
-      :type="route === 'gif' ? 'primary' : 'dark'"
-      size="small"
-      :action="() => setRoute('gif')"
-      text="Gifs">
-      <image-icon size="1x" />
-    </InteractablesButton>
+    <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emoji','gif']">
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Glyphs">
+        <grid-icon size="1x" />
+      </InteractablesButton>
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Emoji">
+        <smile-icon size="1x" />
+      </InteractablesButton>
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Gifs">
+        <image-icon size="1x" />
+      </InteractablesButton>
+    </InteractablesButtonGroup>
   </div>
   <div id="container">
-    Floating: {{ $store.state.ui.enhancers.floating }}
     <picker 
       v-if="route === 'emoji'"
       :data="emojiIndex"

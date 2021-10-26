@@ -146,12 +146,14 @@ export default Vue.extend({
      * Commit store mutation in order to notify the edit status
      */
     editMessage() {
-      const { id, payload } = this.$props.message
-      this.$store.commit('ui/setEditMessage', {
-        id,
-        payload,
-        from: this.$props.group.id,
-      })
+      const { id, payload, type } = this.$props.message
+      if (type === 'text') {
+        this.$store.commit('ui/setEditMessage', {
+          id,
+          payload,
+          from: this.$props.group.id,
+        })
+      }
     },
     /**
      * Called from MessageEdit component when complete to edit message

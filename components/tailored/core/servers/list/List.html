@@ -19,7 +19,7 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
         <div class="server has-tooltip-right has-tooltip-primary" v-for="server in servers"
           v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
-          <UiCircle type="random" :size="40" :seed="server.address" />
+          <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
         </div>
 
       </div>

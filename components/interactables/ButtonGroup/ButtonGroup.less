@@ -1,24 +1,35 @@
 .button-group {
-  display: inline;
   .button {
-    display: inline-block;
     cursor: pointer;
     border-radius: 0;
     margin: 0;
+    border: none;
     &:first-child {
       border-radius: @corner-rounding 0px 0px @corner-rounding;
-      margin-right: -1.5px;
-    }
-    &:not(:first-child) {
-      margin: 0 -1.5px;
-      border-left: none;
     }
     &:last-child {
       border-radius: 0px @corner-rounding @corner-rounding 0px;
     }
     &.active {
-      background: #0984e3;
+      background: @primary-color;
+      box-shadow: @primary-glow;
       color: #dae0ff;
+    }
+  }
+  &.is-normal-width {
+    display: inline;
+    .button {
+      &:not(:first-child) {
+        margin: 0 -1.5px;
+        border-left: none;
+      }
+    }
+  }
+  &.is-full-width {
+    display: flex;
+    width: 100%;
+    .button {
+      flex-grow: 1;
     }
   }
 }

@@ -1,4 +1,4 @@
-import { UIState } from './types'
+import { UIState, GlyphMarketViewStatus } from './types'
 
 const InitalUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -30,6 +30,10 @@ const InitalUIState = (): UIState => ({
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
+  glyphMarketplaceView: {
+    view: GlyphMarketViewStatus.HOME,
+    shopId: null,
+  },
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
 })

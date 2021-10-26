@@ -19,14 +19,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      subject: 'Themes',
+      subject: 'Glyphs',
       marketCategories,
     }
-  },
-  watch: {
-    subject(newVal, oldVal) {
-      console.log(newVal, oldVal)
-    },
   },
   methods: {
     /**
@@ -36,8 +31,8 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    changeSubject(subject: String) {
-      console.log(subject)
+    changeSubject(subject: string) {
+      this.subject = subject
     },
   },
 })

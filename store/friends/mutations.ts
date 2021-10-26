@@ -12,15 +12,15 @@ const mutations = {
     state.incomingRequests.push(incomingRequest)
   },
   updateIncomingRequest(state: FriendsState, incomingRequest: IncomingRequest) {
-    state.incomingRequests.map((request) =>
+    state.incomingRequests = state.incomingRequests.map((request) =>
       request.requestId !== incomingRequest.requestId
         ? request
         : incomingRequest
     )
   },
-  removeIncomingRequest(state: FriendsState, incomingRequest: IncomingRequest) {
-    state.incomingRequests.filter(
-      (request) => request.requestId !== incomingRequest.requestId
+  removeIncomingRequest(state: FriendsState, requestId: string) {
+    state.incomingRequests = state.incomingRequests.filter(
+      (request) => request.requestId !== requestId
     )
   },
   setOutgoingRequests(
@@ -33,25 +33,27 @@ const mutations = {
     state.outgoingRequests.push(outgoingRequest)
   },
   updateOutgoingRequest(state: FriendsState, outgoingRequest: OutgoingRequest) {
-    state.outgoingRequests.map((request) =>
+    state.outgoingRequests = state.outgoingRequests.map((request) =>
       request.requestId !== outgoingRequest.requestId
         ? request
         : outgoingRequest
     )
   },
-  removeOutgoingRequest(state: FriendsState, outgoingRequest: OutgoingRequest) {
-    state.outgoingRequests.filter(
-      (request) => request.requestId !== outgoingRequest.requestId
+  removeOutgoingRequest(state: FriendsState, requestId: string) {
+    state.outgoingRequests = state.outgoingRequests.filter(
+      (request) => request.requestId !== requestId
     )
   },
   addFriend(state: FriendsState, friend: Friend) {
     state.all.push(friend)
   },
   updateFriend(state: FriendsState, friend: Friend) {
-    state.all.map((fr) => (fr.publicKey === friend.publicKey ? friend : fr))
+    state.all = state.all.map((fr) =>
+      fr.publicKey === friend.publicKey ? friend : fr
+    )
   },
   removeFriend(state: FriendsState, friendPublicKey: string) {
-    state.all.filter((fr) => fr.publicKey !== friendPublicKey)
+    state.all = state.all.filter((fr) => fr.publicKey !== friendPublicKey)
   },
 }
 

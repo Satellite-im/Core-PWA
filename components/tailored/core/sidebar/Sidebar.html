@@ -50,24 +50,22 @@
     </div>
 
     <div class="tabs sidebar-selector padded no-top-pad">
-      <InteractablesButton
-        full-width
-        :type="ui.showSidebarUsers ? 'primary' : 'dark'"
-        size="small"
-        :text="$t('global.messages')"
-        :action="() => $store.commit('ui/showSidebarUsers', true)"
-      >
-        <message-square-icon size="1.2x" />
-      </InteractablesButton>
-      <InteractablesButton
-        full-width
-        :type="!ui.showSidebarUsers ? 'primary' : 'dark'"
-        size="small"
-        :text="$t('global.groups')"
-        :action="() => $store.commit('ui/showSidebarUsers', false)"
-      >
-        <users-icon size="1.2x" />
-      </InteractablesButton>
+      <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
+        <InteractablesButton
+          :text="$t('global.messages')"
+          size="small"
+          type="dark"
+        >
+          <message-square-icon size="1.2x" />
+        </InteractablesButton>
+        <InteractablesButton
+          :text="$t('global.groups')"
+          size="small"
+          type="dark"
+        >
+          <users-icon size="1.2x" />
+        </InteractablesButton>
+      </InteractablesButtonGroup>
     </div>
     <div
       class="scrolling hidden-scroll users"
@@ -75,7 +73,7 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.friends !== DataStateType.Loading && users.length">
           <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
           <TailoredCoreUser
             v-for="(user, i) in users"
@@ -83,6 +81,20 @@
             :user="user"
             :isTyping="ui.isTyping.address === user.address"
           />
+
+        </div>
+        <div v-else-if="dataState.friends && !users.length" class="mascot-container">
+          <TypographyTitle text="No Friends Yet" :size="6" />
+          <TypographyText text="The world doesn't have to be so lonely." />
+          <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
+          <InteractablesButton
+            :text="$t('friends.add') + 's'"
+            size="small"
+            type="primary"
+            :action="() => $router.push('/friends/list')"
+          >
+            <user-plus-icon size="1.2x" />
+          </InteractablesButton>
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>
