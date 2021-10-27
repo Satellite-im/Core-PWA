@@ -8,7 +8,7 @@
     >
     <UiGlobal />
 
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal"/>
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="friends.all" :groups="$mock.groups" />
     <div class="dynamic-content">
       <Nuxt id="friends" ref="chat" />

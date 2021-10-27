@@ -2,12 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 import { mapState } from 'vuex'
+import Layout from '~/components/mixins/Layouts/Layout'
+import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
   name: 'ServerLayout',
-  mixins: [mobileSwipe],
+  mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
   data() {
     return {
@@ -16,19 +17,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'media']),
-  },
-  methods: {
-    /**
-     * @method toggleMarketPlace DocsTODO
-     * @description
-     * @example
-     */
-    toggleMarketPlace() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'showMarketPlace',
-        state: !this.ui.modals.showMarketPlace,
-      })
-    },
   },
 })
 </script>

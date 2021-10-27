@@ -4,7 +4,6 @@
     :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${this.asidebar && this.selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'} ${this.selectedGroup ? 'group' : 'direct'} ${$device.isMobile ? 'mobile-app' : ''}`"
     v-touch:swipe="sidebarSwipeHandler(this)" v-touch-options="{ swipeTolerance: 75 }">
     <UiGlobal />
-
     <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
     <TailoredCoreSidebar :toggle="() => $data.sidebar = !$data.sidebar" :users="friends.all" :groups="$mock.groups" />
     <div :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
