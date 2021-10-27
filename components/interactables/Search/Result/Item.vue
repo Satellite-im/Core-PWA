@@ -43,15 +43,18 @@ export default Vue.extend({
   .avatar {
     margin-right: 10px;
   }
-  .username {
-    font-size: @title-text;
-    font-weight: bold;
-  }
-  .message {
-    font-size: @text-size;
-    background-color: transparent;
-    text-overflow: inherit;
-    white-space: pre-wrap;
+  .content {
+    max-width: calc(100% - 48px);
+    .username {
+      font-size: @title-text;
+      font-weight: bold;
+    }
+    .message {
+      font-size: @text-size;
+      background-color: transparent;
+      text-overflow: inherit;
+      white-space: pre-wrap;
+    }
   }
 }
 </style>
