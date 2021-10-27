@@ -30,10 +30,15 @@ export default Vue.extend({
     return {
       Bitrates,
       SampleSizes,
+      hasMicrophone: false,
       audioInputs: [],
       audioOutputs: [],
+      hasWebcam: false,
+      videoInputs: [],
       userHasGivenAudioAccess: false,
       userDeniedAudioAccess: false,
+      userHasGivenVideoAccess: false,
+      userDeniedVideoAccess: false,
       browserAllowsAudioOut: true,
       micLevel: 0,
       stream: null,
@@ -121,6 +126,7 @@ export default Vue.extend({
   },
   mounted() {
     // Check for new input sources
+    this.setupDefaults()
     this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
   },
   beforeDestroy() {
@@ -222,6 +228,15 @@ export default Vue.extend({
           })
           this.setupMicMeter(stream)
         }
+      } else {
+        this.$data.hasAudio = false
+      }
+
+      if (permissionsObject.permissions.webcam) {
+        this.$data.videoInputs = permissionsObject.devices.videoIn
+        this.$data.hasVideo = true
+      } else {
+        this.$data.hasVideo = false
       }
 
       if (permissionsObject.browser !== 'Chrome') {
@@ -245,6 +260,23 @@ export default Vue.extend({
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
         this.$data.userDeniedAudioAccess = true
+      }
+    },
+    /**
+     * @method enableAudio DocsTODO
+     * @description
+     * @example
+     */
+    async enableVideo() {
+      // Check to see if the user has permission
+      try {
+        const stream = await this.requestUserPermissions({ video: true })
+        this.setupMicMeter(stream)
+        this.$data.userHasGivenVideoAccess = true
+        this.setupDefaults()
+      } catch (_: any) {
+        // Error is returned if user selects Block/Deny
+        this.$data.userDeniedVideoAccess = true
       }
     },
     /**

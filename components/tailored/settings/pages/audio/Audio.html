@@ -189,4 +189,36 @@
       />
     </div>
   </div>
+  
+  <!--Video Input Source -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.video.sources.input.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.video.sources.input.subtitle')"
+      />
+      <br />
+      <!-- Ask for permissions block -->
+      <span v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess">
+        <InteractablesButton
+          :text="$t('pages.settings.audio.sources.permissionButtonText')"
+          size="small"
+          type="primary"
+          disabled=""
+          :action="enableVideo"
+        />
+      </span>
+      <span v-if="userHasGivenVideoAccess">
+        <InteractablesSelect
+          v-model="isAudioInput"
+          :options="videoInputs"
+          size="small"
+        />
+      </span>
+    </div>
+  </div>
 </div>

@@ -7,6 +7,8 @@ export enum KeybindTypes {
 export interface SettingsState {
   audioInput: string
   audioOutput: string
+  videoInput: string
+  screenShare: string
   noiseSuppression: Boolean
   echoCancellation: Boolean
   bitrate: Number

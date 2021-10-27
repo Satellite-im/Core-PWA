@@ -150,6 +150,22 @@ export default {
           subtitle: 'Enable to help hide background noise in your environment.',
         },
       },
+      video: {
+        sources: {
+          input: {
+            title: 'Video Input',
+            subtitle:
+              "Select which video device you'd like to share your beautiful smile from.",
+          },
+          screen: {
+            title: 'Screen Share',
+            captureMouse: {
+              title: 'Capture Mouse',
+              subtitle: 'Would you like to share your mouse in screen shares?',
+            },
+          },
+        },
+      },
       keybinds: {
         title: 'Default Keybinds',
         subtitle:
