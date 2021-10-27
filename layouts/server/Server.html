@@ -7,7 +7,7 @@
     v-touch-options="{ swipeTolerance: 75 }"
     >
     <UiGlobal />
-    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" />
+    <TailoredCoreServersList :servers="$mock.servers" :unreads="$mock.unreads" :openModal="toggleModal" />
     <TailoredServersSidebar :toggle="() => $data.sidebar = !$data.sidebar" />
     <TailoredMessagingEnhancers />
     <div :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">

@@ -2,12 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 import { mapState } from 'vuex'
+
+import Layout from '~/components/mixins/Layouts/Layout'
+import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
   name: 'FilesLayout',
-  mixins: [mobileSwipe],
+  mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
   data() {
     return {
