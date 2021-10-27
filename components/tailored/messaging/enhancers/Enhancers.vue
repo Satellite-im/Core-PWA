@@ -1,13 +1,14 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import { mapState } from 'vuex'
-import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
-// @ts-ignore
-import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 // @ts-ignore
 import data from 'emoji-mart-vue-fast/data/all.json'
+import 'emoji-mart-vue-fast/css/emoji-mart.css'
+// @ts-ignore
+import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
+import { mapState } from 'vuex'
+import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
+
 
 const emojiIndex = new EmojiIndex(data)
 
