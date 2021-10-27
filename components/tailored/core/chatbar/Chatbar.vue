@@ -223,7 +223,7 @@ export default Vue.extend({
       const messageBox = this.$refs.messageuser as HTMLElement
       switch (event.key) {
         case 'Backspace':
-          setTimeout(() => {
+          this.$nextTick(() => {
             if (messageBox.textContent) {
               const parsedCommand = parseCommand(messageBox.textContent)
               const currentCommand = commands.find(
@@ -242,7 +242,7 @@ export default Vue.extend({
               this.value = htmlToMarkdown(messageBox.innerHTML)
               this.autoGrow()
             }
-          }, 10)
+          })
           return
         case 'Delete':
           this.autoGrow()
@@ -287,10 +287,10 @@ export default Vue.extend({
               setCaretPosition(messageBox, caretPosition)
             } else {
               const caretPosition = getCaretPosition(messageBox)
-              setTimeout(() => {
+              this.$nextTick(() => {
                 setCaretPosition(messageBox, caretPosition + 1)
                 messageBox.focus()
-              }, 10)
+              })
             }
           }
           return
@@ -331,9 +331,9 @@ export default Vue.extend({
           }
           return
       }
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.handleInputChange()
-      }, 10)
+      })
       // this.$data.lastEdited = Date.now()
     },
     handleInputKeyup(event: KeyboardEvent) {
