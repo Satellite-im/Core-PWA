@@ -36,7 +36,6 @@ export default Vue.extend({
         this.$store.commit('accounts/setStorePin', state)
       },
       get() {
-        console.log(this)
         return !this.accounts ? false : this.accounts.storePin
       },
     },
@@ -73,7 +72,7 @@ export default Vue.extend({
         } else {
           this.$router.replace('/')
         }
-      } catch (error) {
+      } catch (error: any) {
         this.error = error.message
         this.$data.pin = ''
       }
@@ -90,7 +89,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('accounts/setPin', this.$data.pin)
         await this.decrypt()
-      } catch (error) {
+      } catch (error: any) {
         this.error = error.message
       }
     },
