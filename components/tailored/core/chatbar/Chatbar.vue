@@ -367,6 +367,13 @@ export default Vue.extend({
         this.autoGrow()
       })
     },
+    handleDrop(e: any) {
+      e.preventDefault()
+      const file = e.dataTransfer.items[0].getAsFile()
+      const handleFileExpectEvent = { target: { files: [file] } }
+      // @ts-ignore
+      this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+    },
   },
 })
 </script>
