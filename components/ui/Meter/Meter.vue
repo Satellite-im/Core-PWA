@@ -48,6 +48,7 @@ export default Vue.extend({
 
     this.$nextTick(() => {
       /* update number of ticks after whole view is rendrered */
+      // TODO: this seems bad
       setTimeout(this.resizeHandler, 50)
     })
   },
