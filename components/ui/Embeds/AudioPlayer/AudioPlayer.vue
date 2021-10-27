@@ -11,9 +11,11 @@ export default Vue.extend({
     DownloadIcon,
   },
   props: {
-    data: {
-      type: Object as PropType<AudioData> | undefined,
-      default: () => {},
+    data() {
+      return {
+        type: Object as PropType<AudioData> | undefined,
+        default: () => {},
+      }
     },
   },
 })
