@@ -92,10 +92,10 @@ export default Vue.extend({
           {
             event.preventDefault()
             const caretPosition = getCaretPosition(messageBox)
-            setTimeout(() => {
+            this.$nextTick(() => {
               setCaretPosition(messageBox, caretPosition + 1)
               messageBox.focus()
-            }, 10)
+            })
           }
           return
         case 'Left':
@@ -115,9 +115,9 @@ export default Vue.extend({
           this.cancelMessage()
           break
       }
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.handleInputChange()
-      }, 10)
+      })
     },
     handleInputKeyup(event: KeyboardEvent) {
       const messageBox = this.$refs.messageBox as HTMLElement

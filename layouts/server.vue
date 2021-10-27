@@ -1,13 +1,65 @@
-<template src="./server/Server.html"></template>
+<template>
+  <div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+    <div
+      id="app"
+      :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
+        $device.isMobile ? 'mobile-app' : ''
+      }`"
+      v-touch:swipe="sidebarSwipeHandler(this)"
+      v-touch-options="{ swipeTolerance: 75 }"
+    >
+      <UiGlobal />
+      <TailoredCoreServersList
+        :servers="$mock.servers"
+        :unreads="$mock.unreads"
+        :openModal="toggleModal"
+      />
+      <TailoredServersSidebar
+        :toggle="() => ($data.sidebar = !$data.sidebar)"
+      />
+      <TailoredMessagingEnhancers />
+      <div
+        :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+      >
+        <TailoredCoreStatusbar
+          id="statusbar"
+          :server="{
+            name: 'Test Server',
+            address: '0x0',
+            desc: 'Just a test server',
+          }"
+          :user="$mock.users[0]"
+        />
+        <TailoredCoreMedia
+          :fullscreen="ui.fullscreen"
+          :users="$mock.callUsers"
+          :maxViewableUsers="10"
+          :fullscreenMaxViewableUsers="20"
+        />
+        <UiChatScroll
+          :contents="ui.messages"
+          :preventScrollOffset="500"
+          :class="media.activeCall ? 'media-open' : ''"
+          enableWrap
+        >
+          <Nuxt />
+        </UiChatScroll>
+        <TailoredCoreChatbar />
+      </div>
+    </div>
+    <TailoredCoreMobileNav v-if="$device.isMobile" />
+  </div>
+</template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mobileSwipe } from '../components/mixins/Swipe/Swipe'
 import { mapState } from 'vuex'
+import Layout from '~/components/mixins/Layouts/Layout'
+import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
   name: 'ServerLayout',
-  mixins: [mobileSwipe],
+  mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
   data() {
     return {
@@ -17,20 +69,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media']),
   },
-  methods: {
-    /**
-     * @method toggleMarketPlace DocsTODO
-     * @description
-     * @example
-     */
-    toggleMarketPlace() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'showMarketPlace',
-        state: !this.ui.modals.showMarketPlace,
-      })
-    },
-  },
 })
 </script>
 
-<style lang="less" src="./server/Server.less"></style>
+<style lang="less" src="./Layout.less"></style>
