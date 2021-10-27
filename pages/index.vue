@@ -47,7 +47,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('accounts/loadAccount')
 
-        this.$router.replace('/allcomponents')
+        this.$router.replace('/chat/direct')
       } catch (error) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
