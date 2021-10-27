@@ -116,6 +116,11 @@ export default Vue.extend({
       internalText: this.text ? this.text : '',
     }
   },
+  watch: {
+    text() {
+      this.internalText = this.text
+    },
+  },
   methods: {
     /**
      * @method update
