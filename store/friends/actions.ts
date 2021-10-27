@@ -129,7 +129,6 @@ export default {
       (fr) => fr.publicKey === friend.publicKey
     )
 
-    console.log(friendExists, friend)
     if (friendExists) {
       commit('updateFriend', friend)
     } else {
