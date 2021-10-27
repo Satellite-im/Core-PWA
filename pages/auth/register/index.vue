@@ -49,7 +49,7 @@ export default Vue.extend({
         status: userData.status,
       })
 
-      this.$router.replace('/allcomponents')
+      this.$router.replace('/chat/direct')
     },
   },
 })

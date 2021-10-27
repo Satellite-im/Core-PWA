@@ -87,7 +87,7 @@ export default Vue.extend({
     showDropDown() {
       this.dropDown = true
       const searchResult = this.$refs.searchResult as HTMLElement
-      setTimeout(() => {
+      this.$nextTick(() => {
         const searchContent = searchResult.querySelector('.user-search-result')
         if (searchContent) {
           if (searchContent.getBoundingClientRect().height < 200) {
@@ -97,7 +97,7 @@ export default Vue.extend({
             searchResult.style.height = '200px'
           }
         }
-      }, 10)
+      })
     },
     /**
      * @method hideDropDown DocsTODO

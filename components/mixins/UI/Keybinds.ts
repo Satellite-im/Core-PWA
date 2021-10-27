@@ -8,6 +8,9 @@ export const Keybinds = {
       this.activateKeybinds()
     }
   },
+  destroyed() {
+    this.clearKeybinds()
+  },
   methods: {
     /**
      * @method activateKeybinds
