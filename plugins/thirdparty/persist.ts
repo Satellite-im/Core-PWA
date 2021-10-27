@@ -24,6 +24,7 @@ const propertiesBlacklist = [
   'accounts.error',
   'accounts.loading',
   'accounts.registrationStatus',
+  'friends.all',
 ]
 
 export default ({ store }: { store: any }) => {

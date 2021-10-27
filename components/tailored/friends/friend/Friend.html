@@ -59,6 +59,7 @@
   </div>
   <div class="controls" v-else>
     <InteractablesButton
+      v-if="loading !== 'options'"
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
@@ -71,7 +72,8 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-tooltip="Options"
-      :action="() => {}">
+      :loading="loading === 'options'"
+      :action="contextMenu">
       <more-vertical-icon size="1x" />
     </InteractablesButton>
   </div>
