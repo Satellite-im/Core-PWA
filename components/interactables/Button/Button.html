@@ -4,7 +4,7 @@
   <!-- {{$attrs['data-tooltip']}} -->
   <UiGlowingCursorArea :hide="$attrs['data-tooltip'] ? true : false">
   <!-- If the button is in the loading state -->
-  <div v-if="loading">
+  <div class="spinner" v-if="loading">
     <!-- Loading Spinner -->
     <UiSpinner spinning :class="`${loadingText ? 'button-icon' : ''}`" />
     <!-- Loading Text -->
