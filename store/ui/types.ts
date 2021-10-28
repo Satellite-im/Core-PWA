@@ -28,6 +28,8 @@ export interface UIState {
     show: Boolean
     floating: Boolean
     position: Number[]
+    defaultWidth: String
+    defaultHeight: String
   }
   messages: any[]
   unreadMessage: number

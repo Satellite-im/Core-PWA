@@ -23,6 +23,8 @@ const InitalUIState = (): UIState => ({
     show: false,
     floating: false,
     position: [0, 0],
+    defaultWidth: '24rem',
+    defaultHeight: '30rem',
   },
   messages: [],
   unreadMessage: 0,

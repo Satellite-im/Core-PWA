@@ -23,50 +23,38 @@ export default Vue.extend({
       emojiIndex,
       route: 'emoji',
       styleforEnhancer: {
-      "background-color" : "red",
-      "position" : "fixed",
-      "left" : "50px"
+        "background-color" : "red",
+        "position" : "fixed",
+        "left" : "calc(this.$store.state.ui.enhancers.position[0] + @enhancers-width - 100vw)",
+        "bottom" : "calc(this.$store.state.ui.enhancers.position[1] + @enhancers-height - 100vh)",
       },
        styleTest: {
-      "background-color" : "blue"
+        "background-color" : "blue"
       },
     }
-    
+
+//     @enhancers-height: 30rem;
+// @enhancers-width: 24rem;
+    // calc(100vh - 200px)
+    // clickX + contextMenu.clientWidth - window.innerWidth
   },
     mounted() {
       console.log("mounted in Enhancers dot vue")
       console.log(typeof this.$store.state.ui.enhancers.floating)
-
-      console.log(this.$store.state.ui.enhancers.floating)
-      // console.log(this.$refs.enhancers)
-    //   this.$nextTick(() => {
-    //   console.log(this.$refs.enhancers)
-    //   console.log(this.$refs.enhancers.style.height)
-
-    //   this.handleOverflow()
-
-
-    // })
-    //    const el = document.querySelector('body')
-       
-    // if (el) {
-    //   el.addEventListener('tester', this.handleOverflow)
-
-    // }
+      console.log(this.$store.state.ui.enhancers.position[0])
     
   },
   destroyed() {
       console.log("destroyed")
     const el = document.querySelector('body')
     if (el) {
-      el.removeEventListener('tester', this.handleOverflow)
+      // el.removeEventListener('tester', this.handleOverflow)
     }
   },
   computed: {
     ...mapState(['ui']),
   },
   watch: {
-    
     'this.$store.state.ui.enhancers': function() {
     console.log("watched data: " + this.$store.state.ui.enhancers.floating)
   }
@@ -135,15 +123,27 @@ export default Vue.extend({
         })
       }
     },
-    handleOverflow(){
-      const testerRef = this.$refs.enhancers as HTMLElement
-
-      console.log("in handleOverflow" + testerRef)
-            // const testerRef = this.$refs.enhancers as HTMLElement
-      // console.log(testerRef.clientHeight)
-      // console.log(testerRef.clientWidth)
-
-      return
+    handleOverflow(event: MouseEvent){
+      // const testerRef = this.$refs.enhancers as HTMLElement
+          console.log(event)
+      // console.log("in handleOverflow" + testerRef)
+      // const contextMenu = this.$refs.contextMenu as HTMLElement
+      // const position = this.ui.contextMenuPosition
+      // let clickX = position.x
+      // let clickY = position.y
+      // console.warn("in ContextMenu.vue : " , [clickX, clickY])
+      // const widthOverflow = clickX + contextMenu.clientWidth - window.innerWidth
+      // const heightOverflow =
+      //   clickY + contextMenu.clientHeight - window.innerHeight
+      // if (widthOverflow > -8) {
+      //   clickX -= contextMenu.clientWidth
+      //   this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+      // }
+      // if (heightOverflow > -8) {
+      //   clickY -= heightOverflow + 12
+      //   this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+      // }
+      // return
     }
   },
 })

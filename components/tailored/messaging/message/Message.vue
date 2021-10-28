@@ -134,12 +134,54 @@ export default Vue.extend({
         messageID: this.$props.message.id,
       })
       // test setting location of the enhancer window off user click position
-      let currX = e.clientX - 800 
-      let currY = e.clientY - 230 
+      // let currX = e.clientX - 800 
+      // let currY = e.clientY - 230 
 
-       this.$store.commit('ui/toggleEnhancers', { show: true, floating: true, position: [currX, currY] })
        console.log("open the enhancers")
+      let clickX = e.clientX
+      let clickY = e.clientY
 
+      console.log([clickX, clickY])
+
+       this.$store.commit('ui/toggleEnhancers', { show: true, floating: true, position: [clickX, clickY] })
+
+        console.warn("in Message.vue : " , [clickX, clickY])
+    // @ts-ignore
+
+      const widthOverflow = clickX + this.convertRem(this.$store.state.ui.enhancers.defaultWidth) - window.innerWidth
+      
+      console.log(widthOverflow)
+
+      // const heightOverflow =
+      //   clickY + contextMenu.clientHeight - window.innerHeight
+      // if (widthOverflow > -8) {
+      //   clickX -= contextMenu.clientWidth
+      //   this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+      // }
+      // if (heightOverflow > -8) {
+      //   clickY -= heightOverflow + 12
+      //   this.$store.commit('setContextMenuPosition', { x: clickX, y: clickY })
+      // }
+
+      //  console.log()
+
+    },
+    convertRem(value : string) {
+      const fontSize = parseFloat(
+        // of the computed font-size, so in px
+        getComputedStyle(
+          // for the root <html> element
+          document.documentElement
+        ).fontSize
+      );
+      console.log(value)
+
+      console.log(fontSize)
+
+
+      const remNumber = value.replace('rem', '');
+
+      return Number(remNumber) * fontSize;
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('ui/addReaction', {

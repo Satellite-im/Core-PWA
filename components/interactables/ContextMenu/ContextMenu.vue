@@ -55,6 +55,7 @@ export default Vue.extend({
       const position = this.ui.contextMenuPosition
       let clickX = position.x
       let clickY = position.y
+      console.warn("in ContextMenu.vue : " , [clickX, clickY])
       const widthOverflow = clickX + contextMenu.clientWidth - window.innerWidth
       const heightOverflow =
         clickY + contextMenu.clientHeight - window.innerHeight
