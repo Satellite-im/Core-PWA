@@ -128,6 +128,9 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: Event | any) {
+       console.log("in emojiReaction in message.vue")
+       console.log(this.$el)
+
       this.$store.commit('settingReaction', {
         status: true,
         groupID: this.$props.group.id,
@@ -138,7 +141,6 @@ export default Vue.extend({
       let currY = e.clientY - 230 
 
        this.$store.commit('toggleEnhancers', { show: true, floating: true, position: [currX, currY] })
-       console.log("open the enhancers")
 
     },
     quickReaction(emoji: String) {

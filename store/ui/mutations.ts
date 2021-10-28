@@ -64,7 +64,7 @@ export default {
       enhancers: {
         show: options.show,
         floating: options.floating || false,
-        position: options.position || null,
+        position: options.position || [0,0] || null,
       },
     }
   },

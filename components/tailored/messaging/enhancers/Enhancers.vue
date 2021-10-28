@@ -22,12 +22,31 @@ export default Vue.extend({
     return {
       emojiIndex,
       route: 'emoji',
+      styleforEnhancer: {
+      "background-color" : "red",
+      "position" : "fixed",
+      "left" : "50px"
+      },
+       styleTest: {
+      "background-color" : "blue"
+      },
     }
+    
   },
     mounted() {
       console.log("mounted in Enhancers dot vue")
-      this.$store.commit('toggleEnhancers', { show: false, floating: true, position: [0,0] })
-      this.handleOverflow()
+      console.log(typeof this.$store.state.ui.enhancers.floating)
+
+      console.log(this.$store.state.ui.enhancers.floating)
+      // console.log(this.$refs.enhancers)
+    //   this.$nextTick(() => {
+    //   console.log(this.$refs.enhancers)
+    //   console.log(this.$refs.enhancers.style.height)
+
+    //   this.handleOverflow()
+
+
+    // })
     //    const el = document.querySelector('body')
        
     // if (el) {
@@ -45,6 +64,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+  },
+  watch: {
+    
+    'this.$store.state.ui.enhancers': function() {
+    console.log("watched data: " + this.$store.state.ui.enhancers.floating)
+  }
   },
   methods: {
     /**
@@ -107,7 +132,10 @@ export default Vue.extend({
     handleOverflow(){
       const testerRef = this.$refs.enhancers as HTMLElement
 
-      console.log(testerRef)
+      console.log("in handleOverflow" + testerRef)
+            // const testerRef = this.$refs.enhancers as HTMLElement
+      // console.log(testerRef.clientHeight)
+      // console.log(testerRef.clientWidth)
 
       return
     }
