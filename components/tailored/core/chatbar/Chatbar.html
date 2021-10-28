@@ -6,7 +6,7 @@
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
-      <FileUpload type="quick" />
+      <FileUpload type="quick" ref="file-upload" />
     </div>
     <div
       :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"
@@ -18,7 +18,8 @@
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
       @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"></div>
+      @keyup="handleInputKeyup"
+      @drop="handleDrop"></div>
     <span class="placeholder">{{ placeholder }}</span>
     <div
       :data-tooltip="$t('wallet.send_money')"

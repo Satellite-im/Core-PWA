@@ -13,6 +13,13 @@ import {
 } from 'satellite-lucide-icons'
 
 import { Friend } from '~/types/ui/friends'
+import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    removeFriend: () => void
+  }
+}
 
 export default Vue.extend({
   components: {
@@ -23,6 +30,7 @@ export default Vue.extend({
     CircleIcon,
     SmartphoneIcon,
   },
+  mixins: [ContextMenu],
   props: {
     friend: {
       type: Object as PropType<Friend>,
@@ -43,7 +51,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      loading: '' as '' | 'accept' | 'decline' | 'sending',
+      loading: '' as '' | 'accept' | 'decline' | 'sending' | 'options',
+      contextMenuValues: [{ text: 'Remove Friend', func: this.removeFriend }],
     }
   },
   methods: {
@@ -78,9 +87,17 @@ export default Vue.extend({
       this.loading = 'decline'
       try {
         await this.$store.dispatch(
-          'denyFriendRequest',
+          'friends/denyFriendRequest',
           this.$props.friend.request
         )
+      } finally {
+        this.loading = ''
+      }
+    },
+    async removeFriend() {
+      this.loading = 'options'
+      try {
+        await this.$store.dispatch('friends/removeFriend', this.friend)
       } finally {
         this.loading = ''
       }
