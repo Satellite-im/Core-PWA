@@ -3,8 +3,7 @@
   ref="enhancers"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
-  v-bind:style="{top: $store.state.ui.enhancers.position[0]  + `px`, 
-    right: $store.state.ui.enhancers.position[1] + `px`}"
+  v-bind:style="[ this.$store.state.ui.enhancers.floating  ? styleforEnhancer : styleTest ]"
   >
   <div class="navbar">
     <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emoji','gif']">
@@ -29,7 +28,7 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <!-- Floating: {{ $store.state.ui.enhancers.floating }} -->
+    Floating: {{ $store.state.ui.enhancers.floating }}
     <picker 
       v-if="route === 'emoji'"
       :data="emojiIndex"
