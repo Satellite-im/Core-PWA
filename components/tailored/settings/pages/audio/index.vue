@@ -270,7 +270,6 @@ export default Vue.extend({
         }
       }
 
-      console.log(permissionsObject.devices)
       if (permissionsObject.permissions.webcam) {
         this.$data.videoInputs = permissionsObject.devices.videoIn
         this.$data.userHasGivenVideoAccess =
