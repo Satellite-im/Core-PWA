@@ -35,7 +35,7 @@ export default {
     state: UIState,
     options: { show: boolean; floating: boolean; position: Number[]; defaultWidth?: string; defaultHeight?: string}
   ) {
-    //@ts-ignore
+    
     state.enhancers = { 
       show: options.show, 
       ...options.floating && { floating: options.floating },

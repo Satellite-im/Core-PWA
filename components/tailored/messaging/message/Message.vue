@@ -145,10 +145,10 @@ export default Vue.extend({
 
        this.$store.commit('ui/toggleEnhancers', { show: true, floating: true, position: [clickX, clickY] })
 
-        console.warn("in Message.vue : " , [clickX, clickY])
+        console.warn("in Message.vue : " , this.ui)
     // @ts-ignore
 
-      const widthOverflow = clickX + this.convertRem(this.$store.state.ui.enhancers.defaultWidth) - window.innerWidth
+      const widthOverflow = clickX + this.convertRem(this.ui.enhancers.defaultWidth) - window.innerWidth
       
       console.log(widthOverflow)
 
@@ -174,6 +174,8 @@ export default Vue.extend({
           document.documentElement
         ).fontSize
       );
+      console.log(typeof value)
+
       console.log(value)
 
       console.log(fontSize)

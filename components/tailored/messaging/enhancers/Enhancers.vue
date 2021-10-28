@@ -105,16 +105,9 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
-<<<<<<< HEAD
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
       })
-=======
-        console.log("toggleEnhancers in Enhancers.vue")
-        console.log(this.$refs.enhancers)
-  
-      this.$store.commit('toggleEnhancers', { show: !this.ui.enhancers.show })
->>>>>>> b9599aa (feat(glyphOnClick): have Enhancer window render closer to enhancer button in chat)
       if (this.ui.settingReaction.status) {
         this.$store.commit('ui/settingReaction', {
           status: false,
