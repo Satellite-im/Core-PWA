@@ -12,8 +12,19 @@ export default Vue.extend({
     ClipboardIcon,
   },
   layout: 'settings',
+  data() {
+    return {}
+  },
   computed: {
     ...mapState(['accounts']),
+    storePin: {
+      set(state) {
+        this.$store.commit('accounts/setStorePin', state)
+      },
+      get() {
+        return this.accounts.storePin
+      },
+    },
   },
 })
 </script>

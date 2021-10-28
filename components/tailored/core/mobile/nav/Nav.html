@@ -17,5 +17,5 @@
   <settings-icon
     size="1x"
     :class="`${$route.path.includes('/settings') ? 'active' : ''}`"
-    v-on:click="() => $router.push('/settings/personalize')" />
+    v-on:click="$store.commit('ui/toggleSettings', true)" />
 </div>

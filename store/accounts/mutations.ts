@@ -5,6 +5,9 @@ const mutations = {
   setPin(state: AccountsState, pin: string) {
     state.pin = pin
   },
+  setStorePin(state: AccountsState, storePin: boolean) {
+    state.storePin = storePin
+  },
   setPinHash(state: AccountsState, pinHash: string) {
     state.pinHash = pinHash
   },

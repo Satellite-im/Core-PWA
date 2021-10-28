@@ -3,6 +3,8 @@ import { SettingsState, KeybindTypes } from './types'
 const InitalSettingsState = (): SettingsState => ({
   audioInput: '',
   audioOutput: '',
+  videoInput: '',
+  screenShare: '',
   noiseSuppression: true,
   echoCancellation: true,
   bitrate: 96000,
