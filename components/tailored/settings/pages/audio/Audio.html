@@ -1,4 +1,13 @@
 <div id="audio-settings">
+  <!-- Audio -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.audio.title')"
+      />
+    </div>
+  </div>
   <!--Audio Sources-->
   <!-- Requires user permissions to see in most browsers -->
   <div class="columns is-desktop">
@@ -189,7 +198,17 @@
       />
     </div>
   </div>
-  
+
+  <!-- Video -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.video.title')"
+      />
+    </div>
+  </div>
+
   <!--Video Input Source -->
   <div class="columns is-desktop">
     <div class="column">
@@ -208,17 +227,54 @@
           :text="$t('pages.settings.audio.sources.permissionButtonText')"
           size="small"
           type="primary"
-          disabled=""
+          :disabled="!hasWebcam"
           :action="enableVideo"
         />
       </span>
       <span v-if="userHasGivenVideoAccess">
         <InteractablesSelect
-          v-model="isAudioInput"
+          v-model="isVideoInput"
           :options="videoInputs"
           size="small"
         />
       </span>
+
+      <!-- Permission Denied Block -->
+      <span v-if="userDeniedVideoAccess">
+        <TypographyError
+          :text="$t('pages.settings.video.sources.permissionDeniedMessage')"
+        />
+      </span>
+    </div>
+  </div>
+
+  <!-- Screen Share -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.screen.title')"
+      />
+    </div>
+  </div>
+
+  <!-- Capture Mouse -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.screen.captureMouse.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.screen.captureMouse.subtitle')"
+      />
+      <br />
+      <InteractablesSelect
+        v-model="isCaptureMouse"
+        :options="captureMouses"
+        size="small"
+      />
     </div>
   </div>
 </div>
