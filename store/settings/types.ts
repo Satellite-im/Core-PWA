@@ -4,11 +4,17 @@ export enum KeybindTypes {
   openSettings = 'alt+s',
   callActiveChat = 'alt+c',
 }
+
+export enum CaptureMouseTypes {
+  always = 'always',
+  motion = 'motion',
+  never = 'never',
+}
 export interface SettingsState {
   audioInput: string
   audioOutput: string
   videoInput: string
-  screenShare: string
+  captureMouse: string
   noiseSuppression: Boolean
   echoCancellation: Boolean
   bitrate: Number
