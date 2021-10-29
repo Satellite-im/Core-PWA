@@ -5,6 +5,7 @@ const InitalUIState = (): UIState => ({
   showSidebarUsers: true,
   showSearchResult: false,
   showSettings: false,
+  settingsSideBar: false,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
