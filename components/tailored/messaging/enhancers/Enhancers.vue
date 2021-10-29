@@ -1,28 +1,22 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
-import data from 'emoji-mart-vue-fast/data/all.json'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
-// @ts-ignore
-import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 import { mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
-
-
-const emojiIndex = new EmojiIndex(data)
+import { EmojiPicker } from 'vue-emoji-picker'
 
 export default Vue.extend({
   components: {
-    Picker,
     SmileIcon,
     GridIcon,
     ImageIcon,
+    EmojiPicker,
   },
   data() {
     return {
-      emojiIndex,
       route: 'emoji',
+      search: '',
+      clickEvent: () => {},
     }
   },
   computed: {
@@ -72,6 +66,8 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
+      this.clickEvent()
+      // @ts-ignore
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
       })
@@ -87,4 +83,3 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang="less" src="./Enhancers.less"></style>
-<style lang="less" src="./EmojiMart.less"></style>

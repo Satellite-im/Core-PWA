@@ -25,16 +25,31 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <picker 
-      v-if="route === 'emoji'"
-      :data="emojiIndex"
-      ref="emojiPicker"
-      class="emoji-picker"
-      @select="addEmoji" 
-      :per-line="9"
-      color="#087bd3"
-      :emoji-size="26"
-      :show-preview="false" />
+    <emoji-picker @emoji="addEmoji" :search="search" v-if="route === 'emoji'">
+      <div slot="emoji-invoker" slot-scope="{ events: { click: clickEvent }, display, emojis }" v-bind:events.click="clickEvent" @click.stop="clickEvent">
+        <button type="button" ref="emojiInvoker">open display: {{ clickEvent }} </button>
+      </div>
+      <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+        <div class="emoji-picker">
+          <div class="emoji-picker__search">
+            <input type="text" v-model="search" >
+          </div>
+          <div>
+            <div v-for="(emojiGroup, category) in emojis" :key="category">
+              <h5>{{ category }}</h5>
+              <div class="emojis">
+                <span
+                  v-for="(emoji, emojiName) in emojiGroup"
+                  :key="emojiName"
+                  @click="addEmoji(emoji)"
+                  :title="emojiName"
+                >{{ emoji }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </emoji-picker>
     <TailoredMessagingEnhancersGlyphs v-if="route === 'glyphs'"></TailoredMessagingEnhancersGlyphs>
   </div>
 </div>
