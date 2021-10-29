@@ -14,7 +14,7 @@ import {
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
   commandPrefix,
-  containsCommand,
+  //  containsCommand,
   parseCommand,
   commands,
   isArgsValid,

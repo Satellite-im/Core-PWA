@@ -49,7 +49,7 @@
       </InteractablesButton>
     </div>
 
-    <div class="tabs sidebar-selector padded no-top-pad">
+    <div class="tabs sidebar-selector padded no-top-pad flexy">
       <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
         <InteractablesButton
           :text="$t('global.messages')"
@@ -66,6 +66,13 @@
           <users-icon size="1.2x" />
         </InteractablesButton>
       </InteractablesButtonGroup>
+      
+      <div 
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary" 
+        data-tooltip="New Chat">
+        <plus-circle-icon size="1x" />
+      </div>
+      <TailoredCoreQuickChat />
     </div>
     <div
       class="scrolling hidden-scroll users"
