@@ -20,7 +20,7 @@
       v-touch-options="{ swipeTolerance: 75 }"
     >
       <UiGlobal />
-      <TailoredCoreServersList
+      <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :openModal="toggleModal"
