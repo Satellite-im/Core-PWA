@@ -1,5 +1,5 @@
 import { without } from 'lodash'
-import { UIState } from './types'
+import { UIState, EnhancerInfo } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
@@ -33,9 +33,8 @@ export default {
   },
   toggleEnhancers(
     state: UIState,
-    options: { show: boolean; floating: boolean; position: Number[]; defaultWidth?: string; defaultHeight?: string}
+    options: EnhancerInfo
   ) {
-    
     state.enhancers = { 
       show: options.show, 
       ...options.floating && { floating: options.floating },

@@ -142,15 +142,29 @@ export default Vue.extend({
       let clickY = e.clientY
 
       console.log([clickX, clickY])
+        console.log(this.$store.state.ui.enhancers)
+
+        console.log(typeof this.$store.state.ui.enhancers.defaultHeight)
+
+        console.log(this.$store.state.ui.enhancers.defaultHeight)
+
+
 
        this.$store.commit('ui/toggleEnhancers', { show: true, floating: true, position: [clickX, clickY] })
+        console.log(this.$store.state.ui.enhancers.defaultHeight)
 
-        console.warn("in Message.vue : " , this.ui)
+
+        // console.warn("in Message.vue : " , this.ui)
+
+        // this.convertRem(this.ui.enhancers.defaultWidth)
+        
+
+        console.log("what's the rem in the state? ",this.$store.state.ui.enhancers)
     // @ts-ignore
 
-      const widthOverflow = clickX + this.convertRem(this.ui.enhancers.defaultWidth) - window.innerWidth
+      // const widthOverflow = clickX + this.convertRem(this.ui.enhancers.defaultWidth) - window.innerWidth
       
-      console.log(widthOverflow)
+      // console.log(widthOverflow)
 
       // const heightOverflow =
       //   clickY + contextMenu.clientHeight - window.innerHeight
@@ -174,16 +188,25 @@ export default Vue.extend({
           document.documentElement
         ).fontSize
       );
+
+      console.log("convertRem -----")
+
+      console.log(fontSize)
+
+      console.log("convertRem inside of value -----")
+
+
       console.log(typeof value)
 
       console.log(value)
 
-      console.log(fontSize)
-
+      // console.log(remNumber)
 
       const remNumber = value.replace('rem', '');
 
-      return Number(remNumber) * fontSize;
+      // return Number(remNumber) * fontSize;
+      return Number(remNumber);
+
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('ui/addReaction', {
