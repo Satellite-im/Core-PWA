@@ -22,7 +22,33 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
+  watch: {
+    route() {
+      this.openEmoji()
+    },
+    'ui.enhancers.show'(value) {
+      if (value) this.openEmoji()
+    },
+  },
+  mounted() {
+    this.openEmoji()
+  },
   methods: {
+    /**
+     * @method openEmoji DocsTODO
+     * @description
+     * @param
+     * @example
+     */
+    openEmoji() {
+      if (this.route !== 'emoji') return
+      this.$nextTick(() => {
+        setTimeout(() => {
+          // @ts-ignore
+          this.$refs.emojiInvoker?.click()
+        }, 0)
+      })
+    },
     /**
      * Adds emoji to current text input
      * (emoji: any) Comes from <picker/> select event

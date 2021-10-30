@@ -26,8 +26,7 @@
   </div>
   <div id="container">
     <emoji-picker @emoji="addEmoji" :search="search" v-if="route === 'emoji'">
-      <div slot="emoji-invoker" slot-scope="{ events: { click: clickEvent }, display, emojis }" v-bind:events.click="clickEvent" @click.stop="clickEvent">
-        <button type="button" ref="emojiInvoker">open display: {{ clickEvent }} </button>
+      <div ref="emojiInvoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent }, display, emojis }" v-bind:events.click="clickEvent" @click.stop="clickEvent">
       </div>
       <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
         <div class="emoji-picker">
