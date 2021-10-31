@@ -6,9 +6,11 @@ import { IFrameVideoData } from './types'
 
 export default Vue.extend({
   props: {
-    data: {
-      type: String,
-      default: () => {},
+    data() {
+      return {
+        type: String,
+        default: () => {},
+      }
     },
   },
   data() {

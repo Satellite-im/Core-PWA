@@ -1,6 +1,7 @@
+import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
-export default {
+export default defineNuxtConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
@@ -85,8 +86,6 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
     // '@nuxtjs/ngrok',
     '@nuxtjs/style-resources',
     '@nuxtjs/device',
@@ -154,10 +153,17 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend(config) {
+      config.node = {
+        fs: 'empty',
+        encoding: 'empty',
+      }
+    },
+  },
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
     textileKey: process.env.TEXTILE_API_KEY,
   },
-}
+})

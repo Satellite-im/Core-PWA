@@ -90,7 +90,7 @@ export const marketGlyphs = [
   {
     id: 1,
     glyph: Glyphs.genshin,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 7,
     isNew: true,
     isSale: true,
@@ -99,7 +99,7 @@ export const marketGlyphs = [
   {
     id: 2,
     glyph: Glyphs.genshinTwo,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 2.99,
     isNew: true,
     isSale: false,
@@ -108,7 +108,7 @@ export const marketGlyphs = [
   {
     id: 3,
     glyph: Glyphs.astrobunny,
-    image: require('~/assets/img/glyphShopBg1.png'),
+    image: '~/assets/img/glyphShopBg1.png',
     price: 1,
     isNew: true,
     isSale: false,
@@ -117,7 +117,7 @@ export const marketGlyphs = [
   {
     id: 4,
     glyph: Glyphs.birds,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 2.99,
     isNew: false,
     isSale: true,
@@ -126,7 +126,7 @@ export const marketGlyphs = [
   {
     id: 5,
     glyph: Glyphs.blackcat,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 3,
     isNew: false,
     isSale: false,
@@ -135,7 +135,7 @@ export const marketGlyphs = [
   {
     id: 6,
     glyph: Glyphs.food,
-    image: require('~/assets/img/glyphShopBg1.png'),
+    image: '~/assets/img/glyphShopBg1.png',
     price: 10,
     isNew: false,
     isSale: true,
@@ -144,7 +144,7 @@ export const marketGlyphs = [
   {
     id: 7,
     glyph: Glyphs.grimreaper,
-    image: require('~/assets/img/glyphShopBg1.png'),
+    image: '~/assets/img/glyphShopBg1.png',
     price: 3.5,
     isNew: true,
     isSale: false,
@@ -153,7 +153,7 @@ export const marketGlyphs = [
   {
     id: 8,
     glyph: Glyphs.lamsEmoji,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 1,
     isNew: true,
     isSale: false,
@@ -162,7 +162,7 @@ export const marketGlyphs = [
   {
     id: 9,
     glyph: Glyphs.marshmellow,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 1.2,
     isNew: true,
     isSale: true,
@@ -171,7 +171,7 @@ export const marketGlyphs = [
   {
     id: 10,
     glyph: Glyphs.starWars,
-    image: require('~/assets/img/glyphShopBg2.png'),
+    image: '~/assets/img/glyphShopBg2.png',
     price: 7.1,
     isNew: true,
     isSale: true,
