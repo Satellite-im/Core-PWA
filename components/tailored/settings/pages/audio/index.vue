@@ -9,6 +9,7 @@ import {
   PermissionRequestOptions,
   UserPermissions,
 } from '~/components/mixins/UserPermissions'
+import { CaptureMouseTypes } from '~/store/settings/types'
 
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
@@ -43,6 +44,20 @@ export default Vue.extend({
       micLevel: 0,
       stream: null,
       updateInterval: null,
+      captureMouses: [
+        {
+          value: CaptureMouseTypes.always,
+          text: this.$i18n.t('global.always'),
+        },
+        {
+          value: CaptureMouseTypes.motion,
+          text: this.$i18n.t('global.motion'),
+        },
+        {
+          value: CaptureMouseTypes.never,
+          text: this.$i18n.t('global.never'),
+        },
+      ],
     }
   },
   computed: {
@@ -100,6 +115,22 @@ export default Vue.extend({
       },
       get() {
         return this.settings.audioOutput
+      },
+    },
+    isVideoInput: {
+      set(state) {
+        this.$store.commit('settings/videoInput', state)
+      },
+      get() {
+        return this.settings.videoInput
+      },
+    },
+    isCaptureMouse: {
+      set(state) {
+        this.$store.commit('settings/captureMouse', state)
+      },
+      get() {
+        return this.settings.captureMouse
       },
     },
   },
@@ -208,6 +239,15 @@ export default Vue.extend({
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
         permissionsObject.permissions.microphone
+      if (permissionsObject.permissions.microphone) {
+        this.$data.userDeniedAudioAccess = false
+      }
+      this.$data.userHasGivenVideoAccess = permissionsObject.permissions.webcam
+      if (permissionsObject.permissions.webcam) {
+        this.$data.userDeniedVideoAccess = false
+      }
+      this.$data.hasMicrophone = permissionsObject.hasMicrophone
+      this.$data.hasWebcam = permissionsObject.hasWebcam
 
       if (permissionsObject.permissions.microphone) {
         // Get the arrays of devices formtted in the name/value format the select tool wants
@@ -228,15 +268,15 @@ export default Vue.extend({
           })
           this.setupMicMeter(stream)
         }
-      } else {
-        this.$data.hasAudio = false
       }
 
       if (permissionsObject.permissions.webcam) {
         this.$data.videoInputs = permissionsObject.devices.videoIn
-        this.$data.hasVideo = true
-      } else {
-        this.$data.hasVideo = false
+        this.$data.userHasGivenVideoAccess =
+          permissionsObject.permissions.webcam
+        if (!this.settings.videoInput) {
+          this.isVideoInput = permissionsObject.devices.videoIn[0].value
+        }
       }
 
       if (permissionsObject.browser !== 'Chrome') {
@@ -270,8 +310,7 @@ export default Vue.extend({
     async enableVideo() {
       // Check to see if the user has permission
       try {
-        const stream = await this.requestUserPermissions({ video: true })
-        this.setupMicMeter(stream)
+        await this.requestUserPermissions({ video: true })
         this.$data.userHasGivenVideoAccess = true
         this.setupDefaults()
       } catch (_: any) {

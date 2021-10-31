@@ -87,7 +87,9 @@ const getRTC = async () => {
       if (DetectRTC.isWebsiteHasWebcamPermissions) {
         responseObject.permissions.webcam =
           DetectRTC.isWebsiteHasWebcamPermissions
-        responseObject.devices.videoIn = DetectRTC.videoInputDevices
+        responseObject.devices.videoIn = formatDevices(
+          DetectRTC.videoInputDevices
+        )
       }
       if (DetectRTC.isWebsiteHasMicrophonePermissions) {
         responseObject.permissions.microphone =
