@@ -1,33 +1,54 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
-// @ts-ignore
-import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
-// @ts-ignore
-import data from 'emoji-mart-vue-fast/data/all.json'
-
-const emojiIndex = new EmojiIndex(data)
+import { EmojiPicker } from 'vue-emoji-picker'
 
 export default Vue.extend({
   components: {
-    Picker,
     SmileIcon,
     GridIcon,
     ImageIcon,
+    EmojiPicker,
   },
   data() {
     return {
-      emojiIndex,
       route: 'emoji',
+      search: '',
+      clickEvent: () => {},
     }
   },
   computed: {
     ...mapState(['ui']),
   },
+  watch: {
+    route() {
+      this.openEmoji()
+    },
+    'ui.enhancers.show'(value) {
+      if (value) this.openEmoji()
+    },
+  },
+  mounted() {
+    this.openEmoji()
+  },
   methods: {
+    /**
+     * @method openEmoji DocsTODO
+     * @description
+     * @param
+     * @example
+     */
+    openEmoji() {
+      if (this.route !== 'emoji') return
+      this.$nextTick(() => {
+        setTimeout(() => {
+          // @ts-ignore
+          this.$refs.emojiInvoker?.click()
+        }, 0)
+      })
+    },
     /**
      * Adds emoji to current text input
      * (emoji: any) Comes from <picker/> select event
@@ -42,7 +63,7 @@ export default Vue.extend({
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('ui/addReaction', {
-          emoji: emoji.native,
+          emoji,
           reactor: this.$mock.user.name,
           groupID: this.ui.settingReaction.groupID,
           messageID: this.ui.settingReaction.messageID,
@@ -52,7 +73,7 @@ export default Vue.extend({
       } else {
         this.$store.commit(
           'ui/chatbarContent',
-          this.ui.chatbarContent + emoji.native
+          this.ui.chatbarContent + emoji
         )
       }
     },
@@ -71,6 +92,8 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers() {
+      this.clickEvent()
+      // @ts-ignore
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
       })
@@ -86,4 +109,3 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang="less" src="./Enhancers.less"></style>
-<style lang="less" src="./EmojiMart.less"></style>

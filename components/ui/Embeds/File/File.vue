@@ -13,9 +13,11 @@ export default Vue.extend({
     FileIcon,
   },
   props: {
-    data: {
-      type: Object as PropType<FileData> | undefined,
-      default: () => {},
+    data() {
+      return {
+        type: Object as PropType<FileData> | undefined,
+        default: () => {},
+      }
     },
   },
   computed: {

@@ -28,7 +28,7 @@ export const profileBadges = [
 ] as ProfileBadge[]
 
 export const sampleProfileInfo = {
-  imageUrl: require('~/assets/img/profile.png'),
+  imageUrl: '~/assets/img/profile.png',
   badges: profileBadges,
   locations: [
     'New York, United States',
