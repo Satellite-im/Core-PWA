@@ -1,4 +1,4 @@
-<div id="profile-settings">
+<div id="profile-settings" :class="isSmallScreen? 'profile-small-screen' : ''">
   <div>
     <TailoredSettingsProfilePicture :image="profileInfo.imageUrl" />
   </div>
