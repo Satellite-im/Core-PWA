@@ -32,6 +32,9 @@ export default {
     pin: 'Pin',
     send: 'Send',
     more: 'More',
+    always: 'Always',
+    motion: 'Motion',
+    never: 'Never',
     aspect_ratio_label: 'Aspect Ratio Off?',
   },
   wallet: {
@@ -104,6 +107,7 @@ export default {
         send_placeholder: 'Content you want to appear in local notification',
       },
       audio: {
+        title: 'Audio',
         sources: {
           title: 'Audio Sources',
           subtitle: 'Input and Output devices you want Satellite to use.',
@@ -148,6 +152,25 @@ export default {
         noise: {
           title: 'Noise Suppression',
           subtitle: 'Enable to help hide background noise in your environment.',
+        },
+      },
+      video: {
+        title: 'Video',
+        sources: {
+          permissionDeniedMessage:
+            "You have denied camera access so we can't see what devices you have. Please allow camera access in your browser.",
+          input: {
+            title: 'Video Input',
+            subtitle:
+              "Select which video device you'd like to share your beautiful smile from.",
+          },
+        },
+      },
+      screen: {
+        title: 'Screen Share',
+        captureMouse: {
+          title: 'Capture Mouse',
+          subtitle: 'Would you like to share your mouse in screen shares?',
         },
       },
       keybinds: {

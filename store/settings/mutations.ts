@@ -21,6 +21,12 @@ const mutations = {
   audioOutput(state: SettingsState, value: string) {
     state.audioOutput = value
   },
+  videoInput(state: SettingsState, value: string) {
+    state.videoInput = value
+  },
+  captureMouse(state: SettingsState, value: string) {
+    state.captureMouse = value
+  },
   setKeybinds(state: SettingsState, value: string) {
     state.keybinds = value
   },

@@ -9,6 +9,7 @@ import {
   PermissionRequestOptions,
   UserPermissions,
 } from '~/components/mixins/UserPermissions'
+import { CaptureMouseTypes } from '~/store/settings/types'
 
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
@@ -30,14 +31,33 @@ export default Vue.extend({
     return {
       Bitrates,
       SampleSizes,
+      hasMicrophone: false,
       audioInputs: [],
       audioOutputs: [],
+      hasWebcam: false,
+      videoInputs: [],
       userHasGivenAudioAccess: false,
       userDeniedAudioAccess: false,
+      userHasGivenVideoAccess: false,
+      userDeniedVideoAccess: false,
       browserAllowsAudioOut: true,
       micLevel: 0,
       stream: null,
       updateInterval: null,
+      captureMouses: [
+        {
+          value: CaptureMouseTypes.always,
+          text: this.$i18n.t('global.always'),
+        },
+        {
+          value: CaptureMouseTypes.motion,
+          text: this.$i18n.t('global.motion'),
+        },
+        {
+          value: CaptureMouseTypes.never,
+          text: this.$i18n.t('global.never'),
+        },
+      ],
     }
   },
   computed: {
@@ -97,6 +117,22 @@ export default Vue.extend({
         return this.settings.audioOutput
       },
     },
+    isVideoInput: {
+      set(state) {
+        this.$store.commit('settings/videoInput', state)
+      },
+      get() {
+        return this.settings.videoInput
+      },
+    },
+    isCaptureMouse: {
+      set(state) {
+        this.$store.commit('settings/captureMouse', state)
+      },
+      get() {
+        return this.settings.captureMouse
+      },
+    },
   },
   watch: {
     async '$store.state.settings.audioInput'(newValue, oldValue) {
@@ -121,6 +157,7 @@ export default Vue.extend({
   },
   mounted() {
     // Check for new input sources
+    this.setupDefaults()
     this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
   },
   beforeDestroy() {
@@ -202,6 +239,15 @@ export default Vue.extend({
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
         permissionsObject.permissions.microphone
+      if (permissionsObject.permissions.microphone) {
+        this.$data.userDeniedAudioAccess = false
+      }
+      this.$data.userHasGivenVideoAccess = permissionsObject.permissions.webcam
+      if (permissionsObject.permissions.webcam) {
+        this.$data.userDeniedVideoAccess = false
+      }
+      this.$data.hasMicrophone = permissionsObject.hasMicrophone
+      this.$data.hasWebcam = permissionsObject.hasWebcam
 
       if (permissionsObject.permissions.microphone) {
         // Get the arrays of devices formtted in the name/value format the select tool wants
@@ -221,6 +267,15 @@ export default Vue.extend({
             audio: { deviceId: this.settings.audioInput },
           })
           this.setupMicMeter(stream)
+        }
+      }
+
+      if (permissionsObject.permissions.webcam) {
+        this.$data.videoInputs = permissionsObject.devices.videoIn
+        this.$data.userHasGivenVideoAccess =
+          permissionsObject.permissions.webcam
+        if (!this.settings.videoInput) {
+          this.isVideoInput = permissionsObject.devices.videoIn[0].value
         }
       }
 
@@ -245,6 +300,22 @@ export default Vue.extend({
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
         this.$data.userDeniedAudioAccess = true
+      }
+    },
+    /**
+     * @method enableAudio DocsTODO
+     * @description
+     * @example
+     */
+    async enableVideo() {
+      // Check to see if the user has permission
+      try {
+        await this.requestUserPermissions({ video: true })
+        this.$data.userHasGivenVideoAccess = true
+        this.setupDefaults()
+      } catch (_: any) {
+        // Error is returned if user selects Block/Deny
+        this.$data.userDeniedVideoAccess = true
       }
     },
     /**
