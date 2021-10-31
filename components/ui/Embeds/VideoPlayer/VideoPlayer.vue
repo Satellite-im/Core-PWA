@@ -11,11 +11,9 @@ export default Vue.extend({
     DownloadIcon,
   },
   props: {
-    data() {
-      return {
-        type: Object as PropType<VideoData> | undefined,
-        default: () => {},
-      }
+    data: {
+      type: Object as PropType<VideoData> | undefined,
+      default: () => {},
     },
   },
 })
