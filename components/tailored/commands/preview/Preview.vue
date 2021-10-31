@@ -2,8 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { CurrentCommand } from '~/types/utils/commands'
 import { mapState } from 'vuex'
+import { CurrentCommand } from '~/types/utils/commands'
 import {
   commands,
   containsCommand,
