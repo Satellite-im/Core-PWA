@@ -16,6 +16,7 @@
     flex: 1;
     width: 100%;
     height: calc(100% - 3rem);
+    overflow-y: scroll;
   }
   .navbar {
     width: 100%;
@@ -45,8 +46,8 @@
 .emoji-picker {
   font-family: Montserrat;
   width: 100%;
-  height: 20rem;
-  overflow: scroll;
+  min-height: 100%;
+  max-height: 100%;
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
@@ -54,12 +55,12 @@
 .emoji-picker__search {
   display: flex;
 }
-.emoji-picker__search > input {
+.input, .search-box, .emoji-picker__search div {
   flex: 1;
-  border-radius: 10rem;
-  border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  outline: none;
+  width: 100% !important;
+}
+.emoji-picker__search {
+  margin-bottom: @normal-spacing;
 }
 .emoji-picker h5 {
   margin-bottom: 0;
@@ -71,6 +72,7 @@
 .emoji-picker .emojis {
   display: flex;
   flex-wrap: wrap;
+  font-size: 1.5rem;
   justify-content: space-between;
 }
 .emoji-picker .emojis:after {
@@ -83,7 +85,7 @@
   border-radius: 5px;
 }
 .emoji-picker .emojis span:hover {
-  background: #ececec;
+  background: @semitransparent-dark-gradient;
   cursor: pointer;
 }
 

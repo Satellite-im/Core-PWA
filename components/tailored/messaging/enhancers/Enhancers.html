@@ -31,11 +31,11 @@
       <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
         <div class="emoji-picker">
           <div class="emoji-picker__search">
-            <input type="text" v-model="search" >
+            <InteractablesInput v-model="search" type="dark" size="small" placeholder="Search..." />
           </div>
           <div>
             <div v-for="(emojiGroup, category) in emojis" :key="category">
-              <h5>{{ category }}</h5>
+              <TypographyText :text="category" />
               <div class="emojis">
                 <span
                   v-for="(emoji, emojiName) in emojiGroup"

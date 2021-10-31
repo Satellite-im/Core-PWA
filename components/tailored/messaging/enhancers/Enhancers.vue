@@ -63,7 +63,7 @@ export default Vue.extend({
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('ui/addReaction', {
-          emoji: emoji.native,
+          emoji,
           reactor: this.$mock.user.name,
           groupID: this.ui.settingReaction.groupID,
           messageID: this.ui.settingReaction.messageID,
@@ -73,7 +73,7 @@ export default Vue.extend({
       } else {
         this.$store.commit(
           'ui/chatbarContent',
-          this.ui.chatbarContent + emoji.native
+          this.ui.chatbarContent + emoji
         )
       }
     },
