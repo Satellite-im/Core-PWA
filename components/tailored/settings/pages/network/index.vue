@@ -20,7 +20,7 @@ export default Vue.extend({
     },
     isAllowEmbeddedLinks: {
       set(state) {
-        this.$store.commit('embeddedLinks', state)
+        this.$store.commit('settings/embeddedLinks', state)
       },
       get() {
         return this.settings.embeddedLinks
