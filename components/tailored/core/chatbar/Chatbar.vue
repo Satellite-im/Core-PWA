@@ -330,9 +330,9 @@ export default Vue.extend({
           }
           return
       }
-      this.$nextTick(() => {
+      setTimeout(() => {
         this.handleInputChange()
-      })
+      }, 0)
       // this.$data.lastEdited = Date.now()
     },
     handleInputKeyup(event: KeyboardEvent) {
