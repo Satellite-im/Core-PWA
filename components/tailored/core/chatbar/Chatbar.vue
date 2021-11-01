@@ -331,9 +331,6 @@ export default Vue.extend({
           }
           return
       }
-      this.$nextTick(() => {
-        this.handleInputChange()
-      })
       // this.$data.lastEdited = Date.now()
     },
     handleInputKeyup(event: KeyboardEvent) {
@@ -347,6 +344,9 @@ export default Vue.extend({
           }
           break
       }
+      this.$nextTick(() => {
+        this.handleInputChange()
+      })
     },
     /**
      * @method sendMessage
