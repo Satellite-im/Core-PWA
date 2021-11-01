@@ -2,6 +2,6 @@
   <UiTailoredEncrypted />
   <TailoredMessagingConversation
     :messages="ui.messages"
-    :loading="loading"
+    :loading="$store.state.textile.conversationLoading"
   />
 </div>

@@ -80,4 +80,8 @@ export const Config = {
       icon: 'video',
     },
   },
+  chat: {
+    defaultMessageLimit: 50,
+    defalutLoadMoreLimit: 20,
+  },
 }

@@ -14,32 +14,32 @@ export default Vue.extend({
       testMsgSent: 0,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   mounted() {
-    this.$store.dispatch('friends/fetchFriends')
-    this.$store.dispatch('friends/fetchFriendRequests')
-    this.$store.dispatch('friends/subscribeToFriendsEvents')
-    setTimeout(() => {
+    const address = this.$route.params.address
+    if (address) {
+      this.$store.dispatch('textile/fetchMessages', { address })
+    } else {
       this.$data.loading = false
-      this.$store.dispatch('ui/setMessages', this.$mock.messages)
-      /* Add new message per 5 seconds temporarily */
-      this.$data.updateInterval = setInterval(
-        this.sendMessageAutomatically,
-        5000
-      )
-    }, 3000)
+    }
 
-    this.$store.dispatch('friends/fetchFriends')
-    this.$store.dispatch('friends/fetchFriendRequests')
-    this.$store.dispatch('friends/subscribeToFriendsEvents')
+    // setTimeout(() => {
+    //   this.$data.loading = false
+    //   this.$store.dispatch('ui/setMessages', this.$mock.messages)
+    //   /* Add new message per 5 seconds temporarily */
+    //   this.$data.updateInterval = setInterval(
+    //     this.sendMessageAutomatically,
+    //     5000
+    //   )
+    // }, 3000)
   },
   beforeDestroy() {
     if (this.$data.updateInterval) {
       clearInterval(this.$data.updateInterval)
       this.updateInterval = null
     }
-  },
-  computed: {
-    ...mapState(['ui']),
   },
   methods: {
     /**

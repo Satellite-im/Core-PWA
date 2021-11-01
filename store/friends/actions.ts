@@ -132,7 +132,7 @@ export default {
       item: {},
       pending: false,
       activeChat: false,
-      address: '',
+      address: friendKey,
       state: 'offline',
       unreadCount: 0,
     }
@@ -245,10 +245,9 @@ export default {
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    if (
-      !$TextileManager.mailboxManager ||
-      !$TextileManager.mailboxManager.isInitialized()
-    ) {
+    const textilePublicKey = $TextileManager.getIdentityPublicKey()
+
+    if (!textilePublicKey) {
       throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
     }
 
@@ -315,9 +314,9 @@ export default {
     await $Crypto.initializeRecipient(friendToKey)
 
     // Encrypt textile mailbox id for the recipient
-    const encryptedMailboxId = await $Crypto.encryptFor(
+    const encryptedTextilePublicKey = await $Crypto.encryptFor(
       friendToKey.toBase58(),
-      $TextileManager.mailboxManager.mailboxID
+      textilePublicKey
     )
 
     const transactionHash = await friendsProgram.createFriendRequest(
@@ -325,7 +324,7 @@ export default {
       friendAccountMirroredKey,
       userAccount,
       friendToKey,
-      Buffer.from(encryptedMailboxId.padStart(128, '0'))
+      Buffer.from(encryptedTextilePublicKey.padStart(128, '0'))
     )
 
     if (transactionHash) {
@@ -355,10 +354,9 @@ export default {
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    if (
-      !$TextileManager.mailboxManager ||
-      !$TextileManager.mailboxManager.isInitialized()
-    ) {
+    const textilePublicKey = $TextileManager.getIdentityPublicKey()
+
+    if (!textilePublicKey) {
       throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
     }
 
@@ -391,16 +389,16 @@ export default {
     await $Crypto.initializeRecipient(new PublicKey(friendFromKey))
 
     // Encrypt textile mailbox id for the recipient
-    const encryptedMailboxId = await $Crypto.encryptFor(
+    const encryptedIdentityPublicKey = await $Crypto.encryptFor(
       friendFromKey,
-      $TextileManager.mailboxManager.mailboxID
+      textilePublicKey
     )
 
     const transactionId = await friendsProgram.acceptFriendRequest(
       computedFriendAccountKey,
       new PublicKey(account.from),
       userAccount,
-      Buffer.from(encryptedMailboxId.padStart(128, '0'))
+      Buffer.from(encryptedIdentityPublicKey.padStart(128, '0'))
     )
 
     if (transactionId) {

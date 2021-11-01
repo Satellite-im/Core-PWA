@@ -34,6 +34,10 @@ export default Vue.extend({
     } else {
       this.loadAccount()
     }
+
+    this.$store.subscribeAction((action) => {
+      console.log('Action:', action)
+    })
   },
   methods: {
     /**
