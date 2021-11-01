@@ -8,7 +8,7 @@ export const Keybinds = {
       this.activateKeybinds()
     }
   },
-  destroyed() {
+  beforeDestroy() {
     this.clearKeybinds()
   },
   methods: {

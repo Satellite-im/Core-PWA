@@ -1,5 +1,8 @@
 <template>
-  <div class="profile-image" :style="`background-image:url(${image})`"></div>
+  <div>
+    <div class="profile-image" :style="`background-image: url(${image})`"></div>
+    {{ image }}
+  </div>
 </template>
 
 <script lang="ts">

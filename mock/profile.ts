@@ -4,6 +4,9 @@ import {
   ProfileInfo,
 } from '~/types/profile/profile'
 
+// @ts-ignore
+import * as url from '~/assets/img/profile.png'
+
 export const profileBadges = [
   {
     type: ProfileBadgeType.Type1,
@@ -28,7 +31,7 @@ export const profileBadges = [
 ] as ProfileBadge[]
 
 export const sampleProfileInfo = {
-  imageUrl: '~/assets/img/profile.png',
+  imageUrl: url,
   badges: profileBadges,
   locations: [
     'New York, United States',

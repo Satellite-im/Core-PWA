@@ -144,6 +144,23 @@
   }
 }
 
+.flexy {
+  display: inline-flex;
+
+  .quick-chat {
+    padding-left: @light-spacing;
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
+    cursor: pointer;
+    width: auto;
+    z-index: @base-z-index + 4;
+    &::before {
+      z-index: @base-z-index + 8;
+    }
+  }
+}
+
 .sidebar-full-btn {
   width: 100%;
   margin-bottom: @light-spacing;
