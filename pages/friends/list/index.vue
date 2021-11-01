@@ -28,6 +28,16 @@ export default Vue.extend({
       return getAlphaSorted(this.friends.all)
     },
   },
+  watch: {
+    '$route'() {
+      const query = this.$route.query
+      if (query && query.tab) {
+        this.$data.route = query.tab
+      } else {
+        this.$data.route = 'active'
+      }
+    },
+  },
   mounted() {
     this.$store.dispatch('friends/fetchFriends')
   },
