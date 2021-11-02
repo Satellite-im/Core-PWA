@@ -55,6 +55,8 @@ export default Vue.extend({
         const lastMsg = this.contents[this.contents.length - 1]
         if (lastMsg.from === this.$mock.user.address) {
           this.autoScrollToBottom()
+        } else if (!this.$store.state.ui.unreadMessage) {
+          this.autoScrollToBottom()
         } else {
           this.newMessageAlert = true
         }
