@@ -53,13 +53,14 @@ export default Vue.extend({
       deep: true,
       handler() {
         const lastMsg = this.contents[this.contents.length - 1]
-        if (lastMsg.from === this.$mock.user.address) {
+        if (
+          lastMsg.from === this.$mock.user.address ||
+          !this.$store.state.ui.unreadMessage
+        ) {
           this.autoScrollToBottom()
-        } else if (!this.$store.state.ui.unreadMessage) {
-          this.autoScrollToBottom()
-        } else {
-          this.newMessageAlert = true
+          return
         }
+        this.newMessageAlert = true
       },
     },
   },
