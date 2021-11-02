@@ -92,7 +92,7 @@ export default Vue.extend({
       if (menu != null && menu.contains(target)) {
         const items = menu.querySelectorAll('.settings-item')
         let clickedHeader = null
-        let clickedItem = null
+        let clickedItem: any = null
         let clickedItemBody: any = null
         for (let i = 0, ni = items.length; i < ni; i++) {
           const item = items[i] as HTMLElement
@@ -120,9 +120,22 @@ export default Vue.extend({
               (clickedItemBody.children[0] as HTMLElement).offsetHeight +
               2 +
               'px'
-            setTimeout(() => {
-              clickedItemBody.style.overflow = 'visible'
-            }, 300)
+            clickedItemBody.addEventListener(
+              'transitionend',
+              (event: Event) => {
+                const itemBody = event.target as HTMLElement
+                if (
+                  (itemBody.parentElement as HTMLElement).classList.contains(
+                    'open'
+                  )
+                ) {
+                  itemBody.style.overflow = 'visible'
+                }
+              },
+              {
+                once: true,
+              }
+            )
           }
           for (let i = 0, ni = items.length; i < ni; i++) {
             const item = items[i] as HTMLElement
