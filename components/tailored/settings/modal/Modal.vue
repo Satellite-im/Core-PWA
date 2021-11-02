@@ -2,12 +2,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
   data() {
     return {
       page: 'personalize',
-      sidebar: true,
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     /**
@@ -19,7 +23,8 @@ export default Vue.extend({
      * @example
      */
     toggleSidebar() {
-      this.$data.sidebar = !this.$data.sidebar
+      const settingsSideBar = !this.ui.settingsSideBar
+      this.$store.commit('ui/toggleSettingsSidebar', settingsSideBar)
     },
     /**
      * @method showSidebar DocsTODO
@@ -27,7 +32,7 @@ export default Vue.extend({
      * @example
      */
     showSidebar() {
-      this.$data.sidebar = true
+      this.$store.commit('ui/toggleSettingsSidebar', true)
     },
     /**
      * @method collapseSidebar DocsTODO
@@ -35,7 +40,7 @@ export default Vue.extend({
      * @example
      */
     collapseSidebar() {
-      this.$data.sidebar = false
+      this.$store.commit('ui/toggleSettingsSidebar', false)
     },
     /**
      * @method changeRoute DocsTODO
