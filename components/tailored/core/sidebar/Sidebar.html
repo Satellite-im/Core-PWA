@@ -72,8 +72,8 @@
         data-tooltip="New Chat">
         <plus-circle-icon size="1x" />
       </div>
-      <TailoredCoreQuickChat />
     </div>
+    <TailoredFriendsQuick />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -90,7 +90,7 @@
           />
 
         </div>
-        <div v-else-if="dataState.friends && !users.length" class="mascot-container">
+        <div v-else-if="dataState.friends !== DataStateType.Loading && !users.length" class="mascot-container">
           <TypographyTitle text="No Friends Yet" :size="6" />
           <TypographyText text="The world doesn't have to be so lonely." />
           <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />

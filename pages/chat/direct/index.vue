@@ -15,6 +15,9 @@ export default Vue.extend({
     }
   },
   mounted() {
+    this.$store.dispatch('friends/fetchFriends')
+    this.$store.dispatch('friends/fetchFriendRequests')
+    this.$store.dispatch('friends/subscribeToFriendsEvents')
     setTimeout(() => {
       this.$data.loading = false
       this.$store.dispatch('ui/setMessages', this.$mock.messages)

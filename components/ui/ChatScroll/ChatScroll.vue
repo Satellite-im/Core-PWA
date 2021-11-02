@@ -53,11 +53,14 @@ export default Vue.extend({
       deep: true,
       handler() {
         const lastMsg = this.contents[this.contents.length - 1]
-        if (lastMsg.from === this.$mock.user.address) {
+        if (
+          lastMsg.from === this.$mock.user.address ||
+          !this.$store.state.ui.unreadMessage
+        ) {
           this.autoScrollToBottom()
-        } else {
-          this.newMessageAlert = true
+          return
         }
+        this.newMessageAlert = true
       },
     },
   },
@@ -96,9 +99,9 @@ export default Vue.extend({
       if (this.$el) {
         if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {
           this.$store.dispatch('ui/setIsScrollOver', true)
-        } else {
-          this.$store.dispatch('ui/setIsScrollOver', false)
+          return
         }
+        this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },
   },
