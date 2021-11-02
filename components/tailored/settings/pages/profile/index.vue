@@ -31,9 +31,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'ui']),
     splitPhrase(): Array<String> {
       return this.accounts.phrase.split(' ')
+    },
+    isSmallScreen(): Boolean {
+      // @ts-ignore
+      if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
+        return true
+      return false
     },
   },
   methods: {

@@ -1,4 +1,4 @@
-<div id="profile-settings">
+<div id="profile-settings" :class="isSmallScreen? 'profile-small-screen' : ''">
   <div>
     <TailoredSettingsProfilePicture :image="profileInfo.imageUrl" />
   </div>
@@ -28,7 +28,7 @@
           <div class="column profile-photo-column">
             <div class="profile-photo">
               <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
-              <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="$mq === 'sm' ? 55 : 75"/>
+              <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
               <UiCircle 
                 type="icon" 
                 @click="openFileDialog"
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="column username-column">
-            <TypographyTitle :size="$mq === 'sm' ? 6 : 4" text="RetroPronghorn" :class="$mq === 'sm' ? 'mg-quarter' : 'mg-half'" />
+            <TypographyTitle :size="isSmallScreen ? 6 : 4" text="RetroPronghorn" :class="isSmallScreen ? 'mg-quarter' : 'mg-half'" />
             <InteractablesInputGroup
               class="username"
               v-model="profileInfo.status"
@@ -55,7 +55,7 @@
         </div>
       </div>
       
-      <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
+      <UiSpacer :height="isSmallScreen ? 10 : 24" />
       <div class="columns is-desktop">
         <div class="column">
           <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
@@ -72,7 +72,7 @@
           </InteractablesInputGroup>
         </div>
       </div>
-      <UiSpacer :height="$mq === 'sm' ? 10 : 24" />
+      <UiSpacer :height="isSmallScreen ? 10 : 24" />
       <div class="columns is-desktop">
         <div class="column">
           <TypographyTitle :size="6" :text="$t('pages.settings.profile.phrase.title')" />
