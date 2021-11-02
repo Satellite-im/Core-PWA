@@ -13,6 +13,7 @@ export interface UIState {
   contextMenuPosition: Object
   quickProfilePosition: Object
   showSettings: Boolean
+  settingsSideBar: Boolean
   showSidebarUsers: Boolean
   showSearchResult: Boolean
   modals: Object
