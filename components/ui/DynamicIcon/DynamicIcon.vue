@@ -12,6 +12,7 @@
     <search-icon v-if="icon === 'search'" :size="size" />
     <verified-icon v-if="icon === 'verified'" :size="size" />
     <check-icon v-if="icon === 'check'" :size="size" />
+    <x-icon v-if="icon === 'x'" :size="size" />
   </span>
 </template>
 <script lang="ts">
@@ -30,6 +31,7 @@ import {
   SearchIcon,
   CheckIcon,
   VerifiedIcon,
+  XIcon,
 } from 'satellite-lucide-icons'
 
 type Icon =
@@ -45,6 +47,7 @@ type Icon =
   | 'search'
   | 'check'
   | 'verified'
+  | 'x'
 
 export default Vue.extend({
   components: {
@@ -60,6 +63,7 @@ export default Vue.extend({
     SearchIcon,
     CheckIcon,
     VerifiedIcon,
+    XIcon,
   },
   props: {
     size: {

@@ -60,8 +60,12 @@ export default Vue.extend({
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
         {
-          title: 'Network & Security',
+          title: 'Realms & Security',
           links: [
+            {
+              to: 'realms',
+              text: 'Realms',
+            },
             {
               to: 'storage',
               text: 'Storage',
