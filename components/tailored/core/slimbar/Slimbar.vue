@@ -1,4 +1,4 @@
-<template src="./List.html"></template>
+<template src="./Slimbar.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -32,4 +32,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./List.less"></style>
+<style scoped lang="less" src="./Slimbar.less"></style>

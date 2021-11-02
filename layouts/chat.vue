@@ -20,7 +20,7 @@
       v-touch-options="{ swipeTolerance: 75 }"
     >
       <UiGlobal />
-      <TailoredCoreServersList
+      <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :openModal="toggleModal"
@@ -98,6 +98,13 @@ export default Vue.extend({
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('ui/setTypingUser', this.$mock.users[0])
+
+    const appHeight = () => {
+      const doc = document.documentElement
+      doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+    }
+    window.addEventListener('resize', appHeight)
+    appHeight()
   },
 })
 </script>

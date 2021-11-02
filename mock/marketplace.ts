@@ -7,6 +7,12 @@ import {
   ProductItem,
 } from '~/types/marketplace/marketplace'
 
+
+// @ts-ignore
+import * as bg1 from '~/assets/img/glyphShopBg1.png'
+// @ts-ignore
+import * as bg2 from '~/assets/img/glyphShopBg2.png'
+
 export const marketCategories = [
   { parentCategory: '', name: 'Personalize', icon: 'user' },
   { parentCategory: 'Personalize', name: 'Customizations', icon: '' },
@@ -90,7 +96,7 @@ export const marketGlyphs = [
   {
     id: 1,
     glyph: Glyphs.genshin,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg1,
     price: 7,
     isNew: true,
     isSale: true,
@@ -99,7 +105,7 @@ export const marketGlyphs = [
   {
     id: 2,
     glyph: Glyphs.genshinTwo,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 2.99,
     isNew: true,
     isSale: false,
@@ -108,7 +114,7 @@ export const marketGlyphs = [
   {
     id: 3,
     glyph: Glyphs.astrobunny,
-    image: '~/assets/img/glyphShopBg1.png',
+    image: bg1,
     price: 1,
     isNew: true,
     isSale: false,
@@ -117,7 +123,7 @@ export const marketGlyphs = [
   {
     id: 4,
     glyph: Glyphs.birds,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 2.99,
     isNew: false,
     isSale: true,
@@ -126,7 +132,7 @@ export const marketGlyphs = [
   {
     id: 5,
     glyph: Glyphs.blackcat,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 3,
     isNew: false,
     isSale: false,
@@ -135,7 +141,7 @@ export const marketGlyphs = [
   {
     id: 6,
     glyph: Glyphs.food,
-    image: '~/assets/img/glyphShopBg1.png',
+    image: bg1,
     price: 10,
     isNew: false,
     isSale: true,
@@ -144,7 +150,7 @@ export const marketGlyphs = [
   {
     id: 7,
     glyph: Glyphs.grimreaper,
-    image: '~/assets/img/glyphShopBg1.png',
+    image: bg1,
     price: 3.5,
     isNew: true,
     isSale: false,
@@ -153,7 +159,7 @@ export const marketGlyphs = [
   {
     id: 8,
     glyph: Glyphs.lamsEmoji,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 1,
     isNew: true,
     isSale: false,
@@ -162,7 +168,7 @@ export const marketGlyphs = [
   {
     id: 9,
     glyph: Glyphs.marshmellow,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 1.2,
     isNew: true,
     isSale: true,
@@ -171,7 +177,7 @@ export const marketGlyphs = [
   {
     id: 10,
     glyph: Glyphs.starWars,
-    image: '~/assets/img/glyphShopBg2.png',
+    image: bg2,
     price: 7.1,
     isNew: true,
     isSale: true,
