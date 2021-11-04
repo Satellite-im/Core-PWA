@@ -1,14 +1,6 @@
 #chatbar {
   margin-top: @light-spacing;
   width: 100%;
-  .placeholder {
-    position: absolute;
-    left: 4.5rem;
-    opacity: 1;
-    font-size: @text-size;
-    pointer-events: none;
-    padding: 0.25rem @light-spacing;
-  }
   &.has-reply {
     margin-top: 0;
   }
@@ -107,8 +99,11 @@
       resize: none;
       font-size: @text-size;
       padding-top: 6px;
+      &[placeholder]:empty:before {
+        content: attr(placeholder);
+      }
     }
-
+    
     .control-icon {
       justify-self: center;
       align-self: center;
