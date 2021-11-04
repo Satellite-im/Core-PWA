@@ -289,18 +289,20 @@ export default class FriendsProgram extends EventEmitter {
    * @param friendKey the public key of the friend account to be removed
    * @param userFromKey the public key of the sender
    * @param userToKey the public key of the recipient
+   * @param initiator a flag that indicates if the request was initially sent by the current user
    * @returns a transaction object ready to be sent through the network
    */
   initRemoveFriend(
     friendKey: PublicKey,
     userFromKey: PublicKey,
-    userToKey: PublicKey
+    userToKey: PublicKey,
+    initiator: boolean
   ) {
     return new TransactionInstruction({
       keys: [
         { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: true, isWritable: false },
-        { pubkey: userToKey, isSigner: false, isWritable: true },
+        { pubkey: userFromKey, isSigner: initiator, isWritable: false },
+        { pubkey: userToKey, isSigner: !initiator, isWritable: false },
         { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
       ],
       programId: FRIENDS_PROGRAM_ID,
@@ -508,17 +510,14 @@ export default class FriendsProgram extends EventEmitter {
    * @method removeFriend
    * Generates and sends a transaction to remove an existing friend. It can be
    * done by both the sender and the recipient
-   * @param friendKey the public key of the friend account to be removed
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
+   * @param friendAccount the keypair related to the friend account
    * @param confirmOptionsOverride Solana confirm options to be eventually
    * overwritten (eg. commitment, preflightCommitment)
    * @returns the id of the transaction that has been sent
    */
   removeFriend(
-    friendKey: PublicKey,
-    userFromAccount: Keypair,
-    userToKey: PublicKey,
+    friendAccount: FriendAccount,
+    signer: Keypair,
     confirmOptionsOverride?: ConfirmOptions
   ) {
     if (!this.solana) {
@@ -529,14 +528,25 @@ export default class FriendsProgram extends EventEmitter {
     const payerAccount = this.solana.getActiveAccount()
     if (!payerAccount) return null
 
+    const friendAccountKey = new PublicKey(friendAccount.accountId)
+    const userFromKey = new PublicKey(friendAccount.from)
+    const userToKey = new PublicKey(friendAccount.to)
+
+    const isInitiator = userFromKey.toBase58() === signer.publicKey.toBase58()
+
     const transaction = new Transaction().add(
-      this.initRemoveFriend(friendKey, userFromAccount.publicKey, userToKey)
+      this.initRemoveFriend(
+        friendAccountKey,
+        userFromKey,
+        userToKey,
+        isInitiator
+      )
     )
 
     return sendAndConfirmTransaction(
       connection,
       transaction,
-      [payerAccount, userFromAccount],
+      [payerAccount, signer],
       {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
