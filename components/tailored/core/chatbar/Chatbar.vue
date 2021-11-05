@@ -355,6 +355,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
+      if(!this.value) return
       this.$store.dispatch('ui/sendMessage', {
         value: this.value,
         user: this.$mock.user,
