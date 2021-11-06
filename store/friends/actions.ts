@@ -516,30 +516,13 @@ export default {
 
     const { account } = friend
 
-    const sentByMe = account.from !== userAccount.publicKey.toBase58()
-
-    const friendKey = sentByMe ? account.from : account.to
-
-    const computedFriendAccountKey =
-      await friendsProgram.computeFriendAccountKey(
-        new PublicKey(friendKey),
-        userAccount.publicKey
-      )
-
-    const friendAccountMirroredKey =
-      await friendsProgram.computeFriendAccountKey(
-        userAccount.publicKey,
-        new PublicKey(friendKey)
-      )
-
     const transactionId = await friendsProgram.removeFriend(
-      sentByMe ? computedFriendAccountKey : friendAccountMirroredKey,
-      userAccount,
-      new PublicKey(friendKey)
+      account,
+      userAccount
     )
 
     if (transactionId) {
-      commit('removeFriend', friendKey)
+      commit('removeFriend', friend.publicKey)
     }
   },
 }
