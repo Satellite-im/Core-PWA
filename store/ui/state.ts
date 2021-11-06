@@ -15,6 +15,7 @@ const InitalUIState = (): UIState => ({
     createServer: false,
     showMarketPlace: false,
     wallet: false,
+    quickchat: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },

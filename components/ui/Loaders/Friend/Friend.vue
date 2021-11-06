@@ -43,7 +43,7 @@ export default Vue.extend({
     width: 35px;
     height: 35px;
     border-radius: 100%;
-    background: @light-gray;
+    background: @semitransparent-light-gradient;
     margin-left: 0;
     margin-right: 0.75rem;
 
@@ -58,7 +58,7 @@ export default Vue.extend({
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt 50%,
+        @semitransparent-lightest-gradient 50%,
         transparent 100%
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -81,7 +81,7 @@ export default Vue.extend({
     height: 24px;
     position: relative;
     overflow: hidden;
-    background: @light-gray;
+    background: @semitransparent-light-gradient;
     margin-left: 0.5rem;
     margin-bottom: 0.6rem;
 
@@ -101,7 +101,7 @@ export default Vue.extend({
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt 50%,
+        @semitransparent-lightest-gradient 50%,
         transparent 100%
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;

@@ -69,11 +69,12 @@
       
       <div 
         class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary" 
-        data-tooltip="New Chat">
+        data-tooltip="New Chat"
+        @click="toggleModal">
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <TailoredFriendsQuick />
+    <TailoredFriendsQuick v-click-outside="toggleModal" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
