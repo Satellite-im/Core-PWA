@@ -1,3 +1,14 @@
-<div id="quick-chat">
-    quick-chat
+<div id="quick-chat" v-if="$store.state.ui.modals.quickchat">
+  <TypographySubtitle :size="6" text="New Chat" />
+  <TypographyText text="Select one or more of your friends to chat in groups, or one-on-one." />
+  <InteractablesInput 
+    type="primary"
+    size="small"
+    class="search"
+    placeholder="Search" />
+  <div class="scroll-container">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiUser v-for="user in $mock.users" :user="user" :key="user.publicKey" />
+    </UiScroll>
+  </div>
 </div>
