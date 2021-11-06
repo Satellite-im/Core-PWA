@@ -27,6 +27,10 @@ export default Vue.extend({
         5000
       )
     }, 3000)
+
+    this.$store.dispatch('friends/fetchFriends')
+    this.$store.dispatch('friends/fetchFriendRequests')
+    this.$store.dispatch('friends/subscribeToFriendsEvents')
   },
   beforeDestroy() {
     if (this.$data.updateInterval) {
