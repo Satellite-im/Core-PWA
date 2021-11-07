@@ -31,12 +31,12 @@ export default Vue.extend({
   },
   watch: {
     '$route.query'() {
-      this.initRoute();
+      this.initRoute()
     },
   },
   mounted() {
     this.$store.dispatch('friends/fetchFriends')
-    this.initRoute();
+    this.initRoute()
   },
   methods: {
     /**
@@ -58,9 +58,9 @@ export default Vue.extend({
       const query = this.$route.query
       if (query && query.tab) {
         this.$data.route = query.tab
-      } else {
-        this.$data.route = 'active'
+        return
       }
+      this.$data.route = 'active'
     },
   },
 })
