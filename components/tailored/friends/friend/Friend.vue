@@ -61,8 +61,6 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('friends/createFriendRequest', {
           friendToKey: new PublicKey(this.$props.friend.account.accountId),
-          textileMailboxId:
-            'cafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq', // TO DO : change textileMailboxId when it'll be available
         })
         this.$emit('requestSent', '')
       } catch (e) {
@@ -76,8 +74,6 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
           friendRequest: this.$props.friend.request,
-          textileMailboxId:
-            'cafkwqw5h6zlko43enhmrrlksx3fhitmojzpnwtagbrjcflm737btxbq', // TO DO : change textileMailboxId when it'll be available
         })
       } finally {
         this.loading = ''

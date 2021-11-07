@@ -18,10 +18,10 @@ export default {
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
     commit('textileInitialized', true)
-    commit('accounts/updateMailboxId', textilePublicKey, { root: true })
+    commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
   },
   async fetchMessages(
-    { commit, rootState, dispatch, state }: ActionsArguments<TextileState>,
+    { commit, rootState }: ActionsArguments<TextileState>,
     { address }: { address: string }
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -30,7 +30,7 @@ export default {
       throw new Error('Mailbox manager not initialized')
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.publicKey === address)
+    const friend = rootState.friends.all.find((fr) => fr.address === address)
 
     if (!friend) {
       throw new Error('Friend not found')
@@ -43,12 +43,12 @@ export default {
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
     const conversation = await $MailboxManager.getConversation(
-      friend.mailboxId,
+      friend.textilePubkey,
       query
     )
 
     commit('setConversation', {
-      address: friend.publicKey,
+      address: friend.address,
       messages: conversation,
       limit: query.limit,
       skip: query.skip,
@@ -66,7 +66,7 @@ export default {
       throw new Error('Mailbox manager not initialized')
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.publicKey === address)
+    const friend = rootState.friends.all.find((fr) => fr.address === address)
 
     if (!friend) {
       throw new Error('Friend not found')
@@ -83,7 +83,7 @@ export default {
     // const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
     // const conversation = await $MailboxManager.getConversation(
-    //   friend.mailboxId,
+    //   friend.textilePubkey,
     //   query
     // )
 
@@ -106,7 +106,7 @@ export default {
       throw new Error('Mailbox manager not initialized')
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.publicKey === to)
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
       throw new Error('Friend not found')
@@ -114,14 +114,17 @@ export default {
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
-    const result = await $MailboxManager.sendMessage<'text'>(friend.mailboxId, {
-      to: friend.mailboxId,
-      payload: text,
-      type: 'text',
-    })
+    const result = await $MailboxManager.sendMessage<'text'>(
+      friend.textilePubkey,
+      {
+        to: friend.textilePubkey,
+        payload: text,
+        type: 'text',
+      }
+    )
 
     commit('addMessageToConversation', {
-      address: to,
+      address: friend.address,
       message: result,
     })
   },
@@ -135,7 +138,7 @@ export default {
       throw new Error('Mailbox manager not initialized')
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.mailboxId === to)
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
       throw new Error('Friend not found')
@@ -144,9 +147,9 @@ export default {
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
     const result = await $MailboxManager.sendMessage<'reaction'>(
-      friend.mailboxId,
+      friend.textilePubkey,
       {
-        to: friend.mailboxId,
+        to: friend.textilePubkey,
         payload: emoji,
         reactedTo: reactTo,
         type: 'reaction',
@@ -168,7 +171,7 @@ export default {
       throw new Error('Mailbox manager not initialized')
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.address === to)
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
       throw new Error('Friend not found')
@@ -177,9 +180,9 @@ export default {
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
     const result = await $MailboxManager.sendMessage<'reply'>(
-      friend.mailboxId,
+      friend.textilePubkey,
       {
-        to: friend.mailboxId,
+        to: friend.textilePubkey,
         payload: text,
         repliedTo: replyTo,
         type: 'reply',

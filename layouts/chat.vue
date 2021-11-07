@@ -60,7 +60,7 @@
         <TailoredWalletMini v-if="$store.state.ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar :recipient="selectedFriend" />
+        <TailoredCoreChatbar :recipient="recipient" v-if="recipient" />
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
@@ -93,10 +93,20 @@ export default Vue.extend({
   computed: {
     ...mapState(['audio', 'ui', 'media', 'friends']),
     selectedGroup() {
-      return this.$route.params.id
+      return this.$route.params.id // TODO: change with groupid
     },
-    selectedFriend() {
-      return this.$route.params.address
+    recipient() {
+      // It should not happen that someone tries to write to himself, but we should check
+      // anyway
+      const isMe =
+        this.$route.params.address === this.$typedStore.state.accounts.active
+
+      const recipient = isMe
+        ? null
+        : this.$typedStore.state.friends.all.find(
+            (friend) => friend.address === this.$route.params.address
+          )
+      return recipient
     },
   },
   mounted() {

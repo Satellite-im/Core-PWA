@@ -12,6 +12,7 @@ export type User = {
   badge?: BadgeType
   userAccount?: any
   mailboxId?: string
+  textilePubkey?: string
 }
 
 export interface UserRegistrationData {

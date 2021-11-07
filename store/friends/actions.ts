@@ -108,27 +108,29 @@ export default {
     const userKey = rootState.accounts.active
     const sentByMe = friendAccount.from === userKey
     const friendKey = sentByMe ? friendAccount.to : friendAccount.from
-    const encryptedMailboxId = sentByMe
+    const encryptedTextilePubkey = sentByMe
       ? friendAccount.toMailboxId
       : friendAccount.fromMailboxId
 
     // Initialize encryption engine for the given recipient and decrypt
     // the mailboxId
     await $Crypto.initializeRecipient(new PublicKey(friendKey))
-    const mailboxId = await $Crypto.decryptFrom(friendKey, encryptedMailboxId)
+    const textilePubkey = await $Crypto.decryptFrom(
+      friendKey,
+      encryptedTextilePubkey
+    )
     const rawUser = await serverProgram.getUser(new PublicKey(friendKey))
     if (!rawUser) {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
     const friend: Friend = {
-      publicKey: friendKey,
       account: friendAccount,
       name: rawUser.name,
       profilePicture: rawUser.photoHash,
       status: rawUser.status,
-      encryptedMailboxId,
-      mailboxId,
+      encryptedTextilePubkey,
+      textilePubkey,
       item: {},
       pending: false,
       activeChat: false,
@@ -137,9 +139,7 @@ export default {
       unreadCount: 0,
     }
 
-    const friendExists = state.all.find(
-      (fr) => fr.publicKey === friend.publicKey
-    )
+    const friendExists = state.all.find((fr) => fr.address === friend.address)
 
     if (friendExists) {
       commit('updateFriend', friend)

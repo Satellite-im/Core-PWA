@@ -41,6 +41,14 @@ const mutations = {
       }
     }
   },
+  updateTextilePubkey(state: AccountsState, textilePubkey: string) {
+    if (state.details) {
+      state.details = {
+        ...state.details,
+        textilePubkey,
+      }
+    }
+  },
   setRegistrationStatus(
     state: AccountsState,
     registrationStates: RegistrationStatus

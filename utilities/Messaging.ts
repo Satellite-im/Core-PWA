@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { Group, MessageGroup, UIReaction, UIReply } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
 import {
   FileMessage,
   Message,
@@ -172,4 +173,21 @@ export function updateMessageTracker(
     replies: repliesTracker,
     reactions: reactionsTracker,
   }
+}
+
+export function getUsernameFromState(
+  textilePublicKey: string,
+  state: RootState
+) {
+  const accountDetails = state.accounts.details
+  const isMe =
+    accountDetails && accountDetails.textilePubkey === textilePublicKey
+
+  const username = isMe
+    ? accountDetails.name
+    : state.friends.all.find(
+        (friend) => friend.textilePubkey === textilePublicKey
+      )?.name || 'unknown'
+
+  return username
 }

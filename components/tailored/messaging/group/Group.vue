@@ -3,6 +3,8 @@
 import Vue, { PropType } from 'vue'
 
 import { Group } from '~/types/messaging'
+import { User } from '~/types/ui/user'
+import { getUsernameFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   props: {
@@ -13,19 +15,7 @@ export default Vue.extend({
   },
   computed: {
     username() {
-      const myAccountDetails = this.$typedStore.state.accounts.details
-
-      const isMe = this.group.from === myAccountDetails?.mailboxId
-
-      if (!isMe) {
-        const friend = this.$typedStore.state.friends.all.find(
-          (friend) => friend.mailboxId === this.group.from
-        )
-
-        return friend?.name || 'uknown'
-      } else {
-        return myAccountDetails?.name || 'uknown'
-      }
+      return getUsernameFromState(this.group.from, this.$store.state)
     },
     badge() {
       // $mock.users.filter(u => u.address === group.from)[0].badge

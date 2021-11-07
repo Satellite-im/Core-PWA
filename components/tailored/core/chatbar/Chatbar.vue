@@ -1,12 +1,10 @@
 <template src="./Chatbar.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-import {
-  TerminalIcon,
-} from 'satellite-lucide-icons'
+import { TerminalIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
@@ -16,6 +14,7 @@ import {
   commands,
   isArgsValid,
 } from '~/libraries/ui/Commands'
+import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -37,7 +36,11 @@ export default Vue.extend({
       maxChars: 256,
     }
   },
-  props: ['recipient'],
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+    },
+  },
   computed: {
     ...mapState(['ui']),
     /**
@@ -120,7 +123,10 @@ export default Vue.extend({
       const messageBox = this.$refs.messageuser as HTMLElement
       const wrap = this.$refs.wrap as HTMLElement
       // Delete extra character when it exceeds the charlimit
-      if (messageBox.innerHTML && messageBox.innerHTML.length > this.$data.maxChars + 1) {
+      if (
+        messageBox.innerHTML &&
+        messageBox.innerHTML.length > this.$data.maxChars + 1
+      ) {
         messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
         let sel = window.getSelection()
         sel?.selectAllChildren(messageBox)
@@ -175,15 +181,15 @@ export default Vue.extend({
         return
       }
 
-      if (this.ui.replyChatbarContent) {
+      if (this.ui.replyChatbarContent.from) {
         this.$store.dispatch('textile/sendReplyMessage', {
-          to: this.recipient,
+          to: this.recipient.textilePubkey,
           text: this.value,
           replyTo: this.ui.replyChatbarContent.messageID,
         })
       } else {
         this.$store.dispatch('textile/sendTextMessage', {
-          to: this.recipient,
+          to: this.recipient.textilePubkey,
           text: this.value,
         })
       }
@@ -195,7 +201,7 @@ export default Vue.extend({
     },
     /**
      * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar to auto open 
+     * @description Allows the drag and drop of files into the chatbar to auto open
      * the file uploader
      */
     handleDrop(e: any) {

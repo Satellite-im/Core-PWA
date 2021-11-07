@@ -52,11 +52,15 @@ export default Vue.extend({
      * @example
      */
     emojiReaction() {
+      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
-        replyID: this.$props.reply.id,
+        to:
+          this.$props.message.to === myTextilePublicKey
+            ? this.$props.message.from
+            : this.$props.message.to,
       })
       this.$store.commit('ui/toggleEnhancers', { show: true })
     },
