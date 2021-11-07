@@ -159,6 +159,7 @@ export default {
     // Dispatch an action to fetch friends and friends requests
     dispatch('friends/fetchFriends', {}, { root: true })
     dispatch('friends/fetchFriendRequests', {}, { root: true })
+    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
   },
   /**
    * @method registerUser DocsTODO
