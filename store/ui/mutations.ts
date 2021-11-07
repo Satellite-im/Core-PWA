@@ -74,6 +74,7 @@ export default {
         at: Date.now(),
         type: 'text',
         payload: message.value,
+        reactions: [],
         replies: [],
       }
       if (lastMessage.from === message.user.address) {
