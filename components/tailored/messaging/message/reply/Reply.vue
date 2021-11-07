@@ -27,9 +27,16 @@ export default Vue.extend({
       type: Object as PropType<Group>,
       default: () => {},
     },
+    from: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return { showReplies: false, replyHover: '' }
+  },
+  mounted() {
+    console.log('mound', this.from)
   },
   computed: {
     /**
@@ -40,15 +47,17 @@ export default Vue.extend({
       const replyLength = Object.keys(this.$props.message.replies).length
       let baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
 
-      const firstName = this.$mock.users.filter(
-        (u: any) => u.address === this.$props.message.replies[0].from
-      )[0].name
-      const secondName =
-        replyLength > 1
-          ? this.$mock.users.filter(
-              (u: any) => u.address === this.$props.message.replies[1].from
-            )[0].name
-          : ''
+      const firstName = 'testFirst'
+      const secondName = 'testSecond'
+      // const firstName = this.$mock.users.filter(
+      //   (u: any) => u.address === this.$props.message.replies[0].from
+      // )[0].name
+      // const secondName =
+      //   replyLength > 1
+      //     ? this.$mock.users.filter(
+      //         (u: any) => u.address === this.$props.message.replies[1].from
+      //       )[0].name
+      //     : ''
 
       if (replyLength === 1) {
         baseReply += firstName

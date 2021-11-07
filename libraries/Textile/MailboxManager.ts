@@ -192,7 +192,10 @@ export class MailboxManager {
    * @param to Recipient
    * @param message Message to be sent
    */
-  sendMessage<T extends MessageTypes>(to: string, message: MessagePayloads[T]) {
+  async sendMessage<T extends MessageTypes>(
+    to: string,
+    message: MessagePayloads[T]
+  ) {
     const recipient: PublicKey = PublicKey.fromString(to)
 
     const encoder = new TextEncoder()
@@ -203,13 +206,18 @@ export class MailboxManager {
         at: Date.now(),
         type: message.type,
         payload: message.payload,
+        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
+        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
       })
     )
-    return this.textile.users.sendMessage(
+
+    const result = await this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
       body
     )
+
+    return this.decodeMessage(userMessageToThread(result))
   }
 
   /**
@@ -235,7 +243,7 @@ export class MailboxManager {
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,
-        at: created_at,
+        at: Math.floor(created_at / 1000000), // Convert into unix timestamp
         from,
         readAt: read_at,
       })

@@ -2,60 +2,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { groupMessages } from '~/utilities/Messaging'
 
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
-  data() {
-    return {
-      loading: true,
-      updateInterval: null,
-      testMsgSent: 0,
-    }
-  },
   computed: {
-    ...mapState(['ui']),
+    groupedMessages() {
+      const { address } = this.$route.params
+      const conversation = this.$typedStore.state.textile.conversations[address]
+
+      if (!conversation) {
+        return []
+      }
+
+      const { messages, replies, reactions } = conversation
+      return groupMessages(messages, replies, reactions)
+    },
   },
   mounted() {
     const address = this.$route.params.address
     if (address) {
       this.$store.dispatch('textile/fetchMessages', { address })
-    } else {
-      this.$data.loading = false
     }
-
-    // setTimeout(() => {
-    //   this.$data.loading = false
-    //   this.$store.dispatch('ui/setMessages', this.$mock.messages)
-    //   /* Add new message per 5 seconds temporarily */
-    //   this.$data.updateInterval = setInterval(
-    //     this.sendMessageAutomatically,
-    //     5000
-    //   )
-    // }, 3000)
-  },
-  beforeDestroy() {
-    if (this.$data.updateInterval) {
-      clearInterval(this.$data.updateInterval)
-      this.updateInterval = null
-    }
-  },
-  methods: {
-    /**
-     * @method sendMessageAutomatically DocsTODO
-     * @description
-     * @example
-     */
-    sendMessageAutomatically() {
-      this.$data.testMsgSent += 1
-      if (this.$data.testMsgSent > 5) clearInterval(this.$data.updateInterval)
-      this.$store.dispatch('ui/sendMessage', {
-        value: 'Test Message',
-        user: this.$mock.friend,
-        isOwner: false,
-      })
-    },
   },
 })
 </script>

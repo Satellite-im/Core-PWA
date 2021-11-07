@@ -60,7 +60,7 @@
         <TailoredWalletMini v-if="$store.state.ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar />
+        <TailoredCoreChatbar :recipient="selectedFriend" />
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
@@ -94,6 +94,9 @@ export default Vue.extend({
     ...mapState(['audio', 'ui', 'media', 'friends']),
     selectedGroup() {
       return this.$route.params.id
+    },
+    selectedFriend() {
+      return this.$route.params.address
     },
   },
   mounted() {

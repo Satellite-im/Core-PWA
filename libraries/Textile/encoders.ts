@@ -101,9 +101,18 @@ export const textMessage = t.intersection([
   }),
 ])
 
+export const mediaMessage = t.intersection([
+  baseMessage,
+  t.type({
+    payload: t.string,
+    type: t.literal('media'),
+  }),
+])
+
 export const messageEncoder = t.union([
   replyMessage,
   reactionMessage,
   fileMessage,
   textMessage,
+  mediaMessage,
 ])

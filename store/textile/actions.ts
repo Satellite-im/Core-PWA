@@ -13,18 +13,18 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    const mailboxId = await $TextileManager.init(config)
+    await $TextileManager.init(config)
+
+    const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
     commit('textileInitialized', true)
-    commit('accounts/updateMailboxId', mailboxId, { root: true })
+    commit('accounts/updateMailboxId', textilePublicKey, { root: true })
   },
   async fetchMessages(
-    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch, state }: ActionsArguments<TextileState>,
     { address }: { address: string }
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    // dispatch('sendText', { to: address, text: 'prova' })
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
       throw new Error('Mailbox manager not initialized')
@@ -40,21 +40,63 @@ export default {
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
-    const limit = { limit: Config.chat.defaultMessageLimit, skip: 0 }
+    const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
     const conversation = await $MailboxManager.getConversation(
       friend.mailboxId,
-      limit
+      query
     )
 
     commit('setConversation', {
       address: friend.publicKey,
       messages: conversation,
+      limit: query.limit,
+      skip: query.skip,
     })
 
     commit('setConversationLoading', { loading: false })
   },
-  async sendText(
+  async loadMoreMessages(
+    { commit, rootState, dispatch, state }: ActionsArguments<TextileState>,
+    { address }: { address: string }
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.publicKey === address)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const currentConversation = state.conversations[address]
+
+    console.log('currentConversation', currentConversation)
+
+    // commit('setConversationLoading', { loading: true })
+
+    // const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    // const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
+
+    // const conversation = await $MailboxManager.getConversation(
+    //   friend.mailboxId,
+    //   query
+    // )
+
+    // commit('setConversation', {
+    //   address: friend.publicKey,
+    //   messages: conversation,
+    //   limit: query.limit,
+    //   skip: query.skip,
+    // })
+
+    // commit('setConversationLoading', { loading: false })
+  },
+  async sendTextMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, text }: { to: string; text: string }
   ) {
@@ -70,28 +112,83 @@ export default {
       throw new Error('Friend not found')
     }
 
-    // commit('setConversationLoading', { loading: true })
-
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
-    await $MailboxManager.sendMessage<'text'>(friend.mailboxId, {
+    const result = await $MailboxManager.sendMessage<'text'>(friend.mailboxId, {
       to: friend.mailboxId,
       payload: text,
       type: 'text',
     })
 
-    // const limit = { limit: Config.chat.defaultMessageLimit, skip: 0 }
+    commit('addMessageToConversation', {
+      address: to,
+      message: result,
+    })
+  },
+  async sendReactionMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, reactTo, emoji }: { to: string; reactTo: string; emoji: string }
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    // const conversation = await $MailboxManager.getConversation(
-    //   friend.mailboxId,
-    //   limit
-    // )
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
 
-    // commit('setConversation', {
-    //   address: friend.publicKey,
-    //   messages: conversation,
-    // })
+    const friend = rootState.friends.all.find((fr) => fr.mailboxId === to)
 
-    // commit('setConversationLoading', { loading: false })
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    const result = await $MailboxManager.sendMessage<'reaction'>(
+      friend.mailboxId,
+      {
+        to: friend.mailboxId,
+        payload: emoji,
+        reactedTo: reactTo,
+        type: 'reaction',
+      }
+    )
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      message: result,
+    })
+  },
+  async sendReplyMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, replyTo, text }: { to: string; replyTo: string; text: string }
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.address === to)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    const result = await $MailboxManager.sendMessage<'reply'>(
+      friend.mailboxId,
+      {
+        to: friend.mailboxId,
+        payload: text,
+        repliedTo: replyTo,
+        type: 'reply',
+      }
+    )
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      message: result,
+    })
   },
 }

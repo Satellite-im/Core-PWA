@@ -8,7 +8,28 @@ export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      default: () => {},
+      // default: () => {},
+    },
+  },
+  computed: {
+    username() {
+      const myAccountDetails = this.$typedStore.state.accounts.details
+
+      const isMe = this.group.from === myAccountDetails?.mailboxId
+
+      if (!isMe) {
+        const friend = this.$typedStore.state.friends.all.find(
+          (friend) => friend.mailboxId === this.group.from
+        )
+
+        return friend?.name || 'uknown'
+      } else {
+        return myAccountDetails?.name || 'uknown'
+      }
+    },
+    badge() {
+      // $mock.users.filter(u => u.address === group.from)[0].badge
+      return ''
     },
   },
   methods: {

@@ -37,6 +37,7 @@ export default Vue.extend({
       maxChars: 256,
     }
   },
+  props: ['recipient'],
   computed: {
     ...mapState(['ui']),
     /**
@@ -170,12 +171,23 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.value) return
-      this.$store.dispatch('ui/sendMessage', {
-        value: this.value,
-        user: this.$mock.user,
-        isOwner: true,
-      })
+      if (!this.recipient) {
+        return
+      }
+
+      if (this.ui.replyChatbarContent) {
+        this.$store.dispatch('textile/sendReplyMessage', {
+          to: this.recipient,
+          text: this.value,
+          replyTo: this.ui.replyChatbarContent.messageID,
+        })
+      } else {
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: this.recipient,
+          text: this.value,
+        })
+      }
+
       const messageBox = this.$refs.messageuser as HTMLElement
       // Clear Chatbar
       messageBox.innerHTML = ''
