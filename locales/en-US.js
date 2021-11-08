@@ -45,6 +45,16 @@ export default {
     headphones: 'Audio',
     video: 'Video',
   },
+  popups: {
+    error: {
+      text: 'Text',
+      title: 'Title',
+      user_agent: 'User Agent',
+      source: 'Source',
+      line: 'Line',
+      confirm: 'Confirm'
+    },
+  },
   pages: {
     files: {
       upload: 'Upload File',
@@ -345,4 +355,5 @@ export default {
   market_place: {
     title: 'Marketplace',
   },
+    Error: 'Error'
 }
