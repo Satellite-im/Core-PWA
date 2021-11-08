@@ -20,8 +20,8 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import {
-  htmlToMarkdown,
-  markDownToHtml,
+  htmlToMarkdownInchatbar,
+  markDownToHtmlInchatbar,
   getCaretPosition,
   setCaretPosition,
 } from '~/libraries/ui/Chatbar'
@@ -164,16 +164,17 @@ export default Vue.extend({
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
      * Once replaced current HTML content, move the caret to proper position.
+     * @param key Keydown event String
      * @example
      */
-    handleInputChange() {
+    handleInputChange(key: any) {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (messageBox.textContent) {
-        const markDown = htmlToMarkdown(messageBox.innerHTML)
+        const markDown = htmlToMarkdownInchatbar(messageBox.textContent, key)
         this.value = markDown
         let caretPosition = getCaretPosition(messageBox)
         let offset = messageBox.textContent.trim().length
-        let html = markDownToHtml(markDown)
+        let html = markDownToHtmlInchatbar(markDown)
 
         const parsedCommand = parseCommand(this.value)
         const currentCommand = commands.find(
@@ -239,7 +240,10 @@ export default Vue.extend({
                 messageBox.innerHTML = text
                 setCaretPosition(messageBox, text.length)
               }
-              this.value = htmlToMarkdown(messageBox.innerHTML)
+              this.value = htmlToMarkdownInchatbar(
+                messageBox.innerHTML,
+                'Backspace'
+              )
               this.autoGrow()
             }
           })
@@ -276,17 +280,40 @@ export default Vue.extend({
               messageBox.textContent
             ) {
               const tag = currentCommand.args[0]
-              messageBox.innerHTML =
-                '<p>' +
-                messageBox.textContent.trim() +
-                "<span>&nbsp;</span><span class='chatbar-tag'>" +
-                tag.name +
-                '</span><span>&nbsp;</span></p>'
-              this.value = commandPrefix + currentCommand.name + ' ' + tag.name
+              messageBox.innerHTML = `<p>${messageBox.textContent.trim()}<span>&nbsp;</span><span class='chatbar-tag'>${
+                tag.name
+              }</span><span>&nbsp;</span></p>`
+              this.value = `${commandPrefix}${currentCommand.name} ${tag.name}`
               const caretPosition = messageBox.textContent.length
               setCaretPosition(messageBox, caretPosition)
             } else {
               const caretPosition = getCaretPosition(messageBox)
+              if (messageBox.textContent && messageBox.textContent.length > 1) {
+                let firstContent = messageBox.textContent.substring(
+                  0,
+                  caretPosition
+                )
+                var firstMessage = firstContent.replaceAll(
+                  ' ',
+                  '<span>&nbsp;</span>'
+                )
+
+                let lastContent =
+                  messageBox.textContent.substring(caretPosition)
+                var lastMessage = lastContent.replaceAll(
+                  ' ',
+                  '<span>&nbsp;</span>'
+                )
+
+                if (lastMessage.length > 2) {
+                  messageBox.innerHTML = `<p>${firstMessage}<span>&nbsp;</span>${lastMessage}</p>`
+                } else {
+                  messageBox.innerHTML = `<p>${firstMessage}<span>&nbsp;</span></p>`
+                }
+              } else {
+                messageBox.innerHTML = `<p><span>&nbsp;</span></p>`
+              }
+
               this.$nextTick(() => {
                 setCaretPosition(messageBox, caretPosition + 1)
                 messageBox.focus()
@@ -345,7 +372,7 @@ export default Vue.extend({
           break
       }
       this.$nextTick(() => {
-        this.handleInputChange()
+        this.handleInputChange(event.key)
       })
     },
     /**

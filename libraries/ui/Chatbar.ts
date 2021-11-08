@@ -39,6 +39,55 @@ export function htmlToMarkdown(htmlString: string) {
 }
 
 /**
+ * @method htmlToMarkdownInchatbar
+ * @description Convert element's html to markdown expression with multiple whitespaces.
+ * @param {string} htmlString - The html expression
+ * @param {string} key - The variable for the key event
+ * @returns Makrdown expression
+ */
+export function htmlToMarkdownInchatbar(htmlString: string, key: string) {
+  var temp = htmlString.replaceAll("<span>&nbsp;</span>", ' ')
+  htmlString = temp.replaceAll("&nbsp;", ' ')
+  let markDown = '';
+
+  if (key == 'Backspace') {
+    markDown =
+      htmlString.length > 1
+        ? NodeHtmlMarkdown.translate(htmlString.trim())
+        : htmlString
+  } else {
+    if (htmlString.length > 1) {
+      const spaceArr = htmlString.split(/\S+/)
+      markDown = NodeHtmlMarkdown.translate(htmlString.trim())
+      if (htmlString.charCodeAt(0) == 160 || htmlString.charCodeAt(0) == 32) markDown = ' ' + markDown
+
+      spaceArr.forEach(element => {
+        if (element != '' && element != '\n') markDown = markDown.replace(" ", element)      
+      });
+
+      if (key == ' ') {
+        if (/\S+/.test(htmlString)) {
+          if (htmlString.charCodeAt(htmlString.length-2) == 160 || htmlString.charCodeAt(0) == 32) markDown += spaceArr[spaceArr.length-1];
+        } 
+      }
+    } else {
+      markDown = htmlString;
+    }
+  }
+  markDown = markDown
+    .replace(/\\#/g, '#')
+    .replace(/\\`/g, '`')
+    .replace(/\\=/g, '=')
+    .replace(/\\_/g, '_')
+    .replace(/\\>/g, '>')
+    .split('\\*')
+    .join('*')
+    .replace(/_\*/g, '**')
+    .replace(/\*_/g, '**')
+    return markDown
+}
+
+/**
  * @method markDownToHtml
  * @description Convert the markdown expression to html string
  * @param {string} markDown - The markdown expression
@@ -53,6 +102,19 @@ export function markDownToHtml(markDown: string) {
     .replace(/<\/h5>/g, '<span>&nbsp;</span></h5>')
     .replace(/<\/h6>/g, '<span>&nbsp;</span></h6>')
     .replace(/<\/p>/g, '<span>&nbsp;</span></p>')
+  return htmlString
+}
+
+/**
+ * @method markDownToHtmlInchatbar
+ * @description Convert the markdown expression to html string with multi whitespaces
+ * @param {string} markDown - The markdown expression
+ * @returns Converted html expression
+ */
+export function markDownToHtmlInchatbar(markDown: string) {
+  let searchValue = /\s/gi;
+  var markDownWithspace = markDown.replaceAll(searchValue, "<span>&nbsp;</span>")
+  const htmlString = markDownToHtml(markDownWithspace);
   return htmlString
 }
 
