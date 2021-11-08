@@ -71,6 +71,14 @@ export default Vue.extend({
       this.$props.toggle()
     }
   },
+  methods: {
+    toggleModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'quickchat',
+        state: !this.ui.modals.quickchat,
+      })
+    },
+  },
 })
 </script>
 

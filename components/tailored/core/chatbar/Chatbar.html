@@ -17,10 +17,10 @@
     <div contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
+      :placeholder="$t('global.talk')"
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
       @drop="handleDrop"></div>
-    <span class="placeholder">{{ placeholder }}</span>
     <div
       :data-tooltip="$t('wallet.send_money')"
       v-on:click="toggleEnhancers"

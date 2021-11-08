@@ -2,6 +2,9 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
+  bridge: {
+    nitro: false,
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,
@@ -166,4 +169,10 @@ export default defineNuxtConfig({
     clientVersion: pkg.version,
     textileKey: process.env.TEXTILE_API_KEY,
   },
+  webpack: {
+    watchOptions: {
+      ignored: '/node_modules/'
+    },
+    stats: 'verbose',
+  }
 })
