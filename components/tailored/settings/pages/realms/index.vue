@@ -1,4 +1,4 @@
-<template src="./Network.html"></template>
+<template src="./Realms.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -6,7 +6,7 @@ import { mapState } from 'vuex'
 import { Realm } from '~/types/ui/core'
 
 export default Vue.extend({
-  name: 'NetworkSettings',
+  name: 'RealmsSettings',
   layout: 'settings',
   computed: {
     ...mapState(['settings']),
@@ -20,7 +20,7 @@ export default Vue.extend({
     },
     isAllowEmbeddedLinks: {
       set(state) {
-        this.$store.commit('settings/embeddedLinks', state)
+        this.$store.commit('embeddedLinks', state)
       },
       get() {
         return this.settings.embeddedLinks

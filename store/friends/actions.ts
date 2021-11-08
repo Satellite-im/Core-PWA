@@ -24,6 +24,7 @@ import {
 } from '~/types/ui/friends'
 import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
+import { DataStateType } from '../dataState/types'
 
 export default {
   /**
@@ -64,7 +65,12 @@ export default {
    * @param
    * @example
    */
-  async fetchFriends({ dispatch }: ActionsArguments<FriendsState>) {
+  async fetchFriends({ dispatch, commit }: ActionsArguments<FriendsState>) {
+    commit(
+      'dataState/setDataState',
+      { key: 'friends', value: DataStateType.Loading },
+      { root: true }
+    )
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
@@ -73,8 +79,13 @@ export default {
 
     const allFriendsData = [...incoming, ...outgoing]
 
-    allFriendsData.forEach((friendData) =>
+    allFriendsData.forEach((friendData) => {
       dispatch('fetchFriendDetails', friendData)
+    })
+    commit(
+      'dataState/setDataState',
+      { key: 'friends', value: DataStateType.Ready },
+      { root: true }
     )
   },
   /**
@@ -505,30 +516,13 @@ export default {
 
     const { account } = friend
 
-    const sentByMe = account.from !== userAccount.publicKey.toBase58()
-
-    const friendKey = sentByMe ? account.from : account.to
-
-    const computedFriendAccountKey =
-      await friendsProgram.computeFriendAccountKey(
-        new PublicKey(friendKey),
-        userAccount.publicKey
-      )
-
-    const friendAccountMirroredKey =
-      await friendsProgram.computeFriendAccountKey(
-        userAccount.publicKey,
-        new PublicKey(friendKey)
-      )
-
     const transactionId = await friendsProgram.removeFriend(
-      sentByMe ? computedFriendAccountKey : friendAccountMirroredKey,
-      userAccount,
-      new PublicKey(friendKey)
+      account,
+      userAccount
     )
 
     if (transactionId) {
-      commit('removeFriend', friendKey)
+      commit('removeFriend', friend.publicKey)
     }
   },
 }

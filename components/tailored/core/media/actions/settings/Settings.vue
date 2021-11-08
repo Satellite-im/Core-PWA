@@ -92,7 +92,7 @@ export default Vue.extend({
       if (menu != null && menu.contains(target)) {
         const items = menu.querySelectorAll('.settings-item')
         let clickedHeader = null
-        let clickedItem = null
+        let clickedItem: any = null
         let clickedItemBody: any = null
         for (let i = 0, ni = items.length; i < ni; i++) {
           const item = items[i] as HTMLElement
@@ -113,12 +113,29 @@ export default Vue.extend({
           if (clickedItem.classList.contains('open')) {
             clickedItem.classList.remove('open')
             clickedItemBody.style.height = '0'
+            clickedItemBody.style.overflow = 'hidden'
           } else {
             clickedItem.classList.add('open')
             clickedItemBody.style.height =
               (clickedItemBody.children[0] as HTMLElement).offsetHeight +
               2 +
               'px'
+            clickedItemBody.addEventListener(
+              'transitionend',
+              (event: Event) => {
+                const itemBody = event.target as HTMLElement
+                if (
+                  (itemBody.parentElement as HTMLElement).classList.contains(
+                    'open'
+                  )
+                ) {
+                  itemBody.style.overflow = 'visible'
+                }
+              },
+              {
+                once: true,
+              }
+            )
           }
           for (let i = 0, ni = items.length; i < ni; i++) {
             const item = items[i] as HTMLElement
@@ -126,6 +143,7 @@ export default Vue.extend({
               item.classList.remove('open')
               const itemBody = item.querySelector('.item-body') as HTMLElement
               itemBody.style.height = '0'
+              itemBody.style.overflow = 'hidden'
             }
           }
         }

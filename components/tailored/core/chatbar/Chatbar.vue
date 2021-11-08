@@ -14,7 +14,7 @@ import {
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
   commandPrefix,
-  containsCommand,
+  //  containsCommand,
   parseCommand,
   commands,
   isArgsValid,
@@ -331,9 +331,6 @@ export default Vue.extend({
           }
           return
       }
-      this.$nextTick(() => {
-        this.handleInputChange()
-      })
       // this.$data.lastEdited = Date.now()
     },
     handleInputKeyup(event: KeyboardEvent) {
@@ -347,6 +344,9 @@ export default Vue.extend({
           }
           break
       }
+      this.$nextTick(() => {
+        this.handleInputChange()
+      })
     },
     /**
      * @method sendMessage
@@ -355,6 +355,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
+      if (!this.value) return
       this.$store.dispatch('ui/sendMessage', {
         value: this.value,
         user: this.$mock.user,

@@ -49,7 +49,7 @@
       </InteractablesButton>
     </div>
 
-    <div class="tabs sidebar-selector padded no-top-pad">
+    <div class="tabs sidebar-selector padded no-top-pad flexy">
       <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
         <InteractablesButton
           :text="$t('global.messages')"
@@ -66,7 +66,15 @@
           <users-icon size="1.2x" />
         </InteractablesButton>
       </InteractablesButtonGroup>
+      
+      <div 
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary" 
+        data-tooltip="New Chat"
+        @click="toggleModal">
+        <plus-circle-icon size="1x" />
+      </div>
     </div>
+    <TailoredFriendsQuick v-click-outside="toggleModal" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -83,7 +91,7 @@
           />
 
         </div>
-        <div v-else-if="dataState.friends && !users.length" class="mascot-container">
+        <div v-else-if="dataState.friends !== DataStateType.Loading && !users.length" class="mascot-container">
           <TypographyTitle text="No Friends Yet" :size="6" />
           <TypographyText text="The world doesn't have to be so lonely." />
           <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
@@ -91,7 +99,7 @@
             :text="$t('friends.add') + 's'"
             size="small"
             type="primary"
-            :action="() => $router.push('/friends/list')"
+            :action="() => $router.push('/friends/list?tab=add')"
           >
             <user-plus-icon size="1.2x" />
           </InteractablesButton>

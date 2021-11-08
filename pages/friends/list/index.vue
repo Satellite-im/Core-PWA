@@ -11,6 +11,7 @@ type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {
   interface Vue {
     friends: any
+    initRoute: () => void
   }
 }
 export default Vue.extend({
@@ -28,8 +29,14 @@ export default Vue.extend({
       return getAlphaSorted(this.friends.all)
     },
   },
+  watch: {
+    '$route.query'() {
+      this.initRoute()
+    },
+  },
   mounted() {
     this.$store.dispatch('friends/fetchFriends')
+    this.initRoute()
   },
   methods: {
     /**
@@ -39,7 +46,21 @@ export default Vue.extend({
      * @example
      */
     setRoute(route: Route) {
-      this.$data.route = route
+      this.$router.replace({path: this.$route.path, query: {tab: route}})
+    },
+    /**
+     * @method initRoute DocsTODO
+     * @description
+     * @param 
+     * @example
+     */
+    initRoute() {
+      const query = this.$route.query
+      if (query && query.tab) {
+        this.$data.route = query.tab
+        return
+      }
+      this.$data.route = 'active'
     },
   },
 })

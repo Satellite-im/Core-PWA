@@ -7,6 +7,7 @@ import { mapState } from 'vuex'
 import {
   UsersIcon,
   UserPlusIcon,
+  PlusCircleIcon,
   FolderIcon,
   MessageSquareIcon,
   MenuIcon,
@@ -21,6 +22,7 @@ export default Vue.extend({
   components: {
     UsersIcon,
     UserPlusIcon,
+    PlusCircleIcon,
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
@@ -68,6 +70,14 @@ export default Vue.extend({
     if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
       this.$props.toggle()
     }
+  },
+  methods: {
+    toggleModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'quickchat',
+        state: !this.ui.modals.quickchat,
+      })
+    },
   },
 })
 </script>

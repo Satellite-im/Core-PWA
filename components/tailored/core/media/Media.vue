@@ -113,7 +113,7 @@ export default Vue.extend({
             }
           }
 
-          //logic for 'desktop fullscreen calls' where we set the max block content size so that a block cannot be larger than half viewportWidth
+          // logic for 'desktop fullscreen calls' where we set the max block content size so that a block cannot be larger than half viewportWidth
           const maxBlockContentWidth =
             typeof mobileMaxBlockContentWidth === 'undefined'
               ? viewportWidth / 2 - marginPerBlock * 1.5

@@ -40,6 +40,9 @@ export default {
   toggleSettings(state: UIState, show: boolean) {
     state.showSettings = show
   },
+  toggleSettingsSidebar(state: UIState, show: boolean) {
+    state.settingsSideBar = show
+  },
   toggleModal(state: UIState, modal: any) {
     // @ts-ignore
     state.modals[modal.name] = modal.state
@@ -71,6 +74,7 @@ export default {
         at: Date.now(),
         type: 'text',
         payload: message.value,
+        reactions: [],
         replies: [],
       }
       if (lastMessage.from === message.user.address) {

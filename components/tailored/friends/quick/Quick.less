@@ -1,0 +1,32 @@
+#quick-chat {
+  background: @semitransparent-dark-gradient;
+  backdrop-filter: @blur;
+  border-radius: @corner-rounding;
+  border: @light-border;
+  position: fixed;
+  width: 18rem;
+  top: 11rem;
+  padding: @light-spacing @light-spacing;
+  left: @sidebar-size + 2rem;
+  z-index: @base-z-index + 10;
+  display: flex;
+  flex-direction: column;
+  max-height: 24rem;
+  overflow-y: hidden;
+
+  .subtitle {
+    margin: 0;
+    margin-bottom: @light-spacing;
+    font-size: @text-size;
+  }
+
+  .search {
+    margin-top: @normal-spacing;
+  }
+
+  .scroll-container {
+    flex: 1;
+    margin-top: @light-spacing;
+    height: 0;
+  }
+}

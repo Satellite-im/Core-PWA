@@ -1,6 +1,6 @@
 <UiModal :closeModal="closeModal" nopad>
   <div id="settings" 
-    :class="`with-sidebar ${sidebar ? 'is-open' : 'is-collapsed'}`">
+    :class="`with-sidebar ${ui.settingsSideBar ? 'is-open' : 'is-collapsed'}`">
     <div class="sidebar is-secondary-background" v-touch:swipe.left="collapseSidebar" v-touch:swipe.right="showSidebar">
       <UiScroll verticalScroll>
         <TailoredSettingsSidebar
@@ -24,6 +24,7 @@
         <TailoredSettingsPagesProfile v-if="page === 'profile'" />
         <TailoredSettingsPagesStorage v-if="page === 'storage'" />
         <TailoredSettingsPagesNetwork v-if="page === 'network'" />
+        <TailoredSettingsPagesRealms v-if="page === 'realms'" />
       </UiScroll>
     </div>
   </div>
