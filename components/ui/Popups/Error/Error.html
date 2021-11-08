@@ -1,0 +1,21 @@
+<div :class="`modal ${error ? 'is-active' : ''}`">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <section class="modal-card-body">
+      <h2 class="person"><i class="fas fa-spider"></i> {{$t('popups.error.title')}}</h2>
+      <p>{{$t('popups.error.text')}}</p>
+      <span class="label">{{$t('popups.error.user_agent')}}</span>
+      <input type="text" readonly class="input is-small" :value="error.userAgent"/>
+      <span class="label">{{$t('popups.error.source')}}</span>
+      <input type="text" readonly class="input is-small" :value="error.source"/>
+      <span class="label">{{$t('popups.error.line')}}</span>
+      <input type="text" readonly class="input is-small" :value="error.lineno"/>
+
+      <p class="bordered">
+      <small>{{error.message}}</small>
+      </p>
+      <hr class="divider">
+      <button class="button is-danger" v-on:click="confirm"><i class="fas fa-check"></i> &nbsp; {{$t('popups.error.confirm')}}</button>
+    </section>
+  </div>
+</div>
