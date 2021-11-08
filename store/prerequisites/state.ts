@@ -1,13 +1,9 @@
-interface PrerequisiteState {
-  stateLoaded: Boolean
-  peer2PeerBound: Boolean
-  blockchainBound: Boolean
-}
+import { PrerequisiteState } from './types'
 
 const InitalPrerequisitesState = (): PrerequisiteState => ({
-  stateLoaded: true,
-  peer2PeerBound: false,
-  blockchainBound: false,
+  accountsReady: false,
+  p2pReady: true,
+  textileReady: false,
 })
 
 export default InitalPrerequisitesState

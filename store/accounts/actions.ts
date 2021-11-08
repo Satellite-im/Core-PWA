@@ -139,6 +139,14 @@ export default {
     // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', userAccount)
 
+    commit('setUserDetails', {
+      username: userInfo.name,
+      ...userInfo,
+    })
+
+    commit('prerequisites/setAccountsReady', true, { root: true })
+
+    // TODO: move this logic into a startup action
     // Initialize textile
     const { pin } = state
     dispatch(
@@ -150,11 +158,6 @@ export default {
       },
       { root: true }
     )
-
-    commit('setUserDetails', {
-      username: userInfo.name,
-      ...userInfo,
-    })
 
     // Dispatch an action to fetch friends and friends requests
     dispatch('friends/fetchFriends', {}, { root: true })

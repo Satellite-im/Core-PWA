@@ -25,6 +25,7 @@ const propertiesBlacklist = [
   'accounts.loading',
   'accounts.registrationStatus',
   'friends.all',
+  'prerequisites',
 ]
 
 export default ({ store }: { store: any }) => {
@@ -33,30 +34,11 @@ export default ({ store }: { store: any }) => {
     reducer: (state: any) => {
       // Lodash omit is not so performant, but it's actually fine
       // for blacklisting the state to be persisted
-      if (!state.accounts?.storePin) {
-        return omit(state, propertiesBlacklist)
-      }
-      return state
+      return omit(state, propertiesBlacklist)
     },
     filter: (mutation) => {
       // Allows blacklisting of data we don't want stored
       return !mutationsBlacklist.includes(mutation.type)
     },
-    // restoreState: (key, storage) => {
-    //   if (!storage) {
-    //     return null
-    //   }
-
-    //   const stringifiedState = storage.getItem(key)
-
-    //   if (!stringifiedState) {
-    //     return null
-    //   }
-
-    //   const parsedState: RootState = JSON.parse(stringifiedState)
-
-    //   return parsedState
-    // },
-    // saveState: (key, state, storage) => {},
   }).plugin(store)
 }

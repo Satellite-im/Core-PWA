@@ -27,6 +27,9 @@ export default {
 
     commit('textileInitialized', true)
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
+
+    // Set Textile Ready prerequisite as true
+    commit('prerequisites/setTextileReady', true, { root: true })
   },
   /**
    * @description Fetches messages that comes from a specific user
