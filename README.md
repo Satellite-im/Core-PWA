@@ -8,7 +8,7 @@
 
 ## Environment
 
-It's important to setup your environment before running `Satellite-Absoltue`. This will require you 
+It's important to setup your environment before running `Satellite-Absolute`. This will require you 
 to add some keys. See the `.env.example` file to get started.
 
 Start by cloning the `.env.example` to a local `.env`. This stores secure information and is not pushed to production.
