@@ -57,6 +57,7 @@
           <Nuxt />
         </UiChatScroll>
         <TailoredMessagingEnhancers />
+        <TailoredWalletMini />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
         <TailoredCoreChatbar />
