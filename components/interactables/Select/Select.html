@@ -2,17 +2,11 @@
   :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`"
   v-click-outside="() => open = false"
 >
-  <div class="custom-select">
-    <div class="selected" :class="{ open: open }" @click="changeStyle()">
+  <div :class="{'custom-select': true, open, up, down: !up}">
+    <div class="selected" @click="toggleOpen()">
       {{ getSelectLabel() }}
     </div>
-    <div class="items" 
-      :class="
-        [
-          { selectFullscreen: $store.state.ui.fullscreen && !open },
-          { selectDefault: !$store.state.ui.fullscreen && !open }
-        ]" 
-      :style="$store.state.ui.fullscreen ? {top: `${topDirection}px`} : {top: 0}">
+    <div class="items">
       <div
         v-for="(option, i) of options"
         :key="i"

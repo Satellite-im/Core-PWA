@@ -43,9 +43,10 @@
     overflow: hidden;
   }
   .items {
+    position: absolute;
+    display: none;
     color: #fff;
     overflow: hidden;
-    position: relative;
     max-width: 100%;
     background: @semitransparent-dark-gradient;
     border-radius: @corner-rounding;
@@ -74,16 +75,19 @@
       }
     }
   }
-}
-
-.selectDefault {
-  top: -100vh !important;
-  z-index: -100 !important;
-  opacity: 0;
-}
-
-.selectFullscreen {
-  top: 100vh !important;
-  z-index: -100 !important;
-  opacity: 0;
+  &.open {
+    .items {
+      display: block;
+    }
+  }
+  &.up {
+    .items {
+      bottom: 30px;
+    }
+  }
+  &.down {
+    .items {
+      top: 30px;
+    }
+  }
 }

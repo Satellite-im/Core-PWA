@@ -62,7 +62,7 @@ export default Vue.extend({
     return {
       selectedValue: this.placeholder.length ? null : this.selected,
       open: false,
-      topDirection: 0
+      up: false,
     }
   },
   watch: {
@@ -93,16 +93,15 @@ export default Vue.extend({
       this.open = false
     },
     /**
-     * @method changeStyle DocsTODO
+     * @method toggleOpen DocsTODO
      * @description
      * @param
      * @example
      */
-    changeStyle() {
-      let selectedHeight = this.$el.querySelector('.selected')?.scrollHeight
-      let itemsHeight = this.$el.querySelector('.items')?.scrollHeight
-      if (!selectedHeight || !itemsHeight) return
-      this.topDirection = -1 * (selectedHeight + itemsHeight + 16)
+    toggleOpen() {
+      let bodyRect = document.body.getBoundingClientRect()
+      let elementRect = this.$el.getBoundingClientRect()
+      this.up = (elementRect.top > bodyRect.bottom / 2) ? true : false
       this.open = !this.open
     },
     /**
