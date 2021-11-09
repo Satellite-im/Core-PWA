@@ -62,6 +62,7 @@ export default Vue.extend({
     return {
       selectedValue: this.placeholder.length ? null : this.selected,
       open: false,
+      topDirection: 0
     }
   },
   watch: {
@@ -90,6 +91,19 @@ export default Vue.extend({
       this.selectedValue = option.value
       this.$emit('change', this.selectedValue)
       this.open = false
+    },
+    /**
+     * @method changeStyle DocsTODO
+     * @description
+     * @param
+     * @example
+     */
+    changeStyle() {
+      let selectedHeight = this.$el.querySelector('.selected')?.scrollHeight
+      let itemsHeight = this.$el.querySelector('.items')?.scrollHeight
+      if (!selectedHeight || !itemsHeight) return
+      this.topDirection = -1 * (selectedHeight + itemsHeight + 16)
+      this.open = !this.open
     },
     /**
      * @method getSelectLabel DocsTODO

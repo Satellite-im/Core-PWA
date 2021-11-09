@@ -3,10 +3,16 @@
   v-click-outside="() => open = false"
 >
   <div class="custom-select">
-    <div class="selected" :class="{ open: open }" @click="open = !open">
+    <div class="selected" :class="{ open: open }" @click="changeStyle()">
       {{ getSelectLabel() }}
     </div>
-    <div class="items" :class="{ selectHide: !open }">
+    <div class="items" 
+      :class="
+        [
+          { selectFullscreen: $store.state.ui.fullscreen && !open },
+          { selectDefault: !$store.state.ui.fullscreen && !open }
+        ]" 
+      :style="$store.state.ui.fullscreen ? {top: `${topDirection}px`} : {top: 0}">
       <div
         v-for="(option, i) of options"
         :key="i"
