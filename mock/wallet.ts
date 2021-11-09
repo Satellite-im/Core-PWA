@@ -45,7 +45,7 @@ export const RecentTransactions = [
       address: '0x9bf4001de07dfd62b26a2f1307ee0c0307632d59',
     },
     memo: 'Thanks for lunch.',
-    state: 'recived',
+    state: 'received',
     at: 1633500930632,
     amount: 82000,
   },
