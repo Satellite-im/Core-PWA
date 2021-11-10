@@ -115,9 +115,6 @@ export default Vue.extend({
           this.cancelMessage()
           break
       }
-      this.$nextTick(() => {
-        this.handleInputChange()
-      })
     },
     handleInputKeyup(event: KeyboardEvent) {
       const messageBox = this.$refs.messageBox as HTMLElement
@@ -129,6 +126,9 @@ export default Vue.extend({
           }
           break
       }
+      this.$nextTick(() => {
+        this.handleInputChange()
+      })
     },
   },
 })
