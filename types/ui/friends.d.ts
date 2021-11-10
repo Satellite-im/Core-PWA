@@ -2,12 +2,11 @@ import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.
 import { RawUser, User } from '~/types/ui/user'
 
 export interface EncryptedFriend extends User {
-  publicKey: string
-  encryptedMailboxId: string
+  encryptedTextilePubkey: string
 }
 
 export interface Friend extends EncryptedFriend {
-  mailboxId: string
+  textilePubkey: string
   item: any // TODO remove unnecessary properties
   pending: Boolean
   activeChat: Boolean

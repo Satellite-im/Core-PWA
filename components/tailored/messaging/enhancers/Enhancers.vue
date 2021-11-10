@@ -72,19 +72,14 @@ export default Vue.extend({
      */
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
-        this.$store.dispatch('ui/addReaction', {
+        this.$store.dispatch('textile/sendReactionMessage', {
+          to: this.ui.settingReaction.to,
           emoji,
-          reactor: this.$mock.user.name,
-          groupID: this.ui.settingReaction.groupID,
-          messageID: this.ui.settingReaction.messageID,
-          replyID: this.ui.settingReaction.replyID,
+          reactTo: this.ui.settingReaction.messageID,
         })
         this.toggleEnhancers()
       } else {
-        this.$store.commit(
-          'ui/chatbarContent',
-          this.ui.chatbarContent + emoji
-        )
+        this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
     },
     /**

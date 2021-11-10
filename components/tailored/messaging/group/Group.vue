@@ -3,12 +3,23 @@
 import Vue, { PropType } from 'vue'
 
 import { Group } from '~/types/messaging'
+import { User } from '~/types/ui/user'
+import { getUsernameFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      default: () => {},
+      // default: () => {},
+    },
+  },
+  computed: {
+    username() {
+      return getUsernameFromState(this.group.from, this.$store.state)
+    },
+    badge() {
+      // $mock.users.filter(u => u.address === group.from)[0].badge
+      return ''
     },
   },
   methods: {

@@ -1,9 +1,9 @@
 <template>
-  <div class="separator" v-if="plaintext">{{ value }}</div>
-  <div class="separator" v-else>{{ $dayjs(value).format('MMMM DD') }}</div>
+  <div class="separator">{{ text }}</div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import dayjs from 'dayjs'
 
 export default Vue.extend({
   props: {
@@ -14,6 +14,13 @@ export default Vue.extend({
     value: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    text() {
+      return this.plaintext
+        ? this.value
+        : dayjs(parseInt(this.value)).format('MMMM DD')
     },
   },
 })

@@ -25,6 +25,7 @@ import {
 import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
 import { DataStateType } from '../dataState/types'
+import TextileManager from '~/libraries/Textile/TextileManager'
 
 export default {
   /**
@@ -107,38 +108,38 @@ export default {
     const userKey = rootState.accounts.active
     const sentByMe = friendAccount.from === userKey
     const friendKey = sentByMe ? friendAccount.to : friendAccount.from
-    const encryptedMailboxId = sentByMe
+    const encryptedTextilePubkey = sentByMe
       ? friendAccount.toMailboxId
       : friendAccount.fromMailboxId
 
     // Initialize encryption engine for the given recipient and decrypt
     // the mailboxId
     await $Crypto.initializeRecipient(new PublicKey(friendKey))
-    const mailboxId = await $Crypto.decryptFrom(friendKey, encryptedMailboxId)
+    const textilePubkey = await $Crypto.decryptFrom(
+      friendKey,
+      encryptedTextilePubkey
+    )
     const rawUser = await serverProgram.getUser(new PublicKey(friendKey))
     if (!rawUser) {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
     const friend: Friend = {
-      publicKey: friendKey,
       account: friendAccount,
       name: rawUser.name,
       profilePicture: rawUser.photoHash,
       status: rawUser.status,
-      encryptedMailboxId,
-      mailboxId,
+      encryptedTextilePubkey,
+      textilePubkey,
       item: {},
       pending: false,
       activeChat: false,
-      address: '',
+      address: friendKey,
       state: 'offline',
       unreadCount: 0,
     }
 
-    const friendExists = state.all.find(
-      (fr) => fr.publicKey === friend.publicKey
-    )
+    const friendExists = state.all.find((fr) => fr.address === friend.address)
 
     if (friendExists) {
       commit('updateFriend', friend)
@@ -238,10 +239,17 @@ export default {
    */
   async createFriendRequest(
     { commit }: ActionsArguments<FriendsState>,
-    { friendToKey, textileMailboxId }: CreateFriendRequestArguments
+    { friendToKey }: CreateFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    const textilePublicKey = $TextileManager.getIdentityPublicKey()
+
+    if (!textilePublicKey) {
+      throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
+    }
 
     const payerAccount = await $SolanaManager.getActiveAccount()
 
@@ -306,9 +314,9 @@ export default {
     await $Crypto.initializeRecipient(friendToKey)
 
     // Encrypt textile mailbox id for the recipient
-    const encryptedMailboxId = await $Crypto.encryptFor(
+    const encryptedTextilePublicKey = await $Crypto.encryptFor(
       friendToKey.toBase58(),
-      textileMailboxId
+      textilePublicKey
     )
 
     const transactionHash = await friendsProgram.createFriendRequest(
@@ -316,7 +324,7 @@ export default {
       friendAccountMirroredKey,
       userAccount,
       friendToKey,
-      Buffer.from(encryptedMailboxId.padStart(128, '0'))
+      Buffer.from(encryptedTextilePublicKey.padStart(128, '0'))
     )
 
     if (transactionHash) {
@@ -340,10 +348,17 @@ export default {
    */
   async acceptFriendRequest(
     { commit, dispatch }: ActionsArguments<FriendsState>,
-    { friendRequest, textileMailboxId }: AcceptFriendRequestArguments
+    { friendRequest }: AcceptFriendRequestArguments
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    const textilePublicKey = $TextileManager.getIdentityPublicKey()
+
+    if (!textilePublicKey) {
+      throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
+    }
 
     const payerAccount = await $SolanaManager.getActiveAccount()
 
@@ -374,16 +389,16 @@ export default {
     await $Crypto.initializeRecipient(new PublicKey(friendFromKey))
 
     // Encrypt textile mailbox id for the recipient
-    const encryptedMailboxId = await $Crypto.encryptFor(
+    const encryptedIdentityPublicKey = await $Crypto.encryptFor(
       friendFromKey,
-      textileMailboxId
+      textilePublicKey
     )
 
     const transactionId = await friendsProgram.acceptFriendRequest(
       computedFriendAccountKey,
       new PublicKey(account.from),
       userAccount,
-      Buffer.from(encryptedMailboxId.padStart(128, '0'))
+      Buffer.from(encryptedIdentityPublicKey.padStart(128, '0'))
     )
 
     if (transactionId) {
