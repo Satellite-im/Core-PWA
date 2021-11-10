@@ -142,6 +142,12 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
+      if (messageBox.innerHTML && messageBox.innerHTML.length > this.$data.maxChars + 1) {
+        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        let sel = window.getSelection()
+        sel?.selectAllChildren(messageBox)
+        sel?.collapseToEnd()
+      }
       this.value = messageBox.innerHTML
       this.autoGrow()
     },
