@@ -9,6 +9,7 @@
     >
       <terminal-icon size="1x" />
     </div>
+
     <div contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
@@ -16,6 +17,7 @@
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
       @drop="handleDrop"></div>
+
     <TailoredCoreChatbarControls :sendMessage="sendMessage" />
   </div>
   <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />

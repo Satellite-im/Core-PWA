@@ -47,6 +47,7 @@
     padding: (@light-spacing / 1.5) 0.75rem;
     display: inline-flex;
     flex-direction: row;
+    max-width: calc(100% - 2rem);
     width: calc(100% - 2rem);
     border: 1px solid transparent;
     transition: border-radius 0.2s ease;
@@ -89,6 +90,9 @@
       resize: none;
       font-size: @text-size;
       padding-top: 6px;
+      min-width: 0;
+      overflow-wrap: anywhere;
+
       &[placeholder]:empty:before {
         content: attr(placeholder);
       }
