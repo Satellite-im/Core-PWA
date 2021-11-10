@@ -1,7 +1,7 @@
 <div
   id="sidebar"
   class="collapsed"
-  v-touch:swipe="toggle"
+  v-touch:swipe.left="toggle"
   v-touch-options="{ swipeTolerance: 75 }"
 >
   <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
