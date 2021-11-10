@@ -152,7 +152,6 @@ export default Vue.extend({
               break
             }
           }
-          event.preventDefault()
           break
         default:
           break
