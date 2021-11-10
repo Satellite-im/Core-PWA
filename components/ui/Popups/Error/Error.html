@@ -1,20 +1,14 @@
-<div :class="`modal ${error ? 'is-active' : ''}`">
-  <div class="modal-background" v-on:click="close"></div>
-  <div class="modal-card">
-    <section class="modal-card-body">
-      <h2 class="person"><i class="fas fa-spider"></i> {{$t('popups.error.title')}}</h2>
-      <p>{{$t('popups.error.text')}}</p>
-      <span class="label">{{$t('popups.error.user_agent')}}</span>
-      <input type="text" readonly class="input is-small" :value="error.userAgent"/>
-      <span class="label">{{$t('popups.error.source')}}</span>
-      <input type="text" readonly class="input is-small" :value="error.source"/>
-      <span class="label">{{$t('popups.error.line')}}</span>
-      <input type="text" readonly class="input is-small" :value="error.lineno"/>
-      <p class="bordered">
-      <small>{{error.message}}</small>
-      </p>
+<div class="create-error-container">
+  <div class="modal-body">
+    <div class="custom-modal-content">
+      <p class="label" >{{errorText}}</p>
+      <span class="label" >{{ $t('popups.error.source') }}:</span>
+      <p type="text" >{{source}}</p>
+      <span class="label">{{ $t('popups.error.contact') }}</span>
       <hr class="divider">
-      <button class="button is-danger" v-on:click="confirm"><i class="fas fa-check"></i> &nbsp; {{$t('popups.error.confirm')}}</button>
-    </section>
+      <button class="button is-danger" v-on:click="confirm"><i class="fas fa-check"></i> &nbsp;
+        {{ $t('popups.error.confirm') }}
+      </button>
+    </div>
   </div>
 </div>

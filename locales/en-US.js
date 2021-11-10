@@ -48,11 +48,12 @@ export default {
   popups: {
     error: {
       text: 'Text',
-      title: 'Title',
+      title: 'Error',
       user_agent: 'User Agent',
       source: 'Source',
       line: 'Line',
-      confirm: 'Confirm'
+      confirm: 'Confirm',
+      contact: "'Oops! Something went wrong! Help us improve your experience by sending an error report'"
     },
   },
   pages: {
@@ -355,5 +356,4 @@ export default {
   market_place: {
     title: 'Marketplace',
   },
-    Error: 'Error'
 }

@@ -1,12 +1,15 @@
 <template src="./Error.html"></template>
 
 <script>
-import VModal from 'vue-js-modal'
 import Vue from "vue";
 
-Vue.use(VModal, { componentName: 'Error' })
-
-export default {
+/**
+ * @component Error
+ * @description Component that takes an error message to display including source and extra details.
+ * setTimeout prop is a bool that if true will auto close the modal after 5 seconds
+ * @example
+ */
+export default Vue.extend({
   name: 'Error',
   title: {
     type: String,
@@ -15,24 +18,41 @@ export default {
   },
   data () {
     return {
-      error: false
+      source: '',
+      error: '',
+      details: '',
     }
   },
-  closeModal: {
-    type: Function,
-    default: () => {},
-    required: false,
+  props: {
+    errorText: {
+      type: String,
+      default: 'An Error has Occurred',
+      required: false,
+    },
+    setTimeout: {
+      type: Boolean,
+      default: () => {},
+      required: false,
+    },
   },
   methods: {
     confirm () {
       this.error = false
       this.closeModal()
     },
-    close() {
+    close () {
       this.closeModal()
     },
+    timeout () {
+      if(this.setTimeout) {
+        setTimeout(
+          this.close
+          , 5000)
+      }
+    }
   },
   mounted () {
+    this.timeout();
     window.onerror = (message, source, lineno, colno, error) => {
       this.error = {
         message,
@@ -44,12 +64,8 @@ export default {
       }
     }
   },
-  selfTimeOut () {
-    setTimeout({
-      closeModal()
-    }, 10000)
-  }
 }
+)
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
