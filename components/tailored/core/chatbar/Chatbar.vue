@@ -10,8 +10,8 @@ import {
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
-  commandPrefix,
-  containsCommand,
+  // commandPrefix,
+  // containsCommand,
   parseCommand,
   commands,
   isArgsValid,
@@ -19,7 +19,6 @@ import {
 
 declare module 'vue/types/vue' {
   interface Vue {
-    autoGrow: Function
     sendMessage: Function
     handleInputChange: Function
     value: string
@@ -110,30 +109,6 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method autoGrow DocsTODO
-     * @description When textarea for chat is changed, autoGrow handles chat section to grow and allow multi-line display
-     * @example
-     * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
-     * This is called after the typed inputed are processed in order to display markdown expression.
-     */
-    autoGrow() {
-      // made const variables from this.$refs --> HTMLElement through typecasting
-      const messageBox = this.$refs.messageuser as HTMLElement
-      const chatbarGroup = this.$refs.chatbar as HTMLElement
-      const wrap = this.$refs.wrap as HTMLElement
-
-      if (this.$data.text.split('\n').length > 1) {
-        wrap.classList.add('expanded')
-      } else {
-        wrap.classList.remove('expanded')
-      }
-      if (messageBox.scrollHeight < 112) {
-        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
-      } else {
-        chatbarGroup.style.height = '152px'
-      }
-    },
-    /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
@@ -153,7 +128,6 @@ export default Vue.extend({
       if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
       if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
       this.value = messageBox.innerHTML
-      this.autoGrow()
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -184,7 +158,6 @@ export default Vue.extend({
           break
       }
       this.handleInputChange()
-      this.autoGrow()
     },
     handleInputKeyup(event: KeyboardEvent) {
       this.$nextTick(() => {
@@ -208,10 +181,6 @@ export default Vue.extend({
       // Clear Chatbar
       messageBox.innerHTML = ''
       this.value = ''
-      // Redraw size
-      this.$nextTick(() => {
-        this.autoGrow()
-      })
     },
     /**
      * @method handleDrop
