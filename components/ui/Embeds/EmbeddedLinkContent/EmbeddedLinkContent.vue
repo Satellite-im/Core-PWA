@@ -138,7 +138,6 @@ export default Vue.extend({
               .split(/^https?:\/\/([a-z0-9-]+[.])spotify[.]com\//g)[2]
               .split('?')[0]
 
-            console.log(spotifyEmbedType)
             return {
               src: `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`,
               type: 'iframe',

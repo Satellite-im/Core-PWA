@@ -1,10 +1,5 @@
-<div id="chatbar"
-  ref="chatbar"
-  :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
-  <div
-    :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`"
-    ref="wrap"
-  >
+<div id="chatbar" ref="chatbar" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
+  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`" ref="wrap" >
     <div class="control-wrap file-upload-wrap">
       <FileUpload type="quick" ref="file-upload" />
     </div>
@@ -21,45 +16,7 @@
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
       @drop="handleDrop"></div>
-    <div
-      :data-tooltip="$t('wallet.send_money')"
-      v-on:click="toggleEnhancers"
-      class="
-        control-tooltip-wrap
-        has-tooltip has-tooltip-top has-tooltip-primary
-      "
-    >
-      <banknote-icon size="1x"
-        :class="`control-icon `"
-      />
-    </div>
-    <div
-      :data-tooltip="$t('global.glyphs')"
-      v-on:click="toggleEnhancers"
-      class="
-        control-tooltip-wrap
-        has-tooltip has-tooltip-top has-tooltip-primary
-      "
-    >
-      <grid-icon size="1x"
-        :class="`control-icon ${$store.state.ui.enhancers.show ? 'primary' : ''}`"
-      />
-    </div>
-    <div
-      :data-tooltip="$t('global.send')"
-      class="
-        control-tooltip-wrap
-        has-tooltip has-tooltip-top has-tooltip-primary">
-      <arrow-right-icon size="1x"
-        class="control-icon"
-        @click="sendMessage"
-      />
-    </div>
+    <TailoredCoreChatbarControls :sendMessage="sendMessage" />
   </div>
-  <div id="bottom-bar-container">
-    <UiTypingIndicator v-if="$store.state.ui.isTyping" :userName="$store.state.ui.isTyping.name"/>
-    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
-      >{{ `${text.length}/${maxChars}` }}</span
-    >
-  </div>
+  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />
 </div>
