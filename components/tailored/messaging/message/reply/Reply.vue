@@ -82,14 +82,19 @@ export default Vue.extend({
      * @param replyId
      * @example
      */
-    emojiReaction(replyID: string) {
+    emojiReaction(e: MouseEvent, replyID: string) {
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
         replyID,
       })
-      this.$store.commit('ui/toggleEnhancers', { show: true })
+      this.$store.commit('ui/toggleEnhancers', { 
+        show: true,
+        floating: true,
+        position: [e.clientX, e.clientY],
+        containerWidth: this.$el.clientWidth,
+      })
     },
     /**
      * @method showQuickProfile DocsTODO

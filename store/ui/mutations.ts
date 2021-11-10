@@ -33,9 +33,16 @@ export default {
   },
   toggleEnhancers(
     state: UIState,
-    options: { show: boolean; floating: boolean }
+    options: EnhancerInfo
   ) {
-    state.enhancers = { show: options.show, floating: options.floating }
+    state.enhancers = { 
+      show: options.show, 
+      floating: options.floating ? options.floating : state.enhancers.floating,
+      position: options.position ? options.position : state.enhancers.position,
+      defaultWidth: options.defaultWidth ? options.defaultWidth : state.enhancers.defaultWidth,
+      defaultHeight: options.defaultHeight ? options.defaultHeight : state.enhancers.defaultHeight,
+      containerWidth: options.containerWidth ? options.containerWidth : state.enhancers.containerWidth
+    }
   },
   toggleSettings(state: UIState, show: boolean) {
     state.showSettings = show

@@ -5,6 +5,13 @@ import { mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    convertRem: (value: string) => number
+    toggleEnhancers: () => void
+  }
+}
+
 export default Vue.extend({
   components: {
     SmileIcon,
@@ -17,6 +24,7 @@ export default Vue.extend({
       route: 'emoji',
       search: '',
       clickEvent: () => {},
+      onScreenLocation: [],
     }
   },
   computed: {
@@ -27,11 +35,14 @@ export default Vue.extend({
       this.openEmoji()
     },
     'ui.enhancers.show'(value) {
+      this.$data.onScreenLocation = this.ui.enhancers.position
       if (value) this.openEmoji()
     },
   },
   mounted() {
     this.openEmoji()
+    this.$data.onScreenLocation = this.ui.enhancers.position
+    this.toggleEnhancers()
   },
   methods: {
     /**
@@ -69,12 +80,8 @@ export default Vue.extend({
           messageID: this.ui.settingReaction.messageID,
           replyID: this.ui.settingReaction.replyID,
         })
-        this.toggleEnhancers()
       } else {
-        this.$store.commit(
-          'ui/chatbarContent',
-          this.ui.chatbarContent + emoji
-        )
+        this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
     },
     /**
@@ -91,12 +98,21 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers() {
-      this.clickEvent()
-      // @ts-ignore
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-      })
+toggleEnhancers(e: MouseEvent) {
+      if (this.ui.enhancers.show) {
+        let xVal = this.ui.enhancers[0]
+        let yVal = this.ui.enhancers[1]
+        if (e) {
+          xVal = e.clientX
+          yVal = e.clientY
+        }
+        this.$store.commit('ui/toggleEnhancers', {
+          show: !this.ui.enhancers.show,
+          floating: true,
+          position: [xVal, yVal],
+          containerWidth: this.$el.clientWidth,
+        })
+      }
       if (this.ui.settingReaction.status) {
         this.$store.commit('ui/settingReaction', {
           status: false,
@@ -104,6 +120,28 @@ export default Vue.extend({
           messageID: null,
         })
       }
+    },
+    calculatePositionOnScreen(x: number): number {
+      if (
+        this.convertRem(this.ui.enhancers.defaultWidth) + x >
+        window.innerWidth
+      ) {
+        return x - this.convertRem(this.ui.enhancers.defaultWidth) * 2
+      }
+      return x - this.convertRem(this.ui.enhancers.defaultWidth)
+    },
+    /**
+     * @method convertRem
+     * @description This converts an rem value into a pixel value
+     * @example convertRem('24rem') => if the document font size is 16px, this returns the value of 24*16, or 384.
+     */
+    convertRem(value: string): number {
+      // Get the font size on the html tag
+      const fontSize = parseFloat(
+        getComputedStyle(document.documentElement).fontSize // eg 16 (px), 2 (px), etc
+      )
+      const remNumber = Number(value.replace('rem', ''))
+      return remNumber * fontSize
     },
   },
 })

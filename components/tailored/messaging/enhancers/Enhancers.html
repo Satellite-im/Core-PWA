@@ -1,7 +1,11 @@
 <div
   id="enhancers"
+  ref="enhancers"
   v-if="ui.enhancers.show"
-  v-click-outside="toggleEnhancers">
+  v-click-outside="toggleEnhancers"
+  v-bind:style="{ left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px', 
+  bottom: ui.enhancers.position[1] + 'px' }"
+  >
   <div class="navbar">
     <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emoji','gif']">
       <InteractablesButton

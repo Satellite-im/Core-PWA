@@ -125,13 +125,24 @@ export default Vue.extend({
      * @description
      * @example
      */
-    emojiReaction() {
+     emojiReaction(e: MouseEvent) {
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
       })
-      this.$store.commit('ui/toggleEnhancers', { show: true, floating: true })
+      let xVal = this.$el.getBoundingClientRect().x
+      let yVal = this.$el.getBoundingClientRect().y
+      if (e) {
+        xVal = e.clientX
+        yVal = e.clientY
+      }
+      this.$store.commit('ui/toggleEnhancers', {
+        show: true,
+        floating: true,
+        position: [xVal, yVal],
+        containerWidth: this.$el.clientWidth,
+      })
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('ui/addReaction', {

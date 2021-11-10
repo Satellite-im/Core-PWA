@@ -133,6 +133,9 @@ export default Vue.extend({
     toggleEnhancers() {
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
+        floating: false,
+        position: [window.innerWidth, 0],
+        containerWidth: this.$el.clientWidth,
       })
     },
     /**

@@ -2,11 +2,11 @@
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('global.glyphs')"
+    @click="emojiReaction"
   >
     <smile-icon
       size="1x"
       :class="`control-icon emoji-icon ${ui.enhancers.show ? 'primary' : ''}`"
-      @click="emojiReaction"
     />
   </div>
   <div

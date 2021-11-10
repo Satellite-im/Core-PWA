@@ -24,6 +24,10 @@ const InitalUIState = (): UIState => ({
   enhancers: {
     show: false,
     floating: false,
+    position: [0, 0],
+    defaultWidth: '24rem',
+    defaultHeight: '30rem',
+    containerWidth: 0,
   },
   messages: [],
   unreadMessage: 0,

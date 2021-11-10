@@ -18,11 +18,10 @@
       <div></div>
     </div>
   </div>
-  <div class="react-button">
+  <div class="react-button" @click="emojiReaction">
     <smile-icon
       size="1x"
       v-if="reactions.length"
-      class="emoji-icon"
-      @click="emojiReaction" />
+      class="emoji-icon"/>
   </div>
 </div>
