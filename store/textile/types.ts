@@ -1,8 +1,22 @@
+import {
+  MessagesTracker,
+  RepliesTracker,
+  ReactionsTracker,
+} from '~/types/textile/mailbox'
+
 export interface TextileState {
   initialized: boolean
-  mailboxId: string
+  conversations: {
+    [key: string]: {
+      messages: MessagesTracker
+      replies: RepliesTracker
+      reactions: ReactionsTracker
+      limit: number
+      skip: number
+      end: boolean
+    }
+  }
+  conversationLoading: boolean
 }
 
-export enum TextileError {
-  INVALID_PIN = 'errors.accounts.invalid_pin',
-}
+export enum TextileError {}

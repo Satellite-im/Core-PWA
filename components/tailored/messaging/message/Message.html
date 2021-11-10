@@ -28,6 +28,6 @@
       :group="this.$props.group"
       :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`" />
   </div>
-  <TailoredMessagingMessageReply :message="message" :group="group" v-if="!hideActions"/>
+  <TailoredMessagingMessageReply :message="message" :group="group" v-if="!hideActions" :from="from"/>
   <TailoredMessagingMessageEdit v-if="messageEdit" :message="message.payload" @commitMessage="saveMessage" />
 </div>

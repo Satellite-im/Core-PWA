@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { AccountsError } from '~/store/accounts/types'
 
 export default Vue.extend({
@@ -20,6 +20,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
+    ...mapGetters('prerequisites', ['allPrerequisitesReady']),
     // Helper method for prettier loading messages
     loadingStep(): string {
       switch (this.getActiveAccount) {
@@ -29,11 +30,25 @@ export default Vue.extend({
     },
   },
   mounted() {
+    this.$store.subscribeAction((action) => {
+      console.log('Action:', action)
+    })
+
+    // Handle the case that the wallet is not found
     if (this.getEncryptedPhrase === '') {
       this.$router.replace('/setup/disclaimer')
-    } else {
-      this.loadAccount()
+      return
     }
+
+    this.loadAccount()
+  },
+  watch: {
+    // this.$router.replace('/chat/direct')
+    allPrerequisitesReady(nextValue) {
+      if (nextValue) {
+        this.$router.replace('/chat/direct')
+      }
+    },
   },
   methods: {
     /**
@@ -46,9 +61,7 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
-
-        this.$router.replace('/chat/direct')
-      } catch (error) {
+      } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
         }

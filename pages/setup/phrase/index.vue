@@ -20,6 +20,9 @@ export default Vue.extend({
     isOdd(num: any) {
       return num % 2
     },
+    confirm() {
+      this.$router.replace('/')
+    },
   },
 })
 </script>

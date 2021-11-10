@@ -22,11 +22,6 @@ export default Vue.extend({
   props: {
     user: {
       type: Object as PropType<User>,
-      default: () => ({
-        name: '',
-        address: '',
-        status: '',
-      }),
       required: true,
     },
     isTyping: {
@@ -56,7 +51,7 @@ export default Vue.extend({
      * @example ---
      */
     navigateToUser() {
-      this.$router.push('/chat/direct')
+      this.$router.push(`/chat/direct/${this.user.address}`)
     },
   },
 })

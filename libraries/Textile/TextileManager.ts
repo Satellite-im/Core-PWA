@@ -67,4 +67,14 @@ export default class TextileManager {
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
     await this.mailboxManager.init()
   }
+
+  /**
+   * @method
+   * Returns the identity public key if exists
+   * throws an error otherwise
+   * @returns the identity public key
+   */
+  getIdentityPublicKey() {
+    return this.identityManager?.identity?.public?.toString() || null
+  }
 }

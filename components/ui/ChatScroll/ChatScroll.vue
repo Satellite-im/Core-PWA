@@ -96,11 +96,17 @@ export default Vue.extend({
      * @example
      */
     onScrolled() {
-      if (this.$el) {
-        if (Math.abs(this.$el.scrollTop) > this.preventScrollOffset) {
-          this.$store.dispatch('ui/setIsScrollOver', true)
-          return
-        }
+      if (!this.$el) return
+
+      if (
+        Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
+        !this.$store.state.ui.isScrollOver
+      ) {
+        this.$store.dispatch('ui/setIsScrollOver', true)
+        return
+      }
+
+      if (this.$store.state.ui.isScrollOver) {
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },

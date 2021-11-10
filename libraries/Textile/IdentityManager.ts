@@ -8,22 +8,9 @@ import { SolanaWallet } from '~/types/solana/solana'
 import Crypto from '~/libraries/Crypto/Crypto'
 
 export default class IdentityManager {
-  private _client?: Client
-  private _users?: Users
-  private _identity?: Identity
-
-  // Getters
-  get client() {
-    return this._client
-  }
-
-  get users() {
-    return this._users
-  }
-
-  get identity() {
-    return this._identity
-  }
+  client?: Client
+  users?: Users
+  identity?: Identity
 
   /**
    * @method
@@ -108,10 +95,10 @@ export default class IdentityManager {
       )
     }
 
-    this._identity = PrivateKey.fromRawEd25519Seed(Uint8Array.from(array))
+    this.identity = PrivateKey.fromRawEd25519Seed(Uint8Array.from(array))
 
     // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
-    return this._identity
+    return this.identity
   }
 
   /**
@@ -121,9 +108,9 @@ export default class IdentityManager {
    */
   async createRandom(): Promise<Identity> {
     /** No cached identity existed, so create a new one */
-    this._identity = await PrivateKey.fromRandom()
+    this.identity = await PrivateKey.fromRandom()
 
-    return this._identity
+    return this.identity
   }
 
   /**
@@ -133,8 +120,8 @@ export default class IdentityManager {
    * @returns the identity
    */
   initFromPrivateKey(privateKey: string) {
-    this._identity = PrivateKey.fromString(privateKey)
-    return this._identity
+    this.identity = PrivateKey.fromString(privateKey)
+    return this.identity
   }
 
   async authorize(identity: Identity): Promise<AuthData> {
@@ -142,24 +129,24 @@ export default class IdentityManager {
       throw new Error('Textile key not found')
     }
 
-    const client = await Client.withKeyInfo({ key: Config.textile.key })
+    this.client = await Client.withKeyInfo({ key: Config.textile.key })
 
-    const users = await Users.withKeyInfo({
+    this.users = await Users.withKeyInfo({
       key: Config.textile.key,
     })
 
-    await users.getToken(identity)
+    await this.users.getToken(identity)
 
-    const token = await client.getToken(identity)
+    const token = await this.client.getToken(identity)
 
     return {
-      client,
+      client: this.client,
       token,
-      users,
+      users: this.users,
     }
   }
 
   isInitialized() {
-    return Boolean(this._identity)
+    return Boolean(this.identity)
   }
 }

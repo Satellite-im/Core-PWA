@@ -171,8 +171,12 @@ export default defineNuxtConfig({
   },
   webpack: {
     watchOptions: {
-      ignored: '/node_modules/'
+      ignored: '/node_modules/',
     },
     stats: 'verbose',
-  }
+  },
+
+  // Ignore types files inside vuex modules otherwise they are included in the
+  // vuex configuration
+  ignore: 'store/*/types.ts',
 })

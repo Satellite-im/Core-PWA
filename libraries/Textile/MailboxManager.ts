@@ -7,15 +7,20 @@ import {
   Users,
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
+import { isRight } from 'fp-ts/lib/Either'
+import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
-  DecryptedMessage,
   MailboxCallback,
   MessageFromThread,
   MailboxSubscriptionType,
   MessageCallback,
+  MessageTypes,
+  MessagePayloads,
+  Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
+
 export class MailboxManager {
   senderAddress: string
   textile: TextileInitializationData
@@ -35,29 +40,32 @@ export class MailboxManager {
   /**
    * @method init
    * @description Initializes the mailbox for the current user
+   * @returns the mailbox id
    */
-  async init() {
+  async init(): Promise<string> {
     const users: Users = this.textile.users
     this.mailboxID = await users.setupMailbox()
+
+    return this.mailboxID
   }
 
-  /**
-   * @method buildMessage
-   * @description Generates a Message object from the given data
-   * @param to Destination address
-   * @param type Message type
-   * @param data message data
-   * @returns a Message Object
-   */
-  buildMessage(to: string, type: string, data: any) {
-    return {
-      sender: this.senderAddress,
-      to,
-      at: Date.now(),
-      type,
-      payload: data,
-    }
-  }
+  // /**
+  //  * @method buildMessage
+  //  * @description Generates a Message object from the given data
+  //  * @param to Destination address
+  //  * @param type Message type
+  //  * @param data message data
+  //  * @returns a Message Object
+  //  */
+  // buildMessage(to: string, type: string, data: any) {
+  //   return {
+  //     sender: this.senderAddress,
+  //     to,
+  //     at: Date.now(),
+  //     type,
+  //     payload: data,
+  //   }
+  // }
 
   /**
    * @method getConversation
@@ -69,7 +77,7 @@ export class MailboxManager {
   async getConversation(
     friendIdentifier: string,
     query: ConversationQuery
-  ): Promise<DecryptedMessage[]> {
+  ): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
 
@@ -83,7 +91,7 @@ export class MailboxManager {
       inboxQuery.skipNum(query.skip)
     }
 
-    const encryptedInbox = await this.textile.client.find<any>(
+    const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.inbox,
       inboxQuery
@@ -102,7 +110,7 @@ export class MailboxManager {
       sentboxQuery.and('created_at').lt(lastMessageTime)
     }
 
-    const encryptedSentbox = await this.textile.client.find<any>(
+    const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.sentbox,
       sentboxQuery
@@ -112,7 +120,15 @@ export class MailboxManager {
       (a, b) => a.created_at - b.created_at
     )
 
-    return Promise.all<DecryptedMessage>(messages.map<any>(this.decodeMessage))
+    const promises = messages.map<Promise<Message>>(this.decodeMessage)
+
+    const allSettled = await Promise.allSettled(promises)
+
+    const filtered = allSettled.filter(
+      (r) => r.status === 'fulfilled'
+    ) as PromiseFulfilledResult<Message>[]
+
+    return filtered.map((r) => r.value)
   }
 
   /**
@@ -176,16 +192,32 @@ export class MailboxManager {
    * @param to Recipient
    * @param message Message to be sent
    */
-  sendMessage(to: string, message: string) {
+  async sendMessage<T extends MessageTypes>(
+    to: string,
+    message: MessagePayloads[T]
+  ) {
     const recipient: PublicKey = PublicKey.fromString(to)
 
     const encoder = new TextEncoder()
-    const body = encoder.encode(message)
-    return this.textile.users.sendMessage(
+    const body = encoder.encode(
+      JSON.stringify({
+        from: this.senderAddress,
+        to: message.to,
+        at: Date.now(),
+        type: message.type,
+        payload: message.payload,
+        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
+        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
+      })
+    )
+
+    const result = await this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
       body
     )
+
+    return this.decodeMessage(userMessageToThread(result))
   }
 
   /**
@@ -193,21 +225,37 @@ export class MailboxManager {
    * @description Internal function used to decode messages
    * @param message Message to be decoded
    */
-  decodeMessage = async (
-    message: MessageFromThread
-  ): Promise<DecryptedMessage> => {
+  decodeMessage = async (message: MessageFromThread): Promise<Message> => {
     const identity: Identity = this.textile.identity
     const privKey = PrivateKey.fromString(identity.toString())
 
     // eslint-disable-next-line camelcase
     const { _id, from, read_at, created_at } = message
-    const msgBody = Buffer.from(message.body, 'base64')
 
+    // Body decryption and parse
+    const msgBody = Buffer.from(message.body, 'base64')
     const bytes = await privKey.decrypt(msgBody)
     const decoded = new TextDecoder().decode(bytes)
-    const body = JSON.parse(decoded)
 
-    return { body, from, readAt: read_at, sent: created_at, id: _id }
+    try {
+      const parsedBody = JSON.parse(decoded)
+
+      const validation = messageEncoder.decode({
+        ...parsedBody,
+        id: _id,
+        at: Math.floor(created_at / 1000000), // Convert into unix timestamp
+        from,
+        readAt: read_at,
+      })
+
+      if (!isRight(validation)) {
+        throw new Error('Invalid message payload')
+      }
+
+      return validation.right
+    } catch (_) {
+      throw new Error('Invalid message payload')
+    }
   }
 
   /**
