@@ -36,6 +36,7 @@
         :close-modal="toggleMarketPlace"
       />
     </UiModal>
+    <UiUpdateModal />
     <transition :name="$device.isMobile ? 'slide' : ''">
       <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
     </transition>
