@@ -16,6 +16,7 @@ const InitalUIState = (): UIState => ({
     showMarketPlace: false,
     wallet: false,
     quickchat: false,
+    walletMini: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
@@ -24,6 +25,7 @@ const InitalUIState = (): UIState => ({
   enhancers: {
     show: false,
     floating: false,
+    route: 'emotes',
   },
   messages: [],
   unreadMessage: 0,

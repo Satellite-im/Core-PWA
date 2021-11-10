@@ -12,8 +12,8 @@
       <div class="reply-body">
         <div class="reply-heading">
           <span v-on:click="showQuickProfile">
-            <UiUsername :username="$mock.users.filter(u => u.address === reply.from)[0].name"
-              :badge="$mock.users.filter(u => u.address === reply.from)[0].badge" />
+            <!-- TODO: update badges -->
+            <UiUsername :username="getUsernameFromReply(reply)" :badge="''" />
           </span>
           <TypographyText :text="$dayjs(reply.at).from()" />
         </div>

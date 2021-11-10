@@ -1,20 +1,15 @@
 <template src="./Chatbar.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-import {
-  TerminalIcon,
-  GridIcon,
-  ArrowRightIcon,
-  BanknoteIcon,
-} from 'satellite-lucide-icons'
+import { TerminalIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
   commandPrefix,
-  //  containsCommand,
+  // containsCommand,
   parseCommand,
   commands,
   isArgsValid,
@@ -25,13 +20,14 @@ import {
   getCaretPosition,
   setCaretPosition,
 } from '~/libraries/ui/Chatbar'
+import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    autoGrow: Function
     sendMessage: Function
     handleInputChange: Function
     value: string
+    updateText: Function
   }
 }
 
@@ -39,17 +35,18 @@ export default Vue.extend({
   components: {
     FileUpload,
     TerminalIcon,
-    BanknoteIcon,
-    GridIcon,
-    ArrowRightIcon,
   },
   data() {
     return {
       text: '',
-      maxChars: 256,
       showEmojiPicker: false,
-      // lastEdited: 0,
+      maxChars: 256,
     }
+  },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+    },
   },
   computed: {
     ...mapState(['ui']),
@@ -120,45 +117,8 @@ export default Vue.extend({
         return ''
       }
     },
-    // editStatus() {
-    //   return Date.now() - this.$data.lastEdited <= 1000
-    // },
   },
   methods: {
-    /**
-     * @method toggleEnhancers
-     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
-     * @example v-on:click="toggleEnhancers"
-     */
-    toggleEnhancers() {
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-      })
-    },
-    /**
-     * @method autoGrow DocsTODO
-     * @description When textarea for chat is changed, autoGrow handles chat section to grow and allow multi-line display
-     * @example
-     * When Shift+Enter is pressed, this controls chatbar's height so that user can input multiple lines.
-     * This is called after the typed inputed are processed in order to display markdown expression.
-     */
-    autoGrow() {
-      // made const variables from this.$refs --> HTMLElement through typecasting
-      const messageBox = this.$refs.messageuser as HTMLElement
-      const chatbarGroup = this.$refs.chatbar as HTMLElement
-      const wrap = this.$refs.wrap as HTMLElement
-
-      if (this.$data.text.split('\n').length > 1) {
-        wrap.classList.add('expanded')
-      } else {
-        wrap.classList.remove('expanded')
-      }
-      if (messageBox.scrollHeight < 112) {
-        chatbarGroup.style.height = `${messageBox.scrollHeight + 42}px`
-      } else {
-        chatbarGroup.style.height = '152px'
-      }
-    },
     /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
@@ -209,7 +169,18 @@ export default Vue.extend({
         setCaretPosition(messageBox, caretPosition)
         messageBox.focus()
       }
-      this.autoGrow()
+      const wrap = this.$refs.wrap as HTMLElement
+      // Delete extra character when it exceeds the charlimit
+      if (
+        messageBox.innerHTML &&
+        messageBox.innerHTML.length > this.$data.maxChars + 1
+      ) {
+        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        this.updateText()
+      }
+      if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
+      if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
+      this.value = messageBox.innerHTML
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -254,10 +225,9 @@ export default Vue.extend({
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
-            if (this.value !== '' && !this.hasCommand) {
+            if (this.$data.text !== '' && !this.hasCommand) {
               this.sendMessage()
-            } else if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              break
             }
           } else if (!this.hasCommand) {
             this.autoGrow()
@@ -320,60 +290,27 @@ export default Vue.extend({
               })
             }
           }
-          return
-        case 'Left':
-        case 'ArrowLeft':
-        case 'Right':
-        case 'ArrowRight':
-        case 'End':
-        case 'Shift':
-          return
-        case 'a':
-        case 'A':
-          if (event.ctrlKey) {
-            return
-          }
           break
-        case 'ArrowUp':
-        case 'Up':
-          if (this.value === '') {
-            let bset = false
-            const messages = this.ui.messages
-            for (let i = messages.length - 1; i >= 0 && !bset; i--) {
-              if (messages[i].from === this.$mock.user.address) {
-                for (let j = messages[i].messages.length - 1; j >= 0; j--) {
-                  const lastMessage = messages[i].messages[j]
-                  if (lastMessage.type === 'text') {
-                    this.$store.commit('ui/setEditMessage', {
-                      id: lastMessage.id,
-                      payload: lastMessage.payload,
-                      from: messages[i].id,
-                    })
-                    bset = true
-                    break
-                  }
-                }
-              }
-            }
-          }
-          return
+        default:
+          break
       }
-      // this.$data.lastEdited = Date.now()
+      this.handleInputChange()
     },
     handleInputKeyup(event: KeyboardEvent) {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
-          if (messageBox.textContent && messageBox.textContent.trim() === '') {
-            messageBox.innerHTML = ''
-            this.autoGrow()
-          }
-          break
-      }
       this.$nextTick(() => {
         this.handleInputChange(event.key)
       })
+    },
+    /**
+     * @method updateText
+     * @description Helper function to update the text inside the chatbox and send the cursor to the end.
+     */
+    updateText() {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerHTML = this.value
+      let sel = window.getSelection()
+      sel?.selectAllChildren(messageBox)
+      sel?.collapseToEnd()
     },
     /**
      * @method sendMessage
@@ -382,25 +319,44 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.value) return
-      this.$store.dispatch('ui/sendMessage', {
-        value: this.value,
-        user: this.$mock.user,
-        isOwner: true,
-      })
+      if (!this.recipient) {
+        return
+      }
+
+      if (this.ui.replyChatbarContent.from) {
+        this.$store.dispatch('textile/sendReplyMessage', {
+          to: this.recipient.textilePubkey,
+          text: this.value,
+          replyTo: this.ui.replyChatbarContent.messageID,
+        })
+      } else {
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: this.recipient.textilePubkey,
+          text: this.value,
+        })
+      }
+
       const messageBox = this.$refs.messageuser as HTMLElement
+      // Clear Chatbar
       messageBox.innerHTML = ''
       this.value = ''
-      this.$nextTick(() => {
-        this.autoGrow()
-      })
     },
+    /**
+     * @method handleDrop
+     * @description Allows the drag and drop of files into the chatbar to auto open
+     * the file uploader
+     */
     handleDrop(e: any) {
       e.preventDefault()
       const file = e.dataTransfer.items[0].getAsFile()
       const handleFileExpectEvent = { target: { files: [file] } }
       // @ts-ignore
       this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+    },
+  },
+  watch: {
+    '$store.state.ui.chatbarContent': function() {
+      this.updateText()
     },
   },
 })

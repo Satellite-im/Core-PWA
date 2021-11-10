@@ -3,6 +3,7 @@ import { Store, Commit, Dispatch } from 'vuex'
 import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
 import { FriendsState } from '~/store/friends/types'
+import { PrerequisiteState } from '~/store/prerequisites/types'
 import { TextileState } from '~/store/textile/types'
 
 export interface RootState {
@@ -10,6 +11,7 @@ export interface RootState {
   dataState: DataState
   friends: FriendsState
   textile: TextileState
+  prerequisites: PrerequisiteState
 }
 
 export type RootStore = Store<RootState>

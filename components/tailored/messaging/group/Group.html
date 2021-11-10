@@ -6,13 +6,12 @@
     <div class="group-heading">
       <span v-on:click="showQuickProfile">
         <!-- <TypographyTitle :size="6" :text="$mock.users.filter(u => u.address === group.from)[0].name" /> -->
-        <UiUsername :username="$mock.users.filter(u => u.address === group.from)[0].name"
-          :badge="$mock.users.filter(u => u.address === group.from)[0].badge" />
+        <UiUsername :username="username" :badge="badge" />
       </span>
       <TypographyText :text="$dayjs(group.at).from()" />
     </div>
     <div class="group-messages">
-      <TailoredMessagingMessage v-for="message in group.messages" :group="group" :message="message" :from="$mock.users.filter(u => u.address === group.from)[0].name" :key="message.id" />
+      <TailoredMessagingMessage v-for="message in group.messages" :group="group" :message="message" :from="username" :key="message.id" />
     </div>
   </div>
 </div>

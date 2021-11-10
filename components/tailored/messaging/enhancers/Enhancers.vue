@@ -14,13 +14,23 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: 'emoji',
       search: '',
       clickEvent: () => {},
     }
   },
   computed: {
     ...mapState(['ui']),
+    route: {
+      get() {
+        return this.ui.enhancers.route
+      },
+      set(data: string) {
+        this.$store.commit('ui/toggleEnhancers', {
+          show: true,
+          route: data,
+        })
+      }
+    }
   },
   watch: {
     route() {
@@ -41,7 +51,7 @@ export default Vue.extend({
      * @example
      */
     openEmoji() {
-      if (this.route !== 'emoji') return
+      if (this.route !== 'emotes') return
       this.$nextTick(() => {
         setTimeout(() => {
           // @ts-ignore
@@ -62,19 +72,14 @@ export default Vue.extend({
      */
     addEmoji(emoji: any) {
       if (this.ui.settingReaction.status) {
-        this.$store.dispatch('ui/addReaction', {
+        this.$store.dispatch('textile/sendReactionMessage', {
+          to: this.ui.settingReaction.to,
           emoji,
-          reactor: this.$mock.user.name,
-          groupID: this.ui.settingReaction.groupID,
-          messageID: this.ui.settingReaction.messageID,
-          replyID: this.ui.settingReaction.replyID,
+          reactTo: this.ui.settingReaction.messageID,
         })
         this.toggleEnhancers()
       } else {
-        this.$store.commit(
-          'ui/chatbarContent',
-          this.ui.chatbarContent + emoji
-        )
+        this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
     },
     /**
@@ -84,7 +89,10 @@ export default Vue.extend({
      * @example
      */
     setRoute(route: string) {
-      this.$data.route = route
+      this.$store.commit('ui/toggleEnhancers', {
+        show: true,
+        route,
+      })
     },
     /**
      * @method toggleEnhancers DocsTODO

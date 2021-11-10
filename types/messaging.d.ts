@@ -1,42 +1,37 @@
-export type TextPayload = string
+import { FileMessage, ReplyMessage, TextMessage } from './textile/mailbox'
 
-export type ImagePayload = {
-  type: string
-  url: string
-}
-
-export type Reaction = {
+export type UIReaction = {
   emoji: string
   reactors: string[]
   showReactors: boolean
 }
 
-export type Reply = {
-  id: string
-  at: number
-  to: string
-  from: string
-  type: string
-  payload: TextPayload | ImagePayload
-  reactions: Array<Reaction>
+export interface UIReply extends ReplyMessage {
+  reactions: Array<UIReaction>
 }
 
-export type Message = {
+type ConvertToUIMessage<T> = T & {
+  replies: Array<UIReply>
+  reactions: Array<UIReaction>
+}
+
+export type UIMessage =
+  | ConvertToUIMessage<FileMessage>
+  | ConvertToUIMessage<TextMessage>
+
+export type Divider = {
   id: string
   at: number
-  type: string
-  payload: TextPayload | ImagePayload
-  replies: Array<Reply>
-  reactions: Array<Reaction>
+  type: 'divider'
 }
 
 export type Group = {
   id: string
   at: number
-  type: 'group' | 'divider'
+  type: 'group'
   from: string
   to: string
-  messages: Array<Message> | null
+  messages: Array<UIMessage> | null
 }
 
-export type MessageGroup = Array<Group>
+export type MessageGroup = Array<Group | Divider>

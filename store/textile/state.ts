@@ -2,7 +2,8 @@ import { TextileState } from './types'
 
 const InitalTextileState = (): TextileState => ({
   initialized: false,
-  mailboxId: '',
+  conversations: {},
+  conversationLoading: false,
 })
 
 export default InitalTextileState
