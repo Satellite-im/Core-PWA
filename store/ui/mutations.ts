@@ -57,6 +57,9 @@ export default {
     state.isScrollOver = status
     if (!status) state.unreadMessage = 0
   },
+  setIsReacted(state: UIState, status: boolean) {
+    state.isReacted = status
+  },
   /**
    * @method sendMessage DocsTODO
    * @description
@@ -238,6 +241,7 @@ export default {
               showReactors: false,
             })
           }
+          state.isReacted = true      
         }
       }
     }
