@@ -13,14 +13,26 @@
   </div>
   <div
     :data-tooltip="$t('global.glyphs')"
-    v-on:click="toggleEnhancers"
+    v-on:click="toggleEnhancers('glyphs')"
     class="
       control-tooltip-wrap
       has-tooltip has-tooltip-top has-tooltip-primary
     "
   >
-    <grid-icon size="1x"
-      :class="`control-icon ${ui.enhancers.show ? 'primary' : ''}`"
+    <box-select-icon size="1x"
+      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'glyphs' ? 'primary' : ''}`"
+    />
+  </div>
+  <div
+    :data-tooltip="$t('global.emotes')"
+    v-on:click="toggleEnhancers('emotes')"
+    class="
+      control-tooltip-wrap
+      has-tooltip has-tooltip-top has-tooltip-primary
+    "
+  >
+    <smile-icon size="1x"
+      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
     />
   </div>
   <div
