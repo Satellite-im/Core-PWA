@@ -40,8 +40,8 @@
   .file-upload-wrap {
     margin: 0 @light-spacing;
     order: 1;
-    padding-top: 6px;
     align-self: flex-start;
+    font-size: @icon-size;
   }
 
   .chatbar-wrap {
@@ -55,6 +55,9 @@
     align-self: stretch;
     border: 1px solid transparent;
     transition: border-radius 0.2s ease;
+    width: calc(100% - (@normal-spacing * 2));
+    display: inline-flex;
+    align-content: center;
 
     &.expanded {
       border-radius: 5px;
@@ -94,7 +97,6 @@
       outline: none;
       resize: none;
       font-size: @text-size;
-      padding-top: 6px;
       word-break: break-all;
 
       &[placeholder]:empty:before {
@@ -104,7 +106,6 @@
 
     #chatbar-controls {
       order: 3;
-      padding-top: 6px;
       align-self: flex-start;
     }
     
