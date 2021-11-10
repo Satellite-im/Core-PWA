@@ -21,6 +21,7 @@ declare module 'vue/types/vue' {
     sendMessage: Function
     handleInputChange: Function
     value: string
+    updateText: Function
   }
 }
 
@@ -128,9 +129,7 @@ export default Vue.extend({
         messageBox.innerHTML.length > this.$data.maxChars + 1
       ) {
         messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
-        let sel = window.getSelection()
-        sel?.selectAllChildren(messageBox)
-        sel?.collapseToEnd()
+        this.updateText()
       }
       if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
       if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
@@ -169,6 +168,17 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.handleInputChange()
       })
+    },
+    /**
+     * @method updateText
+     * @description Helper function to update the text inside the chatbox and send the cursor to the end.
+     */
+    updateText() {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerHTML = this.value
+      let sel = window.getSelection()
+      sel?.selectAllChildren(messageBox)
+      sel?.collapseToEnd()
     },
     /**
      * @method sendMessage
@@ -210,6 +220,11 @@ export default Vue.extend({
       const handleFileExpectEvent = { target: { files: [file] } }
       // @ts-ignore
       this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+    },
+  },
+  watch: {
+    '$store.state.ui.chatbarContent': function() {
+      this.updateText()
     },
   },
 })
