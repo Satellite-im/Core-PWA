@@ -121,14 +121,19 @@ toggleEnhancers(e: MouseEvent) {
         })
       }
     },
-    calculatePositionOnScreen(x: number): number {
+     /**
+     * @method calculatePositionOnScreen
+     * @description This returns a "x cordinate" to have the Enhancer window to load on the right or left screen
+     * @example calculatePositionOnScreen(ui.enhancers.position[0])
+     */
+    calculatePositionOnScreen(locationX: number): number {
       if (
-        this.convertRem(this.ui.enhancers.defaultWidth) + x >
+        this.convertRem(this.ui.enhancers.defaultWidth) + locationX >
         window.innerWidth
       ) {
-        return x - this.convertRem(this.ui.enhancers.defaultWidth) * 2
+        return locationX - this.convertRem(this.ui.enhancers.defaultWidth) * 2
       }
-      return x - this.convertRem(this.ui.enhancers.defaultWidth)
+      return locationX - this.convertRem(this.ui.enhancers.defaultWidth)
     },
     /**
      * @method convertRem
