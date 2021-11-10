@@ -25,6 +25,7 @@ const InitalUIState = (): UIState => ({
   enhancers: {
     show: false,
     floating: false,
+    route: 'emotes',
   },
   messages: [],
   unreadMessage: 0,

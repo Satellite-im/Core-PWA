@@ -14,13 +14,23 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: 'emoji',
       search: '',
       clickEvent: () => {},
     }
   },
   computed: {
     ...mapState(['ui']),
+    route: {
+      get() {
+        return this.ui.enhancers.route
+      },
+      set(data: string) {
+        this.$store.commit('ui/toggleEnhancers', {
+          show: true,
+          route: data,
+        })
+      }
+    }
   },
   watch: {
     route() {
@@ -41,7 +51,7 @@ export default Vue.extend({
      * @example
      */
     openEmoji() {
-      if (this.route !== 'emoji') return
+      if (this.route !== 'emotes') return
       this.$nextTick(() => {
         setTimeout(() => {
           // @ts-ignore
@@ -84,7 +94,10 @@ export default Vue.extend({
      * @example
      */
     setRoute(route: string) {
-      this.$data.route = route
+      this.$store.commit('ui/toggleEnhancers', {
+        show: true,
+        route,
+      })
     },
     /**
      * @method toggleEnhancers DocsTODO

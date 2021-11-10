@@ -6,7 +6,8 @@ import { mapState } from 'vuex'
 
 import {
   ArrowRightIcon,
-  GridIcon,
+  SmileIcon,
+  BoxSelectIcon,
   BanknoteIcon,
 } from 'satellite-lucide-icons'
 
@@ -18,7 +19,8 @@ export default Vue.extend({
   },
   components: {
     BanknoteIcon,
-    GridIcon,
+    SmileIcon,
+    BoxSelectIcon,
     ArrowRightIcon,
   },
   computed: {
@@ -30,9 +32,10 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers() {
+    toggleEnhancers(route: string) {
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
+        route,
       })
     },
     toggleMiniWallet() {

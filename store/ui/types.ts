@@ -28,6 +28,7 @@ export interface UIState {
   enhancers: {
     show: Boolean
     floating: Boolean
+    route: String
   }
   messages: any[]
   unreadMessage: number
