@@ -142,12 +142,16 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
+      const wrap = this.$refs.wrap as HTMLElement
+      // Delete extra character when it exceeds the charlimit
       if (messageBox.innerHTML && messageBox.innerHTML.length > this.$data.maxChars + 1) {
         messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
         let sel = window.getSelection()
         sel?.selectAllChildren(messageBox)
         sel?.collapseToEnd()
       }
+      if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
+      if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
       this.value = messageBox.innerHTML
       this.autoGrow()
     },
@@ -179,7 +183,7 @@ export default Vue.extend({
         default:
           break
       }
-
+      this.handleInputChange()
       this.autoGrow()
     },
     handleInputKeyup(event: KeyboardEvent) {

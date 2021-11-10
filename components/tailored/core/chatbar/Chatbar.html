@@ -6,6 +6,7 @@
     <div
       :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"
       v-if="hasCommand"
+      ref="chatbar"
     >
       <terminal-icon size="1x" />
     </div>
