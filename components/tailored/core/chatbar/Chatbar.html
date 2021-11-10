@@ -23,7 +23,6 @@
       @drop="handleDrop"></div>
     <div
       :data-tooltip="$t('wallet.send_money')"
-      v-on:click="toggleEnhancers"
       class="
         control-tooltip-wrap
         has-tooltip has-tooltip-top has-tooltip-primary
@@ -34,6 +33,7 @@
       />
     </div>
     <div
+      id='chat-enhancer-toggle'
       :data-tooltip="$t('global.glyphs')"
       v-on:click="toggleEnhancers"
       class="
