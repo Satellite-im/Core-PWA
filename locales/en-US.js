@@ -276,6 +276,12 @@ export default {
       pin_too_short: 'Pin must be at least 5 characters.',
       invalid_pin: 'Pin does not match',
     },
+    friends: {
+      request_already_sent: 'You have already sent a request to this user',
+      request_already_accepted: 'This user is already in your friends',
+      friend_info_not_found: 'Seems that this user is not registered',
+      textile_not_initialized: 'Your account is not ready. Try later',
+    },
   },
   search: {
     input: {

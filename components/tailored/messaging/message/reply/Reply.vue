@@ -6,6 +6,7 @@ import VueMarkdown from 'vue-markdown'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { Message, Group } from '~/types/messaging'
+import { getUsernameFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   components: {
@@ -27,6 +28,10 @@ export default Vue.extend({
       type: Object as PropType<Group>,
       default: () => {},
     },
+    from: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return { showReplies: false, replyHover: '' }
@@ -40,33 +45,33 @@ export default Vue.extend({
       const replyLength = Object.keys(this.$props.message.replies).length
       let baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
 
-      const firstName = this.$mock.users.filter(
-        (u: any) => u.address === this.$props.message.replies[0].from
-      )[0].name
-      const secondName =
-        replyLength > 1
-          ? this.$mock.users.filter(
-              (u: any) => u.address === this.$props.message.replies[1].from
-            )[0].name
-          : ''
+      const getNamesList = (
+        replies: any[],
+        limit = 2,
+        initialText = '',
+        separator = ' and '
+      ) =>
+        replies
+          .slice(0, limit)
+          .reduce(
+            (text, reply, i) =>
+              text +
+              (i > 0 && i < limit ? separator : '') +
+              getUsernameFromState(reply.from, this.$store.state),
+            initialText
+          )
 
-      if (replyLength === 1) {
-        baseReply += firstName
-      } else if (replyLength === 2) {
-        baseReply += firstName + ' and ' + secondName
-      } else {
-        baseReply +=
-          firstName +
-          ', ' +
-          secondName +
-          ', and ' +
-          (replyLength - 2) +
-          ' more ...'
-      }
-      return baseReply
+      const names = getNamesList(this.$props.message.replies, 2, baseReply)
+
+      return replyLength > 2
+        ? `${names} and ${replyLength - 2} more ...`
+        : names
     },
   },
   methods: {
+    getUsernameFromReply(reply: any) {
+      return getUsernameFromState(reply.from, this.$store.state)
+    },
     /**
      * @method mouseOver DocsTODO
      * @description
@@ -83,11 +88,15 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent, replyID: string) {
+      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
-        replyID,
+        messageID: replyID,
+        to:
+          this.$props.message.to === myTextilePublicKey
+            ? this.$props.message.from
+            : this.$props.message.to,
       })
       this.$store.commit('ui/toggleEnhancers', { 
         show: true,

@@ -108,7 +108,8 @@ export default Vue.extend({
      * @example
      */
     setReplyChatbarContent() {
-      const { id, type, payload } = this.$props.message
+      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
+      const { id, type, payload, to, from } = this.$props.message
       let finalPayload = payload
       if (['image', 'video', 'audio', 'file'].includes(type)) {
         finalPayload = `*${this.$t('conversation.multimedia')}*`
@@ -118,6 +119,8 @@ export default Vue.extend({
         id,
         payload: finalPayload,
         from: this.$props.from,
+        messageID: this.$props.message.id,
+        to: to === myTextilePublicKey ? from : to,
       })
     },
     /**
@@ -125,11 +128,16 @@ export default Vue.extend({
      * @description
      * @example
      */
-     emojiReaction(e: MouseEvent) {
+    emojiReaction(e: MouseEvent) {
+      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
         messageID: this.$props.message.id,
+        to:
+          this.$props.message.to === myTextilePublicKey
+            ? this.$props.message.from
+            : this.$props.message.to,
       })
       let xVal = this.$el.getBoundingClientRect().x
       let yVal = this.$el.getBoundingClientRect().y

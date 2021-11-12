@@ -11,6 +11,8 @@ export type User = {
   profilePicture?: string
   badge?: BadgeType
   userAccount?: any
+  mailboxId?: string
+  textilePubkey?: string
 }
 
 export interface UserRegistrationData {

@@ -7,7 +7,7 @@
   bottom: ui.enhancers.position[1] + 'px' }"
   >
   <div class="navbar">
-    <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emoji','gif']">
+    <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emotes','gif']">
       <InteractablesButton
         type="dark"
         size="small"
@@ -29,7 +29,7 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <emoji-picker @emoji="addEmoji" :search="search" v-if="route === 'emoji'">
+    <emoji-picker @emoji="addEmoji" :search="search" v-if="ui.enhancers.route === 'emotes'">
       <div ref="emojiInvoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent }, display, emojis }" v-bind:events.click="clickEvent" @click.stop="clickEvent">
       </div>
       <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
@@ -53,6 +53,6 @@
         </div>
       </div>
     </emoji-picker>
-    <TailoredMessagingEnhancersGlyphs v-if="route === 'glyphs'"></TailoredMessagingEnhancersGlyphs>
+    <TailoredMessagingEnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'"></TailoredMessagingEnhancersGlyphs>
   </div>
 </div>

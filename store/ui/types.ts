@@ -13,6 +13,7 @@ export interface EnhancerInfo {
   defaultWidth?: String
   defaultHeight?: String
   containerWidth?: Number
+  route: String
 }
 
 export interface UIState {

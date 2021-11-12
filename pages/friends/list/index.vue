@@ -46,12 +46,12 @@ export default Vue.extend({
      * @example
      */
     setRoute(route: Route) {
-      this.$router.replace({path: this.$route.path, query: {tab: route}})
+      this.$router.replace({ path: this.$route.path, query: { tab: route } })
     },
     /**
      * @method initRoute DocsTODO
      * @description
-     * @param 
+     * @param
      * @example
      */
     initRoute() {

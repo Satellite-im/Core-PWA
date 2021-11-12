@@ -33,6 +33,22 @@ const mutations = {
       state: 'online',
     }
   },
+  updateMailboxId(state: AccountsState, mailboxId: string) {
+    if (state.details) {
+      state.details = {
+        ...state.details,
+        mailboxId,
+      }
+    }
+  },
+  updateTextilePubkey(state: AccountsState, textilePubkey: string) {
+    if (state.details) {
+      state.details = {
+        ...state.details,
+        textilePubkey,
+      }
+    }
+  },
   setRegistrationStatus(
     state: AccountsState,
     registrationStates: RegistrationStatus

@@ -41,7 +41,8 @@ export default {
       position: options.position ? options.position : state.enhancers.position,
       defaultWidth: options.defaultWidth ? options.defaultWidth : state.enhancers.defaultWidth,
       defaultHeight: options.defaultHeight ? options.defaultHeight : state.enhancers.defaultHeight,
-      containerWidth: options.containerWidth ? options.containerWidth : state.enhancers.containerWidth
+      containerWidth: options.containerWidth ? options.containerWidth : state.enhancers.containerWidth,
+      route: options.route || 'emotes'
     }
   },
   toggleSettings(state: UIState, show: boolean) {

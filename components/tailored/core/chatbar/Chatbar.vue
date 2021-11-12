@@ -1,37 +1,27 @@
 <template src="./Chatbar.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-import {
-  TerminalIcon,
-  GridIcon,
-  ArrowRightIcon,
-  BanknoteIcon,
-} from 'satellite-lucide-icons'
+import { TerminalIcon } from 'satellite-lucide-icons'
 
 import FileUpload from '../fileupload/FileUpload.vue'
 import {
-  commandPrefix,
-  //  containsCommand,
+  // commandPrefix,
+  // containsCommand,
   parseCommand,
   commands,
   isArgsValid,
 } from '~/libraries/ui/Commands'
-import {
-  htmlToMarkdown,
-  markDownToHtml,
-  getCaretPosition,
-  setCaretPosition,
-} from '~/libraries/ui/Chatbar'
+import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    autoGrow: Function
     sendMessage: Function
     handleInputChange: Function
     value: string
+    updateText: Function
   }
 }
 
@@ -39,17 +29,18 @@ export default Vue.extend({
   components: {
     FileUpload,
     TerminalIcon,
-    BanknoteIcon,
-    GridIcon,
-    ArrowRightIcon,
   },
   data() {
     return {
       text: '',
-      maxChars: 256,
       showEmojiPicker: false,
-      // lastEdited: 0,
+      maxChars: 256,
     }
+  },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+    },
   },
   computed: {
     ...mapState(['ui']),
@@ -120,9 +111,6 @@ export default Vue.extend({
         return ''
       }
     },
-    // editStatus() {
-    //   return Date.now() - this.$data.lastEdited <= 1000
-    // },
   },
   methods: {
     /**
@@ -171,47 +159,18 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
-      if (messageBox.textContent) {
-        const markDown = htmlToMarkdown(messageBox.innerHTML)
-        this.value = markDown
-        let caretPosition = getCaretPosition(messageBox)
-        let offset = messageBox.textContent.trim().length
-        let html = markDownToHtml(markDown)
-
-        const parsedCommand = parseCommand(this.value)
-        const currentCommand = commands.find(
-          (c) => c.name === parsedCommand.name.toLowerCase()
-        )
-        if (
-          currentCommand &&
-          currentCommand.args.length > 0 &&
-          parsedCommand.args.length > 0 &&
-          currentCommand.args[0].name === parsedCommand.args[0]
-        ) {
-          html = html.replace(
-            parsedCommand.args[0] as string,
-            "<span class='chatbar-tag'>" + parsedCommand.args[0] + '</span>'
-          )
-        }
-
-        messageBox.innerHTML = html
-        if (offset >= messageBox.textContent.trim().length + 2) {
-          offset -= messageBox.textContent.trim().length
-          caretPosition -= offset
-          if (messageBox.innerHTML.includes('blockquote')) {
-            caretPosition += 1
-          }
-        } else if (
-          offset < messageBox.textContent.trim().length &&
-          caretPosition === offset
-        ) {
-          offset = messageBox.textContent.trim().length - offset
-          caretPosition += offset
-        }
-        setCaretPosition(messageBox, caretPosition)
-        messageBox.focus()
+      const wrap = this.$refs.wrap as HTMLElement
+      // Delete extra character when it exceeds the charlimit
+      if (
+        messageBox.innerHTML &&
+        messageBox.innerHTML.length > this.$data.maxChars + 1
+      ) {
+        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        this.updateText()
       }
-      this.autoGrow()
+      if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
+      if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
+      this.value = messageBox.innerHTML
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -223,133 +182,40 @@ export default Vue.extend({
      * @example
      */
     handleInputKeydown(event: KeyboardEvent) {
-      const messageBox = this.$refs.messageuser as HTMLElement
       switch (event.key) {
-        case 'Backspace':
-          this.$nextTick(() => {
-            if (messageBox.textContent) {
-              const parsedCommand = parseCommand(messageBox.textContent)
-              const currentCommand = commands.find(
-                (c) => c.name === parsedCommand.name.toLowerCase()
-              )
-              if (
-                currentCommand &&
-                currentCommand.args.length > 0 &&
-                parsedCommand.args.length === 1 &&
-                currentCommand.args[0].name === parsedCommand.args[0]
-              ) {
-                const text = commandPrefix + currentCommand.name
-                messageBox.innerHTML = text
-                setCaretPosition(messageBox, text.length)
-              }
-              this.value = htmlToMarkdown(messageBox.innerHTML)
-              this.autoGrow()
-            }
-          })
-          return
-        case 'Delete':
-          this.autoGrow()
-          return
         case 'Enter':
           if (!event.shiftKey) {
             event.preventDefault()
-            if (this.value !== '' && !this.hasCommand) {
+            if (this.$data.text !== '' && !this.hasCommand) {
               this.sendMessage()
-            } else if (this.hasCommand && !this.isValidCommand) {
+              break
+            }
+            if (this.hasCommand && !this.isValidCommand) {
               console.log('dispatch command')
+              break
             }
-          } else if (!this.hasCommand) {
-            this.autoGrow()
-          } else {
-            event.preventDefault()
-          }
-          return
-        case 'Spacebar':
-        case ' ':
-          {
-            event.preventDefault()
-            const parsedCommand = parseCommand(this.value)
-            const currentCommand = commands.find(
-              (c) => c.name === parsedCommand.name.toLowerCase()
-            )
-            if (
-              currentCommand &&
-              parsedCommand.args.length === 0 &&
-              currentCommand.args.length > 0 &&
-              messageBox.textContent
-            ) {
-              const tag = currentCommand.args[0]
-              messageBox.innerHTML =
-                '<p>' +
-                messageBox.textContent.trim() +
-                "<span>&nbsp;</span><span class='chatbar-tag'>" +
-                tag.name +
-                '</span><span>&nbsp;</span></p>'
-              this.value = commandPrefix + currentCommand.name + ' ' + tag.name
-              const caretPosition = messageBox.textContent.length
-              setCaretPosition(messageBox, caretPosition)
-            } else {
-              const caretPosition = getCaretPosition(messageBox)
-              this.$nextTick(() => {
-                setCaretPosition(messageBox, caretPosition + 1)
-                messageBox.focus()
-              })
-            }
-          }
-          return
-        case 'Left':
-        case 'ArrowLeft':
-        case 'Right':
-        case 'ArrowRight':
-        case 'End':
-        case 'Shift':
-          return
-        case 'a':
-        case 'A':
-          if (event.ctrlKey) {
-            return
           }
           break
-        case 'ArrowUp':
-        case 'Up':
-          if (this.value === '') {
-            let bset = false
-            const messages = this.ui.messages
-            for (let i = messages.length - 1; i >= 0 && !bset; i--) {
-              if (messages[i].from === this.$mock.user.address) {
-                for (let j = messages[i].messages.length - 1; j >= 0; j--) {
-                  const lastMessage = messages[i].messages[j]
-                  if (lastMessage.type === 'text') {
-                    this.$store.commit('ui/setEditMessage', {
-                      id: lastMessage.id,
-                      payload: lastMessage.payload,
-                      from: messages[i].id,
-                    })
-                    bset = true
-                    break
-                  }
-                }
-              }
-            }
-          }
-          return
+        default:
+          break
       }
-      // this.$data.lastEdited = Date.now()
+      this.handleInputChange()
     },
     handleInputKeyup(event: KeyboardEvent) {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
-          if (messageBox.textContent && messageBox.textContent.trim() === '') {
-            messageBox.innerHTML = ''
-            this.autoGrow()
-          }
-          break
-      }
       this.$nextTick(() => {
         this.handleInputChange()
       })
+    },
+    /**
+     * @method updateText
+     * @description Helper function to update the text inside the chatbox and send the cursor to the end.
+     */
+    updateText() {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerHTML = this.value
+      let sel = window.getSelection()
+      sel?.selectAllChildren(messageBox)
+      sel?.collapseToEnd()
     },
     /**
      * @method sendMessage
@@ -358,25 +224,44 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.value) return
-      this.$store.dispatch('ui/sendMessage', {
-        value: this.value,
-        user: this.$mock.user,
-        isOwner: true,
-      })
+      if (!this.recipient) {
+        return
+      }
+
+      if (this.ui.replyChatbarContent.from) {
+        this.$store.dispatch('textile/sendReplyMessage', {
+          to: this.recipient.textilePubkey,
+          text: this.value,
+          replyTo: this.ui.replyChatbarContent.messageID,
+        })
+      } else {
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: this.recipient.textilePubkey,
+          text: this.value,
+        })
+      }
+
       const messageBox = this.$refs.messageuser as HTMLElement
+      // Clear Chatbar
       messageBox.innerHTML = ''
       this.value = ''
-      this.$nextTick(() => {
-        this.autoGrow()
-      })
     },
+    /**
+     * @method handleDrop
+     * @description Allows the drag and drop of files into the chatbar to auto open
+     * the file uploader
+     */
     handleDrop(e: any) {
       e.preventDefault()
       const file = e.dataTransfer.items[0].getAsFile()
       const handleFileExpectEvent = { target: { files: [file] } }
       // @ts-ignore
       this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+    },
+  },
+  watch: {
+    '$store.state.ui.chatbarContent': function() {
+      this.updateText()
     },
   },
 })
