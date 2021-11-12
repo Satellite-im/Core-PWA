@@ -2,6 +2,8 @@ import { UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
+// @ts-ignore
+import Mousetrap from 'mousetrap'
 
 const $Sounds = new SoundManager()
 
@@ -25,4 +27,42 @@ export default {
     commit('addReaction', reaction)
     commit('updateRecentReactions', reaction.emoji)
   },
+  /**
+   * @method openSettings
+   * @description Opens setting page
+   * @example Mousetrap.bind('ctrl+s', dispatch('audio/toggleMute') )
+   */
+  openSettings({ commit, state }: any) {
+    commit('toggleSettings', !state.showSettings)
+  },
+  /**
+   * @method activateKeybinds
+   * @description Activates all keybindings with Mousetrap
+   * @example mounted (){ activateKeybinds() }
+   */
+  async activateKeybinds({ dispatch, rootState}: ActionsArguments<any>) {
+    // @ts-ignore
+    const {toggleMute, toggleDeafen, openSettings} = rootState.settings.keybinds
+    Mousetrap.reset()
+    Mousetrap.bind(
+      toggleMute,
+      () => dispatch('audio/toggleMute', null ,{root: true})
+    )
+    Mousetrap.bind(
+      toggleDeafen,
+      () => dispatch('audio/toggleDeafen', null ,{root: true})
+    )
+    Mousetrap.bind(
+      openSettings,
+      () => dispatch('openSettings')
+    )
+  },
+  /**
+   * @method clearKeybinds
+   * @description Unbinds all current keybindings with Mousetrap
+   * @example destroyed (){ clearKeybinds() }
+   */
+  async clearKeybinds({ dispatch }: ActionsArguments<any>) {
+    Mousetrap.reset()
+  }
 }
