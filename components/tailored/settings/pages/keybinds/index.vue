@@ -31,7 +31,7 @@ export default Vue.extend({
      * @example
      */
     editKeybind(keybind: String) {
-      this.$store.dispatch('ui/activateKeybinds')
+      this.$store.dispatch('ui/clearKeybinds')
       window.addEventListener('keydown', this.recordKeybind)
       this.$data.editingKeybind.name = keybind
       this.$data.editingKeybind.status = true
