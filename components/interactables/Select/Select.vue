@@ -62,6 +62,7 @@ export default Vue.extend({
     return {
       selectedValue: this.placeholder.length ? null : this.selected,
       open: false,
+      up: false,
     }
   },
   watch: {
@@ -90,6 +91,18 @@ export default Vue.extend({
       this.selectedValue = option.value
       this.$emit('change', this.selectedValue)
       this.open = false
+    },
+    /**
+     * @method toggleOpen DocsTODO
+     * @description
+     * @param
+     * @example
+     */
+    toggleOpen() {
+      let bodyRect = document.body.getBoundingClientRect()
+      let elementRect = this.$el.getBoundingClientRect()
+      this.up = (elementRect.top > bodyRect.bottom / 2) ? true : false
+      this.open = !this.open
     },
     /**
      * @method getSelectLabel DocsTODO
