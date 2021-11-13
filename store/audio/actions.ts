@@ -1,6 +1,5 @@
 import { AudioState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
-// import { AudioArguments } from '~/types/store/store'
 
 const $Sounds = new SoundManager()
 

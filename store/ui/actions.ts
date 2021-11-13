@@ -40,29 +40,25 @@ export default {
    * @description Activates all keybindings with Mousetrap
    * @example mounted (){ activateKeybinds() }
    */
-  async activateKeybinds({ dispatch, rootState}: ActionsArguments<any>) {
-    // @ts-ignore
-    const {toggleMute, toggleDeafen, openSettings} = rootState.settings.keybinds
+  async activateKeybinds({ dispatch, rootState }: ActionsArguments<UIState>) {
+    const { toggleMute, toggleDeafen, openSettings } =
+      // @ts-ignore
+      rootState.settings.keybinds
     Mousetrap.reset()
-    Mousetrap.bind(
-      toggleMute,
-      () => dispatch('audio/toggleMute', null ,{root: true})
+    Mousetrap.bind(toggleMute, () =>
+      dispatch('audio/toggleMute', null, { root: true })
     )
-    Mousetrap.bind(
-      toggleDeafen,
-      () => dispatch('audio/toggleDeafen', null ,{root: true})
+    Mousetrap.bind(toggleDeafen, () =>
+      dispatch('audio/toggleDeafen', null, { root: true })
     )
-    Mousetrap.bind(
-      openSettings,
-      () => dispatch('openSettings')
-    )
+    Mousetrap.bind(openSettings, () => dispatch('openSettings'))
   },
   /**
    * @method clearKeybinds
    * @description Unbinds all current keybindings with Mousetrap
    * @example destroyed (){ clearKeybinds() }
    */
-  async clearKeybinds({ dispatch }: ActionsArguments<any>) {
+  async clearKeybinds({ dispatch }: ActionsArguments<UIState>) {
     Mousetrap.reset()
-  }
+  },
 }
