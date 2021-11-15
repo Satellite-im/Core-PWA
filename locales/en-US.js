@@ -92,7 +92,7 @@ export default {
       notifications: {
         title: 'Notifications Settings',
         notes:
-          'Notifications work different on every platform. On Web, you need to request noticications. On Desktop and Android notications are enabled by default.',
+          'Notifications work different on every platform. On Web, you need to request notifications. On Desktop and Android notications are enabled by default.',
         enabled: 'Enable or Disable Notifications',
         labels: {
           current_platform: 'Your current platform is:',
