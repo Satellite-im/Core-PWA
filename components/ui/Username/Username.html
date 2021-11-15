@@ -1,8 +1,16 @@
 <div class="username-container">
-    <div class="icon-container" v-if="badge && this.badge.length">
-        <UiBadgedIcon :icon="badge" :size="10" :badge-count="0" color="#55efc4"/>
+    <div class="profile-container">
+        <UiSatelliteCircle 
+        type="random"
+        :size="10" 
+        :name="username"
+        style="background-color: darkorange;"
+        />
     </div>
     <span class="username">
         <TypographyTitle :size="6" :text="username" />
     </span>
+    <div class="icon-container" v-if="badge && this.badge.length">
+        <UiBadgedIcon :icon="badge" :size="10" :badge-count="0" color="#55efc4"/>
+    </div>
 </div>
