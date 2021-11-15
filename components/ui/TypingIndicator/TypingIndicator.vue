@@ -1,15 +1,27 @@
 <template src="./TypingIndicator.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType }  from 'vue'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   props: {
-    userName: {
-      type: String,
-      default: '',
+    users: {
+      type: Array as PropType<Partial<User>>,
+      default: () => [{
+        name: '',
+        status: '',
+      }],
       required: false,
     },
+  },
+  methods: {
+    checkUsersTyping () {
+      console.log('Checking', this.users)
+    },
+    mounted() {
+       this.checkUsersTyping()
+    }
   },
 })
 </script>

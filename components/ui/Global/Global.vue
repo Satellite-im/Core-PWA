@@ -79,7 +79,7 @@ export default Vue.extend({
     },
     /**
      * @method toggleError
-     * @description
+     * @description Commits error modal to store, toggles open and close of modal
      * @example
      */
     toggleError() {

@@ -35,6 +35,13 @@ export default Vue.extend({
       required: false,
     },
   },
+    /**
+     * @methods confirm, close, timeout
+     * @description Component that takes an error message to display including source and extra details.
+     * confirm and close close the modal, confirm records acceptance of the error
+     * setTimeout prop is a bool that if true will auto close the modal after 5 seconds
+     * @example
+     */
   methods: {
     confirm () {
       this.error = false
