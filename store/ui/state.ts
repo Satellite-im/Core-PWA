@@ -31,6 +31,7 @@ const InitalUIState = (): UIState => ({
   unreadMessage: 0,
   isScrollOver: false,
   isTyping: false,
+  isReacted: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
