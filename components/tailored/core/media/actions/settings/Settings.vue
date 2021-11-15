@@ -32,7 +32,7 @@ export default Vue.extend({
     return {
       Bitrates,
       SampleSizes,
-      menuOpen: true,
+      menuOpen: false,
       audioInputs: [],
       audioOutputs: [],
       userHasGivenAudioAccess: false,
