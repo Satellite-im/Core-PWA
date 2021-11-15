@@ -87,7 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
-      asidebar: true,
+      asidebar: !this.$device.isMobile,
     }
   },
   computed: {
