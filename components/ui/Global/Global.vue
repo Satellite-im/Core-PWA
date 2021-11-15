@@ -25,7 +25,7 @@
         v-if="ui.modals.error"
         v-click-outside="toggleError"
         :close-modal="toggleError"
-        :setCloseTimeout=1000
+        :setCloseTimeout=5000
       />
 
     </UiModal>
