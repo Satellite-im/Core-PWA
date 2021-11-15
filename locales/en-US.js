@@ -99,7 +99,7 @@ export default {
         },
         web: {
           granted:
-            'In the web version of Satellite, you need to disable notifications inyour browser for this site.',
+            'In the web version of Satellite, you need to disable notifications in your browser for this site.',
           denied:
             "We cannot re-prompt you for notification permission in the web version of Satellite. You need to set notifications for this site to 'ask' or 'allow'",
         },
