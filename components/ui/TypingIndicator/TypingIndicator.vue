@@ -5,24 +5,36 @@ import Vue, { PropType }  from 'vue'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
+  name: 'Typing Indicator',
   props: {
     users: {
-      type: Array as PropType<Partial<User>>,
-      default: () => [{
-        name: '',
-        status: '',
-      }],
+      type: Array,
+      default: () => [
+],
       required: false,
     },
   },
+    /**
+     * @methods checkUsersTyping
+     * @description Checks the length of the users names array being fed to component
+     * returns a numeric value that the template checks in order to display the correct ui to the user
+     * @example <div id="text-container" v-if="checkUsersTyping() === 1">
+     *          </div>
+     */
   methods: {
-    checkUsersTyping () {
-      console.log('Checking', this.users)
-    },
-    mounted() {
-       this.checkUsersTyping()
+    checkUsersTyping() {
+      if(this.users.length <= 3 && this.users.length != 0) {
+        return 1
+      } else if (this.users.length > 3){
+        return 0
+      } else {
+        return 2
+      }
     }
   },
+  mounted() {
+    this.checkUsersTyping();
+  }
 })
 </script>
 

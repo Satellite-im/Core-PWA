@@ -51,11 +51,11 @@ export default Vue.extend({
       this.closeModal()
     },
     timeout () {
-      if(this.setTimeout) {
+      if(this.setTimeout) 
         setTimeout(
           this.close
           , 5000)
-      }
+      
     }
   },
   mounted () {
