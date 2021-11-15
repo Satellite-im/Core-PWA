@@ -18,7 +18,7 @@ cp .env.example .env
 
 Now simply fill in the required information in the `.env` file.
 
-To load your environemnt variables you need to prefix all yarn commands with `npx dotenv`.
+To load your environment variables you need to prefix all yarn commands with `npx dotenv`.
 
 ## Install Submodules
 
