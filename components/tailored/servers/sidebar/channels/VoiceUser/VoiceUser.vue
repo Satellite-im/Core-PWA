@@ -33,6 +33,5 @@ export default {
 .voice-user-name {
   padding-left: 5px;
   font-size: 11pt;
-  width: 100%;
 }
 </style>
