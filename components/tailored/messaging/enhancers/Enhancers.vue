@@ -99,9 +99,16 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers() {
+    toggleEnhancers(event: Event) {
       this.clickEvent()
+      /* Prevent toggle twice when toggle enhancer button is clicked (for mobile case ) */
+      const chatToggleEnhancer = document.getElementById('chat-enhancer-toggle')
       // @ts-ignore
+      if (!chatToggleEnhancer?.contains(event.target)) {
+        this.$store.commit('ui/toggleEnhancers', {
+          show: !this.ui.enhancers.show,
+        })
+      }
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
       })
