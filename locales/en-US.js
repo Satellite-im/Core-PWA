@@ -193,7 +193,7 @@ export default {
       },
       personalize: {
         title: 'Personalize Satellite',
-        subtitle: 'Make it your own and chose cusotm colors & themes.',
+        subtitle: 'Make it your own and choose custom colors & themes.',
         theme: 'Color Theme',
         language: 'Language',
       },
