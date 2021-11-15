@@ -1,6 +1,6 @@
 <template>
   <div id="bottom-bar-container">
-    <UiTypingIndicator v-if="ui.isTyping" :user-name="ui.isTyping"/>
+    <UiTypingIndicator v-if="ui.isTyping" :user-name="ui.isTyping.name"/>
     <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
       >{{ `${text.length}/${maxChars}` }}</span
     >
