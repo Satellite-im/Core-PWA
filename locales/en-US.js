@@ -309,7 +309,7 @@ export default {
       create: 'Registration',
       sign_in: 'Sign in',
       photo_text:
-        'Customize how the world sees you, chose something memerable.',
+        'Customize how the world sees you, choose something memorable.',
       username: 'Username',
       username_placeholder: 'Neil Spaceman...',
       status: 'Status',
