@@ -34,6 +34,7 @@ export default class SoundManager {
         loop: Config.sounds.doesLoop.includes(key),
         volume,
         html5: true,
+        preload: true,
       })
     }
   }
