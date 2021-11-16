@@ -17,6 +17,19 @@
       />
     </UiModal>
     <UiModal
+      v-if="ui.modals.error"
+      :close-modal="toggleError"
+      :title="$t('popups.error.title')"
+    >
+      <UiPopupsError
+        v-if="ui.modals.error"
+        v-click-outside="toggleError"
+        :close-modal="toggleError"
+        :setCloseTimeout=5000
+      />
+
+    </UiModal>
+    <UiModal
       v-if="$mock.users.find((user) => user.name === media.incomingCall)"
       nopad
     >
@@ -62,6 +75,17 @@ export default Vue.extend({
       this.$store.commit('ui/toggleModal', {
         name: 'createServer',
         state: !this.ui.modals.createServer,
+      })
+    },
+    /**
+     * @method toggleError
+     * @description
+     * @example
+     */
+    toggleError() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'error',
+        state: !this.ui.modals.error,
       })
     },
     /**
