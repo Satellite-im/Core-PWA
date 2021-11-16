@@ -21,6 +21,7 @@ export default Vue.extend({
       source: '',
       error: '',
       details: '',
+      time: null
     }
   },
   props: {
@@ -29,9 +30,11 @@ export default Vue.extend({
       default: 'An Error has Occurred',
       required: false,
     },
-    setTimeout: {
-      type: Boolean,
-      default: () => {},
+  setCloseTimeout: {
+      type: Number,
+      default: () => {
+        this.timeout();
+      },
       required: false,
     },
   },
@@ -45,18 +48,28 @@ export default Vue.extend({
   methods: {
     confirm () {
       this.error = false
-      this.closeModal()
+      this.close()
     },
     close () {
-      this.closeModal()
+      this.$store.commit('ui/toggleModal', {
+        name: 'error',
+        state: !this.ui.modals.error,
+      })
     },
     timeout () {
-      if(this.setTimeout) 
+      if(this.setCloseTimeout) {
+        setTimeout(
+          this.close
+          , this.setCloseTimeout)
+      } else {
         setTimeout(
           this.close
           , 5000)
-      
+      }
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   mounted () {
     this.timeout();
