@@ -10,6 +10,8 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
+import { User } from '~/types/ui/user'
+
 
 export default Vue.extend({
   components: {
@@ -37,9 +39,13 @@ export default Vue.extend({
       type: Function,
       default: () => () => {},
     },
+    messageOwner: {
+      type: String,
+      required: true,
+    }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'accounts'])
   },
 })
 </script>
