@@ -18,6 +18,9 @@ export default {
   setIsScrollOver({ commit }: ActionsArguments<UIState>, status: boolean) {
     commit('setIsScrollOver', status)
   },
+  setIsReacted({ commit }: ActionsArguments<UIState>, status: boolean) {
+    commit('setIsReacted', status)
+  },
   setActiveChannel({ commit }: ActionsArguments<UIState>, channel: Channel) {
     commit('setActiveChannel', channel)
   },

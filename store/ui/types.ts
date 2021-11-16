@@ -34,6 +34,7 @@ export interface UIState {
   unreadMessage: number
   isScrollOver: Boolean
   isTyping: Object | Boolean
+  isReacted: Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
   hoveredGlyphInfo: Object | undefined
