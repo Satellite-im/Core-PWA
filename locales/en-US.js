@@ -45,6 +45,17 @@ export default {
     headphones: 'Audio',
     video: 'Video',
   },
+  popups: {
+    error: {
+      text: 'Text',
+      title: 'Error',
+      user_agent: 'User Agent',
+      source: 'Source',
+      line: 'Line',
+      confirm: 'Confirm',
+      contact: "'Oops! Something went wrong! Help us improve your experience by sending an error report'"
+    },
+  },
   pages: {
     files: {
       upload: 'Upload File',
@@ -92,14 +103,14 @@ export default {
       notifications: {
         title: 'Notifications Settings',
         notes:
-          'Notifications work different on every platform. On Web, you need to request noticications. On Desktop and Android notications are enabled by default.',
+          'Notifications work different on every platform. On Web, you need to request notifications. On Desktop and Android notifications are enabled by default.',
         enabled: 'Enable or Disable Notifications',
         labels: {
           current_platform: 'Your current platform is:',
         },
         web: {
           granted:
-            'In the web version of Satellite, you need to disable notifications inyour browser for this site.',
+            'In the web version of Satellite, you need to disable notifications in your browser for this site.',
           denied:
             "We cannot re-prompt you for notification permission in the web version of Satellite. You need to set notifications for this site to 'ask' or 'allow'",
         },
@@ -309,7 +320,7 @@ export default {
       create: 'Registration',
       sign_in: 'Sign in',
       photo_text:
-        'Customize how the world sees you, chose something memerable.',
+        'Customize how the world sees you, choose something memorable.',
       username: 'Username',
       username_placeholder: 'Neil Spaceman...',
       status: 'Status',

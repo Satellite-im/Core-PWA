@@ -87,7 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
-      asidebar: true,
+      asidebar: !this.$device.isMobile,
     }
   },
   computed: {
@@ -110,6 +110,7 @@ export default Vue.extend({
     },
   },
   mounted() {
+    this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('ui/setTypingUser', this.$mock.users[0])
 

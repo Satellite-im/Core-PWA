@@ -17,6 +17,7 @@ const InitalUIState = (): UIState => ({
     wallet: false,
     quickchat: false,
     walletMini: false,
+    error: false
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
@@ -31,6 +32,7 @@ const InitalUIState = (): UIState => ({
   unreadMessage: 0,
   isScrollOver: false,
   isTyping: false,
+  isReacted: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
