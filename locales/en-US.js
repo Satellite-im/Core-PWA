@@ -45,6 +45,17 @@ export default {
     headphones: 'Audio',
     video: 'Video',
   },
+  popups: {
+    error: {
+      text: 'Text',
+      title: 'Error',
+      user_agent: 'User Agent',
+      source: 'Source',
+      line: 'Line',
+      confirm: 'Confirm',
+      contact: "'Oops! Something went wrong! Help us improve your experience by sending an error report'"
+    },
+  },
   pages: {
     files: {
       upload: 'Upload File',
