@@ -54,13 +54,15 @@ export default Vue.extend({
       handler() {
         const lastMsg = this.contents[this.contents.length - 1]
         if (
-          lastMsg.from === this.$mock.user.address ||
-          !this.$store.state.ui.unreadMessage
+          (lastMsg.from === this.$mock.user.address ||
+          !this.$store.state.ui.unreadMessage) && 
+          !this.$store.state.ui.isReacted
         ) {
           this.autoScrollToBottom()
           return
         }
         this.newMessageAlert = true
+        this.$store.dispatch('ui/setIsReacted', false)
       },
     },
   },
