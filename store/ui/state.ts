@@ -5,7 +5,7 @@ const InitalUIState = (): UIState => ({
   showSidebarUsers: true,
   showSearchResult: false,
   showSettings: false,
-  settingsSideBar: false,
+  settingsSideBar: true,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
@@ -17,7 +17,7 @@ const InitalUIState = (): UIState => ({
     wallet: false,
     quickchat: false,
     walletMini: false,
-    error: false
+    error: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
