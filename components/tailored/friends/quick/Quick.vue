@@ -4,6 +4,16 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'Quick',
+  data() {
+    return {
+      friends: [],
+    }
+  },
+  watch: {
+    friends(newFriends) {
+      console.log(newFriends)
+    },
+  },
 })
 </script>
 
