@@ -9,9 +9,9 @@ export default Vue.extend({
       friends: [],
     }
   },
-  watch: {
-    friends(newFriends) {
-      console.log(newFriends)
+  methods: {
+    confirm() {
+      /* Create Group and Start Chat.  For now Group Messages needs some changes on Solana & IPFS so leave this blank  */
     },
   },
 })
