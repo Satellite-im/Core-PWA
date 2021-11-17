@@ -1,20 +1,20 @@
 <div class="is-message" @contextmenu="contextMenu">
   <div @mouseenter="mouseOver" @mouseleave="mouseOver"
     :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`">
+
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
       Archived
-    </div> 
+    </div>
     <div v-if="hideActions" class="inline-meta">
-      <UiUsername :username="from"
-        :badge="$mock.users.filter(u => u.name === from)[0].badge" />
+      <div class="sat-icon-container satellite-icon-helper">
+        <UiSatelliteCircle type="random" :size="10" :name="from" style="background-color: darkorange;" />
+      </div>
+      <UiUsername :username="from" :badge="$mock.users.filter(u => u.name === from)[0].badge" />
       <TypographyText :text="$dayjs(message.at).from()" />
     </div>
-    <TailoredMessagingMessageActions
-      v-if="messageHover && !hideActions"
-      :setReplyChatbarContent="setReplyChatbarContent"
-      :emojiReaction="emojiReaction"
-      :editMessage="editMessage" />
+    <TailoredMessagingMessageActions v-if="messageHover && !hideActions"
+      :setReplyChatbarContent="setReplyChatbarContent" :emojiReaction="emojiReaction" :editMessage="editMessage" />
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
     <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
@@ -22,12 +22,10 @@
     <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
     <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
     <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
-    <TailoredMessagingMessageReactions
-      v-if="!hideActions && hasReactions"
-      :message="this.$props.message"
+    <TailoredMessagingMessageReactions v-if="!hideActions && hasReactions" :message="this.$props.message"
       :group="this.$props.group"
       :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`" />
   </div>
-  <TailoredMessagingMessageReply :message="message" :group="group" v-if="!hideActions" :from="from"/>
+  <TailoredMessagingMessageReply :message="message" :group="group" v-if="!hideActions" :from="from" />
   <TailoredMessagingMessageEdit v-if="messageEdit" :message="message.payload" @commitMessage="saveMessage" />
 </div>
