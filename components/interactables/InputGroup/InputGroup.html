@@ -1,7 +1,7 @@
 <div>
   <TypographyLabel class="input-label" v-if="labelText.length" :text="labelText" />
   <div class="field has-addons">
-    <div class="control">
+    <div class="control" data-cy="add-input">
       <input
         v-model="internalText"
         :class="`input is-${size} is-${type}`"
@@ -12,7 +12,7 @@
         @input="update"
         />
     </div>
-    <div class="control">
+    <div class="control" data-cy="submit-input">
       <a
         :disabled="disabled"
         :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
