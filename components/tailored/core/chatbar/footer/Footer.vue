@@ -22,7 +22,7 @@ export default Vue.extend({
     },
     usersTyping: {
       type: Array,
-      default: [{ name: 'Phoenix' }, { name: 'Ariel' }],
+      default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
     },
   },
   data() {
