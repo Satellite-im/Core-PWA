@@ -23,11 +23,11 @@ export default Vue.extend({
     checkUsersTyping() {
       if(this.users.length <= 3 && this.users.length != 0) {
         return 1
-      } else if (this.users.length > 3){
-        return 0
-      } else {
+      }
+      if (this.users.length > 3){
         return 2
       }
+      return 0
     }
   },
   mounted() {
