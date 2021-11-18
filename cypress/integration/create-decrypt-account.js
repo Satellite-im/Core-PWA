@@ -20,7 +20,7 @@ for (const command of ['visit', 'click', 'trigger', 'type', 'clear', 'reload', '
     cy.contains('Choose Your Pin')
     cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g',{log:false})
     cy.contains('Store Pin? (Less Secure)')
-    cy.get('#app > div > div > div:nth-child(2) > div > div:nth-child(2) > a').click() //update for data-cy label - AP-52
+    cy.get('[data-cy=submit-input]').click()
     cy.contains("We're going to create an account for you. On the next screen you'll see a set of words. Screenshot this or write it down. This is the only way to backup your account.")
     cy.get('.is-primary > #custom-cursor-area').click()
     cy.contains('I Saved It').click()
@@ -29,7 +29,7 @@ for (const command of ['visit', 'click', 'trigger', 'type', 'clear', 'reload', '
     Cypress.on('uncaught:exception', (err, runnable) => false); // temporary until AP-48 gets fixed
     cy.get('.input-container:nth-child(3) .input').type('name name') //add random name and add data-cy label - AP-53
     cy.contains('Status')
-    cy.get('.input-container:nth-child(4) .input').type('status') //add status name and add data-cy label - AP-53
+    cy.get('.input-container:nth-child(4) .input').type('status') //add random copy and add data-cy label - AP-53
     const filepath = 'images/logo.png'
     cy.get('.is-outlined > #custom-cursor-area').click()
     cy.get('.input-file').attachFile(filepath)
