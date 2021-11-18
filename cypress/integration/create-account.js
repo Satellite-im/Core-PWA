@@ -1,6 +1,6 @@
 const faker = require('faker');
 const randomName = faker.internet.userName(name); // generate random name
-const randomStatus = faker.lorem.word(); // generate random name
+const randomStatus = faker.lorem.word(); // generate random status
 
 
 const COMMAND_DELAY = 2000; // to run tests slower
