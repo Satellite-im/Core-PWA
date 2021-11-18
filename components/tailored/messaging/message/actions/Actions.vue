@@ -37,9 +37,13 @@ export default Vue.extend({
       type: Function,
       default: () => () => {},
     },
+     messageOwner: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'accounts'])
   },
 })
 </script>
