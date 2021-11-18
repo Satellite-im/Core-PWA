@@ -1,3 +1,6 @@
+const faker = require('faker');
+const randomName = faker.name.findName(); // generate random name
+
 const COMMAND_DELAY = 2000; // to run tests slower
 
 for (const command of ['visit', 'click', 'trigger', 'type', 'clear', 'reload', 'contains']) {
@@ -27,9 +30,9 @@ for (const command of ['visit', 'click', 'trigger', 'type', 'clear', 'reload', '
     cy.contains('Customize how the world sees you, choose something memorable.', {timeout: 5000}).should('be.visible')
     cy.contains('Username')
     Cypress.on('uncaught:exception', (err, runnable) => false); // temporary until AP-48 gets fixed
-    cy.get('.input-container:nth-child(3) .input').type('name name') //add random name and add data-cy label - AP-53
+    cy.get('.input-container:nth-child(3) .input').type(randomName) //add data-cy label - AP-53
     cy.contains('Status')
-    cy.get('.input-container:nth-child(4) .input').type('status') //add random copy and add data-cy label - AP-53
+    cy.get('.input-container:nth-child(4) .input').type(randomName) // add data-cy label - AP-53
     const filepath = 'images/logo.png'
     cy.get('.is-outlined > #custom-cursor-area').click()
     cy.get('.input-file').attachFile(filepath)
