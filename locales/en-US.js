@@ -260,6 +260,7 @@ export default {
     chat: {
       new_message: 'messages',
       jump_to_current: 'View New Messages',
+      chat_now: 'chat now',
     },
   },
   servers: {
