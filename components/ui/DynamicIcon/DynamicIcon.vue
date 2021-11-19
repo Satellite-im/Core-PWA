@@ -17,7 +17,6 @@
     <message-square-icon v-if="icon === 'message-square'" :size="size" />
     <layout-icon v-if="icon === 'layout'" :size="size" />
 
-
   </span>
 </template>
 <script lang="ts">

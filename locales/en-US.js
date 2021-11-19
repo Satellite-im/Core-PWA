@@ -264,7 +264,6 @@ export default {
       add_member: 'Add Member+',
       switch_chat: 'Switch Chat',
       start_watch_party: 'Start Watch Party',
-
     },
   },
   servers: {
