@@ -1,7 +1,14 @@
 <div id="typing-badge-container">
-    <div id="typing-loader"></div>
-    <div id="text-container" v-if="userName">
-        <TypographyText :text="userName" :size="6" />
-        <TypographyText text="is typing..." :size="6" />
+    <div id="typing-loader" v-if="checkUsersTyping() !== 0"></div>
+    <div id="text-container" v-if="checkUsersTyping() === 1">
+        <div v-for= "user in users">
+        <TypographyText :text="user.name + ','"  :size="6" />
+    </div>
+    <TypographyText text="is typing..." :size="6" />
+    </div>
+    <div id="text-container" v-if="checkUsersTyping() === 2">
+        <TypographyText text="many users are typing..." :size="6" />
+    </div>
+    <div id="text-container" v-if="checkUsersTyping() === 0">
     </div>
 </div>
