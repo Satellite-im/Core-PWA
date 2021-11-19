@@ -83,7 +83,7 @@ export default {
     disclaimer: {
       title: 'Account Creation',
       subtitle:
-        "We're going to create an account for you. On the next screen you'll see a set of words. Screenshot this or write it down. This is the only way to backup your account.",
+        "We're going to create an account for you. On the next screen, you'll see a set of words. Screenshot this or write it down. This is the only way to backup your account.",
       create: 'Create Account',
       or: 'Or',
       import: 'Import Account',
@@ -127,7 +127,7 @@ export default {
           permissionDeniedMessage:
             "You have denied microphone access so we can't see what devices you have. Please allow microphone access in your browser.",
           browserDoesNotSupportAudioOutChange:
-            'Your Browser does not allow setting an audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
+            'Your Browser does not allow setting audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
           input: {
             title: 'Audio Input',
             subtitle:
@@ -347,7 +347,7 @@ export default {
     search_placeholder: 'Some User...',
     add: 'Add Friend',
     add_description:
-      'Enter your friends account ID, or nickname. Account IDs are case sensitive.',
+      'Enter your friend's account ID or nickname. Account IDs are case sensitive.',
     add_qrcode_description:
       'You can also add a friend by having them scan your QR code, or by scanning theirs.',
     scan_code: 'Scan a Friend Code',
