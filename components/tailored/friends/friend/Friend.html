@@ -1,13 +1,5 @@
 <div class="friend">
-  <UiCircle type="random" :seed="friend.account.accountId" :size="35" />
-  <smartphone-icon
-    size="1x"
-    v-if="friend.state === 'mobile'"
-    :class="`mobile-status is-${friend.state}`" />
-  <circle-icon
-    size="1x"
-    v-if="friend.state !== 'mobile'"
-    :class="`status is-${friend.state}`" />
+  <UiUserState :user="friend" />
   <div class="description">
     <TypographySubtitle :size="6" :text="friend.name" />
     <TypographyText :text="friend.status" />
