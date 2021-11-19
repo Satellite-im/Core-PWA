@@ -35,6 +35,7 @@ export default Vue.extend({
     return {
       files: [] as Array<UploadDropItemType>,
       uploadStatus: false,
+      count_error: false,
     }
   },
   methods: {
@@ -46,6 +47,12 @@ export default Vue.extend({
      */
     async handleFile(event: any) {
       const files: File[] = event.target.files
+      if(files.length > 4) {
+        // @ts-ignore
+        this.$data.count_error = true
+        return
+      }
+      this.$data.count_error = false
       this.$data.files = [...files].map((file: File) => {
         return {
           file,
@@ -101,6 +108,7 @@ export default Vue.extend({
     cancelUpload() {
       this.$data.files = []
       this.$data.uploadStatus = false
+      this.$data.count_error = false
     },
   },
 })
