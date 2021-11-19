@@ -10,6 +10,14 @@ import {
   SlashIcon,
 } from 'satellite-lucide-icons'
 
+import { UploadDropItemType } from '~/types/files/file'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    files: Array<UploadDropItemType>
+  }
+
+}
 export default Vue.extend({
   components: {
     FileIcon,
@@ -25,9 +33,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      file: false,
-      url: false,
-      nsfw: { status: false, checking: false },
+      files: [] as Array<UploadDropItemType>,
     }
   },
   methods: {
@@ -38,11 +44,20 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.file = event.target.files[0]
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-      this.$data.nsfw.checking = false
-      this.loadPicture(this.$data.file)
+      const files: File[] = event.target.files
+      this.$data.files = [...files].map((file: File) => {
+        return {
+          file,
+          nsfw: { status: false, checking: false },
+        }
+      })
+      /* nsfw checking after putting all files */
+      for (const file of this.$data.files) {
+        file.nsfw.checking = true
+        file.nsfw.status = await this.$Security.isNSFW(file.file)
+        file.nsfw.checking = false
+        this.loadPicture(file)
+      }
     },
     /**
      * @method loadPicture
@@ -50,14 +65,14 @@ export default Vue.extend({
      * @param file File to load
      * @example this.loadPicture(this.$data.file)
      */
-    loadPicture(file: File) {
-      if (!file) return
+    loadPicture(item: UploadDropItemType) {
+      if (!item.file) return
       const self = this
       const reader = new FileReader()
       reader.onload = function (e: Event | any) {
-        if (e.target) self.$data.url = e.target.result
+        if (e.target) item.url = e.target.result
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(item.file)
     },
     /**
      * @method isEmbedableImage
@@ -68,6 +83,7 @@ export default Vue.extend({
      * @example v-if="isEmbedableImage(file.name)"
      */
     isEmbedableImage(filename: string): boolean {
+      if (!filename) return false
       // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(
         '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
@@ -81,8 +97,7 @@ export default Vue.extend({
      * @example @click="cancelUpload"
      */
     cancelUpload() {
-      this.$data.file = false
-      this.$data.url = false
+      this.$data.files = []
     },
   },
 })
