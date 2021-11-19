@@ -34,6 +34,7 @@ export default Vue.extend({
   data() {
     return {
       files: [] as Array<UploadDropItemType>,
+      uploadStatus: false,
     }
   },
   methods: {
@@ -49,6 +50,7 @@ export default Vue.extend({
         return {
           file,
           nsfw: { status: false, checking: false },
+          url: ''
         }
       })
       /* nsfw checking after putting all files */
@@ -58,6 +60,7 @@ export default Vue.extend({
         file.nsfw.checking = false
         this.loadPicture(file)
       }
+      this.$data.uploadStatus = true
     },
     /**
      * @method loadPicture
@@ -67,7 +70,6 @@ export default Vue.extend({
      */
     loadPicture(item: UploadDropItemType) {
       if (!item.file) return
-      const self = this
       const reader = new FileReader()
       reader.onload = function (e: Event | any) {
         if (e.target) item.url = e.target.result
@@ -98,6 +100,7 @@ export default Vue.extend({
      */
     cancelUpload() {
       this.$data.files = []
+      this.$data.uploadStatus = false
     },
   },
 })

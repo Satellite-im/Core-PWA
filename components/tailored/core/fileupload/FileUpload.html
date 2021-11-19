@@ -1,5 +1,5 @@
 <div id="file-upload">
-  <div class="file-preview">
+  <div class="file-preview" v-if="files.length">
     <div class="file-preview-item" v-for="item in files">
       <div class="img-wrapper">
         <img
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <div class="is-controls">
+    <div class="is-controls" v-if="uploadStatus">
       <InteractablesButton
         type="primary"
         size="small"
@@ -47,8 +47,8 @@
         :action="cancelUpload"
       />
     </div>
-    <input type="file" id="quick-upload" @change="handleFile" />
   </div>
+  <input type="file" id="quick-upload" @change="handleFile" />
   <label
     v-if="type == 'quick'"
     for="quick-upload"
