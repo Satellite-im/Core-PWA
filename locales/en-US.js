@@ -294,6 +294,9 @@ export default {
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
     },
+    chat: {
+      drop_file_count: 'Sorry, you can only upload 4 files at a time',
+    },
   },
   search: {
     input: {

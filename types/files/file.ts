@@ -15,3 +15,12 @@ export type Folder = {
   modified: number
   children: Array<FileType | Folder>
 }
+
+export type UploadDropItemType = {
+  file: File,
+  url: string,
+  nsfw: {
+    checking: boolean,
+    status: boolean
+  }
+}

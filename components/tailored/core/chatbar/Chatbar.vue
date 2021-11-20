@@ -216,8 +216,10 @@ export default Vue.extend({
      */
     handleDrop(e: any) {
       e.preventDefault()
-      const file = e.dataTransfer.items[0].getAsFile()
-      const handleFileExpectEvent = { target: { files: [file] } }
+      const arrOfFiles: File[] = [...e.dataTransfer.items].map((f: any) =>
+        f.getAsFile()
+      )
+      const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
       // @ts-ignore
       this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
     },
