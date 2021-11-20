@@ -217,8 +217,8 @@ export default Vue.extend({
     handleDrop(e: any) {
       e.preventDefault()
       const arrOfFiles: File[] = [...e.dataTransfer.items]
-        .filter( (f: any) => f.type.includes('image') )
-        .map( (f: any) => f.getAsFile() )
+        .filter((f: any) => f.type.includes('image'))
+        .map((f: any) => f.getAsFile())
 
       if (arrOfFiles.length) {
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
@@ -229,18 +229,18 @@ export default Vue.extend({
     handlePaste(e: any) {
       e.preventDefault()
       const arrOfFiles: File[] = [...e.clipboardData.items]
-        .filter( (f: any) => f.type.includes('image') )
-        .map( (f: any) => f.getAsFile() )
+        .filter((f: any) => f.type.includes('image'))
+        .map((f: any) => f.getAsFile())
 
       if (arrOfFiles.length) {
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
-    }
+    },
   },
   watch: {
-    '$store.state.ui.chatbarContent': function() {
+    '$store.state.ui.chatbarContent': function () {
       this.updateText()
     },
   },
