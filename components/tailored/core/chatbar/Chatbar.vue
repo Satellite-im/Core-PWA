@@ -216,13 +216,28 @@ export default Vue.extend({
      */
     handleDrop(e: any) {
       e.preventDefault()
-      const arrOfFiles: File[] = [...e.dataTransfer.items].map((f: any) =>
-        f.getAsFile()
-      )
-      const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
-      // @ts-ignore
-      this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+      const arrOfFiles: File[] = [...e.dataTransfer.items]
+        .filter( (f: any) => f.type.includes('image') )
+        .map( (f: any) => f.getAsFile() )
+
+      if (arrOfFiles.length) {
+        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
+        // @ts-ignore
+        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+      }
     },
+    handlePaste(e: any) {
+      e.preventDefault()
+      const arrOfFiles: File[] = [...e.clipboardData.items]
+        .filter( (f: any) => f.type.includes('image') )
+        .map( (f: any) => f.getAsFile() )
+
+      if (arrOfFiles.length) {
+        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
+        // @ts-ignore
+        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+      }
+    }
   },
   watch: {
     '$store.state.ui.chatbarContent': function() {
