@@ -101,17 +101,15 @@ export default Vue.extend({
      */
     toggleEnhancers(event: Event) {
       this.clickEvent()
-      /* Prevent toggle twice when toggle enhancer button is clicked (for mobile case ) */
-      const chatToggleEnhancer = document.getElementById('chat-enhancer-toggle')
+      /* Ignore outside toggling when glyph & emoji toggle btn is clickd (for preventing twice-toggling)  */
+      const glyphToggleElm = document.getElementById('glyph-toggle')
+      const emojiToggleElm = document.getElementById('emoji-toggle')
       // @ts-ignore
-      if (!chatToggleEnhancer?.contains(event.target)) {
+      if (!(glyphToggleElm?.contains(event.target) || emojiToggleElm?.contains(event.target))) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
         })
       }
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-      })
       if (this.ui.settingReaction.status) {
         this.$store.commit('ui/settingReaction', {
           status: false,

@@ -1,5 +1,6 @@
 <div class="chatbar-controls">
   <div
+    id="send-money-toggle"
     :data-tooltip="$t('wallet.send_money')"
     v-on:click="toggleMiniWallet"
     class="
@@ -12,7 +13,7 @@
     />
   </div>
   <div
-    id="enhancer-toggle"
+    id="glyph-toggle"
     :data-tooltip="$t('global.glyphs')"
     v-on:click="toggleEnhancers('glyphs')"
     class="
@@ -25,6 +26,7 @@
     />
   </div>
   <div
+    id="emoji-toggle"
     :data-tooltip="$t('global.emotes')"
     v-on:click="toggleEnhancers('emotes')"
     class="

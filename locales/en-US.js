@@ -11,6 +11,7 @@ export default {
     messages: 'Messages',
     groups: 'Groups',
     glyphs: 'Glyphs',
+    emotes: 'Emoji',
     cancel: 'Cancel',
     exit_fullscreen: 'Exit fullscreen',
     fullscreen: 'Fullscreen',
