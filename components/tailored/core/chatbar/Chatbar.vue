@@ -187,7 +187,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.recipient) {
+      if (!this.recipient || !this.value.length) {
         return
       }
 
