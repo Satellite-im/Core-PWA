@@ -183,7 +183,7 @@ export default Vue.extend({
      */
     removeSelected(index: number) {
       this.selected.splice(index, 1)
-      this.showDropDown()
+      // this.showDropDown()
     },
   },
 })

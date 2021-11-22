@@ -351,9 +351,9 @@ export default {
     search_placeholder: 'Some User...',
     add: 'Add Friend',
     add_description:
-      'Enter your friend's account ID or nickname. Account IDs are case sensitive.',
+      "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
     add_qrcode_description:
-      'You can also add a friend by having them scan your QR code, or by scanning theirs.',
+      "You can also add a friend by having them scan your QR code, or by scanning theirs",
     scan_code: 'Scan a Friend Code',
     camera_scan: 'Allow Camera Scan',
     friend_code: 'Your Friend Code',
