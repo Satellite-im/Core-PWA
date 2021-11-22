@@ -16,7 +16,8 @@
       :placeholder="$t('global.talk')"
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
-      @drop="handleDrop">
+      @drop="handleDrop"
+      @paste="handlePaste">
     </div>
 
     <TailoredCoreChatbarControls :sendMessage="sendMessage" id="chatbar-controls"/>
