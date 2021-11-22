@@ -261,9 +261,9 @@ export default {
       new_message: 'messages',
       jump_to_current: 'View New Messages',
       chat_now: 'chat now',
-      add_member: 'Add Member+',
+      add_member: 'Add Member +',
       switch_chat: 'Switch Chat',
-      start_watch_party: 'Start Watch Party',
+      start_watch_party: 'Watch Party',
     },
   },
   servers: {
