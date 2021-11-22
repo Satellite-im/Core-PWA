@@ -8,7 +8,6 @@ import { PlusIcon, XIcon } from 'satellite-lucide-icons'
 
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
-import { Users } from '~/mock/users'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -53,7 +52,7 @@ export default Vue.extend({
   data() {
     return {
       search: '',
-      result: Users,
+      result: this.$store.state.friends.all,
       selected: [] as Array<User>,
       dropDown: false,
       selection: -1,
@@ -113,7 +112,7 @@ export default Vue.extend({
      * @example
      */
     searchResult() {
-      this.result = Users.filter((user) =>
+      this.result = this.$store.state.friends.all.filter((user) =>
         user.name.toLowerCase().includes(this.search.toLowerCase())
       )
       this.selection = -1
@@ -130,7 +129,7 @@ export default Vue.extend({
       if (!user) {
         return
       }
-      this.search = ""
+      this.search = ''
       event.stopPropagation()
       this.result = Users
       this.selected.push(user)

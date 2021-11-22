@@ -4,7 +4,10 @@ import Vue, { PropType } from 'vue'
 
 import { Group } from '~/types/messaging'
 import { User } from '~/types/ui/user'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import {
+  getUsernameFromState,
+  getAddressFromState,
+} from '~/utilities/Messaging'
 
 export default Vue.extend({
   props: {
@@ -14,6 +17,9 @@ export default Vue.extend({
     },
   },
   computed: {
+    address() {
+      return getAddressFromState(this.group.from, this.$store.state)
+    },
     username() {
       return getUsernameFromState(this.group.from, this.$store.state)
     },
