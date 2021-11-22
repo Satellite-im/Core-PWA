@@ -211,24 +211,32 @@ export default Vue.extend({
     },
     /**
      * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar to auto open
-     * the file uploader
+     * @description Allows the drag and drop of files into the chatbar
+     * @param e Drop event data object
+     * @example v-on:drop="handleDrop" 
      */
     handleDrop(e: any) {
       e.preventDefault()
-      const arrOfFiles: File[] = [...e.dataTransfer.items]
-        .filter((f: any) => f.type.includes('image'))
-        .map((f: any) => f.getAsFile())
-
-      if (arrOfFiles.length) {
-        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
-        // @ts-ignore
-        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
-      }
+      this.handleUpload(e.dataTransfer.items)
     },
+    /**
+     * @method handlePaste
+     * @description Allows the pasting of files into the chatbar
+     * @param e Paste event data object
+     * @example v-on:paste="handlePaste"
+     */
     handlePaste(e: any) {
       e.preventDefault()
-      const arrOfFiles: File[] = [...e.clipboardData.items]
+      this.handleUpload(e.clipboardData.items)
+    },
+    /**
+     * @method handleUpload
+     * @description Takes in an array of event items and uploads the file objects
+     * @param items Array of objects
+     * @example this.handleUpload(someEvent.itsData.items)
+     */
+    handleUpload(items: Array<object>) {
+      const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())
 
@@ -237,7 +245,7 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
-    },
+    }
   },
   watch: {
     '$store.state.ui.chatbarContent': function () {
