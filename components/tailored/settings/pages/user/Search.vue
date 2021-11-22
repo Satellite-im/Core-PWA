@@ -130,7 +130,9 @@ export default Vue.extend({
       if (!user) {
         return
       }
+      this.search = ""
       event.stopPropagation()
+      this.result = Users
       this.selected.push(user)
       this.showDropDown()
       this.$emit('input', this.selected)
@@ -183,7 +185,6 @@ export default Vue.extend({
      */
     removeSelected(index: number) {
       this.selected.splice(index, 1)
-      // this.showDropDown()
     },
   },
 })
