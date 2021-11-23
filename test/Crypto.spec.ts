@@ -1,7 +1,7 @@
 import Crypto from '../libraries/Crypto/Crypto'
 import 'ts-jest'
 
-describe('Logo', () => {
+describe('Crypto', () => {
   // create new instance of class
   const crypto = new Crypto();
 
