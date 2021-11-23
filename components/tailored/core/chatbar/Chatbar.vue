@@ -187,7 +187,8 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.recipient || !this.value.length) {
+      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '').length
+      if (!this.recipient || isEmpty) {
         return
       }
 
