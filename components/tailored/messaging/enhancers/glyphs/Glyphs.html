@@ -9,8 +9,12 @@
     />
   </div>
   <TailoredMessagingEnhancersGlyphsNav @navSelected="(val) => {filter(val)}"></TailoredMessagingEnhancersGlyphsNav>
-  <div class="glyph-content hidden-scroll">
+  <v-responsive class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
+      <v-lazy v-model="filteredGlyphs"
+      >
+
+      </v-lazy>
       <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
       <TailoredMessagingEnhancersGlyphsPack
         v-for="pack in filteredGlyphs"
@@ -18,6 +22,6 @@
         :pack="pack"
       ></TailoredMessagingEnhancersGlyphsPack>
     </UiScroll>
-  </div>
+  </v-responsive>
   <TailoredMessagingEnhancersGlyphsItemInfo></TailoredMessagingEnhancersGlyphsItemInfo>
 </div>

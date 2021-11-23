@@ -101,6 +101,7 @@
     "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-27258277.84e299f",
     "@nuxt/types": "^2.15.3",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/vuetify": "^1.12.1",
     "@types/ed2curve": "^0.2.2",
     "@types/elliptic": "^6.4.13",
     "@vue/test-utils": "^1.1.3",

@@ -27,6 +27,15 @@ export default Vue.extend({
       this.$parent.$el.scrollTop = 0
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('scroll', this.onScroll)
+      this.onScroll
+    })
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
     goBack() {
       this.$store.commit('ui/setGlyphMarketplaceView', {
@@ -34,6 +43,22 @@ export default Vue.extend({
         shopId: null,
       })
     },
+    getGlyphs() {
+
+    },
+    onScroll() {
+      const glyphs = this.$refs["marketGlyphs"]
+      if(glyphs) {
+        
+        // let marginTop = glyphs.getBoundingClientRect
+        // let marginInner = window.innerHeight
+        // if((marginTop - marginInner) < -50) {
+        //   this.getGlyphs;
+        // }
+        
+      }
+
+    }
   },
 })
 </script>
