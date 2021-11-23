@@ -1,4 +1,5 @@
-import Crypto from '../libraries/Crypto/Crypto.ts'
+import Crypto from '../libraries/Crypto/Crypto'
+import 'ts-jest'
 
 describe('Logo', () => {
   // create new instance of class
@@ -6,9 +7,9 @@ describe('Logo', () => {
 
   // test that signMessage method exists 
   test("defines signMessage()", () => {
-    expect(typeof crypto.signMessage).toBe("function");
-  });
+    expect(typeof crypto.signMessage).toBe("function")
+  })
   test("expect signmessage without signingKey to be null", () => {
-    expect(crypto.signMessage('dogs')).toBe(null);
-  });
+    expect(crypto.signMessage('dogs')).toBe(null)
+  })
 })
