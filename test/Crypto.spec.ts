@@ -3,7 +3,7 @@ import 'ts-jest'
 
 describe('Crypto', () => {
   // create new instance of class
-  const crypto = new Crypto();
+  const crypto = new Crypto()
 
   // test that signMessage method exists 
   test("defines signMessage()", () => {
