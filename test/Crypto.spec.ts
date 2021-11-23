@@ -9,7 +9,7 @@ describe('Crypto', () => {
   test("defines signMessage()", () => {
     expect(typeof crypto.signMessage).toBe("function")
   })
-  test("expect signmessage without signingKey to be null", () => {
+  test("expect signMessage without signingKey to be null", () => {
     expect(crypto.signMessage('dogs')).toBe(null)
   })
 })
