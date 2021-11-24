@@ -8,12 +8,7 @@
     </div>
     <div v-if="hideActions" class="inline-meta">
       <div class="sat-icon-container satellite-icon-helper">
-        <UiSatelliteCircle
-          type="random"
-          :size="10"
-          :name="from"
-          style="background-color: darkorange;"
-        />
+        <UiCircle type="random" :seed="$mock.users.filter(u => u.name === from)[0].address" :size="23" />
       </div>
       <UiUsername :username="from" :badge="$mock.users.filter(u => u.name === from)[0].badge" />
       <TypographyText :text="$dayjs(message.at).from()" />
