@@ -7,7 +7,7 @@ import { ArchiveIcon } from 'satellite-lucide-icons'
 
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-import { Message, Group } from '~/types/messaging'
+import { UIMessage, Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,7 +23,7 @@ export default Vue.extend({
   mixins: [ContextMenu],
   props: {
     message: {
-      type: Object as PropType<Message>,
+      type: Object as PropType<UIMessage>,
       default: () => ({
         id: '0',
         at: 1620515543000,
