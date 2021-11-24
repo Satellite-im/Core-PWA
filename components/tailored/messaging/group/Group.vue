@@ -16,6 +16,12 @@ export default Vue.extend({
       // default: () => {},
     },
   },
+  data() {
+    return {
+      timestampRefreshInterval: null,
+      timestamp: this.$dayjs(this.group.at).from(),
+    }
+  },
   computed: {
     address() {
       return getAddressFromState(this.group.from, this.$store.state)
@@ -40,6 +46,17 @@ export default Vue.extend({
       this.$store.commit('ui/setQuickProfilePosition', e)
       this.$store.commit('ui/quickProfile', true)
     },
+    refreshTimestampEveryMinute() {
+      this.timestampRefreshInterval = setInterval(() => {
+        this.$data.timestamp = this.$dayjs(this.group.at).from()
+      }, 60 * 1000)
+    },
+  },
+  created() {
+    this.refreshTimestampEveryMinute()
+  },
+  beforeDestroy() {
+    clearInterval(this.refreshTimestampEveryMinute)
   },
 })
 </script>

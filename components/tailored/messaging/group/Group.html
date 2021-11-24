@@ -7,10 +7,16 @@
       <span v-on:click="showQuickProfile">
         <UiUsername :username="username" :badge="badge" />
       </span>
-      <TypographyText :text="$dayjs(group.at).from()" />
+      <TypographyText :text="timestamp" />
     </div>
     <div class="group-messages">
-      <TailoredMessagingMessage v-for="message in group.messages" :group="group" :message="message" :from="username" :key="message.id" />
+      <TailoredMessagingMessage
+        v-for="message in group.messages"
+        :group="group"
+        :message="message"
+        :from="username"
+        :key="message.id"
+      />
     </div>
   </div>
 </div>

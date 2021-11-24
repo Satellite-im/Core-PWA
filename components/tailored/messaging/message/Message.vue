@@ -76,6 +76,8 @@ export default Vue.extend({
         { text: 'Save Image', func: (this as any).testFunc },
         { text: 'Copy Link', func: (this as any).testFunc },
       ],
+      timestampRefreshInterval: null,
+      timestamp: this.$dayjs(this.$props.message.at).from(),
     }
   },
   computed: {
@@ -179,6 +181,17 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
     },
+    refreshTimestampEveryMinute() {
+      this.timestampRefreshInterval = setInterval(() => {
+        this.$data.timestamp = this.$dayjs(this.$props.message.at).from()
+      }, 60 * 1000)
+    },
+  },
+  created() {
+    this.refreshTimestampEveryMinute()
+  },
+  beforeDestroy() {
+    clearInterval(this.refreshTimestampEveryMinute)
   },
 })
 </script>
