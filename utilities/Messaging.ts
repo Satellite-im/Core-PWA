@@ -23,7 +23,7 @@ function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
   reactions.forEach((reactionMessage) => {
     let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-    if(!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
+    if (!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
     groupedReactions[reactionMessage.payload] = {
       emoji: reactionMessage.payload,
       reactors,
