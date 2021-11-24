@@ -22,10 +22,11 @@ function messageRepliesToUIReplies(
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
   reactions.forEach((reactionMessage) => {
-    const reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+    let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+    if(!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
     groupedReactions[reactionMessage.payload] = {
       emoji: reactionMessage.payload,
-      reactors: [...reactors, reactionMessage.from],
+      reactors,
       showReactors: true,
     }
   })
