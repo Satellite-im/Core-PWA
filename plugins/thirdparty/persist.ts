@@ -28,7 +28,10 @@ const propertiesBlacklist = [
   'prerequisites',
 ]
 
-const propertiesBlacklistWhenStorePin = ['prerequisites']
+const propertiesBlacklistWhenStorePin = [
+  'prerequisites',
+  'friends.all',
+]
 
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
