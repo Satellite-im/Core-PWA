@@ -10,8 +10,8 @@ export default Vue.extend({
       default: function () {
         return this.$t('internal.missing_text')
       },
-    }
-  }
+    },
+  },
 })
 </script>
 

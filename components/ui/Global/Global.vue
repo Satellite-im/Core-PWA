@@ -25,9 +25,8 @@
         v-if="ui.modals.error"
         v-click-outside="toggleError"
         :close-modal="toggleError"
-        :setCloseTimeout=5000
+        :setCloseTimeout="5000"
       />
-
     </UiModal>
     <UiModal
       v-if="$mock.users.find((user) => user.name === media.incomingCall)"

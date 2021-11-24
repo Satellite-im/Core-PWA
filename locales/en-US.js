@@ -54,7 +54,8 @@ export default {
       source: 'Source',
       line: 'Line',
       confirm: 'Confirm',
-      contact: "'Oops! Something went wrong! Help us improve your experience by sending an error report'"
+      contact:
+        "'Oops! Something went wrong! Help us improve your experience by sending an error report'",
     },
   },
   pages: {
@@ -354,7 +355,7 @@ export default {
     search_placeholder: 'Some User...',
     add: 'Add Friend',
     add_description:
-      'Enter your friend\'s account ID or nickname. Account IDs are case sensitive.',
+      "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
     add_qrcode_description:
       'You can also add a friend by having them scan your QR code, or by scanning theirs.',
     scan_code: 'Scan a Friend Code',
