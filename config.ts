@@ -83,6 +83,7 @@ export const Config = {
   chat: {
     defaultMessageLimit: 50,
     defalutLoadMoreLimit: 20,
+    timestampUpdateInterval: 60 * 1000,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],

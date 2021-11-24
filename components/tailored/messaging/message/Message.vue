@@ -7,7 +7,10 @@ import { ArchiveIcon } from 'satellite-lucide-icons'
 
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+
+import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
+import { refreshTimestampInterval } from '~/utilities/Messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -181,17 +184,20 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
     },
-    refreshTimestampEveryMinute() {
-      this.timestampRefreshInterval = setInterval(() => {
-        this.$data.timestamp = this.$dayjs(this.$props.message.at).from()
-      }, 60 * 1000)
-    },
   },
   created() {
-    this.refreshTimestampEveryMinute()
+    const setTimestamp = (timePassed: string) => {
+      this.$data.timestamp = timePassed
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.$props.message.at,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval
+    )
   },
   beforeDestroy() {
-    clearInterval(this.refreshTimestampEveryMinute)
+    clearInterval(this.$data.refreshTimestampEveryMinute)
   },
 })
 </script>

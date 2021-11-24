@@ -203,3 +203,15 @@ export function getAddressFromState(
 
   return address
 }
+
+export function refreshTimestampInterval(
+  timestamp: number,
+  action: (timePassed: string) => any,
+  interval: number
+) {
+  return setInterval(() => {
+    const updatedTimestamp = dayjs(timestamp).fromNow()
+
+    action(updatedTimestamp)
+  }, interval)
+}
