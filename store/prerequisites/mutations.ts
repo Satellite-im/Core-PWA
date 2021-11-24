@@ -12,7 +12,10 @@ const mutations = {
     state.textileReady = textileReady
   },
   resetState(state: PrerequisiteState) {
-    state = getInitialState()
+    const initialState = getInitialState()
+    state.accountsReady = initialState.accountsReady
+    state.p2pReady = initialState.p2pReady
+    state.textileReady = initialState.textileReady
   },
 }
 

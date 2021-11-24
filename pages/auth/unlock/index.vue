@@ -32,13 +32,18 @@ export default Vue.extend({
     ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
     ...mapState(['accounts']),
     storePin: {
-      set(state) {
-        this.$store.commit('accounts/setStorePin', state)
+      async set(state) {
+        await this.$store.commit('accounts/setStorePin', state)
+        console.log(JSON.stringify(this.$store.state.prerequisites))
       },
       get() {
         return !this.accounts ? false : this.accounts.storePin
       },
     },
+  },
+  mounted() {
+    this.$store.commit('accounts/lock')
+    this.$store.commit('prerequisites/resetState')
   },
   methods: {
     /**

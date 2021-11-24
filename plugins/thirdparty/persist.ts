@@ -28,13 +28,15 @@ const propertiesBlacklist = [
   'prerequisites',
 ]
 
+const propertiesBlacklistWhenStorePin = ['prerequisites']
+
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
     reducer: (state: any) => {
       let blackList = propertiesBlacklist;
       if (state.accounts.storePin && !state.accounts.locked) {
-        blackList = [];
+        blackList = propertiesBlacklistWhenStorePin
       }
       // Lodash omit is not so performant, but it's actually fine
       // for blacklisting the state to be persisted
