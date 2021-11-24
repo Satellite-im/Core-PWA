@@ -1,5 +1,5 @@
 <div class="friend">
-  <UiCircle type="random" :seed="friend.publicKey" :size="35" />
+  <UiCircle type="random" :seed="friend.account.accountId" :size="35" />
   <smartphone-icon
     size="1x"
     v-if="friend.state === 'mobile'"
