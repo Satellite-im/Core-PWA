@@ -1,7 +1,6 @@
 <template>
   <div id="mini-wallet" v-click-outside="toggleWalletMini">
-    <TailoredWalletMiniNav :route="route" />
-    <TailoredWalletMiniSend v-if="route === 'send'" />
+    <TailoredWalletMiniBody :updateMethod="updateMethod" />
   </div>
 </template>
 <script lang="ts">
@@ -14,7 +13,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: 'send',
+      method: 'send',
     }
   },
   methods: {
@@ -28,6 +27,9 @@ export default Vue.extend({
           state: !this.ui.modals.walletMini,
         })
       }
+    },
+    updateMethod(method: string) {
+      this.$data.method = method
     },
   },
 })
