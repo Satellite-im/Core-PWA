@@ -55,14 +55,15 @@ export default Vue.extend({
           this.error = this.$t('friends.not_found') as string
           return
         }
+        // TODO : fix when all information are available
         this.friend = {
           ...friend,
           state: 'offline',
           // @ts-ignore
-          // TODO: fix
           account: {
             accountId: this.accountID,
           },
+          address: this.accountID,
         }
       } catch (error) {
         this.error = this.$t('friends.invalid_id') as string

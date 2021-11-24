@@ -1,6 +1,5 @@
 <div class="user">
-  <UiCircle type="random" :seed="user.address" :size="35" />
-  <circle-icon size="1x" :class="`status is-${user.state}`" />
+  <UiUserState :user="user"/>
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />
   </div>
