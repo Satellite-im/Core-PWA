@@ -1,5 +1,5 @@
 <div id="status">
-  <UiCircle type="random" :seed="accounts.active" :size="35" />
+  <UiUserState :user="{address: accounts.active, state: accounts.details.state}" />
   <div
     class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
     v-on:click="$toast.show($t('global.copied'))"

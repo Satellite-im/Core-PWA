@@ -3,12 +3,10 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-
 import { PlusIcon, XIcon } from 'satellite-lucide-icons'
-
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
-import { Users } from '~/mock/users'
+import { mapState } from 'vuex'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -53,13 +51,14 @@ export default Vue.extend({
   data() {
     return {
       search: '',
-      result: Users,
+      result: [],
       selected: [] as Array<User>,
       dropDown: false,
       selection: -1,
     }
   },
   computed: {
+    ...mapState(['friends']),
     filteredResult() {
       return this.result.filter((user: User) => {
         const isAlreadyExist = this.selected.find(
@@ -69,6 +68,9 @@ export default Vue.extend({
         return true
       })
     },
+  },
+  beforeMount() {
+    this.result = this.friends.all
   },
   mounted() {
     const searchSlot = this.$refs.searchSlot as HTMLElement
@@ -113,8 +115,8 @@ export default Vue.extend({
      * @example
      */
     searchResult() {
-      this.result = Users.filter((user) =>
-        user.name.toLowerCase().startsWith(this.search.toLowerCase())
+      this.result = this.friends.all.filter((user: User) =>
+        user.name.toLowerCase().includes(this.search.toLowerCase())
       )
       this.selection = -1
     },
@@ -130,7 +132,9 @@ export default Vue.extend({
       if (!user) {
         return
       }
+      this.search = ''
       event.stopPropagation()
+      this.result = this.friends.all
       this.selected.push(user)
       this.showDropDown()
       this.$emit('input', this.selected)
@@ -183,7 +187,6 @@ export default Vue.extend({
      */
     removeSelected(index: number) {
       this.selected.splice(index, 1)
-      this.showDropDown()
     },
   },
 })
