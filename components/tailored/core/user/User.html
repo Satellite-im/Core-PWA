@@ -1,5 +1,5 @@
 <div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
-  <UiCircle type="random" :seed="user.publicKey" :size="35" />
+  <UiCircle type="random" :seed="user.account.accountId" :size="35" />
   <circle-icon
     size="1x"
     v-if="user.state !== 'mobile' && !isTyping"
