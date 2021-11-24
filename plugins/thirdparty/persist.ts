@@ -29,8 +29,8 @@ const propertiesBlacklist = [
 ]
 
 const propertiesBlacklistWhenStorePin = [
-  'prerequisites',
   'friends.all',
+  'prerequisites',
 ]
 
 export default ({ store }: { store: any }) => {
