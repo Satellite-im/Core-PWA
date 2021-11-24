@@ -21,4 +21,4 @@ module.exports = {
     'node_modules/(?!@mylibrary/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
-};
+}

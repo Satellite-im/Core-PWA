@@ -1,8 +1,8 @@
 <template src="./Error.html"></template>
 
 <script>
-import Vue from "vue";
-import { mapState } from "vuex";
+import Vue from 'vue'
+import { mapState } from 'vuex'
 
 /**
  * @component Error
@@ -17,12 +17,12 @@ export default Vue.extend({
     default: '',
     required: false,
   },
-  data () {
+  data() {
     return {
       source: '',
       error: '',
       details: '',
-      time: null
+      time: null,
     }
   },
   props: {
@@ -34,39 +34,35 @@ export default Vue.extend({
     setCloseTimeout: {
       type: Number,
       default: () => {
-        this.timeout();
+        this.timeout()
       },
       required: false,
     },
   },
   methods: {
-    confirm () {
+    confirm() {
       this.error = false
       this.close()
     },
-    close () {
+    close() {
       this.$store.commit('ui/toggleModal', {
         name: 'error',
         state: !this.ui.modals.error,
       })
     },
-    timeout () {
-      if(this.setCloseTimeout) {
-        setTimeout(
-          this.close
-          , this.setCloseTimeout)
+    timeout() {
+      if (this.setCloseTimeout) {
+        setTimeout(this.close, this.setCloseTimeout)
       } else {
-        setTimeout(
-          this.close
-          , 5000)
+        setTimeout(this.close, 5000)
       }
-    }
+    },
   },
   computed: {
     ...mapState(['ui']),
   },
-  mounted () {
-    this.timeout();
+  mounted() {
+    this.timeout()
     window.onerror = (message, source, lineno, colno, error) => {
       this.error = {
         message,
@@ -74,12 +70,11 @@ export default Vue.extend({
         lineno,
         colno,
         error,
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
       }
     }
   },
-}
-)
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
