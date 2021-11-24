@@ -15,6 +15,9 @@ const mutations = {
     state.locked = false
     state.pin = pin
   },
+  lock(state: AccountsState) {
+    state.locked = true
+  },
   setEncryptedPhrase(state: AccountsState, encryptedPhrase: string) {
     state.encryptedPhrase = encryptedPhrase
   },

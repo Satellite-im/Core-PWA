@@ -40,6 +40,10 @@ export default Vue.extend({
       },
     },
   },
+  mounted() {
+    this.$store.commit('accounts/lock')
+    this.$store.commit('prerequisites/resetState')
+  },
   methods: {
     /**
      * @method getIcon DocsTODO
