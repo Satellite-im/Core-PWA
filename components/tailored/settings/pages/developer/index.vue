@@ -9,6 +9,6 @@ export default Vue.extend({
   layout: 'settings',
   computed: {
     ...mapState(['accounts']),
-  }
+  },
 })
 </script>
