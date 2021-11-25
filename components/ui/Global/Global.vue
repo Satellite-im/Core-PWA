@@ -2,8 +2,7 @@
   <div>
     <TailoredSettingsModal v-if="ui.showSettings" />
     <InteractablesContextMenu v-if="ui.contextMenuStatus" />
-    <UiModal v-if="ui.modals.wallet"
-:close-modal="toggleWallet" nopad>
+    <UiModal v-if="ui.modals.wallet" :close-modal="toggleWallet" nopad>
       <TailoredWalletPopup />
     </UiModal>
     <UiModal
@@ -51,8 +50,7 @@
     </UiModal>
     <UiUpdateModal />
     <transition :name="$device.isMobile ? 'slide' : ''">
-      <InteractablesQuickProfile v-if="ui.quickProfile"
-:user="$mock.user" />
+      <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
     </transition>
   </div>
 </template>

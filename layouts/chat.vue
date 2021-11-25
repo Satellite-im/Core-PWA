@@ -29,8 +29,7 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar id="statusbar"
-:user="$mock.users[0]" />
+        <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
         <TailoredCoreMedia
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
@@ -57,7 +56,9 @@
         <TailoredWalletMini v-if="ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />
+        <TailoredCoreChatbar
+v-if="recipient" :recipient="recipient"
+/>
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"

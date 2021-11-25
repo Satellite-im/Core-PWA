@@ -1,6 +1,9 @@
 <template>
   <div class="message-loader">
-    <div v-for="i in count" class="message-loader-item" :key="i">
+    <div
+v-for="i in count" class="message-loader-item"
+:key="i"
+>
       <div class="right">
         <div class="placeholder-item" />
         <div class="placeholder-item bigger" />
