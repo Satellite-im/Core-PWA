@@ -51,6 +51,13 @@ export default Vue.extend({
       this.$data.requiresUpdate = false
       this.$data.hasMinorUpdate = false
     },
+    getReleaseBody() {
+      fetch('https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest')
+        .then(response => response.json())
+        .then(data => {
+          this.releaseData = data
+        })
+    }
   },
 })
 </script>
