@@ -1,4 +1,4 @@
-<template src="./Chat.html"></template>
+<template src="./Chat.html" />
 
 <script lang="ts">
 import Vue from 'vue'

@@ -1,4 +1,4 @@
-<template src="./CollapsableListMenu.html"></template>
+<template src="./CollapsableListMenu.html" />
 <script lang="ts">
 import Vue from 'vue'
 

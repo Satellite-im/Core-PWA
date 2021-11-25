@@ -1,4 +1,4 @@
-<template src="./Status.html"></template>
+<template src="./Status.html" />
 
 <script lang="ts">
 import Vue from 'vue'

@@ -1,4 +1,4 @@
-<template src="./TypingIndicator.html"></template>
+<template src="./TypingIndicator.html" />
 
 <script lang="ts">
 import Vue from 'vue'
@@ -9,6 +9,9 @@ export default Vue.extend({
       default: () => [],
       required: false,
     },
+  },
+  mounted() {
+    this.checkUsersTyping()
   },
   /**
    * @methods checkUsersTyping
@@ -27,9 +30,6 @@ export default Vue.extend({
       }
       return 0
     },
-  },
-  mounted() {
-    this.checkUsersTyping()
   },
 })
 </script>

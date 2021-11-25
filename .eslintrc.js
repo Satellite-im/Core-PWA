@@ -8,6 +8,7 @@ module.exports = {
     //  '@nuxtjs/eslint-config-typescript',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
+    'plugin:vue/vue3-recommended',
   ],
   plugins: [],
   // add your custom rules here
@@ -19,20 +20,14 @@ module.exports = {
     'no-else-return': [
       'error',
       {
-        allowElseIf: false
-      }
-    ],
-    'no-empty-cache': [
-      'error',
-      {
-        allowElseIf: false
-      }
+        allowElseIf: false,
+      },
     ],
     'no-eval': [
       'error',
       {
-        allowIndirect: true
-      }
+        allowIndirect: true,
+      },
     ],
   },
 }

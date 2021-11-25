@@ -1,4 +1,4 @@
-<template src="./Create.html"></template>
+<template src="./Create.html" />
 
 <script>
 import Vue from 'vue'
