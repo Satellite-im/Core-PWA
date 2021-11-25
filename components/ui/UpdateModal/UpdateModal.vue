@@ -48,8 +48,8 @@ export default Vue.extend({
       localStorage.setItem('local-version', this.$config.clientVersion)
       this.$data.requiresUpdate = false
       this.$data.hasMinorUpdate = false
-    }
-  }
+    },
+  },
 })
 </script>
 

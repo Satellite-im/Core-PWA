@@ -6,15 +6,14 @@
 </template>
 
 <script>
-
 export default {
   name: 'VoiceUser',
   props: ['user'],
-  data () {
+  data() {
     return {
-      collapsed: false
+      collapsed: false,
     }
-  }
+  },
 }
 </script>
 

@@ -1,0 +1,49 @@
+<div id="wallet-mini-send">
+  <UiSpacer :height="25" />
+  <div class="flex-row centered">
+    <TypographyTitle :size="2" text="$0" />
+  </div>
+  <UiSpacer :height="45" />
+  <div class="flex-row">
+    <InteractablesInputGroup class="input-container"
+      type="primary"
+      size="small"
+      :placeholder="$t('friends.search_placeholder')"
+      :action="searchFriend"
+      v-model="accountID"
+      :loading="searching">
+      <check-circle-2-icon size="1x" />
+    </InteractablesInputGroup>
+    <InteractablesSelect
+      :options="[{ text: 'USD', value: 'usd' }]"
+      v-model="paymentOption"
+      size="small"
+      class="form-control"
+    />
+  </div>
+  <div id="send-payment">
+    <InteractablesButton
+      type="primary"
+      size="small"
+      text="Send Money"
+      :action="updateMethod('send')">
+      <send-icon size="1x" />
+    </InteractablesButton>
+    <InteractablesButton
+      type="primary"
+      size="small"
+      text="Request Money"
+      :action="updateMethod('request')">
+      <redo-icon size="1x" />
+    </InteractablesButton>
+  </div>
+  <UiHorizontalRuleText plaintext value="Details" />
+  <div class="details">
+    <TypographyText :size="6" text="To: 0x0000000..." />
+    <TypographyText :size="6" text="From: 0x0000000..." />
+    <TypographyText :size="6" text="Amount: 0.00" />
+    <TypographyText :size="6" text="Currency: USDC" />
+    <br>
+    <TypographyText :size="6" text="TXID: AU28CC012ECX0Z" />
+  </div>
+</div>

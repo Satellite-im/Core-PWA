@@ -95,8 +95,9 @@ export default Vue.extend({
     )
     console.log(this.$store.state)
     console.groupEnd()
-
     console.groupEnd()
+    this.$store.commit('accounts/lock')
+    this.$store.commit('prerequisites/resetState')
   },
   methods: {
     /**

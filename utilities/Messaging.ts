@@ -191,3 +191,15 @@ export function getUsernameFromState(
 
   return username
 }
+
+export function getAddressFromState(
+  textilePublicKey: string,
+  state: RootState
+) {
+  const address =
+    state.friends.all.find(
+      (friend) => friend.textilePubkey === textilePublicKey
+    )?.address || 'unknown'
+
+  return address
+}
