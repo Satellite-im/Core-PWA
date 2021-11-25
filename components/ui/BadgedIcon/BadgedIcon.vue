@@ -1,4 +1,4 @@
-<template src="./BadgedIcon.html"></template>
+<template src="./BadgedIcon.html" />
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({

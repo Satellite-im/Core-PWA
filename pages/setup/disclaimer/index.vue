@@ -1,4 +1,4 @@
-<template src="./Disclaimer.html"></template>
+<template src="./Disclaimer.html" />
 
 <script lang="ts">
 import Vue from 'vue'

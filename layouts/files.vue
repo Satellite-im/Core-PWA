@@ -1,19 +1,20 @@
 <template>
-  <div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app-wrap"
+:class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
+      v-touch:swipe="sidebarSwipeHandler(this)"
+      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
         $device.isMobile ? 'mobile-app' : ''
       }`"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
     >
       <UiGlobal />
 
       <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
-        :openModal="toggleModal"
+        :open-modal="toggleModal"
       />
       <TailoredCoreSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
@@ -21,7 +22,8 @@
         :groups="$mock.groups"
       />
       <div class="dynamic-content">
-        <Nuxt id="files" ref="files" />
+        <Nuxt id="files"
+ref="files" />
       </div>
     </div>
     <TailoredCoreMobileNav v-if="$device.isMobile" />

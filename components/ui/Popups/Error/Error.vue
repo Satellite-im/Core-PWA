@@ -1,4 +1,4 @@
-<template src="./Error.html"></template>
+<template src="./Error.html" />
 
 <script>
 import Vue from 'vue'
@@ -17,14 +17,6 @@ export default Vue.extend({
     default: '',
     required: false,
   },
-  data() {
-    return {
-      source: '',
-      error: '',
-      details: '',
-      time: null,
-    }
-  },
   props: {
     errorText: {
       type: String,
@@ -38,6 +30,14 @@ export default Vue.extend({
       },
       required: false,
     },
+  },
+  data() {
+    return {
+      source: '',
+      error: '',
+      details: '',
+      time: null,
+    }
   },
   methods: {
     confirm() {

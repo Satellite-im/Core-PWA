@@ -1,4 +1,4 @@
-<template src="./Info.html"></template>
+<template src="./Info.html" />
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue from 'vue'

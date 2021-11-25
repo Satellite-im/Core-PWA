@@ -1,4 +1,4 @@
-<template src="./Sidebar.html"></template>
+<template src="./Sidebar.html" />
 
 <script lang="ts">
 import Vue from 'vue'

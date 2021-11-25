@@ -1,4 +1,4 @@
-<template src="./Live.html"></template>
+<template src="./Live.html" />
 
 <script lang="ts">
 import { RadioIcon, XIcon } from 'satellite-lucide-icons'

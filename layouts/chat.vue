@@ -2,28 +2,24 @@
   <div
     id="app-wrap"
     :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-      this.asidebar && this.selectedGroup
-        ? 'is-open-aside'
-        : 'is-collapsed-aside'
-    } ${this.selectedGroup ? 'active-group' : null}`"
+      asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
+    } ${selectedGroup ? 'active-group' : null}`"
   >
     <div
       id="app"
-      :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-        this.asidebar && this.selectedGroup
-          ? 'is-open-aside'
-          : 'is-collapsed-aside'
-      } ${this.selectedGroup ? 'group' : 'direct'} ${
-        $device.isMobile ? 'mobile-app' : ''
-      }`"
       v-touch:swipe="sidebarSwipeHandler(this)"
       v-touch-options="{ swipeTolerance: 75 }"
+      :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
+        asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
+      } ${selectedGroup ? 'group' : 'direct'} ${
+        $device.isMobile ? 'mobile-app' : ''
+      }`"
     >
       <UiGlobal />
       <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
-        :openModal="toggleModal"
+        :open-modal="toggleModal"
       />
       <TailoredCoreSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
@@ -33,26 +29,27 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
+        <TailoredCoreStatusbar id="statusbar"
+:user="$mock.users[0]" />
         <TailoredCoreMedia
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
-          :maxViewableUsers="10"
-          :fullscreenMaxViewableUsers="6"
+          :max-viewable-users="10"
+          :fullscreen-max-viewable-users="6"
         />
         <TailoredCoreMedia
           v-else
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
-          :maxViewableUsers="10"
-          :fullscreenMaxViewableUsers="20"
+          :max-viewable-users="10"
+          :fullscreen-max-viewable-users="20"
         />
         <UiChatScroll
           :contents="ui.messages"
-          :preventScrollOffset="500"
+          :prevent-scroll-offset="500"
           :class="media.activeCall ? 'media-open' : ''"
-          enableWrap
+          enable-wrap
         >
           <Nuxt />
         </UiChatScroll>
@@ -60,12 +57,12 @@
         <TailoredWalletMini v-if="ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar :recipient="recipient" v-if="recipient" />
+        <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
-        :selectedGroup="
-          $mock.groups.find((group) => group.address === this.selectedGroup)
+        :selected-group="
+          $mock.groups.find((group) => group.address === selectedGroup)
         "
         :friends="$mock.friends"
       />
