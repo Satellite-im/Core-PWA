@@ -1,4 +1,4 @@
-<template src="./Switch.html"></template>
+<template src="./Switch.html" />
 <script lang="ts">
 import Vue from 'vue'
 

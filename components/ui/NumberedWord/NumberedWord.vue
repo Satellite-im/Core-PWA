@@ -1,4 +1,4 @@
-<template src="./NumberedWord.html"></template>
+<template src="./NumberedWord.html" />
 
 <script lang="ts">
 import Vue from 'vue'

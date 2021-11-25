@@ -8,6 +8,7 @@ module.exports = {
     //  '@nuxtjs/eslint-config-typescript',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
+    'plugin:vue/vue3-recommended',
   ],
   plugins: [],
   // add your custom rules here
@@ -15,24 +16,18 @@ module.exports = {
     'vue/script-setup-uses-vars': 0,
     'import/named': 0,
     'standard/no-callback-literal': 0,
-    'comma-dangle': ['error', 'never'],
+    'comma-dangle': [2, 'always-multiline'],
     'no-else-return': [
       'error',
       {
-        allowElseIf: false
-      }
-    ],
-    'no-empty-cache': [
-      'error',
-      {
-        allowElseIf: false
-      }
+        allowElseIf: false,
+      },
     ],
     'no-eval': [
       'error',
       {
-        allowIndirect: true
-      }
+        allowIndirect: true,
+      },
     ],
   },
 }

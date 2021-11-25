@@ -1,4 +1,4 @@
-<template src="./Direct.html"></template>
+<template src="./Direct.html" />
 
 <script lang="ts">
 import Vue from 'vue'

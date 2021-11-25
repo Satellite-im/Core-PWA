@@ -1,4 +1,4 @@
-<template src="./ChatScroll.html"></template>
+<template src="./ChatScroll.html" />
 
 <script>
 import Vue from 'vue'
@@ -71,7 +71,7 @@ export default Vue.extend({
       this.autoScrollToBottom()
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.loaded = false
   },
   methods: {
