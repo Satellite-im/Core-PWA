@@ -66,6 +66,7 @@ export default Vue.extend({
           file.nsfw.status = await this.$Security.isNSFW(file.file)
         } catch (err) {
           file.nsfw.status = true
+          file.nsfw.checking = false
           return
         }
         file.nsfw.checking = false
