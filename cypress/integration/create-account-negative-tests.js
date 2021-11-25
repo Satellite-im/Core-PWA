@@ -7,4 +7,5 @@ it('Try to create account with PIN less than 5 digits', () => {
   cy.reload()
   cy.get('[data-cy=submit-input]').click()
   cy.contains('Pin must be at least 5 characters.')
+  a
 })
