@@ -123,7 +123,7 @@
     "jest": "^26.6.3",
     "lint-staged": ">=10",
     "prettier": "^2.2.1",
-    "ts-jest": "^26.5.4",
+    "ts-jest": "^27.0.7",
     "vue-jest": "^3.0.4"
   },
   "capacitor": {

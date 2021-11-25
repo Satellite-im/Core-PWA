@@ -54,7 +54,7 @@
           <Nuxt />
         </UiChatScroll>
         <TailoredMessagingEnhancers />
-        <TailoredWalletMini v-if="$store.state.ui.modals.walletMini" />
+        <TailoredWalletMini v-if="ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
         <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />

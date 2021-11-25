@@ -36,12 +36,14 @@ export default Vue.extend({
       if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
         this.$store.commit('ui/toggleEnhancers', {
           show: true,
+          floating: true,
           route,
         })
         return
       }
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
+        floating: true,
         route,
       })
     },
