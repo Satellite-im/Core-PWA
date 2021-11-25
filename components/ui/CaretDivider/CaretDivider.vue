@@ -1,4 +1,4 @@
-<template src="./CaretDivider.html"></template>
+<template src="./CaretDivider.html" />
 
 <script lang="ts">
 import Vue from 'vue'

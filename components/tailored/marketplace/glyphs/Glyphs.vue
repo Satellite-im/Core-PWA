@@ -1,4 +1,4 @@
-<template src="./Glyphs.html"></template>
+<template src="./Glyphs.html" />
 
 <script lang="ts">
 import Vue from 'vue'

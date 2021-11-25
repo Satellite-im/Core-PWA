@@ -1,4 +1,4 @@
-<template src="./Recent.html"></template>
+<template src="./Recent.html" />
 <script lang="ts">
 import Vue from 'vue'
 

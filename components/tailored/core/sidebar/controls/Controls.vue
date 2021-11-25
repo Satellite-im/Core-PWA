@@ -1,4 +1,4 @@
-<template src="./Controls.html"></template>
+<template src="./Controls.html" />
 
 <script lang="ts">
 import Vue from 'vue'

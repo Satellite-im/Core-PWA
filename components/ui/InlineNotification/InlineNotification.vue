@@ -1,4 +1,4 @@
-<template src="./InlineNotification.html"></template>
+<template src="./InlineNotification.html" />
 <script lang="ts">
 import Vue from 'vue'
 import { XIcon } from 'satellite-lucide-icons'
