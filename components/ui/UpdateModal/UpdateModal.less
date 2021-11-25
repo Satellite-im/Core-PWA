@@ -6,7 +6,17 @@
     text-align: center;
     flex-direction: column;
     padding: @normal-spacing;
-    max-width: 20rem;
+    max-width: 40rem;
+
+    pre {
+      white-space: pre-wrap;
+      text-align: left;
+      border: @light-border;
+      background: @semitransparent-dark-gradient;
+      border-radius: @corner-rounding;
+      max-height: 30vh;
+      color: @text-muted;
+    }
 
     .button {
       width: calc(50% - 0.25rem);
