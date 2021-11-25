@@ -35,7 +35,7 @@
             />
             <TypographySubtitle
               :size="6"
-              text="Upload Blocked"
+              :text="`${$t('errors.chat.unable_preview')}. ${$t('errors.chat.upload_blocked')}`"
               v-if="item.nsfw.status"
             />
             <slash-icon size="1x" v-if="item.nsfw.status" />
