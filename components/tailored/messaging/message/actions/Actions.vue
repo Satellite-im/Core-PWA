@@ -37,10 +37,15 @@ export default Vue.extend({
       type: Function,
       default: () => () => {},
     },
-    messageOwner: {
-      type: String,
-      required: true,
-    },
+    message: {
+      type: Object as PropType<UIMessage>,
+      default: {
+        id: '0',
+        at: 1620515543000,
+        type: 'text',
+        payload: 'Invalid Message',
+      }
+    }
   },
   computed: {
     ...mapState(['ui', 'accounts']),

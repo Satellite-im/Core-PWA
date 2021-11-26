@@ -27,18 +27,10 @@
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
-      :messageOwner="this.$props.message.from"
+      :message="message"
     />
-    <VueMarkdown
-      v-if="!messageEdit && message.type === 'text'"
-      :source="message.payload"
-      class="markdown"
-    />
-    <UiImage
-      v-else-if="message.type === 'image'"
-      :source="message.payload.url"
-      alt=""
-    />
+    <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
+    <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiEmbedsEmbeddedLinkContent
       v-if="message.type === 'text'"
