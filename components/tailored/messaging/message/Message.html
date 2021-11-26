@@ -18,6 +18,7 @@
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
+      :message="message"
       :messageOwner="this.$props.message.from" />
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
     <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
