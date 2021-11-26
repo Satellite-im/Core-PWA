@@ -75,6 +75,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
+    { src: '~/plugins/thirdparty/vuetify.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
