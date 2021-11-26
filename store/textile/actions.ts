@@ -154,6 +154,7 @@ export default {
 
       commit('addMessageToConversation', {
         address: sender.address,
+        sender: 'other',
         message,
       })
     })
@@ -213,6 +214,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: 'self',
       message: result,
     })
   },
@@ -252,6 +254,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: 'self',
       message: result,
     })
   },
@@ -291,6 +294,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: 'self',
       message: result,
     })
   },
