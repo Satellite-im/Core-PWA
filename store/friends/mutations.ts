@@ -45,11 +45,11 @@ const mutations = {
     )
   },
   addFriend(state: FriendsState, friend: Friend) {
-    state.all.push(friend)
+    state.all.push(friend);
   },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map((fr) =>
-      fr.publicKey === friend.publicKey ? friend : fr
+      fr = fr.address === friend.address ? friend : fr
     )
   },
   removeFriend(state: FriendsState, friendPublicKey: string) {

@@ -140,11 +140,8 @@ export default {
     }
 
     const friendExists = state.all.find((fr) => fr.address === friend.address)
-
-    if (friendExists) {
-      commit('updateFriend', friend)
-    } else {
-      commit('addFriend', friend)
+    if (!friendExists) {
+      commit('addFriend', friend);
 
       // Eventually delete the related friend request
       commit(
@@ -155,7 +152,10 @@ export default {
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(friendAccount).requestId
       )
+      return
     }
+
+    commit('updateFriend', friend);
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO
