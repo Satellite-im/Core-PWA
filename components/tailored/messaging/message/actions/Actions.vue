@@ -43,6 +43,7 @@ export default Vue.extend({
         id: '0',
         at: 1620515543000,
         type: 'text',
+        from: 'group',
         payload: 'Invalid Message',
       }
     }
