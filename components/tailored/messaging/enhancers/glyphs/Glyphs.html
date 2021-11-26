@@ -8,16 +8,31 @@
       type="primary"
     />
   </div>
-  <TailoredMessagingEnhancersGlyphsNav @navSelected="(val) => {filter(val)}"></TailoredMessagingEnhancersGlyphsNav>
+
+  <TailoredMessagingEnhancersGlyphsNav
+    @navSelected="(val) => {filter(val)}"
+  ></TailoredMessagingEnhancersGlyphsNav>
   <div class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
       <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
-      <TailoredMessagingEnhancersGlyphsPack
-        v-for="pack in filteredGlyphs"
-        :key="pack.id"
-        :pack="pack"
-      ></TailoredMessagingEnhancersGlyphsPack>
+
+      <div v-for="(pack, i) in filteredGlyphs">
+        <v-responsive max-height="100%">
+          <v-lazy
+            v-model="pack.isActive"
+            :options="{
+              threshold: .5 
+            }"
+            min-height="50"
+            transition="fade-transition"
+          >
+            <TailoredMessagingEnhancersGlyphsPack :key="pack.id" :pack="pack">
+            </TailoredMessagingEnhancersGlyphsPack>
+          </v-lazy>
+        </v-responsive>
+      </div>
     </UiScroll>
   </div>
+
   <TailoredMessagingEnhancersGlyphsItemInfo></TailoredMessagingEnhancersGlyphsItemInfo>
 </div>
