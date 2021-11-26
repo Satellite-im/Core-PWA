@@ -28,7 +28,11 @@
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
       :message="message"
+<<<<<<< HEAD
     />
+=======
+      :messageOwner="this.$props.message.from" />
+>>>>>>> d8df374a459cd2f517f79d6c570d5800198504e5
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
     <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
