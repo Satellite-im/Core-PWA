@@ -8,23 +8,28 @@ module.exports = {
     '!**/*.config.ts',
     '!**/config.ts',
     '!**/startup.js',
-    '!**/*.eslintrc.js',
+    '!**/*.eslintrc.js'
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-    '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
+    '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js'
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  coveragePathIgnorePatterns: ['<rootDir>/.nuxt', '<rootDir>/cypress','<rootDir>/coverage', '<rootDir>/plugins' ],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/.nuxt',
+    '<rootDir>/cypress',
+    '<rootDir>/coverage',
+    '<rootDir>/plugins'
+  ],
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest'],
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest']
   },
   transformIgnorePatterns: [
     '/node_modules/',
     'node_modules/(?!@mylibrary/)',
-    '^.+\\.module\\.(css|sass|scss)$',
-  ],
+    '^.+\\.module\\.(css|sass|scss)$'
+  ]
 }
