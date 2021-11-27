@@ -29,8 +29,11 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar id="statusbar"
-:user="$mock.users[0]" />
+        <TailoredCoreStatusbar
+          id="statusbar"
+          :server="recipient || $mock.users[0]"
+          :user="$mock.users[0]"
+        />
         <TailoredCoreMedia
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
@@ -84,7 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
-      asidebar: !this.$device.isMobile,
+      asidebar: !this.$device.isMobile
     }
   },
   computed: {
@@ -104,7 +107,7 @@ export default Vue.extend({
             (friend) => friend.address === this.$route.params.address
           )
       return recipient
-    },
+    }
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
@@ -117,7 +120,7 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-  },
+  }
 })
 </script>
 
