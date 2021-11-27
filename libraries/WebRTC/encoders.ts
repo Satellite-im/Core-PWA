@@ -3,7 +3,7 @@ import * as t from 'io-ts'
 export const wireBaseMessage = t.type({
   type: t.string,
   payload: t.unknown,
-  sentAt: t.number,
+  sentAt: t.number
 })
 
 export const wireIdentificationMessage = t.intersection([
@@ -11,16 +11,16 @@ export const wireIdentificationMessage = t.intersection([
   t.type({
     type: t.literal('IDENTIFICATION'),
     payload: t.type({
-      peerId: t.string,
-    }),
-  }),
+      peerId: t.string
+    })
+  })
 ])
 
 export const wireDataMessage = t.intersection([
   wireBaseMessage,
   t.type({
-    type: t.literal('DATA'),
-  }),
+    type: t.literal('DATA')
+  })
 ])
 
 export const wireSignalMessage = t.intersection([
@@ -29,9 +29,9 @@ export const wireSignalMessage = t.intersection([
     type: t.literal('SIGNAL'),
     payload: t.type({
       peerId: t.string,
-      data: t.unknown,
-    }),
-  }),
+      data: t.unknown
+    })
+  })
 ])
 
 export const wireRefuseConnectionMessage = t.intersection([
@@ -39,7 +39,7 @@ export const wireRefuseConnectionMessage = t.intersection([
   t.type({
     type: t.literal('REFUSE'),
     payload: t.type({
-      peerId: t.string,
-    }),
-  }),
+      peerId: t.string
+    })
+  })
 ])
