@@ -1,3 +1,8 @@
+/**
+ * @class Emitter
+ * @description The emitter class provides an interface for
+ * listening and emitting custom events in a strongly typed way
+ */
 export default class Emitter<
   Listeners extends { [key in keyof Listeners]: (...args: any[]) => any }
 > {
@@ -5,10 +10,10 @@ export default class Emitter<
 
   /**
    * @method on
-   * @description Bind event listeners to WebRTCEvents
-   * @param event WebRTCEvent to listen to
-   * @param listener to call on any WebRTC Event
-   * @example Emitter.on(WebRTCEvents.INIT, () => {})
+   * @description Bind event listeners
+   * @param event Event to listen to
+   * @param listener to call on any Event
+   * @example Emitter.on('EVENT_NAME', (parameter: ParameterType) => {})
    */
   on<T extends keyof Listeners>(event: T, listener: Listeners[T]) {
     if (!this._events[event]) {
@@ -21,9 +26,9 @@ export default class Emitter<
   /**
    * @method off
    * @description Removes an event listener from the listener box
-   * @param event WebRTCEvent to unsubscribe from
+   * @param event event to unsubscribe from
    * @param listener Listener function to remove
-   * @example Emitter.off(WebRTCEvents.INIT, () => {})
+   * @example Emitter.off("EVENT_NAME", (parameter: ParameterType) => {})
    */
   off<T extends keyof Listeners>(event: T, listenerToRemove: Listeners[T]) {
     if (!this._events[event]) {
@@ -42,9 +47,9 @@ export default class Emitter<
   /**
    * @method emit
    * @description Emits an event to all listeners
-   * @param event WebRTCEvent to emit
+   * @param event event to emit
    * @param data Data to provide to listeners
-   * @example Emitter.emit(WebRTCEvents.INIT, 'something')
+   * @example Emitter.emit('EVENT_NAME', {eventParam, otherParam})
    */
   protected emit<T extends keyof Listeners>(
     event: T,
@@ -53,8 +58,6 @@ export default class Emitter<
     if (!this._events[event]) {
       return
     }
-
-    console.log(event, this._events[event])
 
     this._events[event]!.forEach((cb) => cb(data))
   }

@@ -9,10 +9,17 @@ import { Wire } from './Wire'
  * It makes use of a Wire as a communication bus for signaling.
  */
 export class Call extends Emitter<CallEventListeners> {
+  communicationBus: Wire
+
   peer?: Peer.Instance // The Simple Peer instance for the active call
-  communicationBus: Wire // The Wire instance used for signaling (it happens through p2p connection)
   signalingBuffer?: Peer.SignalData // A variable to store the signaling data before the answer
 
+  stream?: MediaStream // MediaStream for the active call
+
+  /**
+   * @constructor
+   * @param communicationBus The Wire instance used for signaling (it happens through p2p connection)
+   */
   constructor(communicationBus: Wire) {
     super()
 
@@ -33,6 +40,9 @@ export class Call extends Emitter<CallEventListeners> {
     // A new Simple Peer instance is created with the initiator flag set to true
     this.peer = new Peer({ initiator: true, trickle: false, stream })
     this._bindPeerListeners()
+
+    // Store the stream of the active call to destroy it after hang up
+    this.stream = stream
   }
 
   /**
@@ -53,8 +63,96 @@ export class Call extends Emitter<CallEventListeners> {
     this.peer = new Peer({ initiator: false, trickle: false, stream })
     this._bindPeerListeners()
 
+    // Store the stream of the active call to destroy it after hang up
+    this.stream = stream
+
     // Signal to the peer with previously received Signaling Data
     this.peer.signal(this.signalingBuffer)
+  }
+
+  /**
+   * @method hangUp
+   * @description It's used to close the call
+   * @example
+   * const call = new Call(wireInstance)
+   * call.hangUp()
+   */
+  hangUp() {
+    console.log('hangup')
+
+    this.peer?.destroy()
+    this.stream?.getTracks().forEach((track) => track.stop())
+
+    delete this.peer
+    delete this.stream
+  }
+
+  /**
+   * @method addStream
+   * @description Adds a stream to the call
+   * @param stream MediaStream to add
+   * @example
+   * const call = new Call(wireInstance)
+   * call.addStream(mediaStream)
+   */
+  addStream(stream: MediaStream) {
+    this.peer?.addStream(stream)
+  }
+
+  /**
+   * @method removeStream
+   * @description Removes a stream from the call
+   * @param stream MediaStream to remove
+   * @example
+   * const call = new Call(wireInstance)
+   * call.removeStream(mediaStream)
+   */
+  removeStream(stream: MediaStream) {
+    this.peer?.removeStream(stream)
+  }
+
+  /**
+   * @method addTrack
+   * @description Adds a track to the call
+   * @param track MediaStreamTrack to add
+   * @param stream Related stream
+   * @example
+   * const call = new Call(wireInstance)
+   * call.addTrack(newTrack, mediaStream)
+   */
+  addTrack(track: MediaStreamTrack, stream: MediaStream) {
+    this.peer?.addTrack(track, stream)
+  }
+
+  /**
+   * @method removeTrack
+   * @description Removes a track from the call
+   * @param track MediaStreamTrack to remove
+   * @param stream Related stream
+   * @example
+   * const call = new Call(wireInstance)
+   * call.removeTrack(trackToRemove, mediaStream)
+   */
+  removeTrack(track: MediaStreamTrack, stream: MediaStream) {
+    this.peer?.removeTrack(track, stream)
+  }
+
+  /**
+   * @method replaceTrack
+   * @description Replaces a track with a new one
+   * @param oldTrack old MediaStreamTrack to remove
+   * @param newTrack new MediaStreamTrack to add
+   * @param stream Related stream
+   * @example
+   * const call = new Call(wireInstance)
+   * call.replaceTrack(trackToRemove, trackToAdd, mediaStream)
+   */
+  replaceTrack(
+    oldTrack: MediaStreamTrack,
+    newTrack: MediaStreamTrack,
+    stream: MediaStream
+  ) {
+    this.peer?.replaceTrack(oldTrack, newTrack, stream)
   }
 
   /**
@@ -65,6 +163,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _bindBusListeners() {
     this.communicationBus?.on('SIGNAL', this._onBusSignal.bind(this))
+    // this.communicationBus?.on('REFUSE', this.)
   }
 
   /**
@@ -155,6 +254,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer close event
    */
   protected _onClose() {
+    this.hangUp()
     this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
   }
 
@@ -171,5 +271,14 @@ export class Call extends Emitter<CallEventListeners> {
     } else {
       this.peer?.signal(this.signalingBuffer)
     }
+  }
+
+  /**
+   * @method _onBusRefuse
+   * @description Callback for the Wire on refuse event. Used for the hang up
+   * before the call started
+   */
+  protected _onBusRefuse() {
+    this._onClose()
   }
 }

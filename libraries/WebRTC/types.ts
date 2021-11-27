@@ -2,6 +2,7 @@ import { TypeOf } from 'io-ts'
 import {
   wireDataMessage,
   wireIdentificationMessage,
+  wireRefuseConnectionMessage,
   wireSignalMessage,
 } from './Encoders'
 import { SignalData } from 'simple-peer'
@@ -15,6 +16,7 @@ export interface WireEventListeners {
   CLOSE: (data: { peerId: string }) => void
   IDENTIFICATION: (data: { peerId: string }) => void
   SIGNAL: (data: { peerId: string; data: SignalData }) => void
+  REFUSE: (data: { peerId: string }) => void
 }
 
 export type WireEvents = keyof WireEventListeners
@@ -22,10 +24,14 @@ export type WireEvents = keyof WireEventListeners
 export type WireIdentificationMessage = TypeOf<typeof wireIdentificationMessage>
 export type WireDataMessage = TypeOf<typeof wireDataMessage>
 export type WireSignalMessage = TypeOf<typeof wireSignalMessage>
+export type WireRefuseConnectionMessage = TypeOf<
+  typeof wireRefuseConnectionMessage
+>
 export interface WireMessages {
   IDENTIFICATION: WireIdentificationMessage
   DATA: WireDataMessage
   SIGNAL: WireSignalMessage
+  REFUSE: WireRefuseConnectionMessage
 }
 
 export type WireMessageType = keyof WireMessages

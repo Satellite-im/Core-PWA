@@ -10,6 +10,7 @@ import {
 import {
   wireDataMessage,
   wireIdentificationMessage,
+  wireRefuseConnectionMessage,
   wireSignalMessage,
 } from './Encoders'
 
@@ -179,6 +180,18 @@ export class Wire extends Emitter<WireEventListeners> {
       this.emit('DATA', {
         peerId: this.identifier,
         data,
+      })
+
+      return
+    }
+
+    const refuseMessage = wireRefuseConnectionMessage.decode(parsedData)
+
+    if (isRight(refuseMessage)) {
+      const data = refuseMessage.right.payload
+
+      this.emit('REFUSE', {
+        peerId: this.identifier,
       })
 
       return

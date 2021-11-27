@@ -33,3 +33,13 @@ export const wireSignalMessage = t.intersection([
     }),
   }),
 ])
+
+export const wireRefuseConnectionMessage = t.intersection([
+  wireBaseMessage,
+  t.type({
+    type: t.literal('REFUSE'),
+    payload: t.type({
+      peerId: t.string,
+    }),
+  }),
+])
