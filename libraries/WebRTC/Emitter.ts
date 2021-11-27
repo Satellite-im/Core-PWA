@@ -1,5 +1,3 @@
-import { DataOf } from '~/libraries/WebRTC/types'
-
 export default class Emitter<
   Listeners extends { [key in keyof Listeners]: (...args: any[]) => any }
 > {
@@ -53,18 +51,11 @@ export default class Emitter<
     ...[data]: Parameters<Listeners[T]>
   ) {
     if (!this._events[event]) {
-      throw new Error(`Can't emit an event. Event "${event}" doesn't exits.`)
+      return
     }
 
-    const fireCallback = (callback: (d: DataOf<T, Listeners>) => void) => {
-      // eslint-disable-next-line node/no-callback-literal
-      callback({
-        at: Date.now(),
-        event,
-        data,
-      } as DataOf<T, Listeners>)
-    }
+    console.log(event, this._events[event])
 
-    this._events[event]!.forEach(fireCallback)
+    this._events[event]!.forEach((cb) => cb(data))
   }
 }

@@ -1,7 +1,6 @@
 import * as t from 'io-ts'
-import { WireMessageTypes } from './types'
 
-const wireBaseMessage = t.type({
+export const wireBaseMessage = t.type({
   type: t.string,
   payload: t.unknown,
   sentAt: t.number,
@@ -10,7 +9,7 @@ const wireBaseMessage = t.type({
 export const wireIdentificationMessage = t.intersection([
   wireBaseMessage,
   t.type({
-    type: t.literal(WireMessageTypes.IDENTIFICATION),
+    type: t.literal('IDENTIFICATION'),
     payload: t.type({
       peerId: t.string,
     }),
@@ -20,20 +19,17 @@ export const wireIdentificationMessage = t.intersection([
 export const wireDataMessage = t.intersection([
   wireBaseMessage,
   t.type({
-    type: t.literal(WireMessageTypes.DATA),
+    type: t.literal('DATA'),
   }),
 ])
 
-export const wireStartCallMessage = t.intersection([
+export const wireSignalMessage = t.intersection([
   wireBaseMessage,
   t.type({
-    type: t.literal(WireMessageTypes.START_CALL),
-  }),
-])
-
-export const wireAnswerCallMessage = t.intersection([
-  wireBaseMessage,
-  t.type({
-    type: t.literal(WireMessageTypes.ANSWER_CALL),
+    type: t.literal('SIGNAL'),
+    payload: t.type({
+      peerId: t.string,
+      data: t.unknown,
+    }),
   }),
 ])

@@ -92,7 +92,13 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    */
   protected _connect(peerId: string, channel: string): void {
     console.log('connecting to', peerId)
-    const wire = new Wire(peerId, channel, this._announceURLs)
+    const wire = new Wire(
+      'originator',
+      peerId,
+      channel,
+      this._announceURLs,
+      false
+    )
 
     this._bindWireListeners(wire)
 
@@ -100,15 +106,15 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   }
 
   protected _bindWireListeners(wire: Wire) {
-    wire.on(WireEvents.CONNECT, ({ peerId }) => {
+    wire.on('CONNECT', ({ peerId }) => {
       this.emit(WebRTCEvents.PEER_CONNECT, { peerId })
     })
 
-    wire.on(WireEvents.DATA, ({ peerId, data }) => {
+    wire.on('DATA', ({ peerId, data }) => {
       console.log(peerId, data)
     })
 
-    wire.on(WireEvents.ERROR, ({ peerId, error }) => {
+    wire.on('ERROR', ({ peerId, error }) => {
       console.log(peerId, error)
     })
   }
