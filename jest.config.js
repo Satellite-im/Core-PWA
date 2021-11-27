@@ -4,6 +4,11 @@ module.exports = {
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
+    '!**/*.config.js',
+    '!**/*.config.ts',
+    '!**/config.ts',
+    '!**/startup.js',
+    '!**/*.eslintrc.js',
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
@@ -12,6 +17,7 @@ module.exports = {
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  coveragePathIgnorePatterns: ['<rootDir>/.nuxt', '<rootDir>/cypress','<rootDir>/coverage', '<rootDir>/plugins' ],
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest'],
