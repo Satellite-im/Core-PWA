@@ -30,6 +30,7 @@
       "nuxt-i18n",
       "@nuxtjs/device",
       "types/modules/satellite-lucide-icons.d.ts",
+      "jest",
     ]
   },
   "exclude": [
