@@ -10,7 +10,7 @@ interface Base64Brand {
 const base64 = t.brand(
   t.string,
   (s: string): s is t.Branded<string, Base64Brand> => isBase64(s),
-  'Base64'
+  'Base64',
 )
 
 export type Base64 = t.TypeOf<typeof base64>
@@ -20,7 +20,7 @@ export const rawMessage = t.intersection([
     id: t.string,
     body: base64,
     from: t.string,
-    sent: t.number
+    sent: t.number,
   }),
   t.partial({ readAt: t.number })
 ])
@@ -32,7 +32,7 @@ export const decryptedMessage = t.intersection([
     id: t.string,
     body: t.string,
     from: t.string,
-    sent: t.number
+    sent: t.number,
   }),
   t.partial({ readAt: t.number })
 ])
@@ -45,7 +45,7 @@ export const messageFromThread = t.intersection([
     body: t.string,
     signature: t.string,
     to: t.string,
-    _mod: t.number
+    _mod: t.number,
   }),
   t.partial({ read_at: t.number })
 ])
@@ -55,7 +55,7 @@ const baseMessage = t.intersection([
     id: t.string,
     at: t.number,
     from: t.string,
-    to: t.string
+    to: t.string,
   }),
   t.partial({ readAt: t.number })
 ])
@@ -65,7 +65,7 @@ export const replyMessage = t.intersection([
   t.type({
     payload: t.string,
     repliedTo: t.string,
-    type: t.literal('reply')
+    type: t.literal('reply'),
   })
 ])
 
@@ -74,7 +74,7 @@ export const reactionMessage = t.intersection([
   t.type({
     payload: t.string,
     reactedTo: t.string,
-    type: t.literal('reaction')
+    type: t.literal('reaction'),
   })
 ])
 
@@ -82,7 +82,7 @@ export const fileMessage = t.intersection([
   baseMessage,
   t.type({
     payload: t.string,
-    type: t.literal('file')
+    type: t.literal('file'),
   })
 ])
 
@@ -90,7 +90,7 @@ export const textMessage = t.intersection([
   baseMessage,
   t.type({
     payload: t.string,
-    type: t.literal('text')
+    type: t.literal('text'),
   })
 ])
 
@@ -98,7 +98,7 @@ export const mediaMessage = t.intersection([
   baseMessage,
   t.type({
     payload: t.string,
-    type: t.literal('media')
+    type: t.literal('media'),
   })
 ])
 
@@ -107,5 +107,5 @@ export const messageEncoder = t.union([
   reactionMessage,
   fileMessage,
   textMessage,
-  mediaMessage
+  mediaMessage,
 ])
