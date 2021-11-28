@@ -16,7 +16,6 @@ module.exports = {
     'vue/script-setup-uses-vars': 0,
     'import/named': 0,
     'standard/no-callback-literal': 0,
-    'comma-dangle': ['error', 'never'],
     'no-else-return': [
       'error',
       {
