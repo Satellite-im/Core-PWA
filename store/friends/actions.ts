@@ -152,9 +152,9 @@ export default {
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(friendAccount).requestId
       )
-    } else {
-      commit('updateFriend', friend);
+      return;
     }
+    commit('updateFriend', friend);
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO
