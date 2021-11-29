@@ -132,7 +132,7 @@ export default class IdentityManager {
     this.client = await Client.withKeyInfo({ key: Config.textile.key })
 
     this.users = await Users.withKeyInfo({
-      key: Config.textile.key,
+      key: Config.textile.key
     })
 
     await this.users.getToken(identity)
@@ -142,7 +142,7 @@ export default class IdentityManager {
     return {
       client: this.client,
       token,
-      users: this.users,
+      users: this.users
     }
   }
 
