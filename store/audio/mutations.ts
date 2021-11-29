@@ -1,3 +1,4 @@
+import { UIState } from '../ui/types'
 import { AudioState } from './types'
 
 const mutations = {
@@ -19,6 +20,13 @@ const mutations = {
   setInputVolume(state: AudioState, inputVolume: Number) {
     state.inputVolume = inputVolume
   },
+  setLevel(state: AudioState, soundType: {
+    inboundMedia: Number
+    outboundMedia: Number
+    system: Number
+  },  volume: Number) {
+    state.sounds = soundType
+  }
 }
 
 export default mutations
