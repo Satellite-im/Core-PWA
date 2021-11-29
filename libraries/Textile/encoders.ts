@@ -22,7 +22,7 @@ export const rawMessage = t.intersection([
     from: t.string,
     sent: t.number,
   }),
-  t.partial({ readAt: t.number })
+  t.partial({ readAt: t.number }),
 ])
 
 export type RawMessage = t.TypeOf<typeof rawMessage>
@@ -34,7 +34,7 @@ export const decryptedMessage = t.intersection([
     from: t.string,
     sent: t.number,
   }),
-  t.partial({ readAt: t.number })
+  t.partial({ readAt: t.number }),
 ])
 
 export const messageFromThread = t.intersection([
@@ -47,7 +47,7 @@ export const messageFromThread = t.intersection([
     to: t.string,
     _mod: t.number,
   }),
-  t.partial({ read_at: t.number })
+  t.partial({ read_at: t.number }),
 ])
 
 const baseMessage = t.intersection([
@@ -57,7 +57,7 @@ const baseMessage = t.intersection([
     from: t.string,
     to: t.string,
   }),
-  t.partial({ readAt: t.number })
+  t.partial({ readAt: t.number }),
 ])
 
 export const replyMessage = t.intersection([
@@ -66,7 +66,7 @@ export const replyMessage = t.intersection([
     payload: t.string,
     repliedTo: t.string,
     type: t.literal('reply'),
-  })
+  }),
 ])
 
 export const reactionMessage = t.intersection([
@@ -75,7 +75,7 @@ export const reactionMessage = t.intersection([
     payload: t.string,
     reactedTo: t.string,
     type: t.literal('reaction'),
-  })
+  }),
 ])
 
 export const fileMessage = t.intersection([
@@ -83,7 +83,7 @@ export const fileMessage = t.intersection([
   t.type({
     payload: t.string,
     type: t.literal('file'),
-  })
+  }),
 ])
 
 export const textMessage = t.intersection([
@@ -91,7 +91,7 @@ export const textMessage = t.intersection([
   t.type({
     payload: t.string,
     type: t.literal('text'),
-  })
+  }),
 ])
 
 export const mediaMessage = t.intersection([
@@ -99,7 +99,7 @@ export const mediaMessage = t.intersection([
   t.type({
     payload: t.string,
     type: t.literal('media'),
-  })
+  }),
 ])
 
 export const messageEncoder = t.union([

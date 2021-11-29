@@ -4,14 +4,14 @@
  * listening and emitting custom events in a strongly typed way
  */
 export default class Emitter<
-  Listeners extends { [key in keyof Listeners]: (...args: any[]) => any }
+  Listeners extends { [key in keyof Listeners]: (...args: any[]) => any },
 > {
   private _events: { [key in keyof Listeners]?: Array<Listeners[key]> } = {}
 
   /**
    * @method on
    * @description Bind event listeners
-   * @param event Event to listen to
+   * @param event Name of the event to listen to
    * @param listener to call on any Event
    * @example Emitter.on('EVENT_NAME', (parameter: ParameterType) => {})
    */
@@ -26,19 +26,19 @@ export default class Emitter<
   /**
    * @method off
    * @description Removes an event listener from the listener box
-   * @param event event to unsubscribe from
+   * @param event Name of the event to unsubscribe from
    * @param listener Listener function to remove
    * @example Emitter.off("EVENT_NAME", (parameter: ParameterType) => {})
    */
   off<T extends keyof Listeners>(event: T, listenerToRemove: Listeners[T]) {
     if (!this._events[event]) {
       throw new Error(
-        `Can't remove a listener. Event "${event}" doesn't exits.`
+        `Can't remove a listener. Event "${event}" doesn't exits.`,
       )
     }
 
     const filteredListeners = this._events[event]!.filter(
-      (listener: Listeners[T]) => listener !== listenerToRemove
+      (listener: Listeners[T]) => listener !== listenerToRemove,
     )
 
     this._events[event] = filteredListeners
@@ -47,7 +47,7 @@ export default class Emitter<
   /**
    * @method emit
    * @description Emits an event to all listeners
-   * @param event event to emit
+   * @param event Name of the event to emit
    * @param data Data to provide to listeners
    * @example Emitter.emit('EVENT_NAME', {eventParam, otherParam})
    */

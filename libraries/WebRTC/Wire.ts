@@ -30,7 +30,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
   /**
    * @constructor
-   * @param originator Idendifier of the originator
+   * @param originator Identifier of the originator
    * @param identifier Identifier of the recipient
    * @param channel Secret communication channel you want to connect (shared secret between parties)
    * @param announceURLs Array of Web Torrent trackers for the signaling
@@ -43,7 +43,7 @@ export class Wire extends Emitter<WireEventListeners> {
     identifier: string,
     channel: string,
     announceURLs: string[] = [],
-    sendIdentification: boolean = false
+    sendIdentification: boolean = false,
   ) {
     super()
 
