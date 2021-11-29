@@ -8,15 +8,17 @@ export default Vue.extend({
   computed: {
     isLoading() {
       return this.$store.state.accounts.loading
-    },
+    }
   },
   methods: {
     async generateWallet() {
       await this.$store.dispatch('accounts/generateWallet')
-
       this.$router.push('phrase')
     },
-  },
+    importAccount() {
+      this.$router.push('inputAccount')
+    },
+  }
 })
 </script>
 
