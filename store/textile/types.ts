@@ -11,8 +11,8 @@ export interface TextileState {
       messages: MessagesTracker
       replies: RepliesTracker
       reactions: ReactionsTracker
-      lastMsgReceived: number // the last time a message was received by any member of conversation other than account owner
-      lastConvoUpdate: number // the last time a message was received by any member of conversation
+      lastInbound: number // the last time a message was received by any member of conversation, other than account owner
+      lastUpdate: number // the last time a message was received by any member of conversation, including account owner
       limit: number
       skip: number
       end: boolean
