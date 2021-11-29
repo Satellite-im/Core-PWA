@@ -25,6 +25,6 @@
         </div>
       </div>
     </div>
-    <InteractablesButton class='recover-account' :text="$t('pages.inputAccount.recover')" :action="recoverAccount"/>
+    <InteractablesButton class='recover-account' :text="$t('pages.inputAccount.recover')" :disabled='phrases.length<12' :action="recoverAccount"/>
   </div>
 </div>
