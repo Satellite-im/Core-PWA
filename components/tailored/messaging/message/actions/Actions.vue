@@ -45,8 +45,8 @@ export default Vue.extend({
         type: 'text',
         from: 'group',
         payload: 'Invalid Message',
-      }
-    }
+      },
+    },
   },
   computed: {
     ...mapState(['ui', 'accounts']),
