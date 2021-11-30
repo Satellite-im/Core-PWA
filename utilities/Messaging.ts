@@ -63,6 +63,20 @@ export function groupMessages(
       ? dayjs(currentMessage.at).isSame(prevMessage.at, 'day')
       : false
 
+    let isSameGroup
+    if (!prevMessage) {
+      isSameGroup = false
+    } else {
+      const currentAt = dayjs(currentMessage.at)
+      const prevAt = dayjs(prevMessage.at)
+      if (!dayjs().isSame(currentAt, 'day')) {
+        isSameGroup = currentAt.isSame(prevAt, 'day')
+      } else {
+        const prevAt = dayjs(prevMessage.at)
+        isSameGroup = currentAt.diff(prevAt, 'minutes') < 15 ? true : false
+      }
+    }
+
     // Eventually place a divider if the day changes
     if (!isSameDay) {
       groupedMessages.push({
@@ -82,7 +96,7 @@ export function groupMessages(
       groupedMessages.length === 0 ||
       groupOrDivider?.type === 'divider' ||
       !isSameSender ||
-      (prevMessage && !isSameDay)
+      (prevMessage && !isSameGroup)
 
     if (isNewGroup) {
       groupedMessages.push({
@@ -187,8 +201,8 @@ export function getUsernameFromState(
   const username = isMe
     ? accountDetails.name
     : state.friends.all.find(
-        (friend) => friend.textilePubkey === textilePublicKey
-      )?.name || 'unknown'
+      (friend) => friend.textilePubkey === textilePublicKey
+    )?.name || 'unknown'
 
   return username
 }
