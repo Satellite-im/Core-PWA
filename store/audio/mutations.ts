@@ -17,15 +17,18 @@ const mutations = {
     state.previousVolume = volume
     state.volume = volume
   },
+  setSystemVolume(state: AudioState, systemVolume: Number) {
+    state.sounds.system = systemVolume
+  },
   setInputVolume(state: AudioState, inputVolume: Number) {
     state.inputVolume = inputVolume
   },
-  setLevel(state: AudioState, soundType: {
+  setSoundLevel(state: AudioState, sound: {
     inboundMedia: Number
     outboundMedia: Number
     system: Number
-  },  volume: Number) {
-    state.sounds = soundType
+  }) {
+    state.sounds = sound
   }
 }
 

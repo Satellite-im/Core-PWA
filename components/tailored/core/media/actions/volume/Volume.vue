@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import {
   VolumeIcon,
@@ -39,6 +40,9 @@ export default Vue.extend({
       type: String,
       default: 'btt',
     },
+  },
+  computed: {
+    ...mapState(['audio'])
   },
   data() {
     return {
@@ -80,8 +84,9 @@ export default Vue.extend({
      * @param volume
      * @example
      */
-    receivedValue(volume: Number) {
+    receivedValue(volume: number) {
       this.$emit('volumeControlValueChange', volume)
+      this.$store.commit('settings/setVolume', volume)
     },
   },
 })
