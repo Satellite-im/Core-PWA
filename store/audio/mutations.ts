@@ -1,4 +1,3 @@
-import { UIState } from '../ui/types'
 import { AudioState } from './types'
 
 const mutations = {

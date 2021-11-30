@@ -169,7 +169,7 @@
         :text="$t('pages.settings.audio.systemVolume.title')"
       />
       <div class="meter-container">
-        <UiMeter :value="micLevel" :height="25" />
+        <UiMeter :value="0" :height="25" />
       </div>
       <TailoredCoreMediaActionsVolume
         :volume="audio.sounds.system"
