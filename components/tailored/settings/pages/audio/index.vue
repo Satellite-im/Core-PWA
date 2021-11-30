@@ -336,6 +336,7 @@ export default Vue.extend({
      * @example
      */
     systemVolumeControlValueChange(volume: number) {
+      this.$Sounds.changeLevels(volume / 100);
       this.$store.commit('audio/setSystemVolume', volume)
     },
     /**
