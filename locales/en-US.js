@@ -308,8 +308,8 @@ export default {
     chat: {
       drop_file_count: 'Sorry, you can only upload 4 files at a time',
       unable_preview: 'Unable to preview file',
-      upload_blocked: 'Upload Blocked'
-    }
+      upload_blocked: 'Upload Blocked',
+    },
   },
   search: {
     input: {
