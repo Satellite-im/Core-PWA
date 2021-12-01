@@ -26,6 +26,10 @@ export default Vue.extend({
     addPhrase() {
       if (this.phrases.length < 12) this.phrases.push(this.phraseInput)
       this.phraseInput = ''
+    },
+    removeWord(index: number) {
+      console.log(index)
+      this.phrases.splice(index,1)
     }
   }
 })
