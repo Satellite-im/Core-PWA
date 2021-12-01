@@ -167,6 +167,7 @@ export default defineNuxtConfig({
         encoding: 'empty',
       }
     },
+    babel: { compact: true },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,
@@ -179,7 +180,6 @@ export default defineNuxtConfig({
     },
     stats: 'verbose',
   },
-
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
   ignore: 'store/*/types.ts',
