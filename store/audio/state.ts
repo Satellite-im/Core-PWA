@@ -20,8 +20,8 @@ const InitalAudioState = (): AudioState => ({
   sounds: {
     inboundMedia: 100,
     outboundMedia: 100,
-    system: 100
-  }
+    system: 100,
+  },
 })
 
 export default InitalAudioState
