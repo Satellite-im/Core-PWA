@@ -12,7 +12,7 @@ import {
   wireIdentificationMessage,
   wireRefuseConnectionMessage,
   wireSignalMessage,
-} from './Encoders'
+} from './encoders'
 
 /**
  * @description A wire is a connection between peers on a specific channel.
