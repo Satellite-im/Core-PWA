@@ -29,11 +29,8 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar
-          id="statusbar"
-          :server="recipient || $mock.users[0]"
-          :user="$mock.users[0]"
-        />
+        <TailoredCoreStatusbar id="statusbar"
+:user="$mock.users[0]" />
         <TailoredCoreMedia
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
