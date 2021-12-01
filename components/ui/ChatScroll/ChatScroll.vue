@@ -1,4 +1,4 @@
-<template src="./ChatScroll.html"></template>
+<template src="./ChatScroll.html" />
 
 <script>
 import Vue from 'vue'
@@ -55,7 +55,7 @@ export default Vue.extend({
         const lastMsg = this.contents[this.contents.length - 1]
         if (
           (lastMsg.from === this.$mock.user.address ||
-          !this.$store.state.ui.unreadMessage) && 
+            !this.$store.state.ui.unreadMessage) &&
           !this.$store.state.ui.isReacted
         ) {
           this.autoScrollToBottom()
@@ -71,7 +71,7 @@ export default Vue.extend({
       this.autoScrollToBottom()
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.loaded = false
   },
   methods: {

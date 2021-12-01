@@ -1,4 +1,4 @@
-<template src="./Pinned.html"></template>
+<template src="./Pinned.html" />
 <script lang="ts">
 import Vue from 'vue'
 

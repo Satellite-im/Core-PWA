@@ -35,7 +35,7 @@ export default function ({ store, route, redirect }: Arguments) {
   }
 
   // If the wallet has not been created yet
-  if (!locked && phrase === '') {
+  if (!locked && phrase === '' && !route.path.includes('setup')) {
     return eventuallyRedirect('/setup/disclaimer')
   }
 

@@ -1,4 +1,4 @@
-<template src="./Volume.html"></template>
+<template src="./Volume.html" />
 
 <script>
 import Vue from 'vue'

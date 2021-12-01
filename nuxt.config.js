@@ -75,6 +75,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
+    { src: '~/plugins/thirdparty/vuetify.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
@@ -166,6 +167,7 @@ export default defineNuxtConfig({
         encoding: 'empty',
       }
     },
+    babel: { compact: true },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,
@@ -178,7 +180,6 @@ export default defineNuxtConfig({
     },
     stats: 'verbose',
   },
-
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
   ignore: 'store/*/types.ts',

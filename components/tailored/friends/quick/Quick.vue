@@ -1,4 +1,4 @@
-<template src="./Quick.html"></template>
+<template src="./Quick.html" />
 
 <script lang="ts">
 import Vue from 'vue'

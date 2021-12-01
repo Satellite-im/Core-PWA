@@ -22,10 +22,11 @@ function messageRepliesToUIReplies(
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
   reactions.forEach((reactionMessage) => {
-    const reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+    let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+    if (!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
     groupedReactions[reactionMessage.payload] = {
       emoji: reactionMessage.payload,
-      reactors: [...reactors, reactionMessage.from],
+      reactors,
       showReactors: true,
     }
   })
@@ -202,4 +203,16 @@ export function getAddressFromState(
     )?.address || 'unknown'
 
   return address
+}
+
+export function refreshTimestampInterval(
+  timestamp: number,
+  action: (timePassed: string) => any,
+  interval: number
+) {
+  return setInterval(() => {
+    const updatedTimestamp = dayjs(timestamp).fromNow()
+
+    action(updatedTimestamp)
+  }, interval)
 }

@@ -1,17 +1,20 @@
-import { WebRTCUser } from '~/types/webrtc/User'
-
 import { Config } from '~/config'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
-import { WebRTCEvents } from '~/libraries/WebRTC/types'
+import { Wire } from '~/libraries/WebRTC/Wire'
+import {
+  WebRTCEventListeners,
+  WebRTCEvents,
+  WireEvents,
+} from '~/libraries/WebRTC/types'
 
-export default class WebRTC extends Emitter {
+export default class WebRTC extends Emitter<WebRTCEventListeners> {
   // Identifier to connect to signaling server with
   id: string | undefined
   // If this is undefined, the WebRTC services cannot run
   initalized: boolean | undefined
   // List of peers we're actively or have been connected to
-  peers: Map<string, WebRTCUser> | undefined
+  peers: Map<string, Wire> | undefined
 
   // --- Internal ---
   //
@@ -36,7 +39,7 @@ export default class WebRTC extends Emitter {
 
     this.initalized = true
     this._runQueue()
-    this.emit(WebRTCEvents.INIT, '')
+    this.emit(WebRTCEvents.INIT)
   }
 
   /**
@@ -87,9 +90,33 @@ export default class WebRTC extends Emitter {
    * @returns
    * @example
    */
-  protected _connect(peerId: string): void {
+  protected _connect(peerId: string, channel: string): void {
     console.log('connecting to', peerId)
+    const wire = new Wire(
+      'originator',
+      peerId,
+      channel,
+      this._announceURLs,
+      false
+    )
+
+    this._bindWireListeners(wire)
+
     return undefined
+  }
+
+  protected _bindWireListeners(wire: Wire) {
+    wire.on('CONNECT', ({ peerId }) => {
+      this.emit(WebRTCEvents.PEER_CONNECT, { peerId })
+    })
+
+    wire.on('DATA', ({ peerId, data }) => {
+      console.log(peerId, data)
+    })
+
+    wire.on('ERROR', ({ peerId, error }) => {
+      console.log(peerId, error)
+    })
   }
 
   // --- Public Methods ---
@@ -110,12 +137,12 @@ export default class WebRTC extends Emitter {
 
   /**
    * @method getPeer
-   * @description Get a WebRTCUser from the list of connected peers
+   * @description Get a Wire from the list of connected peers
    * @param peerId identifier of peer we're seeking
    * @returns
    * @example
    */
-  getPeer(peerId: string): WebRTCUser | undefined {
+  getPeer(peerId: string): Wire | undefined {
     return this.peers?.get(peerId)
   }
 
@@ -125,11 +152,11 @@ export default class WebRTC extends Emitter {
    * @param peerId identifier of peer we're connecting to
    * @example
    */
-  connect(peerId: string) {
+  connect(peerId: string, channel: string) {
     if (!this.initalized) {
-      this._queue(() => this._connect(peerId))
+      this._queue(() => this._connect(peerId, channel))
     } else {
-      this._connect(peerId)
+      this._connect(peerId, channel)
     }
   }
 }

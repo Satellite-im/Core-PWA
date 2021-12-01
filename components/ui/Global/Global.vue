@@ -2,7 +2,8 @@
   <div>
     <TailoredSettingsModal v-if="ui.showSettings" />
     <InteractablesContextMenu v-if="ui.contextMenuStatus" />
-    <UiModal v-if="ui.modals.wallet" :close-modal="toggleWallet" nopad>
+    <UiModal v-if="ui.modals.wallet"
+:close-modal="toggleWallet" nopad>
       <TailoredWalletPopup />
     </UiModal>
     <UiModal
@@ -25,9 +26,8 @@
         v-if="ui.modals.error"
         v-click-outside="toggleError"
         :close-modal="toggleError"
-        :setCloseTimeout=5000
+        :set-close-timeout="5000"
       />
-
     </UiModal>
     <UiModal
       v-if="$mock.users.find((user) => user.name === media.incomingCall)"
@@ -51,7 +51,8 @@
     </UiModal>
     <UiUpdateModal />
     <transition :name="$device.isMobile ? 'slide' : ''">
-      <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
+      <InteractablesQuickProfile v-if="ui.quickProfile"
+:user="$mock.user" />
     </transition>
   </div>
 </template>

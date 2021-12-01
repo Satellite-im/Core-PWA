@@ -1,4 +1,4 @@
-<template src="./Body.html"></template>
+<template src="./Body.html" />
 <script lang="ts">
 import Vue from 'vue'
 
@@ -10,15 +10,15 @@ export default Vue.extend({
     RedoIcon,
     SendIcon,
   },
-  data() {
-    return {
-      paymentOption: 'usd',
-    }
-  },
   props: {
     updateMethod: {
       type: Function,
     },
+  },
+  data() {
+    return {
+      paymentOption: 'usd',
+    }
   },
 })
 </script>

@@ -10,7 +10,7 @@
   </div>
   <div class="user-info" v-if="!$device.isMobile">
     <TypographyTitle :size="6" :text="server ? server.name : user.name" />
-    <TypographySubtitle :size="6" :text="server ? server.desc : user.status" />
+    <TypographySubtitle :size="6" :text="server ? (server.status || server.state) : user.status" />
   </div>
   <div class="statusbar-spacer"></div>
   <div class="controls">

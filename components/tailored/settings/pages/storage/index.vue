@@ -1,4 +1,4 @@
-<template src="./Storage.html"></template>
+<template src="./Storage.html" />
 
 <script lang="ts">
 import Vue from 'vue'

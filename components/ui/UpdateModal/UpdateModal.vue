@@ -1,4 +1,4 @@
-<template src="./UpdateModal.html"></template>
+<template src="./UpdateModal.html" />
 
 <script lang="ts">
 import Vue from 'vue'
@@ -14,6 +14,7 @@ export default Vue.extend({
     return {
       hasMinorUpdate: false,
       requiresUpdate: false,
+      releaseData: {}
     }
   },
   mounted() {
@@ -29,14 +30,15 @@ export default Vue.extend({
 
     // A update which requires resetting of the app has occured.
     if (lsVersion.split('.')[1] !== minorVersion) {
+      this.getReleaseBody()
       this.$data.requiresUpdate = true
       this.$data.hasMinorUpdate = true
       return
     }
     // A version which brings new features without major changes exists
     if (lsVersion.split('.')[2] !== patchVersion) {
+      this.getReleaseBody()
       this.$data.hasMinorUpdate = true
-      localStorage.setItem('local-version', this.$config.clientVersion)
     }
   },
   methods: {
@@ -48,8 +50,15 @@ export default Vue.extend({
       localStorage.setItem('local-version', this.$config.clientVersion)
       this.$data.requiresUpdate = false
       this.$data.hasMinorUpdate = false
+    },
+    getReleaseBody() {
+      fetch('https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest')
+        .then(response => response.json())
+        .then(data => {
+          this.releaseData = data
+        })
     }
-  }
+  },
 })
 </script>
 
