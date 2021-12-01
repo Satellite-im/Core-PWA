@@ -16,12 +16,12 @@
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" />
+          <UiNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" @remove="removeWord(i)" isRemoval />
         </div>
       </div>
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" />
+          <UiNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" @remove="removeWord(i)" isRemoval />
         </div>
       </div>
     </div>
