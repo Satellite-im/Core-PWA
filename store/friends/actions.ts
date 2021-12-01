@@ -154,7 +154,7 @@ export default {
       )
       return;
     }
-    commit('updateFriend', friend);
+    commit('updateFriend', friend)
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO
