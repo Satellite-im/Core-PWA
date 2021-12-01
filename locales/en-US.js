@@ -359,6 +359,7 @@ export default {
     already_friend: "You're already friends with this user.",
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
+    invalid_characters: 'You must input more than 40 characters.',
     request_sent: 'Friend request successfully sent!',
     search_placeholder: 'Some User...',
     add: 'Add Friend',
