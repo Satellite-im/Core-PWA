@@ -22,6 +22,7 @@ declare module 'vue/types/vue' {
     handleInputChange: Function
     value: string
     updateText: Function
+    handleUpload: Function
   }
 }
 
@@ -227,8 +228,11 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: any) {
-      e.preventDefault()
-      this.handleUpload(e.clipboardData.items)
+      e.stopPropagation()
+      const clipboardItems = e.clipboardData.items
+      if(clipboardItems && clipboardItems.length) {
+        this.handleUpload(clipboardItems)
+      }
     },
     /**
      * @method handleUpload
@@ -237,6 +241,7 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: Array<object>) {
+      /* check if type is image */
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())
