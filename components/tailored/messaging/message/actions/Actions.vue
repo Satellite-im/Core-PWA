@@ -37,15 +37,9 @@ export default Vue.extend({
       type: Function,
       default: () => () => {},
     },
-    message: {
-      type: Object as PropType<UIMessage>,
-      default: {
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        from: 'group',
-        payload: 'Invalid Message',
-      },
+    messageOwner: {
+      type: String,
+      required: true,
     },
   },
   computed: {

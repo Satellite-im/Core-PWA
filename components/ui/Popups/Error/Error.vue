@@ -17,6 +17,14 @@ export default Vue.extend({
     default: '',
     required: false,
   },
+  data() {
+    return {
+      source: '',
+      error: '',
+      details: '',
+      time: null,
+    }
+  },
   props: {
     errorText: {
       type: String,

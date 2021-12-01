@@ -55,8 +55,8 @@ export default {
       line: 'Line',
       confirm: 'Confirm',
       contact:
-        "'Oops! Something went wrong! Help us improve your experience by sending an error report'"
-    }
+        "'Oops! Something went wrong! Help us improve your experience by sending an error report'",
+    },
   },
   pages: {
     files: {
