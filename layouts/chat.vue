@@ -57,7 +57,7 @@
         <TailoredWalletMini v-if="ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />
+        <TailoredCoreChatbar :recipient="recipient" />
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"

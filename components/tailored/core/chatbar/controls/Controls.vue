@@ -46,16 +46,11 @@ export default Vue.extend({
           return
         }
         this.$store.commit('ui/toggleEnhancers', {
-          show: true,
+          show: !this.ui.enhancers.show,
           floating: true,
           route,
         })
       }
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-        floating: true,
-        route,
-      })
     },
     toggleMiniWallet() {
       if(this.editable) {
