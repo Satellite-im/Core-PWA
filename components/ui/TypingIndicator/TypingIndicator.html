@@ -4,10 +4,10 @@
         <div v-for= "user, i in users">
             <TypographyText :text="`${i === users.length - 1 ? user.name : user.name + ','}`"  :size="6" />
         </div>
-        <TypographyText :text="`${(users.length === 1) ? 'is' : 'are'} typing...`" :size="6" />
+        <TypographyText :text="`${(users.length === 1) ? $t('ui.is') : $t('ui.are')} ${$t('messaging.typing')}...`" :size="6" />
     </div>
     <div id="text-container" v-if="checkUsersTyping() === 2">
-        <TypographyText text="many users are typing..." :size="6" />
+        <TypographyText :text="`${$t('messaging.many_typing')} ...`" :size="6" />
     </div>
     <div id="text-container" v-if="checkUsersTyping() === 0">
     </div>
