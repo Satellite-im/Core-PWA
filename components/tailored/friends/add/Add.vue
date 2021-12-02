@@ -34,7 +34,7 @@ export default Vue.extend({
       if(this.accountID.length >= 40) {
         await this.searchFriend()
       } else {
-        this.error = this.$t('friends.invalid_characters') as string
+        this.error = this.$t('friends.invalid_id') as string
         this.searching = false
       }
     }, 500),
