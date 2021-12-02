@@ -30,6 +30,6 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/',
     'node_modules/(?!@mylibrary/)',
-    '^.+\\.module\\.(css|sass|scss)$'
-  ]
+    '^.+\\.module\\.(css|sass|scss)$',
+  ],
 }

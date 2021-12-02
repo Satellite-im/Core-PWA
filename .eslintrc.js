@@ -28,13 +28,12 @@ module.exports = {
       {
         allowElseIf: false
       }
-
     ],
     'no-eval': [
       'error',
       {
-        allowIndirect: true,
-      },
+        allowIndirect: true
+      }
     ],
   },
 }
