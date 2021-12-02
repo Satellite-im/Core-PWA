@@ -1,5 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
+  preset: 'jest-playwright-preset',
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
