@@ -2,12 +2,17 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-import { ChevronDownIcon, ImageIcon } from 'satellite-lucide-icons'
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ImageIcon,
+} from 'satellite-lucide-icons'
 import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
   components: {
     ChevronDownIcon,
+    ChevronUpIcon,
     ImageIcon,
   },
   props: {
@@ -20,6 +25,14 @@ export default Vue.extend({
     return {
       isOpen: true,
     }
+  },
+  methods: {
+    togglePack() {
+      // close if open, open if closed
+      console.log('test', this)
+      this.isOpen = !this.isOpen
+      console.log(this.isOpen)
+    },
   },
 })
 </script>
