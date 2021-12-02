@@ -47,15 +47,15 @@ export default Vue.extend({
       captureMouses: [
         {
           value: CaptureMouseTypes.always,
-          text: this.$i18n.t('global.always'),
+          text: this.$i18n.t('pages.settings.always'),
         },
         {
           value: CaptureMouseTypes.motion,
-          text: this.$i18n.t('global.motion'),
+          text: this.$i18n.t('pages.settings.motion'),
         },
         {
           value: CaptureMouseTypes.never,
-          text: this.$i18n.t('global.never'),
+          text: this.$i18n.t('pages.settings.never'),
         },
       ],
     }
