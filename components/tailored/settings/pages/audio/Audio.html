@@ -163,6 +163,21 @@
         @volumeControlValueChange="inputVolumeControlValueChange"
       />
     </div>
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.systemVolume.title')"
+      />
+      <div class="meter-container">
+        <UiMeter :value="0" :height="25" />
+      </div>
+      <TailoredCoreMediaActionsVolume
+        :volume="audio.sounds.system"
+        direction="ltr"
+        plain
+        @volumeControlValueChange="systemVolumeControlValueChange"
+      />
+    </div>
   </div>
 
   <!--Echo Cancellation & Noise Suppression-->

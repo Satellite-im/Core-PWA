@@ -4,6 +4,7 @@ import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType } from '~/types/textile/mailbox'
 
@@ -154,6 +155,7 @@ export default {
 
       commit('addMessageToConversation', {
         address: sender.address,
+        sender: MessageRouteEnum.INBOUND,
         message,
       })
     })
@@ -213,6 +215,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
   },
@@ -252,6 +255,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
   },
@@ -291,6 +295,7 @@ export default {
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
   },

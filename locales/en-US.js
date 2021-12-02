@@ -51,7 +51,7 @@ export default {
       line: 'Line',
       confirm: 'Confirm',
       contact:
-        "'Oops! Something went wrong! Help us improve your experience by sending an error report'",
+        'Oops! Something went wrong! Help us improve your experience by sending an error report',
     },
   },
   files: {
@@ -88,6 +88,12 @@ export default {
       create: 'Create Account',
       or: 'Or',
       import: 'Import Account',
+    },
+    inputAccount: {
+      title: 'Import Account',
+      subtitle: 'Enter your 12 word pass phrase.',
+      enter: 'Enter Passphrase',
+      recover: 'Recover Account',
     },
     phrase: {
       title: 'Recovery Seed',
@@ -160,6 +166,9 @@ export default {
         },
         inputVolume: {
           title: 'Input Volume',
+        },
+        systemVolume: {
+          title: 'System Volume',
         },
         echo: {
           title: 'Echo Cancellation',
