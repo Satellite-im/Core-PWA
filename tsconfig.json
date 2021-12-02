@@ -23,6 +23,9 @@
       "@nuxtjs/device",
       "types/modules/satellite-lucide-icons.d.ts",
       "jest",
+      "puppeteer",
+      "jest-environment-puppeteer",
+      "expect-puppeteer"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
