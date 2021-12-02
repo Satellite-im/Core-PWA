@@ -6,7 +6,7 @@
     type="primary"
     size="small"
     :placeholder="$t('friends.search_placeholder')"
-    :action="searchFriend"
+    @update="_searchFriend"
     v-model="accountID"
     :loading="searching">
     <user-plus-icon size="1x" />
