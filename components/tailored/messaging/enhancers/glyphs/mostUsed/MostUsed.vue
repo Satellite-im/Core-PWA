@@ -21,10 +21,7 @@ export default Vue.extend({
   },
   methods: {
     togglePack() {
-      // close if open, open if closed
-      console.log('test', this)
       this.isOpen = !this.isOpen
-      console.log(this.isOpen)
     },
   },
 })
