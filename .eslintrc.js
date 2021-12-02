@@ -20,14 +20,30 @@ module.exports = {
     'no-else-return': [
       'error',
       {
+<<<<<<< HEAD
         allowElseIf: false,
       },
+=======
+        allowElseIf: false
+      }
+    ],
+    'no-empty-cache': [
+      'error',
+      {
+        allowElseIf: false
+      }
+>>>>>>> 7dd4301e (chore - fix lint + linting files + update packages (#310))
     ],
     'no-eval': [
       'error',
       {
+<<<<<<< HEAD
         allowIndirect: true,
       },
+=======
+        allowIndirect: true
+      }
+>>>>>>> 7dd4301e (chore - fix lint + linting files + update packages (#310))
     ],
   },
 }

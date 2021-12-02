@@ -30,11 +30,6 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/',
     'node_modules/(?!@mylibrary/)',
-<<<<<<< HEAD
     '^.+\\.module\\.(css|sass|scss)$'
   ]
-=======
-    '^.+\\.module\\.(css|sass|scss)$',
-  ],
->>>>>>> 7dd4301e (chore - fix lint + linting files + update packages (#310))
 }
