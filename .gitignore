@@ -64,6 +64,7 @@ typings/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
+
 # next.js build output
 .next
 
@@ -91,3 +92,9 @@ sw.*
 
 # Vim swap files
 *.swp
+
+
+# Submodules
+android/*
+electron/*
+locales/*
