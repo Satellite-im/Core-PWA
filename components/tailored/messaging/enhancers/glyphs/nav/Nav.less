@@ -1,31 +1,36 @@
 #glyphs-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .account-list {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    .account-list {
-        display: flex;
-        align-items: center;
-        .timer {
-            cursor: pointer;
-            margin-right: @light-spacing;
-            background: @semitransparent-dark-gradient;
-            padding: @xlight-spacing @light-spacing;
-            border-radius: @corner-rounding;
-        }
+    .timer {
+      cursor: pointer;
+      margin-right: @light-spacing;
+      background: @semitransparent-dark-gradient;
+      padding: @xlight-spacing @light-spacing;
+      border-radius: @corner-rounding;
     }
-    .pack-list {
-        border-left: @mini-light-border;
-        border-right: @mini-light-border;
-        padding: 0 @light-spacing;
-        display: flex;
-        align-items: center;
-        flex-grow: 1;
+  }
+  .pack-list {
+    border-left: @mini-light-border;
+    border-right: @mini-light-border;
+    padding: 0 @light-spacing;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      display: none;
     }
-    .glyph-item, .circle {
-        margin-right: @light-spacing;
-    }
-    .market-place {
-        cursor: pointer;
-        padding: 0 @light-spacing;
-    }
+  }
+  .glyph-item,
+  .circle {
+    margin-right: @light-spacing;
+  }
+  .market-place {
+    cursor: pointer;
+    padding: 0 @light-spacing;
+  }
 }

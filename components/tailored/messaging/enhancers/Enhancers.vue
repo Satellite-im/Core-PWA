@@ -36,11 +36,10 @@ export default Vue.extend({
       set(data: string) {
         this.$store.commit('ui/toggleEnhancers', {
           show: true,
-          floating: this.$device.isMobile ? true : false,
           route: data,
         })
-      }
-    }
+      },
+    },
   },
   watch: {
     route() {
@@ -116,7 +115,13 @@ export default Vue.extend({
       const glyphToggleElm = document.getElementById('glyph-toggle')
       const emojiToggleElm = document.getElementById('emoji-toggle')
       // @ts-ignore
-      if (!event || !(glyphToggleElm?.contains(event.target) || emojiToggleElm?.contains(event.target))) {
+      if (
+        !event ||
+        !(
+          glyphToggleElm?.contains(event.target) ||
+          emojiToggleElm?.contains(event.target)
+        )
+      ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
           floating: this.$device.isMobile ? true : false,
@@ -130,7 +135,7 @@ export default Vue.extend({
         })
       }
     },
-     /**
+    /**
      * @method calculatePositionOnScreen
      * @description This returns a "x cordinate" to have the Enhancer window to load on the right or left screen
      * @example calculatePositionOnScreen(ui.enhancers.position[0])
@@ -151,7 +156,7 @@ export default Vue.extend({
      */
     convertRem(value: string): number {
       const fontSize = parseFloat(
-        getComputedStyle(document.documentElement).fontSize // Get the font size on the html tag, eg 16 (px), 2 (px), etc
+        getComputedStyle(document.documentElement).fontSize, // Get the font size on the html tag, eg 16 (px), 2 (px), etc
       )
       const remNumber = Number(value.replace('rem', ''))
       return remNumber * fontSize
