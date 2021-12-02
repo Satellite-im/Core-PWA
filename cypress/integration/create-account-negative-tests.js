@@ -1,4 +1,4 @@
-it('Try to create account with PIN less than 5 digits', () => {
+it('Try to create account with PIN less than 5 digits test', () => {
   cy.visit('/')
   cy.contains('Create Account Pin')
   cy.get('[data-cy=add-input]').type('1')
