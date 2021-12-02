@@ -163,6 +163,9 @@ export default {
         inputVolume: {
           title: 'Input Volume'
         },
+        systemVolume: {
+          title: 'System Volume',
+        },
         echo: {
           title: 'Echo Cancellation',
           subtitle:
