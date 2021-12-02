@@ -51,7 +51,6 @@ export default Vue.extend({
       this.$data.requiresUpdate = false
       this.$data.hasMinorUpdate = false
     },
-<<<<<<< HEAD
     getReleaseBody() {
       fetch('https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest')
         .then(response => response.json())
@@ -59,8 +58,6 @@ export default Vue.extend({
           this.releaseData = data
         })
     }
-=======
->>>>>>> 7dd4301e (chore - fix lint + linting files + update packages (#310))
   },
 })
 </script>
