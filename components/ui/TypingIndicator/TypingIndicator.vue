@@ -10,6 +10,9 @@ export default Vue.extend({
       required: false,
     },
   },
+  mounted() {
+    this.checkUsersTyping()
+  },
   /**
    * @methods checkUsersTyping
    * @description Checks the length of the users names array being fed to component
@@ -27,9 +30,6 @@ export default Vue.extend({
       }
       return 0
     },
-  },
-  mounted() {
-    this.checkUsersTyping()
   },
 })
 </script>

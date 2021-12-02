@@ -20,20 +20,14 @@ module.exports = {
     'no-else-return': [
       'error',
       {
-        allowElseIf: false
-      }
-    ],
-    'no-empty-cache': [
-      'error',
-      {
-        allowElseIf: false
-      }
+        allowElseIf: false,
+      },
     ],
     'no-eval': [
       'error',
       {
-        allowIndirect: true
-      }
+        allowIndirect: true,
+      },
     ],
   },
 }
