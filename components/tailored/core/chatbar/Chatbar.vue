@@ -34,7 +34,7 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-      maxChars: 256,
+      maxChars: 256
     }
   },
   props: {
@@ -187,28 +187,30 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '').length
-      if (!this.recipient || isEmpty) {
-        return
-      }
+      if(this.recipient) {
+        const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '').length
+        if (!this.recipient || isEmpty) {
+          return
+        }
 
-      if (this.ui.replyChatbarContent.from) {
-        this.$store.dispatch('textile/sendReplyMessage', {
-          to: this.recipient.textilePubkey,
-          text: this.value,
-          replyTo: this.ui.replyChatbarContent.messageID,
-        })
-      } else {
-        this.$store.dispatch('textile/sendTextMessage', {
-          to: this.recipient.textilePubkey,
-          text: this.value,
-        })
-      }
+        if (this.ui.replyChatbarContent.from) {
+          this.$store.dispatch('textile/sendReplyMessage', {
+            to: this.recipient.textilePubkey,
+            text: this.value,
+            replyTo: this.ui.replyChatbarContent.messageID,
+          })
+        } else {
+          this.$store.dispatch('textile/sendTextMessage', {
+            to: this.recipient.textilePubkey,
+            text: this.value,
+          })
+        }
 
-      const messageBox = this.$refs.messageuser as HTMLElement
-      // Clear Chatbar
-      messageBox.innerHTML = ''
-      this.value = ''
+        const messageBox = this.$refs.messageuser as HTMLElement
+        // Clear Chatbar
+        messageBox.innerHTML = ''
+        this.value = ''
+      }
     },
     /**
      * @method handleDrop

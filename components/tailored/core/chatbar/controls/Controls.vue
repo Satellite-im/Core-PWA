@@ -16,6 +16,9 @@ export default Vue.extend({
     sendMessage: {
       type: Function,
     },
+    editable: {
+      type: Boolean
+    }
   },
   components: {
     BanknoteIcon,
@@ -33,25 +36,29 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
-      if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
+      if(this.editable) {
+        if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
+          this.$store.commit('ui/toggleEnhancers', {
+            show: true,
+            floating: true,
+            route,
+          })
+          return
+        }
         this.$store.commit('ui/toggleEnhancers', {
-          show: true,
+          show: !this.ui.enhancers.show,
           floating: true,
           route,
         })
-        return
       }
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-        floating: true,
-        route,
-      })
     },
     toggleMiniWallet() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'walletMini',
-        state: !this.ui.modals.walletMini,
-      })
+      if(this.editable) {
+        this.$store.commit('ui/toggleModal', {
+          name: 'walletMini',
+          state: !this.ui.modals.walletMini,
+        })
+      }
     },
   },
 })

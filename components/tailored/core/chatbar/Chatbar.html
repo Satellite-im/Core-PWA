@@ -1,7 +1,11 @@
 <div id="chatbar" ref="chatbar" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
-  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`" ref="wrap" >
+  <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'} ${recipient ? 'active' : 'inactive'}`" ref="wrap" >
     <div class="control-wrap file-upload-wrap">
-      <FileUpload type="quick" ref="file-upload" />
+      <FileUpload 
+        :editable="recipient ? true : false" 
+        type="quick" 
+        ref="file-upload" 
+      />
     </div>
     <div
       :class="`chat-label ${isValidCommand ? 'green' : 'red'}`"
@@ -10,7 +14,7 @@
     >
       <terminal-icon size="1x" />
     </div>
-    <div contenteditable="true" autocapitalize="off"
+    <div :contenteditable="recipient ? true : false" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
       :placeholder="$t('global.talk')"
@@ -20,7 +24,7 @@
       @paste="handlePaste">
     </div>
 
-    <TailoredCoreChatbarControls :sendMessage="sendMessage" id="chatbar-controls"/>
+    <TailoredCoreChatbarControls :editable="recipient ? true : false" :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
   <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

@@ -29,6 +29,9 @@ export default Vue.extend({
       type: String,
       default: 'quick',
     },
+    editable: {
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -45,34 +48,36 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      const files: File[] = event.target.files
-      if (files.length > 4) {
-        // @ts-ignore
-        this.$data.count_error = true
-        return
-      }
-      this.$data.count_error = false
-      this.$data.files = [...files].map((file: File) => {
-        return {
-          file,
-          nsfw: { status: false, checking: false },
-          url: '',
-        }
-      })
-      /* nsfw checking after putting all files */
-      for (const file of this.$data.files) {
-        file.nsfw.checking = true
-        try {
-          file.nsfw.status = await this.$Security.isNSFW(file.file)
-        } catch (err) {
-          file.nsfw.status = true
-          file.nsfw.checking = false
+      if(this.editable) {
+        const files: File[] = event.target.files
+        if (files.length > 4) {
+          // @ts-ignore
+          this.$data.count_error = true
           return
         }
-        file.nsfw.checking = false
-        this.loadPicture(file)
+        this.$data.count_error = false
+        this.$data.files = [...files].map((file: File) => {
+          return {
+            file,
+            nsfw: { status: false, checking: false },
+            url: '',
+          }
+        })
+        /* nsfw checking after putting all files */
+        for (const file of this.$data.files) {
+          file.nsfw.checking = true
+          try {
+            file.nsfw.status = await this.$Security.isNSFW(file.file)
+          } catch (err) {
+            file.nsfw.status = true
+            file.nsfw.checking = false
+            return
+          }
+          file.nsfw.checking = false
+          this.loadPicture(file)
+        }
+        this.$data.uploadStatus = true
       }
-      this.$data.uploadStatus = true
     },
     /**
      * @method loadPicture

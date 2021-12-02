@@ -57,12 +57,12 @@
       </div>
     </template>
   </div>
-  <input type="file" id="quick-upload" @change="handleFile" />
+  <input :type="editable ? `file` : `hidden`" id="quick-upload" @change="handleFile" />
   <label
     v-if="type == 'quick'"
     for="quick-upload"
     :data-tooltip="$t('global.upload')"
-    class="has-tooltip has-tooltip-top has-tooltip-primary upload-label"
+    :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
   >
     <plus-icon size="1.2x" class="control-icon" />
   </label>
