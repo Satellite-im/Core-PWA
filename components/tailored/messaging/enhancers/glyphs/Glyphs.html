@@ -18,12 +18,13 @@
 
       <div v-for="(pack, i) in filteredGlyphs">
         <v-responsive max-height="100%">
+          <UiLoadersLoadingInline :count="3" v-if="!pack.isActive" />
           <v-lazy
             v-model="pack.isActive"
             :options="{
               threshold: .5 
             }"
-            min-height="50"
+            min-height="30"
             transition="fade-transition"
           >
             <TailoredMessagingEnhancersGlyphsPack :key="pack.id" :pack="pack">
