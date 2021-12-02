@@ -26,11 +26,7 @@
         v-if="ui.modals.error"
         v-click-outside="toggleError"
         :close-modal="toggleError"
-<<<<<<< HEAD
         :set-close-timeout="5000"
-=======
-        :setCloseTimeout="5000"
->>>>>>> 7dd4301e (chore - fix lint + linting files + update packages (#310))
       />
     </UiModal>
     <UiModal

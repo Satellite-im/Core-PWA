@@ -127,7 +127,10 @@
     "lint-staged": ">=10",
     "prettier": "^2.2.1",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "simple-peer": "^9.11.0",
+=======
+>>>>>>> aa990e65 (test -add jest tests + pre commit hook + vue linter + linting vue files)
 =======
 >>>>>>> aa990e65 (test -add jest tests + pre commit hook + vue linter + linting vue files)
     "ts-jest": "^27.0.7",
