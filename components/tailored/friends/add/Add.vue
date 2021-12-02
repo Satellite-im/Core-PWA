@@ -31,7 +31,7 @@ export default Vue.extend({
   },
   methods: {
     _searchFriend: _.debounce(async function(this:any) {
-      if(this.accountID.length >= 40) {
+      if (this.accountID.length >= 40) {
         return await this.searchFriend()
       }
       this.error = this.$t('friends.invalid_id') as string
