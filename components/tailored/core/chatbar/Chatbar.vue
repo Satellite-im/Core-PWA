@@ -106,7 +106,7 @@ export default Vue.extend({
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('global.talk')
+        return this.$t('ui.talk')
       } else {
         return ''
       }
