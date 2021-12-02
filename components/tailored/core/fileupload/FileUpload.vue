@@ -48,7 +48,7 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      if(this.editable) {
+      if (this.editable) {
         const files: File[] = event.target.files
         if (files.length > 4) {
           // @ts-ignore
