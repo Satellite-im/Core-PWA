@@ -9,7 +9,7 @@ export const Config = {
     browser: 'https://hub.textile.io',
   },
   ipfs: {
-    gateway: 'https://ipfs.io/ipfs/',
+    gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
