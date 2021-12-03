@@ -1,0 +1,23 @@
+<div id="developer-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.info.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.info.subtitle')" />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.app_info')" />
+      <br />
+<pre>
+App Version: {{ this.$config.clientVersion }}
+Browser:     {{ window.navigator.vendor }}, {{ window.navigator.product }}
+Language:    {{ window.navigator.product }}
+Platform:    {{ window.navigator.platform }}
+Online:      {{ window.navigator.onLine }}
+</pre>
+    </div>
+  </div>
+
+</div>

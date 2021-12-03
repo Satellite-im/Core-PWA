@@ -87,6 +87,10 @@ export default Vue.extend({
               to: 'notifications',
               text: 'Notifications',
             },
+            {
+              to: 'info',
+              text: 'App Info',
+            },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
       ],
