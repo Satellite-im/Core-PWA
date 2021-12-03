@@ -1,5 +1,5 @@
 {
-  "name": "satellite-absolute",
+  "name": "Core-PWA",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -67,10 +67,10 @@
     "nuxt-edge": "latest",
     "nuxt-i18n": "^6.26.0",
     "nuxt-mq": "^2.0.2",
-    "p2pt": "Satellite-im/P2PT#fixed-dependencies",
+    "p2pt": "git+https://git@github.com/Satellite-im/P2PT#fixed-dependencies",
     "qrcode.vue": "^1.7.0",
     "remarkable": "^2.0.1",
-    "satellite-lucide-icons": "Satellite-im/satellite-lucide-vue",
+    "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
     "sharp": "^0.29.0",
     "simple-peer": "^9.11.0",
     "uuid": "^8.3.2",
@@ -150,14 +150,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Satellite-im/Satellite-Absolute.git"
+    "url": "git+https://github.com/Satellite-im/Core-PWA.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Satellite-im/Satellite-Absolute/issues"
+    "url": "https://github.com/Satellite-im/Core-PWA/issues"
   },
-  "homepage": "https://github.com/Satellite-im/Satellite-Absolute#readme",
+  "homepage": "https://github.com/Satellite-im/Core-PWA#readme",
   "lint-staged": {
     "*.js": "eslint --cache --fix"
   }

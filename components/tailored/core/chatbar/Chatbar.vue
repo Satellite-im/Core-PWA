@@ -22,6 +22,7 @@ declare module 'vue/types/vue' {
     handleInputChange: Function
     value: string
     updateText: Function
+    handleUpload: Function
   }
 }
 
@@ -65,7 +66,7 @@ export default Vue.extend({
     hasCommand() {
       const parsedCommand = parseCommand(this.ui.chatbarContent)
       const currentCommand = commands.find(
-        (cmd) => cmd.name === parsedCommand.name.toLowerCase()
+        (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
       return currentCommand != null
     },
@@ -77,7 +78,7 @@ export default Vue.extend({
      */
     isValidCommand() {
       const currentText = parseCommand(
-        this.ui.chatbarContent
+        this.ui.chatbarContent,
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
@@ -106,7 +107,7 @@ export default Vue.extend({
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('global.talk')
+        return this.$t('ui.talk')
       } else {
         return ''
       }
@@ -187,7 +188,8 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '').length
+      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '')
+        .length
       if (!this.recipient || isEmpty) {
         return
       }
@@ -214,7 +216,7 @@ export default Vue.extend({
      * @method handleDrop
      * @description Allows the drag and drop of files into the chatbar
      * @param e Drop event data object
-     * @example v-on:drop="handleDrop" 
+     * @example v-on:drop="handleDrop"
      */
     handleDrop(e: any) {
       e.preventDefault()
@@ -227,8 +229,11 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: any) {
-      e.preventDefault()
-      this.handleUpload(e.clipboardData.items)
+      e.stopPropagation()
+      const clipboardItems = e.clipboardData.items
+      if (clipboardItems && clipboardItems.length) {
+        this.handleUpload(clipboardItems)
+      }
     },
     /**
      * @method handleUpload
@@ -237,6 +242,7 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: Array<object>) {
+      /* check if type is image */
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())
@@ -246,7 +252,7 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
-    }
+    },
   },
   watch: {
     '$store.state.ui.chatbarContent': function () {
