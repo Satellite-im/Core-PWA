@@ -6,6 +6,17 @@ export enum GlyphMarketViewStatus {
   SHOP_DETAIL = 'shop_detail',
 }
 
+export enum ModalWindows {
+  NEW_FOLDER = 'newfolder',
+  CREATE_SERVER = 'createServer',
+  MARKETPLACE = 'marketplace',
+  WALLET = 'wallet',
+  QUICK_CHAT = 'quickchat',
+  WALLET_MINI = 'walletMini',
+  ERROR = 'error',
+  CHANGELOG = 'changelog',
+}
+
 export interface EnhancerInfo {
   show: Boolean
   floating?: Boolean
