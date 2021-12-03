@@ -104,7 +104,7 @@ export default Vue.extend({
      * @example
      */
     didIReact(reaction: any) {
-      return reaction.reactors.includes(this.$mock.user.name)
+      return reaction.reactors.includes(this.$store.state.accounts.details.textilePubkey)
     },
     getReactorsList(reactors: string[], limit = 3) {
       const numberOfReactors = reactors.length
