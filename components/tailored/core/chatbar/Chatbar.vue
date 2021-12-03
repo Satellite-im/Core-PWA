@@ -23,6 +23,7 @@ declare module 'vue/types/vue' {
     value: string
     updateText: Function
     handleUpload: Function
+    handleChatBorderRadius: Function
   }
 }
 
@@ -115,6 +116,17 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method handleChatBorderRadius
+     * @description Sets the correct chatbar border radius while typing or when switching between friends
+     * @example
+     */
+    handleChatBorderRadius() {
+      const wrap = this.$refs.wrap as HTMLElement
+      if (wrap.offsetHeight > 50 || this.ui.replyChatbarContent.id)
+        wrap.style.borderRadius = '4px'
+      else wrap.style.borderRadius = '41px'
+    },
+    /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
@@ -123,7 +135,6 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
-      const wrap = this.$refs.wrap as HTMLElement
       // Delete extra character when it exceeds the charlimit
       if (
         messageBox.innerHTML &&
@@ -132,8 +143,7 @@ export default Vue.extend({
         messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
         this.updateText()
       }
-      if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
-      if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
+      this.handleChatBorderRadius()
       this.value = messageBox.innerHTML
     },
     /**
@@ -255,8 +265,18 @@ export default Vue.extend({
     },
   },
   watch: {
-    '$store.state.ui.chatbarContent': function () {
+    'ui.chatbarContent': function () {
       this.updateText()
+    },
+    'ui.replyChatbarContent': function () {
+      this.handleChatBorderRadius()
+    },
+    recipient: function () {
+      this.$store.commit('ui/setReplyChatbarContent', {
+        id: '',
+        payload: '',
+        from: '',
+      })
     },
   },
 })

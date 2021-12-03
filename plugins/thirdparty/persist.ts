@@ -14,6 +14,7 @@ const mutationsBlacklist = [
   'toggleIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
+  'ui/setReplyChatbarContent',
 ]
 
 // State properties path to blacklist saving to store
@@ -28,16 +29,13 @@ const propertiesBlacklist = [
   'prerequisites',
 ]
 
-const propertiesBlacklistWhenStorePin = [
-  'friends.all',
-  'prerequisites',
-]
+const propertiesBlacklistWhenStorePin = ['friends.all', 'prerequisites']
 
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
     reducer: (state: any) => {
-      let blackList = propertiesBlacklist;
+      let blackList = propertiesBlacklist
       if (state.accounts.storePin && !state.accounts.locked) {
         blackList = propertiesBlacklistWhenStorePin
       }
