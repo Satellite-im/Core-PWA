@@ -55,21 +55,28 @@ export default Vue.extend({
       this.$data.files = [...files].map((file: File) => {
         return {
           file,
-          nsfw: { status: false, checking: false },
+          nsfw: { status: false, checking: false, tooLarge: false },
           url: '',
         }
       })
       /* nsfw checking after putting all files */
       for (const file of this.$data.files) {
-        file.nsfw.checking = true
-        try {
-          file.nsfw.status = await this.$Security.isNSFW(file.file)
-        } catch (err) {
-          file.nsfw.status = true
-          file.nsfw.checking = false
-          return
+        const byteLimit = 1048576 * 8 // set to 8mb
+        // don't check nsfw for large files or webgl runs out of memory
+        if (file.file.size > byteLimit) {
+          file.nsfw.tooLarge = true
         }
-        file.nsfw.checking = false
+        if (!file.nsfw.tooLarge) {
+          file.nsfw.checking = true
+          try {
+            file.nsfw.status = await this.$Security.isNSFW(file.file)
+          } catch (err) {
+            file.nsfw.status = true
+            file.nsfw.checking = false
+            return
+          }
+          file.nsfw.checking = false
+        }
         this.loadPicture(file)
       }
       this.$data.uploadStatus = true
@@ -100,7 +107,7 @@ export default Vue.extend({
       if (!filename) return false
       // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(
-        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
       )
       return imageFormatsRegex.test(filename.toLowerCase())
     },

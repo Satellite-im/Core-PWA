@@ -19,6 +19,7 @@
             :src="item.url"
             v-bind:class="{ 'img-blur': item.nsfw.status  }"
           />
+          <UiLoadersLogoLoader v-if="!item.url" :size="48" />
         </div>
         <file-icon
           size="1x"
