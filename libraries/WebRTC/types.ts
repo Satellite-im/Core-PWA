@@ -60,6 +60,8 @@ export enum WebRTCUserEvents {
   CALL_ENDED = 'CALL_ENDED',
   CALL_ANSWERED = 'CALL_ANSWERED',
   CALL_BUSY = 'CALL_BUSY',
+  TYPING_START = 'TYPING_START',
+  TYPING_STOP = 'TYPING_STOP',
 }
 
 export interface WebRTCUserEventListeners {

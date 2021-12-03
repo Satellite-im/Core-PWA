@@ -159,6 +159,9 @@ export default {
       { root: true }
     )
 
+    // Initalize WebRTC with our ID
+    const $WebRTC = Vue.prototype.$WebRTC
+    $WebRTC.init(userAccount?.publicKey.toBase58())
     // Dispatch an action to fetch friends and friends requests
     dispatch('friends/fetchFriends', {}, { root: true })
     dispatch('friends/fetchFriendRequests', {}, { root: true })
