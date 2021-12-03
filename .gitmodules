@@ -4,3 +4,6 @@
 [submodule "electron"]
 	path = electron
 	url = https://github.com/Satellite-im/electron.git
+[submodule "locales"]
+	path = locales
+	url = git@github.com:Satellite-im/Translations.git
