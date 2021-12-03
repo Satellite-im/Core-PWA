@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 
 import { TerminalIcon } from 'satellite-lucide-icons'
 
@@ -15,6 +16,7 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
+import { WebRTCUserEvents } from '~/libraries/WebRTC/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,6 +25,9 @@ declare module 'vue/types/vue' {
     value: string
     updateText: Function
     handleUpload: Function
+    debounceTypingStop: Function
+    typingNotifHandler: Function
+    smartTypingStart: Function
   }
 }
 
@@ -34,6 +39,7 @@ export default Vue.extend({
   data() {
     return {
       text: '',
+      typing: false,
       showEmojiPicker: false,
       maxChars: 256,
     }
@@ -115,6 +121,34 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method typingNotifHandler
+     * @description Wraps the event handler for dispatching typing notifications
+     * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
+     * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
+     */
+    typingNotifHandler(state: WebRTCUserEvents.TYPING_START | WebRTCUserEvents.TYPING_STOP) {
+      console.log('typing state', state)
+      console.log('WebRTC', this.$WebRTC.peers)
+    },
+    /**
+     * @method debounceTypingStop
+     * @description Debounces the typing event so that we only send the typing stopped after it's been
+     * the configured amount of time since they last triggered a keyup event.
+     */
+    debounceTypingStop: debounce(function(ctx) {
+      ctx.$data.typing = false
+      ctx.typingNotifHandler(WebRTCUserEvents.TYPING_STOP)
+    }, 500),
+    /**
+     * @method smartTypingStart
+     * @description Let's us send out events when a user starts typing without spam.
+     */
+    smartTypingStart() {
+      if (this.$data.typing) return
+      this.$data.typing = true
+      this.typingNotifHandler(WebRTCUserEvents.TYPING_START)
+    },
+    /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
@@ -163,9 +197,11 @@ export default Vue.extend({
         default:
           break
       }
+      this.smartTypingStart()
       this.handleInputChange()
     },
     handleInputKeyup(event: KeyboardEvent) {
+      this.debounceTypingStop(this)
       this.$nextTick(() => {
         this.handleInputChange()
       })

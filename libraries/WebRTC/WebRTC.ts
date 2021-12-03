@@ -87,6 +87,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @method _connect
    * @description Internal abstraction of connect to allow for connection queueing
    * @param peerId identifier of peer we're connecting to
+   * @param channel Secret communication channel you want to connect with
    * @returns
    * @example
    */
@@ -97,7 +98,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
       peerId,
       channel,
       this._announceURLs,
-      false
+      false,
     )
 
     this._bindWireListeners(wire)
@@ -150,6 +151,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @method connect
    * @description Connect to a new peer
    * @param peerId identifier of peer we're connecting to
+   * @param channel Secret communication channel you want to connect with
    * @example
    */
   connect(peerId: string, channel: string) {

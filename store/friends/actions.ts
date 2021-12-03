@@ -83,6 +83,12 @@ export default {
     allFriendsData.forEach((friendData) => {
       dispatch('fetchFriendDetails', friendData)
     })
+
+    // Attempt RTC Connection to all friends
+    // TODO: We should probably only try to connect to friends we're actually chatting with
+    // If they call us we'll accept their connection
+    dispatch('webrtc/startup', allFriendsData, { root: true })
+
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Ready },
