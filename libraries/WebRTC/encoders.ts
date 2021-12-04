@@ -43,3 +43,14 @@ export const wireRefuseConnectionMessage = t.intersection([
     }),
   }),
 ])
+
+export const wireKeyboardState = t.intersection([
+  wireBaseMessage,
+  t.type({
+    type: t.literal('TYPING_STATE'),
+    payload: t.type({
+      state: t.string,
+    }),
+  }),
+])
+

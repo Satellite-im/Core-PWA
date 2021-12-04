@@ -4,8 +4,14 @@ import {
   wireIdentificationMessage,
   wireRefuseConnectionMessage,
   wireSignalMessage,
+  wireKeyboardState,
 } from './Encoders'
 import { SignalData } from 'simple-peer'
+
+export enum KeyboardStates {
+  TYPING = 'TYPING',
+  NOT_TYPING = 'NOT_TYPING',
+}
 
 export interface WireEventListeners {
   ERROR: (data: { peerId: string; error: Error }) => void
@@ -17,6 +23,7 @@ export interface WireEventListeners {
   IDENTIFICATION: (data: { peerId: string }) => void
   SIGNAL: (data: { peerId: string; data: SignalData }) => void
   REFUSE: (data: { peerId: string }) => void
+  TYPING_STATE: (data: { state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING }) => void
 }
 
 export type WireEvents = keyof WireEventListeners
@@ -24,6 +31,7 @@ export type WireEvents = keyof WireEventListeners
 export type WireIdentificationMessage = TypeOf<typeof wireIdentificationMessage>
 export type WireDataMessage = TypeOf<typeof wireDataMessage>
 export type WireSignalMessage = TypeOf<typeof wireSignalMessage>
+export type WireKeyboardState = TypeOf<typeof wireKeyboardState>
 export type WireRefuseConnectionMessage = TypeOf<
   typeof wireRefuseConnectionMessage
 >
@@ -32,6 +40,7 @@ export interface WireMessages {
   DATA: WireDataMessage
   SIGNAL: WireSignalMessage
   REFUSE: WireRefuseConnectionMessage
+  TYPING_STATE: WireKeyboardState
 }
 
 export type WireMessageType = keyof WireMessages
@@ -51,16 +60,6 @@ export interface CallEventListeners {
 }
 
 export type CallEvents = keyof CallEventListeners
-
-// export interface PeerEventListeners {
-//   INCOMING_CALL: () => void
-//   CALL_CONNECTED: () => void
-//   STREAM_RECEIVED: () => void
-//   TRACK_RECEIVED: () => void
-//   CALL_ENDED: () => void
-//   CALL_ANSWERED: () => void
-//   CALL_BUSY: () => void
-// }
 
 export interface WebRTCEventListeners {
   INIT: () => void

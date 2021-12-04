@@ -16,7 +16,7 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
-import { WebRTCUserEvents } from '~/libraries/WebRTC/types'
+import { KeyboardStates } from '~/libraries/WebRTC/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -126,9 +126,10 @@ export default Vue.extend({
      * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
      * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
      */
-    typingNotifHandler(state: WebRTCUserEvents.TYPING_START | WebRTCUserEvents.TYPING_STOP) {
-      console.log('typing state', state)
-      console.log('WebRTC', this.$WebRTC.peers)
+    typingNotifHandler(state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING) {
+      const activeFriend = this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
+      const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+      activePeer?.send('TYPING_STATE', { state })
     },
     /**
      * @method debounceTypingStop
@@ -137,7 +138,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function(ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler(WebRTCUserEvents.TYPING_STOP)
+      ctx.typingNotifHandler(KeyboardStates.TYPING)
     }, 500),
     /**
      * @method smartTypingStart
@@ -146,7 +147,7 @@ export default Vue.extend({
     smartTypingStart() {
       if (this.$data.typing) return
       this.$data.typing = true
-      this.typingNotifHandler(WebRTCUserEvents.TYPING_START)
+      this.typingNotifHandler(KeyboardStates.NOT_TYPING)
     },
     /**
      * @method handleInputChange DocsTODO
