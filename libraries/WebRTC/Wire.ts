@@ -96,7 +96,6 @@ export class Wire extends Emitter<WireEventListeners> {
     peer.on('close', this._onClose.bind(this))
 
     this.peer = peer
-
     this._onConnectionHappened(peer)
   }
 
@@ -148,7 +147,7 @@ export class Wire extends Emitter<WireEventListeners> {
       const { peerId } = identificationMessage.right.payload
 
       if (peerId !== this.identifier) {
-        console.log('Not recognized. Drop connection')
+        console.warn('Not recognized. Drop connection')
       } else {
         console.log('identified')
       }
