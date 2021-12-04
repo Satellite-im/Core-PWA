@@ -23,7 +23,10 @@ export interface WireEventListeners {
   IDENTIFICATION: (data: { peerId: string }) => void
   SIGNAL: (data: { peerId: string; data: SignalData }) => void
   REFUSE: (data: { peerId: string }) => void
-  TYPING_STATE: (data: { state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING }) => void
+  TYPING_STATE: (data: {
+    state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING
+    peerId: string
+  }) => void
 }
 
 export type WireEvents = keyof WireEventListeners

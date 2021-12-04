@@ -56,5 +56,11 @@ export default {
     }
 
     $WebRTC.connect(identifier, secretChannel)
+
+    const peer = $WebRTC.getPeer(identifier)
+
+    peer?.communicationBus.on('TYPING_STATE', ({ state, peerId }) => {
+      console.log(`${peerId} is ${state}`)
+    })
   },
 }
