@@ -27,8 +27,6 @@ export default Vue.extend({
       error: '',
       decrypting: false,
       peer: null,
-      firefoxCall: null,
-      chromeCall: null,
     }
   },
   computed: {

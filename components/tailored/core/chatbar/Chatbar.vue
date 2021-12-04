@@ -126,8 +126,12 @@ export default Vue.extend({
      * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
      * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
      */
-    typingNotifHandler(state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING) {
-      const activeFriend = this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
+    typingNotifHandler(
+      state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING,
+    ) {
+      const activeFriend = this.$store.state.friends.all.filter(
+        (f: Friend) => f.activeChat === true,
+      )[0]
       const activePeer = this.$WebRTC.getPeer(activeFriend.address)
       activePeer?.send('TYPING_STATE', { state })
     },
@@ -136,7 +140,7 @@ export default Vue.extend({
      * @description Debounces the typing event so that we only send the typing stopped after it's been
      * the configured amount of time since they last triggered a keyup event.
      */
-    debounceTypingStop: debounce(function(ctx) {
+    debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
       ctx.typingNotifHandler(KeyboardStates.TYPING)
     }, 500),

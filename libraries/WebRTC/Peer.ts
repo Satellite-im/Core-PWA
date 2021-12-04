@@ -26,11 +26,11 @@ export class Peer {
     this.call = new Call(this.communicationBus)
   }
 
-  send(type: WireMessageType, data: any) {
+  send(type: WireMessageType, data: WireMessage['payload']) {
     this.communicationBus.send({
       type,
       payload: data,
-      sentAt: Date.now()
+      sentAt: Date.now(),
     } as WireMessage)
   }
 }
