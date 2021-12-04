@@ -1,4 +1,5 @@
 import { Call } from './Call'
+import { WireMessage, WireMessageType } from './types'
 import { Wire } from './Wire'
 
 export class Peer {
@@ -23,5 +24,13 @@ export class Peer {
     )
 
     this.call = new Call(this.communicationBus)
+  }
+
+  send(type: WireMessageType, data: any) {
+    this.communicationBus.send({
+      type,
+      payload: data,
+      sentAt: Date.now()
+    } as WireMessage)
   }
 }

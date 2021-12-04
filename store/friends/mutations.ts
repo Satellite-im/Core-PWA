@@ -47,6 +47,15 @@ const mutations = {
   addFriend(state: FriendsState, friend: Friend) {
     state.all.push(friend);
   },
+  setActive(state: FriendsState, friend: Friend) {
+    const fList: Friend[] = []
+    state.all.forEach(f => {
+      f.activeChat = (f.account.accountId === friend.account.accountId) ?
+        true : false
+      fList.push(f)
+    })
+    state.all = fList
+  },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map((fr) =>
       fr = fr.address === friend.address ? friend : fr

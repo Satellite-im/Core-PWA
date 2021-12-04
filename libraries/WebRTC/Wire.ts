@@ -140,8 +140,9 @@ export class Wire extends Emitter<WireEventListeners> {
     const decoder = new TextDecoder()
     const decodedString = decoder.decode(data)
     const parsedData = JSON.parse(decodedString)
-
+    console.log('parsedData', parsedData)
     const identificationMessage = wireIdentificationMessage.decode(parsedData)
+    console.log('identificationMessage', identificationMessage)
 
     if (isRight(identificationMessage)) {
       const { peerId } = identificationMessage.right.payload
