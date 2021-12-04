@@ -44,6 +44,15 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
     },
   },
+  directives: {
+    focus: {
+      update(el, { value, oldValue }) {
+        if (!oldValue.from && value.from) {
+          el.focus()
+        }
+      },
+    },
+  },
   computed: {
     ...mapState(['ui']),
     /**
