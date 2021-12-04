@@ -3,7 +3,6 @@ import P2PT from 'p2pt'
 import Peer, { SignalData } from 'simple-peer'
 import Emitter from '~/libraries/WebRTC/Emitter'
 import {
-  KeyboardStates,
   WireEventListeners,
   WireIdentificationMessage,
   WireMessage,
@@ -202,7 +201,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
     if (isRight(keyboardState)) {
       this.emit('TYPING_STATE', {
-        state: KeyboardStates.TYPING,
+        state: keyboardState.right.payload.state,
         peerId: this.identifier,
       })
 

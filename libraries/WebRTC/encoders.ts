@@ -1,6 +1,4 @@
 import * as t from 'io-ts'
-import { fromEnum } from '~/utilities/io-ts'
-import { KeyboardStates } from './types'
 
 export const wireBaseMessage = t.type({
   type: t.string,
@@ -46,12 +44,17 @@ export const wireRefuseConnectionMessage = t.intersection([
   }),
 ])
 
+export const KeyboardStates = t.union([
+  t.literal('TYPING'),
+  t.literal('NOT_TYPING')
+])
+
 export const wireKeyboardState = t.intersection([
   wireBaseMessage,
   t.type({
     type: t.literal('TYPING_STATE'),
     payload: t.type({
-      state: fromEnum('KeyboardStates', KeyboardStates),
+      state: KeyboardStates,
     }),
   }),
 ])
