@@ -26,6 +26,9 @@ export default Vue.extend({
       pin: '',
       error: '',
       decrypting: false,
+      peer: null,
+      firefoxCall: null,
+      chromeCall: null,
     }
   },
   computed: {
@@ -51,9 +54,11 @@ export default Vue.extend({
       '%c🪲 The following info however can be useful for bug reporting. Click the tag below to show more details.',
       'font-family: Space Mono; color:white; background: #2c3e50; border-radius: 2px; padding: 0.5rem;border-right: none;',
     )
-    console.groupCollapsed('%c🛰 Satellite.im%cℹ',
+    console.groupCollapsed(
+      '%c🛰 Satellite.im%cℹ',
       'font-family: Space Mono; color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem;border-right: none;',
-      'color:white; background: #3498db;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',)
+      'color:white; background: #3498db;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
+    )
 
     console.log(
       `%c${this.$config.clientVersion}   %cPre-Alpha`,

@@ -41,7 +41,7 @@ export default {
    */
   async unlock(
     { commit, state }: ActionsArguments<AccountsState>,
-    pin: string
+    pin: string,
   ) {
     const { pinHash, encryptedPhrase } = state
 
@@ -60,7 +60,7 @@ export default {
     if (encryptedPhrase !== '') {
       const decryptedPhrase = await $Crypto.decryptWithPassword(
         encryptedPhrase,
-        pin
+        pin,
       )
 
       await commit('setPhrase', decryptedPhrase)
@@ -94,7 +94,7 @@ export default {
 
     const encryptedPhrase = await $Crypto.encryptWithPassword(
       solanaWallet.mnemonic,
-      pin
+      pin,
     )
 
     commit('setEncryptedPhrase', encryptedPhrase)
@@ -156,12 +156,14 @@ export default {
         pass: pin,
         wallet: $SolanaManager.getMainSolanaWalletInstance(),
       },
-      { root: true }
+      { root: true },
     )
 
     // Initalize WebRTC with our ID
-    const $WebRTC = Vue.prototype.$WebRTC
-    $WebRTC.init(userAccount?.publicKey.toBase58())
+    dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
+      root: true,
+    })
+
     // Dispatch an action to fetch friends and friends requests
     dispatch('friends/fetchFriends', {}, { root: true })
     dispatch('friends/fetchFriendRequests', {}, { root: true })
@@ -175,7 +177,7 @@ export default {
    */
   async registerUser(
     { commit, dispatch }: ActionsArguments<AccountsState>,
-    userData: UserRegistrationPayload
+    userData: UserRegistrationPayload,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
