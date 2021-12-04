@@ -3,6 +3,7 @@ import P2PT from 'p2pt'
 import Peer, { SignalData } from 'simple-peer'
 import Emitter from '~/libraries/WebRTC/Emitter'
 import {
+  KeyboardStates,
   WireEventListeners,
   WireIdentificationMessage,
   WireMessage,
@@ -10,6 +11,7 @@ import {
 import {
   wireDataMessage,
   wireIdentificationMessage,
+  wireKeyboardState,
   wireRefuseConnectionMessage,
   wireSignalMessage,
 } from './encoders'
@@ -139,9 +141,8 @@ export class Wire extends Emitter<WireEventListeners> {
     const decoder = new TextDecoder()
     const decodedString = decoder.decode(data)
     const parsedData = JSON.parse(decodedString)
-    console.log('parsedData', parsedData)
+
     const identificationMessage = wireIdentificationMessage.decode(parsedData)
-    console.log('identificationMessage', identificationMessage)
 
     if (isRight(identificationMessage)) {
       const { peerId } = identificationMessage.right.payload
@@ -191,6 +192,17 @@ export class Wire extends Emitter<WireEventListeners> {
       const data = refuseMessage.right.payload
 
       this.emit('REFUSE', {
+        peerId: this.identifier,
+      })
+
+      return
+    }
+
+    const keyboardState = wireKeyboardState.decode(parsedData)
+
+    if (isRight(keyboardState)) {
+      this.emit('TYPING_STATE', {
+        state: KeyboardStates.TYPING,
         peerId: this.identifier,
       })
 
