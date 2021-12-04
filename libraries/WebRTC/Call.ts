@@ -78,8 +78,6 @@ export class Call extends Emitter<CallEventListeners> {
    * call.hangUp()
    */
   hangUp() {
-    console.log('hangup')
-
     this.peer?.destroy()
     this.stream?.getTracks().forEach((track) => track.stop())
 
@@ -150,7 +148,7 @@ export class Call extends Emitter<CallEventListeners> {
   replaceTrack(
     oldTrack: MediaStreamTrack,
     newTrack: MediaStreamTrack,
-    stream: MediaStream
+    stream: MediaStream,
   ) {
     this.peer?.replaceTrack(oldTrack, newTrack, stream)
   }
@@ -163,7 +161,6 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _bindBusListeners() {
     this.communicationBus?.on('SIGNAL', this._onBusSignal.bind(this))
-    // this.communicationBus?.on('REFUSE', this.)
   }
 
   /**

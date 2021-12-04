@@ -52,45 +52,24 @@ export interface CallEventListeners {
 
 export type CallEvents = keyof CallEventListeners
 
-export enum WebRTCUserEvents {
-  INCOMING_CALL = 'INCOMING_CALL',
-  CALL_CONNECTED = 'CALL_CONNECTED',
-  STREAM_RECEIVED = 'STREAM_RECEIVED',
-  TRACK_RECEIVED = 'TRACK_RECEIVED',
-  CALL_ENDED = 'CALL_ENDED',
-  CALL_ANSWERED = 'CALL_ANSWERED',
-  CALL_BUSY = 'CALL_BUSY',
-  TYPING_START = 'TYPING_START',
-  TYPING_STOP = 'TYPING_STOP',
-}
+// export interface PeerEventListeners {
+//   INCOMING_CALL: () => void
+//   CALL_CONNECTED: () => void
+//   STREAM_RECEIVED: () => void
+//   TRACK_RECEIVED: () => void
+//   CALL_ENDED: () => void
+//   CALL_ANSWERED: () => void
+//   CALL_BUSY: () => void
+// }
 
-export interface WebRTCUserEventListeners {
-  [WebRTCUserEvents.INCOMING_CALL]: () => void
-  [WebRTCUserEvents.CALL_CONNECTED]: () => void
-  [WebRTCUserEvents.STREAM_RECEIVED]: () => void
-  [WebRTCUserEvents.TRACK_RECEIVED]: () => void
-  [WebRTCUserEvents.CALL_ENDED]: () => void
-  [WebRTCUserEvents.CALL_ANSWERED]: () => void
-  [WebRTCUserEvents.CALL_BUSY]: () => void
-}
-
-export enum WebRTCEvents {
-  INIT = 'INIT',
-  KILL = 'KILL',
-  ERROR = 'ERROR',
-  CLOSE = 'CLOSE',
-  TRACKER_CONNECT = 'TRACKER_CONNECT',
-  PEER_CONNECT = 'PEER_CONNECT',
-  PEER_DATA = 'PEER_DATA',
-}
 export interface WebRTCEventListeners {
-  [WebRTCEvents.INIT]: () => void
-  [WebRTCEvents.KILL]: () => void
-  [WebRTCEvents.ERROR]: (data: { error: Error }) => void
-  [WebRTCEvents.CLOSE]: (data: { peerId: string }) => void
-  [WebRTCEvents.TRACKER_CONNECT]: (data: { tracker: string }) => void
-  [WebRTCEvents.PEER_CONNECT]: (data: { peerId: string }) => void
-  [WebRTCEvents.PEER_DATA]: (data: { peerId: string; data: any }) => void
+  INIT: () => void
+  KILL: () => void
+  ERROR: (data: { error: Error }) => void
+  TRACKER_CONNECT: (data: { peerId: string; tracker: string }) => void
+  PEER_CONNECT: (data: { peerId: string }) => void
+  PEER_DISCONNECT: (data: { peerId: string }) => void
+  PEER_DATA: (data: { peerId: string; data: any }) => void
 }
 
 export type WebRTCEvent = keyof WebRTCEventListeners
@@ -104,14 +83,14 @@ export type WebRTCEventBox = {
 
 export type OptionalPayload<
   T extends keyof B,
-  B extends { [key in keyof B]: (...args: any[]) => any }
+  B extends { [key in keyof B]: (...args: any[]) => any },
 > = Parameters<B[T]> extends never
   ? { data?: undefined }
   : { data: Parameters<B[T]>[0] }
 
 export type DataOf<
   T extends keyof B,
-  B extends { [key in keyof B]: (...args: any[]) => any }
+  B extends { [key in keyof B]: (...args: any[]) => any },
 > = {
   at: number
   event: T
