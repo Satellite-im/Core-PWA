@@ -1,7 +1,6 @@
 <template>
   <div id="bottom-bar-container">
-    <UiTypingIndicator v-if="ui.isTyping"
-:users="usersTyping" />
+    <UiTypingIndicator v-if="typing" :users="usersTyping" />
     <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{
       `${text.length}/${maxChars}`
     }}</span>
@@ -9,8 +8,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
@@ -24,6 +24,10 @@ export default Vue.extend({
     usersTyping: {
       type: Array,
       default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
+    },
+    typing: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

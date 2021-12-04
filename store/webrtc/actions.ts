@@ -60,7 +60,7 @@ export default {
     const peer = $WebRTC.getPeer(identifier)
 
     peer?.communicationBus.on('TYPING_STATE', ({ state, peerId }) => {
-      console.log(`${peerId} is ${state}`)
+      commit('friends/setTyping', { id: peerId, typingState: state }, { root: true })
     })
   },
 }

@@ -16,7 +16,6 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
-import { KeyboardStates } from '~/libraries/WebRTC/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -39,9 +38,9 @@ export default Vue.extend({
   data() {
     return {
       text: '',
-      typing: false,
       showEmojiPicker: false,
       maxChars: 256,
+      recipentTyping: false,
     }
   },
   props: {
@@ -50,7 +49,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'friends']),
+    activeFriend() {
+      return this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
+    },
     /**
      * Computes the amount of characters left
      */
@@ -127,7 +129,7 @@ export default Vue.extend({
      * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
      */
     typingNotifHandler(
-      state: KeyboardStates.TYPING | KeyboardStates.NOT_TYPING,
+      state: 'TYPING' | 'NOT_TYPING',
     ) {
       const activeFriend = this.$store.state.friends.all.filter(
         (f: Friend) => f.activeChat === true,
@@ -142,7 +144,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler(KeyboardStates.TYPING)
+      ctx.typingNotifHandler('NOT_TYPING')
     }, 500),
     /**
      * @method smartTypingStart
@@ -151,7 +153,7 @@ export default Vue.extend({
     smartTypingStart() {
       if (this.$data.typing) return
       this.$data.typing = true
-      this.typingNotifHandler(KeyboardStates.NOT_TYPING)
+      this.typingNotifHandler('TYPING')
     },
     /**
      * @method handleInputChange DocsTODO
@@ -298,6 +300,13 @@ export default Vue.extend({
   watch: {
     '$store.state.ui.chatbarContent': function () {
       this.updateText()
+    },
+    '$store.state.friends.all': {
+      handler () {
+        const activeFriend = this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
+        this.$data.recipentTyping = activeFriend.typingState === 'TYPING'
+      },
+      deep: true,
     },
   },
 })
