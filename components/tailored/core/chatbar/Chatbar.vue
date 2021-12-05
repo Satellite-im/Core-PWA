@@ -40,7 +40,7 @@ export default Vue.extend({
       text: '',
       showEmojiPicker: false,
       maxChars: 256,
-      recipentTyping: false,
+      recipientTyping: false,
     }
   },
   props: {
@@ -304,7 +304,7 @@ export default Vue.extend({
     '$store.state.friends.all': {
       handler () {
         const activeFriend = this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
-        this.$data.recipentTyping = activeFriend.typingState === 'TYPING'
+        this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
       },
       deep: true,
     },
