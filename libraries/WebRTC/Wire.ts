@@ -10,6 +10,7 @@ import {
 import {
   wireDataMessage,
   wireIdentificationMessage,
+  wireKeyboardState,
   wireRefuseConnectionMessage,
   wireSignalMessage,
 } from './encoders'
@@ -96,7 +97,6 @@ export class Wire extends Emitter<WireEventListeners> {
     peer.on('close', this._onClose.bind(this))
 
     this.peer = peer
-
     this._onConnectionHappened(peer)
   }
 
@@ -147,7 +147,7 @@ export class Wire extends Emitter<WireEventListeners> {
       const { peerId } = identificationMessage.right.payload
 
       if (peerId !== this.identifier) {
-        console.log('Not recognized. Drop connection')
+        console.warn('Not recognized. Drop connection')
       } else {
         console.log('identified')
       }
@@ -191,6 +191,17 @@ export class Wire extends Emitter<WireEventListeners> {
       const data = refuseMessage.right.payload
 
       this.emit('REFUSE', {
+        peerId: this.identifier,
+      })
+
+      return
+    }
+
+    const keyboardState = wireKeyboardState.decode(parsedData)
+
+    if (isRight(keyboardState)) {
+      this.emit('TYPING_STATE', {
+        state: keyboardState.right.payload.state,
         peerId: this.identifier,
       })
 

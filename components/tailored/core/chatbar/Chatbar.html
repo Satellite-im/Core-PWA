@@ -22,5 +22,5 @@
 
     <TailoredCoreChatbarControls :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
-  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />
+  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
 </div>

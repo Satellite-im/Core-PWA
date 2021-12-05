@@ -1,70 +1,51 @@
-<template>
-  <div>
-    <TailoredSettingsModal v-if="ui.showSettings" />
-    <InteractablesContextMenu v-if="ui.contextMenuStatus" />
-    <UiModal v-if="ui.modals.wallet"
-:close-modal="toggleWallet" nopad>
-      <TailoredWalletPopup />
-    </UiModal>
-    <UiModal
-      v-if="ui.modals.createServer"
-      :close-modal="toggleModal"
-      :title="$t('servers.create.heading')"
-    >
-      <TailoredCoreServersCreate
-        v-if="ui.modals.createServer"
-        v-click-outside="toggleModal"
-        :close-modal="toggleModal"
-      />
-    </UiModal>
-    <UiModal
-      v-if="ui.modals.error"
-      :close-modal="toggleError"
-      :title="$t('popups.error.title')"
-    >
-      <UiPopupsError
-        v-if="ui.modals.error"
-        v-click-outside="toggleError"
-        :close-modal="toggleError"
-        :set-close-timeout="5000"
-      />
-    </UiModal>
-    <UiModal
-      v-if="$mock.users.find((user) => user.name === media.incomingCall)"
-      nopad
-    >
-      <TailoredCoreIncomingCall
-        :user="$mock.users.find((user) => user.name === media.incomingCall)"
-        :accept-call="acceptCall"
-        :deny-call="denyCall"
-      />
-    </UiModal>
-    <UiModal
-      v-if="ui.modals.showMarketPlace"
-      :close-modal="toggleMarketPlace"
-      nopad
-    >
-      <TailoredMarketplace
-        v-click-outside="toggleMarketPlace"
-        :close-modal="toggleMarketPlace"
-      />
-    </UiModal>
-    <UiUpdateModal />
-    <transition :name="$device.isMobile ? 'slide' : ''">
-      <InteractablesQuickProfile v-if="ui.quickProfile"
-:user="$mock.user" />
-    </transition>
-  </div>
-</template>
-
+<template src="./Global.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { ModalWindows } from '~/store/ui/types'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    toggleModal: (modalName: string) => void
+  }
+}
 
 export default Vue.extend({
   name: 'Global',
   computed: {
     ...mapState(['ui', 'media']),
+    ModalWindows: () => ModalWindows,
+  },
+  mounted() {
+    // This determines if we should show the
+    let lsVersion = localStorage.getItem('local-version')
+
+    if (!lsVersion) {
+      localStorage.setItem('local-version', this.$config.clientVersion)
+      lsVersion = this.$config.clientVersion
+      return
+    }
+
+    const [majorVersion, minorVersion, patchVersion] =
+      this.$config.clientVersion.split('.')
+    const [lsMajorVersion, lsMinorVersion, lsPatchVersion] =
+      lsVersion.split('.')
+
+    // // A update which requires resetting of the app has occured.
+    if (lsMinorVersion !== minorVersion) {
+      this.$data.requiresUpdate = true
+      this.$data.hasMinorUpdate = true
+    }
+
+    // // A version which brings new features without major changes exists
+    if (lsPatchVersion !== patchVersion) {
+      this.$data.hasMinorUpdate = true
+    }
+
+    if (this.$config.clientVersion !== lsVersion) {
+      this.toggleModal('changelog')
+      localStorage.setItem('local-version', this.$config.clientVersion)
+    }
   },
   methods: {
     /**
@@ -72,21 +53,10 @@ export default Vue.extend({
      * @description
      * @example
      */
-    toggleModal() {
+    toggleModal(modalName: keyof ModalWindows): void {
       this.$store.commit('ui/toggleModal', {
-        name: 'createServer',
-        state: !this.ui.modals.createServer,
-      })
-    },
-    /**
-     * @method toggleError
-     * @description
-     * @example
-     */
-    toggleError() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'error',
-        state: !this.ui.modals.error,
+        name: modalName,
+        state: !this.ui.modals[modalName],
       })
     },
     /**
@@ -104,23 +74,6 @@ export default Vue.extend({
      */
     denyCall() {
       this.$store.dispatch('media/denyCall')
-    },
-    /**
-     * @method toggleMarketPlace DocsTODO
-     * @description
-     * @example
-     */
-    toggleMarketPlace() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'showMarketPlace',
-        state: !this.ui.modals.showMarketPlace,
-      })
-    },
-    toggleWallet() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'wallet',
-        state: !this.ui.modals.wallet,
-      })
     },
   },
 })

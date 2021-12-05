@@ -33,6 +33,10 @@ export const Config = {
       'wss://tracker.openwebtorrent.com',
       'wss://tracker.sloppyta.co:443/announce',
       'wss://tracker.novage.com.ua:443/announce',
+      'udp://opentracker.i2p.rocks:6969/announce',
+      'http://opentracker.i2p.rocks:6969/announce',
+      'udp://tracker.opentrackr.org:1337/announce',
+      'http://tracker.opentrackr.org:1337/announce',
     ],
   },
   solana: {

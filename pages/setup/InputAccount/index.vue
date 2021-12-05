@@ -28,7 +28,6 @@ export default Vue.extend({
       this.phraseInput = ''
     },
     removeWord(index: number) {
-      console.log(index)
       this.phrases.splice(index,1)
     }
   }

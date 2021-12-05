@@ -47,6 +47,26 @@ const mutations = {
   addFriend(state: FriendsState, friend: Friend) {
     state.all.push(friend);
   },
+  setActive(state: FriendsState, friend: Friend) {
+    const fList: Friend[] = []
+    state.all.forEach(f => {
+      f.activeChat = (f.account.accountId === friend.account.accountId) ?
+        true : false
+      fList.push(f)
+    })
+    state.all = fList
+  },
+  setTyping(state: FriendsState, opts: { id: string, typingState: 'TYPING' | 'NOT_TYPING' }) {
+    const fList: Friend[] = []
+    state.all.forEach(f => {
+      fList.push({
+        ...f,
+        typingState: (f.address === opts.id) ?
+          opts.typingState : f.typingState || 'NOT_TYPING'
+      })
+    })
+    state.all = fList
+  },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map((fr) =>
       fr = fr.address === friend.address ? friend : fr
