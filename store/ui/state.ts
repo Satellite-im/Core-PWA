@@ -13,11 +13,12 @@ const InitalUIState = (): UIState => ({
   modals: {
     newfolder: false,
     createServer: false,
-    showMarketPlace: false,
+    marketPlace: false,
     wallet: false,
     quickchat: false,
     walletMini: false,
     error: false,
+    changelog: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
