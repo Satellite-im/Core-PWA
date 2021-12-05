@@ -9,6 +9,8 @@ import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import { Config } from '~/config'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import Hounddog from '~/utilities/Hounddog'
+
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -20,6 +22,7 @@ declare module 'vue/types/vue' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
+    $Hounddog: Hounddog
   }
 }
 
@@ -33,6 +36,7 @@ declare module '@nuxt/types' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
+    $Hounddog: Hounddog
   }
 }
 
@@ -43,6 +47,7 @@ Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
+Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
