@@ -26,11 +26,13 @@ const propertiesBlacklist = [
   'accounts.registrationStatus',
   'friends.all',
   'prerequisites',
+  'webrtc.activeStream',
 ]
 
 const propertiesBlacklistWhenStorePin = [
   'friends.all',
   'prerequisites',
+  'webrtc.activeStream',
 ]
 
 export default ({ store }: { store: any }) => {
