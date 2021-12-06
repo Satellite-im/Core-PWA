@@ -18,7 +18,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      elapsed: '',
+      elapsed: `${this.$i18n.t('ui.live')} 00:00`,
     }
   },
   mounted() {
