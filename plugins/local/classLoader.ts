@@ -10,14 +10,9 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-<<<<<<< HEAD
 // Utils
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
-=======
-import Hounddog from '~/utilities/Hounddog'
-
->>>>>>> 45427d2588c27a0f0731191ad713bb9621fb5e33
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -30,10 +25,7 @@ declare module 'vue/types/vue' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $Hounddog: Hounddog
-<<<<<<< HEAD
     $Logger: Logger
-=======
->>>>>>> 45427d2588c27a0f0731191ad713bb9621fb5e33
   }
 }
 
@@ -48,10 +40,7 @@ declare module '@nuxt/types' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $Hounddog: Hounddog
-<<<<<<< HEAD
     $Logger: Logger
-=======
->>>>>>> 45427d2588c27a0f0731191ad713bb9621fb5e33
   }
 }
 
@@ -63,10 +52,7 @@ Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
-<<<<<<< HEAD
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
-=======
->>>>>>> 45427d2588c27a0f0731191ad713bb9621fb5e33
 
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
