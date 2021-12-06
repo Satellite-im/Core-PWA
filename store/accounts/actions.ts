@@ -159,7 +159,7 @@ export default {
       { root: true },
     )
 
-    // Initalize WebRTC with our ID
+    // Initialize WebRTC with our ID
     dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
       root: true,
     })
@@ -193,14 +193,14 @@ export default {
     const payerAccount = await $SolanaManager.getActiveAccount()
 
     if (!payerAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
+      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
     const userAccount = await $SolanaManager.getUserAccount()
 
     if (!userAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
+      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 

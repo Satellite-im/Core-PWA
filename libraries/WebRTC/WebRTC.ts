@@ -40,7 +40,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
     this._runQueue()
     this.emit('INIT')
 
-    Vue.prototype.$Logger.log('WebRTC', 'Initalized', { originator: this.originator, announceURLs: this._announceURLs })
+    Vue.prototype.$Logger.log('WebRTC', 'Initialized', { originator: this.originator, announceURLs: this._announceURLs })
   }
 
   /**

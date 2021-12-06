@@ -1,6 +1,6 @@
 import { UIState, GlyphMarketViewStatus } from './types'
 
-const InitalUIState = (): UIState => ({
+const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
   showSearchResult: false,
@@ -49,4 +49,4 @@ const InitalUIState = (): UIState => ({
   recentReactions: ['👍', '😂', '♥️'],
 })
 
-export default InitalUIState
+export default InitialUIState

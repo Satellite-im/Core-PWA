@@ -1,9 +1,9 @@
 import { TextileState } from './types'
 
-const InitalTextileState = (): TextileState => ({
+const InitialTextileState = (): TextileState => ({
   initialized: false,
   conversations: {},
   conversationLoading: false,
 })
 
-export default InitalTextileState
+export default InitialTextileState

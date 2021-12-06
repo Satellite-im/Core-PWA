@@ -1,9 +1,9 @@
 import { FriendsState } from '~/store/friends/types'
 
-const InitalFriendsState: FriendsState = {
+const InitialFriendsState: FriendsState = {
   incomingRequests: [],
   outgoingRequests: [],
   all: [],
 }
 
-export default () => InitalFriendsState
+export default () => InitialFriendsState
