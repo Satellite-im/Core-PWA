@@ -11,7 +11,7 @@ const InitialAccountsState = (): AccountsState => ({
   encryptedPhrase: '',
   loading: false,
   registered: false,
-  registrationStatus: RegistrationStatus.UKNOWN,
+  registrationStatus: RegistrationStatus.UNKNOWN,
 })
 
 export default InitialAccountsState
