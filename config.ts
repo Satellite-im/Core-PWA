@@ -2,7 +2,7 @@
 import { Commitment } from '@solana/web3.js'
 
 export const Config = {
-  debug: false,
+  debug: true,
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,

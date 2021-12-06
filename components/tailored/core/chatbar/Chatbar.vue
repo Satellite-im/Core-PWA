@@ -196,7 +196,7 @@ export default Vue.extend({
               break
             }
             if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              this.$Logger.log('Commands', 'dispatch command')
               break
             }
           }

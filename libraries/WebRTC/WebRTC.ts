@@ -1,4 +1,5 @@
 import { Config } from '~/config'
+import Vue from 'vue'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
 import { Wire } from '~/libraries/WebRTC/Wire'
@@ -39,7 +40,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
     this._runQueue()
     this.emit('INIT')
 
-    console.log('init', this.originator, this._announceURLs)
+    Vue.prototype.$Logger.log('WebRTC', 'Initalized', { originator: this.originator, announceURLs: this._announceURLs })
   }
 
   /**
@@ -114,11 +115,11 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
     })
 
     wire.on('DATA', ({ peerId, data }) => {
-      console.log(peerId, data)
+      Vue.prototype.$Logger.log('WebRTC', 'DATA', { peerId, data })
     })
 
     wire.on('ERROR', ({ peerId, error }) => {
-      console.log(peerId, error)
+      Vue.prototype.$Logger.log('WebRTC', 'ERROR', { peerId, error })
     })
   }
 
