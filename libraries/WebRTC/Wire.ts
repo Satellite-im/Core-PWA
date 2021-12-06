@@ -147,9 +147,9 @@ export class Wire extends Emitter<WireEventListeners> {
       const { peerId } = identificationMessage.right.payload
 
       if (peerId !== this.identifier) {
-        console.warn('Not recognized. Drop connection')
+        Vue.prototype.$Logger.log('WebRTC', 'Not recognized, drop connection.')
       } else {
-        console.log('identified')
+        Vue.prototype.$Logger.log('WebRTC', 'Identified')
       }
 
       this.emit('IDENTIFICATION', {
