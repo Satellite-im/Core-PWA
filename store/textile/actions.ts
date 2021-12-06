@@ -179,7 +179,7 @@ export default {
     }
 
     MailboxManager.listenToSentboxMessages((message) => {
-      console.log('sentbox', message)
+      Vue.prototype.$Logger.log('WebRTC Sentbox', 'New message', message)
     })
   },
   /**
