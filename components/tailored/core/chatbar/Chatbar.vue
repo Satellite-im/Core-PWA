@@ -51,7 +51,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'friends']),
     activeFriend() {
-      return this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
+      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
     /**
      * Computes the amount of characters left
@@ -131,11 +131,11 @@ export default Vue.extend({
     typingNotifHandler(
       state: 'TYPING' | 'NOT_TYPING',
     ) {
-      const activeFriend = this.$store.state.friends.all.filter(
-        (f: Friend) => f.activeChat === true,
-      )[0]
-      const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-      activePeer?.send('TYPING_STATE', { state })
+      const activeFriend = this.$Hounddog.getActiveFriend(this.$store.state.friends)
+      if (activeFriend) {
+        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+        activePeer?.send('TYPING_STATE', { state })
+      }
     },
     /**
      * @method debounceTypingStop
@@ -196,7 +196,7 @@ export default Vue.extend({
               break
             }
             if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              this.$Logger.log('Commands', 'dispatch command')
               break
             }
           }
@@ -303,8 +303,9 @@ export default Vue.extend({
     },
     '$store.state.friends.all': {
       handler () {
-        const activeFriend = this.$store.state.friends.all.filter((f: Friend) => f.activeChat === true)[0]
-        this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
+        const activeFriend = this.$Hounddog.getActiveFriend(this.$store.state.friends)
+        if (activeFriend)
+          this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
       },
       deep: true,
     },
