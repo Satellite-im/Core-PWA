@@ -39,4 +39,9 @@ export default class Hounddog {
             return f.activeChat === true
         })
     }
+
+    friendExists(state: FriendsState, friend: Friend): Boolean {
+        const search = state.all.find((fr: Friend) => fr.address === friend.address)
+        return Boolean(search)
+    }
 }
