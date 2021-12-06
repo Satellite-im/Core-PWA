@@ -104,10 +104,10 @@ export default Vue.extend({
       const recipient = isMe
         ? null
         : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address
+            (friend) => friend.address === this.$route.params.address,
           )
       return recipient
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')

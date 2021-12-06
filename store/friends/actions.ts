@@ -145,7 +145,9 @@ export default {
       unreadCount: 0,
     }
 
-    const friendExists = state.all.find((fr) => fr.address === friend.address)
+    const $Hounddog = Vue.prototype.$Hounddog
+    const friendExists = $Hounddog.friendExists(state, friend)
+
     if (!friendExists) {
       commit('addFriend', friend)
 
