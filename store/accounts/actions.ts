@@ -159,7 +159,7 @@ export default {
       { root: true },
     )
 
-    // Initalize WebRTC with our ID
+    // Initialize WebRTC with our ID
     dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
       root: true,
     })

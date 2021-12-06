@@ -1,7 +1,7 @@
 import { WebRTCState } from './types'
 
-const InitalWebRTCState = (): WebRTCState => ({
+const InitialWebRTCState = (): WebRTCState => ({
   initialized: false,
 })
 
-export default InitalWebRTCState
+export default InitialWebRTCState

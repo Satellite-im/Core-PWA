@@ -1,7 +1,7 @@
 import { VideoState } from './types'
 
-const InitalVideoState = (): VideoState => ({
+const InitialVideoState = (): VideoState => ({
   disabled: false,
 })
 
-export default InitalVideoState
+export default InitialVideoState
