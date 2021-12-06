@@ -23,10 +23,6 @@ declare module 'vue/types/vue' {
     handleInputChange: Function
     value: string
     updateText: Function
-    handleUpload: Function
-    debounceTypingStop: Function
-    typingNotifHandler: Function
-    smartTypingStart: Function
   }
 }
 
@@ -39,8 +35,7 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-      maxChars: 256,
-      recipientTyping: false,
+      maxChars: 256
     }
   },
   props: {
