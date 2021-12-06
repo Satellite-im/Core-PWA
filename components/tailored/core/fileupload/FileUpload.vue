@@ -30,6 +30,9 @@ export default Vue.extend({
       type: String,
       default: 'quick',
     },
+    editable: {
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -46,27 +49,23 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      const files: File[] = event.target.files
-      if (files.length > 4) {
-        // @ts-ignore
-        this.$data.count_error = true
-        return
-      }
-      this.$data.count_error = false
-      this.$data.files = [...files].map((file: File) => {
-        return {
-          file,
-          nsfw: { status: false, checking: false, tooLarge: false },
-          url: '',
+      if (this.editable) {
+        const files: File[] = event.target.files
+        if (files.length > 4) {
+          // @ts-ignore
+          this.$data.count_error = true
+          return
         }
-      })
-      /* nsfw checking after putting all files */
-      for (const file of this.$data.files) {
-        // don't check nsfw for large files or webgl runs out of memory
-        if (file.file.size > Config.uploadByteLimit) {
-          file.nsfw.tooLarge = true
-        }
-        if (!file.nsfw.tooLarge) {
+        this.$data.count_error = false
+        this.$data.files = [...files].map((file: File) => {
+          return {
+            file,
+            nsfw: { status: false, checking: false },
+            url: '',
+          }
+        })
+        /* nsfw checking after putting all files */
+        for (const file of this.$data.files) {
           file.nsfw.checking = true
           try {
             file.nsfw.status = await this.$Security.isNSFW(file.file)
@@ -76,10 +75,10 @@ export default Vue.extend({
             return
           }
           file.nsfw.checking = false
+          this.loadPicture(file)
         }
-        this.loadPicture(file)
+        this.$data.uploadStatus = true
       }
-      this.$data.uploadStatus = true
     },
     /**
      * @method loadPicture
