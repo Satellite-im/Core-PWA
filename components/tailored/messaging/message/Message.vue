@@ -97,7 +97,7 @@ export default Vue.extend({
   },
   methods: {
     testFunc() {
-      console.log('Message Func Testing ' + this.$data.disData)
+      this.$Logger.log('Message Context', 'Test func')
     },
     /**
      * @method mouseOver DocsTODO

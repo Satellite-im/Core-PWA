@@ -23,7 +23,7 @@ export default {
     $WebRTC.init(originator)
 
     $WebRTC.on('PEER_CONNECT', ({ peerId }) => {
-      console.log('PEER CONNECTED', peerId)
+      Vue.prototype.$Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
     })
 
     commit('setInitialized', true)

@@ -7,7 +7,6 @@
  */
 
 export const ConsoleWarning = (clientVersion: string, currentState: object) => {
-  console.clear()
   console.log(
     '%c⚠️ Do not share anything from console with others. Do not run commands sent by others online.',
     'font-family: Space Mono; color:white; background: #e67e22; border-radius: 2px; padding: 0.5rem;border-right: none;',
