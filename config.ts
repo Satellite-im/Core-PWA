@@ -92,4 +92,8 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
+  uploadByteLimit: 1048576 * 8, // 8mb
+  regex: {
+    image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
+  },
 }
