@@ -16,6 +16,7 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
+import { text } from 'stream/consumers'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -52,7 +53,7 @@ export default Vue.extend({
   directives: {
     focus: {
       update(el, { value, oldValue }) {
-        if (!oldValue.from && value.from) {
+        if (Boolean(value.id)) {
           el.focus()
         }
       },
