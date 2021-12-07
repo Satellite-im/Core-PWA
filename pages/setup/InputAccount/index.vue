@@ -3,18 +3,24 @@
 <script lang="ts">
 import Vue from 'vue'
 import { PlusCircleIcon } from 'satellite-lucide-icons'
+import * as bip39 from 'bip39'
 
 export default Vue.extend({
   name: 'InputAccountScreen',
   components: {
-    PlusCircleIcon
+    PlusCircleIcon,
   },
   data() {
     return {
       error: '',
-      phraseInput: '',
-      phrases: []
+      phrases: [],
+      bipList: bip39.wordlists.english,
     }
+  },
+  computed: {
+    availableBipList() {
+      return this.bipList.filter((elm) => !this.phrases.includes(elm))
+    },
   },
   methods: {
     recoverAccount() {
@@ -23,14 +29,14 @@ export default Vue.extend({
     isOdd(num: number) {
       return num % 2
     },
-    addPhrase() {
-      if (this.phrases.length < 12) this.phrases.push(this.phraseInput)
-      this.phraseInput = ''
-    },
     removeWord(index: number) {
-      this.phrases.splice(index,1)
-    }
-  }
+      this.phrases.splice(index, 1)
+    },
+    onSelected(item: string) {
+      if (this.phrases.length < 12 && !this.phrases.includes(item))
+        this.phrases.push(item)
+    },
+  },
 })
 </script>
 
