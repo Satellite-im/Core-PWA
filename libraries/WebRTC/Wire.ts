@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { isRight } from 'fp-ts/lib/Either'
 import P2PT from 'p2pt'
 import Peer, { SignalData } from 'simple-peer'
