@@ -53,7 +53,7 @@ export default Vue.extend({
   directives: {
     focus: {
       update(el, { value, oldValue }) {
-        if (Boolean(value.id)) {
+        if (value.id !== oldValue.id) {
           el.focus()
         }
       },
@@ -321,7 +321,7 @@ export default Vue.extend({
     'ui.chatbarContent': function () {
       this.updateText()
     },
-    '$store.state.friends.all': {
+    'friends.all': {
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(
           this.$store.state.friends,
@@ -335,6 +335,7 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
+      this.$store.commit('ui/chatbarContent', '')
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
