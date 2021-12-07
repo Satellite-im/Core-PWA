@@ -39,12 +39,8 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-<<<<<<< HEAD
       maxChars: 256,
       recipientTyping: false,
-=======
-      maxChars: 256
->>>>>>> acce6d0e (fixed files page chatbar action)
     }
   },
   props: {
