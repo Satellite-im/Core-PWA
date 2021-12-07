@@ -34,8 +34,6 @@ export const sampleProfileInfo = {
   imageUrl: url,
   badges: profileBadges,
   locations: [
-    'New York, United States',
-    'California, United States',
   ] as string[],
   languages: ['English', 'Spanish', 'German'] as string[],
   username: 'username01234#0001',

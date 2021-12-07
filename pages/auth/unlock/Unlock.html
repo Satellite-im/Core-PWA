@@ -30,6 +30,9 @@
       <UiRealm />
     </div>
   </div>
-
-  <UiVersion name version />
+  <span @click="toggleChangelogVisibility">
+    <UiVersion name version/>
+  </span>
+  <UiUpdateModal v-if="ui.modals.changelog"/>
+  
 </div>

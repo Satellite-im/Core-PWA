@@ -17,6 +17,8 @@ import { Server } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
+import { ModalWindows } from '~/store/ui/types'
+
 declare module 'vue/types/vue' {
   interface Vue {
     search: any
@@ -74,6 +76,7 @@ export default Vue.extend({
         return this.search.query
       },
     },
+    ModalWindows: () => ModalWindows,
   },
   methods: {
     /**
@@ -108,20 +111,15 @@ export default Vue.extend({
       this.showSearchResult = !this.showSearchResult
     },
     /**
-     * @method toggleMarketPlace DocsTODO
-     * @description
-     * @example
+     * @method toggleModal
+     * @param modalName - enum for which modal
+     * @description This updates the state to show/hide the specific modal you pass in
+     * @example toggleModal(ModalWindows.WALLET)
      */
-    toggleMarketPlace() {
+    toggleModal(modalName: keyof ModalWindows): void {
       this.$store.commit('ui/toggleModal', {
-        name: 'showMarketPlace',
-        state: !this.ui.modals.showMarketPlace,
-      })
-    },
-    toggleWallet() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'wallet',
-        state: !this.ui.modals.wallet,
+        name: modalName,
+        state: !this.ui.modals[modalName],
       })
     },
   },

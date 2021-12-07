@@ -11,7 +11,7 @@ interface AudioState {
   }
 }
 
-const InitalAudioState = (): AudioState => ({
+const InitialAudioState = (): AudioState => ({
   muted: false,
   deafened: false,
   volume: 100,
@@ -24,4 +24,4 @@ const InitalAudioState = (): AudioState => ({
   },
 })
 
-export default InitalAudioState
+export default InitialAudioState

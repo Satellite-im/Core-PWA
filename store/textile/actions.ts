@@ -72,6 +72,8 @@ export default {
       skip: query.skip,
     })
 
+    commit('friends/setActive', friend, { root: true})
+
     commit('setConversationLoading', { loading: false })
 
     // TODO: only for testing
@@ -177,7 +179,7 @@ export default {
     }
 
     MailboxManager.listenToSentboxMessages((message) => {
-      console.log('sentbox', message)
+      Vue.prototype.$Logger.log('WebRTC Sentbox', 'New message', message)
     })
   },
   /**

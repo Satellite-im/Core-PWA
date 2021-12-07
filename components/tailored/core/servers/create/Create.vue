@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   watch: {
     friends(newFriends) {
-      console.log(newFriends)
+      this.$Logger.log('Friends Watcher', 'New Friends', newFriends)
     },
   },
   methods: {

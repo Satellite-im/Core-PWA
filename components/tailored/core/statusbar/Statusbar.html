@@ -41,14 +41,14 @@
     <div
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
-      v-on:click="toggleMarketPlace"
+      @click="() => toggleModal(ModalWindows.MARKETPLACE)"
       data-tooltip="Marketplace">
       <shopping-bag-icon class="control-icon" size="1x" />
     </div>
     <div
       class="has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
-      v-on:click="toggleWallet"
+      @click="() => toggleModal(ModalWindows.WALLET)"
       data-tooltip="Wallet">
       <wallet-icon class="control-icon" size="1x" />
     </div>

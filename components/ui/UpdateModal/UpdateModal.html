@@ -1,20 +1,19 @@
-<div class="update-modal">
+<div class="update-modal" >
   <UiModal
-    v-if="requiresUpdate || hasMinorUpdate && Object.keys(releaseData).length"
     nopad
   >
-    <div class="update-content">
+    <div class="update-content" v-click-outside="toggleVisibility">
       <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
-      <UiSpacer height="50" />
+      <UiSpacer :height="50" />
       <TypographyTitle :size="6" :text="`Update ${releaseData.tag_name} is Here!`" />
       <pre>
-{{ releaseData.body }}
+        <vue-markdown :source="releaseData.body" :breaks="false"/>
       </pre>
       <TypographyText v-if="requiresUpdate" text="This update requires a refresh of the Alpha application. Click 'Update Now' below to start fresh on the new update." />
       
-      <UiSpacer height="50" />
+      <UiSpacer :height="50" />
       <div>
-        <InteractablesButton
+        <!-- <InteractablesButton
           v-if="requiresUpdate"
           type="danger"
           size="small"
@@ -22,8 +21,8 @@
           text="Skip Update"
         >
           <x-icon size="1x" />
-        </InteractablesButton>
-        <InteractablesButton
+        </InteractablesButton> -->
+        <!-- <InteractablesButton
           v-if="requiresUpdate"
           type="primary"
           size="small"
@@ -31,7 +30,7 @@
           text="Update Now"
         >
           <refresh-cw-icon size="1x" />
-        </InteractablesButton>
+        </InteractablesButton> -->
         <InteractablesButton
           v-if="!requiresUpdate"
           type="primary"

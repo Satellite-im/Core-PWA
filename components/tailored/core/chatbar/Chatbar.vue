@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 
 import { TerminalIcon } from 'satellite-lucide-icons'
 
@@ -15,6 +16,7 @@ import {
   isArgsValid,
 } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
+import { text } from 'stream/consumers'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,6 +25,10 @@ declare module 'vue/types/vue' {
     value: string
     updateText: Function
     handleUpload: Function
+    debounceTypingStop: Function
+    typingNotifHandler: Function
+    smartTypingStart: Function
+    handleChatBorderRadius: Function
   }
 }
 
@@ -36,6 +42,7 @@ export default Vue.extend({
       text: '',
       showEmojiPicker: false,
       maxChars: 256,
+      recipientTyping: false,
     }
   },
   props: {
@@ -43,8 +50,20 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
     },
   },
+  directives: {
+    focus: {
+      update(el, { value, oldValue }) {
+        if (value.id !== oldValue.id) {
+          el.focus()
+        }
+      },
+    },
+  },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'friends']),
+    activeFriend() {
+      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
     /**
      * Computes the amount of characters left
      */
@@ -115,6 +134,50 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method handleChatBorderRadius
+     * @description Sets the correct chatbar border radius while typing or when switching between friends
+     * @example
+     */
+    handleChatBorderRadius() {
+      const wrap = this.$refs.wrap as HTMLElement
+      if (wrap.offsetHeight > 50 || this.ui.replyChatbarContent.id)
+        wrap.style.borderRadius = '4px'
+      else wrap.style.borderRadius = '41px'
+    },
+    /**
+     * @method typingNotifHandler
+     * @description Wraps the event handler for dispatching typing notifications
+     * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
+     * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
+     */
+    typingNotifHandler(state: 'TYPING' | 'NOT_TYPING') {
+      const activeFriend = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      if (activeFriend) {
+        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+        activePeer?.send('TYPING_STATE', { state })
+      }
+    },
+    /**
+     * @method debounceTypingStop
+     * @description Debounces the typing event so that we only send the typing stopped after it's been
+     * the configured amount of time since they last triggered a keyup event.
+     */
+    debounceTypingStop: debounce(function (ctx) {
+      ctx.$data.typing = false
+      ctx.typingNotifHandler('NOT_TYPING')
+    }, 500),
+    /**
+     * @method smartTypingStart
+     * @description Let's us send out events when a user starts typing without spam.
+     */
+    smartTypingStart() {
+      if (this.$data.typing) return
+      this.$data.typing = true
+      this.typingNotifHandler('TYPING')
+    },
+    /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
@@ -123,18 +186,16 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageuser as HTMLElement
-      const wrap = this.$refs.wrap as HTMLElement
       // Delete extra character when it exceeds the charlimit
       if (
-        messageBox.innerHTML &&
-        messageBox.innerHTML.length > this.$data.maxChars + 1
+        messageBox.innerText &&
+        messageBox.innerText.length > this.$data.maxChars + 1
       ) {
-        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
       }
-      if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
-      if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
-      this.value = messageBox.innerHTML
+      this.handleChatBorderRadius()
+      this.value = messageBox.innerText
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -155,7 +216,7 @@ export default Vue.extend({
               break
             }
             if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              this.$Logger.log('Commands', 'dispatch command')
               break
             }
           }
@@ -163,9 +224,11 @@ export default Vue.extend({
         default:
           break
       }
+      this.smartTypingStart()
       this.handleInputChange()
     },
     handleInputKeyup(event: KeyboardEvent) {
+      this.debounceTypingStop(this)
       this.$nextTick(() => {
         this.handleInputChange()
       })
@@ -255,8 +318,29 @@ export default Vue.extend({
     },
   },
   watch: {
-    '$store.state.ui.chatbarContent': function () {
+    'ui.chatbarContent': function () {
       this.updateText()
+    },
+    'friends.all': {
+      handler() {
+        const activeFriend = this.$Hounddog.getActiveFriend(
+          this.$store.state.friends,
+        )
+        if (activeFriend)
+          this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
+      },
+      deep: true,
+    },
+    'ui.replyChatbarContent': function () {
+      this.handleChatBorderRadius()
+    },
+    recipient: function () {
+      this.$store.commit('ui/chatbarContent', '')
+      this.$store.commit('ui/setReplyChatbarContent', {
+        id: '',
+        payload: '',
+        from: '',
+      })
     },
   },
 })

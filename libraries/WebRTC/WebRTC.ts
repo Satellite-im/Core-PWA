@@ -1,20 +1,19 @@
 import { Config } from '~/config'
+import Vue from 'vue'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
 import { Wire } from '~/libraries/WebRTC/Wire'
-import {
-  WebRTCEventListeners,
-  WebRTCEvents,
-  WireEvents,
-} from '~/libraries/WebRTC/types'
+import { WebRTCEventListeners, WireEvents } from '~/libraries/WebRTC/types'
+import { Peer } from './Peer'
+import { WebRTCError } from '~/store/webrtc/types'
 
 export default class WebRTC extends Emitter<WebRTCEventListeners> {
   // Identifier to connect to signaling server with
-  id: string | undefined
+  originator?: string
   // If this is undefined, the WebRTC services cannot run
-  initalized: boolean | undefined
+  initialized?: boolean
   // List of peers we're actively or have been connected to
-  peers: Map<string, Wire> | undefined
+  peers: Map<string, Peer>
 
   // --- Internal ---
   //
@@ -31,15 +30,17 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method init
    * @description Bind required startup data to the WebRTC class
-   * @param id identifier to connect to the signaling server with
+   * @param originator identifier of the current user
    * @example
    */
-  init(id: string) {
-    this.id = id
+  init(originator: string) {
+    this.originator = originator
 
-    this.initalized = true
+    this.initialized = true
     this._runQueue()
-    this.emit(WebRTCEvents.INIT)
+    this.emit('INIT')
+
+    Vue.prototype.$Logger.log('WebRTC', 'Initialized', { originator: this.originator, announceURLs: this._announceURLs })
   }
 
   /**
@@ -87,35 +88,38 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @method _connect
    * @description Internal abstraction of connect to allow for connection queueing
    * @param peerId identifier of peer we're connecting to
+   * @param channel Secret communication channel you want to connect with
    * @returns
    * @example
    */
   protected _connect(peerId: string, channel: string): void {
-    console.log('connecting to', peerId)
-    const wire = new Wire(
-      'originator',
-      peerId,
-      channel,
-      this._announceURLs,
-      false
-    )
+    if (!this.initialized || !this.originator) {
+      throw new Error(WebRTCError.NOT_INITIALIZED)
+    }
 
-    this._bindWireListeners(wire)
+    // Avoid multiple connections to the same peer
+    if (this.peers.has(peerId)) {
+      return
+    }
 
-    return undefined
+    const peer = new Peer(this.originator, peerId, channel, this._announceURLs)
+
+    this._bindWireListeners(peer.communicationBus)
+
+    this.peers.set(peerId, peer)
   }
 
   protected _bindWireListeners(wire: Wire) {
     wire.on('CONNECT', ({ peerId }) => {
-      this.emit(WebRTCEvents.PEER_CONNECT, { peerId })
+      this.emit('PEER_CONNECT', { peerId })
     })
 
     wire.on('DATA', ({ peerId, data }) => {
-      console.log(peerId, data)
+      Vue.prototype.$Logger.log('WebRTC', 'DATA', { peerId, data })
     })
 
     wire.on('ERROR', ({ peerId, error }) => {
-      console.log(peerId, error)
+      Vue.prototype.$Logger.log('WebRTC', 'ERROR', { peerId, error })
     })
   }
 
@@ -142,18 +146,19 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @returns
    * @example
    */
-  getPeer(peerId: string): Wire | undefined {
-    return this.peers?.get(peerId)
+  getPeer(peerId: string): Peer | undefined {
+    return this.peers.get(peerId)
   }
 
   /**
    * @method connect
    * @description Connect to a new peer
    * @param peerId identifier of peer we're connecting to
+   * @param channel Secret communication channel you want to connect with
    * @example
    */
   connect(peerId: string, channel: string) {
-    if (!this.initalized) {
+    if (!this.initialized) {
       this._queue(() => this._connect(peerId, channel))
     } else {
       this._connect(peerId, channel)

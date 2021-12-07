@@ -2,7 +2,7 @@
 import { Commitment } from '@solana/web3.js'
 
 export const Config = {
-  debug: false,
+  debug: true,
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
@@ -33,6 +33,10 @@ export const Config = {
       'wss://tracker.openwebtorrent.com',
       'wss://tracker.sloppyta.co:443/announce',
       'wss://tracker.novage.com.ua:443/announce',
+      'udp://opentracker.i2p.rocks:6969/announce',
+      'http://opentracker.i2p.rocks:6969/announce',
+      'udp://tracker.opentrackr.org:1337/announce',
+      'http://tracker.opentrackr.org:1337/announce',
     ],
   },
   solana: {
@@ -87,5 +91,9 @@ export const Config = {
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
+  },
+  uploadByteLimit: 1048576 * 8, // 8mb
+  regex: {
+    image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
   },
 }

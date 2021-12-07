@@ -1,4 +1,4 @@
-<div id="chatbar" ref="chatbar" :class="$store.state.ui.replyChatbarContent.id ? 'has-reply' : ''">
+<div id="chatbar" ref="chatbar" :class="ui.replyChatbarContent.id ? 'has-reply' : ''">
   <div :class="`chatbar-wrap ${charlimit ? 'is-error' : 'is-normal'}`" ref="wrap" >
     <div class="control-wrap file-upload-wrap">
       <FileUpload type="quick" ref="file-upload" />
@@ -10,7 +10,7 @@
     >
       <terminal-icon size="1x" />
     </div>
-    <div contenteditable="true" autocapitalize="off"
+    <div v-focus="ui.replyChatbarContent" contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
       :placeholder="$t('ui.talk')"
@@ -22,5 +22,5 @@
 
     <TailoredCoreChatbarControls :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
-  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />
+  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
 </div>
