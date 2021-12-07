@@ -1,42 +1,44 @@
 <div id="friends-nav">
   <div v-if="$device.isMobile" class="spacer"></div>
-  <InteractablesButton 
-    size="small" 
-    :text="`${$device.isMobile ? '' : 'Active'}`" 
+  <InteractablesButton
+    size="small"
+    :text="`${$device.isMobile ? '' : 'Active'}`"
     :type="route === 'active' ? 'primary': 'dark'"
     :action="() => setRoute('active')"
-    >
+  >
     <user-icon size="1x" />
   </InteractablesButton>
   <div>
-  <InteractablesButton 
-    size="small" 
-    :text="`${$device.isMobile ? '' : 'Requests'}`" 
-    :type="route === 'requests' ? 'primary' : 'dark'"
-    :action="() => setRoute('requests')"
-    style="background-color: aqua;"
-    :class="this.friends.incomingRequests.length ? 'big-button' : '' "
+    <InteractablesButton
+      size="small"
+      :text="`${$device.isMobile ? '' : 'Requests'}`"
+      :type="route === 'requests' ? 'primary' : 'dark'"
+      :action="() => setRoute('requests')"
+      :class="this.friends.incomingRequests.length ? 'big-button' : 'button' "
     >
-    <user-check-icon size="1x" />
-    <span v-if="this.friends.incomingRequests.length" :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
-      {{this.friends.incomingRequests.length}}
-    </span>
-    
-  </InteractablesButton>
-</div>
-  <InteractablesButton 
+      <user-check-icon size="1x" />
+      <span
+        v-if="this.friends.incomingRequests.length"
+        :class="route === 'requests' ? 'label tag-inverted' : 'label tag'"
+      >
+        {{this.friends.incomingRequests.length}}
+      </span>
+    </InteractablesButton>
+  </div>
+  <InteractablesButton
     size="small"
-    :text="`${$device.isMobile ? '' : 'Blocked'}`" 
+    :text="`${$device.isMobile ? '' : 'Blocked'}`"
     :type="route === 'blocked' ? 'primary' : 'dark'"
-    :action="() => setRoute('blocked')">
+    :action="() => setRoute('blocked')"
+  >
     <user-x-icon size="1x" />
   </InteractablesButton>
-  <InteractablesButton 
+  <InteractablesButton
     size="small"
-    :text="`${$device.isMobile ? 'Add' : 'Add Friend'}`" 
+    :text="`${$device.isMobile ? 'Add' : 'Add Friend'}`"
     :type="route === 'add' ? 'primary' : 'dark'"
-    :action="() => setRoute('add')">
+    :action="() => setRoute('add')"
+  >
     <user-plus-icon size="1x" />
   </InteractablesButton>
-
 </div>

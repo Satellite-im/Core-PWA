@@ -17,17 +17,8 @@ export default Vue.extend({
     UserPlusIcon,
     UserXIcon,
   },
-    computed: {
+  computed: {
     ...mapState(['friends']),
-
-  },
-    mounted() {
-  //   this.initElements(true)
-    console.log(this.$store)
-    console.log(this.friends.incomingRequests)
-    console.log(friends.incomingRequests)
-
-
   },
   props: {
     setRoute: {
