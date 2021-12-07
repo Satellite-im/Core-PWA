@@ -66,6 +66,11 @@ export default Vue.extend({
       isFocus: false,
     }
   },
+  watch: {
+    list: function () {
+      this.update()
+    },
+  },
   methods: {
     update() {
       if (!this.searchText) {

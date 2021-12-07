@@ -17,6 +17,11 @@ export default Vue.extend({
       bipList: bip39.wordlists.english,
     }
   },
+  computed: {
+    availableBipList() {
+      return this.bipList.filter((elm) => !this.phrases.includes(elm))
+    },
+  },
   methods: {
     recoverAccount() {
       /* recover account action will be implemented on bip39 service ticket */
