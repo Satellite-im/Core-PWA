@@ -27,10 +27,14 @@ const propertiesBlacklist = [
   'accounts.registrationStatus',
   'friends.all',
   'prerequisites',
+  'webrtc.activeStream',
 ]
 
-const propertiesBlacklistWhenStorePin = ['friends.all', 'prerequisites']
-
+const propertiesBlacklistWhenStorePin = [
+  'friends.all',
+  'prerequisites',
+  'webrtc.activeStream',
+]
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
