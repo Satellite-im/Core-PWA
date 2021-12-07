@@ -28,7 +28,7 @@
           class="sidebar-full-btn"
           :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
           size="small"
-          :action="() => $router.push('/friends/list')"
+          :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
           :text="$t('friends.friends')"
         >
           <users-icon size="1.2x" />
