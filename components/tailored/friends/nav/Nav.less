@@ -10,7 +10,27 @@
     margin: 0 (@light-spacing / 2);
     justify-self: flex-end;
   }
+  .big-button {
+    // width: 120% !important;
+    padding-right: 30px !important;
+    justify-self: flex-end;
+  }
+  .label {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: @micro-text-size;
+    background-color: @primary-color;
+    border-radius: 2px;
+    line-height: 1.2;
+    padding: 0.15rem 0.5rem;
+    color: @text;
+    font-family: @primary-font;
+    // margin: 5px;
+    padding-right: 5px;
+  }
 }
+
 @media only screen and (max-width: @mobile-breakpoint) {
   #friends-nav {
     display: inline-flex;

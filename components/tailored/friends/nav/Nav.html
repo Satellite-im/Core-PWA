@@ -8,14 +8,22 @@
     >
     <user-icon size="1x" />
   </InteractablesButton>
+  <div>
   <InteractablesButton 
     size="small" 
     :text="`${$device.isMobile ? '' : 'Requests'}`" 
     :type="route === 'requests' ? 'primary' : 'dark'"
     :action="() => setRoute('requests')"
+    style="background-color: aqua;"
+    :class="this.friends.incomingRequests.length ? 'big-button' : '' "
     >
     <user-check-icon size="1x" />
+    <span v-if="this.friends.incomingRequests.length" :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
+      {{this.friends.incomingRequests.length}}
+    </span>
+    
   </InteractablesButton>
+</div>
   <InteractablesButton 
     size="small"
     :text="`${$device.isMobile ? '' : 'Blocked'}`" 

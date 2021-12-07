@@ -1,6 +1,7 @@
 <template src="./Nav.html" />
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import {
   UserIcon,
@@ -15,6 +16,18 @@ export default Vue.extend({
     UserCheckIcon,
     UserPlusIcon,
     UserXIcon,
+  },
+    computed: {
+    ...mapState(['friends']),
+
+  },
+    mounted() {
+  //   this.initElements(true)
+    console.log(this.$store)
+    console.log(this.friends.incomingRequests)
+    console.log(friends.incomingRequests)
+
+
   },
   props: {
     setRoute: {
