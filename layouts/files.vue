@@ -1,6 +1,6 @@
 <template>
   <div id="app-wrap"
-:class="`${sidebar ? 'is-open' : 'is-collapsed'}`" style="background-color: blue">
+:class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
       v-touch:swipe="sidebarSwipeHandler(this)"
