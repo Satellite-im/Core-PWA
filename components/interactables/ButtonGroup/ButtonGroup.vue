@@ -63,7 +63,7 @@ export default Vue.extend({
       } else {
         button.classList.remove(this.activeClass)
       }
-      if(!attachEvent) return
+      if (!attachEvent) return
       button.addEventListener('click', () => {
         if (this.active != null) {
           this.active.classList.remove(this.activeClass)

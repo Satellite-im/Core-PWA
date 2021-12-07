@@ -167,15 +167,15 @@ export default Vue.extend({
       const wrap = this.$refs.wrap as HTMLElement
       // Delete extra character when it exceeds the charlimit
       if (
-        messageBox.innerHTML &&
-        messageBox.innerHTML.length > this.$data.maxChars + 1
+        messageBox.innerText &&
+        messageBox.innerText.length > this.$data.maxChars + 1
       ) {
-        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
       }
       if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
       if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
-      this.value = messageBox.innerHTML
+      this.value = messageBox.innerText
     },
     /**
      * @method handleInputKeydown DocsTODO

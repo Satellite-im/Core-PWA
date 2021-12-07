@@ -12,6 +12,7 @@ import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import { Friend } from '~/types/ui/friends'
 
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import _, { debounce } from 'lodash'
 
 export default Vue.extend({
   components: {
@@ -29,6 +30,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    _searchFriend: _.debounce(async function(this:any) {
+      if (this.accountID.length >= 40) {
+        return await this.searchFriend()
+      }
+      this.error = this.$t('friends.invalid_id') as string
+      this.searching = false
+    }, 500),
     async searchFriend() {
       this.friend = null
       this.searching = true
@@ -37,6 +45,7 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
+      
       if (
         this.$store.state.friends.all.filter(
           (f: Friend) => f.account.accountId === accountID
