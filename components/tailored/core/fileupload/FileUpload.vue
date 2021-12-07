@@ -66,15 +66,21 @@ export default Vue.extend({
         })
         /* nsfw checking after putting all files */
         for (const file of this.$data.files) {
-          file.nsfw.checking = true
-          try {
-            file.nsfw.status = await this.$Security.isNSFW(file.file)
-          } catch (err) {
-            file.nsfw.status = true
-            file.nsfw.checking = false
-            return
+          // don't check nsfw for large files or webgl runs out of memory
+          if (file.file.size > Config.uploadByteLimit) {
+            file.nsfw.tooLarge = true
           }
-          file.nsfw.checking = false
+          if (!file.nsfw.tooLarge) {
+            file.nsfw.checking = true
+            try {
+              file.nsfw.status = await this.$Security.isNSFW(file.file)
+            } catch (err) {
+              file.nsfw.status = true
+              file.nsfw.checking = false
+              return
+            }
+            file.nsfw.checking = false
+          }
           this.loadPicture(file)
         }
         this.$data.uploadStatus = true
