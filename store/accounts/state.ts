@@ -1,6 +1,6 @@
 import { AccountsState, RegistrationStatus } from './types'
 
-const InitalAccountsState = (): AccountsState => ({
+const InitialAccountsState = (): AccountsState => ({
   storePin: false,
   locked: true,
   error: '',
@@ -11,7 +11,7 @@ const InitalAccountsState = (): AccountsState => ({
   encryptedPhrase: '',
   loading: false,
   registered: false,
-  registrationStatus: RegistrationStatus.UKNOWN,
+  registrationStatus: RegistrationStatus.UNKNOWN,
 })
 
-export default InitalAccountsState
+export default InitialAccountsState

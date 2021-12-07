@@ -17,40 +17,9 @@
     font-size: 12px;
     color: #ffc745;
   }
-
-  .status {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    font-size: 10pt;
-    text-shadow: 0 0 3px #000;
-
-    circle {
-      stroke: @dark-gray;
-      stroke-width: 5;
-      paint-order: stroke;
-    }
-    &.is-online {
-      color: @green;
-      fill: @green;
-    }
-    &.is-offline {
-      color: @gray;
-      fill: @gray;
-    }
-    &.is-idle {
-      color: @yellow;
-      fill: @yellow;
-    }
-  }
-
+  
   &:hover {
     background: @semitransparent-lightest-gradient;
-  }
-
-  .circle {
-    align-self: center;
-    justify-self: center;
   }
 
   .user-info {

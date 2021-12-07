@@ -1,9 +1,9 @@
 <div id="status">
-  <UiCircle type="random" :seed="accounts.active" :size="35" />
+  <UiUserState :user="{address: accounts.active, state: accounts.details.state}" />
   <div
     class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
-    v-on:click="$toast.show($t('global.copied'))"
-    :data-tooltip="$t('global.copy_id')"
+    v-on:click="$toast.show($t('ui.copied'))"
+    :data-tooltip="$t('controls.copy_id')"
     v-clipboard:copy="accounts.active"
   >
     <TypographyTitle 

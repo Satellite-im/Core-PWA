@@ -1,4 +1,4 @@
-<template src="./Group.html"></template>
+<template src="./Group.html" />
 
 <script lang="ts">
 import Vue from 'vue'

@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 
 import { TerminalIcon } from 'satellite-lucide-icons'
 
@@ -22,6 +23,10 @@ declare module 'vue/types/vue' {
     handleInputChange: Function
     value: string
     updateText: Function
+    handleUpload: Function
+    debounceTypingStop: Function
+    typingNotifHandler: Function
+    smartTypingStart: Function
   }
 }
 
@@ -35,6 +40,7 @@ export default Vue.extend({
       text: '',
       showEmojiPicker: false,
       maxChars: 256,
+      recipientTyping: false,
     }
   },
   props: {
@@ -43,7 +49,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'friends']),
+    activeFriend() {
+      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
     /**
      * Computes the amount of characters left
      */
@@ -65,7 +74,7 @@ export default Vue.extend({
     hasCommand() {
       const parsedCommand = parseCommand(this.ui.chatbarContent)
       const currentCommand = commands.find(
-        (cmd) => cmd.name === parsedCommand.name.toLowerCase()
+        (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
       return currentCommand != null
     },
@@ -77,7 +86,7 @@ export default Vue.extend({
      */
     isValidCommand() {
       const currentText = parseCommand(
-        this.ui.chatbarContent
+        this.ui.chatbarContent,
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
@@ -106,13 +115,46 @@ export default Vue.extend({
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('global.talk')
+        return this.$t('ui.talk')
       } else {
         return ''
       }
     },
   },
   methods: {
+    /**
+     * @method typingNotifHandler
+     * @description Wraps the event handler for dispatching typing notifications
+     * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
+     * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
+     */
+    typingNotifHandler(
+      state: 'TYPING' | 'NOT_TYPING',
+    ) {
+      const activeFriend = this.$Hounddog.getActiveFriend(this.$store.state.friends)
+      if (activeFriend) {
+        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+        activePeer?.send('TYPING_STATE', { state })
+      }
+    },
+    /**
+     * @method debounceTypingStop
+     * @description Debounces the typing event so that we only send the typing stopped after it's been
+     * the configured amount of time since they last triggered a keyup event.
+     */
+    debounceTypingStop: debounce(function (ctx) {
+      ctx.$data.typing = false
+      ctx.typingNotifHandler('NOT_TYPING')
+    }, 500),
+    /**
+     * @method smartTypingStart
+     * @description Let's us send out events when a user starts typing without spam.
+     */
+    smartTypingStart() {
+      if (this.$data.typing) return
+      this.$data.typing = true
+      this.typingNotifHandler('TYPING')
+    },
     /**
      * @method handleInputChange DocsTODO
      * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
@@ -125,15 +167,15 @@ export default Vue.extend({
       const wrap = this.$refs.wrap as HTMLElement
       // Delete extra character when it exceeds the charlimit
       if (
-        messageBox.innerHTML &&
-        messageBox.innerHTML.length > this.$data.maxChars + 1
+        messageBox.innerText &&
+        messageBox.innerText.length > this.$data.maxChars + 1
       ) {
-        messageBox.innerHTML = messageBox.innerHTML.slice(0, -1)
+        messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
       }
       if (wrap.offsetHeight > 50) wrap.style.borderRadius = '4px'
       if (wrap.offsetHeight < 50) wrap.style.borderRadius = '41px'
-      this.value = messageBox.innerHTML
+      this.value = messageBox.innerText
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -154,7 +196,7 @@ export default Vue.extend({
               break
             }
             if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              this.$Logger.log('Commands', 'dispatch command')
               break
             }
           }
@@ -162,9 +204,11 @@ export default Vue.extend({
         default:
           break
       }
+      this.smartTypingStart()
       this.handleInputChange()
     },
     handleInputKeyup(event: KeyboardEvent) {
+      this.debounceTypingStop(this)
       this.$nextTick(() => {
         this.handleInputChange()
       })
@@ -187,7 +231,9 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if (!this.recipient) {
+      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '')
+        .length
+      if (!this.recipient || isEmpty) {
         return
       }
 
@@ -211,20 +257,57 @@ export default Vue.extend({
     },
     /**
      * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar to auto open
-     * the file uploader
+     * @description Allows the drag and drop of files into the chatbar
+     * @param e Drop event data object
+     * @example v-on:drop="handleDrop"
      */
     handleDrop(e: any) {
       e.preventDefault()
-      const file = e.dataTransfer.items[0].getAsFile()
-      const handleFileExpectEvent = { target: { files: [file] } }
-      // @ts-ignore
-      this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+      this.handleUpload(e.dataTransfer.items)
+    },
+    /**
+     * @method handlePaste
+     * @description Allows the pasting of files into the chatbar
+     * @param e Paste event data object
+     * @example v-on:paste="handlePaste"
+     */
+    handlePaste(e: any) {
+      e.stopPropagation()
+      const clipboardItems = e.clipboardData.items
+      if (clipboardItems && clipboardItems.length) {
+        this.handleUpload(clipboardItems)
+      }
+    },
+    /**
+     * @method handleUpload
+     * @description Takes in an array of event items and uploads the file objects
+     * @param items Array of objects
+     * @example this.handleUpload(someEvent.itsData.items)
+     */
+    handleUpload(items: Array<object>) {
+      /* check if type is image */
+      const arrOfFiles: File[] = [...items]
+        .filter((f: any) => f.type.includes('image'))
+        .map((f: any) => f.getAsFile())
+
+      if (arrOfFiles.length) {
+        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
+        // @ts-ignore
+        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+      }
     },
   },
   watch: {
-    '$store.state.ui.chatbarContent': function() {
+    '$store.state.ui.chatbarContent': function () {
       this.updateText()
+    },
+    '$store.state.friends.all': {
+      handler () {
+        const activeFriend = this.$Hounddog.getActiveFriend(this.$store.state.friends)
+        if (activeFriend)
+          this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
+      },
+      deep: true,
     },
   },
 })

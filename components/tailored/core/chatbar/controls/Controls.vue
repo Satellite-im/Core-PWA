@@ -14,7 +14,7 @@ import {
 export default Vue.extend({
   props: {
     sendMessage: {
-      type: Function
+      type: Function,
     },
   },
   components: {
@@ -33,8 +33,17 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
+      if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
+        this.$store.commit('ui/toggleEnhancers', {
+          show: true,
+          floating: true,
+          route,
+        })
+        return
+      }
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
+        floating: true,
         route,
       })
     },
@@ -44,7 +53,7 @@ export default Vue.extend({
         state: !this.ui.modals.walletMini,
       })
     },
-  }
+  },
 })
 </script>
 

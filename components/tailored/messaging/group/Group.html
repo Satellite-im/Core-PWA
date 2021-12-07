@@ -1,17 +1,22 @@
 <div class="is-group">
   <span v-on:click="showQuickProfile">
-    <UiCircle type="random" :seed="group.from" :size="35" />
+    <UiCircle type="random" :seed="address" :size="35" />
   </span>
   <div class="group-body">
     <div class="group-heading">
       <span v-on:click="showQuickProfile">
-        <!-- <TypographyTitle :size="6" :text="$mock.users.filter(u => u.address === group.from)[0].name" /> -->
         <UiUsername :username="username" :badge="badge" />
       </span>
-      <TypographyText :text="$dayjs(group.at).from()" />
+      <TypographyText :text="timestamp" />
     </div>
     <div class="group-messages">
-      <TailoredMessagingMessage v-for="message in group.messages" :group="group" :message="message" :from="username" :key="message.id" />
+      <TailoredMessagingMessage
+        v-for="message in group.messages"
+        :group="group"
+        :message="message"
+        :from="username"
+        :key="message.id"
+      />
     </div>
   </div>
 </div>

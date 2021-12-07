@@ -1,0 +1,37 @@
+<div id="developer-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.settings.info.title')" />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.info.subtitle')"
+      />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.app_info')" />
+      <br />
+      <pre>
+        App Version: {{ this.$config.clientVersion }}
+        Browser:     {{ window.navigator.vendor }}, {{ window.navigator.product }}
+        Language:    {{ window.navigator.product }}
+        <span v-if="cpu">Platform:    {{cpu}}</span>
+        <span v-if="renderer">Processor:   {{renderer}}</span>
+        Online:      {{ window.navigator.onLine }}
+      </pre
+      >
+    </div>
+  </div>
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyLabel :text="$t('pages.settings.changelog')" />
+      <br />
+      <pre>
+        <vue-markdown :source="releaseData.body" :breaks="false"/>
+      </pre
+      >
+    </div>
+  </div>
+</div>

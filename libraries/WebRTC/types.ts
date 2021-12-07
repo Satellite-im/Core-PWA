@@ -1,19 +1,95 @@
-export enum WebRTCEvents {
-  INIT = 'INIT',
-  KILL = 'KILL',
+import { TypeOf } from 'io-ts'
+import {
+  wireDataMessage,
+  wireIdentificationMessage,
+  wireRefuseConnectionMessage,
+  wireSignalMessage,
+  wireKeyboardState,
+  KeyboardStates,
+} from './Encoders'
+import { SignalData } from 'simple-peer'
+
+export interface WireEventListeners {
+  ERROR: (data: { peerId: string; error: Error }) => void
+  TRACKER_CONNECT: (data: { tracker: string }) => void
+  CONNECT: (data: { peerId: string }) => void
+  DATA: (data: { peerId: string; data: any }) => void
+  RAW_DATA: (data: { peerId: string; data: any }) => void
+  CLOSE: (data: { peerId: string }) => void
+  IDENTIFICATION: (data: { peerId: string }) => void
+  SIGNAL: (data: { peerId: string; data: SignalData }) => void
+  REFUSE: (data: { peerId: string }) => void
+  TYPING_STATE: (data: {
+    state: TypeOf<typeof KeyboardStates>,
+    peerId: string
+  }) => void
 }
 
-export type WebRTCEvent = keyof typeof WebRTCEvents
+export type WireEvents = keyof WireEventListeners
 
-// Declare empty function arrays here for use in
-// event emitters and pubsub methods.
-export const WebRTCEventBox = {
-  [WebRTCEvents.INIT]: [] as Function[],
-  [WebRTCEvents.KILL]: [] as Function[],
+export type WireIdentificationMessage = TypeOf<typeof wireIdentificationMessage>
+export type WireDataMessage = TypeOf<typeof wireDataMessage>
+export type WireSignalMessage = TypeOf<typeof wireSignalMessage>
+export type WireKeyboardState = TypeOf<typeof wireKeyboardState>
+export type WireRefuseConnectionMessage = TypeOf<
+  typeof wireRefuseConnectionMessage
+>
+export interface WireMessages {
+  IDENTIFICATION: WireIdentificationMessage
+  DATA: WireDataMessage
+  SIGNAL: WireSignalMessage
+  REFUSE: WireRefuseConnectionMessage
+  TYPING_STATE: WireKeyboardState
 }
 
-export type WebRTCData = {
-  at: Date
-  event: WebRTCEvent
-  data: any
+export type WireMessageType = keyof WireMessages
+export type WireMessage = WireMessages[WireMessageType]
+
+export interface CallEventListeners {
+  INCOMING_CALL: (data: { peerId: string }) => void
+  CONNECTED: (data: { peerId: string }) => void
+  HANG_UP: (data: { peerId: string }) => void
+  ERROR: (data: { peerId: string; error: Error }) => void
+  TRACK: (data: {
+    peerId: string
+    track: MediaStreamTrack
+    stream: MediaStream
+  }) => void
+  STREAM: (data: { peerId: string; stream: MediaStream }) => void
 }
+
+export type CallEvents = keyof CallEventListeners
+
+export interface WebRTCEventListeners {
+  INIT: () => void
+  KILL: () => void
+  ERROR: (data: { error: Error }) => void
+  TRACKER_CONNECT: (data: { peerId: string; tracker: string }) => void
+  PEER_CONNECT: (data: { peerId: string }) => void
+  PEER_DISCONNECT: (data: { peerId: string }) => void
+  PEER_DATA: (data: { peerId: string; data: any }) => void
+}
+
+export type WebRTCEvent = keyof WebRTCEventListeners
+
+export type WebRTCEventListenerOf<T extends keyof WebRTCEventListeners> =
+  WebRTCEventListeners[T]
+
+export type WebRTCEventBox = {
+  [key in WebRTCEvent]?: Array<WebRTCEventListenerOf<key>>
+}
+
+export type OptionalPayload<
+  T extends keyof B,
+  B extends { [key in keyof B]: (...args: any[]) => any },
+> = Parameters<B[T]> extends never
+  ? { data?: undefined }
+  : { data: Parameters<B[T]>[0] }
+
+export type DataOf<
+  T extends keyof B,
+  B extends { [key in keyof B]: (...args: any[]) => any },
+> = {
+  at: number
+  event: T
+} & OptionalPayload<T, B>

@@ -7,7 +7,10 @@ import { ArchiveIcon } from 'satellite-lucide-icons'
 
 import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-import { Message, Group } from '~/types/messaging'
+
+import { Config } from '~/config'
+import { UIMessage, Group } from '~/types/messaging'
+import { refreshTimestampInterval } from '~/utilities/Messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,7 +26,7 @@ export default Vue.extend({
   mixins: [ContextMenu],
   props: {
     message: {
-      type: Object as PropType<Message>,
+      type: Object as PropType<UIMessage>,
       default: () => ({
         id: '0',
         at: 1620515543000,
@@ -76,6 +79,8 @@ export default Vue.extend({
         { text: 'Save Image', func: (this as any).testFunc },
         { text: 'Copy Link', func: (this as any).testFunc },
       ],
+      timestampRefreshInterval: null,
+      timestamp: this.$dayjs(this.$props.message.at).from(),
     }
   },
   computed: {
@@ -92,7 +97,7 @@ export default Vue.extend({
   },
   methods: {
     testFunc() {
-      console.log('Message Func Testing ' + this.$data.disData)
+      this.$Logger.log('Message Context', 'Test func')
     },
     /**
      * @method mouseOver DocsTODO
@@ -128,7 +133,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    emojiReaction() {
+    emojiReaction(e: MouseEvent) {
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
@@ -139,7 +144,18 @@ export default Vue.extend({
             ? this.$props.message.from
             : this.$props.message.to,
       })
-      this.$store.commit('ui/toggleEnhancers', { show: true, floating: true })
+      let xVal = this.$el.getBoundingClientRect().x
+      let yVal = this.$el.getBoundingClientRect().y
+      if (e) {
+        xVal = e.clientX
+        yVal = e.clientY
+      }
+      this.$store.commit('ui/toggleEnhancers', {
+        show: true,
+        floating: this.$device.isMobile ? true : false,
+        position: [xVal, yVal],
+        containerWidth: this.$el.clientWidth,
+      })
     },
     quickReaction(emoji: String) {
       this.$store.dispatch('ui/addReaction', {
@@ -179,6 +195,20 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
     },
+  },
+  created() {
+    const setTimestamp = (timePassed: string) => {
+      this.$data.timestamp = timePassed
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.$props.message.at,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval
+    )
+  },
+  beforeDestroy() {
+    clearInterval(this.$data.refreshTimestampEveryMinute)
   },
 })
 </script>

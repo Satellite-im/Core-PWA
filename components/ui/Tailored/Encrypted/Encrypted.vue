@@ -1,4 +1,4 @@
-<template src="./Encrypted.html"></template>
+<template src="./Encrypted.html" />
 
 <script lang="ts">
 import Vue from 'vue'

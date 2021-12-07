@@ -12,10 +12,11 @@ export const mobileSwipe = {
      */
     sidebarSwipeHandler(currThis: any) {
       return function (direction: string) {
-        if (direction === 'left' && currThis.$device.isMobile) {
+        const showSettings = currThis.$store.state.ui.showSettings
+        if (direction === 'left' && currThis.$device.isMobile && !showSettings) {
           currThis.sidebar = false
         }
-        if (direction === 'right' && currThis.$device.isMobile) {
+        if (direction === 'right' && currThis.$device.isMobile && !showSettings) {
           currThis.sidebar = true
         }
       }

@@ -1,8 +1,7 @@
-<template src="./Glyphs.html"></template>
+<template src="./Glyphs.html" />
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-nocheck
 import { mapState } from 'vuex'
 import { ChevronLeftIcon } from 'satellite-lucide-icons'
 import { marketGlyphs } from '~/mock/marketplace'

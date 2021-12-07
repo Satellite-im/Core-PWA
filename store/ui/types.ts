@@ -6,6 +6,27 @@ export enum GlyphMarketViewStatus {
   SHOP_DETAIL = 'shop_detail',
 }
 
+export enum ModalWindows {
+  NEW_FOLDER = 'newfolder',
+  CREATE_SERVER = 'createServer',
+  MARKETPLACE = 'marketplace',
+  WALLET = 'wallet',
+  QUICK_CHAT = 'quickchat',
+  WALLET_MINI = 'walletMini',
+  ERROR = 'error',
+  CHANGELOG = 'changelog',
+}
+
+export interface EnhancerInfo {
+  show: Boolean
+  floating?: Boolean
+  position?: Number[]
+  defaultWidth?: String
+  defaultHeight?: String
+  containerWidth?: Number
+  route: String
+}
+
 export interface UIState {
   contextMenuStatus: Boolean
   contextMenuValues: Array<Object>
@@ -25,15 +46,12 @@ export interface UIState {
   }
   showPinned: Boolean
   fullscreen: Boolean
-  enhancers: {
-    show: Boolean
-    floating: Boolean
-    route: String
-  }
+  enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
   isScrollOver: Boolean
   isTyping: Object | Boolean
+  isReacted: Boolean
   activeChannel: Channel | undefined
   settingReaction: Object
   hoveredGlyphInfo: Object | undefined

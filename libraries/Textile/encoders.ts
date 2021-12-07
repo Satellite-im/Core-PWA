@@ -1,6 +1,4 @@
 import * as t from 'io-ts'
-// import * as D from 'io-ts/Decoder'
-// import { MessageFromThread } from '~/types/textile/mailbox'
 
 const isBase64 = (s: string) =>
   /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/gm.test(s)
@@ -12,7 +10,7 @@ interface Base64Brand {
 const base64 = t.brand(
   t.string,
   (s: string): s is t.Branded<string, Base64Brand> => isBase64(s),
-  'Base64'
+  'Base64',
 )
 
 export type Base64 = t.TypeOf<typeof base64>
@@ -51,11 +49,6 @@ export const messageFromThread = t.intersection([
   }),
   t.partial({ read_at: t.number }),
 ])
-
-// export const messageFromThread: D.Decoder<unknown, MessageFromThread> = {
-//   decode: (u) =>
-//     typeof u === 'string' ? D.success(u) : D.failure(u, 'string'),
-// }
 
 const baseMessage = t.intersection([
   t.type({

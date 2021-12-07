@@ -1,33 +1,66 @@
 <div class="is-message" @contextmenu="contextMenu">
-  <div @mouseenter="mouseOver" @mouseleave="mouseOver"
-    :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`">
+  <div
+    @mouseenter="mouseOver"
+    @mouseleave="mouseOver"
+    :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`"
+  >
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
       Archived
-    </div> 
+    </div>
     <div v-if="hideActions" class="inline-meta">
-      <UiUsername :username="from"
-        :badge="$mock.users.filter(u => u.name === from)[0].badge" />
-      <TypographyText :text="$dayjs(message.at).from()" />
+      <div class="sat-icon-container satellite-icon-helper">
+        <UiCircle
+          type="random"
+          :seed="$mock.users.filter(u => u.name === from)[0].address"
+          :size="23"
+        />
+      </div>
+      <UiUsername
+        :username="from"
+        :badge="$mock.users.filter(u => u.name === from)[0].badge"
+      />
+      <TypographyText :text="timestamp" />
     </div>
     <TailoredMessagingMessageActions
       v-if="messageHover && !hideActions"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
-      :editMessage="editMessage" />
+      :editMessage="editMessage"
+      :message="message"
+    />
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
     <UiImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
-    <UiEmbedsEmbeddedLinkContent v-if="message.type === 'text'" :data="message.payload" />
-    <UiEmbedsVideoPlayer v-else-if="message.type === 'video'" :data="message.payload" />
-    <UiEmbedsAudioPlayer v-else-if="message.type === 'audio'" :data="message.payload" />
+    <UiEmbedsEmbeddedLinkContent
+      v-if="message.type === 'text'"
+      :data="message.payload"
+    />
+    <UiEmbedsVideoPlayer
+      v-else-if="message.type === 'video'"
+      :data="message.payload"
+    />
+    <UiEmbedsAudioPlayer
+      v-else-if="message.type === 'audio'"
+      :data="message.payload"
+    />
     <UiEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
     <TailoredMessagingMessageReactions
       v-if="!hideActions && hasReactions"
       :message="this.$props.message"
       :group="this.$props.group"
-      :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`" />
+      :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
+    />
   </div>
-  <TailoredMessagingMessageReply :message="message" :group="group" v-if="!hideActions" :from="from"/>
-  <TailoredMessagingMessageEdit v-if="messageEdit" :message="message.payload" @commitMessage="saveMessage" />
+  <TailoredMessagingMessageReply
+    :message="message"
+    :group="group"
+    v-if="!hideActions"
+    :from="from"
+  />
+  <TailoredMessagingMessageEdit
+    v-if="messageEdit"
+    :message="message.payload"
+    @commitMessage="saveMessage"
+  />
 </div>

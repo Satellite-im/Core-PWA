@@ -19,69 +19,6 @@
     margin: 0.5rem 0 0 0;
   }
 
-  #typing-badge-container {
-    background: @primary-color;
-    width: 40px;
-    height: 18px;
-    position: absolute;
-    bottom: 6px;
-    left: 18px;
-    padding: 5px;
-    border-radius: 10px;
-    border: 3px solid @dark-gray;
-  }
-
-  .status {
-    position: absolute;
-    top: 33.5px;
-    left: 30px;
-    font-size: @text-size;
-    text-shadow: 0 0 3px #000;
-    display: inline-flex;
-    align-content: center;
-
-    circle {
-      stroke: @dark-gray;
-      stroke-width: 5;
-      paint-order: stroke;
-    }
-    &.is-online {
-      color: @green;
-      fill: @green;
-    }
-    &.is-offline {
-      color: @gray;
-      fill: @gray;
-    }
-    &.is-idle {
-      color: @yellow;
-      fill: @yellow;
-    }
-  }
-
-  .mobile-status {
-    position: absolute;
-    top: 33.5px;
-    left: 30px;
-    font-size: @small-icon-size;
-    text-shadow: 0 0 3px #000;
-
-    rect {
-      stroke: @dark-gray;
-      stroke-width: 4;
-      paint-order: stroke;
-      fill: @green;
-    }
-    line {
-      fill: #000;
-      stroke: @dark-gray;
-      stroke-width: 4;
-    }
-    &.is-mobile {
-      color: @green;
-    }
-  }
-
   &:hover {
     background: @semitransparent-light-gradient;
   }

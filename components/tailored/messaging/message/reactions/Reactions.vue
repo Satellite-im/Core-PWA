@@ -52,7 +52,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    emojiReaction() {
+    emojiReaction(e: MouseEvent) {
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
@@ -63,7 +63,14 @@ export default Vue.extend({
             ? this.$props.message.from
             : this.$props.message.to,
       })
-      this.$store.commit('ui/toggleEnhancers', { show: true })
+      let clickX = e.clientX
+      let clickY = e.clientY
+      this.$store.commit('ui/toggleEnhancers', {
+        show: true,
+        floating: this.$device.isMobile ? true : false,
+        position: [clickX, clickY],
+        containerWidth: this.$el.clientWidth,
+      })
     },
     /**
      * @method quickReaction DocsTODO
@@ -97,7 +104,7 @@ export default Vue.extend({
      * @example
      */
     didIReact(reaction: any) {
-      return reaction.reactors.includes(this.$mock.user.name)
+      return reaction.reactors.includes(this.$store.state.accounts.details.textilePubkey)
     },
     getReactorsList(reactors: string[], limit = 3) {
       const numberOfReactors = reactors.length
