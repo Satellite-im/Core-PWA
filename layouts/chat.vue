@@ -59,7 +59,7 @@
         <TailoredMessagingEnhancers />
         <TailoredWalletMini v-if="ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
-        <TailoredCoreChatbarReply />
+        <TailoredCoreChatbarReply v-if="recipient" />
         <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />
       </div>
       <TailoredCoreGroupAside
@@ -87,7 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
-      asidebar: !this.$device.isMobile
+      asidebar: !this.$device.isMobile,
     }
   },
   computed: {
@@ -120,7 +120,7 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-  }
+  },
 })
 </script>
 
