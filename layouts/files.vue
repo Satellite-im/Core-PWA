@@ -5,8 +5,8 @@
       v-touch:swipe="sidebarSwipeHandler(this)"
       v-touch-options="{ swipeTolerance: 75 }"
       :class="
-        (sidebar ? 'is-open' : 'is-collapsed',
-        $device.isMobile ? 'mobile-app' : '')
+        [sidebar ? 'is-open' : 'is-collapsed',
+        $device.isMobile ? 'mobile-app' : '']
       "
     >
       <UiGlobal />
