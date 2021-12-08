@@ -50,15 +50,16 @@ export default Vue.extend({
       }
     },
     setActiveGlyph() {
-      if (this.src) {
-        const activeFriend = this.$Hounddog.getActiveFriend(
-          this.$store.state.friends,
-        )
-        this.$store.dispatch('textile/sendTextMessage', {
-          to: activeFriend?.textilePubkey,
-          text: `<img src=${this.src} height='160' width='160'/>`,
-        })
+      const activeFriend = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      if (!this.src || !activeFriend) {
+        return
       }
+      this.$store.dispatch('textile/sendTextMessage', {
+        to: activeFriend?.textilePubkey,
+        text: `<img src=${this.src} height='160' width='160'/>`,
+      })
     },
   },
 })
