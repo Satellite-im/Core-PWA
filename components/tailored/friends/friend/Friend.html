@@ -11,7 +11,7 @@
       type="success"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.accept')"
+      data-tooltip="Accept"
       :loading="loading === 'accept'"
       :action="acceptFriendRequest"
       >
@@ -22,7 +22,7 @@
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.decline')"
+      data-tooltip="Decline"
       :loading="loading === 'decline'"
       :action="declineFriendRequest">
       <x-icon size="1x"/>
@@ -33,7 +33,7 @@
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.unblock')"
+      data-tooltip="Unblock"
       :action="() => {}">
       <x-icon size="1x" />
     </InteractablesButton>
@@ -43,7 +43,7 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.send')"
+      data-tooltip="Send"
       :loading="loading === 'sending'"
       :action="createFriendRequest">
       <check-icon size="1x" />
@@ -55,7 +55,7 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.message')"
+      data-tooltip="Message"
       :action="sendMessageRequest">
       <message-square-icon size="1x" />
     </InteractablesButton>
@@ -63,7 +63,7 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.options')"
+      data-tooltip="Options"
       :loading="loading === 'options'"
       :action="contextMenu">
       <more-vertical-icon size="1x" />
