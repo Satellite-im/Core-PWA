@@ -2,7 +2,7 @@
   <div v-if="$device.isMobile" class="spacer"></div>
   <InteractablesButton
     size="small"
-    :text="`${$device.isMobile ? '' : 'Active'}`"
+    :text="$device.isMobile ? '' : 'Active'"
     :type="route === 'active' ? 'primary': 'dark'"
     :action="() => setRoute('active')"
   >
@@ -11,14 +11,15 @@
   <div>
     <InteractablesButton
       size="small"
-      :text="`${$device.isMobile ? '' : 'Requests'}`"
+      :text="$device.isMobile ? '' : 'Requests'"
       :type="route === 'requests' ? 'primary' : 'dark'"
       :action="() => setRoute('requests')"
-      :class="this.friends.incomingRequests.length ? 'big-button' : 'button' "
+      :class="friends.incomingRequests.length ? 'big-button' : 'button' "
+      :style=" `padding-right: ${friendRequestPadding}px`"
     >
       <user-check-icon size="1x" />
       <span
-        v-if="this.friends.incomingRequests.length"
+        v-if="friends.incomingRequests.length"
         :class="route === 'requests' ? 'label tag-inverted' : 'label tag'"
       >
         {{makeFriendReqTag}}
@@ -27,7 +28,7 @@
   </div>
   <InteractablesButton
     size="small"
-    :text="`${$device.isMobile ? '' : 'Blocked'}`"
+    :text="$device.isMobile ? '' : 'Blocked'"
     :type="route === 'blocked' ? 'primary' : 'dark'"
     :action="() => setRoute('blocked')"
   >
@@ -35,7 +36,7 @@
   </InteractablesButton>
   <InteractablesButton
     size="small"
-    :text="`${$device.isMobile ? 'Add' : 'Add Friend'}`"
+    :text="$device.isMobile ? 'Add' : 'Add Friend'"
     :type="route === 'add' ? 'primary' : 'dark'"
     :action="() => setRoute('add')"
   >
