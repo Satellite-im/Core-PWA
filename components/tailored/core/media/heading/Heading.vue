@@ -13,13 +13,13 @@ export default Vue.extend({
     MaximizeIcon,
     MinimizeIcon,
   },
-  computed: {
-    ...mapState(['ui', 'webrtc']),
-  },
   data() {
     return {
-      elapsed: `${this.$i18n.t('ui.live')} 00:00`,
+      elapsedTimeLabel: ''
     }
+  },
+  computed: {
+    ...mapState(['ui', 'webrtc']),
   },
   mounted() {
     this.$store.commit('ui/fullscreen', false)
@@ -38,20 +38,20 @@ export default Vue.extend({
     toggleFullscreen() {
       this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
     },
-    elapsedTime(start: number): string {
+    elapsedTime(start: number): void {
       const duration = dayjs.duration(Date.now() - start)
       const hours = duration.hours()
-      return `${this.$i18n.t('ui.live')} ${
+      this.elapsedTimeLabel = `${this.$t('ui.live')} ${
         hours > 0 ? `${hours}:` : ''
       }${duration.format('mm:ss')}`
     },
     setTimer() {
       if (this.webrtc && this.webrtc.activeStream) {
         if (!this.timerId) {
-          this.elapsed = this.elapsedTime(this.webrtc.activeStream.createdAt)
+          this.elapsedTime(this.webrtc.activeStream.createdAt)
           this.timerId = setInterval(() => {
-            this.elapsed = this.elapsedTime(this.webrtc.activeStream.createdAt)
-          }, 500)
+            this.elapsedTime(this.webrtc.activeStream.createdAt)
+          }, 1000)
         }
       }
     },
