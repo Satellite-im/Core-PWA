@@ -19,6 +19,7 @@ export interface TextileState {
     }
   }
   conversationLoading: boolean
+  messageLoading: boolean
 }
 
 export enum TextileError {}
