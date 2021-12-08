@@ -100,6 +100,28 @@ export default {
     commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
+   * @method generateWallet DocsTODO
+   * @description
+   * @param
+   * @example
+   */
+   async setRecoverMnemonic({ commit, state }: ActionsArguments<AccountsState>, mnemonic: string) {
+    const { pin } = state
+
+    if (!pin) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+    
+    await commit('setPhrase', mnemonic)
+    const $Crypto: Crypto = Vue.prototype.$Crypto
+    const encryptedPhrase = await $Crypto.encryptWithPassword(
+      mnemonic,
+      pin,
+    )
+
+    commit('setEncryptedPhrase', encryptedPhrase)
+   },
+  /**
    * @method loadAccount DocsTODO
    * @description
    * @param
