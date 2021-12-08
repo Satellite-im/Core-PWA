@@ -23,8 +23,21 @@ export default Vue.extend({
     },
   },
   methods: {
-    recoverAccount() {
-      /* recover account action will be implemented on bip39 service ticket */
+    /**
+     * @method recoverAccount DocsTODO
+     * @description recover account with 12 mnemonic recover phrases
+     * @param
+     * @example
+     */
+    async recoverAccount() {
+      try {
+        const mnemonic = this.phrases.join(' ')
+        await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
+        await this.$store.dispatch('accounts/loadAccount')
+        this.$router.replace('/chat/direct')
+      } catch (error: any) {
+        this.error = error.message
+      }
     },
     isOdd(num: number) {
       return num % 2
