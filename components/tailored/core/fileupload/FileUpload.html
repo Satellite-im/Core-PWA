@@ -62,7 +62,7 @@
   <label
     v-if="type == 'quick'"
     for="quick-upload"
-    :data-tooltip="$t('ui.upload')"
+    :data-tooltip="$t('global.upload')"
     :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
   >
     <plus-icon size="1.2x" class="control-icon" />
@@ -74,7 +74,7 @@
     >
       <UiGlowingCursorArea>
         <file-plus-icon size="1.2x" class="control-icon" />
-        &nbsp; {{ $t('pages.files.upload') }}
+        &nbsp; {{ $t('global.upload_files') }}
       </UiGlowingCursorArea>
     </label>
   </div>
