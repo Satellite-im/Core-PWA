@@ -98,6 +98,9 @@ export default Vue.extend({
         this.loading = ''
       }
     },
+    sendMessageRequest() {
+      this.$router.push(`/chat/direct/${this.$props.friend.address}`)
+    }
   },
 })
 </script>
