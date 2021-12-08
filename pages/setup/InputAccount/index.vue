@@ -17,11 +17,6 @@ export default Vue.extend({
       bipList: bip39.wordlists.english,
     }
   },
-  computed: {
-    availableBipList() {
-      return this.bipList.filter((elm) => !this.phrases.includes(elm))
-    },
-  },
   methods: {
     /**
      * @method recoverAccount DocsTODO
@@ -45,8 +40,7 @@ export default Vue.extend({
       this.phrases.splice(index, 1)
     },
     onSelected(item: string) {
-      if (this.phrases.length < 12 && !this.phrases.includes(item))
-        this.phrases.push(item)
+      if (this.phrases.length < 12) this.phrases.push(item)
     },
   },
 })
