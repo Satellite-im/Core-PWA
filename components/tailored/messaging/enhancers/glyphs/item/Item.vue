@@ -1,6 +1,7 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 // eslint-disable-next-line import/named
+import { Blob } from 'buffer'
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
 
@@ -46,6 +47,17 @@ export default Vue.extend({
     mouseLeave() {
       if (this.pack) {
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
+      }
+    },
+    setActiveGlyph() {
+      if (this.src) {
+        const activeFriend = this.$Hounddog.getActiveFriend(
+          this.$store.state.friends,
+        )
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: activeFriend?.textilePubkey,
+          text: `<img src=${this.src} height='160' width='160'/>`,
+        })
       }
     },
   },
