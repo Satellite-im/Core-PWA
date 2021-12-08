@@ -41,12 +41,8 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-<<<<<<< HEAD
       maxChars: 256,
       recipientTyping: false,
-=======
-      maxChars: 256
->>>>>>> acce6d0e (fixed files page chatbar action)
     }
   },
   props: {
@@ -130,7 +126,7 @@ export default Vue.extend({
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('ui.talk')
+        return this.$t('global.talk')
       } else {
         return ''
       }
