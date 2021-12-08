@@ -1,6 +1,7 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 import { MessageGroup } from '~/types/messaging'
 
@@ -14,6 +15,9 @@ export default Vue.extend({
       type: Array as PropType<MessageGroup>,
       default: () => [],
     },
+  },
+  computed: {
+    ...mapState(['textile']),
   },
 })
 </script>
