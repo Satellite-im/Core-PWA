@@ -57,7 +57,7 @@ export default Vue.extend({
       }
       this.$store.dispatch('textile/sendTextMessage', {
         to: activeFriend?.textilePubkey,
-        text: `<img src=${this.src} height='160' width='160'/>`,
+        text: `<img src=${this.src} class='glyph'/>`,
       })
     },
   },
