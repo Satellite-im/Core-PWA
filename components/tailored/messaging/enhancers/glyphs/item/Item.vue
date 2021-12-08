@@ -1,7 +1,6 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 // eslint-disable-next-line import/named
-import { Blob } from 'buffer'
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
 
