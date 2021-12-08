@@ -48,7 +48,7 @@ export default Vue.extend({
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
-    setActiveGlyph() {
+    addGlyph() {
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
