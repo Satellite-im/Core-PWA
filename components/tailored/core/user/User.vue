@@ -11,6 +11,7 @@ import { User } from '~/types/ui/user'
 declare module 'vue/types/vue' {
   interface Vue {
     testFunc: () => void
+    navigateToUser: () => void
   }
 }
 export default Vue.extend({
@@ -33,7 +34,7 @@ export default Vue.extend({
   data() {
     return {
       contextMenuValues: [
-        { text: 'Send Message', func: this.testFunc },
+        { text: 'Send Message', func: this.navigateToUser },
         { text: 'Voice Call', func: this.testFunc },
         { text: 'Video Call', func: this.testFunc },
         { text: 'Remove Friend', func: this.testFunc },

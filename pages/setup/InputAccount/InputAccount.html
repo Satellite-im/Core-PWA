@@ -2,29 +2,43 @@
   <div class="input-account-body">
     <TypographyTitle :size="4" :text="$t('pages.inputAccount.title')" />
     <TypographySubtitle :size="6" :text="$t('pages.inputAccount.subtitle')" />
-    <InteractablesInputGroup
-      v-model="phraseInput"
+    <UiTypeHead
+      :list="availableBipList"
       size="small"
-      input-kind="text"
-      :type="`${error ? 'danger' : 'primary'}`"
+      type="primary"
       :placeholder="$t('pages.inputAccount.enter')"
-      :action="addPhrase"
-    >
-      <plus-circle-icon size="1.5x" />
-    </InteractablesInputGroup>
+      :onSelected="onSelected"
+    ></UiTypeHead>
     <TypographyError v-if="error" :text="$t(error)" />
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" @remove="removeWord(i)" isRemoval />
+          <UiNumberedWord
+            :word="word"
+            v-if="isOdd(i + 1)"
+            :number="i + 1"
+            @remove="removeWord(i)"
+            isRemoval
+          />
         </div>
       </div>
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" @remove="removeWord(i)" isRemoval />
+          <UiNumberedWord
+            :word="word"
+            v-if="!isOdd(i + 1)"
+            :number="i + 1"
+            @remove="removeWord(i)"
+            isRemoval
+          />
         </div>
       </div>
     </div>
-    <InteractablesButton class='recover-account' :text="$t('pages.inputAccount.recover')" :disabled='phrases.length<12' :action="recoverAccount"/>
+    <InteractablesButton
+      class="recover-account"
+      :text="$t('pages.inputAccount.recover')"
+      :disabled="phrases.length<12"
+      :action="recoverAccount"
+    />
   </div>
 </div>

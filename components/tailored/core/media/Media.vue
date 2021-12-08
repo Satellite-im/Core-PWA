@@ -64,7 +64,7 @@ export default Vue.extend({
             viewportHeight: number,
             blockWidth: number,
             blockHeight: number,
-            blockCount: number
+            blockCount: number,
           ) {
             const cols = Math.floor(viewportWidth / blockWidth)
             const rows = Math.ceil(blockCount / cols)
@@ -86,7 +86,7 @@ export default Vue.extend({
           const blockCount = blocks.length
           const blockStyle = window.getComputedStyle(blocks[0])
           const blockMargin = Math.floor(
-            parseInt(blockStyle.margin.replace('px', ''))
+            parseInt(blockStyle.margin.replace('px', '')),
           )
           const marginPerBlock = blockMargin * 2
 
@@ -136,7 +136,7 @@ export default Vue.extend({
               : Math.floor((viewportWidth * i) / 100)
 
             const blockContentHeight = Math.floor(
-              blockContentWidth * aspectRatio
+              blockContentWidth * aspectRatio,
             )
             const blockWidth = blockContentWidth + marginPerBlock
             const blockHeight = blockContentHeight + marginPerBlock
@@ -145,7 +145,7 @@ export default Vue.extend({
               viewportHeight,
               blockWidth,
               blockHeight,
-              blockCount
+              blockCount,
             )
             if (!fit) {
               break

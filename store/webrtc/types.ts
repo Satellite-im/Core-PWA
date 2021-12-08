@@ -1,5 +1,8 @@
 export interface WebRTCState {
   initialized: boolean
+  activeStream: {
+    createdAt: number
+  }
 }
 
 export enum WebRTCError {
