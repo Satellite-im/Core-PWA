@@ -17,7 +17,7 @@
     <div v-focus="ui.replyChatbarContent" :contenteditable="recipient ? true : false" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
-      :placeholder="$t('ui.talk')"
+      :placeholder="$t('global.talk')"
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
       @drop="handleDrop"
