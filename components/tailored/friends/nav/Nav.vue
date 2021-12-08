@@ -19,6 +19,17 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends']),
+    /**
+     * makeFriendReqTag: generates the Request tag number on the Request Button
+     * depending on the number of ongoing friend requests, it will generate a different replyLength
+     */
+    makeFriendReqTag() {
+      const replyLength = this.friends.incomingRequests.length
+      if (replyLength > 100) {
+        return '99+'
+      }
+      return replyLength
+    },
   },
   props: {
     setRoute: {

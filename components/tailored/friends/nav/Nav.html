@@ -21,7 +21,7 @@
         v-if="this.friends.incomingRequests.length"
         :class="route === 'requests' ? 'label tag-inverted' : 'label tag'"
       >
-        {{this.friends.incomingRequests.length}}
+        {{makeFriendReqTag}}
       </span>
     </InteractablesButton>
   </div>
