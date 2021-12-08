@@ -94,6 +94,9 @@ export const Config = {
   },
   uploadByteLimit: 1048576 * 8, // 8mb
   regex: {
+    // regex to identify if a filetype is an image we support
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
+    // Regex to check if string is only blank space
+    blankSpace: '^[\\s|&nbsp;]+$',
   },
 }

@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
+    "dev": "git submodule update --remote --merge && nuxi dev",
     "build": "nuxt build",
     "start": "nuxi start",
     "generate": "nuxt generate",

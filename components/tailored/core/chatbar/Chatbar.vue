@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 
@@ -85,7 +86,7 @@ export default Vue.extend({
     hasCommand() {
       const parsedCommand = parseCommand(this.ui.chatbarContent)
       const currentCommand = commands.find(
-        (cmd) => cmd.name === parsedCommand.name.toLowerCase()
+        (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
       return currentCommand != null
     },
@@ -97,7 +98,7 @@ export default Vue.extend({
      */
     isValidCommand() {
       const currentText = parseCommand(
-        this.ui.chatbarContent
+        this.ui.chatbarContent,
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
@@ -251,8 +252,8 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      if(this.recipient) {
-        const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '').length
+      if (this.recipient) {
+        const isEmpty = RegExp(Config.regex.blankSpace, 'g').test(this.value)
         if (!this.recipient || isEmpty) {
           return
         }
@@ -263,12 +264,12 @@ export default Vue.extend({
             text: this.value,
             replyTo: this.ui.replyChatbarContent.messageID,
           })
-        } else {
-          this.$store.dispatch('textile/sendTextMessage', {
-            to: this.recipient.textilePubkey,
-            text: this.value,
-          })
+          return
         }
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: this.recipient.textilePubkey,
+          text: this.value,
+        })
 
         const messageBox = this.$refs.messageuser as HTMLElement
         // Clear Chatbar
@@ -280,7 +281,7 @@ export default Vue.extend({
      * @method handleDrop
      * @description Allows the drag and drop of files into the chatbar
      * @param e Drop event data object
-     * @example v-on:drop="handleDrop" 
+     * @example v-on:drop="handleDrop"
      */
     handleDrop(e: any) {
       e.preventDefault()
@@ -312,7 +313,7 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
-    }
+    },
   },
   watch: {
     'ui.chatbarContent': function () {
