@@ -25,6 +25,7 @@ export default Vue.extend({
       default: null,
       required: false,
     },
+    filter: { type: Boolean, default: false, required: false },
   },
   methods: {
     getStyle() {
