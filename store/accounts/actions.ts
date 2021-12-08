@@ -100,9 +100,9 @@ export default {
     commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method generateWallet DocsTODO
+   * @method setRecoverMnemonic DocsTODO
    * @description
-   * @param
+   * @param mnemonic
    * @example
    */
    async setRecoverMnemonic({ commit, state }: ActionsArguments<AccountsState>, mnemonic: string) {

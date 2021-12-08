@@ -26,8 +26,7 @@ export default Vue.extend({
     /**
      * @method recoverAccount DocsTODO
      * @description recover account with 12 mnemonic recover phrases
-     * @param
-     * @example
+     * @example this.recoverAccount()
      */
     async recoverAccount() {
       try {
