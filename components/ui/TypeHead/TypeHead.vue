@@ -115,7 +115,7 @@ export default Vue.extend({
       if (item) {
         this.onItemClicked(item)
       } else {
-        const itemSplitted = this.searchText.trim().split(' ')
+        const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
         if (itemSplitted.length > 1) {
           this.onMultipleItemSelected(itemSplitted)
         }
