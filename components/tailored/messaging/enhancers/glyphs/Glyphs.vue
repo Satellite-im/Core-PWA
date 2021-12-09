@@ -1,7 +1,7 @@
 <template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import _, { cloneDeep } from 'lodash'
+import _, { cloneDeep, isEmpty } from 'lodash'
 
 export default Vue.extend({
   data() {
@@ -28,7 +28,7 @@ export default Vue.extend({
         {},
       )
       // set active to ensure pack loads. Otherwise lazy load scroll trigger can be impossible to execute
-      if (Object.keys(this.filteredGlyphs).length > 0) {
+      if (!_.isEmpty(this.filteredGlyphs)) {
         this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
       }
     },
