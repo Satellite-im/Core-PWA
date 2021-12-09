@@ -27,7 +27,10 @@ export default Vue.extend({
         }),
         {},
       )
-      this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
+      // set active to ensure pack loads. Otherwise lazy load scroll trigger can be impossible to execute
+      if (Object.keys(this.filteredGlyphs).length > 0) {
+        this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
+      }
     },
   },
 })
