@@ -61,6 +61,9 @@ export default Vue.extend({
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
         }
+        if (error.message === AccountsError.USER_DERIVATION_FAILED) {
+          this.$router.replace('/setup/disclaimer')
+        }
       }
     },
   },

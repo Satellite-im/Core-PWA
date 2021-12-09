@@ -28,10 +28,14 @@ export default Vue.extend({
         const mnemonic = this.phrases.join(' ')
         await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
         await this.$store.dispatch('accounts/loadAccount')
-        this.$router.replace('/chat/direct')
       } catch (error: any) {
         this.error = error.message
+        return
       }
+      await this.$store.commit('account/setPhrase', {
+        phrase: mnemonic,
+      })
+      this.$router.replace('/chat/direct')
     },
     isOdd(num: number) {
       return num % 2

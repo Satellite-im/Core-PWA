@@ -112,7 +112,6 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
     
-    await commit('setPhrase', mnemonic)
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const encryptedPhrase = await $Crypto.encryptWithPassword(
       mnemonic,
