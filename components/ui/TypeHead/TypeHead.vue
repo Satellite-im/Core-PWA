@@ -91,7 +91,12 @@ export default Vue.extend({
       this.isFocus = false
     },
     onItemClicked(item: any) {
-      this.onSelected(item)
+      this.$emit('onSelected', item)
+      this.isFocus = false
+      this.searchText = ''
+    },
+    onMultipleItemSelected(items: any) {
+      this.$emit('onMultipleSelected', items)
       this.isFocus = false
       this.searchText = ''
     },
@@ -107,7 +112,14 @@ export default Vue.extend({
           ? item[this.label] === this.searchText
           : item === this.searchText,
       )
-      if (item) this.onItemClicked(item)
+      if (item) {
+        this.onItemClicked(item)
+      } else {
+        const itemSplitted = this.searchText.trim().split(' ')
+        if (itemSplitted.length > 1) {
+          this.onMultipleItemSelected(itemSplitted)
+        }
+      }
     },
   },
 })

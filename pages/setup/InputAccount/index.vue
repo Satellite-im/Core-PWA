@@ -42,6 +42,18 @@ export default Vue.extend({
     onSelected(item: string) {
       if (this.phrases.length < 12) this.phrases.push(item)
     },
+    onMultipleSelected(items: string[]) {
+      const filteredItems = items.filter((item) => {
+        return this.bipList.indexOf(item) >= 0
+      })
+      filteredItems.every((item) => {
+        if (this.phrases.length < 12 && !this.phrases.includes(item)) {
+          this.phrases.push(item)
+          return true
+        }
+        return false
+      })
+    },
   },
 })
 </script>

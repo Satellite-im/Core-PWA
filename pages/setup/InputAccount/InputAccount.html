@@ -7,7 +7,8 @@
       size="small"
       type="primary"
       :placeholder="$t('pages.inputAccount.enter')"
-      :onSelected="onSelected"
+      @onSelected="onSelected"
+      @onMultipleSelected="onMultipleSelected"
     ></UiTypeHead>
     <TypographyError v-if="error" :text="$t(error)" />
     <div class="columns is-mobile">
