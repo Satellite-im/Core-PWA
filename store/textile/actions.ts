@@ -72,7 +72,7 @@ export default {
       skip: query.skip,
     })
 
-    commit('friends/setActive', friend, { root: true})
+    commit('friends/setActive', friend, { root: true })
 
     commit('setConversationLoading', { loading: false })
 
@@ -300,5 +300,10 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    commit('ui/setReplyChatbarContent', {
+      id: '',
+      payload: '',
+      from: '',
+    }, { root: true })
   },
 }
