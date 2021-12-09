@@ -3,4 +3,5 @@
   :style="getStyle()"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
+  v-on="sendOnClick ? {click: addGlyph} : {}"
 ></div>
