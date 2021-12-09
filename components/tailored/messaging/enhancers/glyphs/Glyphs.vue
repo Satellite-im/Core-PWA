@@ -1,6 +1,7 @@
 <template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import _, { cloneDeep } from 'lodash'
 
 export default Vue.extend({
   data() {
@@ -17,12 +18,14 @@ export default Vue.extend({
   },
   methods: {
     filter(filterValue: any) {
-      this.filteredGlyphs = Object.entries(this.$mock.glyphs).reduce(
+      this.filteredGlyphs = Object.entries(
+        _.cloneDeep(this.$mock.glyphs),
+      ).reduce(
         (prev, [key, value]: [string, any]) => ({
           ...prev,
           ...(value?.name?.includes(filterValue) ? { [key]: value } : {}),
         }),
-        {}
+        {},
       )
     },
   },
