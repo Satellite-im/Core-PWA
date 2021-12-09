@@ -7,6 +7,8 @@ import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType } from '~/types/textile/mailbox'
+import {UploadDropItemType} from "~/types/files/file";
+import {Buckets, Identity, PushPathResult} from "@textile/hub";
 
 export default {
   /**
@@ -275,6 +277,7 @@ export default {
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, replyTo, text }: { to: string; replyTo: string; text: string },
   ) {
+    console.log('Send Reply Message')
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
@@ -288,7 +291,7 @@ export default {
     }
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-
+    console.log(text)
     const result = await $MailboxManager.sendMessage<'reply'>(
       friend.textilePubkey,
       {

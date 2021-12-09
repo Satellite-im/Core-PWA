@@ -1,4 +1,4 @@
-<template src="./File.html"></template>
+<template src="./File.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import filesize from 'filesize'
@@ -14,13 +14,13 @@ export default Vue.extend({
   },
   props: {
     data: {
-      type: Object as PropType<FileData> | undefined,
+      type: String,
       default: () => {},
     },
   },
   computed: {
     filesize() {
-      return filesize(this.$props.data.size)
+      console.log(this.data, 'data')
     },
   },
 })

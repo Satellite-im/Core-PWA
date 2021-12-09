@@ -4,7 +4,7 @@ import {
   Identity,
   ThreadID,
   UserMessage,
-  Users,
+  Users, PushPathResult, Buckets,
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
@@ -20,6 +20,7 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
+import {UploadDropItemType} from "~/types/files/file";
 
 export class MailboxManager {
   senderAddress: string
@@ -192,12 +193,44 @@ export class MailboxManager {
    * @param to Recipient
    * @param message Message to be sent
    */
+  async sendFile<T extends MessageTypes>(
+    to: string,
+    message: MessagePayloads[T]
+  ) {
+    const recipient: PublicKey = PublicKey.fromString(to)
+    const encoder = new TextEncoder()
+    const imageString = message.payload.toString()
+    const body = encoder.encode(
+      JSON.stringify({
+        from: this.senderAddress,
+        to: message.to,
+        at: Date.now(),
+        type: message.type,
+        payload:  imageString,
+        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
+        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
+      })
+    )
+
+    const result = await this.textile.users.sendMessage(
+      this.textile.identity,
+      recipient,
+      body
+    )
+
+    return this.decodeMessage(userMessageToThread(result))
+  }
+  /**
+   * @method sendMessage
+   * @description Sends a message to the given recipient
+   * @param to Recipient
+   * @param message Message to be sent
+   */
   async sendMessage<T extends MessageTypes>(
     to: string,
     message: MessagePayloads[T]
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
-
     const encoder = new TextEncoder()
     const body = encoder.encode(
       JSON.stringify({

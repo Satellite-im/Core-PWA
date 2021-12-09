@@ -1,10 +1,10 @@
 <div id="chatbar" ref="chatbar" :class="ui.replyChatbarContent.id ? 'has-reply' : ''">
   <div class="chatbar-wrap" :class="[charlimit ? 'is-error' : 'is-normal', recipient ? 'active' : 'inactive']" ref="wrap" >
     <div class="control-wrap file-upload-wrap">
-      <FilesUpload 
-        :editable="recipient ? true : false" 
-        type="quick" 
-        ref="file-upload" 
+      <FilesUpload
+        :editable="recipient ? true : false"
+        type="quick"
+        ref="file-upload"
       />
     </div>
     <div
