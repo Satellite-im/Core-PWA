@@ -34,8 +34,9 @@ export default Vue.extend({
      * depending on the number of ongoing friend requests, it will generate a different px amount for padding-right
      */
     friendRequestPadding() {
-      const currentIncomingRequests = this.friends.incomingRequests.length.toString()
-      const length = this.friends.incomingRequests.length.toString().length
+      const currentIncomingRequests =
+        this.friends.incomingRequests.length.toString()
+      const length = currentIncomingRequests.length
 
       if (currentIncomingRequests === '0') {
         return 11
