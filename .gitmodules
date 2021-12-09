@@ -1,9 +1,12 @@
 [submodule "android"]
 	path = android
 	url = https://github.com/Satellite-im/android.git
+	ignore = all
 [submodule "electron"]
 	path = electron
 	url = https://github.com/Satellite-im/electron.git
+	ignore = all
 [submodule "locales"]
 	path = locales
 	url = git@github.com:Satellite-im/Translations.git
+	ignore = all

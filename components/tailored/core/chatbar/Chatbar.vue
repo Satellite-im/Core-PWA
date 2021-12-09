@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 
@@ -251,29 +252,30 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
-      const isEmpty = !this.value.replace(/\s/g, '').replace(/&nbsp;/g, '')
-        .length
-      if (!this.recipient || isEmpty) {
-        return
-      }
+      if (this.recipient) {
+        const isEmpty = RegExp(Config.regex.blankSpace, 'g').test(this.value)
+        if (!this.recipient || isEmpty) {
+          return
+        }
 
-      if (this.ui.replyChatbarContent.from) {
-        this.$store.dispatch('textile/sendReplyMessage', {
-          to: this.recipient.textilePubkey,
-          text: this.value,
-          replyTo: this.ui.replyChatbarContent.messageID,
-        })
-      } else {
+        if (this.ui.replyChatbarContent.from) {
+          this.$store.dispatch('textile/sendReplyMessage', {
+            to: this.recipient.textilePubkey,
+            text: this.value,
+            replyTo: this.ui.replyChatbarContent.messageID,
+          })
+          return
+        }
         this.$store.dispatch('textile/sendTextMessage', {
           to: this.recipient.textilePubkey,
           text: this.value,
         })
-      }
 
-      const messageBox = this.$refs.messageuser as HTMLElement
-      // Clear Chatbar
-      messageBox.innerHTML = ''
-      this.value = ''
+        const messageBox = this.$refs.messageuser as HTMLElement
+        // Clear Chatbar
+        messageBox.innerHTML = ''
+        this.value = ''
+      }
     },
     /**
      * @method handleDrop
@@ -292,11 +294,8 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: any) {
-      e.stopPropagation()
-      const clipboardItems = e.clipboardData.items
-      if (clipboardItems && clipboardItems.length) {
-        this.handleUpload(clipboardItems)
-      }
+      e.preventDefault()
+      this.handleUpload(e.clipboardData.items)
     },
     /**
      * @method handleUpload
@@ -305,7 +304,6 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: Array<object>) {
-      /* check if type is image */
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())

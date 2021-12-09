@@ -304,5 +304,10 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    commit('ui/setReplyChatbarContent', {
+      id: '',
+      payload: '',
+      from: '',
+    }, { root: true })
   },
 }
