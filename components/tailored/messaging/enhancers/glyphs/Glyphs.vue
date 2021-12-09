@@ -27,6 +27,7 @@ export default Vue.extend({
         }),
         {},
       )
+      this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
     },
   },
 })
