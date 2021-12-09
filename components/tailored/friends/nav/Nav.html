@@ -14,7 +14,6 @@
       :text="$device.isMobile ? '' : 'Requests'"
       :type="route === 'requests' ? 'primary' : 'dark'"
       :action="() => setRoute('requests')"
-      :class="friends.incomingRequests.length ? 'big-button' : 'button' "
       :style="`padding-right: ${friendRequestPadding}px`"
     >
       <user-check-icon size="1x" />
