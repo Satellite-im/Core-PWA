@@ -3,5 +3,5 @@
   :style="getStyle()"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
-  v-on="filter ? {} : {click: addGlyph}"
+  v-on="sendOnClick ? {click: addGlyph} : {}"
 ></div>
