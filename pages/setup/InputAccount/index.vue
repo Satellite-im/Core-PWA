@@ -50,7 +50,7 @@ export default Vue.extend({
         return this.bipList.indexOf(item) >= 0
       })
       filteredItems.every((item) => {
-        if (this.phrases.length < 12 && !this.phrases.includes(item)) {
+        if (this.phrases.length < 12 ) {
           this.phrases.push(item)
           return true
         }
