@@ -77,7 +77,7 @@ export default Vue.extend({
         this.searchList = this.list
         return
       }
-      if(!this.isFocus) this.isFocus = true
+      if (!this.isFocus) this.isFocus = true
       this.searchList = this.list.filter((item: any) =>
         this.label
           ? item[this.label].indexOf(this.searchText) === 0
@@ -112,13 +112,12 @@ export default Vue.extend({
           ? item[this.label] === this.searchText
           : item === this.searchText,
       )
-      if (item) {
+
+      const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
+      if (itemSplitted.length > 0) {
+        this.onMultipleItemSelected(itemSplitted)
+      } else if (item) {
         this.onItemClicked(item)
-      } else {
-        const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
-        if (itemSplitted.length > 1) {
-          this.onMultipleItemSelected(itemSplitted)
-        }
       }
     },
   },
