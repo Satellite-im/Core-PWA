@@ -131,7 +131,7 @@ export default Vue.extend({
       this.$data.showReplies = !this.$data.showReplies
 
       const openReplyList = localStorage.getItem('open-reply-list')
-      const oRLObj = openReplyList ? JSON.parse(openReplyList) : []
+      let oRLObj = openReplyList ? JSON.parse(openReplyList) : []
       
       if (this.$data.showReplies === true) {
         oRLObj.includes(this.$props.message.id) ? oRLObj : oRLObj.push(this.$props.message.id)
