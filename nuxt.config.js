@@ -161,28 +161,10 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, ctx) {
+    extend(config) {
       config.node = {
         fs: 'empty',
         encoding: 'empty',
-      }
-      const testAttributes = ['data-cy']
-      ctx.loaders.vue.compilerOptions = {
-        modules: [
-          {
-            preTransformNode(astEl) {
-              const { attrsMap, attrsList } = astEl
-              testAttributes.forEach((attribute) => {
-                if (attrsMap[attribute]) {
-                  delete attrsMap[attribute]
-                  const index = attrsList.findIndex((x) => x.name === attribute)
-                  attrsList.splice(index, 1)
-                }
-              })
-              return astEl
-            },
-          },
-        ],
       }
     },
     babel: { compact: true },
