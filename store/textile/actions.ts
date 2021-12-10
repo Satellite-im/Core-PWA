@@ -7,7 +7,7 @@ import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
-import { UploadDropItemType } from "~/types/files/file";
+import { UploadDropItemType } from '~/types/files/file'
 
 export default {
   /**
@@ -389,7 +389,7 @@ export default {
    */
   async editTextMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, original, text }: { to: string; text: string, original: Message },
+    { to, original, text }: { to: string; text: string; original: Message },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -416,14 +416,11 @@ export default {
       message: editingMessage,
     })
 
-    const result = await $MailboxManager.editMessage<'text'>(
-      original.id,
-      {
-        to: friend.textilePubkey,
-        payload: text,
-        type: 'text',
-      },
-    )
+    const result = await $MailboxManager.editMessage<'text'>(original.id, {
+      to: friend.textilePubkey,
+      payload: text,
+      type: 'text',
+    })
 
     if (result) {
       commit('addMessageToConversation', {
@@ -438,5 +435,49 @@ export default {
         message: original,
       })
     }
+  },
+  /**
+   * @description Sends a glyph message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * glyph to be sent, and pack name
+   */
+  async sendGlyphMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, text, pack }: { to: string; text: string; pack: string },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    commit('setMessageLoading', { loading: true })
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    const result = await $MailboxManager.sendMessage<'glyph'>(
+      friend.textilePubkey,
+      {
+        to: friend.textilePubkey,
+        payload: text,
+        pack: pack,
+        type: 'glyph',
+      },
+    )
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+
+    commit('setMessageLoading', { loading: false })
   },
 }

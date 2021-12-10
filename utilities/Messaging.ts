@@ -10,6 +10,7 @@ import {
   MessagesTracker,
   ReactionsTracker,
   RepliesTracker,
+  GlyphMessage,
 } from '~/types/textile/mailbox'
 
 function messageRepliesToUIReplies(
@@ -187,6 +188,11 @@ export function updateMessageTracker(
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
+        break
+      case 'glyph':
+        const glyphMessage: GlyphMessage = currentMessage
+        glyphMessage.pack='test'
+        messagesTracker[glyphMessage.id] = glyphMessage      
       default:
         break
     }

@@ -46,7 +46,7 @@ export const messageFromThread = t.intersection([
     signature: t.string,
     to: t.string,
   }),
-  t.partial({ _mod: t.number}),
+  t.partial({ _mod: t.number }),
   t.partial({ read_at: t.number }),
 ])
 
@@ -112,6 +112,19 @@ export const mediaMessage = t.intersection([
   }),
 ])
 
+const glyphMessagePayload = t.type({
+  payload: t.string,
+  pack: t.string,
+})
+
+export const glyphMessage = t.intersection([
+  baseMessage,
+  glyphMessagePayload,
+  t.type({
+    type: t.literal('glyph'),
+  }),
+])
+
 export const replyMessage = t.union([
   t.intersection([
     baseMessage,
@@ -148,4 +161,5 @@ export const messageEncoder = t.union([
   fileMessage,
   textMessage,
   mediaMessage,
+  glyphMessage,
 ])

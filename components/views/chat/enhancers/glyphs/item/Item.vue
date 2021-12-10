@@ -56,9 +56,10 @@ export default Vue.extend({
       if (!this.src || !activeFriend) {
         return
       }
-      this.$store.dispatch('textile/sendTextMessage', {
+      this.$store.dispatch('textile/sendGlyphMessage', {
         to: activeFriend?.textilePubkey,
         text: `<img src=${this.src} class='glyph'/>`,
+        pack: this.pack.name,
       })
     },
   },
