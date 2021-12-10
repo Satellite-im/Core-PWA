@@ -13,6 +13,7 @@ const InitialSettingsState = (): SettingsState => ({
   userDeniedAudioAccess: false,
   keybinds: KeybindTypes,
   embeddedLinks: true,
+  displayCurrentActivity: true,
 })
 
 export default InitialSettingsState
