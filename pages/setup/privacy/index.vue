@@ -7,10 +7,40 @@ export default Vue.extend({
   data() {
     return {
       registry: true,
-      storePin: false,
-      embeds: true,
-      activity: true,
     }
+  },
+  computed: {
+    ...mapState(['ui', 'accounts', 'settings']),
+    storePin: {
+      set(state) {
+        this.$store.commit('accounts/setStorePin', state)
+      },
+      get() {
+        return !this.accounts ? false : this.accounts.storePin
+      },
+    },
+    embeddedLinks: {
+      set(state) {
+        this.$store.commit('settings/embeddedLinks', state)
+      },
+      get() {
+        return this.settings.embeddedLinks
+      },
+    },
+    displayCurrentActivity: {
+      set(state) {
+        this.$store.commit('settings/displayCurrentActivity', state)
+      },
+      get() {
+        return this.settings.displayCurrentActivity
+      },
+    },
+  },
+  methods: {
+    async generateWallet() {
+      await this.$store.dispatch('accounts/generateWallet')
+      this.$router.push('phrase')
+    },
   },
 })
 </script>

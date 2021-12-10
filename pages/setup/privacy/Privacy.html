@@ -3,36 +3,36 @@
     <div class="columns">
       <div class="column center">
         <TypographySubtitle :size="6" text="Priavacy Settings" />
-        <TypographyText text="Choose which features to enable to best suit your privacy preferences." />
+        <TypographyText
+          text="Choose which features to enable to best suit your privacy preferences."
+        />
       </div>
     </div>
-    <br>
+    <br />
     <div class="columns">
       <div class="column">
         <div class="columns">
           <div class="column switch-column">
-            <InteractablesSwitch
-              v-model="registry"
-              small
-            />
+            <InteractablesSwitch v-model="registry" small />
           </div>
           <div class="column">
             <TypographySubtitle :size="6" text="Register Username Publicly" />
-            <TypographyText text="Publicly associate your account ID with a human readable username. Anyone can see this assocication." />
+            <TypographyText
+              text="Publicly associate your account ID with a human readable username. Anyone can see this assocication."
+            />
           </div>
         </div>
       </div>
       <div class="column">
         <div class="columns">
           <div class="column switch-column">
-            <InteractablesSwitch
-              v-model="storePin"
-              small
-            />
+            <InteractablesSwitch v-model="storePin" small />
           </div>
           <div class="column">
             <TypographySubtitle :size="6" text="Store Account Pin" />
-            <TypographyText text="Store your account pin locally so you don't have to enter it manually every time. This is not recommended." />
+            <TypographyText
+              text="Store your account pin locally so you don't have to enter it manually every time. This is not recommended."
+            />
           </div>
         </div>
       </div>
@@ -41,40 +41,40 @@
       <div class="column">
         <div class="columns">
           <div class="column switch-column">
-            <InteractablesSwitch
-              v-model="embeds"
-              small
-            />
+            <InteractablesSwitch v-model="embeddedLinks" small />
           </div>
           <div class="column">
             <TypographySubtitle :size="6" text="Enable External Embeds" />
-            <TypographyText text="Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more." />
+            <TypographyText
+              text="Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more."
+            />
           </div>
         </div>
       </div>
       <div class="column">
         <div class="columns">
           <div class="column switch-column">
-            <InteractablesSwitch
-              v-model="activity"
-              small
-            />
+            <InteractablesSwitch v-model="displayCurrentActivity" small />
           </div>
           <div class="column">
             <TypographySubtitle :size="6" text="Display Current Activity" />
-            <TypographyText text="Allow Satellite to see what games you're playing and show them off on your profile so friends can jump in." />
+            <TypographyText
+              text="Allow Satellite to see what games you're playing and show them off on your profile so friends can jump in."
+            />
           </div>
         </div>
       </div>
     </div>
-    <br>
-    <br>
+    <br />
+    <br />
     <div class="columns">
       <div class="column">
         <InteractablesButton
           class="right"
           type="primary"
-          size="small">
+          :action="generateWallet"
+          size="small"
+        >
           Continue
         </InteractablesButton>
       </div>
