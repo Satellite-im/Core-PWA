@@ -252,6 +252,29 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     sendMessage() {
+      // console.log(this.value)
+      // const inputText = '🤌..H E Y K A T ! s&nbsp;d💎 🐱'
+      // const inputText = '..H E Y K A T ! s&nbsp;'
+      const inputText = '💎 🐱🤌'
+      // let newValue = this.value
+      // this.value = inputText
+
+
+      // remove whitespace, emojis, to test if there is anything else in the string
+      let newInput = inputText.replace(/\s|[&nbsp;]|\p{Emoji}/gu, '')
+
+      if (newInput) {
+        console.log('there is stuff in the string, leave the font size small')
+      }
+      if (!newInput) {
+        console.log(
+          "there is not stuff in the string, so it's just emojis and you can make the text bigger",
+        )
+        this.value = `<div style="font-size: 50px">  ${inputText}  </div>`
+        // this.value = newInput
+
+      }
+
       if (this.recipient) {
         const isEmpty = RegExp(Config.regex.blankSpace, 'g').test(this.value)
         if (!this.recipient || isEmpty) {

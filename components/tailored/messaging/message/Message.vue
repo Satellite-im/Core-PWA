@@ -119,7 +119,6 @@ export default Vue.extend({
       if (['image', 'video', 'audio', 'file'].includes(type)) {
         finalPayload = `*${this.$t('conversation.multimedia')}*`
       }
-
       this.$store.commit('ui/setReplyChatbarContent', {
         id,
         payload: finalPayload,
