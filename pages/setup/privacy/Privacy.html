@@ -2,10 +2,8 @@
   <div class="privacy-body">
     <div class="columns">
       <div class="column center">
-        <TypographySubtitle :size="6" text="Priavacy Settings" />
-        <TypographyText
-          text="Choose which features to enable to best suit your privacy preferences."
-        />
+        <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
+        <TypographyText :text="$t('pages.privacy.subtitle')" />
       </div>
     </div>
     <br />
@@ -16,10 +14,11 @@
             <InteractablesSwitch v-model="registry" small />
           </div>
           <div class="column">
-            <TypographySubtitle :size="6" text="Register Username Publicly" />
-            <TypographyText
-              text="Publicly associate your account ID with a human readable username. Anyone can see this assocication."
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.privacy.register.title')"
             />
+            <TypographyText :text="$t('pages.privacy.register.subtitle')" />
           </div>
         </div>
       </div>
@@ -29,10 +28,11 @@
             <InteractablesSwitch v-model="storePin" small />
           </div>
           <div class="column">
-            <TypographySubtitle :size="6" text="Store Account Pin" />
-            <TypographyText
-              text="Store your account pin locally so you don't have to enter it manually every time. This is not recommended."
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.privacy.pin.title')"
             />
+            <TypographyText :text="$t('pages.privacy.pin.subtitle')" />
           </div>
         </div>
       </div>
@@ -44,10 +44,11 @@
             <InteractablesSwitch v-model="embeddedLinks" small />
           </div>
           <div class="column">
-            <TypographySubtitle :size="6" text="Enable External Embeds" />
-            <TypographyText
-              text="Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more."
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.privacy.embeds.title')"
             />
+            <TypographyText :text="$t('pages.privacy.embeds.subtitle')" />
           </div>
         </div>
       </div>
@@ -57,10 +58,11 @@
             <InteractablesSwitch v-model="displayCurrentActivity" small />
           </div>
           <div class="column">
-            <TypographySubtitle :size="6" text="Display Current Activity" />
-            <TypographyText
-              text="Allow Satellite to see what games you're playing and show them off on your profile so friends can jump in."
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.privacy.activity.title')"
             />
+            <TypographyText :text="$t('pages.privacy.activity.subtitle')" />
           </div>
         </div>
       </div>
@@ -75,7 +77,7 @@
           :action="generateWallet"
           size="small"
         >
-          Continue
+          {{ $t('pages.privacy.continue') }}
         </InteractablesButton>
       </div>
     </div>
