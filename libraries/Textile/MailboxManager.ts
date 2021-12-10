@@ -199,14 +199,15 @@ export class MailboxManager {
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
     const encoder = new TextEncoder()
-    const imageString = message.payload.toString()
+    const imageString = message.payload
     const body = encoder.encode(
       JSON.stringify({
         from: this.senderAddress,
         to: message.to,
         at: Date.now(),
         type: message.type,
-        payload:  imageString,
+        payload:  'imageString',
+        file: message.payload,
         reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
         repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
       })

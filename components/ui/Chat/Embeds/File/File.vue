@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   computed: {
     filesize() {
-      console.log(this.data, 'data')
+      // return filesize(this.$props.data.size)
     },
   },
 })
