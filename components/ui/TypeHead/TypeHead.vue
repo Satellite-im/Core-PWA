@@ -77,6 +77,7 @@ export default Vue.extend({
         this.searchList = this.list
         return
       }
+      if(!this.isFocus) this.isFocus = true
       this.searchList = this.list.filter((item: any) =>
         this.label
           ? item[this.label].indexOf(this.searchText) === 0
