@@ -22,7 +22,7 @@ Cypress.Commands.add('importAccount', () => {
   cy.contains(
     'Enter your 12 word pass phrase in exactly the same order your recovery seed was generated.',
   )
-  cy.get('[data-cy=add-pass-phrase]').type(
+  cy.get('[data-cy=add-passphrase]').type(
     'boring over tilt regret diamond rubber example there fire roof sheriff always',
     { log: false },
   )
