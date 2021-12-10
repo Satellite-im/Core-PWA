@@ -1,11 +1,18 @@
 <div v-if="message.replies.length" class="replies-container">
   <div v-if="!showReplies" class="reply-preview" @click="toggleReplies">
     <plus-square-icon size="1.1x" />
-    &nbsp;
-    {{ makeReplyText }}
+    &nbsp; {{ makeReplyText }}
   </div>
-  <div class="reply-container" v-if="showReplies" v-for="reply in message.replies">
-    <div class="is-reply" @mouseenter="mouseOver(reply.id)" @mouseleave="mouseOver('')">
+  <div
+    class="reply-container"
+    v-if="showReplies"
+    v-for="reply in message.replies"
+  >
+    <div
+      class="is-reply"
+      @mouseenter="mouseOver(reply.id)"
+      @mouseleave="mouseOver('')"
+    >
       <span v-on:click="showQuickProfile">
         <UiCircle type="random" :seed="reply.from" :size="35" />
       </span>
@@ -18,20 +25,44 @@
           <TypographyText :text="$dayjs(reply.at).from()" />
         </div>
         <div class="reply-content">
-          <VueMarkdown v-if="reply.type === 'text'" :source="reply.payload" class="markdown" />
-          <UiImage v-else-if="reply.type === 'image'" :source="reply.payload.url" alt="" />
-          <UiEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
-          <UiEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
-          <UiEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
-          <TailoredMessagingMessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
+          <VueMarkdown
+            v-if="reply.type === 'text'|| reply.type === 'reply'"
+            :source="reply.payload"
+            class="markdown"
+          />
+          <UiImage
+            v-else-if="reply.type === 'image'"
+            :source="reply.payload.url"
+            alt=""
+          />
+          <UiEmbedsVideoPlayer
+            v-else-if="reply.type === 'video'"
+            :data="reply.payload"
+          />
+          <UiEmbedsAudioPlayer
+            v-else-if="reply.type === 'audio'"
+            :data="reply.payload"
+          />
+          <UiEmbedsFile
+            v-else-if="reply.type === 'file'"
+            :data="reply.payload"
+          />
+          <TailoredMessagingMessageActions
+            v-if="replyHover == reply.id"
+            :hideReply="true"
+            :emojiReaction="() => emojiReaction($event, reply.id)"
+          />
         </div>
       </div>
     </div>
-    <TailoredMessagingMessageReactions :message="message" :group="group" :reply="reply"/>
+    <TailoredMessagingMessageReactions
+      :message="message"
+      :group="group"
+      :reply="reply"
+    />
   </div>
   <div v-if="showReplies" @click="toggleReplies" class="reply-close">
     <minus-square-icon size="1.1x" />
-    &nbsp;
-    {{$t('conversation.collapse')}}
+    &nbsp; {{$t('conversation.collapse')}}
   </div>
 </div>
