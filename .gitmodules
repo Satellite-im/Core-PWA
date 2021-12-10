@@ -2,7 +2,7 @@
 	path = android
 	url = https://github.com/Satellite-im/android.git
 	ignore = all
-	branch = master
+	branch = main
 [submodule "electron"]
 	path = electron
 	url = https://github.com/Satellite-im/electron.git
