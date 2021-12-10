@@ -50,6 +50,12 @@
       :source="message.payload.url"
       alt=""
     />
+    <VueMarkdown
+      v-else-if="message.type === 'glyph'"
+      :source="message.payload"
+      class="markdown"
+      @click="$emit('openGlyphModal')"
+    />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent
       v-if="message.type === 'text'"
