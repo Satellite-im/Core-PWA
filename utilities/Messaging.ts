@@ -191,8 +191,8 @@ export function updateMessageTracker(
         break
       case 'glyph':
         const glyphMessage: GlyphMessage = currentMessage
-        
-        messagesTracker[glyphMessage.id] = glyphMessage      
+
+        messagesTracker[glyphMessage.id] = glyphMessage
       default:
         break
     }
