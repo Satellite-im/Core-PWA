@@ -2,11 +2,14 @@
 	path = android
 	url = https://github.com/Satellite-im/android.git
 	ignore = all
+	branch = main
 [submodule "electron"]
 	path = electron
 	url = https://github.com/Satellite-im/electron.git
 	ignore = all
+	branch = master
 [submodule "locales"]
 	path = locales
 	url = git@github.com:Satellite-im/Translations.git
 	ignore = all
+	branch = main

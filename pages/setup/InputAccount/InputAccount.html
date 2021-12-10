@@ -10,7 +10,7 @@
       @onSelected="onSelected"
       @onMultipleSelected="onMultipleSelected"
     ></UiTypeHead>
-    <TypographyError v-if="error" :text="$t(error)" />
+    <TypographyError v-if="error" :text="$t(error)" class="input-error"/>
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">

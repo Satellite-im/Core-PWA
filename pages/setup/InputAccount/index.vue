@@ -26,18 +26,21 @@ export default Vue.extend({
     async recoverAccount() {
       try {
         const mnemonic = this.phrases.join(' ')
+        await this.$store.commit('accounts/setPhrase', mnemonic)
         await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
         await this.$store.dispatch('accounts/loadAccount')
-        this.$router.replace('/chat/direct')
       } catch (error: any) {
         this.error = error.message
+        return
       }
+      this.$router.replace('/')
     },
     isOdd(num: number) {
       return num % 2
     },
     removeWord(index: number) {
       this.phrases.splice(index, 1)
+      this.error = ''
     },
     onSelected(item: string) {
       if (this.phrases.length < 12) this.phrases.push(item)
@@ -47,7 +50,7 @@ export default Vue.extend({
         return this.bipList.indexOf(item) >= 0
       })
       filteredItems.every((item) => {
-        if (this.phrases.length < 12 && !this.phrases.includes(item)) {
+        if (this.phrases.length < 12 ) {
           this.phrases.push(item)
           return true
         }
