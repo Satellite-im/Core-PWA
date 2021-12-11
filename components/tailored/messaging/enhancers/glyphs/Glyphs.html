@@ -16,7 +16,13 @@
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
       <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
 
-      <div v-for="(pack, i) in filteredGlyphs">
+      <virtual-list 
+        :data-key="'id'"  
+        :data-sources="filteredGlyphs" 
+        :data-component="itemComponent"
+      />
+
+      <!-- <div v-for="(pack, i) in filteredGlyphs">
         <v-responsive max-height="100%">
           <UiLoadersLoadingInline :count="3" v-if="!pack.isActive" />
           <v-lazy
@@ -31,7 +37,8 @@
             </TailoredMessagingEnhancersGlyphsPack>
           </v-lazy>
         </v-responsive>
-      </div>
+      </div> -->
+      
     </UiScroll>
   </div>
 
