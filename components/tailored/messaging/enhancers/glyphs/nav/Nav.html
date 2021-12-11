@@ -5,13 +5,18 @@
     </div>
   </div>
   <div class="pack-list">
-    <div v-for="pack in $mock.glyphs" @click="$emit('navSelected', pack.name)">
-      <TailoredMessagingEnhancersGlyphsItem
-        :key="pack.id"
-        :src="pack.stickerURLs[0]"
-        :pack="pack"
-      ></TailoredMessagingEnhancersGlyphsItem>
-    </div>
+    <UiScroll horizontalScroll scrollbarVisibility="scroll" style="display: flex;">
+      <div
+        v-for="pack in $mock.glyphs"
+        @click="() => {$emit('navSelected', pack.name)}"
+      >
+        <TailoredMessagingEnhancersGlyphsItem
+          :key="pack.id"
+          :src="pack.stickerURLs[0]"
+          :pack="pack"
+        ></TailoredMessagingEnhancersGlyphsItem>
+      </div>
+    </UiScroll>
   </div>
   <div class="market-place" v-on:click="toggleMarketPlace">
     <shopping-bag-icon class="control-icon" size="1x" />
