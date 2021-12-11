@@ -2,24 +2,28 @@
   <div
     id="app-wrap"
     :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-      asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
-    } ${selectedGroup ? 'active-group' : null}`"
+      this.asidebar && this.selectedGroup
+        ? 'is-open-aside'
+        : 'is-collapsed-aside'
+    } ${this.selectedGroup ? 'active-group' : null}`"
   >
     <div
       id="app"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-        asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
-      } ${selectedGroup ? 'group' : 'direct'} ${
+        this.asidebar && this.selectedGroup
+          ? 'is-open-aside'
+          : 'is-collapsed-aside'
+      } ${this.selectedGroup ? 'group' : 'direct'} ${
         $device.isMobile ? 'mobile-app' : ''
       }`"
+      v-touch:swipe="sidebarSwipeHandler(this)"
+      v-touch-options="{ swipeTolerance: 75 }"
     >
       <UiGlobal />
       <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
-        :open-modal="toggleModal"
+        :openModal="toggleModal"
       />
       <TailoredCoreSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
@@ -29,43 +33,39 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar
-          id="statusbar"
-          :server="recipient || $mock.users[0]"
-          :user="$mock.users[0]"
-        />
+        <TailoredCoreStatusbar id="statusbar" :user="$mock.users[0]" />
         <TailoredCoreMedia
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="6"
+          :maxViewableUsers="10"
+          :fullscreenMaxViewableUsers="6"
         />
         <TailoredCoreMedia
           v-else
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="20"
+          :maxViewableUsers="10"
+          :fullscreenMaxViewableUsers="20"
         />
         <UiChatScroll
           :contents="ui.messages"
-          :prevent-scroll-offset="500"
+          :preventScrollOffset="500"
           :class="media.activeCall ? 'media-open' : ''"
-          enable-wrap
+          enableWrap
         >
           <Nuxt />
         </UiChatScroll>
         <TailoredMessagingEnhancers />
-        <TailoredWalletMini v-if="ui.modals.walletMini" />
+        <TailoredWalletMini v-if="$store.state.ui.modals.walletMini" />
         <TailoredCommandsPreview :message="ui.chatbarContent" />
         <TailoredCoreChatbarReply />
-        <TailoredCoreChatbar v-if="recipient" :recipient="recipient" />
+        <TailoredCoreChatbar :recipient="recipient" v-if="recipient" />
       </div>
       <TailoredCoreGroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
-        :selected-group="
-          $mock.groups.find((group) => group.address === selectedGroup)
+        :selectedGroup="
+          $mock.groups.find((group) => group.address === this.selectedGroup)
         "
         :friends="$mock.friends"
       />
@@ -87,7 +87,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: true,
-      asidebar: !this.$device.isMobile
+      asidebar: true,
     }
   },
   computed: {
@@ -104,13 +104,12 @@ export default Vue.extend({
       const recipient = isMe
         ? null
         : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address,
+            (friend) => friend.address === this.$route.params.address
           )
       return recipient
-    }
+    },
   },
   mounted() {
-    this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('ui/setTypingUser', this.$mock.users[0])
 
@@ -120,7 +119,7 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-  }
+  },
 })
 </script>
 

@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   methods: {
     testFunc() {
-      this.$Logger.log('User Context', 'Test func')
+      console.log('User Func')
     },
     /**
      * @method navigateToUser

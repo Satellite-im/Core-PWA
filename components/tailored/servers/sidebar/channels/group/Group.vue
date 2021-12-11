@@ -1,4 +1,4 @@
-<template src="./Group.html" />
+<template src="./Group.html"></template>
 
 <script>
 import {

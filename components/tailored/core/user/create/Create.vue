@@ -84,7 +84,7 @@ export default Vue.extend({
      */
     confirm() {
       if (this.name.length < 5) {
-        this.error = 'Username must be at least 5 characters.'
+        this.error = 'Username name must be at least 5 characters.'
         return false
       }
       this.error = ''

@@ -1,4 +1,4 @@
-<template src="./Slimbar.html" />
+<template src="./Slimbar.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'

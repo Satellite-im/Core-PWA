@@ -1,4 +1,4 @@
-<template src="./Popup.html" />
+<template src="./Popup.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 

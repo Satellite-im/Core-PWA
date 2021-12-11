@@ -1,4 +1,4 @@
-<template src="./LogoLoader.html" />
+<template src="./LogoLoader.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 

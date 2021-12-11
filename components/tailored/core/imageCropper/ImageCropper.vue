@@ -1,4 +1,4 @@
-<template src="./ImageCropper.html" />
+<template src="./ImageCropper.html"></template>
 
 <script>
 import Vue from 'vue'

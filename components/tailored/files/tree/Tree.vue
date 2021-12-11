@@ -1,4 +1,4 @@
-<template src="./Tree.html" />
+<template src="./Tree.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 

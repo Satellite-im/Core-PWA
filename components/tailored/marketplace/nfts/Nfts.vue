@@ -1,4 +1,4 @@
-<template src="./Nfts.html" />
+<template src="./Nfts.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'

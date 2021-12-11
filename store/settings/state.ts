@@ -1,6 +1,6 @@
 import { SettingsState, KeybindTypes, CaptureMouseTypes } from './types'
 
-const InitialSettingsState = (): SettingsState => ({
+const InitalSettingsState = (): SettingsState => ({
   audioInput: '',
   audioOutput: '',
   videoInput: '',
@@ -15,4 +15,4 @@ const InitialSettingsState = (): SettingsState => ({
   embeddedLinks: true,
 })
 
-export default InitialSettingsState
+export default InitalSettingsState

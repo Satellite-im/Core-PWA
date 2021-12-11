@@ -1,11 +1,11 @@
 import { UIState, GlyphMarketViewStatus } from './types'
 
-const InitialUIState = (): UIState => ({
+const InitalUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
   showSearchResult: false,
   showSettings: false,
-  settingsSideBar: true,
+  settingsSideBar: false,
   quickProfile: false,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
@@ -13,12 +13,10 @@ const InitialUIState = (): UIState => ({
   modals: {
     newfolder: false,
     createServer: false,
-    marketPlace: false,
+    showMarketPlace: false,
     wallet: false,
     quickchat: false,
     walletMini: false,
-    error: false,
-    changelog: false,
   },
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
@@ -27,17 +25,12 @@ const InitialUIState = (): UIState => ({
   enhancers: {
     show: false,
     floating: false,
-    position: [0, 0],
-    defaultWidth: '24rem',
-    defaultHeight: '30rem',
-    containerWidth: 0,
     route: 'emotes',
   },
   messages: [],
   unreadMessage: 0,
   isScrollOver: false,
   isTyping: false,
-  isReacted: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
@@ -49,4 +42,4 @@ const InitialUIState = (): UIState => ({
   recentReactions: ['👍', '😂', '♥️'],
 })
 
-export default InitialUIState
+export default InitalUIState

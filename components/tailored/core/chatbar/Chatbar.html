@@ -13,14 +13,13 @@
     <div contenteditable="true" autocapitalize="off"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       ref="messageuser"
-      :placeholder="$t('ui.talk')"
+      :placeholder="$t('global.talk')"
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
-      @drop="handleDrop"
-      @paste="handlePaste">
+      @drop="handleDrop">
     </div>
 
     <TailoredCoreChatbarControls :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
-  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
+  <TailoredCoreChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

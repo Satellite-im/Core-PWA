@@ -1,7 +1,7 @@
 import { MediaState } from './types'
 
 const InitialMediaState = (): MediaState => ({
-  incomingCall: '',
+  incomingCall: 'Phoenix Kalindi',
   activeCall: '0x0',
   streaming: true,
 })

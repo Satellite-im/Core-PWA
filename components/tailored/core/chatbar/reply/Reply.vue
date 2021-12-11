@@ -1,4 +1,4 @@
-<template src="./Reply.html" />
+<template src="./Reply.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'

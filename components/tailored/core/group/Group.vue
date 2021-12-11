@@ -35,7 +35,7 @@ export default Vue.extend({
   },
   methods: {
     testFunc(): void {
-      this.$Logger.log('Group.vue Context', 'Test Function')
+      console.log('User Func')
     },
     /**
      * @method navigateToGroup

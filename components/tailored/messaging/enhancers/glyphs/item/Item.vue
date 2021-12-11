@@ -8,12 +8,12 @@ export default Vue.extend({
   props: {
     width: {
       type: Number,
-      default: 64,
+      default: 28,
       required: false,
     },
     height: {
       type: Number,
-      default: 64,
+      default: 28,
       required: false,
     },
     src: {

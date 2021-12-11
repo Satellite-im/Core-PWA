@@ -3,6 +3,7 @@
         <div v-for="(address, i) in group.members.slice(0, 3)" :class="[`group-el-${i}`]">
             <UiCircle type="random" :seed="address" :size="i === 2 ? 10 : i == 1 ? 20 : 30" />
         </div>
+        
     </div>
     <div v-else-if="group.members.length == 2" class="group-double">
         <div v-for="(address, i) in group.members" :class="[`group-el-${i}`]">

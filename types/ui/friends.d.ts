@@ -6,8 +6,6 @@ export interface EncryptedFriend extends User {
 }
 
 export interface Friend extends EncryptedFriend {
-  publicKey: string
-  typingState: 'TYPING' | 'NOT_TYPING'
   textilePubkey: string
   item: any // TODO remove unnecessary properties
   pending: Boolean

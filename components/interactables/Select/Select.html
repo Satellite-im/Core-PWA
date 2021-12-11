@@ -2,11 +2,11 @@
   :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`"
   v-click-outside="() => open = false"
 >
-  <div :class="{'custom-select': true, open, up, down: !up}">
-    <div class="selected" @click="toggleOpen()">
+  <div class="custom-select">
+    <div class="selected" :class="{ open: open }" @click="open = !open">
       {{ getSelectLabel() }}
     </div>
-    <div class="items">
+    <div class="items" :class="{ selectHide: !open }">
       <div
         v-for="(option, i) of options"
         :key="i"

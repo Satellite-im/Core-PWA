@@ -3,57 +3,46 @@
     <thead>
       <th>
         {{ $t('pages.files.browse.name') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.modified') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.type') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.encrypted') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th>
         {{ $t('pages.files.browse.size') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
-      <th />
+      <th></th>
     </thead>
     <tbody>
-      <tr v-for="i in rows"
-:key="i">
+      <tr v-for="i in rows" :key="i">
         <td class="filename">
           <div class="filename-item">
-            <div class="placeholder-item icon" />
-            <div class="placeholder-item" />
+            <div class="placeholder-item icon"></div>
+            <div class="placeholder-item"></div>
           </div>
         </td>
-        <td v-if="!$device.isMobile"
-class="modified">
-          <div class="placeholder-item" />
+        <td v-if="!$device.isMobile" class="modified">
+          <div class="placeholder-item"></div>
         </td>
-        <td v-if="!$device.isMobile"
-class="type">
-          <div class="placeholder-item" />
+        <td v-if="!$device.isMobile" class="type">
+          <div class="placeholder-item"></div>
         </td>
-        <td v-if="!$device.isMobile"
-class="encrypted">
-          <div class="placeholder-item" />
+        <td v-if="!$device.isMobile" class="encrypted">
+          <div class="placeholder-item"></div>
         </td>
-        <td class="size">
-          <div class="placeholder-item" />
-        </td>
+        <td class="size"><div class="placeholder-item"></div></td>
         <td class="options">
-          <div class="placeholder-item" />
+          <div class="placeholder-item"></div>
         </td>
       </tr>
     </tbody>

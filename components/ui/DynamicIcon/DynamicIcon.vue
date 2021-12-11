@@ -14,9 +14,6 @@
     <check-icon v-if="icon === 'check'" :size="size" />
     <plus-icon v-if="icon === 'plus'" :size="size" />
     <x-icon v-if="icon === 'x'" :size="size" />
-    <message-square-icon v-if="icon === 'message-square'" :size="size" />
-    <layout-icon v-if="icon === 'layout'" :size="size" />
-
   </span>
 </template>
 <script lang="ts">
@@ -37,9 +34,6 @@ import {
   VerifiedIcon,
   PlusIcon,
   XIcon,
-  MessageSquareIcon,
-  LayoutIcon,
-
 } from 'satellite-lucide-icons'
 
 type Icon =
@@ -57,8 +51,6 @@ type Icon =
   | 'verified'
   | 'plus'
   | 'x'
-  | 'message-square'
-  | 'layout'
 
 export default Vue.extend({
   components: {
@@ -76,8 +68,6 @@ export default Vue.extend({
     VerifiedIcon,
     PlusIcon,
     XIcon,
-    MessageSquareIcon,
-    LayoutIcon,
   },
   props: {
     size: {

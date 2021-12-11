@@ -5,6 +5,8 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+// import { Keybinds } from '~/components/mixins/UI/Keybinds'
+
 export default Vue.extend({
   name: 'KeybindSettings',
   /*  mixins: [Keybinds], */
@@ -31,7 +33,7 @@ export default Vue.extend({
      * @example
      */
     editKeybind(keybind: String) {
-      this.$store.dispatch('ui/clearKeybinds')
+      this.clearKeybinds()
       window.addEventListener('keydown', this.recordKeybind)
       this.$data.editingKeybind.name = keybind
       this.$data.editingKeybind.status = true
@@ -75,7 +77,7 @@ export default Vue.extend({
       })
       this.$data.editingKeybind.newString = ''
       this.$data.editingKeybind.status = false
-      this.$store.dispatch('ui/activateKeybinds')
+      this.activateKeybinds()
     },
     /**
      * @method cancelKeybind DocsTODO
@@ -88,7 +90,7 @@ export default Vue.extend({
       this.$data.editingKeybind.status = false
       this.$data.editingKeybind.errorMessage = ''
       this.$data.editingKeybind.error = false
-      this.$store.dispatch('ui/activateKeybinds')
+      this.activateKeybinds()
     },
     /**
      * @method clearKeybind DocsTODO
@@ -122,7 +124,7 @@ export default Vue.extend({
         keybindName: 'callActiveChat',
         newKeybind: 'alt+c',
       })
-      this.$store.dispatch('ui/activateKeybinds')
+      this.activateKeybinds()
     },
     /**
      * @method errorCheck DocsTODO

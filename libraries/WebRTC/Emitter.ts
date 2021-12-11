@@ -1,64 +1,66 @@
-/**
- * @class Emitter
- * @description The emitter class provides an interface for
- * listening and emitting custom events in a strongly typed way
- */
-export default class Emitter<
-  Listeners extends { [key in keyof Listeners]: (...args: any[]) => any },
-> {
-  private _events: { [key in keyof Listeners]?: Array<Listeners[key]> } = {}
+import {
+  WebRTCEventBox,
+  WebRTCEvents,
+  WebRTCEvent,
+  WebRTCData,
+} from '~/libraries/WebRTC/types'
+
+export default class Emitter {
+  private _events: typeof WebRTCEventBox = WebRTCEventBox
 
   /**
    * @method on
-   * @description Bind event listeners
-   * @param event Name of the event to listen to
-   * @param listener to call on any Event
-   * @example Emitter.on('EVENT_NAME', (parameter: ParameterType) => {})
+   * @description Bind event listeners to WebRTCEvents
+   * @param event WebRTCEvent to listen to
+   * @param listener to call on any WebRTC Event
+   * @example Emitter.on(WebRTCEvents.INIT, () => {})
    */
-  on<T extends keyof Listeners>(event: T, listener: Listeners[T]) {
-    if (!this._events[event]) {
-      this._events[event] = []
-    }
-
-    this._events[event]!.push(listener)
+  on(event: WebRTCEvent, listener: Function) {
+    this._events[WebRTCEvents[event]].push(listener)
   }
 
   /**
    * @method off
    * @description Removes an event listener from the listener box
-   * @param event Name of the event to unsubscribe from
+   * @param event WebRTCEvent to unsubscribe from
    * @param listener Listener function to remove
-   * @example Emitter.off("EVENT_NAME", (parameter: ParameterType) => {})
+   * @example Emitter.off(WebRTCEvents.INIT, () => {})
    */
-  off<T extends keyof Listeners>(event: T, listenerToRemove: Listeners[T]) {
-    if (!this._events[event]) {
+  off(event: WebRTCEvent, listenerToRemove: Function) {
+    if (!this._events[WebRTCEvents[event]]) {
       throw new Error(
-        `Can't remove a listener. Event "${event}" doesn't exits.`,
+        `Can't remove a listener. Event "${event}" doesn't exits.`
       )
     }
 
-    const filteredListeners = this._events[event]!.filter(
-      (listener: Listeners[T]) => listener !== listenerToRemove,
-    )
+    const filterListeners = (listener: Function) =>
+      listener !== listenerToRemove
 
-    this._events[event] = filteredListeners
+    this._events[WebRTCEvents[event]] =
+      this._events[WebRTCEvents[event]].filter(filterListeners)
   }
 
   /**
    * @method emit
    * @description Emits an event to all listeners
-   * @param event Name of the event to emit
+   * @param event WebRTCEvent to emit
    * @param data Data to provide to listeners
-   * @example Emitter.emit('EVENT_NAME', {eventParam, otherParam})
+   * @example Emitter.emit(WebRTCEvents.INIT, 'something')
    */
-  protected emit<T extends keyof Listeners>(
-    event: T,
-    ...[data]: Parameters<Listeners[T]>
-  ) {
-    if (!this._events[event]) {
-      return
+  protected emit(event: WebRTCEvent, data: any) {
+    if (!this._events[WebRTCEvents[event]]) {
+      throw new Error(`Can't emit an event. Event "${event}" doesn't exits.`)
     }
 
-    this._events[event]!.forEach((cb) => cb(data))
+    const fireCallbacks = (callback: Function) => {
+      // eslint-disable-next-line node/no-callback-literal
+      callback({
+        at: Date.now(),
+        event: WebRTCEvents[event],
+        data,
+      } as Object as WebRTCData)
+    }
+
+    this._events[WebRTCEvents[event]].forEach(fireCallbacks)
   }
 }

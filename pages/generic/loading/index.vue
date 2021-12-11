@@ -81,7 +81,7 @@ export default Vue.extend({
      * @example
      */
     completeState() {
-      this.$data.step = 'State Initialized'
+      this.$data.step = 'State Initalized'
       this.$data.stepsCompleted += 1
     },
   },

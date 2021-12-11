@@ -1,4 +1,4 @@
-<template src="./Error.html" />
+<template src="./Error.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 

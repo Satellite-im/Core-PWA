@@ -1,28 +1,16 @@
-<template src="./MostUsed.html" />
+<template src="./MostUsed.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ImageIcon,
-} from 'satellite-lucide-icons'
+import { ChevronDownIcon, ImageIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {
     ChevronDownIcon,
-    ChevronUpIcon,
     ImageIcon,
   },
   data() {
-    return {
-      isOpen: true,
-    }
-  },
-  methods: {
-    togglePack() {
-      this.isOpen = !this.isOpen
-    },
+    return {}
   },
 })
 </script>

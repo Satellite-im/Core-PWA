@@ -27,7 +27,6 @@
   .info-toggle {
     font-size: 20px;
     color: @primary-color;
-    cursor: pointer;
     position: absolute;
     left: -5rem;
     top: 1.8rem;
@@ -91,22 +90,10 @@
     top: 0px;
     z-index: @base-z-index + 101;
     background: @dark-gradient;
-    width: 100%;
-
-    #aside-box {
-      margin-left:  @normal-spacing;
-    }
-
-    .info-toggle {
-      left: -2rem;
-    }
   }
   .is-open {
     #aside {
-      transform: translateX(100%);
-      .info-toggle {
-        left: 0rem;
-      }
+      transform: translateX(calc(@sidebar-size));
     }
   }
 }

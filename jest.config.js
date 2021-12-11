@@ -1,35 +1,18 @@
-module.exports = {
-  preset: 'ts-jest',
-  collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
-    '!**/*.d.ts',
-    '!**/node_modules/**',
-    '!**/*.config.js',
-    '!**/*.config.ts',
-    '!**/config.ts',
-    '!**/startup.js',
-    '!**/*.eslintrc.js'
-  ],
-  moduleDirectories: ['node_modules', 'src'],
+export default {
   moduleNameMapper: {
-    '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-    '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js'
+    '^@/(.*)$': '<rootDir>/$1',
+    '^~/(.*)$': '<rootDir>/$1',
+    '^vue$': 'vue/dist/vue.common.js',
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  coveragePathIgnorePatterns: [
-    '<rootDir>/.nuxt',
-    '<rootDir>/cypress',
-    '<rootDir>/coverage',
-    '<rootDir>/plugins'
-  ],
-  testEnvironment: 'jsdom',
+  moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest']
+    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.js$': 'babel-jest',
+    '.*\\.(vue)$': 'vue-jest',
   },
-  transformIgnorePatterns: [
-    '/node_modules/',
-    'node_modules/(?!@mylibrary/)',
-    '^.+\\.module\\.(css|sass|scss)$'
-  ]
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/components/**/*.vue',
+    '<rootDir>/pages/**/*.vue',
+  ],
 }

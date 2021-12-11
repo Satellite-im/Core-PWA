@@ -4,9 +4,4 @@ export interface AudioState {
   muted: Boolean
   volume: Number
   deafened: Boolean
-  sounds: {
-    inboundMedia: Number
-    outboundMedia: Number
-    system: Number
-  }
 }

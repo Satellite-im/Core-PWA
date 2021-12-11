@@ -1,7 +1,7 @@
 import { FilesState } from './types'
 
-const InitialFilesState = (): FilesState => ({
+const InitalFilesState = (): FilesState => ({
   tree: [],
 })
 
-export default InitialFilesState
+export default InitalFilesState

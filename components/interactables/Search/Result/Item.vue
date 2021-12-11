@@ -23,11 +23,13 @@ declare module 'vue/types/vue' {
 }
 export default Vue.extend({
   props: {
-    data: {
-      type: Object as PropType<SearchResultItem>,
-      default: {} as SearchResultItem,
-    }
-  }
+    data() {
+      return {
+        type: Object as PropType<SearchResultItem>,
+        default: {} as SearchResultItem,
+      }
+    },
+  },
 })
 </script>
 <style scoped lang="less">

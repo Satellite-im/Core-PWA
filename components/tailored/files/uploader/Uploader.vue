@@ -1,7 +1,6 @@
 <template src="./Uploader.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { Config } from '~/config'
 
 import { FileIcon, SlashIcon } from 'satellite-lucide-icons'
 
@@ -34,7 +33,7 @@ export default Vue.extend({
     nsfw: {
       type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
-      default: { status: false, checking: false, tooLarge: false },
+      default: { status: false, checking: false },
     },
   },
   methods: {
@@ -51,7 +50,9 @@ export default Vue.extend({
      */
     isEmbedableImage(filename: string): boolean {
       // eslint-disable-next-line prefer-regex-literals
-      const imageFormatsRegex = new RegExp(Config.regex.image)
+      const imageFormatsRegex = new RegExp(
+        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
+      )
       return imageFormatsRegex.test(filename.toLowerCase())
     },
   },

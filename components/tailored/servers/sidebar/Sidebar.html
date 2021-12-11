@@ -1,6 +1,9 @@
 <div id="sidebar" 
-  class="collapsed">
-  <div class="sidebar-inner sidebar-inner-streaming">
+  class="collapsed" 
+  v-touch:swipe="toggle"
+  v-touch-options="{ swipeTolerance: 75 }"
+  >
+  <div class="sidebar-inner">
     <div class="sidebar-search">
       <menu-icon
         class="toggle-sidebar"
@@ -9,7 +12,7 @@
         full-width
       />
       <InteractablesInput
-        :placeholder="`${$t('ui.search')}...`"
+        :placeholder="`${$t('global.search')}...`"
         size="small"
         input-kind="text"
         :delete-icon="true"
@@ -17,21 +20,11 @@
         full-width
       />
     </div>
-    <div class="scrolling hidden-scroll" v-scroll-lock="true">
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <TailoredServersSidebarChannels />
-      </UiScroll>
-    </div>
+    <TailoredServersSidebarChannels />
   </div>
-  <div class="filler"
-    v-touch:swipe="toggle"
-    v-touch-options="{ swipeTolerance: 75 }"
-  ></div>
+  <div class="filler"></div>
 
-  <div class="controls"
-    v-touch:swipe="toggle"
-    v-touch-options="{ swipeTolerance: 75 }"
-  >
+  <div class="controls">
     <TailoredCoreSidebarControls />
     <TailoredCoreSidebarStatus />
   </div>

@@ -1,4 +1,4 @@
-<template src="./Create.html" />
+<template src="./Create.html"></template>
 
 <script>
 import Vue from 'vue'
@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   watch: {
     friends(newFriends) {
-      this.$Logger.log('Friends Watcher', 'New Friends', newFriends)
+      console.log(newFriends)
     },
   },
   methods: {

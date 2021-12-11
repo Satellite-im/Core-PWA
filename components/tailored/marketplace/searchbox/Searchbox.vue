@@ -1,4 +1,4 @@
-<template src="./Searchbox.html" />
+<template src="./Searchbox.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
