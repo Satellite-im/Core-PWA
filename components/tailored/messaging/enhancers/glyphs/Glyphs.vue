@@ -1,6 +1,8 @@
 <template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import VirtualList from 'vue-virtual-scroll-list'
+import Item from './packGroup/packGroup.vue'
 
 export default Vue.extend({
   data() {
@@ -8,7 +10,11 @@ export default Vue.extend({
       filteredGlyphs: this.$mock.glyphs,
       searchText: '',
       selectedPack: null,
+      itemComponent: Item
     }
+  },
+  components: {
+    'virtual-list': VirtualList
   },
   watch: {
     searchText() {
@@ -17,13 +23,15 @@ export default Vue.extend({
   },
   methods: {
     filter(filterValue: any) {
-      this.filteredGlyphs = Object.entries(this.$mock.glyphs).reduce(
-        (prev, [key, value]: [string, any]) => ({
-          ...prev,
-          ...(value?.name?.includes(filterValue) ? { [key]: value } : {}),
-        }),
-        {}
-      )
+      // this.filteredGlyphs = Object.entries(this.$mock.glyphs).reduce(
+      //   (prev, [key, value]: [string, any]) => ({
+      //     ...prev,
+      //     ...(value?.name?.includes(filterValue) ? { [key]: value } : {}),
+      //   }),
+      //   {}
+      // )
+
+      this.filteredGlyphs = this.$mock.glyphs.filter((e: any) => e.name.includes(filterValue))
     },
   },
 })
