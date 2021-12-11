@@ -15,6 +15,9 @@ import {
 import { UploadDropItemType } from '~/types/files/file'
 import {Friend} from "~/types/ui/friends";
 import {mapState} from "vuex";
+import TextileManager from "~/libraries/Textile/TextileManager";
+import FileC from "~/libraries/Textile/FileC";
+import BucketManager from "~/libraries/Textile/BucketManager";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -46,6 +49,13 @@ export default Vue.extend({
       files: [] as Array<UploadDropItemType>,
       uploadStatus: false,
       count_error: false,
+      progress: 0,
+      ipfsHash: false,
+      selectedFile: false,
+      imageURL: null,
+      fileClass: false,
+      error: false,
+      aiScanning: false
     }
   },
   computed: {
@@ -55,17 +65,17 @@ export default Vue.extend({
     },
   },
   methods: {
-    sendMessage() {
-        this.$store.dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
-          file: this.$data.files[0]
-        })
-
+    // sendMessage() {
+        // this.$store.dispatch('textile/sendFileMessage', {
+        //   to: this.recipient.textilePubkey,
+        //   file: this.$data.files[0]
+        // }
+        // )
       // const messageBox = this.$refs.messageuser as HTMLElement
       // // Clear Chatbar
       // messageBox.innerHTML = ''
       // this.value = ''
-    },
+    // },
     /**
      * @method handleFile
      * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
@@ -149,6 +159,38 @@ export default Vue.extend({
       this.$data.uploadStatus = false
       this.$data.count_error = false
     },
+    /** @method
+     * Setter
+     * Uploads the file to IPFS. Progress will be updated on the
+     * component for tracking in progress bars and watching
+     * @name sendToIpfs
+     * @argument file the file to be uploaded to IPFS
+     */
+    async sendMessage () {
+      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+      const path = `/uploads/${this.$data.files[0].file.name}`
+      console.log(this.$data.files[0].file)
+      $TextileManager.bucketManager?.getBucket()
+      const result = await $TextileManager.bucketManager?.pushFile(
+        this.$data.files[0].file,
+        path,
+        (progress: number) => {
+           progress
+        }
+      )
+      console.log(result)
+      this.imageURL = `https://hub.textile.io${result.root}${path}`
+      // this.$store.commit('setStatus', 'Uploading file to IPFS')
+      // this.ipfsHash = result.root.replace('/ipfs/', '')
+      this.fileClass = new FileC(
+        this.imageURL,
+        this.ipfsHash,
+        this.selectedFile
+      )
+      // Update file index
+      $TextileManager.bucketManager?.addToIndex(this.$data.files, result.root, path)
+
+    }
   },
 })
 </script>

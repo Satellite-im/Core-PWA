@@ -16,7 +16,7 @@ import {TextileInitializationData} from "~/types/textile/manager";
 // TODO: Buckets are not yet secure
 // encrypt storage and allow the recipent to decrypt with
 // their priv key.
-export class BucketManager {
+export default class BucketManager {
   buckets: Buckets | null;
   bucketKey: Root["key"] | null;
   textile: TextileInitializationData
@@ -41,13 +41,14 @@ export class BucketManager {
     if (!Config.textile.key) {
       throw new Error('Textile key not found')
     }
-    const buckets = await Buckets.withKeyInfo({key: Config.textile.key});
-    await buckets.getToken(this.identity)
-    const result = await buckets.getOrCreate(`com.github.vault74.${this.identity}.uploads`);
+    this.buckets = await Buckets.withKeyInfo({key: Config.textile.key});
+    await this.buckets.getToken(this.identity)
+    const result = await this.buckets.getOrCreate(`com.github.vault74.${this.identity}.uploads`);
     if (!result.root) throw new Error('failed to open buckets');
-    this.buckets = buckets;
     this.bucketKey = result.root.key;
+    console.log(this.buckets)
     await this.ensureIndex();
+
   }
 
   async removeFromIndex(file: File) {
@@ -107,6 +108,7 @@ export class BucketManager {
       ],
     };
     // Store the index in the Bucket (or in the Thread later)
+    console.log(index)
     const buf = Buffer.from(JSON.stringify(index, null, 2));
     await this.buckets.pushPath(this.bucketKey, path, buf);
   }
@@ -151,19 +153,26 @@ export class BucketManager {
   }
 
   async pushFile(file: File, path: string, progress: CallableFunction) : Promise<PushPathResult | Error> {
+    await this.init();
+    console.log(this.buckets, "buckets")
     return new Promise((resolve, reject) => {
       console.log(this.buckets, "buckets")
+
       const reader = new FileReader();
       reader.onabort = () => reject('file reading was aborted');
       reader.onerror = () => reject('file reading has failed');
       reader.onload = () => {
+        // if (!this.buckets) {
+        //   this.init()
+        // }
         if (!this.buckets || !this.bucketKey) {
           resolve(new Error('Please init first'));
           return;
         }
         const binaryStr = reader.result;
         // Finally, push the full file to the bucket
-        this.buckets.pushPath(this.bucketKey, '/index.html', binaryStr).then((raw) => {
+        console.log(binaryStr)
+        this.buckets.pushPath(this.bucketKey, `${this.prefix}${path}`, binaryStr).then((raw) => {
           resolve(raw);
           console.log(resolve(raw), "RESOLVE")
         }).catch(error => console.log(error));
