@@ -1,39 +1,38 @@
 <div class="message-actions">
   <div
     class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('ui.glyphs')"
-    @click="emojiReaction"
+    :data-tooltip="$t('global.glyphs')"
   >
     <smile-icon
       size="1x"
       :class="`control-icon emoji-icon ${ui.enhancers.show ? 'primary' : ''}`"
+      @click="emojiReaction"
     />
   </div>
   <div
     v-if="!hideReply"
     class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('messaging.reply')"
+    :data-tooltip="$t('global.reply')"
     @click="setReplyChatbarContent"
   >
     <corner-down-right-icon size="1x" :class="'control-icon'" />
   </div>
   <div
     class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('messaging.pin')"
+    :data-tooltip="$t('global.pin')"
   >
     <archive-icon size="1x" :class="'control-icon'" />
   </div>
   <div
     class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('controls.edit')"
-    v-if="message.from === accounts.details.textilePubkey"
-    @click="editMessage"
+    :data-tooltip="$t('global.edit')"
   >
-    <edit-icon size="1x" :class="'control-icon'" />
+    <edit-icon size="1x" :class="'control-icon'"
+      @click="editMessage" />
   </div>
   <div
     class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('ui.more')"
+    :data-tooltip="$t('global.more')"
   >
     <more-vertical-icon size="1x" :class="'control-icon'" />
   </div>

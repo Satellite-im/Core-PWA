@@ -5,6 +5,6 @@
     <UiSpacer :height="20" />
     <InteractablesButton full-width :text="$t('pages.disclaimer.create')" :action="() => { generateWallet() }" :loading="isLoading"/>
     <TypographySubtitle :size="6" :text="$t('pages.disclaimer.or')" class="centered-subtitle" />
-    <InteractablesButton full-width type="dark" :action="() => { importAccount() }" :text="$t('pages.disclaimer.import')" />
+    <InteractablesButton full-width disabled type="dark" :text="$t('pages.disclaimer.import')" />
   </div>
 </div>

@@ -3,7 +3,7 @@
     :type="audio.muted ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    :data-tooltip="$t('controls.mute')"
+    :data-tooltip="$t('global.mute')"
     :action="toggleMute"
     :text="$t('controls.mic')">
     <mic-off-icon v-if="audio.muted" size="1x"></mic-off-icon>
@@ -13,7 +13,7 @@
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    :data-tooltip="$t('controls.deafen')"
+    :data-tooltip="$t('global.deafen')"
     :action="toggleDeafen"
     :text="$t('controls.headphones')">
     <headphones-icon size="1x"></headphones-icon>
@@ -22,7 +22,7 @@
     :type="video.disabled ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
-    :data-tooltip="$t('controls.toggle')"
+    :data-tooltip="$t('global.toggle')"
     :text="$t('controls.video')"
     :action="toggleVideo"
     >

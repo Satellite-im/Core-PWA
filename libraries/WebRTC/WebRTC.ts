@@ -1,19 +1,17 @@
+import { WebRTCUser } from '~/types/webrtc/User'
+
 import { Config } from '~/config'
-import Vue from 'vue'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
-import { Wire } from '~/libraries/WebRTC/Wire'
-import { WebRTCEventListeners, WireEvents } from '~/libraries/WebRTC/types'
-import { Peer } from './Peer'
-import { WebRTCError } from '~/store/webrtc/types'
+import { WebRTCEvents } from '~/libraries/WebRTC/types'
 
-export default class WebRTC extends Emitter<WebRTCEventListeners> {
+export default class WebRTC extends Emitter {
   // Identifier to connect to signaling server with
-  originator?: string
+  id: string | undefined
   // If this is undefined, the WebRTC services cannot run
-  initialized?: boolean
+  initalized: boolean | undefined
   // List of peers we're actively or have been connected to
-  peers: Map<string, Peer>
+  peers: Map<string, WebRTCUser> | undefined
 
   // --- Internal ---
   //
@@ -30,17 +28,15 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method init
    * @description Bind required startup data to the WebRTC class
-   * @param originator identifier of the current user
+   * @param id identifier to connect to the signaling server with
    * @example
    */
-  init(originator: string) {
-    this.originator = originator
+  init(id: string) {
+    this.id = id
 
-    this.initialized = true
+    this.initalized = true
     this._runQueue()
-    this.emit('INIT')
-
-    Vue.prototype.$Logger.log('WebRTC', 'Initialized', { originator: this.originator, announceURLs: this._announceURLs })
+    this.emit(WebRTCEvents.INIT, '')
   }
 
   /**
@@ -88,39 +84,12 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @method _connect
    * @description Internal abstraction of connect to allow for connection queueing
    * @param peerId identifier of peer we're connecting to
-   * @param channel Secret communication channel you want to connect with
    * @returns
    * @example
    */
-  protected _connect(peerId: string, channel: string): void {
-    if (!this.initialized || !this.originator) {
-      throw new Error(WebRTCError.NOT_INITIALIZED)
-    }
-
-    // Avoid multiple connections to the same peer
-    if (this.peers.has(peerId)) {
-      return
-    }
-
-    const peer = new Peer(this.originator, peerId, channel, this._announceURLs)
-
-    this._bindWireListeners(peer.communicationBus)
-
-    this.peers.set(peerId, peer)
-  }
-
-  protected _bindWireListeners(wire: Wire) {
-    wire.on('CONNECT', ({ peerId }) => {
-      this.emit('PEER_CONNECT', { peerId })
-    })
-
-    wire.on('DATA', ({ peerId, data }) => {
-      Vue.prototype.$Logger.log('WebRTC', 'DATA', { peerId, data })
-    })
-
-    wire.on('ERROR', ({ peerId, error }) => {
-      Vue.prototype.$Logger.log('WebRTC', 'ERROR', { peerId, error })
-    })
+  protected _connect(peerId: string): void {
+    console.log('connecting to', peerId)
+    return undefined
   }
 
   // --- Public Methods ---
@@ -141,27 +110,26 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
 
   /**
    * @method getPeer
-   * @description Get a Wire from the list of connected peers
+   * @description Get a WebRTCUser from the list of connected peers
    * @param peerId identifier of peer we're seeking
    * @returns
    * @example
    */
-  getPeer(peerId: string): Peer | undefined {
-    return this.peers.get(peerId)
+  getPeer(peerId: string): WebRTCUser | undefined {
+    return this.peers?.get(peerId)
   }
 
   /**
    * @method connect
    * @description Connect to a new peer
    * @param peerId identifier of peer we're connecting to
-   * @param channel Secret communication channel you want to connect with
    * @example
    */
-  connect(peerId: string, channel: string) {
-    if (!this.initialized) {
-      this._queue(() => this._connect(peerId, channel))
+  connect(peerId: string) {
+    if (!this.initalized) {
+      this._queue(() => this._connect(peerId))
     } else {
-      this._connect(peerId, channel)
+      this._connect(peerId)
     }
   }
 }

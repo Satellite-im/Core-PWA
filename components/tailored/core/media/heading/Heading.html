@@ -5,7 +5,7 @@
     <div
       v-bind:key="ui.fullscreen"
       class="has-tooltip has-tooltip-primary has-tooltip-left"
-      :data-tooltip="ui.fullscreen ? $t('ui.exit_fullscreen') : $t('ui.fullscreen')"
+      :data-tooltip="ui.fullscreen ? $t('global.exit_fullscreen') : $t('global.fullscreen')"
       @click="toggleFullscreen"
     >
       <minimize-icon v-if="ui.fullscreen" size="1.2x" />

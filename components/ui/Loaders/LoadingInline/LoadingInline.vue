@@ -1,4 +1,4 @@
-<template src="./LoadingInline.html" />
+<template src="./LoadingInline.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 

@@ -50,7 +50,7 @@
     .media-open {
       width: 100%;
       flex: 1;
-      transition: flex 0.3s;
+      transition: flex .3s;
     }
 
     #chatbar {
@@ -123,9 +123,6 @@
     #statusbar {
       padding-left: 3rem;
     }
-    .breadcrumb {
-      padding-top: @xlarge-spacing + @light-spacing;
-    }
   }
 
   &.is-collapsed-aside {
@@ -171,14 +168,8 @@
       pointer-events: all;
     }
   }
-  #app {
-    &.is-collapsed-aside {
-      #aside {
-        transform: translateX(100%);
-      }
-    }
-  }
 }
+
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
   .media-open {

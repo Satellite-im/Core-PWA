@@ -1,4 +1,4 @@
-<template src="./Personalize.html" />
+<template src="./Personalize.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'

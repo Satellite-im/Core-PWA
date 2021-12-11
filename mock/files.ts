@@ -1,5 +1,4 @@
 import { FileType, Folder } from '~/types/files/file'
-import { Config } from '~/config'
 
 export const Files = {
   name: 'root',
@@ -144,7 +143,7 @@ export const Files = {
           modified: 1620871715645,
           type: 'file/markdown',
           size: 8203451,
-          location: `${Config.ipfs.gateway}12jfa9sdf01234`,
+          location: 'https://ifps.io/ipfs/12jfa9sdf01234',
         } as FileType,
         {
           name: 'Some File 2',

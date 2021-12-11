@@ -22,11 +22,10 @@ function messageRepliesToUIReplies(
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
   reactions.forEach((reactionMessage) => {
-    let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-    if (!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
+    const reactors = groupedReactions[reactionMessage.payload]?.reactors || []
     groupedReactions[reactionMessage.payload] = {
       emoji: reactionMessage.payload,
-      reactors,
+      reactors: [...reactors, reactionMessage.from],
       showReactors: true,
     }
   })
@@ -63,20 +62,6 @@ export function groupMessages(
       ? dayjs(currentMessage.at).isSame(prevMessage.at, 'day')
       : false
 
-    let isSameGroup
-    if (!prevMessage) {
-      isSameGroup = false
-    } else {
-      const currentAt = dayjs(currentMessage.at)
-      const prevAt = dayjs(prevMessage.at)
-      if (!dayjs().isSame(currentAt, 'day')) {
-        isSameGroup = currentAt.isSame(prevAt, 'day')
-      } else {
-        const prevAt = dayjs(prevMessage.at)
-        isSameGroup = currentAt.diff(prevAt, 'minutes') < 15 ? true : false
-      }
-    }
-
     // Eventually place a divider if the day changes
     if (!isSameDay) {
       groupedMessages.push({
@@ -96,7 +81,7 @@ export function groupMessages(
       groupedMessages.length === 0 ||
       groupOrDivider?.type === 'divider' ||
       !isSameSender ||
-      (prevMessage && !isSameGroup)
+      (prevMessage && !isSameDay)
 
     if (isNewGroup) {
       groupedMessages.push({
@@ -201,32 +186,8 @@ export function getUsernameFromState(
   const username = isMe
     ? accountDetails.name
     : state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey
-    )?.name || 'unknown'
+        (friend) => friend.textilePubkey === textilePublicKey
+      )?.name || 'unknown'
 
   return username
-}
-
-export function getAddressFromState(
-  textilePublicKey: string,
-  state: RootState
-) {
-  const address =
-    state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey
-    )?.address || 'unknown'
-
-  return address
-}
-
-export function refreshTimestampInterval(
-  timestamp: number,
-  action: (timePassed: string) => any,
-  interval: number
-) {
-  return setInterval(() => {
-    const updatedTimestamp = dayjs(timestamp).fromNow()
-
-    action(updatedTimestamp)
-  }, interval)
 }

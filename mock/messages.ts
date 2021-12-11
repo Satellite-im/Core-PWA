@@ -1,5 +1,3 @@
-import { Config } from '~/config'
-
 export type Message = {
   id: string
   from: string
@@ -79,7 +77,7 @@ export const Messages = [
           filename: 'satellite.tar.gz',
           type: 'application/tar',
           size: 19203,
-          src: `${Config.ipfs.gateway}QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9`,
+          src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
         replies: [],
         reactions: [],
@@ -140,7 +138,7 @@ export const Messages = [
           filename: 'satellite.tar.gz',
           type: 'application/tar',
           size: 19203,
-          src: `${Config.ipfs.gateway}QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9`,
+          src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
         replies: [],
         reactions: [],
@@ -289,7 +287,7 @@ export const Messages = [
           title: 'Break Away',
           author: 'Test Audio',
           filename: 'breakaway.mp3',
-          src: `${Config.ipfs.gateway}QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9`,
+          src: 'https://gateway.pinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9',
         },
         replies: [],
         reactions: [

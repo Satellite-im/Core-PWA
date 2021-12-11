@@ -2,7 +2,7 @@
   position: relative;
   padding: @light-spacing @normal-spacing;
   display: flex;
-  align-items: center;
+  align-content: center;
   user-select: none;
   border-radius: @corner-rounding;
   margin: 0 @light-spacing;
@@ -39,6 +39,47 @@
 
   .spacer {
     flex: 1;
+  }
+  .status {
+    position: absolute;
+    top: calc(28px + @light-spacing);
+    left: calc(25px + @normal-spacing);
+    font-size: @mini-text-size;
+    text-shadow: 0 0 3px #000;
+
+    circle {
+      stroke: @dark-gray;
+      stroke-width: 5;
+      paint-order: stroke;
+    }
+    &.is-online {
+      color: @green;
+      fill: @green;
+    }
+    &.is-offline {
+      color: @gray;
+      fill: @gray;
+    }
+    &.is-idle {
+      color: @yellow;
+      fill: @yellow;
+    }
+  }
+
+  .mobile-status {
+    position: absolute;
+    top: calc(28px + @light-spacing);
+    left: calc(25px + @normal-spacing);
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    path {
+      stroke: @dark-gray;
+      stroke-width: 30;
+    }
+    &.is-mobile {
+      color: @green;
+    }
   }
 }
 

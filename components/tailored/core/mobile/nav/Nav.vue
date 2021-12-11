@@ -1,4 +1,4 @@
-<template src="./Nav.html" />
+<template src="./Nav.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'

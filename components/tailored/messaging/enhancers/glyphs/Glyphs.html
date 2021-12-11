@@ -1,39 +1,23 @@
 <div id="glyphs">
   <div class="search-glyph-box">
     <InteractablesInput
-      :placeholder="$t('ui.search')"
+      :placeholder="$t('global.search')"
       size="small"
       v-model="searchText"
       input-kind="text"
       type="primary"
     />
   </div>
-
-  <TailoredMessagingEnhancersGlyphsNav
-    @navSelected="(val) => {filter(val)}"
-  ></TailoredMessagingEnhancersGlyphsNav>
+  <TailoredMessagingEnhancersGlyphsNav @navSelected="(val) => {filter(val)}"></TailoredMessagingEnhancersGlyphsNav>
   <div class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
       <TailoredMessagingEnhancersGlyphsMostUsed></TailoredMessagingEnhancersGlyphsMostUsed>
-
-      <div v-for="(pack, i) in filteredGlyphs">
-        <v-responsive max-height="100%">
-          <UiLoadersLoadingInline :count="3" v-if="!pack.isActive" />
-          <v-lazy
-            v-model="pack.isActive"
-            :options="{
-              threshold: .5 
-            }"
-            min-height="30"
-            transition="fade-transition"
-          >
-            <TailoredMessagingEnhancersGlyphsPack :key="pack.id" :pack="pack">
-            </TailoredMessagingEnhancersGlyphsPack>
-          </v-lazy>
-        </v-responsive>
-      </div>
+      <TailoredMessagingEnhancersGlyphsPack
+        v-for="pack in filteredGlyphs"
+        :key="pack.id"
+        :pack="pack"
+      ></TailoredMessagingEnhancersGlyphsPack>
     </UiScroll>
   </div>
-
   <TailoredMessagingEnhancersGlyphsItemInfo></TailoredMessagingEnhancersGlyphsItemInfo>
 </div>

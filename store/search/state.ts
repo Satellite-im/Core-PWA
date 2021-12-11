@@ -1,8 +1,8 @@
 import { SearchState } from './types'
 
-const InitialSearchState = (): SearchState => ({
+const InitalSearchState = (): SearchState => ({
   query: '',
   result: null,
 })
 
-export default InitialSearchState
+export default InitalSearchState

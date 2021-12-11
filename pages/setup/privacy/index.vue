@@ -1,4 +1,4 @@
-<template src="./Privacy.html" />
+<template src="./Privacy.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'

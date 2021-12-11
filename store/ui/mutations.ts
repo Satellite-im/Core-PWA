@@ -1,5 +1,5 @@
 import { without } from 'lodash'
-import { EnhancerInfo, UIState } from './types'
+import { UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
@@ -33,17 +33,9 @@ export default {
   },
   toggleEnhancers(
     state: UIState,
-    options: EnhancerInfo,
+    options: { show: boolean; floating: boolean, route: string }
   ) {
-    state.enhancers = { 
-      show: options.show, 
-      floating: (typeof options.floating !== "undefined") ? options.floating : state.enhancers.floating,
-      position: (typeof options.position !== "undefined") ? options.position : state.enhancers.position,
-      defaultWidth: (typeof options.defaultWidth !== "undefined") ? options.defaultWidth : state.enhancers.defaultWidth,
-      defaultHeight: (typeof options.defaultHeight !== "undefined") ? options.defaultHeight : state.enhancers.defaultHeight,
-      containerWidth: (typeof options.containerWidth !== "undefined") ? options.containerWidth : state.enhancers.containerWidth,
-      route: options.route || 'emotes'
-    }
+    state.enhancers = { show: options.show, floating: options.floating, route: options.route || 'emotes' }
   },
   toggleSettings(state: UIState, show: boolean) {
     state.showSettings = show
@@ -64,9 +56,6 @@ export default {
   setIsScrollOver(state: UIState, status: boolean) {
     state.isScrollOver = status
     if (!status) state.unreadMessage = 0
-  },
-  setIsReacted(state: UIState, status: boolean) {
-    state.isReacted = status
   },
   /**
    * @method sendMessage DocsTODO
@@ -249,7 +238,6 @@ export default {
               showReactors: false,
             })
           }
-          state.isReacted = true      
         }
       }
     }

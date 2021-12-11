@@ -87,7 +87,7 @@ export default Vue.extend({
      * @param replyId
      * @example
      */
-    emojiReaction(e: MouseEvent, replyID: string) {
+    emojiReaction(replyID: string) {
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
@@ -98,12 +98,7 @@ export default Vue.extend({
             ? this.$props.message.from
             : this.$props.message.to,
       })
-      this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: this.$device.isMobile ? true : false,
-        position: [e.clientX, e.clientY],
-        containerWidth: this.$el.clientWidth,
-      })
+      this.$store.commit('ui/toggleEnhancers', { show: true })
     },
     /**
      * @method showQuickProfile DocsTODO

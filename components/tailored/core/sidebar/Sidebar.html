@@ -13,7 +13,7 @@
         full-width
       />
       <InteractablesInput
-        :placeholder="`${$t('ui.search')}...`"
+        :placeholder="`${$t('global.search')}...`"
         size="small"
         input-kind="text"
         :delete-icon="true"
@@ -29,7 +29,7 @@
           :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
           size="small"
           :action="() => $router.push('/friends/list')"
-          :text="$t('friends.friends')"
+          :text="$t('global.friends')"
         >
           <users-icon size="1.2x" />
         </InteractablesButton>
@@ -43,7 +43,7 @@
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
         :action="() => $router.push('/files/browse')"
-        :text="$t('files.files')"
+        :text="$t('global.files')"
       >
         <folder-icon size="1.2x" />
       </InteractablesButton>
@@ -52,14 +52,14 @@
     <div class="tabs sidebar-selector padded no-top-pad flexy">
       <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
         <InteractablesButton
-          :text="$t('messaging.messages')"
+          :text="$t('global.messages')"
           size="small"
           type="dark"
         >
           <message-square-icon size="1.2x" />
         </InteractablesButton>
         <InteractablesButton
-          :text="$t('messaging.groups')"
+          :text="$t('global.groups')"
           size="small"
           type="dark"
         >

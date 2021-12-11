@@ -1,4 +1,4 @@
-<template src="./CaretDivider.html" />
+<template src="./CaretDivider.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -10,8 +10,8 @@ export default Vue.extend({
       default: function () {
         return this.$t('internal.missing_text')
       },
-    },
-  },
+    }
+  }
 })
 </script>
 

@@ -5,15 +5,6 @@ import { mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    convertRem: (value: string) => number
-    toggleEnhancers: () => void
-    openEmoji: () => void
-    clickEvent: () => void
-  }
-}
-
 export default Vue.extend({
   components: {
     SmileIcon,
@@ -38,8 +29,8 @@ export default Vue.extend({
           show: true,
           route: data,
         })
-      },
-    },
+      }
+    }
   },
   watch: {
     route() {
@@ -100,7 +91,6 @@ export default Vue.extend({
     setRoute(route: string) {
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
         route,
       })
     },
@@ -109,24 +99,12 @@ export default Vue.extend({
      * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
-    toggleEnhancers(event: Event) {
+    toggleEnhancers() {
       this.clickEvent()
-      /* Ignore outside toggling when glyph & emoji toggle btn is clickd (for preventing twice-toggling)  */
-      const glyphToggleElm = document.getElementById('glyph-toggle')
-      const emojiToggleElm = document.getElementById('emoji-toggle')
       // @ts-ignore
-      if (
-        !event ||
-        !(
-          glyphToggleElm?.contains(event.target) ||
-          emojiToggleElm?.contains(event.target)
-        )
-      ) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: !this.ui.enhancers.show,
-          floating: this.$device.isMobile ? true : false,
-        })
-      }
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+      })
       if (this.ui.settingReaction.status) {
         this.$store.commit('ui/settingReaction', {
           status: false,
@@ -134,32 +112,6 @@ export default Vue.extend({
           messageID: null,
         })
       }
-    },
-    /**
-     * @method calculatePositionOnScreen
-     * @description This returns a "x cordinate" to have the Enhancer window to load on the right or left screen
-     * @example calculatePositionOnScreen(ui.enhancers.position[0])
-     */
-    calculatePositionOnScreen(locationX: number): number {
-      if (
-        this.convertRem(this.ui.enhancers.defaultWidth) + locationX >
-        window.innerWidth
-      ) {
-        return locationX - this.convertRem(this.ui.enhancers.defaultWidth) * 2
-      }
-      return locationX - this.convertRem(this.ui.enhancers.defaultWidth)
-    },
-    /**
-     * @method convertRem
-     * @description This converts an rem value into a pixel value
-     * @example convertRem('24rem') => if the document font size is 16px, this returns the value of 24*16, or 384.
-     */
-    convertRem(value: string): number {
-      const fontSize = parseFloat(
-        getComputedStyle(document.documentElement).fontSize, // Get the font size on the html tag, eg 16 (px), 2 (px), etc
-      )
-      const remNumber = Number(value.replace('rem', ''))
-      return remNumber * fontSize
     },
   },
 })

@@ -41,7 +41,7 @@ export default {
    */
   async unlock(
     { commit, state }: ActionsArguments<AccountsState>,
-    pin: string,
+    pin: string
   ) {
     const { pinHash, encryptedPhrase } = state
 
@@ -60,7 +60,7 @@ export default {
     if (encryptedPhrase !== '') {
       const decryptedPhrase = await $Crypto.decryptWithPassword(
         encryptedPhrase,
-        pin,
+        pin
       )
 
       await commit('setPhrase', decryptedPhrase)
@@ -94,7 +94,7 @@ export default {
 
     const encryptedPhrase = await $Crypto.encryptWithPassword(
       solanaWallet.mnemonic,
-      pin,
+      pin
     )
 
     commit('setEncryptedPhrase', encryptedPhrase)
@@ -156,13 +156,8 @@ export default {
         pass: pin,
         wallet: $SolanaManager.getMainSolanaWalletInstance(),
       },
-      { root: true },
+      { root: true }
     )
-
-    // Initialize WebRTC with our ID
-    dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
-      root: true,
-    })
 
     // Dispatch an action to fetch friends and friends requests
     dispatch('friends/fetchFriends', {}, { root: true })
@@ -177,7 +172,7 @@ export default {
    */
   async registerUser(
     { commit, dispatch }: ActionsArguments<AccountsState>,
-    userData: UserRegistrationPayload,
+    userData: UserRegistrationPayload
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -193,14 +188,14 @@ export default {
     const payerAccount = await $SolanaManager.getActiveAccount()
 
     if (!payerAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
+      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
     const userAccount = await $SolanaManager.getUserAccount()
 
     if (!userAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
+      commit('setRegistrationStatus', RegistrationStatus.UKNOWN)
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 

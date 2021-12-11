@@ -1,4 +1,4 @@
-<template src="./Modal.html" />
+<template src="./Modal.html"></template>
 
 <script>
 import Vue from 'vue'

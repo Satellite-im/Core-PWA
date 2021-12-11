@@ -1,9 +1,7 @@
 <template>
-  <div v-if="show"
-class="chip-item">
+  <div v-if="show" class="chip-item">
     {{ text }}
-    <x-icon size="1x"
-@click="hide" />
+    <x-icon size="1x" @click="hide" />
   </div>
 </template>
 

@@ -46,8 +46,8 @@ export default Vue.extend({
      */
     toggleMarketPlace() {
       this.$store.commit('ui/toggleModal', {
-        name: 'marketplace',
-        state: !this.ui.modals['marketplace'],
+        name: 'showMarketPlace',
+        state: !this.ui.modals.showMarketPlace,
       })
     },
   },

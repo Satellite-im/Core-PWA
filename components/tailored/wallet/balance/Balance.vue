@@ -1,4 +1,4 @@
-<template src="./Balance.html" />
+<template src="./Balance.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'

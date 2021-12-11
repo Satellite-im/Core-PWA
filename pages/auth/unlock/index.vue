@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { ConsoleWarning } from '~/utilities/ConsoleWarning'
+
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 
 declare module 'vue/types/vue' {
@@ -26,13 +26,11 @@ export default Vue.extend({
       pin: '',
       error: '',
       decrypting: false,
-      peer: null,
-      showChangeLog: false,
     }
   },
   computed: {
     ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
-    ...mapState(['ui', 'accounts']),
+    ...mapState(['accounts']),
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
@@ -42,26 +40,7 @@ export default Vue.extend({
       },
     },
   },
-  mounted() {
-    // This information can be useful for users to help us find and report bugs.
-    ConsoleWarning(this.$config.clientVersion, this.$store.state)
-
-    this.$store.commit('accounts/lock')
-    this.$store.commit('prerequisites/resetState')
-  },
   methods: {
-    /**
-     * @method toggleChangelogVisibility
-     * @description This toggles the changelog modal on and off
-     * @returns void
-     * @example this.toggleChangelogVisibility()
-     */
-    toggleChangelogVisibility(): void {
-      this.$store.commit('ui/toggleModal', {
-        name: 'changelog',
-        state: !this.ui.modals['changelog'],
-      })
-    },
     /**
      * @method getIcon DocsTODO
      * @description

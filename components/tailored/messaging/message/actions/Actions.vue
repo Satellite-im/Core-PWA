@@ -1,4 +1,4 @@
-<template src="./Actions.html" />
+<template src="./Actions.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 
@@ -37,19 +37,9 @@ export default Vue.extend({
       type: Function,
       default: () => () => {},
     },
-    message: {
-      type: Object as PropType<UIMessage>,
-      default: {
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        from: 'group',
-        payload: 'Invalid Message',
-      },
-    },
   },
   computed: {
-    ...mapState(['ui', 'accounts']),
+    ...mapState(['ui']),
   },
 })
 </script>

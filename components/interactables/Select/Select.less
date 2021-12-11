@@ -23,7 +23,7 @@
 .custom-select {
   position: relative;
   // width: 100%;
-  height: @select-height;
+  // height: 100%;
   text-align: left;
   outline: none;
   color: @text;
@@ -43,10 +43,9 @@
     overflow: hidden;
   }
   .items {
-    position: absolute;
-    display: none;
     color: #fff;
     overflow: hidden;
+    position: relative;
     max-width: 100%;
     background: @semitransparent-dark-gradient;
     border-radius: @corner-rounding;
@@ -75,19 +74,8 @@
       }
     }
   }
-  &.open {
-    .items {
-      display: block;
-    }
-  }
-  &.up {
-    .items {
-      bottom: 30px;
-    }
-  }
-  &.down {
-    .items {
-      top: 30px;
-    }
-  }
+}
+
+.selectHide {
+  display: none;
 }

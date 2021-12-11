@@ -1,17 +1,16 @@
 <template>
   <div class="message-loader">
-    <div v-for="i in count"
-:key="i" class="message-loader-item">
+    <div v-for="i in count" :key="i" class="message-loader-item">
       <div class="left">
-        <div class="placeholder-profile" />
+        <div class="placeholder-profile"></div>
       </div>
       <div class="center">
-        <div class="placeholder-item shortest" />
-        <div class="placeholder-item" />
+        <div class="placeholder-item shortest"></div>
+        <div class="placeholder-item"></div>
       </div>
       <div class="right">
-        <div class="placeholder-item" />
-        <div class="placeholder-item" />
+        <div class="placeholder-item"></div>
+        <div class="placeholder-item"></div>
       </div>
     </div>
   </div>

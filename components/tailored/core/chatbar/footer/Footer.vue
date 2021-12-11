@@ -1,16 +1,15 @@
 <template>
   <div id="bottom-bar-container">
-    <UiTypingIndicator v-if="typing" :users="usersTyping" />
-    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{
-      `${text.length}/${maxChars}`
-    }}</span>
+    <UiTypingIndicator v-if="ui.isTyping" :user-name="ui.isTyping.name"/>
+    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`"
+      >{{ `${text.length}/${maxChars}` }}</span
+    >
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
@@ -20,15 +19,7 @@ export default Vue.extend({
     },
     charlimit: {
       type: Boolean,
-    },
-    usersTyping: {
-      type: Array,
-      default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
-    },
-    typing: {
-      type: Boolean,
-      default: false,
-    },
+    }
   },
   data() {
     return {
@@ -42,31 +33,31 @@ export default Vue.extend({
 </script>
 
 <style lang="less">
-#bottom-bar-container {
-  display: flex;
-  justify-content: space-between;
-  // height: 1.5rem;
-  align-items: center;
-  padding: 5px 0px 5px 20px;
+  #bottom-bar-container {
+    display: flex;
+    justify-content: space-between;
+    // height: 1.5rem;
+    align-items: center;
+    padding: 5px 0px 5px 20px;
 
-  .charlimit {
-    float: right;
-    margin-right: 2rem;
-    font-size: @mini-text-size;
-    color: @text-muted;
-    margin-left: auto;
-    &.is-error {
-      color: @red;
-    }
-  }
-  &.is-error {
-    border: 1px solid @red;
-
-    .control-icon {
-      &:nth-child(4) {
+    .charlimit {
+      float: right;
+      margin-right: 2rem;
+      font-size: @mini-text-size;
+      color: @text-muted;
+      margin-left: auto;
+      &.is-error {
         color: @red;
       }
     }
+    &.is-error {
+      border: 1px solid @red;
+
+      .control-icon {
+        &:nth-child(4) {
+          color: @red;
+        }
+      }
+    }
   }
-}
 </style>

@@ -1,21 +1,20 @@
 <template>
   <div class="voice-user">
-    <UiCircle type="random"
-:seed="user.address" :size="25" />
-    <TypographyText :text="user.name"
-class="voice-user-name" />
+    <UiCircle type="random" :seed="user.address" :size="25" />
+    <TypographyText :text="user.name" class="voice-user-name" />
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'VoiceUser',
   props: ['user'],
-  data() {
+  data () {
     return {
-      collapsed: false,
+      collapsed: false
     }
-  },
+  }
 }
 </script>
 
@@ -34,5 +33,6 @@ export default {
 .voice-user-name {
   padding-left: 5px;
   font-size: 11pt;
+  width: 100%;
 }
 </style>

@@ -1,7 +1,7 @@
 import { User } from '~/types/ui/user'
 
 export enum RegistrationStatus {
-  UNKNOWN = 'unknown',
+  UKNOWN = 'unknown',
   IN_PROGRESS = 'in_progress',
   FUNDING_ACCOUNT = 'funding_account',
   SENDING_TRANSACTION = 'sending_transaction',

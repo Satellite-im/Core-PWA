@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+          'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1',
       },
       { hid: 'description', name: 'description', content: '' },
     ],
@@ -75,13 +75,13 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
-    { src: '~/plugins/thirdparty/vuetify.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
+    { src: '~/plugins/local/keybindLoader.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -124,10 +124,6 @@ export default defineNuxtConfig({
   },
 
   pwa: {
-    meta: {
-      mobileAppIOS: true,
-      appleStatusBarStyle: 'black-translucent',
-    },
     manifest: {
       name: 'Satellite.im',
       short_name: 'Satellite.im',
@@ -161,31 +157,12 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, ctx) {
+    extend(config) {
       config.node = {
         fs: 'empty',
         encoding: 'empty',
       }
-      const testAttributes = ['data-cy']
-      ctx.loaders.vue.compilerOptions = {
-        modules: [
-          {
-            preTransformNode(astEl) {
-              const { attrsMap, attrsList } = astEl
-              testAttributes.forEach((attribute) => {
-                if (attrsMap[attribute]) {
-                  delete attrsMap[attribute]
-                  const index = attrsList.findIndex((x) => x.name === attribute)
-                  attrsList.splice(index, 1)
-                }
-              })
-              return astEl
-            },
-          },
-        ],
-      }
     },
-    babel: { compact: true },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,
@@ -198,6 +175,7 @@ export default defineNuxtConfig({
     },
     stats: 'verbose',
   },
+
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
   ignore: 'store/*/types.ts',

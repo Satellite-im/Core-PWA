@@ -1,7 +1,5 @@
 <template>
-  <div class="separator">
-    {{ text }}
-  </div>
+  <div class="separator">{{ text }}</div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
