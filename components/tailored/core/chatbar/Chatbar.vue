@@ -245,6 +245,10 @@ export default Vue.extend({
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
     },
+    makeOnlyEmojiLarger(text: any, originalText: any) {
+       
+        return text
+    },
     /**
      * @method sendMessage
      * @description Sends message by calling the sendMessage action with current data and
@@ -253,24 +257,55 @@ export default Vue.extend({
      */
     sendMessage() {
       // console.log(this.value)
-      // const inputText = '🤌..H E Y K A T ! s&nbsp;d💎 🐱'
+      const inputText = '🤌..H E Y K A T ! s&nbsp;d💎 🐱'
       // const inputText = '..H E Y K A T ! s&nbsp;'
-      const inputText = '💎 🐱🤌'
+      // const inputText = '💎 🐱🤌'
       // let newValue = this.value
       // this.value = inputText
 
 
       // remove whitespace, emojis, to test if there is anything else in the string
       let newInput = inputText.replace(/\s|[&nbsp;]|\p{Emoji}/gu, '')
+      let emojisOnly = inputText.replace(/\s|\p{Emoji}/gu, '')
+      // console.log(inputText)
+      // console.log(newInput)
+      // console.log(emojisOnly)
+
 
       if (newInput) {
         console.log('there is stuff in the string, leave the font size small')
+        // let maybeTest = inputText.slice(0, 2)
+        // console.log(maybeTest)
+        // this.value = this.makeOnlyEmojiLarger(newInput, inputText)
+
+        let newValue = "";
+        for(let i = 0; i < inputText.length - 1; i ++) {
+           let firstChar = inputText[i]
+           let secondChar = inputText[i + 1]
+
+           let full = (firstChar + secondChar).match(/[\p{Emoji}\u200d]+/gu) ? (firstChar+secondChar) : "false"
+
+           if(full !== "false") {
+             let wrapAround = `<span style="font-size: 32px">${full}</span>`
+             newValue += wrapAround
+             i ++
+           } else {
+             newValue += firstChar
+           }
+    
+          // console.log(full)
+        // console.log(newValue)
+
+      
+        }
+        console.log(newValue)
+        this.value = newValue
       }
       if (!newInput) {
         console.log(
           "there is not stuff in the string, so it's just emojis and you can make the text bigger",
         )
-        this.value = `<div style="font-size: 50px">  ${inputText}  </div>`
+        this.value = `<span style="font-size: 64px">  ${inputText}  </span>`
         // this.value = newInput
 
       }
