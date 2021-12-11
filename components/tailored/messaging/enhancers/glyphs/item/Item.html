@@ -1,2 +1,7 @@
-<div class="glyph-item" :style="getStyle()" @mouseover="mouseOver" @mouseleave="mouseLeave">
-</div>
+<div
+  class="glyph-item"
+  :style="getStyle()"
+  @mouseover="mouseOver"
+  @mouseleave="mouseLeave"
+  v-on="sendOnClick ? {click: addGlyph} : {}"
+></div>

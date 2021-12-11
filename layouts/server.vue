@@ -1,18 +1,19 @@
 <template>
-  <div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app-wrap"
+:class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
+      v-touch:swipe="sidebarSwipeHandler(this)"
+      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
         $device.isMobile ? 'mobile-app' : ''
       }`"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
     >
       <UiGlobal />
       <TailoredCoreSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
-        :openModal="toggleModal"
+        :open-modal="toggleModal"
       />
       <TailoredServersSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
@@ -33,14 +34,14 @@
         <TailoredCoreMedia
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
-          :maxViewableUsers="10"
-          :fullscreenMaxViewableUsers="20"
+          :max-viewable-users="10"
+          :fullscreen-max-viewable-users="20"
         />
         <UiChatScroll
           :contents="ui.messages"
-          :preventScrollOffset="500"
+          :prevent-scroll-offset="500"
           :class="media.activeCall ? 'media-open' : ''"
-          enableWrap
+          enable-wrap
         >
           <Nuxt />
         </UiChatScroll>

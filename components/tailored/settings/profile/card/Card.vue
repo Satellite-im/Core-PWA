@@ -20,6 +20,21 @@ export default Vue.extend({
       recommendLocations,
     }
   },
+  mounted() {
+    this.getUserTimeZone()
+  },
+  methods: {
+    /**
+     * @method getUserTimeZone
+     * @description Auto grabs users location/timezone, we check the locations array to ensure location hasn't already been added which fixes a multiple input bug
+     * @example Intl.DateTimeFormat().resolvedOptions().timeZone
+     */
+    getUserTimeZone() {
+      if (this.info.locations.indexOf(Intl.DateTimeFormat().resolvedOptions().timeZone) === -1) {
+      this.info.locations.push(Intl.DateTimeFormat().resolvedOptions().timeZone)
+      }
+      },
+  },
 })
 </script>
 

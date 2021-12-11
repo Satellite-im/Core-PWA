@@ -1,13 +1,5 @@
 <div class="friend">
-  <UiCircle type="random" :seed="friend.publicKey" :size="35" />
-  <smartphone-icon
-    size="1x"
-    v-if="friend.state === 'mobile'"
-    :class="`mobile-status is-${friend.state}`" />
-  <circle-icon
-    size="1x"
-    v-if="friend.state !== 'mobile'"
-    :class="`status is-${friend.state}`" />
+  <UiUserState :user="friend" />
   <div class="description">
     <TypographySubtitle :size="6" :text="friend.name" />
     <TypographyText :text="friend.status" />
@@ -19,7 +11,7 @@
       type="success"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Accept"
+      :data-tooltip="$t('friends.accept')"
       :loading="loading === 'accept'"
       :action="acceptFriendRequest"
       >
@@ -30,7 +22,7 @@
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Decline"
+      :data-tooltip="$t('friends.decline')"
       :loading="loading === 'decline'"
       :action="declineFriendRequest">
       <x-icon size="1x"/>
@@ -41,7 +33,7 @@
       type="danger"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Unblock"
+      :data-tooltip="$t('friends.unblock')"
       :action="() => {}">
       <x-icon size="1x" />
     </InteractablesButton>
@@ -51,7 +43,7 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Send"
+      :data-tooltip="$t('friends.send')"
       :loading="loading === 'sending'"
       :action="createFriendRequest">
       <check-icon size="1x" />
@@ -63,15 +55,15 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Message"
-      :action="() => {}">
+      :data-tooltip="$t('friends.message')"
+      :action="sendMessageRequest">
       <message-square-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      data-tooltip="Options"
+      :data-tooltip="$t('friends.options')"
       :loading="loading === 'options'"
       :action="contextMenu">
       <more-vertical-icon size="1x" />

@@ -1,45 +1,42 @@
 <div class="chatbar-controls">
   <div
+    id="send-money-toggle"
     :data-tooltip="$t('wallet.send_money')"
     v-on:click="toggleMiniWallet"
-    class="
-      control-tooltip-wrap
-      has-tooltip has-tooltip-top has-tooltip-primary
-    "
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    :class="editable ? 'active' : 'inactive'"
   >
     <banknote-icon size="1x"
       :class="`control-icon `"
     />
   </div>
   <div
-    :data-tooltip="$t('global.glyphs')"
+    id="glyph-toggle"
+    :data-tooltip="$t('ui.glyphs')"
     v-on:click="toggleEnhancers('glyphs')"
-    class="
-      control-tooltip-wrap
-      has-tooltip has-tooltip-top has-tooltip-primary
-    "
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    :class="editable ? 'active' : 'inactive'"
   >
     <box-select-icon size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'glyphs' ? 'primary' : ''}`"
     />
   </div>
   <div
-    :data-tooltip="$t('global.emotes')"
+    id="emoji-toggle"
+    :data-tooltip="$t('ui.emotes')"
     v-on:click="toggleEnhancers('emotes')"
-    class="
-      control-tooltip-wrap
-      has-tooltip has-tooltip-top has-tooltip-primary
-    "
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    :class="editable ? 'active' : 'inactive'"
   >
     <smile-icon size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
     />
   </div>
   <div
-    :data-tooltip="$t('global.send')"
-    class="
-      control-tooltip-wrap
-      has-tooltip has-tooltip-top has-tooltip-primary">
+    :data-tooltip="$t('ui.send')"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    :class="editable ? 'active' : 'inactive'"
+    >
     <arrow-right-icon size="1x"
       class="control-icon"
       @click="sendMessage"

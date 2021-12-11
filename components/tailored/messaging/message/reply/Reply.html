@@ -23,7 +23,7 @@
           <UiEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
           <UiEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
           <UiEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
-          <TailoredMessagingMessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction(reply.id)" />
+          <TailoredMessagingMessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
         </div>
       </div>
     </div>

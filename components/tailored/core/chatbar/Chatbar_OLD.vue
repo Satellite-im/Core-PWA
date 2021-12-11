@@ -108,7 +108,7 @@ export default Vue.extend({
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('global.talk')
+        return this.$t('ui.talk')
       } else {
         return ''
       }
@@ -236,7 +236,7 @@ export default Vue.extend({
             if (this.value !== '' && !this.hasCommand) {
               this.sendMessage()
             } else if (this.hasCommand && !this.isValidCommand) {
-              console.log('dispatch command')
+              this.$Logger.log('Commands', 'dispatch command')
             }
           } else if (!this.hasCommand) {
             this.autoGrow()

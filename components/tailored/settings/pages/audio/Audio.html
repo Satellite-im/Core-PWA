@@ -88,6 +88,24 @@
             </span>
           </div>
         </div>
+        <div class="columns is-desktop">
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.systemVolume.title')"
+            />
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.settings.audio.systemVolume.subtitle')"
+            />
+            <TailoredCoreMediaActionsVolume
+              :volume="audio.sounds.system"
+              direction="ltr"
+              plain
+              @volumeControlValueChange="systemVolumeControlValueChange"
+            />
+          </div>
+        </div>
       </span>
     </div>
   </div>

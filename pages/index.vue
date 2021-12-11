@@ -30,10 +30,6 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$store.subscribeAction((action) => {
-      console.log('Action:', action)
-    })
-
     // Handle the case that the wallet is not found
     if (this.getEncryptedPhrase === '') {
       this.$router.replace('/setup/disclaimer')
@@ -64,6 +60,9 @@ export default Vue.extend({
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
+        }
+        if (error.message === AccountsError.USER_DERIVATION_FAILED) {
+          this.$router.replace('/setup/disclaimer')
         }
       }
     },

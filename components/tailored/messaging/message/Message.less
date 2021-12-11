@@ -18,6 +18,12 @@
       position: absolute;
     }
   }
+  .sat-icon-container {
+    margin-right: @light-spacing;
+    margin-top: 0.3rem;
+    width: 20px;
+    height: 20px;
+  }
   .inline-meta {
     margin-bottom: @light-spacing;
     display: inline-flex;
@@ -25,6 +31,14 @@
       opacity: 0.8;
       margin-top: 0.3rem;
       margin-left: @light-spacing;
+    }
+    .satellite-circle {
+      position: relative;
+      svg {
+        margin: -0.2rem;
+        width: 13px;
+        height: 13px;
+      }
     }
   }
   .markdown {
@@ -36,11 +50,16 @@
     }
   }
 
-  .message-container{
+  .message-container {
     position: relative;
+    word-break: break-word;
   }
 
   .message-hover {
     background-color: @semitransparent-light-gradient;
+  }
+  .glyph {
+    width: 192px;
+    height: 192px;
   }
 }

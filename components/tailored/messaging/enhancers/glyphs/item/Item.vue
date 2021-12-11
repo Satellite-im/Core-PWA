@@ -8,12 +8,12 @@ export default Vue.extend({
   props: {
     width: {
       type: Number,
-      default: 28,
+      default: 64,
       required: false,
     },
     height: {
       type: Number,
-      default: 28,
+      default: 64,
       required: false,
     },
     src: {
@@ -25,6 +25,7 @@ export default Vue.extend({
       default: null,
       required: false,
     },
+    sendOnClick: { type: Boolean, default: false, required: false },
   },
   methods: {
     getStyle() {
@@ -47,6 +48,18 @@ export default Vue.extend({
       if (this.pack) {
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
+    },
+    addGlyph() {
+      const activeFriend = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      if (!this.src || !activeFriend) {
+        return
+      }
+      this.$store.dispatch('textile/sendTextMessage', {
+        to: activeFriend?.textilePubkey,
+        text: `<img src=${this.src} class='glyph'/>`,
+      })
     },
   },
 })

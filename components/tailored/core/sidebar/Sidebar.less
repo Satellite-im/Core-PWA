@@ -21,7 +21,7 @@
     margin-top: @normal-spacing;
     background: @semitransparent-light-gradient;
     box-shadow: @ui-shadow;
-    max-height: calc(100vh - @sidebar-inner-offset);
+    max-height: calc(var(--app-height) - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
     padding-bottom: @normal-spacing;
@@ -75,7 +75,7 @@
 
 
   .sidebar-inner-streaming {
-    max-height: calc(100vh - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
+    max-height: calc(var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
   }
 
   .controls {
@@ -176,10 +176,10 @@
   #sidebar {
     z-index: 3;
     .sidebar-inner {
-      max-height: calc(100vh - @mobile-sidebar-inner-offset);
+      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
     }
     .sidebar-inner-streaming {
-      max-height: calc(100vh - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
+      max-height: calc(var(--app-height) - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
     }
   }
 }
@@ -189,7 +189,7 @@
     min-width: unset;
     max-width: @sidebar-size;
     sidebar-inner {
-      max-height: calc(100vh - @mobile-sidebar-inner-offset);
+      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
       .users {
         .inline-notification {
           width: 100vw - 32rem !important;

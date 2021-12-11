@@ -6,12 +6,12 @@
     type="primary"
     size="small"
     :placeholder="$t('friends.search_placeholder')"
-    :action="searchFriend"
+    @update="_searchFriend"
     v-model="accountID"
     :loading="searching">
     <user-plus-icon size="1x" />
   </InteractablesInputGroup>
-  <TypographyError v-if="error" :text="error" class="error" />
+  <TypographyError v-if="error" :text="$t(error)" class="error" />
   <TailoredFriendsFriend v-if="friend" :friend="friend" @requestSent="onFriendRequestSent" send/>
   <UiSpacer :height="10" />
   <UiHorizontalRuleText plaintext value="OR" />

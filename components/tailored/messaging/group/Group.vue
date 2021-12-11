@@ -2,9 +2,15 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+import { Config } from '~/config'
+
 import { Group } from '~/types/messaging'
 import { User } from '~/types/ui/user'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import {
+  getUsernameFromState,
+  getAddressFromState,
+  refreshTimestampInterval,
+} from '~/utilities/Messaging'
 
 export default Vue.extend({
   props: {
@@ -13,7 +19,16 @@ export default Vue.extend({
       // default: () => {},
     },
   },
+  data() {
+    return {
+      timestampRefreshInterval: null,
+      timestamp: this.$dayjs(this.group.at).from(),
+    }
+  },
   computed: {
+    address() {
+      return getAddressFromState(this.group.from, this.$store.state)
+    },
     username() {
       return getUsernameFromState(this.group.from, this.$store.state)
     },
@@ -34,6 +49,20 @@ export default Vue.extend({
       this.$store.commit('ui/setQuickProfilePosition', e)
       this.$store.commit('ui/quickProfile', true)
     },
+  },
+  created() {
+    const setTimestamp = (timePassed: string) => {
+      this.$data.timestamp = timePassed
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.group.at,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval
+    )
+  },
+  beforeDestroy() {
+    clearInterval(this.$data.refreshTimestampEveryMinute)
   },
 })
 </script>

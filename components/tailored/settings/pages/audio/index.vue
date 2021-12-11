@@ -47,15 +47,15 @@ export default Vue.extend({
       captureMouses: [
         {
           value: CaptureMouseTypes.always,
-          text: this.$i18n.t('global.always'),
+          text: this.$i18n.t('pages.settings.always'),
         },
         {
           value: CaptureMouseTypes.motion,
-          text: this.$i18n.t('global.motion'),
+          text: this.$i18n.t('pages.settings.motion'),
         },
         {
           value: CaptureMouseTypes.never,
-          text: this.$i18n.t('global.never'),
+          text: this.$i18n.t('pages.settings.never'),
         },
       ],
     }
@@ -326,7 +326,18 @@ export default Vue.extend({
      */
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
-      this.$store.commit('settings/setVolume', volume)
+      this.$store.commit('audio/setVolume', volume)
+    },
+    /**
+     * @method systemVolumeControlValueChange DocsTODO
+     * @description
+     * volume change will effect notification and other system sounds
+     * @param volume
+     * @example
+     */
+    systemVolumeControlValueChange(volume: number) {
+      this.$Sounds.changeLevels(volume / 100)
+      this.$store.commit('audio/setSystemVolume', volume)
     },
     /**
      * @method inputVolumeControlValueChange DocsTODO
@@ -335,7 +346,7 @@ export default Vue.extend({
      * @example
      */
     inputVolumeControlValueChange(volume: number) {
-      this.$store.commit('settings/setInputVolume', volume)
+      this.$store.commit('audio/setInputVolume', volume)
     },
     /**
      * @method hasConstraint DocsTODO

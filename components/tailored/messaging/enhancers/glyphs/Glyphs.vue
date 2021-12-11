@@ -1,6 +1,7 @@
 <template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import _, { cloneDeep, isEmpty } from 'lodash'
 
 export default Vue.extend({
   data() {
@@ -17,13 +18,19 @@ export default Vue.extend({
   },
   methods: {
     filter(filterValue: any) {
-      this.filteredGlyphs = Object.entries(this.$mock.glyphs).reduce(
+      this.filteredGlyphs = Object.entries(
+        _.cloneDeep(this.$mock.glyphs),
+      ).reduce(
         (prev, [key, value]: [string, any]) => ({
           ...prev,
           ...(value?.name?.includes(filterValue) ? { [key]: value } : {}),
         }),
-        {}
+        {},
       )
+      // set active to ensure pack loads. Otherwise lazy load scroll trigger can be impossible to execute
+      if (!_.isEmpty(this.filteredGlyphs)) {
+        this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
+      }
     },
   },
 })

@@ -1,11 +1,11 @@
 <div id="media-heading">
-  <UiTag text="Live 3:20" />
+  <UiTag :text="elapsedTimeLabel" />
   <div class="spacer"></div>
   <transition name="media-fullscreen" mode="out-in">
     <div
       v-bind:key="ui.fullscreen"
       class="has-tooltip has-tooltip-primary has-tooltip-left"
-      :data-tooltip="ui.fullscreen ? $t('global.exit_fullscreen') : $t('global.fullscreen')"
+      :data-tooltip="ui.fullscreen ? $t('ui.exit_fullscreen') : $t('ui.fullscreen')"
       @click="toggleFullscreen"
     >
       <minimize-icon v-if="ui.fullscreen" size="1.2x" />

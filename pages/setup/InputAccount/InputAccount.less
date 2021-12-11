@@ -1,0 +1,35 @@
+.container {
+  margin: 0 auto;
+  min-height: 100vh;
+  max-width: 40rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  .input-account-body {
+    min-width: 32rem;
+    align-self: center;
+    margin-bottom: 25vh;
+    .recover-account {
+      min-width: 24rem;
+    }
+    .columns {
+      margin: @xlarge-spacing auto;
+      max-width: 24rem;
+      .column {
+        padding: @xlight-spacing;
+        .tag,
+        .tag-container {
+          width: 100%;
+        }
+
+        .tag {
+          margin: @xlight-spacing 0;
+        }
+      }
+    }
+  }
+  .input-error {
+    margin-top: 15px;
+  }
+}

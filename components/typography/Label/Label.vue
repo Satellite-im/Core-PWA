@@ -1,4 +1,4 @@
-<template src="./Label.html"></template>
+<template src="./Label.html" />
 <script lang="ts">
 import Vue from 'vue'
 

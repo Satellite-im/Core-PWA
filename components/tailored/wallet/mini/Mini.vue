@@ -1,16 +1,36 @@
 <template>
-  <div id="mini-wallet">
-    <TailoredWalletMiniNav :route="route" />
-    <TailoredWalletMiniSend v-if="route === 'send'" />
+  <div id="mini-wallet" v-click-outside="toggleWalletMini">
+    <TailoredWalletMiniBody :updateMethod="updateMethod" />
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
+  computed: {
+    ...mapState(['ui']),
+  },
   data() {
     return {
-      route: 'send',
+      method: 'send',
     }
+  },
+  methods: {
+    toggleWalletMini() {
+      /* Ignore outside toggling when send money btn is clickd (for preventing twice-toggling)  */
+      const sendMoneyToggleElm = document.getElementById('send-money-toggle')
+      // @ts-ignore
+      if (!sendMoneyToggleElm?.contains(event.target)) {
+        this.$store.commit('ui/toggleModal', {
+          name: 'walletMini',
+          state: !this.ui.modals.walletMini,
+        })
+      }
+    },
+    updateMethod(method: string) {
+      this.$data.method = method
+    },
   },
 })
 </script>

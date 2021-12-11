@@ -4,6 +4,7 @@ import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType } from '~/types/textile/mailbox'
 
@@ -17,7 +18,7 @@ export default {
    */
   async initialize(
     { commit }: ActionsArguments<TextileState>,
-    config: TextileConfig
+    config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -39,7 +40,7 @@ export default {
    */
   async fetchMessages(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { address }: { address: string }
+    { address }: { address: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -61,7 +62,7 @@ export default {
 
     const conversation = await $MailboxManager.getConversation(
       friend.textilePubkey,
-      query
+      query,
     )
 
     commit('setConversation', {
@@ -70,6 +71,8 @@ export default {
       limit: query.limit,
       skip: query.skip,
     })
+
+    commit('friends/setActive', friend, { root: true })
 
     commit('setConversationLoading', { loading: false })
 
@@ -145,7 +148,7 @@ export default {
       }
 
       const sender = rootState.friends.all.find(
-        (friend) => friend.textilePubkey === message.from
+        (friend) => friend.textilePubkey === message.from,
       )
 
       if (!sender) {
@@ -154,6 +157,7 @@ export default {
 
       commit('addMessageToConversation', {
         address: sender.address,
+        sender: MessageRouteEnum.INBOUND,
         message,
       })
     })
@@ -175,7 +179,7 @@ export default {
     }
 
     MailboxManager.listenToSentboxMessages((message) => {
-      console.log('sentbox', message)
+      Vue.prototype.$Logger.log('WebRTC Sentbox', 'New message', message)
     })
   },
   /**
@@ -186,7 +190,7 @@ export default {
    */
   async sendTextMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, text }: { to: string; text: string }
+    { to, text }: { to: string; text: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -200,6 +204,8 @@ export default {
       throw new Error('Friend not found')
     }
 
+    commit('setMessageLoading', { loading: true })
+
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
     const result = await $MailboxManager.sendMessage<'text'>(
@@ -208,13 +214,16 @@ export default {
         to: friend.textilePubkey,
         payload: text,
         type: 'text',
-      }
+      },
     )
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+
+    commit('setMessageLoading', { loading: false })
   },
   /**
    * @description Sends a reaction message to a given friend
@@ -224,7 +233,7 @@ export default {
    */
   async sendReactionMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, reactTo, emoji }: { to: string; reactTo: string; emoji: string }
+    { to, reactTo, emoji }: { to: string; reactTo: string; emoji: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -247,11 +256,12 @@ export default {
         payload: emoji,
         reactedTo: reactTo,
         type: 'reaction',
-      }
+      },
     )
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
   },
@@ -263,7 +273,7 @@ export default {
    */
   async sendReplyMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, replyTo, text }: { to: string; replyTo: string; text: string }
+    { to, replyTo, text }: { to: string; replyTo: string; text: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -286,12 +296,18 @@ export default {
         payload: text,
         repliedTo: replyTo,
         type: 'reply',
-      }
+      },
     )
 
     commit('addMessageToConversation', {
       address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    commit('ui/setReplyChatbarContent', {
+      id: '',
+      payload: '',
+      from: '',
+    }, { root: true })
   },
 }

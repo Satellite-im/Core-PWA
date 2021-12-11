@@ -1,4 +1,4 @@
-<template src="./Aside.html"></template>
+<template src="./Aside.html" />
 <script lang="ts">
 import Vue from 'vue'
 

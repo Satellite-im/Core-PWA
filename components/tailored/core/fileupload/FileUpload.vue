@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Config } from '~/config'
 
 import {
   FileIcon,
@@ -10,6 +11,13 @@ import {
   SlashIcon,
 } from 'satellite-lucide-icons'
 
+import { UploadDropItemType } from '~/types/files/file'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    files: Array<UploadDropItemType>
+  }
+}
 export default Vue.extend({
   components: {
     FileIcon,
@@ -22,12 +30,15 @@ export default Vue.extend({
       type: String,
       default: 'quick',
     },
+    editable: {
+      type: Boolean
+    }
   },
   data() {
     return {
-      file: false,
-      url: false,
-      nsfw: { status: false, checking: false },
+      files: [] as Array<UploadDropItemType>,
+      uploadStatus: false,
+      count_error: false,
     }
   },
   methods: {
@@ -38,11 +49,42 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.file = event.target.files[0]
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-      this.$data.nsfw.checking = false
-      this.loadPicture(this.$data.file)
+      if (this.editable) {
+        const files: File[] = event.target.files
+        if (files.length > 4) {
+          // @ts-ignore
+          this.$data.count_error = true
+          return
+        }
+        this.$data.count_error = false
+        this.$data.files = [...files].map((file: File) => {
+          return {
+            file,
+            nsfw: { status: false, checking: false },
+            url: '',
+          }
+        })
+        /* nsfw checking after putting all files */
+        for (const file of this.$data.files) {
+          // don't check nsfw for large files or webgl runs out of memory
+          if (file.file.size > Config.uploadByteLimit) {
+            file.nsfw.tooLarge = true
+          }
+          if (!file.nsfw.tooLarge) {
+            file.nsfw.checking = true
+            try {
+              file.nsfw.status = await this.$Security.isNSFW(file.file)
+            } catch (err) {
+              file.nsfw.status = true
+              file.nsfw.checking = false
+              return
+            }
+            file.nsfw.checking = false
+          }
+          this.loadPicture(file)
+        }
+        this.$data.uploadStatus = true
+      }
     },
     /**
      * @method loadPicture
@@ -50,14 +92,13 @@ export default Vue.extend({
      * @param file File to load
      * @example this.loadPicture(this.$data.file)
      */
-    loadPicture(file: File) {
-      if (!file) return
-      const self = this
+    loadPicture(item: UploadDropItemType) {
+      if (!item.file) return
       const reader = new FileReader()
       reader.onload = function (e: Event | any) {
-        if (e.target) self.$data.url = e.target.result
+        if (e.target) item.url = e.target.result
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(item.file)
     },
     /**
      * @method isEmbedableImage
@@ -68,10 +109,9 @@ export default Vue.extend({
      * @example v-if="isEmbedableImage(file.name)"
      */
     isEmbedableImage(filename: string): boolean {
+      if (!filename) return false
       // eslint-disable-next-line prefer-regex-literals
-      const imageFormatsRegex = new RegExp(
-        '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$'
-      )
+      const imageFormatsRegex = new RegExp(Config.regex.image)
       return imageFormatsRegex.test(filename.toLowerCase())
     },
     /**
@@ -81,8 +121,9 @@ export default Vue.extend({
      * @example @click="cancelUpload"
      */
     cancelUpload() {
-      this.$data.file = false
-      this.$data.url = false
+      this.$data.files = []
+      this.$data.uploadStatus = false
+      this.$data.count_error = false
     },
   },
 })

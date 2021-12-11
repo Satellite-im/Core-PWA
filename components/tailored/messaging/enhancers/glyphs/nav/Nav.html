@@ -3,12 +3,9 @@
     <div class="timer" @click="() => {$emit('navSelected', '')}">
       <clock-icon class="control-icon" size="1x" />
     </div>
-    <div v-for="user in $mock.unreads" :data-tooltip="user.name">
-      <UiCircle type="random" :size="28" :seed="user.address" />
-    </div>
   </div>
   <div class="pack-list">
-    <div v-for="pack in $mock.glyphs" @click="() => {$emit('navSelected', pack.name)}">
+    <div v-for="pack in $mock.glyphs" @click="$emit('navSelected', pack.name)">
       <TailoredMessagingEnhancersGlyphsItem
         :key="pack.id"
         :src="pack.stickerURLs[0]"

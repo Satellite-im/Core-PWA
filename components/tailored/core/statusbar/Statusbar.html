@@ -1,33 +1,30 @@
 <div id="statusbar">
   <div class="circle-container" v-if="!$device.isMobile">
-    <circle-icon
-      size="1x"
-      :class="`status is-${user.state}`"
-      v-if="!server"
-    />
+    <UiUserState :user="user" v-if="!server"/>
     <UiCircle
       type="random"
       :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
-      :size="28"
-    />
+      :size="35"
+      v-else
+    /> 
   </div>
   <div class="user-info" v-if="!$device.isMobile">
     <TypographyTitle :size="6" :text="server ? server.name : user.name" />
-    <TypographySubtitle :size="6" :text="server ? server.desc : user.status" />
+    <TypographySubtitle :size="6" :text="server ? (server.status || server.state) : user.status" />
   </div>
   <div class="statusbar-spacer"></div>
   <div class="controls">
     <div
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Call"
-      v-if="!server"
+      v-if="server"
     >
       <phone-call-icon size="1x" class="control-icon" />
     </div>
     <div
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Video"
-      v-if="!server"
+      v-if="server"
     >
       <video-icon size="1x" class="control-icon" />
     </div>
@@ -44,14 +41,14 @@
     <div
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
-      v-on:click="toggleMarketPlace"
-      data-tooltip="Market Place">
+      @click="() => toggleModal(ModalWindows.MARKETPLACE)"
+      data-tooltip="Marketplace">
       <shopping-bag-icon class="control-icon" size="1x" />
     </div>
     <div
       class="has-tooltip has-tooltip-primary has-tooltip-bottom"
       v-if="$device.isDesktop"
-      v-on:click="toggleWallet"
+      @click="() => toggleModal(ModalWindows.WALLET)"
       data-tooltip="Wallet">
       <wallet-icon class="control-icon" size="1x" />
     </div>

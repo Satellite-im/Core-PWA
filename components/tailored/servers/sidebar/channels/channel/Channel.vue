@@ -1,4 +1,4 @@
-<template src="./Channel.html"></template>
+<template src="./Channel.html" />
 
 <script>
 import { mapState } from 'vuex'
