@@ -9,9 +9,9 @@
       :placeholder="$t('pages.inputAccount.enter')"
       @onSelected="onSelected"
       @onMultipleSelected="onMultipleSelected"
-    ></UiTypeHead>
-    <TypographyError v-if="error" :text="$t(error)" class="input-error"/>
-    <div class="columns is-mobile">
+    />
+    <TypographyError v-if="error" :text="$t(error)" class="input-error" />
+    <div class="columns is-mobile" v-if="phrases.length > 0">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
           <UiNumberedWord
