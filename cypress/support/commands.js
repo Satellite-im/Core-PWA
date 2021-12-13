@@ -2,6 +2,28 @@ const faker = require('faker')
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
+const COMMAND_DELAY = 2000 // to run tests slower
+
+for (const command of [
+  'visit',
+  'click',
+  'trigger',
+  'type',
+  'clear',
+  'reload',
+  'contains',
+]) {
+  Cypress.Commands.overwrite(command, (originalFn, ...args) => {
+    const origVal = originalFn(...args)
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(origVal)
+      }, COMMAND_DELAY)
+    })
+  })
+}
+
 Cypress.Commands.add('createAccount', () => {
   cy.visit('/')
   cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
