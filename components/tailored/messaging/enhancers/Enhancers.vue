@@ -79,7 +79,7 @@ export default Vue.extend({
      * @param emoji Emoji-mart emoji event object
      * @example v-on:select="addEmoji"
      */
-    addEmoji(emoji: any) {
+    addEmoji(emoji: any, emojiName: string) {
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('textile/sendReactionMessage', {
           to: this.ui.settingReaction.to,
@@ -90,6 +90,7 @@ export default Vue.extend({
       } else {
         this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
+      this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
     },
     /**
      * @method setRoute DocsTODO

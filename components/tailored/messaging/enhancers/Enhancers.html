@@ -45,7 +45,7 @@
                 <span
                   v-for="(emoji, emojiName) in emojiGroup"
                   :key="emojiName"
-                  @click="addEmoji(emoji)"
+                  @click="addEmoji(emoji, emojiName)"
                   :title="emojiName"
                 >{{ emoji }}</span>
               </div>
