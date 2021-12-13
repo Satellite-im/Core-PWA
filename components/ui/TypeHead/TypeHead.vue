@@ -1,7 +1,11 @@
 <template src="./TypeHead.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { InputSize, InputStyle } from '~/components/interactables/Input/types'
+import {
+  InputSize,
+  InputStyle,
+  InputTextTransform,
+} from '~/components/interactables/Input/types'
 
 export default Vue.extend({
   props: {
@@ -58,6 +62,13 @@ export default Vue.extend({
       default: 10,
       required: false,
     },
+    /**
+     * Placeholder text for blank inputs
+     */
+    textTransform: {
+      type: String as PropType<InputTextTransform>,
+      default: 'normal',
+    },
   },
   data() {
     return {
@@ -73,6 +84,11 @@ export default Vue.extend({
   },
   methods: {
     update() {
+      if (this.$props.textTransform === 'lowercase') {
+        this.searchText = this.searchText.toLowerCase()
+      } else if (this.$props.textTransform === 'uppercase') {
+        this.searchText = this.searchText.toUpperCase()
+      }
       if (!this.searchText) {
         this.searchList = this.list
         return
@@ -80,8 +96,10 @@ export default Vue.extend({
       if (!this.isFocus) this.isFocus = true
       this.searchList = this.list.filter((item: any) =>
         this.label
-          ? item[this.label].indexOf(this.searchText) === 0
-          : item.indexOf(this.searchText) === 0,
+          ? item[this.label]
+              .toLowerCase()
+              .indexOf(this.searchText.toLowerCase()) === 0
+          : item.toLowerCase().indexOf(this.searchText.toLowerCase()) === 0,
       )
     },
     setFocus() {
@@ -102,8 +120,9 @@ export default Vue.extend({
     },
     isActive(item: any) {
       return (
-        (this.label && item[this.label] === this.searchText) ||
-        item === this.searchText
+        (this.label &&
+          item[this.label].toLowerCase() === this.searchText.toLowerCase()) ||
+        item.toLowerCase() === this.searchText.toLowerCase()
       )
     },
     onEnterPressed() {
@@ -113,7 +132,7 @@ export default Vue.extend({
           : item === this.searchText,
       )
       const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
-      
+
       if (itemSplitted.length > 0) {
         this.onMultipleItemSelected(itemSplitted)
       } else if (item) {
