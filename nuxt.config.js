@@ -166,23 +166,27 @@ export default defineNuxtConfig({
         fs: 'empty',
         encoding: 'empty',
       }
-      const testAttributes = ['data-cy']
-      ctx.loaders.vue.compilerOptions = {
-        modules: [
-          {
-            preTransformNode(astEl) {
-              const { attrsMap, attrsList } = astEl
-              testAttributes.forEach((attribute) => {
-                if (attrsMap[attribute]) {
-                  delete attrsMap[attribute]
-                  const index = attrsList.findIndex((x) => x.name === attribute)
-                  attrsList.splice(index, 1)
-                }
-              })
-              return astEl
+      if (process.env.ENVIRONMENT !== 'dev') {
+        const testAttributes = ['data-cy']
+        ctx.loaders.vue.compilerOptions = {
+          modules: [
+            {
+              preTransformNode(astEl) {
+                const { attrsMap, attrsList } = astEl
+                testAttributes.forEach((attribute) => {
+                  if (attrsMap[attribute]) {
+                    delete attrsMap[attribute]
+                    const index = attrsList.findIndex(
+                      (x) => x.name === attribute,
+                    )
+                    attrsList.splice(index, 1)
+                  }
+                })
+                return astEl
+              },
             },
-          },
-        ],
+          ],
+        }
       }
     },
     babel: { compact: true },

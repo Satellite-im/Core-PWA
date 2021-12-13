@@ -14,4 +14,20 @@ Cypress.Commands.add('createAccount', () => {
   cy.get('[data-cy=sign-in-button]').click()
 })
 
+Cypress.Commands.add('importAccount', () => {
+  cy.visit('/')
+  cy.get('[data-cy=add-input]').type('test001', { log: false })
+  cy.get('[data-cy=submit-input]').click()
+  cy.contains('Import Account').click()
+  cy.contains(
+    'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
+  )
+  cy.get('[data-cy=add-passphrase]').type(
+    'boring over tilt regret diamond rubber example there fire roof sheriff always',
+    { log: false },
+  )
+  cy.get('[data-cy=add-pass-phrase]').type('{enter}')
+  cy.contains('Recover Account').click()
+})
+
 import 'cypress-file-upload'
