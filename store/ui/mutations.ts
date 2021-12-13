@@ -287,12 +287,12 @@ export default {
     )
     if (emojiUsed) {
       emojiUsed.count++
-    } else {
-      state.mostEmojiUsed.push({
-        code: emojiObj.name,
-        content: emojiObj.emoji,
-        count: 1,
-      })
+      return
     }
+    state.mostEmojiUsed.push({
+      code: emojiObj.name,
+      content: emojiObj.emoji,
+      count: 1,
+    })
   },
 }
