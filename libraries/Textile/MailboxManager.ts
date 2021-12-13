@@ -4,7 +4,7 @@ import {
   Identity,
   ThreadID,
   UserMessage,
-  Users, PushPathResult, Buckets,
+  Users,
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
@@ -20,8 +20,6 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import {UploadDropItemType} from "~/types/files/file";
-import FileC from "~/libraries/Textile/FileC";
 
 export class MailboxManager {
   senderAddress: string

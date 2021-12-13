@@ -47,7 +47,7 @@ export type MediaMessage = TypeOf<typeof mediaMessage>
 export interface MTypes {
   reply: ReplyMessage
   reaction: ReactionMessage
-  file: FileData
+  file: FileMessage
   text: TextMessage
 }
 

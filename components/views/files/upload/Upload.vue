@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue, {PropType} from 'vue'
 import { Config } from '~/config'
-import { Buckets, Identity, KeyInfo } from '@textile/hub'
 
 import {
   FileIcon,
@@ -15,11 +14,6 @@ import {
 import { UploadDropItemType } from '~/types/files/file'
 import {Friend} from "~/types/ui/friends";
 import {mapState} from "vuex";
-import TextileManager from "~/libraries/Textile/TextileManager";
-import FileC from "~/libraries/Textile/FileC";
-import BucketManager from "~/libraries/Textile/BucketManager";
-import { any } from 'io-ts'
-import {Any} from "google-protobuf/google/protobuf/any_pb";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -44,14 +38,6 @@ export default Vue.extend({
     },
     recipient: {
       type: Object as PropType<Friend>,
-    },
-    relayResult: {
-      type: Function,
-      default: () => {},
-    },
-    close: {
-      type: String,
-      default: 'quick',
     },
   },
   data() {
@@ -158,12 +144,9 @@ export default Vue.extend({
       this.$data.uploadStatus = false
       this.$data.count_error = false
     },
-    /** @method
-     * Setter
-     * Uploads the file to IPFS. Progress will be updated on the
-     * component for tracking in progress bars and watching
-     * @name sendToIpfs
-     * @argument file the file to be uploaded to IPFS
+    /**
+     * @method sendMessage
+     * @description Sends action to Upload the file to textile.
      */
     async sendMessage () {
       this.$store.dispatch('textile/sendFileMessage', {
@@ -171,13 +154,6 @@ export default Vue.extend({
         file: this.$data.files[0]
       }
       ).then(() => this.cancelUpload())
-    },
-    determineFileType(type) {
-      let ft = 'file';
-      if (type.includes('image')) ft = 'image';
-      if (type.includes('audio')) ft = 'audio';
-      if (type.includes('video')) ft = 'video';
-      return ft;
     },
   },
 })

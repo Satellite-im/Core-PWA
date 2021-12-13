@@ -227,7 +227,7 @@ export default {
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
-   * the emoji and the id of the message the user reacted to
+   * file: UploadDropItemType to be sent users bucket for textile
    */
   async sendFileMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
@@ -321,7 +321,6 @@ export default {
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, replyTo, text }: { to: string; replyTo: string; text: string },
   ) {
-    console.log('Send Reply Message')
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
@@ -335,7 +334,6 @@ export default {
     }
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-    console.log(text)
     const result = await $MailboxManager.sendMessage<'reply'>(
       friend.textilePubkey,
       {

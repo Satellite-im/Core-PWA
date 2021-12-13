@@ -10,12 +10,8 @@ export default Vue.extend({
     FileIcon,
   },
   props: {
-    data: {
-      type: String,
-      default: () => {},
-    },
     file: {
-      type: Object as PropType< TextileImage>
+      type: Object as PropType<TextileImage>
     },
   },
   data() {
@@ -25,7 +21,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    findSize() {
+    getFileSize() {
     return this.bytesToSize(this.file.size)
     },
   },

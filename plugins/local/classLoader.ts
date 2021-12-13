@@ -56,8 +56,6 @@ Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
-// @ts-ignore
-Vue.prototype.$BucketManager = new BucketManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)

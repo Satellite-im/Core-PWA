@@ -46,7 +46,6 @@ export default class BucketManager {
     const result = await this.buckets.getOrCreate(`hub.textile.io/ipfs/${this.identity}/${this.prefix}`);
     if (!result.root) throw new Error('failed to open buckets');
     this.bucketKey = result.root.key;
-    console.log(this.buckets)
     await this.ensureIndex();
 
   }
@@ -107,7 +106,6 @@ export default class BucketManager {
         },
       ],
     };
-    console.log(index, "Index")
     // Store the index in the Bucket (or in the Thread later)
     const buf = Buffer.from(JSON.stringify(index, null, 2));
     await this.buckets.pushPath(this.bucketKey, path, buf);
@@ -159,13 +157,13 @@ export default class BucketManager {
       reader.onerror = () => reject('file reading has failed');
       reader.onload = () => {
         if (!this.buckets || !this.bucketKey) {
-          resolve(new Error('Please init first'));
+          reject(new Error('Please init first'));
           return;
         }
         const binaryStr = reader.result;
         this.buckets.pushPath(this.bucketKey, `${path}`, binaryStr).then((raw) => {
           resolve(raw);
-        }).catch(error => console.log(error));
+        }).catch(error => new Error(error));
       };
       reader.readAsArrayBuffer(file);
     });
