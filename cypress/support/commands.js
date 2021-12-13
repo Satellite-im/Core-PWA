@@ -20,7 +20,7 @@ Cypress.Commands.add('importAccount', () => {
   cy.get('[data-cy=submit-input]').click()
   cy.contains('Import Account').click()
   cy.contains(
-    'Enter your 12 word pass phrase in exactly the same order your recovery seed was generated.',
+    'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
   )
   cy.get('[data-cy=add-passphrase]').type(
     'boring over tilt regret diamond rubber example there fire roof sheriff always',
