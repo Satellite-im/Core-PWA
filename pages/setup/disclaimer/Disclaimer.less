@@ -1,7 +1,8 @@
 .container {
   margin: 0 auto;
+  padding: 0 @normal-spacing;
   min-height: 100vh;
-  max-width: 400px;
+  max-width: 416px;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -14,11 +15,5 @@
     .centered-subtitle {
       margin: @normal-spacing;
     }
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .container {
-    margin: 0 2rem;
   }
 }

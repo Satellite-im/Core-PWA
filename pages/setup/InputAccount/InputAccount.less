@@ -7,15 +7,18 @@
   text-align: center;
 
   .input-account-body {
-    min-width: 32rem;
     align-self: center;
-    margin-bottom: 25vh;
-    .recover-account {
-      min-width: 24rem;
+    padding: 0 @normal-spacing;
+    max-width: 100vw;
+    .recover-account.button {
+      width: 24rem;
+      max-width: 100%;
+      margin-top: @normal-spacing;
     }
     .columns {
-      margin: @xlarge-spacing auto;
-      max-width: 24rem;
+      margin: @normal-spacing auto 0;
+      max-width: 100%;
+      width: 24rem;
       .column {
         padding: @xlight-spacing;
         .tag,
@@ -30,6 +33,6 @@
     }
   }
   .input-error {
-    margin-top: 15px;
+    margin-top: @normal-spacing;
   }
 }
