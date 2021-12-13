@@ -39,6 +39,9 @@ const mutations = {
     // will not react to deep values
     state.embeddedLinks = value
   },
+  displayCurrentActivity(state: SettingsState, value: Boolean) {
+    state.displayCurrentActivity = value
+  },
 }
 
 export default mutations
