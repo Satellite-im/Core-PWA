@@ -7,6 +7,7 @@ Cypress.Commands.add('createAccount', () => {
   cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
   cy.get('[data-cy=submit-input]').click()
   cy.get('.is-primary > #custom-cursor-area').click()
+  cy.contains('Continue').click()
   cy.contains('I Saved It').click()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   cy.get('[data-cy=username-input]').type(randomName)
