@@ -25,6 +25,10 @@ export default Vue.extend({
         state: !this.ui.modals.marketplace,
       })
     },
+    horizontalScroll(e) {
+      e.preventDefault()
+      this.$refs['hScrollContainer'].scrollLeft += e.deltaY
+    },
   },
 })
 </script>

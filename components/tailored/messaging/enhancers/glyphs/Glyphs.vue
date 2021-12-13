@@ -18,11 +18,12 @@ export default Vue.extend({
   },
   watch: {
     searchText() {
+      console.log('filtered: ', this.searchText)
       this.filter(this.searchText)
     },
   },
   methods: {
-    filter(filterValue: any) {
+    filter(filterValue: string) {
       // this.filteredGlyphs = Object.entries(this.$mock.glyphs).reduce(
       //   (prev, [key, value]: [string, any]) => ({
       //     ...prev,
@@ -31,7 +32,11 @@ export default Vue.extend({
       //   {}
       // )
 
-      this.filteredGlyphs = this.$mock.glyphs.filter((e: any) => e.name.includes(filterValue))
+      console.log('filtered: ', filterValue)
+
+      this.$data.filteredGlyphs = this.$mock.glyphs.filter((e: any) => e.name.toLowerCase().includes(filterValue.toLowerCase()))
+
+      console.log('filtered: ', this.$data.filteredGlyphs)
     },
   },
 })
