@@ -18,7 +18,6 @@ export default Vue.extend({
   },
   watch: {
     searchText() {
-      console.log('filtered: ', this.searchText)
       this.filter(this.searchText)
     },
   },
@@ -32,11 +31,7 @@ export default Vue.extend({
       //   {}
       // )
 
-      console.log('filtered: ', filterValue)
-
       this.$data.filteredGlyphs = this.$mock.glyphs.filter((e: any) => e.name.toLowerCase().includes(filterValue.toLowerCase()))
-
-      console.log('filtered: ', this.$data.filteredGlyphs)
     },
   },
 })
