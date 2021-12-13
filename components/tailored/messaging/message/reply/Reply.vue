@@ -36,6 +36,13 @@ export default Vue.extend({
   data() {
     return { showReplies: false, replyHover: '' }
   },
+   mounted() {
+    const openReplyList = localStorage.getItem('open-reply-list')
+    const oRLObj = openReplyList ? JSON.parse(openReplyList) : []
+    if (oRLObj.includes(this.$props.message.id)) {
+      this.$data.showReplies = true
+    }
+  },
   computed: {
     /**
      * makeReplyText: generates the "Replies from _____" text in a chat
@@ -122,6 +129,16 @@ export default Vue.extend({
      */
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
+
+      const openReplyList = localStorage.getItem('open-reply-list')
+      let oRLObj = openReplyList ? JSON.parse(openReplyList) : []
+      
+      if (this.$data.showReplies === true) {
+        oRLObj.includes(this.$props.message.id) ? oRLObj : oRLObj.push(this.$props.message.id)
+      } else {
+        oRLObj.includes(this.$props.message.id) ? oRLObj.pop(this.$props.message.id) : oRLObj
+      }
+      localStorage.setItem('open-reply-list', JSON.stringify(oRLObj))
     },
   },
 })
