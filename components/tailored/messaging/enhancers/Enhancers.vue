@@ -1,7 +1,7 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 
@@ -29,6 +29,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['getSortedMostUsedEmojis']),
+    mostUsedEmojis() {
+      return this.getSortedMostUsedEmojis.slice(0, 10)
+    },
     route: {
       get() {
         return this.ui.enhancers.route
