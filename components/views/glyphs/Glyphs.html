@@ -1,0 +1,14 @@
+<div class="glyphs-modal">
+  <InteractablesClose class="close" :action="closeModal" />
+  <div class="heading">
+    <TypographyTitle :size="5" :text="selectedPack.name" />
+  </div>
+  <TailoredGlyphsSample :glyphs="samplePack" />
+  <InteractablesButton
+    class="button"
+    type="primary"
+    size="small"
+    text="View More Glyphs"
+    :action="openMarketplace"
+  />
+</div>

@@ -444,7 +444,7 @@ export default {
    */
   async sendGlyphMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, text, pack }: { to: string; text: string; pack: string },
+    { to, src, pack }: { to: string; src: string; pack: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -466,7 +466,7 @@ export default {
       friend.textilePubkey,
       {
         to: friend.textilePubkey,
-        payload: text,
+        payload: src,
         pack: pack,
         type: 'glyph',
       },

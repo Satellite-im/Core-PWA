@@ -236,9 +236,6 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
     },
-    openGlyphModal() {
-      console.log(this)
-    },
   },
   created() {
     const setTimestamp = (timePassed: string) => {
