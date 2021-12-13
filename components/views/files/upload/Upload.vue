@@ -18,6 +18,8 @@ import {mapState} from "vuex";
 import TextileManager from "~/libraries/Textile/TextileManager";
 import FileC from "~/libraries/Textile/FileC";
 import BucketManager from "~/libraries/Textile/BucketManager";
+import { any } from 'io-ts'
+import {Any} from "google-protobuf/google/protobuf/any_pb";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -35,13 +37,21 @@ export default Vue.extend({
   props: {
     type: {
       type: String,
-      default: 'quick',
+      default: '',
     },
     editable: {
       type: Boolean
     },
     recipient: {
       type: Object as PropType<Friend>,
+    },
+    relayResult: {
+      type: Function,
+      default: () => {},
+    },
+    close: {
+      type: String,
+      default: 'quick',
     },
   },
   data() {
@@ -52,7 +62,7 @@ export default Vue.extend({
       progress: 0,
       ipfsHash: false,
       selectedFile: false,
-      imageURL: null,
+      imageURL: String,
       fileClass: false,
       error: false,
       aiScanning: false
@@ -65,17 +75,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    // sendMessage() {
-        // this.$store.dispatch('textile/sendFileMessage', {
-        //   to: this.recipient.textilePubkey,
-        //   file: this.$data.files[0]
-        // }
-        // )
-      // const messageBox = this.$refs.messageuser as HTMLElement
-      // // Clear Chatbar
-      // messageBox.innerHTML = ''
-      // this.value = ''
-    // },
     /**
      * @method handleFile
      * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
@@ -167,30 +166,19 @@ export default Vue.extend({
      * @argument file the file to be uploaded to IPFS
      */
     async sendMessage () {
-      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-      const path = `/uploads/${this.$data.files[0].file.name}`
-      console.log(this.$data.files[0].file)
-      $TextileManager.bucketManager?.getBucket()
-      const result = await $TextileManager.bucketManager?.pushFile(
-        this.$data.files[0].file,
-        path,
-        (progress: number) => {
-           progress
-        }
-      )
-      console.log(result)
-      this.imageURL = `https://hub.textile.io${result.root}${path}`
-      // this.$store.commit('setStatus', 'Uploading file to IPFS')
-      // this.ipfsHash = result.root.replace('/ipfs/', '')
-      this.fileClass = new FileC(
-        this.imageURL,
-        this.ipfsHash,
-        this.selectedFile
-      )
-      // Update file index
-      $TextileManager.bucketManager?.addToIndex(this.$data.files, result.root, path)
-
-    }
+      this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: this.$data.files[0]
+      }
+      ).then(() => this.cancelUpload())
+    },
+    determineFileType(type) {
+      let ft = 'file';
+      if (type.includes('image')) ft = 'image';
+      if (type.includes('audio')) ft = 'audio';
+      if (type.includes('video')) ft = 'video';
+      return ft;
+    },
   },
 })
 </script>

@@ -17,6 +17,7 @@ import {
   messageEncoder,
   mediaMessage,
 } from '~/libraries/Textile/encoders'
+import {FileData} from "~/components/ui/Embeds/File/types";
 
 /**
  * DecryptedMessage is the type that represent the data coming from textile mailbox
@@ -46,7 +47,7 @@ export type MediaMessage = TypeOf<typeof mediaMessage>
 export interface MTypes {
   reply: ReplyMessage
   reaction: ReactionMessage
-  file: FileMessage
+  file: FileData
   text: TextMessage
 }
 

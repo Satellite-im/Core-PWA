@@ -81,7 +81,12 @@ export const reactionMessage = t.intersection([
 export const fileMessage = t.intersection([
   baseMessage,
   t.type({
-    payload: t.string,
+    payload: t.type({
+      url: t.string,
+      name: t.string,
+      size: t.number,
+      type: t.string,
+    }),
     type: t.literal('file'),
   }),
 ])

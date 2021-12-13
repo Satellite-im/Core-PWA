@@ -8,8 +8,6 @@ import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType } from '~/types/textile/mailbox'
 import {UploadDropItemType} from "~/types/files/file";
-// import {BucketManager} from "~/libraries/Textile/BucketManager";
-import {KeyInfo, PrivateKey} from "@textile/hub";
 
 export default {
   /**
@@ -231,67 +229,47 @@ export default {
    * @param param1 an object containing the recipient address (textile public key),
    * the emoji and the id of the message the user reacted to
    */
-  // async sendFileMessage(
-  //   { commit, rootState }: ActionsArguments<TextileState>,
-  //   { to, file }: { to: string; file: UploadDropItemType }
-  // ) {
-  //   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  //   await $TextileManager.bucketManager?.init()
-  //
-  //   if (!$TextileManager.mailboxManager?.isInitialized()) {
-  //     throw new Error('Mailbox manager not initialized')
-  //   }
-  //
-  //   const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
-  //
-  //   if (!friend) {
-  //     throw new Error('Friend not found')
-  //   }
-  //
-  //
-  //   await $TextileManager.bucketManager?.pushFile(file.file, '/uploads/', (a => a))
-  //
-  //   const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-  //     const result = $TextileManager.bucketManager?.pushFile(file.file,'vbd./index.json', (a => a))
-  //
-  //     commit('addMessageToConversation', {
-  //       address: friend.address,
-  //       sender: MessageRouteEnum.OUTBOUND,
-  //       message: result,
-  //     })
-  //
-  // },
   async sendFileMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType }
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    await $TextileManager.bucketManager?.init()
-
-    if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
-    }
-
+    const path = `/${file.file.name}`
+    $TextileManager.bucketManager?.getBucket()
+    const result = await $TextileManager.bucketManager?.pushFile(
+      file.file,
+      path,
+      (progress: number) => {
+        progress
+      }
+    )
+    const imageURL = `https://hub.textile.io${result?.root}${path}`
+    $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
       throw new Error('Friend not found')
     }
 
+    const sendMessageResult = await $TextileManager.mailboxManager?.sendMessage<"file">(
+      friend.textilePubkey,
+      {
+        to: friend.textilePubkey,
+        payload: {
+          url: imageURL,
+          name: file.file.name,
+          size: file.file.size,
+          type: file.file.type,
+        },
+        type: "file",
+      },
+    )
 
-    await $TextileManager.bucketManager?.pushFile(file.file, 'vbd./index.json', (a => a))
-
-    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-      const result = $TextileManager.bucketManager?.pushFile(file.file,'vbd./index.json', (a => a))
-
-      commit('addMessageToConversation', {
-        address: friend.address,
-        sender: MessageRouteEnum.OUTBOUND,
-        message: result,
-      })
-
-
-    commit('setMessageLoading', { loading: false })
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: sendMessageResult,
+    })
   },
   /**
    * @description Sends a reaction message to a given friend

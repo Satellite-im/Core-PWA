@@ -1,5 +1,6 @@
 import { Client, Identity, Users } from '@textile/hub'
 import { SolanaWallet } from '../solana/solana'
+import * as t from "io-ts";
 
 export interface StorageConfig {
   id: string
@@ -20,4 +21,11 @@ export interface TextileInitializationData {
   client: Client
   users: Users
   wallet: SolanaWallet
+}
+
+export type TextileImage = {
+  url: string,
+  name: string,
+  size: number,
+  type: string,
 }

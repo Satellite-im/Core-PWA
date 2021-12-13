@@ -46,7 +46,7 @@ export default class TextileManager {
     }
 
     this.mailboxManager = new MailboxManager(textile, wallet.address)
-    this.bucketManager = new BucketManager(textile, identity, 'vdb.')
+    this.bucketManager = new BucketManager(textile, identity, textile.wallet.address)
     await this.bucketManager.init()
 
     return this.mailboxManager.init()
@@ -70,7 +70,7 @@ export default class TextileManager {
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
     await this.mailboxManager.init()
-    this.bucketManager = new BucketManager(textile, textile.identity,'vdb.')
+    this.bucketManager = new BucketManager(textile, textile.identity,textile.wallet.address)
     await this.bucketManager.init()
   }
 
