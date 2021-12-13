@@ -162,11 +162,11 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
-      if (process.env.ENVIRONMENT === 'DEV' || 'PRODUCTION') {
-        config.node = {
-          fs: 'empty',
-          encoding: 'empty',
-        }
+      config.node = {
+        fs: 'empty',
+        encoding: 'empty',
+      }
+      if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
         ctx.loaders.vue.compilerOptions = {
           modules: [
