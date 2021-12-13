@@ -50,4 +50,6 @@ export default function ({ store, route, redirect }: Arguments) {
   if (!allPrerequisitesReady) {
     return eventuallyRedirect('/')
   }
+  
+  store.commit('accounts/setLastVisited', route.path)
 }
