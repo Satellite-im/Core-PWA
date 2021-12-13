@@ -1,7 +1,7 @@
 <template src="./ContextMenu.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default Vue.extend({
   props: {
@@ -11,7 +11,11 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapGetters('ui', ['getSortedMostUsedEmojis']),
     ...mapState(['settings', 'ui']),
+    mostUsedEmojis() {
+      return this.getSortedMostUsedEmojis.slice(0, 3)
+    },
   },
   mounted() {
     this.handleOverflow()
