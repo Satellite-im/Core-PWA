@@ -14,7 +14,7 @@ export default Vue.extend({
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
     ...mapState(['settings', 'ui']),
     mostUsedEmojis() {
-      return this.getSortedMostUsedEmojis.slice(0, 3)
+      return this.getSortedMostUsedEmojis.slice(0, 4)
     },
   },
   mounted() {
