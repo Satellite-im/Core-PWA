@@ -1,85 +1,87 @@
 <div class="container">
-  <div class="privacy-body">
-    <div class="columns">
-      <div class="column center">
-        <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
-        <TypographyText :text="$t('pages.privacy.subtitle')" />
+  <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+    <div class="privacy-body">
+      <div class="columns">
+        <div class="column center">
+          <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
+          <TypographyText :text="$t('pages.privacy.subtitle')" />
+        </div>
       </div>
-    </div>
-    <br />
-    <div class="columns">
-      <div class="column">
-        <div class="columns">
-          <div class="column switch-column">
-            <InteractablesSwitch v-model="registry" small />
+      <br />
+      <div class="columns">
+        <div class="column">
+          <div class="columns">
+            <div class="column switch-column">
+              <InteractablesSwitch v-model="registry" small />
+            </div>
+            <div class="column">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.privacy.register.title')"
+              />
+              <TypographyText :text="$t('pages.privacy.register.subtitle')" />
+            </div>
           </div>
-          <div class="column">
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.privacy.register.title')"
-            />
-            <TypographyText :text="$t('pages.privacy.register.subtitle')" />
+        </div>
+        <div class="column">
+          <div class="columns">
+            <div class="column switch-column">
+              <InteractablesSwitch v-model="storePin" small />
+            </div>
+            <div class="column">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.privacy.pin.title')"
+              />
+              <TypographyText :text="$t('pages.privacy.pin.subtitle')" />
+            </div>
           </div>
         </div>
       </div>
-      <div class="column">
-        <div class="columns">
-          <div class="column switch-column">
-            <InteractablesSwitch v-model="storePin" small />
+      <div class="columns">
+        <div class="column">
+          <div class="columns">
+            <div class="column switch-column">
+              <InteractablesSwitch v-model="embeddedLinks" small />
+            </div>
+            <div class="column">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.privacy.embeds.title')"
+              />
+              <TypographyText :text="$t('pages.privacy.embeds.subtitle')" />
+            </div>
           </div>
-          <div class="column">
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.privacy.pin.title')"
-            />
-            <TypographyText :text="$t('pages.privacy.pin.subtitle')" />
+        </div>
+        <div class="column">
+          <div class="columns">
+            <div class="column switch-column">
+              <InteractablesSwitch v-model="displayCurrentActivity" small />
+            </div>
+            <div class="column">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.privacy.activity.title')"
+              />
+              <TypographyText :text="$t('pages.privacy.activity.subtitle')" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="columns">
-      <div class="column">
-        <div class="columns">
-          <div class="column switch-column">
-            <InteractablesSwitch v-model="embeddedLinks" small />
-          </div>
-          <div class="column">
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.privacy.embeds.title')"
-            />
-            <TypographyText :text="$t('pages.privacy.embeds.subtitle')" />
-          </div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="columns">
-          <div class="column switch-column">
-            <InteractablesSwitch v-model="displayCurrentActivity" small />
-          </div>
-          <div class="column">
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.privacy.activity.title')"
-            />
-            <TypographyText :text="$t('pages.privacy.activity.subtitle')" />
-          </div>
+      <br />
+      <br />
+      <div class="columns">
+        <div class="column">
+          <InteractablesButton
+            class="right"
+            type="primary"
+            :action="generateWallet"
+            size="small"
+          >
+            {{ $t('pages.privacy.continue') }}
+          </InteractablesButton>
         </div>
       </div>
     </div>
-    <br />
-    <br />
-    <div class="columns">
-      <div class="column">
-        <InteractablesButton
-          class="right"
-          type="primary"
-          :action="generateWallet"
-          size="small"
-        >
-          {{ $t('pages.privacy.continue') }}
-        </InteractablesButton>
-      </div>
-    </div>
-  </div>
+  </UiScroll>
 </div>
