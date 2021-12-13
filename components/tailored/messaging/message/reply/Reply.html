@@ -19,6 +19,7 @@
         </div>
         <div class="reply-content">
           <VueMarkdown v-if="reply.type === 'text'" :source="reply.payload" class="markdown" />
+          <VueMarkdown v-if="reply.type === 'reply'" :source="reply.payload" class="markdown" />
           <UiImage v-else-if="reply.type === 'image'" :source="reply.payload.url" alt="" />
           <UiEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
           <UiEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
