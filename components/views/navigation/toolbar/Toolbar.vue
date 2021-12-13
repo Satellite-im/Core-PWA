@@ -125,6 +125,38 @@ export default Vue.extend({
         state: !this.ui.modals[modalName],
       })
     },
+    async call(hasVideo: boolean) {
+      const identifier = this.$store.state.friends.all.find((f: any) => f.activeChat ).address
+      // Trying to call the same user while call is already active
+      if (identifier === this.$store.state.webrtc.activeCall) {
+        return
+      }
+      // Trying to call different user while call is already active
+      if (this.$store.state.webrtc.activeCall.length > 0) {
+        const oldPeer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
+        oldPeer?.call.hangUp()
+      }
+
+      const peer = this.$WebRTC.getPeer(identifier)
+
+      const streamConstraints = { audio: true, video: false }
+      if (hasVideo) {
+        // @ts-ignore
+        streamConstraints.video = { 
+          facingMode: 'user',
+          width: { min: 1024, ideal: 1280, max: 1920 },
+          height: { min: 576, ideal: 720, max: 1080 },
+        }
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
+      peer?.call.start(stream)
+      if (!hasVideo) {
+        peer?.call.addTransceiver('video')
+      }
+
+      this.$store.dispatch('webrtc/makeCall', { id: identifier, stream: stream})
+    }
   },
 })
 </script>

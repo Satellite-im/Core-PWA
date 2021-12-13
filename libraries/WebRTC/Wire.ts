@@ -211,7 +211,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
     this.emit('RAW_DATA', {
       peerId: this.identifier,
-      data: parsedData.data.payload,
+      data: parsedData.payload,
     })
   }
 

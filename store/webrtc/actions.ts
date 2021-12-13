@@ -36,7 +36,7 @@ export default {
    * this.$store.dispatch('webrtc/initialize')
    */
   async createPeerConnection(
-    { commit }: ActionsArguments<WebRTCState>,
+    { commit, dispatch, state }: ActionsArguments<WebRTCState>,
     identifier: string,
   ) {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
@@ -62,5 +62,53 @@ export default {
     peer?.communicationBus.on('TYPING_STATE', ({ state, peerId }) => {
       commit('friends/setTyping', { id: peerId, typingState: state }, { root: true })
     })
+
+    peer?.communicationBus.on('RAW_DATA', (message) => {
+      if (message.data.type === 'CALL_DENIED') {
+        peer?.call.hangUp()
+        dispatch('hangUp')
+      }
+    })
+
+    peer?.call.on('INCOMING_CALL', (data) => {
+      // if incoming call is activer call return before toggling incoming call
+      if (state.activeCall === data.peerId) {
+        return
+      }
+
+      commit('webrtc/toggleIncomingCall', data.peerId, { root: true })
+    })
+
+    peer?.call.on('HANG_UP', (data) => {
+      dispatch('hangUp')
+    })
+
+    peer?.call.on('STREAM', (data) => {
+      commit('webrtc/setRemoteStream', data.stream, { root: true })
+    })
+
+    peer?.call.on('TRACK', (data) => {
+    })
+  },
+  acceptCall({ commit }: ActionsArguments<WebRTCState>, data: Object) {
+    commit('toggleIncomingCall', '')
+    // @ts-ignore
+    commit('setLocalStream', data.stream)
+    // @ts-ignore
+    commit('toggleActiveCall', data.id)
+  },
+  denyCall({ commit }: ActionsArguments<WebRTCState>) {
+    commit('toggleIncomingCall', '')
+  },
+  makeCall({ commit }: ActionsArguments<WebRTCState>, data: Object) {
+    // @ts-ignore
+    commit('setLocalStream', data.stream)
+    // @ts-ignore
+    commit('toggleActiveCall', data.id)
+  },
+  hangUp({ commit }: ActionsArguments<WebRTCState>, data: Object) {
+    commit('toggleActiveCall', '')
+    commit('setLocalStream', undefined)
+    commit('setRemoteStream', undefined)
   },
 }

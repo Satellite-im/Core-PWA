@@ -1,8 +1,21 @@
-<div id="mediastream" ref="mediastream">
-  <MediaHeading />
+<!-- TODO: Move to hounddog -->
+<div id="mediastream" ref="mediastream" v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)">
+  <TailoredCoreMediaHeading />
   <div id="media" ref="media">
-    <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
-      :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" />
+
+    <div class="user">
+      <div class="video-stream-container" v-if="this.$store.state.webrtc.localStream">
+        <video class="video-stream" :src-object.prop="this.$store.state.webrtc.localStream" autoplay></video>
+      </div>
+    </div>
+    <div class="user">
+      <div class="video-stream-container" v-if="this.$store.state.webrtc.remoteStream">
+        <video class="video-stream"  :src-object.prop="this.$store.state.webrtc.remoteStream" autoplay></video>
+      </div>
+    </div>
+
+    <!-- <TailoredCoreMediaUser v-for="item in computedUsers" :key="item.name" ref="user"
+      :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" /> -->
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
       class="more-user" v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}">...</div>

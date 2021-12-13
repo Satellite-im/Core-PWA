@@ -154,6 +154,17 @@ export class Call extends Emitter<CallEventListeners> {
   }
 
   /**
+   * @method addTransceiver
+   * @description Add a RTCRtpTransceiver to the connection
+   * @param kind A MediaStreamTrack to associate with the transceiver, or a DOMString which is used as the kind of the receiver's track, and by extension of the RTCRtpReceiver itself.
+   * @param init An object that conforms to the RTCRtpTransceiverInit dictionary which provides any options that you may wish to specify when creating the new transceiver.
+   * @example
+   */
+  addTransceiver(kind: string) {
+    this.peer?.addTransceiver(kind, undefined)
+  }
+
+  /**
    * @method _bindPeerListeners
    * @description Internal function to bind listeners to the communiciationBus events
    * @example

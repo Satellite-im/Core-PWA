@@ -64,8 +64,29 @@ export default Vue.extend({
      * @description
      * @example
      */
-    acceptCall() {
-      this.$store.dispatch('media/acceptCall')
+    async acceptCall(hasVideo: boolean) {
+      const identifier = this.$store.state.webrtc.incomingCall
+      const peer = this.$WebRTC.getPeer(identifier)
+      
+      const streamConstraints = { audio: true, video: false }
+      if (hasVideo) {
+        // @ts-ignore
+        streamConstraints.video = { 
+          facingMode: 'user',
+          width: { min: 1024, ideal: 1280, max: 1920 },
+          height: { min: 576, ideal: 720, max: 1080 },
+        }
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
+
+      peer?.call.answer(stream)
+
+      if (hasVideo) {
+        peer?.call.addTransceiver("video")
+      }
+
+      this.$store.dispatch('webrtc/acceptCall', { id: identifier, stream: stream})
     },
     /**
      * @method denyCall DocsTODO
@@ -73,7 +94,11 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.dispatch('media/denyCall')
+      const identifier = this.$store.state.webrtc.incomingCall
+      const peer = this.$WebRTC.getPeer(identifier)
+
+      peer?.send('SIGNAL', { type: 'CALL_DENIED' })
+      this.$store.dispatch('webrtc/denyCall')
     },
   },
 })

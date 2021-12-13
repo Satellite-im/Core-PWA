@@ -51,6 +51,27 @@ export default Vue.extend({
       else this.$Sounds.playSound(Sounds.UNDEAFEN)
 
       this.$store.commit('video/toggleCamera')
+      this.updateStream()
+    },
+    /**
+     * @method hangUp
+     * @description Hangs up active call
+     * @example
+     */
+    hangUp() {
+      const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
+      peer?.call.hangUp()
+      this.$store.dispatch('webrtc/hangUp')
+    },
+    /**
+     * @method updateStream
+     * @description Updates stream when constraints are changed (eg. toggling voice and video)
+     * @example
+     */
+    async updateStream() {
+      const constraints = { audio: true, video: this.video.disabled }
+
+      const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
     },
   },
 })
