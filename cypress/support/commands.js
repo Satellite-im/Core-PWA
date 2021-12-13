@@ -27,7 +27,7 @@ Cypress.Commands.add('importAccount', () => {
     'boring over tilt regret diamond rubber example there fire roof sheriff always',
     { log: false },
   )
-  cy.get('[data-cy=add-pass-phrase]').type('{enter}')
+  cy.get('[data-cy=add-passphrase]').type('{enter}')
   cy.contains('Recover Account').click()
 })
 
