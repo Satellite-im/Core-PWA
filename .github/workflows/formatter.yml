@@ -1,0 +1,11 @@
+on: push
+name: Code Formatter
+jobs:
+  lint:
+    name: Code Formatter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Code Formatter
+      uses: MarvinJWendt/run-node-formatter@stable
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
