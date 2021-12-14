@@ -58,6 +58,9 @@ const mutations = {
   ) {
     state.registrationStatus = registrationStates
   },
+  setLastVisited(state: AccountsState, lastVisited: string) {
+    state.lastVisited = lastVisited
+  }
 }
 
 export default mutations
