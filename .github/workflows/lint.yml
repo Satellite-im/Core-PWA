@@ -1,14 +1,8 @@
 name: Lint
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the dev branch
-  push:
-    branches:
-      - dev
   pull_request:
-    branches:
-      - dev
+    types: [assigned, opened, synchronize, reopened]
 
 jobs:
   run-linters:
