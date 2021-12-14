@@ -1,0 +1,17 @@
+<div class="pack-group">
+  <div class="pack-title" @click="togglePack">
+    <image-icon size="1x" />
+    <span>{{ pack.name }}</span>
+    <chevron-down-icon size="1x" v-if="isOpen" />
+    <chevron-up-icon size="1x" v-if="!isOpen" />
+  </div>
+  <div class="glyph-list-box" v-if="isOpen">
+    <ViewsChatEnhancersGlyphsItem
+      v-for="glyph in pack.stickerURLs"
+      :key="glyph"
+      :src="glyph"
+      :pack="pack"
+      :sendOnClick="true"
+    ></ViewsChatEnhancersGlyphsItem>
+  </div>
+</div>

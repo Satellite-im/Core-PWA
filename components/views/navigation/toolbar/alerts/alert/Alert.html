@@ -1,0 +1,19 @@
+<div :class="`alert ${localAlert.state} ${hidden ? 'hidden' : 'shown'}`">
+  <div>
+    <!--Optional alert image -->
+    <img v-if="localAlert.content.image" :src="localAlert.content.image" />
+  </div>
+  <div>
+    <div class="a-heading">
+      <!--Alert title-->
+      <TypographySubtitle :size="6" :text="localAlert.content.title" />
+      <!--Alert timestamp-->
+      <TypographyText :text="$dayjs(localAlert.at).from()" class="timestamp" />
+    </div>
+    <!--Alert description-->
+    <div class="description">
+      <TypographyText :text="localAlert.content.description" />
+    </div>
+  </div>
+  <InteractablesClose :action="dismiss" />
+</div>

@@ -1,0 +1,34 @@
+<div class="marketplace-glyphs">
+  <div
+    v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.HOME"
+    class="marketplace-glyphs-home"
+  >
+    <div class="home-content">
+      <div class="left-content-block">
+        <ViewsMarketplaceGlyphsFeatured></ViewsMarketplaceGlyphsFeatured>
+        <div class="recommended-block">
+          <ViewsMarketplaceGlyphsRecommended :item="marketGlyphs[2]"></ViewsMarketplaceGlyphsRecommended>
+          <ViewsMarketplaceGlyphsRecommended :item="marketGlyphs[3]"></ViewsMarketplaceGlyphsRecommended>
+        </div>
+      </div>
+      <ViewsMarketplaceGlyphsPopular></ViewsMarketplaceGlyphsPopular>
+    </div>
+    <ViewsMarketplaceGlyphsTrending
+      :list="$mock.glyphs"
+    ></ViewsMarketplaceGlyphsTrending>
+    <ViewsMarketplaceGlyphsShop title="Shop"></ViewsMarketplaceGlyphsShop>
+  </div>
+  <div v-else class="marketplace-glyphs-detail">
+    <div class="go-back" @click="goBack()">
+      <chevron-left-icon size="1.5x"></chevron-left-icon>
+      <TypographySubtitle :size="6" text="Back" />
+    </div>
+    <ViewsMarketplaceGlyphsShop
+      v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_ALL"
+      title="Shop All Glyphs"
+    ></ViewsMarketplaceGlyphsShop>
+    <ViewsMarketplaceGlyphsDetail
+      v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_DETAIL"
+    ></ViewsMarketplaceGlyphsDetail>
+  </div>
+</div>

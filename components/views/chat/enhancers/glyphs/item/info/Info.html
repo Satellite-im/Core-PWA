@@ -1,0 +1,11 @@
+<div class="glyph-info" v-if="ui.hoveredGlyphInfo">
+  <ViewsChatEnhancersGlyphsItem
+    :src="ui.hoveredGlyphInfo.glyphSrc"
+    :width="48"
+    :height="48"
+  ></ViewsChatEnhancersGlyphsItem>
+  <div class="glyph-pack-info">
+    <div>{{ui.hoveredGlyphInfo.pack.name}}</div>
+    <div>{{ui.hoveredGlyphInfo.pack.artists}}</div>
+  </div>
+</div>

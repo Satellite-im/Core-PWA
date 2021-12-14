@@ -1,0 +1,4 @@
+<div class="user">
+  <UiCircle type="random" :seed="user.publicKey" :size="$device.isMobile ? 35 : 65" :class="`${talking ? 'talking' : ''}`" :source="user.profilePicture" />
+  <TypographyTag :text="user.name" inverted />
+</div>

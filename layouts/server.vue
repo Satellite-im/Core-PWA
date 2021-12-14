@@ -1,6 +1,5 @@
 <template>
-  <div id="app-wrap"
-:class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
       v-touch:swipe="sidebarSwipeHandler(this)"
@@ -10,20 +9,20 @@
       }`"
     >
       <UiGlobal />
-      <TailoredCoreSlimbar
+      <ViewsNavigationSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <TailoredServersSidebar
+      <ViewsServersSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
       />
-      <TailoredMessagingEnhancers />
+      <ViewsChatEnhancers />
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar
-          id="statusbar"
+        <ViewsNavigationToolbar
+          id="toolbar"
           :server="{
             name: 'Test Server',
             address: '0x0',
@@ -31,7 +30,7 @@
           }"
           :user="$mock.users[0]"
         />
-        <TailoredCoreMedia
+        <ViewsMedia
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
           :max-viewable-users="10"
@@ -45,10 +44,10 @@
         >
           <Nuxt />
         </UiChatScroll>
-        <TailoredCoreChatbar />
+        <ViewsChatChatbar />
       </div>
     </div>
-    <TailoredCoreMobileNav v-if="$device.isMobile" />
+    <ViewsNavigationMobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

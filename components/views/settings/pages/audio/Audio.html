@@ -1,0 +1,298 @@
+<div id="audio-settings">
+  <!-- Audio -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.audio.title')"
+      />
+    </div>
+  </div>
+  <!--Audio Sources-->
+  <!-- Requires user permissions to see in most browsers -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <div v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess">
+        <TypographyTitle
+          :size="6"
+          :text="$t('pages.settings.audio.sources.title')"
+        />
+        <TypographySubtitle
+          :size="6"
+          :text="$t('pages.settings.audio.sources.subtitle')"
+        />
+        <br />
+      </div>
+
+      <!-- Ask for permissions block -->
+      <span v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess">
+        <InteractablesButton
+          :text="$t('pages.settings.audio.sources.permissionButtonText')"
+          size="small"
+          type="primary"
+          :action="enableAudio"
+        />
+      </span>
+
+      <!-- Permission Denied Block -->
+      <span v-if="userDeniedAudioAccess">
+        <TypographyError
+          :text="$t('pages.settings.audio.sources.permissionDeniedMessage')"
+        />
+      </span>
+
+      <!-- Permission Granted Block -->
+      <span v-if="userHasGivenAudioAccess">
+        <div class="columns is-desktop">
+          <!-- Audio In -->
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.sources.input.title')"
+            />
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.settings.audio.sources.input.subtitle')"
+            />
+            <br />
+            <InteractablesSelect
+              v-model="isAudioInput"
+              :options="audioInputs"
+              size="small"
+            />
+          </div>
+        </div>
+        <div class="columns is-desktop">
+          <!-- Audio Out -->
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.sources.output.title')"
+            />
+            <span v-if="browserAllowsAudioOut">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.settings.audio.sources.output.subtitle')"
+              />
+              <br />
+              <InteractablesSelect
+                v-model="isAudioOutput"
+                :options="audioOutputs"
+                size="small"
+              />
+            </span>
+            <span v-if="!browserAllowsAudioOut">
+              <TypographyError
+                :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
+              />
+            </span>
+          </div>
+        </div>
+        <div class="columns is-desktop">
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.systemVolume.title')"
+            />
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.settings.audio.systemVolume.subtitle')"
+            />
+            <ViewsMediaActionsVolume
+              :volume="audio.sounds.system"
+              direction="ltr"
+              plain
+              @volumeControlValueChange="systemVolumeControlValueChange"
+            />
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <!--Audio Output-->
+
+  <!--Audio Bitrate & Sample-->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.bitrate.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.audio.bitrate.subtitle')"
+      />
+
+      <br />
+      <InteractablesSelect
+        :options="Bitrates"
+        size="small"
+        v-model="isBitrate"
+      />
+    </div>
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.sampleSize.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.audio.sampleSize.subtitle')"
+      />
+
+      <br />
+      <InteractablesSelect
+        :options="SampleSizes"
+        size="small"
+        v-model="isSampleSize"
+      />
+    </div>
+  </div>
+
+  <!--Audio Bitrate & Sample-->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.volume.title')"
+      />
+      <div class="meter-container">
+        <UiMeter :value="0" :height="25" />
+      </div>
+      <ViewsMediaActionsVolume
+        :volume="audio.volume"
+        direction="ltr"
+        plain
+        @volumeControlValueChange="volumeControlValueChange"
+      />
+    </div>
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.inputVolume.title')"
+      />
+      <div class="meter-container">
+        <UiMeter :value="micLevel" :height="25" />
+      </div>
+      <ViewsMediaActionsVolume
+        :volume="audio.inputVolume"
+        direction="ltr"
+        plain
+        @volumeControlValueChange="inputVolumeControlValueChange"
+      />
+    </div>
+  </div>
+
+  <!--Echo Cancellation & Noise Suppression-->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.echo.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.audio.echo.subtitle')"
+      />
+      <br />
+      <InteractablesSwitch
+        v-model="isEchoCancellation"
+        :isEnabled="settings.echoCancellation"
+      />
+    </div>
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.audio.noise.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.audio.noise.subtitle')"
+      />
+      <br />
+      <InteractablesSwitch
+        v-model="isNoiseSuppression"
+        :isEnabled="settings.noiseSuppression"
+      />
+    </div>
+  </div>
+
+  <!-- Video -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.video.title')"
+      />
+    </div>
+  </div>
+
+  <!--Video Input Source -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.video.sources.input.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.video.sources.input.subtitle')"
+      />
+      <br />
+      <!-- Ask for permissions block -->
+      <span v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess">
+        <InteractablesButton
+          :text="$t('pages.settings.audio.sources.permissionButtonText')"
+          size="small"
+          type="primary"
+          :disabled="!hasWebcam"
+          :action="enableVideo"
+        />
+      </span>
+      <span v-if="userHasGivenVideoAccess">
+        <InteractablesSelect
+          v-model="isVideoInput"
+          :options="videoInputs"
+          size="small"
+        />
+      </span>
+
+      <!-- Permission Denied Block -->
+      <span v-if="userDeniedVideoAccess">
+        <TypographyError
+          :text="$t('pages.settings.video.sources.permissionDeniedMessage')"
+        />
+      </span>
+    </div>
+  </div>
+
+  <!-- Screen Share -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="5"
+        :text="$t('pages.settings.screen.title')"
+      />
+    </div>
+  </div>
+
+  <!-- Capture Mouse -->
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.screen.captureMouse.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.screen.captureMouse.subtitle')"
+      />
+      <br />
+      <InteractablesSelect
+        v-model="isCaptureMouse"
+        :options="captureMouses"
+        size="small"
+      />
+    </div>
+  </div>
+</div>

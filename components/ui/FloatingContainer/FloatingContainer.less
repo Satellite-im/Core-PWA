@@ -1,0 +1,26 @@
+#floating-container {
+  position: absolute;
+  display: inline-flex;
+  background: @semitransparent-light-gradient;
+  border-radius: @corner-rounding;
+  border: @light-border;
+  backdrop-filter: @blur;
+  max-height: 50vh;
+  overflow: hidden;
+  padding: (@light-spacing / 2) @light-spacing;
+
+  .wrap {
+    overflow: hidden;
+
+    .header {
+      .subtitle {
+        font-size: @micro-text-size !important;
+        font-family: @primary-font;
+      }
+
+      font-size: @micro-text-size !important;
+      font-family: @primary-font;
+      margin-bottom: @light-spacing;
+    }
+  }
+}

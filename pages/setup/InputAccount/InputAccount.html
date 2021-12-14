@@ -14,7 +14,7 @@
     <div class="columns is-mobile" v-if="phrases.length > 0">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord
+          <TypographyNumberedWord
             :word="word"
             v-if="isOdd(i + 1)"
             :number="i + 1"
@@ -25,7 +25,7 @@
       </div>
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
-          <UiNumberedWord
+          <TypographyNumberedWord
             :word="word"
             v-if="!isOdd(i + 1)"
             :number="i + 1"

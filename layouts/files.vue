@@ -11,12 +11,12 @@
     >
       <UiGlobal />
 
-      <TailoredCoreSlimbar
+      <ViewsNavigationSlimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <TailoredCoreSidebar
+      <ViewsNavigationSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
         :users="friends.all"
         :groups="$mock.groups"
@@ -25,7 +25,7 @@
         <Nuxt id="files" ref="files" />
       </div>
     </div>
-    <TailoredCoreMobileNav v-if="$device.isMobile" />
+    <ViewsNavigationMobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

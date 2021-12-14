@@ -1,0 +1,66 @@
+<div class="is-message" @contextmenu="contextMenu">
+  <div
+    @mouseenter="mouseOver"
+    @mouseleave="mouseOver"
+    :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`"
+  >
+    <div v-if="message.pinned" class="pinned-badge">
+      <archive-icon size="0.85x" />
+      Archived
+    </div>
+    <div v-if="hideActions" class="inline-meta">
+      <div class="sat-icon-container satellite-icon-helper">
+        <UiCircle
+          type="random"
+          :seed="$mock.users.filter(u => u.name === from)[0].address"
+          :size="23"
+        />
+      </div>
+      <UiUserName
+        :username="from"
+        :badge="$mock.users.filter(u => u.name === from)[0].badge"
+      />
+      <TypographyText :text="timestamp" />
+    </div>
+    <ViewsChatMessageActions
+      v-if="messageHover && !hideActions"
+      :setReplyChatbarContent="setReplyChatbarContent"
+      :emojiReaction="emojiReaction"
+      :editMessage="editMessage"
+      :message="message"
+    />
+    <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
+    <UiChatImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
+    <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
+    <UiChatEmbedsEmbeddedLinkContent
+      v-if="message.type === 'text'"
+      :data="message.payload"
+    />
+    <UiChatEmbedsVideoPlayer
+      v-else-if="message.type === 'video'"
+      :data="message.payload"
+    />
+    <UiChatEmbedsAudioPlayer
+      v-else-if="message.type === 'audio'"
+      :data="message.payload"
+    />
+    <UiChatEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
+    <ViewsChatMessageReactions
+      v-if="!hideActions && hasReactions"
+      :message="this.$props.message"
+      :group="this.$props.group"
+      :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
+    />
+  </div>
+  <ViewsChatMessageReply
+    :message="message"
+    :group="group"
+    v-if="!hideActions"
+    :from="from"
+  />
+  <ViewsChatMessageEdit
+    v-if="messageEdit"
+    :message="message.payload"
+    @commitMessage="saveMessage"
+  />
+</div>

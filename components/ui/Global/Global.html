@@ -1,5 +1,5 @@
 <div>
-  <TailoredSettingsModal v-if="ui.showSettings" />
+  <ViewsSettingsModal v-if="ui.showSettings" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <UiModal
     v-if="ui.modals.wallet"
@@ -7,14 +7,14 @@
     nopad
     v-click-outside="() => toggleModal(ModalWindows.WALLET)"
   >
-    <TailoredWalletPopup />
+    <ViewsWalletPopup />
   </UiModal>
   <UiModal
     v-if="ui.modals.createServer"
     :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
     :title="$t('servers.create.heading')"
   >
-    <TailoredCoreServersCreate
+    <ViewsServersCreate
       v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
       :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
     />
@@ -34,7 +34,7 @@
     v-if="$mock.users.find((user) => user.name === media.incomingCall)"
     nopad
   >
-    <TailoredCoreIncomingCall
+    <ViewsMediaIncomingCall
       :user="$mock.users.find((user) => user.name === media.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
@@ -45,7 +45,7 @@
     :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
     nopad
   >
-    <TailoredMarketplace
+    <ViewsMarketplace
       v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
       :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
     />

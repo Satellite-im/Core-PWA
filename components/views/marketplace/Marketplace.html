@@ -1,0 +1,43 @@
+<div class="market-place">
+  <div class="side-bar">
+    <ViewsMarketplaceSidebar :categories="marketCategories" />
+  </div>
+  <div class="body-panel">
+    <div class="top-bar">
+      <div class="search">
+        <ViewsMarketplaceSearchbox />
+      </div>
+      <div class="filter">
+        <ViewsMarketplaceFilterbox />
+      </div>
+      <div class="action">
+        <InteractablesClose :action="closeModal" />
+      </div>
+    </div>
+    <div class="buttons-bar">
+      <InteractablesButtonGroup v-model="subject" :action="changeSubject">
+        <InteractablesButton text="Glyphs" size="small" type="dark">
+          <smile-icon size="1x" />
+        </InteractablesButton>
+        <InteractablesButton text="Themes" size="small" type="dark">
+          <layers-icon size="1x" />
+        </InteractablesButton>
+        <InteractablesButton text="NFTs" size="small" type="dark">
+          <box-icon size="1x" />
+        </InteractablesButton>
+      </InteractablesButtonGroup>
+    </div>
+    <div class="listing-panel">
+      <UiScroll
+        verticalScroll
+        scrollbarVisibility="scroll"
+        enableWrap
+        noPadding
+      >
+        <ViewsMarketplaceListing v-if="subject==='Themes'" />
+        <ViewsMarketplaceGlyphs v-if="subject==='Glyphs'" />
+        <ViewsMarketplaceNfts v-if="subject==='NFTs'" />
+      </UiScroll>
+    </div>
+  </div>
+</div>

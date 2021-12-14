@@ -1,6 +1,6 @@
 <div class="container">
   <div class="registration-body">
-    <TailoredCoreUserCreate :onConfirm="confirm" v-if="hasToRegister"/>
+    <ViewsUserCreate :onConfirm="confirm" v-if="hasToRegister"/>
     <div v-if="!hasToRegister && !isRegistered">
       <UiLoadersLoadingBar />
       <TypographyTitle :size="5" :text="$t('pages.loading.loading')" />

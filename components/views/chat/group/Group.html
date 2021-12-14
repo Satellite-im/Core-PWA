@@ -1,0 +1,22 @@
+<div class="is-group">
+  <span v-on:click="showQuickProfile">
+    <UiCircle type="random" :seed="address" :size="35" />
+  </span>
+  <div class="group-body">
+    <div class="group-heading">
+      <span v-on:click="showQuickProfile">
+        <UiUserName :username="username" :badge="badge" />
+      </span>
+      <TypographyText :text="timestamp" />
+    </div>
+    <div class="group-messages">
+      <ViewsChatMessage
+        v-for="message in group.messages"
+        :group="group"
+        :message="message"
+        :from="username"
+        :key="message.id"
+      />
+    </div>
+  </div>
+</div>

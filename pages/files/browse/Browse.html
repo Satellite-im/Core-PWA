@@ -1,10 +1,10 @@
 <div id="files"  class="hidden-scroll" v-scroll-lock="true">
   <div :class="`${$device.isMobile ? 'mobile-file-aside' : 'hidden-file-aside'}`">
-    <TailoredFilesAside />
+    <ViewsFilesAside />
   </div>
   
   <div class="files-top">
-    <TailoredFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
+    <ViewsFilesFilepath :path="path" :pull="pull" :setPath="setPath" />
   </div>
   <div class="files-container">
     <div class="files-left">
@@ -15,26 +15,26 @@
         placeholder="Search..."
       />
       <UiSpacer :height="10" />
-      <TailoredFilesControls :changeView="changeView" />
-      <TailoredFilesTopbar />
+      <ViewsFilesControls :changeView="changeView" />
+      <ViewsFilesTopbar />
       <UiSpacer :height="10" />
       <TypographyText :size="6" text="Files" />
       <div v-if="view === 'list'">
-        <TailoredFilesList 
+        <ViewsFilesList 
           :path="getPath().children"
           v-if="$store.state.dataState.files !== DataStateType.Loading"
           :push="push" />
         <UiLoadersFileTable v-else :rows="5" />
       </div>
       <div v-else>
-        <TailoredFilesGrid
+        <ViewsFilesGrid
           :path="getPath().children"
           v-if="$store.state.dataState.files !== DataStateType.Loading"
           :push="push" />
       </div>
     </div>
     <div :class="`${$device.isMobile ? 'hidden-file-aside' : 'files-right'}`">
-      <TailoredFilesAside v-if="!$device.isMobile"/>
+      <ViewsFilesAside v-if="!$device.isMobile"/>
     </div>
   </div>
 </div>
