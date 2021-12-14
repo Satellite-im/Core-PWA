@@ -77,6 +77,7 @@ export default Vue.extend({
         this.searchList = this.list
         return
       }
+      if (!this.isFocus) this.isFocus = true
       this.searchList = this.list.filter((item: any) =>
         this.label
           ? item[this.label].indexOf(this.searchText) === 0
@@ -90,7 +91,12 @@ export default Vue.extend({
       this.isFocus = false
     },
     onItemClicked(item: any) {
-      this.onSelected(item)
+      this.$emit('onSelected', item)
+      this.isFocus = false
+      this.searchText = ''
+    },
+    onMultipleItemSelected(items: any) {
+      this.$emit('onMultipleSelected', items)
       this.isFocus = false
       this.searchText = ''
     },
@@ -106,7 +112,13 @@ export default Vue.extend({
           ? item[this.label] === this.searchText
           : item === this.searchText,
       )
-      if (item) this.onItemClicked(item)
+      const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
+      
+      if (itemSplitted.length > 0) {
+        this.onMultipleItemSelected(itemSplitted)
+      } else if (item) {
+        this.onItemClicked(item)
+      }
     },
   },
 })

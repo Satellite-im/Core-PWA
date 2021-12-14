@@ -17,24 +17,45 @@ export default Vue.extend({
       bipList: bip39.wordlists.english,
     }
   },
-  computed: {
-    availableBipList() {
-      return this.bipList.filter((elm) => !this.phrases.includes(elm))
-    },
-  },
   methods: {
-    recoverAccount() {
-      /* recover account action will be implemented on bip39 service ticket */
+    /**
+     * @method recoverAccount DocsTODO
+     * @description recover account with 12 mnemonic recover phrases
+     * @example this.recoverAccount()
+     */
+    async recoverAccount() {
+      try {
+        const mnemonic = this.phrases.join(' ')
+        await this.$store.commit('accounts/setPhrase', mnemonic)
+        await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
+        await this.$store.dispatch('accounts/loadAccount')
+      } catch (error: any) {
+        this.error = error.message
+        return
+      }
+      this.$router.replace('/')
     },
     isOdd(num: number) {
       return num % 2
     },
     removeWord(index: number) {
       this.phrases.splice(index, 1)
+      this.error = ''
     },
     onSelected(item: string) {
-      if (this.phrases.length < 12 && !this.phrases.includes(item))
-        this.phrases.push(item)
+      if (this.phrases.length < 12) this.phrases.push(item)
+    },
+    onMultipleSelected(items: string[]) {
+      const filteredItems = items.filter((item) => {
+        return this.bipList.indexOf(item) >= 0
+      })
+      filteredItems.every((item) => {
+        if (this.phrases.length < 12 ) {
+          this.phrases.push(item)
+          return true
+        }
+        return false
+      })
     },
   },
 })

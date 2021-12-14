@@ -26,7 +26,7 @@ export default function ({ store, route, redirect }: Arguments) {
       if (route.path === path) return
       redirect(path)
     },
-    () => redirect
+    () => redirect,
   )
 
   // If the user is not authenticated
@@ -47,7 +47,6 @@ export default function ({ store, route, redirect }: Arguments) {
 
   const allPrerequisitesReady =
     store.getters['prerequisites/allPrerequisitesReady']
-
   if (!allPrerequisitesReady) {
     return eventuallyRedirect('/')
   }

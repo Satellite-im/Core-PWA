@@ -5,10 +5,7 @@
     </div>
   </div>
   <div class="pack-list">
-    <div
-      v-for="pack in $mock.glyphs"
-      @click="() => {$emit('navSelected', pack.name)}"
-    >
+    <div v-for="pack in $mock.glyphs" @click="$emit('navSelected', pack.name)">
       <TailoredMessagingEnhancersGlyphsItem
         :key="pack.id"
         :src="pack.stickerURLs[0]"

@@ -21,13 +21,13 @@ const mutations = {
       limit: number
       skip: number
       end: boolean
-    }
+    },
   ) {
     const initialValues = {
       messages: state.conversations[address]?.messages || [],
       replies: state.conversations[address]?.replies || [],
       reactions: state.conversations[address]?.reactions || [],
-      lastInbound: state.conversations[address]?.lastInbound || 0,  // the last time a message was received by any member of conversation, EXCEPT account owner
+      lastInbound: state.conversations[address]?.lastInbound || 0, // the last time a message was received by any member of conversation, EXCEPT account owner
       lastUpdate: state.conversations[address]?.lastUpdate || 0, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
 
@@ -39,7 +39,7 @@ const mutations = {
         messages: tracked.messages,
         replies: tracked.replies,
         reactions: tracked.reactions,
-        lastInbound: initialValues.lastInbound,  // the last time a message was received by any member of conversation, EXCEPT account owner
+        lastInbound: initialValues.lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
         lastUpdate: initialValues.lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
         limit,
         skip,
@@ -54,7 +54,7 @@ const mutations = {
         messages: {},
         replies: {},
         reactions: {},
-        lastInbound: 0,  // the last time a message was received by any member of conversation, EXCEPT account owner
+        lastInbound: 0, // the last time a message was received by any member of conversation, EXCEPT account owner
         lastUpdate: 0, // the last time a message was received by any member of conversation, INCLUDING account owner
         limit: 0,
         skip: 0,
@@ -64,18 +64,30 @@ const mutations = {
   },
   addMessageToConversation(
     state: TextileState,
-    { address, sender, message }: { address: string; sender:string; message: Message }
+    {
+      address,
+      sender,
+      message,
+    }: { address: string; sender: string; message: Message },
   ) {
     // No need to copy since we are going to
     // update the whole conversation object
-    const { messages, replies, reactions, lastInbound, lastUpdate, limit, skip, end } =
-      state.conversations[address]
+    const {
+      messages,
+      replies,
+      reactions,
+      lastInbound,
+      lastUpdate,
+      limit,
+      skip,
+      end,
+    } = state.conversations[address]
 
     const initialValues = {
       messages,
       replies,
       reactions,
-      lastInbound,  // the last time a message was received by any member of conversation, EXCEPT account owner
+      lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
       lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
 
@@ -87,7 +99,8 @@ const mutations = {
         messages: tracked.messages,
         replies: tracked.replies,
         reactions: tracked.reactions,
-        lastInbound: (sender !== MessageRouteEnum.OUTBOUND ? message.at : lastInbound),  // the last time a message was received by any member of conversation, EXCEPT account owner
+        lastInbound:
+          sender !== MessageRouteEnum.OUTBOUND ? message.at : lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
         lastUpdate: message.at, // the last time a message was received by any member of conversation, INCLUDING account owner
         limit,
         skip,
@@ -97,9 +110,12 @@ const mutations = {
   },
   setConversationLoading(
     state: TextileState,
-    { loading }: { loading: boolean }
+    { loading }: { loading: boolean },
   ) {
     state.conversationLoading = loading
+  },
+  setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
+    state.messageLoading = loading
   },
 }
 

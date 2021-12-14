@@ -7,11 +7,28 @@ Cypress.Commands.add('createAccount', () => {
   cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
   cy.get('[data-cy=submit-input]').click()
   cy.get('.is-primary > #custom-cursor-area').click()
+  cy.contains('Continue').click()
   cy.contains('I Saved It').click()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   cy.get('[data-cy=username-input]').type(randomName)
   cy.get('[data-cy=status-input]').type(randomStatus)
   cy.get('[data-cy=sign-in-button]').click()
+})
+
+Cypress.Commands.add('importAccount', () => {
+  cy.visit('/')
+  cy.get('[data-cy=add-input]').type('test001', { log: false })
+  cy.get('[data-cy=submit-input]').click()
+  cy.contains('Import Account').click()
+  cy.contains(
+    'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
+  )
+  cy.get('[data-cy=add-passphrase]').type(
+    'boring over tilt regret diamond rubber example there fire roof sheriff always',
+    { log: false },
+  )
+  cy.get('[data-cy=add-passphrase]').type('{enter}')
+  cy.contains('Recover Account').click()
 })
 
 import 'cypress-file-upload'

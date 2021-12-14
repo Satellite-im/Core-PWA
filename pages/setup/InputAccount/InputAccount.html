@@ -3,14 +3,15 @@
     <TypographyTitle :size="4" :text="$t('pages.inputAccount.title')" />
     <TypographySubtitle :size="6" :text="$t('pages.inputAccount.subtitle')" />
     <UiTypeHead
-      :list="availableBipList"
+      :list="bipList"
       size="small"
       type="primary"
       :placeholder="$t('pages.inputAccount.enter')"
-      :onSelected="onSelected"
-    ></UiTypeHead>
-    <TypographyError v-if="error" :text="$t(error)" />
-    <div class="columns is-mobile">
+      @onSelected="onSelected"
+      @onMultipleSelected="onMultipleSelected"
+    />
+    <TypographyError v-if="error" :text="$t(error)" class="input-error" />
+    <div class="columns is-mobile" v-if="phrases.length > 0">
       <div class="column">
         <div v-for="word, i in phrases" class="tag-container">
           <UiNumberedWord
