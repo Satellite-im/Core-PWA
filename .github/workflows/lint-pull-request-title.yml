@@ -1,37 +1,15 @@
-name: Lint Pull Request Title
-
+name: Lint PR Title
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - edited
-      - reopened
+      - synchronize
 
 jobs:
-  lint:
+  main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match
-        with:
-          text: ${{ github.event.pull_request.title }}
-          regex: '(?:add|update|fix|task|feat|test|chore)((\w+)):\s.+'
-
-      - uses: actions-ecosystem/action-create-comment@v1
-        if: ${{ steps.regex-match.outputs.match == '' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            :warning: The title of this PR is invalid.
-            Please make the title match the regex `(?:add|update|fix|task|feat|test|chore)((\w+)):\s.+`.
-            e.g.) `add(cli): enable --verbose flag`, `fix(api): avoid unexpected error in handler`
-      - uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ steps.regex-match.outputs.match == '' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'invalid/title'
-
-      - run: exit 1
-        if: ${{ steps.regex-match.outputs.match == '' }}
+      - uses: dreampulse/action-lint-pull-request-title@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
