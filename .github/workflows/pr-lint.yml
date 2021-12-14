@@ -1,0 +1,14 @@
+name: PR lint
+
+on:
+  pull_request:
+    types: ['opened', 'edited', 'reopened', 'synchronize']
+
+jobs:
+  pr-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: seferov/pr-lint-action@master
+      with:
+        title-regex: '(?:add|update|fix|task|feat|test|chore)((\w+)):\s.+'
+        error-message: 'warning' # optional
