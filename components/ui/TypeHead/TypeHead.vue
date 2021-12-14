@@ -1,10 +1,7 @@
 <template src="./TypeHead.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import {
-  InputSize,
-  InputStyle,
-} from '~/components/interactables/Input/types'
+import { InputSize, InputStyle } from '~/components/interactables/Input/types'
 
 export default Vue.extend({
   props: {
@@ -65,7 +62,7 @@ export default Vue.extend({
   data() {
     return {
       searchText: '',
-      searchList: this.list,
+      searchList: [] as Array<string | Object>,
       isFocus: false,
     }
   },
@@ -73,9 +70,9 @@ export default Vue.extend({
     list: function () {
       this.update()
     },
-    searchText: function() {
+    searchText: function () {
       this.update()
-    }
+    },
   },
   methods: {
     update() {
