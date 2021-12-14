@@ -17,7 +17,7 @@ jobs:
         id: regex-match
         with:
           text: ${{ github.event.pull_request.title }}
-          regex: '(?:add|update|fix|task|feat|test|chore)\([a-z]+\):\s.+'
+          regex: '(?:add|update|fix|task|feat|test|chore)((([a-z]|[A-Z])+)):\s.+
 
       - uses: actions-ecosystem/action-create-comment@v1
         if: ${{ steps.regex-match.outputs.match == '' }}
@@ -26,7 +26,7 @@ jobs:
           body: |
             :warning: The title of this PR is invalid.
 
-            Please make the title match the regex `(?:add|update|fix|task|feat|test|chore)\([a-z]+\):\s.+`.
+            Please make the title match the regex `(?:add|update|fix|task|feat|test|chore)((([a-z]|[A-Z])+)):\s.+`.
 
             e.g.) `add(cli): enable --verbose flag`, `fix(api): avoid unexpected error in handler`
 
