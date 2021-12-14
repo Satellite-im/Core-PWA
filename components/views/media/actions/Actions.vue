@@ -70,12 +70,10 @@ export default Vue.extend({
      * @example
      */
     async updateStream() {
-      const constraints = { audio: true, video: this.video.disabled }
       this.$StreamManager.toggleLocalStreams(
         this.audio.muted,
         !this.video.disabled,
       )
-      // const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
     },
   },
 })

@@ -28,12 +28,10 @@ export default class StreamManager {
   }
 
   public updateConstraints (constraints: MediaStreamConstraints) {
-    console.log(`StreamManager: updateConstraints(${constraints})`)
     this._contraints = constraints
   }
 
   public addLocalStream (identifier: string, stream: MediaStream) {
-    console.log(`$StreamManager: addLocalStream(${identifier}, ${stream})`)
     if (this._localStreams[identifier]) {
       console.warn('Local stream already exist')
       return
@@ -42,7 +40,6 @@ export default class StreamManager {
   }
 
   public addRemoteStream (identifier: string, stream: MediaStream) {
-    console.log(`$StreamManager: addRemoteStream(${identifier}, ${stream})`)
     if (this._remoteStreams[identifier]) {
       console.warn('Remote stream already exist')
       return
@@ -51,7 +48,6 @@ export default class StreamManager {
   }
 
   public toggleLocalStreams (muted: boolean, video: boolean) {
-    console.log(`$StreamManager: toggleLocalStreams(${muted}, ${video})`)
     if (typeof muted === 'undefined') return
 
     Object.entries<MediaStream>(this._localStreams).forEach(
@@ -70,7 +66,6 @@ export default class StreamManager {
   }
 
   public toggleRemoteStreams (muted: boolean, video: boolean) {
-    console.log(`$StreamManager: toggleRemoteStreams(${muted}, ${video})`)
     if (typeof muted === 'undefined') return
 
     Object.values<MediaStream>(this._remoteStreams).forEach(stream => {
@@ -88,7 +83,6 @@ export default class StreamManager {
 
 
   public toggleLocalVideo(enable: boolean) {
-    console.log(`$StreamManager: toggleLocalVideo(${enable})`)
     Object.entries<MediaStream>(this._localStreams).forEach(
       async ([identifier, stream]) => {
         let videoTracks = stream.getVideoTracks()
@@ -98,7 +92,6 @@ export default class StreamManager {
   }
 
   private stopAllTracks (stream: MediaStream) {
-    console.log(`$StreamManager: stopAllTracks(${stream})`)
     stream.getAudioTracks().forEach(track => {
       track.stop()
     })
@@ -108,7 +101,6 @@ export default class StreamManager {
   }
 
   private killStreamsByType (streamType: StreamType) {
-    console.log(`$StreamManager: killStreamsByType(${streamType})`)
     const propertyName = `_${streamType}Streams`
     // @ts-ignore
     Object.values<MediaStream>(this[propertyName]).forEach(this.stopAllTracks)
@@ -117,7 +109,6 @@ export default class StreamManager {
   }
 
   public playStream (streamType: StreamType, identifier: string) {
-    console.log(`$StreamManager: playStream(${streamType}, ${identifier})`)
     const streamTypeId = `_${streamType}Streams`
     const audioTypeId = `_${streamType}Audio`
     // @ts-ignore
@@ -142,7 +133,6 @@ export default class StreamManager {
   }
 
   public stopStream (streamType: StreamType, identifier: string) {
-    console.log(`$StreamManager: stopStream(${streamType}, ${identifier})`)
     const streamTypeId = `_${streamType}Streams`
     const audioTypeId = `_${streamType}Audio`
     // @ts-ignore
@@ -167,7 +157,6 @@ export default class StreamManager {
   }
 
   public killAllStreams () {
-    console.log(`$StreamManager: killAllStreams`)
     this.killStreamsByType('local')
     this.killStreamsByType('remote')
   }
