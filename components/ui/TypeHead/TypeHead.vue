@@ -4,7 +4,6 @@ import Vue, { PropType } from 'vue'
 import {
   InputSize,
   InputStyle,
-  InputTextTransform,
 } from '~/components/interactables/Input/types'
 
 export default Vue.extend({
