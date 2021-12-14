@@ -106,7 +106,7 @@ export default Vue.extend({
     },
     /**
      * @method toggleEnhancers DocsTODO
-     * @description Toggles enhancers by commiting the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
+     * @description Toggles enhancers by committing the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(event: Event) {
