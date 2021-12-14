@@ -1,9 +1,9 @@
 <template>
   <div id="bottom-bar-container">
     <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
-    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{
-      `${text.length}/${maxChars}`
-    }}</span>
+    <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
+      {{ `${calculateLength(ui.chatbarContent)}/${maxChars}` }}
+    </span>
   </div>
 </template>
 
@@ -14,10 +14,6 @@ import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
-    text: {
-      type: String,
-      default: '',
-    },
     charlimit: {
       type: Boolean,
     },
@@ -37,6 +33,34 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+  },
+  methods: {
+    /**
+     * @method calculateLength
+     * @description Calculates the length of a message; and handles emojis to only be counted as one character length
+     * @returns new length of message
+     * @example calculateLength(ui.chatbarContent)
+     */
+    calculateLength(inputString: string) {
+      let numberofEmojis = 0
+      let currentText = this.ui.chatbarContent
+      if (currentText.match(/\p{Emoji}+/gu)) {
+        for (let i = 0; i < currentText.length; i++) {
+          let firstChar = currentText[i]
+          let secondChar = currentText[i + 1]
+          let emojiFound = (firstChar + secondChar).match(
+            /[\p{Emoji}\u200d]+/gu,
+          )
+            ? firstChar + secondChar
+            : false
+          if (emojiFound) {
+            numberofEmojis++
+            i++
+          }
+        }
+      }
+      return currentText.length - numberofEmojis
+    },
   },
 })
 </script>
