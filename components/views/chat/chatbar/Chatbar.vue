@@ -9,8 +9,6 @@ import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 
 import {
-  // commandPrefix,
-  // containsCommand,
   parseCommand,
   commands,
   isArgsValid,
@@ -226,7 +224,7 @@ export default Vue.extend({
       this.smartTypingStart()
       this.handleInputChange()
     },
-    handleInputKeyup(event: KeyboardEvent) {
+    handleInputKeyup() {
       this.debounceTypingStop(this)
       this.$nextTick(() => {
         this.handleInputChange()

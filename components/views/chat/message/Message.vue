@@ -84,7 +84,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'textile']),
 
     hasReactions() {
       return (

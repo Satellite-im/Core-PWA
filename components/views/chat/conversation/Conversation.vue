@@ -17,8 +17,8 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['textile']),
-  },
+    ...mapState(['ui', 'textile']),
+  }
 })
 </script>
 <style scoped lang="less" src="./Conversation.less"></style>

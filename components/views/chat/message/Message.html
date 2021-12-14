@@ -1,4 +1,4 @@
-<div class="is-message" @contextmenu="contextMenu">
+<div class="is-message" :class="textile.messageLoading ? 'loading' : ''" @contextmenu="contextMenu">
   <div
     @mouseenter="mouseOver"
     @mouseleave="mouseOver"
