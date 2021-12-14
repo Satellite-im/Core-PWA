@@ -9,7 +9,7 @@ export default Vue.extend({
      * list for showing typehead items
      */
     list: {
-      type: Array as PropType<Array<String | Object>>,
+      type: Array as PropType<Arraay<String | Objectt>>,
       default: [],
     },
     /**
@@ -28,7 +28,7 @@ export default Vue.extend({
       required: false,
     },
     /**
-     * key to point label when object array passed
+     * key to point label whe object array passed
      */
     label: {
       type: String,
