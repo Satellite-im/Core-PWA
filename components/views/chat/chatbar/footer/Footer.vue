@@ -10,7 +10,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
 import { toArray } from 'lodash'
 
 export default Vue.extend({
@@ -34,16 +33,8 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-  },
-  methods: {
-    /**
-     * @method calculateLength
-     * @description Calculates the length of a message; and handles emojis to only be counted as one character length
-     * @returns new length of message
-     * @example calculateLength(ui.chatbarContent)
-     */
-    calculateLength(inputString: string) {
-      return _.toArray(inputString).length
+    lengthCount() {
+      return `${toArray(this.ui.chatbarContent).length}/${this.maxChars}`
     },
   },
 })
