@@ -1,6 +1,5 @@
 <template>
   <v-responsive max-height="100%">
-    <UiLoadersLoadingInline :count="3" v-if="!source.isActive" />
     <v-lazy
       v-model="source.isActive"
       :options="{

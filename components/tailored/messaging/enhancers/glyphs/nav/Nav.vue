@@ -27,7 +27,12 @@ export default Vue.extend({
     },
     horizontalScroll(e) {
       e.preventDefault()
-      this.$refs['hScrollContainer'].scrollLeft += e.deltaY
+      const containerScrollPosition = this.$refs['hScrollContainer'].scrollLeft
+      this.$refs['hScrollContainer'].scrollTo({
+        top: 0,
+        left: containerScrollPosition + e.deltaY * 10,
+        behaviour: 'smooth',
+      })
     },
   },
 })
