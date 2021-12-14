@@ -268,7 +268,7 @@ export default Vue.extend({
             : false
 
           if (emojiFound) {
-            let wrapAround = `<span style="font-size: 32px">${emojiFound}</span>`
+            let wrapAround = `<span class="mediumEmoji">${emojiFound}</span>`
             newValue += wrapAround
             i++
           } else {
@@ -278,7 +278,7 @@ export default Vue.extend({
         return newValue
       }
       if (!newInput) {
-        return `<span style="font-size: 64px">${inputValue}</span>`
+        return `<span class="bigEmoji">${inputValue}</span>`
       }
     },
     /**
