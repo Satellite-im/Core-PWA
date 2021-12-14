@@ -11,6 +11,7 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
+import { toArray } from 'lodash'
 
 export default Vue.extend({
   props: {
@@ -42,24 +43,7 @@ export default Vue.extend({
      * @example calculateLength(ui.chatbarContent)
      */
     calculateLength(inputString: string) {
-      let numberofEmojis = 0
-      let currentText = this.ui.chatbarContent
-      if (currentText.match(/\p{Emoji}+/gu)) {
-        for (let i = 0; i < currentText.length; i++) {
-          let firstChar = currentText[i]
-          let secondChar = currentText[i + 1]
-          let emojiFound = (firstChar + secondChar).match(
-            /[\p{Emoji}\u200d]+/gu,
-          )
-            ? firstChar + secondChar
-            : false
-          if (emojiFound) {
-            numberofEmojis++
-            i++
-          }
-        }
-      }
-      return currentText.length - numberofEmojis
+      return _.toArray(inputString).length
     },
   },
 })
