@@ -48,13 +48,21 @@
         </div>
       </div>
       <div class="is-controls" v-if="uploadStatus">
-        <InteractablesButton type="primary" size="small" text="Send" :action="sendMessage" />
+        <InteractablesButton :disabled="disabledButton" type="primary" size="small" text="Send" :action="sendMessage" />
         <InteractablesButton
           type="danger"
           size="small"
           text="Cancel"
           :action="cancelUpload"
         />
+      </div>
+      <div v-if="currentProgress !== 0">
+        <UiProgress
+          :progress="currentProgress"
+          type="loading"
+        class="loading-bar"/>
+        <br>
+        <span class="label white">{{currentProgress.toFixed(2)}}% Uploaded...</span>
       </div>
     </template>
   </div>

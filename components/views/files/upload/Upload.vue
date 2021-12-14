@@ -51,13 +51,17 @@ export default Vue.extend({
       imageURL: String,
       fileClass: false,
       error: false,
-      aiScanning: false
+      aiScanning: false,
+      disabledButton: false,
     }
   },
   computed: {
     ...mapState(['ui', 'friends', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
+    currentProgress() {
+      return this.textile.uploadProgress
     },
   },
   methods: {
@@ -149,11 +153,14 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage () {
-      this.$store.dispatch('textile/sendFileMessage', {
+      this.disabledButton = true;
+      await this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
-        file: this.$data.files[0]
+        file: this.$data.files[0],
       }
-      ).then(() => this.cancelUpload())
+      ).then(() => this.disabledButton = false)
+
+      this.cancelUpload()
     },
   },
 })

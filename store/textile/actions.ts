@@ -240,7 +240,7 @@ export default {
       file.file,
       path,
       (progress: number) => {
-        progress
+        commit('setUploadingFileProgress',progress)
       }
     )
     const imageURL = `https://hub.textile.io${result?.root}${path}`
@@ -311,6 +311,10 @@ export default {
       message: result,
     })
   },
+  // async updateFileProgress(
+  //   { commit }: ActionsArguments<TextileState>, {uploaded, fileSize}: {uploaded: number, fileSize: number}){
+  //   commit( 'setUploadingFileProgress' ,uploaded / fileSize * 100)
+  // },
   /**
    * @description Sends a reply message to a given friend
    * @param param0 Action Arguments

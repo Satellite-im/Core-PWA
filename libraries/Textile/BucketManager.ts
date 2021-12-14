@@ -12,6 +12,10 @@ import {
 // @ts-ignore
 import { Config } from '~/config'
 import {TextileInitializationData} from "~/types/textile/manager";
+import {ActionsArguments} from "~/types/store/store";
+import {TextileState} from "~/store/textile/types";
+import {mapState, Store} from "vuex";
+
 
 // TODO: Buckets are not yet secure
 // encrypt storage and allow the recipent to decrypt with
@@ -25,6 +29,7 @@ export default class BucketManager {
   prefix: string;
 
   constructor(textile: TextileInitializationData, identity: Identity, prefix: string) {
+
     this.identity = identity;
     this.textile = textile;
     this.buckets = null;
@@ -73,7 +78,7 @@ export default class BucketManager {
       paths: filtered,
     };
     // Store the index in the Bucket (or in the Thread later)
-    const buf = Buffer.from(JSON.stringify(index, null, 2));
+    const buf = Buffer.from(JSON.stringify(index, null, 1));
     await this.buckets.pushPath(this.bucketKey, path, buf);
   }
 
@@ -147,7 +152,7 @@ export default class BucketManager {
   async removeFile(file: File, path: string) {
     if (!this.buckets || !this.bucketKey) return;
     this.buckets.removePath(this.bucketKey, `${this.prefix}${path}`);
-    this.removeFromIndex(file);
+    // this.removeFromIndex(file);
   }
 
   async pushFile(file: File, path: string, progress: CallableFunction) : Promise<PushPathResult> {
@@ -161,7 +166,11 @@ export default class BucketManager {
           return;
         }
         const binaryStr = reader.result;
-        this.buckets.pushPath(this.bucketKey, `${path}`, binaryStr).then((raw) => {
+        this.buckets.pushPath(this.bucketKey, `${path}`, binaryStr, {
+          progress: (num) => {
+            if (progress && num) progress(this.progressParse(num, file.size))
+          },
+        }).then((raw) => {
           resolve(raw);
         }).catch(error => new Error(error));
       };
