@@ -59,7 +59,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
 
   /**
    * @method _queue
-   * @description Queue functions that are exectued before init for execution later
+   * @description Queue functions that are executed before init for execution later
    * @param fn
    */
   protected _queue(fn: Function) {
