@@ -6,10 +6,8 @@
   <TailoredGlyphsSample :glyphs="samplePack" />
   <TypographyText :text="selectedPack.description" />
   <InteractablesButton
-    class="button"
-    type="primary"
     size="small"
-    text="View Glyph Pack"
+    :text="$t('glyphs.view_pack')"
     :action="openMarketplace"
   >
     <shopping-bag-icon size="1.2x" />
