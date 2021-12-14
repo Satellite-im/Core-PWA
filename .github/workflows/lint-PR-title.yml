@@ -1,15 +1,21 @@
-name: "Lint PR Title"
+name: Check PR title
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
+      - reopened
       - edited
       - synchronize
 
 jobs:
-  main:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: dreampulse/action-lint-pull-request-title@master
+      - uses: ghcr.io/aslafy-z/conventional-pr-title-action@v2.2.5
+        with:
+          success-state: Title follows the specification.
+          failure-state: Title does not follow the specification.
+          context-name: conventional-pr-title
+          preset: conventional-changelog-angular@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
