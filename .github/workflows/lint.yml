@@ -27,3 +27,5 @@ jobs:
         with:
           eslint: true
           prettier: true
+          only_changed: True
+
