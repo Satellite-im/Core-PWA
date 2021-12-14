@@ -73,11 +73,14 @@ export default Vue.extend({
     list: function () {
       this.update()
     },
+    searchText: function() {
+      this.update()
+    }
   },
   methods: {
     update() {
       if (!this.searchText) {
-        this.searchList = this.list
+        this.searchList = []
         return
       }
       if (!this.isFocus) this.isFocus = true
