@@ -20,6 +20,10 @@ export default Vue.extend({
       default: '',
       required: false,
     },
+    small: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     /**

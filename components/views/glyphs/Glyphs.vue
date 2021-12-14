@@ -5,8 +5,12 @@ import { mapState } from 'vuex'
 import { marketGlyphs } from '~/mock/marketplace'
 import { GlyphMarketViewStatus } from '~/store/ui/types'
 import _, { find, findKey, shuffle } from 'lodash'
+import { ShoppingBagIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    ShoppingBagIcon,
+  },
   computed: {
     ...mapState(['ui']),
     selectedPack() {

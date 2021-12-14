@@ -1,15 +1,31 @@
 .sample {
   display: flex;
-  justify-content: space-around;
-  gap: 3rem;
+  flex-direction: column;
+  .img-container {
+    display: flex;
+    gap: 2rem;
+  }
 }
 @media only screen and (max-width: @mobile-breakpoint) {
   .sample {
-    flex-direction: column;
-    align-items: center;
-    img {
-      width: 160px;
-      height: 160px;
+    .img-container {
+      gap: unset;
+      justify-content: space-between;
+      img {
+        width: 96px;
+        height: 96px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  .sample {
+    .img-container {
+      img {
+        width: 80px;
+        height: 80px;
+      }
     }
   }
 }

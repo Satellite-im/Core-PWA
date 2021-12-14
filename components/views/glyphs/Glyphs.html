@@ -4,11 +4,14 @@
     <TypographyTitle :size="5" :text="selectedPack.name" />
   </div>
   <TailoredGlyphsSample :glyphs="samplePack" />
+  <TypographyText :text="selectedPack.description" />
   <InteractablesButton
     class="button"
     type="primary"
     size="small"
-    text="View More Glyphs"
+    text="View Glyph Pack"
     :action="openMarketplace"
-  />
+  >
+    <shopping-bag-icon size="1.2x" />
+  </InteractablesButton>
 </div>
