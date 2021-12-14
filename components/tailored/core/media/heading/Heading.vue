@@ -32,7 +32,7 @@ export default Vue.extend({
   methods: {
     /**
      * @method toggleFullscreen
-     * @description Toggles fullscreen by commiting the opposite of it's current value (this.ui.fullscreen) to fullscreen in state
+     * @description Toggles fullscreen by committing the opposite of it's current value (this.ui.fullscreen) to fullscreen in state
      * @example @click="toggleFullscreen"
      */
     toggleFullscreen() {

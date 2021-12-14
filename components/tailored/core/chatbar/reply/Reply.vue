@@ -17,7 +17,7 @@ export default Vue.extend({
   methods: {
     /**
      * @method setReplyChatbarContent
-     * @description Adds message reply by commiting chatbar content to setReplyChatbarContent in state
+     * @description Adds message reply by committing chatbar content to setReplyChatbarContent in state
      * @example @click="setReplyChatbarContent"
      */
     setReplyChatbarContent() {

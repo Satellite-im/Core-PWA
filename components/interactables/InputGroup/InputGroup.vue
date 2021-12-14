@@ -57,7 +57,7 @@ export default Vue.extend({
       default: 'normal',
     },
     /**
-     * Disbales the attached button
+     * Disables the attached button
      */
     disabled: {
       type: Boolean,
