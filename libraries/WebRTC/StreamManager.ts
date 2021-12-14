@@ -7,8 +7,8 @@ export default class StreamManager {
   _localAudio: { [key: string]: AudioStream }
   _remoteAudio: { [key: string]: AudioStream }
   
-  constructor (constraints: MediaStreamConstraints) {
-    this._contraints = constraints
+  constructor () {
+    this._contraints = {}
     this._localStreams = {}
     this._remoteStreams = {}
     this._localAudio = {}
