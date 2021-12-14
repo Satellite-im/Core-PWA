@@ -62,13 +62,6 @@ export default Vue.extend({
       default: 10,
       required: false,
     },
-    /**
-     * Placeholder text for blank inputs
-     */
-    textTransform: {
-      type: String as PropType<InputTextTransform>,
-      default: 'normal',
-    },
   },
   data() {
     return {
@@ -84,11 +77,6 @@ export default Vue.extend({
   },
   methods: {
     update() {
-      if (this.$props.textTransform === 'lowercase') {
-        this.searchText = this.searchText.toLowerCase()
-      } else if (this.$props.textTransform === 'uppercase') {
-        this.searchText = this.searchText.toUpperCase()
-      }
       if (!this.searchText) {
         this.searchList = this.list
         return

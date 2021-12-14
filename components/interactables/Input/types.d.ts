@@ -7,4 +7,3 @@ export type InputStyle =
   | 'warning'
   | 'danger'
 export type InputSize = 'small' | 'normal' | 'medium' | 'large'
-export type InputTextTransform = 'normal' | 'uppercase' | 'lowercase'
