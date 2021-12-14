@@ -51,13 +51,13 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
     },
   },
-  updated() {
-    const chatMsgList = localStorage.getItem('chat-message-list')
-    let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
-    if (this.$props.recipient && cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
-      this.value = cMLObj.find((item: any) => item.id === this.$props.recipient.address).value
-    }
-  },
+  // updated() {
+  //   const chatMsgList = localStorage.getItem('chat-message-list')
+  //   let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
+  //   if (this.$props.recipient && cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
+  //     this.value = cMLObj.find((item: any) => item.id === this.$props.recipient.address).value
+  //   }
+  // },
   directives: {
     focus: {
       update(el, { value, oldValue }) {
@@ -204,22 +204,6 @@ export default Vue.extend({
       }
       this.handleChatBorderRadius()
       this.value = messageBox.innerText
-
-      const chatMsgList = localStorage.getItem('chat-message-list')
-      let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
-      if (cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
-        cMLObj.map((item: any) => {
-          if (item.id === this.$props.recipient.address) {
-            item.value = this.value
-          }
-        })
-      } else {
-        cMLObj.push({
-          id: this.$props.recipient.address,
-          value: this.value
-        })
-      }
-      localStorage.setItem('chat-message-list', JSON.stringify(cMLObj))
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -267,6 +251,22 @@ export default Vue.extend({
       let sel = window.getSelection()
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
+
+      const chatMsgList = localStorage.getItem('chat-message-list')
+      let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
+      if (cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
+        cMLObj.map((item: any) => {
+          if (item.id === this.$props.recipient.address) {
+            item.value = messageBox.innerHTML
+          }
+        })
+      } else {
+        cMLObj.push({
+          id: this.$props.recipient.address,
+          value: messageBox.innerHTML
+        })
+      }
+      localStorage.setItem('chat-message-list', JSON.stringify(cMLObj))
     },
     /**
      * @method sendMessage
@@ -356,7 +356,14 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      this.$store.commit('ui/chatbarContent', '')
+      const chatMsgList = localStorage.getItem('chat-message-list')
+      let message = null
+      let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
+      if (this.$props.recipient && cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
+        message = cMLObj.find((item: any) => item.id === this.$props.recipient.address).value
+      }
+
+      this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
