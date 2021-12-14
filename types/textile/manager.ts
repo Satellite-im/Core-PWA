@@ -1,6 +1,5 @@
 import { Client, Identity, Users } from '@textile/hub'
 import { SolanaWallet } from '../solana/solana'
-import * as t from "io-ts";
 
 export interface StorageConfig {
   id: string

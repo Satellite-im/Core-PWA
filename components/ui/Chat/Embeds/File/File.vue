@@ -26,6 +26,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method bytesToSize
+     * @description converts bytes to display easily readable file size
+     * @param bytes bytes of current file
+     * @example bytesToSize(this.file.size)
+     */
     bytesToSize (bytes: number) {
       const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
       if (bytes === 0) return '0 Bytes'

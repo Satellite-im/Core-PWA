@@ -243,7 +243,7 @@ export default {
         commit('setUploadingFileProgress',progress)
       }
     )
-    const imageURL = `https://hub.textile.io${result?.root}${path}`
+    const imageURL = `${Config.textile.browser}/${result?.root}${path}`
     $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 

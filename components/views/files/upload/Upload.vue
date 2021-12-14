@@ -48,7 +48,7 @@ export default Vue.extend({
       progress: 0,
       ipfsHash: false,
       selectedFile: false,
-      imageURL: String,
+      imageURL: '',
       fileClass: false,
       error: false,
       aiScanning: false,
