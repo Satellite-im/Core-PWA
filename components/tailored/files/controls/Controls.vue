@@ -37,7 +37,7 @@ export default Vue.extend({
     },
     /**
      * @method hide
-     * @description Hides modals by commiting the modal name with status as false to toggleModal in state
+     * @description Hides modals by committing the modal name with status as false to toggleModal in state
      * @param modalName Name of modal to hide
      * @example v-on:click="hide('newfolder')"
      */
