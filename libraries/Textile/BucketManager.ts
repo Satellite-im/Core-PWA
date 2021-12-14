@@ -38,6 +38,13 @@ export default class BucketManager {
     this.prefix = prefix;
   }
 
+  /**
+   * @method progressParse
+   * @description handles progress math from file size
+   * @param uploaded how much of file has been uploaded
+   * @param2 total actual size of file
+   * @example progressParse(returnedNumber, file.size)
+   */
   private progressParse(uploaded: number, total: number) {
     return uploaded / total * 100;
   }
