@@ -155,7 +155,7 @@ export default Vue.extend({
         peer?.call.addTransceiver('video')
       }
 
-      this.$store.dispatch('webrtc/makeCall', { id: identifier, stream: stream})
+      this.$store.dispatch('webrtc/makeCall', { id: identifier, stream: stream })
     }
   },
 })

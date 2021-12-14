@@ -39,6 +39,7 @@ export default Vue.extend({
       else this.$Sounds.playSound(Sounds.UNMUTE)
 
       this.$store.commit('audio/mute')
+      this.updateStream()
     },
     /**
      * @method toggleVideo
@@ -70,8 +71,11 @@ export default Vue.extend({
      */
     async updateStream() {
       const constraints = { audio: true, video: this.video.disabled }
-
-      const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
+      this.$StreamManager.toggleLocalStreams(
+        this.audio.muted,
+        !this.video.disabled,
+      )
+      // const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
     },
   },
 })

@@ -5,6 +5,7 @@ import Crypto from '~/libraries/Crypto/Crypto'
 
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
+import StreamManager from '~/libraries/WebRTC/StreamManager'
 
 export default {
   /**
@@ -75,7 +76,6 @@ export default {
       if (state.activeCall === data.peerId) {
         return
       }
-
       commit('webrtc/toggleIncomingCall', data.peerId, { root: true })
     })
 
@@ -84,6 +84,8 @@ export default {
     })
 
     peer?.call.on('STREAM', (data) => {
+      const $StreamManager: StreamManager = Vue.prototype.$StreamManager
+      $StreamManager.addLocalStream(data.peerId, data.stream)
       commit('webrtc/setRemoteStream', data.stream, { root: true })
     })
 
@@ -94,6 +96,9 @@ export default {
     commit('toggleIncomingCall', '')
     // @ts-ignore
     commit('setLocalStream', data.stream)
+    const $StreamManager: StreamManager = Vue.prototype.$StreamManager
+    // @ts-ignore
+    $StreamManager.addLocalStream(data.id, data.stream)
     // @ts-ignore
     commit('toggleActiveCall', data.id)
   },
@@ -103,11 +108,16 @@ export default {
   makeCall({ commit }: ActionsArguments<WebRTCState>, data: Object) {
     // @ts-ignore
     commit('setLocalStream', data.stream)
+    const $StreamManager: StreamManager = Vue.prototype.$StreamManager
+    // @ts-ignore
+    $StreamManager.addLocalStream(data.id, data.stream)
     // @ts-ignore
     commit('toggleActiveCall', data.id)
   },
   hangUp({ commit }: ActionsArguments<WebRTCState>, data: Object) {
     commit('toggleActiveCall', '')
+    const $StreamManager: StreamManager = Vue.prototype.$StreamManager
+    $StreamManager.killAllStreams()
     commit('setLocalStream', undefined)
     commit('setRemoteStream', undefined)
   },
