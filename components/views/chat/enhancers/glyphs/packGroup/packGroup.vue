@@ -8,7 +8,7 @@
       min-height="30"
       transition="fade-transition"
     >
-      <TailoredMessagingEnhancersGlyphsPack :key="source.id" :pack="source" />
+      <EnhancersGlyphsPack :key="source.id" :pack="source" />
     </v-lazy>
   </v-responsive>
 </template>
