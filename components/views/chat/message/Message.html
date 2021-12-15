@@ -50,7 +50,7 @@
       :source="message.payload.url"
       alt=""
     />
-    <TailoredMessagingMessageGlyph
+    <MessageGlyph
       v-else-if="message.type === 'glyph'"
       :source="message.payload"
       :pack="message.pack"

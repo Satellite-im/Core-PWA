@@ -3,9 +3,10 @@
   <div class="heading">
     <TypographyTitle :size="5" :text="selectedPack.name" />
   </div>
-  <TailoredGlyphsSample :glyphs="samplePack" />
+  <GlyphsSample :glyphs="samplePack" />
   <TypographyText :text="selectedPack.description" />
   <InteractablesButton
+  class="button"
     size="small"
     :text="$t('glyphs.view_pack')"
     :action="openMarketplace"
