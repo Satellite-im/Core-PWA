@@ -11,7 +11,7 @@
     <TypographySubtitle :text="`Running on ${networkName}`" class="detail" :size="6" />
     <div>
       <TypographySubtitle text="Available" class="detail" :size="6" />
-      <TypographySubtitle :text="!realm.disabled" :class="`detail ${realm.disabled ? 'red' : 'green'}`" :size="6" />
+      <TypographySubtitle :text="(!realm.disabled).toString()" :class="`detail ${realm.disabled ? 'red' : 'green'}`" :size="6" />
     </div>
   </div>
 </div>

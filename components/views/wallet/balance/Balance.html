@@ -12,13 +12,10 @@
           class="modal-input"
           size="small"
           type="primary"
-          v-model="text"
         >
           <send-icon size="1x" />
         </InteractablesInputGroup>
         <InteractablesSelect
-          :options="SampleSizes"
-          v-model="sampleSize"
           size="small"
           class="form-control"
         />
@@ -28,16 +25,14 @@
           class="left"
           type="primary"
           size="small"
-          text="Add Funds"
-          :action="toggleVideo">
+          text="Add Funds">
           <plus-circle-icon size="1.2x" />
         </InteractablesButton>
         <InteractablesButton
           class="left"
           type="dark"
           size="small"
-          text="Cash Out"
-          :action="toggleVideo">
+          text="Cash Out">
           <trending-down-icon size="1.2x" />
         </InteractablesButton>
       </div>

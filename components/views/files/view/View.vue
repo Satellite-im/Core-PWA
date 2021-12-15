@@ -7,6 +7,7 @@ import {
   SlashIcon,
   ArchiveIcon,
   XIcon,
+  LinkIcon,
 } from 'satellite-lucide-icons'
 import { FileType } from '~/types/files/file'
 
@@ -17,6 +18,7 @@ export default Vue.extend({
     SlashIcon,
     ArchiveIcon,
     XIcon,
+    LinkIcon,
   },
   props: {
     file: {

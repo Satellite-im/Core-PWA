@@ -14,7 +14,7 @@
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <ViewsServersSidebar
+      <ViewsNavigationServerSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
       />
       <ViewsChatEnhancers />
