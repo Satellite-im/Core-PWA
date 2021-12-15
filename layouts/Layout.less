@@ -43,8 +43,8 @@
       transition: @transition-all;
     }
 
-    #statusbar {
-      max-height: @statusbar-height;
+    #toolbar {
+      max-height: @toolbar-height;
     }
 
     .media-open {
@@ -91,7 +91,7 @@
         }
       }
       #mediastream {
-        height: calc(100% - @statusbar-height - @light-spacing);
+        height: calc(100% - @toolbar-height - @light-spacing);
       }
     }
   }
@@ -100,7 +100,7 @@
   #servers-vertical-list,
   .dynamic-content,
   #sidebar .toggle-sidebar,
-  #statusbar {
+  #toolbar {
     transition: @transition-all;
   }
 
@@ -120,7 +120,7 @@
       z-index: @base-z-index + 1;
       top: 1.8rem;
     }
-    #statusbar {
+    #toolbar {
       padding-left: 3rem;
     }
     .breadcrumb {
@@ -137,7 +137,7 @@
     }
 
     &.group {
-      #statusbar {
+      #toolbar {
         padding-right: 3rem;
       }
     }

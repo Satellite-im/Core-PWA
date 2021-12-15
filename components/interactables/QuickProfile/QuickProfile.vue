@@ -20,7 +20,7 @@ export default Vue.extend({
   methods: {
     /**
      * @method close
-     * @description Closes quickProfile by commiting quickProfile false to state
+     * @description Closes quickProfile by committing quickProfile false to state
      */
     close() {
       this.$store.commit('ui/quickProfile', false)
