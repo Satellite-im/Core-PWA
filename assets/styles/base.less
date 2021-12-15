@@ -278,6 +278,12 @@ strong {
   animation-timing-function: linear; 
 }
 
+.bounce {
+  animation-name: bounce;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+}
+
 @keyframes spin {
   from {
       transform:rotate(0deg);
@@ -285,4 +291,22 @@ strong {
   to {
       transform:rotate(360deg);
   }
+}
+
+
+@keyframes bounce {
+	0% {
+    font-size: 10pt;
+	}
+	50% {
+    font-size: 56pt;
+	}
+
+	70% {
+    font-size: 37pt;
+	}
+
+	100% {
+    font-size: 42pt;
+	}
 }
