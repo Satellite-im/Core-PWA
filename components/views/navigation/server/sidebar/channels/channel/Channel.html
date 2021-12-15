@@ -1,0 +1,23 @@
+<div
+  :class="`server-sidebar-channel ${getChannelClass()}`"
+  v-on:click="setActiveChannel(localChannel)">
+  <span class="channel-name" v-if="localChannel.type === 'text'">
+    <hash-icon size="0.8x" />
+    {{localChannel.name}}
+  </span>
+  <span class="channel-name" v-if="localChannel.type === 'label'">
+    <tag-icon size="0.8x" />
+    {{localChannel.name}}
+  </span>
+  <span class="channel-name" v-else-if="localChannel.type === 'feed'">
+    <rss-icon size="0.8x" />
+    {{localChannel.name}}
+  </span>
+  <span class="channel-name" v-else-if="localChannel.type === 'voice'">
+    <volume-2-icon size="0.8x" />
+    {{localChannel.name}}
+  </span>
+  <div class="voice-group" v-for="user in localChannel.users">
+    <ViewsNavigationServerSidebarChannelsVoiceUser :user="user" />
+  </div>
+</div>
