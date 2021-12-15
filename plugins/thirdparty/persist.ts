@@ -11,7 +11,7 @@ const mutationsBlacklist = [
   'accounts/setAccountError',
   'accounts/setPhrase',
   'files',
-  'toggleIncomingCall',
+  'toggleMediaIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
   'ui/setReplyChatbarContent',

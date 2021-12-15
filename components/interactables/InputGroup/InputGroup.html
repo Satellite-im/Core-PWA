@@ -19,7 +19,7 @@
         v-on:click="() => !disabled ? action() : null"
         v-if="!copyContent.length"
       >
-        <UiSpinner v-if="loading" spinning />
+        <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
           <slot></slot>
           {{ buttonText }}
@@ -32,7 +32,7 @@
         v-clipboard:copy="copyContent"
         v-else
       >
-        <UiSpinner v-if="loading" spinning />
+        <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
           <slot></slot>
           {{ buttonText }}

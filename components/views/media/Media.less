@@ -1,0 +1,126 @@
+#mediastream {
+  position: absolute;
+  z-index: @base-z-index + 4; // Keep +1 wrt .new-message-alert z-index in ChatScroll.less
+  top: @toolbar-height;
+  height: auto;
+  max-height: 25.5rem;
+  width: 100%;
+  background: @semitransparent-dark-gradient;
+  backdrop-filter: @blur;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: @corner-rounding;
+
+  #media {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    .user {
+      &:nth-child(1) {
+        order: 1;
+      }
+      &:nth-child(2) {
+        order: 2;
+      }
+      &:nth-child(3) {
+        order: 3;
+      }
+      &:nth-child(4) {
+        order: 4;
+      }
+      &:nth-child(5) {
+        order: 5;
+      }
+      &:nth-child(6) {
+        order: 6;
+      }
+      &:nth-child(7) {
+        order: 7;
+      }
+      &:nth-child(8) {
+        order: 8;
+      }
+      &:nth-child(9) {
+        order: 9;
+      }
+      &:nth-child(10) {
+        order: 10;
+      }
+    }
+  }
+}
+
+.fullscreen-media {
+  #mediastream {
+    max-height: unset;
+    height: calc(100% - @toolbar-height - @light-spacing);
+    margin-bottom: 1rem;
+    #media {
+      justify-content: center;
+      flex-direction: row;
+    }
+  }
+}
+
+.more-user {
+  background: @primary-color;
+  min-width: 16rem;
+  height: 9rem;
+  border-radius: @corner-rounding;
+  display: flex;
+  align-self: flex-end;
+  justify-content: center;
+  align-items: center;
+  order: 11;
+  font-size: 30px;
+  line-height: 28px;
+  margin: 0.25rem 0.25rem;
+  padding: 0.5rem;
+  position: relative;
+  transition: all @animation-speed;
+  &.full {
+    line-height: 13px;
+    text-align: center;
+  }
+  &.full-mobile {
+    min-width: 12rem !important;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #mediastream {
+    min-width: @viewport-width;
+    top: @toolbar-height - @normal-spacing;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+@media only screen and (max-width: 1917px) {
+  .more-user:not(.full) {
+    order: 9;
+  }
+}
+
+@media only screen and (max-width: 1653px) {
+  .more-user:not(.full) {
+    order: 7;
+  }
+}
+
+@media only screen and (max-width: 1389px) {
+  .more-user:not(.full) {
+    order: 5;
+  }
+}
+
+@media only screen and (max-width: 1125px) {
+  .more-user:not(.full) {
+    order: 3;
+  }
+}
