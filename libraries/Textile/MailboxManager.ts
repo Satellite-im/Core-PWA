@@ -76,7 +76,7 @@ export class MailboxManager {
    */
   async getConversation(
     friendIdentifier: string,
-    query: ConversationQuery
+    query: ConversationQuery,
   ): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
@@ -94,7 +94,7 @@ export class MailboxManager {
     const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.inbox,
-      inboxQuery
+      inboxQuery,
     )
 
     const lastMessageTime = encryptedInbox?.[0]?.created_at || 0
@@ -113,11 +113,11 @@ export class MailboxManager {
     const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.sentbox,
-      sentboxQuery
+      sentboxQuery,
     )
 
     const messages = [...encryptedInbox, ...encryptedSentbox].sort(
-      (a, b) => a.created_at - b.created_at
+      (a, b) => a.created_at - b.created_at,
     )
 
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
@@ -125,7 +125,7 @@ export class MailboxManager {
     const allSettled = await Promise.allSettled(promises)
 
     const filtered = allSettled.filter(
-      (r) => r.status === 'fulfilled'
+      (r) => r.status === 'fulfilled',
     ) as PromiseFulfilledResult<Message>[]
 
     return filtered.map((r) => r.value)
@@ -140,7 +140,7 @@ export class MailboxManager {
    */
   buildCallback(
     onMessage: MessageCallback,
-    onUnsubscribe: CallableFunction
+    onUnsubscribe: CallableFunction,
   ): MailboxCallback {
     return (reply, err) => {
       // If the reply is undefined means that the subscription
@@ -154,7 +154,7 @@ export class MailboxManager {
         this.decodeMessage(userMessageToThread(reply?.message)).then(
           (decrypted) => {
             onMessage(decrypted)
-          }
+          },
         )
       }
     }
@@ -194,7 +194,7 @@ export class MailboxManager {
    */
   async sendMessage<T extends MessageTypes>(
     to: string,
-    message: MessagePayloads[T]
+    message: MessagePayloads[T],
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
     const encoder = new TextEncoder()
@@ -207,13 +207,14 @@ export class MailboxManager {
         payload: message.payload,
         reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
         repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
-      })
+        replyType: message.type === 'reply' ? message.replyType : undefined,
+      }),
     )
 
     const result = await this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
-      body
+      body,
     )
 
     return this.decodeMessage(userMessageToThread(result))

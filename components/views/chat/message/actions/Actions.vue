@@ -39,13 +39,13 @@ export default Vue.extend({
     },
     message: {
       type: Object as PropType<UIMessage>,
-      default: {
+      default: () => ({
         id: '0',
         at: 1620515543000,
         type: 'text',
         from: 'group',
         payload: 'Invalid Message',
-      },
+      }),
     },
   },
   computed: {

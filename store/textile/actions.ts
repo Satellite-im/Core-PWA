@@ -326,7 +326,17 @@ export default {
    */
   async sendReplyMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, replyTo, text }: { to: string; replyTo: string; text: string },
+    {
+      to,
+      replyTo,
+      text,
+      replyType,
+    }: {
+      to: string
+      replyTo: string
+      text: string
+      replyType: 'file' | 'text' | 'media'
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -348,6 +358,7 @@ export default {
         payload: text,
         repliedTo: replyTo,
         type: 'reply',
+        replyType: replyType,
       },
     )
 

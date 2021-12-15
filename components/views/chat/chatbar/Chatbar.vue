@@ -8,11 +8,7 @@ import { debounce } from 'lodash'
 
 import { TerminalIcon } from 'satellite-lucide-icons'
 
-import {
-  parseCommand,
-  commands,
-  isArgsValid,
-} from '~/libraries/ui/Commands'
+import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import { text } from 'stream/consumers'
 
@@ -279,6 +275,7 @@ export default Vue.extend({
             to: this.recipient.textilePubkey,
             text: this.value,
             replyTo: this.ui.replyChatbarContent.messageID,
+            replyType: 'text',
           })
           return
         }
