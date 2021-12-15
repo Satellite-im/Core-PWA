@@ -254,32 +254,28 @@ export default Vue.extend({
     handleEmojiMessage(inputValue: string) {
       // remove whitespace, emojis, to test if there is anything else in the string
       let newInput = inputValue.replace(/\s|[&nbsp;]|\p{Emoji}/gu, '')
-
       if (newInput) {
         let newValue = ''
         for (let i = 0; i < inputValue.length; i++) {
           let firstChar = inputValue[i]
           let secondChar = inputValue[i + 1]
-
           let emojiFound = (firstChar + secondChar).match(
             /[\p{Emoji}\u200d]+/gu,
           )
             ? firstChar + secondChar
             : false
-
           if (emojiFound) {
             let wrapAround = `<span class="mediumEmoji">${emojiFound}</span>`
             newValue += wrapAround
             i++
-          } else {
+          }
+          if (!emojiFound) {
             newValue += firstChar
           }
         }
         return newValue
       }
-      if (!newInput) {
-        return `<span class="bigEmoji">${inputValue}</span>`
-      }
+      return `<span class="bigEmoji">${inputValue}</span>`
     },
     /**
      * @method sendMessage
@@ -289,7 +285,6 @@ export default Vue.extend({
      */
     sendMessage() {
       this.value = this.handleEmojiMessage(this.value)
-
       if (this.recipient) {
         const isEmpty = RegExp(Config.regex.blankSpace, 'g').test(this.value)
         if (!this.recipient || isEmpty) {
