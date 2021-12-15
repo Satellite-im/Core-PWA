@@ -59,7 +59,9 @@
 .emoji-picker__search {
   display: flex;
 }
-.input, .search-box, .emoji-picker__search div {
+.input,
+.search-box,
+.emoji-picker__search div {
   flex: 1;
   width: 100% !important;
 }
@@ -80,7 +82,7 @@
   justify-content: space-between;
 }
 .emoji-picker .emojis:after {
-  content: "";
+  content: '';
   flex: auto;
 }
 .emoji-picker .emojis span {
@@ -94,8 +96,7 @@
   cursor: pointer;
 }
 
-
-@media only screen and (max-width: @mobile-candybar-breakpoint) {
+@media only screen and (max-width: @mobile-breakpoint) {
   #enhancers {
     width: calc(100vw - @normal-spacing*2);
   }
