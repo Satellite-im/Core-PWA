@@ -3,7 +3,6 @@
     <Nuxt />
   </div>
 </template>
-
 <style lang="less">
 @import 'bulma/css/bulma.css';
 
@@ -33,4 +32,5 @@ p {
 @import url('~/assets/styles/base.less');
 @import url('~/assets/styles/plugins/multiselect.less');
 @import url('~/assets/styles/plugins/v-calendar.less');
+@import url('~/assets/styles/iOS.less');
 </style>
