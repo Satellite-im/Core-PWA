@@ -48,7 +48,6 @@ export default class TextileManager {
     this.mailboxManager = new MailboxManager(textile, wallet.address)
     this.bucketManager = new BucketManager(textile, identity, textile.wallet.address)
     await this.bucketManager.init()
-
     return this.mailboxManager.init()
   }
 

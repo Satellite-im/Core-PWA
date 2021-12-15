@@ -1,21 +1,12 @@
 import {
   Buckets,
-  PrivateKey,
   Identity,
-  KeyInfo,
   PushPathResult,
   Root,
-  UserAuth,
-  createUserAuth,
-  Client, Users, ThreadID
 } from '@textile/hub';
 // @ts-ignore
 import { Config } from '~/config'
 import {TextileInitializationData} from "~/types/textile/manager";
-import {ActionsArguments} from "~/types/store/store";
-import {TextileState} from "~/store/textile/types";
-import {mapState, Store} from "vuex";
-
 
 // TODO: Buckets are not yet secure
 // encrypt storage and allow the recipent to decrypt with
@@ -85,7 +76,7 @@ export default class BucketManager {
       paths: filtered,
     };
     // Store the index in the Bucket (or in the Thread later)
-    const buf = Buffer.from(JSON.stringify(index, null, 1));
+    const buf = Buffer.from(JSON.stringify(index, null, 2));
     await this.buckets.pushPath(this.bucketKey, path, buf);
   }
 

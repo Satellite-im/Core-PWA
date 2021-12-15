@@ -44,7 +44,7 @@
       v-else-if="message.type === 'audio'"
       :data="message.payload"
     />
-    <UiChatEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
+    <UiChatEmbedsFile v-else-if="message.type === 'file'" :file="message.payload" />
     <MessageReactions
       v-if="!hideActions && hasReactions"
       :message="this.$props.message"
