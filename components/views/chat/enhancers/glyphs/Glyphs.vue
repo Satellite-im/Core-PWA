@@ -7,7 +7,7 @@ import Item from './packGroup/packGroup.vue'
 export default Vue.extend({
   data() {
     return {
-      filteredGlyphs: this.$mock.glyphs,
+      filteredGlyphs: Object.values(this.$mock.glyphs),
       searchText: '',
       selectedPack: null,
       itemComponent: Item
@@ -31,7 +31,7 @@ export default Vue.extend({
       //   {}
       // )
 
-      this.$data.filteredGlyphs = this.$mock.glyphs.filter((e: any) => e.name.toLowerCase().includes(filterValue.toLowerCase()))
+      this.$data.filteredGlyphs = Object.values(this.$mock.glyphs).filter((e: any) => e.name.toLowerCase().includes(filterValue.toLowerCase()))
     },
   },
 })
