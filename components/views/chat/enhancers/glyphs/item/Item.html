@@ -1,7 +1,17 @@
-<div
-  class="glyph-item"
-  :style="getStyle()"
+<v-img 
+  :src=""
+  width="85"
+  height="85"
+  :aspect-ratio="1"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
   v-on="sendOnClick ? {click: addGlyph} : {}"
-></div>
+>
+  <template v-slot:placeholder>
+    <v-row
+      class="glyph-item-loading-container"
+    >
+      <UiLoadersLoadingInline text="" />
+    </v-row>
+  </template>
+</v-img>
