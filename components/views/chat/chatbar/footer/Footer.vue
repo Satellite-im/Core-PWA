@@ -1,23 +1,19 @@
 <template>
   <div id="bottom-bar-container">
-    <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
-    <span :class="`charlimit ${charlimit ? 'is-error' : 'is-normal'}`">{{
-      `${text.length}/${maxChars}`
-    }}</span>
+    <UiTypingIndicator v-if="typing" :users="usersTyping" />
+    <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
+      {{ lengthCount }}
+    </span>
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
+import { toArray } from 'lodash'
 
 export default Vue.extend({
   props: {
-    text: {
-      type: String,
-      default: '',
-    },
     charlimit: {
       type: Boolean,
     },
@@ -37,6 +33,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    lengthCount() {
+      return `${toArray(this.ui.chatbarContent).length}/${this.maxChars}`
+    },
   },
 })
 </script>
