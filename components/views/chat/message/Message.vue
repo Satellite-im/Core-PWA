@@ -112,7 +112,7 @@ export default Vue.extend({
      */
     containsOnlyEmoji(str: string): boolean {
       return str
-        .replace(/\s*/g,"").match(this.$Config.regex.isEmoji) !== null
+        .match(this.$Config.regex.isEmoji) === null
     },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
