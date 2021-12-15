@@ -47,13 +47,6 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
     },
   },
-  // updated() {
-  //   const chatMsgList = localStorage.getItem('chat-message-list')
-  //   let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
-  //   if (this.$props.recipient && cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
-  //     this.value = cMLObj.find((item: any) => item.id === this.$props.recipient.address).value
-  //   }
-  // },
   directives: {
     focus: {
       update(el, { value, oldValue }) {
