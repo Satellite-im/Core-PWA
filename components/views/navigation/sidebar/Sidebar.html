@@ -74,7 +74,7 @@
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <ViewsFriendsQuick v-click-outside="toggleModal" />
+    <FriendsQuick v-click-outside="toggleModal" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -83,7 +83,7 @@
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading && users.length">
           <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
-          <ViewsUser
+          <User
             v-for="(user, i) in users"
             :key="i"
             :user="user"
@@ -110,7 +110,7 @@
     <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading">
-          <ViewsGroup
+          <Group
             v-for="group in groups"
             :group="group"
             :key="group.address"
@@ -124,8 +124,8 @@
   <div class="filler"></div>
 
   <div class="controls">
-    <ViewsNavigationSidebarLive />
-    <ViewsNavigationSidebarControls />
-    <ViewsNavigationSidebarStatus />
+    <SidebarLive />
+    <SidebarControls />
+    <SidebarStatus />
   </div>
 </div>

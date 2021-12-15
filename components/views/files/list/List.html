@@ -1,5 +1,5 @@
 <div id="file-list" :class="{'hidden-scroll': !$device.isMobile}" v-scroll-lock="true">
-  <ViewsFilesView
+  <FilesView
     v-if="file"
     :file="file"
     :close="() => this.file = false"

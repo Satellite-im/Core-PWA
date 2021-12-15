@@ -12,7 +12,7 @@
     <user-plus-icon size="1x" />
   </InteractablesInputGroup>
   <TypographyError v-if="error" :text="$t(error)" class="error" />
-  <ViewsFriendsFriend v-if="friend" :friend="friend" @requestSent="onFriendRequestSent" send/>
+  <FriendsFriend v-if="friend" :friend="friend" @requestSent="onFriendRequestSent" send/>
   <UiSpacer :height="10" />
   <TypographyHorizontalRuleText plaintext value="OR" />
   <UiSpacer :height="10" />

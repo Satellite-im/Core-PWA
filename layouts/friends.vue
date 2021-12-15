@@ -11,12 +11,12 @@
     >
       <UiGlobal />
 
-      <ViewsNavigationSlimbar
+      <Slimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <ViewsNavigationSidebar
+      <Sidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
         :users="friends.all"
         :groups="$mock.groups"
@@ -26,7 +26,7 @@
 ref="chat" />
       </div>
     </div>
-    <ViewsNavigationMobileNav v-if="$device.isMobile" />
+    <MobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

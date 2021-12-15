@@ -3,7 +3,7 @@
     :class="`with-sidebar ${ui.settingsSideBar ? 'is-open' : 'is-collapsed'}`">
     <div class="sidebar is-secondary-background" v-touch:swipe.left="collapseSidebar" v-touch:swipe.right="showSidebar">
       <UiScroll verticalScroll>
-        <ViewsSettingsSidebar
+        <SettingsSidebar
           :title="$t('pages.settings.settings')"
           toggleable
           :toggle="toggleSidebar"
@@ -15,17 +15,17 @@
       <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
         <UiBreadcrumbs />
         <InteractablesClose :action="closeModal" />
-        <ViewsSettingsPagesPersonalize v-if="page === 'personalize'" />
-        <ViewsSettingsPagesAccounts v-if="page === 'accounts'" />
-        <ViewsSettingsPagesAudio v-if="page === 'audio'" />
-        <ViewsSettingsPagesDeveloper v-if="page === 'developer'" />
-        <ViewsSettingsPagesInfo v-if="page === 'info'" />
-        <ViewsSettingsPagesKeybinds v-if="page === 'keybinds'" />
-        <ViewsSettingsPagesNotifications v-if="page === 'notifications'" />
-        <ViewsSettingsPagesProfile v-if="page === 'profile'" />
-        <ViewsSettingsPagesStorage v-if="page === 'storage'" />
-        <ViewsSettingsPagesNetwork v-if="page === 'network'" />
-        <ViewsSettingsPagesRealms v-if="page === 'realms'" />
+        <SettingsPagesPersonalize v-if="page === 'personalize'" />
+        <SettingsPagesAccounts v-if="page === 'accounts'" />
+        <SettingsPagesAudio v-if="page === 'audio'" />
+        <SettingsPagesDeveloper v-if="page === 'developer'" />
+        <SettingsPagesInfo v-if="page === 'info'" />
+        <SettingsPagesKeybinds v-if="page === 'keybinds'" />
+        <SettingsPagesNotifications v-if="page === 'notifications'" />
+        <SettingsPagesProfile v-if="page === 'profile'" />
+        <SettingsPagesStorage v-if="page === 'storage'" />
+        <SettingsPagesNetwork v-if="page === 'network'" />
+        <SettingsPagesRealms v-if="page === 'realms'" />
       </UiScroll>
     </div>
   </div>

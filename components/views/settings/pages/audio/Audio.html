@@ -98,7 +98,7 @@
               :size="6"
               :text="$t('pages.settings.audio.systemVolume.subtitle')"
             />
-            <ViewsMediaActionsVolume
+            <MediaActionsVolume
               :volume="audio.sounds.system"
               direction="ltr"
               plain
@@ -159,7 +159,7 @@
       <div class="meter-container">
         <UiMeter :value="0" :height="25" />
       </div>
-      <ViewsMediaActionsVolume
+      <MediaActionsVolume
         :volume="audio.volume"
         direction="ltr"
         plain
@@ -174,7 +174,7 @@
       <div class="meter-container">
         <UiMeter :value="micLevel" :height="25" />
       </div>
-      <ViewsMediaActionsVolume
+      <MediaActionsVolume
         :volume="audio.inputVolume"
         direction="ltr"
         plain

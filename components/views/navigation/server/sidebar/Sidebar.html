@@ -19,7 +19,7 @@
     </div>
     <div class="scrolling hidden-scroll" v-scroll-lock="true">
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <ViewsNavigationServerSidebarChannels />
+        <ServerSidebarChannels />
       </UiScroll>
     </div>
   </div>
@@ -32,7 +32,7 @@
     v-touch:swipe="toggle"
     v-touch-options="{ swipeTolerance: 75 }"
   >
-    <ViewsNavigationSidebarControls />
-    <ViewsNavigationSidebarStatus />
+    <SidebarControls />
+    <SidebarStatus />
   </div>
 </div>

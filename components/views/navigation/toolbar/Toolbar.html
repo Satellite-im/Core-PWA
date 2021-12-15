@@ -28,7 +28,7 @@
       :width="25"
       :height="25"
       :toggleMethod="() => $data.showAlerts = false">
-      <ViewsNavigationToolbarAlerts />
+      <ToolbarAlerts />
     </UiFloatingContainer>
     <div
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
@@ -81,7 +81,7 @@
       :show="showSearchResult"
       @toggle="toggleSearchResult"
     />
-    <ViewsNavigationToolbarPinned 
+    <ToolbarPinned 
       v-if="ui.showPinned"
       />
   </div>

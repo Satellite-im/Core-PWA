@@ -1,6 +1,6 @@
 <div id="channels">
   <div v-for="group in $mock.server.info.groups">
-    <ViewsNavigationServerSidebarChannelsGroup
+    <ServerSidebarChannelsGroup
       :group="group"
       :channels="$mock.server.info.channels"
       :setActiveChannel="setActiveChannel" />

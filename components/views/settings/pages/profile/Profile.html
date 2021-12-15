@@ -1,11 +1,11 @@
 <div id="profile-settings" :class="isSmallScreen? 'profile-small-screen' : ''">
   <div>
-    <ViewsSettingsProfilePicture :image="profileInfo.imageUrl" />
+    <SettingsProfilePicture :image="profileInfo.imageUrl" />
   </div>
   
   <div class="profile-layout">
     <div class="profile-left">
-      <ViewsSettingsProfileCard :info="profileInfo" />
+      <SettingsProfileCard :info="profileInfo" />
     </div>
     <div class="profile-right">
       <div class="profile-main">

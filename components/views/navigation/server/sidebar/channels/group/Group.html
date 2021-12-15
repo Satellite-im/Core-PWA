@@ -8,7 +8,7 @@
     </div>
   </h5>
   <div v-for="channel in group.channels" :class="`${collapsed ? 'collapsed' : 'expanded'}`">
-    <ViewsNavigationServerSidebarChannelsChannel
+    <ServerSidebarChannelsChannel
     :localChannel="channels[channel]"
     :setActiveChannel="setActiveChannel" />
   </div>

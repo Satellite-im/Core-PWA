@@ -5,30 +5,30 @@
   >
     <div class="home-content">
       <div class="left-content-block">
-        <ViewsMarketplaceGlyphsFeatured></ViewsMarketplaceGlyphsFeatured>
+        <MarketplaceGlyphsFeatured></MarketplaceGlyphsFeatured>
         <div class="recommended-block">
-          <ViewsMarketplaceGlyphsRecommended :item="marketGlyphs[2]"></ViewsMarketplaceGlyphsRecommended>
-          <ViewsMarketplaceGlyphsRecommended :item="marketGlyphs[3]"></ViewsMarketplaceGlyphsRecommended>
+          <MarketplaceGlyphsRecommended :item="marketGlyphs[2]"></MarketplaceGlyphsRecommended>
+          <MarketplaceGlyphsRecommended :item="marketGlyphs[3]"></MarketplaceGlyphsRecommended>
         </div>
       </div>
-      <ViewsMarketplaceGlyphsPopular></ViewsMarketplaceGlyphsPopular>
+      <MarketplaceGlyphsPopular></MarketplaceGlyphsPopular>
     </div>
-    <ViewsMarketplaceGlyphsTrending
+    <MarketplaceGlyphsTrending
       :list="$mock.glyphs"
-    ></ViewsMarketplaceGlyphsTrending>
-    <ViewsMarketplaceGlyphsShop title="Shop"></ViewsMarketplaceGlyphsShop>
+    ></MarketplaceGlyphsTrending>
+    <MarketplaceGlyphsShop title="Shop"></MarketplaceGlyphsShop>
   </div>
   <div v-else class="marketplace-glyphs-detail">
     <div class="go-back" @click="goBack()">
       <chevron-left-icon size="1.5x"></chevron-left-icon>
       <TypographySubtitle :size="6" text="Back" />
     </div>
-    <ViewsMarketplaceGlyphsShop
+    <MarketplaceGlyphsShop
       v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_ALL"
       title="Shop All Glyphs"
-    ></ViewsMarketplaceGlyphsShop>
-    <ViewsMarketplaceGlyphsDetail
+    ></MarketplaceGlyphsShop>
+    <MarketplaceGlyphsDetail
       v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_DETAIL"
-    ></ViewsMarketplaceGlyphsDetail>
+    ></MarketplaceGlyphsDetail>
   </div>
 </div>

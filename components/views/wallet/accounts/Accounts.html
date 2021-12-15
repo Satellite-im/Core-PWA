@@ -4,7 +4,7 @@
     <TypographyText text="Linked Accounts" />
   </div>
   <div class="account-list">
-    <ViewsWalletAccountsAccount v-for="account in $mock.wallet.LinkedAccounts" :account="account" :key="account.name" />
+    <WalletAccountsAccount v-for="account in $mock.wallet.LinkedAccounts" :account="account" :key="account.name" />
     <UiHorizontalRule />
     <div class="accounts-footer">
       <plus-circle-icon size="1x" class="green" />

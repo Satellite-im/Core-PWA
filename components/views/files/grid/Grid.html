@@ -1,8 +1,8 @@
 <div id="grid-view" :class="$device.isMobile? 'mobile-grid-view': 'hidden-scroll'" v-scroll-lock="true">
-  <ViewsFilesView v-if="file" :file="file" :close="() => this.file = false"/>
+  <FilesView v-if="file" :file="file" :close="() => this.file = false"/>
   <component :is="!$device.isMobile? 'UiScroll' : 'div'" verticalScroll scrollbarVisibility="scroll" enableWrap>
     <div class="files-container">
-      <ViewsFilesFile 
+      <FilesFile 
         v-for="item in path" 
         :item="item" 
         :key="`${item.name}.${item.modified}`"

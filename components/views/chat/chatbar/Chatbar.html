@@ -1,7 +1,7 @@
 <div id="chatbar" ref="chatbar" :class="ui.replyChatbarContent.id ? 'has-reply' : ''">
   <div class="chatbar-wrap" :class="[charlimit ? 'is-error' : 'is-normal', recipient ? 'active' : 'inactive']" ref="wrap" >
     <div class="control-wrap file-upload-wrap">
-      <ViewsFilesUpload 
+      <FilesUpload 
         :editable="recipient ? true : false" 
         type="quick" 
         ref="file-upload" 
@@ -24,7 +24,7 @@
       @paste="handlePaste">
     </div>
 
-    <ViewsChatChatbarControls :editable="recipient ? true : false" :sendMessage="sendMessage" id="chatbar-controls"/>
+    <ChatbarControls :editable="recipient ? true : false" :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
-  <ViewsChatChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
+  <ChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
 </div>

@@ -9,12 +9,12 @@
     />
   </div>
 
-  <ViewsChatEnhancersGlyphsNav
+  <EnhancersGlyphsNav
     @navSelected="(val) => {filter(val)}"
-  ></ViewsChatEnhancersGlyphsNav>
+  ></EnhancersGlyphsNav>
   <div class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
-      <ViewsChatEnhancersGlyphsMostUsed></ViewsChatEnhancersGlyphsMostUsed>
+      <EnhancersGlyphsMostUsed></EnhancersGlyphsMostUsed>
 
       <div v-for="(pack, i) in filteredGlyphs">
         <v-responsive max-height="100%">
@@ -27,13 +27,13 @@
             min-height="30"
             transition="fade-transition"
           >
-            <ViewsChatEnhancersGlyphsPack :key="pack.id" :pack="pack">
-            </ViewsChatEnhancersGlyphsPack>
+            <EnhancersGlyphsPack :key="pack.id" :pack="pack">
+            </EnhancersGlyphsPack>
           </v-lazy>
         </v-responsive>
       </div>
     </UiScroll>
   </div>
 
-  <ViewsChatEnhancersGlyphsItemInfo></ViewsChatEnhancersGlyphsItemInfo>
+  <EnhancersGlyphsItemInfo></EnhancersGlyphsItemInfo>
 </div>

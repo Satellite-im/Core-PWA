@@ -9,19 +9,19 @@
       }`"
     >
       <UiGlobal />
-      <ViewsNavigationSlimbar
+      <Slimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <ViewsNavigationServerSidebar
+      <ServerSidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
       />
-      <ViewsChatEnhancers />
+      <Enhancers />
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <ViewsNavigationToolbar
+        <Toolbar
           id="toolbar"
           :server="{
             name: 'Test Server',
@@ -30,7 +30,7 @@
           }"
           :user="$mock.users[0]"
         />
-        <ViewsMedia
+        <Media
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
           :max-viewable-users="10"
@@ -44,10 +44,10 @@
         >
           <Nuxt />
         </UiChatScroll>
-        <ViewsChatChatbar />
+        <Chatbar />
       </div>
     </div>
-    <ViewsNavigationMobileNav v-if="$device.isMobile" />
+    <MobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

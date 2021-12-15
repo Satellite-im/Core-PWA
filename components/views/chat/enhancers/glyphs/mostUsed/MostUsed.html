@@ -6,12 +6,12 @@
     <chevron-up-icon size="1x" v-if="!isOpen" />
   </div>
   <div class="glyph-list-box" v-if="isOpen">
-    <ViewsChatEnhancersGlyphsItem
+    <EnhancersGlyphsItem
       v-for="pack in $mock.glyphs"
       :key="pack.id"
       :src="pack.stickerURLs[1]"
       :pack="pack"
       :sendOnClick="true"
-    ></ViewsChatEnhancersGlyphsItem>
+    ></EnhancersGlyphsItem>
   </div>
 </div>

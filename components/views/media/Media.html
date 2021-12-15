@@ -1,14 +1,14 @@
 <div id="mediastream" ref="mediastream">
-  <ViewsMediaHeading />
+  <MediaHeading />
   <div id="media" ref="media">
-    <ViewsMediaUser v-for="item in computedUsers" :key="item.name" ref="user"
+    <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
       :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" />
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
       class="more-user" v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}">...</div>
   </div>
-  <ViewsMediaActionsVolume :volume="audio.volume" isPopup @volumeControlValueChange="volumeControlValueChange" />
+  <MediaActionsVolume :volume="audio.volume" isPopup @volumeControlValueChange="volumeControlValueChange" />
   <!-- {{fullscreen}} -->
-  <ViewsMediaActionsSettings />
-  <ViewsMediaActions />
+  <MediaActionsSettings />
+  <MediaActions />
 </div>

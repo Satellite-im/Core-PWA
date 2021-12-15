@@ -10,7 +10,7 @@
       <TypographyText :text="timestamp" />
     </div>
     <div class="group-messages">
-      <ViewsChatMessage
+      <Message
         v-for="message in group.messages"
         :group="group"
         :message="message"

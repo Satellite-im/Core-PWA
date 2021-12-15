@@ -16,12 +16,12 @@
       }`"
     >
       <UiGlobal />
-      <ViewsNavigationSlimbar
+      <Slimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <ViewsNavigationSidebar
+      <Sidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
         :users="friends.all"
         :groups="$mock.groups"
@@ -29,19 +29,19 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <ViewsNavigationToolbar
+        <Toolbar
           id="toolbar"
           :server="recipient || $mock.users[0]"
           :user="$mock.users[0]"
         />
-        <ViewsMedia
+        <Media
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
           :max-viewable-users="10"
           :fullscreen-max-viewable-users="6"
         />
-        <ViewsMedia
+        <Media
           v-else
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
@@ -56,13 +56,13 @@
         >
           <Nuxt />
         </UiChatScroll>
-        <ViewsChatEnhancers />
-        <ViewsWalletMini v-if="ui.modals.walletMini" />
-        <ViewsChatChatbarCommandsPreview :message="ui.chatbarContent" />
-        <ViewsChatChatbarReply v-if="recipient" />
-        <ViewsChatChatbar :recipient="recipient" />
+        <Enhancers />
+        <WalletMini v-if="ui.modals.walletMini" />
+        <ChatbarCommandsPreview :message="ui.chatbarContent" />
+        <ChatbarReply v-if="recipient" />
+        <Chatbar :recipient="recipient" />
       </div>
-      <ViewsGroupAside
+      <GroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
         :selected-group="
           $mock.groups.find((group) => group.address === selectedGroup)
@@ -70,7 +70,7 @@
         :friends="$mock.friends"
       />
     </div>
-    <ViewsNavigationMobileNav v-if="$device.isMobile" />
+    <MobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

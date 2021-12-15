@@ -23,11 +23,11 @@
           <UiChatEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
           <UiChatEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
           <UiChatEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
-          <ViewsChatMessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
+          <MessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
         </div>
       </div>
     </div>
-    <ViewsChatMessageReactions :message="message" :group="group" :reply="reply"/>
+    <MessageReactions :message="message" :group="group" :reply="reply"/>
   </div>
   <div v-if="showReplies" @click="toggleReplies" class="reply-close">
     <minus-square-icon size="1.1x" />

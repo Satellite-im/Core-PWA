@@ -17,7 +17,7 @@
       </div>
       <UiHorizontalRule />
       <div v-for="message in $mock.pinnedMessages" class="wrap">
-        <ViewsChatMessage
+        <Message
           hide-actions
           :message="message"
           :from="$mock.users.filter(u => u.address === message.from)[0].name"

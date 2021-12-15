@@ -1,6 +1,6 @@
 <template>
   <div id="mini-wallet" v-click-outside="toggleWalletMini">
-    <ViewsWalletMiniBody :updateMethod="updateMethod" />
+    <WalletMiniBody :updateMethod="updateMethod" />
   </div>
 </template>
 <script lang="ts">

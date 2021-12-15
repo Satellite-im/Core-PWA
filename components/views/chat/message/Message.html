@@ -22,7 +22,7 @@
       />
       <TypographyText :text="timestamp" />
     </div>
-    <ViewsChatMessageActions
+    <MessageActions
       v-if="messageHover && !hideActions"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
@@ -45,20 +45,20 @@
       :data="message.payload"
     />
     <UiChatEmbedsFile v-else-if="message.type === 'file'" :data="message.payload" />
-    <ViewsChatMessageReactions
+    <MessageReactions
       v-if="!hideActions && hasReactions"
       :message="this.$props.message"
       :group="this.$props.group"
       :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
     />
   </div>
-  <ViewsChatMessageReply
+  <MessageReply
     :message="message"
     :group="group"
     v-if="!hideActions"
     :from="from"
   />
-  <ViewsChatMessageEdit
+  <MessageEdit
     v-if="messageEdit"
     :message="message.payload"
     @commitMessage="saveMessage"
