@@ -96,6 +96,24 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method wrapEmoji
+     * @description Wraps emojis in spans with the emoji class
+     * @param str String to wrap emojis within
+     */
+    wrapEmoji(str: string): string {
+      return str
+        .replace(this.$Config.regex.emojiWrapper, emoji => `<span class="emoji">${emoji}</span>`)
+    },
+    /**
+     * @method containsOnlyEmoji
+     * @description Check wether or not a string only contains an emoji
+     * @param str String to check against
+     */
+    containsOnlyEmoji(str: string): boolean {
+      return str
+        .match(this.$Config.regex.isEmoji) !== null
+    },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
     },
