@@ -26,5 +26,5 @@
 
     <ChatbarControls :editable="recipient ? true : false" :sendMessage="sendMessage" id="chatbar-controls"/>
   </div>
-  <ChatbarFooter :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
+  <ChatbarFooter :text="text" :charlimit="charlimit" :typing="recipientTyping" :usersTyping="activeFriend ? [ activeFriend ] : []" />
 </div>
