@@ -95,4 +95,5 @@ export default Vue.extend({
     margin-bottom: 25vh;
   }
 }
+
 </style>

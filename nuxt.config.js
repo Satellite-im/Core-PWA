@@ -134,6 +134,7 @@ export default defineNuxtConfig({
     meta: {
       mobileAppIOS: true,
       appleStatusBarStyle: 'black-translucent',
+      viewportFit: 'cover',
     },
     manifest: {
       name: 'Satellite.im',

@@ -3,7 +3,6 @@
     <Nuxt />
   </div>
 </template>
-
 <style lang="less">
 @import 'bulma/css/bulma.css';
 
