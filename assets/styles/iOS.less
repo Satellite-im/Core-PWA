@@ -1,0 +1,9 @@
+@supports (-webkit-touch-callout: none) {
+  html {
+    min-height: calc(100% + env(safe-area-inset-top));
+    position: relative;
+  }
+  #app {
+    min-height: calc(100% + env(safe-area-inset-top) +  env(safe-area-inset-bottom));
+  }
+}
