@@ -3,8 +3,12 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { User } from '~/types/ui/user'
+import { ArrowRightIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    ArrowRightIcon,
+  },
   props: {
     user: {
       type: Object as PropType<User>,
