@@ -95,7 +95,11 @@ export default defineNuxtConfig({
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ['@nuxtjs/ngrok', '@nuxtjs/style-resources', '@nuxtjs/device'],
+  buildModules: [
+    // '@nuxtjs/ngrok',
+    '@nuxtjs/style-resources',
+    '@nuxtjs/device',
+  ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
