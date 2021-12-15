@@ -30,7 +30,7 @@ export default Vue.extend({
       const containerScrollPosition = this.$refs['hScrollContainer'].scrollLeft
       this.$refs['hScrollContainer'].scrollTo({
         top: 0,
-        left: containerScrollPosition + e.deltaY * 10,
+        left: containerScrollPosition + e.deltaY * 5,
         behaviour: 'smooth',
       })
     },
