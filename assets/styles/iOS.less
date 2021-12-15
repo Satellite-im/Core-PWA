@@ -1,9 +1,19 @@
 @supports (-webkit-touch-callout: none) {
-  html {
+  html, body {
+    overflow: unset;
+    height: unset;
+    width: 100%;
     min-height: calc(100% + env(safe-area-inset-top));
+    background: purple;
     position: relative;
+    overflow: hidden;
   }
   #app {
-    min-height: calc(100% + env(safe-area-inset-top) +  env(safe-area-inset-bottom));
+    position: fixed;
+    padding-top: env(safe-area-inset-top);
+
+    .container {
+      min-height: calc(100vh - env(safe-area-inset-top));
+    }
   }
 }
