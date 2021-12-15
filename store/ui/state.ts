@@ -47,6 +47,7 @@ const InitialUIState = (): UIState => ({
   },
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
+  mostEmojiUsed: [],
 })
 
 export default InitialUIState

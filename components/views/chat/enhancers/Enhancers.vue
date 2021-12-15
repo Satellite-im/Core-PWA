@@ -1,7 +1,7 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 
@@ -29,6 +29,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['getSortedMostUsedEmojis']),
+    mostUsedEmojis() {
+      return this.getSortedMostUsedEmojis.slice(0, 10)
+    },
     route: {
       get() {
         return this.ui.enhancers.route
@@ -79,7 +83,7 @@ export default Vue.extend({
      * @param emoji Emoji-mart emoji event object
      * @example v-on:select="addEmoji"
      */
-    addEmoji(emoji: any) {
+    addEmoji(emoji: any, emojiName: string) {
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('textile/sendReactionMessage', {
           to: this.ui.settingReaction.to,
@@ -90,6 +94,7 @@ export default Vue.extend({
       } else {
         this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
+      this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
     },
     /**
      * @method setRoute DocsTODO
