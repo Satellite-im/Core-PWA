@@ -11,6 +11,11 @@ export default Vue.extend({
       default: () => {},
     },
   },
+  data() {
+    return {
+      text: '',
+    }
+  },
   computed: {
     ...mapState(['ui']),
   },
@@ -57,6 +62,13 @@ export default Vue.extend({
           }
         }
       }
+    },
+    sendMessage() {
+      this.$store.dispatch('textile/sendTextMessage', {
+        to: this.user?.textilePubkey,
+        text: this.text,
+      })
+      this.close()
     },
   },
 })
