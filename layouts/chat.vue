@@ -16,12 +16,12 @@
       }`"
     >
       <UiGlobal />
-      <TailoredCoreSlimbar
+      <Slimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <TailoredCoreSidebar
+      <Sidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
         :users="friends.all"
         :groups="$mock.groups"
@@ -29,19 +29,19 @@
       <div
         :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
       >
-        <TailoredCoreStatusbar
-          id="statusbar"
+        <Toolbar
+          id="toolbar"
           :server="recipient || $mock.users[0]"
           :user="$mock.users[0]"
         />
-        <TailoredCoreMedia
+        <Media
           v-if="$device.isMobile"
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
           :max-viewable-users="10"
           :fullscreen-max-viewable-users="6"
         />
-        <TailoredCoreMedia
+        <Media
           v-else
           :fullscreen="ui.fullscreen"
           :users="$mock.callUsers"
@@ -56,13 +56,13 @@
         >
           <Nuxt />
         </UiChatScroll>
-        <TailoredMessagingEnhancers />
-        <TailoredWalletMini v-if="ui.modals.walletMini" />
-        <TailoredCommandsPreview :message="ui.chatbarContent" />
-        <TailoredCoreChatbarReply v-if="recipient" />
-        <TailoredCoreChatbar :recipient="recipient" />
+        <Enhancers />
+        <WalletMini v-if="ui.modals.walletMini" />
+        <ChatbarCommandsPreview :message="ui.chatbarContent" />
+        <ChatbarReply v-if="recipient" />
+        <Chatbar :recipient="recipient" />
       </div>
-      <TailoredCoreGroupAside
+      <GroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
         :selected-group="
           $mock.groups.find((group) => group.address === selectedGroup)
@@ -70,7 +70,7 @@
         :friends="$mock.friends"
       />
     </div>
-    <TailoredCoreMobileNav v-if="$device.isMobile" />
+    <MobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

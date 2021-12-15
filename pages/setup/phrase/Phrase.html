@@ -5,12 +5,12 @@
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in splitPhrase" class="tag-container">
-          <UiNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" />
+          <TypographyNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" />
         </div>
       </div>
       <div class="column">
         <div v-for="word, i in splitPhrase" class="tag-container">
-          <UiNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" />
+          <TypographyNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" />
         </div>
       </div>
     </div>

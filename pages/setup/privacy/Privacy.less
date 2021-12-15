@@ -6,30 +6,33 @@
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
+  section {
+    padding: @xlarge-spacing;
+    margin-bottom: 5rem;
+    .privacy-body {
+      min-width: 16rem;
+      align-self: center;
+      margin: 0 @normal-spacing;
+      margin-top: 20vh;
 
-  .privacy-body {
-    min-width: 250px;
-    align-self: center;
-    margin: 0 @normal-spacing;
-    margin-bottom: 25vh;
-
-    .subtitle {
-      margin-bottom: 0;
-      text-transform: uppercase;
-    }
-
-    .switch-column {
-      max-width: 75px;
-    }
-
-    .center {
-      text-align: center;
       .subtitle {
-        font-weight: bold;
+        margin-bottom: @xlight-spacing;
+        text-transform: uppercase;
       }
-    }
-    .right {
-      float: right;
+
+      .switch-column {
+        max-width: 75px;
+      }
+
+      .center {
+        text-align: center;
+        .subtitle {
+          font-weight: bold;
+        }
+      }
+      .right {
+        float: right;
+      }
     }
   }
 }

@@ -4,9 +4,9 @@ import { ActionsArguments } from '~/types/store/store'
 export default {
   handler: () => {},
   acceptCall({ commit }: ActionsArguments<MediaState>) {
-    commit('toggleIncomingCall', '')
+    commit('toggleMediaIncomingCall', '')
   },
   denyCall({ commit }: ActionsArguments<MediaState>) {
-    commit('toggleIncomingCall', '')
+    commit('toggleMediaIncomingCall', '')
   },
 }

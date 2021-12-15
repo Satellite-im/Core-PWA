@@ -1,5 +1,5 @@
 /**
- * This plugin enables persistant storage to the state.
+ * This plugin enables persistent storage to the state.
  */
 
 import { omit, remove } from 'lodash'
@@ -11,7 +11,7 @@ const mutationsBlacklist = [
   'accounts/setAccountError',
   'accounts/setPhrase',
   'files',
-  'toggleIncomingCall',
+  'toggleMediaIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
   'ui/setReplyChatbarContent',

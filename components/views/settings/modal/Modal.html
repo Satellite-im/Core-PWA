@@ -1,0 +1,32 @@
+<UiModal :closeModal="closeModal" nopad>
+  <div id="settings" 
+    :class="`with-sidebar ${ui.settingsSideBar ? 'is-open' : 'is-collapsed'}`">
+    <div class="sidebar is-secondary-background" v-touch:swipe.left="collapseSidebar" v-touch:swipe.right="showSidebar">
+      <UiScroll verticalScroll>
+        <SettingsSidebar
+          :title="$t('pages.settings.settings')"
+          toggleable
+          :toggle="toggleSidebar"
+          :handleRouteChange="changeRoute"
+        />
+      </UiScroll> 
+    </div>
+    <div class="not-sidebar hidden-scroll" v-scroll-lock="true">
+      <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+        <UiBreadcrumbs />
+        <InteractablesClose :action="closeModal" />
+        <SettingsPagesPersonalize v-if="page === 'personalize'" />
+        <SettingsPagesAccounts v-if="page === 'accounts'" />
+        <SettingsPagesAudio v-if="page === 'audio'" />
+        <SettingsPagesDeveloper v-if="page === 'developer'" />
+        <SettingsPagesInfo v-if="page === 'info'" />
+        <SettingsPagesKeybinds v-if="page === 'keybinds'" />
+        <SettingsPagesNotifications v-if="page === 'notifications'" />
+        <SettingsPagesProfile v-if="page === 'profile'" />
+        <SettingsPagesStorage v-if="page === 'storage'" />
+        <SettingsPagesNetwork v-if="page === 'network'" />
+        <SettingsPagesRealms v-if="page === 'realms'" />
+      </UiScroll>
+    </div>
+  </div>
+</UiModal>
