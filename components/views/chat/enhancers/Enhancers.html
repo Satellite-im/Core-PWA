@@ -1,0 +1,59 @@
+<div
+  id="enhancers"
+  v-if="ui.enhancers.show"
+  v-click-outside="toggleEnhancers"
+  v-bind:style="!ui.enhancers.floating ? {
+    left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px', 
+    bottom: ui.enhancers.position[1] + 'px' 
+  } : {}"
+  >
+  <div class="navbar">
+    <InteractablesButtonGroup v-model="route" :fullWidth="true" :values="['glyphs','emotes','gif']">
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Glyphs">
+        <grid-icon size="1x" />
+      </InteractablesButton>
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Emoji">
+        <smile-icon size="1x" />
+      </InteractablesButton>
+      <InteractablesButton
+        type="dark"
+        size="small"
+        text="Gifs">
+        <image-icon size="1x" />
+      </InteractablesButton>
+    </InteractablesButtonGroup>
+  </div>
+  <div id="container">
+    <emoji-picker @emoji="addEmoji" :search="search" v-if="ui.enhancers.route === 'emotes'">
+      <div ref="emojiInvoker" slot="emoji-invoker" slot-scope="{ events: { click: clickEvent }, display, emojis }" v-bind:events.click="clickEvent" @click.stop="clickEvent">
+      </div>
+      <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+        <div class="emoji-picker">
+          <div class="emoji-picker__search">
+            <InteractablesInput v-model="search" type="dark" size="small" placeholder="Search..." />
+          </div>
+          <div>
+            <div v-for="(emojiGroup, category) in emojis" :key="category">
+              <TypographyText :text="category" />
+              <div class="emojis">
+                <span
+                  v-for="(emoji, emojiName) in emojiGroup"
+                  :key="emojiName"
+                  @click="addEmoji(emoji)"
+                  :title="emojiName"
+                >{{ emoji }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </emoji-picker>
+    <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'"></EnhancersGlyphs>
+  </div>
+</div>

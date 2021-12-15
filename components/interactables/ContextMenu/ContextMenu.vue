@@ -47,7 +47,7 @@ export default Vue.extend({
     /**
      * @method handleOverflow
      * @description Ensures contextMenu is positioned correctly by calculating if the div overflows the page and respositioning as needed.
-     * Corrects position by commiting an adjusted position to setContextMenuPosition in state
+     * Corrects position by committing an adjusted position to setContextMenuPosition in state
      * @example
      */
     handleOverflow() {

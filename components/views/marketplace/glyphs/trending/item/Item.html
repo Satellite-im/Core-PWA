@@ -1,0 +1,22 @@
+<div v-if="item" class="glyph-trending-card">
+  <div class="header">
+    <VueMarkdown :source="':smile:'" class="markdown" />
+    <div class="header-right">
+      <UiCircle type="random" :size="24" />
+      <div class="favorite">
+        <heart-icon size="1x" />
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="trend-glyph-img">
+      <EnhancersGlyphsItem
+        :src="item.stickerURLs[0]"
+        :width="100"
+        :height="100"
+      ></EnhancersGlyphsItem>
+    </div>
+    <TypographySubtitle :size="6" :text="item.name" />
+    <TypographyText :size="6" :text="`${item.stickerURLs.length} glyphs`" />
+  </div>
+</div>

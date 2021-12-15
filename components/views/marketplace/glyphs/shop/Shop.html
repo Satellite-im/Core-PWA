@@ -1,0 +1,18 @@
+<div class="glyph-shop-section">
+  <div class="shop-filter">
+    <TypographySubtitle :size="6" :text="title" />
+    <div class="shop-category">
+      <span class="category-item" v-for="filter in marketGlyphShopFilter"
+        >{{filter.name}}</span
+      >
+    </div>
+  </div>
+
+  <div class="shop-list">
+    <MarketplaceGlyphsShopItem
+      v-for="item in marketGlyphs"
+      :key="item.id"
+      :item="item"
+    ></MarketplaceGlyphsShopItem>
+  </div>
+</div>

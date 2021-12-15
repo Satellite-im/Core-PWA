@@ -102,9 +102,9 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <UiNumberedWord word="Elephant" :number="1" />
-            <UiNumberedWord word="Telephone" :number="2" />
-            <UiNumberedWord word="Rendered" :number="24" />
+            <TypographyNumberedWord word="Elephant" :number="1" />
+            <TypographyNumberedWord word="Telephone" :number="2" />
+            <TypographyNumberedWord word="Rendered" :number="24" />
           </div>
         </div>
       </div>

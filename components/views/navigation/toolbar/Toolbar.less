@@ -1,0 +1,102 @@
+#toolbar {
+  flex: 1;
+  display: flex;
+  height: @toolbar-height;
+  z-index: @base-z-index + 100;
+  padding: 0 @normal-spacing;
+  min-width: 500px;
+  user-select: none;
+  pointer-events: none;
+
+  .vertical-divider {
+    height: 30px;
+    width: 1px;
+    display: inline-block;
+    background: @splash-radial;
+    margin: 0 @light-spacing;
+  }
+
+  .controls {
+    background: @semitransparent-light-gradient;
+    border-radius: @corner-rounding;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    align-self: center;
+    font-size: @icon-size;
+    padding: @light-spacing;
+    box-shadow: @ui-shadow;
+    pointer-events: all;
+
+    .input-wrap {
+      margin-left: @normal-spacing !important;
+    }
+    .control-icon {
+      margin: 0 @light-spacing;
+      cursor: pointer;
+      font-size: @small-icon-size;
+      filter: @white-text-glow;
+
+      &:nth-child(2) {
+        margin-right: @normal-spacing;
+      }
+    }
+  }
+  .toolbar-spacer {
+    height: 45px;
+    flex: auto;
+  }
+  .circle {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .circle-container {
+    height: @toolbar-height;
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+  }
+
+  .user-info {
+    position: relative;
+    align-self: center;
+    margin-left: 0.75rem;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .title {
+      margin: 0;
+      font-size: @title-text;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      line-height: 2 !important;
+    }
+    .subtitle {
+      margin: 0;
+      padding: 0;
+      font-size: @mini-text-size;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block;
+      white-space: nowrap;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #toolbar {
+    min-width: @viewport-width;
+    padding-right: @light-spacing;
+    min-height: @toolbar-height;
+  }
+  .controls {
+    margin-right: 0;
+  }
+  .toolbar-spacer {
+    flex: 1;
+  }
+}
