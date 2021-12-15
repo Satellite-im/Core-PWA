@@ -1,9 +1,16 @@
-<template src="./InputAccount.html" />
+<template src="./InputAccount.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { PlusCircleIcon } from 'satellite-lucide-icons'
 import * as bip39 from 'bip39'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    bipList: Array<string>
+    phrases: Array<string>
+  }
+}
 
 export default Vue.extend({
   name: 'InputAccountScreen',
