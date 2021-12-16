@@ -425,4 +425,63 @@ export default {
       })
     }
   },
+
+  /**
+   * @description Sends a text message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key)
+   * and the text message to be sent
+   */
+  async editTextMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, original, text }: { to: string; text: string, original: Message },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+    const editingMessage = {
+      ...original,
+      payload: text,
+      editingAt: Date.now(),
+    } as Message
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: editingMessage,
+    })
+
+    const result = await $MailboxManager.editMessage<'text'>(
+      original.id,
+      {
+        to: friend.textilePubkey,
+        payload: text,
+        type: 'text',
+      },
+    )
+
+    if (result) {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: result,
+      })
+    } else {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: original,
+      })
+    }
+  },
 }
