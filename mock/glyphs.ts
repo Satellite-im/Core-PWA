@@ -130,7 +130,7 @@ export const Glyphs = {
       `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_18.png`,
       `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_19.png`,
       `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_20.png`,
-      // `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_22.png`,
+      `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_22.png`,
       `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_21.png`,
       `${Config.ipfs.gateway}QmRBxCyQa2yJFpF4yiV2wimLX2i32oty8yKFJFsFhyJR2n/JohnTreanor_GenshinImpactFood_23.png`,
     ],

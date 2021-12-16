@@ -1,11 +1,13 @@
 <v-img 
   :src="src"
-  width="85"
-  height="85"
   :aspect-ratio="1"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
   v-on="sendOnClick ? {click: addGlyph} : {}"
+  class="glyph-item"
+  @load="imageLoaded"
+  @loadstart="imageLoadStart"
+  :style="getStyle()"
 >
   <template v-slot:placeholder>
     <v-row

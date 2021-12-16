@@ -5,6 +5,11 @@ import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
+  data() {
+    return {
+      imgLoaded: false
+    }
+  },
   props: {
     width: {
       type: Number,
@@ -30,9 +35,9 @@ export default Vue.extend({
   methods: {
     getStyle() {
       return {
-        'background-image': `url(${this.src})`,
         width: `${this.width}px`,
         height: `${this.height}px`,
+        cursor: this.$data.imgLoaded ? 'pointer' : 'not-allowed'
       }
     },
     mouseOver() {
@@ -56,11 +61,21 @@ export default Vue.extend({
       if (!this.src || !activeFriend) {
         return
       }
-      this.$store.dispatch('textile/sendTextMessage', {
-        to: activeFriend?.textilePubkey,
-        text: `<img src=${this.src} class='glyph'/>`,
-      })
+      if(this.$data.imgLoaded) {
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: activeFriend?.textilePubkey,
+          text: `<img src=${this.src} class='glyph'/>`,
+        })
+      } else {
+        this.$toast.show(this.$t('glyphs.not_allow_inut'))
+      }
     },
+    imageLoaded() {
+      this.$data.imgLoaded = true;
+    },
+    imageLoadStart() {
+      this.$data.imgLoaded = false;
+    }
   },
 })
 </script>

@@ -2,7 +2,6 @@
   position: relative;
   height: 100%;
   padding: @light-spacing;
-  padding-bottom: @xlarge-spacing;
   .search-glyph-box {
     margin-bottom: @light-spacing;
     input {
@@ -16,14 +15,10 @@
     border-radius: @corner-rounding;
   }
   .glyph-content {
-    height: calc(100% - 5.5rem);
+    height: calc(100% - 9rem);
     font-size: 0.75rem;
     section {
       height: 100%;
-      
-      .group-container {
-        padding-bottom: 85px;
-      }
     }
   }
 }
@@ -34,8 +29,10 @@
 }
 
 .v-image__image {
+  position: absolute;
   width: 100% !important;
   height: 100% !important;
-  background-size: contain;
-  cursor: pointer;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: transparent;
 }
