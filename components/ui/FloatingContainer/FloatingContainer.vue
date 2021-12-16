@@ -9,6 +9,10 @@ export default Vue.extend({
     FlaskConicalIcon,
   },
   props: {
+    customStyles: {
+      type: Boolean,
+      default: false,
+    },
     /**
      * Optional Header Text
      * @remarks

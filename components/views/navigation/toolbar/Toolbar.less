@@ -15,6 +15,7 @@
     background: @splash-radial;
     margin: 0 @light-spacing;
   }
+  
 
   .controls {
     background: @semitransparent-light-gradient;
@@ -98,5 +99,10 @@
   }
   .toolbar-spacer {
     flex: 1;
+  }
+  .alerts-floating-container {
+    top: calc(@toolbar-height - @light-spacing);
+    right: @light-spacing !important;
+    left: @light-spacing !important;
   }
 }
