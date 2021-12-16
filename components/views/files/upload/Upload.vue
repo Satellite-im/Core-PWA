@@ -1,7 +1,7 @@
 <template src="./Upload.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, {PropType} from 'vue'
 import { Config } from '~/config'
 
 import {
@@ -12,6 +12,8 @@ import {
 } from 'satellite-lucide-icons'
 
 import { UploadDropItemType } from '~/types/files/file'
+import {Friend} from "~/types/ui/friends";
+import {mapState} from "vuex";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -29,18 +31,38 @@ export default Vue.extend({
   props: {
     type: {
       type: String,
-      default: 'quick',
+      default: '',
     },
     editable: {
       type: Boolean
-    }
+    },
+    recipient: {
+      type: Object as PropType<Friend>,
+    },
   },
   data() {
     return {
       files: [] as Array<UploadDropItemType>,
       uploadStatus: false,
       count_error: false,
+      progress: 0,
+      ipfsHash: false,
+      selectedFile: false,
+      imageURL: '',
+      fileClass: false,
+      error: false,
+      aiScanning: false,
+      disabledButton: false,
     }
+  },
+  computed: {
+    ...mapState(['ui', 'friends', 'textile']),
+    activeFriend() {
+      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
+    currentProgress() {
+      return this.textile.uploadProgress
+    },
   },
   methods: {
     /**
@@ -125,6 +147,20 @@ export default Vue.extend({
       this.$data.files = []
       this.$data.uploadStatus = false
       this.$data.count_error = false
+    },
+    /**
+     * @method sendMessage
+     * @description Sends action to Upload the file to textile.
+     */
+    async sendMessage () {
+      this.disabledButton = true;
+      await this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: this.$data.files[0],
+      }
+      ).then(() => this.disabledButton = false)
+
+      this.cancelUpload()
     },
   },
 })

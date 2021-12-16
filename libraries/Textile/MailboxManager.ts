@@ -197,7 +197,6 @@ export class MailboxManager {
     message: MessagePayloads[T]
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
-
     const encoder = new TextEncoder()
     const body = encoder.encode(
       JSON.stringify({
@@ -239,7 +238,6 @@ export class MailboxManager {
 
     try {
       const parsedBody = JSON.parse(decoded)
-
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,

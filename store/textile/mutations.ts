@@ -117,6 +117,15 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
+  setUploadingFileProgress(
+    state: TextileState,
+    progress: number
+  ) {
+    state.uploadProgress = progress
+    if( progress === 100) {
+      state.uploadProgress = 0
+    }
+  },
 }
 
 export default mutations
