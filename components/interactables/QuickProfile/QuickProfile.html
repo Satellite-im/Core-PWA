@@ -18,7 +18,7 @@
   <InteractablesInputGroup
     type="primary"
     v-model="text"
-    :placeholder="`Message ${user.name}...`"
+    :placeholder="`${$t('friends.message')} ${user.name}...`"
     :action="sendMessage"
   >
     <arrow-right-icon size="1x" />
