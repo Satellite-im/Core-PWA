@@ -1,9 +1,9 @@
 // Animations
-@animation-speed: 0.2s;
+@animation-speed: 0.05s;
 @animation-speed-micro: 0.05s;
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity @animation-speed;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;

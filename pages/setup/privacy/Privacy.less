@@ -36,3 +36,33 @@
     }
   }
 }
+
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .container {
+    height: 100%;
+    padding-top: @normal-spacing;
+    justify-content: flex-start;
+
+    .center {
+      margin-bottom: @normal-spacing;
+    }
+    section {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      .privacy-body {
+        margin-top: 0;
+        min-height: calc(100% - @normal-spacing);
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .spacer {
+      flex: 1;
+    }
+    .is-button {
+      width: 100%;
+    }
+  }
+}

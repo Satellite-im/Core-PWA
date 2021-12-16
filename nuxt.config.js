@@ -71,7 +71,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
+    { src: '~/plugins/thirdparty/vue3-touch-events.ts' },
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
@@ -95,11 +95,7 @@ export default defineNuxtConfig({
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // '@nuxtjs/ngrok',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/device',
-  ],
+  buildModules: ['@nuxtjs/style-resources', '@nuxtjs/device'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

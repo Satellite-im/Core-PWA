@@ -1,21 +1,41 @@
 @supports (-webkit-touch-callout: none) {
-  html, body {
+  body {
+    background: @background-gradient; 
+
+  }
+  html {
     overflow: unset;
     height: unset;
     width: 100%;
     min-height: calc(100% + env(safe-area-inset-top));
-    background: purple;
+    padding-top: env(safe-area-inset-top);
     position: relative;
     overflow: hidden;
-    background: @background-gradient;
+    background: @background-gradient; 
   }
   #app {
     position: fixed;
     background: transparent;
-    padding-top: env(safe-area-inset-top);
+    overflow: hidden; 
     width: 100%;
+    min-height: 100%;
+    
+    &.is-open {
+      padding-bottom: @mobile-nav-size;
+    }
+
+    &.is-collapsed {
+      min-height: 100%;
+
+      .dynamic-content {
+        height: 100%;
+        padding-bottom: env(safe-area-inset-bottom); 
+      }
+    }
+
     .container {
-      min-height: calc(100vh - env(safe-area-inset-top));
+      position: fixed;
+      min-height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
     }
   }
 }

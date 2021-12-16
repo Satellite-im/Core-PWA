@@ -7,10 +7,9 @@
           <TypographyText :text="$t('pages.privacy.subtitle')" />
         </div>
       </div>
-      <br />
       <div class="columns">
         <div class="column">
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column switch-column">
               <InteractablesSwitch v-model="registry" small />
             </div>
@@ -24,7 +23,7 @@
           </div>
         </div>
         <div class="column">
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column switch-column">
               <InteractablesSwitch v-model="storePin" small />
             </div>
@@ -40,7 +39,7 @@
       </div>
       <div class="columns">
         <div class="column">
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column switch-column">
               <InteractablesSwitch v-model="embeddedLinks" small />
             </div>
@@ -54,7 +53,7 @@
           </div>
         </div>
         <div class="column">
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column switch-column">
               <InteractablesSwitch v-model="displayCurrentActivity" small />
             </div>
@@ -69,8 +68,8 @@
         </div>
       </div>
       <br />
-      <br />
-      <div class="columns">
+      <div class="spacer"></div>
+      <div class="columns is-mobile button-column">
         <div class="column">
           <InteractablesButton
             class="right"

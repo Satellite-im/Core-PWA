@@ -3,7 +3,6 @@
     <div
       id="app"
       v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="[
         sidebar ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : '',
@@ -32,13 +31,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
+import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 export default Vue.extend({
   name: 'FilesLayout',
-  mixins: [mobileSwipe, Layout],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
   data() {
     return {

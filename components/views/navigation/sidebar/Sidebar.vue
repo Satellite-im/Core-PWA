@@ -13,7 +13,6 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import { DataStateType } from '~/store/dataState/types'
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
@@ -27,7 +26,6 @@ export default Vue.extend({
     MessageSquareIcon,
     MenuIcon,
   },
-  mixins: [mobileSwipe],
   props: {
     toggle: {
       type: Function,

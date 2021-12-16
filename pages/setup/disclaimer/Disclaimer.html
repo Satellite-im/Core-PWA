@@ -2,9 +2,9 @@
   <div class="disclaimer-body">
     <TypographyTitle :size="4" :text="$t('pages.disclaimer.title')" />
     <TypographySubtitle :size="6" :text="$t('pages.disclaimer.subtitle')" />
-    <UiSpacer :height="20" />
+  </div>
+  <div class="buttons">
     <InteractablesButton full-width :text="$t('pages.disclaimer.create')" :action="() => { goToPrivacySettings() }" :loading="isLoading"/>
-    <TypographySubtitle :size="6" :text="$t('pages.disclaimer.or')" class="centered-subtitle" />
     <InteractablesButton full-width type="dark" :action="() => { importAccount() }" :text="$t('pages.disclaimer.import')" />
   </div>
 </div>

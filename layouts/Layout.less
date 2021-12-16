@@ -4,10 +4,6 @@
 #app-wrap {
   #app.mobile-app {
     height: calc(var(--app-height) - @mobile-nav-size);
-    transition: height @animation-speed;
-  }
-  #mobile-nav {
-    transition: bottom @animation-speed;
   }
 
   &.is-collapsed {
@@ -15,7 +11,7 @@
       height: var(--app-height);
     }
     #mobile-nav {
-      bottom: -@mobile-nav-size;
+      transform: translate(0, @mobile-nav-size);
     }
   }
 
@@ -50,14 +46,13 @@
     .media-open {
       width: 100%;
       flex: 1;
-      transition: flex 0.3s;
     }
 
     #chatbar {
       width: 100%;
       min-width: 0;
       justify-content: flex-end;
-      transition: height 0.3s;
+      transition: height @animation-speed;
 
       &.has-reply {
         .chatbar-wrap {
@@ -71,9 +66,6 @@
       }
     }
 
-    #mediastream {
-      transition: flex 0.3s;
-    }
     &.fullscreen-media {
       .media-open {
         flex: 0;

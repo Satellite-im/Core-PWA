@@ -25,7 +25,6 @@
     "@capacitor/local-notifications": "^1.0.3",
     "@creativebulma/bulma-tooltip": "^1.2.0",
     "@nuxtjs/device": "^2.1.0",
-    "@nuxtjs/ngrok": "^2.0.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/toast": "^3.3.1",
@@ -91,6 +90,7 @@
     "vue-slider-component": "^3.2.13",
     "vue-typed-mixins": "^0.2.0",
     "vue2-touch-events": "^3.2.2",
+    "vue3-touch-events": "^4.1.0",
     "vuejs-datepicker": "^1.6.2",
     "vuejs-paginate": "^2.1.0",
     "vuex-persist": "^3.1.3"
