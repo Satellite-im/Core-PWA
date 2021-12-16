@@ -38,10 +38,10 @@
         :source="wrapEmoji(message.payload)"
         :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
       />
-      <sm class="editing" v-if="message.editingAt"
-        ><UiLoadersSpinner spinning
-      /></sm>
-      <sm class="edited" v-else-if="message.editedAt">(edited)</sm>
+      <span class="status editing" v-if="message.editingAt">
+        <UiLoadersSpinner spinning />
+      </span>
+      <span class="status edited" v-else-if="message.editedAt">(edited)</span>
     </template>
     <UiChatImage
       v-else-if="message.type === 'image'"
