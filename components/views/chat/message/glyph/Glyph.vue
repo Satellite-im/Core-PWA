@@ -7,7 +7,7 @@ export default Vue.extend({
   props: {
     source: {
       type: String,
-      default: '404.png',
+      default: '',
     },
     pack: {
       type: String,
