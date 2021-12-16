@@ -11,3 +11,8 @@
   z-index: @base-z-index + 100;
   backdrop-filter: @blur;
 }
+@media only screen and (max-width: @mobile-breakpoint) {
+  #mini-wallet {
+    width: calc(100vw - @normal-spacing*2);
+  }
+}
