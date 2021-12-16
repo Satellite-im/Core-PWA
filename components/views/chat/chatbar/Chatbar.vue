@@ -277,6 +277,7 @@ export default Vue.extend({
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: 'text',
           })
+          this.clearChatbar()
           return
         }
         this.$store.dispatch('textile/sendTextMessage', {
@@ -285,9 +286,7 @@ export default Vue.extend({
         })
 
         const messageBox = this.$refs.messageuser as HTMLElement
-        // Clear Chatbar
-        messageBox.innerHTML = ''
-        this.value = ''
+        this.clearChatbar()
       }
     },
     /**
@@ -326,6 +325,11 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
+    },
+    clearChatbar() {
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerHTML = ''
+      this.value = ''
     },
   },
   watch: {

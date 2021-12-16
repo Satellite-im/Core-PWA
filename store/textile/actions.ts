@@ -224,13 +224,13 @@ export default {
       message: result,
     })
     commit('setMessageLoading', { loading: false })
-  }
+  },
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
    * file: UploadDropItemType to be sent users bucket for textile
-   */,
+   */
   async sendFileMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType },
@@ -350,6 +350,17 @@ export default {
       throw new Error('Friend not found')
     }
 
+    commit('setMessageLoading', { loading: true })
+    commit(
+      'ui/setReplyChatbarContent',
+      {
+        id: '',
+        payload: '',
+        from: '',
+      },
+      { root: true },
+    )
+
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
     const result = await $MailboxManager.sendMessage<'reply'>(
       friend.textilePubkey,
@@ -367,15 +378,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    commit(
-      'ui/setReplyChatbarContent',
-      {
-        id: '',
-        payload: '',
-        from: '',
-      },
-      { root: true },
-    )
+    commit('setMessageLoading', { loading: false })
   },
 
   /**
