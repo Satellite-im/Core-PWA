@@ -1,8 +1,5 @@
 .is-message {
   color: @text;
-  .markdown {
-    display: inline;
-  }
   .pinned-message {
     border: 1px solid @primary-color;
     border-radius: @corner-rounding;
@@ -44,7 +41,7 @@
     }
   }
   .markdown {
-    display: inline-flex;
+    display: inline;
     align-items: center;
     strong {
       color: @bright-text;
@@ -78,7 +75,6 @@
     }
   }
   sm {
-    display: inline;
     font-size: @micro-text-size;
     &.editing {
       vertical-align: bottom;
