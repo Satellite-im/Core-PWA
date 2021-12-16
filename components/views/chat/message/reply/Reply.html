@@ -19,11 +19,12 @@
         </div>
         <div class="reply-content">
           <VueMarkdown v-if="reply.type === 'text'" :source="reply.payload" class="markdown" />
-          <UiChatImage v-else-if="reply.type === 'image'" :source="reply.payload.url" alt="" />
-          <UiChatEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
-          <UiChatEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
-          <UiChatEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
-          <MessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
+          <VueMarkdown v-if="reply.type === 'reply'" :source="reply.payload" class="markdown" />
+          <UiImage v-else-if="reply.type === 'image'" :source="reply.payload.url" alt="" />
+          <UiEmbedsVideoPlayer v-else-if="reply.type === 'video'" :data="reply.payload" />
+          <UiEmbedsAudioPlayer v-else-if="reply.type === 'audio'" :data="reply.payload" />
+          <UiEmbedsFile v-else-if="reply.type === 'file'" :data="reply.payload" />
+          <TailoredMessagingMessageActions v-if="replyHover == reply.id" :hideReply="true" :emojiReaction="() => emojiReaction($event, reply.id)" />
         </div>
       </div>
     </div>
