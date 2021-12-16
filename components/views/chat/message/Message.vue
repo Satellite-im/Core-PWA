@@ -212,7 +212,29 @@ export default Vue.extend({
         payload: message,
         from: this.$props.group.id,
       })
+
+      const recipient = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      this.$store.dispatch('textile/editTextMessage', {
+        to: recipient?.textilePubkey,
+        original: this.$props.message,
+        text: message,
+      })
     },
+    cancelMessage() {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: this.$props.group.id,
+      })
+      
+      this.$store.commit('ui/saveEditMessage', {
+        id: this.$props.message.id,
+        payload: 'message',
+        from: this.$props.group.id,
+      })
+    }
   },
   created() {
     const setTimestamp = (timePassed: string) => {
@@ -222,7 +244,7 @@ export default Vue.extend({
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
       this.$props.message.at,
       setTimestamp,
-      Config.chat.timestampUpdateInterval
+      Config.chat.timestampUpdateInterval,
     )
   },
   beforeDestroy() {
