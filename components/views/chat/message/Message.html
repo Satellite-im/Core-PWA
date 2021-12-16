@@ -65,7 +65,11 @@
     />
     <UiChatEmbedsFile
       v-else-if="message.type === 'file'"
+<<<<<<< HEAD
       :file="message.payload"
+=======
+      :data="message.payload"
+>>>>>>> 33f11e9f (fix(mergeconflict): fix ui issues with rebasing)
     />
     <MessageReactions
       v-if="!hideActions && hasReactions"
