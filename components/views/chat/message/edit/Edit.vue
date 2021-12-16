@@ -39,7 +39,7 @@ export default Vue.extend({
       this.$emit('commitMessage', this.content)
     },
     cancelMessage() {
-      this.$emit('commitMessage', this.$props.message)
+      this.$emit('cancelMessage')
     },
     /**
      * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
