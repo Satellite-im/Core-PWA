@@ -8,7 +8,6 @@ import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from "~/types/files/file";
-
 export default {
   /**
    * @description Initializes the TextileManager class and retrieves the
@@ -223,15 +222,17 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-  },/**
+    commit('setMessageLoading', { loading: false })
+  }
+  /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
    * file: UploadDropItemType to be sent users bucket for textile
-   */
+   */,
   async sendFileMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, file }: { to: string; file: UploadDropItemType }
+    { to, file }: { to: string; file: UploadDropItemType },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const path = `/${file.file.name}`
@@ -241,7 +242,7 @@ export default {
       path,
       (progress: number) => {
         commit('setUploadingFileProgress', progress)
-      }
+      },
     )
     const imageURL = `${Config.textile.browser}${result?.root}${path}`
     $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
@@ -251,19 +252,20 @@ export default {
       throw new Error('Friend not found')
     }
 
-    const sendMessageResult = await $TextileManager.mailboxManager?.sendMessage<"file">(
-      friend.textilePubkey,
-      {
-        to: friend.textilePubkey,
-        payload: {
-          url: imageURL,
-          name: file.file.name,
-          size: file.file.size,
-          type: file.file.type,
+    const sendMessageResult =
+      await $TextileManager.mailboxManager?.sendMessage<'file'>(
+        friend.textilePubkey,
+        {
+          to: friend.textilePubkey,
+          payload: {
+            url: imageURL,
+            name: file.file.name,
+            size: file.file.size,
+            type: file.file.type,
+          },
+          type: 'file',
         },
-        type: "file",
-      },
-    )
+      )
 
     commit('addMessageToConversation', {
       address: friend.address,
@@ -353,11 +355,15 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    commit('ui/setReplyChatbarContent', {
-      id: '',
-      payload: '',
-      from: '',
-    }, { root: true })
+    commit(
+      'ui/setReplyChatbarContent',
+      {
+        id: '',
+        payload: '',
+        from: '',
+      },
+      { root: true },
+    )
   },
 
   /**
