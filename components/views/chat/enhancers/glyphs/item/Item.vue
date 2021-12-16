@@ -67,7 +67,7 @@ export default Vue.extend({
           text: `<img src=${this.src} class='glyph'/>`,
         })
       } else {
-        this.$toast.show(this.$t('glyphs.not_allow_inut'))
+        this.$toast.show("Not allowed to input the current loading image.")
       }
     },
     imageLoaded() {
