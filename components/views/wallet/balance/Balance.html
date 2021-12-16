@@ -1,7 +1,7 @@
 <div id="wallet-balance">
   <div class="balance-heading">
     <coins-icon size="1.2x" />
-    <TypographyText text="Balance" />
+    <TypographyText :text="$t('wallet.balance.balance')"  />
   </div>
   <div class="wallet-body">
     <div class="wallet-body-left">
@@ -25,14 +25,14 @@
           class="left"
           type="primary"
           size="small"
-          text="Add Funds">
+          :text="$t('wallet.balance.add_funds')">
           <plus-circle-icon size="1.2x" />
         </InteractablesButton>
         <InteractablesButton
           class="left"
           type="dark"
           size="small"
-          text="Cash Out">
+          :text="$t('wallet.balance.cash_out')">
           <trending-down-icon size="1.2x" />
         </InteractablesButton>
       </div>
