@@ -3,6 +3,7 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
+import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { Message, Group } from '~/types/messaging'
@@ -36,14 +37,23 @@ export default Vue.extend({
   data() {
     return { showReplies: false, replyHover: '' }
   },
-   mounted() {
-    const openReplyList = localStorage.getItem('open-reply-list')
-    const oRLObj = openReplyList ? JSON.parse(openReplyList) : []
-    if (oRLObj.includes(this.$props.message.id)) {
-      this.$data.showReplies = true
+  mounted() {
+    let findItem = this.setChatReply.find((item: any) => item.replyId === this.$props.message.id)
+
+    if(findItem) {
+      this.$data.showReplies = findItem.value
     }
   },
   computed: {
+    ...mapState(['chat']),
+    setChatReply: {
+      set(state) {
+        this.$store.commit('chat/setChatReply', state)
+      },
+      get() {
+        return this.chat.replies
+      }
+    },
     /**
      * makeReplyText: generates the "Replies from _____" text in a chat
      * depending on the number of users in the reply thread, it will generate a different replyText
@@ -130,15 +140,10 @@ export default Vue.extend({
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
 
-      const openReplyList = localStorage.getItem('open-reply-list')
-      let oRLObj = openReplyList ? JSON.parse(openReplyList) : []
-      
-      if (this.$data.showReplies === true) {
-        oRLObj.includes(this.$props.message.id) ? oRLObj : oRLObj.push(this.$props.message.id)
-      } else {
-        oRLObj.includes(this.$props.message.id) ? oRLObj.pop(this.$props.message.id) : oRLObj
+      this.setChatReply = {
+        replyId: this.$props.message.id,
+        value: this.$data.showReplies
       }
-      localStorage.setItem('open-reply-list', JSON.stringify(oRLObj))
     },
   },
 })

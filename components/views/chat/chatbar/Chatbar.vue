@@ -56,8 +56,23 @@ export default Vue.extend({
       },
     },
   },
+  mounted() {
+    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let message = findItem ? findItem.value : ''
+
+    const messageBox = this.$refs.messageuser as HTMLElement
+    messageBox.innerText = message
+  },
   computed: {
-    ...mapState(['ui', 'friends']),
+    ...mapState(['ui', 'friends', 'chat']),
+    setChatText: {
+      set(state) {
+        this.$store.commit('chat/setChatText', state)
+      },
+      get() {
+        return this.chat.chatTexts
+      }
+    },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
@@ -241,21 +256,10 @@ export default Vue.extend({
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
 
-      const chatMsgList = localStorage.getItem('chat-message-list')
-      let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
-      if (cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
-        cMLObj.map((item: any) => {
-          if (item.id === this.$props.recipient.address) {
-            item.value = messageBox.innerHTML
-          }
-        })
-      } else {
-        cMLObj.push({
-          id: this.$props.recipient.address,
-          value: messageBox.innerHTML
-        })
+      this.setChatText = {
+        userId: this.$props.recipient.address,
+        value: messageBox.innerHTML
       }
-      localStorage.setItem('chat-message-list', JSON.stringify(cMLObj))
     },
     /**
      * @method sendMessage
@@ -345,12 +349,8 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      const chatMsgList = localStorage.getItem('chat-message-list')
-      let message = null
-      let cMLObj = chatMsgList ? JSON.parse(chatMsgList) : []
-      if (this.$props.recipient && cMLObj.some((e: any) => e.id === this.$props.recipient.address)) {
-        message = cMLObj.find((item: any) => item.id === this.$props.recipient.address).value
-      }
+      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
