@@ -29,7 +29,7 @@
       :editMessage="editMessage"
       :message="message"
     />
-    <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="message.payload" class="markdown" />
+    <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="wrapEmoji(message.payload)" :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`" />
     <UiChatImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent

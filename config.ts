@@ -98,5 +98,9 @@ export const Config = {
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
     // Regex to check if string is only blank space
     blankSpace: '^[\\s|&nbsp;]+$',
+    // Regex to check if string contains only emoji's. Note: doesn't yet support emoji modifiers
+    isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
+    // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
+    emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
   },
 }
