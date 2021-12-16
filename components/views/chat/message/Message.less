@@ -1,6 +1,5 @@
 .is-message {
   color: @text;
-  margin-bottom: 0.1rem;
   .pinned-message {
     border: 1px solid @primary-color;
     border-radius: @corner-rounding;
@@ -42,13 +41,14 @@
     }
   }
   .markdown {
-    display: inline-flex;
+    display: inline;
     align-items: center;
     strong {
       color: @bright-text;
     }
     p {
       font-size: @text-size;
+      display: inline;
     }
   }
 
@@ -72,6 +72,13 @@
       font-size: 36pt;
       animation-name: bounce;
       animation-duration: 500ms;
+    }
+  }
+  .status {
+    font-size: @micro-text-size;
+    &.editing {
+      vertical-align: bottom;
+      margin-top: 0;
     }
   }
 }
