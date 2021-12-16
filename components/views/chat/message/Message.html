@@ -1,4 +1,8 @@
-<div class="is-message" :class="textile.messageLoading ? 'loading' : ''" @contextmenu="contextMenu">
+<div
+  class="is-message"
+  :class="textile.messageLoading ? 'loading' : ''"
+  @contextmenu="contextMenu"
+>
   <div
     @mouseenter="mouseOver"
     @mouseleave="mouseOver"
@@ -29,10 +33,21 @@
       :editMessage="editMessage"
       :message="message"
     />
-    <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="wrapEmoji(message.payload)" :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`" />
-    <sm class="editing" v-if="message.editingAt"><UiSpinner spinning /></sm>
-    <sm class="edited" v-else-if="message.editedAt">(edited)</sm>
-    <UiChatImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
+    <template v-if="!messageEdit && message.type === 'text'">
+      <VueMarkdown
+        :source="wrapEmoji(message.payload)"
+        :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
+      />
+      <sm class="editing" v-if="message.editingAt"
+        ><UiLoadersSpinner spinning
+      /></sm>
+      <sm class="edited" v-else-if="message.editedAt">(edited)</sm>
+    </template>
+    <UiChatImage
+      v-else-if="message.type === 'image'"
+      :source="message.payload.url"
+      alt=""
+    />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent
       v-if="message.type === 'text'"
@@ -46,7 +61,10 @@
       v-else-if="message.type === 'audio'"
       :data="message.payload"
     />
-    <UiChatEmbedsFile v-else-if="message.type === 'file'" :file="message.payload" />
+    <UiChatEmbedsFile
+      v-else-if="message.type === 'file'"
+      :file="message.payload"
+    />
     <MessageReactions
       v-if="!hideActions && hasReactions"
       :message="this.$props.message"
