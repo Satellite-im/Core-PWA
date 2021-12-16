@@ -30,6 +30,8 @@
       :message="message"
     />
     <VueMarkdown v-if="!messageEdit && message.type === 'text'" :source="wrapEmoji(message.payload)" :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`" />
+    <sm class="editing" v-if="message.editingAt"><UiSpinner spinning /></sm>
+    <sm class="edited" v-else-if="message.editedAt">(edited)</sm>
     <UiChatImage v-else-if="message.type === 'image'" :source="message.payload.url" alt="" />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent
@@ -62,5 +64,6 @@
     v-if="messageEdit"
     :message="message.payload"
     @commitMessage="saveMessage"
+    @cancelMessage="cancelMessage"
   />
 </div>
