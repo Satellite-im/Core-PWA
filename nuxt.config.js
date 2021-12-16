@@ -61,7 +61,7 @@ export default defineNuxtConfig({
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/styles/framework/framework.less'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -123,7 +123,7 @@ export default defineNuxtConfig({
   },
 
   styleResources: {
-    less: './assets/styles/vars/*.less',
+    less: './assets/styles/framework/*.less',
   },
 
   pwa: {
