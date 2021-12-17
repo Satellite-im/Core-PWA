@@ -1,8 +1,8 @@
 <div class="files-aside">
   <div class="flex">
-    <TypographyText :size="6" text="Free Tier" />
+    <TypographyText :size="6" :text="$t('pages.files.aside.free_tier')" />
     <InteractablesButton
-      text="Upgrade"
+      :text="$t('pages.files.aside.upgrade')"
       size="small"
       type="success"
       :action="() => {}"
@@ -16,12 +16,12 @@
   </div>
   <UiSpacer :height="10" />
   <div>
-    <TypographyText :size="6" text="Quick Access" />
+    <TypographyText :size="6" :text="$t('pages.files.aside.quick_access')" />
     <UiSimpleList :menuContent="[{ text: 'Recent', icon: 'clock', active: true }, { text: 'Deleted', icon: 'trash' }, { text: 'Favorited', icon: 'heart' }]" />
   </div>
   <UiSpacer :height="10" />
   <div>
-    <TypographyText :size="6" text="Shared Items" />
+    <TypographyText :size="6" :text="$t('pages.files.aside.shared_items')" />
     <UiSimpleList :menuContent="[{ text: 'Shared Folders', icon: 'folder' }, { text: 'Links', icon: 'link' }]" />
   </div>
 </div>

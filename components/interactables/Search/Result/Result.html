@@ -24,7 +24,7 @@
         :close-on-select="false"
         :clear-on-select="false"
         :preserve-search="true"
-        placeholder="Users"
+        :placeholder="$t('search.result.users')"
         label="name"
         track-by="name"
         v-model="users"
@@ -40,7 +40,7 @@
         :multiple="true"
         :clear-on-select="false"
         :preserve-search="true"
-        placeholder="Conversations"
+        :placeholder="$t('search.result.conversations')"
         label="name"
         track-by="name"
         v-model="channels"
@@ -61,7 +61,7 @@
             :value="inputValue"
             v-on="inputEvents"
             class="date-input"
-            placeholder="Select Date"
+            :placeholder="$t('search.result.select_date')"
           />
         </template>
       </v-date-picker>
