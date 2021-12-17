@@ -14,11 +14,9 @@ jobs:
           requireChecklist: false # If this is true and there are no checklists detected, the action will fail
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: test
-        if: ${{ failure() }}
-        uses: JoseThen/comment-pr@v1.1.1
+      - name: Comment on Issue
+        uses: ActionsDesk/add-comment-action@master
         with:
-           comment: 'This PR is the bees knees!'
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+           message: ${{ steps.invite_user.outputs.message }}
+           failureMessage: ${{ steps.invite_user.outputs.message }}
         
