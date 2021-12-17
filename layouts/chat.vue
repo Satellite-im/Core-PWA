@@ -107,7 +107,7 @@ export default Vue.extend({
             (friend) => friend.address === this.$route.params.address,
           )
       return recipient
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')

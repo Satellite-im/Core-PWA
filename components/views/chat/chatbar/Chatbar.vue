@@ -8,6 +8,8 @@ import { debounce } from 'lodash'
 
 import { TerminalIcon } from 'satellite-lucide-icons'
 
+import Editable from './Editable.vue'
+
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import { text } from 'stream/consumers'
@@ -29,6 +31,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     TerminalIcon,
+    Editable,
   },
   data() {
     return {
@@ -53,11 +56,13 @@ export default Vue.extend({
     },
   },
   mounted() {
-    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let findItem = this.setChatText.find(
+      (item: any) => item.userId === this.$props.recipient.address,
+    )
     let message = findItem ? findItem.value : ''
 
-    const messageBox = this.$refs.messageuser as HTMLElement
-    messageBox.innerText = message
+    // const messageBox = this.$refs.messageuser as HTMLElement
+    // messageBox.innerText = message
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -67,7 +72,7 @@ export default Vue.extend({
       },
       get() {
         return this.chat.chatTexts
-      }
+      },
     },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
@@ -193,17 +198,17 @@ export default Vue.extend({
      * @example
      */
     handleInputChange() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      // Delete extra character when it exceeds the charlimit
-      if (
-        messageBox.innerText &&
-        messageBox.innerText.length > this.$data.maxChars + 1
-      ) {
-        messageBox.innerText = messageBox.innerText.slice(0, -1)
-        this.updateText()
-      }
-      this.handleChatBorderRadius()
-      this.value = messageBox.innerText
+      // const messageBox = this.$refs.messageuser as HTMLElement
+      // // Delete extra character when it exceeds the charlimit
+      // if (
+      //   messageBox.innerText &&
+      //   messageBox.innerText.length > this.$data.maxChars + 1
+      // ) {
+      //   messageBox.innerText = messageBox.innerText.slice(0, -1)
+      //   this.updateText()
+      // }
+      // this.handleChatBorderRadius()
+      // this.value = messageBox.innerText
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -246,16 +251,15 @@ export default Vue.extend({
      * @description Helper function to update the text inside the chatbox and send the cursor to the end.
      */
     updateText() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = this.value
-      let sel = window.getSelection()
-      sel?.selectAllChildren(messageBox)
-      sel?.collapseToEnd()
-
-      this.setChatText = {
-        userId: this.$props.recipient.address,
-        value: messageBox.innerHTML
-      }
+      // const messageBox = this.$refs.messageuser as HTMLElement
+      // messageBox.innerHTML = this.value
+      // let sel = window.getSelection()
+      // sel?.selectAllChildren(messageBox)
+      // sel?.collapseToEnd()
+      // this.setChatText = {
+      //   userId: this.$props.recipient.address,
+      //   value: messageBox.innerHTML,
+      // }
     },
     /**
      * @method sendMessage
@@ -285,7 +289,6 @@ export default Vue.extend({
           text: this.value,
         })
 
-        const messageBox = this.$refs.messageuser as HTMLElement
         this.clearChatbar()
       }
     },
@@ -326,11 +329,11 @@ export default Vue.extend({
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
     },
-    clearChatbar() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = ''
-      this.value = ''
-    },
+    // clearChatbar() {
+    //   const messageBox = this.$refs.messageuser as HTMLElement
+    //   messageBox.innerHTML = ''
+    //   this.value = ''
+    // },
   },
   watch: {
     'ui.chatbarContent': function () {
@@ -350,7 +353,9 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let findItem = this.setChatText.find(
+        (item: any) => item.userId === this.$props.recipient.address,
+      )
       let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
