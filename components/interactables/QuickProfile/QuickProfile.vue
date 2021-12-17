@@ -21,7 +21,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'accounts']),
   },
   mounted() {
     this.handleOverflow()
@@ -73,6 +73,12 @@ export default Vue.extend({
         text: this.text,
       })
       this.close()
+    },
+    isMe() {
+      return (
+        this.accounts.details &&
+        this.accounts.details.textilePubkey === this.user?.textilePubkey
+      )
     },
   },
 })

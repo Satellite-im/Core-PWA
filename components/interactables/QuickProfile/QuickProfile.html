@@ -14,13 +14,15 @@
     class="address"
   />
   <TypographyText :text="user.status" :size="6" />
-  <UiHorizontalRule />
-  <InteractablesInputGroup
-    type="primary"
-    v-model="text"
-    :placeholder="`${$t('friends.message')} ${user.name}...`"
-    :action="sendMessage"
-  >
-    <arrow-right-icon size="1x" />
-  </InteractablesInputGroup>
+  <template v-if="!isMe()">
+    <UiHorizontalRule />
+    <InteractablesInputGroup
+      type="primary"
+      v-model="text"
+      :placeholder="`${$t('friends.message')} ${user.name}...`"
+      :action="sendMessage"
+    >
+      <arrow-right-icon size="1x" />
+    </InteractablesInputGroup>
+  </template>
 </div>

@@ -114,7 +114,7 @@ export default Vue.extend({
     showQuickProfile(e: Event) {
       const selectedUser = getFullUserInfoFromState(this.$props.message.from, this.$store.state)
       this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', true)
+      this.$store.commit('ui/quickProfile', selectedUser)
     },
     /**
      * @method toggleReplies DocsTODO
