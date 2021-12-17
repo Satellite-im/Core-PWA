@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
+import Editable from './Editable.vue'
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
@@ -30,6 +31,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     TerminalIcon,
+    Editable,
   },
   data() {
     return {
@@ -60,8 +62,8 @@ export default Vue.extend({
     )
     const message = findItem ? findItem.value : ''
 
-    const messageBox = this.$refs.messageuser as HTMLElement
-    messageBox.innerText = message
+    // const messageBox = this.$refs.messageuser as HTMLElement
+    // messageBox.innerText = message
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -331,11 +333,11 @@ export default Vue.extend({
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
     },
-    clearChatbar() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = ''
-      this.value = ''
-    },
+    // clearChatbar() {
+    //   const messageBox = this.$refs.messageuser as HTMLElement
+    //   messageBox.innerHTML = ''
+    //   this.value = ''
+    // },
   },
   // eslint-disable-next-line vue/order-in-components
   watch: {
