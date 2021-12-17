@@ -8,8 +8,17 @@ jobs:
   job:
     runs-on: ubuntu-latest
     steps:
+      - name: test
       - uses: mheap/require-checklist-action@v1
         with:
           requireChecklist: false # If this is true and there are no checklists detected, the action will fail
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: test
+        if: ${{ failure() }}
+        uses: JoseThen/comment-pr@v1.1.1
+        with:
+           comment: 'This PR is the bees knees!'
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        
