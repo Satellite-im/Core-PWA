@@ -4,7 +4,7 @@ import {
   PushPathResult,
   Root,
 } from '@textile/hub';
-// @ts-ignore
+// @ts-ignore m, . 
 import { Config } from '~/config'
 import {TextileInitializationData} from "~/types/textile/manager";
 
