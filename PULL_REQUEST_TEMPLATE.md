@@ -12,7 +12,7 @@ If this is your first time, please read our contributor guidelines: https://gith
 
 **Additional comments** 🎤
 
-## Checklist 📖
+## Checklist 📝
 - [x] I have read the Contributing
 - [x] I have made corresponding changes to the documentation
 - [x] My changes generate no lint errors
