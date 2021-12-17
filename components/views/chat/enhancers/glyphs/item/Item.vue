@@ -6,16 +6,6 @@ import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
   props: {
-    width: {
-      type: Number,
-      default: 64,
-      required: false,
-    },
-    height: {
-      type: Number,
-      default: 64,
-      required: false,
-    },
     src: {
       type: String,
       default: '',
@@ -28,13 +18,6 @@ export default Vue.extend({
     sendOnClick: { type: Boolean, default: false, required: false },
   },
   methods: {
-    getStyle() {
-      return {
-        'background-image': `url(${this.src})`,
-        width: `${this.width}px`,
-        height: `${this.height}px`,
-      }
-    },
     mouseOver() {
       /* Set hovered glyph info only pack property exist */
       if (this.pack) {

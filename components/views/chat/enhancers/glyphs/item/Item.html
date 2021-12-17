@@ -1,7 +1,11 @@
-<div
-  class="glyph-item"
-  :style="getStyle()"
-  @mouseover="mouseOver"
-  @mouseleave="mouseLeave"
-  v-on="sendOnClick ? {click: addGlyph} : {}"
-></div>
+<div class="img-container">
+  <img
+    width="64px"
+    height="64px"
+    class="glyph-item"
+    :src="src"
+    @mouseover="mouseOver"
+    @mouseleave="mouseLeave"
+    v-on="sendOnClick ? {click: addGlyph} : {}"
+  />
+</div>

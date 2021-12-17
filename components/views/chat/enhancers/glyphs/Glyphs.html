@@ -10,27 +10,15 @@
   </div>
 
   <div class="glyph-content hidden-scroll">
-    <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
-      <EnhancersGlyphsMostUsed></EnhancersGlyphsMostUsed>
-
-      <div v-for="(pack, i) in filteredGlyphs">
-        <v-responsive max-height="@full">
-          <UiLoadersLoadingInline :count="3" v-if="!pack.isActive" />
-          <v-lazy
-            v-model="pack.isActive"
-            :options="{
-              threshold: .4
-            }"
-            min-height="30"
-            transition="fade-transition"
-          >
-            <EnhancersGlyphsPack :key="pack.id" :pack="pack">
-            </EnhancersGlyphsPack>
-          </v-lazy>
-        </v-responsive>
-      </div>
-    </UiScroll>
+    <virtual-list
+      class="virtual-list"
+      style="height: 360px; overflow-y: auto"
+      :data-key="'id'"
+      :data-sources="filteredGlyphs"
+      :data-component="packGroup"
+      :keeps="15"
+    />
   </div>
 
-  <EnhancersGlyphsItemInfo></EnhancersGlyphsItemInfo>
+  <EnhancersGlyphsItemInfo />
 </div>
