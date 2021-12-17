@@ -13,8 +13,8 @@ If this is your first time, please read our contributor guidelines: https://gith
 **Additional comments** 🎤
 
 ## Checklist 📝
-- [x] I have read the Contributing
-- [x] I have made corresponding changes to the documentation
-- [x] My changes generate no lint errors
-- [x] Tested locally including on mobile
-- [x] New and existing unit tests pass locally with my changes
+- [ ] I have read the Contributing
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no lint errors
+- [ ] Tested locally including on mobile
+- [ ] New and existing unit tests pass locally with my changes
