@@ -10,12 +10,15 @@
     @mousedown="setFocus"
     @input="update"
     v-on:keyup.enter="onEnterPressed"
+    v-on:keyup.esc="lostFocus"
+    v-on:keydown.up="onUpBrowseItem"
+    v-on:keydown.down="onDownBrowseItem"
   />
   <div v-if="isFocus && searchList.length" class="search-options">
     <ul class="search-option-group">
       <li
         v-for="(item, i) in searchList.slice(0, maxShowCounts)"
-        :class="{'active': isActive(item)}"
+        :class="{'active': i === browseIndex}"
         @click="onItemClicked(item)"
       >
         {{ label ? item[label] : item}}

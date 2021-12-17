@@ -64,6 +64,7 @@ export default Vue.extend({
       searchText: '',
       searchList: [] as Array<string | Object>,
       isFocus: false,
+      browseIndex: -1,
     }
   },
   watch: {
@@ -81,6 +82,8 @@ export default Vue.extend({
         return
       }
       if (!this.isFocus) this.isFocus = true
+
+      this.browseIndex = -1
       this.searchList = this.list.filter((item: any) =>
         this.label
           ? item[this.label]
@@ -88,6 +91,13 @@ export default Vue.extend({
               .indexOf(this.searchText.toLowerCase()) === 0
           : item.toLowerCase().indexOf(this.searchText.toLowerCase()) === 0,
       )
+
+      this.searchList.every((item: any, index) => {
+        const compare = (this.label ? item[this.label] : item) as string
+        this.browseIndex =
+          compare.toLowerCase() === this.searchText.toLowerCase() ? index : -1
+        return this.browseIndex !== -1
+      })
     },
     setFocus() {
       this.isFocus = true
@@ -105,25 +115,26 @@ export default Vue.extend({
       this.isFocus = false
       this.searchText = ''
     },
-    isActive(item: any) {
-      return (
-        (this.label &&
-          item[this.label].toLowerCase() === this.searchText.toLowerCase()) ||
-        item.toLowerCase() === this.searchText.toLowerCase()
-      )
+    onUpBrowseItem(event: KeyboardEvent) {
+      event.preventDefault()
+      if (this.browseIndex > 0) {
+        this.browseIndex--
+      }
+    },
+    onDownBrowseItem(event: KeyboardEvent) {
+      event.preventDefault()
+      if (this.browseIndex < this.searchList.length - 1) {
+        this.browseIndex++
+      }
     },
     onEnterPressed() {
-      const item = this.list.find((item: any) =>
-        this.label
-          ? item[this.label] === this.searchText
-          : item === this.searchText,
-      )
+      const item =
+        this.browseIndex !== -1 ? this.searchList[this.browseIndex] : null
       const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
-
-      if (itemSplitted.length > 0) {
-        this.onMultipleItemSelected(itemSplitted)
-      } else if (item) {
+      if (item) {
         this.onItemClicked(item)
+      } else if (itemSplitted.length > 1) {
+        this.onMultipleItemSelected(itemSplitted)
       }
     },
   },
