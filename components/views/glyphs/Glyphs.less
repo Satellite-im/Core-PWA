@@ -1,12 +1,11 @@
 .glyphs-modal {
   display: flex;
-  height: 35vh;
   max-height: 100%;
   overflow: hidden;
   border-radius: @corner-rounding;
   padding: @normal-spacing @xlarge-spacing;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 1rem;
   .close {
     position: absolute;
     top: @normal-spacing;
@@ -21,10 +20,6 @@
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  .glyphs-modal {
-    justify-content: unset;
-    gap: @normal-spacing;
-  }
   .button {
     margin-top: auto;
   }
