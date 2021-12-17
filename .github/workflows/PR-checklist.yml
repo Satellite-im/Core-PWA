@@ -1,12 +1,15 @@
-name: 'PR Tasks Completed Check'
-on: 
+name: Require Checklist
+on:
   pull_request:
-    types: [opened, edited]
-
+    types: [opened, edited, synchronize]
+  issues:
+    types: [opened, edited, deleted]
 jobs:
-  task-check:
-    runs-on: ubuntu-latest
+  job1:
+    runs-on: ubuntu-16.04
     steps:
-      - uses: kentaro-m/task-completed-checker-action@v0.1.0
+      - uses: mheap/require-checklist-action@v1
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          requireChecklist: false # If this is true and there are no checklists detected, the action will fail
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
