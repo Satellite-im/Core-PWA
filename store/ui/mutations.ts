@@ -67,6 +67,9 @@ export default {
     // @ts-ignore
     state.modals[modal.name] = modal.state
   },
+  setGlyphModalPack(state: UIState, pack: string) {
+    state.glyphModalPack = pack
+  },
   showSearchResult(state: UIState, enabled: boolean) {
     state.showSearchResult = enabled
   },

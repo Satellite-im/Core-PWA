@@ -102,8 +102,10 @@ export default Vue.extend({
      * @param str String to wrap emojis within
      */
     wrapEmoji(str: string): string {
-      return str
-        .replace(this.$Config.regex.emojiWrapper, emoji => `<span class="emoji">${emoji}</span>`)
+      return str.replace(
+        this.$Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
+      )
     },
     /**
      * @method containsOnlyEmoji
@@ -111,8 +113,7 @@ export default Vue.extend({
      * @param str String to check against
      */
     containsOnlyEmoji(str: string): boolean {
-      return str
-        .match(this.$Config.regex.isEmoji) === null
+      return str.match(this.$Config.regex.isEmoji) === null
     },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
@@ -228,13 +229,13 @@ export default Vue.extend({
         payload: '',
         from: this.$props.group.id,
       })
-      
+
       this.$store.commit('ui/saveEditMessage', {
         id: this.$props.message.id,
         payload: 'message',
         from: this.$props.group.id,
       })
-    }
+    },
   },
   created() {
     const setTimestamp = (timePassed: string) => {

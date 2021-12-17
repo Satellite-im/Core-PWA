@@ -50,6 +50,18 @@
       :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
     />
   </UiModal>
+  <UiModal
+    v-if="ui.modals.glyph"
+    :close-modal="() => toggleModal(ModalWindows.GLYPH)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
+    :small="true"
+  >
+    <Glyphs
+      v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
+      :close-modal="() => toggleModal(ModalWindows.GLYPH)"
+    />
+  </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"

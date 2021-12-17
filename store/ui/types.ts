@@ -15,6 +15,7 @@ export enum ModalWindows {
   WALLET_MINI = 'walletMini',
   ERROR = 'error',
   CHANGELOG = 'changelog',
+  GLYPH = 'glyph',
 }
 
 export interface EnhancerInfo {
@@ -44,6 +45,7 @@ export interface UIState {
   showSidebarUsers: Boolean
   showSearchResult: Boolean
   modals: Object
+  glyphModalPack: String
   chatbarContent: String
   replyChatbarContent: {
     id: String
