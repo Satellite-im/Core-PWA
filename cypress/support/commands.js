@@ -26,7 +26,7 @@ for (const command of [
 
 Cypress.Commands.add('createAccount', () => {
   cy.visit('/')
-  cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
+  cy.get('[data-cy=add-input]').type('test001', { log: false })
   cy.get('[data-cy=submit-input]').click()
   cy.get('.is-primary > #custom-cursor-area').click()
   cy.contains('Continue').click()
