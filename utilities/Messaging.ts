@@ -160,23 +160,14 @@ export function updateMessageTracker(
     switch (currentMessage.type) {
       case 'reply':
         const reply: ReplyMessage = currentMessage
-        repliesTracker[reply.repliedTo]
-          ? repliesTracker[reply.repliedTo].some(function (value) {
-              return value.id === reply.id
-            })
-            ? repliesTracker[reply.repliedTo]
-            : repliesTracker[reply.repliedTo].push(reply)
-          : (repliesTracker[currentMessage.repliedTo] = [reply])
+        let repliedTo = repliesTracker[reply.repliedTo] || []
+        if (!repliedTo.find((elm) => elm.id === reply.id)) repliedTo.push(reply)
         break
       case 'reaction':
         const reaction: ReactionMessage = currentMessage
-        reactionsTracker[reaction.reactedTo]
-          ? reactionsTracker[reaction.reactedTo].some(function (value) {
-              return value.id === reaction.id
-            })
-            ? reactionsTracker[reaction.reactedTo]
-            : reactionsTracker[reaction.reactedTo].push(reaction)
-          : (reactionsTracker[reaction.reactedTo] = [reaction])
+        let reactedTo = reactionsTracker[reaction.reactedTo] || []
+        if (!reactedTo.find((elm) => elm.id === reaction.id))
+          reactedTo.push(reaction)
         break
       case 'file':
         const fileMessage: FileMessage = currentMessage
