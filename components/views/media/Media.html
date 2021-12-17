@@ -4,7 +4,7 @@
   <div id="media" ref="media">
     <div class="user">
       <div class="video-stream-container" v-if="this.$store.state.webrtc.localStream">
-        <video class="video-stream" :src-object.prop="this.$store.state.webrtc.localStream" autoplay></video>
+        <video class="video-stream" :src-object.prop="this.$store.state.webrtc.localStream" autoplay muted></video>
       </div>
     </div>
     <div class="user">
