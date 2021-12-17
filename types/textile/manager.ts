@@ -21,3 +21,10 @@ export interface TextileInitializationData {
   users: Users
   wallet: SolanaWallet
 }
+
+export type TextileImage = {
+  url: string,
+  name: string,
+  size: number,
+  type: string,
+}

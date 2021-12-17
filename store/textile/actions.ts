@@ -6,7 +6,8 @@ import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { MailboxSubscriptionType } from '~/types/textile/mailbox'
+import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
+import { UploadDropItemType } from "~/types/files/file";
 
 export default {
   /**
@@ -222,8 +223,56 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-
     commit('setMessageLoading', { loading: false })
+  }
+  /**
+   * @description Sends a File message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * file: UploadDropItemType to be sent users bucket for textile
+   */,
+  async sendFileMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, file }: { to: string; file: UploadDropItemType },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const path = `/${file.file.name}`
+    $TextileManager.bucketManager?.getBucket()
+    const result = await $TextileManager.bucketManager?.pushFile(
+      file.file,
+      path,
+      (progress: number) => {
+        commit('setUploadingFileProgress', progress)
+      },
+    )
+    const imageURL = `${Config.textile.browser}${result?.root}${path}`
+    $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const sendMessageResult =
+      await $TextileManager.mailboxManager?.sendMessage<'file'>(
+        friend.textilePubkey,
+        {
+          to: friend.textilePubkey,
+          payload: {
+            url: imageURL,
+            name: file.file.name,
+            size: file.file.size,
+            type: file.file.type,
+          },
+          type: 'file',
+        },
+      )
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: sendMessageResult,
+    })
   },
   /**
    * @description Sends a reaction message to a given friend
@@ -265,6 +314,10 @@ export default {
       message: result,
     })
   },
+  // async updateFileProgress(
+  //   { commit }: ActionsArguments<TextileState>, {uploaded, fileSize}: {uploaded: number, fileSize: number}){
+  //   commit( 'setUploadingFileProgress' ,uploaded / fileSize * 100)
+  // },
   /**
    * @description Sends a reply message to a given friend
    * @param param0 Action Arguments
@@ -288,7 +341,6 @@ export default {
     }
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-
     const result = await $MailboxManager.sendMessage<'reply'>(
       friend.textilePubkey,
       {
@@ -304,10 +356,73 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    commit('ui/setReplyChatbarContent', {
-      id: '',
-      payload: '',
-      from: '',
-    }, { root: true })
+    commit(
+      'ui/setReplyChatbarContent',
+      {
+        id: '',
+        payload: '',
+        from: '',
+      },
+      { root: true },
+    )
+  },
+
+  /**
+   * @description Edit a text message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key)
+   * and the text message to be sent
+   */
+  async editTextMessage(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    { to, original, text }: { to: string; text: string, original: Message },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error('Mailbox manager not initialized')
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
+
+    if (!friend) {
+      throw new Error('Friend not found')
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+    const editingMessage = {
+      ...original,
+      payload: text,
+      editingAt: Date.now(),
+    } as Message
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: editingMessage,
+    })
+
+    const result = await $MailboxManager.editMessage<'text'>(
+      original.id,
+      {
+        to: friend.textilePubkey,
+        payload: text,
+        type: 'text',
+      },
+    )
+
+    if (result) {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: result,
+      })
+    } else {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: original,
+      })
+    }
   },
 }

@@ -3,10 +3,11 @@
 import Vue, { PropType } from 'vue'
 import VueMarkdown from 'vue-markdown'
 
+import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { Message, Group } from '~/types/messaging'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import { getUsernameFromState, getFullUserInfoFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   components: {
@@ -36,7 +37,23 @@ export default Vue.extend({
   data() {
     return { showReplies: false, replyHover: '' }
   },
+  mounted() {
+    let findItem = this.setChatReply.find((item: any) => item.replyId === this.$props.message.id)
+
+    if(findItem) {
+      this.$data.showReplies = findItem.value
+    }
+  },
   computed: {
+    ...mapState(['chat']),
+    setChatReply: {
+      set(state) {
+        this.$store.commit('chat/setChatReply', state)
+      },
+      get() {
+        return this.chat.replies
+      }
+    },
     /**
      * makeReplyText: generates the "Replies from _____" text in a chat
      * depending on the number of users in the reply thread, it will generate a different replyText
@@ -112,8 +129,9 @@ export default Vue.extend({
      * @example
      */
     showQuickProfile(e: Event) {
+      const selectedUser = getFullUserInfoFromState(this.$props.message.from, this.$store.state)
       this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', true)
+      this.$store.commit('ui/quickProfile', selectedUser)
     },
     /**
      * @method toggleReplies DocsTODO
@@ -122,6 +140,11 @@ export default Vue.extend({
      */
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
+
+      this.setChatReply = {
+        replyId: this.$props.message.id,
+        value: this.$data.showReplies
+      }
     },
   },
 })

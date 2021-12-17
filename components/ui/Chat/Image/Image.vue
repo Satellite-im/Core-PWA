@@ -28,7 +28,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    oepnImage() {
+    openImage() {
       // @ts-ignore
       window?.open(source, '_blank').focus()
     },

@@ -45,8 +45,8 @@ export const messageFromThread = t.intersection([
     body: t.string,
     signature: t.string,
     to: t.string,
-    _mod: t.number,
   }),
+  t.partial({ _mod: t.number}),
   t.partial({ read_at: t.number }),
 ])
 
@@ -58,6 +58,8 @@ const baseMessage = t.intersection([
     to: t.string,
   }),
   t.partial({ readAt: t.number }),
+  t.partial({ editedAt: t.number }),
+  t.partial({ editingAt: t.number }),
 ])
 
 export const replyMessage = t.intersection([
@@ -81,7 +83,12 @@ export const reactionMessage = t.intersection([
 export const fileMessage = t.intersection([
   baseMessage,
   t.type({
-    payload: t.string,
+    payload: t.type({
+      url: t.string,
+      name: t.string,
+      size: t.number,
+      type: t.string,
+    }),
     type: t.literal('file'),
   }),
 ])

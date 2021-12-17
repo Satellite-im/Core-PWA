@@ -14,6 +14,7 @@ import { Alerts } from '~/libraries/ui/Alerts'
 // Utils
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
+import BucketManager from '~/libraries/Textile/BucketManager';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -25,6 +26,7 @@ declare module 'vue/types/vue' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
+    $BucketManager: BucketManager
     $Hounddog: Hounddog
     $Logger: Logger
     $Alerts: Alerts
@@ -41,6 +43,7 @@ declare module '@nuxt/types' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
+    $BucketManager: BucketManager
     $Hounddog: Hounddog
     $Logger: Logger
     $Alerts: Alerts

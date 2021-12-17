@@ -9,6 +9,7 @@ import { User } from '~/types/ui/user'
 import {
   getUsernameFromState,
   getAddressFromState,
+  getFullUserInfoFromState,
   refreshTimestampInterval,
 } from '~/utilities/Messaging'
 
@@ -46,8 +47,9 @@ export default Vue.extend({
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: Event) {
+      const selectedUser = getFullUserInfoFromState(this.group.from, this.$store.state)
       this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', true)
+      this.$store.commit('ui/quickProfile', selectedUser)
     },
   },
   created() {

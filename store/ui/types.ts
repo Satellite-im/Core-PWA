@@ -27,6 +27,12 @@ export interface EnhancerInfo {
   route: String
 }
 
+export interface EmojiUsage {
+  code: string,
+  count: number,
+  content: string,
+}
+
 export interface UIState {
   contextMenuStatus: Boolean
   contextMenuValues: Array<Object>
@@ -61,5 +67,6 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: Array<String>
+  recentReactions: Array<String>,
+  mostEmojiUsed: Array<EmojiUsage>,
 }

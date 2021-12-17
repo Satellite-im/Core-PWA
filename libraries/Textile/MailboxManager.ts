@@ -8,7 +8,7 @@ import {
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
-import { messageEncoder } from './encoders'
+import { messageEncoder, messageFromThread } from './encoders'
 import {
   ConversationQuery,
   MailboxCallback,
@@ -197,7 +197,6 @@ export class MailboxManager {
     message: MessagePayloads[T]
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
-
     const encoder = new TextEncoder()
     const body = encoder.encode(
       JSON.stringify({
@@ -221,6 +220,52 @@ export class MailboxManager {
   }
 
   /**
+   * @method editMessage
+   * @description Edits a message to the given recipient
+   * @param id Message id
+   * @param message Message to be sent
+   */
+  async editMessage<T extends MessageTypes>(
+    id: string,
+    message: MessagePayloads[T]
+  ) {
+    const identity = this.textile.identity
+    const publicKey = PublicKey.fromString(identity.public.toString())
+    const encoder = new TextEncoder()
+    const encodedBody = encoder.encode(
+      JSON.stringify({
+        from: this.senderAddress,
+        to: message.to,
+        at: Date.now(),
+        editedAt: Date.now(),
+        type: message.type,
+        payload: message.payload,
+        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
+        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
+      })
+    )
+
+    const body = Buffer.from(await publicKey.encrypt(encodedBody)).toString('base64')
+    const signature = Buffer.from(await identity.sign(encodedBody)).toString('base64')
+
+    const thread = await this.textile.users.getThread('hubmail')
+    const threadID = ThreadID.fromString(thread.id)
+
+    const records = await this.textile.client.find<MessageFromThread>(threadID, MailboxSubscriptionType.sentbox, Query.where('_id').eq(id))
+    if (records.length > 0) {
+      const [record] = records;
+      record.body = body
+      record.signature = signature
+      delete record._mod
+      await this.textile.client.save(threadID, MailboxSubscriptionType.sentbox, [
+        record,
+      ])
+      return this.decodeMessage(record)
+    }
+    return false
+  }
+
+  /**
    * @method decodeMessage
    * @description Internal function used to decode messages
    * @param message Message to be decoded
@@ -239,7 +284,6 @@ export class MailboxManager {
 
     try {
       const parsedBody = JSON.parse(decoded)
-
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,

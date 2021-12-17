@@ -96,6 +96,24 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method wrapEmoji
+     * @description Wraps emojis in spans with the emoji class
+     * @param str String to wrap emojis within
+     */
+    wrapEmoji(str: string): string {
+      return str
+        .replace(this.$Config.regex.emojiWrapper, emoji => `<span class="emoji">${emoji}</span>`)
+    },
+    /**
+     * @method containsOnlyEmoji
+     * @description Check wether or not a string only contains an emoji
+     * @param str String to check against
+     */
+    containsOnlyEmoji(str: string): boolean {
+      return str
+        .match(this.$Config.regex.isEmoji) === null
+    },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
     },
@@ -194,7 +212,29 @@ export default Vue.extend({
         payload: message,
         from: this.$props.group.id,
       })
+
+      const recipient = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      this.$store.dispatch('textile/editTextMessage', {
+        to: recipient?.textilePubkey,
+        original: this.$props.message,
+        text: message,
+      })
     },
+    cancelMessage() {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: this.$props.group.id,
+      })
+      
+      this.$store.commit('ui/saveEditMessage', {
+        id: this.$props.message.id,
+        payload: 'message',
+        from: this.$props.group.id,
+      })
+    }
   },
   created() {
     const setTimestamp = (timePassed: string) => {
@@ -204,7 +244,7 @@ export default Vue.extend({
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
       this.$props.message.at,
       setTimestamp,
-      Config.chat.timestampUpdateInterval
+      Config.chat.timestampUpdateInterval,
     )
   },
   beforeDestroy() {

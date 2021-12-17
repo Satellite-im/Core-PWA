@@ -1,11 +1,8 @@
-<template src="./File.html"></template>
+<template src="./File.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import filesize from 'filesize'
-
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
-
-import { FileData } from './types'
+import {TextileImage} from "~/types/textile/manager";
 
 export default Vue.extend({
   components: {
@@ -13,16 +10,35 @@ export default Vue.extend({
     FileIcon,
   },
   props: {
-    data: {
-      type: Object as PropType<FileData> | undefined,
-      default: () => {},
+    file: {
+      type: Object as PropType<TextileImage>
     },
+  },
+  data() {
+    return {
+      fileUrl: String,
+      fileSize: '',
+    }
   },
   computed: {
-    filesize() {
-      return filesize(this.$props.data.size)
+    getFileSize() {
+    return this.bytesToSize(this.file.size)
     },
   },
+  methods: {
+    /**
+     * @method bytesToSize
+     * @description converts bytes to display easily readable file size
+     * @param bytes bytes of current file
+     * @example bytesToSize(this.file.size)
+     */
+    bytesToSize (bytes: number) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes === 0) return '0 Bytes'
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
+    }
+  }
 })
 </script>
 <style lang="less" scoped src="./File.less"></style>
