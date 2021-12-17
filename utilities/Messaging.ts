@@ -161,7 +161,7 @@ export function updateMessageTracker(
       case 'reply':
         const reply: ReplyMessage = currentMessage
         repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
-        if (!repliesTracker[reply.repliedTo].find((elm) => elm.id === reply.id))
+        if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
           repliesTracker[reply.repliedTo].push(reply)
         break
       case 'reaction':
@@ -169,7 +169,7 @@ export function updateMessageTracker(
         reactionsTracker[reaction.reactedTo] =
           reactionsTracker[reaction.reactedTo] || []
         if (
-          !reactionsTracker[reaction.reactedTo].find(
+          !reactionsTracker[reaction.reactedTo].some(
             (elm) => elm.id === reaction.id,
           )
         )
