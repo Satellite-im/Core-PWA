@@ -1,14 +1,11 @@
-name: Jest Coverage
-
-on:
-  pull_request:
-    types: ['opened', 'edited', 'reopened', 'synchronize']
-
+name: CI
+on: push
 jobs:
-  pr-lint:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: JEST Report
-      uses: RedaktionsNetzwerk-Deutschland/action-jest-reporter@v1.0.0
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn
+    - name: Run tests
+      run: yarn test
