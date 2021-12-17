@@ -1,11 +1,10 @@
-<div class="img-container">
-  <img
-    width="64px"
-    height="64px"
-    class="glyph-item"
-    :src="src"
-    @mouseover="mouseOver"
-    @mouseleave="mouseLeave"
-    v-on="sendOnClick ? {click: addGlyph} : {}"
-  />
-</div>
+<!-- loader idea - use dummy src until real img is loaded -->
+<img
+  :width="`${width}px`"
+  :height="`${height}px`"
+  class="glyph-item"
+  :src="src"
+  @mouseover="mouseOver"
+  @mouseleave="mouseLeave"
+  v-on="sendOnClick ? {click: addGlyph} : {}"
+/>

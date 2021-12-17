@@ -1,19 +1,22 @@
 <div id="glyphs-nav" class="glyph-list-box">
   <div class="account-list">
-    <div class="timer" @click="() => {$emit('navSelected', '')}">
+    <div class="timer">
       <clock-icon class="control-icon" size="1x" />
     </div>
   </div>
   <div class="pack-list">
-    <div v-for="pack in $mock.glyphs" @click="$emit('navSelected', pack.name)">
+    <div v-for="pack in $mock.glyphs">
       <EnhancersGlyphsItem
         :key="pack.id"
         :src="pack.stickerURLs[0]"
         :pack="pack"
-      ></EnhancersGlyphsItem>
+        :height="32"
+        :width="32"
+        :sendOnClick="true"
+      />
     </div>
   </div>
-  <div class="market-place" v-on:click="toggleMarketPlace">
+  <div class="market-place" @click="toggleMarketPlace">
     <shopping-bag-icon class="control-icon" size="1x" />
   </div>
 </div>

@@ -5,6 +5,7 @@
   .account-list {
     display: flex;
     align-items: center;
+    gap: @light-spacing;
     .timer {
       cursor: pointer;
       margin-right: @light-spacing;
@@ -12,15 +13,12 @@
       padding: @xlight-spacing @light-spacing;
       &:extend(.round-corners);
     }
-  }
   .pack-list {
     border-left: @mini-light-border;
     border-right: @mini-light-border;
     padding: 0 @light-spacing;
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    overflow-x: auto;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -31,6 +29,5 @@
   }
   .market-place {
     cursor: pointer;
-    padding: 0 @light-spacing;
   }
 }

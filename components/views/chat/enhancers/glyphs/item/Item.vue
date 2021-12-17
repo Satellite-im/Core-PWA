@@ -6,6 +6,16 @@ import { Glyph } from '~/types/ui/glyph'
 
 export default Vue.extend({
   props: {
+    width: {
+      type: Number,
+      default: 64,
+      required: false,
+    },
+    height: {
+      type: Number,
+      default: 64,
+      required: false,
+    },
     src: {
       type: String,
       default: '',
