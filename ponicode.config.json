@@ -1,0 +1,9 @@
+{
+    "schemaVersion": "0",
+    "name": "Core-PWA",
+    "rootDir": "./",
+    "testEnvironment": "node",
+    "testLocationStrategy": "relativeToProjectRoot",
+    "testLocationFolder": "./test",
+    "testNamePattern": "{name}.test.{ext}"
+}
