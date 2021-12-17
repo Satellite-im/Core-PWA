@@ -8,15 +8,8 @@ jobs:
   job:
     runs-on: ubuntu-latest
     steps:
-      - name: test001
       - uses: mheap/require-checklist-action@v1
         with:
           requireChecklist: false # If this is true and there are no checklists detected, the action will fail
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  comment-failure:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: quipper/comment-failure-action@v0.1.1
-        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
