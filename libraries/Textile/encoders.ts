@@ -62,15 +62,6 @@ const baseMessage = t.intersection([
   t.partial({ editingAt: t.number }),
 ])
 
-export const replyMessage = t.intersection([
-  baseMessage,
-  t.type({
-    payload: t.string,
-    repliedTo: t.string,
-    type: t.literal('reply'),
-  }),
-])
-
 export const reactionMessage = t.intersection([
   baseMessage,
   t.type({
@@ -80,33 +71,75 @@ export const reactionMessage = t.intersection([
   }),
 ])
 
+const fileMessagePayload = t.type({
+  payload: t.type({
+    url: t.string,
+    name: t.string,
+    size: t.number,
+    type: t.string,
+  }),
+})
+
 export const fileMessage = t.intersection([
   baseMessage,
+  fileMessagePayload,
   t.type({
-    payload: t.type({
-      url: t.string,
-      name: t.string,
-      size: t.number,
-      type: t.string,
-    }),
     type: t.literal('file'),
   }),
 ])
 
+const textMessagePayload = t.type({
+  payload: t.string,
+})
+
 export const textMessage = t.intersection([
   baseMessage,
+  textMessagePayload,
   t.type({
-    payload: t.string,
     type: t.literal('text'),
   }),
 ])
 
+const mediaMessagePayload = t.type({
+  payload: t.string,
+})
+
 export const mediaMessage = t.intersection([
   baseMessage,
+  mediaMessagePayload,
   t.type({
-    payload: t.string,
     type: t.literal('media'),
   }),
+])
+
+export const replyMessage = t.union([
+  t.intersection([
+    baseMessage,
+    textMessagePayload,
+    t.type({
+      repliedTo: t.string,
+      replyType: t.literal('text'),
+      type: t.literal('reply'),
+    }),
+  ]),
+  t.intersection([
+    baseMessage,
+    fileMessagePayload,
+    t.type({
+      repliedTo: t.string,
+      replyType: t.literal('file'),
+      type: t.literal('reply'),
+    }),
+  ]),
+  t.intersection([
+    baseMessage,
+    mediaMessagePayload,
+    t.type({
+      repliedTo: t.string,
+      replyType: t.literal('media'),
+      type: t.literal('reply'),
+    }),
+  ]),
 ])
 
 export const messageEncoder = t.union([

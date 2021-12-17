@@ -224,13 +224,13 @@ export default {
       message: result,
     })
     commit('setMessageLoading', { loading: false })
-  }
+  },
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
    * file: UploadDropItemType to be sent users bucket for textile
-   */,
+   */
   async sendFileMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType },
@@ -326,7 +326,17 @@ export default {
    */
   async sendReplyMessage(
     { commit, rootState }: ActionsArguments<TextileState>,
-    { to, replyTo, text }: { to: string; replyTo: string; text: string },
+    {
+      to,
+      replyTo,
+      text,
+      replyType,
+    }: {
+      to: string
+      replyTo: string
+      text: string
+      replyType: 'file' | 'text' | 'media'
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -340,22 +350,7 @@ export default {
       throw new Error('Friend not found')
     }
 
-    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-    const result = await $MailboxManager.sendMessage<'reply'>(
-      friend.textilePubkey,
-      {
-        to: friend.textilePubkey,
-        payload: text,
-        repliedTo: replyTo,
-        type: 'reply',
-      },
-    )
-
-    commit('addMessageToConversation', {
-      address: friend.address,
-      sender: MessageRouteEnum.OUTBOUND,
-      message: result,
-    })
+    commit('setMessageLoading', { loading: true })
     commit(
       'ui/setReplyChatbarContent',
       {
@@ -365,6 +360,25 @@ export default {
       },
       { root: true },
     )
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+    const result = await $MailboxManager.sendMessage<'reply'>(
+      friend.textilePubkey,
+      {
+        to: friend.textilePubkey,
+        payload: text,
+        repliedTo: replyTo,
+        type: 'reply',
+        replyType: replyType,
+      },
+    )
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+    commit('setMessageLoading', { loading: false })
   },
 
   /**
