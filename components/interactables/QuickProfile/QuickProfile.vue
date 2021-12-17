@@ -3,16 +3,25 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { User } from '~/types/ui/user'
+import { ArrowRightIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    ArrowRightIcon,
+  },
   props: {
     user: {
       type: Object as PropType<User>,
       default: () => {},
     },
   },
+  data() {
+    return {
+      text: '',
+    }
+  },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'accounts']),
   },
   mounted() {
     this.handleOverflow()
@@ -57,6 +66,19 @@ export default Vue.extend({
           }
         }
       }
+    },
+    sendMessage() {
+      this.$store.dispatch('textile/sendTextMessage', {
+        to: this.user?.textilePubkey,
+        text: this.text,
+      })
+      this.close()
+    },
+    isMe() {
+      return (
+        this.accounts.details &&
+        this.accounts.details.textilePubkey === this.user?.textilePubkey
+      )
     },
   },
 })

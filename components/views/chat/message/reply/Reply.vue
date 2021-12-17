@@ -7,7 +7,7 @@ import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { Message, Group } from '~/types/messaging'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import { getUsernameFromState, getFullUserInfoFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   components: {
@@ -129,8 +129,9 @@ export default Vue.extend({
      * @example
      */
     showQuickProfile(e: Event) {
+      const selectedUser = getFullUserInfoFromState(this.$props.message.from, this.$store.state)
       this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', true)
+      this.$store.commit('ui/quickProfile', selectedUser)
     },
     /**
      * @method toggleReplies DocsTODO

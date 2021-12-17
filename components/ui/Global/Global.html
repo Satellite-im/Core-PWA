@@ -55,6 +55,6 @@
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
   />
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
 </div>
