@@ -8,7 +8,7 @@ it('Create Account', () => {
   cy.contains('Create Account Pin')
   cy.contains("The pin can be anything you want, just don't forget it.")
   cy.contains('Choose Your Pin')
-  cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
+  cy.get('[data-cy=add-input]').type('test001', { log: false })
   cy.contains('Store Pin? (Less Secure)')
   cy.get('[data-cy=submit-input]').click()
   cy.contains(
