@@ -6,7 +6,7 @@ const textToPaste = 'copy paste stuff'
 it('Chat - Send stuff on chat', () => {
   cy.importAccount()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-270 gets fixed
-  cy.get(':nth-child(1) > .user').click() //update this to a data-cy label
+  cy.contains('aaaaa').click() //clicks on user name
   cy.get('.messageuser').type(randomMessage)
   cy.get('.messageuser').type('{enter}') //to send out a written message
   cy.contains(randomMessage)
