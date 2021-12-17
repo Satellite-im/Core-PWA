@@ -1,0 +1,14 @@
+name: Jest Coverage
+
+on:
+  pull_request:
+    types: ['opened', 'edited', 'reopened', 'synchronize']
+
+jobs:
+  pr-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: ziishaned/jest-reporter-action@v0.0.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        test-command: "yarn jest --coverage"
