@@ -11,12 +11,12 @@
     >
       <UiGlobal />
 
-      <TailoredCoreSlimbar
+      <Slimbar
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <TailoredCoreSidebar
+      <Sidebar
         :toggle="() => ($data.sidebar = !$data.sidebar)"
         :users="friends.all"
         :groups="$mock.groups"
@@ -26,7 +26,7 @@
 ref="chat" />
       </div>
     </div>
-    <TailoredCoreMobileNav v-if="$device.isMobile" />
+    <MobileNav v-if="$device.isMobile" />
   </div>
 </template>
 

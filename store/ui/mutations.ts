@@ -31,18 +31,30 @@ export default {
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
   },
-  toggleEnhancers(
-    state: UIState,
-    options: EnhancerInfo,
-  ) {
-    state.enhancers = { 
-      show: options.show, 
-      floating: (typeof options.floating !== "undefined") ? options.floating : state.enhancers.floating,
-      position: (typeof options.position !== "undefined") ? options.position : state.enhancers.position,
-      defaultWidth: (typeof options.defaultWidth !== "undefined") ? options.defaultWidth : state.enhancers.defaultWidth,
-      defaultHeight: (typeof options.defaultHeight !== "undefined") ? options.defaultHeight : state.enhancers.defaultHeight,
-      containerWidth: (typeof options.containerWidth !== "undefined") ? options.containerWidth : state.enhancers.containerWidth,
-      route: options.route || 'emotes'
+  toggleEnhancers(state: UIState, options: EnhancerInfo) {
+    state.enhancers = {
+      show: options.show,
+      floating:
+        typeof options.floating !== 'undefined'
+          ? options.floating
+          : state.enhancers.floating,
+      position:
+        typeof options.position !== 'undefined'
+          ? options.position
+          : state.enhancers.position,
+      defaultWidth:
+        typeof options.defaultWidth !== 'undefined'
+          ? options.defaultWidth
+          : state.enhancers.defaultWidth,
+      defaultHeight:
+        typeof options.defaultHeight !== 'undefined'
+          ? options.defaultHeight
+          : state.enhancers.defaultHeight,
+      containerWidth:
+        typeof options.containerWidth !== 'undefined'
+          ? options.containerWidth
+          : state.enhancers.containerWidth,
+      route: options.route || 'emotes',
     }
   },
   toggleSettings(state: UIState, show: boolean) {
@@ -54,6 +66,9 @@ export default {
   toggleModal(state: UIState, modal: any) {
     // @ts-ignore
     state.modals[modal.name] = modal.state
+  },
+  setGlyphModalPack(state: UIState, pack: string) {
+    state.glyphModalPack = pack
   },
   showSearchResult(state: UIState, enabled: boolean) {
     state.showSearchResult = enabled
@@ -121,7 +136,7 @@ export default {
       id: String
       from: String
       payload: String
-    }
+    },
   ) {
     state.replyChatbarContent = message
   },
@@ -139,7 +154,7 @@ export default {
       id: string
       from: string
       payload: string
-    }
+    },
   ) {
     state.editMessage = message
   },
@@ -154,7 +169,7 @@ export default {
       id: String
       from: String
       payload: String
-    }
+    },
   ) {
     const messages: any[] = [...state.messages]
     let found = messages.find((item) => {
@@ -187,7 +202,7 @@ export default {
 
     // ßFind message group meant for reaction
     const currGroup = messageGroups?.find(
-      (group) => group.id === reaction.groupID
+      (group) => group.id === reaction.groupID,
     )
 
     if (currGroup?.messages) {
@@ -199,7 +214,7 @@ export default {
           ?.replies.find((reply) => reply.id === reaction.replyID)
       } else {
         currMessage = currGroup?.messages.find(
-          (message) => message.id === reaction.messageID
+          (message) => message.id === reaction.messageID,
         )
       }
 
@@ -217,7 +232,7 @@ export default {
           // If reactions array exist
           // Find selected reaction
           const currReaction = currMessage.reactions.find(
-            (react) => react.emoji === reaction.emoji
+            (react) => react.emoji === reaction.emoji,
           )
 
           if (currReaction) {
@@ -229,13 +244,13 @@ export default {
               // If the selected reactions already has the reactor and is the only one
               currMessage.reactions = without(
                 currMessage.reactions,
-                currReaction
+                currReaction,
               )
             } else if (currReaction?.reactors.includes(reaction.reactor)) {
               // If the selected reactions already has the reactor
               currReaction.reactors = without(
                 currReaction.reactors,
-                reaction.reactor
+                reaction.reactor,
               )
             } else {
               // If the selected reactions doesnt have the reactor
@@ -249,7 +264,7 @@ export default {
               showReactors: false,
             })
           }
-          state.isReacted = true      
+          state.isReacted = true
         }
       }
     }
@@ -268,5 +283,19 @@ export default {
   },
   setGlyphMarketplaceView(state: UIState, values: Object) {
     state.glyphMarketplaceView = values
+  },
+  updateMostUsedEmoji(state: UIState, emojiObj: any) {
+    const emojiUsed = state.mostEmojiUsed.find(
+      (elm) => elm.code === emojiObj.name,
+    )
+    if (emojiUsed) {
+      emojiUsed.count++
+      return
+    }
+    state.mostEmojiUsed.push({
+      code: emojiObj.name,
+      content: emojiObj.emoji,
+      count: 1,
+    })
   },
 }

@@ -85,7 +85,14 @@ export default defineNuxtConfig({
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: {
+    dirs: [
+      '~/components',
+      '~/components/views/chat',
+      '~/components/views/navigation',
+      '~/components/views/',
+    ],
+  },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -127,6 +134,7 @@ export default defineNuxtConfig({
     meta: {
       mobileAppIOS: true,
       appleStatusBarStyle: 'black-translucent',
+      viewportFit: 'cover',
     },
     manifest: {
       name: 'Satellite.im',
@@ -166,23 +174,27 @@ export default defineNuxtConfig({
         fs: 'empty',
         encoding: 'empty',
       }
-      const testAttributes = ['data-cy']
-      ctx.loaders.vue.compilerOptions = {
-        modules: [
-          {
-            preTransformNode(astEl) {
-              const { attrsMap, attrsList } = astEl
-              testAttributes.forEach((attribute) => {
-                if (attrsMap[attribute]) {
-                  delete attrsMap[attribute]
-                  const index = attrsList.findIndex((x) => x.name === attribute)
-                  attrsList.splice(index, 1)
-                }
-              })
-              return astEl
+      if (process.env.ENVIRONMENT !== 'dev') {
+        const testAttributes = ['data-cy']
+        ctx.loaders.vue.compilerOptions = {
+          modules: [
+            {
+              preTransformNode(astEl) {
+                const { attrsMap, attrsList } = astEl
+                testAttributes.forEach((attribute) => {
+                  if (attrsMap[attribute]) {
+                    delete attrsMap[attribute]
+                    const index = attrsList.findIndex(
+                      (x) => x.name === attribute,
+                    )
+                    attrsList.splice(index, 1)
+                  }
+                })
+                return astEl
+              },
             },
-          },
-        ],
+          ],
+        }
       }
     },
     babel: { compact: true },

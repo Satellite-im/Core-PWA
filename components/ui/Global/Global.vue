@@ -31,7 +31,7 @@ export default Vue.extend({
     const [lsMajorVersion, lsMinorVersion, lsPatchVersion] =
       lsVersion.split('.')
 
-    // // A update which requires resetting of the app has occured.
+    // // A update which requires resetting of the app has occurred.
     if (lsMinorVersion !== minorVersion) {
       this.$data.requiresUpdate = true
       this.$data.hasMinorUpdate = true

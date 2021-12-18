@@ -15,6 +15,7 @@ export enum ModalWindows {
   WALLET_MINI = 'walletMini',
   ERROR = 'error',
   CHANGELOG = 'changelog',
+  GLYPH = 'glyph',
 }
 
 export interface EnhancerInfo {
@@ -25,6 +26,12 @@ export interface EnhancerInfo {
   defaultHeight?: String
   containerWidth?: Number
   route: String
+}
+
+export interface EmojiUsage {
+  code: string,
+  count: number,
+  content: string,
 }
 
 export interface UIState {
@@ -38,6 +45,7 @@ export interface UIState {
   showSidebarUsers: Boolean
   showSearchResult: Boolean
   modals: Object
+  glyphModalPack: String
   chatbarContent: String
   replyChatbarContent: {
     id: String
@@ -61,5 +69,6 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: Array<String>
+  recentReactions: Array<String>,
+  mostEmojiUsed: Array<EmojiUsage>,
 }

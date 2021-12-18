@@ -1,0 +1,88 @@
+<div id="toolbar">
+  <div class="circle-container" v-if="!$device.isMobile">
+    <UiUserState :user="user" v-if="!server"/>
+    <UiCircle
+      type="random"
+      :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
+      :size="35"
+      v-else
+    /> 
+  </div>
+  <div class="user-info" v-if="!$device.isMobile">
+    <TypographyTitle :size="6" :text="server ? server.name : user.name" />
+    <TypographySubtitle :size="6" :text="server ? (server.status || server.state) : user.status" />
+  </div>
+  <div class="toolbar-spacer"></div>
+  <div class="controls">
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Alerts"
+      @click="$data.showAlerts = !$data.showAlerts"
+    >
+      <bell-icon size="1x" :class="`control-icon ${showAlerts ? 'primary' : ''}`" />
+    </div>
+    <UiFloatingContainer
+      v-if="showAlerts"
+      :offsets="[4.2, 2.3]"
+      heading="Alerts"
+      :width="25"
+      :height="25"
+      :toggleMethod="() => $data.showAlerts = false">
+      <ToolbarAlerts />
+    </UiFloatingContainer>
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Call"
+      v-if="server"
+    >
+      <phone-call-icon size="1x" class="control-icon" />
+    </div>
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      data-tooltip="Video"
+      v-if="server"
+    >
+      <video-icon size="1x" class="control-icon" />
+    </div>
+    <div
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      :class="ui.showPinned ? 'primary' : ''"
+      data-tooltip="Archived Messages"
+      @click="() => {
+        $store.commit('ui/togglePinned', !ui.showPinned)
+      }"
+    >
+      <archive-icon size="1x" class="control-icon" />
+    </div>
+    <div class="vertical-divider" v-if="$device.isDesktop"></div>
+    <div
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      @click="() => toggleModal(ModalWindows.MARKETPLACE)"
+      data-tooltip="Marketplace">
+      <shopping-bag-icon class="control-icon" size="1x" />
+    </div>
+    <div
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop"
+      @click="() => toggleModal(ModalWindows.WALLET)"
+      data-tooltip="Wallet">
+      <wallet-icon class="control-icon" size="1x" />
+    </div>
+    <div class="vertical-divider"></div>
+    <InteractablesSearchInput
+      @search="handleSearch"
+      @change="handleChange"
+      placeholder="Search..."
+      :searchRecommend="searchRecommend"
+    />
+    <InteractablesSearchResult
+      :searchQuery="searchQuery"
+      :show="showSearchResult"
+      @toggle="toggleSearchResult"
+    />
+    <ToolbarPinned 
+      v-if="ui.showPinned"
+      />
+  </div>
+</div>

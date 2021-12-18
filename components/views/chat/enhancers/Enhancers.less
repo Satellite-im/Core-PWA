@@ -1,0 +1,103 @@
+#enhancers {
+  height: @enhancers-height;
+  max-width: @enhancers-width;
+  position: absolute;
+  margin-left: @normal-spacing;
+  right: @normal-spacing !important;
+  bottom: @chatbar-size !important;
+  margin-bottom: @light-spacing;
+  border-radius: @corner-rounding;
+  background: @semitransparent-light-gradient;
+  overflow: hidden;
+  z-index: @base-z-index + 100;
+  backdrop-filter: @blur;
+
+  #container {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: calc(100% - 3rem);
+    overflow-y: scroll;
+  }
+  #container::-webkit-scrollbar {
+    display: none;
+  }
+  .navbar {
+    width: 100%;
+    display: inline-flex;
+    padding: 0.75rem 0.5rem 0.5rem 0.5rem;
+    background: @semitransparent-dark-gradient;
+    .button {
+      width: 100%;
+
+      &:nth-child(1) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
+      }
+      &:nth-child(2) {
+        border-radius: 0;
+      }
+      &:nth-child(3) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: 0;
+      }
+    }
+  }
+}
+
+.emoji-picker {
+  font-family: Montserrat;
+  width: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+}
+.emoji-picker__search {
+  display: flex;
+}
+.input,
+.search-box,
+.emoji-picker__search div {
+  flex: 1;
+  width: 100% !important;
+}
+.emoji-picker__search {
+  margin-bottom: @normal-spacing;
+}
+.emoji-picker h5 {
+  margin-bottom: 0;
+  color: #b1b1b1;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  cursor: default;
+}
+.emoji-picker .emojis {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.5rem;
+  justify-content: space-between;
+}
+.emoji-picker .emojis:after {
+  content: '';
+  flex: auto;
+}
+.emoji-picker .emojis span {
+  cursor: pointer;
+  user-select: none;
+  padding: 0.2rem;
+  border-radius: 5px;
+}
+.emoji-picker .emojis span:hover {
+  background: @semitransparent-dark-gradient;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #enhancers {
+    width: calc(100vw - @normal-spacing*2);
+  }
+}

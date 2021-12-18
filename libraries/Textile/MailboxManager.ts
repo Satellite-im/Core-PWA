@@ -8,7 +8,7 @@ import {
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
-import { messageEncoder } from './encoders'
+import { messageEncoder, messageFromThread } from './encoders'
 import {
   ConversationQuery,
   MailboxCallback,
@@ -76,7 +76,7 @@ export class MailboxManager {
    */
   async getConversation(
     friendIdentifier: string,
-    query: ConversationQuery
+    query: ConversationQuery,
   ): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
@@ -94,7 +94,7 @@ export class MailboxManager {
     const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.inbox,
-      inboxQuery
+      inboxQuery,
     )
 
     const lastMessageTime = encryptedInbox?.[0]?.created_at || 0
@@ -113,11 +113,11 @@ export class MailboxManager {
     const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
       threadID,
       MailboxSubscriptionType.sentbox,
-      sentboxQuery
+      sentboxQuery,
     )
 
     const messages = [...encryptedInbox, ...encryptedSentbox].sort(
-      (a, b) => a.created_at - b.created_at
+      (a, b) => a.created_at - b.created_at,
     )
 
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
@@ -125,7 +125,7 @@ export class MailboxManager {
     const allSettled = await Promise.allSettled(promises)
 
     const filtered = allSettled.filter(
-      (r) => r.status === 'fulfilled'
+      (r) => r.status === 'fulfilled',
     ) as PromiseFulfilledResult<Message>[]
 
     return filtered.map((r) => r.value)
@@ -140,7 +140,7 @@ export class MailboxManager {
    */
   buildCallback(
     onMessage: MessageCallback,
-    onUnsubscribe: CallableFunction
+    onUnsubscribe: CallableFunction,
   ): MailboxCallback {
     return (reply, err) => {
       // If the reply is undefined means that the subscription
@@ -154,7 +154,7 @@ export class MailboxManager {
         this.decodeMessage(userMessageToThread(reply?.message)).then(
           (decrypted) => {
             onMessage(decrypted)
-          }
+          },
         )
       }
     }
@@ -194,10 +194,9 @@ export class MailboxManager {
    */
   async sendMessage<T extends MessageTypes>(
     to: string,
-    message: MessagePayloads[T]
+    message: MessagePayloads[T],
   ) {
     const recipient: PublicKey = PublicKey.fromString(to)
-
     const encoder = new TextEncoder()
     const body = encoder.encode(
       JSON.stringify({
@@ -208,16 +207,74 @@ export class MailboxManager {
         payload: message.payload,
         reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
         repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
-      })
+        replyType: message.type === 'reply' ? message.replyType : undefined,
+        pack: message.pack,
+      }),
     )
 
     const result = await this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
-      body
+      body,
     )
 
     return this.decodeMessage(userMessageToThread(result))
+  }
+
+  /**
+   * @method editMessage
+   * @description Edits a message to the given recipient
+   * @param id Message id
+   * @param message Message to be sent
+   */
+  async editMessage<T extends MessageTypes>(
+    id: string,
+    message: MessagePayloads[T],
+  ) {
+    const identity = this.textile.identity
+    const publicKey = PublicKey.fromString(identity.public.toString())
+    const encoder = new TextEncoder()
+    const encodedBody = encoder.encode(
+      JSON.stringify({
+        from: this.senderAddress,
+        to: message.to,
+        at: Date.now(),
+        editedAt: Date.now(),
+        type: message.type,
+        payload: message.payload,
+        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
+        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
+      }),
+    )
+
+    const body = Buffer.from(await publicKey.encrypt(encodedBody)).toString(
+      'base64',
+    )
+    const signature = Buffer.from(await identity.sign(encodedBody)).toString(
+      'base64',
+    )
+
+    const thread = await this.textile.users.getThread('hubmail')
+    const threadID = ThreadID.fromString(thread.id)
+
+    const records = await this.textile.client.find<MessageFromThread>(
+      threadID,
+      MailboxSubscriptionType.sentbox,
+      Query.where('_id').eq(id),
+    )
+    if (records.length > 0) {
+      const [record] = records
+      record.body = body
+      record.signature = signature
+      delete record._mod
+      await this.textile.client.save(
+        threadID,
+        MailboxSubscriptionType.sentbox,
+        [record],
+      )
+      return this.decodeMessage(record)
+    }
+    return false
   }
 
   /**
@@ -239,7 +296,6 @@ export class MailboxManager {
 
     try {
       const parsedBody = JSON.parse(decoded)
-
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,

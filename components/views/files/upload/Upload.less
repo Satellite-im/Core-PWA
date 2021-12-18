@@ -1,0 +1,119 @@
+#file-upload {
+  display: inline-flex;
+  justify-self: flex-start;
+  align-self: flex-start;
+
+  #quick-upload {
+    width: 0;
+    height: 0;
+    border: none;
+    position: absolute;
+  }
+
+  .control-icon {
+    justify-self: flex-start;
+    align-self: flex-start;
+    font-size: @larger-icon-size;
+    width: unset;
+  }
+  .loading-bar{
+    max-width: 50%;
+  }
+
+  .file-preview {
+    position: absolute;
+    bottom: calc(4.6rem + @light-spacing);
+    right: @normal-spacing;
+    width: calc(100% - @sidebar-size - 40px - @normal-spacing);
+    backdrop-filter: @blur;
+    background: @semitransparent-light-gradient;
+    border: @light-border;
+    border-radius: @corner-rounding;
+    padding: @normal-spacing;
+
+    .file-preview-item {
+      width: 100%;
+      display: inline-flex;
+      margin-bottom: @light-spacing;
+      .file-info {
+        width: 100%;
+      }
+
+      .title {
+        font-size: @text-size;
+      }
+      .subtitle {
+        font-size: @mini-text-size;
+        margin-bottom: 0.75rem;
+      }
+
+      img {
+        max-width: 15vw;
+        max-height: 10vh;
+        border-radius: 2px;
+        width: 100%;
+      }
+
+      .img-wrapper {
+        max-width: 15vw;
+        max-height: 10vh;
+        min-width: 64px;
+        min-height: 64px;
+        border-radius: 2px;
+        margin-right: @normal-spacing;
+        overflow: hidden;
+      }
+
+      .img-blur {
+        filter: blur(8px);
+        -webkit-filter: blur(8px);
+        -moz-filter: blur(8px);
+        -o-filter: blur(8px);
+        -ms-filter: blur(8px);
+      }
+    }
+    .is-controls {
+      align-content: flex-end;
+
+      .button {
+        float: right;
+        margin-left: @light-spacing;
+      }
+    }
+    .nsfw-text {
+      display: flex;
+      align-items: center;
+      margin-top: @light-spacing;
+      h1 {
+        margin: 0 @light-spacing 0 0 !important;
+      }
+    }
+  }
+}
+
+.button {
+  position: relative;
+  overflow: hidden;
+  margin-left: @xlight-spacing;
+}
+
+.upload-label {
+  display: inline-flex;
+}
+.upload-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  height: 20px;
+  width: 20px;
+}
+.feather {
+  height: 20px;
+  width: 20px;
+}
+
+.inactive {
+  cursor: not-allowed !important;
+}

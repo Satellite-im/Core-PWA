@@ -24,7 +24,7 @@ Generic button component.
 
 **outlined** Add the outline style to the button
 
-**action** Funciton or method to be called when the button is clicked
+**action** Function or method to be called when the button is clicked
 
 **loading** Optionall loading state for the button (useful for async tasks)
 

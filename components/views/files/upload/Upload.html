@@ -1,0 +1,89 @@
+<div id="file-upload">
+  <div class="file-preview" v-if="files.length || count_error">
+    <div v-if="count_error">
+      <TypographyError :text="$t('errors.chat.drop_file_count')" />
+      <div class="is-controls">
+        <InteractablesButton
+          type="danger"
+          size="small"
+          text="Close"
+          :action="cancelUpload"
+        />
+      </div>
+    </div>
+    <template v-else>
+      <div class="file-preview-item" v-for="item in files">
+        <div class="img-wrapper">
+          <img
+            v-if="isEmbedableImage(item.file.name)"
+            :src="item.url"
+            v-bind:class="{ 'img-blur': item.nsfw.status  }"
+          />
+          <UiLoadersLogoLoader v-if="!item.url" :size="48" />
+        </div>
+        <file-icon
+          size="1x"
+          v-if="!isEmbedableImage(item.file.name)"
+          class="control-icon"
+        />
+        <div class="file-info">
+          <TypographyTitle :size="6" :text="item.file.name" />
+          <div v-if="item.nsfw.status || item.nsfw.checking" class="nsfw-text">
+            <TypographySubtitle
+              :size="6"
+              text="Scanning Image..."
+              v-if="item.nsfw.checking"
+            />
+            <TypographySubtitle
+              :size="6"
+              :text="`${$t('errors.chat.unable_preview')}. ${$t('errors.chat.upload_blocked')}`"
+              v-if="item.nsfw.status"
+            />
+            <slash-icon size="1x" v-if="item.nsfw.status" />
+          </div>
+          <div v-else>
+            <TypographySubtitle :size="6" :text="item.file.type" />
+            <TypographySubtitle :size="6" :text="$filesize(item.file.size)" />
+          </div>
+        </div>
+      </div>
+      <div class="is-controls" v-if="uploadStatus">
+        <InteractablesButton :disabled="disabledButton" type="primary" size="small" text="Send" :action="sendMessage" />
+        <InteractablesButton
+          type="danger"
+          size="small"
+          text="Cancel"
+          :action="cancelUpload"
+        />
+      </div>
+      <div v-if="currentProgress !== 0">
+        <UiProgress
+          :progress="currentProgress"
+          type="loading"
+        class="loading-bar"/>
+        <br>
+        <span class="label white">{{currentProgress.toFixed(2)}}% Uploaded...</span>
+      </div>
+    </template>
+  </div>
+  <input :type="editable ? `file` : `hidden`" id="quick-upload" @change="handleFile" />
+  <label
+    v-if="type == 'quick'"
+    for="quick-upload"
+    :data-tooltip="$t('global.upload')"
+    :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
+  >
+    <plus-icon size="1.2x" class="control-icon" />
+  </label>
+  <div v-if="type =='button'">
+    <label
+      for="quick-upload"
+      class="button is-button is-small is-primary is-normal-width"
+    >
+      <UiGlowingCursorArea>
+        <file-plus-icon size="1.2x" class="control-icon" />
+        &nbsp; {{ $t('global.upload_files') }}
+      </UiGlowingCursorArea>
+    </label>
+  </div>
+</div>

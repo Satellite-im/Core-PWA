@@ -19,7 +19,9 @@ const InitialUIState = (): UIState => ({
     walletMini: false,
     error: false,
     changelog: false,
+    glyph: false,
   },
+  glyphModalPack: '',
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
@@ -47,6 +49,7 @@ const InitialUIState = (): UIState => ({
   },
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
+  mostEmojiUsed: [],
 })
 
 export default InitialUIState

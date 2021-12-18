@@ -1,0 +1,12 @@
+<div class="embeded-file">
+  <file-icon size="1x" class="file-icon" />
+  <img
+    class="image-file"
+    :src="file.url"
+  />
+  <div class="file-info">
+    <TypographySubtitle :size="6" :text="`${file.name}`" />
+    <TypographyText :text="`${file.type} - ${getFileSize}`" />
+  </div>
+  <download-icon size="1x" class="download" />
+</div>
