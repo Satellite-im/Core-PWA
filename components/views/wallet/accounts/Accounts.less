@@ -1,6 +1,6 @@
 
 .accounts {
-  width: 50%;
+  &:extend(.half-width);
   .accounts-heading {
     display: inline-flex;
     .is-text {
@@ -17,9 +17,9 @@
   }
 
   .account-list {
-    background: @semitransparent-light-gradient;
-    border-radius: @corner-rounding;
-    border: @light-border;
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    &:extend(.bordered);
     padding: @normal-spacing;
   }
 

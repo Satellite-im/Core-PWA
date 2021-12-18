@@ -1,20 +1,5 @@
 .glyph-card {
-  font-family: @primary-font;
-  border-radius: @corner-rounding;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  border: @light-border;
-  background: transparent;
-  box-shadow: none;
-
   .glyph-card-header {
-    width: 100%;
-    height: 5rem;
-    background-position: center;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    padding: @normal-spacing;
     .btn-group {
       display: flex;
       justify-content: space-between;
@@ -22,12 +7,14 @@
         font-size: 18px;
       }
     }
+    &:extend(.full-width);
+    height: 5rem;
+    background-position: center;
+    background-size: @full;
+    background-repeat: no-repeat;
+    padding: @normal-spacing;
   }
   .card-text {
-    width: 100%;
-    height: 11rem;
-    padding: @normal-spacing;
-    background: @semitransparent-dark-gradient;
     .name {
       font-size: 14px;
       font-weight: 600;
@@ -43,5 +30,17 @@
       justify-content: space-between;
       align-items: baseline;
     }
+    &:extend(.full-width);
+    height: 11rem;
+    padding: @normal-spacing;
+    &:extend(.background-semitransparent-dark);
   }
+  font-family: @primary-font;
+  &:extend(.round-corners);
+  overflow: hidden;
+  &:extend(.full-width);
+  max-width: @full;
+  &:extend(.bordered);
+  background: transparent;
+  box-shadow: none;
 }

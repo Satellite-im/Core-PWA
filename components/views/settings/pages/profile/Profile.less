@@ -9,16 +9,16 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  width: 100%;
+  &:extend(.full-width);
   .profile-left {
     padding: @normal-spacing 0;
   }
   .profile-layout {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
     flex-wrap: wrap;
     .profile-left {
-      width: 100%;
+      &:extend(.full-width);
       margin-top: 0;
     }
   }
@@ -49,9 +49,9 @@
 }
 
 .profile-main {
-  background-color: @dark-gray-alt;
+  background: @dark-gray-alt;
   padding: @normal-spacing;
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
 }
 
 .profile-photo-column {
@@ -63,8 +63,8 @@
     cursor: pointer;
     .is-rounded,
     .is-square {
-      max-width: 100% !important;
-      max-height: 100% !important;
+      max-width: @full !important;
+      max-height: @full !important;
     }
     .plus-button {
       z-index: 2;
@@ -83,13 +83,13 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 100%;
+    &:extend(.full-width);
   }
 }
 
 .profile-image-cropper {
-  width: 100%;
-  height: 100%;
+  &:extend(.full-width);
+  height: @full;
   z-index: 5;
   display: flex;
   align-items: center;
@@ -106,11 +106,11 @@
     width: 500px;
     .cropper-mask {
       position: fixed;
-      background-color: @light-gray !important;
+      background: @light-gray !important;
       opacity: 0.6;
       z-index: 9;
-      height: 100%;
-      width: 100%;
+      height: @full;
+      &:extend(.full-width);
       top: 0;
       left: 0;
     }
@@ -130,7 +130,7 @@
     flex: 1;
 
     .tag {
-      width: 100%;
+      &:extend(.full-width);
     }
   }
 }

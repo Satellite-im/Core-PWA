@@ -1,6 +1,6 @@
 .marketplace-glyphs {
   .subtitle {
-    color: @bright-text;
+    &:extend(.font-bright);
   }
   .home-content {
     display: flex;
@@ -30,7 +30,7 @@
     .btns {
       .navigator button{
         font-size: 0.6rem;
-        border-radius: @corner-rounding;
+        &:extend(.round-corners);
       }
     }
   }
@@ -39,7 +39,7 @@
       display: flex;
       align-items: center;
       cursor: pointer;
-      color: @bright-text;
+      &:extend(.font-bright);
     }
   }
   .badges {
@@ -47,17 +47,17 @@
     align-items: center;
     .badge-new,
     .badge-sale {
-      color: @white;
-      background-color: @green;
+      &:extend(.font-white);
+      background: @green;
       padding: 8px 10px;
       border-radius: 4px;
       margin-right: @xlight-spacing;
     }
     .badge-new {
-      background-color: @green;
+      background: @green;
     }
     .badge-sale {
-      background-color: @red;
+      background: @red;
     }
   }
 }

@@ -1,18 +1,4 @@
 .message-actions {
-  position: absolute;
-  border: @light-border;
-  border-radius: @corner-rounding;
-  background: @semitransparent-light-gradient;
-  backdrop-filter: @blur;
-
-  top: -18px;
-  right: 0;
-  display: flex;
-  box-sizing: border-box;
-  height: 36px;
-  font-size: 14px;
-  align-items: center;
-  padding: 0 0.25rem;
   .reply-text {
     padding: 0 0.25rem;
   }
@@ -25,9 +11,9 @@
     cursor: pointer;
 
     &:hover {
-      background: @semitransparent-light-gradient;
+      &:extend(.background-semitransparent-light);
       .control-icon {
-        color: @bright-text;
+        &:extend(.font-bright);
       }
     }
 
@@ -35,7 +21,20 @@
       justify-self: center;
       align-self: center;
       font-size: @small-icon-size;
-      color: @text;
+      &:extend(.font-primary);
     }
   }
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  &:extend(.blur);
+  position: absolute;
+  top: -18px;
+  right: 0;
+  display: flex;
+  box-sizing: border-box;
+  height: 36px;
+  font-size: 14px;
+  align-items: center;
+  padding: 0 0.25rem;
 }

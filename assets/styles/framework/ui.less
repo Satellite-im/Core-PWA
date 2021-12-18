@@ -24,12 +24,24 @@
 @corner-rounding: 4px;
 @corner-rounding-smaller: 2px;
 
+.round-corners {
+  border-radius: @corner-rounding;
+}
+
 // Spacing
 @xlight-spacing: 0.25rem;
 @light-spacing: 0.5rem;
 @normal-spacing: 1rem;
 @large-spacing: 1.5rem;
 @xlarge-spacing: 2rem;
+
+.more-pad-sides {
+  padding: @light-spacing @normal-spacing;
+}
+
+.light-padding {
+  padding: @light-spacing;
+}
 
 // Scrollbars
 @scrollbar-width: 5px;
@@ -40,4 +52,9 @@
 
 // Borders
 @light-border: 1px solid rgba(105, 128, 167, 0.05);
+
+.bordered {
+  border: @light-border;
+}
+
 @mini-light-border: 1px solid rgba(199, 206, 246, 0.25);

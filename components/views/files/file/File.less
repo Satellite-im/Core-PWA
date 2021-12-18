@@ -1,30 +1,17 @@
 .file {
-  width: 20%;
-  min-width: 160px;
-  margin-right: @light-spacing;
-  margin-bottom: @light-spacing;
-  border-radius: @corner-rounding-smaller;
-  background: @semitransparent-light-gradient;
-  float: left;
-  display: inline-flex;
-  flex-direction: column;
-  align-content: center;
-  padding-top: @normal-spacing * 2;
-  overflow: hidden;
-
   .quick-actions {
     position: absolute;
     top: 0;
-    width: 100%;
+    &:extend(.full-width);
     display: inline-block;
-    padding: @light-spacing @normal-spacing;
+    &:extend(.more-pad-sides);
 
     .like {
       float: right;
     }
 
     svg:hover {
-      color: @bright-text;
+      &:extend(.font-bright);
       cursor: pointer;
     }
   }
@@ -34,7 +21,7 @@
     align-self: center;
     justify-self: center;
     margin-left: 45px;
-    color: @primary-color;
+    &:extend(.font-accent);
   }
 
   .image-preview {
@@ -51,10 +38,21 @@
     padding: @normal-spacing;
 
     .subtext {
-      color: @text-muted;
+      &:extend(.font-muted);
     }
   }
-
+  width: 20%;
+  min-width: 160px;
+  margin-right: @light-spacing;
+  margin-bottom: @light-spacing;
+  border-radius: @corner-rounding-smaller;
+  &:extend(.background-semitransparent-light);
+  float: left;
+  display: inline-flex;
+  flex-direction: column;
+  align-content: center;
+  padding-top: @normal-spacing * 2;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

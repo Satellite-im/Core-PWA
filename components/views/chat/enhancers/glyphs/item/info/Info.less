@@ -2,14 +2,13 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  &:extend(.full-width);
   height: 4.5rem;
   display: flex;
   align-items: center;
-  background: @dark-gradient;
+  &:extend(.background-dark-gradient);
   font-size: 1rem;
-  padding: @light-spacing;
-  pointer-events: none;
+  &:extend(.light-padding);  pointer-events: none;
   .glyph-pack-info {
     margin-left: @normal-spacing;
   }

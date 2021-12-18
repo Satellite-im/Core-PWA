@@ -1,11 +1,11 @@
 .live {
 	display: inline-flex;
 	align-content: center;
-	width: 100%;
+	&:extend(.full-width);
 	flex-direction: row;
 	justify-content: space-between;
 	align-content: center;
-	color: @bright-text;
+	&:extend(.font-bright);
 	border-bottom: @light-border;
 	padding-bottom: @light-spacing;
 	.name-and-icon {
@@ -18,7 +18,7 @@
     margin: 0;
 		margin-left: @light-spacing;
 		font-family: @primary-font;
-		color: @bright-text;
+		&:extend(.font-bright);
   }
   .button {
     padding: 0 @light-spacing 0 @light-spacing;

@@ -1,17 +1,6 @@
 .user {
-  display: inline-flex;
-  overflow: hidden;
-  min-width: 0;
-  text-overflow: ellipsis;
-  padding: 0.4rem 0.35rem;
-  border-radius: @corner-rounding;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
-  width: 100%;
-
   .tag {
-    background-color: @primary-color;
+    &:extend(.background-primary);
     height: 18px;
     padding: 0.35rem;
     align-self: flex-end;
@@ -20,7 +9,7 @@
   }
 
   &:hover {
-    background: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
   }
 
   .circle {
@@ -29,15 +18,6 @@
   }
 
   .user-info {
-    flex: 1;
-    min-width: 0;
-    padding-left: @light-spacing;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
     .title {
       margin: 0 0 1.25rem 0;
       text-overflow: ellipsis;
@@ -54,6 +34,14 @@
     .subtitle {
       font-size: @mini-text-size;
     }
+    flex: 1;
+    min-width: 0;
+    padding-left: @light-spacing;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .user-chat-details {
@@ -63,4 +51,14 @@
       font-size: @micro-text-size;
     }
   }
+  display: inline-flex;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  padding: 0.4rem 0.35rem;
+  &:extend(.round-corners);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  &:extend(.full-width);
 }

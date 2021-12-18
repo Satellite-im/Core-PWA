@@ -13,11 +13,11 @@
     width: 20%;
     display: inline-flex;
     justify-content: center;
-    color: @bright-text;
+    &:extend(.font-bright);
     font-size: @small-icon-size;
   }
 
   .active {
-    color: @primary-color;
+    &:extend(.font-accent);
   }
 }

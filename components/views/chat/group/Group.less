@@ -1,10 +1,6 @@
 .is-group {
-  display: flex;
-  width: 100%;
-  margin-bottom: @light-spacing;
-
   .title {
-    color: @bright-text;
+    &:extend(.font-bright);
     font-size: @title-text;
     font-weight: bold;
     cursor: pointer;
@@ -14,23 +10,25 @@
     cursor: pointer;
   }
   .group-body {
-    margin-left: 0.75rem;
-    width: 100%;
     .group-heading {
-      width: 100%;
-      display: inline-flex;
-      flex-direction: row;
-      align-items: center;
-
       .is-text {
         margin-left: @light-spacing;
         // line-height: 1;
         font-size: @micro-text-size;
-        color: @text-muted;
+        &:extend(.font-muted);
         display: flex;
         align-items: flex-end;
         height: 1.2rem;
       }
+      &:extend(.full-width);
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
     }
+    margin-left: 0.75rem;
+    &:extend(.full-width);
   }
+  display: flex;
+  &:extend(.full-width);
+  margin-bottom: @light-spacing;
 }

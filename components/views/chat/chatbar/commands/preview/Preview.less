@@ -1,13 +1,13 @@
 #command-preview {
-  width: calc(100% - 2rem);
+  width: calc(@full - 2rem);
   position: absolute;
   bottom: @chatbar-size + 1px;
   margin: @light-spacing @normal-spacing;
   padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
   min-height: 5rem;
-  background: @semitransparent-light-gradient;
-  backdrop-filter: @blur;
+  &:extend(.background-semitransparent-light);
+  &:extend(.blur);
   z-index: @base-z-index;
 
   #commands {
@@ -20,9 +20,9 @@
 
   .tag {
     background: @black;
-    color: @bright-text;
-    border-radius: @corner-rounding;
-    border: @light-border;
+    &:extend(.font-bright);
+    &:extend(.round-corners);
+    &:extend(.bordered);
     box-shadow: none;
     font-family: @primary-font;
     text-transform: lowercase;
@@ -39,7 +39,7 @@
   }
 
   .red, .green {
-    color: @white;
+    &:extend(.font-white);
     font-weight: bold;
   }
 

@@ -1,38 +1,14 @@
 @supports (-webkit-touch-callout: none) {
   html {
-    overflow: unset;
-    height: unset;
-    width: 100%;
-    min-height: calc(100% + env(safe-area-inset-top));
-    padding-top: env(safe-area-inset-top);
-    position: relative;
-    overflow: hidden;
-    background: @background-gradient; 
+    min-height: calc(@full + env(safe-area-inset-top) - 11px);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   #app {
-    position: fixed;
-    background: transparent;
-    overflow: hidden; 
-    width: 100%;
-    min-height: 100%;
-    
-    &.is-open {
-      padding-bottom: @mobile-nav-size;
-    }
-
-    &.is-collapsed {
-      min-height: 100%;
-
-      .dynamic-content {
-        height: 100%;
-        padding-bottom: env(safe-area-inset-bottom); 
-      }
-    }
-
-    .container {
-      position: fixed;
-      min-height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
-    }
+    border-top: none;
+    height: 100%;
+  }
+  #__layout{
+    height: calc(100% - 2px);
   }
 }
-@import '~/assets/styles/themes/moonless_night.less';
+// @import '~/assets/styles/themes/moonless_night.less';

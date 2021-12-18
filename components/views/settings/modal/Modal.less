@@ -3,8 +3,8 @@ p {
   font-family: @secondary-font;
   font-size: 16px;
   word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: @full;
+  -webkit-text-size-adjust: @full;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
@@ -14,14 +14,13 @@ p {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  height: 100vh;
   overflow: hidden;
 }
 
 .sidebar {
   flex-basis: 18rem;
   flex-grow: 1;
-  height: 100%;
+  height: @full;
   transition: transform @animation-speed;
   position: relative;
 
@@ -47,7 +46,7 @@ p {
   white-space: pre-line;
   flex-basis: 0;
   flex-grow: 999;
-  height: 100%;
+  height: @full;
   font-size: @text-size;
   transition: margin-left @animation-speed;
   .title, .subtitle {

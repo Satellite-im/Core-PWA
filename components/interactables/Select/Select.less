@@ -1,59 +1,54 @@
 .is-full-width {
-  width: 100%;
+  &:extend(.full-width);
   select {
-    width: 100%;
+    &:extend(.full-width);
   }
 }
 
 .is-primary {
   .custom-select {
     .selected {
-      background: @primary-gradient;
-      border: none;
-      outline: none;
-      box-shadow: @primary-glow;
+      &:extend(.background-primary-gradient);
+      &:extend(.glow-primary);
       &::after,
       &::before {
         border-color: @bright-text;
       }
+      border: none;
+      outline: none;
     }
   }
 }
 
 .custom-select {
-  position: relative;
-  // width: 100%;
-  height: @select-height;
-  text-align: left;
-  outline: none;
-  color: @text;
+  &:extend(.font-primary);
   .selected {
+    &:extend(.font-primary);
     height: @select-height;
     line-height: @select-height;
     border-radius: 4rem;
-    background-color: @dark-gray;
-    color: @text;
+    background: @dark-gray;
     padding-left: @normal-spacing;
     padding-right: @normal-spacing * 2;
     cursor: pointer;
     user-select: none;
-    max-width: 100%;
+    max-width: @full;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
   .items {
+    &:extend(.background-semitransparent-dark);
+    &:extend(.round-corners);
+    &:extend(.bordered);
+    &:extend(.blur);
     position: absolute;
     display: none;
     color: #fff;
     overflow: hidden;
-    max-width: 100%;
-    background: @semitransparent-dark-gradient;
-    border-radius: @corner-rounding;
-    border: @light-border;
+    max-width: @full;
     left: 0;
     right: 0;
-    backdrop-filter: @blur;
     z-index: @base-z-index + 100;
     margin-top: @light-spacing;
     div {
@@ -62,7 +57,7 @@
       padding-left: @normal-spacing;
       padding-right: @normal-spacing;
       cursor: pointer;
-      max-width: 100%;
+      max-width: @full;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
@@ -71,7 +66,7 @@
         opacity: 0.5;
       }
       &:hover {
-        background: @semitransparent-lighter-gradient;
+        &:extend(.background-semitransparent-lighter);
       }
     }
   }
@@ -90,4 +85,8 @@
       top: 30px;
     }
   }
+  position: relative;
+  height: @select-height;
+  text-align: left;
+  outline: none;
 }

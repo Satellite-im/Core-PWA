@@ -1,34 +1,21 @@
 #enhancers {
-  height: @enhancers-height;
-  max-width: @enhancers-width;
-  position: absolute;
-  margin-left: @normal-spacing;
-  right: @normal-spacing !important;
-  bottom: @chatbar-size !important;
-  margin-bottom: @light-spacing;
-  border-radius: @corner-rounding;
-  background: @semitransparent-light-gradient;
-  overflow: hidden;
-  z-index: @base-z-index + 100;
-  backdrop-filter: @blur;
-
   #container {
     position: relative;
     flex: 1;
-    width: 100%;
-    height: calc(100% - 3rem);
+    &:extend(.full-width);
+    height: calc(@full - 3rem);
     overflow-y: scroll;
   }
   #container::-webkit-scrollbar {
     display: none;
   }
   .navbar {
-    width: 100%;
+    &:extend(.full-width);
     display: inline-flex;
     padding: 0.75rem 0.5rem 0.5rem 0.5rem;
-    background: @semitransparent-dark-gradient;
+    &:extend(.background-semitransparent-dark);
     .button {
-      width: 100%;
+      &:extend(.full-width);
 
       &:nth-child(1) {
         border-top-right-radius: 0;
@@ -45,13 +32,26 @@
       }
     }
   }
+  height: @enhancers-height;
+  min-width: @enhancers-width;
+  max-width: @enhancers-width;
+  position: absolute;
+  margin-left: @normal-spacing;
+  right: @normal-spacing !important;
+  bottom: @chatbar-size !important;
+  margin-bottom: @light-spacing;
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  overflow: hidden;
+  z-index: @base-z-index + 100;
+  &:extend(.blur);
 }
 
 .emoji-picker {
   font-family: Montserrat;
-  width: 100%;
-  min-height: 100%;
-  max-height: 100%;
+  &:extend(.full-width);
+  min-height: @full;
+  max-height: @full;
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
@@ -63,7 +63,7 @@
 .search-box,
 .emoji-picker__search div {
   flex: 1;
-  width: 100% !important;
+  width: @full !important;
 }
 .emoji-picker__search {
   margin-bottom: @normal-spacing;
@@ -92,7 +92,7 @@
   border-radius: 5px;
 }
 .emoji-picker .emojis span:hover {
-  background: @semitransparent-dark-gradient;
+  &:extend(.background-semitransparent-dark);
   cursor: pointer;
 }
 

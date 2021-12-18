@@ -3,13 +3,13 @@
     max-height: 36px;
     display: flex;
     justify-content: space-between;
-    width: calc(100% - 2rem);
+    width: calc(@full - 2rem);
     padding: 0.25rem 0.5rem;
     font-size: @text-size;
     font-family: @secondary-font;
     margin: 0 1rem;
-    background: @primary-gradient;
-    backdrop-filter: @blur;
+    &:extend(.background-primary-gradient);
+    &:extend(.blur);
     border-top: @light-border;
     border-left: @light-border;
     border-right: @light-border;
@@ -19,11 +19,11 @@
     align-items: center;
 
     strong {
-        color: @bright-text;
+        &:extend(.font-bright);
     }
 
     .markdown {
-        width: calc(100% - @small-icon-size - 0.25rem);
+        width: calc(@full - @small-icon-size - 0.25rem);
         p {
             font-size: @text-size;
             text-overflow: ellipsis;
@@ -36,13 +36,13 @@
         cursor: pointer;
         display: flex;
         font-size: @small-icon-size;
-        color: @text;
+        &:extend(.font-primary);
     }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .is-chatbar-reply {
       margin: 0 @light-spacing;
-      width: calc(100% - @normal-spacing);
+      width: calc(@full - @normal-spacing);
   }
 }

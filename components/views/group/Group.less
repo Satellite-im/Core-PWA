@@ -1,39 +1,27 @@
 .group {
-  display: inline-flex;
-  overflow: hidden;
-  min-width: 0;
-  text-overflow: ellipsis;
-  padding: 0.35rem;
-  border-radius: @corner-rounding;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
-  width: 100%;
-
   .status {
-    position: absolute;
-    top: 33.5px;
-    left: 30px;
-    font-size: 10pt;
-    text-shadow: 0 0 3px #000;
-
     path {
       stroke: @dark-gray;
       stroke-width: 100;
     }
     &.is-online {
-      color: @green;
+      &:extend(.font-green);
     }
     &.is-offline {
-      color: @gray;
+      &:extend(.font-gray);
     }
     &.is-idle {
-      color: @yellow;
+      &:extend(.font-yellow);
     }
+    position: absolute;
+    top: 33.5px;
+    left: 30px;
+    font-size: 10pt;
+    text-shadow: 0 0 3px #000;
   }
 
   &:hover {
-    background: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
   }
   
   .circle {
@@ -42,15 +30,6 @@
   }
 
   .group-info {
-    min-width: 0;
-    padding-left: @light-spacing;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-
     .title {
       margin: 0 0 1.25rem 0;
       text-overflow: ellipsis;
@@ -67,5 +46,22 @@
     .subtitle {
       font-size: @mini-text-size;
     }
+    min-width: 0;
+    padding-left: @light-spacing;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+  display: inline-flex;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  padding: 0.35rem;
+  &:extend(.round-corners);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  &:extend(.full-width);
 }

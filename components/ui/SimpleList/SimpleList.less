@@ -4,12 +4,12 @@
 }
 
 .active {
-  background-color: @primary-color;
-  color: @bright-text;
+  &:extend(.background-primary);
+  &:extend(.font-bright);
   border-radius: @corner-rounding-smaller;
 
   &:hover {
-    background-color: @primary-color;
+    &:extend(.background-primary);
   }
 }
 
@@ -19,12 +19,12 @@ li {
   margin: 0.2rem -@light-spacing;
   display: inline-flex;
   align-items: center;
-  width: 100%;
+  &:extend(.full-width);
 
   .dynamic-icon {
     margin-right: @light-spacing;
   }
   &:hover {
-    background-color: @light-gray;
+    background: @light-gray;
   }
 }

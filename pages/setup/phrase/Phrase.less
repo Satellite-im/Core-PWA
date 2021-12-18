@@ -1,6 +1,5 @@
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   max-width: 400px;
   display: flex;
   justify-content: center;
@@ -22,7 +21,7 @@
         padding: 0.25rem;
 
         .tag, .tag-container {
-          width: 100%;
+          &:extend(.full-width);
         }
 
         .tag {
@@ -37,11 +36,11 @@
   .container {
     margin: 0 @normal-spacing;
     justify-content: flex-start;
-    width: 100%;
+    &:extend(.full-width);
     .phrase-body {
       margin-top: @normal-spacing;
       align-self: flex-start;
-      height: 100%;
+      height: @full;
       display: flex;
       flex-direction: column;
       padding-bottom: @normal-spacing;
@@ -49,8 +48,9 @@
 
       .is-button {
         margin-top: auto;
-        width: 100%;
+        &:extend(.full-width);
         justify-self: flex-end;
+        margin-bottom: @normal-spacing;
       }
     }
   }

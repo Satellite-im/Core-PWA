@@ -22,13 +22,13 @@ export default Vue.extend({
 </script>
 <style lang="less">
 .tag {
-  background: @primary-gradient;
+  &:extend(.background-primary-gradient);
+  &:extend(.glow-primary);
   color: @bright-text !important;
-  box-shadow: @primary-glow;
 }
 .tag-inverted {
+  &:extend(.font-bright);
   background: @light-gray !important;
-  color: @bright-text;
   box-shadow: none;
 }
 </style>

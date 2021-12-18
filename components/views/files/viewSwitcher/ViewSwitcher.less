@@ -1,5 +1,8 @@
 .control-icon {
-  color: @text-muted;
+  &:hover {
+    cursor: pointer;
+  }
+  &:extend(.font-muted);
   opacity: 0.75;
   font-size: @icon-size;
   align-self: flex-end;
@@ -7,14 +10,9 @@
   float: right;
   margin-left: @light-spacing;
   justify-self: center;
-  
-
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .active {
-  color: @bright-text;
+  &:extend(.font-bright);
   opacity: 1;
 }

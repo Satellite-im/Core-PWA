@@ -1,12 +1,12 @@
 <div class="container">
-  <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
-    <div class="privacy-body">
-      <div class="columns">
-        <div class="column center">
-          <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
-          <TypographyText :text="$t('pages.privacy.subtitle')" />
-        </div>
+  <div class="privacy-body">
+    <div class="columns">
+      <div class="column center">
+        <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
+        <TypographyText :text="$t('pages.privacy.subtitle')" />
       </div>
+    </div>
+    <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
       <div class="columns">
         <div class="column">
           <div class="columns is-mobile">
@@ -67,20 +67,20 @@
           </div>
         </div>
       </div>
-      <br />
-      <div class="spacer"></div>
-      <div class="columns is-mobile button-column">
-        <div class="column">
-          <InteractablesButton
-            class="right"
-            type="primary"
-            :action="generateWallet"
-            size="small"
-          >
-            {{ $t('pages.privacy.continue') }}
-          </InteractablesButton>
-        </div>
+    </UiScroll>
+    <br />
+    <div class="spacer"></div>
+    <div class="columns is-mobile buttons">
+      <div class="column">
+        <InteractablesButton
+          class="right"
+          type="primary"
+          :action="generateWallet"
+          size="small"
+        >
+          {{ $t('pages.privacy.continue') }}
+        </InteractablesButton>
       </div>
     </div>
-  </UiScroll>
+  </div>
 </div>

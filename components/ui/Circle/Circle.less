@@ -1,11 +1,11 @@
 .circle {
+  &:extend(.font-bright);
+  .image {
+    &:extend(.full-width);
+    height: @full;
+  }
   display: inline-block;
   vertical-align: top;
-  color: @bright-text;
-  .image {
-    width: 100%;
-    height: 100%;
-  }
 }
 
 .circle-flex {
@@ -15,5 +15,5 @@
 }
 
 .is-rounded {
-  border-radius: 50%;
+  border-radius: @half;
 }

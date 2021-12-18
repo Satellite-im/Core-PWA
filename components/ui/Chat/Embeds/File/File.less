@@ -1,53 +1,45 @@
 .embeded-file {
-  margin: @normal-spacing 0;
-  background: @semitransparent-light-gradient;
-  border: @light-border;
-  padding: @light-spacing @normal-spacing;
-  border-radius: @corner-rounding;
-  display: inline-flex;
-  justify-content: center;
-  flex-direction: row;
-
+  &:extend(.background-semitransparent-light);
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.more-pad-sides);
+  &:extend(.inline-flex-justify-center);
   .image-file {
     max-width: 80%;
   }
-
   .file-icon {
     font-size: @xl-icon-size;
     align-self: center;
   }
-
   .download {
+    &:hover {
+      &:extend(.font-bright);
+    }
     align-self: center;
     cursor: pointer;
-
-    &:hover {
-      color: @bright-text;
-    }
   }
-
   .subtitle {
+    &:extend(.font-bright);
     margin: 0;
     font-weight: bold;
     font-size: @text-size;
-    color: @bright-text;
   }
-
   .file-info {
     margin-right: @normal-spacing;
     margin-left: @light-spacing;
     align-self: center;
   }
-
   .is-text {
+    &:extend(.font-muted);
     margin: 0;
     font-family: @primary-font;
     white-space: nowrap;
     font-size: @mini-text-size;
-    color: @text-muted;
     line-height: 0.9;
     margin-bottom: 0.4rem;
   }
+  margin: @normal-spacing 0;
+  flex-direction: row;
 }
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {

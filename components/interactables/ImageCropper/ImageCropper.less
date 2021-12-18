@@ -3,7 +3,7 @@
 }
 
 .cropped-image {
-  border-radius: 50%;
+  border-radius: @half;
   height: 400px;
   width: 500px;
 }
@@ -25,41 +25,24 @@
 }
 
 .cropper-mask {
+  &:extend(.blur-less);
   background: transparent !important;
   opacity: 1;
-  backdrop-filter: @light-blur;
 }
 
 .cropper-container {
-  display: flex;
-  justify-content: center;
+  &:extend(.background-semitransparent-light);
+  &:extend(.blur);
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.flex-justify-content-centered);
+  &:extend(.absolute-coverage);
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  background: @semitransparent-light-gradient;
-  backdrop-filter: @blur;
-  border: @light-border;
-  border-radius: @corner-rounding;
   z-index: 99;
   padding: 35px;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
   margin: auto;
   width: 380px;
   height: 380px;
   animation: zoom-in-zoom-out @animation-speed ease-out;
-}
-
-@keyframes zoom-in-zoom-out {
-  0% {
-    transform: scale(1, 1);
-  }
-  50% {
-    transform: scale(1.2, 1.2);
-  }
-  100% {
-    transform: scale(1, 1);
-  }
 }

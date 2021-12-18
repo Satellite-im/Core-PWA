@@ -1,8 +1,4 @@
 #friends-nav {
-  padding: @normal-spacing;
-  display: inline-flex;
-  justify-content: flex-end;
-  width: 100%;
   &:nth-last-child(.button) {
     margin-right: 0;
   }
@@ -15,13 +11,17 @@
     top: @xlight-spacing;
     right: @xlight-spacing;
     font-size: @micro-text-size;
-    background-color: @primary-color;
+    &:extend(.background-primary);
     border-radius: 2px;
     line-height: 1.2;
     padding: 0.15rem 0.5rem;
-    color: @text;
+    &:extend(.font-primary);
     font-family: @primary-font;
   }
+  padding: @normal-spacing;
+  display: inline-flex;
+  justify-content: flex-end;
+  &:extend(.full-width);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

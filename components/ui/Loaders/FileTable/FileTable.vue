@@ -3,50 +3,41 @@
     <thead>
       <th>
         {{ $t('pages.files.browse.name') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.modified') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.type') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th v-if="!$device.isMobile">
         {{ $t('pages.files.browse.encrypted') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th>
         {{ $t('pages.files.browse.size') }}
-        <filter-icon class="sort"
-size="1x" />
+        <filter-icon class="sort" size="1x" />
       </th>
       <th />
     </thead>
     <tbody>
-      <tr v-for="i in rows"
-:key="i">
+      <tr v-for="i in rows" :key="i">
         <td class="filename">
           <div class="filename-item">
             <div class="placeholder-item icon" />
             <div class="placeholder-item" />
           </div>
         </td>
-        <td v-if="!$device.isMobile"
-class="modified">
+        <td v-if="!$device.isMobile" class="modified">
           <div class="placeholder-item" />
         </td>
-        <td v-if="!$device.isMobile"
-class="type">
+        <td v-if="!$device.isMobile" class="type">
           <div class="placeholder-item" />
         </td>
-        <td v-if="!$device.isMobile"
-class="encrypted">
+        <td v-if="!$device.isMobile" class="encrypted">
           <div class="placeholder-item" />
         </td>
         <td class="size">
@@ -79,14 +70,14 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .table {
-  width: 100%;
+  &:extend(.full-width);
   font-size: @text-size;
-  background-color: transparent;
+  background: transparent;
   margin: 0;
 
   thead {
     th {
-      color: @bright-text;
+      &:extend(.font-bright);
       border-bottom-width: 1px;
       border-bottom-color: @text-muted;
     }
@@ -95,7 +86,7 @@ export default Vue.extend({
   tr {
     td {
       padding: 0.75rem;
-      color: @text;
+      &:extend(.font-primary);
       border-bottom-color: @light-gray;
     }
   }
@@ -161,44 +152,27 @@ export default Vue.extend({
 }
 
 .placeholder-item {
-  flex: 1;
-  border-radius: 2px;
-  height: 18px;
-  position: relative;
-  overflow: hidden;
-  background: @dark-gray;
-
   &::before {
     content: '';
     display: block;
     position: absolute;
     left: -150px;
     top: 0;
-    height: 100%;
+    height: @full;
     width: 75%;
     background: linear-gradient(
       to right,
       transparent 0%,
-      @dark-gray-alt 50%,
-      transparent 100%
+      @dark-gray-alt @half,
+      transparent @full
     );
     animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
-  @keyframes load {
-    from {
-      left: -75%;
-    }
-    to {
-      left: 100%;
-    }
-  }
-  @keyframes loadreverse {
-    from {
-      left: -100%;
-    }
-    to {
-      left: 200%;
-    }
-  }
+  flex: 1;
+  border-radius: 2px;
+  height: 18px;
+  position: relative;
+  overflow: hidden;
+  background: @dark-gray;
 }
 </style>

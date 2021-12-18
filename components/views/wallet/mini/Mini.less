@@ -5,11 +5,11 @@
   right: @normal-spacing;
   bottom: @chatbar-size;
   margin-bottom: @light-spacing;
-  border-radius: @corner-rounding;
-  background: @semitransparent-light-gradient;
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
   overflow: hidden;
   z-index: @base-z-index + 100;
-  backdrop-filter: @blur;
+  &:extend(.blur);
 }
 @media only screen and (max-width: @mobile-breakpoint) {
   #mini-wallet {

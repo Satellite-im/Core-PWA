@@ -16,9 +16,9 @@
                 }
                 &.active, :hover {
                     cursor: pointer;
-                    color: @primary-color;
+                    &:extend(.font-accent);
                     .fa-circle {
-                        color: @green;
+                        &:extend(.font-green);
                         width: 0.5rem;
                     }
                 }
@@ -51,7 +51,7 @@
                 .category {
                     position: relative;
                     display: inline-block;
-                    width: 100%;
+                    &:extend(.full-width);
                     padding-left: 24px;
                     &::before {
                         position: absolute;

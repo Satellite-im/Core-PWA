@@ -1,7 +1,7 @@
 .glyph-trending-card {
   min-width: 10.5rem;
   height: 229px;
-  background: @semitransparent-light-gradient;
+  &:extend(.background-semitransparent-light);
   padding: @normal-spacing;
   margin-right: @normal-spacing;
   border: 1px solid @light-border;
@@ -21,11 +21,11 @@
   .body {
     text-align: center;
     .subtitle {
-      color: @bright-text;
+      &:extend(.font-bright);
       margin: @xlight-spacing 0!important;
     }
     .trend-glyph-img {
-      width: 100%;
+      &:extend(.full-width);
       margin: @light-spacing 0!important;
       .glyph-item {
         margin: auto;

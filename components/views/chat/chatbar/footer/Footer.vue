@@ -52,10 +52,10 @@ export default Vue.extend({
     float: right;
     margin-right: 2rem;
     font-size: @mini-text-size;
-    color: @text-muted;
+    &:extend(.font-muted);
     margin-left: auto;
     &.is-error {
-      color: @red;
+      &:extend(.font-red);
     }
   }
   &.is-error {
@@ -63,7 +63,7 @@ export default Vue.extend({
 
     .control-icon {
       &:nth-child(4) {
-        color: @red;
+        &:extend(.font-red);
       }
     }
   }

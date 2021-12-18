@@ -1,13 +1,4 @@
 #view-file {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: @base-z-index + 100;
-  align-content: center;
-
   .image-container {
     width: 100vw;
     display: inline-flex;
@@ -18,7 +9,7 @@
     justify-self: center;
     align-self: center;
     max-height: 80vh;
-    border-radius: @corner-rounding;
+    &:extend(.round-corners);
   }
   .file-icon {
     font-size: 50pt;
@@ -49,7 +40,7 @@
     .file-info {
       margin: @normal-spacing;
       .title {
-        color: @bright-text;
+        &:extend(.font-bright);
       }
     }
 
@@ -58,7 +49,7 @@
         display: inline-flex;
         font-size: @icon-size;
         margin: @normal-spacing @light-spacing;
-        color: @bright-text;
+        &:extend(.font-bright);
   
         &:nth-child(4) {
           margin-right: @normal-spacing;
@@ -71,4 +62,12 @@
       
     }
   }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: @base-z-index + 100;
+  align-content: center;
 }

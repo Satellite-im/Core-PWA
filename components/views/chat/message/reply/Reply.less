@@ -1,16 +1,9 @@
 .replies-container {
-  border: @light-border;
-  border-radius: @corner-rounding;
-  padding: (@light-spacing / 2) @light-spacing;
-  margin-top: @light-spacing;
-  margin-bottom: @light-spacing;
-  background: @semitransparent-light-gradient;
-
   .reply-preview {
     padding: 0.25rem;
     cursor: pointer;
     font-size: @text-size;
-    color: @bright-text;
+    &:extend(.font-bright);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -23,32 +16,22 @@
     padding-bottom: 0.5rem;
     padding-left: 0.5rem;
     font-size: @text-size;
-    color: @bright-text;
+    &:extend(.font-bright);
   }
 
   .reply-container {
-    display: flex;
-    flex-direction: column;
     .emoji-reactions {
       margin-top: 0;
       margin-left: 3rem;
       position: relative;
     }
     .is-reply {
-      width: 100%;
-      padding: 0.5rem;
-      display: flex;
-      margin-bottom: 0.25rem;
-
       .circle {
         margin-top: 0.3rem;
         cursor: pointer;
       }
 
       .reply-body {
-        margin-left: 0.75rem;
-        width: 100%;
-
         .reply-heading {
           display: inline-flex;
           flex-direction: row;
@@ -57,7 +40,7 @@
           .is-text {
             margin-left: @light-spacing;
             font-size: @micro-text-size;
-            color: @text-muted;
+            &:extend(.font-muted);
             display: flex;
             align-items: flex-end;
             height: 1.2rem;
@@ -67,9 +50,23 @@
         .reply-content {
           position: relative;
         }
+        margin-left: 0.75rem;
+        &:extend(.full-width);
       }
+      &:extend(.full-width);
+      padding: 0.5rem;
+      display: flex;
+      margin-bottom: 0.25rem;
     }
+    display: flex;
+    flex-direction: column;
   }
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  padding: (@light-spacing / 2) @light-spacing;
+  margin-top: @light-spacing;
+  margin-bottom: @light-spacing;
+  &:extend(.background-semitransparent-light);
 }
 .is-chatbar-reply {
   .glyph {

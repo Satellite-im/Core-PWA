@@ -1,6 +1,5 @@
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-content: flex-end;
@@ -8,18 +7,27 @@
   flex-direction: column;
 
   .registration-body {
-    min-width: 250px;
     align-self: center;
-    margin-bottom: 25vh;
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 2rem;
-
-    .registration-body {
-      width: 100%;
+    .create-server-container {
+      .submit-container {
+        margin-top: auto;
+        justify-self: flex-end;
+      }
+      width: unset;
+      padding: @normal-spacing;
+      height: @full;
     }
+    .registration-body {
+      &:extend(.full-width);
+      height: @full;
+    }
+  }
+  .create-server-button {
+    min-width: @full !important;
   }
 }

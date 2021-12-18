@@ -10,7 +10,7 @@
   min-width: @sidebar-size;
   position: relative;
   display: inline-flex;
-  height: 100%;
+  height: @full;
   display: flex;
   flex-direction: column;
   padding-bottom: @normal-spacing;
@@ -22,17 +22,17 @@
   }
 
   .sidebar-inner {
-    border-radius: @corner-rounding;
+    &:extend(.round-corners);
     margin-top: @normal-spacing;
     padding-bottom: @normal-spacing;
-    background: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
     max-height: calc(var(--app-height) - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
     padding-bottom: @normal-spacing;
     .sidebar-search {
-      width: 100%;
+      &:extend(.full-width);
       padding: @normal-spacing;
       padding-right: @normal-spacing * 3;
     }
@@ -42,8 +42,8 @@
       z-index: @base-z-index;
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
-      color: @primary-color;
-      filter: @primary-text-glow;
+      &:extend(.font-accent);
+      &:extend(.filter-glow-accent);
     }
   }
 
@@ -52,8 +52,8 @@
   }
 
   .controls {
-    background: @semitransparent-light-gradient;
-    border-radius: @corner-rounding;
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
     padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
     box-shadow: @ui-shadow;
   }
@@ -79,11 +79,11 @@
     top: 0.25rem;
     right: 0.25rem;
     font-size: @micro-text-size;
-    background-color: @primary-color;
+    &:extend(.background-primary);
     border-radius: 2px;
     line-height: 1.2;
     padding: 0.15rem 0.25rem;
-    color: @text;
+    &:extend(.font-primary);
     font-family: @primary-font;
   }
 
@@ -104,19 +104,19 @@
       padding-right: @normal-spacing * 1.5;
       right: -@normal-spacing;
       left: 0;
-      width: calc(100% + @normal-spacing);
+      width: calc(@full + @normal-spacing);
     }
   }
 
   .loading-container {
     display: inline-flex;
     justify-content: center;
-    width: 100%;
+    &:extend(.full-width);
   }
 }
 
 .sidebar-full-btn {
-  width: 100%;
+  &:extend(.full-width);
   margin-bottom: @light-spacing;
   justify-content: flex-start;
 }
@@ -129,7 +129,7 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
     z-index: 3;
-    background: @dark-gradient;
+    &:extend(.background-dark-gradient);
     padding-bottom: @normal-spacing;
     .sidebar-inner-streaming {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);

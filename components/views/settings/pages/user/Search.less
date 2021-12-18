@@ -5,7 +5,7 @@
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    max-width: 100%;
+    max-width: @full;
     min-width: 0;
     height: auto;
     margin-top: @xlight-spacing;
@@ -20,7 +20,7 @@
     flex-grow: 0;
     padding: 1px @xlight-spacing;
     border-radius: @corner-rounding-xxlarge;
-    background-color: @light-gray;
+    background: @light-gray;
     margin-right: @xlight-spacing;
 
     .text {
@@ -35,9 +35,9 @@
   .user-selected {
     flex: 1 1;
     outline: none;
-    background-color: transparent;
+    background: transparent;
     border-width: 0px;
-    color: @text;
+    &:extend(.font-primary);
     font-size: smaller !important;
     outline: none;
     min-width: 50px;
@@ -47,9 +47,9 @@
   &-input {
     flex: 1 1;
     outline: none;
-    background-color: transparent;
+    background: transparent;
     border-width: 0px;
-    color: @text;
+    &:extend(.font-primary);
     font-size: inherit !important;
     outline: none;
     min-width: 50px;
@@ -58,7 +58,7 @@
   &-list {
     display: none;
     position: absolute;
-    width: 100%;
+    &:extend(.full-width);
     height: 200px;
     overflow-y: auto;
 
@@ -86,16 +86,15 @@
   }
 
   &-result {
-    width: 100%;
-    background-color: @darker;
+    &:extend(.full-width);
+    background: @darker;
     border: 1px solid @dark;
     position: absolute;
     
     li {
       display: flex;
       align-items: center;
-      padding: @light-spacing;
-      .text {
+      &:extend(.light-padding);      .text {
         margin-left: @light-spacing;
         flex: 1 1;
       }
@@ -107,7 +106,7 @@
       }
 
       &:hover, &.active {
-        background-color: @light-gray;
+        background: @light-gray;
       }
     }
   }

@@ -1,29 +1,12 @@
 .card {
-  font-family: @primary-font;
-  border-radius: @corner-rounding;
-  overflow: hidden;
-  min-width: 200px;
-  width: 100%;
-  max-width: 100%;
-  border: @light-border;
-  background: transparent;
-  box-shadow: none;
-
   .card-image {
-    border-radius: 4px 4px 0px 0px;
-    width: 100%;
-    position: relative;
-    height: 170px;
-    background-color: @primary-color-alt;
-    background-position: center;
-    background-size: cover;
     .badge-new {
       position: absolute;
       left: 16px;
       top: 16px;
       font-size: 12px;
-      color: @white;
-      background-color: @green;
+      &:extend(.font-white);
+      background: @green;
       padding: 8px 10px;
       border-radius: 4px;
     }
@@ -33,12 +16,15 @@
       top: 16px;
       font-size: 18px;
     }
+    border-radius: 4px 4px 0px 0px;
+    &:extend(.full-width);
+    position: relative;
+    height: 170px;
+    background: @primary-color-alt;
+    background-position: center;
+    background-size: cover;
   }
   .card-text {
-    width: 100%;
-    height: 145px;
-    padding: 16px;
-    background: @semitransparent-dark-gradient;
     .name {
       font-size: 14px;
       font-weight: 600;
@@ -49,11 +35,6 @@
       margin-bottom: 8px;
     }
     .price {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      font-size: 24px;
-      font-weight: 600;
       .btn-buy {
         display: flex;
         justify-content: center;
@@ -61,11 +42,29 @@
         width: 40px;
         height: 40px;
         border-radius: 20px;
-        color: @bright-text;
+        &:extend(.font-bright);
         font-size: 12px;
-        background: @primary-gradient;
-        box-shadow: @primary-glow;
+        &:extend(.background-primary-gradient);
+        &:extend(.glow-primary);
       }
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      font-size: 24px;
+      font-weight: 600;
     }
+    &:extend(.full-width);
+    height: 145px;
+    padding: 16px;
+    &:extend(.background-semitransparent-dark);
   }
+  font-family: @primary-font;
+  &:extend(.round-corners);
+  overflow: hidden;
+  min-width: 200px;
+  &:extend(.full-width);
+  max-width: @full;
+  &:extend(.bordered);
+  background: transparent;
+  box-shadow: none;
 }

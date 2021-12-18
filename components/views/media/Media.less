@@ -4,18 +4,18 @@
   top: @toolbar-height;
   height: auto;
   max-height: 25.5rem;
-  width: 100%;
-  background: @semitransparent-dark-gradient;
-  backdrop-filter: @blur;
+  &:extend(.full-width);
+  &:extend(.background-semitransparent-dark);
+  &:extend(.blur);
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
 
   #media {
     display: flex;
     flex: 1;
-    width: 100%;
+    &:extend(.full-width);
     overflow: hidden;
     justify-content: center;
     align-items: center;
@@ -58,7 +58,7 @@
 .fullscreen-media {
   #mediastream {
     max-height: unset;
-    height: calc(100% - @toolbar-height - @light-spacing);
+    height: calc(@full - @toolbar-height - @light-spacing);
     margin-bottom: 1rem;
     #media {
       justify-content: center;
@@ -68,10 +68,10 @@
 }
 
 .more-user {
-  background: @primary-color;
+  &:extend(.background-primary);
   min-width: 16rem;
   height: 9rem;
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
   display: flex;
   align-self: flex-end;
   justify-content: center;

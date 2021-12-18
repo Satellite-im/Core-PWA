@@ -40,7 +40,7 @@
   color: @text;
 }
 .font-muted {
-  color: @text-muted;
+ color: @text-muted;
 }
 .font-bright {
   color: @bright-text;
@@ -121,6 +121,10 @@
 
 // Solid Gradients
 @input-gradient: @semitransparent-lighter-gradient;
+
+.input-bg {
+  background: @input-gradient;
+}
 
 @splash-radial: radial-gradient(circle, rgba(44,51,65,0.8127844887955182) 0%, rgba(34,44,63,0) 100%);
 

@@ -1,8 +1,4 @@
 #file-upload {
-  display: inline-flex;
-  justify-self: flex-start;
-  align-self: flex-start;
-
   #quick-upload {
     width: 0;
     height: 0;
@@ -17,26 +13,13 @@
     width: unset;
   }
   .loading-bar{
-    max-width: 50%;
+    max-width: @half;
   }
 
   .file-preview {
-    position: absolute;
-    bottom: calc(4.6rem + @light-spacing);
-    right: @normal-spacing;
-    width: calc(100% - @sidebar-size - 40px - @normal-spacing);
-    backdrop-filter: @blur;
-    background: @semitransparent-light-gradient;
-    border: @light-border;
-    border-radius: @corner-rounding;
-    padding: @normal-spacing;
-
     .file-preview-item {
-      width: 100%;
-      display: inline-flex;
-      margin-bottom: @light-spacing;
       .file-info {
-        width: 100%;
+        &:extend(.full-width);
       }
 
       .title {
@@ -51,7 +34,7 @@
         max-width: 15vw;
         max-height: 10vh;
         border-radius: 2px;
-        width: 100%;
+        &:extend(.full-width);
       }
 
       .img-wrapper {
@@ -71,6 +54,9 @@
         -o-filter: blur(8px);
         -ms-filter: blur(8px);
       }
+      &:extend(.full-width);
+      display: inline-flex;
+      margin-bottom: @light-spacing;
     }
     .is-controls {
       align-content: flex-end;
@@ -81,14 +67,26 @@
       }
     }
     .nsfw-text {
-      display: flex;
-      align-items: center;
-      margin-top: @light-spacing;
       h1 {
         margin: 0 @light-spacing 0 0 !important;
       }
+      display: flex;
+      align-items: center;
+      margin-top: @light-spacing;
     }
+    position: absolute;
+    bottom: calc(4.6rem + @light-spacing);
+    right: @normal-spacing;
+    width: calc(@full - @sidebar-size - 40px - @normal-spacing);
+    &:extend(.blur);
+    &:extend(.background-semitransparent-light);
+    &:extend(.bordered);
+    &:extend(.round-corners);
+    padding: @normal-spacing;
   }
+  display: inline-flex;
+  justify-self: flex-start;
+  align-self: flex-start;
 }
 
 .button {

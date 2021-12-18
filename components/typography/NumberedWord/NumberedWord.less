@@ -4,13 +4,13 @@
   position: relative;
   font-size: @normal-spacing;
   &.is-dark {
-    background: @semitransparent-lighter-gradient;
-    color: @bright-text;
+    &:extend(.background-semitransparent-lighter);
+    &:extend(.font-bright);
     box-shadow: 0 5px 14px -5px @light-gray;
   }
   .tag-number {
     position: absolute;
-    background-color: @primary-color;
+    &:extend(.background-primary);
     top: 0rem;
     left: 0;
     width: 18px;

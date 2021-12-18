@@ -1,5 +1,5 @@
 #servers-vertical-list {
-  height: 100%;
+  height: @full;
   width: 60px;
   min-width: 60px;
   display: inline-flex;
@@ -11,7 +11,7 @@
 
   .circle-group {
     margin: @normal-spacing 0;
-    color: @text;
+    &:extend(.font-primary);
     bottom: 0rem;
     // position: absolute;
     margin-bottom: 0.7rem;
@@ -41,12 +41,12 @@
       bottom: 2px;
       right: -2px;
       font-size: @micro-text-size;
-      background-color: @primary-color;
-      border-radius: 50%;
+      &:extend(.background-primary);
+      border-radius: @half;
       line-height: 1.2;
       padding: 0.1rem 0.27rem;
       text-align: center;
-      color: @text;
+      &:extend(.font-primary);
       font-family: @primary-font;
       border: 2px solid @darker;
     }
@@ -60,14 +60,14 @@
 
   .scroll-area {
     height: auto;
-    max-height: calc(100% - 10rem);
+    max-height: calc(@full - 10rem);
     width: 200px;
     overflow: hidden;
     display: flex;
   }
   #list-container {
     height: fit-content;
-    max-height: calc(100% - 10rem);
+    max-height: calc(@full - 10rem);
     position: relative;
     pointer-events: auto;
   }

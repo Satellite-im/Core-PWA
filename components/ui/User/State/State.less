@@ -19,15 +19,15 @@
             paint-order: stroke;
         }
         &.is-online {
-            color: @green;
+            &:extend(.font-green);
             fill: @green;
         }
         &.is-offline {
-            color: @gray;
+            &:extend(.font-gray);
             fill: @gray;
         }
         &.is-idle {
-            color: @yellow;
+            &:extend(.font-yellow);
             fill: @yellow;
         }
     }
@@ -51,12 +51,12 @@
             stroke-width: 4;
         }
         &.is-mobile {
-            color: @green;
+            &:extend(.font-green);
         }
     }
 
     #typing-badge-container {
-        background: @primary-color;
+        &:extend(.background-primary);
         width: 40px;
         height: 18px;
         position: absolute;

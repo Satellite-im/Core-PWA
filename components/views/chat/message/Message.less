@@ -2,7 +2,7 @@
   color: @text;
   .pinned-message {
     border: 1px solid @primary-color;
-    border-radius: @corner-rounding;
+    &:extend(.round-corners);
     padding: @normal-spacing;
     margin-top: @normal-spacing;
     margin-bottom: @light-spacing;
@@ -11,7 +11,7 @@
       top: -(@light-spacing);
       left: @light-spacing;
       padding: 0 @light-spacing;
-      background-color: @primary-color;
+      &:extend(.background-primary);
       border-radius: @corner-rounding-smaller;
       font-size: @mini-text-size;
       position: absolute;
@@ -44,7 +44,7 @@
     display: inline;
     align-items: center;
     strong {
-      color: @bright-text;
+      &:extend(.font-bright);
     }
     p {
       font-size: @text-size;
@@ -58,7 +58,7 @@
   }
 
   .message-hover {
-    background-color: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
   }
   .glyph {
     width: 192px;

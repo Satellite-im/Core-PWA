@@ -1,17 +1,8 @@
 .context-menu {
-  position: fixed;
-  background: @semitransparent-dark-gradient;
-  backdrop-filter: @blur;
-  color: @bright-text;
-  z-index: 999;
-  outline: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: @corner-rounding;
-  max-width: 200px;
-  min-width: 150px;
-  // border: 1px solid @primary-color;
-  // box-shadow: 0px 0px 12px @black;
+  &:extend(.background-semitransparent-dark);
+  &:extend(.blur);
+  &:extend(.font-bright);
+  &:extend(.round-corners);
   .subtitle {
     margin: 0 0 @light-spacing @light-spacing;
     font-size: @mini-text-size;
@@ -22,16 +13,12 @@
     font-size: 14px;
   }
   p:hover {
-    background: @primary-color;
-    color: @bright-text;
+    &:extend(.background-primary);
+    &:extend(.font-bright);
   }
   .quickReactions {
-    display: flex;
-    flex-flow: row nowrap;
-    margin-bottom: @light-spacing;
-    justify-content: center;
     .reaction {
-      background: @semitransparent-light-gradient;
+      &:extend(.background-semitransparent-light);
     }
     p {
       display: flex;
@@ -48,8 +35,19 @@
       border-radius: 0 @corner-rounding @corner-rounding 0;
     }
     p:hover {
-      background: @semitransparent-lighter-gradient;
+      &:extend(.background-semitransparent-lighter);
       text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color, 1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
     }
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: @light-spacing;
+    justify-content: center;
   }
+  position: fixed;
+  z-index: 999;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  max-width: 200px;
+  min-width: 150px;
 }
