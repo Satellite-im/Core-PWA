@@ -27,6 +27,8 @@
       heading="Alerts"
       :width="25"
       :height="25"
+      class="alerts-floating-container"
+      :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false">
       <ToolbarAlerts />
     </UiFloatingContainer>

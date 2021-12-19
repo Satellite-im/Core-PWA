@@ -5,16 +5,14 @@
   width: 40px;
 }
 .control:nth-child(1) {
-  width: 100%;
+  &:extend(.full-width);
 }
 .button, .button span {
-  display: inline-flex;
-  justify-content: center;
-  align-content: center;
+  &:extend(.inline-flex-content-centered);
 }
 .has-addons {
-  border: @light-border;
-  border-radius: @corner-rounding;
+  &:extend(.bordered);
+  &:extend(.round-corners);
 }
 .input.is-normal, .button.is-normal {
   height: 2.3rem;

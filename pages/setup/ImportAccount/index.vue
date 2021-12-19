@@ -1,4 +1,4 @@
-<template src="./InputAccount.html"></template>
+<template src="./ImportAccount.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -13,7 +13,7 @@ declare module 'vue/types/vue' {
 }
 
 export default Vue.extend({
-  name: 'InputAccountScreen',
+  name: 'ImportAccountScreen',
   components: {
     PlusCircleIcon,
   },
@@ -68,4 +68,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped src="./InputAccount.less"></style>
+<style lang="less" scoped src="./ImportAccount.less"></style>

@@ -1,6 +1,5 @@
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   max-width: 400px;
   display: flex;
   justify-content: center;
@@ -12,17 +11,17 @@
     margin-bottom: 25vh;
     
     .title {
-      margin: 0.25rem;
+      margin-top: 0;
     }
 
     .columns {
-      margin: 0 -0.25rem;
+      margin: 0;
 
       .column {
         padding: 0.25rem;
 
         .tag, .tag-container {
-          width: 100%;
+          &:extend(.full-width);
         }
 
         .tag {
@@ -35,6 +34,27 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 2rem;
+    margin: 0 @normal-spacing;
+    justify-content: flex-start;
+    &:extend(.full-width);
+    .phrase-body {
+      margin-top: @normal-spacing;
+      align-self: flex-start;
+      height: @full;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: @normal-spacing;
+
+
+      .is-button {
+        margin-top: auto;
+        &:extend(.full-width);
+        justify-self: flex-end;
+        margin-bottom: @normal-spacing;
+      }
+    }
+  }
+  .spacer {
+    flex: 1;
   }
 }

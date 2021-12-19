@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="horizontal-rule">
     <hr >
   </div>
 </template>

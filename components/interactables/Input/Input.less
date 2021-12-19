@@ -2,31 +2,31 @@
   text-align: left;
 }
 .is-full-width {
-  width: 100%;
+  &:extend(.full-width);
 }
 .search-box {
-  position: relative;
   &.right-icon {
     input {
       padding-right: 34px;
     }
   }
   .search-clear {
+    &:extend(.font-primary);
+    &:focus {
+      background: @background;
+    }
     position: absolute;
     font-size: @tiny-icon-size;
     top: 0;
     right: 0;
     width: 34px;
-    height: 100%;
-    background-color: transparent;
+    height: @full;
+    background: transparent;
     border-color: transparent;
-    color: @text;
     z-index: 2;
     cursor: pointer;
-    &:focus {
-      background-color: @dark;
-    }
   }
+  position: relative;
 }
 
 .input {

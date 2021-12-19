@@ -1,10 +1,4 @@
 #wallet-balance {
-  width: 100%;
-  background: @semitransparent-light-gradient;
-  border-radius: @corner-rounding;
-  padding: @normal-spacing;
-  border: @light-border;
-
   .balance-heading {
     display: inline-flex;
     .is-text {
@@ -14,7 +8,7 @@
   .wallet-body {
     display: flex;
     .title {
-      color: @green;
+      &:extend(.color-success);
       margin-top: @normal-spacing;
       margin-bottom: @light-spacing;
     }
@@ -24,7 +18,7 @@
     }
 
     .wallet-body-left, .wallet-body.right {
-      width: 100%;
+      &:extend(.full-width);
     }
 
     .wallet-body-right .is-text {
@@ -32,9 +26,6 @@
     }
 
     .inline {
-      display: inline-flex;
-      width: 100%;
-      margin-bottom: @light-spacing;
       .button {
         margin-right: @light-spacing;
       }
@@ -46,6 +37,14 @@
         margin-left: @light-spacing;
         width: 30%;
       }
+      display: inline-flex;
+      &:extend(.full-width);
+      margin-bottom: @light-spacing;
     }
   }
+  &:extend(.full-width);
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  padding: @normal-spacing;
+  &:extend(.bordered);
 }

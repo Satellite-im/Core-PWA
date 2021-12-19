@@ -1,7 +1,7 @@
 .market-place {
     display: flex;
-    height: 100%;
-    max-height: 100%;
+    height: @full;
+    max-height: @full;
     overflow: hidden;
 
     .listing-panel {
@@ -18,7 +18,7 @@
     
     .side-bar {
         width: 312px;
-        background: @semitransparent-dark-gradient;
+        &:extend(.background-semitransparent-dark);
     }
     .body-panel {
         width: 784px;

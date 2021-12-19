@@ -1,7 +1,5 @@
 .badged-icon {
-  display: inline-flex;
-  position: relative;
-  color: @primary-color;
+  &:extend(.font-accent);
   .dynamic-icon {
     filter: drop-shadow( 0px 3px 2px @primary-color);
   }
@@ -20,6 +18,15 @@
   }
 
   .tag {
+    &:not(body).is-dark {    
+      .tag-number {
+        background: @primary-color-alt;
+      }
+      background: @background;
+    }
+    &:not(body).is-primary {
+      &:extend(.background-primary);
+    }
     position: absolute;
     padding: 0.25rem;
     right: -0.25rem;
@@ -27,18 +34,7 @@
     border-radius: 2px;
     text-align: right;
     font-family: @primary-font;
-
-    &:not(body).is-dark {
-      background: @dark;
-    
-      .tag-number {
-        background: @primary-color-alt;
-      }
-    }
-    
-    &:not(body).is-primary {
-      background-color: @primary-color;
-    }
-    
   }
+  display: inline-flex;
+  position: relative;
 }

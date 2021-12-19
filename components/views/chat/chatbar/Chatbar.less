@@ -1,11 +1,11 @@
 #chatbar {
   margin-top: @light-spacing;
-  width: 100%;
+  &:extend(.full-width);
   &.has-reply {
     margin-top: 0;
   }
   .chat-label {
-    background: @primary-color;
+    &:extend(.background-primary);
     font-size: @mini-text-size;
     font-weight: bold;
     width: 1.5rem;
@@ -25,11 +25,11 @@
   }
   .green {
     background: @green;
-    color: @white;
+    &:extend(.font-white);
   }
   .red {
     background: @red;
-    color: @white;
+    &:extend(.font-white);
   }
   .control-wrap {
     display: flex;
@@ -45,7 +45,7 @@
   }
 
   .chatbar-wrap {
-    background: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
     border-radius: 40px;
     padding: (@light-spacing / 1.5) 0.75rem;
@@ -54,8 +54,7 @@
     flex-wrap: wrap;
     align-self: stretch;
     border: 1px solid transparent;
-    transition: border-radius 0.2s ease;
-    width: calc(100% - (@normal-spacing * 2));
+    width: calc(@full - (@normal-spacing * 2));
     display: inline-flex;
     align-content: center;
 
@@ -81,7 +80,7 @@
 
       .control-icon {
         &:nth-child(4) {
-          color: @red;
+          &:extend(.color-danger);
         }
       }
     }
@@ -90,10 +89,10 @@
       flex: 1;
       order: 2;
       padding: 0.25rem @light-spacing;
-      background-color: transparent;
+      background: transparent;
       border: none;
       font-family: 'Poppins';
-      color: @text;
+      &:extend(.font-primary);
       outline: none;
       resize: none;
       font-size: @text-size;
@@ -122,13 +121,8 @@
         margin-left: 0;
       }
       &:nth-child(4) {
-        color: @primary-color;
+        &:extend(.font-accent);
       }
-    }
-
-    .emoji-icon:hover {
-      transition: 200ms;
-      transform: rotate(1turn);
     }
   }
 
@@ -145,7 +139,7 @@
 
     .chatbar-wrap {
       margin: 0 @light-spacing;
-      width: calc(100% - @normal-spacing);
+      width: calc(@full - @normal-spacing);
     }
   }
 }

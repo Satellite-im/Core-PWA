@@ -15,18 +15,18 @@
     background: @splash-radial;
     margin: 0 @light-spacing;
   }
+  
 
   .controls {
-    background: @semitransparent-light-gradient;
-    border-radius: @corner-rounding;
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
     display: inline-flex;
     justify-content: center;
     align-items: center;
     justify-self: center;
     align-self: center;
     font-size: @icon-size;
-    padding: @light-spacing;
-    box-shadow: @ui-shadow;
+    &:extend(.light-padding);    box-shadow: @ui-shadow;
     pointer-events: all;
 
     .input-wrap {
@@ -36,7 +36,7 @@
       margin: 0 @light-spacing;
       cursor: pointer;
       font-size: @small-icon-size;
-      filter: @white-text-glow;
+      &:extend(.filter-glow);
 
       &:nth-child(2) {
         margin-right: @normal-spacing;
@@ -98,5 +98,10 @@
   }
   .toolbar-spacer {
     flex: 1;
+  }
+  .alerts-floating-container {
+    top: calc(@toolbar-height - @light-spacing);
+    right: @light-spacing !important;
+    left: @light-spacing !important;
   }
 }

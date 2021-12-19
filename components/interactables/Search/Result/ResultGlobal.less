@@ -10,17 +10,17 @@
     a {
       display: block;
       padding: 5px 10px;
-      color: @bright-text;
+      &:extend(.font-secondary);
       border-radius: @corner-rounding-smaller;
     }
     &.active {
       a {
-        background-color: @primary-color;
+        &:extend(.background-primary);
       }
     }
     &.disabled {
       a {
-        color: @text-muted;
+        &:extend(.font-muted);
       }
     }
   }

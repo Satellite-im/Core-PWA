@@ -23,7 +23,7 @@ export default Vue.extend({
 
 <style scopped lang="less">
 .profile-image {
-  width: 100%;
+  &:extend(.full-width);
   height: 330px;
   background-repeat: no-repeat;
   background-position: center;

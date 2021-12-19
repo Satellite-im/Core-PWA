@@ -1,28 +1,10 @@
-#app-wrap {
-  #app.mobile-app {
-    height: calc(100vh - @mobile-nav-size);
-    transition: height @animation-speed;
-  }
-  #mobile-nav {
-    transition: bottom @animation-speed;
-  }
-
-  &.is-collapsed {
-    #app.mobile-app {
-      height: 100vh;
-    }
-    #mobile-nav {
-      bottom: -@mobile-nav-size;
-    }
-  }
-}
 
 p {
   font-family: @secondary-font;
   font-size: 16px;
   word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: @full;
+  -webkit-text-size-adjust: @full;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
@@ -32,15 +14,14 @@ p {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  height: 100vh;
   overflow: hidden;
 }
 
 .sidebar {
   flex-basis: 18rem;
   flex-grow: 1;
-  height: 100%;
-  transition: @transition-all;
+  height: @full;
+  transition: transform @animation-speed;
   position: relative;
 
   .sidebar-word {
@@ -52,7 +33,6 @@ p {
     text-transform: uppercase;
     display: none;
     opacity: 0;
-    transition: @transition-all;
   }
 
   .is-collapsed {
@@ -66,9 +46,9 @@ p {
   white-space: pre-line;
   flex-basis: 0;
   flex-grow: 999;
-  height: 100%;
+  height: @full;
   font-size: @text-size;
-  transition: @transition-all;
+  transition: margin-left @animation-speed;
   .title, .subtitle {
     font-size: @text-size;
   }
@@ -78,10 +58,6 @@ p {
   .is-primary.input, .is-dark.input {
     background: @semitransparent-lightest-gradient !important;
   }
-}
-
-.menu-toggle {
-  transition: @transition-all;
 }
 
 .is-collapsed {
@@ -99,96 +75,3 @@ p {
     margin-left: calc(-@sidebar-size + 3rem);
   }
 }
-
-#app-wrap {
-  #settings {
-    height: 80vh;
-    width: 80vw;
-    display: flex;
-    overflow: hidden;
-    border-radius: @corner-rounding;
-  
-    #app.mobile-app {
-      transition: height @animation-speed;
-    }
-    #mobile-nav {
-      transition: bottom @animation-speed;
-    }
-
-    &.is-collapsed {
-      #app.mobile-app {
-        height: 80vh;
-      }
-      #mobile-nav {
-        bottom: -@mobile-nav-size;
-      }
-    }
-  
-    .with-sidebar {
-      display: flex;
-      flex-wrap: wrap;
-      height: 80vh;
-      overflow: hidden;
-    }
-  
-    .sidebar {
-      flex-basis: 18rem;
-      flex-grow: 1;
-      transition: @transition-all;
-      position: relative;
-      border: @light-border;
-      backdrop-filter: none;
-      background: @semitransparent-dark-gradient;
-      backdrop-filter: @blur;
-      margin: 0;
-      width: 20rem;
-    }
-  
-    .not-sidebar {
-      white-space: pre-line;
-      flex-basis: 0;
-      flex-grow: 999;
-      font-size: @text-size;
-      transition: @transition-all;
-      width: calc(100% - 20rem);
-      .title, .subtitle {
-        font-size: @text-size;
-      }
-      .ps {
-        padding: @normal-spacing * 2;
-      }
-    }
-  
-    .menu-toggle {
-      transition: @transition-all;
-      filter: @primary-text-glow;
-    }
-    
-    @media only screen and (max-width: @mobile-breakpoint) {
-      width: 100%;
-      height: 100%;
-      
-      &.is-open {
-        position: relative;
-        
-        .sidebar {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          z-index: @base-z-index + 1;
-        }
-      }
-      &.is-collapsed {
-        position: static;
-        .sidebar {
-          position: static;
-          z-index: 0;
-        }
-        .not-sidebar {
-          min-width: calc(100% - 3rem);
-        }
-      }
-    }
-  }
-}
-

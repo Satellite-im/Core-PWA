@@ -1,4 +1,9 @@
 .loading-updating {
+  &:extend(.round-corners);
+  .loading-text {
+    margin-left: @light-spacing;
+    font-family: 'Space Mono', monospace;
+  }
   display: inline-flex;
   flex-direction: row;
   margin: 0;
@@ -7,12 +12,7 @@
   bottom: @normal-spacing;
   right: @normal-spacing;
   background:  @primary-color;
-  border-radius: @corner-rounding;
   padding: calc(@normal-spacing / 2);
-  .loading-text {
-    margin-left: @light-spacing;
-    font-family: 'Space Mono', monospace;
-  }
 }
 
 .muted {

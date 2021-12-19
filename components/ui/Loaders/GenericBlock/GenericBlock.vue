@@ -1,7 +1,6 @@
 <template>
   <div :class="`${inverted ? 'inverted' : ''} generic-block-loader`">
-    <div v-for="i in count"
-:key="i" class="generic-block-loader-item">
+    <div v-for="i in count" :key="i" class="generic-block-loader-item">
       <div class="right">
         <div class="placeholder-item shortest" />
         <div class="placeholder-item" />
@@ -27,9 +26,9 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .generic-block-loader {
-  padding: @light-spacing;
+  &:extend(.light-padding);
   .generic-block-loader-item {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
   }
 
@@ -38,8 +37,8 @@ export default Vue.extend({
     overflow: hidden;
     width: 35px;
     height: 35px;
-    border-radius: 100%;
-    background: @light-gray;
+    border-radius: @full;
+    background: @foreground;
     margin: 0.75rem;
     margin-left: 0;
 
@@ -49,28 +48,21 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
-      width: 100%;
+      height: @full;
+      &:extend(.full-width);
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt 50%,
-        transparent 100%
+        @foreground-alt @half,
+        transparent @full
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
   .right {
-    width: 100%;
+    &:extend(.full-width);
   }
   .placeholder-item {
-    border-radius: 2px;
-    height: 30px;
-    position: relative;
-    overflow: hidden;
-    background: @dark-gray;
-    margin: 0.75rem;
-
     &.shortest {
       height: 15px;
       width: 30%;
@@ -85,46 +77,36 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
+      height: @full;
       width: 75%;
       background: linear-gradient(
         to right,
         transparent 0%,
-        @dark-gray-alt 50%,
-        transparent 100%
+        @midground-alt @half,
+        transparent @full
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
-  }
-  @keyframes load {
-    from {
-      left: -75%;
-    }
-    to {
-      left: 100%;
-    }
-  }
-  @keyframes loadreverse {
-    from {
-      left: -100%;
-    }
-    to {
-      left: 200%;
-    }
+    border-radius: 2px;
+    height: 30px;
+    position: relative;
+    overflow: hidden;
+    background: @midground;
+    margin: 0.75rem;
   }
 }
 .inverted {
   .placeholder-item,
   .placeholder-profile {
-    background: @darker;
     &::before {
       background: linear-gradient(
         to right,
         transparent 0%,
-        @darker-alt 50%,
-        transparent 100%
+        @darker-alt @half,
+        transparent @full
       );
     }
+    background: @darker;
   }
 }
 </style>

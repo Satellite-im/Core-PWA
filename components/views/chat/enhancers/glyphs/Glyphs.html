@@ -9,15 +9,12 @@
     />
   </div>
 
-  <EnhancersGlyphsNav
-    @navSelected="(val) => {filter(val)}"
-  ></EnhancersGlyphsNav>
   <div class="glyph-content hidden-scroll">
     <UiScroll verticalScroll scrollbarVisibility="scroll" class="glyph-content">
       <EnhancersGlyphsMostUsed></EnhancersGlyphsMostUsed>
 
       <div v-for="(pack, i) in filteredGlyphs">
-        <v-responsive max-height="100%">
+        <v-responsive max-height="@full">
           <UiLoadersLoadingInline :count="3" v-if="!pack.isActive" />
           <v-lazy
             v-model="pack.isActive"

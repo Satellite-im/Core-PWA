@@ -1,36 +1,28 @@
 .glyph-popular {
-  width: 100%;
+  &:extend(.full-width);
   .glyph-detail-card {
-    width: 100%;
-    max-width: 100%;
-    font-family: @primary-font;
-    border-radius: @corner-rounding;
-    overflow: hidden;
-    margin-top: @normal-spacing;
-    border: @light-border;
-    background: transparent;
+    &:extend(.full-width);
+    &:extend(.bordered);
     .bg-header {
-      width: 100%;
+      &:extend(.full-width);
       height: 5rem;
       background-position: center;
-      background-size: 100%;
+      background-size: @full;
       background-repeat: no-repeat;
       padding: @normal-spacing;
     }
     .glyph-content {
-      width: 100%;
-      padding: @normal-spacing;
-      background: @semitransparent-dark-gradient;
+      &:extend(.full-width);
+      &:extend(.background-semitransparent-dark);
       .glyph-list {
-        height: 16rem;
-        text-align: center;
-        overflow: hidden;
-        padding: @light-spacing;
         div {
           display: inline-block;
           margin: 0 @light-spacing @light-spacing 0;
         }
-      }
+        height: 16rem;
+        text-align: center;
+        overflow: hidden;
+        &:extend(.light-padding);      }
       .glyph-content-text {
         .subtitle,
         .is-text {
@@ -43,6 +35,13 @@
           margin-bottom: 2rem;
         }
       }
+      padding: @normal-spacing;
     }
+    max-width: @full;
+    font-family: @primary-font;
+    &:extend(.round-corners);
+    overflow: hidden;
+    margin-top: @normal-spacing;
+    background: transparent;
   }
 }

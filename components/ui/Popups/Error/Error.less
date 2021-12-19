@@ -8,24 +8,24 @@
 }
 
 .is-rounded.circle {
-  background-color: @light-gray !important;
+  background: @foreground !important;
 }
 
 .label {
   font-size: @text-size;
-  color: @bright-text !important;
+  color: @secondary-text !important;
 }
 .image {
   max-width: 175px;
 }
 .column.align {
+  .set-photo-title {
+    margin-bottom: 20px;
+  }
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  .set-photo-title {
-    margin-bottom: 20px;
-  }
 }
 
 .input-file {
@@ -33,10 +33,10 @@
 }
 
 .submit-container {
+  &:extend(.full-width);
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
-  width: 100%;
 }
 
 .input-container {
@@ -44,37 +44,37 @@
 }
 
 .cropper-mask {
+  &:extend(.full-width);
   position: fixed;
-  background-color: @light-gray !important;
+  background: @foreground !important;
   opacity: 0.6;
   z-index: 9;
-  height: 100%;
-  width: 100%;
+  height: @full;
   top: 0;
   left: 0;
 }
 
 .red {
-  color: @red;
+  &:extend(.color-danger);
 }
 
 .modal-body {
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
+  height: @full;
 }
 
 .custom-modal-content {
-  width: 100%;
+  &:extend(.full-width);
 }
 
 @media (max-width: 768px) {
   .create-error-container {
-    width: 100%;
+    &:extend(.full-width);
   }
 
   .custom-modal-content {
-    height: calc(100% - 90px);
+    height: calc(@full - 90px);
     overflow-y: scroll;
   }
 
@@ -86,10 +86,7 @@
   }
 
   .create-server-btn {
-    // position: absolute;
-    // bottom: 1.5rem;
-    // right: 1.5rem;
-    width: 100%;
+    &:extend(.full-width);
     height: 53px;
   }
 }
