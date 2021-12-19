@@ -18,7 +18,7 @@ html {
 
 ::selection {
   &:extend(.background-primary);
-  &:extend(.font-bright);
+  &:extend(.font-secondary);
 }
 
 .hidden-scroll {
@@ -57,7 +57,7 @@ html {
 
 .toasted-container .toasted {
   background: @primary-color !important;
-  color: @bright-text !important;
+  color: @secondary-text !important;
   font-family: @primary-font;
 }
 .loading-bar {
@@ -109,11 +109,11 @@ html {
     &:extend(.glow-primary);
     border: none !important;
     outline: none;
-    color: @bright-text !important;
+    color: @secondary-text !important;
 
     &:hover, &:focus, &:active {
       &:extend(.background-primary-gradient);
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       border: none;
       &:extend(.glow-primary);
     }
@@ -124,7 +124,7 @@ html {
     &:extend(.glow-primary);
   
     &:hover, &:focus {
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       &:extend(.glow-primary);
     }
   }
@@ -140,12 +140,12 @@ html {
   }
 
   &.is-danger.is-outlined {
-    &:extend(.font-red);
+    &:extend(.color-danger);
     &:extend(.glow-danger);
 
     &:hover, &:focus {
       background: @danger-gradient;
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       &:extend(.glow-danger);
     }
   }
@@ -162,28 +162,28 @@ button {
 
 .button.is-dark.is-outlined {
   &:extend(.font-primary);
-  border-color: @light-gray;
+  border-color: @foreground;
 
   &:hover, &:focus {
-    background: @light-gray;
-    border-color: @light-gray;
-    &:extend(.font-bright);
+    background: @foreground;
+    border-color: @foreground;
+    &:extend(.font-secondary);
   }
 
   &.active {
     &:extend(.background-primary);
-    border-color: @light-gray;
-    &:extend(.font-bright);
+    border-color: @foreground;
+    &:extend(.font-secondary);
   }
 }
 
 .button.is-dark {
   &:extend(.background-semitransparent-lighter);
-  &:extend(.font-bright);
+  &:extend(.font-secondary);
 }
 .button.is-dark:hover {
-  background: @light-gray-alt;
-  &:extend(.font-bright);
+  background: @foreground-alt;
+  &:extend(.font-secondary);
 }
 
 // Inputs
@@ -201,7 +201,7 @@ button {
     background: @semitransparent-dark-gradient !important;
     &:extend(.blur-less);
     font-family: @primary-font !important;
-    color: @bright-text !important;
+    color: @secondary-text !important;
     z-index: 100000;
   }
 }
@@ -214,7 +214,7 @@ button {
   }
 }
 .select select{
-  background: @dark-gray;
+  background: @midground;
   &:extend(.font-primary);
 }
 ::placeholder {
@@ -237,20 +237,20 @@ button {
   outline: none;
   &:extend(.glow-primary);
   &::after, &::before {
-    border-color: @bright-text;
+    border-color: @secondary-text;
   }
 }
 
 .select.is-primary:not(:hover)::after,
 .select:not(.is-multiple):not(.is-loading):hover::after  {
-  border-color: @bright-text;
+  border-color: @secondary-text;
   z-index: @base-z-index;
 }
 
 .select.is-primary:hover::after,
 .select.is-primary:active::after,
 .select.is-primary select:hover  {
-  border-color: @bright-text;
+  border-color: @secondary-text;
 }
 
 
@@ -295,7 +295,7 @@ code {
 }
 
 strong {
-  &:extend(.font-bright);
+  &:extend(.font-secondary);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

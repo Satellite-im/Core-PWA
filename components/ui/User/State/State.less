@@ -14,12 +14,12 @@
         align-content: center;
 
         circle {
-            stroke: @dark-gray;
+            stroke: @midground;
             stroke-width: 5;
             paint-order: stroke;
         }
         &.is-online {
-            &:extend(.font-green);
+            &:extend(.color-success);
             fill: @green;
         }
         &.is-offline {
@@ -27,7 +27,7 @@
             fill: @gray;
         }
         &.is-idle {
-            &:extend(.font-yellow);
+            &:extend(.color-warning);
             fill: @yellow;
         }
     }
@@ -40,18 +40,18 @@
         text-shadow: 0 0 3px #000;
 
         rect {
-            stroke: @dark-gray;
+            stroke: @midground;
             stroke-width: 4;
             paint-order: stroke;
             fill: @green;
         }
         line {
             fill: #000;
-            stroke: @dark-gray;
+            stroke: @midground;
             stroke-width: 4;
         }
         &.is-mobile {
-            &:extend(.font-green);
+            &:extend(.color-success);
         }
     }
 
@@ -64,6 +64,6 @@
         left: 18px;
         padding: 5px;
         border-radius: 10px;
-        border: 3px solid @dark-gray;
+        border: 3px solid @midground;
     }
 }

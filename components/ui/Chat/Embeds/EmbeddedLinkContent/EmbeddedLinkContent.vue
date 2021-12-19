@@ -199,7 +199,7 @@ export default Vue.extend({
   &:extend(.font-muted);
   cursor: pointer;
   &:hover {
-    &:extend(.font-bright);
+    &:extend(.font-secondary);
   }
 }
 </style>

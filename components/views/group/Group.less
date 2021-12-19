@@ -1,17 +1,17 @@
 .group {
   .status {
     path {
-      stroke: @dark-gray;
+      stroke: @midground;
       stroke-width: 100;
     }
     &.is-online {
-      &:extend(.font-green);
+      &:extend(.color-success);
     }
     &.is-offline {
       &:extend(.font-gray);
     }
     &.is-idle {
-      &:extend(.font-yellow);
+      &:extend(.color-warning);
     }
     position: absolute;
     top: 33.5px;

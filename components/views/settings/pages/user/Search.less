@@ -20,7 +20,7 @@
     flex-grow: 0;
     padding: 1px @xlight-spacing;
     border-radius: @corner-rounding-xxlarge;
-    background: @light-gray;
+    background: @foreground;
     margin-right: @xlight-spacing;
 
     .text {
@@ -88,7 +88,7 @@
   &-result {
     &:extend(.full-width);
     background: @darker;
-    border: 1px solid @dark;
+    border: 1px solid @background;
     position: absolute;
     
     li {
@@ -106,7 +106,7 @@
       }
 
       &:hover, &.active {
-        background: @light-gray;
+        background: @foreground;
       }
     }
   }

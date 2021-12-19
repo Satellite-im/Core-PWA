@@ -40,7 +40,7 @@ export default Vue.extend({
       background: linear-gradient(
         to right,
         transparent 0%,
-        @dark-gray-alt @half,
+        @midground-alt @half,
         transparent @full
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -81,7 +81,7 @@ export default Vue.extend({
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt @half,
+        @foreground-alt @half,
         transparent @full
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -90,7 +90,7 @@ export default Vue.extend({
     height: 30px;
     position: relative;
     overflow: hidden;
-    background: @light-gray;
+    background: @foreground;
     margin: 0.75rem;
   }
 }

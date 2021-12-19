@@ -20,7 +20,7 @@ fieldset[disabled] .multiselect {
   height: 16px;
   border-radius: @full;
   border: 2px solid transparent;
-  border-top-color: @bright-text;
+  border-top-color: @secondary-text;
   box-shadow: 0 0 0 1px transparent;
   z-index: @base-z-index + 4;
 }
@@ -125,7 +125,7 @@ fieldset[disabled] .multiselect {
   &:extend(.round-corners);
   border: 1px solid @primary-color;
   &:extend(.background-primary-gradient);
-  &:extend(.font-bright);
+  &:extend(.font-secondary);
   font-size: @text-size;
   line-height: 1;
   border-radius: 1rem;
@@ -139,7 +139,7 @@ fieldset[disabled] .multiselect {
   &:extend(.font-white);
   font-size: @mini-text-size;
   line-height: 1.1;
-  background: @light-gray;
+  background: @foreground;
   white-space: nowrap;
   overflow: hidden;
   max-width: @full;
@@ -201,14 +201,14 @@ fieldset[disabled] .multiselect {
   left: 11px;
   top: 8px;
   &:extend(.font-white);
-  border-color: @bright-text;
+  border-color: @secondary-text;
   border-style: solid;
   transform: rotate(45deg);
   border-width: 0 2px 2px 0;
   content: '';
 }
 .multiselect__placeholder {
-  &:extend(.font-bright);
+  &:extend(.font-secondary);
   display: inline-block;
   margin-bottom: 5px;
   padding-top: 4px;
@@ -220,7 +220,7 @@ fieldset[disabled] .multiselect {
 .multiselect__content-wrapper {
   position: absolute;
   display: block;
-  background: @dark-gray;
+  background: @midground;
   &:extend(.full-width);
   max-height: 240px;
   overflow: auto;
@@ -270,17 +270,17 @@ fieldset[disabled] .multiselect {
   line-height: 16px;
 }
 .multiselect__option--highlight {
-  background: @light-gray-alt;
+  background: @foreground-alt;
   outline: none;
   &:extend(.font-primary);
 }
 .multiselect__option--highlight:after {
   content: attr(data-select);
-  background: @light-gray-alt;
+  background: @foreground-alt;
   &:extend(.font-primary);
 }
 .multiselect__option--selected {
-  background: @light-gray-alt;
+  background: @foreground-alt;
   &:extend(.font-primary);
 }
 .multiselect__option--selected:after {
@@ -288,11 +288,11 @@ fieldset[disabled] .multiselect {
   &:extend(.font-gray);
 }
 .multiselect__option--selected.multiselect__option--highlight {
-  background: @light-gray-alt;
+  background: @foreground-alt;
   &:extend(.font-primary);
 }
 .multiselect__option--selected.multiselect__option--highlight:after {
-  background: @light-gray-alt;
+  background: @foreground-alt;
   content: attr(data-deselect);
   &:extend(.font-primary);
 }
@@ -307,7 +307,7 @@ fieldset[disabled] .multiselect {
   pointer-events: none;
 }
 .multiselect__option--group {
-  background: @dark-gray-alt;
+  background: @midground-alt;
   &:extend(.font-primary);
 }
 .multiselect__option--group.multiselect__option--highlight {

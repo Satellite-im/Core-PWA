@@ -24,11 +24,11 @@ export default Vue.extend({
 .tag {
   &:extend(.background-primary-gradient);
   &:extend(.glow-primary);
-  color: @bright-text !important;
+  color: @secondary-text !important;
 }
 .tag-inverted {
-  &:extend(.font-bright);
-  background: @light-gray !important;
+  &:extend(.font-secondary);
+  background: @foreground !important;
   box-shadow: none;
 }
 </style>

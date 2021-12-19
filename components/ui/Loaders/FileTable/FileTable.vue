@@ -77,7 +77,7 @@ export default Vue.extend({
 
   thead {
     th {
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       border-bottom-width: 1px;
       border-bottom-color: @text-muted;
     }
@@ -87,7 +87,7 @@ export default Vue.extend({
     td {
       padding: 0.75rem;
       &:extend(.font-primary);
-      border-bottom-color: @light-gray;
+      border-bottom-color: @foreground;
     }
   }
 
@@ -163,7 +163,7 @@ export default Vue.extend({
     background: linear-gradient(
       to right,
       transparent 0%,
-      @dark-gray-alt @half,
+      @midground-alt @half,
       transparent @full
     );
     animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -173,6 +173,6 @@ export default Vue.extend({
   height: 18px;
   position: relative;
   overflow: hidden;
-  background: @dark-gray;
+  background: @midground;
 }
 </style>

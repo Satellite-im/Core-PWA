@@ -18,10 +18,10 @@
     &:extend(.font-muted);
     & .group-item {
       &:hover {
-        &:extend(.font-bright);
+        &:extend(.font-secondary);
       }
       &.active {
-        &:extend(.font-bright);
+        &:extend(.font-secondary);
         border-color: @primary-color;
       }
       padding: 5px 10px;
@@ -29,7 +29,7 @@
   }
   &-filters {    
     .date-input {
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       &:extend(.background-primary-gradient);
       &:extend(.glow-primary);
       border-radius: 1rem;
@@ -42,11 +42,11 @@
       &:extend(.full-width);
 
       &::placeholder {
-        color: @bright-text !important;
+        color: @secondary-text !important;
       }
     }
     .date-icon {
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       position: absolute;
       top: 10px;
       left: 20px;

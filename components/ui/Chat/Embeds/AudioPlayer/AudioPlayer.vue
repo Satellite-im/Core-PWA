@@ -38,7 +38,7 @@ export default Vue.extend({
   cursor: pointer;
 
   &:hover {
-    &:extend(.font-bright);
+    &:extend(.font-secondary);
   }
 }
 </style>

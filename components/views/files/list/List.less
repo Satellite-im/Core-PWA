@@ -2,7 +2,7 @@
 .table {
   thead {
     th {
-      &:extend(.font-bright);
+      &:extend(.font-secondary);
       border-bottom-width: 1px;
       border-bottom-color: @text-muted;
     }
@@ -11,7 +11,7 @@
   tr {
     td {
       &:extend(.font-primary);
-      border-bottom-color: @light-gray;
+      border-bottom-color: @foreground;
     }
   }
 
@@ -45,7 +45,7 @@
   }
 
   .feather-archive {
-    &:extend(.font-red);
+    &:extend(.color-danger);
   }
 
   .feather-file {

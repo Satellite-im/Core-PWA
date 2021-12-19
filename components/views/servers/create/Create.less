@@ -8,12 +8,12 @@
 }
 
 .is-rounded.circle {
-  background: @light-gray !important;
+  background: @foreground !important;
 }
 
 .label {
   font-size: @text-size;
-  color: @bright-text !important;
+  color: @secondary-text !important;
 }
 .image {
   max-width: 175px;
@@ -45,7 +45,7 @@
 
 .cropper-mask {
   position: fixed;
-  background: @light-gray !important;
+  background: @foreground !important;
   opacity: 0.6;
   z-index: 9;
   height: @full;
@@ -55,7 +55,7 @@
 }
 
 .red {
-  &:extend(.font-red);
+  &:extend(.color-danger);
 }
 
 .modal-body {

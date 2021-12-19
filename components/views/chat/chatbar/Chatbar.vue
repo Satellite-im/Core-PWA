@@ -376,7 +376,7 @@ export default Vue.extend({
     font-size: @text-size !important;
     .chatbar-tag {
       &:extend(.round-corners);
-      background: @dark-gray;
+      background: @midground;
       padding: @xlight-spacing;
     }
   }

@@ -55,7 +55,7 @@ export default Vue.extend({
     &:extend(.font-muted);
     margin-left: auto;
     &.is-error {
-      &:extend(.font-red);
+      &:extend(.color-danger);
     }
   }
   &.is-error {
@@ -63,7 +63,7 @@ export default Vue.extend({
 
     .control-icon {
       &:nth-child(4) {
-        &:extend(.font-red);
+        &:extend(.color-danger);
       }
     }
   }
