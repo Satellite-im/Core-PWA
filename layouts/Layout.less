@@ -31,6 +31,31 @@
   display: flex;
   user-select: none;
   height: var(--app-height);
+
+  .swiper {
+    width: 100%;
+    overflow: unset;
+    .swiper-wrapper {
+      box-sizing: border-box;
+      .swiper-slide {
+        flex-shrink: unset;
+      }
+      .sidebar-container.swiper-slide-active {
+        width: @sidebar-size !important;
+      }
+      .sidebar-container.swiper-slide-prev {
+        width: 0 !important;
+      }
+
+      .dynamic-content.swiper-slide-active {
+        width: calc(100vw - 60px) !important;
+      }
+      .dynamic-content.swiper-slide-next {
+        width: calc(100vw - @sidebar-size - 60px) !important;
+      }
+    }
+  }
+
   .dynamic-content {
     width: 100%;
     position: relative;

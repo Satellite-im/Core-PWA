@@ -7,8 +7,6 @@
   >
     <div
       id="app"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
         asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
       } ${selectedGroup ? 'group' : 'direct'} ${
@@ -21,47 +19,49 @@
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <Sidebar
-        :toggle="() => ($data.sidebar = !$data.sidebar)"
-        :users="friends.all"
-        :groups="$mock.groups"
-      />
-      <div
-        :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
-      >
-        <Toolbar
-          id="toolbar"
-          :server="recipient || $mock.users[0]"
-          :user="$mock.users[0]"
-        />
-        <Media
-          v-if="$device.isMobile"
-          :fullscreen="ui.fullscreen"
-          :users="$mock.callUsers"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="6"
-        />
-        <Media
-          v-else
-          :fullscreen="ui.fullscreen"
-          :users="$mock.callUsers"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="20"
-        />
-        <UiChatScroll
-          :contents="ui.messages"
-          :prevent-scroll-offset="500"
-          :class="media.activeCall ? 'media-open' : ''"
-          enable-wrap
-        >
-          <Nuxt />
-        </UiChatScroll>
-        <Enhancers />
-        <WalletMini v-if="ui.modals.walletMini" />
-        <ChatbarCommandsPreview :message="ui.chatbarContent" />
-        <ChatbarReply v-if="recipient" />
-        <Chatbar :recipient="recipient" />
-      </div>
+      <swiper class="swiper" :options="swiperOptions" ref="swiper">
+        <swiper-slide class="sidebar-container">
+          <Sidebar
+            :users="friends.all"
+            :groups="$mock.groups"
+            :showMenu="toggleMenu"
+          />
+        </swiper-slide>
+        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+          <Toolbar
+            id="toolbar"
+            :server="recipient || $mock.users[0]"
+            :user="$mock.users[0]"
+          />
+          <Media
+            v-if="$device.isMobile"
+            :fullscreen="ui.fullscreen"
+            :users="$mock.callUsers"
+            :max-viewable-users="10"
+            :fullscreen-max-viewable-users="6"
+          />
+          <Media
+            v-else
+            :fullscreen="ui.fullscreen"
+            :users="$mock.callUsers"
+            :max-viewable-users="10"
+            :fullscreen-max-viewable-users="20"
+          />
+          <UiChatScroll
+            :contents="ui.messages"
+            :prevent-scroll-offset="500"
+            :class="media.activeCall ? 'media-open' : ''"
+            enable-wrap
+          >
+            <Nuxt />
+          </UiChatScroll>
+          <Enhancers />
+          <WalletMini v-if="ui.modals.walletMini" />
+          <ChatbarCommandsPreview :message="ui.chatbarContent" />
+          <ChatbarReply v-if="recipient" />
+          <Chatbar :recipient="recipient" />
+        </swiper-slide>
+      </swiper>
       <GroupAside
         :toggle="() => ($data.asidebar = !$data.asidebar)"
         :selected-group="
@@ -80,14 +80,34 @@ import { mapState } from 'vuex'
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import Layout from '~/components/mixins/Layouts/Layout'
 
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css'
+
 export default Vue.extend({
   name: 'ChatLayout',
   mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
+  components: {
+    Swiper,
+    SwiperSlide
+  },
   data() {
     return {
       sidebar: true,
       asidebar: !this.$device.isMobile,
+      menuOpened: false,
+      swiperOption: {
+        initialSlide: 1,
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        slideToClickedSlide: true,
+        on: {
+          slideChange() {
+            console.log("active: ", this.swiper.activeIndex)
+            this.$data.menuOpened = this.swiper.activeIndex === 0
+          }
+        }
+      }
     }
   },
   computed: {
@@ -107,6 +127,9 @@ export default Vue.extend({
             (friend) => friend.address === this.$route.params.address,
           )
       return recipient
+    },
+    swiper() {
+      return this.$refs.swiper.$swiper
     }
   },
   mounted() {
@@ -121,6 +144,13 @@ export default Vue.extend({
     window.addEventListener('resize', appHeight)
     appHeight()
   },
+  methods: {
+    toggleMenu() {
+      this.$data.menuOpened
+        ? this.swiper.slideNext()
+        : this.swiper.slidePrev()
+    }
+  }
 })
 </script>
 
