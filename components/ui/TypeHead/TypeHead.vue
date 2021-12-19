@@ -55,7 +55,7 @@ export default Vue.extend({
      */
     maxShowCounts: {
       type: Number,
-      default: 10,
+      default: 8,
       required: false,
     },
   },
@@ -84,13 +84,15 @@ export default Vue.extend({
       if (!this.isFocus) this.isFocus = true
 
       this.browseIndex = -1
-      this.searchList = this.list.filter((item: any) =>
-        this.label
-          ? item[this.label]
-              .toLowerCase()
-              .indexOf(this.searchText.toLowerCase()) === 0
-          : item.toLowerCase().indexOf(this.searchText.toLowerCase()) === 0,
-      )
+      this.searchList = this.list
+        .filter((item: any) =>
+          this.label
+            ? item[this.label]
+                .toLowerCase()
+                .indexOf(this.searchText.toLowerCase()) === 0
+            : item.toLowerCase().indexOf(this.searchText.toLowerCase()) === 0,
+        )
+        .slice(0, this.maxShowCounts)
 
       this.searchList.every((item: any, index) => {
         const compare = (this.label ? item[this.label] : item) as string
