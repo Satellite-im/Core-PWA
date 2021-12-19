@@ -53,7 +53,9 @@ export default Vue.extend({
     },
   },
   mounted() {
-    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let findItem = this.setChatText.find(
+      (item: any) => item.userId === this.$props.recipient.address,
+    )
     let message = findItem ? findItem.value : ''
 
     const messageBox = this.$refs.messageuser as HTMLElement
@@ -67,7 +69,7 @@ export default Vue.extend({
       },
       get() {
         return this.chat.chatTexts
-      }
+      },
     },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
@@ -254,7 +256,7 @@ export default Vue.extend({
 
       this.setChatText = {
         userId: this.$props.recipient.address,
-        value: messageBox.innerHTML
+        value: messageBox.innerHTML,
       }
     },
     /**
@@ -350,7 +352,9 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let findItem = this.setChatText.find(
+        (item: any) => item.userId === this.$props.recipient.address,
+      )
       let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
