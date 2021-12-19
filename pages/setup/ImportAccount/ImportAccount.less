@@ -37,8 +37,6 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0;
-    width: @full;
     .columns {
       margin: 0;
     }
@@ -47,15 +45,14 @@
         margin-top: auto;
         width: unset;
         min-width: @full;
-        &:extend(.full-width);
       }
       margin: 0;
-      width: unset;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-self: flex-start;
       height: 100%;
-      padding: 0 @normal-spacing;
     }
+    padding-bottom: @normal-spacing;
   }
 }

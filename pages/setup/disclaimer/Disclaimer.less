@@ -20,19 +20,16 @@
   justify-content: center;
 }
 @media only screen and (max-width: @mobile-breakpoint) {
-  .disclaimer-body {
-    margin-top: @normal-spacing;
-  }
-  .buttons {
-    button {
-      margin-top: @light-spacing;
-      width: @full !important;
+  .container {
+    .buttons {
+      button {
+        margin-top: @light-spacing;
+        width: @full !important;
+      }
+      display: inline-block;
+      margin-top: auto;
+      justify-self: flex-end;
     }
-    display: inline-block;
-    margin-top: auto;
-    justify-self: flex-end;
-    &:nth-child(2) {
-      margin-bottom: @normal-spacing;
-    }
+    padding: 0 @normal-spacing;
   }
 }
