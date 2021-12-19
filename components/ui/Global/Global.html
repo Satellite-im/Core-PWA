@@ -32,7 +32,7 @@
   </UiModal>
   <!-- TODO: Move to hounddog -->
   <UiModal
-    v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
     nopad
   >
   <!-- TODO: Move to hounddog -->

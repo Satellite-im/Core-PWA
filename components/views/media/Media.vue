@@ -41,6 +41,9 @@ export default Vue.extend({
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
         : this.users.slice(0, this.maxViewableUsers)
     },
+    activeCall() {
+      return this.$store.state.friends.all.some((friend: any) => friend.address === this.$store.state.webrtc.activeCall)
+    },
     ...mapState(['audio']),
   },
   watch: {

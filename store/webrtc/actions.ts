@@ -85,7 +85,7 @@ export default {
 
     peer?.call.on('STREAM', (data) => {
       const $StreamManager: StreamManager = Vue.prototype.$StreamManager
-      $StreamManager.addLocalStream(data.peerId, data.stream)
+      $StreamManager.addRemoteStream(data.peerId, data.stream)
       commit('webrtc/setRemoteStream', data.stream, { root: true })
     })
 
@@ -111,6 +111,8 @@ export default {
     const $StreamManager: StreamManager = Vue.prototype.$StreamManager
     // @ts-ignore
     $StreamManager.addLocalStream(data.id, data.stream)
+    // @ts-ignore
+    $StreamManager.toggleLocalStreams(data.audio, data.video)
     // @ts-ignore
     commit('toggleActiveCall', data.id)
   },

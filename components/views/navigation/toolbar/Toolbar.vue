@@ -62,7 +62,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'search']),
+    ...mapState(['ui', 'search', 'audio', 'video']),
     showSearchResult: {
       set(state) {
         this.$store.commit('ui/showSearchResult', state)
@@ -126,7 +126,7 @@ export default Vue.extend({
       })
     },
     async call(hasVideo: boolean) {
-      const identifier = this.$store.state.friends.all.find((f: any) => f.activeChat ).address
+      const identifier = this.$Hounddog.getActiveFriend(this.$store.state.friends).address
       // Trying to call the same user while call is already active
       if (identifier === this.$store.state.webrtc.activeCall) {
         return
@@ -155,7 +155,7 @@ export default Vue.extend({
         peer?.call.addTransceiver('video')
       }
 
-      this.$store.dispatch('webrtc/makeCall', { id: identifier, stream: stream })
+      this.$store.dispatch('webrtc/makeCall', { id: identifier, stream: stream, audio: this.audio.muted, video: !this.video.disabled })
     }
   },
 })

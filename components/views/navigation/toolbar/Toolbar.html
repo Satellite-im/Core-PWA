@@ -36,7 +36,7 @@
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Call"
       v-if="server"
-      @click="() => { call(false) }"
+      @click="() => call(false)"
     >
       <phone-call-icon size="1x" class="control-icon" />
     </div>
@@ -44,7 +44,7 @@
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       data-tooltip="Video"
       v-if="server"
-      @click="() => { call(true) }"
+      @click="() => call(true)"
     >
       <video-icon size="1x" class="control-icon" />
     </div>
