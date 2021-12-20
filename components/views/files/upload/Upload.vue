@@ -148,6 +148,7 @@ export default Vue.extend({
      */
     cancelUpload() {
       this.$data.files = []
+      document.body.style.cursor= PropCommonEnum.DEFAULT
       this.$data.uploadStatus = false
       this.$data.count_error = false
     },
@@ -161,21 +162,18 @@ export default Vue.extend({
         this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
         file: file,
-      }).then().catch(error => {
-          document.body.style.cursor= PropCommonEnum.DEFAULT
-          Error(error)
-        })
+      })
       )
-      Promise.all(sendFiles).then(() => {
+      Promise.allSettled(sendFiles).then(() => {
         this.cancelUpload()
         document.body.style.cursor= PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
         this.disabledButton = false
-        }
-      ).catch(error => {
+      }).catch(error => {
         document.body.style.cursor= PropCommonEnum.DEFAULT
         Error(error)
       })
+
     },
   },
 })

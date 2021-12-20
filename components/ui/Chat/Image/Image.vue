@@ -29,7 +29,6 @@ export default Vue.extend({
   },
   computed: {
     getFileSize() {
-      console.log(this.url, this.image)
       return this.bytesToSize(this.image.payload.size)
     },
   },
