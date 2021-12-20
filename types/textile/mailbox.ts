@@ -16,7 +16,7 @@ import {
   glyphMessage,
   reactionMessage,
   messageEncoder,
-  mediaMessage,
+  mediaMessage, imageMessage,
 } from '~/libraries/Textile/encoders'
 
 /**
@@ -34,6 +34,7 @@ export type DecryptedMessage = TypeOf<typeof decryptedMessage>
 export type ReplyMessage = TypeOf<typeof replyMessage>
 export type ReactionMessage = TypeOf<typeof reactionMessage>
 export type FileMessage = TypeOf<typeof fileMessage>
+export type ImageMessage = TypeOf<typeof imageMessage>
 export type TextMessage = TypeOf<typeof textMessage>
 export type MediaMessage = TypeOf<typeof mediaMessage>
 export type GlyphMessage = TypeOf<typeof glyphMessage>
@@ -49,6 +50,7 @@ export interface MTypes {
   reply: ReplyMessage
   reaction: ReactionMessage
   file: FileMessage
+  image: ImageMessage
   text: TextMessage
   glyph: GlyphMessage
 }
@@ -66,6 +68,7 @@ export interface MessagePayloads {
   reply: Omit<ReplyMessage, 'id' | 'at' | 'from'>
   reaction: Omit<ReactionMessage, 'id' | 'at' | 'from'>
   file: Omit<FileMessage, 'id' | 'at' | 'from'>
+  image: Omit<ImageMessage, 'id' | 'at' | 'from'>
   text: Omit<TextMessage, 'id' | 'at' | 'from'>
   glyph: Omit<GlyphMessage, 'id' | 'at' | 'from'>
 }
@@ -111,7 +114,7 @@ export interface ConversationQuery {
  * message id, replies and reactions are indexed by the message id they are referring to.
  */
 export type MessagesTracker = {
-  [key: string]: FileMessage | TextMessage | GlyphMessage
+  [key: string]: FileMessage | TextMessage | GlyphMessage | ImageMessage
 }
 export type RepliesTracker = { [key: string]: ReplyMessage[] }
 export type ReactionsTracker = { [key: string]: ReactionMessage[] }

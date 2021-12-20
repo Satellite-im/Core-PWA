@@ -12,6 +12,9 @@
     font-size: @larger-icon-size;
     width: unset;
   }
+  //.loading-info{
+  //  display: block;
+  //}
   .loading-bar{
     max-width: @half;
   }
@@ -35,6 +38,10 @@
         max-height: 10vh;
         border-radius: 2px;
         &:extend(.full-width);
+      }
+
+      .loading-bar{
+        max-width: 100%;
       }
 
       .img-wrapper {

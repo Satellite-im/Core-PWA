@@ -1,6 +1,7 @@
 <template src="./Image.html" />
 <script lang="ts">
-import Vue from 'vue'
+import Vue, {PropType} from 'vue'
+import {FileMessage, ImageMessage} from "~/types/textile/mailbox";
 
 export default Vue.extend({
   props: {
@@ -8,21 +9,43 @@ export default Vue.extend({
       type: String,
       default: 'Image',
     },
+    url: {
+      type: String,
+      default: 'url',
+    },
     full: {
       type: Boolean,
       default: false,
     },
-    source: {
-      type: String,
-      default: '404.png',
+    image: {
+      type: Object as PropType<ImageMessage>
     },
   },
   data() {
     return {
       showfull: false,
+      fileSize: '',
     }
   },
+  computed: {
+    getFileSize() {
+      console.log(this.url, this.image)
+      return this.bytesToSize(this.image.payload.size)
+    },
+  },
   methods: {
+    /**
+     * @method bytesToSize
+     * @description converts bytes to display easily readable file size
+     * @param bytes bytes of current file
+     * @example bytesToSize(this.file.size)
+     */
+    bytesToSize (bytes: number) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes === 0) return '0 Bytes'
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
+    },
     /**
      * @method openImage DocsTODO
      * @description

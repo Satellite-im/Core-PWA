@@ -111,6 +111,7 @@ export default class BucketManager {
     };
     // Store the index in the Bucket (or in the Thread later)
     const buf = Buffer.from(JSON.stringify(index, null, 2));
+    console.log(buf)
     await this.buckets.pushPath(this.bucketKey, path, buf);
   }
 

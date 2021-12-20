@@ -13,14 +13,14 @@
     </div>
     <template v-else>
       <div class="file-preview-item" v-for="item in files">
-        <div class="img-wrapper">
+        <div class="img-wrapper" v-if="item.file.type === 'image'">
           <img
             v-if="isEmbedableImage(item.file.name)"
             :src="item.url"
             v-bind:class="{ 'img-blur': item.nsfw.status  }"
           />
-          <UiLoadersLogoLoader v-if="!item.url" :size="48" />
         </div>
+        <UiLoadersLogoLoader v-if="!item.url" :size="48" />
         <file-icon
           size="1x"
           v-if="!isEmbedableImage(item.file.name)"
@@ -44,6 +44,22 @@
           <div v-else>
             <TypographySubtitle :size="6" :text="item.file.type" />
             <TypographySubtitle :size="6" :text="$filesize(item.file.size)" />
+
+            <br>
+            <div v-for="itemProgress in currentProgress">
+              <div v-if="itemProgress.name === item.file.name">
+            <div v-if="itemProgress.progress !== 100">
+              <UiProgress
+                :progress="itemProgress.progress"
+                type="loading"
+                class="loading-bar"/>
+              <TypographySubtitle :text="`${itemProgress.progress.toFixed(2)}% Uploaded...`"/>
+            </div>
+            <div v-if="itemProgress.finished">
+              <file-plus-icon/>
+            </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -56,17 +72,9 @@
           :action="cancelUpload"
         />
       </div>
-      <div v-if="currentProgress !== 0">
-        <UiProgress
-          :progress="currentProgress"
-          type="loading"
-        class="loading-bar"/>
-        <br>
-        <span class="label white">{{currentProgress.toFixed(2)}}% Uploaded...</span>
-      </div>
     </template>
   </div>
-  <input :type="editable ? `file` : `hidden`" id="quick-upload" @change="handleFile" />
+  <input :type="editable ? `file` : `hidden`" id="quick-upload" @change="handleFile" multiple/>
   <label
     v-if="type == 'quick'"
     for="quick-upload"
