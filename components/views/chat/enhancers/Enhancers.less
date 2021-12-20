@@ -4,9 +4,10 @@
     flex: 1;
     &:extend(.full-width);
     height: calc(@full - 3rem);
-  }
-  #container::-webkit-scrollbar {
-    display: none;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   .navbar {
     &:extend(.full-width);
@@ -32,8 +33,7 @@
     }
   }
   height: @enhancers-height;
-  min-width: @enhancers-width;
-  max-width: @enhancers-width;
+  width: @enhancers-width;
   position: absolute;
   margin-left: @normal-spacing;
   right: @normal-spacing !important;
@@ -97,6 +97,6 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #enhancers {
-    width: calc(100vw - @normal-spacing*2);
+    width: calc(@full - @normal-spacing*2);
   }
 }
