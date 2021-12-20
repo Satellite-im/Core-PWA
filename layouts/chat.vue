@@ -19,7 +19,7 @@
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
       />
-      <swiper class="swiper" :options="swiperOptions" ref="swiper">
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Sidebar
             :users="friends.all"
@@ -61,14 +61,16 @@
           <ChatbarReply v-if="recipient" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
+        <!-- <swiper-slide class="aside-container">
+          <GroupAside
+            :toggle="() => ($data.asidebar = !$data.asidebar)"
+            :selected-group="
+              $mock.groups.find((group) => group.address === selectedGroup)
+            "
+            :friends="$mock.friends"
+          />
+        </swiper-slide> -->
       </swiper>
-      <GroupAside
-        :toggle="() => ($data.asidebar = !$data.asidebar)"
-        :selected-group="
-          $mock.groups.find((group) => group.address === selectedGroup)
-        "
-        :friends="$mock.friends"
-      />
     </div>
     <MobileNav v-if="$device.isMobile" />
   </div>
@@ -81,7 +83,7 @@ import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import Layout from '~/components/mixins/Layouts/Layout'
 
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css'
+import 'swiper/css/swiper.css'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -95,16 +97,13 @@ export default Vue.extend({
     return {
       sidebar: true,
       asidebar: !this.$device.isMobile,
-      menuOpened: false,
       swiperOption: {
-        initialSlide: 1,
+        initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        slideToClickedSlide: true,
         on: {
-          slideChange() {
-            console.log("active: ", this.swiper.activeIndex)
-            this.$data.menuOpened = this.swiper.activeIndex === 0
+          slideChange: () => {
+            this.sidebar = this.swiper.activeIndex === 0
           }
         }
       }
@@ -130,7 +129,7 @@ export default Vue.extend({
     },
     swiper() {
       return this.$refs.swiper.$swiper
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
@@ -146,9 +145,12 @@ export default Vue.extend({
   },
   methods: {
     toggleMenu() {
-      this.$data.menuOpened
-        ? this.swiper.slideNext()
-        : this.swiper.slidePrev()
+      console.log('toggleMenu')
+      if(this.swiper) {
+        this.$data.sidebar
+          ? this.swiper.slideNext()
+          : this.swiper.slidePrev()
+      }
     }
   }
 })

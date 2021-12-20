@@ -73,7 +73,7 @@
     "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
     "sharp": "^0.29.0",
     "simple-peer": "^9.11.0",
-    "swiper": "^7.3.3",
+    "swiper": "5.x",
     "uuid": "^8.3.2",
     "v-calendar": "^2.3.2",
     "v-click-outside": "^3.1.2",

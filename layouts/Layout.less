@@ -34,25 +34,20 @@
 
   .swiper {
     width: 100%;
-    overflow: unset;
     .swiper-wrapper {
       box-sizing: border-box;
-      .swiper-slide {
-        flex-shrink: unset;
-      }
-      .sidebar-container.swiper-slide-active {
-        width: @sidebar-size !important;
-      }
-      .sidebar-container.swiper-slide-prev {
-        width: 0 !important;
-      }
+    }
 
-      .dynamic-content.swiper-slide-active {
-        width: calc(100vw - 60px) !important;
-      }
-      .dynamic-content.swiper-slide-next {
-        width: calc(100vw - @sidebar-size - 60px) !important;
-      }
+    .sidebar-container {
+      min-width: 200px;
+      width: 70%;
+      max-width: @sidebar-size;
+    }
+
+    .aside-container {
+      min-width: 200px;
+      width: 70%;
+      max-width: @sidebar-size;
     }
   }
 
@@ -121,6 +116,13 @@
     }
   }
 
+  .dynamic-content.swiper-slide-next {
+    padding-right: @sidebar-size;
+    #mediastream {
+      width: calc(100% - @sidebar-size);
+    }
+  }
+
   #sidebar,
   #servers-vertical-list,
   .dynamic-content,
@@ -133,13 +135,13 @@
     .file-preview {
       width: calc(100% - 2rem) !important;
     }
-    #sidebar,
-    #servers-vertical-list {
-      transform: translateX(calc(-@sidebar-size + -@servers-size));
-    }
-    .dynamic-content {
-      margin-left: calc(-@sidebar-size + -@servers-size);
-    }
+  //   #sidebar,
+    // #servers-vertical-list {
+    //   transform: translateX(calc(-@sidebar-size + -@servers-size));
+    // }
+  //   .dynamic-content {
+  //     margin-left: calc(-@sidebar-size + -@servers-size);
+  //   }
     #sidebar .toggle-sidebar {
       right: -2rem;
       z-index: @base-z-index + 1;
@@ -157,9 +159,9 @@
     #aside {
       transform: translateX(calc(@sidebar-size));
     }
-    .dynamic-content {
-      margin-right: -250px;
-    }
+  //   .dynamic-content {
+  //     margin-right: -250px;
+  //   }
 
     &.group {
       #toolbar {
@@ -201,6 +203,13 @@
       #aside {
         transform: translateX(100%);
       }
+    }
+  }
+
+  .dynamic-content.swiper-slide-next {
+    padding-right: 0;
+    #mediastream {
+      width: 100%;
     }
   }
 }
