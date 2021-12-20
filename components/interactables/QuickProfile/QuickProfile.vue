@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Config } from '~/config'
 import { User } from '~/types/ui/user'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
 
@@ -18,6 +19,7 @@ export default Vue.extend({
   data() {
     return {
       text: '',
+      maxChars: Config.chat.maxChars,
     }
   },
   computed: {

@@ -110,6 +110,16 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+    textLimit: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    limitCount: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   data() {
     return {
