@@ -1,5 +1,9 @@
 <div>
-  <TypographyLabel class="input-label" v-if="labelText.length" :text="labelText" />
+  <TypographyLabel
+    class="input-label"
+    v-if="labelText.length"
+    :text="labelText"
+  />
   <div class="field has-addons">
     <div class="control" data-cy="add-input">
       <input
@@ -8,9 +12,10 @@
         :readonly="readonly"
         :type="inputKind"
         :placeholder="placeholder"
+        :maxLength="textLimit? limitCount : ''"
         v-on:keyup.enter="action"
         @input="update"
-        />
+      />
     </div>
     <div class="control" data-cy="submit-input">
       <a
@@ -40,4 +45,7 @@
       </a>
     </div>
   </div>
+  <span v-if="textLimit" class="char-limit">
+    {{ `${internalText.length}/${limitCount}` }}
+  </span>
 </div>
