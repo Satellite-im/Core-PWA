@@ -33,7 +33,6 @@ const mutations = {
 
     const tracked = updateMessageTracker(messages, initialValues)
 
-    console.log(tracked)
     state.conversations = {
       ...state.conversations,
       [address]: {

@@ -13,7 +13,7 @@
     </div>
     <template v-else>
       <div class="file-preview-item" v-for="item in files">
-        <div class="img-wrapper" v-if="item.file.type === 'image'">
+        <div class="img-wrapper" v-if="item.file.type.includes('image')">
           <img
             v-if="isEmbedableImage(item.file.name)"
             :src="item.url"
