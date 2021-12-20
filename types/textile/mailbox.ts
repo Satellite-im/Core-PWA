@@ -16,7 +16,8 @@ import {
   glyphMessage,
   reactionMessage,
   messageEncoder,
-  mediaMessage, imageMessage,
+  mediaMessage,
+  imageMessage,
 } from '~/libraries/Textile/encoders'
 
 /**

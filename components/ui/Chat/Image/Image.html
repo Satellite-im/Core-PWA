@@ -1,30 +1,14 @@
-<!--<div>-->
-<!--  <div-->
-<!--    class="image-mask"-->
-<!--    v-if="!showfull">-->
-<!--    <img-->
-<!--      :class="`is-image-in-mask`"-->
-<!--      :src="image.url"-->
-<!--      v-click-outside="() => $data.showfull = !$data.showfull" />-->
-<!--  </div>-->
-<!--  <img-->
-<!--    :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"-->
-<!--    :src="image.url"-->
-<!--    v-on:click="() => $data.showfull = !$data.showfull" />-->
-<!--</div>-->
-<div class="embeded-file">
-  <file-icon size="1x" class="file-icon" />
-  <img
-    class="image-file"
-    :src="image.url"
-  />
-  <img
-    class="image-file"
-    :src="url"
-  />
-  <div class="file-info">
-    <TypographySubtitle :size="6" :text="`${image.name}`" />
-    <TypographyText :text="`${image.type} - ${getFileSize}`" />
+<div>
+  <div
+    class="image-mask"
+    v-if="!showfull">
+    <img
+      :class="`is-image-in-mask`"
+      :src="image.url"
+      v-click-outside="() => $data.showfull = !$data.showfull" />
   </div>
-  <download-icon size="1x" class="download" />
+  <img
+    :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
+    :src="image.url"
+    v-on:click="() => $data.showfull = !$data.showfull" />
 </div>
