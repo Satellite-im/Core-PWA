@@ -162,10 +162,7 @@ export default Vue.extend({
         this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
         file: file,
-      }).then().catch(error => {
-          document.body.style.cursor= PropCommonEnum.DEFAULT
-          Error(error)
-        })
+      })
       )
       Promise.allSettled(sendFiles).then(() => {
         this.cancelUpload()
