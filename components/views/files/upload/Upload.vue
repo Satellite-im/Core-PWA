@@ -77,7 +77,7 @@ export default Vue.extend({
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = event.target.files
-        if (files.length > 4) {
+        if (files.length > 8) {
           // @ts-ignore
           this.$data.count_error = true
           return
@@ -161,7 +161,10 @@ export default Vue.extend({
         this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
         file: file,
-      })
+      }).then().catch(error => {
+          document.body.style.cursor= PropCommonEnum.DEFAULT
+          Error(error)
+        })
       )
       Promise.all(sendFiles).then(() => {
         this.cancelUpload()
