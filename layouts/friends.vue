@@ -3,28 +3,29 @@
 :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-        $device.isMobile ? 'mobile-app' : ''
+        $device.isMobile ? 'mobile-app' : 'desktop'
       }`"
     >
       <UiGlobal />
 
-      <Slimbar
-        :servers="$mock.servers"
-        :unreads="$mock.unreads"
-        :open-modal="toggleModal"
-      />
-      <Sidebar
-        :toggle="() => ($data.sidebar = !$data.sidebar)"
-        :users="friends.all"
-        :groups="$mock.groups"
-      />
-      <div class="dynamic-content">
-        <Nuxt id="friends"
-ref="chat" />
-      </div>
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
+        <swiper-slide class="sidebar-container">
+          <Slimbar
+            :servers="$mock.servers"
+            :unreads="$mock.unreads"
+            :open-modal="toggleModal"
+          />
+          <Sidebar
+            :showMenu="toggleMenu"
+            :users="friends.all"
+            :groups="$mock.groups"
+          />
+        </swiper-slide>
+        <swiper-slide class="dynamic-content">
+          <Nuxt id="friends" ref="chat" />
+        </swiper-slide>
+      </swiper>
     </div>
     <MobileNav v-if="$device.isMobile" />
   </div>
@@ -36,17 +37,44 @@ import { mapState } from 'vuex'
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import Layout from '~/components/mixins/Layouts/Layout'
 
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
+
 export default Vue.extend({
   name: 'ChatLayout',
   mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
+  components: {
+    Swiper,
+    SwiperSlide
+  },
   data() {
     return {
       sidebar: true,
+      swiperOption: {
+        initialSlide: 0,
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        on: {
+          slideChange: () => {
+            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+          }
+        }
+      },
     }
   },
   computed: {
     ...mapState(['friends']),
+  },
+  methods: {
+    toggleMenu() {
+      console.log('toggleMenu')
+      if(this.$refs.swiper.$swiper) {
+        this.$data.sidebar
+          ? this.$refs.swiper.$swiper.slideNext()
+          : this.$refs.swiper.$swiper.slidePrev()
+      }
+    }
   },
 })
 </script>

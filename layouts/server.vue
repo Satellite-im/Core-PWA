@@ -2,50 +2,52 @@
   <div id="app-wrap" :class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
     <div
       id="app"
-      v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-        $device.isMobile ? 'mobile-app' : ''
+        $device.isMobile ? 'mobile-app' : 'desktop'
       }`"
     >
       <UiGlobal />
-      <Slimbar
-        :servers="$mock.servers"
-        :unreads="$mock.unreads"
-        :open-modal="toggleModal"
-      />
-      <ServerSidebar
-        :toggle="() => ($data.sidebar = !$data.sidebar)"
-      />
-      <Enhancers />
-      <div
-        :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
-      >
-        <Toolbar
-          id="toolbar"
-          :server="{
-            name: 'Test Server',
-            address: '0x0',
-            desc: 'Just a test server',
-          }"
-          :user="$mock.users[0]"
-        />
-        <Media
-          :fullscreen="ui.fullscreen"
-          :users="$mock.callUsers"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="20"
-        />
-        <UiChatScroll
-          :contents="ui.messages"
-          :prevent-scroll-offset="500"
-          :class="media.activeCall ? 'media-open' : ''"
-          enable-wrap
-        >
-          <Nuxt />
-        </UiChatScroll>
-        <Chatbar />
-      </div>
+
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
+        <swiper-slide class="sidebar-container">
+          <Slimbar
+            :servers="$mock.servers"
+            :unreads="$mock.unreads"
+            :open-modal="toggleModal"
+          />
+          <ServerSidebar
+            :toggle="() => ($data.sidebar = !$data.sidebar)"
+            :showMenu="toggleMenu"
+          />
+          <Enhancers />
+        </swiper-slide>
+        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+          <Toolbar
+            id="toolbar"
+            :server="{
+              name: 'Test Server',
+              address: '0x0',
+              desc: 'Just a test server',
+            }"
+            :user="$mock.users[0]"
+          />
+          <Media
+            :fullscreen="ui.fullscreen"
+            :users="$mock.callUsers"
+            :max-viewable-users="10"
+            :fullscreen-max-viewable-users="20"
+          />
+          <UiChatScroll
+            :contents="ui.messages"
+            :prevent-scroll-offset="500"
+            :class="media.activeCall ? 'media-open' : ''"
+            enable-wrap
+          >
+            <Nuxt />
+          </UiChatScroll>
+          <Chatbar />
+        </swiper-slide>
+      </swiper>
     </div>
     <MobileNav v-if="$device.isMobile" />
   </div>
@@ -57,17 +59,47 @@ import { mapState } from 'vuex'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
+
 export default Vue.extend({
   name: 'ServerLayout',
   mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
+  components: {
+    Swiper,
+    SwiperSlide
+  },
   data() {
     return {
       sidebar: true,
+      swiperOption: {
+        initialSlide: 0,
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        on: {
+          slideChange: () => {
+            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+          }
+        }
+      },
     }
   },
   computed: {
     ...mapState(['ui', 'media']),
+    swiper() {
+      return this.$refs.swiper.$swiper
+    },
+  },
+  methods: {
+    toggleMenu() {
+      console.log('toggleMenu')
+      if(this.$refs.swiper.$swiper) {
+        this.$data.sidebar
+          ? this.$refs.swiper.$swiper.slideNext()
+          : this.$refs.swiper.$swiper.slidePrev()
+      }
+    }
   },
 })
 </script>

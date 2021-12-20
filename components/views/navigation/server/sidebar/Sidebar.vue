@@ -18,6 +18,10 @@ export default Vue.extend({
       type: Function,
       default: () => {},
     },
+    showMenu: {
+      type: Function,
+      default: () => {},
+    },
   },
   computed: {
     ...mapState(['ui']),

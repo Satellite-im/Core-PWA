@@ -10,17 +10,17 @@
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
         asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
       } ${selectedGroup ? 'group' : 'direct'} ${
-        $device.isMobile ? 'mobile-app' : ''
+        $device.isMobile ? 'mobile-app' : 'desktop'
       }`"
     >
       <UiGlobal />
-      <Slimbar
-        :servers="$mock.servers"
-        :unreads="$mock.unreads"
-        :open-modal="toggleModal"
-      />
       <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
+          <Slimbar
+            :servers="$mock.servers"
+            :unreads="$mock.unreads"
+            :open-modal="toggleModal"
+          />
           <Sidebar
             :users="friends.all"
             :groups="$mock.groups"
@@ -61,7 +61,7 @@
           <ChatbarReply v-if="recipient" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
-        <!-- <swiper-slide class="aside-container">
+        <swiper-slide class="aside-container" v-if="$data.asidebar">
           <GroupAside
             :toggle="() => ($data.asidebar = !$data.asidebar)"
             :selected-group="
@@ -69,7 +69,7 @@
             "
             :friends="$mock.friends"
           />
-        </swiper-slide> -->
+        </swiper-slide>
       </swiper>
     </div>
     <MobileNav v-if="$device.isMobile" />
@@ -103,10 +103,12 @@ export default Vue.extend({
         slidesPerView: 'auto',
         on: {
           slideChange: () => {
-            this.sidebar = this.swiper.activeIndex === 0
+            console.log('slideChange: ', this.$refs.swiper.$swiper.activeIndex)
+            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+            this.$data.asidebar = this.$refs.swiper.$swiper.activeIndex === 2
           }
         }
-      }
+      },
     }
   },
   computed: {
@@ -127,9 +129,6 @@ export default Vue.extend({
           )
       return recipient
     },
-    swiper() {
-      return this.$refs.swiper.$swiper
-    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
@@ -145,14 +144,14 @@ export default Vue.extend({
   },
   methods: {
     toggleMenu() {
-      console.log('toggleMenu')
-      if(this.swiper) {
+      console.log('sidebar: ', this.$data.sidebar)
+      if(this.$refs.swiper.$swiper) {
         this.$data.sidebar
-          ? this.swiper.slideNext()
-          : this.swiper.slidePrev()
+          ? this.$refs.swiper.$swiper.slideNext()
+          : this.$refs.swiper.$swiper.slidePrev()
       }
     }
-  }
+  },
 })
 </script>
 
