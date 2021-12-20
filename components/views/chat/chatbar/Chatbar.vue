@@ -33,7 +33,6 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-      maxChars: 256,
       recipientTyping: false,
     }
   },
@@ -85,7 +84,7 @@ export default Vue.extend({
      * @example
      */
     charlimit() {
-      return this.$data.text.length > this.$data.maxChars
+      return this.$data.text.length > Config.chat.maxChars
     },
     /**
      * @method hasCommand DocsTODO
@@ -200,7 +199,7 @@ export default Vue.extend({
       // Delete extra character when it exceeds the charlimit
       if (
         messageBox.innerText &&
-        messageBox.innerText.length > this.$data.maxChars + 1
+        messageBox.innerText.length > Config.chat.maxChars + 1
       ) {
         messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
