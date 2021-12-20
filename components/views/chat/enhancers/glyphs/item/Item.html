@@ -1,10 +1,10 @@
-<!-- loader idea - use dummy src until real img is loaded -->
 <img
   :width="`${width}px`"
   :height="`${height}px`"
   class="glyph-item"
-  :src="src"
+  :src="getSrc"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
   v-on="sendOnClick ? {click: addGlyph} : {}"
+  @load="setLoaded"
 />

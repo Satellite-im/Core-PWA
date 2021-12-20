@@ -22,8 +22,7 @@
       "nuxt-i18n",
       "@nuxtjs/device",
       "types/modules/satellite-lucide-icons.d.ts",
-      "jest",
-      "vuetify"
+      "jest"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]

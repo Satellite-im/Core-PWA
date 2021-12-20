@@ -1,8 +1,8 @@
 <template src="./Item.html"></template>
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
+import * as loadImg from '~/assets/img/glyphLoader.png'
 
 export default Vue.extend({
   props: {
@@ -26,6 +26,16 @@ export default Vue.extend({
       required: false,
     },
     sendOnClick: { type: Boolean, default: false, required: false },
+  },
+  computed: {
+    getSrc() {
+      return this.isLoaded ? this.src : loadImg
+    },
+  },
+  data() {
+    return {
+      isLoaded: false,
+    }
   },
   methods: {
     mouseOver() {
@@ -54,6 +64,9 @@ export default Vue.extend({
         src: this.src,
         pack: this.pack.name,
       })
+    },
+    setLoaded() {
+      this.isLoaded = true
     },
   },
 })
