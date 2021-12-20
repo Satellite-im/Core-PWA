@@ -10,7 +10,6 @@ import { TerminalIcon } from 'satellite-lucide-icons'
 
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
-import { text } from 'stream/consumers'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -306,7 +305,9 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: any) {
-      e.preventDefault()
+      /* Don't use event.preventDefault(). It prevent original text copy-paste */
+      e.stopPropagation()
+      /* Upload if image, if not then no action */
       this.handleUpload(e.clipboardData.items)
     },
     /**
