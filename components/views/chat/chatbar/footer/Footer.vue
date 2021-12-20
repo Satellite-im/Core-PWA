@@ -21,10 +21,12 @@ export default Vue.extend({
     usersTyping: {
       type: Array,
       default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
+      required: false,
     },
     typing: {
       type: Boolean,
       default: false,
+      required: false,
     },
   },
   computed: {

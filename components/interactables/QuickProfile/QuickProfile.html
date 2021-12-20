@@ -19,6 +19,8 @@
     <InteractablesInputGroup
       type="primary"
       v-model="text"
+      textLimit="true"
+      :limitCount="maxChars"
       :placeholder="`${$t('friends.message')} ${user.name}...`"
       :action="sendMessage"
     >
