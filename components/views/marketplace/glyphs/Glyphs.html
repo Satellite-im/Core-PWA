@@ -21,7 +21,7 @@
   <div v-else class="marketplace-glyphs-detail">
     <div class="go-back" @click="goBack()">
       <chevron-left-icon size="1.5x"></chevron-left-icon>
-      <TypographySubtitle :size="6" text="Back" />
+      <TypographySubtitle :size="6" :text="$t('glyphs.back')" />
     </div>
     <MarketplaceGlyphsShop
       v-if="ui.glyphMarketplaceView.view === GlyphMarketViewStatus.SHOP_ALL"

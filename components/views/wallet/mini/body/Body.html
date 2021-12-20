@@ -25,25 +25,25 @@
     <InteractablesButton
       type="primary"
       size="small"
-      text="Send Money"
+      :text="$t('wallet.mini_wallet.send_money')"
       :action="updateMethod('send')">
       <send-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       type="primary"
       size="small"
-      text="Request Money"
+      :text="$t('wallet.mini_wallet.request_money')"
       :action="updateMethod('request')">
       <redo-icon size="1x" />
     </InteractablesButton>
   </div>
-  <TypographyHorizontalRuleText plaintext value="Details" />
+  <TypographyHorizontalRuleText plaintext :value="$t('wallet.mini_wallet.details')" />
   <div class="details">
-    <TypographyText :size="6" text="To: 0x0000000..." />
-    <TypographyText :size="6" text="From: 0x0000000..." />
-    <TypographyText :size="6" text="Amount: 0.00" />
-    <TypographyText :size="6" text="Currency: USDC" />
+    <TypographyText :size="6" :text="$t('wallet.mini_wallet.to') + '0x0000000...'" />
+    <TypographyText :size="6" :text="$t('wallet.mini_wallet.from') + '0x0000000...'" />
+    <TypographyText :size="6" :text="$t('wallet.mini_wallet.amount') + '0.00'" />
+    <TypographyText :size="6" :text="$t('wallet.mini_wallet.currency') + 'USDC'" />
     <br>
-    <TypographyText :size="6" text="TXID: AU28CC012ECX0Z" />
+    <TypographyText :size="6" :text="$t('wallet.mini_wallet.txid') + 'AU28CC012ECX0Z'" />
   </div>
 </div>

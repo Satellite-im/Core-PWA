@@ -2,8 +2,8 @@
   <div class="glyph-card-header" :style="`background-image:url(${item.image})`">
     <div class="btn-group">
       <div class="badges">
-        <div v-if="item.isNew" class="badge-new">New</div>
-        <div v-if="item.isSale" class="badge-sale">Sale</div>
+        <div v-if="item.isNew" class="badge-new">{{ $t('glyphs.new') }}</div>
+        <div v-if="item.isSale" class="badge-sale">{{ $t('glyphs.sale') }}</div>
         <TypographyText
           :size="6"
           :text="`${item.glyph.stickerURLs.length} glyphs`"
@@ -21,7 +21,7 @@
       <InteractablesButton
         type="primary"
         size="small"
-        text="Shop Now"
+        :text="$t('glyphs.shop_now')"
         :action="goToShopItem"
       >
       </InteractablesButton>

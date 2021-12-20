@@ -8,12 +8,12 @@
       enableWrap>
       <div class="header">
         <archive-icon size="0.85x" />
-        <TypographySubtitle :size="6" text="Archived Messages" />
+        <TypographySubtitle :size="6":text="$t('messaging.pinned.archived_messages')" />
       </div>
       <div class="filters">
-        <span class="filter active-filter">New</span>
-        <span class="filter">Old</span>
-        <span class="filter">Files</span>
+        <span class="filter active-filter">{{ $t('messaging.pinned.new') }}</span>
+        <span class="filter">{{ $t('messaging.pinned.old') }}</span>
+        <span class="filter">{{ $t('messaging.pinned.files') }}</span>
       </div>
       <UiHorizontalRule />
       <div v-for="message in $mock.pinnedMessages" class="wrap">

@@ -6,7 +6,7 @@
         <InteractablesButton
           type="danger"
           size="small"
-          text="Close"
+          :text="$t('pages.files.upload.close')"
           :action="cancelUpload"
         />
       </div>
@@ -31,7 +31,7 @@
           <div v-if="item.nsfw.status || item.nsfw.checking" class="nsfw-text">
             <TypographySubtitle
               :size="6"
-              text="Scanning Image..."
+              :text="$t('pages.files.upload.scanning_image')"
               v-if="item.nsfw.checking"
             />
             <TypographySubtitle
@@ -52,7 +52,7 @@
         <InteractablesButton
           type="danger"
           size="small"
-          text="Cancel"
+          :text="$t('pages.files.upload.cancel')"
           :action="cancelUpload"
         />
       </div>
