@@ -88,6 +88,7 @@ export const Config = {
     defaultMessageLimit: 50,
     defalutLoadMoreLimit: 20,
     timestampUpdateInterval: 60 * 1000,
+    maxChars: 256,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
