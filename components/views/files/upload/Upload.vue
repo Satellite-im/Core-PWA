@@ -14,6 +14,7 @@ import {
 import { UploadDropItemType } from '~/types/files/file'
 import {Friend} from "~/types/ui/friends";
 import {mapState} from "vuex";
+import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -72,9 +73,11 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
+      this.disabledButton = false
+      this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = event.target.files
-        if (files.length > 4) {
+        if (files.length > 8) {
           // @ts-ignore
           this.$data.count_error = true
           return
@@ -145,6 +148,7 @@ export default Vue.extend({
      */
     cancelUpload() {
       this.$data.files = []
+      document.body.style.cursor= PropCommonEnum.DEFAULT
       this.$data.uploadStatus = false
       this.$data.count_error = false
     },
@@ -154,13 +158,22 @@ export default Vue.extend({
      */
     async sendMessage () {
       this.disabledButton = true;
-      await this.$store.dispatch('textile/sendFileMessage', {
+      const sendFiles = this.$data.files.map((file: UploadDropItemType) =>
+        this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
-        file: this.$data.files[0],
-      }
-      ).then(() => this.disabledButton = false)
+        file: file,
+      })
+      )
+      Promise.allSettled(sendFiles).then(() => {
+        this.cancelUpload()
+        document.body.style.cursor= PropCommonEnum.DEFAULT
+        this.$store.dispatch('textile/clearUploadStatus')
+        this.disabledButton = false
+      }).catch(error => {
+        document.body.style.cursor= PropCommonEnum.DEFAULT
+        Error(error)
+      })
 
-      this.cancelUpload()
     },
   },
 })

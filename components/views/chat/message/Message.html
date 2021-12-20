@@ -46,8 +46,9 @@
       </span>
     </template>
     <UiChatImage
-      v-else-if="message.type === 'image'"
-      :source="message.payload.url"
+      v-if="message.type === 'image'"
+      :image="message.payload"
+      :url="message.payload.url"
       alt=""
     />
     <MessageGlyph

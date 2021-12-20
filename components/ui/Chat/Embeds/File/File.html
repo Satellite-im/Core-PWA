@@ -1,6 +1,6 @@
 <div class="embeded-file">
   <file-icon size="1x" class="file-icon" />
-  <img
+  <img v-if="file.type.includes('image')"
     class="image-file"
     :src="file.url"
   />

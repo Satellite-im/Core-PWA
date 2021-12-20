@@ -20,6 +20,9 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
+import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
+import {MessagingTypesEnum} from "~/libraries/Enums/types/messaging-types";
+import {EncodingTypesEnum} from "~/libraries/Enums/types/encoding-types";
 
 export class MailboxManager {
   senderAddress: string
@@ -103,11 +106,11 @@ export class MailboxManager {
 
     const sentboxQuery = Query.where('to')
       .eq(friendIdentifier)
-      .and('created_at')
+      .and(PropCommonEnum.CREATED_AT)
       .ge(firstMessageTime)
 
     if (query?.skip && query.skip > 0) {
-      sentboxQuery.and('created_at').lt(lastMessageTime)
+      sentboxQuery.and(PropCommonEnum.CREATED_AT).lt(lastMessageTime)
     }
 
     const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
@@ -125,7 +128,7 @@ export class MailboxManager {
     const allSettled = await Promise.allSettled(promises)
 
     const filtered = allSettled.filter(
-      (r) => r.status === 'fulfilled',
+      (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
 
     return filtered.map((r) => r.value)
@@ -205,9 +208,9 @@ export class MailboxManager {
         at: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
-        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
-        replyType: message.type === 'reply' ? message.replyType : undefined,
+        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
+        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
+        replyType: message.type === MessagingTypesEnum.REPLY ? message.replyType : undefined,
         pack: message.pack,
       }),
     )
@@ -242,16 +245,16 @@ export class MailboxManager {
         editedAt: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo: message.type === 'reaction' ? message.reactedTo : undefined,
-        repliedTo: message.type === 'reply' ? message.repliedTo : undefined,
+        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
+        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
       }),
     )
 
     const body = Buffer.from(await publicKey.encrypt(encodedBody)).toString(
-      'base64',
+      EncodingTypesEnum.BASE64,
     )
     const signature = Buffer.from(await identity.sign(encodedBody)).toString(
-      'base64',
+      EncodingTypesEnum.BASE64,
     )
 
     const thread = await this.textile.users.getThread('hubmail')
@@ -290,7 +293,7 @@ export class MailboxManager {
     const { _id, from, read_at, created_at } = message
 
     // Body decryption and parse
-    const msgBody = Buffer.from(message.body, 'base64')
+    const msgBody = Buffer.from(message.body, EncodingTypesEnum.BASE64)
     const bytes = await privKey.decrypt(msgBody)
     const decoded = new TextDecoder().decode(bytes)
 
@@ -344,12 +347,12 @@ function userMessageToThread(message: UserMessage): MessageFromThread {
   const { body, createdAt, from, id, readAt, signature, to } = message
   return {
     _id: id,
-    body: Buffer.from(body).toString('base64'),
+    body: Buffer.from(body).toString(EncodingTypesEnum.BASE64),
     created_at: createdAt,
     read_at: readAt,
     _mod: createdAt,
     from,
-    signature: Buffer.from(signature).toString('base64'),
+    signature: Buffer.from(signature).toString(EncodingTypesEnum.BASE64),
     to,
   }
 }
