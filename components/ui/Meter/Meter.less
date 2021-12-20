@@ -1,22 +1,22 @@
 .meter {
-  width: 100%;
-  height: 1.5rem;
-  display: inline-block;
+  &:extend(.full-width);
   .meter-tick {
-      width: 10px;
-      height: 100%;
-      margin: 5px;
-      float: left;
-      background: #27293b !important;
-      border-radius: 2px;
+    width: 10px;
+    height: @full;
+    margin: 5px;
+    float: left;
+    background: #27293b !important;
+    border-radius: 2px;
   }
   .green-tick {
-      background: #00b894 !important;
+    background: #00b894 !important;
   }
   .orange-tick {
-      background: #fbc02d !important;
+    background: #fbc02d !important;
   }
   .red-tick {
-      background: #df7070 !important;
+    background: #df7070 !important;
   }
+  height: 1.5rem;
+  display: inline-block;
 }

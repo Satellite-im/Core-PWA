@@ -1,17 +1,15 @@
 #add-friend {
-  padding: @normal-spacing;
   .card {
-    background: @semitransparent-light-gradient;
-    border: @light-border;
+    &:extend(.background-semitransparent-light);
+    &:extend(.bordered);
   }
-
   .search-container {
     margin: @light-spacing @light-spacing;
   }
-
   .error {
     margin: 0 @normal-spacing;
   }
+  padding: @normal-spacing;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

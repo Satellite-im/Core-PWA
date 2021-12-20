@@ -2,20 +2,9 @@
 @mobile_media_open_offset: 12rem;
 @mobile_candybar_media_open_offset: 18rem;
 #app-wrap {
-  #app.mobile-app {
-    height: calc(var(--app-height) - @mobile-nav-size);
-    transition: height @animation-speed;
-  }
-  #mobile-nav {
-    transition: bottom @animation-speed;
-  }
-
   &.is-collapsed {
-    #app.mobile-app {
-      height: var(--app-height);
-    }
     #mobile-nav {
-      bottom: -@mobile-nav-size;
+      transform: translate(0, @mobile-nav-size);
     }
   }
 
@@ -30,9 +19,9 @@
 #app {
   display: flex;
   user-select: none;
-  height: var(--app-height);
+  height: 100%;
   .dynamic-content {
-    width: 100%;
+    &:extend(.full-width);
     position: relative;
     user-select: text;
     display: flex;
@@ -48,16 +37,15 @@
     }
 
     .media-open {
-      width: 100%;
+      &:extend(.full-width);
       flex: 1;
-      transition: flex 0.3s;
     }
 
     #chatbar {
-      width: 100%;
+      &:extend(.full-width);
       min-width: 0;
       justify-content: flex-end;
-      transition: height 0.3s;
+      transition: height @animation-speed;
 
       &.has-reply {
         .chatbar-wrap {
@@ -71,9 +59,6 @@
       }
     }
 
-    #mediastream {
-      transition: flex 0.3s;
-    }
     &.fullscreen-media {
       .media-open {
         flex: 0;
@@ -91,7 +76,7 @@
         }
       }
       #mediastream {
-        height: calc(100% - @toolbar-height - @light-spacing);
+        height: calc(@full - @toolbar-height - @light-spacing);
       }
     }
   }
@@ -106,7 +91,7 @@
 
   &.is-collapsed {
     .file-preview {
-      width: calc(100% - 2rem) !important;
+      width: calc(@full - 2rem) !important;
     }
     #sidebar,
     #servers-vertical-list {
@@ -174,7 +159,7 @@
   #app {
     &.is-collapsed-aside {
       #aside {
-        transform: translateX(100%);
+        transform: translateX(@full);
       }
     }
   }
@@ -188,3 +173,5 @@
     }
   }
 }
+
+@import url('~/assets/styles/platforms/iOS.less');

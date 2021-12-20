@@ -1,21 +1,12 @@
 .files-aside {
-  width: 100%;
-  background: @semitransparent-light-gradient;
-  border-radius: @corner-rounding;
-  padding: @light-spacing @normal-spacing;
-
   .flex {
-    display: inline-flex;
-    flex-direction: row;
-    width: 100%;
-    margin-bottom: @light-spacing;
     .is-text {
-      width: 100%;
+      &:extend(.full-width);
     }
     .upgrade-text {
       align-self: flex-end;
       text-align: right;
-      color: @green;
+      &:extend(.color-success);
       text-transform: uppercase;
     }
     .button {
@@ -24,12 +15,20 @@
       padding: @xlight-spacing @light-spacing;
       line-height: 1!important;
     }
+    display: inline-flex;
+    flex-direction: row;
+    &:extend(.full-width);
+    margin-bottom: @light-spacing;
   }
   .usage-text {
     font-size: @text-size;
     
     .red {
-      color: @red;
+      &:extend(.color-danger);
     }
   }
+  &:extend(.full-width);
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.more-pad-sides);
 }

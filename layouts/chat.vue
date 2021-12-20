@@ -8,7 +8,6 @@
     <div
       id="app"
       v-touch:swipe="sidebarSwipeHandler(this)"
-      v-touch-options="{ swipeTolerance: 75 }"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
         asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
       } ${selectedGroup ? 'group' : 'direct'} ${
@@ -77,12 +76,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
+import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
 export default Vue.extend({
   name: 'ChatLayout',
-  mixins: [mobileSwipe, Layout],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
   data() {
     return {
@@ -107,7 +106,7 @@ export default Vue.extend({
             (friend) => friend.address === this.$route.params.address,
           )
       return recipient
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
@@ -116,7 +115,6 @@ export default Vue.extend({
 
     const appHeight = () => {
       const doc = document.documentElement
-      doc.style.setProperty('--app-height', `${window.innerHeight}px`)
     }
     window.addEventListener('resize', appHeight)
     appHeight()

@@ -1,15 +1,8 @@
-#file-list {
-  height: calc(100vh - 210px);
-}
-.table {
-  width: 100%;
-  font-size: @text-size;
-  background-color: transparent;
-  margin: 0;
 
+.table {
   thead {
     th {
-      color: @bright-text;
+      &:extend(.font-secondary);
       border-bottom-width: 1px;
       border-bottom-color: @text-muted;
     }
@@ -17,8 +10,8 @@
 
   tr {
     td {
-      color: @text;
-      border-bottom-color: @light-gray;
+      &:extend(.font-primary);
+      border-bottom-color: @foreground;
     }
   }
 
@@ -44,7 +37,7 @@
   }
 
   .feather-folder {
-    color: @orange;
+    &:extend(.font-orange);
   }
 
   .feather-image {
@@ -52,12 +45,16 @@
   }
 
   .feather-archive {
-    color: @red;
+    &:extend(.color-danger);
   }
 
   .feather-file {
-    color: @pink;
+    &:extend(.font-pink);
   }
+  &:extend(.full-width);
+  font-size: @text-size;
+  background: transparent;
+  margin: 0;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

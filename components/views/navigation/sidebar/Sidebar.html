@@ -82,7 +82,7 @@
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading && users.length">
-          <UiInlineNotification text="New Messages" v-if="ui.unreadMessage.length" />
+          <UiInlineNotification :text="$t('messaging.new_messages')" v-if="ui.unreadMessage.length" />
           <User
             v-for="(user, i) in users"
             :key="i"
@@ -92,8 +92,8 @@
 
         </div>
         <div v-else-if="dataState.friends !== DataStateType.Loading && !users.length" class="mascot-container">
-          <TypographyTitle text="No Friends Yet" :size="6" />
-          <TypographyText text="The world doesn't have to be so lonely." />
+          <TypographyTitle  :text="$t('pages.chat.no_friends_yet')"  :size="6" />
+          <TypographyText  :text="$t('pages.chat.no_friends_yet_text')"  />
           <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
           <InteractablesButton
             :text="$t('friends.add') + 's'"

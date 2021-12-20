@@ -1,7 +1,6 @@
 <template>
   <div class="message-loader">
-    <div v-for="i in count"
-:key="i" class="message-loader-item">
+    <div v-for="i in count" :key="i" class="message-loader-item">
       <div class="left">
         <div class="placeholder-profile" />
       </div>
@@ -30,37 +29,36 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .message-loader {
-  overflow: hidden;
-  padding: @light-spacing;
+  &:extend(.light-padding);
   .message-loader-item {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
     padding: 0.4rem 0.35rem;
   }
 
   .placeholder-profile {
+    &:extend(.background-semitransparent-light);
     position: relative;
     overflow: hidden;
     width: 35px;
     height: 35px;
-    border-radius: 100%;
-    background: @semitransparent-light-gradient;
+    border-radius: @full;
     margin-left: 0;
     margin-right: 0.75rem;
 
     &::before {
+      &:extend(.full-width);
       content: '';
       display: block;
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
-      width: 100%;
+      height: @full;
       background: linear-gradient(
         to right,
         transparent 0%,
-        @semitransparent-lightest-gradient 50%,
-        transparent 100%
+        @semitransparent-lightest-gradient @half,
+        transparent @full
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
@@ -69,20 +67,20 @@ export default Vue.extend({
     width: 60%;
   }
   .right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
     .placeholder-item {
       width: 36px;
       height: 28px;
     }
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
   }
   .placeholder-item {
+    &:extend(.background-semitransparent-light);
     border-radius: 2px;
     height: 24px;
     position: relative;
     overflow: hidden;
-    background: @semitransparent-light-gradient;
     margin-left: 0.5rem;
     margin-bottom: 0.6rem;
 
@@ -97,32 +95,17 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
+      height: @full;
       width: 75%;
       background: linear-gradient(
         to right,
         transparent 0%,
-        @semitransparent-lightest-gradient 50%,
-        transparent 100%
+        @semitransparent-lightest-gradient @half,
+        transparent @full
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
-  @keyframes load {
-    from {
-      left: -75%;
-    }
-    to {
-      left: 100%;
-    }
-  }
-  @keyframes loadreverse {
-    from {
-      left: -100%;
-    }
-    to {
-      left: 200%;
-    }
-  }
+  overflow: hidden;
 }
 </style>

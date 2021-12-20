@@ -8,12 +8,12 @@
 }
 
 .is-rounded.circle {
-  background-color: @light-gray !important;
+  background: @foreground !important;
 }
 
 .label {
   font-size: @text-size;
-  color: @bright-text !important;
+  color: @secondary-text !important;
 }
 .image {
   max-width: 175px;
@@ -36,7 +36,7 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
-  width: 100%;
+  &:extend(.full-width);
 }
 
 .input-container {
@@ -45,36 +45,36 @@
 
 .cropper-mask {
   position: fixed;
-  background-color: @light-gray !important;
+  background: @foreground !important;
   opacity: 0.6;
   z-index: 9;
-  height: 100%;
-  width: 100%;
+  height: @full;
+  &:extend(.full-width);
   top: 0;
   left: 0;
 }
 
 .red {
-  color: @red;
+  &:extend(.color-danger);
 }
 
 .modal-body {
   display: flex;
   flex-wrap: wrap;
-  height: 100%;
+  height: @full;
 }
 
 .custom-modal-content {
-  width: 100%;
+  &:extend(.full-width);
 }
 
 @media (max-width: 768px) {
   .create-server-container {
-    width: 100%;
+    &:extend(.full-width);
   }
 
   .custom-modal-content {
-    height: calc(100% - 90px);
+    height: calc(@full - 90px);
     overflow-y: scroll;
   }
 
@@ -84,12 +84,14 @@
     align-self: flex-end;
     margin-top: 0px;
   }
+}
 
-  .create-server-btn {
-    // position: absolute;
-    // bottom: 1.5rem;
-    // right: 1.5rem;
-    width: 100%;
-    height: 53px;
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .submit-container {
+    .is-button {
+      min-width: @full !important;
+      &:extend(.full-width);
+    }
   }
 }

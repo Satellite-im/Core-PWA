@@ -141,7 +141,7 @@ export default Vue.extend({
     border-left: 4px solid @text-muted;
     padding-left: @light-spacing;
   }
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
   p {
     font-size: @text-size !important;
   }

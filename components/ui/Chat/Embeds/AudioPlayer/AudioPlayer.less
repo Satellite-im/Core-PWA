@@ -1,17 +1,17 @@
 .audio {
+  &:extend(.half-width);
   max-width: 400px;
-  width: 50%;
   margin: @normal-spacing 0;
 }
 
 .plyr--audio {
-  border-radius: @corner-rounding;
+  &:extend(.round-corners);
 
   .plyr__controls {
-    border-radius: @corner-rounding;
+    &:extend(.round-corners);
+    &:extend(.bordered);
     background: @semitransparent-light-gradient !important;
-    color: @bright-text !important;
-    border: @light-border;
+    color: @secondary-text !important;
   }
 
   .plyr__progress__buffer {
@@ -21,8 +21,8 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .audio {
-    max-width: 100%;
-    width: 100%;
+    &:extend(.full-width);
+    max-width: @full;
   }
 }
 

@@ -18,9 +18,7 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .loading-bar {
-  display: inline-flex;
-  width: 100%;
-
+  &:extend(.full-width);
   .bar {
     animation: loading 2s cubic-bezier(0.17, 0.37, 0.43, 0.67) infinite;
     float: left;
@@ -28,17 +26,6 @@ export default Vue.extend({
     height: 6px;
     border-radius: 2px;
   }
-}
-
-@keyframes loading {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-
-  50% {
-    transform: translate(80px, 0);
-    width: 25px;
-  }
+  display: inline-flex;
 }
 </style>

@@ -3,13 +3,13 @@
 }
 
 #new-folder {
+  .modal-input {
+    &:extend(.half-width);
+  }
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  &:extend(.full-width);
   margin-top: 12px;
-  .modal-input {
-    width: 50%;
-  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

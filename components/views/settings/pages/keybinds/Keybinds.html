@@ -13,19 +13,19 @@
     </div>
     <div class="column">
       <InteractablesButton
-        text="Clear"
+        :text="$t('pages.settings.keybinds.clear')"
         size="small"
         type="primary"
         :action="clearKeybind"
       />
       <InteractablesButton
-        text="Save"
+        :text="$t('pages.settings.keybinds.save')"
         size="small"
         type="primary"
         :action="saveKeybind"
       />
       <InteractablesButton
-        text="Cancel"
+        :text="$t('pages.settings.keybinds.cancel')"
         size="small"
         type="primary"
         :action="cancelKeybind"
@@ -56,7 +56,7 @@
   </div>
 
   <InteractablesButton
-    text="Reset All Keybinds"
+    :text="$t('pages.settings.keybinds.reset_all')"
     size="small"
     type="primary"
     :action="resetKeybinds"

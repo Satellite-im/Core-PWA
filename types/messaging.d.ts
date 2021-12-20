@@ -1,4 +1,4 @@
-import { FileMessage, GlyphMessage, ReplyMessage, TextMessage } from './textile/mailbox'
+import {FileMessage, GlyphMessage, ImageMessage, ReplyMessage, TextMessage} from './textile/mailbox'
 
 export type UIReaction = {
   emoji: string
@@ -17,6 +17,7 @@ type ConvertToUIMessage<T> = T & {
 
 export type UIMessage =
   | ConvertToUIMessage<FileMessage>
+  | ConvertToUIMessage<ImageMessage>
   | ConvertToUIMessage<TextMessage>
   | ConvertToUIMessage<GlyphMessage>
 

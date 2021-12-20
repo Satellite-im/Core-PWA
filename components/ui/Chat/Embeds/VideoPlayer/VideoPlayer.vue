@@ -25,7 +25,7 @@ export default Vue.extend({
   padding: 0;
   line-height: 0.8;
   font-family: @primary-font;
-  color: @text-muted;
+  &:extend(.font-muted);
   display: inline-block;
   text-align: left;
 }
@@ -34,10 +34,10 @@ export default Vue.extend({
   font-family: @primary-font;
   font-size: @mini-text-size;
   margin-top: 0.25rem;
-  color: @text-muted;
+  &:extend(.font-muted);
   cursor: pointer;
   &:hover {
-    color: @bright-text;
+    &:extend(.font-secondary);
   }
 }
 </style>

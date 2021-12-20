@@ -3,6 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
 import {TextileImage} from "~/types/textile/manager";
+import {FileMessage} from "~/types/textile/mailbox";
 
 export default Vue.extend({
   components: {
@@ -11,7 +12,7 @@ export default Vue.extend({
   },
   props: {
     file: {
-      type: Object as PropType<TextileImage>
+      type: Object as PropType<FileMessage>
     },
   },
   data() {

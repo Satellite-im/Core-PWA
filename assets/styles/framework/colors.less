@@ -1,0 +1,187 @@
+// Base Colors
+@foreground: #2b2b3b;
+@foreground-alt: #3a3a50;
+@midground: #16161e;
+@midground-alt: #1a1a24;
+@background: #191927;
+@background-hover: #2e303d;
+
+@darker: #121216;
+@darker-transparent: #121216ce;
+
+@darker-alt: rgb(9, 9, 12);
+@black: #000;
+
+@primary-color: #2761fd;
+@primary-color-alt: #2761fd;
+@scrollbar-color: @primary-color;
+
+@secondary-text: #dae0ff;
+@text: #c6cefa;
+@text-muted: #a0a9cf;
+
+// ---------- Generic ----------
+@red: #e73c59;
+@yellow: #feca57;
+@orange: #ff9f43;
+@purple: #5f27cd;
+@pink: #ff9ff3;
+@blue: #48dbfb;
+@gray: #576574;
+@jade: #00d2d3;
+@green: #00b894;
+@white: #fff;
+
+// ---------- Fonts ----------
+.font-accent {
+  color: @primary-color;
+}
+.font-primary {
+  color: @text;
+}
+.font-muted {
+ color: @text-muted;
+}
+.font-secondary {
+  color: @secondary-text;
+}
+.font-red, 
+.red, 
+.color-danger {
+  color: @red;
+}
+.font-yellow, 
+.yellow, 
+.color-warning {
+  color: @yellow;
+}
+.font-orange, 
+.orange, 
+.color-orange {
+  color: @orange;
+}
+.font-purple, 
+.purple {
+  color: @purple;
+}
+.font-pink, 
+.pink {
+  color: @pink;
+}
+.font-gray, 
+.gray {
+  color: @gray;
+}
+.font-blue, 
+.blue, 
+.color-info {
+  color: @blue;
+}
+.font-green, 
+.green, 
+.color-success {
+  color: @green;
+}
+.font-white, 
+.white {
+  color: @white;
+}
+
+// ---------- Backgrounds ----------
+
+// Semitransparent Gradients
+@semitransparent-dark-gradient: linear-gradient(
+  328deg,
+  #16171dda 0%,
+  #16171dda 75%,
+  #0f141dd5 100%
+);
+@semitransparent-light-gradient: linear-gradient(
+  0deg,
+  rgba(34, 44, 63, 0.5) 0%,
+  rgba(36, 40, 57, 0.5) 100%
+);
+@semitransparent-lighter-gradient: linear-gradient(
+  0deg,
+  rgba(42, 54, 75, 0.5) 0%,
+  rgba(48, 52, 71, 0.5) 100%
+);
+@semitransparent-lightest-gradient: linear-gradient(
+  0deg,
+  rgba(49, 63, 87, 0.8) 0%,
+  rgba(62, 66, 90, 0.5) 100%
+);
+@semitransparent-red-gradient: linear-gradient(
+  0deg,
+  rgba(231, 76, 60, 0.5) 0%,
+  rgba(192, 57, 43, 0.5) 100%
+);
+
+.background-semitransparent-dark {
+  background: @semitransparent-dark-gradient;
+}
+.background-semitransparent-light {
+  background: @semitransparent-light-gradient;
+}
+.background-semitransparent-lighter {
+  background: @semitransparent-lighter-gradient;
+}
+.background-semitransparent-lightest {
+  background: @semitransparent-lightest-gradient;
+}
+.background-semitransparent-danger {
+  background: @semitransparent-red-gradient;
+}
+
+// Solid Gradients
+@input-gradient: @semitransparent-lighter-gradient;
+
+.input-bg {
+  background: @input-gradient;
+}
+
+@splash-radial: radial-gradient(circle, rgba(44,51,65,0.8127844887955182) 0%, rgba(34,44,63,0) 100%);
+
+@midground-gradient: -webkit-radial-gradient(
+    top left,
+    #1c273a,
+    rgba(0, 0, 0, 0) 10%
+  ),
+  -webkit-radial-gradient(bottom left, #121822, rgba(0, 0, 0, 0) 20%),
+  -webkit-radial-gradient(top right, #1b2638, rgba(0, 0, 0, 0) 68%), #16171d;
+@primary-gradient: linear-gradient(
+  40deg,
+  rgba(39, 97, 253, 1) 0%,
+  rgba(40, 109, 254, 1) 100%
+);
+@danger-gradient: linear-gradient(
+  40deg,
+  rgba(231, 76, 60, 1) 0%,
+  rgba(231, 60, 89, 1) 100%
+);
+@background-gradient: linear-gradient(328deg, #16171d 0%, #16171d 75%, #161f2e 100%);
+@background-gradient-alt: linear-gradient(
+  -328deg,
+  #131217 0%,
+  #131217 32%,
+  #121b28 100%
+);
+
+.background-primary {
+  background: @primary-color;
+}
+.background-primary-gradient {
+  background: @primary-gradient;
+}
+.background-danger-gradient {
+  background: @danger-gradient;
+}
+.background-dark-gradient {
+  background: @background-gradient;
+}
+.background-gradient {
+  background: @midground-gradient;
+}
+.background-gradient-alt {
+  background: @background-gradient-alt;
+}

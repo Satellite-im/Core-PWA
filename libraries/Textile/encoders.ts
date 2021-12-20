@@ -80,11 +80,28 @@ const fileMessagePayload = t.type({
   }),
 })
 
+const imageMessagePayload = t.type({
+  payload: t.type({
+    url: t.string,
+    name: t.string,
+    size: t.number,
+    type: t.string,
+  }),
+})
+
 export const fileMessage = t.intersection([
   baseMessage,
   fileMessagePayload,
   t.type({
     type: t.literal('file'),
+  }),
+])
+
+export const imageMessage = t.intersection([
+  baseMessage,
+  imageMessagePayload,
+  t.type({
+    type: t.literal('image'),
   }),
 ])
 
@@ -146,6 +163,15 @@ export const replyMessage = t.union([
   ]),
   t.intersection([
     baseMessage,
+    imageMessagePayload,
+    t.type({
+      repliedTo: t.string,
+      replyType: t.literal('image'),
+      type: t.literal('reply'),
+    }),
+  ]),
+  t.intersection([
+    baseMessage,
     mediaMessagePayload,
     t.type({
       repliedTo: t.string,
@@ -159,6 +185,7 @@ export const messageEncoder = t.union([
   replyMessage,
   reactionMessage,
   fileMessage,
+  imageMessage,
   textMessage,
   mediaMessage,
   glyphMessage,

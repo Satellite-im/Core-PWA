@@ -1,13 +1,8 @@
 .switch-container {
-  display: inline-flex;
-  align-content: flex-end;
-  margin: @light-spacing 0;
-
   .is-small {
     transform: scale(0.75);
     transform-origin: 0;
   }
-
   .switch-label {
     display: inline-block;
     margin-left: 10px;
@@ -19,17 +14,7 @@
     font-size: 12px;
   }
   .switch-button-control {
-    display: inline-block;
-
     .switch-button {
-      height: 1.6em;
-      width: calc(1.6em * 2);
-      border: 2px solid var(--color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-      border-radius: 1.6em;
-      transition: all @animation-speed-micro ease-in-out;
-      cursor: pointer;
-
       .sw-button {
         height: calc(1.6em - (2 * 2px));
         width: calc(1.6em - (2 * 2px));
@@ -38,17 +23,28 @@
         background: var(--color);
         transition: all @animation-speed-micro ease-in-out;
       }
+      height: 1.6em;
+      width: calc(1.6em * 2);
+      border: 2px solid var(--color);
+      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
+      border-radius: 1.6em;
+      transition: all @animation-speed-micro ease-in-out;
+      cursor: pointer;
     }
     .switch-button.enabled {
-      background-color: var(--color);
-      box-shadow: none;
       .sw-button {
         background: white;
         transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
       }
+      background: var(--color);
+      box-shadow: none;
     }
     .switch-button-label {
       margin-left: 10px;
     }
+    display: inline-block;
   }
+  display: inline-flex;
+  align-content: flex-end;
+  margin: @light-spacing 0;
 }

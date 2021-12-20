@@ -1,15 +1,5 @@
 .edit-message {
-  margin: @light-spacing 0px;
-  padding: @light-spacing;
-  background: @semitransparent-dark-gradient;
-  border-radius: @corner-rounding;
-  border: 1px solid @primary-color;
   &-body {
-    display: flex;
-    align-items: center;
-    border-radius: @corner-rounding;
-    background: @semitransparent-lighter-gradient;
-    padding: @light-spacing @normal-spacing;
     &-input {
       flex-grow: 1;
       font-size: @text-size;
@@ -17,8 +7,17 @@
     &-emoj {
       flex-shrink: 0;
     }
+    display: flex;
+    align-items: center;
+    &:extend(.round-corners);
+    &:extend(.background-semitransparent-lighter);
+    &:extend(.more-pad-sides);
   }
   &-bottom {
     font-size: @text-size;
   }
+  margin: @light-spacing 0px;
+  &:extend(.light-padding);  &:extend(.background-semitransparent-dark);
+  &:extend(.round-corners);
+  border: 1px solid @primary-color;
 }

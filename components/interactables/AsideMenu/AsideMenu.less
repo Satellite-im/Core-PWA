@@ -1,25 +1,20 @@
 .aside-menu {
-  padding: 2rem;
-  position: relative;
-  -webkit-user-drag: none;
-  user-select: none;
-
   .menu-list {
-    margin-bottom: @normal-spacing;
-
     a {
       -webkit-user-drag: none;
       user-select: none;
     }
+    margin-bottom: @normal-spacing;
   }
 
-  li.active {
-    box-shadow: @primary-glow;
-  }
-
-  li:hover {
-    &:not(.active) {
-      background: @semitransparent-light-gradient;
+  li {
+    &.active {
+      &:extend(.glow-primary);
+    }
+    &:hover {
+      &:not(.active) {
+        &:extend(.background-semitransparent-light);
+      }
     }
   }
 
@@ -28,4 +23,9 @@
     right: 2rem;
     top: 2.4rem;
   }
+
+  padding: @xlarge-spacing;
+  position: relative;
+  -webkit-user-drag: none;
+  user-select: none;
 }

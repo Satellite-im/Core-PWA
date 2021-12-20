@@ -293,10 +293,5 @@ export default Vue.extend({
   justify-content: center;
   text-align: center;
   overflow: scroll;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 </style>

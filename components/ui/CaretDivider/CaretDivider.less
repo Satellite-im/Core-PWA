@@ -1,30 +1,15 @@
 .caret_divider {
-  width: 100%;
-  border-bottom: 1px solid @red;
-  position: relative;
-  margin-top: @light-spacing;
-  margin-bottom: 0.5rem + @light-spacing;
-  pointer-events: none;
-
+  &:extend(.full-width);
   .caret_text {
-    user-select: none;
-    background: @red;
-    border-radius: @corner-rounding-smaller 0 0 @corner-rounding-smaller;
-    display: inline-block;
-    font-size: @mini-text-size;
-    position: absolute;
-    top: -9.5px;
-    padding: 0 0 0 @light-spacing;
-    height: 20px;
-    color: @bright-text;
-    box-shadow: @danger-glow;
+    &:extend(.font-secondary);
+    &:extend(.glow-danger);
     .triangle, .triangle:before, .triangle:after { width: 20px; height: 20px; }
     .triangle {
       overflow: hidden;
       position: absolute;
       top: -5px;
       right: -18.1px;
-      transform: translateY(50%) rotate(0deg) skewY(30deg) scaleX(.866);
+      transform: translateY(@half) rotate(0deg) skewY(30deg) scaleX(.866);
       cursor: pointer;
       pointer-events: none;
     } 
@@ -42,5 +27,19 @@
       transform: scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%) 
           skewX(-30deg) scaleY(.866) translateX(24%);
     }
+    user-select: none;
+    background: @red;
+    border-radius: @corner-rounding-smaller 0 0 @corner-rounding-smaller;
+    display: inline-block;
+    font-size: @mini-text-size;
+    position: absolute;
+    top: -9.5px;
+    padding: 0 0 0 @light-spacing;
+    height: 20px;
   }
+  border-bottom: 1px solid @red;
+  position: relative;
+  margin-top: @light-spacing;
+  margin-bottom: 0.5rem + @light-spacing;
+  pointer-events: none;
 }

@@ -1,34 +1,22 @@
 #quick-profile {
-  position: fixed;
-  z-index: 3;
-  width: 350px;
-  max-width: calc(100% - 2rem);
-  top: 4rem;
-  left: 4rem;
-  padding: @normal-spacing;
-  background: @semitransparent-dark-gradient;
-  backdrop-filter: @blur;
-  border-radius: @corner-rounding;
-  overflow: hidden;
-  border: @light-border;
-
+  &:extend(.background-semitransparent-dark);
+  &:extend(.blur);
+  &:extend(.round-corners);
+  &:extend(.bordered);
   .header {
-    width: calc(100% + 2rem);
+    &:extend(.background-primary);
+    width: calc(@full + 2rem);
     height: 3rem;
     margin: -@normal-spacing -@normal-spacing calc(@normal-spacing + 20px) -@normal-spacing;
-    background: @primary-color;
     position: relative;
   }
-
   .is-text {
     margin-bottom: @light-spacing;
   }
-
   .address {
-    color: @text-muted;
+    &:extend(.font-muted);
     font-size: @mini-text-size;
   }
-
   .circle {
     position: absolute;
     bottom: -20px;
@@ -39,6 +27,14 @@
     box-shadow: 4px 0 0 0 @black; /* Border right */
     box-shadow: 0 0 0 4px @black; /* All the borders by using the spread properties */
   }
+  position: fixed;
+  z-index: 3;
+  width: 350px;
+  max-width: calc(@full - 2rem);
+  top: 4rem;
+  left: 4rem;
+  padding: @normal-spacing;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -48,6 +44,6 @@
     top: unset;
     left: 1rem;
     right: 1rem;
-    width: calc(100% - 2rem);
+    width: calc(@full - 2rem);
   }
 }

@@ -1,4 +1,4 @@
-export const mobileSwipe = {
+export const Touch = {
   created: () => {
     // can add functions here on start-up if needed
   },
@@ -24,4 +24,4 @@ export const mobileSwipe = {
   },
 }
 
-export default mobileSwipe
+export default Touch

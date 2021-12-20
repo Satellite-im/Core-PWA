@@ -68,6 +68,10 @@ export default Vue.extend({
 
 <style scoped lang="less" src="./Modal.less"></style>
 <style lang="less">
+#settings {
+  width: 90vw;
+  height: 90vh;
+}
 #settings.is-collapsed
   > div.sidebar.is-secondary-background
   > section

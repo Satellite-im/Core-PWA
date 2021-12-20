@@ -15,7 +15,7 @@
 
 .iframe-container-1-1 {
   position: relative;
-  padding-bottom: 100%;
+  padding-bottom: @full;
 }
 .iframe-container-4-3 {
   position: relative;
@@ -24,11 +24,11 @@
 /* End Aspect Ratios */
 
 .responsive-iframe {
+  &:extend(.full-width);
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  height: @full;
 }
 
 .aspect-ratio-switcher,

@@ -24,13 +24,11 @@
     </div>
   </div>
   <div class="filler"
-    v-touch:swipe="toggle"
-    v-touch-options="{ swipeTolerance: 75 }"
+    v-touch:swipe.left="toggle"
   ></div>
 
   <div class="controls"
-    v-touch:swipe="toggle"
-    v-touch-options="{ swipeTolerance: 75 }"
+    v-touch:swipe.left="toggle"
   >
     <SidebarControls />
     <SidebarStatus />

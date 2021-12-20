@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
       },
       { hid: 'description', name: 'description', content: '' },
     ],
@@ -61,7 +61,7 @@ export default defineNuxtConfig({
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/styles/framework/framework.less'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -71,7 +71,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
+    { src: '~/plugins/thirdparty/vue3-touch-events.ts' },
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
@@ -95,11 +95,7 @@ export default defineNuxtConfig({
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // '@nuxtjs/ngrok',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/device',
-  ],
+  buildModules: ['@nuxtjs/style-resources', '@nuxtjs/device'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -127,7 +123,7 @@ export default defineNuxtConfig({
   },
 
   styleResources: {
-    less: './assets/styles/vars/*.less',
+    less: './assets/styles/framework/*.less',
   },
 
   pwa: {

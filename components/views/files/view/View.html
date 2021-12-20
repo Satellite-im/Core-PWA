@@ -8,11 +8,11 @@
     </div>
     <div class="controls">
       <div
-        :data-tooltip="$t('messaging.unpin')"
+        :data-tooltip="$t('ui.unpin')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
         <archive-icon size="1x" />
       </div>
-      <a 
+      <a
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
         :href="file.location"
@@ -37,7 +37,7 @@
     <img class="file-image" :src="file.location" />
   </div>
   <div v-else class="no-preview">
-    <a 
+    <a
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-top"
         :href="file.location"

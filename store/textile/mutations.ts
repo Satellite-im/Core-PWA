@@ -92,7 +92,6 @@ const mutations = {
     }
 
     const tracked = updateMessageTracker([message], initialValues)
-
     state.conversations = {
       ...state.conversations,
       [address]: {
@@ -117,13 +116,38 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
+  clearUploadProgress(
+    state: TextileState,
+    ) {
+    state.uploadProgress = {}
+  },
   setUploadingFileProgress(
     state: TextileState,
-    progress: number
+    {progress, name} : {
+      progress: number,
+      name: string,
+    },
   ) {
-    state.uploadProgress = progress
+    if( progress !== 100) {
+      state.uploadProgress = {
+        ...state.uploadProgress,
+        [name]: {
+          progress: progress,
+          finished: false,
+          name: name
+        }
+      }
+    }
     if( progress === 100) {
-      state.uploadProgress = 0
+      state.uploadProgress = {
+        ...state.uploadProgress,
+        [name]: {
+          progress: progress,
+          finished: true,
+          name: name
+        }
+    }
+
     }
   },
 }
