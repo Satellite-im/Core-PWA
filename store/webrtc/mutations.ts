@@ -38,7 +38,7 @@ const mutations = {
       }
     },
   ) {
-    state.remoteTracks = { ...state.localTracks, ...tracks }
+    state.remoteTracks = { ...state.remoteTracks, ...tracks }
   },
 }
 
