@@ -135,15 +135,3 @@ export default Vue.extend({
 </script>
 
 <style lang="less" src="./Edit.less"></style>
-<style lang="less">
-.edit-message-body-input {
-  blockquote {
-    border-left: 4px solid @text-muted;
-    padding-left: @light-spacing;
-  }
-  &:extend(.round-corners);
-  p {
-    font-size: @text-size !important;
-  }
-}
-</style>
