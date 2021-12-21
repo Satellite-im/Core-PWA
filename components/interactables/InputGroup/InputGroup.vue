@@ -3,6 +3,13 @@
 import Vue, { PropType } from 'vue'
 import { InputTypes, InputStyle, InputSize } from './types.d'
 import { Icon } from '~/types/ui/icons'
+import { toArray } from 'lodash'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    internalText: string
+  }
+}
 
 export default Vue.extend({
   model: {
@@ -119,6 +126,11 @@ export default Vue.extend({
       type: Number,
       required: false,
       default: 0,
+    },
+  },
+  computed: {
+    textLength() {
+      return `${toArray(this.internalText).length}/${this.limitCount}`
     },
   },
   data() {
