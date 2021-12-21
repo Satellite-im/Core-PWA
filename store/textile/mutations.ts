@@ -128,7 +128,7 @@ const mutations = {
       name: string,
     },
   ) {
-    if( progress !== 100) {
+    if (progress !== 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
@@ -138,7 +138,7 @@ const mutations = {
         }
       }
     }
-    if( progress === 100) {
+    if (progress === 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {

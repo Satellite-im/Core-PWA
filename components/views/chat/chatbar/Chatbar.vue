@@ -5,12 +5,9 @@ import Vue, { PropType } from 'vue'
 import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-
 import { TerminalIcon } from 'satellite-lucide-icons'
-
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
-
 declare module 'vue/types/vue' {
   interface Vue {
     sendMessage: Function
@@ -24,7 +21,6 @@ declare module 'vue/types/vue' {
     handleChatBorderRadius: Function
   }
 }
-
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -52,13 +48,10 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if(this.$props.recipient) {
-      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
-      let message = findItem ? findItem.value : ''
-
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerText = message
-    }
+    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let message = findItem ? findItem.value : ''
+    const messageBox = this.$refs.messageuser as HTMLElement
+    messageBox.innerText = message
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -252,12 +245,9 @@ export default Vue.extend({
       let sel = window.getSelection()
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
-
-      if(this.$props.recipient) {
-        this.setChatText = {
-          userId: this.$props.recipient.address,
-          value: messageBox.innerHTML
-        }
+      this.setChatText = {
+        userId: this.$props.recipient.address,
+        value: messageBox.innerHTML
       }
     },
     /**
@@ -272,7 +262,6 @@ export default Vue.extend({
         if (!this.recipient || isEmpty) {
           return
         }
-
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
@@ -287,7 +276,6 @@ export default Vue.extend({
           to: this.recipient.textilePubkey,
           text: this.value,
         })
-
         const messageBox = this.$refs.messageuser as HTMLElement
         this.clearChatbar()
       }
@@ -324,7 +312,6 @@ export default Vue.extend({
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())
-
       if (arrOfFiles.length) {
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
         // @ts-ignore
@@ -355,12 +342,8 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let message = ''
-      if(this.$props.recipient) {
-        let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
-        message = findItem ? findItem.value : ''
-      }
-
+      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let message = findItem ? findItem.value : ''
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',

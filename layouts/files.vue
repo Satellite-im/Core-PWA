@@ -86,7 +86,7 @@ export default Vue.extend({
   },
   methods: {
     toggleMenu() {
-      if(this.$refs.swiper.$swiper) {
+      if (this.$refs.swiper.$swiper) {
         this.$data.sidebar
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
