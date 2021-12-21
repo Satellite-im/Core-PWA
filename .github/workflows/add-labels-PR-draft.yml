@@ -2,7 +2,7 @@ name: Add draft label
 on:
   pull_request:
     types:
-      - converted_to_draft
+      - drafted
 
 jobs:
   add-label:
