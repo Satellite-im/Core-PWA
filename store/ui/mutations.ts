@@ -1,5 +1,5 @@
 import { without } from 'lodash'
-import { EnhancerInfo, UIState } from './types'
+import { EnhancerInfo, Theme, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
@@ -297,5 +297,11 @@ export default {
       content: emojiObj.emoji,
       count: 1,
     })
+  },
+  updateTheme(state: UIState, theme: Theme) {
+    state.theme.base = theme
+  },
+  updateFlair(state: UIState, flair: String) {
+    state.theme.flair = flair
   },
 }

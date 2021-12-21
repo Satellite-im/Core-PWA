@@ -6,6 +6,31 @@ export enum GlyphMarketViewStatus {
   SHOP_DETAIL = 'shop_detail',
 }
 
+export enum ThemeNames {
+  DEFAULT = 'default',
+  MOONLIT = 'moonlit_night',
+}
+
+export type Theme = {
+  name: ThemeNames,
+  class: String,
+}
+
+export const Themes = [
+  {
+    text: 'Default',
+    name: ThemeNames.DEFAULT,
+    value: ThemeNames.DEFAULT,
+    class: '',
+  },
+  {
+    text: 'Moonlit Night',
+    name: ThemeNames.MOONLIT,
+    value: ThemeNames.MOONLIT,
+    class: 'moonlit_night',
+  },
+]
+
 export enum ModalWindows {
   NEW_FOLDER = 'newfolder',
   CREATE_SERVER = 'createServer',
@@ -71,4 +96,8 @@ export interface UIState {
   }
   recentReactions: Array<String>,
   mostEmojiUsed: Array<EmojiUsage>,
+  theme: {
+    base: Theme,
+    flair: String,
+  },
 }

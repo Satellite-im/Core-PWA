@@ -28,6 +28,10 @@ export default Vue.extend({
       default: () => {},
       required: false,
     },
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>

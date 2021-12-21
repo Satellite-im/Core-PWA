@@ -128,7 +128,8 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
-    z-index: 3;
+    width: @sidebar-size-mobile !important;
+    min-width: @sidebar-size-mobile !important;
     &:extend(.background-dark-gradient);
     padding-bottom: @normal-spacing;
     .sidebar-inner-streaming {

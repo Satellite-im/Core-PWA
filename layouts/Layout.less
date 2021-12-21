@@ -7,6 +7,9 @@
       transform: translate(0, @mobile-nav-size);
     }
   }
+  &.is-open {
+    height: calc(@full - @mobile-nav-size);
+  }
 
   .media-open {
     padding-top: @media_open_offset;
@@ -177,16 +180,32 @@
   }
   .dynamic-content {
     pointer-events: none;
+    
   }
   &.is-collapsed {
+    #sidebar,
+    #servers-vertical-list {
+      transform: translateX(-@sidebar-size-mobile) !important;
+    }
     .dynamic-content {
       pointer-events: all;
+      margin-left: -100vw;
+    }
+  }
+  &.is-open {
+    .dynamic-content {
+      margin-left: 0;
     }
   }
   #app {
     &.is-collapsed-aside {
       #aside {
         transform: translateX(@full);
+      }
+    }
+    &.is-collapsed { 
+      .dynamic-content {
+        margin-left: -100%;
       }
     }
   }

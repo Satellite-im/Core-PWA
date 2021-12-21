@@ -3,7 +3,9 @@
     id="app-wrap"
     :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
       asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
-    } ${selectedGroup ? 'active-group' : null}`"
+    } ${selectedGroup ? 'active-group' : null} ${
+      $store.state.ui.theme.base.class
+    }`"
   >
     <div
       id="app"
@@ -17,6 +19,7 @@
       <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
+            v-if="!$devie.isMobile"
             :servers="$mock.servers"
             :unreads="$mock.unreads"
             :open-modal="toggleModal"
