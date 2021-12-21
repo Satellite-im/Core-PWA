@@ -187,41 +187,7 @@ export default Vue.extend({
       this.fileAmount = this.$data.files.length
       this.$data.files.forEach((file: UploadDropItemType) => {
         this.dispatchFile(file, this.finishUploads)
-        // this.finish()
       })
-
-      // new Promise((reject, resolve) => {
-      //   this.$data.files.map((file: UploadDropItemType) => {
-      //     this.$store.dispatch('textile/sendFileMessage', {
-      //       to: this.recipient.textilePubkey,
-      //       file: file,
-      //     })
-      //   })
-      // }).then(() => {
-      //   this.cancelUpload()
-      //   document.body.style.cursor= PropCommonEnum.DEFAULT
-      //   this.$store.dispatch('textile/clearUploadStatus')
-      //   this.disabledButton = false
-      // })
-
-          // this.$data.files.map((promiseChain: globalThis.Promise<any>, file: UploadDropItemType) => {
-          //     new Promise((resolve, reject) =>
-          //       this.$store.dispatch('textile/sendFileMessage', {
-          //       to: this.recipient.textilePubkey,
-          //       file: file,
-          //     }))
-            //   .then(() => {
-            //   this.cancelUpload()
-            //   document.body.style.cursor= PropCommonEnum.DEFAULT
-            //   this.$store.dispatch('textile/clearUploadStatus')
-            //   this.disabledButton = false
-            // })
-          // }, Promise.resolve().then(() => {
-          //   this.cancelUpload()
-          //   document.body.style.cursor= PropCommonEnum.DEFAULT
-          //   this.$store.dispatch('textile/clearUploadStatus')
-          //   this.disabledButton = false
-
     },
   },
 })
