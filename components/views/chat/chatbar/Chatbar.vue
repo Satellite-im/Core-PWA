@@ -52,11 +52,13 @@ export default Vue.extend({
     },
   },
   mounted() {
-    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
-    let message = findItem ? findItem.value : ''
+    if(this.$props.recipient) {
+      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let message = findItem ? findItem.value : ''
 
-    const messageBox = this.$refs.messageuser as HTMLElement
-    messageBox.innerText = message
+      const messageBox = this.$refs.messageuser as HTMLElement
+      messageBox.innerText = message
+    }
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -251,9 +253,11 @@ export default Vue.extend({
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
 
-      this.setChatText = {
-        userId: this.$props.recipient.address,
-        value: messageBox.innerHTML
+      if(this.$props.recipient) {
+        this.setChatText = {
+          userId: this.$props.recipient.address,
+          value: messageBox.innerHTML
+        }
       }
     },
     /**
@@ -351,8 +355,11 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
-      let message = findItem ? findItem.value : ''
+      let message = ''
+      if(this.$props.recipient) {
+        let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+        message = findItem ? findItem.value : ''
+      }
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
