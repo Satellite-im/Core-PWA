@@ -1,7 +1,6 @@
 <template>
   <div class="message-loader">
-    <div v-for="i in count"
-:key="i" class="message-loader-item">
+    <div v-for="i in count" :key="i" class="message-loader-item">
       <div class="left">
         <div class="placeholder-profile" />
       </div>
@@ -29,7 +28,7 @@ export default Vue.extend({
 <style scoped lang="less">
 .message-loader {
   .message-loader-item {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
   }
 
@@ -38,7 +37,7 @@ export default Vue.extend({
     overflow: hidden;
     width: 35px;
     height: 35px;
-    border-radius: 100%;
+    border-radius: @full;
     background: rgba(36, 40, 57, 0.5);
     margin-top: 0.5rem;
     margin-right: 0.3rem;
@@ -50,19 +49,19 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
-      width: 100%;
+      height: @full;
+      &:extend(.full-width);
       background: linear-gradient(
         to right,
         transparent 0%,
-        rgba(34, 44, 63, 0.5) 50%,
-        transparent 100%
+        rgba(34, 44, 63, 0.5) @half,
+        transparent @full
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
   .right {
-    width: 100%;
+    &:extend(.full-width);
   }
   .placeholder-item {
     border-radius: 2px;
@@ -91,31 +90,15 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
+      height: @full;
       width: 75%;
       background: linear-gradient(
         to right,
         transparent 0%,
-        rgba(34, 44, 63, 0.5) 50%,
-        transparent 100%
+        rgba(34, 44, 63, 0.5) @half,
+        transparent @full
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-  }
-  @keyframes load {
-    from {
-      left: -75%;
-    }
-    to {
-      left: 100%;
-    }
-  }
-  @keyframes loadreverse {
-    from {
-      left: -100%;
-    }
-    to {
-      left: 200%;
     }
   }
 }

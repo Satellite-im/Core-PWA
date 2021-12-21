@@ -5,7 +5,7 @@
 
 .transaction-item {
   display: inline-flex;
-  width: 100%;
+  &:extend(.full-width);
   margin-bottom: @light-spacing;
   .tx-base {
     display: inline-flex;
@@ -13,7 +13,7 @@
       margin-right: @light-spacing;
     }
     .subtitle {
-      color: @bright-text;
+      &:extend(.font-secondary);
       font-size: @text-size;
     }
     .is-text {

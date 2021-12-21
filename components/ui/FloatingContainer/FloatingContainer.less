@@ -1,17 +1,9 @@
 #floating-container {
-  position: absolute;
-  display: inline-flex;
-  background: @semitransparent-light-gradient;
-  border-radius: @corner-rounding;
-  border: @light-border;
-  backdrop-filter: @blur;
-  max-height: 50vh;
-  overflow: hidden;
-  padding: (@light-spacing / 2) @light-spacing;
-
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  &:extend(.blur);
   .wrap {
-    overflow: hidden;
-
     .header {
       .subtitle {
         font-size: @micro-text-size !important;
@@ -22,7 +14,13 @@
       font-family: @primary-font;
       margin-bottom: @light-spacing;
     }
+    overflow: hidden;
   }
+  position: absolute;
+  display: inline-flex;
+  max-height: 50vh;
+  overflow: hidden;
+  padding: (@light-spacing / 2) @light-spacing;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

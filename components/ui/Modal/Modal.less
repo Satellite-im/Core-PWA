@@ -1,27 +1,26 @@
 .modal-card-head {
-  background: transparent;
-  width: 100%;
-  border-bottom: none;
-  font-size: @text-size;
-
+  &:extend(.full-width);
   .title {
     font-size: @title-text;
   }
+  background: transparent;
+  border-bottom: none;
+  font-size: @text-size;
 }
 
 .modal-background {
+  &:extend(.blur-less);
   background: transparent !important;
-  backdrop-filter: @light-blur;
 }
 
 .modal-card-body {
+  &:extend(.bordered);
   font-weight: normal !important;
   font-size: @text-size;
   width: fit-content;
   text-align: left;
   padding: @normal-spacing;
   background: transparent;
-  border: @light-border;
   overflow: hidden;
 }
 
@@ -35,6 +34,7 @@
 
 .modal {
   z-index: @base-z-index + 103;
+  position: absolute;
 }
 .close {
   position: absolute;
@@ -52,9 +52,9 @@
 }
 
 .modal-card {
-  border-radius: @corner-rounding;
-  backdrop-filter: @heavy-blur;
-  background: @semitransparent-dark-gradient;
+  &:extend(.round-corners);
+  &:extend(.blur-more);
+  &:extend(.background-semitransparent-dark);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -66,17 +66,17 @@
     }
   }
   .modal-card {
-    height: 100%;
-    width: 100%;
+    height: @full;
+    &:extend(.full-width);
     margin: 0px;
-    max-height: 100%;
+    max-height: @full;
   }
 
   .modal-card-body {
-    width: 100%;
+    &:extend(.full-width);
 
     & > div {
-      height: 100%;
+      height: @full;
     }
   }
 

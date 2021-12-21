@@ -1,20 +1,54 @@
+:root {
+  --app-height: 100vh;
+}
+
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+  height: @full;
+  &:extend(.full-width);
+  overscroll-behavior: none;
+  caret-color: @primary-color;
+}
+
+html {
+  &:extend(.background-gradient);
+}
+
+::selection {
+  &:extend(.background-primary);
+  &:extend(.font-secondary);
+}
+
+.hidden-scroll {
+  overflow-y: auto;
+  position: relative;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+    scrollbar-width: none;
+  }
+}
+
 #app {
-  background: @background-gradient;
-  color: @text;
+  &:extend(.font-primary);
 }
 
 .is-secondary-background {
-  background-color: @darker;
+  background: @darker;
 }
 
 .is-collapsed .menu-toggle {
-  color: @primary-color;
+  &:extend(.font-accent);
 }
 // UI Kit
 
 .card {
-  background-color: black;
-  color: @text;
+  background: black;
+  &:extend(.font-primary);
 }
 
 .toasted-container.top-center {
@@ -22,13 +56,13 @@
 }
 
 .toasted-container .toasted {
-  background-color: @primary-color !important;
-  color: @bright-text !important;
+  background: @primary-color !important;
+  color: @secondary-text !important;
   font-family: @primary-font;
 }
 .loading-bar {
   .bar {
-    background-color: @text;
+    background: @text;
   }
 }
 
@@ -45,53 +79,53 @@
     margin: 0.25rem;
 
     a {
-      color: @text;
+      &:extend(.font-primary);
   
       &.is-active {
-        background-color: @primary-color;
-        box-shadow: @primary-glow;
+        &:extend(.background-primary);
+        &:extend(.glow-primary);
       }
       
       &:hover:not(.is-active) {
-        background: @semitransparent-light-gradient;
-        color: @text;
+        &:extend(.background-semitransparent-light);
+        &:extend(.font-primary);
       }
     }
   }
 }
 .menu-label {
-  color: @text-muted;
+  &:extend(.font-muted);
 }
 
 .version {
-  color: @text-muted;
+  &:extend(.font-muted);
 }
 
 // Buttons
 .button {
   
   &.is-primary, .is-primary{
-    background: @primary-gradient;
-    box-shadow: @primary-glow;
+    &:extend(.background-primary-gradient);
+    &:extend(.glow-primary);
     border: none !important;
     outline: none;
-    color: @bright-text !important;
+    color: @secondary-text !important;
 
     &:hover, &:focus, &:active {
-      background: @primary-gradient;
-      color: @bright-text;
+      &:extend(.background-primary-gradient);
+      &:extend(.font-secondary);
       border: none;
-      box-shadow: @primary-glow;
+      &:extend(.glow-primary);
     }
   }
 
   &.is-primary.is-outlined {
-    color: @primary-color;
-    box-shadow: @primary-glow;
+    &:extend(.font-accent);
+    &:extend(.glow-primary);
   
     &:hover, &:focus {
-      color: @bright-text;
-      box-shadow: @primary-glow;
+      &:extend(.font-secondary);
+      &:extend(.glow-primary);
     }
   }
 
@@ -100,19 +134,19 @@
     box-shadow: @danger-glow !important;
     
     &:hover {
-      box-shadow: @danger-glow;
+      &:extend(.glow-danger);
       background: @danger-gradient;
     }
   }
 
   &.is-danger.is-outlined {
-    color: @red;
-    box-shadow: @danger-glow;
+    &:extend(.color-danger);
+    &:extend(.glow-danger);
 
     &:hover, &:focus {
       background: @danger-gradient;
-      color: @bright-text;
-      box-shadow: @danger-glow;
+      &:extend(.font-secondary);
+      &:extend(.glow-danger);
     }
   }
 }
@@ -127,29 +161,29 @@ button {
 }
 
 .button.is-dark.is-outlined {
-  color: @text;
-  border-color: @light-gray;
+  &:extend(.font-primary);
+  border-color: @foreground;
 
   &:hover, &:focus {
-    background-color: @light-gray;
-    border-color: @light-gray;
-    color: @bright-text;
+    background: @foreground;
+    border-color: @foreground;
+    &:extend(.font-secondary);
   }
 
   &.active {
-    background-color: @primary-color;
-    border-color: @light-gray;
-    color: @bright-text;
+    &:extend(.background-primary);
+    border-color: @foreground;
+    &:extend(.font-secondary);
   }
 }
 
 .button.is-dark {
-  background: @semitransparent-lighter-gradient;
-  color: @bright-text;
+  &:extend(.background-semitransparent-lighter);
+  &:extend(.font-secondary);
 }
 .button.is-dark:hover {
-  background-color: @light-gray-alt;
-  color: @bright-text;
+  background: @foreground-alt;
+  &:extend(.font-secondary);
 }
 
 // Inputs
@@ -163,33 +197,33 @@ button {
 }
 .has-tooltip-primary {
   &:before {
-    background-color: transparent;
+    background: transparent;
     background: @semitransparent-dark-gradient !important;
-    backdrop-filter: @light-blur;
+    &:extend(.blur-less);
     font-family: @primary-font !important;
-    color: @bright-text !important;
+    color: @secondary-text !important;
     z-index: 100000;
   }
 }
 .input {
-  background-color: @input-gradient;
-  color: @text;
+  &:extend(.input-bg);
+  &:extend(.font-primary);
   box-shadow: none !important;
   &:active, &:focus {
     background: @semitransparent-lightest-gradient !important;
   }
 }
 .select select{
-  background-color: @dark-gray;
-  color: @text;
+  background: @midground;
+  &:extend(.font-primary);
 }
 ::placeholder {
   color: @text-muted !important;
 }
 .is-primary.input,
 .is-dark.input {
-  background: @input-gradient;
-  color: @text;
+  &:extend(.input-bg);
+  &:extend(.font-primary);
   border: none;
 
   &:active, &:focus {
@@ -198,35 +232,35 @@ button {
   }
 }
 .select.is-primary select {
-  background: @primary-gradient;
+  &:extend(.background-primary-gradient);
   border: none;
   outline: none;
-  box-shadow: @primary-glow;
+  &:extend(.glow-primary);
   &::after, &::before {
-    border-color: @bright-text;
+    border-color: @secondary-text;
   }
 }
 
 .select.is-primary:not(:hover)::after,
 .select:not(.is-multiple):not(.is-loading):hover::after  {
-  border-color: @bright-text;
+  border-color: @secondary-text;
   z-index: @base-z-index;
 }
 
 .select.is-primary:hover::after,
 .select.is-primary:active::after,
 .select.is-primary select:hover  {
-  border-color: @bright-text;
+  border-color: @secondary-text;
 }
 
 
 // Typography
 .title {
-  color: @text;
+  &:extend(.font-primary);
 }
 
 .subtitle {
-  color: @text-muted;
+  &:extend(.font-muted);
 }
 
 // generic
@@ -244,7 +278,7 @@ button {
 }
 
 li.active {
-  background-color: @primary-gradient;
+  &:extend(.background-primary-gradient);
 }
 
 *:focus {
@@ -256,12 +290,12 @@ li.active {
 }
 
 code {
-  background: @semitransparent-lighter-gradient;
-  color: @primary-color;
+  &:extend(.background-semitransparent-lighter);
+  &:extend(.font-accent);
 }
 
 strong {
-  color: @bright-text;
+  &:extend(.font-secondary);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -284,29 +318,3 @@ strong {
   animation-iteration-count: infinite;
 }
 
-@keyframes spin {
-  from {
-      transform:rotate(0deg);
-  }
-  to {
-      transform:rotate(360deg);
-  }
-}
-
-
-@keyframes bounce {
-	0% {
-    font-size: 10pt;
-	}
-	50% {
-    font-size: 56pt;
-	}
-
-	70% {
-    font-size: 37pt;
-	}
-
-	100% {
-    font-size: 42pt;
-	}
-}

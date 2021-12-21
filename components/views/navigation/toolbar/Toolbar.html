@@ -27,6 +27,8 @@
       heading="Alerts"
       :width="25"
       :height="25"
+      class="alerts-floating-container"
+      :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false">
       <ToolbarAlerts />
     </UiFloatingContainer>
@@ -73,7 +75,7 @@
     <InteractablesSearchInput
       @search="handleSearch"
       @change="handleChange"
-      placeholder="Search..."
+      :placeholder="$t('search.search')"
       :searchRecommend="searchRecommend"
     />
     <InteractablesSearchResult

@@ -10,7 +10,7 @@ import * as url from '~/assets/img/profile.png'
 export const profileBadges = [
   {
     type: ProfileBadgeType.Type1,
-    badge: { color: 'red', icon: ['far', 'id-badge'] },
+    badge: { color: 'color-danger', icon: ['far', 'id-badge'] },
   },
   {
     type: ProfileBadgeType.Type2,

@@ -1,13 +1,13 @@
 #encrypted-yellow {
-    color: @yellow;
-    width: calc(100% - @light-spacing * 2);
+    &:extend(.color-warning);
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    &:extend(.light-padding);
+    width: calc(@full - @light-spacing * 2);
     text-align: center;
     margin-left: 2.5%;
     font-size: 10pt;
     margin: @light-spacing;
-    padding: @light-spacing;
-    background: @semitransparent-light-gradient;
-    border-radius: 3px;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

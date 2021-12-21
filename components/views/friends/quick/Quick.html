@@ -1,7 +1,7 @@
 <div id="quick-chat" v-if="$store.state.ui.modals.quickchat">
-  <TypographySubtitle :size="6" text="New Chat" />
+  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
   <TypographyText
-    text="Select one or more of your friends to chat in groups, or one-on-one."
+    :text="$t('pages.chat.new_chat_description')" 
   />
   <SettingsPagesUserSearch
     v-model="friends"

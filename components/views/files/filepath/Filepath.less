@@ -1,25 +1,25 @@
 .breadcrumb {
-  font-family: @primary-font;
-  font-size: @text-size;
   a {
     text-transform: capitalize;
-    color: @primary-color;
+    &:extend(.font-accent);
     &:hover {
-      color: @primary-color;
+      &:extend(.font-accent);
     }
   }
   li + li::before {
-    color: @text;
+    &:extend(.font-primary);
   }
 
   li.is-active a {
-    color: @text-muted;
+    &:extend(.font-muted);
   }
+  font-family: @primary-font;
+  font-size: @text-size;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .breadcrumb {
-    min-width: 100%;
+    min-width: @full;
     padding-top: @light-spacing;
   }
 }

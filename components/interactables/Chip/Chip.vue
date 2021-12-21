@@ -1,9 +1,7 @@
 <template>
-  <div v-if="show"
-class="chip-item">
+  <div v-if="show" class="chip-item">
     {{ text }}
-    <x-icon size="1x"
-@click="hide" />
+    <x-icon size="1x" @click="hide" />
   </div>
 </template>
 
@@ -41,17 +39,17 @@ export default Vue.extend({
 
 <style scoped lang="less">
 .chip-item {
-  display: inline-block;
-  margin-right: @light-spacing;
-  margin-bottom: @light-spacing;
-  padding: @xlight-spacing @light-spacing;
-  border-radius: @corner-rounding-xxlarge;
-  background-color: @primary-color;
-  color: white;
+  &:extend(.background-primary);
   .fa-times {
     margin-bottom: -2px;
     margin-left: @light-spacing;
     cursor: pointer;
   }
+  display: inline-block;
+  margin-right: @light-spacing;
+  margin-bottom: @light-spacing;
+  padding: @xlight-spacing @light-spacing;
+  border-radius: @corner-rounding-xxlarge;
+  color: white;
 }
 </style>

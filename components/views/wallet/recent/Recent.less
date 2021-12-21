@@ -1,11 +1,9 @@
 .recent-transactions {
-  width: 50%;
-  margin-right: @normal-spacing;
   .recent-transactions-items {
-    background: @semitransparent-light-gradient;
-    border-radius: @corner-rounding;
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
     padding: @normal-spacing;
-    border: @light-border;
+    &:extend(.bordered);
   }
   .balance-heading {
     display: inline-flex;
@@ -13,4 +11,6 @@
       margin-left: @light-spacing;
     }
   }
+  &:extend(.half-width);
+  margin-right: @normal-spacing;
 }

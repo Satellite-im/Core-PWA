@@ -1,18 +1,9 @@
 .wallet {
-  display: flex;
-  height: 80vh;
-  width: 80vw;
-  max-height: 100%;
-  overflow: hidden;
-  border-radius: @corner-rounding;
-  padding: @normal-spacing;
-  flex-direction: column;
   .close {
     position: absolute;
     top: @normal-spacing;
     right: @normal-spacing;
   }
-
   .heading {
     font-family: @primary-font;
     display: inline-flex;
@@ -22,10 +13,17 @@
       margin-left: @light-spacing;
     }
   }
-
   .more-info {
     display: inline-flex;
-    width: 100%;
+    &:extend(.full-width);
     margin-top: @normal-spacing;
   }
+  display: flex;
+  height: 80vh;
+  width: 80vw;
+  max-height: @full;
+  overflow: hidden;
+  &:extend(.round-corners);
+  padding: @normal-spacing;
+  flex-direction: column;
 }

@@ -2,7 +2,7 @@
   padding: @normal-spacing;
 
   .files-container {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
     flex-direction: row;
   }
@@ -14,11 +14,11 @@
     width: 33%;
     float: left;
     text-align: right;
-    color: @text-muted;
+    &:extend(.font-muted);
   }
 
   .files-left {
-    width: 100%;
+    &:extend(.full-width);
   }
   .files-right {
     width: 350px;
@@ -27,7 +27,7 @@
     padding-right: 0;
   }
   .files-top {
-    width: 100%;
+    &:extend(.full-width);
     display: inline-flex;
     margin-bottom: @normal-spacing;
   }

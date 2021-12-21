@@ -42,9 +42,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
+import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
 import {
   MenuIcon,
@@ -55,7 +54,7 @@ import 'swiper/css/swiper.css'
 
 export default Vue.extend({
   name: 'FilesLayout',
-  mixins: [mobileSwipe, Layout],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
   components: {
     MenuIcon,

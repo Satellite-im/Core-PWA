@@ -15,7 +15,7 @@ export default Vue.extend({
       this.$router.push('privacy')
     },
     importAccount() {
-      this.$router.push('inputAccount')
+      this.$router.push('importAccount')
     },
   },
 })

@@ -3,10 +3,10 @@
   display: inline-flex;
   top: calc(@toolbar-height - @light-spacing);
   width: 22rem;
-  background: @semitransparent-light-gradient;
-  border-radius: @corner-rounding;
-  border: @light-border;
-  backdrop-filter: @blur;
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  &:extend(.blur);
   max-height: 50vh;
   overflow: hidden;
 
@@ -14,7 +14,7 @@
     overflow: hidden;
   }
   img {
-    max-width: 100%;
+    max-width: @full;
   }
 
   .header {
@@ -46,7 +46,7 @@
   }
 
   .scroll-area {
-    max-height: 100%;
+    max-height: @full;
     padding: @light-spacing @light-spacing;
     padding-right: @normal-spacing;
 
@@ -58,9 +58,9 @@
       padding: 0 @light-spacing;
       padding-bottom: @light-spacing;
       margin-bottom: @light-spacing;
-      background: @semitransparent-lighter-gradient;
-      border-radius: @corner-rounding;
-      border: @light-border;
+      &:extend(.background-semitransparent-lighter);
+      &:extend(.round-corners);
+      &:extend(.bordered);
 
       .button {
         padding: 0 @light-spacing;

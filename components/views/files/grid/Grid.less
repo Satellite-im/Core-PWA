@@ -1,13 +1,12 @@
 #grid-view {
-  display: flexbox;
-  width: 100%;
-  height: calc(100vh - 210px);
-  flex-direction: column;
   &.mobile-grid-view {
     height: auto;
   }
   .files-container {
-    width: 100%;
+    &:extend(.full-width);
     height: auto;
   }
+  display: flexbox;
+  &:extend(.full-width);
+  flex-direction: column;
 }

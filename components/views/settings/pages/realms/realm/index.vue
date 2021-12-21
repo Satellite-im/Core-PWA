@@ -26,10 +26,10 @@ export default Vue.extend({
   cursor: pointer;
   display: inline-flex;
   flex-direction: row;
-  width: 100%;
-  padding: @light-spacing @normal-spacing;
-  border-radius: @corner-rounding;
-  background: @semitransparent-light-gradient;
+  &:extend(.full-width);
+  &:extend(.more-pad-sides);
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
   border: 1px solid @green;
   margin-top: @normal-spacing;
   align-content: center;
@@ -59,6 +59,6 @@ export default Vue.extend({
 .realm-disabled {
   opacity: 0.4;
   cursor: unset;
-  border: @light-border;
+  &:extend(.bordered);
 }
 </style>

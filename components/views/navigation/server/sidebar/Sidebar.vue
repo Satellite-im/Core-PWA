@@ -6,13 +6,10 @@ import { mapState } from 'vuex'
 
 import { MenuIcon } from 'satellite-lucide-icons'
 
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
-
 export default Vue.extend({
   components: {
     MenuIcon,
   },
-  mixins: [mobileSwipe],
   props: {
     toggle: {
       type: Function,

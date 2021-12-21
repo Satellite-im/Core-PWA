@@ -23,48 +23,40 @@ export default Vue.extend({
 <style scoped lang="less">
 .message-loader {
   .message-loader-item {
-    width: 100%;
+    &:extend(.full-width);
     display: flex;
   }
 
   .placeholder-profile {
-    position: relative;
-    overflow: hidden;
-    width: 55px;
-    height: 55px;
-    border-radius: 100%;
-    background: @semitransparent-light-gradient;
-    margin: 0.75rem;
-    margin-left: 0;
-
+    &:extend(.background-semitransparent-light);
     &::before {
+      &:extend(.full-width);
       content: '';
       display: block;
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
-      width: 100%;
+      height: @full;
       background: linear-gradient(
         to right,
         transparent 0%,
-        @dark-gray-alt 50%,
-        transparent 100%
+        @midground-alt @half,
+        transparent @full
       );
       animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
-  }
-  .right {
-    width: 100%;
-  }
-  .placeholder-item {
-    border-radius: 2px;
-    height: 30px;
     position: relative;
     overflow: hidden;
-    background: @light-gray;
+    width: 55px;
+    height: 55px;
+    border-radius: @full;
     margin: 0.75rem;
-
+    margin-left: 0;
+  }
+  .right {
+    &:extend(.full-width);
+  }
+  .placeholder-item {
     &.bigger {
       height: 55px;
     }
@@ -84,32 +76,22 @@ export default Vue.extend({
       position: absolute;
       left: -150px;
       top: 0;
-      height: 100%;
+      height: @full;
       width: 75%;
       background: linear-gradient(
         to right,
         transparent 0%,
-        @light-gray-alt 50%,
-        transparent 100%
+        @foreground-alt @half,
+        transparent @full
       );
       animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
-  }
-  @keyframes load {
-    from {
-      left: -75%;
-    }
-    to {
-      left: 100%;
-    }
-  }
-  @keyframes loadreverse {
-    from {
-      left: -100%;
-    }
-    to {
-      left: 200%;
-    }
+    border-radius: 2px;
+    height: 30px;
+    position: relative;
+    overflow: hidden;
+    background: @foreground;
+    margin: 0.75rem;
   }
 }
 </style>

@@ -1,12 +1,8 @@
 #realm {
-  background: @semitransparent-light-gradient;
-  padding: calc(@light-spacing / 2) @normal-spacing;
-  display: inline-flex;
-  border-radius: @corner-rounding;
-  align-items: center;
-  width: fit-content;
-  color: @text-muted;
-  font-family: @primary-font;
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.font-muted);
+  &:extend(.inline-flex-align-center);
   .realm {
     display: inline-block;
     margin-right: @light-spacing;
@@ -15,8 +11,11 @@
     margin-right: (@light-spacing / 2);
   }
   .realm-name {
+    &:extend(.font-orange);
     display: inline-flex;
     align-items: center;
-    color: @orange;
   }
+  padding: calc(@light-spacing / 2) @normal-spacing;
+  width: fit-content;
+  font-family: @primary-font;
 }

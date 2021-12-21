@@ -1,24 +1,25 @@
 .glyph-shop-section {
-  margin-top: @xlarge-spacing;
   .shop-filter {
-    display: flex;
-    justify-content: space-between;
     .category-item {
       margin-right: @light-spacing;
       cursor: pointer;
     }
+    display: flex;
+    justify-content: space-between;
   }
   .shop-list {
-    display: grid;
-    grid-column-gap: 24px;
-    grid-row-gap: 24px;
-    grid-template-columns: auto auto auto;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
     .item {
       display: flex;
       justify-content: center;
     }
+    display: grid;
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+    grid-template-columns: auto auto auto;
+    &:extend(.full-width);
+    max-width: @full;
+    overflow-x: hidden;
   }
+  margin-top: @xlarge-spacing;
+
 }

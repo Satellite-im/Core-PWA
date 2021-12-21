@@ -1,18 +1,16 @@
 .separator {
-  display: flex;
-  align-items: center;
-  text-align: center;
+  &:extend(.font-muted);
+  &:extend(.flex-centered);
   margin: @normal-spacing 0;
   font-family: @primary-font;
   font-size: @mini-text-size;
-  color: @text-muted;
 }
 
 .separator::before,
 .separator::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid @light-gray;
+  border-bottom: 1px solid @foreground;
 }
 
 .separator:not(:empty)::before {

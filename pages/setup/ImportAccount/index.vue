@@ -1,4 +1,4 @@
-<template src="./InputAccount.html"></template>
+<template src="./ImportAccount.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -13,7 +13,7 @@ declare module 'vue/types/vue' {
 }
 
 export default Vue.extend({
-  name: 'InputAccountScreen',
+  name: 'ImportAccountScreen',
   components: {
     PlusCircleIcon,
   },
@@ -50,14 +50,15 @@ export default Vue.extend({
       this.error = ''
     },
     onSelected(item: string) {
-      if (this.phrases.length < 12) this.phrases.push(item)
+      if (this.phrases.indexOf(item) === -1 && this.phrases.length < 12)
+        this.phrases.push(item)
     },
     onMultipleSelected(items: string[]) {
       const filteredItems = items.filter((item) => {
         return this.bipList.indexOf(item) >= 0
       })
       filteredItems.every((item) => {
-        if (this.phrases.length < 12 ) {
+        if (this.phrases.indexOf(item) === -1 && this.phrases.length < 12) {
           this.phrases.push(item)
           return true
         }
@@ -68,4 +69,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped src="./InputAccount.less"></style>
+<style lang="less" scoped src="./ImportAccount.less"></style>

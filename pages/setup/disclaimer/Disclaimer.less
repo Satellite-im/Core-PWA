@@ -1,12 +1,4 @@
 .container {
-  margin: 0 auto;
-  padding: 0 @normal-spacing;
-  min-height: 100vh;
-  max-width: 416px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-
   .disclaimer-body {
     min-width: 250px;
     align-self: center;
@@ -15,5 +7,29 @@
     .centered-subtitle {
       margin: @normal-spacing;
     }
+    padding: 0 @normal-spacing;
+    max-width: 416px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media only screen and (max-width: @mobile-breakpoint) {
+  .container {
+    .buttons {
+      button {
+        margin-top: @light-spacing;
+        width: @full !important;
+      }
+      display: inline-block;
+      margin-top: auto;
+      justify-self: flex-end;
+    }
+    padding: 0 @normal-spacing;
   }
 }

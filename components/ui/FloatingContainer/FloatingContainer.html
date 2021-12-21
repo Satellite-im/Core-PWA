@@ -1,7 +1,7 @@
 <div 
   id="floating-container" 
   v-click-outside="toggleMethod"
-  :style="{ maxHeight: `${height}rem`, width: `${width}rem`, top: `${offsets[0]}rem`, right: `${offsets[1]}rem` }" >
+  :style="customStyles ? {} : { maxHeight: `${height}rem`, width: `${width}rem`, top: `${offsets[0]}rem`, right: `${offsets[1]}rem` }" >
   <div class="wrap">
     <UiScroll
       verticalScroll

@@ -1,18 +1,4 @@
 #quick-chat {
-  background: @semitransparent-dark-gradient;
-  backdrop-filter: @blur;
-  border-radius: @corner-rounding;
-  border: @light-border;
-  position: fixed;
-  width: 18rem;
-  top: 12rem;
-  padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
-  left: @sidebar-size + 2rem;
-  z-index: @base-z-index + 10;
-  display: flex;
-  flex-direction: column;
-  max-height: 24rem;
-
   .subtitle {
     margin: 0;
     margin-bottom: @light-spacing;
@@ -27,8 +13,21 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 1em;
-    width: 100%;
+    &:extend(.full-width);
   }
+  &:extend(.background-semitransparent-dark);
+  &:extend(.blur);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  position: fixed;
+  width: 18rem;
+  top: 11rem;
+  padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
+  left: @sidebar-size + 2rem;
+  z-index: @base-z-index + 10;
+  display: flex;
+  flex-direction: column;
+  max-height: 24rem;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

@@ -1,29 +1,10 @@
 #media-settings {
-  -webkit-tap-highlight-color: transparent;
-
-  position: absolute;
-  bottom: @light-spacing;
-  left: @normal-spacing;
-  cursor: pointer;
-  z-index: @base-z-index;
-
   #settings-menu {
-    cursor: pointer;
-    margin-bottom: 0.25rem;
-    border-radius: @corner-rounding;
-    padding: (@light-spacing / 2) 0;
-    min-width: 8rem;
-    font-size: @text-size;
-    background: @semitransparent-dark-gradient;
-    backdrop-filter: @blur;
-
     .settings-item {
       &:last-of-type {
         border-bottom: none;
       }
       .item-header {
-        padding: (@light-spacing / 2) @light-spacing 0 @light-spacing;
-        display: flex;
         .word {
           flex: 1;
           margin-right: @normal-spacing;
@@ -33,14 +14,16 @@
           height: 1rem;
           width: 1rem;
         }
+        padding: (@light-spacing / 2) @light-spacing 0 @light-spacing;
+        display: flex;
       }
       .item-body {
-        height: 0;
-        overflow: hidden;
-        transition: height @animation-speed;
         & > div {
           padding: 0.5rem 0.5rem;
         }
+        height: 0;
+        overflow: hidden;
+        transition: height @animation-speed;
       }
       &.open {
         .item-header {
@@ -50,6 +33,14 @@
         }
       }
     }
+    cursor: pointer;
+    margin-bottom: 0.25rem;
+    &:extend(.round-corners);
+    padding: (@light-spacing / 2) 0;
+    min-width: 8rem;
+    font-size: @text-size;
+    &:extend(.background-semitransparent-dark);
+    &:extend(.blur);
   }
   .form {
     .form-group:not(:last-child) {
@@ -67,4 +58,10 @@
       padding: 0.25rem;
     }
   }
+  -webkit-tap-highlight-color: transparent;
+  position: absolute;
+  bottom: @light-spacing;
+  left: @normal-spacing;
+  cursor: pointer;
+  z-index: @base-z-index;
 }

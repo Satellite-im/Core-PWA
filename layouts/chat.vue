@@ -87,7 +87,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
+import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
 import {
@@ -99,7 +99,7 @@ import 'swiper/css/swiper.css'
 
 export default Vue.extend({
   name: 'ChatLayout',
-  mixins: [mobileSwipe, Layout],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
   components: {
     MenuIcon,
@@ -150,7 +150,6 @@ export default Vue.extend({
 
     const appHeight = () => {
       const doc = document.documentElement
-      doc.style.setProperty('--app-height', `${window.innerHeight}px`)
     }
     window.addEventListener('resize', appHeight)
     appHeight()

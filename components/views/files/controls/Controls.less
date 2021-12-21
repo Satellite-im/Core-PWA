@@ -1,19 +1,13 @@
 #file-controls {
-  display: inline-flex;
-  justify-content: flex-end;
-  width: 100%;
-
   .button {
     margin-left: 0.25rem;
   }
-
   .file-flex {
     display: inline-flex;
     flex: 1;
     align-items: center;
     justify-content: center;
   }
-
   #file-upload {
     width: 0px;
     height: 0px;
@@ -23,6 +17,9 @@
   #quick-upload {
     display: none;
   }
+  display: inline-flex;
+  justify-content: flex-end;
+  &:extend(.full-width);
 }
 
 @media only screen and (max-width: 576px) {
@@ -31,7 +28,7 @@
     min-width: @viewport-width - 20px;
     .file-type {
       .select {
-        // width: 100%;
+        // &:extend(.full-width);
       }
     }
     & > div {

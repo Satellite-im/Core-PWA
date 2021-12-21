@@ -1,9 +1,5 @@
 .button-group {
   .button {
-    cursor: pointer;
-    border-radius: 0;
-    margin: 0;
-    border: none;
     &:first-child {
       border-radius: @corner-rounding 0px 0px @corner-rounding;
     }
@@ -11,25 +7,29 @@
       border-radius: 0px @corner-rounding @corner-rounding 0px;
     }
     &.active {
-      background: @primary-color;
-      box-shadow: @primary-glow;
+      &:extend(.background-primary);
+      &:extend(.glow-primary);
       color: #dae0ff;
     }
+    cursor: pointer;
+    border-radius: 0;
+    margin: 0;
+    border: none;
   }
   &.is-normal-width {
-    display: inline;
     .button {
       &:not(:first-child) {
         margin: 0 -1.5px;
         border-left: none;
       }
     }
+    display: inline;
   }
   &.is-full-width {
-    display: flex;
-    width: 100%;
+    &:extend(.full-width);
     .button {
       flex-grow: 1;
     }
+    display: flex;
   }
 }

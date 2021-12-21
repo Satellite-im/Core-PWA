@@ -3,7 +3,7 @@
 }
 .flex-row {
   display: inline-flex;
-  width: 100%;
+  &:extend(.full-width);
   flex-direction: row;
 
   .input-container {
@@ -12,7 +12,7 @@
   }
 }
 .title {
-  color: @green;
+  &:extend(.color-success);
 }
 .centered {
   justify-content: center;
@@ -22,13 +22,12 @@
 #send-payment {
   margin-top: @normal-spacing;
   .is-button {
-    width: calc(50% - 0.25em);
+    width: calc(@half - 0.25em);
   }
 }
 .details {
-  border: @light-border;
-  padding: @light-spacing;
-  background: @semitransparent-light-gradient;
+  &:extend(.bordered);
+  &:extend(.light-padding);  &:extend(.background-semitransparent-light);
   .is-text {
     font-family: @primary-font;
   }

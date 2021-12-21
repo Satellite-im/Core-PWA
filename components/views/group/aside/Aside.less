@@ -1,42 +1,27 @@
 @sidebar-size: 250px;
 
 #aside {
-  transition: @transition-all;
-  width: @sidebar-size;
-  min-width: @sidebar-size;
-  position: relative;
-  display: inline-flex;
-  height: 100%;
-  // background-color: @dark-gray;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: @light-spacing;
-  z-index: @base-z-index;
-  align-items: center;
-
   #aside-box {
-    border-radius: @corner-rounding;
+    &:extend(.round-corners);
     margin-top: @normal-spacing;
-    background: @semitransparent-light-gradient;
+    &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
     margin-right: @normal-spacing;
     margin-left: @light-spacing;
-    padding: @light-spacing;
-  }
+    &:extend(.light-padding);  }
 
   .info-toggle {
     font-size: 20px;
-    color: @primary-color;
+    &:extend(.font-accent);
     cursor: pointer;
     position: absolute;
     left: -5rem;
     top: 1.8rem;
     z-index: 999;
-    transition: visibility 0.1s;
   }
 
   #top-info {
-    width: 100%;
+    &:extend(.full-width);
     height: 46px;
     padding: 0 @light-spacing;
     display: flex;
@@ -48,7 +33,7 @@
   }
 
   #actions {
-    width: 100%;
+    &:extend(.full-width);
     padding: 0 @light-spacing;
     display: flex;
     align-items: center;
@@ -66,14 +51,14 @@
 
       &:hover {
         background: @primary-gradient !important;
-        box-shadow: @primary-glow;
+        &:extend(.glow-primary);
       }
     }
   }
 
   #members {
-    width: 100%;
-    max-height: calc(100% - 8.5rem);
+    &:extend(.full-width);
+    max-height: calc(@full - 8.5rem);
     #members-number {
       display: flex;
       margin-bottom: 0.5rem;
@@ -82,16 +67,27 @@
       }
     }
   }
+  width: @sidebar-size;
+  min-width: @sidebar-size;
+  position: relative;
+  display: inline-flex;
+  height: @full;
+  // background: @midground;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: @light-spacing;
+  z-index: @base-z-index;
+  align-items: center;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #aside {
-    position: fixed;
+    position: absolute;
     right: 0px;
     top: 0px;
     z-index: @base-z-index + 101;
-    background: @dark-gradient;
-    width: 100%;
+    &:extend(.background-dark-gradient);
+    &:extend(.full-width);
 
     #aside-box {
       margin-left:  @normal-spacing;
@@ -103,7 +99,7 @@
   }
   .is-open {
     #aside {
-      transform: translateX(100%);
+      transform: translateX(@full);
       .info-toggle {
         left: 0rem;
       }

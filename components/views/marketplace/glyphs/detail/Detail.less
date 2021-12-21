@@ -1,9 +1,5 @@
 .glyph-marketplace-detail {
-  margin-top: @xlarge-spacing;
   .detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     .owner-name {
       display: flex;
       align-items: center;
@@ -11,34 +7,28 @@
         margin-right: @light-spacing;
       }
     }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .glyph-detail-card {
-    width: 100%;
-    max-width: 100%;
-    font-family: @primary-font;
-    border-radius: @corner-rounding;
-    overflow: hidden;
-    margin-top: @normal-spacing;
-    border: @light-border;
-    background: transparent;
     .bg-header {
-      width: 100%;
+      &:extend(.full-width);
       height: 5rem;
       background-position: center;
-      background-size: 100%;
+      background-size: @full;
       background-repeat: no-repeat;
       padding: @normal-spacing;
     }
     .glyph-content {
-      width: 100%;
+      &:extend(.full-width);
       display: flex;
       padding: @xlarge-spacing;
-      background: @semitransparent-dark-gradient;
+      &:extend(.background-semitransparent-dark);
       .glyph-list {
         flex-grow: 4;
         flex-basis: 0;
-        padding: @light-spacing;
-        div {
+        &:extend(.light-padding);        div {
           display: inline-block;
           margin: 0 @light-spacing @light-spacing 0;
         }
@@ -56,5 +46,14 @@
         }
       }
     }
+    &:extend(.full-width);
+    max-width: @full;
+    font-family: @primary-font;
+    &:extend(.round-corners);
+    overflow: hidden;
+    margin-top: @normal-spacing;
+    &:extend(.bordered);
+    background: transparent;
   }
+  margin-top: @xlarge-spacing;
 }

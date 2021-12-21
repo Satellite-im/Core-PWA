@@ -1,24 +1,19 @@
 .alpha-divider {
-  width: 100%;
+  &:extend(.full-width);
   display: inline-block;
   padding-left: @normal-spacing;
   font-size: @mini-text-size;
-  color: @primary-color;
+  &:extend(.font-accent);
   font-family: @primary-font;
 }
 
 #chat {
-  padding: @light-spacing;
-}
+  &:extend(.light-padding);}
 
 .scrolling {
-  height: 100%;
-  min-height: 100%;
+  height: @full;
+  min-height: @full;
 }
 .loading-container {
   text-align: center;
-}
-
-#friends {
-  height: 100vh;
 }

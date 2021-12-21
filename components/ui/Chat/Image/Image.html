@@ -1,14 +1,14 @@
 <div>
   <div
     class="image-mask"
-    v-if="showfull">
+    v-if="!showfull">
     <img
       :class="`is-image-in-mask`"
-      :src="source"
+      :src="image.url"
       v-click-outside="() => $data.showfull = !$data.showfull" />
   </div>
   <img
     :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
-    :src="source"
+    :src="image.url"
     v-on:click="() => $data.showfull = !$data.showfull" />
 </div>

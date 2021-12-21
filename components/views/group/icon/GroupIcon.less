@@ -1,11 +1,8 @@
 .group-icon {
-    width: 40px;
-    height: 40px;
-    
     .circle {
-        border: @light-border;
+        &:extend(.bordered);
         box-shadow: 0 5px 5px 5px rgba(0,0,0,0.1);
-        border-radius: 50%;
+        border-radius: @half;
     }
 
     .group-multi {
@@ -77,13 +74,15 @@
             bottom: 0;
             right: 0;
             font-size: @micro-text-size;
-            background-color: @primary-color;
-            border-radius: 50%;
+            &:extend(.background-primary);
+            border-radius: @half;
             line-height: 1.2;
             padding: 0.1rem 0.27rem;
             text-align: center;
-            color: @text;
+            &:extend(.font-primary);
             font-family: @primary-font;
         }
     }
+    width: 40px;
+    height: 40px;
 }

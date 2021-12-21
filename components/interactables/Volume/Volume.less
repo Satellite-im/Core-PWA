@@ -1,22 +1,12 @@
 .volume-slider {
-  background-color: transparent;
-  border-radius: @corner-rounding;
-  display: flex;
-  padding: 0.65rem 0;
-  position: relative;
-  margin-bottom: 0.25rem;
-  max-width: 100% !important;
+  &:extend(.round-corners);
   .blank {
+    &:extend(.full-width);
     flex: 1;
-    width: 100%;
     min-height: 1px;
   }
   .vue-slider-dot-tooltip-inner {
-    border-color: transparent;
-    border-radius: 2px;
-    background-color: @primary-color;
-    font-size: @micro-text-size;
-
+    &:extend(.background-primary);
     &::after {
       width: 0;
       height: 0;
@@ -25,27 +15,29 @@
       border-left: 5px solid @primary-color;
       margin-left: -1px;
     }
+    border-color: transparent;
+    border-radius: 2px;
+    font-size: @micro-text-size;
   }
 
   .vue-slider-rail {
-    background-color: @gray;
+    background: @gray;
   }
 
   .vue-slider-process {
-    background-color: @primary-color;
+    &:extend(.background-primary);
   }
 
   .vue-slider-dot-handle {
-    height: 13px;
-    margin-left: 1px;
-    width: 13px;
-    background-color: @white;
-    box-shadow: none;
-
     &:hover {
       box-shadow: 0 0 0 2pt rgba(255, 255, 255, 0.5);
       border: 1px solid @gray;
     }
+    height: 13px;
+    margin-left: 1px;
+    width: 13px;
+    background: @white;
+    box-shadow: none;
   }
 
   &--btt,
@@ -53,8 +45,7 @@
     height: 8rem;
   }
   &--ltr {
-    display: block;
-    width: 100%;
+    &:extend(.full-width);
     .vue-slider-dot-tooltip-inner {
       &::after {
         width: 0;
@@ -65,5 +56,12 @@
         margin-left: -1px;
       }
     }
+    display: block;
   }
+  background: transparent;
+  display: flex;
+  padding: 0.65rem 0;
+  position: relative;
+  margin-bottom: 0.25rem;
+  max-width: @full !important;
 }
