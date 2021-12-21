@@ -6,9 +6,12 @@
       class="editable-input"
       @input="onInput"
       @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
       @paste="handleInputPaste"
-    />
+    >
+      <div class="chat-row-content">
+        <span><br /></span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -36,11 +39,11 @@ class Cursor {
 
           if (node.previousSibling) {
             node = node.previousSibling
-            // Get innertText when available (is aware of <br>), otherwise get the textContent
-            charCount +=
-              (node.innerText
-                ? node.innerText?.length
-                : node.textContent?.length) || 0
+            const isNodeRow = node.nodeName === 'DIV'
+            // If it's a row, add the length of the text plus the newline
+            charCount += isNodeRow
+              ? node.textContent.length + 1
+              : node.textContent.length
           } else {
             node = node.parentNode
             if (node === null) {
@@ -218,7 +221,6 @@ export default Vue.extend({
     value() {
       if (!this.$refs?.editable) return
       const messageBox = this.$refs?.editable
-
       const pos = Cursor.getCurrentCursorPosition(messageBox)
       const rows = []
       messageBox.childNodes.forEach((node, index) => {
@@ -230,43 +232,52 @@ export default Vue.extend({
 
       this.rowLength = rows.length
       messageBox.innerHTML = rows.join('')
-
       Cursor.setCurrentCursorPosition(pos, messageBox)
     },
+  },
+  mounted() {
+    document.addEventListener('selectionchange', this.onSelectionChange)
+  },
+  beforeDestroy() {
+    document.removeEventListener('selectionchange', this.onSelectionChange)
   },
   methods: {
     handleInputPaste(event) {
       event.preventDefault()
-      console.log('handleInputPaste', event)
-      console.log(
-        event.clipboardData
-          .getData('text/plain')
-          .split(/\r\n|\r|\n/)
-          .join('\n\n'),
-      )
-      const cond = parseInnerText(
-        (event.originalEvent || event).clipboardData.getData('text/plain'),
-      )
-      //   document.execCommand('insertHTML', false, cond)
+      const text = event.clipboardData.getData('text/plain')
+      if (document.queryCommandSupported('insertText')) {
+        document.execCommand('insertText', false, text)
+      } else {
+        document.execCommand('paste', false, text)
+      }
     },
     handleInputKeydown(e) {
-      const messageBox = this.$refs.editable
       switch (e.key) {
         case 'Enter':
           if (!e.shiftKey) {
             e.preventDefault()
           }
           return
+
+        case 'Backspace':
+        case 'Delete':
+          if (
+            this.$refs?.editable &&
+            Cursor.getCurrentCursorPosition(this.$refs?.editable) === 0
+          ) {
+            e.preventDefault()
+          }
+          return
       }
     },
-    handleInputKeyup(e) {
-      if (!this.$refs?.editable) return
+    onSelectionChange() {
+      const selection = document.getSelection()
       const messageBox = this.$refs?.editable
-
-      console.log(
-        'Cursor position',
-        Cursor.getCurrentCursorPosition(messageBox),
-      )
+      const node = selection.getRangeAt(0).commonAncestorContainer
+      // If the content is just a newline don't select
+      if (node.innerText === '\n') {
+        Cursor.setCurrentCursorPosition(0, messageBox)
+      }
     },
     onInput(e) {
       const messageBox = e.target
