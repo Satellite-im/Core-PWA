@@ -9,6 +9,7 @@
         v-on:click="showMenu"
         size="1.2x"
         full-width
+        :style="`${sidebar ? 'display: block' : 'display: none'}`"
       />
       <InteractablesInput
         :placeholder="`${$t('ui.search')}...`"

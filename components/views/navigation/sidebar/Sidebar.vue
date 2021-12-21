@@ -45,6 +45,10 @@ export default Vue.extend({
       type: Function,
       default: () => {},
     },
+    sidebar: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     DataStateType: () => DataStateType,

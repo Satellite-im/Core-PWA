@@ -20,9 +20,17 @@
             :showMenu="toggleMenu"
             :users="friends.all"
             :groups="$mock.groups"
+            :sidebar="sidebar"
           />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
+          <menu-icon
+            class="toggle--sidebar"
+            v-on:click="toggleMenu"
+            size="1.2x"
+            full-width
+            :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+          />
           <Nuxt id="friends" ref="chat" />
         </swiper-slide>
       </swiper>
@@ -37,6 +45,10 @@ import { mapState } from 'vuex'
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 import Layout from '~/components/mixins/Layouts/Layout'
 
+import {
+  MenuIcon,
+} from 'satellite-lucide-icons'
+
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 
@@ -45,6 +57,7 @@ export default Vue.extend({
   mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
   components: {
+    MenuIcon,
     Swiper,
     SwiperSlide
   },

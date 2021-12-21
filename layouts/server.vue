@@ -18,10 +18,18 @@
           <ServerSidebar
             :toggle="() => ($data.sidebar = !$data.sidebar)"
             :showMenu="toggleMenu"
+            :sidebar="sidebar"
           />
           <Enhancers />
         </swiper-slide>
         <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+          <menu-icon
+            class="toggle--sidebar"
+            v-on:click="toggleMenu"
+            size="1.2x"
+            full-width
+            :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+          />
           <Toolbar
             id="toolbar"
             :server="{
@@ -59,6 +67,10 @@ import { mapState } from 'vuex'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { mobileSwipe } from '~/components/mixins/Swipe/Swipe'
 
+import {
+  MenuIcon,
+} from 'satellite-lucide-icons'
+
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 
@@ -67,6 +79,7 @@ export default Vue.extend({
   mixins: [mobileSwipe, Layout],
   middleware: 'authenticated',
   components: {
+    MenuIcon,
     Swiper,
     SwiperSlide
   },

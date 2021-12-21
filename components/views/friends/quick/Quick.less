@@ -5,7 +5,7 @@
   border: @light-border;
   position: fixed;
   width: 18rem;
-  top: 11rem;
+  top: 12rem;
   padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
   left: @sidebar-size + 2rem;
   z-index: @base-z-index + 10;
@@ -28,5 +28,11 @@
     justify-content: flex-end;
     margin-top: 1em;
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #quick-chat {
+    left: @servers-size + 2rem;
   }
 }
