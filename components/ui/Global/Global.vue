@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
@@ -64,29 +65,14 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async acceptCall(hasVideo: boolean) {
+    async acceptCall(kinds: TrackKind[]) {
       const identifier = this.$store.state.webrtc.incomingCall
+
       const peer = this.$WebRTC.getPeer(identifier)
-      
-      const streamConstraints = { audio: true, video: false }
-      if (hasVideo) {
-        // @ts-ignore
-        streamConstraints.video = { 
-          facingMode: 'user',
-          width: { min: 1024, ideal: 1280, max: 1920 },
-          height: { min: 576, ideal: 720, max: 1080 },
-        }
-      }
 
-      const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
+      await peer?.call.createLocalTracks(kinds)
 
-      peer?.call.answer(stream)
-
-      if (hasVideo) {
-        peer?.call.addTransceiver("video")
-      }
-
-      this.$store.dispatch('webrtc/acceptCall', { id: identifier, stream: stream})
+      await peer?.call.answer()
     },
     /**
      * @method denyCall DocsTODO
@@ -97,8 +83,10 @@ export default Vue.extend({
       const identifier = this.$store.state.webrtc.incomingCall
       const peer = this.$WebRTC.getPeer(identifier)
 
-      peer?.send('SIGNAL', { type: 'CALL_DENIED' })
-      this.$store.dispatch('webrtc/denyCall')
+      peer?.call.deny()
+
+      // peer?.send('SIGNAL', { type: 'CALL_DENIED' })
+      // this.$store.dispatch('webrtc/denyCall')
     },
   },
 })

@@ -4,17 +4,41 @@ const mutations = {
   setInitialized(state: WebRTCState, initialized: boolean) {
     state.initialized = initialized
   },
-  toggleIncomingCall(state: WebRTCState, id: string) {
+  setIncomingCall(state: WebRTCState, id: string) {
     state.incomingCall = id
   },
-  toggleActiveCall(state: WebRTCState, id: string) {
+  setActiveCall(state: WebRTCState, id: string) {
     state.activeCall = id
   },
-  setLocalStream(state: WebRTCState, stream: MediaStream) {
-    state.localStream = stream
+  updateLocalTracks(
+    state: WebRTCState,
+    tracks: {
+      audio?: {
+        id: string
+        muted: boolean
+      }
+      video?: {
+        id: string
+        muted: boolean
+      }
+    },
+  ) {
+    state.localTracks = { ...state.localTracks, ...tracks }
   },
-  setRemoteStream(state: WebRTCState, stream: MediaStream) {
-    state.remoteStream = stream
+  updateRemoteTracks(
+    state: WebRTCState,
+    tracks: {
+      audio?: {
+        id: string
+        muted: boolean
+      }
+      video?: {
+        id: string
+        muted: boolean
+      }
+    },
+  ) {
+    state.remoteTracks = { ...state.localTracks, ...tracks }
   },
 }
 

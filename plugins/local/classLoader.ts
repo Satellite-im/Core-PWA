@@ -6,7 +6,6 @@ import { Config } from '~/config'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import SoundManager from '~/libraries/SoundManager/SoundManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
-import StreamManager from '~/libraries/WebRTC/StreamManager'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
@@ -15,13 +14,12 @@ import { Alerts } from '~/libraries/ui/Alerts'
 // Utils
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
-import BucketManager from '~/libraries/Textile/BucketManager';
+import BucketManager from '~/libraries/Textile/BucketManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
     $Config: any
     $WebRTC: WebRTC
-    $StreamManager: StreamManager
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
@@ -39,7 +37,6 @@ declare module '@nuxt/types' {
   interface Context {
     $Config: any
     $WebRTC: WebRTC
-    $StreamManager: StreamManager
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
@@ -54,7 +51,6 @@ declare module '@nuxt/types' {
 }
 
 Vue.prototype.$WebRTC = new WebRTC()
-Vue.prototype.$StreamManager = new StreamManager()
 Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()

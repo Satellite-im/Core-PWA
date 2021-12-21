@@ -1,12 +1,30 @@
 export interface WebRTCState {
   initialized: boolean
-  incomingCall: String
-  activeCall: String
-  localStream: MediaStream | undefined,
-  remoteStream: MediaStream | undefined,
+  incomingCall: string
+  activeCall: string
   streaming: Boolean
   activeStream: {
     createdAt: number
+  }
+  remoteTracks: {
+    audio: {
+      id?: string
+      muted?: boolean
+    }
+    video: {
+      id?: string
+      muted?: boolean
+    }
+  }
+  localTracks: {
+    audio: {
+      id?: string
+      muted?: boolean
+    }
+    video: {
+      id?: string
+      muted?: boolean
+    }
   }
 }
 

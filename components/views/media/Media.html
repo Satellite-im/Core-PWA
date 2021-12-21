@@ -3,15 +3,16 @@
   <MediaHeading />
   <div id="media" ref="media">
     <div class="user">
-      <div class="video-stream-container" v-if="this.$store.state.webrtc.localStream">
-        <video class="video-stream" :src-object.prop="this.$store.state.webrtc.localStream" autoplay muted></video>
+      <div class="video-stream-container" v-if="localVideoStream">
+        <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
       </div>
     </div>
     <div class="user">
-      <div class="video-stream-container" v-if="this.$store.state.webrtc.remoteStream">
-        <video class="video-stream"  :src-object.prop="this.$store.state.webrtc.remoteStream" autoplay></video>
+      <div class="video-stream-container" v-if="remoteVideoStream">
+        <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
       </div>
     </div>
+    <audio :src-object.prop="remoteAudioStream" v-if="remoteAudioStream" autoplay/>
     <!-- <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
       :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" /> -->
     <div

@@ -25,6 +25,12 @@ export default Vue.extend({
     PhoneOffIcon,
   },
   computed: {
+    audioMuted() {
+      return this.$store.state.webrtc.localTracks.audio.muted
+    },
+    videoMuted() {
+      return this.$store.state.webrtc.localTracks.video.muted
+    },
     ...mapState(['audio', 'video']),
   },
   methods: {
@@ -34,12 +40,19 @@ export default Vue.extend({
      * @example
      */
     toggleMute() {
-      const muted = this.audio.muted
-      if (!muted) this.$Sounds.playSound(Sounds.MUTE)
-      else this.$Sounds.playSound(Sounds.UNMUTE)
+      const muted = this.audioMuted
 
-      this.$store.commit('audio/mute')
-      this.updateStream()
+      const { activeCall } = this.$store.state.webrtc
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      if (muted) {
+        peer?.call.unmute('audio')
+        this.$Sounds.playSound(Sounds.UNMUTE)
+      } else {
+        peer?.call.mute('audio')
+        this.$Sounds.playSound(Sounds.MUTE)
+      }
     },
     /**
      * @method toggleVideo
@@ -47,12 +60,19 @@ export default Vue.extend({
      * @example
      */
     toggleVideo() {
-      const videoDisabled = this.video.disabled
-      if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
-      else this.$Sounds.playSound(Sounds.UNDEAFEN)
+      const muted = this.videoMuted
 
-      this.$store.commit('video/toggleCamera')
-      this.updateStream()
+      const { activeCall } = this.$store.state.webrtc
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      if (muted) {
+        this.$Sounds.playSound(Sounds.UNDEAFEN)
+        peer?.call.unmute('video')
+      } else {
+        this.$Sounds.playSound(Sounds.DEAFEN)
+        peer?.call.mute('video')
+      }
     },
     /**
      * @method hangUp
@@ -63,17 +83,6 @@ export default Vue.extend({
       const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
       peer?.call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
-    },
-    /**
-     * @method updateStream
-     * @description Updates stream when constraints are changed (eg. toggling voice and video)
-     * @example
-     */
-    async updateStream() {
-      this.$StreamManager.toggleLocalStreams(
-        this.audio.muted,
-        !this.video.disabled,
-      )
     },
   },
 })

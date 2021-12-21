@@ -37,6 +37,7 @@ export const Config = {
       'http://opentracker.i2p.rocks:6969/announce',
       'udp://tracker.opentrackr.org:1337/announce',
       'http://tracker.opentrackr.org:1337/announce',
+      // 'ws://localhost:5001', // FOR DEVELOPMENT
     ],
   },
   solana: {
@@ -102,5 +103,15 @@ export const Config = {
     isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
+  },
+  webrtc: {
+    constraints: {
+      audio: true,
+      video: {
+        facingMode: 'user',
+        width: { min: 1024, ideal: 1280, max: 1920 },
+        height: { min: 576, ideal: 720, max: 1080 },
+      },
+    },
   },
 }

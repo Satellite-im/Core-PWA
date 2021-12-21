@@ -4,12 +4,12 @@ const InitialWebRTCState = (): WebRTCState => ({
   initialized: false,
   incomingCall: '',
   activeCall: '',
-  localStream: undefined,
-  remoteStream: undefined,
   activeStream: {
     createdAt: Date.now(),
   },
   streaming: true,
+  localTracks: { audio: {}, video: {} },
+  remoteTracks: { audio: {}, video: {} },
 })
 
 export default InitialWebRTCState
