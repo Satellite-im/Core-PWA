@@ -2,12 +2,13 @@ name: Add draft label
 on:
   pull_request:
     types:
-      - drafted
+      - opened
 
 jobs:
   add-label:
     name: Add draft label
     runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
     steps:
       - uses: actions/checkout@v2
       - uses: christianvuerings/add-labels@v1
