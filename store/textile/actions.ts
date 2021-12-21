@@ -250,7 +250,6 @@ export default {
       },
     )
     const fileURL = `${Config.textile.browser}${result?.root}${path}`
-    $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
@@ -270,6 +269,8 @@ export default {
             type: 'file',
           },
         )
+
+    // $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
 
       commit('addMessageToConversation', {
         address: friend.address,
