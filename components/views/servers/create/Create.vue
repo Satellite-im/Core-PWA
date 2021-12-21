@@ -70,7 +70,7 @@ export default Vue.extend({
      */
     confirm() {
       if (this.name < 5) {
-        this.error = 'Server name must be at least 5 characters.'
+        this.error = this.$t('servers.create.server_name_error') as string
         return false
       }
       this.error = false
