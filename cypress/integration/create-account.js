@@ -50,7 +50,7 @@ it('Create Account', () => {
   cy.contains('Crop').click()
   cy.get('[data-cy=sign-in-button]').click()
   cy.contains('Linking Satellites...')
-  cy.contains('Working on the space station', { timeout: 30000 }).should(
+  cy.contains('Working on the space station', { timeout: 60000 }).should(
     'be.visible',
   )
 })
