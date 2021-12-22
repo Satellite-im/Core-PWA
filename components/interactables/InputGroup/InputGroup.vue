@@ -130,6 +130,7 @@ export default Vue.extend({
   },
   computed: {
     textLength() {
+      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
       return `${toArray(this.internalText).length}/${this.limitCount}`
     },
   },

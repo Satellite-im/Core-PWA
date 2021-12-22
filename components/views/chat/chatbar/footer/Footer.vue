@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { toArray } from 'lodash'
 
@@ -32,7 +31,10 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     lengthCount() {
-      return `${toArray(this.ui.chatbarContent).length}/${Config.chat.maxChars}`
+      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
+      return `${toArray(this.ui.chatbarContent).length}/${
+        this.$Config.chat.maxChars
+      }`
     },
   },
 })

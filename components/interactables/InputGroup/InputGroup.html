@@ -12,7 +12,7 @@
         :readonly="readonly"
         :type="inputKind"
         :placeholder="placeholder"
-        :maxLength="textLimit? limitCount : ''"
+        :maxLength="textLimit? limitCount : $Config.chat.maxChars"
         v-on:keyup.enter="action"
         @input="update"
       />
@@ -45,7 +45,5 @@
       </a>
     </div>
   </div>
-  <span v-if="textLimit" class="char-limit">
-    {{ textLength }}
-  </span>
+  <span v-if="textLimit" class="char-limit"> {{ textLength }} </span>
 </div>

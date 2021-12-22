@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 
@@ -84,7 +83,7 @@ export default Vue.extend({
      * @example
      */
     charlimit() {
-      return this.$data.text.length > Config.chat.maxChars
+      return this.$data.text.length > this.$Config.chat.maxChars
     },
     /**
      * @method hasCommand DocsTODO
@@ -199,7 +198,7 @@ export default Vue.extend({
       // Delete extra character when it exceeds the charlimit
       if (
         messageBox.innerText &&
-        messageBox.innerText.length > Config.chat.maxChars + 1
+        messageBox.innerText.length > this.$Config.chat.maxChars + 1
       ) {
         messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
@@ -269,7 +268,9 @@ export default Vue.extend({
      */
     sendMessage() {
       if (this.recipient) {
-        const isEmpty = RegExp(Config.regex.blankSpace, 'g').test(this.value)
+        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(
+          this.value,
+        )
         if (!this.recipient || isEmpty) {
           return
         }
