@@ -302,7 +302,7 @@ export default Vue.extend({
      */
     handleDrop(e: any) {
       e.preventDefault()
-      this.handleUpload(e.dataTransfer.items)
+      this.handleUpload(e.dataTransfer.items, e)
     },
     /**
      * @method handlePaste
@@ -314,7 +314,7 @@ export default Vue.extend({
       /* Don't use event.preventDefault(). It prevent original text copy-paste */
       e.stopPropagation()
       /* Upload if image, if not then no action */
-      this.handleUpload(e.clipboardData.items)
+      this.handleUpload(e.clipboardData.items, e)
     },
     /**
      * @method handleUpload
@@ -322,12 +322,13 @@ export default Vue.extend({
      * @param items Array of objects
      * @example this.handleUpload(someEvent.itsData.items)
      */
-    handleUpload(items: Array<object>) {
+    handleUpload(items: Array<object>, e: any) {
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes('image'))
         .map((f: any) => f.getAsFile())
 
       if (arrOfFiles.length) {
+        e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
