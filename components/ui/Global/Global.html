@@ -34,7 +34,7 @@
     v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
     nopad
   >
-    <TailoredCoreIncomingCall
+    <MediaIncomingCall
       :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
