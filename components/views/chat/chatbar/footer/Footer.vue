@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { toArray } from 'lodash'
+import { Config } from '~/config'
 
 export default Vue.extend({
   props: {
