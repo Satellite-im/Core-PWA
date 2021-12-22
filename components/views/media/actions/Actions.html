@@ -15,10 +15,10 @@
     class="has-tooltip has-tooltip-primary"
     :data-tooltip="$t('controls.mute')">
     <InteractablesButton
-      :type="audio.muted ? 'danger' : 'dark'"
+      :type="audioMuted ? 'danger' : 'dark'"
       size="small"
       :action="toggleMute">
-      <mic-icon v-if="!audio.muted" size="1.2x" />
+      <mic-icon v-if="!audioMuted" size="1.2x" />
       <mic-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
@@ -39,7 +39,7 @@
       class="right"
       type="danger"
       size="small"
-      :action="() => {}">
+      :action="() => hangUp()">
       <phone-off-icon size="1.2x" />
     </InteractablesButton>
   </div>

@@ -1,7 +1,7 @@
 #glyphs {
   position: relative;
   height: @full;
-  &:extend(.light-padding);  padding-bottom: @xlarge-spacing;
+  &:extend(.light-padding);
   .search-glyph-box {
     margin-bottom: @light-spacing;
     input {
@@ -11,13 +11,19 @@
   .glyph-list-box {
     &:extend(.blur);
     &:extend(.bordered);
-    &:extend(.light-padding);    &:extend(.round-corners);
+    &:extend(.light-padding);
+    &:extend(.round-corners);
   }
   .glyph-content {
-    height: @full;
     font-size: 0.75rem;
-    section {
-      height: @full;
+  }
+  .virtual-list {
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: @primary-color;
+      border-radius: 6px;
     }
   }
 }

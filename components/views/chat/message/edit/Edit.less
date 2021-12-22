@@ -3,6 +3,15 @@
     &-input {
       flex-grow: 1;
       font-size: @text-size;
+      word-break: break-all;
+      blockquote {
+        border-left: 4px solid @text-muted;
+        padding-left: @light-spacing;
+      }
+      &:extend(.round-corners);
+      p {
+        font-size: @text-size !important;
+      }
     }
     &-emoj {
       flex-shrink: 0;
@@ -17,7 +26,8 @@
     font-size: @text-size;
   }
   margin: @light-spacing 0px;
-  &:extend(.light-padding);  &:extend(.background-semitransparent-dark);
+  &:extend(.light-padding);
+  &:extend(.background-semitransparent-dark);
   &:extend(.round-corners);
   border: 1px solid @primary-color;
 }

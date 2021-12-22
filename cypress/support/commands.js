@@ -51,7 +51,7 @@ Cypress.Commands.add('importAccount', () => {
   )
   cy.get('[data-cy=add-passphrase]').type('{enter}')
   cy.contains('Recover Account').click()
-  cy.contains('Working on the space station', { timeout: 30000 }).should(
+  cy.contains('Working on the space station', { timeout: 60000 }).should(
     'be.visible',
   )
 })

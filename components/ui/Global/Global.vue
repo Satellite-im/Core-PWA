@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
@@ -64,8 +65,14 @@ export default Vue.extend({
      * @description
      * @example
      */
-    acceptCall() {
-      this.$store.dispatch('media/acceptCall')
+    async acceptCall(kinds: TrackKind[]) {
+      const identifier = this.$store.state.webrtc.incomingCall
+
+      const peer = this.$WebRTC.getPeer(identifier)
+
+      await peer?.call.createLocalTracks(kinds)
+
+      await peer?.call.answer()
     },
     /**
      * @method denyCall DocsTODO
@@ -73,7 +80,13 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.dispatch('media/denyCall')
+      const identifier = this.$store.state.webrtc.incomingCall
+      const peer = this.$WebRTC.getPeer(identifier)
+
+      peer?.call.deny()
+
+      // peer?.send('SIGNAL', { type: 'CALL_DENIED' })
+      // this.$store.dispatch('webrtc/denyCall')
     },
   },
 })

@@ -41,6 +41,53 @@ export default Vue.extend({
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
         : this.users.slice(0, this.maxViewableUsers)
     },
+    activeCall() {
+      return this.$store.state.friends.all.some(
+        (friend: any) => friend.address === this.$store.state.webrtc.activeCall,
+      )
+    },
+    localVideoStream() {
+      const { activeCall } = this.$store.state.webrtc
+      const { id, muted } = this.$store.state.webrtc.localTracks.video
+
+      if (muted) {
+        return null
+      }
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      const localVideoTrack = peer?.call.getTrackById(id)
+
+      return localVideoTrack ? new MediaStream([localVideoTrack]) : null
+    },
+    remoteVideoStream() {
+      const { activeCall } = this.$store.state.webrtc
+      const { id, muted } = this.$store.state.webrtc.remoteTracks.video
+
+      if (muted) {
+        return null
+      }
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      const remoteVideoTrack = peer?.call.getTrackById(id)
+
+      return remoteVideoTrack ? new MediaStream([remoteVideoTrack]) : null
+    },
+    remoteAudioStream() {
+      const { activeCall } = this.$store.state.webrtc
+      const { id, muted } = this.$store.state.webrtc.remoteTracks.audio
+
+      if (muted) {
+        return null
+      }
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      const remoteAudioTrack = peer?.call.getTrackById(id)
+
+      return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
+    },
     ...mapState(['audio']),
   },
   watch: {
