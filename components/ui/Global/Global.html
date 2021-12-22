@@ -30,14 +30,12 @@
       :set-close-timeout="5000"
     />
   </UiModal>
-  <!-- TODO: Move to hounddog -->
   <UiModal
-    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+    v-if="$Hounddog.matchesSomeActiveCall($store.state)"
     nopad
   >
-  <!-- TODO: Move to hounddog -->
     <TailoredCoreIncomingCall
-      :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+    v-if="$Hounddog.matchesActiveCall($store.state)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
     />
