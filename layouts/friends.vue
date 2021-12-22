@@ -63,7 +63,8 @@ export default Vue.extend({
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        cssMode: this.$device.isMobile ? false : true,
+        noSwiping: this.$device.isMobile ? false : true,
+        allowTouchMove:  this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
