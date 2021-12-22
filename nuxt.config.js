@@ -153,7 +153,7 @@ export default defineNuxtConfig({
       runtimeCaching: [
         {
           urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
-          handler: 'cacheFirst',
+          handler: 'StaleWhileRevalidate',
           method: 'GET',
           strategyOptions: {
             cacheName: 'ipfs',
