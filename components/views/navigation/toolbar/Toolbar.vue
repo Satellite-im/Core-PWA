@@ -19,6 +19,7 @@ import { User } from '~/types/ui/user'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -62,7 +63,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'search']),
+    ...mapState(['ui', 'search', 'audio', 'video']),
     showSearchResult: {
       set(state) {
         this.$store.commit('ui/showSearchResult', state)
@@ -124,6 +125,24 @@ export default Vue.extend({
         name: modalName,
         state: !this.ui.modals[modalName],
       })
+    },
+    async call(kinds: TrackKind[]) {
+      const identifier = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      ).address
+
+      console.log('kind', kinds)
+
+      // Trying to call the same user while call is already active
+      if (identifier === this.$store.state.webrtc.activeCall) {
+        return
+      }
+
+      const peer = this.$WebRTC.getPeer(identifier)
+
+      const tracks = await peer?.call.createLocalTracks(kinds)
+
+      await peer?.call.start()
     },
   },
 })

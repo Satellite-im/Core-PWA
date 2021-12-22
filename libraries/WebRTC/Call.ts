@@ -1,6 +1,8 @@
 import Peer, { SignalData } from 'simple-peer'
+import { Config } from '~/config'
 import Emitter from './Emitter'
-import { CallEventListeners } from './types'
+import { TracksManager } from './TracksManager'
+import { CallEventListeners, TrackKind } from './types'
 import { Wire } from './Wire'
 
 /**
@@ -15,6 +17,11 @@ export class Call extends Emitter<CallEventListeners> {
   signalingBuffer?: Peer.SignalData // A variable to store the signaling data before the answer
 
   stream?: MediaStream // MediaStream for the active call
+  remoteStream?: MediaStream // Remote stream received via WebRTC
+
+  constraints: MediaStreamConstraints
+
+  tracksManager: TracksManager // Keep tracks of all media stream tracks
 
   /**
    * @constructor
@@ -25,7 +32,116 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.communicationBus = communicationBus
 
+    this.constraints = Config.webrtc.constraints
+
+    this.tracksManager = new TracksManager()
+
     this._bindBusListeners()
+  }
+
+  /**
+   * @method createLocalTracks
+   * @description Generate local tracks for audio/video
+   * @param kinds Array of track kind you want to create
+   * @param constraints Media stream constraints to apply
+   * @returns The created local tracks
+   * @example
+   * const call = new Call(wireInstance)
+   * call.createLocalTracks({audio: true, video: true})
+   */
+  async createLocalTracks(
+    kinds: TrackKind[],
+    constraints?: MediaStreamConstraints,
+  ) {
+    if (!navigator.mediaDevices.getUserMedia) {
+      throw new Error('WebRTC not supported')
+    }
+
+    if (constraints) {
+      const constraintsUpdates = kinds.reduce(
+        (updates, kind) => ({ ...updates, [kind]: constraints[kind] }),
+        {},
+      )
+      this.updateConstraints(constraintsUpdates)
+    }
+
+    const constraintsToApply = kinds.reduce(
+      (updates, kind) => ({ ...updates, [kind]: this.constraints[kind] }),
+      {},
+    )
+
+    this.stream = await navigator.mediaDevices.getUserMedia(constraintsToApply)
+
+    const { audio, video } = this.getLocalTracks()
+
+    if (audio) this.tracksManager.addTrack(audio)
+    if (video) this.tracksManager.addTrack(video)
+
+    if (audio) {
+      this.emit('LOCAL_TRACK_CREATED', {
+        peerId: this.communicationBus.identifier,
+        track: audio,
+      })
+    }
+
+    if (video) {
+      this.emit('LOCAL_TRACK_CREATED', {
+        peerId: this.communicationBus.identifier,
+        track: video,
+      })
+    }
+
+    return { audio, video }
+  }
+
+  /**
+   * @method updateConstraints
+   * @description Updates the constraints property
+   * @param constraints Media stream contraints to apply from now on
+   */
+  updateConstraints(constraints: MediaStreamConstraints) {
+    this.constraints = { ...this.constraints, ...constraints }
+  }
+
+  /**
+   * @method getLocalTracks
+   * @description Extract the local tracks from the stream
+   * @returns the local tracks from the media stream
+   */
+  getLocalTracks() {
+    if (!this.stream) {
+      throw new Error('Stream not initialized')
+    }
+
+    const [audio] = this.stream.getAudioTracks()
+    const [video] = this.stream.getVideoTracks()
+
+    return { audio, video }
+  }
+
+  /**
+   * @method getRemoteTracks
+   * @description Extract the remote tracks from the remote stream
+   * @returns the remote tracks from the media stream
+   */
+  getRemoteTracks() {
+    if (!this.remoteStream) {
+      throw new Error('Remote stream not initialized')
+    }
+
+    const [audio] = this.remoteStream.getAudioTracks()
+    const [video] = this.remoteStream.getVideoTracks()
+
+    return { audio, video }
+  }
+
+  /**
+   * @method getTrackById
+   * @description Returns a mediastreamtrack from the given id
+   * @returns a mediastream track or undefined if not found
+   */
+  getTrackById(id: string): MediaStreamTrack | undefined {
+    return this.tracksManager.getTrack(id)
   }
 
   /**
@@ -34,15 +150,26 @@ export class Call extends Emitter<CallEventListeners> {
    * @param stream MediaStream object containing the audio/video tracks
    * @example
    * const call = new Call(wireInstance)
-   * call.start(mediaStream)
+   * await call.createLocalTracks({audio: true, video: true})
+   * call.start()
    */
-  start(stream: MediaStream) {
+  start() {
+    if (!this.stream) {
+      throw new Error('Local tracks not initialized. Create local tracks first')
+    }
+
     // A new Simple Peer instance is created with the initiator flag set to true
-    this.peer = new Peer({ initiator: true, trickle: false, stream })
+    this.peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: this.stream,
+    })
     this._bindPeerListeners()
 
-    // Store the stream of the active call to destroy it after hang up
-    this.stream = stream
+    this.addTransceiver('audio')
+    this.addTransceiver('video')
+
+    this.emit('OUTGOING_CALL', { peerId: this.communicationBus.identifier })
   }
 
   /**
@@ -54,20 +181,39 @@ export class Call extends Emitter<CallEventListeners> {
    * const call = new Call(wireInstance)
    * call.answer(mediaStream)
    */
-  answer(stream: MediaStream) {
+  answer() {
     if (!this.signalingBuffer) {
       throw new Error('No call to answer')
     }
 
-    // A new Simple Peer instance is created with the initiator flag set to false
-    this.peer = new Peer({ initiator: false, trickle: false, stream })
-    this._bindPeerListeners()
+    if (!this.stream) {
+      throw new Error('Local tracks not initialized. Create local tracks first')
+    }
 
-    // Store the stream of the active call to destroy it after hang up
-    this.stream = stream
+    // A new Simple Peer instance is created with the initiator flag set to false
+    this.peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: this.stream,
+    })
+    this._bindPeerListeners()
 
     // Signal to the peer with previously received Signaling Data
     this.peer.signal(this.signalingBuffer)
+  }
+
+  deny() {
+    if (!this.signalingBuffer) {
+      console.warn('No call to deny')
+      this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
+      return
+    }
+
+    this.communicationBus.send({
+      type: 'REFUSE',
+      payload: { peerId: this.communicationBus.identifier },
+      sentAt: Date.now(),
+    })
   }
 
   /**
@@ -80,9 +226,57 @@ export class Call extends Emitter<CallEventListeners> {
   hangUp() {
     this.peer?.destroy()
     this.stream?.getTracks().forEach((track) => track.stop())
+    this.remoteStream?.getTracks().forEach((track) => track.stop())
+
+    this.tracksManager.removeAllTracks()
 
     delete this.peer
     delete this.stream
+  }
+
+  /**
+   * @method mute
+   * @description Mute audio or video by removing the track of the given kind
+   * @param kind Kind of the track to mute
+   */
+  async mute(kind: TrackKind) {
+    if (!this.stream) {
+      throw new Error('Stream not initialized. Create local tracks first')
+    }
+
+    const localTracks = this.getLocalTracks()
+
+    if (localTracks[kind]) {
+      this.removeTrack(localTracks[kind], this.stream)
+
+      this.emit('LOCAL_TRACK_REMOVED', {
+        peerId: this.communicationBus.identifier,
+        track: localTracks[kind],
+      })
+    }
+  }
+
+  /**
+   * @method unmute
+   * @description Unmute audio or video by adding a new track of the given kind
+   * @param kind Kind of the track to unmute
+   */
+  async unmute(kind: TrackKind) {
+    if (!this.stream) {
+      throw new Error('Stream not initialized. Create local tracks first')
+    }
+
+    const localTracks = this.getLocalTracks()
+
+    if (localTracks[kind]) {
+      throw new Error('Track already present')
+    }
+
+    const constraints = { [kind]: this.constraints[kind] }
+
+    const newTracks = await this.createLocalTracks([kind], constraints)
+
+    this.addTrack(newTracks[kind], this.stream)
   }
 
   /**
@@ -120,6 +314,8 @@ export class Call extends Emitter<CallEventListeners> {
    */
   addTrack(track: MediaStreamTrack, stream: MediaStream) {
     this.peer?.addTrack(track, stream)
+    this.tracksManager.addTrack(track)
+    stream.addTrack(track)
   }
 
   /**
@@ -132,7 +328,10 @@ export class Call extends Emitter<CallEventListeners> {
    * call.removeTrack(trackToRemove, mediaStream)
    */
   removeTrack(track: MediaStreamTrack, stream: MediaStream) {
+    track.stop()
     this.peer?.removeTrack(track, stream)
+    stream.removeTrack(track)
+    this.tracksManager.removeTrack(track.id)
   }
 
   /**
@@ -151,6 +350,19 @@ export class Call extends Emitter<CallEventListeners> {
     stream: MediaStream,
   ) {
     this.peer?.replaceTrack(oldTrack, newTrack, stream)
+    this.tracksManager.removeTrack(oldTrack.id)
+    this.tracksManager.addTrack(newTrack)
+  }
+
+  /**
+   * @method addTransceiver
+   * @description Add a RTCRtpTransceiver to the connection
+   * @param kind A MediaStreamTrack to associate with the transceiver, or a DOMString which is used as the kind of the receiver's track, and by extension of the RTCRtpReceiver itself.
+   * @param init An object that conforms to the RTCRtpTransceiverInit dictionary which provides any options that you may wish to specify when creating the new transceiver.
+   * @example
+   */
+  addTransceiver(kind: string) {
+    this.peer?.addTransceiver(kind, undefined)
   }
 
   /**
@@ -161,6 +373,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _bindBusListeners() {
     this.communicationBus?.on('SIGNAL', this._onBusSignal.bind(this))
+    this.communicationBus?.on('REFUSE', this._onBusRefuse.bind(this))
   }
 
   /**
@@ -230,7 +443,22 @@ export class Call extends Emitter<CallEventListeners> {
    * @param stream MediaStream object for the audio/video stream
    */
   protected _onTrack(track: MediaStreamTrack, stream: MediaStream) {
-    this.emit('TRACK', {
+    const trackMuteListener = () => {
+      this.tracksManager.removeTrack(track.id)
+
+      track.removeEventListener('mute', trackMuteListener)
+
+      this.emit('REMOTE_TRACK_REMOVED', {
+        peerId: this.communicationBus.identifier,
+        track,
+        stream,
+      })
+    }
+
+    track.addEventListener('mute', trackMuteListener)
+
+    this.tracksManager.addTrack(track)
+    this.emit('REMOTE_TRACK_RECEIVED', {
       peerId: this.communicationBus.identifier,
       track,
       stream,
@@ -243,6 +471,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param stream MediaStream object for the audio/video stream
    */
   protected _onStream(stream: MediaStream) {
+    this.remoteStream = stream
     this.emit('STREAM', { peerId: this.communicationBus.identifier, stream })
   }
 
@@ -252,6 +481,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onClose() {
     this.hangUp()
+    delete this.signalingBuffer
     this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
   }
 
@@ -261,12 +491,11 @@ export class Call extends Emitter<CallEventListeners> {
    * @param message Wire Message containing the signal data
    */
   protected _onBusSignal(message: { peerId: string; data: SignalData }) {
-    this.signalingBuffer = message.data
-
-    if (message.data.type === 'offer') {
+    if (message.data.type === 'offer' && !this.signalingBuffer) {
+      this.signalingBuffer = message.data
       this.emit('INCOMING_CALL', { peerId: this.communicationBus.identifier })
     } else {
-      this.peer?.signal(this.signalingBuffer)
+      this.peer?.signal(message.data)
     }
   }
 

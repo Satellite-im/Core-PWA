@@ -30,12 +30,14 @@
       :set-close-timeout="5000"
     />
   </UiModal>
+  <!-- TODO: Move to hounddog -->
   <UiModal
-    v-if="$mock.users.find((user) => user.name === media.incomingCall)"
+    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
     nopad
   >
-    <MediaIncomingCall
-      :user="$mock.users.find((user) => user.name === media.incomingCall)"
+  <!-- TODO: Move to hounddog -->
+    <TailoredCoreIncomingCall
+      :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
     />
