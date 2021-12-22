@@ -81,49 +81,6 @@ export default {
     dispatch('subscribeToMailbox')
   },
   /**
-   * @description Needed for loading more messages from a specific friend
-   * @param param0
-   * @param param1
-   */
-  // async loadMoreMessages(
-  //   { commit, rootState, dispatch, state }: ActionsArguments<TextileState>,
-  //   { address }: { address: string }
-  // ) {
-  //   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-  //   if (!$TextileManager.mailboxManager?.isInitialized()) {
-  //     throw new Error('Mailbox manager not initialized')
-  //   }
-
-  //   const friend = rootState.friends.all.find((fr) => fr.address === address)
-
-  //   if (!friend) {
-  //     throw new Error('Friend not found')
-  //   }
-
-  //   const currentConversation = state.conversations[address]
-
-  //   commit('setConversationLoading', { loading: true })
-
-  //   const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
-
-  //   const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
-
-  //   const conversation = await $MailboxManager.getConversation(
-  //     friend.textilePubkey,
-  //     query
-  //   )
-
-  //   commit('setConversation', {
-  //     address: friend.publicKey,
-  //     messages: conversation,
-  //     limit: query.limit,
-  //     skip: query.skip,
-  //   })
-
-  //   commit('setConversationLoading', { loading: false })
-  // },
-  /**
    * @description Subscribes to the user mailbox, if not already subscribed, and eventually
    * updates messages in the active chat
    * @param param0 Action Arguments
@@ -270,8 +227,6 @@ export default {
           },
         )
 
-    // $TextileManager.bucketManager?.addToIndex(file.file, result?.root, path)
-
       commit('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
@@ -318,10 +273,6 @@ export default {
       message: result,
     })
   },
-  // async updateFileProgress(
-  //   { commit }: ActionsArguments<TextileState>, {uploaded, fileSize}: {uploaded: number, fileSize: number}){
-  //   commit( 'setUploadingFileProgress' ,uploaded / fileSize * 100)
-  // },
   /**
    * @description Sends a reply message to a given friend
    * @param param0 Action Arguments
