@@ -9,6 +9,18 @@ import {
 } from '../Solana'
 
 export default class SolanaManager {
+  static waitForAccount(param1: any, param2: any) {
+      throw new Error('Method not implemented.')
+  }
+  static stringToBuffer(arg0: string, arg1: number): any {
+      throw new Error('Method not implemented.')
+  }
+  static publicKeyFromSeeds(param1: any, arg1: string, param3: any) {
+      throw new Error('Method not implemented.')
+  }
+  static getClusterFromNetworkConfig(arg0: string): any {
+      throw new Error('Method not implemented.')
+  }
   accounts: Array<SolanaWallet>
   payerAccount?: Keypair
   connection: Connection
