@@ -10,7 +10,10 @@
     <SmileIcon class="edit-message-body-emoj" size="1.5x" />
   </div>
   <div class="edit-message-bottom">
-    escape to <a @click="cancelMessage">cancel</a> • enter to
-    <a @click="saveMessage">save</a>
+    <div>
+      escape to <a @click="cancelMessage">cancel</a> • enter to
+      <a @click="saveMessage">save</a>
+    </div>
+    <div>{{lengthCount}}/{{maxChars}}</div>
   </div>
 </div>

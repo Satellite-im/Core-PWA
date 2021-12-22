@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { toArray } from 'lodash'
+import { Config } from '~/config'
 
 export default Vue.extend({
   props: {
@@ -28,7 +29,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      maxChars: 256,
+      maxChars: Config.chat.messageMaxChars,
     }
   },
   computed: {

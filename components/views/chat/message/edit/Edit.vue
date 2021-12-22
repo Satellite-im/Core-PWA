@@ -1,10 +1,12 @@
 <template src="./Edit.html"></template>
 
 <script lang="ts">
+import { number } from 'io-ts'
 import Vue from 'vue'
 
 // @ts-ignore
 import { SmileIcon } from 'vue-feather-icons'
+import { Config } from '~/config'
 
 import {
   htmlToMarkdown,
@@ -22,16 +24,22 @@ export default Vue.extend({
       type: String,
       required: true,
     },
+    maxChars: {
+      type: Number,
+      default: Config.chat.messageMaxChars,
+    },
   },
   data() {
     return {
       content: '',
+      lengthCount: 0,
     }
   },
   mounted() {
     this.content = this.$props.message
     const messageBox = this.$refs.messageBox as HTMLElement
     messageBox.innerHTML = markDownToHtml(this.content)
+    this.lengthCount = messageBox.innerText.trim().length
     setCaretPosition(messageBox, this.content.length)
   },
   methods: {
@@ -41,6 +49,12 @@ export default Vue.extend({
     cancelMessage() {
       this.$emit('cancelMessage')
     },
+    calculateLengthCount() {
+      const messageBox = this.$refs.messageBox as HTMLElement
+      this.lengthCount = messageBox.textContent
+        ? messageBox.textContent.trim().length
+        : 0
+    },
     /**
      * Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
      * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
@@ -48,7 +62,13 @@ export default Vue.extend({
      */
     handleInputChange() {
       const messageBox = this.$refs.messageBox as HTMLElement
+      this.calculateLengthCount()
       if (messageBox && messageBox.textContent) {
+        if (this.lengthCount >= this.maxChars) {
+          messageBox.innerText = messageBox.innerText.slice(0, this.maxChars)
+          setCaretPosition(messageBox, this.maxChars)
+          this.calculateLengthCount()
+        }
         const markDown = htmlToMarkdown(messageBox.innerHTML)
         this.content = markDown
         let caretPosition = getCaretPosition(messageBox)
@@ -81,6 +101,7 @@ export default Vue.extend({
       switch (event.key) {
         case 'Backspace':
         case 'Delete':
+          this.calculateLengthCount()
           return
         case 'Enter':
           if (!event.shiftKey) {
@@ -90,6 +111,7 @@ export default Vue.extend({
         case 'Spacebar':
         case ' ':
           {
+            this.calculateLengthCount()
             event.preventDefault()
             const caretPosition = getCaretPosition(messageBox)
             this.$nextTick(() => {
@@ -105,14 +127,20 @@ export default Vue.extend({
         case 'End':
         case 'Shift':
           return
+        case 'Escape':
+          this.cancelMessage()
+          break
         case 'a':
         case 'A':
           if (event.ctrlKey) {
             return
           }
-          break
-        case 'Escape':
-          this.cancelMessage()
+        default:
+          this.calculateLengthCount()
+          if (this.lengthCount >= this.maxChars) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
           break
       }
     },
@@ -125,6 +153,26 @@ export default Vue.extend({
             messageBox.innerHTML = ''
           }
           break
+        case 'a':
+        case 'A':
+          if (event.ctrlKey) {
+            return
+          }
+          break
+        case 'Home':
+        case 'End':
+        case 'Left':
+        case 'ArrowLeft':
+        case 'Up':
+        case 'ArrowUp':
+        case 'Right':
+        case 'ArrowRight':
+        case 'Down':
+        case 'ArrowDown':
+          return
+        case 'Control':
+        case 'Shift':
+          return
       }
       this.$nextTick(() => {
         this.handleInputChange()

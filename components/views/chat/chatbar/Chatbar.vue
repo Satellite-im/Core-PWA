@@ -33,7 +33,7 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-      maxChars: 256,
+      maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
     }
   },
