@@ -1,12 +1,13 @@
-<!-- TODO: Move to hounddog -->
-<div id="mediastream" ref="mediastream" v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)">
+<div id="mediastream" ref="mediastream" v-if="this.$Hounddog.matchesActiveCall($store.state)">
   <MediaHeading />
   <div id="media" ref="media">
+    <!--TODO: Move to MediaUser -->
     <div class="user">
       <div class="video-stream-container" v-if="localVideoStream">
         <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
       </div>
     </div>
+    <!--TODO: Move to MediaUser -->
     <div class="user">
       <div class="video-stream-container" v-if="remoteVideoStream">
         <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
