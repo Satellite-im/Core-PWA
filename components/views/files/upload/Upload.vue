@@ -11,10 +11,12 @@ import {
   SlashIcon,
 } from 'satellite-lucide-icons'
 
-import { UploadDropItemType } from '~/types/files/file'
+import { FileType, UploadDropItemType } from "~/types/files/file";
 import {Friend} from "~/types/ui/friends";
 import {mapState} from "vuex";
 import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
+import {Promise} from "es6-promise";
+import { function } from "fp-ts";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -54,6 +56,7 @@ export default Vue.extend({
       error: false,
       aiScanning: false,
       disabledButton: false,
+      fileAmount: 0,
     }
   },
   computed: {
@@ -153,27 +156,39 @@ export default Vue.extend({
       this.$data.count_error = false
     },
     /**
+     * @method finishUploads
+     * @description Keeps track of how many files have been uploaded
+     */
+    finishUploads() {
+      this.fileAmount --
+      if (this.fileAmount === 0) {
+        this.cancelUpload()
+        document.body.style.cursor = PropCommonEnum.DEFAULT
+        this.$store.dispatch('textile/clearUploadStatus')
+        this.disabledButton = false
+      }
+    },
+    /**
+     * @method dispatchFile
+     * @description Sends a singular file to textile.
+     */
+    dispatchFile(file: FileType){
+      this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: file,
+      }).then( () =>
+        this.finishUploads())
+    },
+    /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage () {
       this.disabledButton = true;
-      const sendFiles = this.$data.files.map((file: UploadDropItemType) =>
-        this.$store.dispatch('textile/sendFileMessage', {
-        to: this.recipient.textilePubkey,
-        file: file,
+      this.fileAmount = this.$data.files.length
+      this.$data.files.forEach((file: UploadDropItemType) => {
+        this.dispatchFile(file)
       })
-      )
-      Promise.allSettled(sendFiles).then(() => {
-        this.cancelUpload()
-        document.body.style.cursor= PropCommonEnum.DEFAULT
-        this.$store.dispatch('textile/clearUploadStatus')
-        this.disabledButton = false
-      }).catch(error => {
-        document.body.style.cursor= PropCommonEnum.DEFAULT
-        Error(error)
-      })
-
     },
   },
 })
