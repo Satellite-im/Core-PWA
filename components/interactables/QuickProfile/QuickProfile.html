@@ -19,8 +19,10 @@
     <InteractablesInputGroup
       type="primary"
       v-model="text"
+      :limitCount="maxChars"
       :placeholder="`${$t('friends.message')} ${user.name}...`"
       :action="sendMessage"
+      textLimit
     >
       <arrow-right-icon size="1x" />
     </InteractablesInputGroup>
