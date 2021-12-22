@@ -2,7 +2,7 @@
 
 exports[`utils.stringToTypedBase64 0 1`] = `"c29tZXRoaW5nLmV4YW1wbGUuY29t"`;
 
-exports[`utils.stringToTypedBase64 1 1`] = `"cG9uaWNvZGUuY29t"`;
+exports[`utils.stringToTypedBase64 1 1`] = `"Z29vZ2xlLmNvbQ=="`;
 
 exports[`utils.stringToTypedBase64 2 1`] = `"ZW1haWxAR29vZ2xlLmNvbQ=="`;
 

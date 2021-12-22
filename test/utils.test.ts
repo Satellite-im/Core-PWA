@@ -7,7 +7,7 @@ describe("utils.stringToTypedBase64", () => {
     })
 
     test("1", () => {
-        let result: any = utils.stringToTypedBase64("ponicode.com")
+        let result: any = utils.stringToTypedBase64("google.com")
         expect(result).toMatchSnapshot()
     })
 
