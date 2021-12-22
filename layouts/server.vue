@@ -71,17 +71,12 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-
 export default Vue.extend({
   name: 'ServerLayout',
   mixins: [Touch, Layout],
   middleware: 'authenticated',
   components: {
     MenuIcon,
-    Swiper,
-    SwiperSlide
   },
   data() {
     return {
@@ -90,6 +85,7 @@ export default Vue.extend({
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
+        cssMode: this.$device.isMobile ? false : true,
         on: {
           slideChange: () => {
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
@@ -106,7 +102,6 @@ export default Vue.extend({
   },
   methods: {
     toggleMenu() {
-      console.log('toggleMenu')
       if (this.$refs.swiper.$swiper) {
         this.$data.sidebar
           ? this.$refs.swiper.$swiper.slideNext()

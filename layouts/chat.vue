@@ -94,29 +94,24 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-
 export default Vue.extend({
   name: 'ChatLayout',
   mixins: [Touch, Layout],
   middleware: 'authenticated',
   components: {
     MenuIcon,
-    Swiper,
-    SwiperSlide
   },
   data() {
     return {
       sidebar: true,
       asidebar: !this.$device.isMobile,
-      swiperOption: {
+      swiperOption: {        
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
+        cssMode: this.$device.isMobile ? false : true,
         on: {
           slideChange: () => {
-            console.log('slideChange: ', this.$refs.swiper.$swiper.activeIndex)
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
             this.$data.asidebar = this.$refs.swiper.$swiper.activeIndex === 2
           }
@@ -156,7 +151,6 @@ export default Vue.extend({
   },
   methods: {
     toggleMenu() {
-      console.log('sidebar: ', this.$data.sidebar)
       if (this.$refs.swiper.$swiper) {
         this.$data.sidebar
           ? this.$refs.swiper.$swiper.slideNext()

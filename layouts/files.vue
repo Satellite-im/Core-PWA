@@ -49,17 +49,12 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-
 export default Vue.extend({
   name: 'FilesLayout',
   mixins: [Touch, Layout],
   middleware: 'authenticated',
   components: {
     MenuIcon,
-    Swiper,
-    SwiperSlide
   },
   data() {
     return {
@@ -68,9 +63,9 @@ export default Vue.extend({
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
+        cssMode: this.$device.isMobile ? false : true,
         on: {
           slideChange: () => {
-            console.log('slideChange: ', this.swiper)
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
           }
         }
@@ -79,10 +74,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends']),
-    swiper() {
-      console.log('com swiper: ')
-      return this.$refs.swiper.$swiper
-    },
   },
   methods: {
     toggleMenu() {
