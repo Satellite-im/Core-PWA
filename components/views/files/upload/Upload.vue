@@ -11,11 +11,12 @@ import {
   SlashIcon,
 } from 'satellite-lucide-icons'
 
-import { UploadDropItemType } from '~/types/files/file'
+import { FileType, UploadDropItemType } from "~/types/files/file";
 import {Friend} from "~/types/ui/friends";
 import {mapState} from "vuex";
 import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
 import {Promise} from "es6-promise";
+import { function } from "fp-ts";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -55,7 +56,7 @@ export default Vue.extend({
       error: false,
       aiScanning: false,
       disabledButton: false,
-      fileAmount: null,
+      fileAmount: 0,
     }
   },
   computed: {
@@ -171,12 +172,12 @@ export default Vue.extend({
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file, finish){
+    dispatchFile(file: FileType){
       this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
         file: file,
       }).then( () =>
-        finish())
+        this.finishUploads())
     },
     /**
      * @method sendMessage
@@ -186,7 +187,7 @@ export default Vue.extend({
       this.disabledButton = true;
       this.fileAmount = this.$data.files.length
       this.$data.files.forEach((file: UploadDropItemType) => {
-        this.dispatchFile(file, this.finishUploads)
+        this.dispatchFile(file)
       })
     },
   },

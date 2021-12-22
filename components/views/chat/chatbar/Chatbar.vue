@@ -10,6 +10,11 @@ import { TerminalIcon } from 'satellite-lucide-icons'
 
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
+import {
+  KeybindingEnum,
+  MessagingTypesEnum,
+  PropCommonEnum
+} from "~/libraries/Enums/enums";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -52,15 +57,11 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if (this.$props.recipient) {
-      let findItem = this.setChatText.find(
-        (item: any) => item.userId === this.$props.recipient.address,
-      )
-      let message = findItem ? findItem.value : ''
+    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let message = findItem ? findItem.value : ''
 
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerText = message
-    }
+    const messageBox = this.$refs.messageuser as HTMLElement
+    messageBox.innerText = message
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -70,7 +71,7 @@ export default Vue.extend({
       },
       get() {
         return this.chat.chatTexts
-      },
+      }
     },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
@@ -161,7 +162,7 @@ export default Vue.extend({
      * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
      * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
      */
-    typingNotifHandler(state: 'TYPING' | 'NOT_TYPING') {
+    typingNotifHandler(state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING) {
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
@@ -177,7 +178,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler('NOT_TYPING')
+      ctx.typingNotifHandler(PropCommonEnum)
     }, 500),
     /**
      * @method smartTypingStart
@@ -186,7 +187,7 @@ export default Vue.extend({
     smartTypingStart() {
       if (this.$data.typing) return
       this.$data.typing = true
-      this.typingNotifHandler('TYPING')
+      this.typingNotifHandler(PropCommonEnum.TYPING)
     },
     /**
      * @method handleInputChange DocsTODO
@@ -219,7 +220,7 @@ export default Vue.extend({
      */
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
-        case 'Enter':
+        case KeybindingEnum.ENTER:
           if (!event.shiftKey) {
             event.preventDefault()
             if (this.$data.text !== '' && !this.hasCommand) {
@@ -255,11 +256,10 @@ export default Vue.extend({
       sel?.selectAllChildren(messageBox)
       sel?.collapseToEnd()
 
-      if (this.$props.recipient) {
-        this.setChatText = {
-          userId: this.$props.recipient.address,
-          value: messageBox.innerHTML,
-        }
+      // if (messageBox.)
+      this.setChatText = {
+        userId: this.$props.recipient.address,
+        value: messageBox.innerHTML
       }
     },
     /**
@@ -280,7 +280,7 @@ export default Vue.extend({
             to: this.recipient.textilePubkey,
             text: this.value,
             replyTo: this.ui.replyChatbarContent.messageID,
-            replyType: 'text',
+            replyType: MessagingTypesEnum.TEXT,
           })
           this.clearChatbar()
           return
@@ -300,9 +300,10 @@ export default Vue.extend({
      * @param e Drop event data object
      * @example v-on:drop="handleDrop"
      */
-    handleDrop(e: any) {
-      e.preventDefault()
-      this.handleUpload(e.dataTransfer.items, e)
+    handleDrop(e: DragEvent) {
+      if(e.dataTransfer) {
+        this.handleUpload(e?.dataTransfer?.items, e)
+      }
     },
     /**
      * @method handlePaste
@@ -310,11 +311,11 @@ export default Vue.extend({
      * @param e Paste event data object
      * @example v-on:paste="handlePaste"
      */
-    handlePaste(e: any) {
+    handlePaste(e: ClipboardEvent) {
       /* Don't use event.preventDefault(). It prevent original text copy-paste */
       e.stopPropagation()
       /* Upload if image, if not then no action */
-      this.handleUpload(e.clipboardData.items, e)
+      this.handleUpload(e?.clipboardData?.items, e)
     },
     /**
      * @method handleUpload
@@ -322,9 +323,9 @@ export default Vue.extend({
      * @param items Array of objects
      * @example this.handleUpload(someEvent.itsData.items)
      */
-    handleUpload(items: Array<object>, e: any) {
+    handleUpload(items: Array<object>, e: Event) {
       const arrOfFiles: File[] = [...items]
-        .filter((f: any) => f.type.includes('image'))
+        .filter((f: any) => f.type.includes(MessagingTypesEnum.IMAGE))
         .map((f: any) => f.getAsFile())
 
       if (arrOfFiles.length) {
@@ -350,7 +351,7 @@ export default Vue.extend({
           this.$store.state.friends,
         )
         if (activeFriend)
-          this.$data.recipientTyping = activeFriend.typingState === 'TYPING'
+          this.$data.recipientTyping = activeFriend.typingState === PropCommonEnum.TYPING
       },
       deep: true,
     },
@@ -358,13 +359,8 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let message = ''
-      if (this.$props.recipient) {
-        let findItem = this.setChatText.find(
-          (item: any) => item.userId === this.$props.recipient.address,
-        )
-        message = findItem ? findItem.value : ''
-      }
+      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {

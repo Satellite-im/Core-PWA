@@ -147,11 +147,11 @@ export default class BucketManager {
     return index;
   }
 
-  async removeFile(file: File, path: string) {
-    if (!this.buckets || !this.bucketKey) return;
-    this.buckets.removePath(this.bucketKey, `${this.prefix}${path}`);
-    // this.removeFromIndex(file);
-  }
+  // async removeFile(file: File, path: string) {
+  //   if (!this.buckets || !this.bucketKey) return;
+  //   this.buckets.removePath(this.bucketKey, `${this.prefix}${path}`);
+  //   // this.removeFromIndex(file);
+  // }
 
   async pushFile(file: File, path: string, progress: CallableFunction) : Promise<PushPathResult> {
     return new Promise((resolve, reject) => {
@@ -170,7 +170,9 @@ export default class BucketManager {
           },
         }).then((raw) => {
           resolve(raw);
-        }).catch(error => new Error(error));
+        }).catch(error => {
+          new Error(error);
+        });
       };
       reader.readAsArrayBuffer(file);
     });
