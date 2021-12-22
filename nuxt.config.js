@@ -148,7 +148,7 @@ export default defineNuxtConfig({
       source: '/static/favicon.png',
     },
     workbox: {
-      // uncomment next line to test dev
+      // uncomment next line to test local
       // enabled: true,
       runtimeCaching: [
         {
