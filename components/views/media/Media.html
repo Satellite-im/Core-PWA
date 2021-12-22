@@ -1,8 +1,21 @@
-<div id="mediastream" ref="mediastream">
+<div id="mediastream" ref="mediastream" v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)">
   <MediaHeading />
   <div id="media" ref="media">
-    <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
-      :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" />
+    <!--TODO: Move to MediaUser -->
+    <div class="user">
+      <div class="video-stream-container" v-if="localVideoStream">
+        <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
+      </div>
+    </div>
+    <!--TODO: Move to MediaUser -->
+    <div class="user">
+      <div class="video-stream-container" v-if="remoteVideoStream">
+        <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
+      </div>
+    </div>
+    <audio :src-object.prop="remoteAudioStream" v-if="remoteAudioStream" autoplay/>
+    <!-- <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
+      :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" /> -->
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
       class="more-user" v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}">...</div>

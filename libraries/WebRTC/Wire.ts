@@ -49,6 +49,7 @@ export class Wire extends Emitter<WireEventListeners> {
   ) {
     super()
 
+    console.log(announceURLs)
     this.originator = originator
     this.identifier = identifier
     this.channel = channel
@@ -211,7 +212,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
     this.emit('RAW_DATA', {
       peerId: this.identifier,
-      data: parsedData.data.payload,
+      data: parsedData.payload,
     })
   }
 

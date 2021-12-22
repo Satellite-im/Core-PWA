@@ -44,4 +44,12 @@ export default class Hounddog {
         const search = state.all.find((fr: Friend) => fr.address === friend.address)
         return Boolean(search)
     }
+
+    matchesActiveCall(state: any): Friend {
+        return state.friends.all.find((friend: Friend) => friend.address === state.webrtc.activeCall)
+    }
+
+    matchesSomeActiveCall(state: any): Friend {
+        return state.friends.all.some((friend: Friend) => friend.address === state.webrtc.activeCall)
+    }
 }

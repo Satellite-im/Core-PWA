@@ -20,7 +20,7 @@ export interface WireEventListeners {
   SIGNAL: (data: { peerId: string; data: SignalData }) => void
   REFUSE: (data: { peerId: string }) => void
   TYPING_STATE: (data: {
-    state: TypeOf<typeof KeyboardStates>,
+    state: TypeOf<typeof KeyboardStates>
     peerId: string
   }) => void
 }
@@ -45,17 +45,39 @@ export interface WireMessages {
 export type WireMessageType = keyof WireMessages
 export type WireMessage = WireMessages[WireMessageType]
 
+export type Tracks = {
+  audio: MediaStreamTrack
+  video: MediaStreamTrack
+}
+
+export type TrackKind = keyof Tracks
+
 export interface CallEventListeners {
   INCOMING_CALL: (data: { peerId: string }) => void
+  OUTGOING_CALL: (data: { peerId: string }) => void
   CONNECTED: (data: { peerId: string }) => void
   HANG_UP: (data: { peerId: string }) => void
   ERROR: (data: { peerId: string; error: Error }) => void
-  TRACK: (data: {
+  REMOTE_TRACK_RECEIVED: (data: {
+    peerId: string
+    track: MediaStreamTrack
+    stream: MediaStream
+  }) => void
+  REMOTE_TRACK_REMOVED: (data: {
     peerId: string
     track: MediaStreamTrack
     stream: MediaStream
   }) => void
   STREAM: (data: { peerId: string; stream: MediaStream }) => void
+  TRACK_MUTE_CHANGED: (data: { peerId: string; trackType: TrackKind }) => void
+  LOCAL_TRACK_CREATED: (data: {
+    peerId: string
+    track: MediaStreamTrack
+  }) => void
+  LOCAL_TRACK_REMOVED: (data: {
+    peerId: string
+    track: MediaStreamTrack
+  }) => void
 }
 
 export type CallEvents = keyof CallEventListeners
