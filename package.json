@@ -89,6 +89,7 @@
     "vue-plyr": "^7.0.0",
     "vue-slider-component": "^3.2.13",
     "vue-typed-mixins": "^0.2.0",
+    "vue-virtual-scroll-list": "^2.3.3",
     "vue2-touch-events": "^3.2.2",
     "vue3-touch-events": "^4.1.0",
     "vuejs-datepicker": "^1.6.2",

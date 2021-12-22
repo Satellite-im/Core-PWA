@@ -19,7 +19,7 @@ export default Vue.extend({
       })
       return this.$mock.glyphs[key]
     },
-    samplePack() {
+    samplePackUrls() {
       return shuffle(this.selectedPack.stickerURLs).slice(1, 4)
     },
   },

@@ -1,14 +1,17 @@
 <template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import _, { cloneDeep, isEmpty } from 'lodash'
+import VirtualList from 'vue-virtual-scroll-list'
+import PackGroup from './pack/PackGroup.vue'
 
 export default Vue.extend({
+  components: { VirtualList },
   data() {
     return {
-      filteredGlyphs: this.$mock.glyphs,
+      filteredGlyphs: Object.values(this.$mock.glyphs),
       searchText: '',
       selectedPack: null,
+      packGroup: PackGroup,
     }
   },
   watch: {
@@ -18,19 +21,10 @@ export default Vue.extend({
   },
   methods: {
     filter(filterValue: any) {
-      this.filteredGlyphs = Object.entries(
-        _.cloneDeep(this.$mock.glyphs),
-      ).reduce(
-        (prev, [key, value]: [string, any]) => ({
-          ...prev,
-          ...(value?.name?.includes(filterValue) ? { [key]: value } : {}),
-        }),
-        {},
+      this.filteredGlyphs = Object.values(this.$mock.glyphs).filter(
+        (pack) =>
+          pack.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1,
       )
-      // set active to ensure pack loads. Otherwise lazy load scroll trigger can be impossible to execute
-      if (!_.isEmpty(this.filteredGlyphs)) {
-        this.filteredGlyphs[Object.keys(this.filteredGlyphs)[0]].isActive = true
-      }
     },
   },
 })
