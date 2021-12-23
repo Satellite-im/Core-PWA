@@ -7,8 +7,8 @@ import { IFrameVideoData } from './types'
 export default Vue.extend({
   props: {
     data: {
-        type: String,
-        default: () => {},
+      type: String,
+      default: () => {},
     },
   },
   data() {
@@ -34,7 +34,7 @@ export default Vue.extend({
     parseEmbeddableVideoContentFromText(messagetext: string) {
       // parse incoming text for links
       const arrayOfLinks = messagetext.match(
-        /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi
+        /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
       )
 
       // this.settings.embeddedLinks is the global set in the networks panel. Without this, it just shows up as a normal link
@@ -92,7 +92,7 @@ export default Vue.extend({
               requestWidth = '300'
             }
             const facebookOutSource = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-              link.split('?')[0]
+              link.split('?')[0],
             )}&show_text=0&width=${requestWidth}`
             return {
               src: facebookOutSource,
@@ -120,7 +120,7 @@ export default Vue.extend({
               src: `https://player.twitch.tv/?${videoId}&parent=${window.location.hostname}&autoplay=false`,
               type: 'iframe',
               ref: this.setRefId(
-                `https://player.twitch.tv/?${videoId}&parent=${window.location.hostname}&autoplay=false`
+                `https://player.twitch.tv/?${videoId}&parent=${window.location.hostname}&autoplay=false`,
               ),
               aspectRatioClass: 'iframe-container-16-9',
             }
@@ -128,7 +128,7 @@ export default Vue.extend({
 
           if (
             link.match(
-              /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g
+              /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g,
             )
           ) {
             // get type and id
@@ -142,7 +142,7 @@ export default Vue.extend({
               src: `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`,
               type: 'iframe',
               ref: this.setRefId(
-                `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`
+                `https://open.spotify.com/embed/${spotifyEmbedType}?utm_source=generator`,
               ),
               aspectRatioClass: 'iframe-container-16-9',
             }
@@ -180,7 +180,7 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./EmbeddedLinkContent.less"></style>
+<style scoped lang="less" src="./EmbeddedLinkContent.less"></style>
 <style scoped lang="less">
 .is-text {
   font-size: @micro-text-size;

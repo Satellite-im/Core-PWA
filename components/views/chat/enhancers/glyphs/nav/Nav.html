@@ -3,16 +3,20 @@
     <clock-icon class="control-icon" size="1x" />
   </div>
   <div class="pack-list">
-    <div v-for="pack in $mock.glyphs">
+    <TypographyText
+      v-if="!ui.recentGlyphs.length"
+      text="Try using some glyphs"
+    />
+    <template v-else v-for="glyph in recentGlyphs">
       <EnhancersGlyphsItem
-        :key="pack.id"
-        :src="pack.stickerURLs[0]"
-        :pack="pack"
+        :key="glyph.url"
+        :src="glyph.url"
+        :pack="glyph.pack"
         :height="32"
         :width="32"
         :sendOnClick="true"
       />
-    </div>
+    </template>
   </div>
   <div class="market-place" @click="toggleMarketPlace">
     <shopping-bag-icon class="control-icon" size="1x" />
