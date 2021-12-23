@@ -218,6 +218,18 @@ export default Vue.extend({
         this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
+        nsfwCheck.map((file: UploadDropItemType) => {
+          this.fileAmount = nsfwCheck.length
+          this.$store.dispatch('textile/sendFileMessage', {
+            to: this.recipient.textilePubkey,
+            file: file,
+          }).then( () =>
+            this.finishUploads())
+        })
+
+        // }
+
+      console.log(nsfwCheck)
     },
   },
 })
