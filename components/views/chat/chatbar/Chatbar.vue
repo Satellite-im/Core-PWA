@@ -4,9 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-
 import { TerminalIcon } from 'satellite-lucide-icons'
-
 import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
@@ -28,7 +26,6 @@ declare module 'vue/types/vue' {
     handleChatBorderRadius: Function
   }
 }
-
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -274,7 +271,6 @@ export default Vue.extend({
         if (!this.recipient || isEmpty) {
           return
         }
-
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
@@ -289,7 +285,6 @@ export default Vue.extend({
           to: this.recipient.textilePubkey,
           text: this.value,
         })
-
         const messageBox = this.$refs.messageuser as HTMLElement
         this.clearChatbar()
       }
@@ -327,7 +322,6 @@ export default Vue.extend({
       const arrOfFiles: File[] = [...items]
         .filter((f: any) => f.type.includes(MessagingTypesEnum.IMAGE))
         .map((f: any) => f.getAsFile())
-
       if (arrOfFiles.length) {
         e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }

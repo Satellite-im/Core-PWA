@@ -39,6 +39,14 @@ export default Vue.extend({
       type: Array as PropType<Array<Group>>,
       default: () => [],
     },
+    showMenu: {
+      type: Function,
+      default: () => {},
+    },
+    sidebar: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     DataStateType: () => DataStateType,
@@ -58,15 +66,15 @@ export default Vue.extend({
      * when user is on a mobile device
      */
     if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
-      this.$props.toggle()
+      this.$props.showMenu()
     }
 
     if (this.$route.name?.includes('friends-list') && this.$device.isMobile) {
-      this.$props.toggle()
+      this.$props.showMenu()
     }
 
     if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-      this.$props.toggle()
+      this.$props.showMenu()
     }
   },
   methods: {

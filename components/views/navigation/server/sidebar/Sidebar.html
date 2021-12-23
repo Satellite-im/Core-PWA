@@ -4,9 +4,10 @@
     <div class="sidebar-search">
       <menu-icon
         class="toggle-sidebar"
-        v-on:click="toggle"
+        v-on:click="showMenu"
         size="1.2x"
         full-width
+        :style="`${sidebar ? 'display: block' : 'display: none'}`"
       />
       <InteractablesInput
         :placeholder="`${$t('ui.search')}...`"
@@ -24,11 +25,9 @@
     </div>
   </div>
   <div class="filler"
-    v-touch:swipe.left="toggle"
   ></div>
 
   <div class="controls"
-    v-touch:swipe.left="toggle"
   >
     <SidebarControls />
     <SidebarStatus />

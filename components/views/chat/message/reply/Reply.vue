@@ -40,7 +40,7 @@ export default Vue.extend({
   mounted() {
     let findItem = this.setChatReply.find((item: any) => item.replyId === this.$props.message.id)
 
-    if(findItem) {
+    if (findItem) {
       this.$data.showReplies = findItem.value
     }
   },
