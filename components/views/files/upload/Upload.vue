@@ -169,10 +169,16 @@ export default Vue.extend({
       await this.$store.dispatch('textile/sendFileMessage', {
         to: this.recipient.textilePubkey,
         file: file,
-      }).then(() =>
-        this.finishUploads())
+      }).then(() => {
+        this.finishUploads()
+      })
         .catch((error) => {
-          new Error(error)
+          if (error) {
+            new Error(error)
+            document.body.style.cursor = PropCommonEnum.DEFAULT
+            this.$store.dispatch('textile/clearUploadStatus')
+            this.disabledButton = false
+          }
         })
     },
     /**
