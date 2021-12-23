@@ -1,6 +1,9 @@
-<template src="./Upload.html"></template>
+<template src='./Upload.html'></template>
 
-<script lang="ts">
+<script lang='ts'>
+import Vue, { PropType } from 'vue'
+import { Config } from '~/config'
+
 import {
   FileIcon,
   FilePlusIcon,
@@ -8,12 +11,13 @@ import {
   SlashIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { UploadDropItemType } from '~/types/files/file'
+
+import { FileType, UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
+import { Config } from '~/config'
+import { mapState } from 'vuex'
+import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
+import { Promise } from 'es6-promise'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -126,7 +130,7 @@ export default Vue.extend({
     loadPicture(item: UploadDropItemType) {
       if (!item.file) return
       const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
+      reader.onload = function(e: Event | any) {
         if (e.target) item.url = e.target.result
       }
       reader.readAsDataURL(item.file)
@@ -173,6 +177,8 @@ export default Vue.extend({
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
+      this.fileAmount--
+      if (this.fileAmount === 0) {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
         this.cancelUpload()
@@ -185,40 +191,34 @@ export default Vue.extend({
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    // dispatchFile(file: FileType){
-    //   this.$store.dispatch('textile/sendFileMessage', {
-    //     to: this.recipient.textilePubkey,
-    //     file: file,
-    //   }).then( () =>
-    //     this.finishUploads())
-    // },
+    async dispatchFile(file: FileType) {
+      await this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: file,
+      }).then(() =>
+        this.finishUploads())
+        .catch((error) => {
+          new Error(error)
+        })
+    },
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
-    async sendMessage () {
-      this.disabledButton = true;
-
+    async sendMessage() {
+      this.disabledButton = true
       const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
         if (!file.nsfw.status) {
           return file
         }
       })
-        nsfwCheck.map((file: UploadDropItemType) => {
-          this.fileAmount = nsfwCheck.length
-          this.$store.dispatch('textile/sendFileMessage', {
-            to: this.recipient.textilePubkey,
-            file: file,
-          }).then( () =>
-            this.finishUploads())
-        })
-
-        // }
-
-      console.log(nsfwCheck)
+      nsfwCheck.map((file: UploadDropItemType) => {
+        this.fileAmount = nsfwCheck.length
+        this.dispatchFile(file)
+      })
     },
   },
 })
 </script>
 
-<style scoped lang="less" src="./Upload.less"></style>
+<style scoped lang='less' src='./Upload.less'></style>
