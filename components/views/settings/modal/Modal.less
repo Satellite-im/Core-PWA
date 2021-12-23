@@ -26,10 +26,12 @@ p {
 
   .sidebar {      
     width: @sidebar-size;
+    box-sizing: border-box;
   }
   
   .not-sidebar {
     width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -60,7 +62,7 @@ p {
     font-size: @text-size;
   }
   .ps {
-    width: calc(100% - @normal-spacing * 4);
+    width:100%;
     padding: @normal-spacing * 2;
     margin: 0;
   }
@@ -72,7 +74,7 @@ p {
 @media only screen and (min-width: @mobile-breakpoint) {
   .not-sidebar.swiper-slide-next {
     .ps {
-      width: calc(100% - @sidebar-size - @normal-spacing * 4);
+      width: calc(100% - @sidebar-size);
     }
   }
 }
@@ -81,10 +83,10 @@ p {
 
   .settings-modal #settings {
     width: 100vw;
+    height: 100vh;
   }
 
   .sidebar {
-    height: 100vh;
     .ps {
       padding-top: @normal-spacing;
     }
@@ -104,14 +106,6 @@ p {
       padding-top: @normal-spacing * 3;
       width: 100%;
     }
-  }
-
-  .not-sidebar.swiper-slide-active {
-    box-sizing: border-box;
-  }
-
-  .not-sidebar.swiper-slide-next {
-    
   }
 }
 
