@@ -163,24 +163,37 @@ export default Vue.extend({
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file: UploadDropItemType) {
-      this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
-          file: file,
-        })
-        .then(() => this.finishUploads())
-    },
+    // dispatchFile(file: FileType){
+    //   this.$store.dispatch('textile/sendFileMessage', {
+    //     to: this.recipient.textilePubkey,
+    //     file: file,
+    //   }).then( () =>
+    //     this.finishUploads())
+    // },
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
-    async sendMessage() {
-      this.$data.disabledButton = true
-      this.$data.fileAmount = this.$data.files.length
-      this.$data.files.forEach((file: UploadDropItemType) => {
-        this.dispatchFile(file)
+    async sendMessage () {
+      this.disabledButton = true;
+
+      const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
+        if (!file.nsfw.status) {
+          return file
+        }
       })
+        nsfwCheck.map((file: UploadDropItemType) => {
+          this.fileAmount = nsfwCheck.length
+          this.$store.dispatch('textile/sendFileMessage', {
+            to: this.recipient.textilePubkey,
+            file: file,
+          }).then( () =>
+            this.finishUploads())
+        })
+
+        // }
+
+      console.log(nsfwCheck)
     },
   },
 })
