@@ -20,21 +20,21 @@ export default Vue.extend({
     usersTyping: {
       type: Array,
       default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
+      required: false,
     },
     typing: {
       type: Boolean,
       default: false,
+      required: false,
     },
-  },
-  data() {
-    return {
-      maxChars: 256,
-    }
   },
   computed: {
     ...mapState(['ui']),
     lengthCount() {
-      return `${toArray(this.ui.chatbarContent).length}/${this.maxChars}`
+      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
+      return `${toArray(this.ui.chatbarContent).length}/${
+        this.$Config.chat.maxChars
+      }`
     },
   },
 })

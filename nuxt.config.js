@@ -76,6 +76,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
     { src: '~/plugins/thirdparty/vuetify.ts' },
+    { src: '~/plugins/thirdparty/swiper.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
@@ -146,6 +147,23 @@ export default defineNuxtConfig({
     },
     icon: {
       source: '/static/favicon.png',
+    },
+    workbox: {
+      // uncomment next line to test local
+      // enabled: true,
+      runtimeCaching: [
+        {
+          urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
+          handler: 'StaleWhileRevalidate',
+          method: 'GET',
+          strategyOptions: {
+            cacheName: 'ipfs',
+            cacheExpiration: {
+              maxAgeSeconds: 7 * 24 * 60 * 60 * 52, // 1 year
+            },
+          },
+        },
+      ],
     },
   },
 

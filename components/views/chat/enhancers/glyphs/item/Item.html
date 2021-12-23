@@ -1,7 +1,10 @@
-<div
+<img
+  :width="`${width}px`"
+  :height="`${height}px`"
   class="glyph-item"
-  :style="getStyle()"
+  :src="getSrc"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
   v-on="sendOnClick ? {click: addGlyph} : {}"
-></div>
+  @load="setLoaded"
+/>

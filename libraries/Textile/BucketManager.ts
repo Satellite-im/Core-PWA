@@ -110,7 +110,7 @@ export default class BucketManager {
       ],
     };
     // Store the index in the Bucket (or in the Thread later)
-    const buf = Buffer.from(JSON.stringify(index, null, 2));
+    const buf = Buffer.from(JSON.stringify(index, null, 1));
     await this.buckets.pushPath(this.bucketKey, path, buf);
   }
 
@@ -147,11 +147,11 @@ export default class BucketManager {
     return index;
   }
 
-  async removeFile(file: File, path: string) {
-    if (!this.buckets || !this.bucketKey) return;
-    this.buckets.removePath(this.bucketKey, `${this.prefix}${path}`);
-    // this.removeFromIndex(file);
-  }
+  // async removeFile(file: File, path: string) {
+  //   if (!this.buckets || !this.bucketKey) return;
+  //   this.buckets.removePath(this.bucketKey, `${this.prefix}${path}`);
+  //   // this.removeFromIndex(file);
+  // }
 
   async pushFile(file: File, path: string, progress: CallableFunction) : Promise<PushPathResult> {
     return new Promise((resolve, reject) => {
@@ -170,7 +170,9 @@ export default class BucketManager {
           },
         }).then((raw) => {
           resolve(raw);
-        }).catch(error => new Error(error));
+        }).catch(error => {
+          new Error(error);
+        });
       };
       reader.readAsArrayBuffer(file);
     });

@@ -1,6 +1,8 @@
 export enum MessagingTypesEnum {
-  REPLY = "reaction",
-  REACTION = "reply",
+  REPLY = "reply",
+  REACTION = "reaction",
+  IMAGE = "image",
+  TEXT = "text"
 }
 
 export type MessagingType  = keyof typeof MessagingTypesEnum

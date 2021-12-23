@@ -1,26 +1,19 @@
 #glyphs-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  .account-list {
-    display: flex;
-    align-items: center;
-    .timer {
-      cursor: pointer;
-      margin-right: @light-spacing;
-      &:extend(.background-semitransparent-dark);
-      padding: @xlight-spacing @light-spacing;
-      &:extend(.round-corners);
-    }
+  justify-content: space-around;
+  gap: @light-spacing;
+  .timer {
+    &:extend(.background-semitransparent-dark);
+    padding: @xlight-spacing @light-spacing;
+    &:extend(.round-corners);
   }
   .pack-list {
+    display: flex;
     border-left: @mini-light-border;
     border-right: @mini-light-border;
     padding: 0 @light-spacing;
-    display: flex;
     align-items: center;
-    flex-grow: 1;
-    overflow-x: auto;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -31,6 +24,5 @@
   }
   .market-place {
     cursor: pointer;
-    padding: 0 @light-spacing;
   }
 }

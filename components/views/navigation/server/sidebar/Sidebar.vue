@@ -15,6 +15,14 @@ export default Vue.extend({
       type: Function,
       default: () => {},
     },
+    showMenu: {
+      type: Function,
+      default: () => {},
+    },
+    sidebar: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     ...mapState(['ui']),

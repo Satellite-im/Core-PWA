@@ -4,14 +4,38 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+import {
+  MenuIcon,
+} from 'satellite-lucide-icons'
+
 export default Vue.extend({
+  components: {
+    MenuIcon
+  },
   data() {
     return {
       page: 'personalize',
+      sidebar: true,
+      settingSwiperOption: {        
+        initialSlide: 0,
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        noSwiping: this.$device.isMobile ? false : true,
+        allowTouchMove:  this.$device.isMobile ? true : false,
+        on: {
+          slideChange: () => {
+            this.$store.commit('ui/toggleSettingsSidebar', this.$refs.settingSwiper.$swiper.activeIndex === 0)
+            this.$data.sidebar = this.$refs.settingSwiper.$swiper.activeIndex === 0
+          }
+        }
+      },
     }
   },
   computed: {
     ...mapState(['ui']),
+  },
+  mounted() {
+    this.$store.commit('ui/toggleSettingsSidebar', true)
   },
   methods: {
     /**
@@ -23,8 +47,11 @@ export default Vue.extend({
      * @example
      */
     toggleSidebar() {
-      const settingsSideBar = !this.ui.settingsSideBar
-      this.$store.commit('ui/toggleSettingsSidebar', settingsSideBar)
+      if (this.$refs.settingSwiper.$swiper) {
+        this.ui.settingsSideBar 
+          ? this.$refs.settingSwiper.$swiper.slideNext() 
+          : this.$refs.settingSwiper.$swiper.slidePrev()
+      }
     },
     /**
      * @method showSidebar DocsTODO

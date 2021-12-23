@@ -1,16 +1,15 @@
 <div
   id="sidebar"
   class="collapsed"
-  v-touch:swipe.left="toggle"
-  v-touch-options="{ swipeTolerance: 75 }"
 >
   <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
     <div class="sidebar-search">
       <menu-icon
         class="toggle-sidebar"
-        v-on:click="toggle"
+        v-on:click="showMenu"
         size="1.2x"
         full-width
+        :style="`${sidebar ? 'display: block' : 'display: none'}`"
       />
       <InteractablesInput
         :placeholder="`${$t('ui.search')}...`"
