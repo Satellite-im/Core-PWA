@@ -18,6 +18,7 @@ export default Vue.extend({
   data() {
     return {
       text: '',
+      maxChars: this.$Config.chat.maxChars,
     }
   },
   computed: {

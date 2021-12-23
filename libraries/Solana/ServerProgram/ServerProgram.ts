@@ -10,6 +10,7 @@ import {
   Transaction,
   TransactionInstruction,
 } from '@solana/web3.js'
+import base58 from 'micro-base58'
 import { Config } from '~/config'
 import {
   Seeds,
@@ -67,7 +68,7 @@ export default class ServerProgram {
     userAccount: Keypair,
     name: string,
     photoHash: string,
-    status: string
+    status: string,
   ) {
     const params = {
       initializeDweller: {
@@ -97,7 +98,7 @@ export default class ServerProgram {
     return PublicKey.createWithSeed(
       payerAccount.publicKey,
       Seeds.User,
-      SERVER_PROGRAM_ID
+      SERVER_PROGRAM_ID,
     )
   }
 
@@ -116,7 +117,7 @@ export default class ServerProgram {
     name: string,
     photoHash: string,
     status: string,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Server program not initialized')
@@ -141,7 +142,7 @@ export default class ServerProgram {
           lamports,
           space,
           programId: SERVER_PROGRAM_ID,
-        })
+        }),
       )
       .add(this.initializeUser(userAccount, name, photoHash, status))
 
@@ -153,7 +154,7 @@ export default class ServerProgram {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
 
     return userAccount
@@ -193,14 +194,43 @@ export default class ServerProgram {
     const { connection } = this.solana
     const accountInfo = await connection.getAccountInfo(
       userPubkey,
-      Config.solana.defaultCommitment
+      Config.solana.defaultCommitment,
     )
 
     return accountInfo
       ? this.parseUserInfo(
-          dwellerAccountLayout.decode(Buffer.from(accountInfo.data))
+          dwellerAccountLayout.decode(Buffer.from(accountInfo.data)),
         )
       : null
+  }
+
+  /**
+   * @method searchByName
+   * @description Allow to search for users by name
+   * @param name name to search for
+   * @returns a list of found users
+   */
+  async searchByName(name: string) {
+    if (!this.solana) {
+      throw new Error('Server program not initialized')
+    }
+
+    const { connection } = this.solana
+
+    const convertedName = base58(Buffer.from(name))
+
+    const accounts = await connection.getProgramAccounts(SERVER_PROGRAM_ID, {
+      filters: [{ memcmp: { offset: 9, bytes: convertedName } }],
+    })
+
+    const parsedAccounts = accounts.map(({ account, pubkey }) => ({
+      address: pubkey,
+      userData: this.parseUserInfo(
+        dwellerAccountLayout.decode(Buffer.from(account.data)),
+      ),
+    }))
+
+    return parsedAccounts
   }
 
   /**
@@ -223,17 +253,17 @@ export default class ServerProgram {
     seedString: string,
     index: number,
     addressTypeValue: string,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     const base = await PublicKey.findProgramAddress(
       [seedKey.toBytes()],
-      SERVER_PROGRAM_ID
+      SERVER_PROGRAM_ID,
     )
 
     const addressToCreate = await PublicKey.createWithSeed(
       base[0],
       seedString + index,
-      SERVER_PROGRAM_ID
+      SERVER_PROGRAM_ID,
     )
 
     const params: CreateDerivedAccountParams = {

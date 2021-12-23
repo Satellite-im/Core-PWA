@@ -81,7 +81,6 @@ export default Vue.extend({
   display: flex;
   justify-content: center;
   text-align: center;
-  overflow: scroll;
 
   .loader-container {
     min-width: 250px;
