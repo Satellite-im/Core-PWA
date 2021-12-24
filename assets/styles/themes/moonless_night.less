@@ -1,175 +1,282 @@
-//------------- Colors -------------
-@white: #c6cefa;
-@flair: #f53b57;
+.moonless_night {
+  //------------- Colors -------------
+  @white: #fff;
+  @flair: #2ed573;
 
-@midground: #000;
-@graydient: linear-gradient(0deg, rgba(42, 54, 75, 0.5) 0%, rgba(48, 52, 71, 0.5) 100%);
-@gray: rgba(42, 54, 75, 0.5);
-@transparent: transparent;
+  @background: #15161d;
+  @midground: #000;
+  @graydient: linear-gradient(0deg, rgba(42, 54, 75, 0.5) 0%, rgba(48, 52, 71, 0.5) 100%);
+  @gray: linear-gradient(0deg, rgba(42, 54, 75, 0.5) 0%, rgba(48, 52, 71, 0.5) 100%);
+  @transparent: transparent;
 
-//------------- Ui Colors -------------
-@border-color: @gray;
-@flair-glow: 0 5px 14px -5px @flair;
+  //------------- Ui Colors -------------
+  @border-color: @gray;
+  @flair-glow: 0 5px 14px -5px @flair;
 
-//------------- Ui Flair -------------
-@border: 1px solid @border-color;
+  //------------- Ui Flair -------------
+  @border: 1px solid @border-color;
 
-.background { background: @midground !important; }
-.background-alt { background: @graydient !important; }
 
-body,
-html,
-#app,
-.horizontal-rule,
-.vertical-divider {
-  &:extend(.background);
-}
+  .background { background: @midground !important; }
+  .background-alt { background: @graydient !important; }
 
-.flair-bg { background: @flair !important; }
-.flair-glow { box-shadow: @flair-glow !important; }
+  .flair { background: @flair !important; }
+  .flair-glow { box-shadow: @flair-glow !important; }
 
-.flair-bg-glowing {
-  &:extend(.flair-bg .flair-glow);
-}
-
-.is-primary {
-  .custom-select .selected {
-    &:extend(.flair-bg-glowing);
+  .flair-glowing {
+    &:extend(.flair .flair-glow);
   }
-}
-.menu-list li a.is-active {
-  &:extend(.flair-bg-glowing);
-}
 
-//------------- Navigation -------------
+  &body,
+  #app,
+  .horizontal-rule,
+  .vertical-divider {
+    background: @midground !important;
+  }
 
-.breadcrum a {
-  color: @flair !important;
-}
+  .menu-list li a.is-active {
+    background: @flair !important;
+    box-shadow: @flair-glow !important;
+  }
 
-.toggle-sidebar, .menu-toggle {
-  color: @flair !important;
-}
-
-.sidebar-inner, .controls {
-  &:extend(.background);
-}
-
-#sidebar {
-  .sidebar-nav {
-    .button, div {
-      .label {
-        line-height: 1 !important;
+  .is-primary {
+    .custom-select {
+      color: @white !important;
+      .selected {
+        color: @white !important;
+        background: @flair !important;
+        box-shadow: @flair-glow !important;
       }
-      .content {
-        display: inline-flex;
-        justify-content: flex-start;
-        div {
-          width: 20px;
+    }
+  }
+
+
+  //------------- Navigation -------------
+
+  .alpha-divider {
+    color: @flair !important;
+  }
+
+  li .is-active,
+  li.active {
+    background: @flair !important;
+    box-shadow: @flair-glow !important;
+  }
+
+  .breadcrumb a {
+    color: @flair !important;
+  }
+
+  .toggle-sidebar, .menu-toggle {
+    color: @flair !important;
+  }
+
+  .sidebar-inner, .controls {
+    background: @transparent !important;
+    backdrop-filter: unset !important;
+    box-shadow: none !important;
+  }
+
+  .control-icon.active, #mobile-nav .active  {
+    background: transparent !important;
+  }
+
+  .multiselect__tags {
+    background: @flair !important;
+    box-shadow: @flair-glow;
+    border: @flair;
+  }
+
+  .chip-item {
+    background: @flair !important;
+    border: @flair;
+  }
+
+  .switch-button {
+    border-color: @flair !important;
+    .sw-button {
+      border-color: @flair !important;
+      background: @flair !important;
+    }
+    &.enabled{
+      .sw-button {
+        border-color: @white !important;
+        background: @white !important;
+      }
+      background: @flair !important;
+      border-color: @flair !important;
+    }
+  }
+  #sidebar {
+    .sidebar-nav {
+      .button, div {
+        .label {
+          line-height: 1 !important;
+        }
+        .content {
+          display: inline-flex;
+          justify-content: flex-start;
+          div {
+            width: 20px;
+          }
+        }
+
+        &.is-primary {
+          background: @flair !important;
+          box-shadow: @flair-glow !important;
+        }
+        .tag-inverted {
+          background: @midground !important;
+        }
+        &:extend(.full-width);
+
+        &:nth-child(1) {
+          margin-right: @light-spacing;
         }
       }
-
-      &.is-primary {
-        &:extend(.flair-bg-glowing);
-      }
-      .tag-inverted {
-        &:extend(.background);
-      }
-      &:extend(.background);
-      &:extend(.full-width);
+      display: inline-flex;
     }
-    display: inline-flex;
+    background: @background !important;
+    border-right: @border;
+    border-left: @border;
   }
-  border-right: @border;
-  border-left: @border;
-}
 
-#mobile-nav {
-  div {
-    svg {
-      &:extend(.font-white);
-    }
-    &.active {
-      border-radius: @half;
+  #mobile-nav {
+    div {
       svg {
-        color: @flair;
+        color: @white !important;
       }
+      &.active {
+        border-radius: @half;
+        color: @flair !important;
+        svg {
+          color: @flair !important;
+        }
+      }
+      &:extend(.inline-flex-centered);
+      margin: auto;
+      width: 40px !important;
+      height: 40px;
     }
-    &:extend(.inline-flex-centered);
-    margin: auto;
-    width: 40px !important;
-    height: 40px;
+    
+    background: @graydient !important;
   }
-  
-  &:extend(.background-alt);
-}
 
-// ------------- Ui Elements-------------
+  // ------------- Ui Elements-------------
 
-// Chatbar
+  // Files
 
-#chatbar {
-  .chatbar-controls {
-    div[data-tooltip="Send"] {
+  .file {
+    .file-icon {
       color: @flair !important;
     }
   }
-}
 
-// Buttons
-.button {
-  &.active {
-    &:extend(.flair-bg-glowing);
+  .files-aside {
+    background: @graydient !important;
   }
-}
 
-// Labels
-.label {
-  &:extend(.flair-bg);
-}
 
-// Media 
-#mediastream {
-  .user, .tag {
-    &:extend(.flair-bg);
+  // Chatbar
+
+  #chatbar {
+    .chatbar-controls {
+      div[data-tooltip="Send"] {
+        color: @flair !important;
+      }
+    }
   }
-  .tag {
-    &:extend(.flair-glow);
+
+  // Buttons
+  .button {
+    &.is-primary {
+      background: @flair !important;
+      box-shadow: @flair-glow !important;
+      color: @white !important;
+      background: @flair !important;
+    }
+    &.is-dark {
+      background: @gray;
+    }
+    &.active {
+      background: @flair !important;
+      box-shadow: @flair-glow !important;
+      color: @white !important;
+    }
   }
-}
 
-// ------------- ThirdParty-------------
-
-// Volume
-.volume-slider .vue-slider-process,
-.vue-slider-dot-tooltip-inner {
-  &::after {
-    border-left-color: @flair !important;
+  // Labels
+  .label {
+    background: @flair !important;
   }
-  &:extend(.flair-bg);
-}
 
-// Scrollbars
-.ps__thumb-x,
-.ps__thumb-y,
-.ps__rail-x:hover > .ps__thumb-x,
-.ps__rail-x:focus > .ps__thumb-x,
-.ps__rail-x.ps--clicking .ps__thumb-x,
-.ps__rail-y:hover > .ps__thumb-y,
-.ps__rail-y:focus > .ps__thumb-y,
-.ps__rail-y.ps--clicking .ps__thumb-y {
-  &:extend(.flair-bg);
-}
-
-.auto-scroll {
-  /* Scroll Handle */
-  &::-webkit-scrollbar-thumb {
-    &:extend(.flair-bg);
+  // Media 
+  #mediastream {
+    .user, .tag {
+      background: @flair !important;
+    }
+    .tag {
+      box-shadow: @flair-glow !important;
+    }
   }
-  /* Custom Scroll for Firefox */
-  scrollbar-color: @flair transparent !important;
-}
 
-.new-message-alert {
-  &:extend(.flair-bg);
+  // Progress
+  .progress {
+    border: @flair;
+
+    &.is-primary {
+      border-color: @flair !important;
+      &::-webkit-progress-value {
+        background: @flair !important;
+      }
+      &::-moz-progress-bar {
+        background: @flair !important;
+      }
+      &::-ms-fill {
+        background: @flair !important;
+        border: none;
+      }
+    }
+
+
+    border: 1px solid @flair;
+    background: transparent;
+    margin-bottom: @light-spacing;
+  }
+
+  // ------------- ThirdParty-------------
+
+  // Volume
+  .volume-slider .vue-slider-process,
+  .vue-slider-dot-tooltip-inner {
+    &::after {
+      border-left-color: @flair !important;
+    }
+    background: @flair !important;
+  }
+
+  // Scrollbars
+  .ps__thumb-x,
+  .ps__thumb-y,
+  .ps__rail-x:hover > .ps__thumb-x,
+  .ps__rail-x:focus > .ps__thumb-x,
+  .ps__rail-x.ps--clicking .ps__thumb-x,
+  .ps__rail-y:hover > .ps__thumb-y,
+  .ps__rail-y:focus > .ps__thumb-y,
+  .ps__rail-y.ps--clicking .ps__thumb-y {
+    background: @flair !important;
+  }
+
+  .auto-scroll {
+    /* Scroll Handle */
+    &::-webkit-scrollbar-thumb {
+      background: @flair !important;
+    }
+    /* Custom Scroll for Firefox */
+    scrollbar-color: @flair transparent !important;
+  }
+
+  .new-message-alert {
+    background: @flair !important;
+  }
 }

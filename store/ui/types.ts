@@ -1,5 +1,30 @@
 import { Channel } from '~/types/ui/server'
 
+export enum ThemeNames {
+  DEFAULT = 'default',
+  MOONLESS = 'moonless_night',
+}
+
+export type Theme = {
+  name: ThemeNames,
+  class: String,
+}
+
+export const Themes = [
+  {
+    text: 'Default',
+    name: ThemeNames.DEFAULT,
+    value: ThemeNames.DEFAULT,
+    class: '',
+  },
+  {
+    text: 'Moonless Night',
+    name: ThemeNames.MOONLESS,
+    value: ThemeNames.MOONLESS,
+    class: 'moonless_night',
+  },
+]
+
 export enum GlyphMarketViewStatus {
   HOME = 'home',
   SHOP_ALL = 'shop_all',
@@ -71,4 +96,8 @@ export interface UIState {
   }
   recentReactions: Array<String>,
   mostEmojiUsed: Array<EmojiUsage>,
+  theme: {
+    base: Theme,
+    flair: String,
+  },
 }
