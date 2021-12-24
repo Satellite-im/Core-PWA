@@ -73,9 +73,10 @@
     }
   }
 
-
   .sidebar-inner-streaming {
-    max-height: calc(var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
+    max-height: calc(
+      var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad
+    );
   }
 
   .controls {
@@ -83,8 +84,10 @@
     &:extend(.round-corners);
     padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
     box-shadow: @ui-shadow;
+    &.mobile {
+      margin-bottom: @mobile-nav-size;
+    }
   }
-  
 
   .filler {
     flex: 1;
@@ -179,7 +182,10 @@
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
     }
     .sidebar-inner-streaming {
-      max-height: calc(var(--app-height) - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
+      max-height: calc(
+        var(--app-height) - @sidebar-inner-offset -
+          @mobile-sidebar-inner-streaming-pad
+      );
     }
   }
 }
