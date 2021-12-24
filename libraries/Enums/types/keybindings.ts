@@ -1,10 +1,28 @@
 export enum KeybindingEnum {
+    //special keys
+
     ARROW_DOWN = "ArrowDown",
+    ARROW_LEFT = "ArrowLeft",
+    ARROW_RIGHT = "ArrowRight",
     ARROW_UP = "ArrowUp",
-    UP = "Up",
-    DOWN = "Down",
     BACKSPACE = "Backspace",
-    ENTER = "Enter"
+    CONTROL = "Control",
+    DELETE = "Delete",
+    DOWN = "Down",
+    END = "End",
+    ENTER = "Enter",
+    ESCAPE = "Escape",
+    HOME = "Home",
+    LEFT = "Left",
+    RIGHT = "Right",
+    SHIFT = "SHIFT",
+    SPACEBAR = "Spacebar",
+    SPACE = ' ',
+    UP = "Up",
+
+    // alphabet
+    A = 'A',
+    a = 'a',
 }
 
-export type KeyBinding  = keyof typeof KeybindingEnum
+export type KeyBinding = keyof typeof KeybindingEnum

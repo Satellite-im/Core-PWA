@@ -7,7 +7,7 @@ import Vue from 'vue'
 // @ts-ignore
 import { SmileIcon } from 'vue-feather-icons'
 import { Config } from '~/config'
-
+import { KeybindingEnum } from '~/libraries/Enums/enums'
 import {
   htmlToMarkdown,
   markDownToHtml,
@@ -99,17 +99,17 @@ export default Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       const messageBox = this.$refs.messageBox as HTMLElement
       switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
+        case KeybindingEnum.BACKSPACE:
+        case KeybindingEnum.DELETE:
           this.calculateLengthCount()
           return
-        case 'Enter':
+        case KeybindingEnum.ENTER:
           if (!event.shiftKey) {
             this.saveMessage()
           }
           return
-        case 'Spacebar':
-        case ' ':
+        case KeybindingEnum.SPACEBAR:
+        case KeybindingEnum.SPACE:
           {
             this.calculateLengthCount()
             event.preventDefault()
@@ -120,18 +120,18 @@ export default Vue.extend({
             })
           }
           return
-        case 'Left':
-        case 'ArrowLeft':
-        case 'Right':
-        case 'ArrowRight':
-        case 'End':
-        case 'Shift':
+        case KeybindingEnum.LEFT:
+        case KeybindingEnum.ARROW_LEFT:
+        case KeybindingEnum.RIGHT:
+        case KeybindingEnum.ARROW_RIGHT:
+        case KeybindingEnum.END:
+        case KeybindingEnum.SHIFT:
           return
-        case 'Escape':
+        case KeybindingEnum.ESCAPE:
           this.cancelMessage()
           break
-        case 'a':
-        case 'A':
+        case KeybindingEnum.A:
+        case KeybindingEnum.a:
           if (event.ctrlKey) {
             return
           }
@@ -147,31 +147,31 @@ export default Vue.extend({
     handleInputKeyup(event: KeyboardEvent) {
       const messageBox = this.$refs.messageBox as HTMLElement
       switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
+        case KeybindingEnum.BACKSPACE:
+        case KeybindingEnum.DELETE:
           if (messageBox.textContent && messageBox.textContent.trim() === '') {
             messageBox.innerHTML = ''
           }
           break
-        case 'a':
-        case 'A':
+        case KeybindingEnum.A:
+        case KeybindingEnum.a:
           if (event.ctrlKey) {
             return
           }
           break
-        case 'Home':
-        case 'End':
-        case 'Left':
-        case 'ArrowLeft':
-        case 'Up':
-        case 'ArrowUp':
-        case 'Right':
-        case 'ArrowRight':
-        case 'Down':
-        case 'ArrowDown':
+        case KeybindingEnum.HOME:
+        case KeybindingEnum.END:
+        case KeybindingEnum.LEFT:
+        case KeybindingEnum.ARROW_LEFT:
+        case KeybindingEnum.UP:
+        case KeybindingEnum.ARROW_UP:
+        case KeybindingEnum.RIGHT:
+        case KeybindingEnum.ARROW_RIGHT:
+        case KeybindingEnum.DOWN:
+        case KeybindingEnum.ARROW_DOWN:
           return
-        case 'Control':
-        case 'Shift':
+        case KeybindingEnum.CONTROL:
+        case KeybindingEnum.SHIFT:
           return
       }
       this.$nextTick(() => {
