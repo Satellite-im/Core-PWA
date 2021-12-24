@@ -58,7 +58,7 @@
           <UiChatScroll
             :contents="ui.messages"
             :prevent-scroll-offset="500"
-            :class="media.activeCall ? 'media-open' : ''"
+            :class="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall) ? '' : 'media-open'"
             enable-wrap
           >
             <Nuxt />
