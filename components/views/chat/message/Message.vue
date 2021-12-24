@@ -84,7 +84,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
+    ...mapState(['ui', 'textile', 'accounts']),
 
     hasReactions() {
       return (
@@ -189,8 +189,8 @@ export default Vue.extend({
      * Commit store mutation in order to notify the edit status
      */
     editMessage() {
-      const { id, payload, type } = this.$props.message
-      if (type === 'text') {
+      const { id, payload, type, from } = this.$props.message
+      if (type === 'text' && from === this.accounts.details.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,

@@ -10,8 +10,9 @@ import { Friend } from '~/types/ui/friends'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
-  PropCommonEnum
-} from "~/libraries/Enums/enums";
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -34,6 +35,7 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
+      maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
     }
   },
@@ -52,7 +54,9 @@ export default Vue.extend({
     },
   },
   mounted() {
-    let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+    let findItem = this.setChatText.find(
+      (item: any) => item.userId === this.$props.recipient.address,
+    )
     let message = findItem ? findItem.value : ''
 
     const messageBox = this.$refs.messageuser as HTMLElement
@@ -66,7 +70,7 @@ export default Vue.extend({
       },
       get() {
         return this.chat.chatTexts
-      }
+      },
     },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
@@ -157,7 +161,9 @@ export default Vue.extend({
      * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
      * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
      */
-    typingNotifHandler(state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING) {
+    typingNotifHandler(
+      state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
+    ) {
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
@@ -254,7 +260,7 @@ export default Vue.extend({
       // if (messageBox.)
       this.setChatText = {
         userId: this.$props.recipient.address,
-        value: messageBox.innerHTML
+        value: messageBox.innerHTML,
       }
     },
     /**
@@ -296,7 +302,7 @@ export default Vue.extend({
      * @example v-on:drop="handleDrop"
      */
     handleDrop(e: DragEvent) {
-      if(e.dataTransfer) {
+      if (e.dataTransfer) {
         this.handleUpload(e?.dataTransfer?.items, e)
       }
     },
@@ -345,7 +351,8 @@ export default Vue.extend({
           this.$store.state.friends,
         )
         if (activeFriend)
-          this.$data.recipientTyping = activeFriend.typingState === PropCommonEnum.TYPING
+          this.$data.recipientTyping =
+            activeFriend.typingState === PropCommonEnum.TYPING
       },
       deep: true,
     },
@@ -353,7 +360,9 @@ export default Vue.extend({
       this.handleChatBorderRadius()
     },
     recipient: function () {
-      let findItem = this.setChatText.find((item: any) => item.userId === this.$props.recipient.address)
+      let findItem = this.setChatText.find(
+        (item: any) => item.userId === this.$props.recipient.address,
+      )
       let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
