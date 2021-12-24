@@ -65,8 +65,8 @@
                 (friend) =>
                   friend.address === this.$store.state.webrtc.activeCall,
               )
-                ? ''
-                : 'media-open'
+                ? 'media-open'
+                : 'media-unopen'
             "
             enable-wrap
           >
