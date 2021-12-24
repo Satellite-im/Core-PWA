@@ -12,8 +12,17 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { FileType, UploadDropItemType } from '~/types/files/file'
+import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    loadPicture: (item: UploadDropItemType) => void
+    cancelUpload: () => void
+    finishUploads: () => void
+    dispatchFile: (file: UploadDropItemType) => void
+  }
+}
 
 export default Vue.extend({
   name: 'Upload',
@@ -75,7 +84,6 @@ export default Vue.extend({
         const files: File[] = event.target.files
         this.$parent.$data.showFilePreview = files.length > 0
         if (files.length > 8) {
-          // @ts-ignore
           this.$data.count_error = true
           return
         }
@@ -104,7 +112,6 @@ export default Vue.extend({
             uploadFile.nsfw.checking = false
           }
 
-          // @ts-ignore
           this.loadPicture(uploadFile)
         })
         this.$data.uploadStatus = true
@@ -168,7 +175,6 @@ export default Vue.extend({
     finishUploads() {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
-        // @ts-ignore
         this.cancelUpload()
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
@@ -179,13 +185,12 @@ export default Vue.extend({
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file: FileType) {
+    dispatchFile(file: UploadDropItemType) {
       this.$store
         .dispatch('textile/sendFileMessage', {
           to: this.recipient.textilePubkey,
           file: file,
         })
-        // @ts-ignore
         .then(() => this.finishUploads())
     },
     /**
@@ -196,7 +201,6 @@ export default Vue.extend({
       this.$data.disabledButton = true
       this.$data.fileAmount = this.$data.files.length
       this.$data.files.forEach((file: UploadDropItemType) => {
-        // @ts-ignore
         this.dispatchFile(file)
       })
     },
