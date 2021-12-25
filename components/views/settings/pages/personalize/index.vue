@@ -3,13 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Themes } from '~/store/ui/types.ts'
+import { Themes, Flairs } from '~/store/ui/types.ts'
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
   data() {
     return {
       themes: Themes,
+      flairs: Flairs,
     }
   },
   computed: {
@@ -18,17 +19,24 @@ export default Vue.extend({
     // the state accordingly with the mutation
     theme: {
       set(state) {
-        console.log('themes', Themes)
         const activeTheme = Themes.find((th) => {
-          console.log('th', th)
           return th.value === state
         })
-        console.log('activeTheme', activeTheme)
-        console.log('state', state)
         this.$store.commit('ui/updateTheme', activeTheme)
       },
       get() {
         return this.ui.theme.base.value
+      },
+    },
+    flair: {
+      set(state) {
+        const activeFlair = Flairs.find((fl) => {
+          return fl.value === state
+        })
+        this.$store.commit('ui/updateFlair', activeFlair)
+      },
+      get() {
+        return this.ui.theme.flair.value
       },
     },
   },

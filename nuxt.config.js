@@ -85,6 +85,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
+    { src: '~/plugins/local/style.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
