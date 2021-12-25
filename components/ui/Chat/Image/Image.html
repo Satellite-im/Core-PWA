@@ -7,7 +7,9 @@
         :class="`is-image-in-mask`"
         :src="image.url"
         v-click-outside="() => $data.showfull = !$data.showfull" />
-      <a :href="image.url" target="_blank">View Fullsize</a>
+      <a :href="image.url" target="_blank">
+        {{ $t('files.view_original') }}
+      </a>
     </div>
   </div>
   <img
