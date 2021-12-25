@@ -49,7 +49,7 @@
     </div>
 
     <Slimbar
-      v-if="!$device.isMobile"
+      v-if="$device.isMobile"
       :servers="$mock.servers"
       :unreads="$mock.unreads"
       :open-modal="toggleModal"
