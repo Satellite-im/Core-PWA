@@ -50,19 +50,14 @@
               :size="6"
               :text="$t('pages.settings.audio.sources.input.title')"
             />
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.settings.audio.sources.input.subtitle')"
-            />
-            <br />
+            <br>
             <InteractablesSelect
               v-model="isAudioInput"
               :options="audioInputs"
               size="small"
             />
           </div>
-        </div>
-        <div class="columns is-desktop">
+        
           <!-- Audio Out -->
           <div class="column">
             <TypographyTitle
@@ -70,11 +65,7 @@
               :text="$t('pages.settings.audio.sources.output.title')"
             />
             <span v-if="browserAllowsAudioOut">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.settings.audio.sources.output.subtitle')"
-              />
-              <br />
+              <br>
               <InteractablesSelect
                 v-model="isAudioOutput"
                 :options="audioOutputs"
@@ -88,6 +79,42 @@
             </span>
           </div>
         </div>
+
+        <div class="columns is-desktop">
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.inputVolume.title')"
+            />
+            <br>
+            <div class="meter-container">
+              <UiMeter :value="micLevel" :height="5" solid />
+            </div>
+            <MediaActionsVolume
+              :volume="audio.inputVolume"
+              direction="ltr"
+              plain
+              @volumeControlValueChange="inputVolumeControlValueChange"
+            />
+          </div>
+          <div class="column">
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.audio.volume.title')"
+            />
+            <br>
+            <div class="meter-container">
+              <UiMeter :value="0" :height="5" solid />
+            </div>
+            <MediaActionsVolume
+              :volume="audio.volume"
+              direction="ltr"
+              plain
+              @volumeControlValueChange="volumeControlValueChange"
+            />
+          </div>
+        </div>
+
         <div class="columns is-desktop">
           <div class="column">
             <TypographyTitle
@@ -150,38 +177,7 @@
   </div>
 
   <!--Audio Bitrate & Sample-->
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.audio.volume.title')"
-      />
-      <div class="meter-container">
-        <UiMeter :value="0" :height="5" />
-      </div>
-      <MediaActionsVolume
-        :volume="audio.volume"
-        direction="ltr"
-        plain
-        @volumeControlValueChange="volumeControlValueChange"
-      />
-    </div>
-    <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.audio.inputVolume.title')"
-      />
-      <div class="meter-container">
-        <UiMeter :value="micLevel" :height="5" />
-      </div>
-      <MediaActionsVolume
-        :volume="audio.inputVolume"
-        direction="ltr"
-        plain
-        @volumeControlValueChange="inputVolumeControlValueChange"
-      />
-    </div>
-  </div>
+  
 
   <!--Echo Cancellation & Noise Suppression-->
   <div class="columns is-desktop">
