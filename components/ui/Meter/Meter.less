@@ -1,22 +1,18 @@
 .meter {
   &:extend(.full-width);
-  .meter-tick {
-    width: 10px;
+  .meter-fill {
     height: @full;
-    margin: 5px;
-    float: left;
-    background: #27293b !important;
-    border-radius: 2px;
+    background: #27293b;
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition: left 0.1s ease-out;
   }
-  .green-tick {
-    background: #00b894 !important;
-  }
-  .orange-tick {
-    background: #fbc02d !important;
-  }
-  .red-tick {
-    background: #df7070 !important;
-  }
-  height: 1.5rem;
   display: inline-block;
+  position: relative;
+  background: linear-gradient(90deg, rgba(0,184,148,1) 0%, rgba(0,184,148,1) 40%, rgba(251,192,45,1) 80%, rgba(223,112,112,1) 95%);
+  border-radius: @corner-rounding;
+  overflow: hidden;
 }

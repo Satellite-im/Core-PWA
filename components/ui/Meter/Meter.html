@@ -1,5 +1,3 @@
 <div class="meter" :style="`height: ${height}px;`" ref="meter">
-  <div 
-    v-for="n in numberOfTicks" 
-    :class="`meter-tick ${getTickColor(n)}`"></div>
+  <div class="meter-fill" :style="{ left: `${value}%` }"></div>
 </div>

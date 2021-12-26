@@ -157,7 +157,7 @@
         :text="$t('pages.settings.audio.volume.title')"
       />
       <div class="meter-container">
-        <UiMeter :value="0" :height="25" />
+        <UiMeter :value="0" :height="5" />
       </div>
       <MediaActionsVolume
         :volume="audio.volume"
@@ -172,7 +172,7 @@
         :text="$t('pages.settings.audio.inputVolume.title')"
       />
       <div class="meter-container">
-        <UiMeter :value="micLevel" :height="25" />
+        <UiMeter :value="micLevel" :height="5" />
       </div>
       <MediaActionsVolume
         :volume="audio.inputVolume"
