@@ -2,6 +2,7 @@ import { without } from 'lodash'
 import { EnhancerInfo, Flair, Theme, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
+import { RecentGlyph } from '~/store/ui/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -295,6 +296,18 @@ export default {
     state.mostEmojiUsed.push({
       code: emojiObj.name,
       content: emojiObj.emoji,
+      count: 1,
+    })
+  },
+  updateRecentGlyphs(state: UIState, glyph: RecentGlyph) {
+    const glyphUsed = state.recentGlyphs.find((e) => e.url === glyph.url)
+    if (glyphUsed) {
+      glyphUsed.count++
+      return
+    }
+    state.recentGlyphs.push({
+      pack: glyph.pack,
+      url: glyph.url,
       count: 1,
     })
   },

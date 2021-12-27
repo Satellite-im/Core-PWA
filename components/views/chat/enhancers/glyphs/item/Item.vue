@@ -28,7 +28,7 @@ export default Vue.extend({
     sendOnClick: { type: Boolean, default: false, required: false },
   },
   computed: {
-    getSrc() {
+    getSrc(): string {
       return this.isLoaded ? this.src : loadImg
     },
   },
@@ -52,7 +52,7 @@ export default Vue.extend({
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
-    addGlyph() {
+    sendGlyph() {
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
@@ -63,6 +63,10 @@ export default Vue.extend({
         to: activeFriend?.textilePubkey,
         src: this.src,
         pack: this.pack.name,
+      })
+      this.$store.commit('ui/updateRecentGlyphs', {
+        pack: this.pack,
+        url: this.src,
       })
     },
     setLoaded() {

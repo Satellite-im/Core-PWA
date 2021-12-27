@@ -1,3 +1,4 @@
+import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
 export enum ThemeNames {
@@ -6,8 +7,8 @@ export enum ThemeNames {
 }
 
 export type Theme = {
-  name: ThemeNames,
-  class: String,
+  name: ThemeNames
+  class: String
 }
 
 export enum FlairColors {
@@ -105,9 +106,15 @@ export interface EnhancerInfo {
 }
 
 export interface EmojiUsage {
-  code: string,
-  count: number,
-  content: string,
+  code: string
+  count: number
+  content: string
+}
+
+export interface RecentGlyph {
+  pack: Glyph
+  url: string
+  count: number
 }
 
 export interface UIState {
@@ -145,10 +152,11 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: Array<String>,
-  mostEmojiUsed: Array<EmojiUsage>,
+  recentReactions: Array<String>
+  mostEmojiUsed: Array<EmojiUsage>
+  recentGlyphs: Array<RecentGlyph>
   theme: {
-    base: Theme,
-    flair: Flair,
-  },
+    base: Theme
+    flair: Flair
+  }
 }
