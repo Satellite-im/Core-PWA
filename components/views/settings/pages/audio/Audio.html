@@ -57,8 +57,9 @@
   <!--Audio Bitrate & Sample-->
   <div class="columns is-desktop">
     <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
+      <br>
       <div class="meter-container">
-        <UiMeter :value="0" :height="25" />
+        <UiMeter :value="0" :height="5" solid />
       </div>
       <MediaActionsVolume
         :volume="audio.volume"
@@ -68,8 +69,9 @@
       />
     </SettingsUnit>
     <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
+      <br>
       <div class="meter-container">
-        <UiMeter :value="micLevel" :height="25" />
+        <UiMeter :value="micLevel" :height="5" solid />
       </div>
       <MediaActionsVolume
         :volume="audio.inputVolume"
