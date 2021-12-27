@@ -27,6 +27,11 @@
     &:extend(.flair .flair-glow);
   }
 
+  ::selection {
+    &:extend(.font-secondary);
+    background: @flair !important;
+  }
+
   &body,
   #app,
   .horizontal-rule,
@@ -53,7 +58,7 @@
 
   //------------- Navigation -------------
 
-  a {
+  a.link {
     color: @flair !important;
 
     &:hover {
