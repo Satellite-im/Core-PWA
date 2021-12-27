@@ -1,0 +1,39 @@
+name: "ponicode-ci"
+on:
+  pull_request:
+    types: [ opened, edited, synchronize ]  # rebuild any PRs and main branch changes
+
+jobs:
+  ponicode:
+    runs-on: ubuntu-latest
+    env:
+      SQUAR_API_URL: "https://ponicode-glados-prod.azurewebsites.net"
+      FETCH_REPORT_RETRY_MILLISEC: 5000
+    steps:
+    - uses: actions/checkout@v1
+    - run: |
+        npm install -g ponicode
+        npm i --save-dev rewire @types/rewire jest@26 ts-jest@26 @types/jest
+    
+    # Identify which files are impacted by the Push / PR
+    - id: get_changed_files
+      uses: jitterbit/get-changed-files@v1
+      continue-on-error: true
+      with:
+        format: 'json'
+
+    # Extract branch name
+    - id: extract_branch
+      if: github.event_name == 'pull_request'
+      run: echo "::set-output name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF})"
+    
+    # Run Ponicode SQUAR action
+    - uses: ponicode/squar_action@master
+      id: ponicode_squar
+      with:
+        repoURL: ${{github.repository}} # DO NOT MODIFY
+        impactedFiles: ${{ steps.get_changed_files.outputs.added_modified }} # DO NOT MODIFY
+        branch: ${{ steps.extract_branch.outputs.BRANCH_NAME }} # DO NOT MODIFY
+        githubToken: ${{ secrets.GITHUB_TOKEN }} # DO NOT MODIFY
+        ponicodeSquarToken: ${{ secrets.PONICODE_SQUAR_TOKEN }} # DO NOT MODIFY
+        displayFullReport: 'true'
