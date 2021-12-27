@@ -1,5 +1,5 @@
 import { without } from 'lodash'
-import { EnhancerInfo, Theme, UIState } from './types'
+import { EnhancerInfo, Flair, Theme, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { RecentGlyph } from '~/store/ui/types'
@@ -314,7 +314,7 @@ export default {
   updateTheme(state: UIState, theme: Theme) {
     state.theme.base = theme
   },
-  updateFlair(state: UIState, flair: String) {
+  updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
   },
 }

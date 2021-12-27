@@ -11,6 +11,57 @@ export type Theme = {
   class: String
 }
 
+export enum FlairColors {
+  PEACH = '#ED4C67',
+  PINK = '#FDA7DF',
+  LIME = '#A3CB38',
+  PURPLE = '#6F1E51',
+  PURPLER = '#9980FA',
+  SUNFLOWER = '#FFC312',
+  DEEP_BLUE = '#30336b',
+  VOID = '#2C3A47',
+}
+
+export type Flair = {
+  text: String,
+  value: FlairColors,
+}
+
+export const Flairs = [
+  {
+    text: 'Peach',
+    value: FlairColors.PEACH,
+  },
+  {
+    text: 'Pink',
+    value: FlairColors.PINK,
+  },
+  {
+    text: 'Lime',
+    value: FlairColors.LIME,
+  },
+  {
+    text: 'Purple',
+    value: FlairColors.PURPLE,
+  },
+  {
+    text: 'Purpler',
+    value: FlairColors.PURPLER,
+  },
+  {
+    text: 'Sunflower',
+    value: FlairColors.SUNFLOWER,
+  },
+  {
+    text: 'Deep',
+    value: FlairColors.DEEP_BLUE,
+  },
+  {
+    text: 'Void',
+    value: FlairColors.VOID,
+  },
+]
+
 export const Themes = [
   {
     text: 'Default',
@@ -106,6 +157,6 @@ export interface UIState {
   recentGlyphs: Array<RecentGlyph>
   theme: {
     base: Theme
-    flair: String
+    flair: Flair
   }
 }
