@@ -31,7 +31,7 @@
           />
         </swiper-slide>
         <swiper-slide
-          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : 'commonscreen'}`"
         >
           <menu-icon
             class="toggle--sidebar"
