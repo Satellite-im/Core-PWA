@@ -45,9 +45,10 @@
   }
 
   .chatbar-wrap {
+    position: relative;
     &:extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
-    border-radius: 40px;
+    border-radius: 20px;
     padding: (@light-spacing / 1.5) 0.75rem;
     display: flex;
     flex-direction: row;
@@ -84,6 +85,10 @@
         }
       }
     }
+    &.show-file-preview {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
 
     .messageuser {
       flex: 1;
@@ -107,7 +112,7 @@
       order: 3;
       align-self: flex-start;
     }
-    
+
     .control-icon {
       justify-self: center;
       align-self: center;
