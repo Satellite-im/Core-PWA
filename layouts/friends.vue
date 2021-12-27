@@ -1,6 +1,10 @@
 <template>
-  <div id="app-wrap"
-:class="`${sidebar ? 'is-open' : 'is-collapsed'}`">
+  <div
+    id="app-wrap"
+    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
+      $store.state.ui.theme.base.class
+    }`"
+  >
     <div
       id="app"
       :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
@@ -12,6 +16,7 @@
       <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
+            v-if="!$device.isMobile"
             :servers="$mock.servers"
             :unreads="$mock.unreads"
             :open-modal="toggleModal"

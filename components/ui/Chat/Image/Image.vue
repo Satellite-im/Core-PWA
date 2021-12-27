@@ -52,7 +52,7 @@ export default Vue.extend({
      */
     openImage() {
       // @ts-ignore
-      window?.open(source, '_blank').focus()
+      window?.open(this.$props.image.url, '_blank').focus()
     },
   },
 })

@@ -175,6 +175,9 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
     z-index: 3;
+    width: @sidebar-size-mobile !important;
+    min-width: @sidebar-size-mobile !important;
+    padding-bottom: @mobile-nav-size;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
     }
@@ -186,8 +189,8 @@
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
   #sidebar {
-    min-width: unset;
     max-width: @sidebar-size;
+    min-width: @sidebar-size-mobile;
     sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
       .users {

@@ -11,6 +11,10 @@ export default Vue.extend({
     SatelliteIcon,
   },
   props: {
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
     unreads: {
       type: Array,
       default() {

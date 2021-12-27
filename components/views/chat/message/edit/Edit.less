@@ -24,6 +24,12 @@
   }
   &-bottom {
     font-size: @text-size;
+    display: flex;
+    margin: 0 -@light-spacing;
+    justify-content: space-between;
+    & > div {
+      padding: 0 @light-spacing;
+    }
   }
   margin: @light-spacing 0px;
   &:extend(.light-padding);

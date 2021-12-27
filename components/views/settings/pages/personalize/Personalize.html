@@ -10,7 +10,12 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.theme')" />
       <br />
-      <InteractablesSelect size="small" :options="[{ text: 'Default Theme', value: 'default' }]" selected="default" />
+      <InteractablesSelect 
+        v-model="theme"
+        size="small"
+        :options="themes"
+        :selected="ui.theme.base.value"
+      />
     </div>
   </div>
 

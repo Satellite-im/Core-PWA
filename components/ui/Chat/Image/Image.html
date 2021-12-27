@@ -1,11 +1,16 @@
 <div>
   <div
     class="image-mask"
-    v-if="!showfull">
-    <img
-      :class="`is-image-in-mask`"
-      :src="image.url"
-      v-click-outside="() => $data.showfull = !$data.showfull" />
+    v-if="showfull">
+    <div class="image-container">
+      <img
+        :class="`is-image-in-mask`"
+        :src="image.url"
+        v-click-outside="() => $data.showfull = !$data.showfull" />
+      <a :href="image.url" target="_blank">
+        {{ $t('files.view_original') }}
+      </a>
+    </div>
   </div>
   <img
     :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
