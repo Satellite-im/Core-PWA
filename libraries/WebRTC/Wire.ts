@@ -49,7 +49,6 @@ export class Wire extends Emitter<WireEventListeners> {
   ) {
     super()
 
-    console.log(announceURLs)
     this.originator = originator
     this.identifier = identifier
     this.channel = channel
