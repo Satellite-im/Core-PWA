@@ -14,10 +14,8 @@ import {
 
 import { FileType, UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
-import { Config } from '~/config'
 import { mapState } from 'vuex'
 import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { Promise } from 'es6-promise'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -171,14 +169,11 @@ export default Vue.extend({
         this.$data.count_error = false
         this.$parent.$data.showFilePreview = false
       }
-    },
-    /**
+    },/**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.fileAmount--
-      if (this.fileAmount === 0) {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
         this.cancelUpload()
@@ -203,7 +198,7 @@ export default Vue.extend({
             new Error(error)
             document.body.style.cursor = PropCommonEnum.DEFAULT
             this.$store.dispatch('textile/clearUploadStatus')
-            this.disabledButton = false
+            this.$data.disabledButton = false
           }
         })
     },
@@ -212,14 +207,14 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage() {
-      this.disabledButton = true
+      this.$data.disabledButton = true
       const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
         if (!file.nsfw.status) {
           return file
         }
       })
       nsfwCheck.map((file: UploadDropItemType) => {
-        this.fileAmount = nsfwCheck.length
+        this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
     },
