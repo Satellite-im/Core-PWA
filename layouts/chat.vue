@@ -72,7 +72,7 @@
           >
             <Nuxt />
           </UiChatScroll>
-          <Enhancers />
+          <Enhancers :sidebar="sidebar" />
           <WalletMini v-if="ui.modals.walletMini" />
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
           <ChatbarReply v-if="recipient" />
