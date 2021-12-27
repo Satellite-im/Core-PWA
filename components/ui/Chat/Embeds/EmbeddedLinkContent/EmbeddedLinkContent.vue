@@ -33,9 +33,7 @@ export default Vue.extend({
      */
     parseEmbeddableVideoContentFromText(messagetext: string) {
       // parse incoming text for links
-      const arrayOfLinks = messagetext.match(
-        /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
-      )
+      const arrayOfLinks = messagetext.match(this.$Config.regex.link)
 
       // this.settings.embeddedLinks is the global set in the networks panel. Without this, it just shows up as a normal link
       if (arrayOfLinks && this.settings.embeddedLinks === true) {
@@ -44,8 +42,8 @@ export default Vue.extend({
             Parsing Youtube links, if we need to modify the regex do it in here.
           */
           if (
-            link.match(/^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g) ||
-            link.match(/^https?:\/\/([a-z0-9-]+[.])*youtu.be?/g)
+            link.match(this.$Config.regex.youtube) ||
+            link.match(this.$Config.regex.youtubeShort)
           ) {
             let youtubeOutSource: string = ''
             if (link.includes('youtube')) {
@@ -68,7 +66,7 @@ export default Vue.extend({
           /*
             Parsing Vimeo links, if we need to modify the regex do it in here. Right now it parses regular links and links to videos that are in collections
           */
-          if (link.match(/^https?:\/\/([a-z0-9-]+[.])*vimeo.com?/g)) {
+          if (link.match(this.$Config.regex.vimeo)) {
             // vimeo makes their video id potentially available in several different places in the url
             const videoID: string = link
               .split('/')
@@ -83,7 +81,7 @@ export default Vue.extend({
           }
 
           if (
-            link.match(/^https?:\/\/([a-z0-9-]+[.])*facebook.com?/g) &&
+            link.match(this.$Config.regex.facebook) &&
             link.includes('videos')
           ) {
             // hacky workaround to make facebook embed more mobile responsive.
@@ -102,7 +100,7 @@ export default Vue.extend({
             }
           }
 
-          if (link.match(/^https?:\/\/([a-z0-9-]+[.])twitch[.]tv\/?/g)) {
+          if (link.match(this.$Config.regex.twitch)) {
             let videoId: string = ''
             // check to see if it's an individual video
             if (link.includes('/videos/')) {
@@ -126,11 +124,7 @@ export default Vue.extend({
             }
           }
 
-          if (
-            link.match(
-              /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g,
-            )
-          ) {
+          if (link.match(this.$Config.regex.spotify)) {
             // get type and id
             // https://open.spotify.com/playlist/46ffmNKBTEakwz0t625bbC?si=e878040ce04c460f => playlist/46ffmNKBTEakwz0t625bbC
             // https://open.spotify.com/track/3s2RFp5hU6jEvAmfZrnrAi?si=a9bf555ede314a19 => track/3s2RFp5hU6jEvAmfZrnrAi

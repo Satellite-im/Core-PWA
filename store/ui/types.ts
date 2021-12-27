@@ -55,14 +55,14 @@ export interface EnhancerInfo {
 }
 
 export interface EmojiUsage {
-  code: String
+  code: string
   count: number
-  content: String
+  content: string
 }
 
 export interface RecentGlyph {
   pack: Glyph
-  url: String
+  url: string
   count: number
 }
 

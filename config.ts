@@ -105,6 +105,14 @@ export const Config = {
     isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
+    // check for link
+    link: /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
+    youtube: /^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g,
+    youtubeShort: /^https?:\/\/([a-z0-9-]+[.])*youtu.be?/g,
+    vimeo: /^https?:\/\/([a-z0-9-]+[.])*vimeo.com?/g,
+    facebook: /^https?:\/\/([a-z0-9-]+[.])*facebook.com?/g,
+    twitch: /^https?:\/\/([a-z0-9-]+[.])twitch[.]tv\/?/g,
+    spotify: /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g,
   },
   webrtc: {
     constraints: {
