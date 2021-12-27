@@ -3,9 +3,7 @@
   v-click-outside="() => open = false"
 >
   <div :class="{'custom-select': true, open, up, down: !up}">
-    <div class="selected" @click="toggleOpen()">
-      {{ getSelectLabel() }}
-    </div>
+    <div class="selected" @click="toggleOpen()">{{ getSelectLabel() }}</div>
     <div class="items">
       <div
         v-for="(option, i) of options"
@@ -13,7 +11,14 @@
         :disabled="option.disabled"
         @click="change(option)"
       >
-        {{ option.text }}
+        <div
+          class="color"
+          v-if="colorSupport"
+          :style="{ background: option.value }"
+        >
+          {{ option.text }}
+        </div>
+        <span v-else>{{ option.text }}</span>
       </div>
     </div>
   </div>

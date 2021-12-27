@@ -1,4 +1,4 @@
-import { UIState, GlyphMarketViewStatus, ThemeNames } from './types'
+import { UIState, GlyphMarketViewStatus, Themes, Flairs } from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -50,13 +50,9 @@ const InitialUIState = (): UIState => ({
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
   mostEmojiUsed: [],
-  recentGlyphs: [],
   theme: {
-    base: {
-      name: ThemeNames.DEFAULT,
-      class: '',
-    },
-    flair: 'Green',
+    base: Themes[0],
+    flair: Flairs[0],
   },
 })
 
