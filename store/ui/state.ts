@@ -50,7 +50,8 @@ const InitialUIState = (): UIState => ({
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
   mostEmojiUsed: [],
-    theme: {
+  recentGlyphs: [],
+  theme: {
     base: {
       name: ThemeNames.DEFAULT,
       class: '',

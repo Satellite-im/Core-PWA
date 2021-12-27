@@ -111,6 +111,7 @@ export default defineNuxtConfig({
         // Default breakpoint for SSR
         defaultBreakpoint: 'sm',
         breakpoints: {
+          xs: 360,
           sm: 768,
           md: 1250,
           lg: Infinity,

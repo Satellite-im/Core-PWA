@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SimpleWrap.SimpleWrap 0 1`] = `"This is a Text"`;
+
+exports[`SimpleWrap.SimpleWrap 1 1`] = `"foo bar"`;
+
+exports[`SimpleWrap.SimpleWrap 2 1`] = `"Hello, world!"`;
+
+exports[`SimpleWrap.SimpleWrap 3 1`] = `"foo bar"`;
+
+exports[`SimpleWrap.SimpleWrap 4 1`] = `"Hello, world!"`;
+
+exports[`SimpleWrap.SimpleWrap 5 1`] = `"<></>"`;
