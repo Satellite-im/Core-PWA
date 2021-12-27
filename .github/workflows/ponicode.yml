@@ -37,14 +37,3 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }} # DO NOT MODIFY
         ponicodeSquarToken: ${{ secrets.PONICODE_SQUAR_TOKEN }} # DO NOT MODIFY
         displayFullReport: 'true'
-
-    # Run Ponicode Unit-Testing Action
-    - uses: ponicode/unit-testing-action@master
-      id: ponicode_unit_testing
-      with:
-        repoURL: ${{github.repository}} # DO NOT MODIFY
-        branch: ${{ steps.extract_branch.outputs.BRANCH_NAME }} # DO NOT MODIFY
-        githubToken: ${{ secrets.GITHUB_TOKEN }} # DO NOT MODIFY
-        ponicodeUtToken: ${{ secrets.PONICODE_TOKEN }} # DO NOT MODIFY
-        impactedFiles: ${{ steps.ponicode_squar.outputs.impacted_files }} # DO NOT MODIFY IF YOU WANT TO GENERATE TESTS ON SQUAR OUTCOME ONLY
-        commentUTs: "true"
