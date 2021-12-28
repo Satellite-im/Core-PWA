@@ -2,8 +2,10 @@ import { UIState } from './types'
 
 const getters = {
   getSortedMostUsedEmojis: (state: UIState) => {
-    const emojis = [...state.mostEmojiUsed].sort((a, b) => b.count - a.count)
-    return emojis
+    return [...state.mostEmojiUsed].sort((a, b) => b.count - a.count)
+  },
+  getSortedRecentGlyphs: (state: UIState) => {
+    return [...state.recentGlyphs].sort((a, b) => b.count - a.count)
   },
 }
 

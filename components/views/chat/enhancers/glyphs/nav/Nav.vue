@@ -1,7 +1,7 @@
 <template src="./Nav.html" />
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import { ShoppingBagIcon, ClockIcon } from 'satellite-lucide-icons'
 
@@ -10,13 +10,18 @@ export default Vue.extend({
     ShoppingBagIcon,
     ClockIcon,
   },
-  data() {
-    return {
-      selectedPack: null,
-    }
-  },
   computed: {
-    ...mapState(['ui', 'search']),
+    ...mapState(['ui']),
+    ...mapGetters('ui', ['getSortedRecentGlyphs']),
+    recentGlyphs() {
+      if (this.$mq === 'xs') {
+        return this.getSortedRecentGlyphs.slice(0, 5)
+      }
+      if (this.$mq === 'sm') {
+        return this.getSortedRecentGlyphs.slice(0, 6)
+      }
+      return this.getSortedRecentGlyphs.slice(0, 11)
+    },
   },
   methods: {
     toggleMarketPlace() {

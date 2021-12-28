@@ -42,6 +42,10 @@
       </swiper>
     </div>
     <MobileNav v-if="$device.isMobile" />
+    <!-- Sets the global css variable for the theme flair color -->
+    <v-style>
+      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+    </v-style>
   </div>
 </template>
 
