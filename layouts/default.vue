@@ -1,6 +1,10 @@
 <template>
   <div id="app" :class="$store.state.ui.theme.base.class">
     <Nuxt />
+    <!-- Sets the global css variable for the theme flair color -->
+    <v-style>
+      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+    </v-style>
   </div>
 </template>
 <style lang="less">

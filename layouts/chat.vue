@@ -60,12 +60,19 @@
           <UiChatScroll
             :contents="ui.messages"
             :prevent-scroll-offset="500"
-            :class="media.activeCall ? 'media-open' : ''"
+            :class="
+              this.$store.state.friends.all.find(
+                (friend) =>
+                  friend.address === this.$store.state.webrtc.activeCall,
+              )
+                ? 'media-open'
+                : 'media-unopen'
+            "
             enable-wrap
           >
             <Nuxt />
           </UiChatScroll>
-          <Enhancers />
+          <Enhancers :sidebar="sidebar" />
           <WalletMini v-if="ui.modals.walletMini" />
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
           <ChatbarReply v-if="recipient" />
@@ -83,6 +90,10 @@
       </swiper>
     </div>
     <MobileNav v-if="$device.isMobile" />
+    <!-- Sets the global css variable for the theme flair color -->
+    <v-style>
+      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+    </v-style>
   </div>
 </template>
 
@@ -92,9 +103,7 @@ import { mapState } from 'vuex'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -107,18 +116,18 @@ export default Vue.extend({
     return {
       sidebar: true,
       asidebar: !this.$device.isMobile,
-      swiperOption: {        
+      swiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
             this.$data.asidebar = this.$refs.swiper.$swiper.activeIndex === 2
-          }
-        }
+          },
+        },
       },
     }
   },
@@ -159,7 +168,7 @@ export default Vue.extend({
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
       }
-    }
+    },
   },
 })
 </script>

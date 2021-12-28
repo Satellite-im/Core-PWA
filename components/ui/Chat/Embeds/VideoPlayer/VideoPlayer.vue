@@ -18,7 +18,7 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./VideoPlayer.less"></style>
+<style scoped lang="less" src="./VideoPlayer.less"></style>
 <style scoped lang="less">
 .is-text {
   font-size: @micro-text-size;

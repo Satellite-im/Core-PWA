@@ -1,12 +1,13 @@
-<div class="embeded-file">
-  <file-icon size="1x" class="file-icon" />
-  <img v-if="file.type.includes('image')"
-    class="image-file"
-    :src="file.url"
+<div :class="file.type.includes('image') ? 'embeded-image' : 'embeded-file'">
+  <file-icon size="1x" class="file-icon" v-if="!file.type.includes('image')" />
+  <UiChatImage
+    v-if="file.type.includes('image')"
+    :image="file"
+    :alt="file.name"
   />
-  <div class="file-info">
+  <div class="file-info" v-if="!file.type.includes('image')">
     <TypographySubtitle :size="6" :text="`${file.name}`" />
     <TypographyText :text="`${file.type} - ${getFileSize}`" />
   </div>
-  <download-icon size="1x" class="download" />
+  <download-icon size="1x" class="download" v-if="!file.type.includes('image')" />
 </div>

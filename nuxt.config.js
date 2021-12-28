@@ -32,6 +32,8 @@ export default defineNuxtConfig({
           'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
       },
       { hid: 'description', name: 'description', content: '' },
+      { name: 'mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
     ],
     link: [
       {
@@ -83,6 +85,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
+    { src: '~/plugins/local/style.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -109,6 +112,7 @@ export default defineNuxtConfig({
         // Default breakpoint for SSR
         defaultBreakpoint: 'sm',
         breakpoints: {
+          xs: 360,
           sm: 768,
           md: 1250,
           lg: Infinity,
@@ -144,6 +148,7 @@ export default defineNuxtConfig({
       theme_color: '#101016',
       orientation: 'portrait',
       prefer_related_applications: false,
+      permissions: ['unlimitedStorage', 'fullscreen'],
     },
     icon: {
       source: '/static/favicon.png',

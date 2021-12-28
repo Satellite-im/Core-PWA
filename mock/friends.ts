@@ -65,12 +65,12 @@ export const Requests = [
 ]
 
 export const Blocked = [
-  // {
-  //   name: 'Toxic McToxicson',
-  //   address: '0xdfeeb223bafbe5c5271415c75aecd68c21fe3d7f',
-  //   status: 'Reeeeeeeee',
-  //   state: 'online',
-  // },
+  {
+    name: 'Toxic McToxicson',
+    address: '0xdfeeb223bafbe5c5271415c75aecd68c21fe3d7f',
+    status: 'Reeeeeeeee',
+    state: 'online',
+  },
 ]
 
 export const Friend = {

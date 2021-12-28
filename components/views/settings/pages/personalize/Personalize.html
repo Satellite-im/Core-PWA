@@ -21,6 +21,20 @@
 
   <div class="columns is-desktop">
     <div class="column">
+      <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
+      <br />
+      <InteractablesSelect 
+        v-model="flair"
+        size="small"
+        :options="flairs"
+        colorSupport
+        :selected="ui.theme.flair.value"
+      />
+    </div>
+  </div>
+
+  <div class="columns is-desktop">
+    <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.language')" />
       <br />
       <InteractablesSelect size="small" :options="[{ text: 'English (USA)', value: 'en_US' }]" selected="en_US" />
