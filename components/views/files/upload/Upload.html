@@ -2,14 +2,7 @@
   <div class="file-preview" v-if="files.length || count_error">
     <div v-if="count_error" class="file-error">
       <TypographyError :text="$t('errors.chat.drop_file_count')" />
-      <div class="is-controls">
-        <InteractablesButton
-          type="danger"
-          size="small"
-          :text="$t('pages.files.upload.close')"
-          :action="cancelUpload"
-        />
-      </div>
+      <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
     </div>
     <template v-else>
       <UiScroll horizontalScroll scrollbarVisibility="scroll">
