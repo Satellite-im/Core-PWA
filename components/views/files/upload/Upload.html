@@ -11,6 +11,7 @@
             :item="item"
             :index="index"
             :key="index"
+            @removeUploadItem="removeUploadItem(index)"
             v-for="(item, index) in files"
           ></FilesUploadPreviewItem>
         </div>

@@ -1,9 +1,5 @@
 <div class="file-item">
-  <button
-    class="close"
-    @click="$emit('removeUploadItem', index)"
-    v-if="!!item.url"
-  >
+  <button class="close" @click="$emit('removeUploadItem')" v-if="!!item.url">
     <x-icon size="1x" />
   </button>
   <div class="preview">

@@ -23,10 +23,6 @@ export default Vue.extend({
       type: Object as PropType<UploadDropItemType>,
       default: () => {},
     },
-    index: {
-      type: Number,
-      default: 0,
-    },
   },
   computed: {
     ...mapState(['textile']),
