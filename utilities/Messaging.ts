@@ -51,6 +51,7 @@ export function groupMessages(
   messages: MessagesTracker,
   replies: RepliesTracker,
   reactions: ReactionsTracker,
+  address: string,
 ): MessageGroup {
   let groupedMessages: MessageGroup = []
 
@@ -155,15 +156,15 @@ export function groupMessages(
     }
   }
 
-  console.log('gmsg', groupedMessages.at(-1))
   if (groupedMessages.length) {
+    const data = { [address]: groupedMessages, key: address }
     db.conversations
-      .bulkPut(groupedMessages)
+      .put(data)
       .then(() => {
-        alert('Successfully stored the array')
+        console.log('success')
       })
       .catch((error) => {
-        alert('Error: ' + error)
+        console.log('error: ', error)
       })
   }
 
