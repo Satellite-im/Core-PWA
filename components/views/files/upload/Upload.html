@@ -1,5 +1,11 @@
 <div id="file-upload">
-  <div class="file-preview" v-if="files.length || count_error">
+  <div
+    class="file-preview"
+    v-if="files.length || count_error"
+    @touchmove="handleTouchPreview"
+    @touchstart="handleTouchPreview"
+    @touchend="handleTouchPreview"
+  >
     <div v-if="count_error" class="file-error">
       <TypographyError :text="$t('errors.chat.drop_file_count')" />
       <div class="is-controls">

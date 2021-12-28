@@ -117,6 +117,9 @@ export default Vue.extend({
         this.$data.uploadStatus = true
       }
     },
+    handleTouchPreview(event: Event) {
+      event.stopPropagation()
+    },
     /**
      * @method loadPicture
      * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
