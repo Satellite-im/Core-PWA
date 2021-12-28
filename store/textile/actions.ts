@@ -8,7 +8,6 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
-import { db } from '~/plugins/thirdparty/dexie'
 
 export default {
   /**
@@ -27,9 +26,6 @@ export default {
     await $TextileManager.init(config)
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
-
-    // const info = await db.conversations.toArray()
-    // console.log(info)
 
     commit('textileInitialized', true)
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })

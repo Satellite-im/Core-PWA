@@ -12,6 +12,7 @@ import {
   RepliesTracker,
   GlyphMessage,
 } from '~/types/textile/mailbox'
+import { db } from '~/plugins/thirdparty/dexie'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
@@ -152,6 +153,18 @@ export function groupMessages(
         messages: newMessages,
       }
     }
+  }
+
+  console.log('gmsg', groupedMessages.at(-1))
+  if (groupedMessages.length) {
+    db.conversations
+      .bulkPut(groupedMessages)
+      .then(() => {
+        alert('Successfully stored the array')
+      })
+      .catch((error) => {
+        alert('Error: ' + error)
+      })
   }
 
   return groupedMessages
