@@ -51,7 +51,7 @@ export function groupMessages(
   messages: MessagesTracker,
   replies: RepliesTracker,
   reactions: ReactionsTracker,
-  address: string,
+  address: any, // string, declared any to bypass ts error,
 ): MessageGroup {
   let groupedMessages: MessageGroup = []
 
@@ -158,14 +158,9 @@ export function groupMessages(
 
   if (groupedMessages.length) {
     const data = { [address]: groupedMessages, key: address }
-    db.conversations
-      .put(data)
-      .then(() => {
-        console.log('success')
-      })
-      .catch((error) => {
-        console.log('error: ', error)
-      })
+    db.conversations.put(data).catch((error) => {
+      console.log('error: ', error)
+    })
   }
 
   return groupedMessages

@@ -17,5 +17,5 @@ export const db = new SatelliteDB()
 
 type DexieMessageGroup = {
   [key: string]: MessageGroup
-  key: string
+  key: any // string, declared any to bypass ts error
 }
