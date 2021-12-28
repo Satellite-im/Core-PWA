@@ -120,12 +120,8 @@
   }
 
   &.is-collapsed {
-    #sidebar,
-    #servers-vertical-list {
-      transform: translateX(calc(-@sidebar-size + -@servers-size));
-    }
-    .dynamic-content {
-      margin-left: calc(-@sidebar-size + -@servers-size);
+    .file-preview {
+      width: calc(@full - 2rem) !important;
     }
     #sidebar .toggle-sidebar {
       right: -2rem;

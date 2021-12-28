@@ -37,7 +37,6 @@ export default Vue.extend({
       showEmojiPicker: false,
       maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
-      showFilePreview: false,
     }
   },
   props: {
@@ -151,10 +150,10 @@ export default Vue.extend({
      * @example
      */
     handleChatBorderRadius() {
-      // const wrap = this.$refs.wrap as HTMLElement
-      // if (wrap.offsetHeight > 50 || this.ui.replyChatbarContent.id)
-      //   wrap.style.borderRadius = '4px'
-      // else wrap.style.borderRadius = '41px'
+      const wrap = this.$refs.wrap as HTMLElement
+      if (wrap.offsetHeight > 50 || this.ui.replyChatbarContent.id)
+        wrap.style.borderRadius = '4px'
+      else wrap.style.borderRadius = '41px'
     },
     /**
      * @method typingNotifHandler
@@ -225,7 +224,7 @@ export default Vue.extend({
         case KeybindingEnum.ENTER:
           if (!event.shiftKey) {
             event.preventDefault()
-            if (!this.hasCommand) {
+            if (this.$data.text !== '' && !this.hasCommand) {
               this.sendMessage()
               break
             }
@@ -270,10 +269,7 @@ export default Vue.extend({
      * then setting all related feilds to their default (empty)
      * @example v-on:click="sendMessage"
      */
-    async sendMessage() {
-      // @ts-ignore
-      await this.$refs['file-upload']?.sendMessage()
-
+    sendMessage() {
       if (this.recipient) {
         const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(
           this.value,

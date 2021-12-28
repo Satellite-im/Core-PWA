@@ -1,29 +1,28 @@
 <template src="./Upload.html"></template>
 
 <script lang="ts">
+import Vue, {PropType} from 'vue'
+import { Config } from '~/config'
+
 import {
   FileIcon,
-  FilePlusIcon,
   PlusIcon,
+  FilePlusIcon,
   SlashIcon,
-  XIcon,
 } from 'satellite-lucide-icons'
-import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { UploadDropItemType } from '~/types/files/file'
-import { Friend } from '~/types/ui/friends'
+
+import { FileType, UploadDropItemType } from "~/types/files/file";
+import {Friend} from "~/types/ui/friends";
+import {mapState} from "vuex";
+import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
+import {Promise} from "es6-promise";
+import { function } from "fp-ts";
 
 declare module 'vue/types/vue' {
   interface Vue {
-    loadPicture: (item: UploadDropItemType) => void
-    cancelUpload: () => void
-    finishUploads: () => void
-    dispatchFile: (file: UploadDropItemType) => void
+    files: Array<UploadDropItemType>
   }
 }
-
 export default Vue.extend({
   name: 'Upload',
   components: {
@@ -31,7 +30,6 @@ export default Vue.extend({
     PlusIcon,
     FilePlusIcon,
     SlashIcon,
-    XIcon,
   },
   props: {
     type: {
@@ -39,7 +37,7 @@ export default Vue.extend({
       default: '',
     },
     editable: {
-      type: Boolean,
+      type: Boolean
     },
     recipient: {
       type: Object as PropType<Friend>,
@@ -78,42 +76,42 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.disabledButton = false
+      this.disabledButton = false
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = event.target.files
-        this.$parent.$data.showFilePreview = files.length > 0
         if (files.length > 8) {
+          // @ts-ignore
           this.$data.count_error = true
           return
         }
         this.$data.count_error = false
-        this.$data.files = await Promise.all(
-          [...files].map(async (file: File) => {
-            const uploadFile = {
-              file,
-              nsfw: { status: false, checking: false },
-              url: '',
-            } as UploadDropItemType
-            return uploadFile
-          }),
-        )
-        this.$data.files.every(async (uploadFile: UploadDropItemType) => {
-          if (uploadFile.file.size <= Config.uploadByteLimit) {
-            uploadFile.nsfw.checking = true
-            try {
-              uploadFile.nsfw.status = await this.$Security.isNSFW(
-                uploadFile.file,
-              )
-            } catch (err) {
-              uploadFile.nsfw.status = true
-              uploadFile.nsfw.checking = false
-            }
-            uploadFile.nsfw.checking = false
+        this.$data.files = [...files].map((file: File) => {
+          return {
+            file,
+            nsfw: { status: false, checking: false },
+            url: '',
           }
-
-          this.loadPicture(uploadFile)
         })
+        /* nsfw checking after putting all files */
+        for (const file of this.$data.files) {
+          // don't check nsfw for large files or webgl runs out of memory
+          if (file.file.size > Config.uploadByteLimit) {
+            file.nsfw.tooLarge = true
+          }
+          if (!file.nsfw.tooLarge) {
+            file.nsfw.checking = true
+            try {
+              file.nsfw.status = await this.$Security.isNSFW(file.file)
+            } catch (err) {
+              file.nsfw.status = true
+              file.nsfw.checking = false
+              return
+            }
+            file.nsfw.checking = false
+          }
+          this.loadPicture(file)
+        }
         this.$data.uploadStatus = true
       }
     },
@@ -153,53 +151,41 @@ export default Vue.extend({
      */
     cancelUpload() {
       this.$data.files = []
-      document.body.style.cursor = PropCommonEnum.DEFAULT
+      document.body.style.cursor= PropCommonEnum.DEFAULT
       this.$data.uploadStatus = false
       this.$data.count_error = false
-      this.$parent.$data.showFilePreview = false
-    },
-    removeUploadItem(index: number) {
-      this.$data.files.splice(index, 1)
-      this.$data.files = [...this.$data.files]
-      if (this.$data.files.length === 0) {
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.$data.uploadStatus = false
-        this.$data.count_error = false
-        this.$parent.$data.showFilePreview = false
-      }
     },
     /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.$data.fileAmount--
-      if (this.$data.fileAmount === 0) {
+      this.fileAmount --
+      if (this.fileAmount === 0) {
         this.cancelUpload()
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
-        this.$data.disabledButton = false
+        this.disabledButton = false
       }
     },
     /**
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file: UploadDropItemType) {
-      this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
-          file: file,
-        })
-        .then(() => this.finishUploads())
+    dispatchFile(file: FileType){
+      this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: file,
+      }).then( () =>
+        this.finishUploads())
     },
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
-    async sendMessage() {
-      this.$data.disabledButton = true
-      this.$data.fileAmount = this.$data.files.length
+    async sendMessage () {
+      this.disabledButton = true;
+      this.fileAmount = this.$data.files.length
       this.$data.files.forEach((file: UploadDropItemType) => {
         this.dispatchFile(file)
       })
