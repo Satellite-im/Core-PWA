@@ -30,7 +30,7 @@
             :sidebar="sidebar"
           />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : 'commonscreen'}`">
+        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
           <menu-icon
             class="toggle--sidebar"
             v-on:click="toggleMenu"
