@@ -30,9 +30,7 @@
             :sidebar="sidebar"
           />
         </swiper-slide>
-        <swiper-slide
-          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
-        >
+        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
           <menu-icon
             class="toggle--sidebar"
             v-on:click="toggleMenu"
@@ -62,12 +60,19 @@
           <UiChatScroll
             :contents="ui.messages"
             :prevent-scroll-offset="500"
-            :class="media.activeCall ? 'media-open' : ''"
+            :class="
+              this.$store.state.friends.all.find(
+                (friend) =>
+                  friend.address === this.$store.state.webrtc.activeCall,
+              )
+                ? 'media-open'
+                : 'media-unopen'
+            "
             enable-wrap
           >
             <Nuxt />
           </UiChatScroll>
-          <Enhancers />
+          <Enhancers :sidebar="sidebar" />
           <WalletMini v-if="ui.modals.walletMini" />
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
           <ChatbarReply v-if="recipient" />

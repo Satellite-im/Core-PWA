@@ -83,6 +83,7 @@ export default Vue.extend({
       const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
       peer?.call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
+      this.$store.commit('ui/fullscreen', false)
     },
   },
 })

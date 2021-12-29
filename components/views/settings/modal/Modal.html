@@ -1,18 +1,15 @@
 <UiModal class="settings-modal" :closeModal="closeModal" nopad>
-  <div 
-    id="settings" 
-    class="with-sidebar" 
-  >
-    <swiper 
+  <div id="settings" class="with-sidebar">
+    <swiper
       class="setting-swiper"
-      :options="settingSwiperOption" 
+      :options="settingSwiperOption"
       ref="settingSwiper"
     >
       <swiper-slide class="sidebar is-secondary-background">
         <UiScroll verticalScroll>
           <SettingsSidebar
             :title="$t('pages.settings.settings')"
-            :toggleable="sidebar"
+            :toggleable="$device.isMobile"
             :toggle="toggleSidebar"
             :handleRouteChange="changeRoute"
           />
@@ -21,8 +18,8 @@
       <swiper-slide class="not-sidebar hidden-scroll" v-scroll-lock="true">
         <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
           <menu-icon
+            v-if="$device.isMobile"
             size="1x"
-            v-if="!sidebar"
             v-on:click="toggleSidebar"
             class="menu--toggle"
           />
@@ -42,5 +39,5 @@
         </UiScroll>
       </swiper-slide>
     </swiper>
-  </div>    
+  </div>
 </UiModal>
