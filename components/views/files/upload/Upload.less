@@ -19,112 +19,25 @@
 
   .file-preview {
     position: absolute;
-    bottom: 2.6rem;
+    bottom: 2.5rem;
     left: 0;
     right: 0;
     width: 100%;
     background-color: #181f2c;
     &:extend(.bordered);
+    border-bottom: 1px solid rgba(87, 101, 116, 0.3);
     border-radius: @corner-rounding @corner-rounding 0 0;
     padding: 0 @normal-spacing;
   }
 
-  .file-list {
-    .file-item {
-      position: relative;
-      border: 1px solid #57657480;
-      background-color: #3a3a5030;
-      border-radius: @corner-rounding;
-      padding: @normal-spacing @light-spacing @light-spacing;
-      display: inline-block;
-      width: 224px;
-      margin: @normal-spacing @light-spacing;
-      &:first-child {
-        margin-left: 0;
-      }
-      &:last-child {
-        margin-right: 0;
-      }
-      .close {
-        position: absolute;
-        top: @xlight-spacing;
-        right: @xlight-spacing;
-        background-color: transparent;
-        color: @primary-color;
-        &:hover {
-          color: @primary-color-alt;
-        }
-      }
-
-      .file-info {
-        .title {
-          width: 100%;
-          font-size: @text-size;
-          overflow-x: hidden;
-          overflow-y: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          margin-bottom: 0;
-        }
-
-        .subtitle {
-          font-size: @mini-text-size;
-          margin-bottom: 0;
-        }
-      }
-
-      .preview {
-        margin: @light-spacing;
-        width: 192px;
-        height: 110px;
-        position: relative;
-      }
-
-      .loading-bar {
-        max-width: 100%;
-      }
-
-      .thumbnail {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: @corner-rounding;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
-
-      .blur {
-        filter: blur(8px);
-        -webkit-filter: blur(8px);
-        -moz-filter: blur(8px);
-        -o-filter: blur(8px);
-        -ms-filter: blur(8px);
-      }
-    }
-    .is-controls {
-      align-content: flex-end;
-
-      .button {
-        float: right;
-        margin-left: @light-spacing;
-      }
-    }
-    .nsfw-text {
-      display: block;
-      h1 {
-        display: block;
-        margin: 0 @light-spacing 0 0 !important;
-        font-size: @title-text;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      width: 100%;
-      margin-top: @light-spacing;
-    }
+  .file-error {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin: @large-spacing 0;
   }
+
   display: inline-flex;
   justify-self: flex-start;
   align-self: flex-start;
