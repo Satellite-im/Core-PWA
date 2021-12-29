@@ -8,6 +8,7 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
+import { db } from '~/plugins/thirdparty/dexie'
 
 export default {
   /**
@@ -65,6 +66,11 @@ export default {
       friend.textilePubkey,
       query,
     )
+
+    const data = { [address]: conversation, key: address }
+    db.conversations.put(data).catch((error) => {
+      console.log('error: ', error)
+    })
 
     commit('setConversation', {
       address: friend.address,

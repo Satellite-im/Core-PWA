@@ -12,7 +12,6 @@ import {
   RepliesTracker,
   GlyphMessage,
 } from '~/types/textile/mailbox'
-import { db } from '~/plugins/thirdparty/dexie'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
@@ -51,7 +50,6 @@ export function groupMessages(
   messages: MessagesTracker,
   replies: RepliesTracker,
   reactions: ReactionsTracker,
-  address: any, // string, declared any to bypass ts error,
 ): MessageGroup {
   let groupedMessages: MessageGroup = []
 
@@ -154,13 +152,6 @@ export function groupMessages(
         messages: newMessages,
       }
     }
-  }
-
-  if (groupedMessages.length) {
-    const data = { [address]: groupedMessages, key: address }
-    db.conversations.put(data).catch((error) => {
-      console.log('error: ', error)
-    })
   }
 
   return groupedMessages

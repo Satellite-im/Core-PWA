@@ -1,8 +1,8 @@
 import Dexie from 'dexie'
-import { MessageGroup } from '~/types/messaging'
+import { Message } from '~/types/textile/mailbox'
 
 class SatelliteDB extends Dexie {
-  public conversations: Dexie.Table<DexieMessageGroup, string>
+  public conversations: Dexie.Table<DexieMessage, string>
 
   public constructor() {
     super('SatelliteDB')
@@ -15,7 +15,7 @@ class SatelliteDB extends Dexie {
 
 export const db = new SatelliteDB()
 
-type DexieMessageGroup = {
-  [key: string]: MessageGroup
+type DexieMessage = {
+  [key: string]: Message[]
   key: any // string, declared any to bypass ts error
 }
