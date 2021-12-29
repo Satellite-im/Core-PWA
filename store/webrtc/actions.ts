@@ -28,8 +28,11 @@ export default {
 
     $WebRTC.on('PEER_CONNECT', ({ peerId }) => {
       $Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
+      commit('setConnectedPeer', peerId)
     })
-
+    $WebRTC.on('ERROR', () => {
+      commit('setConnectedPeer', '')
+    })
     commit('setInitialized', true)
   },
   /**

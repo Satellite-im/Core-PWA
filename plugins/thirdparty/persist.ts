@@ -28,12 +28,14 @@ const propertiesBlacklist = [
   'friends.all',
   'prerequisites',
   'webrtc.activeStream',
+  'webrtc.connectedPeer',
 ]
 
 const propertiesBlacklistWhenStorePin = [
   'friends.all',
   'prerequisites',
   'webrtc.activeStream',
+  'webrtc.connectedPeer',
 ]
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
