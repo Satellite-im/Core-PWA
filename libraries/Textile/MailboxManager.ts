@@ -131,8 +131,6 @@ export class MailboxManager {
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
 
-    console.log(filtered)
-
     return filtered.map((r) => r.value)
   }
 

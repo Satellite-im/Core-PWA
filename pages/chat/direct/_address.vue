@@ -18,7 +18,7 @@ export default Vue.extend({
       }
 
       const { messages, replies, reactions } = conversation
-      return groupMessages(messages, replies, reactions, address)
+      return groupMessages(messages, replies, reactions)
     },
   },
   mounted() {
