@@ -155,21 +155,24 @@ export default Vue.extend({
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.fileAmount--
-      if (this.fileAmount === 0) {
-        this.$data.fileAmount--
-        if (this.$data.fileAmount === 0) {
-          if (this.$data.containsNsfw) {
-            this.$data.alertNsfw = true
-            this.alertNsfwFile()
-          }
-          if (!this.$data.containsNsfw) {
+      this.$data.fileAmount--
+      if (this.$data.fileAmount === 0) {
+        if (this.$data.containsNsfw) {
+          this.$data.alertNsfw = true
+          setTimeout(() => {
+            this.$data.alertNsfw = false
+            this.$data.containsNsfw = false
             this.cancelUpload()
             document.body.style.cursor = PropCommonEnum.DEFAULT
             this.$store.dispatch('textile/clearUploadStatus')
-          }
-
+          }, 5000)
         }
+        if (!this.$data.containsNsfw) {
+          this.cancelUpload()
+          document.body.style.cursor = PropCommonEnum.DEFAULT
+          this.$store.dispatch('textile/clearUploadStatus')
+        }
+
       }
     },
     alertNsfwFile() {
@@ -198,7 +201,6 @@ export default Vue.extend({
             new Error(error)
             document.body.style.cursor = PropCommonEnum.DEFAULT
             this.$store.dispatch('textile/clearUploadStatus')
-            this.$data.disabledButton = false
           }
         })
     },
@@ -207,7 +209,6 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage() {
-      this.$data.disabledButton = true
       const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
         if (!file.nsfw.status) {
           return file
