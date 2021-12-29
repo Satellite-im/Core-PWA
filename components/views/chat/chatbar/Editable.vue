@@ -16,7 +16,7 @@
 </template>
 <script>
 import Vue from 'vue'
-import { marked } from 'marked'
+import { toHTML } from '~/libraries/ui/Markdown'
 
 class Cursor {
   static getCurrentCursorPosition(parentElement) {
@@ -151,56 +151,10 @@ class Cursor {
   }
 }
 
-// Override function
-const renderer = {
-  strong: getCustomParser('strong'),
-  em: getCustomParser('em'),
-  codespan: getCustomParser('codespan'),
-  del: getCustomParser('del'),
-}
-
-const tokenizer = {
-  codespan(src) {
-    // Keep only `code` and not ```code```
-    const match = src.match(/^(`)([^`]|[^`][\s\S]*?[^`])\1(?!`)/)
-    if (match) {
-      return {
-        type: 'codespan',
-        raw: match[0],
-        text: match[2],
-      }
-    }
-  },
-  br() {},
-  link() {},
-  image() {},
-  text() {},
-}
-
-marked.use({ renderer, tokenizer })
-
-function getCustomParser(type) {
-  const customParsers = {
-    em: (text) => {
-      const newText = `<span class="md-symbol">*</span><em>${text}</em><span class="md-symbol">*</span>`
-      return newText
-    },
-    strong: (text) => {
-      return `<span class="md-symbol">**</span><strong>${text}</strong><span class="md-symbol">**</span>`
-    },
-    del: (text) => {
-      return `<span class="md-symbol">~</span><del>${text}</del><span class="md-symbol">~</span>`
-    },
-    codespan: (text) => {
-      return `<span class="md-symbol">\`</span><code>${text}</code><span class="md-symbol">\`</span>`
-    },
-  }
-
-  return customParsers[type]
-}
-
 function buildChatbarRow(text) {
-  return `<div class="chat-row-content"><span>${text}<br /></span></div>`
+  return `<div class="chat-row-content"><span>${toHTML(
+    text,
+  )}<br /></span></div>`
 }
 
 export default Vue.extend({
@@ -226,7 +180,7 @@ export default Vue.extend({
       messageBox.childNodes.forEach((node, index) => {
         // When encountering a newline, create a new row
         node.textContent.split('\n').forEach((line) => {
-          rows.push(buildChatbarRow(this.markdownToHtml(line)))
+          rows.push(buildChatbarRow(line))
         })
       })
 
@@ -273,10 +227,12 @@ export default Vue.extend({
     onSelectionChange() {
       const selection = document.getSelection()
       const messageBox = this.$refs?.editable
-      const node = selection.getRangeAt(0).commonAncestorContainer
-      // If the content is just a newline don't select
-      if (node.innerText === '\n') {
-        Cursor.setCurrentCursorPosition(0, messageBox)
+      if (selection && selection.rangeCount > 0) {
+        const node = selection.getRangeAt(0).commonAncestorContainer
+        // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
+        if (node.innerText === '\n') {
+          Cursor.setCurrentCursorPosition(0, messageBox)
+        }
       }
     },
     onInput(e) {
@@ -284,7 +240,7 @@ export default Vue.extend({
       this.$emit('input', messageBox.innerHTML)
     },
     markdownToHtml(mdString) {
-      return marked.parseInline(mdString)
+      return toHTML(mdString)
     },
   },
 })
@@ -310,7 +266,11 @@ export default Vue.extend({
       height: 24px;
 
       .md-symbol {
-        color: grey;
+        color: @gray;
+      }
+
+      .md-url {
+        color: @primary-color;
       }
     }
   }

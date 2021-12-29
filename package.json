@@ -76,6 +76,7 @@
     "remarkable": "^2.0.1",
     "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
     "sharp": "^0.29.0",
+    "simple-markdown": "^0.7.3",
     "simple-peer": "^9.11.0",
     "swiper": "5.x",
     "uuid": "^8.3.2",
