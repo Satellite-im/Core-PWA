@@ -1,6 +1,6 @@
 import * as actions from '~/store/audio/actions'
 
-describe.skip("actions.default.toggleDeafen", () => { //add-ticket     TypeError: Cannot read properties of undefined (reading 'deafened')
+describe.skip("actions.default.toggleDeafen", () => { //AP-375
     test("0", () => {
         let result: any = actions.default.toggleDeafen("http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg")
         expect(result).toMatchSnapshot()
@@ -32,8 +32,7 @@ describe.skip("actions.default.toggleDeafen", () => { //add-ticket     TypeError
     })
 })
 
-
-describe.skip("actions.default.toggleMute", () => { //add-ticket     TypeError: Cannot read properties of undefined (reading 'muted')
+describe.skip("actions.default.toggleMute", () => { //AP-376
     test("0", () => {
         let result: any = actions.default.toggleMute("https://croplands.org/app/a/confirm?t=")
         expect(result).toMatchSnapshot()
@@ -50,7 +49,7 @@ describe.skip("actions.default.toggleMute", () => { //add-ticket     TypeError: 
     })
 
     test("3", () => {
-        let result: any = actions.default.toggleMute("ponicode.com")
+        let result: any = actions.default.toggleMute("google.com")
         expect(result).toMatchSnapshot()
     })
 

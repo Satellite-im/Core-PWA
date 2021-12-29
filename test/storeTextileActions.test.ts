@@ -1,6 +1,6 @@
 import * as actions from '~/store/textile/actions'
 
-describe.skip("actions.default.subscribeToSentbox", () => { //add-ticket     TypeError: Cannot read properties of undefined (reading 'mailboxManager')
+describe.skip("actions.default.subscribeToSentbox", () => { //AP-377
     test("0", async () => {
         await actions.default.subscribeToSentbox()
     })
