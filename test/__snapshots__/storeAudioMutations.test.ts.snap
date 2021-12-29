@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutations.default.deafen 0 1`] = `undefined`;
+
+exports[`mutations.default.deafen 1 1`] = `undefined`;
+
+exports[`mutations.default.deafen 2 1`] = `undefined`;
+
+exports[`mutations.default.deafen 3 1`] = `undefined`;
+
+exports[`mutations.default.deafen 4 1`] = `undefined`;
+
+exports[`mutations.default.deafen 5 1`] = `undefined`;
+
+exports[`mutations.default.mute 0 1`] = `undefined`;
+
+exports[`mutations.default.mute 1 1`] = `undefined`;
+
+exports[`mutations.default.mute 2 1`] = `undefined`;
+
+exports[`mutations.default.mute 3 1`] = `undefined`;
+
+exports[`mutations.default.mute 4 1`] = `undefined`;
+
+exports[`mutations.default.mute 5 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 0 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 1 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 2 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 3 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 4 1`] = `undefined`;
+
+exports[`mutations.default.setInputVolume 5 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 0 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 1 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 2 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 3 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 4 1`] = `undefined`;
+
+exports[`mutations.default.setMuted 5 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 0 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 1 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 2 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 3 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 4 1`] = `undefined`;
+
+exports[`mutations.default.setSoundLevel 5 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 0 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 1 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 2 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 3 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 4 1`] = `undefined`;
+
+exports[`mutations.default.setSystemVolume 5 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 0 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 1 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 2 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 3 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 4 1`] = `undefined`;
+
+exports[`mutations.default.setVolume 5 1`] = `undefined`;
