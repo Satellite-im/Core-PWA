@@ -76,8 +76,8 @@ export default {
     )
 
     // compare last messages of indexeddb and store. Write to db if outdated
-    // needs refactoring after partial fetch is working
-    db.conversations.get({ key: address }).then((e) => {
+    // needs rewrite after partial fetch is working
+    db.conversations.get(address).then((e) => {
       if (!(e?.[address]?.at(-1)?.id === fetchedConversation.at(-1)?.id)) {
         const dbData = { [address]: fetchedConversation, key: address }
         console.log('stored in db')

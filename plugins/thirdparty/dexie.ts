@@ -15,7 +15,7 @@ class SatelliteDB extends Dexie {
 
 export const db = new SatelliteDB()
 
-type DexieMessage = {
+export type DexieMessage = {
   [key: string]: Message[]
   //@ts-ignore
   key: string
