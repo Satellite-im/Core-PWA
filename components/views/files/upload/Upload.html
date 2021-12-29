@@ -1,4 +1,5 @@
 <div id="file-upload">
+
   <div
     class="file-preview"
     v-if="files.length || count_error"
@@ -9,6 +10,17 @@
     <div v-if="count_error" class="file-error">
       <TypographyError :text="$t('errors.chat.drop_file_count')" />
       <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
+    </div>
+    <div v-if="alertNsfw" class="file-error">
+      <TypographyError :text="$t('errors.chat.contains_nsfw')" />
+      <div class="is-controls">
+        <InteractablesButton
+          type="danger"
+          size="small"
+          :text="$t('pages.files.upload.close')"
+          :action="closeNsfwAlert"
+        />
+      </div>
     </div>
     <template v-else>
       <UiScroll horizontalScroll scrollbarVisibility="scroll">

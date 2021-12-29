@@ -49,8 +49,9 @@ export default Vue.extend({
       fileClass: false,
       error: false,
       aiScanning: false,
-      disabledButton: false,
       fileAmount: 0,
+      containsNsfw: false,
+      alertNsfw: false
     }
   },
   computed: {
@@ -67,7 +68,6 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.disabledButton = false
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = event.target.files
@@ -145,17 +145,34 @@ export default Vue.extend({
         this.$data.count_error = false
         this.$parent.$data.showFilePreview = false
       }
-    },/**
+    },
+    closeNsfwAlert() {
+      this.$data.alertNsfw = false
+      this.cancelUpload()
+    },
+    /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
-        this.cancelUpload()
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.$store.dispatch('textile/clearUploadStatus')
-        this.$data.disabledButton = false
+        if (this.$data.containsNsfw) {
+          this.$data.alertNsfw = true
+          setTimeout(() => {
+            this.$data.alertNsfw = false
+            this.$data.containsNsfw = false
+            this.cancelUpload()
+            document.body.style.cursor = PropCommonEnum.DEFAULT
+            this.$store.dispatch('textile/clearUploadStatus')
+          }, 5000)
+        }
+        if (!this.$data.containsNsfw) {
+          this.cancelUpload()
+          document.body.style.cursor = PropCommonEnum.DEFAULT
+          this.$store.dispatch('textile/clearUploadStatus')
+        }
+
       }
     },
     /**
@@ -174,7 +191,6 @@ export default Vue.extend({
             new Error(error)
             document.body.style.cursor = PropCommonEnum.DEFAULT
             this.$store.dispatch('textile/clearUploadStatus')
-            this.$data.disabledButton = false
           }
         })
     },
@@ -183,10 +199,12 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage() {
-      this.$data.disabledButton = true
       const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
         if (!file.nsfw.status) {
           return file
+        }
+        if (file.nsfw.status) {
+          this.$data.containsNsfw = true
         }
       })
       nsfwCheck.map((file: UploadDropItemType) => {

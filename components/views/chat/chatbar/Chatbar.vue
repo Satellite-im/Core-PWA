@@ -38,6 +38,7 @@ export default Vue.extend({
       maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
       showFilePreview: false,
+      nsfwUploadError: false
     }
   },
   props: {
@@ -270,6 +271,7 @@ export default Vue.extend({
           return
         }
         if (this.ui.replyChatbarContent.from) {
+
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: this.value,
@@ -283,6 +285,7 @@ export default Vue.extend({
           to: this.recipient.textilePubkey,
           text: this.value,
         })
+        this.$data.nsfwUploadError = false
         const messageBox = this.$refs.messageuser as HTMLElement
         this.clearChatbar()
       }
