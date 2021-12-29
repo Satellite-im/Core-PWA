@@ -183,7 +183,7 @@ describe("SearchUtil.default.getCommandTypeParam", () => {
     })
 })*/
 
-// @ponicode
+
 describe("SearchUtil.default.filterSearchRecommendResult", () => {
     test("0", () => {
         let object: any = [{ name: "Michael", address: "192.168.1.5", avatar: undefined, key: "Elio", value: "Dillenberg" }, { name: "Jean-Philippe", address: "0.0.0.0", avatar: undefined, key: "elio@example.com", value: "elio@example.com" }]

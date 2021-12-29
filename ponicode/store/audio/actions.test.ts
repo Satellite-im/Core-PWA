@@ -50,7 +50,7 @@ describe.skip("actions.default.toggleMute", () => { //add-ticket     TypeError: 
     })
 
     test("3", () => {
-        let result: any = actions.default.toggleMute("ponicode.com")
+        let result: any = actions.default.toggleMute("google.com")
         expect(result).toMatchSnapshot()
     })
 

@@ -352,7 +352,7 @@ describe("mutations.default.embeddedLinks", () => {
     })
 })
 
-// @ponicode
+
 describe("mutations.default.displayCurrentActivity", () => {
     test("0", () => {
         let result: any = mutations.default.displayCurrentActivity({ audioInput: "v1.2.4", audioOutput: "/PDFData/rothfuss/data/UCF101/prepared_videos", videoInput: "v1.2.4", captureMouse: "2021-07-29T17:54:41.653Z", noiseSuppression: false, echoCancellation: false, bitrate: 10000, sampleSize: 64, userHasGivenAudioAccess: false, userDeniedAudioAccess: true, keybinds: { constructor: () => true, toString: () => "2020-06-01", toLocaleString: () => "foo bar", valueOf: () => null, hasOwnProperty: () => false, isPrototypeOf: () => true, propertyIsEnumerable: () => true }, embeddedLinks: false, displayCurrentActivity: true }, true)

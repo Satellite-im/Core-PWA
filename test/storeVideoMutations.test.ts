@@ -12,7 +12,7 @@ describe("mutations.default.toggleCamera", () => {
     })
 })
 
-// @ponicode
+
 describe("mutations.default.setDisabled", () => {
     test("0", () => {
         let result: any = mutations.default.setDisabled({ disabled: false }, true)

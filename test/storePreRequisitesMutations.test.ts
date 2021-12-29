@@ -81,7 +81,7 @@ describe("mutations.default.setAccountsReady", () => {
     })
 })
 
-// @ponicode
+
 describe("mutations.default.resetState", () => {
     test("0", () => {
         let result: any = mutations.default.resetState({ accountsReady: false, textileReady: true, p2pReady: true })

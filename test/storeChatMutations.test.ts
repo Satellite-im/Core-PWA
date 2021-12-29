@@ -42,7 +42,7 @@ describe("mutations.default.setChatReply", () => {
     })
 })
 
-// @ponicode
+
 describe("mutations.default.setChatText", () => {
     test("0", () => {
         let object2: any = [{ userId: "12345", value: "elio@example.com" }, { userId: "9876", value: "Elio" }]

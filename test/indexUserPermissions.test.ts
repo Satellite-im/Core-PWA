@@ -80,7 +80,7 @@ describe("index.UserPermissions.methods.getUserPermissions", () => {
     })
 })
 
-// @ponicode
+
 describe.skip("index.UserPermissions.methods.requestUserPermissions", () => { //add-ticket     TypeError: Cannot read properties of undefined (reading 'getUserMedia')
     test("0", async () => {
         await index.UserPermissions.methods.requestUserPermissions(undefined)
