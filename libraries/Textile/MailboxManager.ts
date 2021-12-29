@@ -20,9 +20,9 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
-import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
+import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
+import {MessagingTypesEnum} from "~/libraries/Enums/types/messaging-types";
+import {EncodingTypesEnum} from "~/libraries/Enums/types/encoding-types";
 
 export class MailboxManager {
   senderAddress: string
@@ -208,18 +208,9 @@ export class MailboxManager {
         at: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo:
-          message.type === MessagingTypesEnum.REACTION
-            ? message.reactedTo
-            : undefined,
-        repliedTo:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.repliedTo
-            : undefined,
-        replyType:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.replyType
-            : undefined,
+        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
+        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
+        replyType: message.type === MessagingTypesEnum.REPLY ? message.replyType : undefined,
         pack: message.pack,
       }),
     )
@@ -254,14 +245,8 @@ export class MailboxManager {
         editedAt: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo:
-          message.type === MessagingTypesEnum.REACTION
-            ? message.reactedTo
-            : undefined,
-        repliedTo:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.repliedTo
-            : undefined,
+        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
+        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
       }),
     )
 

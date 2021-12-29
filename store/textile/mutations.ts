@@ -2,6 +2,7 @@ import { TextileState } from './types'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
+import { db } from '~/plugins/thirdparty/dexie'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
@@ -106,6 +107,12 @@ const mutations = {
         end,
       },
     }
+
+    // add message to indexeddb
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((x) => x[address].push(message))
   },
   setConversationLoading(
     state: TextileState,
@@ -116,16 +123,17 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
-  clearUploadProgress(
-    state: TextileState,
-    ) {
+  clearUploadProgress(state: TextileState) {
     state.uploadProgress = {}
   },
   setUploadingFileProgress(
     state: TextileState,
-    {progress, name} : {
-      progress: number,
-      name: string,
+    {
+      progress,
+      name,
+    }: {
+      progress: number
+      name: string
     },
   ) {
     if (progress !== 100) {
@@ -134,8 +142,8 @@ const mutations = {
         [name]: {
           progress: progress,
           finished: false,
-          name: name
-        }
+          name: name,
+        },
       }
     }
     if (progress === 100) {
@@ -144,10 +152,9 @@ const mutations = {
         [name]: {
           progress: progress,
           finished: true,
-          name: name
-        }
-    }
-
+          name: name,
+        },
+      }
     }
   },
 }

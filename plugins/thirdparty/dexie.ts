@@ -17,5 +17,6 @@ export const db = new SatelliteDB()
 
 type DexieMessage = {
   [key: string]: Message[]
-  key: any // string, declared any to bypass ts error
+  //@ts-ignore
+  key: string
 }

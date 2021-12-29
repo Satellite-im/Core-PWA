@@ -67,9 +67,15 @@ export default {
       query,
     )
 
-    const data = { [address]: conversation, key: address }
-    db.conversations.put(data).catch((error) => {
-      console.log('error: ', error)
+    // compare last messages of indexeddb and store. Write to db if outdated
+    db.conversations.get({ key: address }).then((e) => {
+      if (!(e?.[address]?.at(-1)?.id === conversation.at(-1)?.id)) {
+        const dbData = { [address]: conversation, key: address }
+        // @ts-ignore
+        db.conversations.put(dbData).catch((error) => {
+          console.log('dexie: ', error)
+        })
+      }
     })
 
     commit('setConversation', {
