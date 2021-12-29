@@ -159,13 +159,7 @@ export default Vue.extend({
       if (this.$data.fileAmount === 0) {
         if (this.$data.containsNsfw) {
           this.$data.alertNsfw = true
-          setTimeout(() => {
-            this.$data.alertNsfw = false
-            this.$data.containsNsfw = false
-            this.cancelUpload()
-            document.body.style.cursor = PropCommonEnum.DEFAULT
-            this.$store.dispatch('textile/clearUploadStatus')
-          }, 5000)
+          this.alertNsfwFile()
         }
         if (!this.$data.containsNsfw) {
           this.cancelUpload()
@@ -174,6 +168,16 @@ export default Vue.extend({
         }
 
       }
+    },
+    alertNsfwFile() {
+      this.$data.alertNsfw = true
+      setTimeout(() => {
+        this.$data.alertNsfw = false
+        this.$data.containsNsfw = false
+        this.cancelUpload()
+        document.body.style.cursor = PropCommonEnum.DEFAULT
+        this.$store.dispatch('textile/clearUploadStatus')
+      }, 5000)
     },
     /**
      * @method dispatchFile
@@ -205,6 +209,9 @@ export default Vue.extend({
         }
         if (file.nsfw.status) {
           this.$data.containsNsfw = true
+          if (this.$data.files.length === 1) {
+            this.alertNsfwFile()
+          }
         }
       })
       nsfwCheck.map((file: UploadDropItemType) => {
