@@ -34,50 +34,6 @@ describe("SearchUtil.default.getSearchOrderTypeList", () => {
         expect(result).toMatchSnapshot()
     })
 })
-/*
-describe("SearchUtil.default.getCommandMeta", () => {
-    test("0", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.In)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("1", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.From)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("2", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.Before)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("3", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.Empty)
-        expect(result).toMatchSnapshot()
-    })
-})
-
-describe("SearchUtil.default.getCommandTypeParam", () => {
-    test("0", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.Mentions)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("1", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.Before)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("2", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.In)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("3", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.After)
-        expect(result).toMatchSnapshot()
-    })
-})*/
 
 describe("SearchUtil.default.filterSearchRecommendResult", () => {
     /*test("0", () => {
@@ -109,11 +65,6 @@ describe("SearchUtil.default.filterSearchRecommendResult", () => {
         let result: any = SearchUtil.default.filterSearchRecommendResult({ key0: object, key2: [], key4: [], key3: [], key1: [] }, null)
         expect(result).toMatchSnapshot()
     })
-
-    /*test("5", () => {
-        let result: any = SearchUtil.default.filterSearchRecommendResult({ key1: [], key3: [], key0: [], key2: [] }, { command: search.SearchCommand.From, value: "", index: NaN, cursorStart: NaN, cursorEnd: NaN })
-        expect(result).toMatchSnapshot()
-    })*/
 })
 
 describe("SearchUtil.default.getCommandMetaList", () => {
@@ -143,47 +94,7 @@ describe("SearchUtil.default.getSearchOrderTypeList", () => {
         expect(result).toMatchSnapshot()
     })
 })
-/*
-describe("SearchUtil.default.getCommandMeta", () => {
-    test("0", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.In)
-        expect(result).toMatchSnapshot()
-    })
 
-    test("1", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.During)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("2", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.From)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("3", () => {
-        let result: any = SearchUtil.default.getCommandMeta(search.SearchCommand.Mentions)
-        expect(result).toMatchSnapshot()
-    })
-})
-
-describe("SearchUtil.default.getCommandTypeParam", () => {
-    test("0", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.Before)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("1", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.During)
-        expect(result).toMatchSnapshot()
-    })
-
-    test("2", () => {
-        let result: any = SearchUtil.default.getCommandTypeParam(search.SearchCommand.Mentions)
-        expect(result).toMatchSnapshot()
-    })
-})*/
-
-// @ponicode
 describe("SearchUtil.default.filterSearchRecommendResult", () => {
     test("0", () => {
         let object: any = [{ name: "Michael", address: "192.168.1.5", avatar: undefined, key: "Elio", value: "Dillenberg" }, { name: "Jean-Philippe", address: "0.0.0.0", avatar: undefined, key: "elio@example.com", value: "elio@example.com" }]
