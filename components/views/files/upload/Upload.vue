@@ -159,13 +159,7 @@ export default Vue.extend({
       if (this.$data.fileAmount === 0) {
         if (this.$data.containsNsfw) {
           this.$data.alertNsfw = true
-          setTimeout(() => {
-            this.$data.alertNsfw = false
-            this.$data.containsNsfw = false
-            this.cancelUpload()
-            document.body.style.cursor = PropCommonEnum.DEFAULT
-            this.$store.dispatch('textile/clearUploadStatus')
-          }, 5000)
+          this.alertNsfwFile()
         }
         if (!this.$data.containsNsfw) {
           this.cancelUpload()
