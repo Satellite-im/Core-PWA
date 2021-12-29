@@ -58,29 +58,39 @@ export default {
 
     commit('setConversationLoading', { loading: true })
 
+    // fetch timestamp of last message in indexeddb
+    const lastMsgTimestamp: number = await db.conversations
+      .get(address)
+      .then((e) => {
+        return e?.[address]?.at(-1)?.['at'] ?? 0
+      })
+
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    const conversation = await $MailboxManager.getConversation(
+    const fetchedConversation = await $MailboxManager.getConversation(
       friend.textilePubkey,
       query,
+      lastMsgTimestamp,
     )
 
     // compare last messages of indexeddb and store. Write to db if outdated
+    // needs refactoring after partial fetch is working
     db.conversations.get({ key: address }).then((e) => {
-      if (!(e?.[address]?.at(-1)?.id === conversation.at(-1)?.id)) {
-        const dbData = { [address]: conversation, key: address }
+      if (!(e?.[address]?.at(-1)?.id === fetchedConversation.at(-1)?.id)) {
+        const dbData = { [address]: fetchedConversation, key: address }
+        console.log('stored in db')
         // @ts-ignore
-        db.conversations.put(dbData).catch((error) => {
-          console.log('dexie: ', error)
+        db.conversations.put(dbData).catch((e) => {
+          console.log(e)
         })
       }
     })
 
     commit('setConversation', {
       address: friend.address,
-      messages: conversation,
+      messages: fetchedConversation,
       limit: query.limit,
       skip: query.skip,
     })
