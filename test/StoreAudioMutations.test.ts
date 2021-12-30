@@ -192,7 +192,6 @@ describe("mutations.default.setSystemVolume", () => {
     })
 })
 
-
 describe("mutations.default.setInputVolume", () => {
     test("0", () => {
         let result: any = mutations.default.setInputVolume({ previousVolume: 100, inputVolume: -1, muted: true, volume: -1, deafened: true, sounds: { inboundMedia: 10.23, outboundMedia: -0.5, system: -29.45 } }, -1)
