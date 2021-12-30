@@ -1,25 +1,24 @@
+name: 'code-risk-analyzer'
+
 on:
-  pull_request:
-    branches: [dev]
+  push: {branches: main}
+  pull_request: {branches: main}
 
 jobs:
-  angular-test-coverage:
+  code-risk-analyzer:
+    name: Code Risk Analyzer
     runs-on: ubuntu-latest
-    name: angular test coverage update
-    steps:
-       - uses: actions/checkout@v2
-       - name: Install modules
-         run: yarn
-       - name: Run Jest tests
-         run: yarn test
-        
-       - name: Coverage report
-         uses: eleboys/test-coverage-report-action@v1.0.2
-         id: report
-         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: coverage/coverage-summary.json
-          title: Karma Test Coverage
 
-       - name: Print the output summary
-         run: echo "Report coverage json ${{ steps.report.outputs.summary }}"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Code Risk Analyzer
+        uses: Fizz-Q/code-risk-analyzer@v1.23
+        with:
+          # ${{ github.repository }}
+          repository: ${{ github.repository }}
+          # ${{ github.repository_owner }}
+          user: ${{ github.repository_owner }}
+          # ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
