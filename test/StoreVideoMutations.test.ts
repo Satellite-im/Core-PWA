@@ -12,7 +12,6 @@ describe("mutations.default.toggleCamera", () => {
     })
 })
 
-
 describe("mutations.default.setDisabled", () => {
     test("0", () => {
         let result: any = mutations.default.setDisabled({ disabled: false }, true)
