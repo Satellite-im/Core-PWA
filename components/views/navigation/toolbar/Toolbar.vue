@@ -63,7 +63,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'search', 'audio', 'video']),
+    ...mapState(['ui', 'search', 'audio', 'video', 'webrtc']),
     showSearchResult: {
       set(state) {
         this.$store.commit('ui/showSearchResult', state)
@@ -127,6 +127,7 @@ export default Vue.extend({
       })
     },
     async call(kinds: TrackKind[]) {
+      if(!this.webrtc.connectedPeer) return
       const identifier = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       ).address

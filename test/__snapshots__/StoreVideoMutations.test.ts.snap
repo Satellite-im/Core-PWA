@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutations.default.setDisabled 0 1`] = `undefined`;
+
+exports[`mutations.default.setDisabled 1 1`] = `undefined`;
+
+exports[`mutations.default.setDisabled 2 1`] = `undefined`;
+
+exports[`mutations.default.setDisabled 3 1`] = `undefined`;
+
+exports[`mutations.default.toggleCamera 0 1`] = `undefined`;
+
+exports[`mutations.default.toggleCamera 1 1`] = `undefined`;

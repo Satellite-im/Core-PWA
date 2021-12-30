@@ -27,6 +27,12 @@ export default Vue.extend({
       clickEvent: () => {},
     }
   },
+  props: {
+    sidebar: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapState(['ui']),
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),

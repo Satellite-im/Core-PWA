@@ -1,5 +1,6 @@
 <div
   id="enhancers"
+  :class="`${sidebar ? 'side-open': 'side-close'}`"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
   v-bind:style="!ui.enhancers.floating ? {

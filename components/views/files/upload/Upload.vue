@@ -1,13 +1,7 @@
 <template src="./Upload.html"></template>
 
 <script lang="ts">
-import {
-  FileIcon,
-  FilePlusIcon,
-  PlusIcon,
-  SlashIcon,
-  XIcon,
-} from 'satellite-lucide-icons'
+import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
@@ -27,10 +21,8 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Upload',
   components: {
-    FileIcon,
     PlusIcon,
     FilePlusIcon,
-    SlashIcon,
     XIcon,
   },
   props: {
@@ -62,12 +54,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'textile']),
+    ...mapState(['ui', 'friends']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
-    },
-    currentProgress() {
-      return this.textile.uploadProgress
     },
   },
   methods: {
@@ -117,6 +106,9 @@ export default Vue.extend({
         this.$data.uploadStatus = true
       }
     },
+    handleTouchPreview(event: Event) {
+      event.stopPropagation()
+    },
     /**
      * @method loadPicture
      * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
@@ -130,20 +122,6 @@ export default Vue.extend({
         if (e.target) item.url = e.target.result
       }
       reader.readAsDataURL(item.file)
-    },
-    /**
-     * @method isEmbedableImage
-     * @description Uses Regex to check if a files filename has a valid extension
-     * Potential image extensions pulled from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
-     * @param filename A files filename
-     * @returns Boolean based on if the filename has a valid extension or not
-     * @example v-if="isEmbedableImage(file.name)"
-     */
-    isEmbedableImage(filename: string): boolean {
-      if (!filename) return false
-      // eslint-disable-next-line prefer-regex-literals
-      const imageFormatsRegex = new RegExp(Config.regex.image)
-      return imageFormatsRegex.test(filename.toLowerCase())
     },
     /**
      * @method cancelUpload

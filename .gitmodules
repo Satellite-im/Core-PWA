@@ -13,3 +13,8 @@
 	url = git@github.com:Satellite-im/Translations.git
 	ignore = all
 	branch = main
+[submodule "cypress"]
+	path = cypress
+	url = git@github.com:Satellite-im/cypress.git
+	ignore = all
+	branch = main

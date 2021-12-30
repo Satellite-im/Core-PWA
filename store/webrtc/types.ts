@@ -2,6 +2,7 @@ export interface WebRTCState {
   initialized: boolean
   incomingCall: string
   activeCall: string
+  connectedPeer: string
   streaming: Boolean
   activeStream: {
     createdAt: number

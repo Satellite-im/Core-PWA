@@ -1,33 +1,30 @@
 <template src="./Modal.html"></template>
 
 <script lang="ts">
+import { MenuIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+type Swiper = {
+  $swiper: {
+    slideNext: () => void
+    slidePrev: () => void
+  }
+}
 
 export default Vue.extend({
   components: {
-    MenuIcon
+    MenuIcon,
   },
   data() {
     return {
       page: 'personalize',
-      sidebar: true,
-      settingSwiperOption: {        
+      settingSwiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
-        on: {
-          slideChange: () => {
-            this.$store.commit('ui/toggleSettingsSidebar', this.$refs.settingSwiper.$swiper.activeIndex === 0)
-            this.$data.sidebar = this.$refs.settingSwiper.$swiper.activeIndex === 0
-          }
-        }
+        allowTouchMove: this.$device.isMobile ? true : false,
       },
     }
   },
@@ -35,7 +32,7 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   mounted() {
-    this.$store.commit('ui/toggleSettingsSidebar', true)
+    this.showSidebar(false)
   },
   methods: {
     /**
@@ -47,27 +44,19 @@ export default Vue.extend({
      * @example
      */
     toggleSidebar() {
-      if (this.$refs.settingSwiper.$swiper) {
-        this.ui.settingsSideBar 
-          ? this.$refs.settingSwiper.$swiper.slideNext() 
-          : this.$refs.settingSwiper.$swiper.slidePrev()
-      }
+      const $swiper = (this.$refs.settingSwiper as Vue & Swiper)?.$swiper
+      !this.ui.settingsSideBar ? $swiper.slideNext() : $swiper.slidePrev()
+      this.$store.commit('ui/toggleSettingsSidebar', !this.ui.settingsSideBar)
     },
     /**
      * @method showSidebar DocsTODO
      * @description
      * @example
      */
-    showSidebar() {
-      this.$store.commit('ui/toggleSettingsSidebar', true)
-    },
-    /**
-     * @method collapseSidebar DocsTODO
-     * @description
-     * @example
-     */
-    collapseSidebar() {
-      this.$store.commit('ui/toggleSettingsSidebar', false)
+    showSidebar(show: Boolean) {
+      const $swiper = (this.$refs.settingSwiper as Vue & Swiper)?.$swiper
+      show ? $swiper.slideNext() : $swiper.slidePrev()
+      this.$store.commit('ui/toggleSettingsSidebar', show)
     },
     /**
      * @method changeRoute DocsTODO
@@ -78,7 +67,7 @@ export default Vue.extend({
     changeRoute(route: string) {
       this.$data.page = route
       if (this.$device.isMobile) {
-        this.collapseSidebar()
+        this.showSidebar(true)
       }
     },
     /**

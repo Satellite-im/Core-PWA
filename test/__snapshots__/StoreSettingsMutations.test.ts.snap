@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutations.default.audioInput 0 1`] = `undefined`;
+
+exports[`mutations.default.audioInput 1 1`] = `undefined`;
+
+exports[`mutations.default.audioInput 2 1`] = `undefined`;
+
+exports[`mutations.default.audioInput 3 1`] = `undefined`;
+
+exports[`mutations.default.audioInput 4 1`] = `undefined`;
+
+exports[`mutations.default.audioInput 5 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 0 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 1 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 2 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 3 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 4 1`] = `undefined`;
+
+exports[`mutations.default.audioOutput 5 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 0 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 1 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 2 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 3 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 4 1`] = `undefined`;
+
+exports[`mutations.default.bitrate 5 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 0 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 1 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 2 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 3 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 4 1`] = `undefined`;
+
+exports[`mutations.default.captureMouse 5 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 0 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 1 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 2 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 3 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 4 1`] = `undefined`;
+
+exports[`mutations.default.displayCurrentActivity 5 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 0 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 1 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 2 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 3 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 4 1`] = `undefined`;
+
+exports[`mutations.default.echoCancellation 5 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 0 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 1 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 2 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 3 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 4 1`] = `undefined`;
+
+exports[`mutations.default.embeddedLinks 5 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 0 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 1 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 2 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 3 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 4 1`] = `undefined`;
+
+exports[`mutations.default.noiseSuppression 5 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 0 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 1 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 2 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 3 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 4 1`] = `undefined`;
+
+exports[`mutations.default.sampleSize 5 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 0 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 1 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 2 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 3 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 4 1`] = `undefined`;
+
+exports[`mutations.default.setKeybinds 5 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 0 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 1 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 2 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 3 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 4 1`] = `undefined`;
+
+exports[`mutations.default.updateKeybinding 5 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 0 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 1 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 2 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 3 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 4 1`] = `undefined`;
+
+exports[`mutations.default.videoInput 5 1`] = `undefined`;

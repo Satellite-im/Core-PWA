@@ -15,7 +15,6 @@
     background: @splash-radial;
     margin: 0 @light-spacing;
   }
-  
 
   .controls {
     &:extend(.background-semitransparent-light);
@@ -26,7 +25,8 @@
     justify-self: center;
     align-self: center;
     font-size: @icon-size;
-    &:extend(.light-padding);    box-shadow: @ui-shadow;
+    &:extend(.light-padding);
+    box-shadow: @ui-shadow;
     pointer-events: all;
 
     .input-wrap {
@@ -40,6 +40,13 @@
 
       &:nth-child(2) {
         margin-right: @normal-spacing;
+      }
+    }
+    .disabled {
+      &:extend(.font-muted);
+      &,
+      svg {
+        cursor: not-allowed !important;
       }
     }
   }

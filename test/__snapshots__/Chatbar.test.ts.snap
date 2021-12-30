@@ -1,14 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Chatbar.getCaretPosition 0 1`] = `0`;
+exports[`Chatbar.htmlToMarkdown 0 1`] = `"This is a Text"`;
 
-exports[`Chatbar.htmlToMarkdown 0 1`] = `"Hello, world!"`;
+exports[`Chatbar.htmlToMarkdown 1 1`] = `"foo bar"`;
 
-exports[`Chatbar.htmlToMarkdown 1 1`] = `"Foo bar"`;
+exports[`Chatbar.htmlToMarkdown 2 1`] = `"Hello, world!"`;
 
-exports[`Chatbar.htmlToMarkdown 2 1`] = `"foo bar"`;
-
-exports[`Chatbar.htmlToMarkdown 3 1`] = `"This is a Text"`;
+exports[`Chatbar.htmlToMarkdown 3 1`] = `"Foo bar"`;
 
 exports[`Chatbar.htmlToMarkdown 4 1`] = `""`;
 
@@ -18,7 +16,7 @@ exports[`Chatbar.markDownToHtml 0 1`] = `
 `;
 
 exports[`Chatbar.markDownToHtml 1 1`] = `
-"<p>m2v<span>&nbsp;</span></p>
+"<p>mpe<span>&nbsp;</span></p>
 "
 `;
 
@@ -28,7 +26,7 @@ exports[`Chatbar.markDownToHtml 2 1`] = `
 `;
 
 exports[`Chatbar.markDownToHtml 3 1`] = `
-"<p>mpe<span>&nbsp;</span></p>
+"<p>m2v<span>&nbsp;</span></p>
 "
 `;
 

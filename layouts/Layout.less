@@ -14,6 +14,10 @@
       margin-top: @media_open_offset;
     }
   }
+
+  .media-unopen {
+    margin-top: auto;
+  }
 }
 
 #app {
@@ -83,8 +87,8 @@
           border-top: 0;
           border-top-left-radius: 0;
           border-top-right-radius: 0;
-          border-bottom-left-radius: @corner-rounding;
-          border-bottom-right-radius: @corner-rounding;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
         }
       }
     }
@@ -120,13 +124,6 @@
   }
 
   &.is-collapsed {
-    #sidebar,
-    #servers-vertical-list {
-      transform: translateX(calc(-@sidebar-size + -@servers-size));
-    }
-    .dynamic-content {
-      margin-left: calc(-@sidebar-size + -@servers-size);
-    }
     #sidebar .toggle-sidebar {
       right: -2rem;
       z-index: @base-z-index + 10;

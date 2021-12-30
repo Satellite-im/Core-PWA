@@ -146,17 +146,6 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method handleChatBorderRadius
-     * @description Sets the correct chatbar border radius while typing or when switching between friends
-     * @example
-     */
-    handleChatBorderRadius() {
-      // const wrap = this.$refs.wrap as HTMLElement
-      // if (wrap.offsetHeight > 50 || this.ui.replyChatbarContent.id)
-      //   wrap.style.borderRadius = '4px'
-      // else wrap.style.borderRadius = '41px'
-    },
-    /**
      * @method typingNotifHandler
      * @description Wraps the event handler for dispatching typing notifications
      * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
@@ -208,7 +197,6 @@ export default Vue.extend({
         messageBox.innerText = messageBox.innerText.slice(0, -1)
         this.updateText()
       }
-      this.handleChatBorderRadius()
       this.value = messageBox.innerText
     },
     /**
@@ -359,9 +347,6 @@ export default Vue.extend({
             activeFriend.typingState === PropCommonEnum.TYPING
       },
       deep: true,
-    },
-    'ui.replyChatbarContent': function () {
-      this.handleChatBorderRadius()
     },
     recipient: function () {
       let findItem = this.setChatText.find(

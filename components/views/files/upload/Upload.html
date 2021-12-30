@@ -1,76 +1,25 @@
 <div id="file-upload">
-  <div class="file-preview" v-if="files.length || count_error">
+  <div
+    class="file-preview"
+    v-if="files.length || count_error"
+    @touchmove="handleTouchPreview"
+    @touchstart="handleTouchPreview"
+    @touchend="handleTouchPreview"
+  >
     <div v-if="count_error" class="file-error">
       <TypographyError :text="$t('errors.chat.drop_file_count')" />
-      <div class="is-controls">
-        <InteractablesButton
-          type="danger"
-          size="small"
-          :text="$t('pages.files.upload.close')"
-          :action="cancelUpload"
-        />
-      </div>
+      <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
     </div>
     <template v-else>
       <UiScroll horizontalScroll scrollbarVisibility="scroll">
         <div class="file-list">
-          <div class="file-item" v-for="(item, index) in files">
-            <button
-              class="close"
-              @click="removeUploadItem(index)"
-              v-if="!!item.url"
-            >
-              <x-icon size="1x" />
-            </button>
-            <div class="preview">
-              <div
-                :class="{thumbnail: true, blur: item.nsfw.status}"
-                v-if="isEmbedableImage(item.file.name)"
-                :style="`background-image:url(${item.url})`"
-              ></div>
-              <file-icon
-                size="1x"
-                v-if="!isEmbedableImage(item.file.name)"
-                class="control-icon"
-              />
-              <UiLoadersLogoLoader v-if="!item.url" :size="48" />
-              <div class="nsfw-text">
-                <TypographySubtitle
-                  :size="6"
-                  :text="$t('pages.files.upload.scanning_image')"
-                  v-if="item.nsfw.checking"
-                />
-                <TypographySubtitle
-                  :size="6"
-                  :text="`${$t('errors.chat.unable_preview')}. ${$t('errors.chat.upload_blocked')}`"
-                  v-if="item.nsfw.status"
-                />
-                <slash-icon size="1x" v-if="item.nsfw.status" />
-              </div>
-            </div>
-            <div class="file-info">
-              <TypographyTitle :size="6" :text="item.file.name" />
-              <div>
-                <div v-for="itemProgress in currentProgress">
-                  <div v-if="itemProgress.name === item.file.name">
-                    <div v-if="itemProgress.progress !== 100">
-                      <UiProgress
-                        :progress="itemProgress.progress"
-                        type="loading"
-                        class="loading-bar"
-                      />
-                      <TypographySubtitle
-                        :text="`${itemProgress.progress.toFixed(2)}% Uploaded...`"
-                      />
-                    </div>
-                    <div v-if="itemProgress.finished">
-                      <file-plus-icon />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FilesUploadPreviewItem
+            :item="item"
+            :index="index"
+            :key="index"
+            @removeUploadItem="removeUploadItem(index)"
+            v-for="(item, index) in files"
+          ></FilesUploadPreviewItem>
         </div>
       </UiScroll>
     </template>

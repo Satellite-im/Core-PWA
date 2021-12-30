@@ -1,31 +1,23 @@
-import * as Chatbar from "~/libraries/ui/Chatbar"
-
-describe("Chatbar.getCaretPosition", () => {
-    test("0", () => {
-        let result: any = Chatbar.getCaretPosition(document.querySelector("canvas:first-of-type","span:first-of-type","div:first-of-type"))
-        expect(result).toMatchSnapshot()
-    })
-})
-
+import * as Chatbar from '~/libraries/ui/Chatbar'
 
 describe("Chatbar.htmlToMarkdown", () => {
     test("0", () => {
-        let result: any = Chatbar.htmlToMarkdown("Hello, world!")
+        let result: any = Chatbar.htmlToMarkdown("This is a Text")
         expect(result).toMatchSnapshot()
     })
 
     test("1", () => {
-        let result: any = Chatbar.htmlToMarkdown("Foo bar")
-        expect(result).toMatchSnapshot()
-    })
-
-    test("2", () => {
         let result: any = Chatbar.htmlToMarkdown("foo bar")
         expect(result).toMatchSnapshot()
     })
 
+    test("2", () => {
+        let result: any = Chatbar.htmlToMarkdown("Hello, world!")
+        expect(result).toMatchSnapshot()
+    })
+
     test("3", () => {
-        let result: any = Chatbar.htmlToMarkdown("This is a Text")
+        let result: any = Chatbar.htmlToMarkdown("Foo bar")
         expect(result).toMatchSnapshot()
     })
 
@@ -35,7 +27,6 @@ describe("Chatbar.htmlToMarkdown", () => {
     })
 })
 
-
 describe("Chatbar.markDownToHtml", () => {
     test("0", () => {
         let result: any = Chatbar.markDownToHtml("pdf")
@@ -43,7 +34,7 @@ describe("Chatbar.markDownToHtml", () => {
     })
 
     test("1", () => {
-        let result: any = Chatbar.markDownToHtml("m2v")
+        let result: any = Chatbar.markDownToHtml("mpe")
         expect(result).toMatchSnapshot()
     })
 
@@ -53,7 +44,7 @@ describe("Chatbar.markDownToHtml", () => {
     })
 
     test("3", () => {
-        let result: any = Chatbar.markDownToHtml("mpe")
+        let result: any = Chatbar.markDownToHtml("m2v")
         expect(result).toMatchSnapshot()
     })
 
