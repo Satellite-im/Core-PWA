@@ -81,7 +81,6 @@ describe("mutations.default.setAccountsReady", () => {
     })
 })
 
-
 describe("mutations.default.resetState", () => {
     test("0", () => {
         let result: any = mutations.default.resetState({ accountsReady: false, textileReady: true, p2pReady: true })
