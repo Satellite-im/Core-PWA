@@ -15,6 +15,6 @@
 	branch = main
 [submodule "cypress"]
 	path = cypress
-	url = git@github.com:Satellite-im/cypress.git
+	url = https://github.com/Satellite-im/cypress
 	ignore = all
 	branch = main
