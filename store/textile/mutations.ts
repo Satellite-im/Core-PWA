@@ -2,7 +2,7 @@ import { TextileState } from './types'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
-import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import { db } from '~/plugins/thirdparty/dexie'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
@@ -117,14 +117,13 @@ const mutations = {
 
     // replace old message with new edited version
     if (message.editedAt) {
-      db.transaction('rw', db.conversations, async () => {
-        let convo = await db.conversations.get(address)
+      db.conversations.get(address).then((convo) => {
         if (!convo) {
           return
         }
         const index = convo[address].map((e) => e.id).indexOf(message.id)
-        convo[address][index] = message // replace original message with new edited version
-        await db.conversations.put(convo)
+        convo[address][index] = message
+        db.conversations.put(convo)
       })
       return
     }

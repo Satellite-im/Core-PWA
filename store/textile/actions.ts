@@ -8,7 +8,7 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
-import { db } from '~/plugins/thirdparty/dexie'
+import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 
 export default {
   /**
@@ -58,12 +58,7 @@ export default {
 
     commit('setConversationLoading', { loading: true })
 
-    // fetch timestamp of last message in indexeddb
-    const lastMsgTimestamp: number = await db.conversations
-      .get(address)
-      .then((e) => {
-        return e?.[address]?.at(-1)?.['at'] ?? 0
-      })
+    const lastInbound = rootState.textile.conversations[address].lastInbound
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
@@ -72,20 +67,18 @@ export default {
     const fetchedConversation = await $MailboxManager.getConversation(
       friend.textilePubkey,
       query,
-      lastMsgTimestamp,
+      lastInbound,
     )
 
-    // compare last messages of indexeddb and store. Write to db if outdated
     // needs rewrite after partial fetch is working
     db.conversations.get(address).then((e) => {
-      if (!(e?.[address]?.at(-1)?.id === fetchedConversation.at(-1)?.id)) {
-        const dbData = { [address]: fetchedConversation, key: address }
-        console.log('stored in db')
-        // @ts-ignore
-        db.conversations.put(dbData).catch((e) => {
-          console.log(e)
-        })
+      // @ts-ignore
+      const dbData: DexieMessage = {
+        [address]: fetchedConversation,
+        key: address,
       }
+      console.log('stored in db')
+      db.conversations.put(dbData)
     })
 
     commit('setConversation', {

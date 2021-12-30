@@ -75,20 +75,20 @@ export class MailboxManager {
    * Retrieve a conversation with a specific user, filtered by the given query parameters
    * @param friendIdentifier friend mailboxId
    * @param query parameters for filtering
+   * @param lastInbound timestamp of last received message
    * @returns an array of messages
    */
   async getConversation(
     friendIdentifier: string,
     query: ConversationQuery,
-    startingTimestamp: number,
+    lastInbound: number,
   ): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
 
     const inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
 
-    // compare created_at and edited_at using this timestamp on inbox and sentbox queries?
-    console.log(startingTimestamp)
+    console.log(lastInbound)
 
     if (query?.limit) {
       inboxQuery.limitTo(query.limit)
