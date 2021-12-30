@@ -1,3 +1,4 @@
+//@ts-ignore
 import rewire from "rewire"
 const EXIF = rewire("~/utilities/EXIF")
 const strip = EXIF.__get__("strip")
