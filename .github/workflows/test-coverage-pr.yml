@@ -7,19 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     name: angular test coverage update
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Run Jest tests
-        run: yarn test
+       - uses: actions/checkout@v2
+       - name: Install modules
+         run: yarn
+       - name: Run Jest tests
+         run: yarn test
         
-      - name: Coverage report
-        uses: eleboys/test-coverage-report-action@v1.0.2
-        id: report
-        with:
+       - name: Coverage report
+         uses: eleboys/test-coverage-report-action@v1.0.2
+         id: report
+         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: coverage/coverage-summary.json
           title: Karma Test Coverage
 
-      - name: Print the output summary
-        run: echo "Report coverage json ${{ steps.report.outputs.summary }}"
+       - name: Print the output summary
+         run: echo "Report coverage json ${{ steps.report.outputs.summary }}"
