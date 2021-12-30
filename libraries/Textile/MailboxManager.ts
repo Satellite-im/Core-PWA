@@ -81,14 +81,19 @@ export class MailboxManager {
   async getConversation(
     friendIdentifier: string,
     query: ConversationQuery,
-    lastInbound: number,
+    lastInbound?: number,
   ): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
 
-    const inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
-
-    console.log(lastInbound)
+    let inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
+    if (lastInbound) {
+      inboxQuery = Query.where('from')
+        .eq(friendIdentifier)
+        .and(PropCommonEnum.MOD)
+        .ge(lastInbound) // this will always return every message. textile timestamp has more digits, so it will always be larger
+        .orderByIDDesc()
+    }
 
     if (query?.limit) {
       inboxQuery.limitTo(query.limit)
@@ -134,6 +139,8 @@ export class MailboxManager {
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
+
+    debugger
 
     return filtered.map((r) => r.value)
   }

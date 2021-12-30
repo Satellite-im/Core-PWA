@@ -9,6 +9,7 @@ import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import { reject } from 'lodash'
 
 export default {
   /**
@@ -64,26 +65,41 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    const fetchedConversation = await $MailboxManager.getConversation(
-      friend.textilePubkey,
-      query,
-      lastInbound,
-    )
+    const conversation = await db.conversations
+      .get(address)
+      .then((convo) => {
+        // if nothing indexed, fetch entire conversation
+        if (!convo) {
+          return $MailboxManager.getConversation(friend.textilePubkey, query)
+        }
 
-    // needs rewrite after partial fetch is working
-    db.conversations.get(address).then((e) => {
-      // @ts-ignore
-      const dbData: DexieMessage = {
-        [address]: fetchedConversation,
-        key: address,
-      }
-      console.log('stored in db')
-      db.conversations.put(dbData)
-    })
+        const dbinfo = convo[address]
+        console.log('db', dbinfo)
+
+        // todo - return db and partial fetch combined
+        // return convo[address]
+        return $MailboxManager.getConversation(
+          friend.textilePubkey,
+          query,
+          lastInbound,
+        )
+      })
+      //
+      .then((convo) => {
+        console.log('fetched', convo)
+        // @ts-ignore
+        const dbData: DexieMessage = {
+          [address]: convo,
+          key: address,
+        }
+        console.log('stored in db')
+        db.conversations.put(dbData)
+        return convo
+      })
 
     commit('setConversation', {
       address: friend.address,
-      messages: fetchedConversation,
+      messages: conversation,
       limit: query.limit,
       skip: query.skip,
     })
