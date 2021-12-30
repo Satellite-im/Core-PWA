@@ -41,6 +41,7 @@ describe("FriendsProgram_layout.encodeInstructionData", () => {
         expect(result).toMatchSnapshot()
     })
 })
+
 describe("FriendsProgram_layout.encodeInstructionData", () => {
     test("0", () => {
         let result: any = FriendsProgram_layout.encodeInstructionData({ removeFriend: {} })
@@ -82,4 +83,3 @@ describe("FriendsProgram_layout.encodeInstructionData", () => {
         expect(result).toMatchSnapshot()
     })
 })
-
