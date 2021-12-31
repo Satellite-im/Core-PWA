@@ -1,6 +1,8 @@
 :root {
   --app-height: 100vh;
+  --flair-color: @primary-color;
 }
+@flair-glow: 0 5px 14px -5px var(--flair-color);
 
 html,
 body {
@@ -9,17 +11,21 @@ body {
   height: @full;
   &:extend(.full-width);
   overscroll-behavior: none;
-  caret-color: @primary-color;
+  caret-color: var(--flair-color) !important;;
 }
 
 html {
   &:extend(.background-gradient);
 }
 
+
 ::selection {
-  &:extend(.background-primary);
   &:extend(.font-secondary);
+  background: var(--flair-color) !important;
 }
+
+.flair { background: var(--flair-color) !important; }
+.flair-glow { box-shadow: @flair-glow !important; }
 
 .hidden-scroll {
   overflow-y: auto;
@@ -56,7 +62,7 @@ html {
 }
 
 .toasted-container .toasted {
-  background: @primary-color !important;
+  background: var(--flair-color) !important;;
   color: @secondary-text !important;
   font-family: @primary-font;
 }
@@ -80,12 +86,12 @@ html {
 
     a {
       &:extend(.font-primary);
-  
+
       &.is-active {
         &:extend(.background-primary);
         &:extend(.glow-primary);
       }
-      
+
       &:hover:not(.is-active) {
         &:extend(.background-semitransparent-light);
         &:extend(.font-primary);
@@ -101,15 +107,16 @@ html {
   &:extend(.font-muted);
 }
 
+
 // Buttons
 .button {
-  
+
   &.is-primary, .is-primary{
     &:extend(.background-primary-gradient);
     &:extend(.glow-primary);
     border: none !important;
     outline: none;
-    color: @secondary-text !important;
+    color: var(--flair-color) !important;;
 
     &:hover, &:focus, &:active {
       &:extend(.background-primary-gradient);
@@ -122,7 +129,7 @@ html {
   &.is-primary.is-outlined {
     &:extend(.font-accent);
     &:extend(.glow-primary);
-  
+
     &:hover, &:focus {
       &:extend(.font-secondary);
       &:extend(.glow-primary);
@@ -132,7 +139,7 @@ html {
   &.is-danger, .is-danger {
     background: @danger-gradient !important;
     box-shadow: @danger-glow !important;
-    
+
     &:hover {
       &:extend(.glow-danger);
       background: @danger-gradient;
@@ -249,10 +256,13 @@ button {
 
 .select.is-primary:hover::after,
 .select.is-primary:active::after,
-.select.is-primary select:hover  {
+.select.is-primary selec:hover  {
   border-color: @secondary-text;
 }
 
+.icon {
+  color: @primary-color;
+}
 
 // Typography
 .title {
@@ -309,7 +319,7 @@ strong {
   animation-name: spin;
   animation-duration: 2000ms;
   animation-iteration-count: infinite;
-  animation-timing-function: linear; 
+  animation-timing-function: linear;
 }
 
 .bounce {

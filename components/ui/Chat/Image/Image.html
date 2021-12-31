@@ -16,4 +16,10 @@
     :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
     :src="image.url"
     v-on:click="() => $data.showfull = !$data.showfull" />
+  <div class="file-info">
+    <image-icon/>
+    <TypographySubtitle :size="6" :text="`${image.name}`" />
+    <TypographyText :text="`${image.type} - ${getFileSize}`" />
+
+  </div>
 </div>
