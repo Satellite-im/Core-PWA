@@ -10,6 +10,9 @@ export default Vue.extend({
     DownloadIcon,
   },
   props: {
+    components: {
+      ImageIcon,
+    },
     alt: {
       type: String,
       default: 'Image',
