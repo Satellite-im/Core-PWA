@@ -1,9 +1,10 @@
 name: 'code-risk-analyzer'
 
 on:
-  push: {branches: main}
-  pull_request: {branches: main}
-
+  pull_request:
+    types:
+      - opened
+      
 jobs:
   code-risk-analyzer:
     name: Code Risk Analyzer
