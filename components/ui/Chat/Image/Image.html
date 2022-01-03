@@ -1,25 +1,33 @@
 <div>
   <div
-    class="image-mask"
-    v-if="showfull">
-    <div class="image-container">
+    class='image-mask'
+    v-if='showfull'>
+    <div class='image-container'>
       <img
-        :class="`is-image-in-mask`"
-        :src="image.url"
-        v-click-outside="() => $data.showfull = !$data.showfull" />
-      <a class="link" :href="image.url" target="_blank">
+        :class='`is-image-in-mask`'
+        :src='image.url'
+        v-click-outside='() => $data.showfull = !$data.showfull' />
+      <a class='link' :href='image.url' target='_blank'>
         {{ $t('files.view_original') }}
       </a>
     </div>
   </div>
   <img
     :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
-    :src="image.url"
-    v-on:click="() => $data.showfull = !$data.showfull" />
-  <div class="file-info">
-    <image-icon/>
-    <TypographySubtitle :size="6" :text="`${image.name}`" />
-    <TypographyText :text="`${image.type} - ${getFileSize}`" />
+    :src='image.url'
+    v-on:click='() => $data.showfull = !$data.showfull' />
+  <div class='file-info'>
+    <div class='download-container'>
+      <image-icon class='icon' />
+      <TypographySubtitle class='name-text' :size='6' :text='`${image.name}`' />
+
+      <a class='dl-text link' href='#' :download='image.url'>
+        <download-icon size='1x' class='icon' />
+        <TypographyText class='name-text text link' :text="$t('controls.download')" />
+      </a>
+    </div>
+
+    <TypographyText class='size-text' :text='`${image.type} - ${getFileSize}`' />
 
   </div>
 </div>

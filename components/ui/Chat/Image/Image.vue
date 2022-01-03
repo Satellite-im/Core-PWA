@@ -2,13 +2,14 @@
 <script lang="ts">
 import Vue, {PropType} from 'vue'
 import {FileMessage, ImageMessage} from "~/types/textile/mailbox";
-import { ImageIcon } from 'satellite-lucide-icons'
+import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    ImageIcon,
+    DownloadIcon,
+  },
   props: {
-    components: {
-      ImageIcon,
-    },
     alt: {
       type: String,
       default: 'Image',
@@ -33,8 +34,7 @@ export default Vue.extend({
   },
   computed: {
     getFileSize() {
-      console.log(this.image)
-      // return this.bytesToSize(this.image.payload.size)
+      return this.bytesToSize(this.image.size)
     },
   },
   methods: {
@@ -49,6 +49,10 @@ export default Vue.extend({
       if (bytes === 0) return '0 Bytes'
       const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
+    },
+    async downloadImage(imageURL: string) {
+
+
     },
     /**
      * @method openImage DocsTODO
