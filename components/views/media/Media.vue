@@ -33,6 +33,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['ui']),
     propsToWatch() {
       return { users: this.users, fullscreen: this.fullscreen }
     },
@@ -227,6 +228,18 @@ export default Vue.extend({
       this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('audio/setVolume', volume)
     },
+    handleDoubleClick(id: string) {
+      if (!this.ui.fullscreen) {
+        this.$store.commit('ui/fullscreen', true)
+      }
+      const media: HTMLElement = this.$refs.media as HTMLElement
+      const element = media.querySelector(`#${id}`)
+      if (element?.classList.contains('full-video')) {
+        element?.classList.remove('full-video')
+      } else {
+        element?.classList.add('full-video')
+      }
+    }
   },
 })
 </script>
