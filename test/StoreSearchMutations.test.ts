@@ -39,7 +39,6 @@ describe("mutations.default.setSearchQuery", () => {
     })
 })
 
-
 describe("mutations.default.search", () => {
     test("0", () => {
         let object2: any = [{ id: "03ea49f8-1d96-4cd0-b279-0684e3eec3a9", at: -5.48, type: "array", user: undefined }, { id: "a85a8e6b-348b-4011-a1ec-1e78e9620782", at: 100, type: "object", user: undefined }, { id: "a85a8e6b-348b-4011-a1ec-1e78e9620782", at: -100, type: "object", user: undefined }, { id: "03ea49f8-1d96-4cd0-b279-0684e3eec3a9", at: 100, type: "array", user: undefined }]
