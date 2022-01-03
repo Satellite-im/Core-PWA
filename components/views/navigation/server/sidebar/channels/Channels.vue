@@ -30,7 +30,7 @@ export default Vue.extend({
       if (!nonText.includes(ch.type)) {
         this.$store.commit('ui/setActiveChannel', ch)
       } else {
-        // TODO: Join voice channel //AP-391
+        // TODO: Join voice channel - AP-391
       }
     },
   },
