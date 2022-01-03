@@ -92,7 +92,6 @@ export default Vue.extend({
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleChange(value: string, item: SearchQueryItem) {
-      // console.log('change-search-input:', value, item)
     },
     /**
      * @method handleSearch DocsTODO
