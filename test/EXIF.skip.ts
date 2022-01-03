@@ -35,7 +35,6 @@ describe.skip("EXIF.stripEXIF", () => { // AP-331
     })
 })
 
-
 describe("strip", () => {
     test("0", () => {
         let object: any = [[256, 32, 32, 0], [32, 0, 64, 16], [16, 32, 16, 256], [10, 0, 10, 0]]
