@@ -165,7 +165,7 @@ export default class ServerProgram {
    * @param userInfo raw account info related to the user that has
    * been retrieved from the network
    * @returns a parsed object representing the user information
-   * //TODO: use strong type
+   * //TODO: use strong type - AP-405
    */
   parseUserInfo(userInfo: any): RawUser | null {
     if (!userInfo) {
