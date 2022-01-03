@@ -65,7 +65,7 @@ export class Alerts {
   /**
    * @getter all
    * @description Get a list of all active alerts
-   * TODO: add pagination
+   * TODO: add pagination - AP-399
    */
   get all(): Alert[] {
     return this._alerts
