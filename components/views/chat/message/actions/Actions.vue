@@ -1,6 +1,6 @@
 <template src="./Actions.html" />
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 
 import {
   SmileIcon,
@@ -10,6 +10,7 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
+import { UIMessage } from '~/types/messaging'
 
 export default Vue.extend({
   components: {
