@@ -27,7 +27,6 @@ describe("Commands.parseCommand", () => {
     })
 })
 
-
 describe("Commands.containsCommand", () => {
     test("0", () => {
         let result: any = Commands.containsCommand(" Hello, world!")
@@ -59,7 +58,6 @@ describe("Commands.containsCommand", () => {
         expect(result).toMatchSnapshot()
     })
 })
-
 
 describe("Commands.isArgsValid", () => {
     test("0", () => {
