@@ -9,7 +9,7 @@ export interface Friend extends EncryptedFriend {
   publicKey: string
   typingState: 'TYPING' | 'NOT_TYPING'
   textilePubkey: string
-  item: any // TODO remove unnecessary properties
+  item: any // TODO remove unnecessary properties AP-393
   pending: Boolean
   activeChat: Boolean
   account: FriendAccount
