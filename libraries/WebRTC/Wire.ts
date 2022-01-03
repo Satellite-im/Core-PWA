@@ -117,7 +117,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
       // Immediately send an identification message to let
       // the peer know what is the identifier
-      // TODO: use a signed message for the future
+      // TODO: use a signed message for the future - AP-404
       peer.send(JSON.stringify(identificationMessage))
     }
 
