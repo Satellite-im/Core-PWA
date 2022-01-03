@@ -126,7 +126,7 @@ export default Vue.extend({
     /**
      * @method cancelUpload
      * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling
+     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
      * @example @click="cancelUpload"
      */
     cancelUpload() {
