@@ -64,7 +64,7 @@ export default Vue.extend({
           this.error = this.$t('friends.not_found') as string
           return
         }
-        // TODO : fix when all information are available
+        // TODO : fix when all information are available - AP-398
         this.friend = {
           ...friend,
           state: 'offline',
