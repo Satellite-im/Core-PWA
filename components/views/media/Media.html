@@ -2,13 +2,21 @@
   <MediaHeading />
   <div id="media" ref="media">
     <!--TODO: Move to MediaUser -->
-    <div class="user" id="local_video" @dblclick="handleDoubleClick('local_video')">
+    <div
+      class="user"
+      id="local_video"
+      @dblclick="handleDoubleClick('local_video')"
+    >
       <div class="video-stream-container" v-if="localVideoStream">
         <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
       </div>
     </div>
     <!--TODO: Move to MediaUser -->
-    <div class="user" id="remote_video" @dblclick="handleDoubleClick('remote_video')">
+    <div
+      class="user"
+      id="remote_video"
+      @dblclick="handleDoubleClick('remote_video')"
+    >
       <div class="video-stream-container" v-if="remoteVideoStream">
         <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
       </div>
