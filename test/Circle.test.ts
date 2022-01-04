@@ -17,7 +17,6 @@ describe("Circle.addressToNumber", () => {
     })
 })
 
-
 describe("Circle.toHex", () => {
     test("0", () => {
         let result: any = Circle.toHex("<?xml version=\"1.0\" ?>\n<a b=\"c\"/>\n")
