@@ -1,0 +1,136 @@
+@size: 75px;
+@size-mobile: 55px;
+
+#profile-settings {
+  position: relative;
+}
+
+.profile-small-screen {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  &:extend(.full-width);
+  .profile-left {
+    padding: @normal-spacing 0;
+  }
+  .profile-layout {
+    &:extend(.full-width);
+    display: flex;
+    flex-wrap: wrap;
+    .profile-left {
+      &:extend(.full-width);
+      margin-top: 0;
+    }
+  }
+  .profile-photo-column {
+    max-width: 75px;
+    .profile-photo {
+      height: @size-mobile;
+      width: @size-mobile;
+    }
+  }
+}
+
+.profile-layout {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-left {
+  flex-shrink: 0;
+  width: 300px;
+  padding: @normal-spacing;
+  margin-top: -200px;
+}
+
+.profile-right {
+  flex-grow: 1;
+  margin-top: @xlarge-spacing;
+}
+
+.profile-main {
+  background: @midground-alt;
+  padding: @normal-spacing;
+  &:extend(.round-corners);
+}
+
+.profile-photo-column {
+  max-width: 100px;
+  .profile-photo {
+    position: relative;
+    height: @size;
+    width: @size;
+    cursor: pointer;
+    .is-rounded,
+    .is-square {
+      max-width: @full !important;
+      max-height: @full !important;
+    }
+    .plus-button {
+      z-index: 2;
+      right: 0;
+      top: 0;
+      position: absolute;
+      color: #fff;
+    }
+  }
+}
+
+.username-column {
+  overflow: hidden;
+
+  .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:extend(.full-width);
+  }
+}
+
+.profile-image-cropper {
+  &:extend(.full-width);
+  height: @full;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  .content {
+    position: relative;
+    width: 500px;
+    .cropper-mask {
+      position: fixed;
+      background: @foreground !important;
+      opacity: 0.6;
+      z-index: 9;
+      height: @full;
+      &:extend(.full-width);
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.input-file {
+  display: none;
+}
+
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  .tag-container {
+    display: inline-block;
+    margin: 0.25rem;
+    flex: 1;
+
+    .tag {
+      &:extend(.full-width);
+    }
+  }
+}

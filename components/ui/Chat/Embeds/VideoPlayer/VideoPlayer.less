@@ -1,0 +1,78 @@
+video {
+  &:extend(.round-corners);
+  &:extend(.glow-primary);
+  overflow: hidden;
+}
+
+.plyr__video-wrapper, .plyr__poster, .plyr {
+  &:extend(.round-corners);
+}
+
+.plyr {
+  &:extend(.bordered);
+}
+
+.video {
+  max-width: 540px;
+  min-width: 200px;
+  width: 70%;
+}
+
+.plyr__menu__container {
+  &:extend(.blur);
+  &:extend(.round-corners);
+  background: @semitransparent-dark-gradient !important;
+  color: @secondary-text !important;
+  padding: 0;
+
+  &:hover, .plyr_control, span {
+    color: @secondary-text !important;
+  }
+  &::after {
+    border-top-color: @midground !important;
+  }
+}
+
+.plyr__tooltip {
+  &:extend(.blur);
+  background: @semitransparent-dark-gradient !important;
+  color: @secondary-text !important;
+  
+  &::before {
+    border-top-color: @midground !important;
+  }
+}
+
+.plyr__control {
+  &:hover {
+    background: transparent !important;
+  }
+}
+.plyr__control--overlaid {
+  &:extend(.glow-primary);
+  &:hover {
+    &:extend(.glow-primary);
+    background: @primary-color-alt !important;
+  }
+  background: @primary-color !important;
+}
+
+.plyr--full-ui input[type=range] {
+  color: @primary-color !important;
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .video {
+    &:extend(.full-width);
+    max-width: @full;
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  .download {
+    display: none;
+  }
+  .is-text {
+    display: none !important;
+  }
+}

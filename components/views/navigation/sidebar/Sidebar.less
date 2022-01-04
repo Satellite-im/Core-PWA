@@ -1,0 +1,203 @@
+@sidebar-inner-offset: 175px;
+@mobile-sidebar-inner-offset: 245px;
+
+@sidebar-inner-streaming-pad: 2rem;
+@mobile-sidebar-inner-streaming-pad: 6rem;
+
+#sidebar {
+  width: @sidebar-size;
+  min-width: @sidebar-size;
+  position: relative;
+  display: inline-flex;
+  height: @full;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: @normal-spacing;
+  z-index: @base-z-index + 12;
+  background: transparent;
+
+  .sidebar-inner {
+    &:extend(.round-corners);
+    margin-top: @normal-spacing;
+    &:extend(.background-semitransparent-light);
+    box-shadow: @ui-shadow;
+    max-height: calc(var(--app-height) - @sidebar-inner-offset);
+    display: flex;
+    flex-direction: column;
+    padding-bottom: @normal-spacing;
+
+    .mascot {
+      max-width: @half;
+      padding-top: @normal-spacing;
+      pointer-events: none;
+    }
+
+    .mascot-container {
+      &:extend(.full-width);
+      display: inline-flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+
+      .button {
+        margin-top: @normal-spacing;
+        width: 75%;
+      }
+
+      .is-text {
+        text-align: center;
+      }
+    }
+
+    .users {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      .inline-notification {
+        width: @sidebar-size - (@normal-spacing * 2);
+      }
+    }
+    .sidebar-search {
+      &:extend(.full-width);
+      padding: @normal-spacing;
+      padding-right: @normal-spacing * 3;
+    }
+
+    .toggle-sidebar {
+      position: absolute;
+      z-index: @base-z-index + 10;
+      top: @normal-spacing * 2.5;
+      right: @normal-spacing;
+      &:extend(.font-accent);
+      &:extend(.filter-glow-accent);
+    }
+  }
+
+
+  .sidebar-inner-streaming {
+    max-height: calc(var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
+  }
+
+  .controls {
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
+    box-shadow: @ui-shadow;
+  }
+  
+
+  .filler {
+    flex: 1;
+  }
+
+  .padded {
+    padding: @normal-spacing @normal-spacing 0 @normal-spacing;
+  }
+
+  .no-top-pad {
+    padding: 0 @normal-spacing;
+  }
+
+  .tabs {
+    margin-bottom: @normal-spacing;
+    overflow: unset;
+  }
+
+  .label {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: @micro-text-size;
+    &:extend(.background-primary);
+    border-radius: 2px;
+    line-height: 1.2;
+    padding: 0.15rem 0.25rem;
+    &:extend(.font-primary);
+    font-family: @primary-font;
+  }
+
+  .sidebar-selector {
+    .button:nth-child(1) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .button:nth-child(2) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .scrolling {
+    padding: 0 @normal-spacing;
+    .ps {
+      padding-right: @normal-spacing * 1.5;
+      right: -@normal-spacing;
+      left: 0;
+      width: calc(@full + @normal-spacing);
+    }
+  }
+
+  .loading-container {
+    display: inline-flex;
+    justify-content: center;
+    &:extend(.full-width);
+  }
+}
+
+.flexy {
+  display: inline-flex;
+
+  .quick-chat {
+    padding-left: @light-spacing;
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
+    cursor: pointer;
+    width: auto;
+    z-index: @base-z-index + 4;
+    &::before {
+      z-index: @base-z-index + 8;
+    }
+  }
+}
+
+.sidebar-full-btn {
+  &:extend(.full-width);
+  margin-bottom: @light-spacing;
+  justify-content: flex-start;
+}
+
+.sidebar-nav {
+  padding: 0 @normal-spacing;
+  margin-bottom: @light-spacing;
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #sidebar {
+    z-index: 3;
+    width: @sidebar-size-mobile !important;
+    min-width: @sidebar-size-mobile !important;
+    padding-bottom: @mobile-nav-size;
+    .sidebar-inner {
+      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+    }
+    .sidebar-inner-streaming {
+      max-height: calc(var(--app-height) - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  #sidebar {
+    max-width: @sidebar-size;
+    min-width: @sidebar-size-mobile;
+    sidebar-inner {
+      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      .users {
+        .inline-notification {
+          width: 100vw - 32rem !important;
+        }
+      }
+    }
+  }
+}

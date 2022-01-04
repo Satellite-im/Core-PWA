@@ -1,0 +1,47 @@
+.glyph-popular {
+  &:extend(.full-width);
+  .glyph-detail-card {
+    &:extend(.full-width);
+    &:extend(.bordered);
+    .bg-header {
+      &:extend(.full-width);
+      height: 5rem;
+      background-position: center;
+      background-size: @full;
+      background-repeat: no-repeat;
+      padding: @normal-spacing;
+    }
+    .glyph-content {
+      &:extend(.full-width);
+      &:extend(.background-semitransparent-dark);
+      .glyph-list {
+        div {
+          display: inline-block;
+          margin: 0 @light-spacing @light-spacing 0;
+        }
+        height: 16rem;
+        text-align: center;
+        overflow: hidden;
+        &:extend(.light-padding);      }
+      .glyph-content-text {
+        .subtitle,
+        .is-text {
+          margin-bottom: @xlarge-spacing;
+        }
+        .btns {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 2rem;
+        }
+      }
+      padding: @normal-spacing;
+    }
+    max-width: @full;
+    font-family: @primary-font;
+    &:extend(.round-corners);
+    overflow: hidden;
+    margin-top: @normal-spacing;
+    background: transparent;
+  }
+}

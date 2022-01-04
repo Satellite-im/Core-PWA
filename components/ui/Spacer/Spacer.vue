@@ -19,7 +19,7 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .spacer {
-  width: 100%;
+  &:extend(.full-width);
   display: inline-flex;
 }
 </style>

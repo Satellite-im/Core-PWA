@@ -1,0 +1,10 @@
+<div class="glyph-trending-section">
+  <TypographySubtitle :size="6" :text="$t('glyphs.trending')" />
+  <div class="trending-list">
+    <MarketplaceGlyphsTrendingItem
+      v-for="(item, i) in list"
+      :key="item.id"
+      :item="item"
+    ></MarketplaceGlyphsTrendingItem>
+  </div>
+</div>

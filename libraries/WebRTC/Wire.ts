@@ -49,6 +49,7 @@ export class Wire extends Emitter<WireEventListeners> {
   ) {
     super()
 
+    console.log(announceURLs)
     this.originator = originator
     this.identifier = identifier
     this.channel = channel
@@ -116,7 +117,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
       // Immediately send an identification message to let
       // the peer know what is the identifier
-      // TODO: use a signed message for the future
+      // TODO: use a signed message for the future - AP-404
       peer.send(JSON.stringify(identificationMessage))
     }
 
@@ -211,7 +212,7 @@ export class Wire extends Emitter<WireEventListeners> {
 
     this.emit('RAW_DATA', {
       peerId: this.identifier,
-      data: parsedData.data.payload,
+      data: parsedData.payload,
     })
   }
 

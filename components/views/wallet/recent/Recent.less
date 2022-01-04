@@ -1,0 +1,16 @@
+.recent-transactions {
+  .recent-transactions-items {
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    padding: @normal-spacing;
+    &:extend(.bordered);
+  }
+  .balance-heading {
+    display: inline-flex;
+    .is-text {
+      margin-left: @light-spacing;
+    }
+  }
+  &:extend(.half-width);
+  margin-right: @normal-spacing;
+}

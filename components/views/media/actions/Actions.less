@@ -1,0 +1,20 @@
+#actions {
+  .button {
+    width: 3rem;
+    &.left {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+    &.right {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+    margin: 0;
+    border-radius: 0;
+  }
+  &:extend(.light-padding);  &:extend(.round-corners);
+  display: inline-flex;
+  justify-content: center;
+  align-self: center;
+  justify-self: flex-end;
+}

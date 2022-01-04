@@ -1,4 +1,4 @@
-import { UIState, GlyphMarketViewStatus } from './types'
+import { UIState, GlyphMarketViewStatus, Themes, Flairs } from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -19,7 +19,9 @@ const InitialUIState = (): UIState => ({
     walletMini: false,
     error: false,
     changelog: false,
+    glyph: false,
   },
+  glyphModalPack: '',
   chatbarContent: '',
   replyChatbarContent: { id: '', from: '', payload: '' },
   fullscreen: false,
@@ -47,6 +49,12 @@ const InitialUIState = (): UIState => ({
   },
   editMessage: { id: '', from: '', payload: '' },
   recentReactions: ['👍', '😂', '♥️'],
+  mostEmojiUsed: [],
+  recentGlyphs: [],
+  theme: {
+    base: Themes[0],
+    flair: Flairs[0],
+  },
 })
 
 export default InitialUIState

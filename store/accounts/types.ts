@@ -22,6 +22,7 @@ export interface AccountsState {
   registered: boolean
   details?: User
   registrationStatus: RegistrationStatus
+  lastVisited: string
 }
 
 export enum AccountsError {

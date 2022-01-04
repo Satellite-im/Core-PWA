@@ -3,6 +3,13 @@
 import Vue, { PropType } from 'vue'
 import { InputTypes, InputStyle, InputSize } from './types.d'
 import { Icon } from '~/types/ui/icons'
+import { toArray } from 'lodash'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    internalText: string
+  }
+}
 
 export default Vue.extend({
   model: {
@@ -57,7 +64,7 @@ export default Vue.extend({
       default: 'normal',
     },
     /**
-     * Disbales the attached button
+     * Disables the attached button
      */
     disabled: {
       type: Boolean,
@@ -109,6 +116,22 @@ export default Vue.extend({
       type: String,
       required: false,
       default: '',
+    },
+    textLimit: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    limitCount: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+  },
+  computed: {
+    textLength() {
+      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
+      return `${toArray(this.internalText).length}/${this.limitCount}`
     },
   },
   data() {

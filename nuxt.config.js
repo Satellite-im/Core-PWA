@@ -29,9 +29,11 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
       },
       { hid: 'description', name: 'description', content: '' },
+      { name: 'mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
     ],
     link: [
       {
@@ -61,7 +63,7 @@ export default defineNuxtConfig({
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/styles/framework/framework.less'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -71,28 +73,33 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/vue2-touch-events.ts' },
+    { src: '~/plugins/thirdparty/vue3-touch-events.ts' },
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
     { src: '~/plugins/thirdparty/vuetify.ts' },
+    { src: '~/plugins/thirdparty/swiper.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
     { src: '~/plugins/local/config.ts' },
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
+    { src: '~/plugins/local/style.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: {
+    dirs: [
+      '~/components',
+      '~/components/views/chat',
+      '~/components/views/navigation',
+      '~/components/views/',
+    ],
+  },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // '@nuxtjs/ngrok',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/device',
-  ],
+  buildModules: ['@nuxtjs/style-resources', '@nuxtjs/device'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -105,6 +112,7 @@ export default defineNuxtConfig({
         // Default breakpoint for SSR
         defaultBreakpoint: 'sm',
         breakpoints: {
+          xs: 360,
           sm: 768,
           md: 1250,
           lg: Infinity,
@@ -120,13 +128,14 @@ export default defineNuxtConfig({
   },
 
   styleResources: {
-    less: './assets/styles/vars/*.less',
+    less: './assets/styles/framework/*.less',
   },
 
   pwa: {
     meta: {
       mobileAppIOS: true,
       appleStatusBarStyle: 'black-translucent',
+      viewportFit: 'cover',
     },
     manifest: {
       name: 'Satellite.im',
@@ -139,9 +148,27 @@ export default defineNuxtConfig({
       theme_color: '#101016',
       orientation: 'portrait',
       prefer_related_applications: false,
+      permissions: ['unlimitedStorage', 'fullscreen'],
     },
     icon: {
       source: '/static/favicon.png',
+    },
+    workbox: {
+      // uncomment next line to test local
+      // enabled: true,
+      runtimeCaching: [
+        {
+          urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
+          handler: 'StaleWhileRevalidate',
+          method: 'GET',
+          strategyOptions: {
+            cacheName: 'ipfs',
+            cacheExpiration: {
+              maxAgeSeconds: 7 * 24 * 60 * 60 * 52, // 1 year
+            },
+          },
+        },
+      ],
     },
   },
 

@@ -1,0 +1,84 @@
+.is-message {
+  color: @text;
+  .pinned-message {
+    border: 1px solid @primary-color;
+    &:extend(.round-corners);
+    padding: @normal-spacing;
+    margin-top: @normal-spacing;
+    margin-bottom: @light-spacing;
+
+    .pinned-badge {
+      top: -(@light-spacing);
+      left: @light-spacing;
+      padding: 0 @light-spacing;
+      &:extend(.background-primary);
+      border-radius: @corner-rounding-smaller;
+      font-size: @mini-text-size;
+      position: absolute;
+    }
+  }
+  .sat-icon-container {
+    margin-right: @light-spacing;
+    margin-top: 0.3rem;
+    width: 20px;
+    height: 20px;
+  }
+  .inline-meta {
+    margin-bottom: @light-spacing;
+    display: inline-flex;
+    .is-text {
+      opacity: 0.8;
+      margin-top: 0.3rem;
+      margin-left: @light-spacing;
+    }
+    .satellite-circle {
+      position: relative;
+      svg {
+        margin: -0.2rem;
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
+  .markdown {
+    display: inline;
+    align-items: center;
+    strong {
+      &:extend(.font-secondary);
+    }
+    p {
+      font-size: @text-size;
+      display: inline;
+    }
+  }
+
+  .message-container {
+    position: relative;
+    word-break: break-word;
+  }
+
+  .message-hover {
+    &:extend(.background-semitransparent-light);
+  }
+  .glyph {
+    width: 192px;
+    height: 192px;
+  }
+  .emoji {
+    font-size: 15pt;
+  }
+  .bigmoji {
+    .emoji {
+      font-size: 36pt;
+      animation-name: bounce;
+      animation-duration: 500ms;
+    }
+  }
+  .status {
+    font-size: @micro-text-size;
+    &.editing {
+      vertical-align: bottom;
+      margin-top: 0;
+    }
+  }
+}

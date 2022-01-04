@@ -1,5 +1,10 @@
-<div class="meter" :style="`height: ${height}px;`" ref="meter">
-  <div 
-    v-for="n in numberOfTicks" 
-    :class="`meter-tick ${getTickColor(n)}`"></div>
+<div
+  :class="solid ? 'solid' : 'transparent'"
+  :style="{ height: `${height}px` }"
+>
+  <div
+    class="meter"
+    ref="meter"
+    :style="{ clipPath: `inset(0 ${100 - value}% 0 0)` }"
+  ></div>
 </div>

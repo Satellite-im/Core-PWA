@@ -1,0 +1,22 @@
+<div id="quick-chat" v-if="$store.state.ui.modals.quickchat">
+  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
+  <TypographyText
+    :text="$t('pages.chat.new_chat_description')" 
+  />
+  <SettingsPagesUserSearch
+    v-model="friends"
+    :placeholder="$t('servers.create.select_friends_placeholder')"
+    size="small"
+    type="primary"
+    drop="top"
+  />
+  <div v-if="friends.length" class="submit-container">
+    <InteractablesButton
+      type="primary"
+      size="small"
+      :text="$t('pages.chat.chat_now')"
+      class="create-server-btn"
+      :action="confirm"
+    />
+  </div>
+</div>

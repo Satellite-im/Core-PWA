@@ -21,6 +21,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
     ...mapGetters('prerequisites', ['allPrerequisitesReady']),
+    ...mapState(['accounts']),
     // Helper method for prettier loading messages
     loadingStep(): string {
       switch (this.getActiveAccount) {
@@ -42,6 +43,10 @@ export default Vue.extend({
     // this.$router.replace('/chat/direct')
     allPrerequisitesReady(nextValue) {
       if (nextValue) {
+        if (this.accounts.lastVisited && this.accounts.lastVisited !== this.$route.path) {
+          this.$router.replace(this.accounts.lastVisited)
+          return
+        }
         this.$router.replace('/chat/direct')
       }
     },
@@ -76,13 +81,6 @@ export default Vue.extend({
   display: flex;
   justify-content: center;
   text-align: center;
-  overflow: scroll;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
 
   .loader-container {
     min-width: 250px;
@@ -90,4 +88,5 @@ export default Vue.extend({
     margin-bottom: 25vh;
   }
 }
+
 </style>

@@ -1,0 +1,13 @@
+<div class="recent-transactions">
+  <div class="balance-heading">
+    <clock-icon size="1.2x" />
+    <TypographyText :text="$t('wallet.recent_transactions')" />
+  </div>
+
+  <div class="recent-transactions-items">
+    <WalletRecentItem
+      v-for="transaction in $mock.wallet.RecentTransactions"
+      :key="transaction.id"
+      :transaction="transaction" />
+  </div>
+</div>

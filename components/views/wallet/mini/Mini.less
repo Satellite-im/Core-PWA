@@ -1,0 +1,18 @@
+#mini-wallet {
+  height: @enhancers-height;
+  width: @enhancers-width;
+  position: absolute;
+  right: @normal-spacing;
+  bottom: @chatbar-size;
+  margin-bottom: @light-spacing;
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  overflow: hidden;
+  z-index: @base-z-index + 100;
+  &:extend(.blur);
+}
+@media only screen and (max-width: @mobile-breakpoint) {
+  #mini-wallet {
+    width: calc(100vw - @normal-spacing*2);
+  }
+}

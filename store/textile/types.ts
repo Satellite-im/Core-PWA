@@ -20,6 +20,13 @@ export interface TextileState {
   }
   conversationLoading: boolean
   messageLoading: boolean
+  uploadProgress: {
+    [key: string]: {
+      progress: number
+      finished: boolean
+      name: string
+  }
+}
 }
 
 export enum TextileError {}

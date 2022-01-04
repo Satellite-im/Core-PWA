@@ -1,0 +1,40 @@
+.message-actions {
+  .reply-text {
+    padding: 0 0.25rem;
+  }
+  .reply-command {
+    width: 35px;
+    // height: 35px;
+    padding: 0.25rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      &:extend(.background-semitransparent-light);
+      .control-icon {
+        &:extend(.font-secondary);
+      }
+    }
+
+    .control-icon {
+      justify-self: center;
+      align-self: center;
+      font-size: @small-icon-size;
+      &:extend(.font-primary);
+    }
+  }
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  &:extend(.blur);
+  position: absolute;
+  top: -18px;
+  right: 0;
+  display: flex;
+  box-sizing: border-box;
+  height: 36px;
+  font-size: 14px;
+  align-items: center;
+  padding: 0 0.25rem;
+}

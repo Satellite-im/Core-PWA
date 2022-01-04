@@ -1,0 +1,34 @@
+.is-group {
+  .title {
+    &:extend(.font-secondary);
+    font-size: @title-text;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .circle {
+    margin-top: 0.3rem;
+    cursor: pointer;
+  }
+  .group-body {
+    .group-heading {
+      .is-text {
+        margin-left: @light-spacing;
+        // line-height: 1;
+        font-size: @micro-text-size;
+        &:extend(.font-muted);
+        display: flex;
+        align-items: flex-end;
+        height: 1.2rem;
+      }
+      &:extend(.full-width);
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    margin-left: 0.75rem;
+    &:extend(.full-width);
+  }
+  display: flex;
+  &:extend(.full-width);
+  margin-bottom: @light-spacing;
+}

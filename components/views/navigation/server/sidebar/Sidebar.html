@@ -1,0 +1,35 @@
+<div id="sidebar" 
+  class="collapsed">
+  <div class="sidebar-inner sidebar-inner-streaming">
+    <div class="sidebar-search">
+      <menu-icon
+        class="toggle-sidebar"
+        v-on:click="showMenu"
+        size="1.2x"
+        full-width
+        :style="`${sidebar ? 'display: block' : 'display: none'}`"
+      />
+      <InteractablesInput
+        :placeholder="`${$t('ui.search')}...`"
+        size="small"
+        input-kind="text"
+        :delete-icon="true"
+        type="dark"
+        full-width
+      />
+    </div>
+    <div class="scrolling hidden-scroll" v-scroll-lock="true">
+      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+        <ServerSidebarChannels />
+      </UiScroll>
+    </div>
+  </div>
+  <div class="filler"
+  ></div>
+
+  <div class="controls"
+  >
+    <SidebarControls />
+    <SidebarStatus />
+  </div>
+</div>

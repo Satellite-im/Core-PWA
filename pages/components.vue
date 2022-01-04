@@ -102,9 +102,9 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
-            <UiNumberedWord word="Elephant" :number="1" />
-            <UiNumberedWord word="Telephone" :number="2" />
-            <UiNumberedWord word="Rendered" :number="24" />
+            <TypographyNumberedWord word="Elephant" :number="1" />
+            <TypographyNumberedWord word="Telephone" :number="2" />
+            <TypographyNumberedWord word="Rendered" :number="24" />
           </div>
         </div>
       </div>
@@ -293,10 +293,5 @@ export default Vue.extend({
   justify-content: center;
   text-align: center;
   overflow: scroll;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 </style>

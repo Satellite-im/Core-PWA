@@ -1,0 +1,73 @@
+#view-file {
+  .image-container {
+    width: 100vw;
+    display: inline-flex;
+    justify-content: center;
+  }
+  .file-image {
+    max-width: 80vw;
+    justify-self: center;
+    align-self: center;
+    max-height: 80vh;
+    &:extend(.round-corners);
+  }
+  .file-icon {
+    font-size: 50pt;
+    align-self: center;
+    justify-self: center;
+    margin: 0 auto;
+    margin-bottom: @normal-spacing;
+  }
+  .no-preview {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    .subtitle {
+      display: block;
+      text-align: center;
+      margin-bottom: 0;
+    }
+  }
+
+  .file-nav {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+
+    .file-info {
+      margin: @normal-spacing;
+      .title {
+        &:extend(.font-secondary);
+      }
+    }
+
+    .controls {
+      .control {
+        display: inline-flex;
+        font-size: @icon-size;
+        margin: @normal-spacing @light-spacing;
+        &:extend(.font-secondary);
+  
+        &:nth-child(4) {
+          margin-right: @normal-spacing;
+        }
+      }
+      justify-items: flex-end;
+      align-items: flex-end;
+      flex: 1;
+      text-align: right;
+      
+    }
+  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: @base-z-index + 100;
+  align-content: center;
+}

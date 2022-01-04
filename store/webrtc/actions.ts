@@ -5,6 +5,9 @@ import Crypto from '~/libraries/Crypto/Crypto'
 
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
+import StreamManager from '~/libraries/WebRTC/StreamManager'
+import Logger from '~/utilities/Logger'
+import { TracksManager } from '~/libraries/WebRTC/TracksManager'
 
 export default {
   /**
@@ -19,13 +22,17 @@ export default {
     originator: string,
   ) {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
+    const $Logger: Logger = Vue.prototype.$Logger
 
     $WebRTC.init(originator)
 
     $WebRTC.on('PEER_CONNECT', ({ peerId }) => {
-      Vue.prototype.$Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
+      $Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
+      commit('setConnectedPeer', peerId)
     })
-
+    $WebRTC.on('ERROR', () => {
+      commit('setConnectedPeer', '')
+    })
     commit('setInitialized', true)
   },
   /**
@@ -36,16 +43,16 @@ export default {
    * this.$store.dispatch('webrtc/initialize')
    */
   async createPeerConnection(
-    { commit }: ActionsArguments<WebRTCState>,
+    { commit, dispatch, state }: ActionsArguments<WebRTCState>,
     identifier: string,
   ) {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
+    const $TracksManager: TracksManager = Vue.prototype.$TracksManager
+    const $Crypto: Crypto = Vue.prototype.$Crypto
 
     if (!$WebRTC.initialized) {
       throw new Error(WebRTCError.NOT_INITIALIZED)
     }
-
-    const $Crypto: Crypto = Vue.prototype.$Crypto
 
     const secretChannel = await $Crypto.computeSharedSecret(
       new PublicKey(identifier),
@@ -60,7 +67,96 @@ export default {
     const peer = $WebRTC.getPeer(identifier)
 
     peer?.communicationBus.on('TYPING_STATE', ({ state, peerId }) => {
-      commit('friends/setTyping', { id: peerId, typingState: state }, { root: true })
+      commit(
+        'friends/setTyping',
+        { id: peerId, typingState: state },
+        { root: true },
+      )
     })
+
+    // peer?.communicationBus.on('RAW_DATA', (message) => {
+    //   if (message.data.type === 'CALL_DENIED') {
+    //     peer?.call.hangUp()
+    //     dispatch('hangUp')
+    //   }
+    // })
+
+    peer?.call.on('INCOMING_CALL', (data) => {
+      // if incoming call is activer call return before toggling incoming call
+      if (state.activeCall === data.peerId) {
+        return
+      }
+      commit('setIncomingCall', data.peerId)
+    })
+
+    peer?.call.on('OUTGOING_CALL', (data) => {
+      commit('setActiveCall', data.peerId)
+    })
+
+    peer?.call.on('CONNECTED', (data) => {
+      commit('setIncomingCall', '')
+      commit('setActiveCall', data.peerId)
+    })
+
+    peer?.call.on('HANG_UP', (data) => {
+      commit('setIncomingCall', '')
+      commit('setActiveCall', '')
+
+      commit('updateLocalTracks', {
+        audio: {},
+        video: {},
+      })
+
+      commit('updateRemoteTracks', {
+        audio: {},
+        video: {},
+      })
+    })
+
+    peer?.call.on('LOCAL_TRACK_CREATED', ({ track }) => {
+      const update = { [track.kind]: { id: track.id, muted: !track.enabled } }
+
+      commit('updateLocalTracks', update)
+
+      if (track.kind === 'audio') {
+        commit('audio/setMuted', !track.enabled, { root: true })
+      }
+
+      if (track.kind === 'video') {
+        commit('video/setDisabled', !track.enabled, { root: true })
+      }
+    })
+
+    peer?.call.on('LOCAL_TRACK_REMOVED', ({ track }) => {
+      const update = { [track.kind]: { muted: true } }
+
+      if (track.kind === 'audio') {
+        commit('audio/setMuted', true, { root: true })
+      }
+
+      if (track.kind === 'video') {
+        commit('video/setDisabled', true, { root: true })
+      }
+
+      commit('updateLocalTracks', update)
+    })
+
+    peer?.call.on('REMOTE_TRACK_RECEIVED', ({ track }) => {
+      const update = { [track.kind]: { id: track.id, muted: !track.enabled } }
+
+      commit('updateRemoteTracks', update)
+    })
+
+    peer?.call.on('REMOTE_TRACK_REMOVED', ({ track }) => {
+      const update = { [track.kind]: { muted: true } }
+
+      commit('updateRemoteTracks', update)
+    })
+  },
+  denyCall({ commit }: ActionsArguments<WebRTCState>) {
+    commit('setIncomingCall', '')
+  },
+  hangUp({ commit }: ActionsArguments<WebRTCState>) {
+    commit('setActiveCall', '')
   },
 }

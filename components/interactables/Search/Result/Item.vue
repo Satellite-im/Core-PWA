@@ -34,24 +34,24 @@ export default Vue.extend({
 .result-item {
   padding: 10px;
   margin: 8px 0;
-  border-radius: @corner-rounding;
-  background: @semitransparent-light-gradient;
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
   box-shadow: @light-blur;
   border: @light-border !important;
   display: flex;
-  width: 100%;
+  &:extend(.full-width);
   .avatar {
     margin-right: 10px;
   }
   .content {
-    max-width: calc(100% - 48px);
+    max-width: calc(@full - 48px);
     .username {
       font-size: @title-text;
       font-weight: bold;
     }
     .message {
       font-size: @text-size;
-      background-color: transparent;
+      background: transparent;
       text-overflow: inherit;
       white-space: pre-wrap;
     }

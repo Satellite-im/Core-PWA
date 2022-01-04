@@ -37,6 +37,7 @@ export const Config = {
       'http://opentracker.i2p.rocks:6969/announce',
       'udp://tracker.opentrackr.org:1337/announce',
       'http://tracker.opentrackr.org:1337/announce',
+      // 'ws://localhost:5001', // FOR DEVELOPMENT
     ],
   },
   solana: {
@@ -87,7 +88,9 @@ export const Config = {
   chat: {
     defaultMessageLimit: 50,
     defalutLoadMoreLimit: 20,
+    messageMaxChars: 256,
     timestampUpdateInterval: 60 * 1000,
+    maxChars: 256,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
@@ -97,6 +100,28 @@ export const Config = {
     // regex to identify if a filetype is an image we support
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
     // Regex to check if string is only blank space
-    blankSpace: '^[\\s|&nbsp;]+$',
+    blankSpace: '^[\\s|&nbsp;]*$',
+    // Regex to check if string contains only emoji's. Note: doesn't yet support emoji modifiers
+    isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
+    // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
+    emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
+    // check for link
+    link: /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
+    youtube: /^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g,
+    youtubeShort: /^https?:\/\/([a-z0-9-]+[.])*youtu.be?/g,
+    vimeo: /^https?:\/\/([a-z0-9-]+[.])*vimeo.com?/g,
+    facebook: /^https?:\/\/([a-z0-9-]+[.])*facebook.com?/g,
+    twitch: /^https?:\/\/([a-z0-9-]+[.])twitch[.]tv\/?/g,
+    spotify: /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g,
+  },
+  webrtc: {
+    constraints: {
+      audio: true,
+      video: {
+        facingMode: 'user',
+        width: { min: 1024, ideal: 1280, max: 1920 },
+        height: { min: 576, ideal: 720, max: 1080 },
+      },
+    },
   },
 }

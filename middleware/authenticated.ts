@@ -1,5 +1,5 @@
 import { NuxtRouteConfig } from '@nuxt/types/config/router'
-// TODO: verify why we got the import/named error for RawLocation import
+// TODO: verify why we got the import/named error for RawLocation import AP-394
 // eslint-disable-next-line import/named
 import { RawLocation } from 'vue-router'
 import { Config } from '~/config'
@@ -50,4 +50,6 @@ export default function ({ store, route, redirect }: Arguments) {
   if (!allPrerequisitesReady) {
     return eventuallyRedirect('/')
   }
+  
+  store.commit('accounts/setLastVisited', route.path)
 }

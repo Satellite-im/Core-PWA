@@ -56,16 +56,9 @@ export default Vue.extend({
 <style lang="less" scoped>
 .container {
   margin: 0 auto;
-  max-height: 100vh;
   display: flex;
   justify-content: center;
   text-align: center;
-}
-@media only screen and (max-width: @mobile-breakpoint) {
-  /* due to vh issue on mobile devices */
-  .container {
-    max-height: calc(100vh - 60px);
-  }
 }
 .title {
   margin: 0;

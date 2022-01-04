@@ -1,0 +1,31 @@
+.aside-menu {
+  .menu-list {
+    a {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    margin-bottom: @normal-spacing;
+  }
+
+  li {
+    &.active {
+      &:extend(.glow-primary);
+    }
+    &:hover {
+      &:not(.active) {
+        &:extend(.background-semitransparent-light);
+      }
+    }
+  }
+
+  .menu-toggle {
+    position: absolute;
+    right: 2rem;
+    top: 2.4rem;
+  }
+
+  padding: @xlarge-spacing;
+  position: relative;
+  -webkit-user-drag: none;
+  user-select: none;
+}

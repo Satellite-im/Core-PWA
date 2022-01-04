@@ -1,5 +1,9 @@
 <div>
-  <TypographyLabel class="input-label" v-if="labelText.length" :text="labelText" />
+  <TypographyLabel
+    class="input-label"
+    v-if="labelText.length"
+    :text="labelText"
+  />
   <div class="field has-addons">
     <div class="control" data-cy="add-input">
       <input
@@ -8,9 +12,10 @@
         :readonly="readonly"
         :type="inputKind"
         :placeholder="placeholder"
+        :maxLength="textLimit? limitCount : $Config.chat.maxChars"
         v-on:keyup.enter="action"
         @input="update"
-        />
+      />
     </div>
     <div class="control" data-cy="submit-input">
       <a
@@ -19,7 +24,7 @@
         v-on:click="() => !disabled ? action() : null"
         v-if="!copyContent.length"
       >
-        <UiSpinner v-if="loading" spinning />
+        <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
           <slot></slot>
           {{ buttonText }}
@@ -32,7 +37,7 @@
         v-clipboard:copy="copyContent"
         v-else
       >
-        <UiSpinner v-if="loading" spinning />
+        <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
           <slot></slot>
           {{ buttonText }}
@@ -40,4 +45,5 @@
       </a>
     </div>
   </div>
+  <span v-if="textLimit" class="char-limit"> {{ textLength }} </span>
 </div>

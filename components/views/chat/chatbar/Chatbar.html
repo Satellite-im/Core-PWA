@@ -1,0 +1,51 @@
+<div
+  id="chatbar"
+  ref="chatbar"
+  :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
+>
+  <div
+    class="chatbar-wrap"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'show-file-preview': showFilePreview}"
+    ref="wrap"
+  >
+    <div class="control-wrap file-upload-wrap">
+      <FilesUpload
+        :editable="recipient ? true : false"
+        :recipient="recipient"
+        type="quick"
+        ref="file-upload"
+      />
+    </div>
+    <div
+      :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
+      v-if="hasCommand"
+      ref="chatbar"
+    >
+      <terminal-icon size="1x" />
+    </div>
+    <div
+      v-focus="ui.replyChatbarContent"
+      :contenteditable="recipient ? true : false"
+      autocapitalize="off"
+      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
+      ref="messageuser"
+      :placeholder="$t('ui.talk')"
+      @keydown="handleInputKeydown"
+      @keyup="handleInputKeyup"
+      @drop="handleDrop"
+      @paste="handlePaste"
+    ></div>
+
+    <ChatbarControls
+      :editable="recipient ? true : false"
+      :sendMessage="sendMessage"
+      id="chatbar-controls"
+    />
+  </div>
+  <ChatbarFooter
+    :text="text"
+    :charlimit="charlimit"
+    :typing="recipientTyping"
+    :usersTyping="activeFriend ? [ activeFriend ] : []"
+  />
+</div>

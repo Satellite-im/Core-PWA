@@ -9,7 +9,7 @@
       <pre>
         <vue-markdown :source="releaseData.body" :breaks="false"/>
       </pre>
-      <TypographyText v-if="requiresUpdate" text="This update requires a refresh of the Alpha application. Click 'Update Now' below to start fresh on the new update." />
+      <TypographyText v-if="requiresUpdate" :text="$t('modal.update_modal.update_required')" />
       
       <UiSpacer :height="50" />
       <div>
@@ -36,7 +36,7 @@
           type="primary"
           size="small"
           :action="skipVersion"
-          text="Got It!"
+          :text="$t('modal.update_modal.got_it')"
         >
           <refresh-cw-icon size="1x" />
         </InteractablesButton>

@@ -2,9 +2,10 @@ import { AudioState } from './types'
 
 const mutations = {
   mute(state: AudioState) {
-    // We clone a new object here since vuex
-    // will not react to deep values
     state.muted = !state.muted
+  },
+  setMuted(state: AudioState, muted: boolean) {
+    state.muted = muted
   },
   deafen(state: AudioState) {
     const isDeafened = state.deafened
@@ -22,13 +23,16 @@ const mutations = {
   setInputVolume(state: AudioState, inputVolume: Number) {
     state.inputVolume = inputVolume
   },
-  setSoundLevel(state: AudioState, sound: {
-    inboundMedia: Number
-    outboundMedia: Number
-    system: Number
-  }) {
+  setSoundLevel(
+    state: AudioState,
+    sound: {
+      inboundMedia: Number
+      outboundMedia: Number
+      system: Number
+    },
+  ) {
     state.sounds = sound
-  }
+  },
 }
 
 export default mutations

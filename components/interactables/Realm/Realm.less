@@ -1,0 +1,21 @@
+#realm {
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.font-muted);
+  &:extend(.inline-flex-align-center);
+  .realm {
+    display: inline-block;
+    margin-right: @light-spacing;
+  }
+  svg {
+    margin-right: (@light-spacing / 2);
+  }
+  .realm-name {
+    &:extend(.font-orange);
+    display: inline-flex;
+    align-items: center;
+  }
+  padding: calc(@light-spacing / 2) @normal-spacing;
+  width: fit-content;
+  font-family: @primary-font;
+}

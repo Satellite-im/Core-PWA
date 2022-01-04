@@ -2,20 +2,9 @@
 @mobile_media_open_offset: 12rem;
 @mobile_candybar_media_open_offset: 18rem;
 #app-wrap {
-  #app.mobile-app {
-    height: calc(var(--app-height) - @mobile-nav-size);
-    transition: height @animation-speed;
-  }
-  #mobile-nav {
-    transition: bottom @animation-speed;
-  }
-
   &.is-collapsed {
-    #app.mobile-app {
-      height: var(--app-height);
-    }
     #mobile-nav {
-      bottom: -@mobile-nav-size;
+      transform: translate(0, @mobile-nav-size);
     }
   }
 
@@ -25,14 +14,48 @@
       margin-top: @media_open_offset;
     }
   }
+
+  .media-unopen {
+    margin-top: auto;
+  }
 }
 
 #app {
   display: flex;
   user-select: none;
   height: var(--app-height);
-  .dynamic-content {
+
+  .swiper {
     width: 100%;
+    .swiper-wrapper {
+      box-sizing: border-box;
+    }
+
+    .sidebar-container {      
+      width: calc( @sidebar-size + @servers-size );
+      display: flex;
+    }
+    
+    .dynamic-content {
+      width: 100%;
+    }
+
+    .aside-container {
+      width: @sidebar-size;
+    }
+  }
+
+  .toggle--sidebar {
+    position: absolute;
+    z-index: @base-z-index + 10;
+    top: @normal-spacing * 2;
+    left: @normal-spacing;
+    color: @primary-color;
+    filter: @primary-text-glow;
+  }
+
+  .dynamic-content {
+    &:extend(.full-width);
     position: relative;
     user-select: text;
     display: flex;
@@ -43,21 +66,20 @@
       transition: @transition-all;
     }
 
-    #statusbar {
-      max-height: @statusbar-height;
+    #toolbar {
+      max-height: @toolbar-height;
     }
 
     .media-open {
-      width: 100%;
+      &:extend(.full-width);
       flex: 1;
-      transition: flex 0.3s;
     }
 
     #chatbar {
-      width: 100%;
+      &:extend(.full-width);
       min-width: 0;
       justify-content: flex-end;
-      transition: height 0.3s;
+      transition: height @animation-speed;
 
       &.has-reply {
         .chatbar-wrap {
@@ -65,15 +87,12 @@
           border-top: 0;
           border-top-left-radius: 0;
           border-top-right-radius: 0;
-          border-bottom-left-radius: @corner-rounding;
-          border-bottom-right-radius: @corner-rounding;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
         }
       }
     }
 
-    #mediastream {
-      transition: flex 0.3s;
-    }
     &.fullscreen-media {
       .media-open {
         flex: 0;
@@ -91,7 +110,7 @@
         }
       }
       #mediastream {
-        height: calc(100% - @statusbar-height - @light-spacing);
+        height: calc(@full - @toolbar-height - @light-spacing);
       }
     }
   }
@@ -100,27 +119,17 @@
   #servers-vertical-list,
   .dynamic-content,
   #sidebar .toggle-sidebar,
-  #statusbar {
+  #toolbar {
     transition: @transition-all;
   }
 
   &.is-collapsed {
-    .file-preview {
-      width: calc(100% - 2rem) !important;
-    }
-    #sidebar,
-    #servers-vertical-list {
-      transform: translateX(calc(-@sidebar-size + -@servers-size));
-    }
-    .dynamic-content {
-      margin-left: calc(-@sidebar-size + -@servers-size);
-    }
     #sidebar .toggle-sidebar {
       right: -2rem;
-      z-index: @base-z-index + 1;
+      z-index: @base-z-index + 10;
       top: 1.8rem;
     }
-    #statusbar {
+    #toolbar {
       padding-left: 3rem;
     }
     .breadcrumb {
@@ -132,12 +141,9 @@
     #aside {
       transform: translateX(calc(@sidebar-size));
     }
-    .dynamic-content {
-      margin-right: -250px;
-    }
 
     &.group {
-      #statusbar {
+      #toolbar {
         padding-right: 3rem;
       }
     }
@@ -147,6 +153,13 @@
         visibility: hidden !important;
       }
     }
+  }
+}
+
+.desktop .dynamic-content.swiper-slide-next {
+  padding-right: calc(@sidebar-size + @servers-size);
+  #mediastream {
+    width: calc(100% - @sidebar-size - @servers-size);
   }
 }
 
@@ -174,10 +187,21 @@
   #app {
     &.is-collapsed-aside {
       #aside {
-        transform: translateX(100%);
+        transform: translateX(@full);
       }
     }
   }
+
+  .dynamic-content.swiper-slide-next {
+    padding-right: 0;
+    #mediastream {
+      width: 100%;
+    }
+  }
+  .sidebar-container {
+    width: 100vw !important;
+  }
+
 }
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
@@ -188,3 +212,6 @@
     }
   }
 }
+
+@import url('~/assets/styles/platforms/iOS.less');
+@import url('~/assets/styles/themes/moonless_night.less');

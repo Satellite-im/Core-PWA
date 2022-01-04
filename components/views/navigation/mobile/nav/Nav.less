@@ -1,0 +1,23 @@
+#mobile-nav {
+  width: 100vw;
+  height: @mobile-nav-size;
+  background: @black;
+  position: fixed;
+  bottom: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: @normal-spacing;
+  z-index: 2;
+  div {
+    width: 20%;
+    display: inline-flex;
+    justify-content: center;
+    &:extend(.font-secondary);
+    font-size: @small-icon-size;
+  }
+
+  .active {
+    &:extend(.font-accent);
+  }
+}

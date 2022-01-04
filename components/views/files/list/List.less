@@ -1,0 +1,64 @@
+
+.table {
+  thead {
+    th {
+      &:extend(.font-secondary);
+      border-bottom-width: 1px;
+      border-bottom-color: @text-muted;
+    }
+  }
+
+  tr {
+    td {
+      &:extend(.font-primary);
+      border-bottom-color: @foreground;
+    }
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  .icon {
+    width: 30px;
+  }
+
+  .filename {
+    font-family: @primary-font;
+    cursor: pointer;
+  }
+  .sort {
+    font-size: 9pt;
+    cursor: pointer;
+  }
+  
+  .options {
+    cursor: pointer;
+  }
+
+  .feather-folder {
+    &:extend(.font-orange);
+  }
+
+  .feather-image {
+    color: @jade;
+  }
+
+  .feather-archive {
+    &:extend(.color-danger);
+  }
+
+  .feather-file {
+    &:extend(.font-pink);
+  }
+  &:extend(.full-width);
+  font-size: @text-size;
+  background: transparent;
+  margin: 0;
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .table {
+    min-width: @viewport-width - 20px;
+  }
+}

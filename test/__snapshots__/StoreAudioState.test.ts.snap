@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`state.default 0 1`] = `
+Object {
+  "deafened": false,
+  "inputVolume": 100,
+  "muted": false,
+  "previousVolume": 0,
+  "sounds": Object {
+    "inboundMedia": 100,
+    "outboundMedia": 100,
+    "system": 100,
+  },
+  "volume": 100,
+}
+`;

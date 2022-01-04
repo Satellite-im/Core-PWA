@@ -1,0 +1,18 @@
+.control-icon {
+  &:hover {
+    cursor: pointer;
+  }
+  &:extend(.font-muted);
+  opacity: 0.75;
+  font-size: @icon-size;
+  align-self: flex-end;
+  text-align: right;
+  float: right;
+  margin-left: @light-spacing;
+  justify-self: center;
+}
+
+.active {
+  &:extend(.font-secondary);
+  opacity: 1;
+}

@@ -1,0 +1,28 @@
+.tag {
+  display: inline-flex;
+  padding: 0.85rem @normal-spacing 0.85rem 1.5rem;
+  position: relative;
+  font-size: @normal-spacing;
+  &.is-dark {
+    &:extend(.background-semitransparent-lighter);
+    &:extend(.font-secondary);
+    box-shadow: 0 5px 14px -5px @foreground;
+  }
+  .tag-number {
+    position: absolute;
+    &:extend(.background-primary);
+    top: 0rem;
+    left: 0;
+    width: 18px;
+    font-size: @mini-text-size;
+    text-align: center;
+    border-radius: 4px 0 2px 0;
+    line-height: 1.4;
+  }
+  .remove-word {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: @light-spacing;
+  }
+}

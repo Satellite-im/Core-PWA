@@ -1,5 +1,5 @@
 <div>
-  <TailoredSettingsModal v-if="ui.showSettings" />
+  <SettingsModal v-if="ui.showSettings" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <UiModal
     v-if="ui.modals.wallet"
@@ -7,14 +7,14 @@
     nopad
     v-click-outside="() => toggleModal(ModalWindows.WALLET)"
   >
-    <TailoredWalletPopup />
+    <WalletPopup />
   </UiModal>
   <UiModal
     v-if="ui.modals.createServer"
     :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
     :title="$t('servers.create.heading')"
   >
-    <TailoredCoreServersCreate
+    <ServersCreate
       v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
       :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
     />
@@ -31,11 +31,11 @@
     />
   </UiModal>
   <UiModal
-    v-if="$mock.users.find((user) => user.name === media.incomingCall)"
+    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
     nopad
   >
-    <TailoredCoreIncomingCall
-      :user="$mock.users.find((user) => user.name === media.incomingCall)"
+    <MediaIncomingCall
+      :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
     />
@@ -45,9 +45,21 @@
     :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
     nopad
   >
-    <TailoredMarketplace
+    <Marketplace
       v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
       :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
+    />
+  </UiModal>
+  <UiModal
+    v-if="ui.modals.glyph"
+    :close-modal="() => toggleModal(ModalWindows.GLYPH)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
+    :small="true"
+  >
+    <Glyphs
+      v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
+      :close-modal="() => toggleModal(ModalWindows.GLYPH)"
     />
   </UiModal>
   <UiUpdateModal
@@ -55,6 +67,6 @@
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
   />
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="$mock.user" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
 </div>

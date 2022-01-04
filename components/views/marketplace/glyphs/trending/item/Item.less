@@ -1,0 +1,35 @@
+.glyph-trending-card {
+  min-width: 10.5rem;
+  height: 229px;
+  &:extend(.background-semitransparent-light);
+  padding: @normal-spacing;
+  margin-right: @normal-spacing;
+  border: 1px solid @light-border;
+  box-sizing: border-box;
+  border-radius: 4px;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    .header-right {
+      display: flex;
+      .favorite {
+        font-size: 20px;
+        margin-left: @light-spacing;
+      }
+    }
+  }
+  .body {
+    text-align: center;
+    .subtitle {
+      &:extend(.font-secondary);
+      margin: @xlight-spacing 0!important;
+    }
+    .trend-glyph-img {
+      &:extend(.full-width);
+      margin: @light-spacing 0!important;
+      .glyph-item {
+        margin: auto;
+      }
+    }
+  }
+}

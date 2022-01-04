@@ -1,0 +1,30 @@
+.filterbox {
+  .filter-label {
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  .filter-options {
+    &.active {
+      display: inline-block;
+    }
+    li {
+      padding: 4px 0px;
+      input {
+        margin-right: 12px;
+      }
+    }
+    display: none;
+    position: absolute;
+    background: @darker;
+    &:extend(.bordered);
+    &:extend(.round-corners);
+    &:extend(.more-pad-sides);
+    top: 32px;
+    left: @half;
+    transform: translateX(-@half);
+    width: 220px;
+    z-index: 10;
+  }
+  position: relative;
+
+}

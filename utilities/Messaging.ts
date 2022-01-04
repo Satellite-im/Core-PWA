@@ -10,11 +10,12 @@ import {
   MessagesTracker,
   ReactionsTracker,
   RepliesTracker,
+  GlyphMessage,
 } from '~/types/textile/mailbox'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
-  reactions: ReactionMessage[]
+  reactions: ReactionMessage[],
 ) {
   return replies.map((reply) => replyMessageToUIReply(reply, reactions))
 }
@@ -23,7 +24,8 @@ function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
   reactions.forEach((reactionMessage) => {
     let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-    if (!reactors.includes(reactionMessage.from)) reactors = [...reactors, reactionMessage.from]
+    if (!reactors.includes(reactionMessage.from))
+      reactors = [...reactors, reactionMessage.from]
     groupedReactions[reactionMessage.payload] = {
       emoji: reactionMessage.payload,
       reactors,
@@ -36,7 +38,7 @@ function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
 
 function replyMessageToUIReply(
   reply: ReplyMessage,
-  reactions: ReactionMessage[]
+  reactions: ReactionMessage[],
 ): UIReply {
   return { ...reply, reactions: getMessageUIReactions(reply, reactions) }
 }
@@ -44,7 +46,7 @@ function replyMessageToUIReply(
 export function groupMessages(
   messages: MessagesTracker,
   replies: RepliesTracker,
-  reactions: ReactionsTracker
+  reactions: ReactionsTracker,
 ): MessageGroup {
   let groupedMessages: MessageGroup = []
 
@@ -55,7 +57,7 @@ export function groupMessages(
     const prevMessage = i > 0 ? messageArray[i - 1] : null
     const currentMessage = messageArray[i]
 
-    // TODO: Update the typings and embed this data in grouped messages
+    // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
 
@@ -110,11 +112,11 @@ export function groupMessages(
             ...currentMessage,
             replies: messageRepliesToUIReplies(
               currentMessageReplies,
-              currentMessageReactions
+              currentMessageReactions,
             ),
             reactions: getMessageUIReactions(
               currentMessage,
-              currentMessageReactions
+              currentMessageReactions,
             ),
           },
         ],
@@ -147,7 +149,7 @@ type TrackingValues = {
 
 export function updateMessageTracker(
   inputMessages: Message[],
-  initialValues?: TrackingValues
+  initialValues?: TrackingValues,
 ): TrackingValues {
   let messagesTracker: MessagesTracker = initialValues?.messages || {}
   let repliesTracker: RepliesTracker = initialValues?.replies || {}
@@ -159,15 +161,20 @@ export function updateMessageTracker(
     switch (currentMessage.type) {
       case 'reply':
         const reply: ReplyMessage = currentMessage
-        repliesTracker[reply.repliedTo]
-          ? repliesTracker[reply.repliedTo].some(function(value) { return value.id === reply.id}) ? repliesTracker[reply.repliedTo] : repliesTracker[reply.repliedTo].push(reply)
-          : (repliesTracker[currentMessage.repliedTo] = [reply])
+        repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
+        if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
+          repliesTracker[reply.repliedTo].push(reply)
         break
       case 'reaction':
         const reaction: ReactionMessage = currentMessage
-        reactionsTracker[reaction.reactedTo]
-          ? reactionsTracker[reaction.reactedTo].some(function(value) {return value.id === reaction.id}) ? reactionsTracker[reaction.reactedTo] : reactionsTracker[reaction.reactedTo].push(reaction)
-          : (reactionsTracker[reaction.reactedTo] = [reaction])
+        reactionsTracker[reaction.reactedTo] =
+          reactionsTracker[reaction.reactedTo] || []
+        if (
+          !reactionsTracker[reaction.reactedTo].some(
+            (elm) => elm.id === reaction.id,
+          )
+        )
+          reactionsTracker[reaction.reactedTo].push(reaction)
         break
       case 'file':
         const fileMessage: FileMessage = currentMessage
@@ -178,6 +185,11 @@ export function updateMessageTracker(
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
+        break
+      case 'glyph':
+        const glyphMessage: GlyphMessage = currentMessage
+
+        messagesTracker[glyphMessage.id] = glyphMessage
       default:
         break
     }
@@ -192,37 +204,44 @@ export function updateMessageTracker(
 
 export function getUsernameFromState(
   textilePublicKey: string,
-  state: RootState
+  state: RootState,
 ) {
-  const accountDetails = state.accounts.details
-  const isMe =
-    accountDetails && accountDetails.textilePubkey === textilePublicKey
-
-  const username = isMe
-    ? accountDetails.name
-    : state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey
-    )?.name || 'unknown'
-
-  return username
+  return getFullUserInfoFromState(textilePublicKey, state)?.name || 'unknown'
 }
 
 export function getAddressFromState(
   textilePublicKey: string,
-  state: RootState
+  state: RootState,
 ) {
   const address =
     state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey
+      (friend) => friend.textilePubkey === textilePublicKey,
     )?.address || 'unknown'
 
   return address
 }
 
+export function getFullUserInfoFromState(
+  textilePublicKey: string,
+  state: RootState,
+) {
+  const accountDetails = state.accounts.details
+  const isMe =
+    accountDetails && accountDetails.textilePubkey === textilePublicKey
+
+  const userInfo = isMe
+    ? accountDetails
+    : state.friends.all.find(
+        (friend) => friend.textilePubkey === textilePublicKey,
+      )
+
+  return userInfo
+}
+
 export function refreshTimestampInterval(
   timestamp: number,
   action: (timePassed: string) => any,
-  interval: number
+  interval: number,
 ) {
   return setInterval(() => {
     const updatedTimestamp = dayjs(timestamp).fromNow()

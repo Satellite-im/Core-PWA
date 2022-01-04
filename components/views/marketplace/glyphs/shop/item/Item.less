@@ -1,0 +1,72 @@
+.glyph-card {
+  font-family: @primary-font;
+  &:extend(.round-corners);
+  overflow: hidden;
+  min-width: 200px;
+  &:extend(.full-width);
+  max-width: @full;
+  &:extend(.bordered);
+  background: transparent;
+  box-shadow: none;
+
+  .glyph-card-header {
+    &:extend(.full-width);
+    height: 10.5rem;
+    padding: @normal-spacing;
+    border-radius: 4px 4px 0px 0px;
+    background: @primary-color-alt;
+    background-position: center;
+    background-size: cover;
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      .favorite {
+        font-size: 18px;
+      }
+    }
+    .glyph-list {
+      padding-top: @normal-spacing;
+      max-height: 6rem;
+      overflow: hidden;
+      div {
+        display: inline-block;
+        margin: 0 @light-spacing @light-spacing 0;
+      }
+    }
+  }
+  .card-text {
+    &:extend(.full-width);
+    height: 145px;
+    padding: @normal-spacing;
+    &:extend(.background-semitransparent-dark);
+    .name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .description {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .price {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      font-size: 24px;
+      font-weight: 600;
+      .btn-buy {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        border-radius: 20px;
+        &:extend(.font-secondary);
+        font-size: 12px;
+        &:extend(.background-primary-gradient);
+        &:extend(.glow-primary);
+      }
+    }
+  }
+}

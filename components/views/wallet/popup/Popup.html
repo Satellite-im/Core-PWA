@@ -1,0 +1,12 @@
+<div class="wallet">
+  <div class="heading">
+    <wallet-icon size="1.2x" />
+    <TypographySubtitle :size="6" :text="$t('wallet.wallet')" />
+    <InteractablesClose class="close" :action="toggleWallet" />
+  </div>
+  <WalletBalance />
+  <div class="more-info">
+    <WalletRecent />
+    <WalletAccounts />
+  </div>
+</div>

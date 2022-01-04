@@ -1,0 +1,13 @@
+<div class="sample">
+  <div class="img-container">
+    <img
+      v-for="src in glyphUrls"
+      :src="getSrc(src)"
+      height="128px"
+      width="128px"
+      alt=""
+      @load="setLoaded"
+    />
+  </div>
+  <UiHorizontalRule style="margin-bottom: 0" />
+</div>

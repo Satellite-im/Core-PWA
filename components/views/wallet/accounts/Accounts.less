@@ -1,0 +1,38 @@
+
+.accounts {
+  &:extend(.half-width);
+  .accounts-heading {
+    display: inline-flex;
+    .is-text {
+      margin-left: @light-spacing;
+    }
+  }
+
+  .accounts-footer {
+    display: inline-flex;
+    align-items: center;
+    .is-text {
+      margin-left: @light-spacing;
+    }
+  }
+
+  .account-list {
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    &:extend(.bordered);
+    padding: @normal-spacing;
+  }
+
+  .yellow {
+    font-size: @micro-text-size;
+  }
+
+  .accounts-subtext {
+    display: inline-flex;
+    align-items: center;
+    margin-top: @light-spacing;
+    .is-text {
+      margin-left: @light-spacing;
+    }
+  }
+}

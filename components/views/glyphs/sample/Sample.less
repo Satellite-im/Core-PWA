@@ -1,0 +1,35 @@
+.sample {
+  display: flex;
+  flex-direction: column;
+  .img-container {
+    display: flex;
+    gap: 2rem;
+    img {
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+  }
+}
+@media only screen and (max-width: @mobile-breakpoint) {
+  .sample {
+    .img-container {
+      gap: unset;
+      justify-content: space-between;
+      img {
+        width: 96px;
+        height: 96px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  .sample {
+    .img-container {
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
+}
