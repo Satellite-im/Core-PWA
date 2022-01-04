@@ -24,9 +24,10 @@
   </div>
   <div 
     class="has-tooltip has-tooltip-primary"
-    data-tooltip="Screenshare">
+    :data-tooltip="$t('controls.not_available')">
     <InteractablesButton
       type="dark"
+      disabled
       size="small"
       :action="() => {}">
       <screen-share-icon size="1.2x" />
