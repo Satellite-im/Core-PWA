@@ -57,7 +57,7 @@ export function groupMessages(
     const prevMessage = i > 0 ? messageArray[i - 1] : null
     const currentMessage = messageArray[i]
 
-    // TODO: Update the typings and embed this data in grouped messages
+    // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
 
