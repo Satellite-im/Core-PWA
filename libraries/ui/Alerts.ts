@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 export enum AlertType {
-  FREIND_REQUEST = 'FRIEND_REQUEST',
+  FRIEND_REQUEST = 'FRIEND_REQUEST',
   MISSED_CALL = 'MISSED_CALL',
   FILES_FULL = 'FILES_FULL',
   FILE_UPLOADED = 'FILE_UPLOADED',
