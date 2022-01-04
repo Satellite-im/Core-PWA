@@ -1,43 +1,39 @@
+.image {
+  display: grid;
+}
+.text {
+  margin-top: 5px;
+}
 .is-normal-image {
   &:extend(.round-corners);
   max-width: 30vw;
   user-select: none;
 }
-
-.icon {
-  margin-bottom: -5px;
-}
-
-.control-icon {
-  float: right;
-  margin-top: 10px;
+.file-info {
+  grid-row: auto;
 }
 
 .dl-text {
-  display: inline;
+  display: flex;
   float: right;
 }
 
-.name-text {
-  display: inline-block;
-}
-
-.sub-text {
-  margin-bottom: -10px;
+.dl-icon-text {
+  grid-row: auto;
+  .name-text {
+    text-overflow: ellipsis;
+  }
 }
 
 .size-text {
-  margin-top: -15px;
   margin-bottom: 10px;
 }
 
-.name-text {
-  margin-top: 15px;
-}
 
 .image-mask {
   &:extend(.flex-justify-content-centered);
   &:extend(.absolute-coverage);
+
   .is-image-in-mask {
     &:extend(.round-corners);
     max-height: 80vh;
@@ -46,12 +42,14 @@
     align-self: center;
     margin: 0 auto;
   }
+
   .image-container {
     display: inline-flex;
     flex-direction: column;
     max-width: fit-content;
     align-self: center;
   }
+
   position: fixed;
   background: rgba(0, 0, 0, 0.75);
   z-index: @base-z-index + 102;
