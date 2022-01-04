@@ -85,7 +85,7 @@ export default Vue.extend({
     /**
      * @method addEmoji
      * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
-     * TODO: Change reactor in dispatch addReaction to current users name instead of 'Jpanay'
+     * TODO: Change reactor in dispatch addReaction to current users name instead of 'Jpanay' //AP-390
      * @param emoji Emoji-mart emoji event object
      * @example v-on:select="addEmoji"
      */

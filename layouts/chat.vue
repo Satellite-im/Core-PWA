@@ -134,7 +134,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['audio', 'ui', 'media', 'friends']),
     selectedGroup() {
-      return this.$route.params.id // TODO: change with groupid
+      return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient() {
       // It should not happen that someone tries to write to himself, but we should check

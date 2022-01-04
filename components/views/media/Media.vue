@@ -104,7 +104,7 @@ export default Vue.extend({
         media.style.paddingTop = ''
         media.style.paddingBottom = ''
       } else {
-        // TODO: Listen to scroll event instead..
+        // TODO: Listen to scroll event instead.. - AP-396
         this.$nextTick(() => {
           const isFit = function (
             viewportWidth: number,
