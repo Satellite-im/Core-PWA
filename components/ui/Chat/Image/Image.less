@@ -1,14 +1,17 @@
 .image {
   display: grid;
 }
+
 .text {
   margin-top: 5px;
 }
+
 .is-normal-image {
   &:extend(.round-corners);
   max-width: 30vw;
   user-select: none;
 }
+
 .file-info {
   grid-row: auto;
 }
@@ -20,6 +23,7 @@
 
 .dl-icon-text {
   grid-row: auto;
+
   .name-text {
     text-overflow: ellipsis;
   }
@@ -28,7 +32,6 @@
 .size-text {
   margin-bottom: 10px;
 }
-
 
 .image-mask {
   &:extend(.flex-justify-content-centered);
