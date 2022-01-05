@@ -7,17 +7,16 @@ on:
       - dev
 
 jobs:
-  eslint:
+  eslint_check:
+    name: Prepare action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - run: yarn install
-      - uses: sibiraj-s/action-eslint@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
-          eslint-args: '--ignore-path=.gitignore --quiet'
-          extensions: 'js,jsx,ts,tsx'
-          annotations: true
+    - name: Checkout 
+      uses: actions/checkout@v1
+    - name: Lint
+      uses: Krizzu/eslint-check-action@v1.1.0
+      with:
+        ghToken: ${{ secrets.GITHUB_TOKEN }}
+        eslintFiles: "lib, scripts"
+        eslintConfig: ".eslintrc.js"
+        eslintExt: "ts, tsx"
