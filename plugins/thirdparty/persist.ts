@@ -29,6 +29,7 @@ const propertiesBlacklist = [
   'prerequisites',
   'webrtc.activeStream',
   'webrtc.connectedPeer',
+  'webrtc.incomingCall',
 ]
 
 const propertiesBlacklistWhenStorePin = [
@@ -36,6 +37,7 @@ const propertiesBlacklistWhenStorePin = [
   'prerequisites',
   'webrtc.activeStream',
   'webrtc.connectedPeer',
+  'webrtc.incomingCall',
 ]
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
