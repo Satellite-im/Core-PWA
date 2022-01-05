@@ -547,7 +547,7 @@ export default {
     )
 
     if (transactionId) {
-      commit('removeFriend', friend.publicKey)
+      commit('removeFriend', friend.textilePubkey)
     }
   },
 }
