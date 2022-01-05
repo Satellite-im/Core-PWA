@@ -195,8 +195,8 @@ export default Vue.extend({
         messageBox.innerText &&
         messageBox.innerText.length > this.$Config.chat.maxChars + 1
       ) {
+        /* remove updateText() here because when this.value is changed it is automatically called */
         messageBox.innerText = messageBox.innerText.slice(0, -1)
-        this.updateText()
       }
       this.value = messageBox.innerText
     },
@@ -238,16 +238,15 @@ export default Vue.extend({
     },
     /**
      * @method updateText
-     * @description Helper function to update the text inside the chatbox and send the cursor to the end.
+     * @description Helper function to update the setChatText and send the cursor to the end if collapseToEnd is true.
      */
-    updateText() {
+    updateText(collapseToEnd: boolean) {
       const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = this.value
-      let sel = window.getSelection()
-      sel?.selectAllChildren(messageBox)
-      sel?.collapseToEnd()
-
-      // if (messageBox.)
+      if (collapseToEnd) {
+        let sel = window.getSelection()
+        sel?.selectAllChildren(messageBox)
+        sel?.collapseToEnd()
+      }
       this.setChatText = {
         userId: this.$props.recipient.address,
         value: messageBox.innerHTML,
@@ -338,7 +337,7 @@ export default Vue.extend({
   },
   watch: {
     'ui.chatbarContent': function () {
-      this.updateText()
+      this.updateText(false)
     },
     'friends.all': {
       handler() {
