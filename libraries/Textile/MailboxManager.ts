@@ -78,20 +78,26 @@ export class MailboxManager {
    * @param lastInbound timestamp of last received message
    * @returns an array of messages
    */
-  async getConversation(
-    friendIdentifier: string,
-    query: ConversationQuery,
-    lastInbound?: number,
-  ): Promise<Message[]> {
+  async getConversation({
+    friendIdentifier,
+    query,
+    lastInbound,
+  }: {
+    friendIdentifier: string
+    query: ConversationQuery
+    lastInbound?: number
+  }): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
 
     let inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
+
+    // if messages are stored in indexeddb, only fetch new messages from textile
     if (lastInbound) {
       inboxQuery = Query.where('from')
         .eq(friendIdentifier)
         .and(PropCommonEnum.MOD)
-        .ge(lastInbound) // this will always return every message. textile timestamp has more digits, so it will always be larger
+        .ge(lastInbound)
         .orderByIDDesc()
     }
 
@@ -122,11 +128,16 @@ export class MailboxManager {
       sentboxQuery.and(PropCommonEnum.CREATED_AT).lt(lastMessageTime)
     }
 
-    const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
-      threadID,
-      MailboxSubscriptionType.sentbox,
-      sentboxQuery,
-    )
+    let encryptedSentbox: MessageFromThread[] = []
+
+    // only fetch sent messages if indexeddb is empty. after that, sending/editing action will add to indexeddb
+    if (lastInbound === undefined) {
+      encryptedSentbox = await this.textile.client.find<MessageFromThread>(
+        threadID,
+        MailboxSubscriptionType.sentbox,
+        sentboxQuery,
+      )
+    }
 
     const messages = [...encryptedInbox, ...encryptedSentbox].sort(
       (a, b) => a.created_at - b.created_at,
@@ -139,8 +150,6 @@ export class MailboxManager {
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
-
-    debugger
 
     return filtered.map((r) => r.value)
   }

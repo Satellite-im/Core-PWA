@@ -65,37 +65,41 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    const conversation = await db.conversations
-      .get(address)
-      .then((convo) => {
-        // if nothing indexed, fetch entire conversation
-        if (!convo) {
-          return $MailboxManager.getConversation(friend.textilePubkey, query)
-        }
+    let conversation: Message[] = []
 
-        const dbinfo = convo[address]
-        console.log('db', dbinfo)
+    let dbMessages = await db.conversations.get(address).then((convo) => {
+      return convo?.[address] ?? []
+    })
 
-        // todo - return db and partial fetch combined
-        // return convo[address]
-        return $MailboxManager.getConversation(
-          friend.textilePubkey,
-          query,
-          lastInbound,
-        )
+    //  if nothing stored in indexeddb, fetch entire conversation
+    if (!dbMessages.length) {
+      conversation = await $MailboxManager.getConversation({
+        friendIdentifier: friend.textilePubkey,
+        query,
       })
-      //
-      .then((convo) => {
-        console.log('fetched', convo)
-        // @ts-ignore
-        const dbData: DexieMessage = {
-          [address]: convo,
-          key: address,
-        }
-        console.log('stored in db')
-        db.conversations.put(dbData)
-        return convo
+    }
+    // otherwise, combine new textile messages with stored messages
+    else {
+      const textileMessages = await $MailboxManager.getConversation({
+        friendIdentifier: friend.textilePubkey,
+        query,
+        lastInbound: lastInbound * 1000000, // textile has a more specific unix timestamp, matching theirs
       })
+
+      // use textileMessages as primary source. this way, old versions of edited messages (with the same id) will not be used
+      const ids = new Set(textileMessages.map((d) => d.id))
+      conversation = [
+        ...textileMessages,
+        ...dbMessages.filter((d) => !ids.has(d.id)),
+      ]
+    }
+
+    // @ts-ignore - store latest data in indexeddb
+    const dbData: DexieMessage = {
+      [address]: conversation,
+      key: address,
+    }
+    db.conversations.put(dbData)
 
     commit('setConversation', {
       address: friend.address,
