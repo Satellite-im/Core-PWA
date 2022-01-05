@@ -10,7 +10,7 @@
 	branch = master
 [submodule "locales"]
 	path = locales
-	url = git@github.com:Satellite-im/Translations.git
+	url = https://github.com/Satellite-im/locales.git
 	ignore = all
 	branch = main
 [submodule "cypress"]
