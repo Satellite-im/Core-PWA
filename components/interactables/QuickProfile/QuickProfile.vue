@@ -37,8 +37,8 @@ export default Vue.extend({
     },
     /**
      * @method close
-     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and respositioning as needed.
-     * Corrects position by commiting an adjusted position to setQuickProfilePosition in state
+     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and repositioning as needed.
+     * Corrects position by committing an adjusted position to setQuickProfilePosition in state
      */
     handleOverflow() {
       if (this.$device.isDesktop) {

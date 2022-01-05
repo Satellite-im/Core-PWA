@@ -39,7 +39,7 @@ Summary of the changes made.
 - fix -> bug fix
 - docs -> documentation
 - style -> formatting, lint stuff
-- refactor -> code restructure without changing exterrnal behavior
+- refactor -> code restructure without changing external behavior
 - test -> adding missing tests
 - chore -> maintenance
 - init -> initial commit
