@@ -40,7 +40,7 @@
       <ToolbarAlerts />
     </UiFloatingContainer>
     <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary ${!webrtc.connectedPeer ? 'disabled' : ''}`"
+      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
       :data-tooltip="webrtc.connectedPeer ? $t('controls.call') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio'])"
