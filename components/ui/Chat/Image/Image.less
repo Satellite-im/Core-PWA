@@ -1,12 +1,51 @@
+.image {
+  display: grid;
+  padding: 5px;
+}
+
+.text {
+  margin-top: 5px;
+}
+
 .is-normal-image {
   &:extend(.round-corners);
   max-width: 30vw;
   user-select: none;
 }
 
+.file-info {
+  grid-row: auto;
+}
+
+.dl-text {
+  display: flex;
+  float: right;
+}
+.icon {
+  margin-right: 5px;
+}
+.imag-icon{
+  margin: 10px 5px -5px -1px;
+}
+
+.dl-icon-text {
+  grid-row: auto;
+
+  .name-text {
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+  }
+}
+
+.size-text {
+  margin-bottom: 10px;
+
+}
+
 .image-mask {
   &:extend(.flex-justify-content-centered);
   &:extend(.absolute-coverage);
+
   .is-image-in-mask {
     &:extend(.round-corners);
     max-height: 80vh;
@@ -15,12 +54,14 @@
     align-self: center;
     margin: 0 auto;
   }
+
   .image-container {
     display: inline-flex;
     flex-direction: column;
     max-width: fit-content;
     align-self: center;
   }
+
   position: fixed;
   background: rgba(0, 0, 0, 0.75);
   z-index: @base-z-index + 102;

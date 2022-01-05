@@ -5,6 +5,7 @@ export enum AlertType {
   MISSED_CALL = 'MISSED_CALL',
   FILES_FULL = 'FILES_FULL',
   FILE_UPLOADED = 'FILE_UPLOADED',
+  FILE_NSFW = 'FILE_NSFW',
   DEV = 'DEV',
 }
 

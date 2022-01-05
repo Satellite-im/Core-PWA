@@ -8,6 +8,9 @@
   <div class="file-info" v-if="!file.type.includes('image')">
     <TypographySubtitle :size="6" :text="`${file.name}`" />
     <TypographyText :text="`${file.type} - ${getFileSize}`" />
+
   </div>
-  <download-icon size="1x" class="download" v-if="!file.type.includes('image')" />
+  <a :href='file.url' target='_blank' class='button is-primary'  v-if="!file.type.includes('image')" >
+    <download-icon size='1x' class=' download control-icon'/>
+  </a>
 </div>

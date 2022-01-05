@@ -1,4 +1,4 @@
-<template src="./Upload.html"></template>
+<template src='./Upload.html'></template>
 
 <script lang="ts">
 import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
@@ -6,7 +6,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { UploadDropItemType } from '~/types/files/file'
+import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
@@ -49,8 +49,9 @@ export default Vue.extend({
       fileClass: false,
       error: false,
       aiScanning: false,
-      disabledButton: false,
       fileAmount: 0,
+      containsNsfw: false,
+      alertNsfw: false
     }
   },
   computed: {
@@ -67,7 +68,6 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.disabledButton = false
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = event.target.files
@@ -118,7 +118,7 @@ export default Vue.extend({
     loadPicture(item: UploadDropItemType) {
       if (!item.file) return
       const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
+      reader.onload = function(e: Event | any) {
         if (e.target) item.url = e.target.result
       }
       reader.readAsDataURL(item.file)
@@ -146,6 +146,10 @@ export default Vue.extend({
         this.$parent.$data.showFilePreview = false
       }
     },
+    closeNsfwAlert() {
+      this.$data.alertNsfw = false
+      this.cancelUpload()
+    },
     /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
@@ -153,32 +157,65 @@ export default Vue.extend({
     finishUploads() {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
+        if (this.$data.containsNsfw) {
+          this.$data.alertNsfw = true
+          this.alertNsfwFile()
+        }
+        if (!this.$data.containsNsfw) {
+          this.cancelUpload()
+          document.body.style.cursor = PropCommonEnum.DEFAULT
+          this.$store.dispatch('textile/clearUploadStatus')
+        }
+
+      }
+    },
+    alertNsfwFile() {
+      this.$data.alertNsfw = true
+      setTimeout(() => {
+        this.$data.alertNsfw = false
+        this.$data.containsNsfw = false
         this.cancelUpload()
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
-        this.$data.disabledButton = false
-      }
+      }, 5000)
     },
     /**
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file: UploadDropItemType) {
-      this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
-          file: file,
+    async dispatchFile(file: FileType) {
+      await this.$store.dispatch('textile/sendFileMessage', {
+        to: this.recipient.textilePubkey,
+        file: file,
+      }).then(() => {
+        this.finishUploads()
+      })
+        .catch((error) => {
+          if (error) {
+            new Error(error)
+            document.body.style.cursor = PropCommonEnum.DEFAULT
+            this.$store.dispatch('textile/clearUploadStatus')
+          }
         })
-        .then(() => this.finishUploads())
     },
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage() {
-      this.$data.disabledButton = true
-      this.$data.fileAmount = this.$data.files.length
-      this.$data.files.forEach((file: UploadDropItemType) => {
+      const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
+        if (!file.nsfw.status) {
+          return file
+        }
+        if (file.nsfw.status) {
+          this.$data.containsNsfw = true
+          if (this.$data.files.length === 1) {
+            this.alertNsfwFile()
+          }
+        }
+      })
+      nsfwCheck.map((file: UploadDropItemType) => {
+        this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
     },
@@ -186,4 +223,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Upload.less"></style>
+<style scoped lang='less' src='./Upload.less'></style>
