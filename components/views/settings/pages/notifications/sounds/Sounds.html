@@ -1,0 +1,41 @@
+<div class="sounds">
+  <TypographyTitle
+    :size="6"
+    :text="$t('pages.settings.notifications.sounds.title')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.message)"
+    @toggle="toggleSound(SoundsTypes.message, $event)"
+    :title="$t('pages.settings.notifications.sounds.message')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+  :value="sound(SoundsTypes.call)"
+  @toggle="toggleSound(SoundsTypes.call, $event)"
+    :title="$t('pages.settings.notifications.sounds.call')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.mute)"
+    @toggle="toggleSound(SoundsTypes.mute, $event)"
+    :title="$t('pages.settings.notifications.sounds.mute')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.deafen)"
+    @toggle="toggleSound(SoundsTypes.deafen, $event)"
+    :title="$t('pages.settings.notifications.sounds.deafen')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.undeafen)"
+    @toggle="toggleSound(SoundsTypes.undeafen, $event)"
+    :title="$t('pages.settings.notifications.sounds.undeafen')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.upload)"
+    @toggle="toggleSound(SoundsTypes.upload, $event)"
+    :title="$t('pages.settings.notifications.sounds.upload')"
+  />
+  <SettingsPagesNotificationsSoundsItem
+    :value="sound(SoundsTypes.connected)"
+    @toggle="toggleSound(SoundsTypes.connected, $event)"
+    :title="$t('pages.settings.notifications.sounds.connected')"
+  />
+</div>
