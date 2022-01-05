@@ -18,19 +18,6 @@
     v-on:click='() => $data.showfull = !$data.showfull' />
   <div class='file-info'>
     <div class='download-container'>
-      <image-icon class='icon' />
-      <TypographySubtitle class='name-text' :size='6' :text='`${image.name}`' />
-
-      <a class='dl-text link' href='#' :download='image.url'>
-        <download-icon size='1x' class='icon' />
-        <TypographyText class='name-text text link' :text="$t('controls.download')" />
-      </a>
-    </div>
-
-    <TypographyText class='size-text' :text='`${image.type} - ${getFileSize}`' />
-
-  <div class='file-info'>
-    <div class='download-container'>
       <div class=' dl-icon-text'>
         <image-icon class='icon imag-icon' />
         <TypographySubtitle class='name-text' :size='6' :text='`${image.name}`' />
