@@ -21,7 +21,7 @@ export default Vue.extend({
     },
     sidebar: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   computed: {

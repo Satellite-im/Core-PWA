@@ -14,7 +14,8 @@
     >
       <UiGlobal />
 
-      <swiper class="swiper" :options="swiperOption" ref="swiper">
+      <swiper class="swiper"
+:options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -23,7 +24,7 @@
             :open-modal="toggleModal"
           />
           <Sidebar
-            :showMenu="toggleMenu"
+            :show-menu="toggleMenu"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="sidebar"
@@ -32,12 +33,13 @@
         <swiper-slide class="dynamic-content">
           <menu-icon
             class="toggle--sidebar"
-            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
           />
-          <Nuxt id="files" ref="files" />
+          <Nuxt id="files"
+ref="files" />
         </swiper-slide>
       </swiper>
     </div>
@@ -55,17 +57,15 @@ import { mapState } from 'vuex'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'FilesLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
   data() {
     return {
       sidebar: true,
@@ -74,12 +74,12 @@ export default Vue.extend({
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
-          }
-        }
+          },
+        },
       },
     }
   },
@@ -93,7 +93,7 @@ export default Vue.extend({
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
       }
-    }
+    },
   },
 })
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div :class="`${inverted ? 'inverted' : ''} generic-block-loader`">
-    <div v-for="i in count" :key="i" class="generic-block-loader-item">
+    <div v-for="i in count"
+:key="i" class="generic-block-loader-item">
       <div class="right">
         <div class="placeholder-item shortest" />
         <div class="placeholder-item" />

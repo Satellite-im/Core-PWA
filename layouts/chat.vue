@@ -15,7 +15,8 @@
       }`"
     >
       <UiGlobal />
-      <swiper class="swiper" :options="swiperOption" ref="swiper">
+      <swiper class="swiper"
+:options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -26,17 +27,19 @@
           <Sidebar
             :users="friends.all"
             :groups="$mock.groups"
-            :showMenu="toggleMenu"
+            :show-menu="toggleMenu"
             :sidebar="sidebar"
           />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+        <swiper-slide
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+        >
           <menu-icon
             class="toggle--sidebar"
-            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
           />
           <Toolbar
             id="toolbar"
@@ -61,9 +64,8 @@
             :contents="ui.messages"
             :prevent-scroll-offset="500"
             :class="
-              this.$store.state.friends.all.find(
-                (friend) =>
-                  friend.address === this.$store.state.webrtc.activeCall,
+              $store.state.friends.all.find(
+                (friend) => friend.address === $store.state.webrtc.activeCall,
               )
                 ? 'media-open'
                 : 'media-unopen'
@@ -78,7 +80,7 @@
           <ChatbarReply v-if="recipient" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
-        <swiper-slide class="aside-container" v-if="$data.asidebar">
+        <swiper-slide v-if="$data.asidebar" class="aside-container">
           <GroupAside
             :toggle="() => ($data.asidebar = !$data.asidebar)"
             :selected-group="
@@ -107,11 +109,11 @@ import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ChatLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
   data() {
     return {
       sidebar: true,

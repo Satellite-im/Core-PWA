@@ -1,4 +1,4 @@
-<template src="./Meter.html"></template>
+<template src="./Meter.html" />
 
 <script lang="ts">
 import Vue from 'vue'

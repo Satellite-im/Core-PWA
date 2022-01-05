@@ -1,6 +1,7 @@
 <template>
   <div id="bottom-bar-container">
-    <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
+    <UiChatTypingIndicator v-if="typing"
+:users="usersTyping" />
     <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
       {{ lengthCount }}
     </span>

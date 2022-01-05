@@ -14,7 +14,8 @@
     >
       <UiGlobal />
 
-      <swiper class="swiper" :options="swiperOption" ref="swiper">
+      <swiper class="swiper"
+:options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -24,18 +25,20 @@
           />
           <ServerSidebar
             :toggle="() => ($data.sidebar = !$data.sidebar)"
-            :showMenu="toggleMenu"
+            :show-menu="toggleMenu"
             :sidebar="sidebar"
           />
           <Enhancers />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+        <swiper-slide
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+        >
           <menu-icon
             class="toggle--sidebar"
-            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
           />
           <Toolbar
             id="toolbar"
@@ -78,17 +81,15 @@ import { mapState } from 'vuex'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ServerLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
   data() {
     return {
       sidebar: true,
@@ -97,12 +98,12 @@ export default Vue.extend({
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
-          }
-        }
+          },
+        },
       },
     }
   },
@@ -119,7 +120,7 @@ export default Vue.extend({
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
       }
-    }
+    },
   },
 })
 </script>
