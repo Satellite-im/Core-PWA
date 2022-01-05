@@ -1,4 +1,4 @@
-<div :class="file.type.includes('image') ? 'embeded-image' : 'embeded-file'">
+<div :class="file.type.includes('image') ? 'embedded-image' : 'embedded-file'">
   <file-icon size="1x" class="file-icon" v-if="!file.type.includes('image')" />
   <UiChatImage
     v-if="file.type.includes('image')"
