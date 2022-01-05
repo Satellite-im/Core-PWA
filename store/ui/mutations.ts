@@ -14,6 +14,9 @@ export default {
   showSidebarUsers(state: UIState, enabled: boolean) {
     state.showSidebarUsers = enabled
   },
+  showSidebar(state: UIState, enabled: boolean) {
+    state.showSidebar = enabled
+  },
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values
   },

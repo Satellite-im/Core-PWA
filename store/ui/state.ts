@@ -3,6 +3,7 @@ import { UIState, GlyphMarketViewStatus, Themes, Flairs } from './types'
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
+  showSidebar: true,
   showSearchResult: false,
   showSettings: false,
   settingsSideBar: true,

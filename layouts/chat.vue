@@ -2,13 +2,13 @@
   <div
     id="app-wrap"
     :class="`${$store.state.ui.theme.base.class}
-    ${sidebar ? 'is-open' : 'is-collapsed'} ${
+    ${showSidebar ? 'is-open' : 'is-collapsed'} ${
       asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
     } ${selectedGroup ? 'active-group' : null}`"
   >
     <div
       id="app"
-      :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
+      :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
         asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
       } ${selectedGroup ? 'group' : 'direct'} ${
         $device.isMobile ? 'mobile-app' : 'desktop'
@@ -26,17 +26,18 @@
           <Sidebar
             :users="friends.all"
             :groups="$mock.groups"
-            :showMenu="toggleMenu"
-            :sidebar="sidebar"
+            :sidebar="showSidebar"
           />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+        <swiper-slide
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+        >
           <menu-icon
             class="toggle--sidebar"
             v-on:click="toggleMenu"
             size="1.2x"
             full-width
-            :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
           />
           <Toolbar
             id="toolbar"
@@ -72,7 +73,7 @@
           >
             <Nuxt />
           </UiChatScroll>
-          <Enhancers :sidebar="sidebar" />
+          <Enhancers :sidebar="showSidebar" />
           <WalletMini v-if="ui.modals.walletMini" />
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
           <ChatbarReply v-if="recipient" />
@@ -99,7 +100,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
@@ -114,7 +115,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      sidebar: true,
       asidebar: !this.$device.isMobile,
       swiperOption: {
         initialSlide: 0,
@@ -124,8 +124,13 @@ export default Vue.extend({
         allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
-            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
-            this.$data.asidebar = this.$refs.swiper.$swiper.activeIndex === 2
+            if (this.$refs.swiper) {
+              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+              if (this.showSidebar !== newShowSidebar) {
+                this.$store.commit('ui/showSidebar', newShowSidebar)
+              }
+              this.$data.asidebar = this.$refs.swiper.$swiper.activeIndex === 2
+            }
           },
         },
       },
@@ -133,6 +138,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['audio', 'ui', 'media', 'friends']),
+    ...mapGetters('ui', ['showSidebar']),
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
@@ -150,6 +156,15 @@ export default Vue.extend({
       return recipient
     },
   },
+  watch: {
+    showSidebar(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        newValue
+          ? this.$refs.swiper.$swiper.slidePrev()
+          : this.$refs.swiper.$swiper.slideNext()
+      }
+    },
+  },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
@@ -160,14 +175,16 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
+
+    if (this.$device.isMobile && this.$route.params.id) {
+      this.$store.commit('ui/showSidebar', false)
+    } else {
+      this.$store.commit('ui/showSidebar', true)
+    }
   },
   methods: {
     toggleMenu() {
-      if (this.$refs.swiper.$swiper) {
-        this.$data.sidebar
-          ? this.$refs.swiper.$swiper.slideNext()
-          : this.$refs.swiper.$swiper.slidePrev()
-      }
+      this.$store.commit('ui/showSidebar', !this.showSidebar)
     },
   },
 })

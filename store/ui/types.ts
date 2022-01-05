@@ -127,6 +127,7 @@ export interface UIState {
   settingsSideBar: Boolean
   showSidebarUsers: Boolean
   showSearchResult: Boolean
+  showSidebar: boolean,
   modals: Object
   glyphModalPack: String
   chatbarContent: String
