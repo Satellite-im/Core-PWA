@@ -37,6 +37,13 @@ export default Vue.extend({
      */
     toggleFullscreen() {
       this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
+      const elements = document.querySelectorAll('.full-video')
+      if (elements && elements.length > 0 && !this.ui.fullscreen) {
+        for (let i = 0; i < elements.length; i++) {
+          const element = elements[i];
+          element?.classList.remove('full-video')
+        }
+      }
     },
     elapsedTime(start: number): void {
       const duration = dayjs.duration(Date.now() - start)

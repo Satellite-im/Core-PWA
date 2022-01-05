@@ -13,6 +13,7 @@
   &:extend(.round-corners);
 
   #media {
+    position: relative;
     display: flex;
     flex: 1;
     &:extend(.full-width);
@@ -21,6 +22,12 @@
     align-items: center;
     flex-wrap: wrap;
     .user {
+      &.full-video {
+        position: absolute;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 100;
+      }
       .video-stream-container {
         height: 9rem;
         min-width: 16rem;

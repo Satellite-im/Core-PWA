@@ -1,14 +1,22 @@
 <div id="mediastream" ref="mediastream" v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)">
   <MediaHeading />
   <div id="media" ref="media">
-    <!--TODO: Move to MediaUser --> //AP-392
-    <div class="user">
+    <!--TODO: Move to MediaUser -->
+    <div
+      class="user"
+      id="local_video"
+      @dblclick="handleDoubleClick('local_video')"
+    >
       <div class="video-stream-container" v-if="localVideoStream">
         <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
       </div>
     </div>
     <!--TODO: Move to MediaUser -->
-    <div class="user">
+    <div
+      class="user"
+      id="remote_video"
+      @dblclick="handleDoubleClick('remote_video')"
+    >
       <div class="video-stream-container" v-if="remoteVideoStream">
         <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
       </div>
