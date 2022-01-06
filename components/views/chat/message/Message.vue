@@ -72,7 +72,7 @@ export default Vue.extend({
             if (['image', 'video', 'audio', 'file'].includes(type)) {
               finalPayload = this.$t('conversation.multimedia')
             }
-            navigator.clipboard.writeText(finalPayload)
+            this.$envinfo.navigator.clipboard.writeText(finalPayload)
           },
         },
         { text: 'Copy Image', func: (this as any).testFunc },

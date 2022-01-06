@@ -15,11 +15,11 @@
       <br />
       <pre>
         App Version: {{ this.$config.clientVersion }}
-        Browser:     {{ window.navigator.vendor }}, {{ window.navigator.product }}
-        Language:    {{ window.navigator.product }}
+        Browser:     {{ this.$envinfo.navigator.vendor }}, {{ this.$envinfo.navigator.product }}
+        Language:    {{ this.$envinfo.navigator.product }}
         <span v-if="cpu">Platform:    {{cpu}}</span>
         <span v-if="renderer">Processor:   {{renderer}}</span>
-        Online:      {{ window.navigator.onLine }}
+        Online:      {{ this.$envinfo.navigator.onLine }}
       </pre
       >
     </div>
