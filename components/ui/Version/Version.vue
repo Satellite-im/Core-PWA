@@ -1,6 +1,7 @@
 <template>
-  <p class="version"
-data-cy="version">
+  <p
+class="version" data-cy="version"
+>
     <span v-if="name">
       {{ $config.clientName }}
     </span>

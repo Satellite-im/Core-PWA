@@ -14,8 +14,10 @@
     >
       <UiGlobal />
 
-      <swiper class="swiper"
-:options="swiperOption" ref="swiper">
+      <swiper
+class="swiper" :options="swiperOption"
+ref="swiper"
+>
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"

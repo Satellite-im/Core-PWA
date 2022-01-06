@@ -1,9 +1,12 @@
 <template>
   <div class="voice-user">
-    <UiCircle type="random"
-:seed="user.address" :size="25" />
-    <TypographyText :text="user.name"
-class="voice-user-name" />
+    <UiCircle
+type="random" :seed="user.address"
+:size="25"
+/>
+    <TypographyText
+:text="user.name" class="voice-user-name"
+/>
   </div>
 </template>
 

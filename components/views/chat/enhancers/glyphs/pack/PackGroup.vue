@@ -1,6 +1,7 @@
 <template>
-  <EnhancersGlyphsPack :key="source.id"
-:pack="source" />
+  <EnhancersGlyphsPack
+:key="source.id" :pack="source"
+/>
 </template>
 
 <script lang="ts">

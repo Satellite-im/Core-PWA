@@ -15,8 +15,10 @@
       }`"
     >
       <UiGlobal />
-      <swiper class="swiper"
-:options="swiperOption" ref="swiper">
+      <swiper
+class="swiper" :options="swiperOption"
+ref="swiper"
+>
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -80,7 +82,8 @@
           <ChatbarReply v-if="recipient" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
-        <swiper-slide v-if="$data.asidebar" class="aside-container">
+        <swiper-slide v-if="$data.asidebar"
+class="aside-container">
           <GroupAside
             :toggle="() => ($data.asidebar = !$data.asidebar)"
             :selected-group="

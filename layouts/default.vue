@@ -1,6 +1,7 @@
 <template>
-  <div id="app"
-:class="$store.state.ui.theme.base.class">
+  <div
+id="app" :class="$store.state.ui.theme.base.class"
+>
     <Nuxt />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
