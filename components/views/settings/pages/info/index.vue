@@ -26,23 +26,6 @@ export default Vue.extend({
   },
   mounted() {
     this.getReleaseBody()
-    // if (this.window.navigator.product === 'Gecko') {
-    //   const canvas = document.createElement('canvas')
-    //   let gl, debugInfo, vendor, renderer
-    //   try {
-    //     gl =
-    //       canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-    //   } catch (e) {
-    //     console.warn('cannot create webgl canvas')
-    //   }
-
-    //   if (gl) {
-    //     this.debugInfo = gl.getExtension('WEBGL_debug_renderer_info')
-    //     this.cpu = gl.getParameter(this.debugInfo.UNMASKED_VENDOR_WEBGL)
-    //     this.renderer = gl.getParameter(this.debugInfo.UNMASKED_RENDERER_WEBGL)
-    //   }
-    // }
-
     this.debugInfo = this.$envinfo.debugInfo
     this.cpu = this.$envinfo.cpu
     this.renderer = this.$envinfo.renderer
