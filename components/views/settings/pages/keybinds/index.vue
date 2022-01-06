@@ -5,6 +5,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'KeybindSettings',
@@ -136,11 +137,11 @@ export default Vue.extend({
       const newString = this.$data.editingKeybind.newString
       const keyAlreadyBound = newString.includes(key)
 
-      const keyAlreadyExist = navigator.userAgent.indexOf("Mac") ? 
+      const keyAlreadyExist = navigator.userAgent.indexOf("Mac") > 0 ? 
         macShortcuts.includes(newString + '+' + key) : 
         windowsShortcuts.includes(newString + '+' + key)
 
-      const modifiers = ['shift', 'control', 'alt', 'meta', 'tab', 'capslock']
+      const modifiers = Object.values(ModifierKeysEnum)
       const isModifier = modifiers.includes(key)
       let hasAlphanumeric = false
       for (const char of newString.split('+')) {
@@ -149,22 +150,21 @@ export default Vue.extend({
         }
       }
       const modifierAfterAlphanumeric = hasAlphanumeric && isModifier
-      const blockedChars = ['capslock', 'delete']
+      const blockedChars = Object.values(BlockKeysEnum)
       const hasBlockedChars = blockedChars.includes(key)
 
       if (keyAlreadyExist) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = 'That is browser/system shortcut. Please input other keys.'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
       } else if (keyAlreadyBound) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = 'Key already bound'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.existHotkeyError')
       } else if (modifierAfterAlphanumeric) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage =
-          'Modifiers (Shift, Tab, Option, etc.) Must Come Before Alphanumerics'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.modifierHotkeyError')
       } else if (hasBlockedChars) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = 'Character Not Allowed'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.editHotkeyError')
       } else {
         this.$data.editingKeybind.error = false
         this.$data.editingKeybind.errorMessage = ''
