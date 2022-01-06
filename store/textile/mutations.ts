@@ -2,7 +2,6 @@ import { TextileState } from './types'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
-import { db } from '~/plugins/thirdparty/dexie'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
@@ -107,32 +106,6 @@ const mutations = {
         end,
       },
     }
-
-    // indexeddb work below
-
-    // don't store editing message
-    if (message.editingAt) {
-      return
-    }
-
-    // replace old message with new edited version
-    if (message.editedAt) {
-      db.conversations.get(address).then((convo) => {
-        if (!convo) {
-          return
-        }
-        const index = convo[address].map((e) => e.id).indexOf(message.id)
-        convo[address][index] = message
-        db.conversations.put(convo)
-      })
-      return
-    }
-
-    // add regular message to indexeddb
-    db.conversations
-      .where('key')
-      .equals(address)
-      .modify((convo) => convo[address].push(message))
   },
   setConversationLoading(
     state: TextileState,
