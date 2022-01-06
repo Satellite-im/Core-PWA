@@ -4,6 +4,7 @@
 // @ts-nocheck
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
 
 export default Vue.extend({
   name: 'KeybindSettings',
@@ -135,6 +136,10 @@ export default Vue.extend({
       const newString = this.$data.editingKeybind.newString
       const keyAlreadyBound = newString.includes(key)
 
+      const keyAlreadyExist = navigator.userAgent.indexOf("Mac") ? 
+        macShortcuts.includes(newString + '+' + key) : 
+        windowsShortcuts.includes(newString + '+' + key)
+
       const modifiers = ['shift', 'control', 'alt', 'meta', 'tab', 'capslock']
       const isModifier = modifiers.includes(key)
       let hasAlphanumeric = false
@@ -147,7 +152,10 @@ export default Vue.extend({
       const blockedChars = ['capslock', 'delete']
       const hasBlockedChars = blockedChars.includes(key)
 
-      if (keyAlreadyBound) {
+      if (keyAlreadyExist) {
+        this.$data.editingKeybind.error = true
+        this.$data.editingKeybind.errorMessage = 'That is browser/system shortcut. Please input other keys.'
+      } else if (keyAlreadyBound) {
         this.$data.editingKeybind.error = true
         this.$data.editingKeybind.errorMessage = 'Key already bound'
       } else if (modifierAfterAlphanumeric) {
