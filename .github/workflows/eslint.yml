@@ -7,16 +7,12 @@ on:
       - dev
 
 jobs:
-  eslint_check:
-    name: Prepare action
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout 
-      uses: actions/checkout@v1
-    - name: Lint
-      uses: Krizzu/eslint-check-action@v1.1.0
-      with:
-        ghToken: ${{ secrets.GITHUB_TOKEN }}
-        eslintFiles: "lib, scripts"
-        eslintConfig: ".eslintrc.js"
-        eslintExt: "ts, tsx"
+      - uses: actions/checkout@v2
+      - uses: rpkak/ESLint-PR-review@latest
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          src: src
+          eslint-format: table
