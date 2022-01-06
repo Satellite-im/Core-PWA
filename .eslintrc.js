@@ -10,8 +10,10 @@ module.exports = {
     'plugin:nuxt/recommended',
     'plugin:vue/vue3-recommended',
   ],
-  plugins: [],
-  // add your custom rules here
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error',
+  },
   rules: {
     'vue/script-setup-uses-vars': 0,
     'import/named': 0,
