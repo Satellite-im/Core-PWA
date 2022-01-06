@@ -94,6 +94,7 @@ export class MailboxManager {
 
     // if messages are stored in indexeddb, only fetch new messages from textile
     if (lastInbound) {
+      lastInbound = lastInbound * 1000000 // textile has a more specific unix timestamp, matching theirs
       inboxQuery = Query.where('from')
         .eq(friendIdentifier)
         .and(PropCommonEnum.MOD)
@@ -130,7 +131,7 @@ export class MailboxManager {
 
     let encryptedSentbox: MessageFromThread[] = []
 
-    // only fetch sent messages if indexeddb is empty. after that, sending/editing action will add to indexeddb
+    // only fetch sent messages from textile if indexeddb is empty. after that, fetch sent messages from indexeddb
     if (lastInbound === undefined) {
       encryptedSentbox = await this.textile.client.find<MessageFromThread>(
         threadID,

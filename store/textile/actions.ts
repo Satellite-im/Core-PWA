@@ -9,7 +9,6 @@ import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
-import { reject } from 'lodash'
 
 export default {
   /**
@@ -83,10 +82,10 @@ export default {
       const textileMessages = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,
         query,
-        lastInbound: lastInbound * 1000000, // textile has a more specific unix timestamp, matching theirs
+        lastInbound: lastInbound,
       })
 
-      // use textileMessages as primary source. this way, old versions of edited messages (with the same id) will not be used
+      // use textileMessages as primary source. this way, edited messages will use the newest version
       const ids = new Set(textileMessages.map((d) => d.id))
       conversation = [
         ...textileMessages,
