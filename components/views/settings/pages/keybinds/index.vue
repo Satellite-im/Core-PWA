@@ -63,7 +63,7 @@ export default Vue.extend({
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
       const newKeybind = this.$data.editingKeybind.newString
-      console.log("newKeyBind", newKeybind)
+      
       for (const key in this.settings.keybinds) {
         if (this.checkSystemHotkey(this.settings.keybinds[key])) {
           this.$data.editingKeybind.error = true
@@ -183,11 +183,11 @@ export default Vue.extend({
         this.$data.editingKeybind.errorMessage = ''
       }
     },
-    checkSystemHotkey(keys) {
+    checkSystemHotkey(keys: string) {
       return navigator.userAgent.indexOf("Mac") > 0 ? 
         macShortcuts.includes(keys) : 
         windowsShortcuts.includes(keys)
-    }
+    },
   },
 })
 </script>
