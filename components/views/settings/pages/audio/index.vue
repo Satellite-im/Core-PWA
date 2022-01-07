@@ -356,7 +356,7 @@ export default Vue.extend({
      * @example
      */
     hasConstraint(prop: keyof MediaTrackConstraintSet): Boolean {
-      const supports = navigator.mediaDevices.getSupportedConstraints()
+      const supports = this.$envinfo.navigator.mediaDevices.getSupportedConstraints()
       return Boolean(supports[prop])
     },
     /**

@@ -70,7 +70,7 @@ export default Vue.extend({
         lineno,
         colno,
         error,
-        userAgent: navigator.userAgent,
+        userAgent: this.$envinfo.navigator.userAgent,
       }
     }
   },
