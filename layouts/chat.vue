@@ -27,6 +27,7 @@
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
+            :showMenu="toggleMenu"
           />
         </swiper-slide>
         <swiper-slide
