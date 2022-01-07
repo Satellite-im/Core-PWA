@@ -97,17 +97,22 @@ export default Vue.extend({
           : this.$refs.swiper.$swiper.slideNext()
       }
     },
+    $route() {
+      this.showInitialSidebar()
+    },
   },
   mounted() {
-    if (this.$device.isMobile && !this.$route.query?.sidebar) {
-      this.$store.commit('ui/showSidebar', false)
-    } else {
-      this.$store.commit('ui/showSidebar', true)
-    }
+    this.showInitialSidebar()
   },
   methods: {
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
+    },
+    showInitialSidebar() {
+      if (this.$device.isMobile && !this.$route.query?.sidebar) {
+        return this.$store.commit('ui/showSidebar', false)
+      }
+      this.$store.commit('ui/showSidebar', true)
     },
   },
 })

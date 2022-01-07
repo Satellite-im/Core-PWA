@@ -108,11 +108,11 @@ import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ChatLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: ['authenticated'],
   data() {
     return {
       asidebar: !this.$device.isMobile,
@@ -164,6 +164,9 @@ export default Vue.extend({
           : this.$refs.swiper.$swiper.slideNext()
       }
     },
+    $route() {
+      this.showInitialSidebar()
+    },
   },
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
@@ -175,16 +178,17 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-
-    if (this.$device.isMobile && this.$route.params.id) {
-      this.$store.commit('ui/showSidebar', false)
-    } else {
-      this.$store.commit('ui/showSidebar', true)
-    }
+    this.showInitialSidebar()
   },
   methods: {
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
+    },
+    showInitialSidebar() {
+      if (this.$device.isMobile && this.$route.params.address) {
+        return this.$store.commit('ui/showSidebar', false)
+      }
+      this.$store.commit('ui/showSidebar', true)
     },
   },
 })
