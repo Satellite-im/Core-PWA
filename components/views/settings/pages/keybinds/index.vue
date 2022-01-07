@@ -63,7 +63,17 @@ export default Vue.extend({
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
       const newKeybind = this.$data.editingKeybind.newString
+      console.log("newKeyBind", newKeybind)
       for (const key in this.settings.keybinds) {
+        if (this.checkSystemHotkey(this.settings.keybinds[key])) {
+          this.$data.editingKeybind.error = true
+          this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+          this.$store.commit('settings/updateKeybinding', {
+            keybindName: key,
+            newKeybind: '',
+          })
+        }
+
         if (this.settings.keybinds[key] === newKeybind) {
           this.$store.commit('settings/updateKeybinding', {
             keybindName: key,
@@ -71,13 +81,18 @@ export default Vue.extend({
           })
         }
       }
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName,
-        newKeybind,
-      })
-      this.$data.editingKeybind.newString = ''
-      this.$data.editingKeybind.status = false
-      this.$store.dispatch('ui/activateKeybinds')
+      if (!this.checkSystemHotkey(newKeybind)) {
+        this.$store.commit('settings/updateKeybinding', {
+          keybindName,
+          newKeybind,
+        })
+        this.$data.editingKeybind.newString = ''
+        this.$data.editingKeybind.status = false
+        this.$store.dispatch('ui/activateKeybinds')
+      } else {
+        this.$data.editingKeybind.error = true
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+      }
     },
     /**
      * @method cancelKeybind DocsTODO
@@ -137,9 +152,7 @@ export default Vue.extend({
       const newString = this.$data.editingKeybind.newString
       const keyAlreadyBound = newString.includes(key)
 
-      const keyAlreadyExist = navigator.userAgent.indexOf("Mac") > 0 ? 
-        macShortcuts.includes(newString + '+' + key) : 
-        windowsShortcuts.includes(newString + '+' + key)
+      const keyAlreadyExist = this.checkSystemHotkey(newString + '+' + key)
 
       const modifiers = Object.values(ModifierKeysEnum)
       const isModifier = modifiers.includes(key)
@@ -170,6 +183,11 @@ export default Vue.extend({
         this.$data.editingKeybind.errorMessage = ''
       }
     },
+    checkSystemHotkey(keys) {
+      return navigator.userAgent.indexOf("Mac") > 0 ? 
+        macShortcuts.includes(keys) : 
+        windowsShortcuts.includes(keys)
+    }
   },
 })
 </script>
