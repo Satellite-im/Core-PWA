@@ -45,7 +45,7 @@ export default Vue.extend({
     },
     sidebar: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   computed: {
@@ -60,29 +60,21 @@ export default Vue.extend({
       },
     },
   },
-  mounted() {
-    /**
-     * Opens and closes the left hand sidebar upon clicking on 'direct-chat', 'friends-list', and 'files-browse'
-     * when user is on a mobile device
-     */
-    if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
-
-    if (this.$route.name?.includes('friends-list') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
-
-    if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
-  },
   methods: {
     toggleModal() {
       this.$store.commit('ui/toggleModal', {
         name: 'quickchat',
         state: !this.ui.modals.quickchat,
       })
+    },
+    gotoAddFriends() {
+      if (this.$route.name?.includes('friends-list')) {
+        if (this.$device.isMobile) {
+          this.$store.commit('ui/showSidebar', false)
+        }
+      } else {
+        this.$router.push({ path: '/friends/list' })
+      }
     },
   },
 })

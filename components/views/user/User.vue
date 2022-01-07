@@ -52,6 +52,9 @@ export default Vue.extend({
      * @example ---
      */
     navigateToUser() {
+      if (this.$route.params.address === this.user.address && this.$device.isMobile) {
+        this.$store.commit('ui/showSidebar', false)
+      }
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
   },
