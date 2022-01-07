@@ -1,4 +1,3 @@
-// plugins/envinfo.ts
 import Vue from 'vue'
 
 import { EnvInfo } from '~/utilities/EnvInfo'
