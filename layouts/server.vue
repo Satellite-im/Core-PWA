@@ -91,16 +91,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      sidebar: true,
+      sidebar: this.$device.isMobile ? false : true,
       swiperOption: {
-        initialSlide: 0,
+        initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
-            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+            if (this.$refs.swiper && this.$refs.swiper.$swiper) {
+              this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+            }
           }
         }
       },
