@@ -232,5 +232,5 @@ export default defineNuxtConfig({
   },
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
-  ignore: 'store/*/types.ts',
+  ignore: ['**/*.test.*', 'store/*/types.ts'],
 })
