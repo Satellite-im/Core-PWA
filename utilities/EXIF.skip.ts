@@ -1,5 +1,6 @@
 //@ts-ignore
 import rewire from "rewire"
+import { expect } from '@jest/globals'
 const EXIF = rewire("~/utilities/EXIF")
 const strip = EXIF.__get__("strip")
 

@@ -1,4 +1,5 @@
 import * as Chatbar from '~/libraries/ui/Chatbar'
+import { expect } from '@jest/globals'
 
 describe("Chatbar.htmlToMarkdown", () => {
     test("0", () => {

@@ -1,4 +1,5 @@
 import * as ConsoleWarning from "~/utilities/ConsoleWarning"
+import { expect } from '@jest/globals'
 
 describe("ConsoleWarning.ConsoleWarning", () => {
     test("0", () => {

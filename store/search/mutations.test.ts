@@ -1,4 +1,5 @@
 import * as mutations from '~/store/search/mutations'
+import { expect } from '@jest/globals'
 
 describe("mutations.default.setSearchQuery", () => {
     test("0", () => {

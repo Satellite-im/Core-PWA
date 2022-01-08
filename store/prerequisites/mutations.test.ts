@@ -1,4 +1,5 @@
 import * as mutations from '~/store/prerequisites/mutations'
+import { expect } from '@jest/globals'
 
 describe("mutations.default.setTextileReady", () => {
     test("0", () => {

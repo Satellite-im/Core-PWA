@@ -1,4 +1,5 @@
 import * as mutations from '~/store/settings/mutations'
+import { expect } from '@jest/globals'
 
 describe("mutations.default.echoCancellation", () => {
     test("0", () => {
