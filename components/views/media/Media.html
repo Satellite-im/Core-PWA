@@ -1,4 +1,8 @@
-<div id="mediastream" ref="mediastream" v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)">
+<div
+  id="mediastream"
+  ref="mediastream"
+  v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)"
+>
   <MediaHeading />
   <div id="media" ref="media">
     <!--TODO: Move to MediaUser -->
@@ -7,9 +11,15 @@
       id="local_video"
       @dblclick="handleDoubleClick('local_video')"
     >
-      <div class="video-stream-container" v-if="localVideoStream">
-        <video class="video-stream" :src-object.prop="localVideoStream" autoplay muted></video>
+      <div v-if="localVideoStream" class="video-stream-container">
+        <video
+          class="video-stream"
+          :src-object.prop="localVideoStream"
+          autoplay
+          muted
+        ></video>
       </div>
+      <MediaUser v-else :user="accounts.details" />
     </div>
     <!--TODO: Move to MediaUser -->
     <div
@@ -17,18 +27,35 @@
       id="remote_video"
       @dblclick="handleDoubleClick('remote_video')"
     >
-      <div class="video-stream-container" v-if="remoteVideoStream">
-        <video class="video-stream"  :src-object.prop="remoteVideoStream" autoplay></video>
+      <div v-if="remoteVideoStream" class="video-stream-container">
+        <video
+          class="video-stream"
+          :src-object.prop="remoteVideoStream"
+          autoplay
+        ></video>
       </div>
+      <MediaUser v-else-if="recipient" :user="recipient" />
     </div>
-    <audio :src-object.prop="remoteAudioStream" v-if="remoteAudioStream" autoplay/>
+    <audio
+      :src-object.prop="remoteAudioStream"
+      v-if="remoteAudioStream"
+      autoplay
+    />
     <!-- <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
       :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" /> -->
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
-      class="more-user" v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}">...</div>
+      class="more-user"
+      v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
+    >
+      ...
+    </div>
   </div>
-  <MediaActionsVolume :volume="audio.volume" isPopup @volumeControlValueChange="volumeControlValueChange" />
+  <MediaActionsVolume
+    :volume="audio.volume"
+    isPopup
+    @volumeControlValueChange="volumeControlValueChange"
+  />
   <!-- {{fullscreen}} -->
   <MediaActionsSettings />
   <MediaActions />

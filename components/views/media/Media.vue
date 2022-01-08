@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
@@ -33,7 +34,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'accounts', 'friends']),
     propsToWatch() {
       return { users: this.users, fullscreen: this.fullscreen }
     },
@@ -88,6 +89,15 @@ export default Vue.extend({
       const remoteAudioTrack = peer?.call.getTrackById(id)
 
       return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
+    },
+    recipient() {
+      const isMe = this.$route.params.address === this.accounts.active
+      const recipient = isMe
+        ? null
+        : this.friends.all.find(
+            (friend: Friend) => friend.address === this.$route.params.address,
+          )
+      return recipient
     },
     ...mapState(['audio']),
   },
@@ -239,7 +249,7 @@ export default Vue.extend({
       } else {
         element?.classList.add('full-video')
       }
-    }
+    },
   },
 })
 </script>
