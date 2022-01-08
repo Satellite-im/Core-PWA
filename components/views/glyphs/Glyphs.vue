@@ -34,7 +34,7 @@ export default Vue.extend({
       this.closeModal()
       this.$store.commit('ui/toggleModal', {
         name: 'marketplace',
-        state: !this.ui.modals.marketPlace,
+        state: !this.ui.modals.marketplace,
       })
       const marketInfo = find(marketGlyphs, ({ glyph }) => {
         return glyph.name === this.selectedPack.name

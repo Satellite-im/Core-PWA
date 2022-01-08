@@ -14,7 +14,7 @@ const InitialUIState = (): UIState => ({
   modals: {
     newfolder: false,
     createServer: false,
-    marketPlace: false,
+    marketplace: false,
     wallet: false,
     quickchat: false,
     walletMini: false,
