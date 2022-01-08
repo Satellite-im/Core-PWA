@@ -66,15 +66,16 @@ export default Vue.extend({
   },
   data() {
     return {
+      sidebar: this.$device.isMobile ? false : true,
       swiperOption: {
-        initialSlide: 0,
+        initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
         allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
-            if (this.$refs.swiper) {
+            if (this.$refs.swiper && this.$refs.swiper.$swiper) {
               const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
               if (this.showSidebar !== newShowSidebar) {
                 this.$store.commit('ui/showSidebar', newShowSidebar)
