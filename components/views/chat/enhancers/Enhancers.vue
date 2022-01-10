@@ -90,8 +90,6 @@ export default Vue.extend({
      * @example v-on:select="addEmoji"
      */
     addEmoji(emoji: any, emojiName: string) {
-
-
       if (this.ui.settingReaction.status) {
         this.$store.dispatch('textile/sendReactionMessage', {
           to: this.ui.settingReaction.to,
