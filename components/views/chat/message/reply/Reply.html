@@ -19,7 +19,7 @@
       <div class="reply-body">
         <div class="reply-heading">
           <span v-on:click="showQuickProfile">
-            <!-- TODO: update badges --> //AP-397
+            <!-- TODO: update badges //AP-397 -->
             <UiUserName :username="getUsernameFromReply(reply)" :badge="''" />
           </span>
           <TypographyText :text="$dayjs(reply.at).from()" />
