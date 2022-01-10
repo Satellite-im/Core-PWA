@@ -1,4 +1,5 @@
 import * as io_ts from "~/utilities/io-ts"
+import { expect } from '@jest/globals'
 
 describe("io_ts.fromEnum", () => {
     test("0", () => {

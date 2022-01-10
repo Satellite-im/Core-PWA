@@ -1,4 +1,5 @@
 import * as mutations from '~/store/chat/mutations'
+import { expect } from '@jest/globals'
 
 describe("mutations.default.setChatReply", () => {
     test("0", () => {

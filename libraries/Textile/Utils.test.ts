@@ -1,4 +1,5 @@
 import * as utils from "~/libraries/Textile/utils"
+import { expect } from '@jest/globals'
 
 describe("utils.stringToTypedBase64", () => {
     test("0", () => {
