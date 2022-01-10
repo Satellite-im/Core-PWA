@@ -67,11 +67,11 @@ export default Vue.extend({
       const peer = this.$WebRTC.getPeer(activeCall)
 
       if (muted) {
-        this.$Sounds.playSound(Sounds.UNDEAFEN)
         peer?.call.unmute('video')
+        this.$Sounds.playSound(Sounds.UNDEAFEN)
       } else {
-        this.$Sounds.playSound(Sounds.DEAFEN)
         peer?.call.mute('video')
+        this.$Sounds.playSound(Sounds.DEAFEN)
       }
     },
     /**

@@ -48,7 +48,7 @@
       <phone-call-icon size="1x" class="control-icon" />
     </div>
     <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary ${!webrtc.connectedPeer ? 'disabled' : ''}`"
+      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
       :data-tooltip="webrtc.connectedPeer ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio', 'video'])"

@@ -70,7 +70,11 @@ export class Call extends Emitter<CallEventListeners> {
       {},
     )
 
-    this.stream = await navigator.mediaDevices.getUserMedia(constraintsToApply)
+    await navigator.mediaDevices.getUserMedia(constraintsToApply)
+      .then((stream) => this.stream = stream )
+      .catch((err) => {
+         console.log(err)
+      });
 
     const { audio, video } = this.getLocalTracks()
 
