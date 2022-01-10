@@ -53,6 +53,7 @@ export default Vue.extend({
       }${duration.format('mm:ss')}`
     },
     setTimer() {
+      this.$store.commit('webrtc/updateActiveStream', Date.now())
       if (this.webrtc && this.webrtc.activeStream) {
         if (!this.timerId) {
           this.elapsedTime(this.webrtc.activeStream.createdAt)
