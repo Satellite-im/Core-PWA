@@ -306,7 +306,6 @@ export default {
         type: 'reaction',
       },
     )
-
     commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,

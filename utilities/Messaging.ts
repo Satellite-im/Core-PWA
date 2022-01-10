@@ -10,8 +10,11 @@ import {
   MessagesTracker,
   ReactionsTracker,
   RepliesTracker,
-  GlyphMessage,
+  GlyphMessage, ImageMessage,
 } from '~/types/textile/mailbox'
+import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
+import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
+import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
@@ -63,9 +66,8 @@ export function groupMessages(
     // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
-
     const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(prevMessage.at, 'day')
+      ? dayjs(currentMessage.at).isSame(prevMessage.at, MeasurementUnitsEnum.DAY)
       : false
 
     let isSameGroup
@@ -74,11 +76,11 @@ export function groupMessages(
     } else {
       const currentAt = dayjs(currentMessage.at)
       const prevAt = dayjs(prevMessage.at)
-      if (!dayjs().isSame(currentAt, 'day')) {
-        isSameGroup = currentAt.isSame(prevAt, 'day')
+      if (!dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)) {
+        isSameGroup = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
       } else {
         const prevAt = dayjs(prevMessage.at)
-        isSameGroup = currentAt.diff(prevAt, 'minutes') < 15 ? true : false
+        isSameGroup = currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
       }
     }
 
@@ -87,7 +89,7 @@ export function groupMessages(
       groupedMessages.push({
         id: `${currentMessage.id}-divider`,
         at: currentMessage.at,
-        type: 'divider',
+        type: MessagingTypesEnum.DIVIDER,
       })
     }
     const isSameSender = currentMessage.from === prevMessage?.from
@@ -99,14 +101,14 @@ export function groupMessages(
     // Checks if the message must be included in a new group
     const isNewGroup =
       groupedMessages.length === 0 ||
-      groupOrDivider?.type === 'divider' ||
+      groupOrDivider?.type === MessagingTypesEnum.DIVIDER ||
       !isSameSender ||
-      (prevMessage && !isSameGroup)
-
+      (prevMessage && !isSameGroup) ||
+      currentMessage.type === MessagingTypesEnum.FILE
     if (isNewGroup) {
       groupedMessages.push({
         id: currentMessage.id,
-        type: 'group',
+        type: MessagingTypesEnum.GROUP,
         at: currentMessage.at,
         from: currentMessage.from,
         to: currentMessage.to,
@@ -173,36 +175,37 @@ export function updateMessageTracker(
 
   for (let i = 0; i < inputMessages.length; i++) {
     const currentMessage = inputMessages[i]
-
     switch (currentMessage.type) {
-      case 'reply':
+      case MessagingTypesEnum.REPLY:
         const reply: ReplyMessage = currentMessage
         repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
         if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
           repliesTracker[reply.repliedTo].push(reply)
         break
-      case 'reaction':
+      case MessagingTypesEnum.REACTION:
         const reaction: ReactionMessage = currentMessage
         reactionsTracker[reaction.reactedTo] =
           reactionsTracker[reaction.reactedTo] || []
         if (
           !reactionsTracker[reaction.reactedTo].some(
-            (elm) => elm.id === reaction.id,
+            (elm) => {
+              return elm.id === reaction.id
+            },
           )
         )
           reactionsTracker[reaction.reactedTo].push(reaction)
         break
-      case 'file':
+      case MessagingTypesEnum.FILE:
         const fileMessage: FileMessage = currentMessage
 
         messagesTracker[fileMessage.id] = fileMessage
         break
-      case 'text':
+      case MessagingTypesEnum.TEXT:
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
         break
-      case 'glyph':
+      case MessagingTypesEnum.GLYPH:
         const glyphMessage: GlyphMessage = currentMessage
 
         messagesTracker[glyphMessage.id] = glyphMessage
@@ -222,7 +225,7 @@ export function getUsernameFromState(
   textilePublicKey: string,
   state: RootState,
 ) {
-  return getFullUserInfoFromState(textilePublicKey, state)?.name || 'unknown'
+  return getFullUserInfoFromState(textilePublicKey, state)?.name || PropCommonEnum.UNKNOWN
 }
 
 export function getAddressFromState(
@@ -232,7 +235,7 @@ export function getAddressFromState(
   const address =
     state.friends.all.find(
       (friend) => friend.textilePubkey === textilePublicKey,
-    )?.address || 'unknown'
+    )?.address || PropCommonEnum.UNKNOWN
 
   return address
 }
@@ -248,8 +251,8 @@ export function getFullUserInfoFromState(
   const userInfo = isMe
     ? accountDetails
     : state.friends.all.find(
-        (friend) => friend.textilePubkey === textilePublicKey,
-      )
+      (friend) => friend.textilePubkey === textilePublicKey,
+    )
 
   return userInfo
 }

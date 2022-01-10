@@ -208,13 +208,14 @@ export default {
     const currGroup = messageGroups?.find(
       (group) => group.id === reaction.groupID,
     )
-
     if (currGroup?.messages) {
       // Find message in message group or reply in message meant for reaction
       let currMessage
       if (reaction.replyID) {
         currMessage = currGroup?.messages
-          .find((message) => message.id === reaction.messageID)
+          .find((message) => {
+            return message.id === reaction.messageID
+          })
           ?.replies.find((reply) => reply.id === reaction.replyID)
       } else {
         currMessage = currGroup?.messages.find(
