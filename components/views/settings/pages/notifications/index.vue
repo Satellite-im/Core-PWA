@@ -41,7 +41,7 @@ export default Vue.extend({
     // Check for new input sources
 
     // @ts-ignore
-    this.$data.Platform = this.$notifications.currentPlatform
+    this.$data.Platform = this.$envinfo.currentPlatform
     // @ts-ignore
     this.$data.NotificationStatus = this.$notifications.notificationPermission
 

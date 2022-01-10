@@ -1,14 +1,14 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
+    :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
       $store.state.ui.theme.base.class
     }`"
   >
     <div
       id="app"
       :class="[
-        sidebar ? 'is-open' : 'is-collapsed',
+        showSidebar ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : 'desktop',
       ]"
     >
@@ -23,10 +23,10 @@
             :open-modal="toggleModal"
           />
           <Sidebar
-            :showMenu="toggleMenu"
             :users="friends.all"
             :groups="$mock.groups"
-            :sidebar="sidebar"
+            :sidebar="showSidebar"
+            :showMenu="toggleMenu"
           />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
@@ -35,7 +35,7 @@
             v-on:click="toggleMenu"
             size="1.2x"
             full-width
-            :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
           />
           <Nuxt id="files" ref="files" />
         </swiper-slide>
@@ -51,13 +51,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -68,32 +66,54 @@ export default Vue.extend({
   },
   data() {
     return {
-      sidebar: true,
       swiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
-            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
-          }
-        }
+            if (this.$refs.swiper) {
+              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+              if (this.showSidebar !== newShowSidebar) {
+                this.$store.commit('ui/showSidebar', newShowSidebar)
+              }
+            }
+          },
+        },
       },
     }
   },
   computed: {
     ...mapState(['friends']),
+    ...mapGetters('ui', ['showSidebar']),
+  },
+  watch: {
+    showSidebar(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        newValue
+          ? this.$refs.swiper.$swiper.slidePrev()
+          : this.$refs.swiper.$swiper.slideNext()
+      }
+    },
+    $route() {
+      this.showInitialSidebar()
+    },
+  },
+  mounted() {
+    this.showInitialSidebar()
   },
   methods: {
     toggleMenu() {
-      if (this.$refs.swiper.$swiper) {
-        this.$data.sidebar
-          ? this.$refs.swiper.$swiper.slideNext()
-          : this.$refs.swiper.$swiper.slidePrev()
+      this.$store.commit('ui/showSidebar', !this.showSidebar)
+    },
+    showInitialSidebar() {
+      if (this.$device.isMobile && !this.$route.query?.sidebar) {
+        return this.$store.commit('ui/showSidebar', false)
       }
-    }
+      this.$store.commit('ui/showSidebar', true)
+    },
   },
 })
 </script>

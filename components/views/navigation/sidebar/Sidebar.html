@@ -106,7 +106,7 @@
             :text="$t('friends.add') + 's'"
             size="small"
             type="primary"
-            :action="() => $router.push('/friends/list?tab=add')"
+            :action="gotoAddFriends"
           >
             <user-plus-icon size="1.2x" />
           </InteractablesButton>

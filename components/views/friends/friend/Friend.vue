@@ -84,7 +84,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch(
           'friends/denyFriendRequest',
-          this.$props.friend.request
+          this.$props.friend.request,
         )
       } finally {
         this.loading = ''
@@ -100,7 +100,7 @@ export default Vue.extend({
     },
     sendMessageRequest() {
       this.$router.push(`/chat/direct/${this.$props.friend.address}`)
-    }
+    },
   },
 })
 </script>

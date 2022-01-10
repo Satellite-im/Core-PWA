@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
+import { EnvInfo } from './EnvInfo'
 
 // export interface LocalNotificationSchedule {
 //   at?: Date
@@ -33,7 +34,8 @@ export const Notifications = class Notifications {
   sendNotification: any = this.sendNotifications
 
   constructor() {
-    this.currentPlatform = Capacitor.getPlatform() // ios, web, android
+    let envinfo = new EnvInfo()
+    this.currentPlatform = envinfo.currentPlatform // ios, web, android
     if (this.currentPlatform === 'web') {
       // all mount needs for web/pwa
       if (this.notificationPermission !== 'granted' && isSupported()) {
