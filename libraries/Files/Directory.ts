@@ -8,7 +8,7 @@ export class Directory extends Item {
   /**
    * @param  {string=''} name Name of the new directory
    * @param  {DIRECTORY_TYPE=DIRECTORY_TYPE.DEFAULT} type directory type of the new folder
-   * @returns {DIRECTORY_TYPE}
+   * @returns {Directory}
    */
   constructor(name: string = '', type: DIRECTORY_TYPE = DIRECTORY_TYPE.DEFAULT) {
     super(name || 'un-named directory')
@@ -61,14 +61,14 @@ export class Directory extends Item {
    * @returns {boolean} returns true or false depending on if a child exists in the directory
    */
   addChild(child: Item): boolean {
-    if(this.hasChild(child.name)) return true
-    
-    if(child === this) throw new Error('Directory cannot contain itself')
+    if (this.hasChild(child.name)) return false
+
+    if( child === this) throw new Error('Directory cannot contain itself')
     
     let parent = this.parent
     
-    while(parent !== null) {
-      if(parent === child)
+    while (parent !== null) {
+      if (parent === child)
         throw new Error('Directory cannot contain one of its ancestors')
       parent = parent.parent
     }
