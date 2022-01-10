@@ -191,3 +191,10 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="less">
+.keybind-error {
+  padding-top: 1rem;
+  color: @red !important;
+}
+</style>
