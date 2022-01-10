@@ -10,7 +10,7 @@ import {
   MessagesTracker,
   ReactionsTracker,
   RepliesTracker,
-  GlyphMessage,
+  GlyphMessage, ImageMessage,
 } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
