@@ -18,6 +18,7 @@ module.exports = {
     'import/named': 0,
     'standard/no-callback-literal': 0,
     '@typescript-eslint/no-unused-vars': 0,
+    '@typescript-eslint/require-await': 0,
     'no-else-return': [
       'error',
       {
