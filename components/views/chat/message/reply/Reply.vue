@@ -6,7 +6,7 @@ import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
-import { Message, Group } from '~/types/messaging'
+import { UIMessage, Group } from '~/types/messaging'
 import { getUsernameFromState, getFullUserInfoFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   props: {
     message: {
-      type: Object as PropType<Message>,
+      type: Object as PropType<UIMessage>,
       default: () => ({
         id: '0',
         at: 1620515543000,
