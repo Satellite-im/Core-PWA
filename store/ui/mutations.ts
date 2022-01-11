@@ -213,9 +213,7 @@ export default {
       let currMessage
       if (reaction.replyID) {
         currMessage = currGroup?.messages
-          .find((message) => {
-            return message.id === reaction.messageID
-          })
+          .find((message) => { return message.id === reaction.messageID })
           ?.replies.find((reply) => reply.id === reaction.replyID)
       } else {
         currMessage = currGroup?.messages.find(

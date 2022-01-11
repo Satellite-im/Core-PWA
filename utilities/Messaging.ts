@@ -103,8 +103,7 @@ export function groupMessages(
       groupedMessages.length === 0 ||
       groupOrDivider?.type === MessagingTypesEnum.DIVIDER ||
       !isSameSender ||
-      (prevMessage && !isSameGroup) ||
-      currentMessage.type === MessagingTypesEnum.FILE
+      (prevMessage && !isSameGroup)
     if (isNewGroup) {
       groupedMessages.push({
         id: currentMessage.id,
