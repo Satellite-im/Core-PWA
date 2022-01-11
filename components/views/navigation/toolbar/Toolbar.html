@@ -29,11 +29,11 @@
     </div>
     <UiFloatingContainer
       v-if="showAlerts"
-      :offsets="[4.2, 2.3]"
+      :offsets="showSidebar ? [4.2] : [4.2, 2.3]"
       heading="Alerts"
       :width="25"
       :height="25"
-      class="alerts-floating-container"
+      :class="`alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
