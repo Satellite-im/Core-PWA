@@ -2,7 +2,6 @@ import { Directory } from '../Directory'
 import { Fil } from '../Fil'
 import { FileSystem } from '../FileSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
-import { FILE_TYPE } from '../types/file'
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -28,7 +27,7 @@ describe('Test FileSystem', () => {
     expect(filesystem.name).toEqual(mockFileSystemData.name))
   const newDirectory = filesystem.copyChild('Test Directory')
   if (newDirectory) {
-    it(`Correctly rejects diplicate entries`, () =>
+    it(`Correctly rejects duplicate entries`, () =>
       expect(filesystem.addChild(newDirectory)).toBe(false))
   }
 

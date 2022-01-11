@@ -1,7 +1,6 @@
 import { Directory } from '../Directory'
 import { Fil } from '../Fil'
 import { DIRECTORY_TYPE } from '../types/directory'
-import { FILE_TYPE } from '../types/file'
 
 describe('Test FileSystem Directory', () => {
   const mockFileData = {

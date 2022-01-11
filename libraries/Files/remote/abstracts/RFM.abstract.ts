@@ -1,7 +1,6 @@
-// Remote file managment
+// Remote file management
 
 import { Item } from "../../abstracts/Item.abstract";
-import { Directory } from "../../Directory";
 import { FileSystemErrors } from "../../errors/Errors";
 import { Fil } from "../../Fil";
 import { RFMInterface } from "../interface/RFM.interface";

@@ -4,7 +4,7 @@ import { FILE_TYPE } from '../types/file'
 describe('Test FileSystem File', () => {
   const mockFileData = {
     name: 'TestFile.png',
-    descrption: 'Test file description',
+    description: 'Test file description',
     hash: '0x0aef',
   }
 
@@ -12,8 +12,8 @@ describe('Test FileSystem File', () => {
 
   it(`Correctly returns a file name (${mockFileData.name})`, () =>
     expect(file.name).toEqual(mockFileData.name))
-  it(`Correctly returns a file description (${mockFileData.descrption})`, () =>
-    expect(file.description).toEqual(mockFileData.descrption))
+  it(`Correctly returns a file description (${mockFileData.description})`, () =>
+    expect(file.description).toEqual(mockFileData.description))
   it(`Correctly returns a file type (${FILE_TYPE.GENERIC})`, () =>
     expect(file.type).toEqual(FILE_TYPE.GENERIC))
   it(`Correctly returns a file hash (${mockFileData.hash})`, () =>
