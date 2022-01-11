@@ -116,9 +116,9 @@ export default Vue.extend({
       this.$data.editingKeybind.error = false
     },
     /**
-     * @method resetKeybinds DocsTODO
-     * @description
-     * @example
+     * @method resetKeybinds
+     * @description Resets keybind local state back to hard-coded defaults
+     * @example resetKeybinds()
      */
     resetKeybinds() {
       this.$store.commit('settings/updateKeybinding', {
