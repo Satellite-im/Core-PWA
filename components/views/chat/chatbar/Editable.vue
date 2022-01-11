@@ -1,5 +1,5 @@
 <template>
-  <div :style="`height: ${rowLength * 24 + 24}px`" class="editable-cointainer">
+  <div :style="`height: ${chatHeight}px`" class="editable-cointainer">
     <div
       ref="editable"
       contenteditable
@@ -168,9 +168,10 @@ export default Vue.extend({
   emits: ['input'],
   data() {
     return {
-      rowLength: 1,
+      chatHeight: 44, // inital height
     }
   },
+
   watch: {
     value() {
       if (!this.$refs?.editable) return
@@ -183,8 +184,7 @@ export default Vue.extend({
           rows.push(buildChatbarRow(line))
         })
       })
-
-      this.rowLength = rows.length
+      this.chatHeight = messageBox.offsetHeight
       messageBox.innerHTML = rows.join('')
       Cursor.setCurrentCursorPosition(pos, messageBox)
     },
@@ -230,7 +230,7 @@ export default Vue.extend({
       if (selection && selection.rangeCount > 0) {
         const node = selection.getRangeAt(0).commonAncestorContainer
         // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
-        if (node.innerText === '\n') {
+        if (node.innerText === '\n' && messageBox.innerText === '\n') {
           Cursor.setCurrentCursorPosition(0, messageBox)
         }
       }
@@ -252,25 +252,27 @@ export default Vue.extend({
   width: 100%;
 
   .editable-input {
-    height: 100%;
     width: 100%;
     position: absolute;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 11px;
+    padding-bottom: 11px;
     display: inline-block;
     overflow-wrap: break-word;
     word-break: break-word;
     white-space: break-spaces !important;
+    line-height: 22px;
 
     .chat-row-content {
-      height: 24px;
-
       .md-symbol {
         color: @gray;
       }
 
       .md-url {
         color: @primary-color;
+      }
+
+      .md-lang {
+        color: @green;
       }
     }
   }
