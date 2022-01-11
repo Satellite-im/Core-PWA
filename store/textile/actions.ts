@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { TextileState } from './types'
+import { TextileState, TextileError } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
@@ -8,7 +8,6 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
-import { TextileError } from './types'
 
 export default {
   /**
