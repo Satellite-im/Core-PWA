@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import { TextileState } from './types'
+import { TextileState, TextileError } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
-import {MessageRouteEnum, PropCommonEnum} from '~/libraries/Enums/enums'
+import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
@@ -46,13 +46,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.address === address)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     commit('setConversationLoading', { loading: true })
@@ -93,7 +93,7 @@ export default {
     const MailboxManager = $TextileManager.mailboxManager
 
     if (!MailboxManager) {
-      throw new Error('Mailbox manager not found')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
@@ -129,7 +129,7 @@ export default {
     const MailboxManager = $TextileManager.mailboxManager
 
     if (!MailboxManager) {
-      throw new Error('Mailbox manager not found')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.sentbox)) {
@@ -153,13 +153,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     commit('setMessageLoading', { loading: true })
@@ -195,7 +195,7 @@ export default {
     { commit, rootState }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType },
   ) {
-    document.body.style.cursor= PropCommonEnum.WAIT
+    document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const path = `/${file.file.name}`
     $TextileManager.bucketManager?.getBucket()
@@ -203,35 +203,38 @@ export default {
       file.file,
       path,
       (progress: number) => {
-        commit('setUploadingFileProgress', {progress: progress, name: file.file.name,})
+        commit('setUploadingFileProgress', {
+          progress: progress,
+          name: file.file.name,
+        })
       },
     )
     const fileURL = `${Config.textile.browser}${result?.root}${path}`
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
-      const sendFileResult =
-        await $TextileManager.mailboxManager?.sendMessage<'file'>(
-          friend.textilePubkey,
-          {
-            to: friend.textilePubkey,
-            payload: {
-              url: fileURL,
-              name: file.file.name,
-              size: file.file.size,
-              type: file.file.type,
-            },
-            type: 'file',
+    const sendFileResult =
+      await $TextileManager.mailboxManager?.sendMessage<'file'>(
+        friend.textilePubkey,
+        {
+          to: friend.textilePubkey,
+          payload: {
+            url: fileURL,
+            name: file.file.name,
+            size: file.file.size,
+            type: file.file.type,
           },
-        )
+          type: 'file',
+        },
+      )
 
-      commit('addMessageToConversation', {
-        address: friend.address,
-        sender: MessageRouteEnum.OUTBOUND,
-        message: sendFileResult,
-      })
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: sendFileResult,
+    })
   },
   /**
    * @description Sends a reaction message to a given friend
@@ -246,13 +249,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
@@ -296,13 +299,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     commit('setMessageLoading', { loading: true })
@@ -349,13 +352,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
@@ -404,13 +407,13 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error('Mailbox manager not initialized')
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
-      throw new Error('Friend not found')
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
     commit('setMessageLoading', { loading: true })

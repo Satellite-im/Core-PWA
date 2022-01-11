@@ -9,11 +9,11 @@ export enum SoundsTypes {
 }
 
 export interface SoundsState {
-  message: boolean,
-  call: boolean,
-  mute: boolean,
-  deafen: boolean,
-  undeafen: boolean,
-  upload: boolean,
-  connected: boolean,
+  message: boolean
+  call: boolean
+  mute: boolean
+  deafen: boolean
+  undeafen: boolean
+  upload: boolean
+  connected: boolean
 }

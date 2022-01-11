@@ -25,8 +25,13 @@ export interface TextileState {
       progress: number
       finished: boolean
       name: string
+    }
   }
 }
-}
 
-export enum TextileError {}
+export enum TextileError {
+  EDIT_HOT_KEY_ERROR = 'pages.settings.keybinds.editHotkeyError',
+  FRIEND_NOT_FOUND = 'errors.textile.friend_not_found',
+  MAILBOX_MANAGER_NOT_FOUND = 'errors.textile.mailbox_manager_not_found',
+  MAILBOX_MANAGER_NOT_INITIALIZED = 'errors.textile.mailbox_manager_not_initialized',
+}
