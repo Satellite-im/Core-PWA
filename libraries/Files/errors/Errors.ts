@@ -11,5 +11,4 @@ export enum FileSystemErrors {
   DUPLICATE_NAME = 'Item with name already exists in this directory',
   DIR_PARADOX = 'Directory cannot contain itself',
   DIR_PARENT_PARADOX = 'Directory cannot contain one of its ancestors',
-  
 }
