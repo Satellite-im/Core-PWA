@@ -128,7 +128,20 @@ export function groupMessages(
       const group: Group = groupOrDivider
 
       const newMessages = group.messages
-        ? [...group.messages, { ...currentMessage, replies: [], reactions: [] }]
+        ? [
+            ...group.messages,
+            {
+              ...currentMessage,
+              replies: messageRepliesToUIReplies(
+                currentMessageReplies,
+                currentMessageReactions,
+              ),
+              reactions: getMessageUIReactions(
+                currentMessage,
+                currentMessageReactions,
+              ),
+            },
+          ]
         : [{ ...currentMessage, replies: [], reactions: [] }]
 
       groupedMessages[groupedMessages.length - 1] = {
