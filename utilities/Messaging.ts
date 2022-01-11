@@ -187,9 +187,7 @@ export function updateMessageTracker(
           reactionsTracker[reaction.reactedTo] || []
         if (
           !reactionsTracker[reaction.reactedTo].some(
-            (elm) => {
-              return elm.id === reaction.id
-            },
+            (elm) => elm.id === reaction.id
           )
         )
           reactionsTracker[reaction.reactedTo].push(reaction)
