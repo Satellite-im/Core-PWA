@@ -17,7 +17,9 @@ function messageRepliesToUIReplies(
   replies: ReplyMessage[],
   reactions: ReactionsTracker,
 ) {
-  return replies.map((reply) => replyMessageToUIReply(reply, reactions[reply.id]))
+  return replies.map((reply) =>
+    replyMessageToUIReply(reply, reactions[reply.id]),
+  )
 }
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
@@ -113,7 +115,7 @@ export function groupMessages(
             ...currentMessage,
             replies: messageRepliesToUIReplies(
               currentMessageReplies,
-              reactions
+              reactions,
             ),
             reactions: getMessageUIReactions(
               currentMessage,
@@ -135,7 +137,7 @@ export function groupMessages(
               ...currentMessage,
               replies: messageRepliesToUIReplies(
                 currentMessageReplies,
-                currentMessageReactions,
+                reactions,
               ),
               reactions: getMessageUIReactions(
                 currentMessage,
