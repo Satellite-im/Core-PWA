@@ -1,7 +1,6 @@
 <template src="./Keybinds.html"></template>
 
 <script lang="ts">
-// @ts-nocheck
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
@@ -9,7 +8,6 @@ import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'KeybindSettings',
-  /*  mixins: [Keybinds], */
   layout: 'settings',
   data() {
     return {
@@ -46,7 +44,7 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    recordKeybind(e: any) {
+    recordKeybind(e: KeyboardEvent) {
       this.errorCheck(e)
       if (!this.$data.editingKeybind.error) {
         this.$data.editingKeybind.newString.length === 0
@@ -147,15 +145,14 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    errorCheck(e: any) {
+    errorCheck(e: KeyboardEvent) {
       const key = e.key.toLowerCase()
       const newString = this.$data.editingKeybind.newString
       const keyAlreadyBound = newString.includes(key)
-
       const keyAlreadyExist = this.checkSystemHotkey(newString + '+' + key)
 
       const modifiers = Object.values(ModifierKeysEnum)
-      const isModifier = modifiers.includes(key)
+      const isModifier = key in modifiers
       let hasAlphanumeric = false
       for (const char of newString.split('+')) {
         if (char.length === 1) {
@@ -164,7 +161,7 @@ export default Vue.extend({
       }
       const modifierAfterAlphanumeric = hasAlphanumeric && isModifier
       const blockedChars = Object.values(BlockKeysEnum)
-      const hasBlockedChars = blockedChars.includes(key)
+      const hasBlockedChars = key in blockedChars
 
       if (keyAlreadyExist) {
         this.$data.editingKeybind.error = true
@@ -191,3 +188,5 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped lang="less" src="./Keybinds.less"></style>

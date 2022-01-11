@@ -80,6 +80,9 @@ export const windowsShortcuts = [
 
 export const macShortcuts = [
     'meta+n',
+    'meta+c',
+    'meta+a',
+    'meta+r',
     'meta+shift+n',
     'meta+t',
     'meta+shift+t',
