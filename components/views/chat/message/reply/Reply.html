@@ -50,7 +50,7 @@
           <MessageActions
             v-if="replyHover == reply.id"
             :hideReply="true"
-            :emojiReaction="() => emojiReaction($event, reply.id)"
+            :emojiReaction="(event) => emojiReaction(event, reply.id)"
           />
         </div>
       </div>
