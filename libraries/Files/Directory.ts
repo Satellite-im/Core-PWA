@@ -1,4 +1,5 @@
 import { Item } from './abstracts/Item.abstract'
+import { FileSystemErrors } from './errors/Errors'
 import { DIRECTORY_TYPE } from './types/directory'
 
 export class Directory extends Item {
@@ -63,13 +64,13 @@ export class Directory extends Item {
   addChild(child: Item): boolean {
     if (this.hasChild(child.name)) return false
 
-    if( child === this) throw new Error('Directory cannot contain itself')
+    if( child === this) throw new Error(FileSystemErrors.DIR_PARADOX)
     
     let parent = this.parent
     
     while (parent !== null) {
       if (parent === child)
-        throw new Error('Directory cannot contain one of its ancestors')
+        throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
       parent = parent.parent
     }
     

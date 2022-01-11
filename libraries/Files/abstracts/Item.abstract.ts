@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
+import { FileSystemErrors } from '../errors/Errors'
 import { ItemInterface } from '../interface/Item.interface'
 import { DIRECTORY_TYPE } from '../types/directory'
 
@@ -16,7 +17,7 @@ export abstract class Item implements ItemInterface {
    */
   constructor(name: string, parent?: Directory | null) {
     if (this.constructor.name === 'Item')
-      throw new Error('Item class is Abstract. It can only be extended')
+      throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
 
     this._name = name
     this._parent = parent
@@ -79,15 +80,13 @@ export abstract class Item implements ItemInterface {
     const filenameTest = new RegExp('[\\/:"*?<>|]+')
 
     if (!newName || typeof newName !== 'string' || !newName.trim().length)
-      throw new Error('Item name must be a non empty string')
+      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
 
     if (filenameTest.test(newName))
-      throw new Error('Item name contains invalid symbol')
+      throw new Error(FileSystemErrors.INVALID_SYMBOL)
 
     if (this.validateParent(this.parent) && this.parent?.hasChild(newName))
-      throw new Error(
-        `Item with name of "${newName}" already exists in this directory`,
-      )
+      throw new Error(FileSystemErrors.DUPLICATE_NAME)
 
     this._name = newName.trim()
   }

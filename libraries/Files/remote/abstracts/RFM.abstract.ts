@@ -1,5 +1,9 @@
 // Remote file managment
 
+import { Item } from "../../abstracts/Item.abstract";
+import { Directory } from "../../Directory";
+import { FileSystemErrors } from "../../errors/Errors";
+import { Fil } from "../../Fil";
 import { RFMInterface } from "../interface/RFM.interface";
 
 export abstract class RFM implements RFMInterface{
@@ -7,13 +11,21 @@ export abstract class RFM implements RFMInterface{
 
   constructor(fileSystem: FileSystem) {
     if (this.constructor.name === 'RFM')
-      throw new Error('RFM class is Abstract. It can only be extended')
+      throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
 
     this._fileSystem = fileSystem
   }
+  updateIndex(index: FileSystem): void {
+    throw new Error(FileSystemErrors.METHOD_MISSING)
+  }
+  getIndex(): Promise<Item[]> {
+    throw new Error(FileSystemErrors.METHOD_MISSING)
+  }
+  delete(file: Fil): boolean {
+    throw new Error(FileSystemErrors.METHOD_MISSING)
+  }
 
   upload(file: File, name: string, meta: any): string {
-    // Should call addFile on the filesystem
-    return ''
+    throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 }
