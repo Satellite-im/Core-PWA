@@ -11,7 +11,7 @@ describe('Test FileSystem Directory', () => {
 
   const mockDirectoryData = {
     name: 'Test Directory',
-    type: DIRECTORY_TYPE.DEFAULT
+    type: DIRECTORY_TYPE.DEFAULT,
   }
 
   const file = new Fil(...Object.values(mockFileData))
@@ -24,7 +24,6 @@ describe('Test FileSystem Directory', () => {
   it('Correctly adds a child file or folder', () => {
     directory.addChild(file)
     expect(directory.hasChild(file.name)).toBe(true)
-    
     const child = directory.getChild(file.name)
     expect(child.id).toEqual(file.id)
   })
@@ -39,7 +38,7 @@ describe('Test FileSystem Directory', () => {
   it('Correctly removes a child file or folder', () => {
     directory.removeChild(file.name)
     expect(directory.hasChild(file.name)).toBe(false)
-    
+
     const child = directory.getChild(file.name)
     expect(child).toBe(null)
   })

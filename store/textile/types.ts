@@ -3,21 +3,21 @@ import {
   RepliesTracker,
   ReactionsTracker,
 } from '~/types/textile/mailbox'
-
+export interface Conversation {
+  [key: string]: {
+    messages: MessagesTracker
+    replies: RepliesTracker
+    reactions: ReactionsTracker
+    lastInbound: number // the last time a message was received by any member of conversation, other than account owner
+    lastUpdate: number // the last time a message was received by any member of conversation, including account owner
+    limit: number
+    skip: number
+    end: boolean
+  }
+}
 export interface TextileState {
   initialized: boolean
-  conversations: {
-    [key: string]: {
-      messages: MessagesTracker
-      replies: RepliesTracker
-      reactions: ReactionsTracker
-      lastInbound: number // the last time a message was received by any member of conversation, other than account owner
-      lastUpdate: number // the last time a message was received by any member of conversation, including account owner
-      limit: number
-      skip: number
-      end: boolean
-    }
-  }
+  conversations: Conversation
   conversationLoading: boolean
   messageLoading: boolean
   uploadProgress: {

@@ -10,9 +10,19 @@
   overflow: hidden;
   z-index: @base-z-index + 100;
   &:extend(.blur);
+  &.side-open {
+    margin-right: calc(@sidebar-size + @servers-size + 1rem);
+  }
+  &.side-close {
+    margin-right: 1rem;
+  }
 }
 @media only screen and (max-width: @mobile-breakpoint) {
   #mini-wallet {
     width: calc(100vw - @normal-spacing*2);
+    &.side-open,
+    &.side-close {
+      margin-right: 0rem;
+    }
   }
 }

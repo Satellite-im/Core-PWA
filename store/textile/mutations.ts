@@ -90,7 +90,6 @@ const mutations = {
       lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
       lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
-
     const tracked = updateMessageTracker([message], initialValues)
     state.conversations = {
       ...state.conversations,
@@ -116,38 +115,38 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
-  clearUploadProgress(
-    state: TextileState,
-    ) {
+  clearUploadProgress(state: TextileState) {
     state.uploadProgress = {}
   },
   setUploadingFileProgress(
     state: TextileState,
-    {progress, name} : {
-      progress: number,
-      name: string,
+    {
+      progress,
+      name,
+    }: {
+      progress: number
+      name: string
     },
   ) {
     if (progress !== 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: false,
-          name: name
-        }
+          name,
+        },
       }
     }
     if (progress === 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: true,
-          name: name
-        }
-    }
-
+          name,
+        },
+      }
     }
   },
 }

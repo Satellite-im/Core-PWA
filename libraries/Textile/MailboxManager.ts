@@ -20,9 +20,9 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import {PropCommonEnum} from "~/libraries/Enums/types/prop-common-events";
-import {MessagingTypesEnum} from "~/libraries/Enums/types/messaging-types";
-import {EncodingTypesEnum} from "~/libraries/Enums/types/encoding-types";
+import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
+import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
+import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
 
 export class MailboxManager {
   senderAddress: string
@@ -75,16 +75,32 @@ export class MailboxManager {
    * Retrieve a conversation with a specific user, filtered by the given query parameters
    * @param friendIdentifier friend mailboxId
    * @param query parameters for filtering
+   * @param lastInbound timestamp of last received message
    * @returns an array of messages
    */
-  async getConversation(
-    friendIdentifier: string,
-    query: ConversationQuery,
-  ): Promise<Message[]> {
+  async getConversation({
+    friendIdentifier,
+    query,
+    lastInbound,
+  }: {
+    friendIdentifier: string
+    query: ConversationQuery
+    lastInbound?: number
+  }): Promise<Message[]> {
     const thread = await this.textile.users.getThread('hubmail')
     const threadID = ThreadID.fromString(thread.id)
 
-    const inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
+    let inboxQuery = Query.where('from').eq(friendIdentifier).orderByIDDesc()
+
+    // if messages are stored in indexeddb, only fetch new messages from textile
+    if (lastInbound) {
+      lastInbound = lastInbound * 1000000 // textile has a more specific unix timestamp, matching theirs
+      inboxQuery = Query.where('from')
+        .eq(friendIdentifier)
+        .and(PropCommonEnum.MOD)
+        .ge(lastInbound)
+        .orderByIDDesc()
+    }
 
     if (query?.limit) {
       inboxQuery.limitTo(query.limit)
@@ -113,16 +129,20 @@ export class MailboxManager {
       sentboxQuery.and(PropCommonEnum.CREATED_AT).lt(lastMessageTime)
     }
 
-    const encryptedSentbox = await this.textile.client.find<MessageFromThread>(
-      threadID,
-      MailboxSubscriptionType.sentbox,
-      sentboxQuery,
-    )
+    let encryptedSentbox: MessageFromThread[] = []
+
+    // only fetch sent messages from textile if indexeddb is empty. after that, fetch sent messages from indexeddb
+    if (lastInbound === undefined) {
+      encryptedSentbox = await this.textile.client.find<MessageFromThread>(
+        threadID,
+        MailboxSubscriptionType.sentbox,
+        sentboxQuery,
+      )
+    }
 
     const messages = [...encryptedInbox, ...encryptedSentbox].sort(
       (a, b) => a.created_at - b.created_at,
     )
-
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
 
     const allSettled = await Promise.allSettled(promises)
@@ -130,7 +150,6 @@ export class MailboxManager {
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
-
     return filtered.map((r) => r.value)
   }
 
@@ -208,9 +227,18 @@ export class MailboxManager {
         at: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
-        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
-        replyType: message.type === MessagingTypesEnum.REPLY ? message.replyType : undefined,
+        reactedTo:
+          message.type === MessagingTypesEnum.REACTION
+            ? message.reactedTo
+            : undefined,
+        repliedTo:
+          message.type === MessagingTypesEnum.REPLY
+            ? message.repliedTo
+            : undefined,
+        replyType:
+          message.type === MessagingTypesEnum.REPLY
+            ? message.replyType
+            : undefined,
         pack: message.pack,
       }),
     )
@@ -245,8 +273,14 @@ export class MailboxManager {
         editedAt: Date.now(),
         type: message.type,
         payload: message.payload,
-        reactedTo: message.type === MessagingTypesEnum.REACTION ? message.reactedTo : undefined,
-        repliedTo: message.type === MessagingTypesEnum.REPLY ? message.repliedTo : undefined,
+        reactedTo:
+          message.type === MessagingTypesEnum.REACTION
+            ? message.reactedTo
+            : undefined,
+        repliedTo:
+          message.type === MessagingTypesEnum.REPLY
+            ? message.repliedTo
+            : undefined,
       }),
     )
 
@@ -296,7 +330,6 @@ export class MailboxManager {
     const msgBody = Buffer.from(message.body, EncodingTypesEnum.BASE64)
     const bytes = await privKey.decrypt(msgBody)
     const decoded = new TextDecoder().decode(bytes)
-
     try {
       const parsedBody = JSON.parse(decoded)
       const validation = messageEncoder.decode({

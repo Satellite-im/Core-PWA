@@ -8,6 +8,7 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
+import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 
 export default {
   /**
@@ -61,10 +62,42 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    const conversation = await $MailboxManager.getConversation(
-      friend.textilePubkey,
-      query,
-    )
+    let conversation: Message[] = []
+
+    const dbMessages = await db.conversations.get(address).then((convo) => {
+      return convo?.conversation ?? []
+    })
+
+    //  if nothing stored in indexeddb, fetch entire conversation
+    if (!dbMessages.length) {
+      conversation = await $MailboxManager.getConversation({
+        friendIdentifier: friend.textilePubkey,
+        query,
+      })
+    }
+    // otherwise, combine new textile messages with stored messages
+    else {
+      const lastInbound = rootState.textile.conversations[address].lastInbound
+      const textileMessages = await $MailboxManager.getConversation({
+        friendIdentifier: friend.textilePubkey,
+        query,
+        lastInbound,
+      })
+
+      // use textileMessages as primary source. this way, edited messages will use the newest version
+      const ids = new Set(textileMessages.map((d) => d.id))
+      conversation = [
+        ...textileMessages,
+        ...dbMessages.filter((d) => !ids.has(d.id)),
+      ]
+    }
+
+    // store latest data in indexeddb
+    const dbData: DexieMessage = {
+      conversation,
+      key: address,
+    }
+    db.conversations.put(dbData)
 
     commit('setConversation', {
       address: friend.address,
@@ -88,6 +121,7 @@ export default {
   async subscribeToMailbox({
     commit,
     rootState,
+    dispatch,
   }: ActionsArguments<TextileState>) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const MailboxManager = $TextileManager.mailboxManager
@@ -118,6 +152,7 @@ export default {
         sender: MessageRouteEnum.INBOUND,
         message,
       })
+      dispatch('storeMessage', { address: sender.address, message })
     })
   },
   /**
@@ -147,7 +182,7 @@ export default {
    * and the text message to be sent
    */
   async sendTextMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, text }: { to: string; text: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -180,6 +215,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
   clearUploadStatus({ commit }: ActionsArguments<TextileState>) {
@@ -192,7 +228,7 @@ export default {
    * file: UploadDropItemType to be sent users bucket for textile
    */
   async sendFileMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType },
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
@@ -204,7 +240,7 @@ export default {
       path,
       (progress: number) => {
         commit('setUploadingFileProgress', {
-          progress: progress,
+          progress,
           name: file.file.name,
         })
       },
@@ -235,6 +271,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
     })
+    dispatch('storeMessage', { address: friend.address, sendFileResult })
   },
   /**
    * @description Sends a reaction message to a given friend
@@ -243,7 +280,7 @@ export default {
    * the emoji and the id of the message the user reacted to
    */
   async sendReactionMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, reactTo, emoji }: { to: string; reactTo: string; emoji: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -269,12 +306,12 @@ export default {
         type: 'reaction',
       },
     )
-
     commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    dispatch('storeMessage', { address: friend.address, message: result })
   },
   /**
    * @description Sends a reply message to a given friend
@@ -283,7 +320,7 @@ export default {
    * the text message and the id of the message the user replied to
    */
   async sendReplyMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     {
       to,
       replyTo,
@@ -327,7 +364,7 @@ export default {
         payload: text,
         repliedTo: replyTo,
         type: 'reply',
-        replyType: replyType,
+        replyType,
       },
     )
 
@@ -336,6 +373,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
 
@@ -346,7 +384,7 @@ export default {
    * and the text message to be sent
    */
   async editTextMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, original, text }: { to: string; text: string; original: Message },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -386,12 +424,14 @@ export default {
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
       })
+      dispatch('storeMessage', { address: friend.address, message: result })
     } else {
       commit('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: original,
       })
+      dispatch('storeMessage', { address: friend.address, message: original })
     }
   },
   /**
@@ -401,7 +441,7 @@ export default {
    * glyph to be sent, and pack name
    */
   async sendGlyphMessage(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, src, pack }: { to: string; src: string; pack: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -425,7 +465,7 @@ export default {
       {
         to: friend.textilePubkey,
         payload: src,
-        pack: pack,
+        pack,
         type: 'glyph',
       },
     )
@@ -435,7 +475,43 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
+    dispatch('storeMessage', { address: friend.address, message: result })
 
     commit('setMessageLoading', { loading: false })
+  },
+  /**
+   * @description Store a new sent message in indexeddb. If edited, replace old message
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key) and the message to be stored,
+   * glyph to be sent, and pack name
+   */
+  async storeMessage(
+    {}: ActionsArguments<TextileState>,
+    {
+      address,
+      message,
+    }: {
+      address: string
+      message: Message
+    },
+  ) {
+    // replace old message with new edited version
+    if (message.editedAt !== undefined) {
+      db.conversations.get(address).then((convo) => {
+        if (!convo) {
+          return
+        }
+        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
+        convo.conversation[index] = message
+        db.conversations.put(convo)
+      })
+      return
+    }
+
+    // add regular message to indexeddb
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((convo) => convo.conversation.push(message))
   },
 }

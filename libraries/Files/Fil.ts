@@ -1,4 +1,4 @@
-import { Item } from "./abstracts/Item.abstract"
+import { Item } from './abstracts/Item.abstract'
 
 import { FILE_TYPE } from './types/file'
 
