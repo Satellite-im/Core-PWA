@@ -13,6 +13,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export default Vue.extend({
   components: {
@@ -77,10 +78,10 @@ export default Vue.extend({
       const peer = this.$WebRTC.getPeer(activeCall)
 
       if (muted) {
-        peer?.call.unmute('video')
+        peer?.call.unmute(WebRTCEnum.VIDEO)
         this.$Sounds.playSound(Sounds.UNDEAFEN)
       } else {
-        peer?.call.mute('video')
+        peer?.call.mute(WebRTCEnum.VIDEO)
         this.$Sounds.playSound(Sounds.DEAFEN)
       }
     },
