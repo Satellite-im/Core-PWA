@@ -58,8 +58,6 @@ export default {
 
     commit('setConversationLoading', { loading: true })
 
-    const lastInbound = rootState.textile.conversations[address].lastInbound
-
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
@@ -79,6 +77,7 @@ export default {
     }
     // otherwise, combine new textile messages with stored messages
     else {
+      const lastInbound = rootState.textile.conversations[address].lastInbound
       const textileMessages = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,
         query,
