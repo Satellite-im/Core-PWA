@@ -5,6 +5,7 @@ import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
 import { ModifierKeysEnum } from '~/libraries/Enums/types/modifierKeys'
 import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export {
   KeybindingEnum as KeybindingEnum,
@@ -13,5 +14,6 @@ export {
   MessagingTypesEnum as MessagingTypesEnum,
   EncodingTypesEnum as EncodingTypesEnum,
   ModifierKeysEnum as ModifierKeysEnum,
-  BlockKeysEnum as BlockKeysEnum
+  BlockKeysEnum as BlockKeysEnum,
+  WebRTCEnum as WebRTCEnum,
 }
