@@ -68,7 +68,6 @@
     <div class="vertical-divider" v-if="$device.isDesktop"></div>
     <div
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
-      v-if="$device.isDesktop"
       @click="() => toggleModal(ModalWindows.MARKETPLACE)"
       data-tooltip="Marketplace"
     >
@@ -76,7 +75,6 @@
     </div>
     <div
       class="has-tooltip has-tooltip-primary has-tooltip-bottom"
-      v-if="$device.isDesktop"
       @click="() => toggleModal(ModalWindows.WALLET)"
       data-tooltip="Wallet"
     >
