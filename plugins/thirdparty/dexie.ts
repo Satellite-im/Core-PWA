@@ -1,6 +1,10 @@
 import Dexie from 'dexie'
 import { Message } from '~/types/textile/mailbox'
 
+export type DexieMessage = {
+  key: string
+  conversation: Message[]
+}
 class SatelliteDB extends Dexie {
   public conversations: Dexie.Table<DexieMessage, string>
 
@@ -14,9 +18,3 @@ class SatelliteDB extends Dexie {
 }
 
 export const db = new SatelliteDB()
-
-export type DexieMessage = {
-  [key: string]: Message[]
-  // @ts-ignore
-  key: string
-}

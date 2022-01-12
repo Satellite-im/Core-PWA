@@ -66,8 +66,8 @@ export default {
 
     let conversation: Message[] = []
 
-    let dbMessages = await db.conversations.get(address).then((convo) => {
-      return convo?.[address] ?? []
+    const dbMessages = await db.conversations.get(address).then((convo) => {
+      return convo?.conversation ?? []
     })
 
     //  if nothing stored in indexeddb, fetch entire conversation
@@ -82,7 +82,7 @@ export default {
       const textileMessages = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,
         query,
-        lastInbound: lastInbound,
+        lastInbound,
       })
 
       // use textileMessages as primary source. this way, edited messages will use the newest version
@@ -93,9 +93,9 @@ export default {
       ]
     }
 
-    // @ts-ignore - store latest data in indexeddb
+    // store latest data in indexeddb
     const dbData: DexieMessage = {
-      [address]: conversation,
+      conversation,
       key: address,
     }
     db.conversations.put(dbData)
@@ -241,7 +241,7 @@ export default {
       path,
       (progress: number) => {
         commit('setUploadingFileProgress', {
-          progress: progress,
+          progress,
           name: file.file.name,
         })
       },
@@ -366,7 +366,7 @@ export default {
         payload: text,
         repliedTo: replyTo,
         type: 'reply',
-        replyType: replyType,
+        replyType,
       },
     )
 
@@ -467,7 +467,7 @@ export default {
       {
         to: friend.textilePubkey,
         payload: src,
-        pack: pack,
+        pack,
         type: 'glyph',
       },
     )
@@ -503,8 +503,8 @@ export default {
         if (!convo) {
           return
         }
-        const index = convo[address].map((e) => e.id).indexOf(message.id)
-        convo[address][index] = message
+        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
+        convo.conversation[index] = message
         db.conversations.put(convo)
       })
       return
@@ -514,6 +514,6 @@ export default {
     db.conversations
       .where('key')
       .equals(address)
-      .modify((convo) => convo[address].push(message))
+      .modify((convo) => convo.conversation.push(message))
   },
 }
