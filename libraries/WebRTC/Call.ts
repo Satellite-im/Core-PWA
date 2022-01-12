@@ -365,9 +365,10 @@ export class Call extends Emitter<CallEventListeners> {
    * @example this.toggleTracks('audio')
    */
    toggleTracks(kind: string, enabled: boolean) {
-    const tracks = this.tracksManager.tracks
-    for (const key in tracks) {
-      const track = tracks[key]
+    const localTracks = this.getLocalTracks()
+    for (const key in localTracks) {
+      // @ts-ignore
+      const track = localTracks[key]
       if (track.kind === kind) track.enabled = enabled
     }
   }
