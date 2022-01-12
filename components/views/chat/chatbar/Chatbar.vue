@@ -38,7 +38,7 @@ export default Vue.extend({
       maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
       showFilePreview: false,
-      nsfwUploadError: false
+      nsfwUploadError: false,
     }
   },
   props: {
@@ -195,8 +195,8 @@ export default Vue.extend({
         messageBox.innerText &&
         messageBox.innerText.length > this.$Config.chat.maxChars + 1
       ) {
-        /* remove updateText() here because when this.value is changed it is automatically called */
         messageBox.innerText = messageBox.innerText.slice(0, -1)
+        this.updateText()
       }
       this.value = messageBox.innerText
     },
@@ -240,13 +240,12 @@ export default Vue.extend({
      * @method updateText
      * @description Helper function to update the setChatText and send the cursor to the end if collapseToEnd is true.
      */
-    updateText(collapseToEnd: boolean) {
+    updateText() {
       const messageBox = this.$refs.messageuser as HTMLElement
-      if (collapseToEnd) {
-        let sel = window.getSelection()
-        sel?.selectAllChildren(messageBox)
-        sel?.collapseToEnd()
-      }
+      messageBox.innerHTML = this.value
+      let sel = window.getSelection()
+      sel?.selectAllChildren(messageBox)
+      sel?.collapseToEnd()
       this.setChatText = {
         userId: this.$props.recipient.address,
         value: messageBox.innerHTML,
@@ -270,7 +269,6 @@ export default Vue.extend({
           return
         }
         if (this.ui.replyChatbarContent.from) {
-
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: this.value,
@@ -337,7 +335,7 @@ export default Vue.extend({
   },
   watch: {
     'ui.chatbarContent': function () {
-      this.updateText(false)
+      this.updateText()
     },
     'friends.all': {
       handler() {
