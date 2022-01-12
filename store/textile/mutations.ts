@@ -90,7 +90,6 @@ const mutations = {
       lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
       lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
-
     const tracked = updateMessageTracker([message], initialValues)
     state.conversations = {
       ...state.conversations,

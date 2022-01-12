@@ -218,10 +218,6 @@ export default Vue.extend({
         this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
-      nsfwCheck.map((file: UploadDropItemType) => {
-        this.$data.fileAmount = nsfwCheck.length
-        this.dispatchFile(file)
-      })
     },
   },
 })

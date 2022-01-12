@@ -143,7 +143,6 @@ export class MailboxManager {
     const messages = [...encryptedInbox, ...encryptedSentbox].sort(
       (a, b) => a.created_at - b.created_at,
     )
-
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
 
     const allSettled = await Promise.allSettled(promises)
@@ -151,7 +150,6 @@ export class MailboxManager {
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
-
     return filtered.map((r) => r.value)
   }
 
@@ -332,7 +330,6 @@ export class MailboxManager {
     const msgBody = Buffer.from(message.body, EncodingTypesEnum.BASE64)
     const bytes = await privKey.decrypt(msgBody)
     const decoded = new TextDecoder().decode(bytes)
-
     try {
       const parsedBody = JSON.parse(decoded)
       const validation = messageEncoder.decode({
