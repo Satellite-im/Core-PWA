@@ -359,6 +359,23 @@ export class Call extends Emitter<CallEventListeners> {
   }
 
   /**
+   * @method toggleTracks
+   * @description Enable and disable tracks
+   * @param kind Kinds of tracks (video or audio) to disable
+   * @example this.toggleTracks('audio')
+   */
+   toggleTracks(kind: string, enabled: boolean) {
+    const tracks = this.tracksManager.tracks
+    for (let key in tracks) {
+      let track = tracks[key]
+      console.log(track)
+      if (track.kind === kind) {
+        track.enabled = enabled
+      }
+    }
+  }
+
+  /**
    * @method addTransceiver
    * @description Add a RTCRtpTransceiver to the connection
    * @param kind A MediaStreamTrack to associate with the transceiver, or a DOMString which is used as the kind of the receiver's track, and by extension of the RTCRtpReceiver itself.
