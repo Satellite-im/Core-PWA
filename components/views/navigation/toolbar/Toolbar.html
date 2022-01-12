@@ -59,6 +59,7 @@
       class="has-tooltip has-tooltip-bottom has-tooltip-primary"
       :class="ui.showPinned ? 'primary' : ''"
       data-tooltip="Archived Messages"
+      v-if="$device.isDesktop ? true : !searchInputFocus"
       @click="() => {
         $store.commit('ui/togglePinned', !ui.showPinned)
       }"
@@ -68,6 +69,7 @@
     <div class="vertical-divider" v-if="$device.isDesktop"></div>
     <div
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop ? true : !searchInputFocus"
       @click="() => toggleModal(ModalWindows.MARKETPLACE)"
       data-tooltip="Marketplace"
     >
@@ -75,6 +77,7 @@
     </div>
     <div
       class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="$device.isDesktop ? true : !searchInputFocus"
       @click="() => toggleModal(ModalWindows.WALLET)"
       data-tooltip="Wallet"
     >
@@ -86,6 +89,7 @@
       @change="handleChange"
       :placeholder="$t('search.search')"
       :searchRecommend="searchRecommend"
+      :setSearchInputFocus="setSearchInputFocus"
     />
     <InteractablesSearchResult
       :searchQuery="searchQuery"

@@ -60,6 +60,7 @@ export default Vue.extend({
     return {
       searchRecommend,
       showAlerts: false,
+      searchInputFocus: false,
     }
   },
   computed: {
@@ -142,6 +143,9 @@ export default Vue.extend({
       const tracks = await peer?.call.createLocalTracks(kinds)
 
       await peer?.call.start()
+    },
+    setSearchInputFocus(focusStatus) {
+      this.$data.searchInputFocus = focusStatus
     },
   },
 })

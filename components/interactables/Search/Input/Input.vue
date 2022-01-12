@@ -38,6 +38,9 @@ export default Vue.extend({
       type: Object as PropType<SearchRecommend>,
       default: { users: [], channels: [] } as SearchRecommend,
     },
+    setSearchInputFocus: {
+      type: Function,
+    },
   },
   data() {
     return {
@@ -187,7 +190,7 @@ export default Vue.extend({
       this.current = this.searchQuery.insertCommand(
         SearchCommand.Empty,
         '',
-        after
+        after,
       )
       this._produceItems()
     },
@@ -209,7 +212,7 @@ export default Vue.extend({
         this.current = this.searchQuery.insertCommand(
           option.name,
           '',
-          this.current.index
+          this.current.index,
         )
       }
       if (this.current) {
@@ -345,7 +348,7 @@ export default Vue.extend({
           const range = new Range()
           range.setStart(
             el.firstChild === null ? el : el.firstChild,
-            position - queryItem.cursorStart
+            position - queryItem.cursorStart,
           )
           range.collapse(false)
           selection?.removeAllRanges()
@@ -360,7 +363,7 @@ export default Vue.extend({
           const range = new Range()
           range.setStart(
             el.firstChild === null ? el : el.firstChild,
-            el.textContent ? el.textContent.length : 0
+            el.textContent ? el.textContent.length : 0,
           )
           range.collapse(false)
           selection?.removeAllRanges()
@@ -410,7 +413,7 @@ export default Vue.extend({
     _prepareSearch() {
       // this.caretPosition = this._getCaretPosition()
       this.current = this.searchQuery.queryItemFrom(
-        this.caretPosition
+        this.caretPosition,
       ) as SearchQueryItem
       if (this.current == null) {
         return
@@ -430,7 +433,7 @@ export default Vue.extend({
     _filterSearchResult() {
       this.searchResult = SearchUtil.filterSearchRecommendResult(
         this.searchRecommend,
-        this.current
+        this.current,
       )
     },
 
@@ -618,6 +621,7 @@ export default Vue.extend({
       searchInput.contentEditable = 'true'
       searchInput.autocapitalize = 'off'
       this.isFocus = true
+      this.setSearchInputFocus(true)
       this.caretPosition = this._getCaretPosition()
     },
 
@@ -631,6 +635,7 @@ export default Vue.extend({
       searchInput.autocapitalize = 'off'
       searchInput.blur()
       this.isFocus = false
+      this.setSearchInputFocus(false)
     },
 
     /**
@@ -643,7 +648,7 @@ export default Vue.extend({
       this.$emit(
         'search',
         this.searchQuery.getQueryString(),
-        this.searchQuery.queryItems
+        this.searchQuery.queryItems,
       )
     },
 
