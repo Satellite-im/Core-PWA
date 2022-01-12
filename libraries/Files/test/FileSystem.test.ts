@@ -37,6 +37,7 @@ describe('Test FileSystem', () => {
   if (newDirectory && newDirectory2) {
     newDirectory2.addChild(file)
     newDirectory2.addChild(file2)
+    console.log(newDirectory2.content)
     filesystem.openDirectory('Test Directory 2')
     filesystem.addChild(file)
     filesystem.addChild(file2)
