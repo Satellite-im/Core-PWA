@@ -1,4 +1,5 @@
 import * as SolanaManager from "~/libraries/Solana/SolanaManager/SolanaManager"
+import { expect } from '@jest/globals'
 
 describe.skip("SolanaManager.default.stringToBuffer", () => { // AP-329
     test("0", () => {

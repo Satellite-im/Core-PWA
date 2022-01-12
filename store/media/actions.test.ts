@@ -1,4 +1,5 @@
 import * as actions from '~/store/media/actions'
+import { expect } from '@jest/globals'
 
 describe("actions.default.handler", () => {
     test("0", () => {

@@ -9,7 +9,7 @@
   <div class="columns is-desktop" v-if="editingKeybind.status">
     <div class="column">
       <InteractablesInput readonly type="primary" :placeholder="editingKeybind.newString" />
-      <TypographySubtitle :size="6" :text="editingKeybind.errorMessage" v-if="editingKeybind.error"/>
+      <TypographySubtitle class="keybind-error color-danger" type="danger" :size="6" :text="editingKeybind.errorMessage" v-if="editingKeybind.error"/>
     </div>
     <div class="column">
       <InteractablesButton

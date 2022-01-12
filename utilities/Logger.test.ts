@@ -1,4 +1,5 @@
 import Logger from "../utilities/Logger"
+import { expect } from '@jest/globals'
 
 describe('Test class Logger', () => {
 

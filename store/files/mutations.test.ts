@@ -1,4 +1,5 @@
 import * as mutations from '~/store/files/mutations'
+import { expect } from '@jest/globals'
 
 describe("mutations.default.fetchFiles", () => {
     test("0", () => {

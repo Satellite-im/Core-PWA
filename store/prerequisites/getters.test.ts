@@ -1,4 +1,5 @@
 import * as getters from '~/store/prerequisites/getters'
+import { expect } from '@jest/globals'
 
 describe("getters.default.allPrerequisitesReady", () => {
     test("0", () => {

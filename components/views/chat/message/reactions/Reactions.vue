@@ -57,7 +57,7 @@ export default Vue.extend({
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
+        messageID: this.$props.reply.id ? this.$props.reply.id : this.$props.message.id,
         to:
           this.$props.message.to === myTextilePublicKey
             ? this.$props.message.from

@@ -1,4 +1,5 @@
 import * as SimpleWrap from "~/utilities/SimpleWrap"
+import { expect } from '@jest/globals'
 
 describe("SimpleWrap.SimpleWrap", () => {
     test("0", () => {

@@ -1,5 +1,6 @@
 import * as Solana from "~/libraries/Solana/Solana"
 import * as web3 from "@solana/web3.js"
+import { expect } from '@jest/globals'
 
 describe("Solana.getClusterFromNetworkConfig", () => {
     test("0", () => {

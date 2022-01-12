@@ -15,23 +15,26 @@ import {
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
-  reactions: ReactionMessage[],
+  reactions: ReactionsTracker,
 ) {
-  return replies.map((reply) => replyMessageToUIReply(reply, reactions))
+  return replies.map((reply) =>
+    replyMessageToUIReply(reply, reactions[reply.id]),
+  )
 }
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   let groupedReactions: { [key: string]: UIReaction } = {}
-  reactions.forEach((reactionMessage) => {
-    let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-    if (!reactors.includes(reactionMessage.from))
-      reactors = [...reactors, reactionMessage.from]
-    groupedReactions[reactionMessage.payload] = {
-      emoji: reactionMessage.payload,
-      reactors,
-      showReactors: true,
-    }
-  })
+  if (reactions)
+    reactions.forEach((reactionMessage) => {
+      let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+      if (!reactors.includes(reactionMessage.from))
+        reactors = [...reactors, reactionMessage.from]
+      groupedReactions[reactionMessage.payload] = {
+        emoji: reactionMessage.payload,
+        reactors,
+        showReactors: true,
+      }
+    })
 
   return Object.values(groupedReactions)
 }
@@ -112,7 +115,7 @@ export function groupMessages(
             ...currentMessage,
             replies: messageRepliesToUIReplies(
               currentMessageReplies,
-              currentMessageReactions,
+              reactions,
             ),
             reactions: getMessageUIReactions(
               currentMessage,
@@ -128,7 +131,20 @@ export function groupMessages(
       const group: Group = groupOrDivider
 
       const newMessages = group.messages
-        ? [...group.messages, { ...currentMessage, replies: [], reactions: [] }]
+        ? [
+            ...group.messages,
+            {
+              ...currentMessage,
+              replies: messageRepliesToUIReplies(
+                currentMessageReplies,
+                reactions,
+              ),
+              reactions: getMessageUIReactions(
+                currentMessage,
+                currentMessageReactions,
+              ),
+            },
+          ]
         : [{ ...currentMessage, replies: [], reactions: [] }]
 
       groupedMessages[groupedMessages.length - 1] = {

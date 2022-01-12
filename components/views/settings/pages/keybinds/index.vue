@@ -1,13 +1,13 @@
 <template src="./Keybinds.html"></template>
 
 <script lang="ts">
-// @ts-nocheck
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'KeybindSettings',
-  /*  mixins: [Keybinds], */
   layout: 'settings',
   data() {
     return {
@@ -44,7 +44,7 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    recordKeybind(e: any) {
+    recordKeybind(e: KeyboardEvent) {
       this.errorCheck(e)
       if (!this.$data.editingKeybind.error) {
         this.$data.editingKeybind.newString.length === 0
@@ -61,7 +61,17 @@ export default Vue.extend({
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
       const newKeybind = this.$data.editingKeybind.newString
+      
       for (const key in this.settings.keybinds) {
+        if (this.checkSystemHotkey(this.settings.keybinds[key])) {
+          this.$data.editingKeybind.error = true
+          this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+          this.$store.commit('settings/updateKeybinding', {
+            keybindName: key,
+            newKeybind: '',
+          })
+        }
+
         if (this.settings.keybinds[key] === newKeybind) {
           this.$store.commit('settings/updateKeybinding', {
             keybindName: key,
@@ -69,13 +79,18 @@ export default Vue.extend({
           })
         }
       }
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName,
-        newKeybind,
-      })
-      this.$data.editingKeybind.newString = ''
-      this.$data.editingKeybind.status = false
-      this.$store.dispatch('ui/activateKeybinds')
+      if (!this.checkSystemHotkey(newKeybind)) {
+        this.$store.commit('settings/updateKeybinding', {
+          keybindName,
+          newKeybind,
+        })
+        this.$data.editingKeybind.newString = ''
+        this.$data.editingKeybind.status = false
+        this.$store.dispatch('ui/activateKeybinds')
+      } else {
+        this.$data.editingKeybind.error = true
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+      }
     },
     /**
      * @method cancelKeybind DocsTODO
@@ -101,9 +116,9 @@ export default Vue.extend({
       this.$data.editingKeybind.error = false
     },
     /**
-     * @method resetKeybinds DocsTODO
-     * @description
-     * @example
+     * @method resetKeybinds
+     * @description Resets keybind local state back to hard-coded defaults
+     * @example resetKeybinds()
      */
     resetKeybinds() {
       this.$store.commit('settings/updateKeybinding', {
@@ -130,13 +145,14 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    errorCheck(e: any) {
+    errorCheck(e: KeyboardEvent) {
       const key = e.key.toLowerCase()
       const newString = this.$data.editingKeybind.newString
       const keyAlreadyBound = newString.includes(key)
+      const keyAlreadyExist = this.checkSystemHotkey(newString + '+' + key)
 
-      const modifiers = ['shift', 'control', 'alt', 'meta', 'tab', 'capslock']
-      const isModifier = modifiers.includes(key)
+      const modifiers = Object.values(ModifierKeysEnum)
+      const isModifier = key in modifiers
       let hasAlphanumeric = false
       for (const char of newString.split('+')) {
         if (char.length === 1) {
@@ -144,24 +160,33 @@ export default Vue.extend({
         }
       }
       const modifierAfterAlphanumeric = hasAlphanumeric && isModifier
-      const blockedChars = ['capslock', 'delete']
-      const hasBlockedChars = blockedChars.includes(key)
+      const blockedChars = Object.values(BlockKeysEnum)
+      const hasBlockedChars = key in blockedChars
 
-      if (keyAlreadyBound) {
+      if (keyAlreadyExist) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = 'Key already bound'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+      } else if (keyAlreadyBound) {
+        this.$data.editingKeybind.error = true
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.existHotkeyError')
       } else if (modifierAfterAlphanumeric) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage =
-          'Modifiers (Shift, Tab, Option, etc.) Must Come Before Alphanumerics'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.modifierHotkeyError')
       } else if (hasBlockedChars) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = 'Character Not Allowed'
+        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.editHotkeyError')
       } else {
         this.$data.editingKeybind.error = false
         this.$data.editingKeybind.errorMessage = ''
       }
     },
+    checkSystemHotkey(keys: string) {
+      return navigator.userAgent.indexOf("Mac") > 0 ? 
+        macShortcuts.includes(keys) : 
+        windowsShortcuts.includes(keys)
+    },
   },
 })
 </script>
+
+<style scoped lang="less" src="./Keybinds.less"></style>
