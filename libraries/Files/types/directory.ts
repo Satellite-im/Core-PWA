@@ -1,3 +1,3 @@
 export enum DIRECTORY_TYPE {
-  DEFAULT = 'DEFAULT'
+  DEFAULT = 'DEFAULT',
 }
