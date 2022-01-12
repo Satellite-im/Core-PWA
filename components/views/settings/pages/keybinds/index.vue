@@ -45,11 +45,17 @@ export default Vue.extend({
      * @example
      */
     recordKeybind(e: KeyboardEvent) {
+      let key = ''
+      if (e.altKey && e.keyCode >= 65 && e.keyCode <= 90) {
+        key = String.fromCharCode(e.keyCode).toLowerCase()
+      } else {
+        key = e.key.toLowerCase()
+      }
       this.errorCheck(e)
       if (!this.$data.editingKeybind.error) {
         this.$data.editingKeybind.newString.length === 0
-          ? (this.$data.editingKeybind.newString += e.key.toLowerCase())
-          : (this.$data.editingKeybind.newString += `+${e.key.toLowerCase()}`)
+          ? (this.$data.editingKeybind.newString += key)
+          : (this.$data.editingKeybind.newString += `+${key}`)
       }
     },
     /**
@@ -61,11 +67,13 @@ export default Vue.extend({
       window.removeEventListener('keydown', this.recordKeybind)
       const keybindName = this.$data.editingKeybind.name
       const newKeybind = this.$data.editingKeybind.newString
-      
+
       for (const key in this.settings.keybinds) {
         if (this.checkSystemHotkey(this.settings.keybinds[key])) {
           this.$data.editingKeybind.error = true
-          this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+          this.$data.editingKeybind.errorMessage = this.$t(
+            'pages.settings.keybinds.systemHotkeyError',
+          )
           this.$store.commit('settings/updateKeybinding', {
             keybindName: key,
             newKeybind: '',
@@ -89,7 +97,9 @@ export default Vue.extend({
         this.$store.dispatch('ui/activateKeybinds')
       } else {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.systemHotkeyError',
+        )
       }
     },
     /**
@@ -146,13 +156,19 @@ export default Vue.extend({
      * @example
      */
     errorCheck(e: KeyboardEvent) {
-      const key = e.key.toLowerCase()
+      let key = ''
+      if (e.altKey && e.keyCode >= 65 && e.keyCode <= 90) {
+        key = String.fromCharCode(e.keyCode).toLowerCase()
+      } else {
+        key = e.key.toLowerCase()
+      }
       const newString = this.$data.editingKeybind.newString
-      const keyAlreadyBound = newString.includes(key)
+
+      const keyAlreadyBound = newString.split('+').includes(key)
+
       const keyAlreadyExist = this.checkSystemHotkey(newString + '+' + key)
 
-      const modifiers = Object.values(ModifierKeysEnum)
-      const isModifier = key in modifiers
+      const isModifier = key in ModifierKeysEnum
       let hasAlphanumeric = false
       for (const char of newString.split('+')) {
         if (char.length === 1) {
@@ -160,30 +176,37 @@ export default Vue.extend({
         }
       }
       const modifierAfterAlphanumeric = hasAlphanumeric && isModifier
-      const blockedChars = Object.values(BlockKeysEnum)
-      const hasBlockedChars = key in blockedChars
+      const hasBlockedChars = key in BlockKeysEnum
 
       if (keyAlreadyExist) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.systemHotkeyError')
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.systemHotkeyError',
+        )
       } else if (keyAlreadyBound) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.existHotkeyError')
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.existHotkeyError',
+        )
       } else if (modifierAfterAlphanumeric) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.modifierHotkeyError')
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.modifierHotkeyError',
+        )
       } else if (hasBlockedChars) {
         this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t('pages.settings.keybinds.editHotkeyError')
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.editHotkeyError',
+        )
       } else {
         this.$data.editingKeybind.error = false
         this.$data.editingKeybind.errorMessage = ''
       }
     },
     checkSystemHotkey(keys: string) {
-      return navigator.userAgent.indexOf("Mac") > 0 ? 
-        macShortcuts.includes(keys) : 
-        windowsShortcuts.includes(keys)
+      return navigator.userAgent.indexOf('Mac') > 0
+        ? macShortcuts.includes(keys)
+        : windowsShortcuts.includes(keys)
     },
   },
 })
