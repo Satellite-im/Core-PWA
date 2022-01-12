@@ -1,6 +1,6 @@
 export enum WebRTCEnum {
-  AUDIO = 'Audio',
-  VIDEO = 'Video',
+  AUDIO = 'audio',
+  VIDEO = 'video',
 }
 
 export type WebRTC = keyof typeof WebRTCEnum
