@@ -133,9 +133,9 @@ const mutations = {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: false,
-          name: name,
+          name,
         },
       }
     }
@@ -143,9 +143,9 @@ const mutations = {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: true,
-          name: name,
+          name,
         },
       }
     }
