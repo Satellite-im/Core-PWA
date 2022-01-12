@@ -44,6 +44,7 @@
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.10.4",
     "detectrtc": "^1.4.1",
+    "dexie": "^3.2.0",
     "ed2curve": "^0.3.0",
     "emoji-mart-vue-fast": "^10.0.1",
     "events": "^3.3.0",
