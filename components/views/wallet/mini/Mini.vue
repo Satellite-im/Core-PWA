@@ -1,15 +1,20 @@
 <template>
-  <div id="mini-wallet" v-click-outside="toggleWalletMini">
+  <div
+    id="mini-wallet"
+    v-click-outside="toggleWalletMini"
+    :class="`${showSidebar ? 'side-open' : 'side-close'}`"
+  >
     <WalletMiniBody :updateMethod="updateMethod" />
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default Vue.extend({
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['showSidebar']),
   },
   data() {
     return {
