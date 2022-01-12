@@ -2,6 +2,7 @@ import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
+import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
 
 export class FileSystem {
   private _self = new Directory('root')
@@ -73,6 +74,18 @@ export class FileSystem {
   }
 
   /**
+   * @getter export
+   * @returns {FileSystemExport} returns exported filesystem object
+   */
+  get export(): FileSystemExport {
+    return {
+      type: FILESYSTEM_TYPE.DEFAULT,
+      version: 1,
+      content: this.content,
+    }
+  }
+
+  /**
    * @method createFile
    * @argument {string} fileName name of the new file to create
    * @argument {any[]} options list of additional arguments to pass to new file
@@ -90,7 +103,10 @@ export class FileSystem {
    * @argument {type} DIRECTORY_TYPE Default for now
    * @returns {Fil | null} Returns the new directory if successfully created, else null
    */
-  public createDirectory(dirName: string, type = DIRECTORY_TYPE.DEFAULT): Directory | null {
+  public createDirectory(
+    dirName: string,
+    type = DIRECTORY_TYPE.DEFAULT,
+  ): Directory | null {
     const newDir = new Directory(dirName, type)
     const inserted = this.currentDirectory.addChild(newDir)
     return inserted ? newDir : null
@@ -191,7 +207,7 @@ export class FileSystem {
   public openDirectory(path: string): Directory | null {
     if (!path) return null
 
-    let dir = this.getDirectoryFromPath(path as string)
+    const dir = this.getDirectoryFromPath(path as string)
     if (!(dir && dir instanceof Directory)) return null
 
     const dirPath = [dir]
@@ -307,7 +323,7 @@ export class FileSystem {
     return null
   }
 
-  /**f
+  /**
    * @method moveItemTo
    * move an item into a specific directory
    * @argument {string} childName name of item to move
@@ -320,7 +336,7 @@ export class FileSystem {
     multiple: boolean = false,
   ): Item[] | null {
     let match = multiple ? ([] as Item[]) : null
-    let directories = []
+    const directories = []
 
     for (const item of dir.content) {
       if (isItem(item)) {
@@ -332,8 +348,7 @@ export class FileSystem {
         }
       }
 
-      if (item instanceof Directory)
-        directories.push(item)
+      if (item instanceof Directory) directories.push(item)
     }
 
     if ((match === null || multiple) && directories.length) {
@@ -350,7 +365,6 @@ export class FileSystem {
 
     return match
   }
-
 
   /**
    * @method setupAndFind
@@ -375,12 +389,10 @@ export class FileSystem {
    * @argument {string} dirPath string path to the directory to get
    * @returns {Directory | null} returns the directory or null if it can't be found
    */
-  private getDirectoryFromPath (dirPath: string): Directory | null {
-    if (dirPath.match(/^(root\/?|\/)$/g))
-      return this.root
+  private getDirectoryFromPath(dirPath: string): Directory | null {
+    if (dirPath.match(/^(root\/?|\/)$/g)) return this.root
 
-    if (dirPath.match(/^\.\/?$/g))
-      return this.currentDirectory
+    if (dirPath.match(/^\.\/?$/g)) return this.currentDirectory
 
     let dir = dirPath.match(/^(root\/?|\/)/g)
       ? this.root
@@ -390,12 +402,10 @@ export class FileSystem {
     while (paths.length) {
       dir = dir.getChild(paths.shift() as string) as Directory
 
-      if (!dir || !(dir instanceof Directory))
-        return null
+      if (!dir || !(dir instanceof Directory)) return null
     }
 
-    if (paths.length === 0)
-      return dir
+    if (paths.length === 0) return dir
 
     return null
   }

@@ -11,7 +11,10 @@ export class Directory extends Item {
    * @param  {DIRECTORY_TYPE=DIRECTORY_TYPE.DEFAULT} type directory type of the new folder
    * @returns {Directory}
    */
-  constructor(name: string = '', type: DIRECTORY_TYPE = DIRECTORY_TYPE.DEFAULT) {
+  constructor(
+    name: string = '',
+    type: DIRECTORY_TYPE = DIRECTORY_TYPE.DEFAULT,
+  ) {
     super(name || 'un-named directory')
     this._type = DIRECTORY_TYPE[type] ? type : DIRECTORY_TYPE.DEFAULT
   }
@@ -23,6 +26,7 @@ export class Directory extends Item {
   get content(): Array<any> {
     return Array.from(this._children.values())
   }
+
   /**
    * @getter type
    * @returns {DIRECTORY_TYPE} returns the type of directory
@@ -37,13 +41,13 @@ export class Directory extends Item {
    */
   get copy(): Directory {
     const dirCopy = new Directory(`${this.name} copy`, this.type)
-    
-    this.content.forEach(item => {
+
+    this.content.forEach((item) => {
       const itemCopy = item.copy
       itemCopy.name = item.name
       dirCopy.addChild(itemCopy)
     })
-    
+
     return dirCopy
   }
 
@@ -64,23 +68,21 @@ export class Directory extends Item {
   addChild(child: Item): boolean {
     if (this.hasChild(child.name)) return false
 
-    if( child === this) throw new Error(FileSystemErrors.DIR_PARADOX)
-    
+    if (child === this) throw new Error(FileSystemErrors.DIR_PARADOX)
+
     let parent = this.parent
-    
+
     while (parent !== null) {
-      if (parent === child)
-        throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
+      if (parent === child) throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
       parent = parent.parent
     }
-    
+
     this._children.set(child.name, child)
     child.parent = this
-    
+
     return this.hasChild(child.name)
   }
 
-  
   /**
    * @method getChild
    * @param {string} childName the name of the child to fetch
@@ -98,12 +100,12 @@ export class Directory extends Item {
   removeChild(childName: string): boolean {
     if (this.getChild(childName) === null) return false
     const child = this.getChild(childName)
-    
+
     if (child) {
       this._children.delete(childName)
       child.parent = null
     }
-    
+
     return !this.hasChild(childName)
   }
 }
