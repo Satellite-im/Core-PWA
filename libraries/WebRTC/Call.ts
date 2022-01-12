@@ -366,12 +366,9 @@ export class Call extends Emitter<CallEventListeners> {
    */
    toggleTracks(kind: string, enabled: boolean) {
     const tracks = this.tracksManager.tracks
-    for (let key in tracks) {
-      let track = tracks[key]
-      console.log(track)
-      if (track.kind === kind) {
-        track.enabled = enabled
-      }
+    for (const key in tracks) {
+      const track = tracks[key]
+      if (track.kind === kind) track.enabled = enabled
     }
   }
 
