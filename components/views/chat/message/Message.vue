@@ -10,7 +10,10 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
-import { refreshTimestampInterval } from '~/utilities/Messaging'
+import { getFullUserInfoFromState, refreshTimestampInterval } from '~/utilities/Messaging'
+import ThreadManager from '~/libraries/textile/ThreadManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -96,6 +99,13 @@ export default Vue.extend({
     },
   },
   methods: {
+    testThread() {
+      console.log('huh')
+      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+      const ThreadManager = $TextileManager.threadManager
+      const userID = this.accounts?.details?.textilePubkey
+      ThreadManager.getCreateThread([userID], 'newThread bebeee', {poop:'poop', fart:'fart', })
+    },
     /**
      * @method wrapEmoji
      * @description Wraps emojis in spans with the emoji class

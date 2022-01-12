@@ -6,12 +6,14 @@ import {
   TextileInitializationData,
 } from '~/types/textile/manager'
 import BucketManager from "~/libraries/Textile/BucketManager";
+import ThreadManager from "~/libraries/Textile/ThreadManager";
 
 export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
   bucketManager?: BucketManager
+  threadManager?: ThreadManager
 
   constructor() {
     this.identityManager = new IdentityManager()
@@ -47,7 +49,9 @@ export default class TextileManager {
 
     this.mailboxManager = new MailboxManager(textile, wallet.address)
     this.bucketManager = new BucketManager(textile, identity, textile.wallet.address)
+    this.threadManager = new ThreadManager(textile, textile.wallet.address, identity)
     await this.bucketManager.init().catch((e) => console.log(e))
+    await this.threadManager.init().catch((e) => console.log(e))
     return this.mailboxManager.init()
   }
 
@@ -71,6 +75,8 @@ export default class TextileManager {
     await this.mailboxManager.init()
     this.bucketManager = new BucketManager(textile, textile.identity,textile.wallet.address)
     await this.bucketManager.init().catch((e) => console.log(e))
+    this.threadManager = new ThreadManager(textile, textile.wallet.address, textile.identity)
+    await this.threadManager.init().catch((e) => console.log(e))
   }
 
   /**
