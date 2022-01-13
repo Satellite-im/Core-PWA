@@ -25,6 +25,10 @@ declare module 'vue/types/vue' {
     typingNotifHandler: Function
     smartTypingStart: Function
     handleChatBorderRadius: Function
+    clearChatbar: Function
+    setChatText: any
+    findDiff: Function
+    checkEmoji: Function
   }
 }
 export default Vue.extend({
@@ -195,8 +199,8 @@ export default Vue.extend({
         messageBox.innerText &&
         messageBox.innerText.length > this.$Config.chat.maxChars + 1
       ) {
+        /* remove updateText() here because when this.value is changed it is automatically called */
         messageBox.innerText = messageBox.innerText.slice(0, -1)
-        this.updateText()
       }
       this.value = messageBox.innerText
     },
@@ -240,12 +244,13 @@ export default Vue.extend({
      * @method updateText
      * @description Helper function to update the setChatText and send the cursor to the end if collapseToEnd is true.
      */
-    updateText() {
+    updateText(collapseToEnd: boolean) {
       const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = this.value
-      let sel = window.getSelection()
-      sel?.selectAllChildren(messageBox)
-      sel?.collapseToEnd()
+      if (collapseToEnd) {
+        let sel = window.getSelection()
+        sel?.selectAllChildren(messageBox)
+        sel?.collapseToEnd()
+      }
       this.setChatText = {
         userId: this.$props.recipient.address,
         value: messageBox.innerHTML,
@@ -332,10 +337,34 @@ export default Vue.extend({
       messageBox.innerHTML = ''
       this.value = ''
     },
+    findDiff(str1: string, str2: string) {
+      let i = 0
+      let j = 0
+      let result = ''
+
+      while (j < str2.length) {
+        if (str1[i] != str2[j] || i == str1.length) result += str2[j]
+        else i++
+        j++
+      }
+      return result
+    },
+    checkEmoji(str: string) {
+      var regex =
+        /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g
+      return str.match(regex)?.length ? true : false
+    },
   },
   watch: {
-    'ui.chatbarContent': function () {
-      this.updateText()
+    'ui.chatbarContent': {
+      handler(newValue, oldValue) {
+        const messageBox = this.$refs.messageuser as HTMLElement
+
+        this.checkEmoji(this.findDiff(oldValue, newValue))
+          ? (messageBox.innerHTML = this.ui.chatbarContent)
+          : this.updateText(false)
+      },
+      deep: true,
     },
     'friends.all': {
       handler() {
