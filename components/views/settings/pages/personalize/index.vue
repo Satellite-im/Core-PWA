@@ -3,12 +3,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Themes, Flairs } from '~/store/ui/types.ts'
+import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
   data() {
     return {
+      ThemeNames,
       themes: Themes,
       flairs: Flairs,
     }
