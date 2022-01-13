@@ -62,6 +62,15 @@
       :close-modal="() => toggleModal(ModalWindows.GLYPH)"
     />
   </UiModal>
+  <UiModal
+    v-if="ui.modals.userprofile"
+    :close-modal="() => toggleModal(ModalWindows.USERPROFILE)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.USERPROFILE)"
+    :small="true"
+  >
+    <UserProfile :close-modal="() => toggleModal(ModalWindows.USERPROFILE)" />
+  </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"

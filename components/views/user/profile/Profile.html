@@ -1,0 +1,13 @@
+<div class="user-profile" v-click-outside="closeProfileModal">
+  <div class="body-panel">
+    <div class="top-bar">
+      <div class="action">
+        <InteractablesClose :action="closeProfileModal" />
+      </div>
+    </div>
+
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap noPadding>
+      <div>{{this.ui.userProfile.name}}</div>
+    </UiScroll>
+  </div>
+</div>

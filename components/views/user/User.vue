@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
@@ -12,6 +13,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     testFunc: () => void
     navigateToUser: () => void
+    handleShowProfile: () => void
   }
 }
 export default Vue.extend({
@@ -20,6 +22,9 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
+  computed: {
+    ...mapState(['ui']),
+  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -38,6 +43,7 @@ export default Vue.extend({
         { text: 'Voice Call', func: this.testFunc },
         { text: 'Video Call', func: this.testFunc },
         { text: 'Remove Friend', func: this.testFunc },
+        { text: 'Profile', func: this.handleShowProfile },
       ],
     }
   },
@@ -52,10 +58,20 @@ export default Vue.extend({
      * @example ---
      */
     navigateToUser() {
-      if (this.$route.params.address === this.user.address && this.$device.isMobile) {
+      if (
+        this.$route.params.address === this.user.address &&
+        this.$device.isMobile
+      ) {
         this.$store.commit('ui/showSidebar', false)
       }
       this.$router.push(`/chat/direct/${this.user.address}`)
+    },
+    handleShowProfile() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'userprofile',
+        state: !this.ui.modals.userprofile,
+      })
+      this.$store.commit('ui/setUserProfile', this.user)
     },
   },
 })

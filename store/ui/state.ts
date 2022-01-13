@@ -8,6 +8,7 @@ const InitialUIState = (): UIState => ({
   showSettings: false,
   settingsSideBar: true,
   quickProfile: false,
+  userProfile: {},
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
   quickProfilePosition: { x: 0, y: 0 },

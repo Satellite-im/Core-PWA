@@ -23,8 +23,8 @@ export enum FlairColors {
 }
 
 export type Flair = {
-  text: String,
-  value: FlairColors,
+  text: String
+  value: FlairColors
 }
 
 export const Flairs = [
@@ -93,6 +93,7 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
+  USERPROFILE = 'userprofile',
 }
 
 export interface EnhancerInfo {
@@ -121,13 +122,14 @@ export interface UIState {
   contextMenuStatus: Boolean
   contextMenuValues: Array<Object>
   quickProfile: Object | Boolean
+  userProfile: Object
   contextMenuPosition: Object
   quickProfilePosition: Object
   showSettings: Boolean
   settingsSideBar: Boolean
   showSidebarUsers: Boolean
   showSearchResult: Boolean
-  showSidebar: boolean,
+  showSidebar: boolean
   modals: Object
   glyphModalPack: String
   chatbarContent: String
