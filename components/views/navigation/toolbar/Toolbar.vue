@@ -13,7 +13,7 @@ import {
   WalletIcon,
 } from 'satellite-lucide-icons'
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Server } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 import { searchRecommend } from '~/mock/search'
@@ -64,6 +64,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'search', 'audio', 'video', 'webrtc']),
+    ...mapGetters('ui', ['showSidebar']),
     showSearchResult: {
       set(state) {
         this.$store.commit('ui/showSearchResult', state)
@@ -91,8 +92,7 @@ export default Vue.extend({
      * @example
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleChange(value: string, item: SearchQueryItem) {
-    },
+    handleChange(value: string, item: SearchQueryItem) {},
     /**
      * @method handleSearch DocsTODO
      * @description
@@ -126,7 +126,7 @@ export default Vue.extend({
       })
     },
     async call(kinds: TrackKind[]) {
-      if(!this.webrtc.connectedPeer) return
+      if (!this.webrtc.connectedPeer) return
       const identifier = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       ).address
