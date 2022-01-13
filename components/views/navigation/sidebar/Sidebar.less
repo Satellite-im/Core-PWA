@@ -175,8 +175,8 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
     z-index: 3;
-    width: @sidebar-size-mobile !important;
-    min-width: @sidebar-size-mobile !important;
+    width: @sidebar-size-mobile;
+    min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
@@ -190,8 +190,8 @@
   }
 
   .desktop #sidebar {
-    width: calc(@sidebar-size-mobile - @slimbar-size) !important;
-    min-width: calc(@sidebar-size-mobile - @slimbar-size) !important;
+    width: calc(@sidebar-size-mobile - @slimbar-size);
+    min-width: calc(@sidebar-size-mobile - @slimbar-size);
   }
 }
 
