@@ -68,8 +68,8 @@ export default Vue.extend({
     },
     handleShowProfile() {
       this.$store.commit('ui/toggleModal', {
-        name: 'userprofile',
-        state: !this.ui.modals.userprofile,
+        name: 'userProfile',
+        state: !this.ui.modals.userProfile,
       })
       this.$store.commit('ui/setUserProfile', this.user)
     },

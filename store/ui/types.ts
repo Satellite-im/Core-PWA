@@ -93,7 +93,7 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USERPROFILE = 'userprofile',
+  USERPROFILE = 'userProfile',
 }
 
 export interface EnhancerInfo {
