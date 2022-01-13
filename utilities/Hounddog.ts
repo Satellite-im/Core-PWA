@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { FriendStatus } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
@@ -29,9 +28,14 @@ export default class Hounddog {
             return f.name === identifier ||
                 f.address === identifier ||
                 f.account.accountId === identifier ||
-                f.textilePubkey === identifier || 
+                f.textilePubkey === identifier ||
                 f.name === identifier
         })
+    }
+
+    findFriendByAddress(address: string, state: FriendsState): Friend | undefined {
+        const search = state.all.find((fr: Friend) => fr.address === address)
+        return search;
     }
 
     getActiveFriend(state: FriendsState): Friend | undefined {

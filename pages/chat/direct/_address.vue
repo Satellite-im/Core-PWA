@@ -24,17 +24,16 @@ export default Vue.extend({
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
-    const address = this.$route.params.address
-    const { all: friends } = this.$store.state.friends
+    const { address } = this.$route.params
+    const { friends } = this.$store.state
     if (address) {
-      const friend = friends.find((fr) => fr.address === address)
-      if (friend) {
+      if (this.$Hounddog.findFriendByAddress(address, friends)) {
         this.$store.dispatch('textile/fetchMessages', { address })
         return
       }
     }
-    if (friends.length > 0) {
-      this.$router.replace(`/chat/direct/${friends[0].address}`)
+    if (friends && friends.all && friends.all.length > 0) {
+      this.$router.replace(`/chat/direct/${friends.all[0].address}`)
       return
     }
     this.$route.replace('/chat/direct')
