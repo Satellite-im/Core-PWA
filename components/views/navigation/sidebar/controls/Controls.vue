@@ -13,6 +13,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export default Vue.extend({
   components: {
@@ -23,6 +24,12 @@ export default Vue.extend({
     VideoOffIcon,
   },
   computed: {
+    audioMuted() {
+      return this.$store.state.webrtc.localTracks.audio.muted
+    },
+    videoMuted() {
+      return this.$store.state.webrtc.localTracks.video.muted
+    },
     ...mapState(['audio', 'video']),
   },
   methods: {
@@ -32,11 +39,19 @@ export default Vue.extend({
      * @example
      */
     toggleMute() {
-      const muted = this.audio.muted
-      if (!muted) this.$Sounds.playSound(Sounds.MUTE)
-      else this.$Sounds.playSound(Sounds.UNMUTE)
+      const muted = this.audioMuted
 
-      this.$store.commit('audio/mute')
+      const { activeCall } = this.$store.state.webrtc
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      if (muted) {
+        peer?.call.unmute(WebRTCEnum.AUDIO)
+        this.$Sounds.playSound(Sounds.UNMUTE)
+      } else {
+        peer?.call.mute(WebRTCEnum.AUDIO)
+        this.$Sounds.playSound(Sounds.MUTE)
+      }
     },
     /**
      * @method toggleDeafen DocsTODO
@@ -56,11 +71,19 @@ export default Vue.extend({
      * @example
      */
     toggleVideo() {
-      const videoDisabled = this.video.disabled
-      if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
-      else this.$Sounds.playSound(Sounds.UNDEAFEN)
+      const muted = this.videoMuted
 
-      this.$store.commit('video/toggleCamera')
+      const { activeCall } = this.$store.state.webrtc
+
+      const peer = this.$WebRTC.getPeer(activeCall)
+
+      if (muted) {
+        peer?.call.unmute(WebRTCEnum.VIDEO)
+        this.$Sounds.playSound(Sounds.UNDEAFEN)
+      } else {
+        peer?.call.mute(WebRTCEnum.VIDEO)
+        this.$Sounds.playSound(Sounds.DEAFEN)
+      }
     },
   },
 })

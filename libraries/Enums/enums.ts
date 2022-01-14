@@ -6,6 +6,7 @@ import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
 import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
 import { ModifierKeysEnum } from '~/libraries/Enums/types/modifierKeys'
 import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export {
   KeybindingEnum as KeybindingEnum,
@@ -15,5 +16,6 @@ export {
   EncodingTypesEnum as EncodingTypesEnum,
   MeasurementUnitsEnum as MeasurementUnitsEnum,
   ModifierKeysEnum as ModifierKeysEnum,
-  BlockKeysEnum as BlockKeysEnum
+  BlockKeysEnum as BlockKeysEnum,
+  WebRTCEnum as WebRTCEnum,
 }

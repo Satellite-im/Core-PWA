@@ -70,7 +70,12 @@ export class Call extends Emitter<CallEventListeners> {
       {},
     )
 
-    this.stream = await navigator.mediaDevices.getUserMedia(constraintsToApply)
+    await navigator.mediaDevices
+      .getUserMedia(constraintsToApply)
+      .then((stream) => (this.stream = stream))
+      .catch((err) => {
+        console.error(err)
+      })
 
     const { audio, video } = this.getLocalTracks()
 
@@ -92,6 +97,43 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     return { audio, video }
+  }
+
+  /**
+   * @method createNewTracks
+   * @description Creates new media stream and returns tracks
+   * @param constraints Media stream contraints to apply
+   */
+  async createNewTracks(constraints: MediaStreamConstraints) {
+    if (!navigator.mediaDevices.getUserMedia) {
+      throw new Error('WebRTC not supported')
+    }
+    return await navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream: MediaStream) => {
+        const [audio] = stream.getAudioTracks()
+        const [video] = stream.getVideoTracks()
+        if (audio) this.tracksManager.addTrack(audio)
+        if (video) this.tracksManager.addTrack(video)
+
+        if (audio) {
+          this.emit('LOCAL_TRACK_CREATED', {
+            peerId: this.communicationBus.identifier,
+            track: audio,
+          })
+        }
+
+        if (video) {
+          this.emit('LOCAL_TRACK_CREATED', {
+            peerId: this.communicationBus.identifier,
+            track: video,
+          })
+        }
+        return { audio, video }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   /**
@@ -274,9 +316,10 @@ export class Call extends Emitter<CallEventListeners> {
 
     const constraints = { [kind]: this.constraints[kind] }
 
-    const newTracks = await this.createLocalTracks([kind], constraints)
-
-    this.addTrack(newTracks[kind], this.stream)
+    const newTracks: any = await this.createNewTracks(constraints)
+    if (newTracks[kind]) {
+      this.addTrack(newTracks[kind], this.stream)
+    }
   }
 
   /**
@@ -352,6 +395,21 @@ export class Call extends Emitter<CallEventListeners> {
     this.peer?.replaceTrack(oldTrack, newTrack, stream)
     this.tracksManager.removeTrack(oldTrack.id)
     this.tracksManager.addTrack(newTrack)
+  }
+
+  /**
+   * @method toggleTracks
+   * @description Enable and disable tracks
+   * @param kind Kinds of tracks (video or audio) to disable
+   * @example this.toggleTracks('audio')
+   */
+  toggleTracks(kind: string, enabled: boolean) {
+    const localTracks = this.getLocalTracks()
+    for (const key in localTracks) {
+      // @ts-ignore
+      const track = localTracks[key]
+      if (track.kind === kind) track.enabled = enabled
+    }
   }
 
   /**
