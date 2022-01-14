@@ -4,6 +4,7 @@ import Emitter from './Emitter'
 import { TracksManager } from './TracksManager'
 import { CallEventListeners, TrackKind } from './types'
 import { Wire } from './Wire'
+import Logger from '~/utilities/Logger'
 
 /**
  * @class Call
@@ -74,7 +75,8 @@ export class Call extends Emitter<CallEventListeners> {
       .getUserMedia(constraintsToApply)
       .then((stream) => (this.stream = stream))
       .catch((err) => {
-        console.error(err)
+        // @ts-ignore
+        Logger.log('Call.ts Error:', err)
       })
 
     const { audio, video } = this.getLocalTracks()
@@ -132,7 +134,8 @@ export class Call extends Emitter<CallEventListeners> {
         return { audio, video }
       })
       .catch((err) => {
-        console.error(err)
+        // @ts-ignore
+        Logger.log('Call.ts Error:', err)
       })
   }
 
@@ -405,9 +408,10 @@ export class Call extends Emitter<CallEventListeners> {
    */
   toggleTracks(kind: string, enabled: boolean) {
     const localTracks = this.getLocalTracks()
+    type trackType = typeof localTracks
+
     for (const key in localTracks) {
-      // @ts-ignore
-      const track = localTracks[key]
+      const track = localTracks[key as keyof trackType]
       if (track.kind === kind) track.enabled = enabled
     }
   }
