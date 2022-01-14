@@ -31,11 +31,11 @@
       box-sizing: border-box;
     }
 
-    .sidebar-container {      
-      width: calc( @sidebar-size + @servers-size );
+    .sidebar-container {
+      width: calc(@sidebar-size + @servers-size);
       display: flex;
     }
-    
+
     .dynamic-content {
       width: 100%;
     }
@@ -46,6 +46,7 @@
   }
 
   .toggle--sidebar {
+    cursor: pointer;
     position: absolute;
     z-index: @base-z-index + 10;
     top: @normal-spacing * 2;
@@ -201,7 +202,6 @@
   .sidebar-container {
     width: 100vw !important;
   }
-
 }
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {

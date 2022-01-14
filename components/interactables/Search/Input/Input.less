@@ -96,12 +96,10 @@
   margin-top: @light-spacing * 1.5;
 }
 
-.search-option-group {  
+.search-option-group {
   li {
     &:hover:not(:first-child),
     &.active {
-      &:extend(.background-primary);
-      &:extend(.glow-primary);
       &:extend(.font-secondary);
       &:extend(.round-corners);
       span:last-child {
@@ -120,7 +118,6 @@
     font-size: 12px;
   }
   padding: 5px;
-
 }
 
 .search-recommends {
@@ -189,8 +186,9 @@
     }
     width: 150px;
   }
-  
-  .search-recommends, .search-options {
+
+  .search-recommends,
+  .search-options {
     margin: 0;
     width: calc(@full - (@light-spacing * 2));
     left: @light-spacing;

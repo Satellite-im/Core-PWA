@@ -1,6 +1,9 @@
 <div class="simple-menu">
   <ul class="menu-list">
-    <li v-for="item in menuContent" :class="`${item.active ? 'active' : ''}`">
+    <li
+      v-for="item in menuContent"
+      :class="`${item.active ? 'is-active' : ''}`"
+    >
       <UiDynamicIcon size="1x" :icon="item.icon" /> {{item.text}}
     </li>
   </ul>

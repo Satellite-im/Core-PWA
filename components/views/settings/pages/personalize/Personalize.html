@@ -29,8 +29,8 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
       <br />
+      <!-- :disabled="theme===ThemeNames.DEFAULT" -->
       <InteractablesSelect
-        :disabled="theme===ThemeNames.DEFAULT"
         v-model="flair"
         size="small"
         :options="flairs"
