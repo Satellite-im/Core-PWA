@@ -50,10 +50,10 @@ export default Vue.extend({
       if (muted) {
         peer?.call.unmute(WebRTCEnum.AUDIO)
         this.$Sounds.playSound(Sounds.UNMUTE)
-      } else {
-        peer?.call.mute(WebRTCEnum.AUDIO)
-        this.$Sounds.playSound(Sounds.MUTE)
+        return
       }
+      peer?.call.mute(WebRTCEnum.AUDIO)
+      this.$Sounds.playSound(Sounds.MUTE)
     },
     /**
      * @method toggleVideo
@@ -70,10 +70,10 @@ export default Vue.extend({
       if (muted) {
         peer?.call.unmute(WebRTCEnum.VIDEO)
         this.$Sounds.playSound(Sounds.UNDEAFEN)
-      } else {
-        peer?.call.mute(WebRTCEnum.VIDEO)
-        this.$Sounds.playSound(Sounds.DEAFEN)
+        return
       }
+      peer?.call.mute(WebRTCEnum.VIDEO)
+      this.$Sounds.playSound(Sounds.DEAFEN)
     },
     /**
      * @method hangUp
