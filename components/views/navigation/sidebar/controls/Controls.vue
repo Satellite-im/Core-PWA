@@ -24,13 +24,13 @@ export default Vue.extend({
     VideoOffIcon,
   },
   computed: {
+    ...mapState(['audio', 'video', 'webrtc']),
     audioMuted() {
-      return this.$store.state.webrtc.localTracks.audio.muted
+      return this.webrtc.localTracks.audio.muted
     },
     videoMuted() {
-      return this.$store.state.webrtc.localTracks.video.muted
+      return this.webrtc.localTracks.video.muted
     },
-    ...mapState(['audio', 'video']),
   },
   methods: {
     /**
@@ -41,7 +41,7 @@ export default Vue.extend({
     toggleMute() {
       const muted = this.audioMuted
 
-      const { activeCall } = this.$store.state.webrtc
+      const { activeCall } = this.webrtc
 
       const peer = this.$WebRTC.getPeer(activeCall)
 
@@ -73,7 +73,7 @@ export default Vue.extend({
     toggleVideo() {
       const muted = this.videoMuted
 
-      const { activeCall } = this.$store.state.webrtc
+      const { activeCall } = this.webrtc
 
       const peer = this.$WebRTC.getPeer(activeCall)
 
