@@ -27,7 +27,7 @@
       padding: 5px 10px;
     }
   }
-  &-filters {    
+  &-filters {
     .date-input {
       &:extend(.font-secondary);
       &:extend(.background-primary-gradient);
@@ -38,8 +38,9 @@
       border: 1px solid @primary-color;
       outline: none;
       line-height: 1.2;
-      padding: 0 10px 0 38px;
+      padding: 0 10px 0 10px;
       &:extend(.full-width);
+      text-align: center;
 
       &::placeholder {
         color: @secondary-text !important;
@@ -48,8 +49,9 @@
     .date-icon {
       &:extend(.font-secondary);
       position: absolute;
-      top: 10px;
+      top: 50%;
       left: 20px;
+      transform: translateY(calc(-50% - 2px));
       font-size: @small-icon-size;
     }
     .add-more-filters {
@@ -68,6 +70,19 @@
       &:active {
         &:extend(.background-primary);
         color: white;
+      }
+    }
+    .container-filter {
+      position: relative;
+      margin-right: 10px;
+
+      &.user-options,
+      &.channel-options {
+        width: 166px;
+      }
+
+      &.date {
+        height: 28px;
       }
     }
     padding: 5px 10px;
@@ -107,7 +122,7 @@
   &-history {
     padding: 5px 10px;
   }
-  
+
   font-family: @primary-font;
   position: fixed;
   right: 10px;
@@ -118,7 +133,8 @@
   border: @light-border !important;
   z-index: @base-z-index + 3;
   font-size: @text-size;
-  &:extend(.light-padding);}
+  &:extend(.light-padding);
+}
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .search-result {

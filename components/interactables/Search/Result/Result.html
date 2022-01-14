@@ -4,7 +4,7 @@
   v-if="show && ((result && result.data) || loading === DataStateType.Loading)"
 >
   <div class="search-result-header">
-    {{$t('search.result.search_results')}} 
+    {{$t('search.result.search_results')}}
     <InteractablesClose class="close" :action="toggle" />
   </div>
   <div class="search-result-group">
@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="search-result-filters">
-    <div>
+    <div class="container-filter user-options">
       <multiselect
         :options="userOptions"
         :multiple="true"
@@ -34,7 +34,7 @@
       >
       </multiselect>
     </div>
-    <div>
+    <div class="container-filter channel-options">
       <multiselect
         :options="channelOptions"
         :multiple="true"
@@ -50,13 +50,10 @@
       >
       </multiselect>
     </div>
-    <div>
+    <div class="container-filter date">
       <v-date-picker v-model="date" is-dark>
         <template v-slot="{ inputValue, inputEvents }">
-          <calendar-icon
-            size="1x"
-            class="date-icon"
-          />
+          <calendar-icon size="1x" class="date-icon" />
           <input
             :value="inputValue"
             v-on="inputEvents"
@@ -66,15 +63,19 @@
         </template>
       </v-date-picker>
     </div>
-    <div>
-      <button class="add-more-filters">{{$t('search.result.more_filters')}} </button>
+    <div class="container-filter">
+      <button class="add-more-filters">
+        {{$t('search.result.more_filters')}}
+      </button>
     </div>
   </div>
   <div
     class="search-result-meta"
     v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
   >
-    <div class="result-count">{{result.data.totalRows}} {{$t('search.result.results')}} </div>
+    <div class="result-count">
+      {{result.data.totalRows}} {{$t('search.result.results')}}
+    </div>
     <div class="result-orderby">
       <div
         v-for="item in orderTypeList"
@@ -110,6 +111,10 @@
     container-class="search-result-pagination"
   />
   <div class="search-result-history">
-    <InteractablesChip v-for="(item, i) in givenQueryItems" :key="i" :text="item" />
+    <InteractablesChip
+      v-for="(item, i) in givenQueryItems"
+      :key="i"
+      :text="item"
+    />
   </div>
 </div>
