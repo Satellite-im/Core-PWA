@@ -50,7 +50,7 @@
     &:extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
     border-radius: 20px;
-    padding: (@light-spacing / 1.5) 0.75rem;
+    padding: 0 0.75rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -103,10 +103,6 @@
       resize: none;
       font-size: @text-size;
       word-break: break-all;
-
-      &[placeholder]:empty:before {
-        content: attr(placeholder);
-      }
     }
 
     #chatbar-controls {

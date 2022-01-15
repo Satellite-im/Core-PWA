@@ -1,11 +1,14 @@
 <template>
   <div :style="`height: ${chatHeight}px`" class="editable-cointainer">
+    <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
-      contenteditable
+      :contenteditable="recipient ? true : false"
+      autocapitalize="off"
       class="editable-input"
       @input="onInput"
       @keydown="handleInputKeydown"
+      @keyup="handleInputKeyupProps"
       @paste="handleInputPaste"
     >
       <div class="chat-row-content">
@@ -17,6 +20,13 @@
 <script>
 import Vue from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
+
+// To wait for a browser repaint, you need to use "double" requestAnimationFrame. Vue $nextTick is sometimes not enough.
+function doubleRaf(callback) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(callback)
+  })
+}
 
 class Cursor {
   static getCurrentCursorPosition(parentElement) {
@@ -164,6 +174,22 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    recipient: {
+      type: Object,
+      default: null,
+    },
+    handleInputKeydownProps: {
+      type: Function,
+      default: () => {},
+    },
+    handleInputKeyupProps: {
+      type: Function,
+      default: () => {},
+    },
   },
   emits: ['input'],
   data() {
@@ -171,31 +197,47 @@ export default Vue.extend({
       chatHeight: 44, // inital height
     }
   },
-
   watch: {
-    value() {
+    value(newValue) {
+      this.handleNewValue(newValue)
+    },
+    recipient() {
       if (!this.$refs?.editable) return
       const messageBox = this.$refs?.editable
-      const pos = Cursor.getCurrentCursorPosition(messageBox)
-      const rows = []
-      messageBox.childNodes.forEach((node, index) => {
-        // When encountering a newline, create a new row
-        node.textContent.split('\n').forEach((line) => {
-          rows.push(buildChatbarRow(line))
-        })
-      })
-      this.chatHeight = messageBox.offsetHeight
-      messageBox.innerHTML = rows.join('')
-      Cursor.setCurrentCursorPosition(pos, messageBox)
+      Cursor.setCurrentCursorPosition(this.$props.value.length, messageBox)
     },
   },
   mounted() {
     document.addEventListener('selectionchange', this.onSelectionChange)
+    // Handle initial value
+    this.handleNewValue(this.$props.value)
+    // On mount we must wait for the browser to repaint in order to set the correct height
+    if (!this.$refs?.editable) return
+    const messageBox = this.$refs?.editable
+    doubleRaf(() => {
+      this.chatHeight = messageBox.offsetHeight
+    })
   },
   beforeDestroy() {
     document.removeEventListener('selectionchange', this.onSelectionChange)
   },
   methods: {
+    handleNewValue(newValue) {
+      // console.log('newValue', newValue, newValue.split('\n'))
+      if (!this.$refs?.editable) return
+      const messageBox = this.$refs?.editable
+      const pos = Cursor.getCurrentCursorPosition(messageBox)
+      const rows = []
+      newValue.split('\n').forEach((row) => {
+        // When encountering a newline, create a new row
+        row.split('\n').forEach((line) => {
+          rows.push(buildChatbarRow(line))
+        })
+      })
+      messageBox.innerHTML = rows.join('')
+      this.chatHeight = messageBox.offsetHeight
+      Cursor.setCurrentCursorPosition(pos, messageBox)
+    },
     handleInputPaste(event) {
       event.preventDefault()
       const text = event.clipboardData.getData('text/plain')
@@ -207,11 +249,11 @@ export default Vue.extend({
     },
     handleInputKeydown(e) {
       switch (e.key) {
-        case 'Enter':
-          if (!e.shiftKey) {
-            e.preventDefault()
-          }
-          return
+        // case 'Enter':
+        //   if (!e.shiftKey) {
+        //     e.preventDefault()
+        //   }
+        //   return
 
         case 'Backspace':
         case 'Delete':
@@ -223,6 +265,7 @@ export default Vue.extend({
           }
           return
       }
+      this.handleInputKeydownProps(e)
     },
     onSelectionChange() {
       const selection = document.getSelection()
@@ -237,10 +280,15 @@ export default Vue.extend({
     },
     onInput(e) {
       const messageBox = e.target
-      this.$emit('input', messageBox.innerHTML)
-    },
-    markdownToHtml(mdString) {
-      return toHTML(mdString)
+      let finalValue = ''
+      messageBox.innerText.split('\n\n').forEach((row, i) => {
+        finalValue +=
+          i === messageBox.innerText.split('\n\n').length - 1
+            ? // Remove the final newline on the last row
+              row.replace(/\n$/, '')
+            : row + '\n' // Close the row
+      })
+      this.$emit('input', finalValue)
     },
   },
 })
@@ -250,6 +298,22 @@ export default Vue.extend({
   position: relative;
   min-height: 48px;
   width: 100%;
+
+  .placeholder {
+    color: @gray;
+    position: absolute;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    left: 0;
+    right: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
   .editable-input {
     width: 100%;

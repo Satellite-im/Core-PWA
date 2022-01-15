@@ -13,19 +13,20 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { setCaretPosition } from '~/libraries/ui/Chatbar'
+import { ChatTextObj } from '~/types/chat/chat'
 
 declare module 'vue/types/vue' {
   interface Vue {
     sendMessage: Function
-    handleInputChange: Function
-    value: string
+    text: string
     updateText: Function
     handleUpload: Function
     debounceTypingStop: Function
     typingNotifHandler: Function
     smartTypingStart: Function
+    clearChatbar: Function
     handleChatBorderRadius: Function
+    setChatText: ChatTextObj
   }
 }
 export default Vue.extend({
@@ -35,7 +36,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      text: '',
       showEmojiPicker: false,
       recipientTyping: false,
       showFilePreview: false,
@@ -56,15 +56,6 @@ export default Vue.extend({
       },
     },
   },
-  mounted() {
-    const findItem = this.setChatText.find(
-      (item: any) => item.userId === this.$props.recipient.address,
-    )
-    const message = findItem ? findItem.value : ''
-
-    // const messageBox = this.$refs.messageuser as HTMLElement
-    // messageBox.innerText = message
-  },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
     setChatText: {
@@ -76,7 +67,7 @@ export default Vue.extend({
       },
     },
     activeFriend() {
-      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+      return this.$Hounddog.getActiveFriend(this.friends)
     },
     /**
      * Computes the amount of characters left
@@ -88,7 +79,7 @@ export default Vue.extend({
      * @example
      */
     charlimit() {
-      return this.$data.text.length > this.$Config.chat.maxChars
+      return this.text.length > this.$Config.chat.maxChars
     },
     /**
      * @method hasCommand DocsTODO
@@ -117,7 +108,7 @@ export default Vue.extend({
       const currentCommand = commands.find((c) => c.name === currentText)
       return currentCommand && isArgsValid(currentCommand, currentArgs)
     },
-    value: {
+    text: {
       /**
        * @method get
        * @description Gets chatbars current text
@@ -135,7 +126,10 @@ export default Vue.extend({
        */
       set(val: string) {
         this.$store.commit('ui/chatbarContent', val)
-        this.$data.text = val
+        this.setChatText = {
+          userId: this.$props.recipient?.address,
+          value: this.text,
+        }
       },
     },
     placeholder() {
@@ -155,9 +149,7 @@ export default Vue.extend({
     typingNotifHandler(
       state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
     ) {
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
+      const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
         const activePeer = this.$WebRTC.getPeer(activeFriend.address)
         activePeer?.send('TYPING_STATE', { state })
@@ -180,29 +172,6 @@ export default Vue.extend({
       if (this.$data.typing) return
       this.$data.typing = true
       this.typingNotifHandler(PropCommonEnum.TYPING)
-    },
-    /**
-     * @method handleInputChange DocsTODO
-     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
-     * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
-     * Once replaced current HTML content, move the caret to proper position.
-     * @example
-     */
-    handleInputChange() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      // Delete extra character when it exceeds the charlimit
-      if (
-        messageBox.innerText &&
-        messageBox.innerText.length > this.$Config.chat.maxChars
-      ) {
-        /* remove updateText() here because when this.value is changed it is automatically called */
-        messageBox.innerText = messageBox.innerText.slice(
-          0,
-          this.$Config.chat.maxChars,
-        )
-        setCaretPosition(messageBox, this.$Config.chat.maxChars)
-      }
-      this.value = messageBox.innerText
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -232,29 +201,9 @@ export default Vue.extend({
           break
       }
       this.smartTypingStart()
-      this.handleInputChange()
     },
     handleInputKeyup() {
       this.debounceTypingStop(this)
-      this.$nextTick(() => {
-        this.handleInputChange()
-      })
-    },
-    /**
-     * @method updateText
-     * @description Helper function to update the setChatText and send the cursor to the end if collapseToEnd is true.
-     */
-    updateText(collapseToEnd: boolean) {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      if (collapseToEnd) {
-        const sel = window.getSelection()
-        sel?.selectAllChildren(messageBox)
-        sel?.collapseToEnd()
-      }
-      this.setChatText = {
-        userId: this.$props.recipient.address,
-        value: messageBox.innerHTML,
-      }
     },
     /**
      * @method sendMessage
@@ -268,9 +217,9 @@ export default Vue.extend({
       if (this.recipient) {
         /* enforce limit as max chars when sending */
         const value =
-          this.value.length > this.$Config.chat.maxChars
-            ? this.value.slice(0, this.$Config.chat.maxChars)
-            : this.value
+          this.text.length > this.$Config.chat.maxChars
+            ? this.text.slice(0, this.$Config.chat.maxChars)
+            : this.text
         const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(value)
         if (!this.recipient || isEmpty) {
           return
@@ -282,7 +231,7 @@ export default Vue.extend({
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.clearChatbar()
+          this.text = ''
           return
         }
         this.$store.dispatch('textile/sendTextMessage', {
@@ -290,7 +239,7 @@ export default Vue.extend({
           text: value,
         })
         this.$data.nsfwUploadError = false
-        this.clearChatbar()
+        this.text = ''
       }
     },
     /**
@@ -333,22 +282,12 @@ export default Vue.extend({
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
     },
-    // clearChatbar() {
-    //   const messageBox = this.$refs.messageuser as HTMLElement
-    //   messageBox.innerHTML = ''
-    //   this.value = ''
-    // },
   },
   // eslint-disable-next-line vue/order-in-components
   watch: {
-    'ui.chatbarContent'() {
-      this.updateText(false)
-    },
     'friends.all': {
       handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(
-          this.$store.state.friends,
-        )
+        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
         if (activeFriend)
           this.$data.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING

@@ -24,19 +24,19 @@
     >
       <terminal-icon size="1x" />
     </div>
-        <!-- <Editable v-model="text" :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"/> -->
-    <div
-      v-focus="ui.replyChatbarContent"
-      :contenteditable="recipient ? true : false"
-      autocapitalize="off"
-      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
-      ref="messageuser"
+    <Editable
+      v-model="text"
       :placeholder="$t('ui.talk')"
-      @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
+      :recipient="recipient"
+      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
+      :handleInputKeydownProps="handleInputKeydown"
+      :handleInputKeyupProps="handleInputKeyup"
+    />
+    <!-- <div
+      v-focus="ui.replyChatbarContent"
       @drop="handleDrop"
       @paste="handlePaste"
-    ></div>
+    ></div> -->
 
     <ChatbarControls
       :editable="recipient ? true : false"
