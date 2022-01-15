@@ -53,8 +53,6 @@ export default Vue.extend({
     float: right;
     margin-right: 2rem;
     font-size: @mini-text-size;
-    user-select: none;
-    -webkit-user-select: none;
     &:extend(.font-muted);
     margin-left: auto;
     &.is-error {
