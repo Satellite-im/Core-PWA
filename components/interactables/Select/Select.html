@@ -1,5 +1,5 @@
 <div
-  :class="{'select': true, [`is-${type}`]: true, [`is-${size}`]: true, 'is-full-width': fullWidth, 'disabled': disabled}"
+  :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`"
   v-click-outside="() => open = false"
 >
   <div :class="{'custom-select': true, open, up, down: !up}">
