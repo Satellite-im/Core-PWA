@@ -78,7 +78,7 @@ export default Vue.extend({
         .sendNotifications(
           'Satellite',
           'Satellite',
-          this.$data.NotificationText,
+          this.$data.NotificationText
         )
     },
   },

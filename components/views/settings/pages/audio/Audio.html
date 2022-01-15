@@ -1,8 +1,5 @@
 <div id="audio-settings">
-  <TypographyHorizontalRuleText
-    plaintext
-    :value="$t('pages.settings.audio.title')"
-  />
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.audio.title')" />
   <!--Audio Sources-->
   <!-- Requires user permissions to see in most browsers -->
   <div class="columns is-desktop">
@@ -56,11 +53,11 @@
       />
     </SettingsUnit>
   </div>
-
+  
   <!--Audio Bitrate & Sample-->
   <div class="columns is-desktop">
     <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
-      <br />
+      <br>
       <div class="meter-container">
         <UiMeter :value="0" :height="5" solid />
       </div>
@@ -72,7 +69,7 @@
       />
     </SettingsUnit>
     <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
-      <br />
+      <br>
       <div class="meter-container">
         <UiMeter :value="micLevel" :height="5" solid />
       </div>
@@ -132,10 +129,7 @@
   </div>
 
   <!-- Video -->
-  <TypographyHorizontalRuleText
-    plaintext
-    :value="$t('pages.settings.video.title')"
-  />
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.video.title')" />
 
   <!--Video Input Source -->
   <div class="columns is-desktop">
@@ -171,10 +165,8 @@
   </div>
 
   <!-- Screen Share -->
-  <TypographyHorizontalRuleText
-    plaintext
-    :value="$t('pages.settings.screen.title')"
-  />
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.screen.title')" />
+
 
   <!-- Capture Mouse -->
   <div class="columns is-desktop">
@@ -189,11 +181,4 @@
       />
     </SettingsUnit>
   </div>
-
-  <!-- Notification Sounds -->
-  <TypographyHorizontalRuleText
-    plaintext
-    :value="$t('pages.settings.notifications.title')"
-  />
-  <SettingsPagesAudioSounds />
 </div>
