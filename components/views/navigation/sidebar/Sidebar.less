@@ -73,10 +73,9 @@
     }
   }
 
+
   .sidebar-inner-streaming {
-    max-height: calc(
-      var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad
-    );
+    max-height: calc(var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
   }
 
   .controls {
@@ -85,6 +84,7 @@
     padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
     box-shadow: @ui-shadow;
   }
+  
 
   .filler {
     flex: 1;
@@ -175,23 +175,15 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
     z-index: 3;
-    width: @sidebar-size-mobile;
-    min-width: @sidebar-size-mobile;
+    width: @sidebar-size-mobile !important;
+    min-width: @sidebar-size-mobile !important;
     padding-bottom: @mobile-nav-size;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
     }
     .sidebar-inner-streaming {
-      max-height: calc(
-        var(--app-height) - @sidebar-inner-offset -
-          @mobile-sidebar-inner-streaming-pad
-      );
+      max-height: calc(var(--app-height) - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
     }
-  }
-
-  .desktop #sidebar {
-    width: calc(@sidebar-size-mobile - @slimbar-size);
-    min-width: calc(@sidebar-size-mobile - @slimbar-size);
   }
 }
 
