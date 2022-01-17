@@ -119,13 +119,14 @@ export class FileSystem {
     if (obj._children) {
       let child = Array.from(obj._children)
       let newChildren: Array<object> = []
-      child.forEach((cItem: any) => {
+      child.forEach((cItem: Item) => {
+        console.log('cItem: ', cItem)
         cItem.forEach((element: FSCItem) => {
           if (typeof element === 'object' && Object.keys(element).length > 0) {
             let cc = this.exportChildren(element)
 
             newChildren.push({
-              id: element._id,
+              _id: element._id,
               name: element._name,
               type: element._type,
               children: cc.children,
@@ -139,7 +140,7 @@ export class FileSystem {
 
     childrenObj = {
       ...childrenObj,
-      id: obj._id,
+      _id: obj._id,
       name: obj._name,
       type: obj._type,
     }

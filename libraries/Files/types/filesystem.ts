@@ -11,7 +11,7 @@ export type FileSystemExport = {
 }
 
 export type FSItem = {
-  id: string
+  _id: string
   name: string
   type: string
   children: Array<object>
