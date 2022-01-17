@@ -9,3 +9,17 @@ export type FileSystemExport = {
   version: number
   content: Array<Item>
 }
+
+export type FSItem = {
+  id: string
+  name: string
+  type: string
+  children: Array<object>
+}
+
+export type FSCItem = {
+  _id: string
+  _name: string
+  _type: string
+  _children: Array<object>
+}
