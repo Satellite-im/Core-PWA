@@ -99,13 +99,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    testThread() {
-      console.log('huh')
-      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-      const ThreadManager = $TextileManager.threadManager
-      const userID = this.accounts?.details?.textilePubkey
-      ThreadManager.getCreateThread([userID], 'newThread bebeee', {poop:'poop', fart:'fart', })
-    },
     /**
      * @method wrapEmoji
      * @description Wraps emojis in spans with the emoji class

@@ -1,26 +1,20 @@
-import { Client, Identity, ThreadID } from '@textile/hub'
+import { Client, Identity, ThreadID, Where } from '@textile/hub'
 // @ts-ignore
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { User } from '~/types/ui/user'
 
 export default class ThreadManager {
   textile: TextileInitializationData
+  senderAddress: string
   identity: Identity
   threadID: ThreadID | null
   token: string | null
   textileClient: Client
 
-  /** @constructor
-   * Construct a ThreadManager
-   * The thread manager stores and fetches threads to store
-   * arbitrary data between two peers
-   * @argument storageMethod preffered storage method of thread assignment (LocalStorage)
-   * @argument textileClient reference to the authenticated textile client
-   */
   constructor(textile: TextileInitializationData, senderAddress: string, identity: Identity) {
     this.identity = identity
     this.textile = textile
+    this.senderAddress = senderAddress
     this.threadID = null
     this.token = null
     this.textileClient = textile.client
@@ -30,15 +24,6 @@ export default class ThreadManager {
   async init() {
     await this.authorize()
 
-  }
-
-  async setupDB(threadName: string, threadUsers: string[], threadID: ThreadID, options?: Object) {
-    // const thread = await this.textile.users.getThread(threadName)
-    // const threadID = ThreadID.fromString(thread.id)
-    await this.textileClient.newCollectionFromObject(threadID, { threadUsers, options }, { name: "threadName" })
-    await this.textileClient.create(threadID, threadName, [{ threadUsers, options }])
-
-    return threadID
   }
 
   async authorize(): Promise<null | any> {
@@ -58,34 +43,63 @@ export default class ThreadManager {
     })
   }
 
-  async getCreateThread(threadUsers: string[], threadTitle?: string, options?: Object ) {
-    if (!this.textileClient) return new Error('Attempted to interface with a thread before initalizing')
-    // const thread = await this.textileClient.listThreads()
-    // if (!thread || threadTitle === undefined) {
-    const thread = await this.textile.users.getThread('hubmail')
-    const threadID = ThreadID.fromString(thread.id)
-      // this.threadID = await this.textileClient.newDB(
-      //   undefined,
-      //   threadTitle || '' + Date.now(),
-      // )
-      await this.setupDB(threadTitle  || '', threadUsers, threadID, options)
-    // }
-    // if (thread) {
-    //   if (threadTitle != null) {
-    //     const thread = await this.textile.users.getThread(threadTitle)
-    //     return ThreadID.fromString(thread.id)
-    //   }
-    // }
+  /**
+   * @method
+   * @name createThread
+   * @argument threadUsers Users to create new thread with
+   * @argument threadTitle Title of new thread
+   * @argument options Object containing values to pass to textile
+   */
+  async createThread(threadUsers: Array<Object>, threadTitle: string, options?: Object) {
+    if (!this.textileClient || !this.identity) return new Error('Attempted to interface with a thread before initalizing')
+    this.threadID = await this.textileClient.newDB(
+      undefined,
+      threadTitle + Date.now(),
+    )
+    const users =
+      {
+        name: '',
+        _id: this.threadID.toString(),
+      }
+    await this.textileClient.newCollectionFromObject(this.threadID, users, { name: threadTitle })
+    await this.textileClient.create(this.threadID, threadTitle, threadUsers)
   }
 
   /**
    * @method
-   * @name updateThread
-   * @argument identifier identifier to store the thread by
-   * @argument threadID ThreadID object to store ID of
+   * @name getCollection
+   * @argument threadTitle identifier to retrieve the collection by
+   * @argument options Object containing values to pass to textile
    */
-  async updateThread(identifier: string, threadID: ThreadID, values: Array<any>) {
-    await this.textileClient.save(threadID, identifier, values)
+  async getCollection(threadTitle: string, options?: Object) {
+    if (!this.textileClient || !this.identity) return new Error('Attempted to interface with a thread before initalizing')
+    const findThread = await this.textile.users.getThread(threadTitle)
+    const threadID = ThreadID.fromString(findThread.id)
+    return await this.textileClient.getCollectionInfo(threadID, threadTitle)
+  }
+
+  /**
+   * @method
+   * @name addUserToThread
+   * @argument threadTitle identifier to store the thread by
+   * @argument values Values object Array containing update info
+   */
+  async addUserToThread(threadTitle: string, userName: string, newInfo: Array<any>) {
+    interface UserInfo {
+      name: string
+      _id: string
+    }
+
+    const findThread = await this.textile.users.getThread(threadTitle)
+    const threadID = ThreadID.fromString(findThread.id)
+    const query = new Where('name').eq(userName)
+    const result = await this.textileClient.find<UserInfo>(threadID, threadTitle, query)
+    newInfo.forEach(user => result.push(user))
+    return await this.textileClient.save(threadID, threadTitle, result)
+  }
+
+  async getIndexes(name: string, threadID: ThreadID) {
+    return await this.textileClient.getCollectionIndexes(threadID, name)
   }
 
   /**
