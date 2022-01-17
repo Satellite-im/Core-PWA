@@ -29,7 +29,7 @@ export default Vue.extend({
           return this.$i18n.t('user.registration.reg_status.funding_account')
         case RegistrationStatus.SENDING_TRANSACTION:
           return this.$i18n.t(
-            'user.registration.reg_status.sending_transaction'
+            'user.registration.reg_status.sending_transaction',
           )
         default:
           return this.$i18n.t('user.registration.reg_status.registered')

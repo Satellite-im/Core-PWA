@@ -54,13 +54,13 @@ const mutations = {
   },
   setRegistrationStatus(
     state: AccountsState,
-    registrationStates: RegistrationStatus
+    registrationStates: RegistrationStatus,
   ) {
     state.registrationStatus = registrationStates
   },
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
-  }
+  },
 }
 
 export default mutations

@@ -236,7 +236,11 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
-    await serverProgram.createUser(userData.name, '', userData.status)
+    await serverProgram.createUser(
+      userData.name,
+      userData.photoHash,
+      userData.status,
+    )
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
@@ -247,7 +251,7 @@ export default {
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
-      photoHash: userData.photoHash,
+      imageURI: userData.photoHash,
       address: userAccount.publicKey.toBase58(),
     })
   },
