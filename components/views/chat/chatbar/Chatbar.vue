@@ -6,7 +6,12 @@ import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import Editable from './Editable.vue'
-import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
+import {
+  parseCommand,
+  commands,
+  isArgsValid,
+  hasCommandPreview,
+} from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
   KeybindingEnum,
@@ -47,15 +52,6 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
     },
   },
-  directives: {
-    focus: {
-      update(el, { value, oldValue }) {
-        if (value.id !== oldValue.id) {
-          el.focus()
-        }
-      },
-    },
-  },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
     setChatText: {
@@ -93,6 +89,15 @@ export default Vue.extend({
         (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
       return currentCommand != null
+    },
+    /**
+     * @method hasCommandPreview DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
+    commandPreview() {
+      return hasCommandPreview(this.ui.chatbarContent)
     },
     /**
      * @method isValidCommand DocsTODO
@@ -188,13 +193,18 @@ export default Vue.extend({
           if (!event.shiftKey) {
             event.preventDefault()
             if (!this.hasCommand) {
-              this.sendMessage()
-              break
+              return this.sendMessage()
             }
             if (this.hasCommand && !this.isValidCommand) {
               this.$Logger.log('Commands', 'dispatch command')
-              break
+              return
             }
+            return
+          }
+
+          // If there is a command disable shift + enter
+          if (this.hasCommand) {
+            event.preventDefault()
           }
           break
         default:

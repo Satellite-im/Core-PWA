@@ -5,7 +5,7 @@
 >
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'show-file-preview': showFilePreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
     ref="wrap"
   >
 
@@ -28,15 +28,13 @@
       v-model="text"
       :placeholder="$t('ui.talk')"
       :recipient="recipient"
+      :focusValue="ui.replyChatbarContent.id"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       :handleInputKeydownProps="handleInputKeydown"
       :handleInputKeyupProps="handleInputKeyup"
+      :handleDropProps="handleDrop"
+      :handlePasteProps="handlePaste"
     />
-    <!-- <div
-      v-focus="ui.replyChatbarContent"
-      @drop="handleDrop"
-      @paste="handlePaste"
-    ></div> -->
 
     <ChatbarControls
       :editable="recipient ? true : false"

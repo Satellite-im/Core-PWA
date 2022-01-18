@@ -12,10 +12,11 @@
     height: 1.25rem;
     padding: 0.15rem;
     text-align: center;
-    align-self: center;
     align-content: center;
     border-radius: @corner-rounding-smaller;
     cursor: pointer;
+    align-self: flex-start;
+    margin-top: 11px;
   }
   textarea.has-command {
     font-family: @primary-font;
@@ -86,7 +87,8 @@
         }
       }
     }
-    &.show-file-preview {
+
+    &.top-corners-sharp {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
@@ -94,7 +96,6 @@
     .messageuser {
       flex: 1;
       order: 2;
-      // padding: 0.25rem @light-spacing;
       background-color: transparent;
       border: none;
       font-family: 'Poppins';

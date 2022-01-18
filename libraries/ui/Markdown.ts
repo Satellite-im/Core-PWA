@@ -1,4 +1,3 @@
-import highlight from 'highlight.js'
 import * as markdown from 'simple-markdown'
 
 interface Options {

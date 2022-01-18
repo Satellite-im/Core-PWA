@@ -1,8 +1,9 @@
 <template>
-  <div :style="`height: ${chatHeight}px`" class="editable-cointainer">
+  <div class="editable-cointainer">
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
+      v-focus="focusValue"
       :contenteditable="recipient ? true : false"
       autocapitalize="off"
       class="editable-input"
@@ -10,6 +11,7 @@
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyupProps"
       @paste="handleInputPaste"
+      @drop="handleDropProps"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -20,13 +22,6 @@
 <script>
 import Vue from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
-
-// To wait for a browser repaint, you need to use "double" requestAnimationFrame. Vue $nextTick is sometimes not enough.
-function doubleRaf(callback) {
-  requestAnimationFrame(() => {
-    requestAnimationFrame(callback)
-  })
-}
 
 class Cursor {
   static getCurrentCursorPosition(parentElement) {
@@ -161,13 +156,17 @@ class Cursor {
   }
 }
 
-function buildChatbarRow(text) {
-  return `<div class="chat-row-content"><span>${toHTML(
-    text,
-  )}<br /></span></div>`
-}
-
 export default Vue.extend({
+  directives: {
+    focus: {
+      update(el, { value, oldValue }, vnode) {
+        if (value && value !== oldValue) {
+          el.focus()
+          Cursor.setCurrentCursorPosition(vnode.context.$props.value.length, el)
+        }
+      },
+    },
+  },
   inheritAttrs: true,
   props: {
     value: {
@@ -182,6 +181,10 @@ export default Vue.extend({
       type: Object,
       default: null,
     },
+    focusValue: {
+      type: String,
+      default: '',
+    },
     handleInputKeydownProps: {
       type: Function,
       default: () => {},
@@ -190,13 +193,16 @@ export default Vue.extend({
       type: Function,
       default: () => {},
     },
+    handleDropProps: {
+      type: Function,
+      default: () => {},
+    },
+    handlePasteProps: {
+      type: Function,
+      default: () => {},
+    },
   },
   emits: ['input'],
-  data() {
-    return {
-      chatHeight: 44, // inital height
-    }
-  },
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
@@ -211,19 +217,18 @@ export default Vue.extend({
     document.addEventListener('selectionchange', this.onSelectionChange)
     // Handle initial value
     this.handleNewValue(this.$props.value)
-    // On mount we must wait for the browser to repaint in order to set the correct height
-    if (!this.$refs?.editable) return
-    const messageBox = this.$refs?.editable
-    doubleRaf(() => {
-      this.chatHeight = messageBox.offsetHeight
-    })
   },
   beforeDestroy() {
     document.removeEventListener('selectionchange', this.onSelectionChange)
   },
   methods: {
+    buildChatbarRow(text) {
+      return `<div class="chat-row-content"><span>${toHTML(text).replace(
+        this.$Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
+      )}<br /></span></div>`
+    },
     handleNewValue(newValue) {
-      // console.log('newValue', newValue, newValue.split('\n'))
       if (!this.$refs?.editable) return
       const messageBox = this.$refs?.editable
       const pos = Cursor.getCurrentCursorPosition(messageBox)
@@ -231,30 +236,24 @@ export default Vue.extend({
       newValue.split('\n').forEach((row) => {
         // When encountering a newline, create a new row
         row.split('\n').forEach((line) => {
-          rows.push(buildChatbarRow(line))
+          rows.push(this.buildChatbarRow(line))
         })
       })
       messageBox.innerHTML = rows.join('')
-      this.chatHeight = messageBox.offsetHeight
       Cursor.setCurrentCursorPosition(pos, messageBox)
     },
-    handleInputPaste(event) {
-      event.preventDefault()
-      const text = event.clipboardData.getData('text/plain')
+    handleInputPaste(e) {
+      e.preventDefault()
+      const text = e.clipboardData.getData('text/plain')
       if (document.queryCommandSupported('insertText')) {
         document.execCommand('insertText', false, text)
       } else {
         document.execCommand('paste', false, text)
       }
+      this.handlePasteProps(e)
     },
     handleInputKeydown(e) {
       switch (e.key) {
-        // case 'Enter':
-        //   if (!e.shiftKey) {
-        //     e.preventDefault()
-        //   }
-        //   return
-
         case 'Backspace':
         case 'Delete':
           if (
@@ -294,13 +293,31 @@ export default Vue.extend({
 })
 </script>
 <style lang="less">
+// non-Retina-specific stuff here
+@media not screen and (-webkit-min-device-pixel-ratio: 2),
+  not screen and (min--moz-device-pixel-ratio: 2),
+  not screen and (-o-min-device-pixel-ratio: 2/1),
+  not screen and (min-device-pixel-ratio: 2),
+  not screen and (min-resolution: 192dpi),
+  not screen and (min-resolution: 2dppx) {
+  .editable-cointainer {
+    .chat-row-content {
+      // Chrome bug for emoji spacing on non-retina screens
+      .emoji {
+        letter-spacing: 4px;
+      }
+    }
+  }
+}
+
 .editable-cointainer {
   position: relative;
   min-height: 48px;
   width: 100%;
 
   .placeholder {
-    color: @gray;
+    z-index: -1;
+    color: @text-muted;
     position: absolute;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -317,7 +334,6 @@ export default Vue.extend({
 
   .editable-input {
     width: 100%;
-    position: absolute;
     padding-top: 11px;
     padding-bottom: 11px;
     display: inline-block;
@@ -327,6 +343,10 @@ export default Vue.extend({
     line-height: 22px;
 
     .chat-row-content {
+      .emoji {
+        font-style: initial;
+      }
+
       .md-symbol {
         color: @gray;
       }
