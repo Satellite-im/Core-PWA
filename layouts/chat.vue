@@ -170,7 +170,7 @@ export default Vue.extend({
       this.showInitialSidebar()
     },
   },
-  mounted() {
+  async mounted() {
     this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
     this.$store.commit('ui/setTypingUser', this.$mock.users[0])

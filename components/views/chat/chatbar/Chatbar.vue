@@ -34,6 +34,7 @@ declare module 'vue/types/vue' {
     setChatText: ChatTextObj
   }
 }
+
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -167,7 +168,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler(PropCommonEnum.NOT_TYPING)
+      ctx.typingNotifHandler(PropCommonEnum)
     }, 500),
     /**
      * @method smartTypingStart
@@ -293,7 +294,6 @@ export default Vue.extend({
       }
     },
   },
-  // eslint-disable-next-line vue/order-in-components
   watch: {
     'friends.all': {
       handler() {
@@ -305,10 +305,10 @@ export default Vue.extend({
       deep: true,
     },
     recipient() {
-      const findItem = this.setChatText.find(
-        (item: any) => item.userId === this.$props.recipient.address,
+      let findItem = this.chat.chatTexts.find(
+        (item: any) => item.userId === this.$props.recipient?.address,
       )
-      const message = findItem ? findItem.value : ''
+      let message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {

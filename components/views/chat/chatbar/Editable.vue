@@ -23,146 +23,7 @@
 import Vue, { PropType } from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { mapState } from 'vuex'
-
-class Cursor {
-  static getCurrentCursorPosition(parentElement: HTMLElement) {
-    const selection = window.getSelection()
-    let charCount = -1
-    let node
-
-    if (selection && selection.focusNode) {
-      if (Cursor._isChildOf(selection.focusNode, parentElement)) {
-        node = selection.focusNode as HTMLElement
-        charCount += node.innerText
-          ? node.innerText?.length
-          : // + 1 because of the newline that focusOffset doesn't count
-            selection.focusOffset + 1
-
-        while (node) {
-          if (node === parentElement) {
-            break
-          }
-
-          if (node.previousSibling) {
-            node = node.previousSibling
-            const isNodeRow = node.nodeName === 'DIV'
-            // If it's a row, add the length of the text plus the newline
-            // if (node.textContent)
-            charCount += isNodeRow
-              ? (node.textContent?.length || 0) + 1
-              : node.textContent?.length || 0
-          } else {
-            node = node.parentNode
-            if (node === null) {
-              break
-            }
-          }
-        }
-      }
-    }
-
-    return charCount
-  }
-
-  static setCurrentCursorPosition(chars: number, element: HTMLElement) {
-    if (chars >= 0) {
-      const selection = window.getSelection()
-
-      let range = Cursor._createRange(element, chars)
-      if (range && selection) {
-        range.collapse(false)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      }
-    }
-  }
-
-  // Recursively find the text node that contains the given character index, or the BR node at the end
-  static _findCursorNode(
-    node: ChildNode,
-    chars: { count: number },
-  ): [ChildNode | null, number] {
-    let offset = 0
-    if (node.nodeName === 'BR') {
-      return [node, 0]
-    }
-
-    if (node.nodeType === Node.TEXT_NODE) {
-      if ((node as Text).length > chars.count) {
-        offset = chars.count
-        return [node, offset]
-      }
-      chars.count -= (node as Text).length
-      return [null, 0]
-    }
-
-    for (let i = 0; i < node.childNodes.length; i++) {
-      const [finalNode, finalOffset] = Cursor._findCursorNode(
-        node.childNodes[i],
-        chars,
-      )
-      if (finalNode !== null) {
-        return [finalNode, finalOffset]
-      }
-    }
-
-    return [null, 0]
-  }
-
-  // Not perfect, can be refactored even better
-  static _createRange(
-    node: HTMLElement,
-    chars: number,
-    range: Range | null = null,
-  ) {
-    if (!range) {
-      range = document.createRange()
-      range.selectNode(node)
-      range.setStart(node, 0)
-    }
-
-    let rows = node.innerText.split('\n\n')
-    let elementIndex = 0
-
-    for (let [row, el] of rows.entries()) {
-      if (el.length >= chars) {
-        elementIndex = row
-        break
-      } else {
-        chars -= el.length + 1
-      }
-    }
-
-    const finalRowDiv = node.childNodes[elementIndex]
-
-    if (!finalRowDiv || !finalRowDiv.childNodes.length) {
-      return null
-    }
-
-    const span = finalRowDiv.childNodes[0]
-    const [cursorNode, finalOffset] = Cursor._findCursorNode(span, {
-      count: chars,
-    })
-
-    if (cursorNode) {
-      range.setEnd(cursorNode, finalOffset)
-      return range
-    }
-
-    return range
-  }
-
-  static _isChildOf(node: Node | null, parentElement: HTMLElement) {
-    while (node !== null) {
-      if (node === parentElement) {
-        return true
-      }
-      node = node.parentNode
-    }
-
-    return false
-  }
-}
+import Cursor from '~/libraries/ui/Cursor'
 
 export default Vue.extend({
   props: {
@@ -213,10 +74,15 @@ export default Vue.extend({
       },
     },
   },
-  mounted() {
+  async mounted() {
     document.addEventListener('selectionchange', this.onSelectionChange)
     // Handle initial value
     this.handleNewValue(this.$props.value)
+    // Reset value if in inconsistent state
+    if (this.$store.state.ui.chatbarFocus) {
+      await this.$store.dispatch('ui/setChatbarFocus', false)
+    }
+    this.$store.dispatch('ui/setChatbarFocus', true)
   },
   beforeDestroy() {
     document.removeEventListener('selectionchange', this.onSelectionChange)
