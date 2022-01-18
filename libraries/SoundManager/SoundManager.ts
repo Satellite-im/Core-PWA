@@ -1,4 +1,5 @@
 import { Howl } from 'howler'
+import { SoundsState, SoundsTypes } from '~/store/sounds/types'
 import { Config } from '~/config'
 
 // Keep this type in sync with Config.sounds
@@ -20,14 +21,18 @@ export enum Sounds {
  */
 export default class SoundManager {
   sounds: Record<Sounds, Howl>
+  soundsFlag: Record<Sounds, boolean>
   /**
    * @constructs SoundManager
    */
-  constructor(volume: number = 1.0) {
+  constructor(soundsState: SoundsState | null = null, volume: number = 1.0) {
+    //
+    // Init 'sounds' property
+    //
     this.sounds = {} as Record<Sounds, Howl>
     for (const [key, value] of Object.entries(Config.sounds) as [
       Sounds,
-      string
+      string,
     ][]) {
       this.sounds[key] = new Howl({
         src: [`${Config.ipfs.gateway}${value}`],
@@ -37,8 +42,30 @@ export default class SoundManager {
         preload: true,
       })
     }
+
+    //
+    // initialize 'soundsMuteFlag' property
+    //
+    // TODO: put some optimized code instead of manual putting
+    this.soundsFlag = {} as Record<Sounds, boolean>
+    if (soundsState == null) return
+    this.soundsFlag[Sounds.NEW_MESSAGE] = soundsState[SoundsTypes.message]
+    this.soundsFlag[Sounds.CALL] = soundsState[SoundsTypes.call]
+    this.soundsFlag[Sounds.HANGUP] = true // no hangup related notification setting ? default: true
+    this.soundsFlag[Sounds.MUTE] = soundsState[SoundsTypes.mute]
+    this.soundsFlag[Sounds.UNMUTE] = soundsState[SoundsTypes.mute]
+    this.soundsFlag[Sounds.DEAFEN] = soundsState[SoundsTypes.deafen]
+    this.soundsFlag[Sounds.UNDEAFEN] = soundsState[SoundsTypes.undeafen]
+    this.soundsFlag[Sounds.UPLOAD] = soundsState[SoundsTypes.upload]
+    this.soundsFlag[Sounds.CONNECTED] = soundsState[SoundsTypes.connected]
   }
 
+  /**
+   * @function
+   * init 'sounds' property
+   * @param volume
+   */
+  private initSounds(volume: number = 1.0) {}
   /** @function
    * Check if a specific sound exists
    * @param sound Name of the sound to check
@@ -57,6 +84,8 @@ export default class SoundManager {
    */
   playSound(sound: Sounds) {
     this.existsSound(sound)
+
+    if (this.soundsFlag[sound] === false) return // if sound is muted then dont play
 
     this.sounds[sound].play()
   }
