@@ -2,12 +2,7 @@ import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
-import {
-  FileSystemExport,
-  FILESYSTEM_TYPE,
-  FSItem,
-  FSCItem,
-} from './types/filesystem'
+import { FileSystemExport, FILESYSTEM_TYPE, FSCItem } from './types/filesystem'
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -110,12 +105,12 @@ export class FileSystem {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
       version: 1,
-      children: newContent,
+      _children: newContent,
     }
   }
 
   exportChildren(obj: FSCItem): any {
-    let childrenObj: FSItem = {}
+    let childrenObj: FSCItem = {}
     if (obj._children) {
       let child = Array.from(obj._children)
       let newChildren: Array<object> = []
@@ -127,22 +122,22 @@ export class FileSystem {
 
             newChildren.push({
               _id: element._id,
-              name: element._name,
-              type: element._type,
-              children: cc.children,
+              _name: element._name,
+              _type: element._type,
+              _children: cc._children,
             })
           }
         })
       })
 
-      childrenObj.children = newChildren
+      childrenObj._children = newChildren
     }
 
     childrenObj = {
       ...childrenObj,
       _id: obj._id,
-      name: obj._name,
-      type: obj._type,
+      _name: obj._name,
+      _type: obj._type,
     }
     return childrenObj
   }
@@ -152,23 +147,23 @@ export class FileSystem {
 
     const directory = new Directory(...Object.values(mockDirectoryData))
 
-    this.createChildrens(rTestData, filesystem, directory)
+    this.importChildren(rTestData, filesystem, directory)
   }
 
-  createChildrens(item: FSItem, filesystem: FileSystem, dir: Directory): any {
-    if (dir && item.children && item.children.length > 0) {
-      item.children.map((cItem: FSItem) => {
-        filesystem.openDirectory(item.name)
-        if (cItem.type === 'DEFAULT') {
-          const cDirectory = filesystem.createDirectory(cItem.name)
+  importChildren(item: FSCItem, filesystem: FileSystem, dir: Directory): any {
+    if (dir && item._children && item._children.length > 0) {
+      item._children.map((cItem: FSCItem) => {
+        filesystem.openDirectory(item._name)
+        if (cItem._type === 'DEFAULT') {
+          const cDirectory = filesystem.createDirectory(cItem._name)
           if (cDirectory) {
-            this.createChildrens(cItem, filesystem, cDirectory)
+            this.importChildren(cItem, filesystem, cDirectory)
           }
         } else {
           const cFile = new Fil(
             ...Object.values({
               ...mockFileData,
-              name: cItem.name,
+              name: cItem._name,
             }),
           )
 

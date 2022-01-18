@@ -10,13 +10,6 @@ export type FileSystemExport = {
   content: Array<Item>
 }
 
-export type FSItem = {
-  _id: string
-  name: string
-  type: string
-  children: Array<object>
-}
-
 export type FSCItem = {
   _id: string
   _name: string
