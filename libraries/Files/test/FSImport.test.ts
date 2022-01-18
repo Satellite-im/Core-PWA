@@ -11,5 +11,5 @@ describe('Test FileSystem Import/Export', () => {
   it(`Correctly returns a filesystem name (${mockFileSystemData.name})`, () =>
     expect(filesystem.name).toEqual(mockFileSystemData.name))
   filesystem.importAll(filesystem, testData)
-  console.log(JSON.stringify(filesystem.exportAll))
+  filesystem.exportAll
 })

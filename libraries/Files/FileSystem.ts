@@ -3,18 +3,6 @@ import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE, FSCItem } from './types/filesystem'
-
-const mockFileData = {
-  name: 'TestFile.png',
-  descrption: 'Test file description',
-  hash: '0x0aef',
-}
-
-const mockDirectoryData = {
-  name: 'Test Directory',
-  type: DIRECTORY_TYPE.DEFAULT,
-}
-
 export class FileSystem {
   private _self = new Directory('root')
   private _currentDirectory = this._self
@@ -109,23 +97,32 @@ export class FileSystem {
     }
   }
 
-  exportChildren(obj: FSCItem): any {
+  exportChildren(obj: Item): any {
     let childrenObj: FSCItem = {}
     if (obj._children) {
       let child = Array.from(obj._children)
       let newChildren: Array<object> = []
       child.forEach((cItem: Item) => {
-        console.log('cItem: ', cItem)
-        cItem.forEach((element: FSCItem) => {
+        cItem.forEach((element: Item) => {
           if (typeof element === 'object' && Object.keys(element).length > 0) {
             let cc = this.exportChildren(element)
 
-            newChildren.push({
-              _id: element._id,
-              _name: element._name,
-              _type: element._type,
-              _children: cc._children,
-            })
+            let newChildrenItem =
+              element._type === 'generic'
+                ? {
+                    _id: element._id,
+                    _name: element._name,
+                    _type: element._type,
+                    _description: element._description,
+                  }
+                : {
+                    _id: element._id,
+                    _name: element._name,
+                    _type: element._type,
+                    _children: cc._children,
+                  }
+
+            newChildren.push(newChildrenItem)
           }
         })
       })
@@ -139,13 +136,21 @@ export class FileSystem {
       _name: obj._name,
       _type: obj._type,
     }
+    if (obj._type === 'generic') {
+      childrenObj._description = obj._description
+    }
     return childrenObj
   }
 
   importAll(filesystem: FileSystem, testData: string): any {
     let rTestData = JSON.parse(testData)
 
-    const directory = new Directory(...Object.values(mockDirectoryData))
+    const directory = new Directory(
+      ...Object.values({
+        name: 'Directory',
+        type: DIRECTORY_TYPE.DEFAULT,
+      }),
+    )
 
     this.importChildren(rTestData, filesystem, directory)
   }
@@ -162,8 +167,9 @@ export class FileSystem {
         } else {
           const cFile = new Fil(
             ...Object.values({
-              ...mockFileData,
-              name: cItem._name,
+              _name: cItem._name,
+              _description: cItem._description,
+              hash: '0x0aef',
             }),
           )
 

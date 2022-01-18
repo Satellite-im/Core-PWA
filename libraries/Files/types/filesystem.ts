@@ -14,5 +14,6 @@ export type FSCItem = {
   _id: string
   _name: string
   _type: string
+  _description: string
   _children: Array<object>
 }
