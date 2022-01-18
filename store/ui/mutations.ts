@@ -29,6 +29,9 @@ export default {
   quickProfile(state: UIState, profile: Object | boolean) {
     state.quickProfile = profile
   },
+  setUserProfile(state: UIState, userProfile: Object) {
+    state.userProfile = userProfile
+  },
   chatbarContent(state: UIState, content: string) {
     state.chatbarContent = content
   },
@@ -213,7 +216,7 @@ export default {
       let currMessage
       if (reaction.replyID) {
         currMessage = currGroup?.messages
-          .find((message) =>  message.id === reaction.messageID)
+          .find((message) => message.id === reaction.messageID)
           ?.replies.find((reply) => reply.id === reaction.replyID)
       } else {
         currMessage = currGroup?.messages.find(
