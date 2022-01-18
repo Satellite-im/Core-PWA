@@ -57,16 +57,12 @@ export default Vue.extend({
   },
   computed: {
     src() {
-      if (this.friend?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${this.friend.profilePicture}`
-      }
-      if (this.friend?.photoHash) {
-        return `${this.$Config.textile.browser}/ipfs/${this.friend.photoHash}`
-      }
-      if (this.friend?.request?.userInfo?.photoHash) {
-        return `${this.$Config.textile.browser}/ipfs/${this.friend.request.userInfo.photoHash}`
-      }
-      return ''
+      return (
+        this.friend?.photoHash ||
+        this.friend?.profilePicture ||
+        this.friend?.request?.userInfo?.photoHash ||
+        ''
+      )
     },
   },
   methods: {

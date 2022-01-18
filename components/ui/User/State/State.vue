@@ -1,7 +1,11 @@
 <template>
   <div class="user-state">
-    <UiCircle v-if="src" type="image" :source="src" :size="35" />
-    <UiCircle v-else type="random" :seed="user.address" :size="35" />
+    <UiCircle
+      :type="src ? 'image' : 'random'"
+      :seed="user.address"
+      :size="35"
+      :source="src"
+    />
     <circle-icon
       v-if="user.state !== 'mobile' && !isTyping"
       size="1x"

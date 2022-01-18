@@ -83,10 +83,7 @@ export default Vue.extend({
     },
     ModalWindows: () => ModalWindows,
     src() {
-      if (this.server?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${this.server.profilePicture}`
-      }
-      return ''
+      return this.server?.profilePicture ?? ''
     },
   },
   methods: {

@@ -8,10 +8,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['accounts']),
     src() {
-      if (this.accounts?.details?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${this.accounts.details.profilePicture}`
-      }
-      return ''
+      return this.accounts.details.profilePicture
     },
   },
 })

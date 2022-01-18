@@ -49,10 +49,7 @@ export default Vue.extend({
   },
   computed: {
     src() {
-      if (this.user?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${this.user?.profilePicture}`
-      }
-      return ''
+      return this.user?.profilePicture ?? ''
     },
   },
   methods: {

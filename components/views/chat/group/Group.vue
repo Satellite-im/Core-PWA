@@ -1,11 +1,10 @@
 <template src="./Group.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
+import { mapState } from 'vuex'
 import { Config } from '~/config'
-
 import { Group } from '~/types/messaging'
-import { User } from '~/types/ui/user'
+import { Friend } from '~/types/ui/friends'
 import {
   getUsernameFromState,
   getAddressFromState,
@@ -27,6 +26,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['friends', 'accounts']),
     address() {
       return getAddressFromState(this.group.from, this.$store.state)
     },
@@ -37,19 +37,12 @@ export default Vue.extend({
       // $mock.users.filter(u => u.address === group.from)[0].badge
       return ''
     },
-  },
-  methods: {
-    /**
-     * @method showQuickProfile
-     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
-     * to the current group components click event data
-     * @param e Event object from group component click
-     * @example v-on:click="showQuickProfile"
-     */
-    showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(this.group.from, this.$store.state)
-      this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', selectedUser)
+    src() {
+      // if sender is you
+      if (this.address === 'unknown') {
+        return this.accounts.details.profilePicture
+      }
+      return this.friends.all.find((e: Friend) => e.activeChat).profilePicture
     },
   },
   created() {
@@ -60,11 +53,28 @@ export default Vue.extend({
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
       this.group.at,
       setTimestamp,
-      Config.chat.timestampUpdateInterval
+      Config.chat.timestampUpdateInterval,
     )
   },
   beforeDestroy() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
+  },
+  methods: {
+    /**
+     * @method showQuickProfile
+     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
+     * to the current group components click event data
+     * @param e Event object from group component click
+     * @example v-on:click="showQuickProfile"
+     */
+    showQuickProfile(e: Event) {
+      const selectedUser = getFullUserInfoFromState(
+        this.group.from,
+        this.$store.state,
+      )
+      this.$store.commit('ui/setQuickProfilePosition', e)
+      this.$store.commit('ui/quickProfile', selectedUser)
+    },
   },
 })
 </script>
