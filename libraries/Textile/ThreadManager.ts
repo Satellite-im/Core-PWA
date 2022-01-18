@@ -11,7 +11,11 @@ export default class ThreadManager {
   token: string | null
   textileClient: Client
 
-  constructor(textile: TextileInitializationData, senderAddress: string, identity: Identity) {
+  constructor(
+    textile: TextileInitializationData,
+    senderAddress: string,
+    identity: Identity,
+  ) {
     this.identity = identity
     this.textile = textile
     this.senderAddress = senderAddress
@@ -23,18 +27,17 @@ export default class ThreadManager {
 
   async init() {
     await this.authorize()
-
   }
 
   async authorize(): Promise<null | any> {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
-      const client =
-        await Client.withKeyInfo({
-          // @ts-ignore
-          key: Config.textile.key,
-        })
+      const client = await Client.withKeyInfo({
+        // @ts-ignore
+        key: Config.textile.key,
+      })
       const token = await client.getToken(this.identity).catch((e) => {
-        resolve(new Error('Couldn\'t connect to Textile.io'))
+        resolve(new Error("Couldn't connect to Textile.io"))
       })
       resolve({
         client,
@@ -50,18 +53,26 @@ export default class ThreadManager {
    * @argument threadTitle Title of new thread
    * @argument options Object containing values to pass to textile
    */
-  async createThread(threadUsers: Array<Object>, threadTitle: string, options?: Object) {
-    if (!this.textileClient || !this.identity) return new Error('Attempted to interface with a thread before initalizing')
+  async createThread(
+    threadUsers: Array<Object>,
+    threadTitle: string,
+    options?: Object,
+  ) {
+    if (!this.textileClient || !this.identity)
+      return new Error(
+        'Attempted to interface with a thread before initializing',
+      )
     this.threadID = await this.textileClient.newDB(
       undefined,
       threadTitle + Date.now(),
     )
-    const users =
-      {
-        name: '',
-        _id: this.threadID.toString(),
-      }
-    await this.textileClient.newCollectionFromObject(this.threadID, users, { name: threadTitle })
+    const users = {
+      name: '',
+      _id: this.threadID.toString(),
+    }
+    await this.textileClient.newCollectionFromObject(this.threadID, users, {
+      name: threadTitle,
+    })
     await this.textileClient.create(this.threadID, threadTitle, threadUsers)
   }
 
@@ -72,7 +83,10 @@ export default class ThreadManager {
    * @argument options Object containing values to pass to textile
    */
   async getCollection(threadTitle: string, options?: Object) {
-    if (!this.textileClient || !this.identity) return new Error('Attempted to interface with a thread before initalizing')
+    if (!this.textileClient || !this.identity)
+      return new Error(
+        'Attempted to interface with a thread before initializing',
+      )
     const findThread = await this.textile.users.getThread(threadTitle)
     const threadID = ThreadID.fromString(findThread.id)
     return await this.textileClient.getCollectionInfo(threadID, threadTitle)
@@ -84,7 +98,11 @@ export default class ThreadManager {
    * @argument threadTitle identifier to store the thread by
    * @argument values Values object Array containing update info
    */
-  async addUserToThread(threadTitle: string, userName: string, newInfo: Array<any>) {
+  async addUserToThread(
+    threadTitle: string,
+    userName: string,
+    newInfo: Array<any>,
+  ) {
     interface UserInfo {
       name: string
       _id: string
@@ -93,8 +111,12 @@ export default class ThreadManager {
     const findThread = await this.textile.users.getThread(threadTitle)
     const threadID = ThreadID.fromString(findThread.id)
     const query = new Where('name').eq(userName)
-    const result = await this.textileClient.find<UserInfo>(threadID, threadTitle, query)
-    newInfo.forEach(user => result.push(user))
+    const result = await this.textileClient.find<UserInfo>(
+      threadID,
+      threadTitle,
+      query,
+    )
+    newInfo.forEach((user) => result.push(user))
     return await this.textileClient.save(threadID, threadTitle, result)
   }
 
@@ -140,9 +162,7 @@ export default class ThreadManager {
     const existingThreadID = this.fetchThread(identifier)
 
     if (existingThreadID) {
-      const ex = ThreadID.fromString(
-        existingThreadID.toString(),
-      )
+      const ex = ThreadID.fromString(existingThreadID.toString())
       return ex
     }
     return await this.fetchThread(identifier)
