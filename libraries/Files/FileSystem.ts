@@ -84,7 +84,7 @@ export class FileSystem {
     }
   }
 
-  get exportAll(): any {
+  get exportAll(): object {
     let newContent: Array<object> = []
     this.content.forEach((item) => {
       newContent.push({ ...this.exportChildren(item) })
@@ -97,7 +97,7 @@ export class FileSystem {
     }
   }
 
-  exportChildren(obj: Item): any {
+  exportChildren(obj: Item): FSCItem {
     let childrenObj: FSCItem = {}
     if (obj._children) {
       let child = Array.from(obj._children)
@@ -142,7 +142,7 @@ export class FileSystem {
     return childrenObj
   }
 
-  importAll(filesystem: FileSystem, testData: string): any {
+  importAll(filesystem: FileSystem, testData: string): void {
     let rTestData = JSON.parse(testData)
 
     const directory = new Directory(
@@ -155,7 +155,7 @@ export class FileSystem {
     this.importChildren(rTestData, filesystem, directory)
   }
 
-  importChildren(item: FSCItem, filesystem: FileSystem, dir: Directory): any {
+  importChildren(item: FSCItem, filesystem: FileSystem, dir: Directory): void {
     if (dir && item._children && item._children.length > 0) {
       item._children.map((cItem: FSCItem) => {
         filesystem.openDirectory(item._name)
