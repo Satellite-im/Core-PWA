@@ -38,7 +38,7 @@ export default Vue.extend({
       maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
       showFilePreview: false,
-      nsfwUploadError: false
+      nsfwUploadError: false,
     }
   },
   props: {
@@ -56,10 +56,10 @@ export default Vue.extend({
     },
   },
   mounted() {
-    let findItem = this.setChatText.find(
+    const findItem = this.setChatText.find(
       (item: any) => item.userId === this.$props.recipient.address,
     )
-    let message = findItem ? findItem.value : ''
+    const message = findItem ? findItem.value : ''
 
     const messageBox = this.$refs.messageuser as HTMLElement
     messageBox.innerText = message
@@ -170,7 +170,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler(PropCommonEnum)
+      ctx.typingNotifHandler(PropCommonEnum.NOT_TYPING)
     }, 500),
     /**
      * @method smartTypingStart
@@ -243,7 +243,7 @@ export default Vue.extend({
     updateText(collapseToEnd: boolean) {
       const messageBox = this.$refs.messageuser as HTMLElement
       if (collapseToEnd) {
-        let sel = window.getSelection()
+        const sel = window.getSelection()
         sel?.selectAllChildren(messageBox)
         sel?.collapseToEnd()
       }
@@ -270,7 +270,6 @@ export default Vue.extend({
           return
         }
         if (this.ui.replyChatbarContent.from) {
-
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: this.value,
@@ -335,8 +334,9 @@ export default Vue.extend({
       this.value = ''
     },
   },
+  // eslint-disable-next-line vue/order-in-components
   watch: {
-    'ui.chatbarContent': function () {
+    'ui.chatbarContent'() {
       this.updateText(false)
     },
     'friends.all': {
@@ -350,11 +350,11 @@ export default Vue.extend({
       },
       deep: true,
     },
-    recipient: function () {
-      let findItem = this.setChatText.find(
+    recipient() {
+      const findItem = this.setChatText.find(
         (item: any) => item.userId === this.$props.recipient.address,
       )
-      let message = findItem ? findItem.value : ''
+      const message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
