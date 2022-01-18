@@ -53,7 +53,6 @@ declare module '@nuxt/types' {
 
 Vue.prototype.$WebRTC = new WebRTC()
 Vue.prototype.$SolanaManager = new SolanaManager()
-Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
@@ -66,5 +65,12 @@ Vue.prototype.$Alerts = new Alerts()
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {
     return this.$store
+  },
+})
+
+Object.defineProperty(Vue.prototype, '$Sounds', {
+  get(this: Vue) {
+    const states = this.$store.getters['sounds/getNotificationStates']
+    return new SoundManager(states)
   },
 })
