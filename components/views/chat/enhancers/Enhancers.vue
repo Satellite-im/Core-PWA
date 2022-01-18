@@ -30,8 +30,8 @@ export default Vue.extend({
   props: {
     sidebar: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapState(['ui']),
@@ -96,11 +96,11 @@ export default Vue.extend({
           emoji,
           reactTo: this.ui.settingReaction.messageID,
         })
-        this.toggleEnhancers()
       } else {
         this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
       }
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
+      this.toggleEnhancers()
     },
     /**
      * @method setRoute DocsTODO
