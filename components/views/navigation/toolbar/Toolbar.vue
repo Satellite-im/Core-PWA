@@ -126,12 +126,20 @@ export default Vue.extend({
       })
     },
     async call(kinds: TrackKind[]) {
-      if (!this.webrtc.connectedPeer) return
-      const identifier = this.$Hounddog.getActiveFriend(
+      const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
-      ).address
+      )
+      if (!activeFriend) {
+        return
+      }
+      const identifier = activeFriend.address
 
-      console.log('kind', kinds)
+      if (!this.webrtc.connectedPeer) {
+        await this.$store.dispatch('webrtc/createPeerConnection', identifier)
+        if (!this.webrtc.connectedPeer) {
+          return
+        }
+      }
 
       // Trying to call the same user while call is already active
       if (identifier === this.$store.state.webrtc.activeCall) {

@@ -14,6 +14,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export default Vue.extend({
   components: {
@@ -25,13 +26,13 @@ export default Vue.extend({
     PhoneOffIcon,
   },
   computed: {
+    ...mapState(['audio', 'video', 'webrtc']),
     audioMuted() {
-      return this.$store.state.webrtc.localTracks.audio.muted
+      return this.webrtc.localTracks.audio.muted
     },
     videoMuted() {
-      return this.$store.state.webrtc.localTracks.video.muted
+      return this.webrtc.localTracks.video.muted
     },
-    ...mapState(['audio', 'video']),
   },
   methods: {
     /**
@@ -42,17 +43,17 @@ export default Vue.extend({
     toggleMute() {
       const muted = this.audioMuted
 
-      const { activeCall } = this.$store.state.webrtc
+      const { activeCall } = this.webrtc
 
       const peer = this.$WebRTC.getPeer(activeCall)
 
       if (muted) {
-        peer?.call.unmute('audio')
+        peer?.call.unmute(WebRTCEnum.AUDIO)
         this.$Sounds.playSound(Sounds.UNMUTE)
-      } else {
-        peer?.call.mute('audio')
-        this.$Sounds.playSound(Sounds.MUTE)
+        return
       }
+      peer?.call.mute(WebRTCEnum.AUDIO)
+      this.$Sounds.playSound(Sounds.MUTE)
     },
     /**
      * @method toggleVideo
@@ -62,17 +63,17 @@ export default Vue.extend({
     toggleVideo() {
       const muted = this.videoMuted
 
-      const { activeCall } = this.$store.state.webrtc
+      const { activeCall } = this.webrtc
 
       const peer = this.$WebRTC.getPeer(activeCall)
 
       if (muted) {
+        peer?.call.unmute(WebRTCEnum.VIDEO)
         this.$Sounds.playSound(Sounds.UNDEAFEN)
-        peer?.call.unmute('video')
-      } else {
-        this.$Sounds.playSound(Sounds.DEAFEN)
-        peer?.call.mute('video')
+        return
       }
+      peer?.call.mute(WebRTCEnum.VIDEO)
+      this.$Sounds.playSound(Sounds.DEAFEN)
     },
     /**
      * @method hangUp
@@ -80,7 +81,7 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      const peer = this.$WebRTC.getPeer(this.$store.state.webrtc.activeCall)
+      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
       peer?.call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
       this.$store.commit('ui/fullscreen', false)

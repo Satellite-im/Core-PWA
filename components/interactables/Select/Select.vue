@@ -2,8 +2,9 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-import { SelectOption } from '~/types/ui/inputs'
+
 import { SelectSize, SelectStyle } from './types.d'
+import { SelectOption } from '~/types/ui/inputs'
 
 export default Vue.extend({
   model: {
@@ -18,10 +19,6 @@ export default Vue.extend({
     placeholder: {
       type: String,
       default: '',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
     },
     /**
      * If provided the select will cover 100% of the parent
@@ -106,13 +103,9 @@ export default Vue.extend({
      * @example
      */
     toggleOpen() {
-      if (this.disabled) {
-        this.open = false
-        return
-      }
       let bodyRect = document.body.getBoundingClientRect()
       let elementRect = this.$el.getBoundingClientRect()
-      this.up = elementRect.top > bodyRect.bottom / 2 ? true : false
+      this.up = (elementRect.top > bodyRect.bottom / 2) ? true : false
       this.open = !this.open
     },
     /**
@@ -125,7 +118,7 @@ export default Vue.extend({
     getSelectLabel() {
       if (this.selectedValue) {
         const item: any = (this.options as Array<SelectOption>).find(
-          (opt: SelectOption) => opt.value === this.selectedValue,
+          (opt: SelectOption) => opt.value === this.selectedValue
         )
         if (item) return item.text
       }
