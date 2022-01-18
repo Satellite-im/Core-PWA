@@ -5,6 +5,15 @@ import { mapState } from 'vuex'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    text: string
+    maxChars: number
+    close: () => void
+    handleOverflow: () => void
+  }
+}
+
 export default Vue.extend({
   components: {
     ArrowRightIcon,
@@ -23,6 +32,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'accounts']),
+    isMe(): boolean {
+      return this.accounts.details.textilePubkey === this.user?.textilePubkey
+    },
   },
   mounted() {
     this.handleOverflow()
@@ -74,12 +86,6 @@ export default Vue.extend({
         text: this.text,
       })
       this.close()
-    },
-    isMe() {
-      return (
-        this.accounts.details &&
-        this.accounts.details.textilePubkey === this.user?.textilePubkey
-      )
     },
   },
 })
