@@ -11,6 +11,7 @@ import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
+import TextileManager from '~/libraries/Textile/TextileManager'
 
 export default {
   /**
@@ -197,7 +198,7 @@ export default {
    * @example
    */
   async registerUser(
-    { commit, dispatch }: ActionsArguments<AccountsState>,
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -236,11 +237,35 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
-    await serverProgram.createUser(
-      userData.name,
-      userData.photoHash,
-      userData.status,
+    // init textile so image can be sent to bucket
+    const { pin } = state
+    await dispatch(
+      'textile/initialize',
+      {
+        id: userAccount?.publicKey.toBase58(),
+        pass: pin,
+        wallet: $SolanaManager.getMainSolanaWalletInstance(),
+      },
+      { root: true },
     )
+
+    // convert data string image to File
+    const imageFile: File = await fetch(userData.image)
+      .then((res) => res.blob())
+      .then((blob) => {
+        return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
+      })
+
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    $TextileManager.bucketManager?.getBucket()
+    const result = await $TextileManager.bucketManager?.pushFile(
+      imageFile,
+      imageFile.name,
+    )
+
+    const imagePath = result?.path.root.toString() ?? ''
+
+    await serverProgram.createUser(userData.name, imagePath, userData.status)
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
@@ -251,7 +276,7 @@ export default {
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
-      imageURI: userData.photoHash,
+      photoHash: imagePath,
       address: userAccount.publicKey.toBase58(),
     })
   },

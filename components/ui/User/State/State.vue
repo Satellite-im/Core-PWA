@@ -1,14 +1,15 @@
 <template>
   <div class="user-state">
-    <UiCircle type="random" :seed="user.address" :size="35" />
+    <UiCircle v-if="src" type="image" :source="src" :size="35" />
+    <UiCircle v-else type="random" :seed="user.address" :size="35" />
     <circle-icon
-      size="1x"
       v-if="user.state !== 'mobile' && !isTyping"
+      size="1x"
       :class="`status is-${user.state}`"
     />
     <smartphone-icon
-      size="1x"
       v-else-if="user.state === 'mobile'"
+      size="1x"
       :class="`mobile-status is-${user.state}`"
     />
     <UiChatTypingIndicator v-else />
@@ -17,8 +18,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/types/ui/user'
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
@@ -35,6 +36,7 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    src: { type: String, default: '', required: false },
   },
 })
 </script>

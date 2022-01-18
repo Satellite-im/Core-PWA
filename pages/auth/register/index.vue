@@ -42,10 +42,9 @@ export default Vue.extend({
   mounted() {},
   methods: {
     async confirm(userData: UserRegistrationData) {
-      // TODO: upload picture to pinata first - AP-395
       await this.$store.dispatch('accounts/registerUser', {
         name: userData.username,
-        photoHash: '',
+        image: userData.photoHash,
         status: userData.status,
       })
 

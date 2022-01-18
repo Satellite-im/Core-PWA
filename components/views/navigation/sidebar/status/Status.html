@@ -1,15 +1,18 @@
 <div id="status">
-  <UiUserState :user="{address: accounts.active, state: accounts.details.state}" />
+  <UiUserState
+    :user="{address: accounts.active, state: accounts.details.state}"
+    :src="src"
+  />
   <div
     class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
     v-on:click="$toast.show($t('ui.copied'))"
     :data-tooltip="$t('controls.copy_id')"
     v-clipboard:copy="accounts.active"
   >
-    <TypographyTitle 
-      :text="accounts.details.name" 
+    <TypographyTitle :text="accounts.details.name" :size="6" />
+    <TypographySubtitle
+      :text="accounts.details.status || 'No status set.'"
       :size="6"
-      />
-    <TypographySubtitle :text="accounts.details.status || 'No status set.'" :size="6"/>
+    />
   </div>
 </div>

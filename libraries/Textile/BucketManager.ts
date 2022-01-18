@@ -149,7 +149,7 @@ export default class BucketManager {
   async pushFile(
     file: File,
     path: string,
-    progress: CallableFunction,
+    progress?: CallableFunction,
   ): Promise<PushPathResult> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()

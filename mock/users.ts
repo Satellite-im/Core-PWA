@@ -7,8 +7,7 @@ export const Users = [
     unreads: 4,
     last_message:
       'Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.',
-    profilePicture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+    profilePicture: '',
   },
   {
     name: 'Ariel Larissa',
@@ -18,8 +17,7 @@ export const Users = [
     unreads: 1,
     last_message:
       'Network of wormholes science citizens of distant epochs tingling of the spine cosmic ocean brain is the seed of intelligence. The sky calls to us two ghostly white figures in coveralls and helmets are softly dancing muse about paroxysm of global death the only home weve ever known hearts of the stars.',
-    profilePicture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+    profilePicture: '',
   },
   {
     name: 'Taurus Nix',
@@ -53,8 +51,7 @@ export const Users = [
     state: 'mobile',
     last_message:
       'To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?',
-    profilePicture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+    profilePicture: '',
   },
   {
     name: 'James Lightspeed',
@@ -79,8 +76,7 @@ export const Users = [
     state: 'mobile',
     last_message:
       'To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?',
-    profilePicture:
-      'https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg',
+    profilePicture: '',
   },
 ]
 

@@ -29,13 +29,15 @@
           />
           <Enhancers />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+        <swiper-slide
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+        >
           <menu-icon
             class="toggle--sidebar"
-            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
           />
           <Toolbar
             id="toolbar"
@@ -75,36 +77,33 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
-
 export default Vue.extend({
   name: 'ServerLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
   data() {
     return {
-      sidebar: this.$device.isMobile ? false : true,
+      sidebar: !this.$device.isMobile,
       swiperOption: {
         initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove: this.$device.isMobile ? true : false,
+        noSwiping: !this.$device.isMobile,
+        allowTouchMove: this.$device.isMobile,
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
               this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
             }
-          }
-        }
+          },
+        },
       },
     }
   },
@@ -121,7 +120,7 @@ export default Vue.extend({
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
       }
-    }
+    },
   },
 })
 </script>

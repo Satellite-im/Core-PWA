@@ -17,7 +17,7 @@ export type User = {
 
 export interface UserRegistrationData {
   username: string
-  imageURI: string
+  photoHash: string
   status: string
 }
 

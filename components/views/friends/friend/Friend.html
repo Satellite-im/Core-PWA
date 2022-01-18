@@ -1,5 +1,5 @@
 <div class="friend">
-  <UiUserState :user="friend" />
+  <UiUserState :user="friend" :src="src" />
   <div class="description">
     <TypographySubtitle :size="6" :text="friend.name" />
     <TypographyText :text="friend.status" />
@@ -14,7 +14,7 @@
       :data-tooltip="$t('friends.accept')"
       :loading="loading === 'accept'"
       :action="acceptFriendRequest"
-      >
+    >
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
@@ -24,8 +24,9 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.decline')"
       :loading="loading === 'decline'"
-      :action="declineFriendRequest">
-      <x-icon size="1x"/>
+      :action="declineFriendRequest"
+    >
+      <x-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
@@ -34,7 +35,8 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.unblock')"
-      :action="() => {}">
+      :action="() => {}"
+    >
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
@@ -45,7 +47,8 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.send')"
       :loading="loading === 'sending'"
-      :action="createFriendRequest">
+      :action="createFriendRequest"
+    >
       <check-icon size="1x" />
     </InteractablesButton>
   </div>
@@ -56,7 +59,8 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.message')"
-      :action="sendMessageRequest">
+      :action="sendMessageRequest"
+    >
       <message-square-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
@@ -65,7 +69,8 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.options')"
       :loading="loading === 'options'"
-      :action="contextMenu">
+      :action="contextMenu"
+    >
       <more-vertical-icon size="1x" />
     </InteractablesButton>
   </div>

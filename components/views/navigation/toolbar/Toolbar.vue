@@ -1,4 +1,4 @@
-<template src="./Toolbar.html" />
+<template src="./Toolbar.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -82,6 +82,12 @@ export default Vue.extend({
       },
     },
     ModalWindows: () => ModalWindows,
+    src() {
+      if (this.server?.profilePicture) {
+        return `${this.$Config.textile.browser}/ipfs/${this.server.profilePicture}`
+      }
+      return ''
+    },
   },
   methods: {
     /**

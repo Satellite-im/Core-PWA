@@ -31,7 +31,7 @@ const mutations = {
     state.details = {
       name: details.username,
       status: details.status,
-      profilePicture: details.imageURI,
+      profilePicture: details.photoHash,
       address: state.active,
       state: 'online',
     }
