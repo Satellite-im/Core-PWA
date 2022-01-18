@@ -19,19 +19,20 @@
     </div>
   </div>
 </template>
-<script>
-import Vue from 'vue'
+
+<script lang="ts">
+import Vue, { PropType } from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
 
 class Cursor {
-  static getCurrentCursorPosition(parentElement) {
+  static getCurrentCursorPosition(parentElement: HTMLElement) {
     const selection = window.getSelection()
     let charCount = -1
     let node
 
-    if (selection.focusNode) {
+    if (selection && selection.focusNode) {
       if (Cursor._isChildOf(selection.focusNode, parentElement)) {
-        node = selection.focusNode
+        node = selection.focusNode as HTMLElement
         charCount += node.innerText
           ? node.innerText?.length
           : // + 1 because of the newline that focusOffset doesn't count
@@ -46,9 +47,10 @@ class Cursor {
             node = node.previousSibling
             const isNodeRow = node.nodeName === 'DIV'
             // If it's a row, add the length of the text plus the newline
+            // if (node.textContent)
             charCount += isNodeRow
-              ? node.textContent.length + 1
-              : node.textContent.length
+              ? (node.textContent?.length || 0) + 1
+              : node.textContent?.length || 0
           } else {
             node = node.parentNode
             if (node === null) {
@@ -62,12 +64,12 @@ class Cursor {
     return charCount
   }
 
-  static setCurrentCursorPosition(chars, element) {
+  static setCurrentCursorPosition(chars: number, element: HTMLElement) {
     if (chars >= 0) {
       const selection = window.getSelection()
 
       let range = Cursor._createRange(element, chars)
-      if (range) {
+      if (range && selection) {
         range.collapse(false)
         selection.removeAllRanges()
         selection.addRange(range)
@@ -76,19 +78,21 @@ class Cursor {
   }
 
   // Recursively find the text node that contains the given character index, or the BR node at the end
-  // Return [node, offset]
-  static _findCursorNode(node, chars) {
+  static _findCursorNode(
+    node: ChildNode,
+    chars: { count: number },
+  ): [ChildNode | null, number] {
     let offset = 0
     if (node.nodeName === 'BR') {
       return [node, 0]
     }
 
     if (node.nodeType === Node.TEXT_NODE) {
-      if (node.length > chars.count) {
+      if ((node as Text).length > chars.count) {
         offset = chars.count
         return [node, offset]
       }
-      chars.count -= node.length
+      chars.count -= (node as Text).length
       return [null, 0]
     }
 
@@ -106,7 +110,11 @@ class Cursor {
   }
 
   // Not perfect, can be refactored even better
-  static _createRange(node, chars, range) {
+  static _createRange(
+    node: HTMLElement,
+    chars: number,
+    range: Range | null = null,
+  ) {
     if (!range) {
       range = document.createRange()
       range.selectNode(node)
@@ -144,7 +152,7 @@ class Cursor {
     return range
   }
 
-  static _isChildOf(node, parentElement) {
+  static _isChildOf(node: Node | null, parentElement: HTMLElement) {
     while (node !== null) {
       if (node === parentElement) {
         return true
@@ -162,12 +170,14 @@ export default Vue.extend({
       update(el, { value, oldValue }, vnode) {
         if (value && value !== oldValue) {
           el.focus()
-          Cursor.setCurrentCursorPosition(vnode.context.$props.value.length, el)
+          Cursor.setCurrentCursorPosition(
+            vnode.context?.$props.value.length || 0,
+            el,
+          )
         }
       },
     },
   },
-  inheritAttrs: true,
   props: {
     value: {
       type: String,
@@ -186,30 +196,29 @@ export default Vue.extend({
       default: '',
     },
     handleInputKeydownProps: {
-      type: Function,
-      default: () => {},
+      type: Function as PropType<(e: KeyboardEvent) => void>,
+      default: () => void {},
     },
     handleInputKeyupProps: {
-      type: Function,
-      default: () => {},
+      type: Function as PropType<(e: KeyboardEvent) => void>,
+      default: () => void {},
     },
     handleDropProps: {
-      type: Function,
-      default: () => {},
+      type: Function as PropType<(e: DragEvent) => void>,
+      default: () => void {},
     },
     handlePasteProps: {
-      type: Function,
-      default: () => {},
+      type: Function as PropType<(e: ClipboardEvent) => void>,
+      default: () => void {},
     },
   },
-  emits: ['input'],
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
     },
     recipient() {
       if (!this.$refs?.editable) return
-      const messageBox = this.$refs?.editable
+      const messageBox = this.$refs?.editable as HTMLElement
       Cursor.setCurrentCursorPosition(this.$props.value.length, messageBox)
     },
   },
@@ -222,17 +231,17 @@ export default Vue.extend({
     document.removeEventListener('selectionchange', this.onSelectionChange)
   },
   methods: {
-    buildChatbarRow(text) {
+    buildChatbarRow(text: string) {
       return `<div class="chat-row-content"><span>${toHTML(text).replace(
         this.$Config.regex.emojiWrapper,
-        (emoji) => `<span class="emoji">${emoji}</span>`,
+        (emoji: string) => `<span class="emoji">${emoji}</span>`,
       )}<br /></span></div>`
     },
-    handleNewValue(newValue) {
+    handleNewValue(newValue: string) {
       if (!this.$refs?.editable) return
-      const messageBox = this.$refs?.editable
+      const messageBox = this.$refs?.editable as HTMLElement
       const pos = Cursor.getCurrentCursorPosition(messageBox)
-      const rows = []
+      const rows: Array<string> = []
       newValue.split('\n').forEach((row) => {
         // When encountering a newline, create a new row
         row.split('\n').forEach((line) => {
@@ -242,9 +251,9 @@ export default Vue.extend({
       messageBox.innerHTML = rows.join('')
       Cursor.setCurrentCursorPosition(pos, messageBox)
     },
-    handleInputPaste(e) {
+    handleInputPaste(e: ClipboardEvent) {
       e.preventDefault()
-      const text = e.clipboardData.getData('text/plain')
+      const text = e.clipboardData?.getData('text/plain') || ''
       if (document.queryCommandSupported('insertText')) {
         document.execCommand('insertText', false, text)
       } else {
@@ -252,13 +261,15 @@ export default Vue.extend({
       }
       this.handlePasteProps(e)
     },
-    handleInputKeydown(e) {
+    handleInputKeydown(e: KeyboardEvent) {
       switch (e.key) {
         case 'Backspace':
         case 'Delete':
           if (
             this.$refs?.editable &&
-            Cursor.getCurrentCursorPosition(this.$refs?.editable) === 0
+            Cursor.getCurrentCursorPosition(
+              this.$refs?.editable as HTMLElement,
+            ) === 0
           ) {
             e.preventDefault()
           }
@@ -268,17 +279,18 @@ export default Vue.extend({
     },
     onSelectionChange() {
       const selection = document.getSelection()
-      const messageBox = this.$refs?.editable
+      const messageBox = this.$refs?.editable as HTMLElement
       if (selection && selection.rangeCount > 0) {
-        const node = selection.getRangeAt(0).commonAncestorContainer
+        const node = selection.getRangeAt(0)
+          .commonAncestorContainer as HTMLElement
         // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
         if (node.innerText === '\n' && messageBox.innerText === '\n') {
           Cursor.setCurrentCursorPosition(0, messageBox)
         }
       }
     },
-    onInput(e) {
-      const messageBox = e.target
+    onInput(e: KeyboardEvent) {
+      const messageBox = e.target as HTMLElement
       let finalValue = ''
       messageBox.innerText.split('\n\n').forEach((row, i) => {
         finalValue +=
