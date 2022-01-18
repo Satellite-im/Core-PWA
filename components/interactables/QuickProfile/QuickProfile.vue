@@ -2,8 +2,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/types/ui/user'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {

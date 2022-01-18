@@ -8,7 +8,12 @@
     <InteractablesClose :action="close" />
   </div>
   <div class="header">
-    <UiCircle type="random" :seed="user.address" :size="45" />
+    <UiCircle
+      :type="user.profilePicture ? 'image' : 'random'"
+      :seed="user.address"
+      :size="45"
+      :source="user.profilePicture"
+    />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
   <TypographyText
