@@ -138,6 +138,7 @@ export interface UIState {
   modals: Object
   glyphModalPack: String
   chatbarContent: String
+  chatbarFocus: Boolean
   replyChatbarContent: {
     id: String
     from: String

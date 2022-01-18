@@ -3,8 +3,7 @@
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
-      v-focus="focusValue"
-      :contenteditable="recipient ? true : false"
+      :contenteditable="enabled"
       autocapitalize="off"
       class="editable-input"
       @input="onInput"
@@ -23,6 +22,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
+import { mapState } from 'vuex'
 
 class Cursor {
   static getCurrentCursorPosition(parentElement: HTMLElement) {
@@ -165,19 +165,6 @@ class Cursor {
 }
 
 export default Vue.extend({
-  directives: {
-    focus: {
-      update(el, { value, oldValue }, vnode) {
-        if (value && value !== oldValue) {
-          el.focus()
-          Cursor.setCurrentCursorPosition(
-            vnode.context?.$props.value.length || 0,
-            el,
-          )
-        }
-      },
-    },
-  },
   props: {
     value: {
       type: String,
@@ -187,13 +174,9 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    recipient: {
-      type: Object,
-      default: null,
-    },
-    focusValue: {
-      type: String,
-      default: '',
+    enabled: {
+      type: Boolean,
+      default: true,
     },
     handleInputKeydownProps: {
       type: Function as PropType<(e: KeyboardEvent) => void>,
@@ -212,14 +195,22 @@ export default Vue.extend({
       default: () => void {},
     },
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
     },
-    recipient() {
-      if (!this.$refs?.editable) return
-      const messageBox = this.$refs?.editable as HTMLElement
-      Cursor.setCurrentCursorPosition(this.$props.value.length, messageBox)
+    'ui.chatbarFocus': {
+      handler(value) {
+        if (value) {
+          this.$store.dispatch('ui/setChatbarFocus', false)
+          if (!this.$refs?.editable) return
+          const messageBox = this.$refs?.editable as HTMLElement
+          Cursor.setCurrentCursorPosition(this.$props.value.length, messageBox)
+        }
+      },
     },
   },
   mounted() {

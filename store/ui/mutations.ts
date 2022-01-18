@@ -322,4 +322,7 @@ export default {
   updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
   },
+  setChatbarFocus(state: UIState, status: boolean) {
+    state.chatbarFocus = status
+  },
 }

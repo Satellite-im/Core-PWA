@@ -27,8 +27,7 @@
     <Editable
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :recipient="recipient"
-      :focusValue="ui.replyChatbarContent.id"
+      :enabled="Boolean(recipient)"
       :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
       :handleInputKeydownProps="handleInputKeydown"
       :handleInputKeyupProps="handleInputKeyup"

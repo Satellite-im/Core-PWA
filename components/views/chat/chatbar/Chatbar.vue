@@ -316,6 +316,7 @@ export default Vue.extend({
         payload: '',
         from: '',
       })
+      this.$store.dispatch('ui/setChatbarFocus', true)
     },
   },
 })
