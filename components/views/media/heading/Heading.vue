@@ -15,7 +15,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      elapsedTimeLabel: '',
+      elapsedTimeLabel: ''
     }
   },
   computed: {
@@ -40,7 +40,7 @@ export default Vue.extend({
       const elements = document.querySelectorAll('.full-video')
       if (elements && elements.length > 0 && !this.ui.fullscreen) {
         for (let i = 0; i < elements.length; i++) {
-          const element = elements[i]
+          const element = elements[i];
           element?.classList.remove('full-video')
         }
       }
@@ -53,7 +53,6 @@ export default Vue.extend({
       }${duration.format('mm:ss')}`
     },
     setTimer() {
-      this.$store.commit('webrtc/updateCreatedAt', Date.now())
       if (this.webrtc && this.webrtc.activeStream) {
         if (!this.timerId) {
           this.elapsedTime(this.webrtc.activeStream.createdAt)

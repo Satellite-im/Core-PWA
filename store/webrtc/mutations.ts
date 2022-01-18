@@ -43,9 +43,6 @@ const mutations = {
   ) {
     state.remoteTracks = { ...state.remoteTracks, ...tracks }
   },
-  updateCreatedAt(state: WebRTCState, date: number) {
-    state.activeStream.createdAt = date
-  },
 }
 
 export default mutations

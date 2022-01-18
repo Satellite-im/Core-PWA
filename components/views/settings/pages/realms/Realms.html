@@ -1,16 +1,23 @@
 <div id="network-settings">
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.network.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.network.subtitle')" />
+      <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.realms.subtitle')"
+      />
     </div>
   </div>
 
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyLabel :text="$t('pages.settings.network.chain')" />
+      <TypographyLabel :text="$t('pages.settings.realms.chain')" />
       <br />
-      <SettingsPagesRealmsRealm  v-for="realm in realms" :realm="realm" :key="realm.id" />
+      <SettingsPagesRealmsRealm
+        v-for="realm in realms"
+        :realm="realm"
+        :key="realm.id"
+      />
     </div>
   </div>
 </div>

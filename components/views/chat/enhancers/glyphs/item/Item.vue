@@ -27,15 +27,15 @@ export default Vue.extend({
     },
     sendOnClick: { type: Boolean, default: false, required: false },
   },
-  computed: {
-    getSrc(): string {
-      return this.isLoaded ? this.src : loadImg
-    },
-  },
   data() {
     return {
       isLoaded: false,
     }
+  },
+  computed: {
+    getSrc(): string {
+      return this.isLoaded ? this.src : loadImg
+    },
   },
   methods: {
     mouseOver() {
@@ -67,6 +67,10 @@ export default Vue.extend({
       this.$store.commit('ui/updateRecentGlyphs', {
         pack: this.pack,
         url: this.src,
+      })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: false,
+        floating: !!this.$device.isMobile,
       })
     },
     setLoaded() {
