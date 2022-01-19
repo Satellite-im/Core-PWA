@@ -282,13 +282,12 @@ export default {
 }
 
 /**
- * @method uploadPicture helper function to upload image to textile if needed
- * @description
- * @param userAccount
- * @example
+ * @method uploadPicture
+ * @description helper function to upload image to textile if needed
+ * @param image data string of uploaded image
+ * @returns textile hash of image, or '' if no image is present
  */
 async function uploadPicture(image: string) {
-  // immediately return empty string if there's no image
   if (!image) {
     return ''
   }
