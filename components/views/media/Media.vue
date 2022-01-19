@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   props: {
@@ -67,6 +68,7 @@ export default Vue.extend({
       const { id, muted } = this.$store.state.webrtc.remoteTracks.video
 
       if (muted) {
+        this.$Sounds.playSound(Sounds.DEAFEN)
         return null
       }
 
@@ -81,6 +83,7 @@ export default Vue.extend({
       const { id, muted } = this.$store.state.webrtc.remoteTracks.audio
 
       if (muted) {
+        this.$Sounds.playSound(Sounds.MUTE)
         return null
       }
 
