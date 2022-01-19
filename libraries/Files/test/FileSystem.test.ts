@@ -24,6 +24,10 @@ describe('Test FileSystem', () => {
   const file2 = new Fil(
     ...Object.values({ ...mockFileData, name: 'testPng2.png' }),
   )
+  const file3 = new Fil(...Object.values({ ...mockFileData, name: 'abc.png' }))
+  const file4 = new Fil(
+    ...Object.values({ ...mockFileData, name: 'cc123.png' }),
+  )
   const directory = new Directory(...Object.values(mockDirectoryData))
   directory.addChild(file)
   directory.addChild(file)
@@ -33,14 +37,14 @@ describe('Test FileSystem', () => {
   it(`Correctly returns a filesystem name (${mockFileSystemData.name})`, () =>
     expect(filesystem.name).toEqual(mockFileSystemData.name))
   const newDirectory = filesystem.copyChild('Test Directory')
-  const newDirectory2 = filesystem.createDirectory('Test Directory 2')
+  const newDirectory2 = filesystem.createDirectory('second dir')
   if (newDirectory && newDirectory2) {
     newDirectory2.addChild(file)
     newDirectory2.addChild(file2)
     console.log(newDirectory2.content)
-    filesystem.openDirectory('Test Directory 2')
-    filesystem.addChild(file)
-    filesystem.addChild(file2)
+    filesystem.openDirectory('second dir')
+    filesystem.addChild(file3)
+    filesystem.addChild(file4)
     filesystem.goBack()
     it(`Correctly rejects duplicate entries`, () =>
       expect(filesystem.addChild(newDirectory)).toBe(false))
@@ -60,6 +64,6 @@ describe('Test FileSystem', () => {
     expect(filesystem.hasChild('test_fil')).toBe(false)
     expect(filesystem.hasChild('test_fil_rename')).toBe(true)
     console.log(newDirectory2?.content)
-    console.log(JSON.stringify(filesystem.export))
+    filesystem.fuzzySearch('generic')
   })
 })
