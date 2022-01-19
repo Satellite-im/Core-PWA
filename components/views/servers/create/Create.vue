@@ -73,7 +73,6 @@ export default Vue.extend({
         this.error = this.$t('servers.create.server_name_error') as string
         return false
       }
-      console.log(this.friends)
       this.error = false
       return true
     },
