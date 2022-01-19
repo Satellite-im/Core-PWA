@@ -36,7 +36,8 @@ export default Vue.extend({
       return this.accounts.details.textilePubkey === this.user?.textilePubkey
     },
     src(): string {
-      return `${this.$Config.textile.browser}/ipfs/${this.user?.profilePicture}`
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   mounted() {
