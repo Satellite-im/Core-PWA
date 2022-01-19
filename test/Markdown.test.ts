@@ -123,46 +123,4 @@ describe('html output', function () {
       `${decorator('||')}<span>spoiler</span>${decorator('||')}`,
     )
   })
-
-  //   it('should parse blockquotes', function () {
-  //     assertParsesToHtml('> blockquote', `<blockquote>blockquote</blockquote>`)
-  //   })
-
-  //   it('should parse blockquotes with triple >>>', function () {
-  //     assertParsesToHtml('>>> blockquote', `<blockquote>blockquote</blockquote>`)
-  //   })
-
-  //   it('should parse complete codeblocks', function () {
-  //     assertParsesToHtml(
-  //       '```code```',
-  //       `${decorator('```')}<pre><code class="hljs">code</code></pre>${decorator(
-  //         '```',
-  //       )}`,
-  //     )
-  //   })
-
-  //   it('should parse codeblocks with only initial ```', function () {
-  //     assertParsesToHtml(
-  //       '```code',
-  //       `${decorator('```')}<pre><code class="hljs">code</code></pre>`,
-  //     )
-  //   })
-
-  //   it('should parse codeblocks with only initial ``` and no code', function () {
-  //     assertParsesToHtml(
-  //       '```',
-  //       `${decorator('```')}<pre><code class="hljs"></code></pre>`,
-  //     )
-  //   })
-
-  //   it('should parse codeblocks with highlight.js', function () {
-  //     assertParsesToHtml(
-  //       '```js\nconst satellite = "rocks";\nconsole.log(satellite);\n```',
-  //       `${decorator(
-  //         '```',
-  //       )}<pre><code class="hljs js"><span class="hljs-keyword">const</span> satellite = <span class="hljs-string">&quot;rocks&quot;</span>; <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(satellite);</code></pre>${decorator(
-  //         '```',
-  //       )}`,
-  //     )
-  //   })
 })
