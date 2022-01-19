@@ -1,6 +1,5 @@
 <template src="./Add.html"></template>
 <script lang="ts">
-// @ts-ignore
 import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'

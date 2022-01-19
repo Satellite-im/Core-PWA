@@ -203,6 +203,7 @@ export default Vue.extend({
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
+     * eslint is expecting return. may need refactoring
      */
     async sendMessage() {
       const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {

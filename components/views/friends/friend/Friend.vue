@@ -18,6 +18,7 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 declare module 'vue/types/vue' {
   interface Vue {
     removeFriend: () => void
+    loading: string
   }
 }
 
@@ -56,13 +57,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    src() {
-      return (
+    src(): string {
+      const hash =
         this.friend?.photoHash ||
         this.friend?.profilePicture ||
-        this.friend?.request?.userInfo?.photoHash ||
-        ''
-      )
+        this.friend?.request?.userInfo?.photoHash
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   methods: {

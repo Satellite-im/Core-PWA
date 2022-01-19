@@ -40,9 +40,15 @@ export default Vue.extend({
     src() {
       // if sender is you
       if (this.address === 'unknown') {
-        return this.accounts.details.profilePicture
+        const myHash = this.accounts.details.profilePicture
+        return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
       }
-      return this.friends.all.find((e: Friend) => e.activeChat).profilePicture
+
+      const hash = this.friends.all.find(
+        (e: Friend) => e.activeChat,
+      ).profilePicture
+
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   created() {

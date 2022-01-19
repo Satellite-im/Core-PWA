@@ -49,7 +49,8 @@ export default Vue.extend({
   },
   computed: {
     src() {
-      return this.user?.profilePicture ?? ''
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   methods: {

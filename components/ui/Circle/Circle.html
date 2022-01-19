@@ -4,7 +4,7 @@
   @click="() => {$emit('click')}"
 >
   <img
-    :src="fetchSource"
+    :src="source"
     v-if="type === 'image' && source"
     alt="Circle Image"
     :class="`${square ? 'is-square' : 'is-rounded'} image`"

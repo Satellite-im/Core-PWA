@@ -8,7 +8,8 @@ export default Vue.extend({
   computed: {
     ...mapState(['accounts']),
     src() {
-      return this.accounts.details.profilePicture
+      const hash = this.accounts.details.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
 })

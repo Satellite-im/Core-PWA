@@ -69,11 +69,6 @@ export default Vue.extend({
       default: '',
     },
   },
-  computed: {
-    fetchSource() {
-      return `${this.$Config.textile.browser}/ipfs/${this.source}`
-    },
-  },
 })
 </script>
 <style scoped lang="less" src="./Circle.less"></style>
