@@ -1,9 +1,9 @@
+import Mousetrap from 'mousetrap'
 import { UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 // @ts-ignore
-import Mousetrap from 'mousetrap'
 
 const $Sounds = new SoundManager()
 
@@ -36,7 +36,7 @@ export default {
    * @example Mousetrap.bind('ctrl+s', dispatch('audio/toggleMute') )
    */
   openSettings({ commit, state }: any) {
-    commit('toggleSettings', !state.showSettings)
+    commit('toggleSettings', { show: !state.showSettings })
   },
   /**
    * @method activateKeybinds
@@ -49,10 +49,10 @@ export default {
       rootState.settings.keybinds
     Mousetrap.reset()
     Mousetrap.bind(toggleMute, () =>
-      dispatch('audio/toggleMute', null, { root: true })
+      dispatch('audio/toggleMute', null, { root: true }),
     )
     Mousetrap.bind(toggleDeafen, () =>
-      dispatch('audio/toggleDeafen', null, { root: true })
+      dispatch('audio/toggleDeafen', null, { root: true }),
     )
     Mousetrap.bind(openSettings, () => dispatch('openSettings'))
   },

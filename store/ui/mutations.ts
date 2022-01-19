@@ -1,8 +1,7 @@
 import { without } from 'lodash'
-import { EnhancerInfo, Flair, Theme, UIState } from './types'
+import { EnhancerInfo, Flair, Theme, UIState, RecentGlyph } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { RecentGlyph } from '~/store/ui/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -64,8 +63,13 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(state: UIState, show: boolean) {
+  toggleSettings(
+    state: UIState,
+    options: { show: boolean; defaultRoute?: string },
+  ) {
+    const { show, defaultRoute } = options
     state.showSettings = show
+    state.settingsDefaultRoute = defaultRoute || 'personalize'
   },
   toggleSettingsSidebar(state: UIState, show: boolean) {
     state.settingsSideBar = show
