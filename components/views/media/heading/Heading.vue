@@ -26,7 +26,7 @@ export default Vue.extend({
     this.timer = false
     this.setTimer()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearTimer()
   },
   methods: {
@@ -46,6 +46,7 @@ export default Vue.extend({
       }
     },
     elapsedTime(start: number): void {
+      if (!start) return
       const duration = dayjs.duration(Date.now() - start)
       const hours = duration.hours()
       this.elapsedTimeLabel = `${this.$t('ui.live')} ${
@@ -54,10 +55,10 @@ export default Vue.extend({
     },
     setTimer() {
       this.$store.commit('webrtc/updateCreatedAt', Date.now())
-      if (this.webrtc && this.webrtc.activeStream) {
-        if (!this.timerId) {
+      if (this.webrtc?.activeCall) {
+        if (!this.timer) {
           this.elapsedTime(this.webrtc.activeStream.createdAt)
-          this.timerId = setInterval(() => {
+          this.timer = setInterval(() => {
             this.elapsedTime(this.webrtc.activeStream.createdAt)
           }, 1000)
         }

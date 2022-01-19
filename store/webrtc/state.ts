@@ -6,7 +6,7 @@ const InitialWebRTCState = (): WebRTCState => ({
   activeCall: '',
   connectedPeer: '',
   activeStream: {
-    createdAt: Date.now(),
+    createdAt: 0,
   },
   streaming: true,
   localTracks: { audio: {}, video: {} },
