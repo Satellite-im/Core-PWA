@@ -2,6 +2,9 @@ import { Client, Identity, ThreadID, Where } from '@textile/hub'
 // @ts-ignore
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
+import { MessageFromThread } from '~/types/textile/mailbox'
+import { messageFromThread } from '~/libraries/Textile/encoders'
+import { User } from '~/types/ui/user'
 
 export default class ThreadManager {
   textile: TextileInitializationData
@@ -55,7 +58,7 @@ export default class ThreadManager {
    */
   async createThread(
     threadUsers: Array<Object>,
-    threadTitle: string,
+    collectionName: string,
     options?: Object,
   ) {
     if (!this.textileClient || !this.identity)
@@ -64,16 +67,16 @@ export default class ThreadManager {
       )
     this.threadID = await this.textileClient.newDB(
       undefined,
-      threadTitle + Date.now(),
+      'groupChats' + Date.now(),
     )
-    const users = {
-      name: '',
-      _id: this.threadID.toString(),
-    }
-    await this.textileClient.newCollectionFromObject(this.threadID, users, {
-      name: threadTitle,
-    })
-    await this.textileClient.create(this.threadID, threadTitle, threadUsers)
+    await this.textileClient.newCollectionFromObject(
+      this.threadID,
+      messageFromThread,
+      {
+        name: collectionName,
+      },
+    )
+    await this.textileClient.create(this.threadID, collectionName, threadUsers)
   }
 
   /**
@@ -82,14 +85,14 @@ export default class ThreadManager {
    * @argument threadTitle identifier to retrieve the collection by
    * @argument options Object containing values to pass to textile
    */
-  async getCollection(threadTitle: string, options?: Object) {
+  async getCollection(collectionName: string, options?: Object) {
     if (!this.textileClient || !this.identity)
       return new Error(
         'Attempted to interface with a thread before initializing',
       )
-    const findThread = await this.textile.users.getThread(threadTitle)
+    const findThread = await this.textile.users.getThread('groupChats')
     const threadID = ThreadID.fromString(findThread.id)
-    return await this.textileClient.getCollectionInfo(threadID, threadTitle)
+    return await this.textileClient.getCollectionInfo(threadID, collectionName)
   }
 
   /**
@@ -99,25 +102,44 @@ export default class ThreadManager {
    * @argument values Values object Array containing update info
    */
   async addUserToThread(
-    threadTitle: string,
+    collectionName: string,
     userName: string,
     newInfo: Array<any>,
   ) {
-    interface UserInfo {
-      name: string
-      _id: string
-    }
-
-    const findThread = await this.textile.users.getThread(threadTitle)
+    const findThread = await this.textile.users.getThread('groupChats')
     const threadID = ThreadID.fromString(findThread.id)
     const query = new Where('name').eq(userName)
-    const result = await this.textileClient.find<UserInfo>(
+    const result = await this.textileClient.find<User>(
       threadID,
-      threadTitle,
+      collectionName,
       query,
     )
     newInfo.forEach((user) => result.push(user))
-    return await this.textileClient.save(threadID, threadTitle, result)
+    return await this.textileClient.save(threadID, collectionName, result)
+  }
+
+  async ensureCollection(
+    threadID: ThreadID,
+    collectionName: string,
+    schema: any,
+  ) {
+    try {
+      await this.textileClient.getCollectionIndexes(threadID, collectionName)
+    } catch (e) {
+      await this.textileClient.newCollectionFromObject(threadID, schema, {
+        name: collectionName,
+      })
+    }
+  }
+
+  async addNewMessage(
+    threadID: ThreadID,
+    collectionName: string,
+    message: MessageFromThread,
+  ): Promise<ThreadID> {
+    await this.ensureCollection(threadID, collectionName, messageFromThread)
+    await this.textileClient.create(threadID, collectionName, [message])
+    return threadID
   }
 
   async getIndexes(name: string, threadID: ThreadID) {
@@ -132,7 +154,7 @@ export default class ThreadManager {
    * @returns string ID of the thread
    */
   async fetchThread(identifier: string): Promise<ThreadID> {
-    const thread = await this.textile.users.getThread(identifier)
+    const thread = await this.textile.users.getThread('groupChats')
     return ThreadID.fromString(thread.id)
   }
 
