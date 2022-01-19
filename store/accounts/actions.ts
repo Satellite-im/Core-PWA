@@ -237,33 +237,21 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
-    // init textile so image can be sent to bucket
-    const { pin } = state
-    await dispatch(
-      'textile/initialize',
-      {
-        id: userAccount?.publicKey.toBase58(),
-        pass: pin,
-        wallet: $SolanaManager.getMainSolanaWalletInstance(),
-      },
-      { root: true },
-    )
+    // only init textile if we need to push an image to bucket
+    if (userData.image) {
+      const { pin } = state
+      await dispatch(
+        'textile/initialize',
+        {
+          id: userAccount?.publicKey.toBase58(),
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
 
-    // convert data string image to File
-    const imageFile: File = await fetch(userData.image)
-      .then((res) => res.blob())
-      .then((blob) => {
-        return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
-      })
-
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    $TextileManager.bucketManager?.getBucket()
-    const result = await $TextileManager.bucketManager?.pushFile(
-      imageFile,
-      imageFile.name,
-    )
-
-    const imagePath = result?.path.root.toString() ?? ''
+    const imagePath = await uploadPicture(userData.image)
 
     await serverProgram.createUser(userData.name, imagePath, userData.status)
 
@@ -291,4 +279,33 @@ export default {
     const $Crypto: Crypto = Vue.prototype.$Crypto
     await $Crypto.init(userAccount)
   },
+}
+
+/**
+ * @method uploadPicture helper function to upload image to textile if needed
+ * @description
+ * @param userAccount
+ * @example
+ */
+async function uploadPicture(image: string) {
+  // immediately return empty string if there's no image
+  if (!image) {
+    return ''
+  }
+
+  // convert data string image to File
+  const imageFile: File = await fetch(image)
+    .then((res) => res.blob())
+    .then((blob) => {
+      return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
+    })
+
+  const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+  $TextileManager.bucketManager?.getBucket()
+  const result = await $TextileManager.bucketManager?.pushFile(
+    imageFile,
+    imageFile.name,
+  )
+
+  return result?.path.root.toString() ?? ''
 }
