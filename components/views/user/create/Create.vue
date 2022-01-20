@@ -88,7 +88,7 @@ export default Vue.extend({
 
       this.onConfirm({
         username: this.name,
-        imageURI: this.croppedImage,
+        photoHash: this.croppedImage,
         status: this.status,
       })
       return true

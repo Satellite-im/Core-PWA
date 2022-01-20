@@ -1,6 +1,5 @@
 <template src="./Circle.html"></template>
 <script lang="ts">
-// @ts-ignore - Missing Types
 import Vue, { PropType } from 'vue'
 import { CircleType } from './types'
 

@@ -31,7 +31,7 @@ const mutations = {
     state.details = {
       name: details.username,
       status: details.status,
-      profilePicture: details.imageURI,
+      profilePicture: details.photoHash,
       address: state.active,
       state: 'online',
     }
@@ -54,13 +54,13 @@ const mutations = {
   },
   setRegistrationStatus(
     state: AccountsState,
-    registrationStates: RegistrationStatus
+    registrationStates: RegistrationStatus,
   ) {
     state.registrationStatus = registrationStates
   },
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
-  }
+  },
 }
 
 export default mutations

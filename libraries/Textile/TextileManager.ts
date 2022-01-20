@@ -5,7 +5,7 @@ import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
-import BucketManager from "~/libraries/Textile/BucketManager";
+import BucketManager from '~/libraries/Textile/BucketManager'
 
 export default class TextileManager {
   creds?: Creds
@@ -46,7 +46,11 @@ export default class TextileManager {
     }
 
     this.mailboxManager = new MailboxManager(textile, wallet.address)
-    this.bucketManager = new BucketManager(textile, identity, textile.wallet.address)
+    this.bucketManager = new BucketManager(
+      textile,
+      identity,
+      textile.wallet.address,
+    )
     await this.bucketManager.init().catch((e) => console.log(e))
     return this.mailboxManager.init()
   }
@@ -60,7 +64,7 @@ export default class TextileManager {
   async authenticate(
     id: string,
     pass: string,
-    textile: TextileInitializationData
+    textile: TextileInitializationData,
   ) {
     this.creds = {
       id,
@@ -69,7 +73,11 @@ export default class TextileManager {
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
     await this.mailboxManager.init()
-    this.bucketManager = new BucketManager(textile, textile.identity,textile.wallet.address)
+    this.bucketManager = new BucketManager(
+      textile,
+      textile.identity,
+      textile.wallet.address,
+    )
     await this.bucketManager.init().catch((e) => console.log(e))
   }
 

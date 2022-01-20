@@ -47,6 +47,12 @@ export default Vue.extend({
       ],
     }
   },
+  computed: {
+    src(): string {
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+  },
   methods: {
     testFunc() {
       this.$Logger.log('User Context', 'Test func')

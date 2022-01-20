@@ -5,13 +5,12 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
-
-
 import { sampleProfileInfo } from '~/mock/profile'
+import { AccountsState } from '~/store/accounts/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    accounts: any
+    accounts: AccountsState
   }
 }
 export default Vue.extend({
@@ -38,6 +37,13 @@ export default Vue.extend({
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
         return true
       return false
+    },
+    src(): string {
+      if (this.croppedImage) {
+        return this.croppedImage
+      }
+      const hash = this.accounts.details.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   methods: {

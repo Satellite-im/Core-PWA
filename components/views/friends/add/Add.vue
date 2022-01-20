@@ -1,6 +1,5 @@
 <template src="./Add.html"></template>
 <script lang="ts">
-// @ts-ignore
 import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
@@ -8,11 +7,11 @@ import QrcodeVue from 'qrcode.vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-import { Friend } from '~/types/ui/friends'
 
+import { debounce } from 'lodash'
+import { Friend } from '~/types/ui/friends'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import _, { debounce } from 'lodash'
 
 export default Vue.extend({
   components: {
@@ -30,7 +29,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    _searchFriend: _.debounce(async function(this:any) {
+    _searchFriend: debounce(async function (this: any) {
       if (this.accountID.length >= 40) {
         return await this.searchFriend()
       }
@@ -45,10 +44,10 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
-      
+
       if (
         this.$store.state.friends.all.filter(
-          (f: Friend) => f.account.accountId === accountID
+          (f: Friend) => f.account.accountId === accountID,
         ).length === 1
       ) {
         this.error = this.$t('friends.already_friend') as string
