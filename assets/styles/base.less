@@ -127,9 +127,13 @@ html {
   &:extend(.font-muted);
 }
 
-// Labels
-.label {
-  &:extend(.background-flair);
+// Server labels
+#list-container {
+  .unread {
+    .label {
+      &:extend(.background-flair);
+    }
+  }
 }
 
 // Buttons
@@ -138,7 +142,6 @@ html {
   .is-primary {
     &:extend(.background-flair);
     &:extend(.glow-flair);
-    &:extend(.font-primary);
 
     &:hover,
     &:focus {
@@ -150,13 +153,16 @@ html {
 
   &.is-primary.is-outlined {
     &:extend(.font-accent);
-    &:extend(.glow-primary);
 
     &:hover,
     &:focus {
       &:extend(.font-secondary);
       &:extend(.glow-primary);
     }
+  }
+
+  #custom-cursor-area {
+    &:extend(.font-primary);
   }
 
   &.is-danger,
