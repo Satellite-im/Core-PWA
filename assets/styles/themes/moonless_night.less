@@ -149,8 +149,13 @@
     box-shadow: @flair-glow !important;
   }
   .multiselect__tags {
-    background: var(--flair-color) !important;
+    background: var(--flair-color);
     border: var(--flair-color);
+
+    .multiselect__input {
+      background: var(--flair-color);
+      box-shadow: @flair-glow;
+    }
   }
 
   .chip-item {
@@ -360,5 +365,23 @@
 
   .new-message-alert {
     background: var(--flair-color) !important;
+  }
+
+  .tag {
+    .tag-number {
+      background: var(--flair-color);
+    }
+  }
+
+  .context-menu {
+    p:hover {
+      background: var(--flair-color);
+    }
+  }
+
+  .filter-options {
+    input[type='checkbox'] {
+      accent-color: var(--flair-color);
+    }
   }
 }
