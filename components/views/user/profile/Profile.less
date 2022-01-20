@@ -1,19 +1,43 @@
-.user-profile {
+#profile {
   display: flex;
+  flex-direction: column;
   height: @full;
-  max-height: @full;
   overflow: hidden;
+  width: 964px;
 
-  .body-panel {
-    width: 784px;
-    padding: 32px;
-    .top-bar {
-      height: 25px;
+  .banner {
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .picture {
+    max-height: 424px;
+    margin-top: -120px;
+  }
+
+  .profile-body {
+    display: flex;
+    gap: @large-spacing;
+    padding: @xlarge-spacing;
+
+    .details-container {
+      width: @full;
+    }
+
+    .details {
       display: flex;
+      flex-direction: row;
       align-items: center;
-      .action {
-        flex-shrink: 0;
+      gap: @normal-spacing;
+      margin-bottom: @large-spacing;
+
+      .intro {
+        display: flex;
+        flex-direction: column;
       }
+    }
+    .buttons {
+      margin-left: auto;
     }
   }
 }

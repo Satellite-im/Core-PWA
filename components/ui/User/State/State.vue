@@ -1,11 +1,12 @@
 <template>
-  <div class="user-state">
+  <div class="user-state" :style="`width:${size}px; height:${size}px`">
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="user.address"
-      :size="35"
+      :size="size"
       :source="src"
     />
+
     <circle-icon
       v-if="user.state !== 'mobile' && !isTyping"
       size="1x"
@@ -41,6 +42,11 @@ export default Vue.extend({
       required: false,
     },
     src: { type: String, default: '', required: false },
+    size: {
+      type: Number,
+      default: 35,
+      required: false,
+    },
   },
 })
 </script>

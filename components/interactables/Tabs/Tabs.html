@@ -1,0 +1,5 @@
+<div id="tabs">
+  <button v-for="tab in tabs" @click="setRoute(tab.route)">{{tab.text}}</button>
+
+  <slot v-if="$slots.default"></slot>
+</div>
