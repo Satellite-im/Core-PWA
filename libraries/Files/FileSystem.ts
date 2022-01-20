@@ -97,8 +97,8 @@ export class FileSystem {
     }
   }
 
-  exportChildren(obj: Item): FSCItem {
-    let childrenObj: FSCItem = {}
+  exportChildren(obj: Item): Item {
+    let childrenObj: Item = {}
     if (obj._children) {
       let child = Array.from(obj._children)
       let newChildren: Array<object> = []
