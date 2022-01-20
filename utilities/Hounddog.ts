@@ -8,52 +8,65 @@ import { Friend } from '~/types/ui/friends'
 
 // Hounddog is used to clean up searching and finding data in our application.
 export default class Hounddog {
-    private _WebRTC: WebRTC
-    private _TextileManager: TextileManager
-    private _SolanaManager: SolanaManager
-    private _Store: { state: RootState }
+  private _WebRTC: WebRTC
+  private _TextileManager: TextileManager
+  private _SolanaManager: SolanaManager
+  private _Store: { state: RootState }
 
-    constructor(store: { state: RootState }) {
-        this._WebRTC = Vue.prototype.$WebRTC
-        this._TextileManager = Vue.prototype.$TextileManager
-        this._SolanaManager = Vue.prototype.$SolanaManager
-        this._Store = store
-    }
+  constructor(store: { state: RootState }) {
+    this._WebRTC = Vue.prototype.$WebRTC
+    this._TextileManager = Vue.prototype.$TextileManager
+    this._SolanaManager = Vue.prototype.$SolanaManager
+    this._Store = store
+  }
 
-    findFriend(
-        identifier: Friend["name"] | Friend["address"] | Friend["textilePubkey"] | string,
-        state: FriendsState
-    ): Friend | undefined {
-        return state.all.find(f => {
-            return f.name === identifier ||
-                f.address === identifier ||
-                f.account.accountId === identifier ||
-                f.textilePubkey === identifier ||
-                f.name === identifier
-        })
-    }
+  findFriend(
+    identifier:
+      | Friend['name']
+      | Friend['address']
+      | Friend['textilePubkey']
+      | string,
+    state: FriendsState,
+  ): Friend | undefined {
+    return state.all.find((f) => {
+      return (
+        f.name === identifier ||
+        f.address === identifier ||
+        f.account.accountId === identifier ||
+        f.textilePubkey === identifier ||
+        f.name === identifier
+      )
+    })
+  }
 
-    findFriendByAddress(address: string, state: FriendsState): Friend | undefined {
-        const search = state.all.find((fr: Friend) => fr.address === address)
-        return search;
-    }
+  findFriendByAddress(
+    address: string,
+    state: FriendsState,
+  ): Friend | undefined {
+    const search = state.all.find((fr: Friend) => fr.address === address)
+    return search
+  }
 
-    getActiveFriend(state: FriendsState): Friend | undefined {
-        return state.all.find(f => {
-            return f.activeChat === true
-        })
-    }
+  getActiveFriend(state: FriendsState): Friend | undefined {
+    return state.all.find((f) => {
+      return f.activeChat === true
+    })
+  }
 
-    friendExists(state: FriendsState, friend: Friend): Boolean {
-        const search = state.all.find((fr: Friend) => fr.address === friend.address)
-        return Boolean(search)
-    }
+  friendExists(state: FriendsState, friend: Friend): Boolean {
+    const search = state.all.find((fr: Friend) => fr.address === friend.address)
+    return Boolean(search)
+  }
 
-    matchesActiveCall(state: any): Friend {
-        return state.friends.all.find((friend: Friend) => friend.address === state.webrtc.activeCall)
-    }
+  matchesActiveCall(state: any): Friend {
+    return state.friends.all.find(
+      (friend: Friend) => friend.address === state.webrtc.activeCall,
+    )
+  }
 
-    matchesSomeActiveCall(state: any): Friend {
-        return state.friends.all.some((friend: Friend) => friend.address === state.webrtc.activeCall)
-    }
+  matchesSomeActiveCall(state: any): Friend {
+    return state.friends.all.some(
+      (friend: Friend) => friend.address === state.webrtc.activeCall,
+    )
+  }
 }

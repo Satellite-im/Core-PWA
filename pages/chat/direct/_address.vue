@@ -27,7 +27,10 @@ export default Vue.extend({
     const { address } = this.$route.params
     const { friends } = this.$store.state
     if (address) {
-      if (this.$Hounddog.findFriendByAddress(address, friends)) {
+      if (
+        this.$Hounddog &&
+        this.$Hounddog.findFriendByAddress(address, friends)
+      ) {
         this.$store.dispatch('textile/fetchMessages', { address })
         return
       }
@@ -36,7 +39,7 @@ export default Vue.extend({
       this.$router.replace(`/chat/direct/${friends.all[0].address}`)
       return
     }
-    this.$route.replace('/chat/direct')
+    this.$router.replace('/chat/direct')
   },
 })
 </script>
