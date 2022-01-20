@@ -44,14 +44,13 @@
   overflow: hidden;
   z-index: @base-z-index + 100;
   &:extend(.blur);
-}
 
-#enhancers.side-open {
-  margin-right: calc(@sidebar-size + @servers-size + 1rem);
-}
-
-#enhancers.side-close {
-  margin-right: 1rem;
+  &.side-open {
+    margin-right: calc(@sidebar-size + @servers-size + 1rem);
+  }
+  &.side-close {
+    margin-right: 1rem;
+  }
 }
 
 .emoji-picker {
@@ -107,5 +106,8 @@
   #enhancers {
     width: calc(100vw - @normal-spacing*2);
     min-width: calc(100vw - @normal-spacing*2);
+    &.side-close {
+      margin-right: 0;
+    }
   }
 }

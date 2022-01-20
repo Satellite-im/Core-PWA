@@ -68,7 +68,7 @@
   &:extend(.full-width);
 }
 
-@media (max-width: 768px) {
+@media (max-width: @mobile-breakpoint) {
   .create-server-container {
     &:extend(.full-width);
   }
@@ -85,7 +85,6 @@
     margin-top: 0px;
   }
 }
-
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .submit-container {

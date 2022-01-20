@@ -5,6 +5,7 @@
     <img :src="sample.imageUrl" alt="" class="photo" />
     <div class="details">
       <div class="details-info">
+        <img :src="sample.imageUrl" alt="" class="photo-sm" />
         <!-- todo: add source after AP476 gets merged profilePictureSrc -->
         <UiUserState
           :user="{address: ui.userProfile.address, state: ui.userProfile.state}"
