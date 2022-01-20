@@ -1,16 +1,17 @@
 #profile {
   display: flex;
   flex-direction: column;
-  height: @full;
-  overflow: hidden;
+  height: 540px;
   width: 964px;
+  max-height: @full;
+  max-width: @full;
 
   .banner {
     height: 120px;
     object-fit: cover;
   }
 
-  .picture {
+  .photo {
     max-height: 424px;
     margin-top: -120px;
   }
@@ -20,11 +21,13 @@
     gap: @large-spacing;
     padding: @xlarge-spacing;
 
-    .details-container {
+    .details {
       width: @full;
+      display: flex;
+      flex-direction: column;
     }
 
-    .details {
+    .details-info {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -37,7 +40,13 @@
       }
     }
     .buttons {
+      padding-bottom: @normal-spacing;
       margin-left: auto;
+    }
+    .about {
+      display: flex;
+      flex-direction: column;
+      gap: @normal-spacing;
     }
   }
 }

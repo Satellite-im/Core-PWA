@@ -63,9 +63,8 @@ export default Vue.extend({
       this.closeModal()
       this.$store.commit('ui/setUserProfile', {})
     },
-    setRoute(destination: string) {
-      console.log(destination)
-      this.route = destination
+    setRoute(route: string) {
+      this.route = route
     },
   },
 })

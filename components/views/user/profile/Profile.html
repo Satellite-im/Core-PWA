@@ -2,10 +2,10 @@
   <InteractablesClose :action="closeProfileModal" />
   <img :src="sample.imageUrl" alt="" class="banner" />
   <div class="profile-body">
-    <img :src="sample.imageUrl" alt="" class="picture" />
-    <div class="details-container">
-      <div class="details">
-        <!-- add source after rebase profilePictureSrc -->
+    <img :src="sample.imageUrl" alt="" class="photo" />
+    <div class="details">
+      <div class="details-info">
+        <!-- todo: add source after AP476 gets merged profilePictureSrc -->
         <UiUserState
           :user="{address: ui.userProfile.address, state: ui.userProfile.state}"
           :size="80"
@@ -16,7 +16,7 @@
           <div v-if="ui.userProfile.badges" class="badges"></div>
         </div>
       </div>
-      <InteractablesTabs :tabs="tabs" @setRoute="setRoute">
+      <InteractablesTabs :tabs="tabs" @setRoute="setRoute" :route="route">
         <div class="buttons">
           <InteractablesButton type="primary" size="small">
             <user-plus-icon size="1.25x" />
@@ -26,16 +26,24 @@
           </InteractablesButton>
         </div>
       </InteractablesTabs>
-      <UiHorizontalRule />
-      <UiScroll
-        v-if="route==='about'"
-        verticalScroll
-        scrollbarVisibility="scroll"
-        enableWrap
-        noPadding
-      >
-        test
-      </UiScroll>
+      <UiHorizontalRule style="margin-top: 0" />
+      <div v-if="route==='about'" class="about">
+        <div>
+          <TypographyTitle text="About Me" :size="6" />
+          <TypographyText text="Lorem ipsum dolor" />
+        </div>
+        <div>
+          <TypographyTitle text="Location" :size="6" />
+          <TypographyText text="Lorem ipsum dolor" />
+        </div>
+        <div>
+          <TypographyTitle text="Add Note" :size="6" />
+          <TypographyText text="Click to add note" />
+        </div>
+      </div>
+      <div v-if="route==='accounts'">accounts</div>
+      <div v-if="route==='activity'">activity</div>
+      <div v-if="route==='mutual'">mutual</div>
     </div>
   </div>
 </div>
