@@ -24,7 +24,7 @@ export default Vue.extend({
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
-        allowTouchMove: !!this.$device.isMobile,
+        allowTouchMove: this.$device.isMobile,
       },
     }
   },
