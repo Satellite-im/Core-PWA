@@ -281,8 +281,6 @@ button {
     &:extend(.background-flair);
     color: @text;
   }
-  /*  &:extend(.glow-flair);
-  border: 1px solid var(--flair-color); */
 
   .multiselect__content-wrapper {
     border: 1px solid var(--flair-color);
@@ -332,14 +330,6 @@ progress.progress {
     &::-webkit-progress-value {
       &:extend(.background-flair);
     }
-
-    /*  &::-moz-progress-bar {
-      &:extend(.background-flair);
-    }
-    &::-ms-fill {
-      &:extend(.background-flair);
-      border: none;
-    } */
   }
 
   border: 1px solid var(--flair-color);
@@ -598,67 +588,3 @@ strong {
   animation-duration: 2000ms;
   animation-iteration-count: infinite;
 }
-/* 
-
-// ------------- Ui Elements-------------
-
-.is-chatbar-reply {
-  background: var(--flair-color) !important;
-}
-
-* {
-  border-color: var(--flair-color);
-}
-
-.icon {
-  color: var(--flair-color) !important;
-}
-
-.files-aside {
-  background: @graydient !important;
-}
-
-// Chatbar
-
-#chatbar {
-  .chatbar-controls {
-    div[data-tooltip='Send'] {
-      color: var(--flair-color) !important;
-    }
-  }
-}
-
-// Media
-#mediastream {
-  .user,
-  .tag {
-    background: var(--flair-color) !important;
-  }
-  .tag {
-    box-shadow: @flair-glow !important;
-  }
-}
-
-// Progress
-.progress {
-  border: var(--flair-color);
-
-  &.is-primary {
-    border-color: var(--flair-color) !important;
-    &::-webkit-progress-value {
-      background: var(--flair-color) !important;
-    }
-    &::-moz-progress-bar {
-      background: var(--flair-color) !important;
-    }
-    &::-ms-fill {
-      background: var(--flair-color) !important;
-      border: none;
-    }
-  }
-
-  border: 1px solid var(--flair-color);
-  background: transparent;
-  margin-bottom: @light-spacing;
-}
- */
