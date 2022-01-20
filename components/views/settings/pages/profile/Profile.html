@@ -28,7 +28,7 @@
           <div class="column profile-photo-column">
             <div class="profile-photo">
               <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
-              <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
+              <UiCircle :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' " :source="src" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
               <UiCircle 
                 type="icon" 
                 @click="openFileDialog"

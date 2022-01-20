@@ -3,9 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { AccountsState } from '~/store/accounts/types'
+
 declare module 'vue/types/vue' {
   interface Vue {
-    accounts: any
+    accounts: AccountsState
   }
 }
 export default Vue.extend({

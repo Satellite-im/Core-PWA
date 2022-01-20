@@ -37,7 +37,7 @@ export default Vue.extend({
       // $mock.users.filter(u => u.address === group.from)[0].badge
       return ''
     },
-    src() {
+    src(): string {
       // if sender is you
       if (this.address === 'unknown') {
         const myHash = this.accounts.details.profilePicture
