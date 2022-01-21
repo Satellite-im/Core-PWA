@@ -4,7 +4,11 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { UserPlusIcon, MoreVerticalIcon } from 'satellite-lucide-icons'
+import {
+  UserPlusIcon,
+  MoreVerticalIcon,
+  AwardIcon,
+} from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 
 declare module 'vue/types/vue' {
@@ -18,6 +22,7 @@ export default Vue.extend({
   components: {
     UserPlusIcon,
     MoreVerticalIcon,
+    AwardIcon,
   },
   props: {
     closeModal: {
@@ -30,19 +35,19 @@ export default Vue.extend({
       route: 'about',
       tabs: [
         {
-          text: 'About',
+          text: this.$t('modal.profile.about.tab'),
           route: 'about',
         },
         {
-          text: 'Accounts',
+          text: this.$t('modal.profile.accounts'),
           route: 'accounts',
         },
         {
-          text: 'Activity',
+          text: this.$t('modal.profile.activity.tab'),
           route: 'activity',
         },
         {
-          text: 'Mutual',
+          text: this.$t('modal.profile.mutual.tab'),
           route: 'mutual',
         },
       ],
@@ -56,6 +61,10 @@ export default Vue.extend({
     profilePictureSrc() {
       const hash = this.ui.userProfile.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    // temp until we get real badges
+    badgeColors() {
+      return ['', '#F6CC6B', '#61CEA4', '#DA716F']
     },
   },
   methods: {

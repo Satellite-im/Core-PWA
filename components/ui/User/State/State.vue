@@ -9,7 +9,7 @@
 
     <circle-icon
       v-if="user.state !== 'mobile' && !isTyping"
-      size="1x"
+      :size="size > 35 ? '1.65x' : '1x'"
       :class="`status is-${user.state}`"
     />
     <smartphone-icon

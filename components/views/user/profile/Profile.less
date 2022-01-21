@@ -2,13 +2,12 @@
   display: flex;
   flex-direction: column;
   width: 964px;
-  height: 540px;
+  height: @full;
 
   .banner {
     height: 120px;
     object-fit: cover;
   }
-
   .photo {
     max-height: 424px;
     margin-top: -88px;
@@ -16,7 +15,6 @@
   .photo-sm {
     display: none;
   }
-
   .profile-body {
     display: flex;
     gap: @large-spacing;
@@ -27,7 +25,6 @@
       display: flex;
       flex-direction: column;
     }
-
     .details-info {
       display: flex;
       flex-direction: row;
@@ -38,16 +35,35 @@
       .intro {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
+
+        .badges {
+          display: flex;
+          gap: 0.4rem;
+        }
       }
     }
     .buttons {
       padding-bottom: @normal-spacing;
       margin-left: auto;
+
+      &.mobile {
+        display: none;
+      }
     }
     .about {
       display: flex;
       flex-direction: column;
       gap: @normal-spacing;
+
+      // temp font fixes until we refactor headings
+      .title.is-6 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 12px;
+      }
     }
   }
 }
@@ -83,6 +99,22 @@
     }
     .photo-sm {
       display: none;
+    }
+  }
+}
+@media only screen and (max-width: 480px) {
+  #profile {
+    .profile-body {
+      .buttons {
+        margin-left: initial;
+        padding: initial;
+        &.desktop {
+          display: none;
+        }
+        &.mobile {
+          display: flex;
+        }
+      }
     }
   }
 }

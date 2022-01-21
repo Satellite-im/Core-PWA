@@ -6,19 +6,37 @@
     <div class="details">
       <div class="details-info">
         <img :src="sample.imageUrl" alt="" class="photo-sm" />
-        <!-- todo: add source after AP476 gets merged profilePictureSrc -->
         <UiUserState
           :user="{address: ui.userProfile.address, state: ui.userProfile.state}"
           :size="80"
+          :src="profilePictureSrc"
         />
         <div class="intro">
-          <TypographyTitle :text="ui.userProfile.name" :size="6" />
-          <TypographyText :text="ui.userProfile.status" :size="6" />
-          <div v-if="ui.userProfile.badges" class="badges"></div>
+          <div>
+            <TypographyTitle :text="ui.userProfile.name" :size="6" />
+            <TypographyText :text="ui.userProfile.status" :size="6" />
+          </div>
+          <!-- todo: add real badges and conditional -->
+          <div class="badges">
+            <award-icon
+              v-for="n in 3"
+              :key="n"
+              size="1.2x"
+              :style="`color:${badgeColors[n]}`"
+            />
+          </div>
         </div>
       </div>
+      <div class="buttons mobile">
+        <InteractablesButton type="primary">
+          <user-plus-icon size="1.25x" />
+        </InteractablesButton>
+        <InteractablesButton type="primary">
+          <more-vertical-icon size="1.25x" />
+        </InteractablesButton>
+      </div>
       <InteractablesTabs :tabs="tabs" @setRoute="setRoute" :route="route">
-        <div class="buttons">
+        <div class="buttons desktop">
           <InteractablesButton type="primary" size="small">
             <user-plus-icon size="1.25x" />
           </InteractablesButton>
@@ -30,16 +48,22 @@
       <UiHorizontalRule style="margin-top: 0" />
       <div v-if="route==='about'" class="about">
         <div>
-          <TypographyTitle text="About Me" :size="6" />
+          <TypographyTitle :text="$t('modal.profile.about.me')" :size="6" />
           <TypographyText text="Lorem ipsum dolor" />
         </div>
         <div>
-          <TypographyTitle text="Location" :size="6" />
+          <TypographyTitle
+            :text="$t('modal.profile.about.location')"
+            :size="6"
+          />
           <TypographyText text="Lorem ipsum dolor" />
         </div>
         <div>
-          <TypographyTitle text="Add Note" :size="6" />
-          <TypographyText text="Click to add note" />
+          <TypographyTitle
+            :text="$t('modal.profile.about.add_note')"
+            :size="6"
+          />
+          <TypographyText :text="$t('modal.profile.about.click_note')" />
         </div>
       </div>
       <div v-if="route==='accounts'">accounts</div>
