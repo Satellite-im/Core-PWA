@@ -3,6 +3,7 @@
   --flair-color: @primary-color;
 }
 @flair-glow: 0 5px 14px -5px var(--flair-color);
+@switch-off-flair-glow: -5px 0px 20px -2px var(--flair-color);
 
 html,
 body {
@@ -26,6 +27,9 @@ html {
 }
 .color-flair {
   color: var(--flair-color) !important;
+}
+.switch-off-glow-flair {
+  box-shadow: @switch-off-flair-glow !important;
 }
 
 ::selection {
@@ -138,27 +142,13 @@ html {
 
 // Buttons
 .button {
-  &.is-primary,
-  .is-primary {
+  &.is-primary {
     &:extend(.background-flair);
     &:extend(.glow-flair);
-
-    &:hover,
-    &:focus {
-      border: none;
-      &:extend(.font-secondary);
-      &:extend(.glow-primary);
-    }
   }
 
   &.is-primary.is-outlined {
     &:extend(.font-accent);
-
-    &:hover,
-    &:focus {
-      &:extend(.font-secondary);
-      &:extend(.glow-primary);
-    }
   }
 
   #custom-cursor-area {
@@ -183,7 +173,6 @@ html {
     &:hover,
     &:focus {
       background: @danger-gradient;
-      &:extend(.font-secondary);
       &:extend(.glow-danger);
     }
   }
@@ -198,7 +187,6 @@ html {
     }
     &:hover {
       border: none;
-      &:extend(.font-secondary);
     }
   }
 }
@@ -254,8 +242,15 @@ button {
     }
     .switch-button.enabled {
       &:extend(.background-flair);
+      &:extend(.glow-flair);
       .sw-button {
         background: @white !important;
+      }
+    }
+
+    .switch-button {
+      .sw-button {
+        &:extend(.switch-off-glow-flair);
       }
     }
   }
@@ -314,7 +309,6 @@ button {
       &:extend(.glow-flair);
 
       &:hover {
-        &:extend(.font-secondary);
         &:extend(.glow-primary);
       }
     }

@@ -18,7 +18,7 @@ export default Vue.extend({
     color: {
       type: String,
       required: false,
-      default: '#0984e3',
+      default: 'null',
     },
     /**
      * Size of the switch
