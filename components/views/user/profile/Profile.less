@@ -1,18 +1,119 @@
-.user-profile {
+#profile {
   display: flex;
+  flex-direction: column;
+  width: 964px;
   height: @full;
-  max-height: @full;
-  overflow: hidden;
 
-  .body-panel {
-    width: 784px;
-    padding: 32px;
-    .top-bar {
-      height: 25px;
+  .banner {
+    height: 120px;
+    object-fit: cover;
+  }
+  .photo {
+    max-height: 424px;
+    margin-top: -88px;
+  }
+  .photo-sm {
+    display: none;
+  }
+  .profile-body {
+    display: flex;
+    gap: @large-spacing;
+    padding: @xlarge-spacing;
+
+    .details {
+      width: @full;
       display: flex;
+      flex-direction: column;
+    }
+    .details-info {
+      display: flex;
+      flex-direction: row;
       align-items: center;
-      .action {
-        flex-shrink: 0;
+      gap: @normal-spacing;
+      margin-bottom: @large-spacing;
+
+      .intro {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .badges {
+          display: flex;
+          gap: 0.4rem;
+        }
+      }
+    }
+    .buttons {
+      padding-bottom: @normal-spacing;
+      margin-left: auto;
+
+      &.mobile {
+        display: none;
+      }
+    }
+    .about {
+      display: flex;
+      flex-direction: column;
+      gap: @normal-spacing;
+
+      // temp font fixes until we refactor headings
+      .title.is-6 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @medium-breakpoint) {
+  #profile {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 546px;
+
+    .photo {
+      display: none;
+    }
+    .photo-sm {
+      display: block;
+      max-height: 212px;
+      margin: -88px 8px 0 0;
+    }
+    .profile-body {
+      padding-top: 0;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #profile {
+    width: @full;
+    height: @full;
+
+    .profile-body {
+      padding: @large-spacing;
+    }
+    .photo-sm {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 480px) {
+  #profile {
+    .profile-body {
+      .buttons {
+        margin-left: initial;
+        padding: initial;
+        &.desktop {
+          display: none;
+        }
+        &.mobile {
+          display: flex;
+        }
       }
     }
   }
