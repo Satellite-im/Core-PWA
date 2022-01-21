@@ -18,25 +18,19 @@
       .sw-button {
         height: calc(1.6em - (2 * 2px));
         width: calc(1.6em - (2 * 2px));
-        border: 2px solid var(--color);
         border-radius: calc(1.6em - (2 * 2px));
-        background: var(--color);
         transition: all @animation-speed-micro ease-in-out;
       }
       height: 1.6em;
       width: calc(1.6em * 2);
-      border: 2px solid var(--color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
       border-radius: 1.6em;
       transition: all @animation-speed-micro ease-in-out;
       cursor: pointer;
     }
     .switch-button.enabled {
       .sw-button {
-        background: white;
         transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
       }
-      background: var(--color);
       box-shadow: none;
     }
     .switch-button-label {
