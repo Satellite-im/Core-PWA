@@ -57,6 +57,10 @@ export default Vue.extend({
               to: 'accounts',
               text: 'Accounts & Devices',
             },
+            {
+              to: 'privacy',
+              text: 'Privacy',
+            },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
         {
