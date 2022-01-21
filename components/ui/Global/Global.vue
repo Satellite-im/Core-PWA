@@ -85,8 +85,8 @@ export default Vue.extend({
 
       peer?.call.deny()
 
-      // peer?.send('SIGNAL', { type: 'CALL_DENIED' })
-      // this.$store.dispatch('webrtc/denyCall')
+      peer?.send('SIGNAL', { type: 'CALL_DENIED' })
+      this.$store.dispatch('webrtc/denyCall')
     },
   },
 })

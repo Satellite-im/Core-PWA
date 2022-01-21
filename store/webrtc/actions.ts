@@ -74,12 +74,12 @@ export default {
       )
     })
 
-    // peer?.communicationBus.on('RAW_DATA', (message) => {
-    //   if (message.data.type === 'CALL_DENIED') {
-    //     peer?.call.hangUp()
-    //     dispatch('hangUp')
-    //   }
-    // })
+    peer?.communicationBus.on('RAW_DATA', (message) => {
+      if (message.data.type === 'CALL_DENIED') {
+        peer?.call.hangUp()
+        dispatch('hangUp')
+      }
+    })
 
     peer?.call.on('INCOMING_CALL', (data) => {
       // if incoming call is activer call return before toggling incoming call
