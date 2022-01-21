@@ -17,7 +17,7 @@ export enum FlairColors {
   PINK = '#FDA7DF',
   LIME = '#A3CB38',
   PURPLE = '#6F1E51',
-  PURPLER = '#9980FA',
+  LAVENDER = '#9980FA',
   SUNFLOWER = '#FFC312',
   DEEP_BLUE = '#30336b',
   VOID = '#2C3A47',
@@ -50,8 +50,8 @@ export const Flairs = [
     value: FlairColors.PURPLE,
   },
   {
-    text: 'Purpler',
-    value: FlairColors.PURPLER,
+    text: 'Lavender',
+    value: FlairColors.LAVENDER,
   },
   {
     text: 'Sunflower',
