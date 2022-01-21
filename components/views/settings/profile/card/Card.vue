@@ -2,9 +2,10 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 import { ProfileInfo } from '~/types/profile/profile'
-import { recommendLocations } from '~/mock/profile'
+import { timezones } from '~/mock/profile'
 
 export default Vue.extend({
   props: {
@@ -15,25 +16,20 @@ export default Vue.extend({
   },
   data() {
     return {
-      locations: [],
       languages: [],
-      recommendLocations,
+      timezones,
     }
   },
-  mounted() {
-    this.getUserTimeZone()
-  },
-  methods: {
-    /**
-     * @method getUserTimeZone
-     * @description Auto grabs users location/timezone, we check the locations array to ensure location hasn't already been added which fixes a multiple input bug
-     * @example Intl.DateTimeFormat().resolvedOptions().timeZone
-     */
-    getUserTimeZone() {
-      if (this.info.locations.indexOf(Intl.DateTimeFormat().resolvedOptions().timeZone) === -1) {
-      this.info.locations.push(Intl.DateTimeFormat().resolvedOptions().timeZone)
-      }
+  computed: {
+    ...mapState(['settings']),
+    timezone: {
+      set(value: string) {
+        this.$store.commit('settings/setTimezone', value)
       },
+      get() {
+        return this.settings.timezone
+      },
+    },
   },
 })
 </script>

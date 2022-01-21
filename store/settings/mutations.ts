@@ -30,6 +30,9 @@ const mutations = {
   setKeybinds(state: SettingsState, value: string) {
     state.keybinds = value
   },
+  setTimezone(state: SettingsState, value: string) {
+    state.timezone = value
+  },
   updateKeybinding(state: SettingsState, value: Object) {
     // @ts-ignore
     state.keybinds[value.keybindName] = value.newKeybind

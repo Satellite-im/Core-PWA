@@ -14,6 +14,7 @@ const InitialSettingsState = (): SettingsState => ({
   keybinds: KeybindTypes,
   embeddedLinks: true,
   displayCurrentActivity: true,
+  timezone: '',
 })
 
 export default InitialSettingsState
