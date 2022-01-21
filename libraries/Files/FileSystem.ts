@@ -2,7 +2,7 @@ import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
-import { FileSystemExport, FILESYSTEM_TYPE, FSCItem } from './types/filesystem'
+import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
 export class FileSystem {
   private _self = new Directory('root')
   private _currentDirectory = this._self
@@ -155,9 +155,9 @@ export class FileSystem {
     this.importChildren(rTestData, filesystem, directory)
   }
 
-  importChildren(item: FSCItem, filesystem: FileSystem, dir: Directory): void {
+  importChildren(item: Item, filesystem: FileSystem, dir: Directory): void {
     if (dir && item._children && item._children.length > 0) {
-      item._children.map((cItem: FSCItem) => {
+      item._children.map((cItem: Item) => {
         filesystem.openDirectory(item._name)
         if (cItem._type === 'DEFAULT') {
           const cDirectory = filesystem.createDirectory(cItem._name)
