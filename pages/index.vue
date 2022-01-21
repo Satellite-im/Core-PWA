@@ -43,9 +43,15 @@ export default Vue.extend({
     // this.$router.replace('/chat/direct')
     allPrerequisitesReady(nextValue) {
       if (nextValue) {
-        if (this.accounts.lastVisited && this.accounts.lastVisited !== this.$route.path) {
-          this.$router.replace(this.accounts.lastVisited)
-          return
+        if (
+          this.accounts.lastVisited &&
+          this.accounts.lastVisited !== this.$route.path
+        ) {
+          const matcher = this.$router.match(this.accounts.lastVisited)
+          if (matcher.matched.length > 0) {
+            this.$router.replace(this.accounts.lastVisited)
+            return
+          }
         }
         this.$router.replace('/chat/direct')
       }
@@ -88,5 +94,4 @@ export default Vue.extend({
     margin-bottom: 25vh;
   }
 }
-
 </style>
