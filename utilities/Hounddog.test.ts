@@ -101,29 +101,10 @@ describe("Retrieving friend's profile", () => { // state.all.find
         badge: "community",
         userAccount: "",
         mailboxId: "",
-        // textilePubkey: "", this have been written above. cannot have redundancies.
       }]
     },
     textile: {
       initialized: true,
-      //   conversations: {
-      //     ["cba"]: {
-      //       messages: {
-      //         ["message1"]: { id: "string", at: 213, from: "string", to: "string" }
-      //         },
-      //         replies: {
-      //             ["reply1"]: {}
-      //         },
-      //         reactions: {
-      //             ["reaction1"]: {}
-      //         },
-      //         lastInbound: 123, // the last time a message was received by any member of conversation, other than account owner
-      //         lastUpdate: 123, // the last time a message was received by any member of conversation, including account owner
-      //         limit: 123,
-      //         skip: 123,
-      //         end: false,
-      //     }
-      //     },
       conversations: {},
       conversationLoading: true,
       messageLoading: true,
@@ -315,7 +296,6 @@ describe("Retrieve WebRTC calls with success", () => {
         badge: "community",
         userAccount: "",
         mailboxId: "",
-        // textilePubkey: "", this have been written above. cannot have redundancies.
       }]
     }
   }
