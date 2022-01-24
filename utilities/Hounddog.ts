@@ -33,8 +33,7 @@ export default class Hounddog {
         f.name === identifier ||
         f.address === identifier ||
         f.account.accountId === identifier ||
-        f.textilePubkey === identifier ||
-        f.name === identifier
+        f.textilePubkey === identifier
       )
     })
   }
