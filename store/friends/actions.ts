@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import Vue from 'vue'
+import { DataStateType } from '../dataState/types'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
@@ -24,7 +25,6 @@ import {
 } from '~/types/ui/friends'
 import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
-import { DataStateType } from '../dataState/types'
 import TextileManager from '~/libraries/Textile/TextileManager'
 
 export default {
@@ -130,7 +130,7 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
-    const friend: Friend = {
+    const friend: Omit<Friend, 'publicKey' | 'typingState'> = {
       account: friendAccount,
       name: rawUser.name,
       profilePicture: rawUser.photoHash,

@@ -8,7 +8,7 @@ import {
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
-import { messageEncoder, messageFromThread } from './encoders'
+import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
   MailboxCallback,
@@ -20,9 +20,11 @@ import {
   Message,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
-import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
+import {
+  PropCommonEnum,
+  MessagingTypesEnum,
+  EncodingTypesEnum,
+} from '~/libraries/Enums/enums'
 
 export class MailboxManager {
   senderAddress: string
@@ -239,7 +241,8 @@ export class MailboxManager {
           message.type === MessagingTypesEnum.REPLY
             ? message.replyType
             : undefined,
-        pack: message.pack,
+        pack:
+          message.type === MessagingTypesEnum.GLYPH ? message.pack : undefined,
       }),
     )
 
@@ -335,8 +338,10 @@ export class MailboxManager {
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,
+        // eslint-disable-next-line camelcase
         at: Math.floor(created_at / 1000000), // Convert into unix timestamp
         from,
+        // eslint-disable-next-line camelcase
         readAt: read_at,
       })
 
