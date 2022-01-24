@@ -410,8 +410,7 @@ export class FileSystem {
   }
 
   checkString(item: Item): boolean {
-    if (item._name) return true
-    return false
+    return item._name.includes('')
   }
 
   /**
