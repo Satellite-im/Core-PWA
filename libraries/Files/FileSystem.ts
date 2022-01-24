@@ -3,6 +3,8 @@ import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
+import { matchSorter } from 'match-sorter'
+
 export class FileSystem {
   private _self = new Directory('root')
   private _currentDirectory = this._self
@@ -395,6 +397,20 @@ export class FileSystem {
     fromDirectory: Directory = this.root,
   ): Directory | Item[] | null {
     return this.setupAndFind(itemNameOrValidatorFunc, fromDirectory, true)
+  }
+
+  /**
+   * @method fuzzySearch
+   * search the file or folders from file system
+   * @argument {string} partial search value
+   */
+  public fuzzySearch(partial: string): Item[] {
+    const itemList: Item[] = this.findAllItems(this.checkString, this.root)
+    return matchSorter(itemList, partial, { keys: ['_name', '_type'] })
+  }
+
+  checkString(item: Item): boolean {
+    return item._name.includes('')
   }
 
   /**
