@@ -314,7 +314,6 @@ describe("Retrieve WebRTC calls with success", () => {
   }
 
   beforeEach(() => {
-    // WebRTC.default.setActiveCall(state.webrtc, '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7e')
     WebRTC.default.setActiveCall(state.webrtc, payload.address)
     inst = new Hounddog.default({
       state
@@ -331,6 +330,7 @@ describe("Retrieve WebRTC calls with success", () => {
     expect(result).toMatchSnapshot()
   })
 })
+
 describe("Retrieve WebRTC calls with failure", () => {
   let inst: any
   let state: any = {
