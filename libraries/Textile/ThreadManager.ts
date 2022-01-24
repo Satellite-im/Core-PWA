@@ -3,7 +3,7 @@ import { Client, Identity, ThreadID, Where } from '@textile/hub'
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { MessageFromThread } from '~/types/textile/mailbox'
-import { messageFromThread } from '~/libraries/Textile/encoders'
+import { groupChatCollection } from '~/libraries/Textile/encoders'
 import { User } from '~/types/ui/user'
 
 export default class ThreadManager {
@@ -76,16 +76,20 @@ export default class ThreadManager {
     return this.threadID
   }
 
-  async createNewChatCollection() {
+  async createNewChatCollection(collectionUsers: Array<string>) {
+    const collectionIdentifier = this.makeIdentifier(
+      collectionUsers[0],
+      collectionUsers[1],
+    )
     await this.textileClient.newCollectionFromObject(
       this.threadID,
-      messageFromThread,
+      groupChatCollection,
       {
-        name: 'collectionName',
+        name: collectionIdentifier,
       },
     )
-    await this.textileClient.create(this.threadID, 'collectionName', [
-      messageFromThread,
+    await this.textileClient.create(this.threadID, collectionIdentifier, [
+      groupChatCollection,
     ])
   }
 
@@ -144,7 +148,7 @@ export default class ThreadManager {
     collectionName: string,
     message: MessageFromThread,
   ): Promise<ThreadID> {
-    await this.ensureCollection(collectionName, messageFromThread)
+    await this.ensureCollection(collectionName, groupChatCollection)
     await this.textileClient.create(this.threadID, collectionName, [message])
     return this.threadID
   }

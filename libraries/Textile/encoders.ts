@@ -50,6 +50,21 @@ export const messageFromThread = t.intersection([
   t.partial({ read_at: t.number }),
 ])
 
+const groupMessageUser = t.type({
+  payload: t.type({
+    _id: t.string,
+    name: t.string,
+  }),
+})
+
+export const groupChatCollection = t.intersection([
+  messageFromThread,
+  groupMessageUser,
+  t.type({
+    _id: t.string,
+  }),
+])
+
 const baseMessage = t.intersection([
   t.type({
     id: t.string,
@@ -79,6 +94,7 @@ const fileMessagePayload = t.type({
     type: t.string,
   }),
 })
+
 
 const imageMessagePayload = t.type({
   payload: t.type({
