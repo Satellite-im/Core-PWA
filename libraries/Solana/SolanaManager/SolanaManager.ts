@@ -1,13 +1,13 @@
 import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
 import * as ed25519 from 'ed25519-hd-key'
+import { Config } from '~/config'
+import { SolanaWallet } from '~/types/solana/solana'
 import {
   getClusterFromNetworkConfig,
   publicKeyFromSeed,
   sleep,
 } from '../Solana'
-import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
 
 export default class SolanaManager {
   accounts: Array<SolanaWallet>
@@ -98,10 +98,18 @@ export default class SolanaManager {
     if (!this.mnemonic) {
       return null
     }
-    const path = "m/44'/501'/0'/1'"
+
+    const path = 'user'
+
     const seed = await bip39.mnemonicToSeed(this.mnemonic)
-    const seedWithPath = this.deriveSeed(seed, path)
-    const keypair = Keypair.fromSeed(seedWithPath)
+    const seedWithPath = `${seed.toString('utf-8')}${path}`
+
+    const hashBuffer = await crypto.subtle.digest(
+      'SHA-256',
+      Buffer.from(seedWithPath),
+    )
+    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
+
     return keypair
   }
 
