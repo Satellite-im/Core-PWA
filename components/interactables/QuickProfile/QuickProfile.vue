@@ -2,8 +2,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/types/ui/user'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { User } from '~/types/ui/user'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    text: string
+    maxChars: number
+    close: () => void
+    handleOverflow: () => void
+  }
+}
 
 export default Vue.extend({
   components: {
@@ -23,6 +32,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'accounts']),
+    isMe(): boolean {
+      return this.accounts.details.textilePubkey === this.user?.textilePubkey
+    },
+    src(): string {
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   mounted() {
     this.handleOverflow()
@@ -74,12 +90,6 @@ export default Vue.extend({
         text: this.text,
       })
       this.close()
-    },
-    isMe() {
-      return (
-        this.accounts.details &&
-        this.accounts.details.textilePubkey === this.user?.textilePubkey
-      )
     },
   },
 })

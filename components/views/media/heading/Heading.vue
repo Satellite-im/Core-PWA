@@ -15,7 +15,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      elapsedTimeLabel: ''
+      elapsedTimeLabel: '',
     }
   },
   computed: {
@@ -26,7 +26,7 @@ export default Vue.extend({
     this.timer = false
     this.setTimer()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.clearTimer()
   },
   methods: {
@@ -40,12 +40,13 @@ export default Vue.extend({
       const elements = document.querySelectorAll('.full-video')
       if (elements && elements.length > 0 && !this.ui.fullscreen) {
         for (let i = 0; i < elements.length; i++) {
-          const element = elements[i];
+          const element = elements[i]
           element?.classList.remove('full-video')
         }
       }
     },
     elapsedTime(start: number): void {
+      if (!start) return
       const duration = dayjs.duration(Date.now() - start)
       const hours = duration.hours()
       this.elapsedTimeLabel = `${this.$t('ui.live')} ${
@@ -53,10 +54,11 @@ export default Vue.extend({
       }${duration.format('mm:ss')}`
     },
     setTimer() {
-      if (this.webrtc && this.webrtc.activeStream) {
-        if (!this.timerId) {
+      this.$store.commit('webrtc/updateCreatedAt', Date.now())
+      if (this.webrtc?.activeCall) {
+        if (!this.timer) {
           this.elapsedTime(this.webrtc.activeStream.createdAt)
-          this.timerId = setInterval(() => {
+          this.timer = setInterval(() => {
             this.elapsedTime(this.webrtc.activeStream.createdAt)
           }, 1000)
         }

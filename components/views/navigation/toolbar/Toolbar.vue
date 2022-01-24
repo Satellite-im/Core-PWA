@@ -1,4 +1,4 @@
-<template src="./Toolbar.html" />
+<template src="./Toolbar.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -82,6 +82,11 @@ export default Vue.extend({
       },
     },
     ModalWindows: () => ModalWindows,
+    src(): string {
+      // @ts-ignore curently reading user as type Server. Will likely be reworked with server update
+      const hash = this.server?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   methods: {
     /**
@@ -127,11 +132,16 @@ export default Vue.extend({
     },
     async call(kinds: TrackKind[]) {
       if (!this.webrtc.connectedPeer) return
-      const identifier = this.$Hounddog.getActiveFriend(
+      const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
-      ).address
+      )
+      if (!activeFriend) return
+      const identifier = activeFriend.address
 
-      console.log('kind', kinds)
+      if (!this.webrtc.connectedPeer) {
+        await this.$store.dispatch('webrtc/createPeerConnection', identifier)
+        if (!this.webrtc.connectedPeer) return
+      }
 
       // Trying to call the same user while call is already active
       if (identifier === this.$store.state.webrtc.activeCall) {

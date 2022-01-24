@@ -34,17 +34,6 @@
     background: @graydient !important;
   }
 
-  .flair {
-    background: var(--flair-color) !important;
-  }
-  .flair-glow {
-    box-shadow: @flair-glow !important;
-  }
-
-  .flair-glowing {
-    &:extend(.flair .flair-glow);
-  }
-
   ::selection {
     &:extend(.font-secondary);
     background: var(--flair-color) !important;
@@ -58,154 +47,9 @@
     caret-color: var(--flair-color) !important;
   }
 
-  .menu-list li a.is-active {
-    background: var(--flair-color) !important;
-    box-shadow: @flair-glow !important;
-  }
-
-  .is-primary {
-    .custom-select {
-      color: @white !important;
-      .selected {
-        color: @white !important;
-        background: var(--flair-color) !important;
-        box-shadow: @flair-glow !important;
-      }
-    }
-  }
-
-  //------------- Navigation -------------
-
-  a.link {
-    color: var(--flair-color) !important;
-
-    &:hover {
-      color: var(--flair-color) !important;
-    }
-  }
-
-  .alpha-divider,
-  .search-option-heading,
-  .vc-weekday,
-  .search-result-header,
-  .add-more-filters {
-    color: var(--flair-color) !important;
-  }
-
-  .add-more-filters {
-    &:hover {
-      background: var(--flair-color) !important;
-      color: @white !important;
-    }
-    color: var(--flair-color) !important;
-  }
-
-  .search-query-highlight {
-    background: var(--flair-color) !important;
-    box-shadow: @flair-glow !important;
-  }
-
-  .search-option-group {
-    li {
-      &:hover:not(:first-child),
-      &.active {
-        background: var(--flair-color) !important;
-        box-shadow: @flair-glow !important;
-      }
-    }
-  }
-
-  li .is-active,
-  li.active,
-  input.date-input {
-    background: var(--flair-color) !important;
-    box-shadow: @flair-glow !important;
-    border: none !important;
-  }
-
-  .breadcrumb a {
-    color: var(--flair-color) !important;
-  }
-
-  .toggle-sidebar,
-  .toggle--sidebar,
-  .menu-toggle {
-    color: var(--flair-color) !important;
-  }
-
-  .sidebar-inner,
-  .controls {
-    background: @transparent !important;
-    backdrop-filter: unset !important;
-    box-shadow: none !important;
-  }
-
   .control-icon.active,
   #mobile-nav .active {
     background: transparent !important;
-  }
-
-  .multiselect {
-    box-shadow: @flair-glow !important;
-  }
-  .multiselect__tags {
-    background: var(--flair-color) !important;
-    border: var(--flair-color);
-  }
-
-  .chip-item {
-    background: var(--flair-color) !important;
-    border: var(--flair-color);
-  }
-
-  .switch-button {
-    border-color: var(--flair-color) !important;
-    .sw-button {
-      border-color: var(--flair-color) !important;
-      background: var(--flair-color) !important;
-    }
-    &.enabled {
-      .sw-button {
-        border-color: @white !important;
-        background: @white !important;
-      }
-      background: var(--flair-color) !important;
-      border-color: var(--flair-color) !important;
-    }
-  }
-  #sidebar {
-    .sidebar-nav {
-      .button,
-      div {
-        .label {
-          line-height: 1 !important;
-        }
-        .content {
-          display: inline-flex;
-          justify-content: flex-start;
-          div {
-            width: 20px;
-          }
-        }
-
-        &.is-primary {
-          background: var(--flair-color) !important;
-          box-shadow: @flair-glow !important;
-        }
-        .tag-inverted {
-          background: @midground !important;
-        }
-        &:extend(.full-width);
-
-        &:nth-child(1) {
-          margin-right: @light-spacing;
-        }
-      }
-      display: inline-flex;
-    }
-    background: @background !important;
-    border-right: @border;
-    border-left: @border;
   }
 
   #mobile-nav {
@@ -232,64 +76,15 @@
 
   // ------------- Ui Elements-------------
 
-  .is-chatbar-reply {
-    background: var(--flair-color) !important;
-  }
-
-  * {
-    border-color: var(--flair-color);
-  }
-
-  .icon {
-    color: var(--flair-color) !important;
-  }
-
-  // Files
-
-  .file {
-    .file-icon {
-      color: var(--flair-color) !important;
-    }
-  }
-
   .files-aside {
     background: @graydient !important;
   }
 
-  // Chatbar
-
-  #chatbar {
-    .chatbar-controls {
-      div[data-tooltip='Send'] {
-        color: var(--flair-color) !important;
-      }
-    }
-  }
-
-  .message-hover {
-    background: unset !important;
-  }
-
-  // Buttons
-  .button {
-    &.is-primary {
-      background: var(--flair-color) !important;
-      box-shadow: @flair-glow !important;
-      color: @white !important;
-    }
-    &.is-dark {
-      background: @gray;
-    }
-    &.active {
-      background: var(--flair-color) !important;
-      box-shadow: @flair-glow !important;
-      color: @white !important;
-    }
-  }
-
-  // Labels
-  .label {
-    background: var(--flair-color) !important;
+  .sidebar-inner,
+  .controls {
+    background: @transparent !important;
+    backdrop-filter: unset !important;
+    box-shadow: none !important;
   }
 
   // Media
@@ -301,64 +96,5 @@
     .tag {
       box-shadow: @flair-glow !important;
     }
-  }
-
-  // Progress
-  .progress {
-    border: var(--flair-color);
-
-    &.is-primary {
-      border-color: var(--flair-color) !important;
-      &::-webkit-progress-value {
-        background: var(--flair-color) !important;
-      }
-      &::-moz-progress-bar {
-        background: var(--flair-color) !important;
-      }
-      &::-ms-fill {
-        background: var(--flair-color) !important;
-        border: none;
-      }
-    }
-
-    border: 1px solid var(--flair-color);
-    background: transparent;
-    margin-bottom: @light-spacing;
-  }
-
-  // ------------- ThirdParty-------------
-
-  // Volume
-  .volume-slider .vue-slider-process,
-  .vue-slider-dot-tooltip-inner {
-    &::after {
-      border-top-color: var(--flair-color) !important;
-    }
-    background: var(--flair-color) !important;
-  }
-
-  // Scrollbars
-  .ps__thumb-x,
-  .ps__thumb-y,
-  .ps__rail-x:hover > .ps__thumb-x,
-  .ps__rail-x:focus > .ps__thumb-x,
-  .ps__rail-x.ps--clicking .ps__thumb-x,
-  .ps__rail-y:hover > .ps__thumb-y,
-  .ps__rail-y:focus > .ps__thumb-y,
-  .ps__rail-y.ps--clicking .ps__thumb-y {
-    background: var(--flair-color) !important;
-  }
-
-  .auto-scroll {
-    /* Scroll Handle */
-    &::-webkit-scrollbar-thumb {
-      background: var(--flair-color) !important;
-    }
-    /* Custom Scroll for Firefox */
-    scrollbar-color: var(--flair-color) transparent !important;
-  }
-
-  .new-message-alert {
-    background: var(--flair-color) !important;
   }
 }

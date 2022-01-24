@@ -12,6 +12,7 @@ export type Theme = {
 }
 
 export enum FlairColors {
+  SATELLITE = '#2761fd',
   PEACH = '#ED4C67',
   PINK = '#FDA7DF',
   LIME = '#A3CB38',
@@ -28,6 +29,10 @@ export type Flair = {
 }
 
 export const Flairs = [
+  {
+    text: 'Satellite',
+    value: FlairColors.SATELLITE,
+  },
   {
     text: 'Peach',
     value: FlairColors.PEACH,

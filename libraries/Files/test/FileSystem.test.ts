@@ -4,14 +4,14 @@ import { FileSystem } from '../FileSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
 
 const mockFileData = {
-  name: 'TestFile.png',
-  descrption: 'Test file description',
+  _name: 'TestFile.png',
+  _descrption: 'Test file description',
   hash: '0x0aef',
 }
 
 const mockDirectoryData = {
-  name: 'Test Directory',
-  type: DIRECTORY_TYPE.DEFAULT,
+  _name: 'Test Directory',
+  _type: DIRECTORY_TYPE.DEFAULT,
 }
 
 const mockFileSystemData = {

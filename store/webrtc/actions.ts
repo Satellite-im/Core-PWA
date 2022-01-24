@@ -96,12 +96,13 @@ export default {
     peer?.call.on('CONNECTED', (data) => {
       commit('setIncomingCall', '')
       commit('setActiveCall', data.peerId)
+      commit('setConnectedTime', Date.now())
     })
 
     peer?.call.on('HANG_UP', (data) => {
       commit('setIncomingCall', '')
       commit('setActiveCall', '')
-
+      commit('setConnectedTime', 0)
       commit('updateLocalTracks', {
         audio: {},
         video: {},

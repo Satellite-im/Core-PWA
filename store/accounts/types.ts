@@ -38,6 +38,6 @@ export enum AccountsError {
 
 export interface UserRegistrationPayload {
   name: string
-  photoHash: string
+  image: string
   status: string
 }
