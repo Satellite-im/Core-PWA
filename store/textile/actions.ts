@@ -96,6 +96,9 @@ export default {
     const dbData: DexieMessage = {
       conversation,
       key: address,
+      lastInbound: conversation.length
+        ? conversation[conversation.length - 1].at
+        : 0,
     }
     db.conversations.put(dbData)
 
@@ -512,6 +515,9 @@ export default {
     db.conversations
       .where('key')
       .equals(address)
-      .modify((convo) => convo.conversation.push(message))
+      .modify((convo) => {
+        convo.conversation.push(message)
+        convo.lastInbound = message.at
+      })
   },
 }
