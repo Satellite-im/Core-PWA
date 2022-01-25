@@ -3,6 +3,7 @@ import { EnhancerInfo, Flair, Theme, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { RecentGlyph } from '~/store/ui/types'
+import { User } from '~/types/ui/user'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -322,7 +323,7 @@ export default {
   updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
   },
-  setSelectedUserInfo(state: UIState, selectedUserInfo: Object) {
+  setSelectedUserInfo(state: UIState, selectedUserInfo: User) {
     state.selectedUserInfo = selectedUserInfo
   },
 }
