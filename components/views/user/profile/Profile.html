@@ -77,7 +77,9 @@
           <TypographyText :text="$t('modal.profile.about.click_note')" />
         </div>
       </div>
-      <div v-if="route==='accounts'">accounts</div>
+      <div v-if="route==='accounts'">
+        <UserProfileAccounts />
+      </div>
       <div v-if="route==='activity'">activity</div>
       <div v-if="route==='mutual'">mutual</div>
     </div>
