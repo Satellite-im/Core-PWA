@@ -111,7 +111,7 @@ export default Vue.extend({
     setRoute(route: string) {
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
+        floating: !!this.$device.isMobile,
         route,
       })
     },
@@ -135,7 +135,7 @@ export default Vue.extend({
       ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
-          floating: this.$device.isMobile ? true : false,
+          floating: !!this.$device.isMobile,
         })
       }
       if (this.ui.settingReaction.status) {

@@ -8,7 +8,7 @@ import {
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
-import { messageEncoder, messageFromThread } from './encoders'
+import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
   MailboxCallback,
@@ -51,24 +51,6 @@ export class MailboxManager {
 
     return this.mailboxID
   }
-
-  // /**
-  //  * @method buildMessage
-  //  * @description Generates a Message object from the given data
-  //  * @param to Destination address
-  //  * @param type Message type
-  //  * @param data message data
-  //  * @returns a Message Object
-  //  */
-  // buildMessage(to: string, type: string, data: any) {
-  //   return {
-  //     sender: this.senderAddress,
-  //     to,
-  //     at: Date.now(),
-  //     type,
-  //     payload: data,
-  //   }
-  // }
 
   /**
    * @method getConversation

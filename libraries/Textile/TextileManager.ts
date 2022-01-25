@@ -59,6 +59,7 @@ export default class TextileManager {
       identity,
     )
     await this.bucketManager.init().catch((e) => console.log(e))
+    await this.threadManager.init().catch((e) => console.log(e))
     return this.mailboxManager.init()
   }
 
