@@ -13,6 +13,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'webrtc']),
+    existLiveChat(): Boolean {
+      return this.$store.state.friends.all.find(
+        (friend) => friend.address === this.$store.state.webrtc.activeCall,
+      )
+    },
   },
   methods: {
     hangUp() {
@@ -25,7 +30,6 @@ export default Vue.extend({
       this.call(['audio'])
     },
     async call(kinds: TrackKind[]) {
-      if (!this.webrtc.connectedPeer) return
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )

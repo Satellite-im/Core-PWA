@@ -71,7 +71,7 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
       this.$router.push(`/chat/direct/${this.user.address}`)
-      this.$store.commit('ui/setSenderInfo', this.user)
+      this.$store.commit('ui/setSelectedUserInfo', this.user)
     },
     handleShowProfile() {
       this.$store.commit('ui/toggleModal', {

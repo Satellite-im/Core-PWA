@@ -167,5 +167,5 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
-  senderInfo: Object
+  selectedUserInfo: Object
 }

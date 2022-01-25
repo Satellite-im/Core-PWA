@@ -1,14 +1,14 @@
 <div class="live">
-  <div class="name-and-icon" v-on:click="() => activeChat()">
+  <div class="name-and-icon" v-on:click="activeChat">
     <radio-icon size="1.2x" class="green" />
-    <TypographySubtitle :size="6" :text="ui.senderInfo.name || ''" />
+    <TypographySubtitle :size="6" :text="ui.selectedUserInfo.name || ''" />
   </div>
   <InteractablesButton
     type="danger"
     size="small"
     :text="$t('controls.end_stream')"
-    :action="() => hangUp()"
-    v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)"
+    :action="hangUp"
+    v-if="existLiveChat"
   >
     <x-icon size="1x"></x-icon>
   </InteractablesButton>

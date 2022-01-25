@@ -322,7 +322,7 @@ export default {
   updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
   },
-  setSenderInfo(state: UIState, senderInfo: Object) {
-    state.senderInfo = senderInfo
+  setSelectedUserInfo(state: UIState, selectedUserInfo: Object) {
+    state.selectedUserInfo = selectedUserInfo
   },
 }
