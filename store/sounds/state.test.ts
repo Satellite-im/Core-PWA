@@ -8,15 +8,7 @@ describe('init', () => {
     })
 
     it('should return the initial settings state', () => {
-        expect(inst).toEqual({
-            message: true,
-            call: true,
-            mute: true,
-            deafen: true,
-            undeafen: true,
-            upload: true,
-            connected: true,
-        })
+        expect(inst).toMatchSnapshot()
     })
 
     it('should not return the initial settings state', () => {
