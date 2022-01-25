@@ -23,7 +23,17 @@ export default Vue.extend({
   },
   mixins: [ContextMenu],
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'textile']),
+    src(): string {
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    getLastBoundary(): String {
+      const curUserMInfo = this.textile.conversations[this.user.address]
+      return curUserMInfo && curUserMInfo.lastInbound
+        ? this.$dayjs(curUserMInfo.lastInbound).from()
+        : ''
+    },
   },
   props: {
     user: {
@@ -46,12 +56,6 @@ export default Vue.extend({
         { text: 'Profile', func: this.handleShowProfile },
       ],
     }
-  },
-  computed: {
-    src(): string {
-      const hash = this.user?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
   },
   methods: {
     testFunc() {

@@ -10,7 +10,7 @@
     <TypographySubtitle v-else :size="6" :text="user.status" />
   </div>
   <div class="user-chat-details">
-    <TypographyText :size="6" text="12:03" />
+    <TypographyText :size="6" :text="getLastBoundary" />
     <TypographyTag :text="user.unreads.toString()" v-if="user.unreads > 0" />
   </div>
 </div>
