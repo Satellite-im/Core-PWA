@@ -10,9 +10,6 @@ const mutations = {
   setActiveCall(state: WebRTCState, id: string) {
     state.activeCall = id
   },
-  setConnectedTime(state: WebRTCState, timestamp: number) {
-    state.activeStream.createdAt = timestamp
-  },
   setConnectedPeer(state: WebRTCState, id: string) {
     state.connectedPeer = id
   },
@@ -46,8 +43,8 @@ const mutations = {
   ) {
     state.remoteTracks = { ...state.remoteTracks, ...tracks }
   },
-  updateCreatedAt(state: WebRTCState, date: number) {
-    state.activeStream.createdAt = date
+  updateCreatedAt(state: WebRTCState, timestamp: number) {
+    state.activeStream.createdAt = timestamp
   },
 }
 
