@@ -28,6 +28,9 @@
       @dblclick="handleDoubleClick('remote_video')"
     >
       <div v-if="remoteVideoStream" class="video-stream-container">
+        <div class="indicators">
+          <mic-off-icon class="indicator" v-if="remoteAudioMuted" size="1.2x" />
+        </div>
         <video
           class="video-stream"
           :src-object.prop="remoteVideoStream"
