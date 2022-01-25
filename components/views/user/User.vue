@@ -22,19 +22,6 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
-  computed: {
-    ...mapState(['ui', 'textile']),
-    src(): string {
-      const hash = this.user?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
-    getLastBoundary(): String {
-      const curUserMInfo = this.textile.conversations[this.user.address]
-      return curUserMInfo && curUserMInfo.lastInbound
-        ? this.$dayjs(curUserMInfo.lastInbound).from()
-        : ''
-    },
-  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -56,6 +43,19 @@ export default Vue.extend({
         { text: 'Profile', func: this.handleShowProfile },
       ],
     }
+  },
+  computed: {
+    ...mapState(['ui', 'textile']),
+    src(): string {
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    getLastBoundary(): String {
+      const curUserMInfo = this.textile.conversations[this.user.address]
+      return curUserMInfo && curUserMInfo.lastInbound
+        ? this.$dayjs(curUserMInfo.lastInbound).fromNow()
+        : ''
+    },
   },
   methods: {
     testFunc() {
