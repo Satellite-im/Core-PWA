@@ -90,6 +90,12 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    if (this.$route.params && this.$route.params.id) {
+      this.$data.accountID = this.$route.params.id
+      this._searchFriend()
+    }
+  },
 })
 </script>
 <style scoped lang="less" src="./Add.less"></style>

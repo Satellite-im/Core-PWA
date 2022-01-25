@@ -7,30 +7,40 @@
         <FriendsAdd />
         <!-- Friend Requests -->
         <div v-if="friends.incomingRequests.length" class="padded_divider">
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.requests')" />
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.requests')"
+          />
         </div>
         <FriendsFriend
-            v-for="friend in friends.incomingRequests"
-            :friend="{
+          v-for="friend in friends.incomingRequests"
+          :friend="{
               name: friend.userInfo.name,
               address: friend.from,
               state: 'offline',
               status: friend.userInfo.status,
               request: friend
             }"
-            :key="friend.from"
-            request
-          />
+          :key="friend.from"
+          request
+        />
       </div>
       <div class="column is-half-desktop">
         <!-- Friends List -->
-        <div v-if="Object.entries(alphaSortedFriends).length && $device.isMobile" class="padded_divider">
+        <div
+          v-if="Object.entries(alphaSortedFriends).length && $device.isMobile"
+          class="padded_divider"
+        >
           <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
         </div>
         <div v-if="dataState.friends !== DataStateType.Loading">
           <div v-for="entry in Object.entries(alphaSortedFriends)">
             <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
-            <FriendsFriend v-for="friend in entry[1]" :friend="friend" :key="friend.address" />
+            <FriendsFriend
+              v-for="friend in entry[1]"
+              :friend="friend"
+              :key="friend.address"
+            />
           </div>
           <div
             class="loading-container"
@@ -43,7 +53,10 @@
           <UiLoadersFriend :count="5" />
         </div>
         <div v-if="Object.entries($mock.blocked).length" class="padded_divider">
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.blocked')" />
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.blocked')"
+          />
         </div>
         <FriendsFriend
           v-for="friend in $mock.blocked"
