@@ -59,6 +59,7 @@
     "less": "^4.1.1",
     "less-loader": "^7.1.1",
     "lodash": "^4.17.21",
+    "match-sorter": "^6.3.1",
     "micro-base58": "^0.5.0",
     "mousetrap": "^1.6.5",
     "net": "^1.0.2",
