@@ -8,7 +8,7 @@ export enum PropCommonEnum {
   MOD = '_mod',
   TYPING = 'TYPING',
   NOT_TYPING = 'NOT_TYPING',
-  UNKNOWN = "unknown",
+  UNKNOWN = 'unknown',
 }
 
 export type PropCommon = keyof typeof PropCommonEnum

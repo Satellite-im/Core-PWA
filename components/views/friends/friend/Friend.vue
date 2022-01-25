@@ -14,11 +14,12 @@ import {
 
 import { Friend } from '~/types/ui/friends'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import { AddFriendEnum } from '~/libraries/Enums/enums'
 
 declare module 'vue/types/vue' {
   interface Vue {
     removeFriend: () => void
-    loading: string
+    loading: AddFriendEnum
   }
 }
 
@@ -52,7 +53,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      loading: '' as '' | 'accept' | 'decline' | 'sending' | 'options',
+      loading: '' as AddFriendEnum,
       contextMenuValues: [{ text: 'Remove Friend', func: this.removeFriend }],
     }
   },
@@ -67,45 +68,45 @@ export default Vue.extend({
   },
   methods: {
     async createFriendRequest() {
-      this.loading = 'sending'
+      this.loading = AddFriendEnum.SENDING
       try {
         await this.$store.dispatch('friends/createFriendRequest', {
           friendToKey: new PublicKey(this.$props.friend.account.accountId),
         })
         this.$emit('requestSent', '')
-      } catch (e) {
+      } catch (e: any) {
         this.$emit('requestSent', e.message)
       } finally {
-        this.loading = ''
+        this.loading = AddFriendEnum.EMPTY
       }
     },
     async acceptFriendRequest() {
-      this.loading = 'accept'
+      this.loading = AddFriendEnum.ACCEPT
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
           friendRequest: this.$props.friend.request,
         })
       } finally {
-        this.loading = ''
+        this.loading = AddFriendEnum.EMPTY
       }
     },
     async declineFriendRequest() {
-      this.loading = 'decline'
+      this.loading = AddFriendEnum.DECLINE
       try {
         await this.$store.dispatch(
           'friends/denyFriendRequest',
           this.$props.friend.request,
         )
       } finally {
-        this.loading = ''
+        this.loading = AddFriendEnum.EMPTY
       }
     },
     async removeFriend() {
-      this.loading = 'options'
+      this.loading = AddFriendEnum.OPTIONS
       try {
         await this.$store.dispatch('friends/removeFriend', this.friend)
       } finally {
-        this.loading = ''
+        this.loading = AddFriendEnum.EMPTY
       }
     },
     sendMessageRequest() {
