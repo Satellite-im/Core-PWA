@@ -7,6 +7,7 @@ import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
 import { ModifierKeysEnum } from '~/libraries/Enums/types/modifierKeys'
 import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import { SocialAccountTypesEnum } from '~/libraries/Enums/types/social'
 import { AddFriendEnum } from '~/libraries/Enums/types/addFriend'
 
 export {
@@ -20,4 +21,5 @@ export {
   BlockKeysEnum,
   WebRTCEnum,
   AddFriendEnum,
+  SocialAccountTypesEnum,
 }

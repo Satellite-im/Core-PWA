@@ -1,70 +1,52 @@
 <template>
   <div class="accounts">
-    <div class="columns is-desktop">
-      <div class="column">
-        <UserProfileSocialAccount
-          :account-type="SocialAccountType.Facebook"
-          username="Lady_Caliope"
-          profile-url="https://facebook.com/users/Lady_Caliope"
-          verified
-        />
-      </div>
-      <div class="column">
-        <UserProfileSocialAccount
-          :account-type="SocialAccountType.Linkedin"
-          username="Lady_Caliope"
-          profile-url="https://linkedin.com/in/Lady_Caliope"
-          verified
-        />
-      </div>
-    </div>
-    <div class="columns is-desktop">
-      <div class="column">
-        <UserProfileSocialAccount
-          :account-type="SocialAccountType.Github"
-          username="Lady_Caliope"
-          profile-url="https://github.com/Lady_Caliope"
-        />
-      </div>
-      <div class="column">
-        <UserProfileSocialAccount
-          :account-type="SocialAccountType.Twitter"
-          username="Lady_Caliope"
-          profile-url="https://twitter.com/Lady_Caliope"
-          verified
-        />
-      </div>
-    </div>
-    <div class="columns is-desktop">
-      <div class="column">
-        <UserProfileSocialAccount
-          :account-type="SocialAccountType.Youtube"
-          username="Lady_Caliope"
-        />
-      </div>
-      <div class="column"></div>
-    </div>
+    <UserProfileSocialAccount
+      :account-type="SocialAccountTypesEnum.FACEBOOK"
+      username="Lady_Caliope"
+      profile-url="https://facebook.com/users/Lady_Caliope"
+      verified
+    />
+    <UserProfileSocialAccount
+      :account-type="SocialAccountTypesEnum.LINKEDIN"
+      username="Lady_Caliope"
+      profile-url="https://linkedin.com/in/Lady_Caliope"
+      verified
+    />
+    <UserProfileSocialAccount
+      :account-type="SocialAccountTypesEnum.GITHUB"
+      username="Lady_Caliope"
+      profile-url="https://github.com/Lady_Caliope"
+    />
+    <UserProfileSocialAccount
+      :account-type="SocialAccountTypesEnum.TWITTER"
+      username="Lady_Caliope"
+      profile-url="https://twitter.com/Lady_Caliope"
+      verified
+    />
+    <UserProfileSocialAccount
+      :account-type="SocialAccountTypesEnum.YOUTUBE"
+      username="Lady_Caliope"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { SocialAccountType } from '~/types/social/social'
+import { SocialAccountTypesEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   data() {
     return {
-      SocialAccountType,
+      SocialAccountTypesEnum,
     }
   },
 })
 </script>
+
 <style scoped lang="less">
-.columns {
-  margin-left: -0.4rem;
-  margin-right: -0.4rem;
-}
-.column {
-  padding: 0.4rem;
+.accounts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+  gap: @normal-spacing;
 }
 </style>

@@ -11,7 +11,7 @@ import {
   ExternalLinkIcon,
 } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
-import { SocialAccountType } from '~/types/social/social'
+import { SocialAccountTypesEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
@@ -29,8 +29,8 @@ export default Vue.extend({
       default: '',
     },
     accountType: {
-      type: String as PropType<SocialAccountType>,
-      default: SocialAccountType.Facebook,
+      type: String as PropType<SocialAccountTypesEnum>,
+      default: SocialAccountTypesEnum.FACEBOOK,
     },
     username: {
       type: String,
@@ -47,13 +47,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      SocialAccountType,
+      SocialAccountTypesEnum,
       socialIcons: {
-        [SocialAccountType.Github]: GithubIcon,
-        [SocialAccountType.Facebook]: FacebookIcon,
-        [SocialAccountType.Linkedin]: LinkedinIcon,
-        [SocialAccountType.Twitter]: TwitterIcon,
-        [SocialAccountType.Youtube]: YoutubeIcon,
+        [SocialAccountTypesEnum.GITHUB]: GithubIcon,
+        [SocialAccountTypesEnum.FACEBOOK]: FacebookIcon,
+        [SocialAccountTypesEnum.LINKEDIN]: LinkedinIcon,
+        [SocialAccountTypesEnum.TWITTER]: TwitterIcon,
+        [SocialAccountTypesEnum.YOUTUBE]: YoutubeIcon,
       },
     }
   },
