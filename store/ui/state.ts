@@ -58,6 +58,7 @@ const InitialUIState = (): UIState => ({
     base: Themes[0],
     flair: Flairs[0],
   },
+  senderInfo: {},
 })
 
 export default InitialUIState
