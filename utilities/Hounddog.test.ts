@@ -127,7 +127,8 @@ describe("Retrieving friend's profile", () => {
   }
 
   beforeEach(() => {
-    inst = new Hounddog.default({
+    const HounddogConstructor = Hounddog.default
+    inst = new HounddogConstructor({
       state,
     })
   })
@@ -325,7 +326,8 @@ describe('Retrieve WebRTC calls with success', () => {
 
   beforeEach(() => {
     WebRTC.default.setActiveCall(state.webrtc, payload.address)
-    inst = new Hounddog.default({
+    const HounddogConstructor = Hounddog.default
+    inst = new HounddogConstructor({
       state,
     })
   })
@@ -447,7 +449,8 @@ describe('Retrieve WebRTC calls with failure', () => {
   beforeEach(() => {
     WebRTC.default.setActiveCall(state.webrtc, '0x0') //  See comment above
     // WebRTC.default.setActiveCall(state.webrtc, payload.address) // We do not have a payload here due to our need to get a fail result
-    inst = new Hounddog.default({
+    const HounddogConstructor = Hounddog.default
+    inst = new HounddogConstructor({
       state,
     })
   })
