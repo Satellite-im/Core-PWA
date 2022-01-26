@@ -156,7 +156,8 @@ export default {
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-      dispatch('storeMessage', { address: sender.address, message })
+
+      dispatch('storeInMessage', { address: sender.address, message })
     })
   },
   /**
@@ -490,7 +491,7 @@ export default {
    * glyph to be sent, and pack name
    */
   async storeMessage(
-    { rootState }: ActionsArguments<TextileState>,
+    {}: ActionsArguments<TextileState>,
     {
       address,
       message,
@@ -512,7 +513,35 @@ export default {
       return
     }
 
-    const friend = rootState.friends.all.find((fr) => fr.address === address)
+    // add regular message to indexeddb
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((convo) => convo.conversation.push(message))
+  },
+
+  async storeInMessage(
+    { }: ActionsArguments<TextileState>,
+    {
+      address,
+      message,
+    }: {
+      address: string
+      message: Message
+    },
+  ) {
+    // replace old message with new edited version
+    if (message.editedAt !== undefined) {
+      db.conversations.get(address).then((convo) => {
+        if (!convo) {
+          return
+        }
+        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
+        convo.conversation[index] = message
+        db.conversations.put(convo)
+      })
+      return
+    }
 
     // add regular message to indexeddb
     db.conversations
@@ -520,9 +549,7 @@ export default {
       .equals(address)
       .modify((convo) => {
         convo.conversation.push(message)
-        if (friend && message.from === friend.textilePubkey) {
-          convo.lastInbound = message.at
-        }
+        convo.lastInbound = message.at
       })
   },
 }
