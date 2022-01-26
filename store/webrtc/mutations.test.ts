@@ -126,6 +126,21 @@ describe("Mutate WebRTC by setting", () => {
     })
   })
 
+  it("should update time of creation", () => { // Identical to the updateCreatedAt unit test
+    // This particular test suite somehow has an error: TypeError: Cannot set properties of undefined (setting 'createdAt')
+    // How we bypassed it is by passing `state.webrtc` instead of just plainly `state` like in the other unit test
+
+    let localStateForUnitTest = {...state}
+    let dummyDate = Date.now()
+    inst.setConnectedTime(localStateForUnitTest.webrtc, dummyDate)
+
+    expect(localStateForUnitTest.webrtc).toMatchObject({
+      activeStream: {
+        createdAt: dummyDate
+      }
+    })
+  })
+
   it("should set connected peer", () => {
     let localStateForUnitTest = {...state}
     inst.setConnectedPeer(localStateForUnitTest, '0x0')
@@ -311,7 +326,7 @@ describe("Mutate WebRTC by updating", () => {
     })
   })
 
-  it("should update time of creation", () => {
+  it("should update time of creation", () => { // Identical to the setConnectedTime unit test
     // This particular test suite somehow has an error: TypeError: Cannot set properties of undefined (setting 'createdAt')
     // How we bypassed it is by passing `state.webrtc` instead of just plainly `state` like in the other unit test
 
