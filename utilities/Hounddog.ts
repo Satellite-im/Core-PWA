@@ -1,19 +1,11 @@
 import Vue from 'vue'
-import {
-  FriendStatus
-} from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
+import { FriendStatus } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
-import {
-  FriendsState
-} from '~/store/friends/types'
-import {
-  RootState
-} from '~/types/store/store'
-import {
-  Friend
-} from '~/types/ui/friends'
+import { FriendsState } from '~/store/friends/types'
+import { RootState } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
 
 // Hounddog is used to clean up searching and finding data in our application.
 export default class Hounddog {
@@ -24,9 +16,7 @@ export default class Hounddog {
     state: RootState
   }
 
-  constructor(store: {
-    state: RootState
-  }) {
+  constructor(store: { state: RootState }) {
     this._WebRTC = Vue.prototype.$WebRTC
     this._TextileManager = Vue.prototype.$TextileManager
     this._SolanaManager = Vue.prototype.$SolanaManager
@@ -41,14 +31,20 @@ export default class Hounddog {
    * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
    */
   findFriend(
-    identifier: Friend["name"] | Friend["address"] | Friend["textilePubkey"] | string,
-    state: FriendsState
+    identifier:
+      | Friend['name']
+      | Friend['address']
+      | Friend['textilePubkey']
+      | string,
+    state: FriendsState,
   ): Friend | undefined {
-    return state.all.find(f => {
-      return f.name === identifier ||
+    return state.all.find((f) => {
+      return (
+        f.name === identifier ||
         f.address === identifier ||
         f.account.accountId === identifier ||
         f.textilePubkey === identifier
+      )
     })
   }
 
@@ -59,7 +55,7 @@ export default class Hounddog {
    * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
    */
   getActiveFriend(state: FriendsState): Friend | undefined {
-    return state.all.find(f => {
+    return state.all.find((f) => {
       return f.activeChat === true
     })
   }
@@ -77,13 +73,15 @@ export default class Hounddog {
   }
 
   /** @function
-   * Find the first retrieved active call 
+   * Find the first retrieved active call
    * @name matchesActiveCall
    * @argument state Object that contains an array that will be searched for the active call
    * @returns object containing an active call in the form of the Friend interface if an active call are found, returns undefined if no active calls are found
    */
   matchesActiveCall(state: any): Friend {
-    return state.friends.all.find((friend: Friend) => friend.address === state.webrtc.activeCall)
+    return state.friends.all.find(
+      (friend: Friend) => friend.address === state.webrtc.activeCall,
+    )
   }
 
   /** @function
@@ -93,6 +91,8 @@ export default class Hounddog {
    * @returns True if an active call are found, False if no active calls are found
    */
   matchesSomeActiveCall(state: any): Boolean {
-    return state.friends.all.some((friend: Friend) => friend.address === state.webrtc.activeCall)
+    return state.friends.all.some(
+      (friend: Friend) => friend.address === state.webrtc.activeCall,
+    )
   }
 }
