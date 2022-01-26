@@ -34,6 +34,11 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+
+    /**
+     * If provided the button would appear as disabled and non interactable
+     */
+    isLocked: Boolean,
   },
   methods: {
     /**
@@ -42,7 +47,9 @@ export default Vue.extend({
      * @example
      */
     toggle() {
-      this.$emit('toggle', !this.isEnabled)
+      if (!this.isLocked) {
+        this.$emit('toggle', !this.isEnabled)
+      }
     },
   },
 })
