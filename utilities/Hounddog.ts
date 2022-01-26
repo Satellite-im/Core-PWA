@@ -7,7 +7,7 @@ import { FriendsState } from '~/store/friends/types'
 import { RootState } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 
-// Hounddog is used to clean up searching and finding data in our application.
+// Hounddog, is used to clean up searching and finding data in our application.
 export default class Hounddog {
   private _WebRTC: WebRTC
   private _TextileManager: TextileManager
