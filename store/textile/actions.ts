@@ -68,7 +68,9 @@ export default {
       return convo?.conversation ?? []
     })
 
-    let rLastInbound = 0
+    const lastInbound = rootState.textile.conversations.length
+      ? rootState.textile.conversations[address].lastInbound
+      : 0
 
     //  if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
@@ -79,14 +81,11 @@ export default {
     }
     // otherwise, combine new textile messages with stored messages
     else {
-      const lastInbound = rootState.textile.conversations[address].lastInbound
       const textileMessages = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,
         query,
         lastInbound,
       })
-
-      rLastInbound = lastInbound
 
       // use textileMessages as primary source. this way, edited messages will use the newest version
       const ids = new Set(textileMessages.map((d) => d.id))
@@ -100,7 +99,7 @@ export default {
     const dbData: DexieMessage = {
       conversation,
       key: address,
-      lastInbound: rLastInbound,
+      lastInbound,
     }
     db.conversations.put(dbData)
 
@@ -512,6 +511,8 @@ export default {
       })
       return
     }
+
+    console.log('storeMessage: ', message)
 
     const friend = rootState.friends.all.find((fr) => fr.address === address)
 
