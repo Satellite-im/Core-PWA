@@ -68,6 +68,8 @@ export default {
       return convo?.conversation ?? []
     })
 
+    let rLastInbound = 0
+
     //  if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
       conversation = await $MailboxManager.getConversation({
@@ -84,6 +86,8 @@ export default {
         lastInbound,
       })
 
+      rLastInbound = lastInbound
+
       // use textileMessages as primary source. this way, edited messages will use the newest version
       const ids = new Set(textileMessages.map((d) => d.id))
       conversation = [
@@ -96,9 +100,7 @@ export default {
     const dbData: DexieMessage = {
       conversation,
       key: address,
-      lastInbound: conversation.length
-        ? conversation[conversation.length - 1].at
-        : 0,
+      lastInbound: rLastInbound,
     }
     db.conversations.put(dbData)
 
@@ -489,7 +491,7 @@ export default {
    * glyph to be sent, and pack name
    */
   async storeMessage(
-    {}: ActionsArguments<TextileState>,
+    { rootState }: ActionsArguments<TextileState>,
     {
       address,
       message,
@@ -511,13 +513,17 @@ export default {
       return
     }
 
+    const friend = rootState.friends.all.find((fr) => fr.address === address)
+
     // add regular message to indexeddb
     db.conversations
       .where('key')
       .equals(address)
       .modify((convo) => {
         convo.conversation.push(message)
-        convo.lastInbound = message.at
+        if (friend && message.from === friend.textilePubkey) {
+          convo.lastInbound = message.at
+        }
       })
   },
 }
