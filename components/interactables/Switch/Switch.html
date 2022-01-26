@@ -1,6 +1,10 @@
 <div class="switch-container">
   <div :class="`switch-button-control ${small ? 'is-small' : ''}`">
-    <div class="switch-button" :class="{ enabled: isEnabled }" @click="toggle">
+    <div
+      class="switch-button"
+      :class="{ enabled: isEnabled, locked: isLocked }"
+      @click="toggle"
+    >
       <div class="sw-button"></div>
     </div>
     <div class="switch-button-label">
