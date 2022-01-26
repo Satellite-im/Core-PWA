@@ -512,8 +512,6 @@ export default {
       return
     }
 
-    console.log('storeMessage: ', message)
-
     const friend = rootState.friends.all.find((fr) => fr.address === address)
 
     // add regular message to indexeddb
