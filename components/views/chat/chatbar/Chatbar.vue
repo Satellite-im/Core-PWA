@@ -13,6 +13,7 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { setCaretPosition } from '~/libraries/ui/Chatbar'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -139,9 +140,8 @@ export default Vue.extend({
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
         return this.$t('ui.talk')
-      } else {
-        return ''
       }
+      return ''
     },
   },
   methods: {
@@ -192,10 +192,14 @@ export default Vue.extend({
       // Delete extra character when it exceeds the charlimit
       if (
         messageBox.innerText &&
-        messageBox.innerText.length > this.$Config.chat.maxChars + 1
+        messageBox.innerText.length > this.$Config.chat.maxChars
       ) {
         /* remove updateText() here because when this.value is changed it is automatically called */
-        messageBox.innerText = messageBox.innerText.slice(0, -1)
+        messageBox.innerText = messageBox.innerText.slice(
+          0,
+          this.$Config.chat.maxChars,
+        )
+        setCaretPosition(messageBox, this.$Config.chat.maxChars)
       }
       this.value = messageBox.innerText
     },
