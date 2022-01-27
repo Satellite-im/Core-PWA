@@ -188,7 +188,7 @@ export default defineNuxtConfig({
     locales: [
       {
         code: 'en',
-        file: 'en-US.js.js',
+        file: 'en-US.js',
       },
     ],
     vueI18n: {
