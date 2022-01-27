@@ -13,6 +13,7 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { setCaretPosition } from '~/libraries/ui/Chatbar'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -35,7 +36,6 @@ export default Vue.extend({
     return {
       text: '',
       showEmojiPicker: false,
-      maxChars: Config.chat.messageMaxChars,
       recipientTyping: false,
       showFilePreview: false,
       nsfwUploadError: false,
@@ -140,9 +140,8 @@ export default Vue.extend({
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
         return this.$t('ui.talk')
-      } else {
-        return ''
       }
+      return ''
     },
   },
   methods: {
@@ -193,10 +192,14 @@ export default Vue.extend({
       // Delete extra character when it exceeds the charlimit
       if (
         messageBox.innerText &&
-        messageBox.innerText.length > this.$Config.chat.maxChars + 1
+        messageBox.innerText.length > this.$Config.chat.maxChars
       ) {
         /* remove updateText() here because when this.value is changed it is automatically called */
-        messageBox.innerText = messageBox.innerText.slice(0, -1)
+        messageBox.innerText = messageBox.innerText.slice(
+          0,
+          this.$Config.chat.maxChars,
+        )
+        setCaretPosition(messageBox, this.$Config.chat.maxChars)
       }
       this.value = messageBox.innerText
     },
@@ -261,18 +264,20 @@ export default Vue.extend({
     async sendMessage() {
       // @ts-ignore
       await this.$refs['file-upload']?.sendMessage()
-
       if (this.recipient) {
-        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(
-          this.value,
-        )
+        /* enforce limit as max chars when sending */
+        const value =
+          this.value.length > this.$Config.chat.maxChars
+            ? this.value.slice(0, this.$Config.chat.maxChars)
+            : this.value
+        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(value)
         if (!this.recipient || isEmpty) {
           return
         }
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
-            text: this.value,
+            text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
@@ -281,10 +286,9 @@ export default Vue.extend({
         }
         this.$store.dispatch('textile/sendTextMessage', {
           to: this.recipient.textilePubkey,
-          text: this.value,
+          text: value,
         })
         this.$data.nsfwUploadError = false
-        const messageBox = this.$refs.messageuser as HTMLElement
         this.clearChatbar()
       }
     },
