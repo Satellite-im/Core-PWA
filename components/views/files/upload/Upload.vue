@@ -5,7 +5,7 @@ import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 
@@ -36,6 +36,7 @@ export default Vue.extend({
     },
     recipient: {
       type: Object as PropType<Friend>,
+      default: () => {},
     },
   },
   data() {
@@ -186,7 +187,7 @@ export default Vue.extend({
     async dispatchFile(file: FileType) {
       await this.$store
         .dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
+          to: this.recipient?.textilePubkey,
           file,
         })
         .then(() => {

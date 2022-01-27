@@ -89,8 +89,7 @@ export default Vue.extend({
       this.friend = null
       this.accountID = ''
       if (!error) {
-        // @ts-ignore
-        this.$toast.show(this.$t('friends.request_sent'))
+        this.$toast.show(this.$t('friends.request_sent') as string)
       } else {
         this.error = error
       }

@@ -1,3 +1,13 @@
+@keyframes emoji-appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .is-message {
   color: @text;
   .pinned-message {
@@ -70,7 +80,7 @@
   .bigmoji {
     .emoji {
       font-size: 36pt;
-      animation-name: bounce;
+      animation-name: emoji-appear;
       animation-duration: 500ms;
     }
   }

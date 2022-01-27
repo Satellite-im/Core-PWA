@@ -7,15 +7,19 @@ import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
 import { ModifierKeysEnum } from '~/libraries/Enums/types/modifierKeys'
 import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import { SocialAccountTypesEnum } from '~/libraries/Enums/types/social'
+import { AddFriendEnum } from '~/libraries/Enums/types/addFriend'
 
 export {
-  KeybindingEnum as KeybindingEnum,
-  PropCommonEnum as PropCommonEnum,
-  MessageRouteEnum as MessageRouteEnum,
-  MessagingTypesEnum as MessagingTypesEnum,
-  EncodingTypesEnum as EncodingTypesEnum,
-  MeasurementUnitsEnum as MeasurementUnitsEnum,
-  ModifierKeysEnum as ModifierKeysEnum,
-  BlockKeysEnum as BlockKeysEnum,
-  WebRTCEnum as WebRTCEnum,
+  KeybindingEnum,
+  PropCommonEnum,
+  MessageRouteEnum,
+  MessagingTypesEnum,
+  EncodingTypesEnum,
+  MeasurementUnitsEnum,
+  ModifierKeysEnum,
+  BlockKeysEnum,
+  WebRTCEnum,
+  AddFriendEnum,
+  SocialAccountTypesEnum,
 }

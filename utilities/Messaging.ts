@@ -12,9 +12,11 @@ import {
   RepliesTracker,
   GlyphMessage,
 } from '~/types/textile/mailbox'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
-import { MeasurementUnitsEnum } from '~/libraries/Enums/types/measurement-units'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
+import {
+  MessagingTypesEnum,
+  MeasurementUnitsEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
@@ -26,7 +28,7 @@ function messageRepliesToUIReplies(
 }
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
-  let groupedReactions: { [key: string]: UIReaction } = {}
+  const groupedReactions: { [key: string]: UIReaction } = {}
   if (reactions)
     reactions.forEach((reactionMessage) => {
       let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
@@ -54,7 +56,7 @@ export function groupMessages(
   replies: RepliesTracker,
   reactions: ReactionsTracker,
 ): MessageGroup {
-  let groupedMessages: MessageGroup = []
+  const groupedMessages: MessageGroup = []
 
   // Get the sorted array of messages (not replies or reactions)
   const messageArray = Object.values(messages).sort((a, b) => a.at - b.at)
@@ -67,7 +69,10 @@ export function groupMessages(
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
     const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(prevMessage.at, MeasurementUnitsEnum.DAY)
+      ? dayjs(currentMessage.at).isSame(
+          prevMessage.at,
+          MeasurementUnitsEnum.DAY,
+        )
       : false
 
     let isSameGroup
@@ -168,44 +173,50 @@ export function updateMessageTracker(
   inputMessages: Message[],
   initialValues?: TrackingValues,
 ): TrackingValues {
-  let messagesTracker: MessagesTracker = initialValues?.messages || {}
-  let repliesTracker: RepliesTracker = initialValues?.replies || {}
-  let reactionsTracker: ReactionsTracker = initialValues?.reactions || {}
+  const messagesTracker: MessagesTracker = initialValues?.messages || {}
+  const repliesTracker: RepliesTracker = initialValues?.replies || {}
+  const reactionsTracker: ReactionsTracker = initialValues?.reactions || {}
 
   for (let i = 0; i < inputMessages.length; i++) {
     const currentMessage = inputMessages[i]
     switch (currentMessage.type) {
-      case MessagingTypesEnum.REPLY:
+      case MessagingTypesEnum.REPLY: {
         const reply: ReplyMessage = currentMessage
         repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
         if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
           repliesTracker[reply.repliedTo].push(reply)
         break
-      case MessagingTypesEnum.REACTION:
+      }
+      case MessagingTypesEnum.REACTION: {
         const reaction: ReactionMessage = currentMessage
         reactionsTracker[reaction.reactedTo] =
           reactionsTracker[reaction.reactedTo] || []
         if (
           !reactionsTracker[reaction.reactedTo].some(
-            (elm) => elm.id === reaction.id
+            (elm) => elm.id === reaction.id,
           )
         )
           reactionsTracker[reaction.reactedTo].push(reaction)
         break
-      case MessagingTypesEnum.FILE:
+      }
+      case MessagingTypesEnum.FILE: {
         const fileMessage: FileMessage = currentMessage
 
         messagesTracker[fileMessage.id] = fileMessage
         break
-      case MessagingTypesEnum.TEXT:
+      }
+      case MessagingTypesEnum.TEXT: {
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
         break
-      case MessagingTypesEnum.GLYPH:
+      }
+      case MessagingTypesEnum.GLYPH: {
         const glyphMessage: GlyphMessage = currentMessage
 
         messagesTracker[glyphMessage.id] = glyphMessage
+        break
+      }
       default:
         break
     }
@@ -222,7 +233,10 @@ export function getUsernameFromState(
   textilePublicKey: string,
   state: RootState,
 ) {
-  return getFullUserInfoFromState(textilePublicKey, state)?.name || PropCommonEnum.UNKNOWN
+  return (
+    getFullUserInfoFromState(textilePublicKey, state)?.name ||
+    PropCommonEnum.UNKNOWN
+  )
 }
 
 export function getAddressFromState(
@@ -248,8 +262,8 @@ export function getFullUserInfoFromState(
   const userInfo = isMe
     ? accountDetails
     : state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey,
-    )
+        (friend) => friend.textilePubkey === textilePublicKey,
+      )
 
   return userInfo
 }

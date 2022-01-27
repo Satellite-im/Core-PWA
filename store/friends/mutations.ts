@@ -4,7 +4,7 @@ import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 const mutations = {
   setIncomingRequests(
     state: FriendsState,
-    incomingRequests: IncomingRequest[]
+    incomingRequests: IncomingRequest[],
   ) {
     state.incomingRequests = incomingRequests
   },
@@ -15,17 +15,17 @@ const mutations = {
     state.incomingRequests = state.incomingRequests.map((request) =>
       request.requestId !== incomingRequest.requestId
         ? request
-        : incomingRequest
+        : incomingRequest,
     )
   },
   removeIncomingRequest(state: FriendsState, requestId: string) {
     state.incomingRequests = state.incomingRequests.filter(
-      (request) => request.requestId !== requestId
+      (request) => request.requestId !== requestId,
     )
   },
   setOutgoingRequests(
     state: FriendsState,
-    outgoingRequests: OutgoingRequest[]
+    outgoingRequests: OutgoingRequest[],
   ) {
     state.outgoingRequests = outgoingRequests
   },
@@ -36,44 +36,50 @@ const mutations = {
     state.outgoingRequests = state.outgoingRequests.map((request) =>
       request.requestId !== outgoingRequest.requestId
         ? request
-        : outgoingRequest
+        : outgoingRequest,
     )
   },
   removeOutgoingRequest(state: FriendsState, requestId: string) {
     state.outgoingRequests = state.outgoingRequests.filter(
-      (request) => request.requestId !== requestId
+      (request) => request.requestId !== requestId,
     )
   },
   addFriend(state: FriendsState, friend: Friend) {
-    state.all.push(friend);
+    state.all.push(friend)
   },
   setActive(state: FriendsState, friend: Friend) {
     const fList: Friend[] = []
-    state.all.forEach(f => {
-      f.activeChat = (f.account.accountId === friend.account.accountId) ?
-        true : false
+    state.all.forEach((f) => {
+      f.activeChat = f.account.accountId === friend.account.accountId
       fList.push(f)
     })
     state.all = fList
   },
-  setTyping(state: FriendsState, opts: { id: string, typingState: 'TYPING' | 'NOT_TYPING' }) {
+  setTyping(
+    state: FriendsState,
+    opts: { id: string; typingState: 'TYPING' | 'NOT_TYPING' },
+  ) {
     const fList: Friend[] = []
-    state.all.forEach(f => {
+    state.all.forEach((f) => {
       fList.push({
         ...f,
-        typingState: (f.address === opts.id) ?
-          opts.typingState : f.typingState || 'NOT_TYPING'
+        typingState:
+          f.address === opts.id
+            ? opts.typingState
+            : f.typingState || 'NOT_TYPING',
       })
     })
     state.all = fList
   },
   updateFriend(state: FriendsState, friend: Friend) {
-    state.all = state.all.map((fr) =>
-      fr = fr.address === friend.address ? friend : fr
+    state.all = state.all.map(
+      (fr) => (fr = fr.address === friend.address ? friend : fr),
     )
   },
   removeFriend(state: FriendsState, friendTextilePublicKey: string) {
-    state.all = state.all.filter((fr) => fr.textilePubkey !== friendTextilePublicKey)
+    state.all = state.all.filter(
+      (fr) => fr.textilePubkey !== friendTextilePublicKey,
+    )
   },
 }
 
