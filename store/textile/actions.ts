@@ -68,9 +68,8 @@ export default {
       return convo?.conversation ?? []
     })
 
-    const lastInbound = rootState.textile.conversations.length
-      ? rootState.textile.conversations[address].lastInbound
-      : 0
+    const lastInbound =
+      rootState.textile.conversations[address]?.lastInbound ?? 0
 
     //  if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
@@ -521,7 +520,7 @@ export default {
   },
 
   async storeInMessage(
-    { }: ActionsArguments<TextileState>,
+    {}: ActionsArguments<TextileState>,
     {
       address,
       message,
