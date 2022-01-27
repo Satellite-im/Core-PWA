@@ -38,12 +38,29 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    selectImage(e: Event) {
+    async selectImage(e: Event) {
       const target = e.target as HTMLInputElement
       if (target.value === null) return
 
       const files = target.files
       if (!files?.length) return
+
+      // stop upload if picture is too large for nsfw scan
+      if (files[0].size > this.$Config.uploadByteLimit) {
+        this.error = this.$t('errors.accounts.file_too_large') as string
+        return
+      }
+      // stop upload if picture is nsfw
+      try {
+        const nsfw = await this.$Security.isNSFW(files[0])
+        if (nsfw) {
+          this.error = this.$t('errors.chat.contains_nsfw') as string
+          return
+        }
+      } catch (err: any) {
+        this.$Logger.log('error', 'file upload error')
+      }
+      this.error = ''
 
       const reader = new FileReader()
       reader.onload = (e) => {

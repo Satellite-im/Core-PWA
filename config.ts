@@ -102,9 +102,9 @@ export const Config = {
     // Regex to check if string is only blank space
     blankSpace: '^[\\s|&nbsp;]*$',
     // Regex to check if string contains only emoji's. Note: doesn't yet support emoji modifiers
-    isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
+    isEmoji: /\w*[{Emoji_Presentation}\u200D]+/gu,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
-    emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
+    emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
     // check for link
     link: /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
     youtube: /^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g,
