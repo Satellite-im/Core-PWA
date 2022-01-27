@@ -1,6 +1,6 @@
 <div class="live">
   <div class="name-and-icon" v-on:click="activeChat">
-    <radio-icon size="1.2x" class="green" />
+    <radio-icon size="1.2x" class="green" v-if="existLiveChat" />
     <TypographySubtitle :size="6" :text="ui.selectedUserInfo.name || ''" />
   </div>
   <InteractablesButton
