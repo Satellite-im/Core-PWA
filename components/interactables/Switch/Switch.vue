@@ -38,7 +38,11 @@ export default Vue.extend({
     /**
      * If provided the button would appear as disabled and non interactable
      */
-    isLocked: Boolean,
+    isLocked: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   methods: {
     /**

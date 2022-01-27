@@ -1,4 +1,9 @@
 .switch-container {
+  display: inline-flex;
+  align-content: flex-end;
+  margin: @light-spacing 0;
+  align-items: center;
+
   .is-small {
     transform: scale(0.75);
     transform-origin: 0;
@@ -14,40 +19,40 @@
     font-size: 12px;
   }
   .switch-button-control {
+    display: inline-block;
+
     .switch-button {
+      height: 1.6em;
+      width: calc(1.6em * 2);
+      border-radius: 1.6em;
+      transition: all @animation-speed-micro ease-in-out;
+      cursor: pointer;
+
       .sw-button {
         height: calc(1.6em - (2 * 2px));
         width: calc(1.6em - (2 * 2px));
         border-radius: calc(1.6em - (2 * 2px));
         transition: all @animation-speed-micro ease-in-out;
       }
-      height: 1.6em;
-      width: calc(1.6em * 2);
-      border-radius: 1.6em;
-      transition: all @animation-speed-micro ease-in-out;
-      cursor: pointer;
-    }
-    .switch-button.enabled {
-      .sw-button {
-        transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
+
+      &.enabled {
+        box-shadow: none;
+        .sw-button {
+          transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
+        }
       }
-      box-shadow: none;
-    }
-    .switch-button.locked {
-      .sw-button {
+
+      &.locked {
         border-color: @gray;
-        background: @gray !important;
-        box-shadow: -5px 0px 20px -2px @gray !important;
+        .sw-button {
+          border-color: @gray;
+          background: @gray !important;
+          box-shadow: -5px 0px 20px -2px @gray !important;
+        }
       }
-      border-color: @gray;
     }
     .switch-button-label {
       margin-left: 10px;
     }
-    display: inline-block;
   }
-  display: inline-flex;
-  align-content: flex-end;
-  margin: @light-spacing 0;
-  align-items: center;
 }
