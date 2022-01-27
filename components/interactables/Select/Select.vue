@@ -81,7 +81,7 @@ export default Vue.extend({
      * @example
      */
     selected(newValue, oldValue) {
-      if (!oldValue) {
+      if (oldValue !== newValue) {
         this.$data.selectedValue = newValue
       }
     },
