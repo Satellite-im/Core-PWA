@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { FriendStatus } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
