@@ -297,6 +297,21 @@ export class MailboxManager {
   }
 
   /**
+   * @method removeMessage
+   * @description removes a message to the given recipient
+   * @param id Message id
+   */
+  async removeMessage(id: string) {
+    const thread = await this.textile.users.getThread('hubmail')
+    const threadID = ThreadID.fromString(thread.id)
+    const deleteResponse = await this.textile.client.delete(
+      threadID,
+      MailboxSubscriptionType.inbox,
+      [id],
+    )
+  }
+
+  /**
    * @method decodeMessage
    * @description Internal function used to decode messages
    * @param message Message to be decoded

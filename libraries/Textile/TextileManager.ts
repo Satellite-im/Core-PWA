@@ -14,6 +14,7 @@ export default class TextileManager {
   mailboxManager?: MailboxManager
   bucketManager?: BucketManager
   threadManager?: ThreadManager
+  static mailboxManager: any
 
   constructor() {
     this.identityManager = new IdentityManager()

@@ -3,7 +3,8 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
-import { Group } from '~/types/messaging'
+import { Group } from '~/types/ui/core'
+import { Group as $Group } from '~/types/messaging'
 import { Friend } from '~/types/ui/friends'
 import {
   getUsernameFromState,
@@ -11,16 +12,24 @@ import {
   getFullUserInfoFromState,
   refreshTimestampInterval,
 } from '~/utilities/Messaging'
+import { Groups } from '~/mock/groups'
+import {Messages} from "~/mock/messages";
 
 export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      // default: () => {},
+      default: () => {},
     },
+    groupMessages: {
+      type: Object as PropType<$Group>,
+      default: () => {},
+    }
   },
   data() {
     return {
+      mockGroup: {},
+      groupMessage: [],
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.group.at).from(),
     }
@@ -28,13 +37,22 @@ export default Vue.extend({
   computed: {
     ...mapState(['friends', 'accounts']),
     address() {
-      return getAddressFromState(this.group.from, this.$store.state)
+      this.$data.mockGroup = Groups[0]
+      this.$data.groupMessage = Messages
+      return this.$data.mockGroup.address
+      // return getAddressFromState(
+      //   this.$data.mockGroup.address,
+      //   this.$store.state,
+      // )
     },
     username() {
-      return getUsernameFromState(this.group.from, this.$store.state)
+      return getUsernameFromState(
+        this.$data.mockGroup.address,
+        this.$store.state,
+      )
     },
     badge() {
-      // $mock.users.filter(u => u.address === group.from)[0].badge
+      // $mock.users.filter(u => u.address === this.$data.mockGroup)[0].badge
       return ''
     },
     src(): string {
@@ -44,11 +62,11 @@ export default Vue.extend({
         return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
       }
 
-      const hash = this.friends.all.find(
-        (e: Friend) => e.activeChat,
-      ).profilePicture
-
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      // const hash = this.friends.all.find(
+      //   (e: Friend) => e.activeChat,
+      // ).profilePicture
+      //
+      // return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   created() {
@@ -62,7 +80,7 @@ export default Vue.extend({
       Config.chat.timestampUpdateInterval,
     )
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
   },
   methods: {

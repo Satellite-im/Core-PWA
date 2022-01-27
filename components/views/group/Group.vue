@@ -19,6 +19,7 @@ export default Vue.extend({
         name: '',
         address: '',
         motd: '',
+        members: [],
       }),
       required: true,
     },

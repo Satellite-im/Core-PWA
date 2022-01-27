@@ -9,6 +9,7 @@ import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import ThreadManager from "~/libraries/Textile/ThreadManager";
 
 export default {
   /**
@@ -220,6 +221,40 @@ export default {
   },
   clearUploadStatus({ commit }: ActionsArguments<TextileState>) {
     commit('clearUploadProgress', {})
+  },
+  /**
+   * @description Sends a text message to a group
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key)
+   * and the text message to be sent
+   */
+  async sendGroupMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { collectionID, text }: { collectionID: string; text: string },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.threadManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+
+    commit('setMessageLoading', { loading: true })
+
+    const $ThreadManager: ThreadManager = $TextileManager.threadManager
+
+    const result = await $ThreadManager.sendMessage<'text'>(collectionID, {
+      to: collectionID,
+      payload: text,
+      type: 'text',
+    })
+
+    commit('addMessageToConversation', {
+      address: collectionID,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+    dispatch('storeMessage', { address: collectionID, message: result })
+    commit('setMessageLoading', { loading: false })
   },
   /**
    * @description Sends a File message to a given friend

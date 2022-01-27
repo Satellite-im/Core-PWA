@@ -11,6 +11,7 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
+import TextileManager from '~/libraries/Textile/TextileManager'
 
 declare module 'vue/types/vue' {
   interface Vue {

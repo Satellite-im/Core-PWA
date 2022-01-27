@@ -26,7 +26,7 @@ function messageRepliesToUIReplies(
 }
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
-  let groupedReactions: { [key: string]: UIReaction } = {}
+  const groupedReactions: { [key: string]: UIReaction } = {}
   if (reactions)
     reactions.forEach((reactionMessage) => {
       let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
@@ -248,8 +248,8 @@ export function getFullUserInfoFromState(
   const userInfo = isMe
     ? accountDetails
     : state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey,
-    )
+        (friend) => friend.textilePubkey === textilePublicKey,
+      )
 
   return userInfo
 }

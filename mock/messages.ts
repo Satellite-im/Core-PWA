@@ -87,6 +87,46 @@ export const Messages = [
     ],
   },
   {
+    id: '45XfMPooGavLsw9Rhs5VP5aX4bboyTQhy9U8qNoMTMa2',
+    at: 1620515543000,
+    type: 'group',
+    from: '45XfMPooGavLsw9Rhs5VP5aX4bboyTQhy9U8qNoMTMa2',
+    to: '45XfMPooGavLsw9Rhs5VP5aX4bboyTQhy9U8qNoMTMa2',
+    messages: [
+      {
+        id: '00-00-10',
+        at: 1620515543000,
+        type: 'text',
+        payload:
+          'Cosmic ipsum probe solstice vernal equinox red dwarf libration double star perigee cosmos cislunar hyperbolic orbit pole star black body meteor shower Jupiter transparency',
+        replies: [],
+        reactions: [],
+      },
+      {
+        id: '00-00-11',
+        at: 1620515543400,
+        type: 'text',
+        payload:
+          'Doppler shift quasar astronomer conjunction dark matter solar Pluto cosmonaut azimuth inner planets supernova new moon libration',
+        replies: [],
+        reactions: [],
+      },
+      {
+        id: '00-123193-10',
+        at: 1620515543000,
+        type: 'file',
+        payload: {
+          filename: 'satellite.tar.gz',
+          type: 'application/tar',
+          size: 19203,
+          src: `${Config.ipfs.gateway}QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9`,
+        },
+        replies: [],
+        reactions: [],
+      },
+    ],
+  },
+  {
     type: 'divider',
     at: 1620515543400,
   },
