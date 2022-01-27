@@ -1,7 +1,7 @@
 <template src="./Tabs.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Tab } from './types.d'
+import { Tab } from '~/types/ui/tab'
 
 export default Vue.extend({
   props: {

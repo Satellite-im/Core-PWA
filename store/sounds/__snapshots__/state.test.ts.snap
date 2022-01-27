@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init should return the initial settings state 1`] = `
+Object {
+  "call": true,
+  "connected": true,
+  "deafen": true,
+  "message": true,
+  "mute": true,
+  "undeafen": true,
+  "upload": true,
+}
+`;
