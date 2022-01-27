@@ -22,9 +22,6 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
-  computed: {
-    ...mapState(['ui']),
-  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -45,9 +42,11 @@ export default Vue.extend({
         { text: 'Remove Friend', func: this.testFunc },
         { text: 'Profile', func: this.handleShowProfile },
       ],
+      existConversation: false,
     }
   },
   computed: {
+    ...mapState(['ui', 'textile']),
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
@@ -78,6 +77,31 @@ export default Vue.extend({
         state: !this.ui.modals.userProfile,
       })
       this.$store.commit('ui/setUserProfile', this.user)
+    },
+    existMessage(textileObj: any) {
+      const curUserMInfo = textileObj.conversations[this.user.address]
+      console.log(' this.user.name: ', this.user.name)
+      console.log('curUserMInfo: ', curUserMInfo)
+      if (
+        !curUserMInfo ||
+        (curUserMInfo.lastUpdate <= 0 &&
+          this.user.account.from === this.user.address)
+      ) {
+        this.$data.existConversation = false
+      } else {
+        this.$data.existConversation = true
+      }
+    },
+  },
+  mounted() {
+    this.existMessage(this.$store.state.textile)
+  },
+  watch: {
+    textile: {
+      handler(newValue) {
+        this.existMessage(newValue)
+      },
+      deep: true,
     },
   },
 })
