@@ -168,5 +168,5 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
-  selectedUserInfo: User
+  selectedUserInfo: User | undefined
 }

@@ -18,6 +18,9 @@ export default Vue.extend({
         (friend) => friend.address === this.$store.state.webrtc.activeCall,
       )
     },
+    selUserName(): string {
+      return this.ui.selectedUserInfo?.name ?? ''
+    },
   },
   methods: {
     hangUp() {

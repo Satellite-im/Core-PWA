@@ -58,7 +58,7 @@ const InitialUIState = (): UIState => ({
     base: Themes[0],
     flair: Flairs[0],
   },
-  selectedUserInfo: {},
+  selectedUserInfo: undefined,
 })
 
 export default InitialUIState
