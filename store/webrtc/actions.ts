@@ -5,7 +5,6 @@ import Crypto from '~/libraries/Crypto/Crypto'
 
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
-import StreamManager from '~/libraries/WebRTC/StreamManager'
 import Logger from '~/utilities/Logger'
 import { TracksManager } from '~/libraries/WebRTC/TracksManager'
 
