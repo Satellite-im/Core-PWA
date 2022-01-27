@@ -49,6 +49,21 @@ export default class Hounddog {
   }
 
   /** @function
+   * Find friends who are currently active by address
+   * @name findFriendByAddress
+   * @argument address Address as the identifier for the search (query)
+   * @argument state Object that contains an array that will be searched for an active chat
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
+  findFriendByAddress(
+    address: string,
+    state: FriendsState,
+  ): Friend | undefined {
+    const search = state.all.find((fr: Friend) => fr.address === address)
+    return search
+  }
+
+  /** @function
    * Find friends who are currently active
    * @name getActiveFriend
    * @argument state Object that contains an array that will be searched for an active chat
