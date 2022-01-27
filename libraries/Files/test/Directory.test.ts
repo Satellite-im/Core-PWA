@@ -1,6 +1,8 @@
 import { Directory } from '../Directory'
 import { Fil } from '../Fil'
+import { FileSystem } from '../FileSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
+import { FileSystemErrors } from '../errors/Errors'
 
 describe('Test FileSystem Directory', () => {
   const mockFileData = {
@@ -27,6 +29,35 @@ describe('Test FileSystem Directory', () => {
     const child = directory.getChild(file.name)
     expect(child.id).toEqual(file.id)
   })
+  it('Incorrectly adds directory as a child of itself', () => {
+    try {
+      directory.addChild(directory)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', FileSystemErrors.DIR_PARADOX)
+    }
+  })
+  // it("Incorrectly adds directory's ancestor as a child of itself", () => {
+  //   const currentMockFileData = {
+  //     name: 'TestFile.png',
+  //     descrption: 'Test file description',
+  //     hash: '0x0aef',
+  //     parent: null,
+  //   }
+  //   const currentFile = new Fil(...Object.values(currentMockFileData))
+  //   const filesystem = new FileSystem()
+  //   const newDirectory = filesystem.createDirectory(null)
+  //   try {
+  //     newDirectory!.addChild(currentFile)
+  //   } catch (error) {
+  //     console.log(11)
+  //     expect(error).toBeInstanceOf(Error)
+  //     expect(error).toHaveProperty(
+  //       'message',
+  //       FileSystemErrors.DIR_PARENT_PARADOX,
+  //     )
+  //   }
+  // })
   it('Correctly displays content', () => {
     const content = directory.content
     expect(content).not.toEqual(null)
