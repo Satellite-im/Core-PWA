@@ -3,11 +3,23 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import {
+  VideoIcon,
+  VideoOffIcon,
+  MicIcon,
+  MicOffIcon,
+} from 'satellite-lucide-icons'
 import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
+  components: {
+    VideoIcon,
+    VideoOffIcon,
+    MicIcon,
+    MicOffIcon,
+  },
   props: {
     users: {
       type: Array as PropType<Array<User>>,
@@ -35,7 +47,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'friends']),
+    ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
+    localAudioMuted() {
+      return this.webrtc.localTracks.audio.muted
+    },
+    remoteAudioMuted() {
+      return this.webrtc.remoteTracks.audio.muted
+    },
     propsToWatch() {
       return { users: this.users, fullscreen: this.fullscreen }
     },
@@ -46,12 +64,12 @@ export default Vue.extend({
     },
     activeCall() {
       return this.$store.state.friends.all.some(
-        (friend: any) => friend.address === this.$store.state.webrtc.activeCall,
+        (friend: any) => friend.address === this.webrtc.activeCall,
       )
     },
     localVideoStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.localTracks.video
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.localTracks.video
 
       if (muted) {
         return null
@@ -64,8 +82,8 @@ export default Vue.extend({
       return localVideoTrack ? new MediaStream([localVideoTrack]) : null
     },
     remoteVideoStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.remoteTracks.video
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.remoteTracks.video
 
       if (muted) {
         this.$Sounds.playSound(Sounds.DEAFEN)
@@ -79,8 +97,8 @@ export default Vue.extend({
       return remoteVideoTrack ? new MediaStream([remoteVideoTrack]) : null
     },
     remoteAudioStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.remoteTracks.audio
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.remoteTracks.audio
 
       if (muted) {
         this.$Sounds.playSound(Sounds.MUTE)

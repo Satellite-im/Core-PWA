@@ -1,10 +1,10 @@
-import InitialUIState from '~/store/ui/state'
+import InitialWebRTCState from '~/store/webrtc/state'
 
 describe('init', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = InitialUIState()
+    inst = InitialWebRTCState()
   })
 
   it('should return the initial settings state', () => {

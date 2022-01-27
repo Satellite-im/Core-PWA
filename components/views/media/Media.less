@@ -41,6 +41,19 @@
           height: 100%;
           border-radius: @corner-rounding;
         }
+        .indicators {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: flex-end;
+          position: absolute;
+          width: 16rem;
+          bottom: 0;
+          padding: 1rem;
+          z-index: @base-z-index + 2;
+          .indicator {
+            margin-left: 0.5rem;
+          }
+        }
       }
 
       &:nth-child(1) {

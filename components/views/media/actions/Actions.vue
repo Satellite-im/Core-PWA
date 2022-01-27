@@ -14,7 +14,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import { WebRTCEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {

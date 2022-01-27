@@ -46,8 +46,8 @@ const mutations = {
   ) {
     state.remoteTracks = { ...state.remoteTracks, ...tracks }
   },
-  updateCreatedAt(state: WebRTCState, date: number) {
-    state.activeStream.createdAt = date
+  updateCreatedAt(state: WebRTCState, timestamp: number) {
+    state.activeStream.createdAt = timestamp
   },
 }
 

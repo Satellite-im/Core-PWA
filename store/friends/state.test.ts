@@ -1,10 +1,10 @@
-import InitialUIState from '~/store/ui/state'
+import InitialFriendsState from '~/store/friends/state'
 
 describe('init', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = InitialUIState()
+    inst = InitialFriendsState()
   })
 
   it('should return the initial settings state', () => {

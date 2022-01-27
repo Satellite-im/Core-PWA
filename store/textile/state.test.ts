@@ -1,10 +1,10 @@
-import InitialUIState from '~/store/ui/state'
+import InitialTextileState from '~/store/textile/state'
 
 describe('init', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = InitialUIState()
+    inst = InitialTextileState()
   })
 
   it('should return the initial settings state', () => {
