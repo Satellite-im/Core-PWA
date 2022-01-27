@@ -1,6 +1,6 @@
 export enum MeasurementUnitsEnum {
-  DAY = "day",
-  MINUTES = "minutes",
+  DAY = 'day',
+  MINUTES = 'minutes',
 }
 
-export type MeasurementUnits  = keyof typeof MeasurementUnitsEnum
+export type MeasurementUnits = keyof typeof MeasurementUnitsEnum

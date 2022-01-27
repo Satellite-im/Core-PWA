@@ -28,7 +28,12 @@
         </div>
       </div>
       <div class="buttons mobile">
-        <InteractablesButton type="primary">
+        <InteractablesButton
+          type="primary"
+          v-if="!isFriend"
+          :action="createFriendRequest"
+          :loading="Boolean(loading)"
+        >
           <user-plus-icon size="1.25x" />
         </InteractablesButton>
         <InteractablesButton type="primary">
@@ -37,7 +42,13 @@
       </div>
       <InteractablesTabs :tabs="tabs" @setRoute="setRoute" :route="route">
         <div class="buttons desktop">
-          <InteractablesButton type="primary" size="small">
+          <InteractablesButton
+            type="primary"
+            size="small"
+            v-if="!isFriend"
+            :action="createFriendRequest"
+            :loading="Boolean(loading)"
+          >
             <user-plus-icon size="1.25x" />
           </InteractablesButton>
           <InteractablesButton type="primary" size="small">
@@ -66,7 +77,7 @@
           <TypographyText :text="$t('modal.profile.about.click_note')" />
         </div>
       </div>
-      <div v-if="route==='accounts'">accounts</div>
+      <UserProfileAccounts v-if="route==='accounts'" />
       <div v-if="route==='activity'">activity</div>
       <div v-if="route==='mutual'">mutual</div>
     </div>
