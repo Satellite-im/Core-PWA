@@ -30,6 +30,15 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    // Handle the case that the wallet is not found
+    if (this.getEncryptedPhrase === '') {
+      this.$router.replace('/setup/disclaimer')
+      return
+    }
+
+    this.loadAccount()
+  },
   watch: {
     // this.$router.replace('/chat/direct')
     allPrerequisitesReady(nextValue) {
@@ -47,14 +56,6 @@ export default Vue.extend({
         this.$router.replace('/chat/direct')
       }
     },
-  },
-  mounted() {
-    // Handle the case that the wallet is not found
-    if (this.getEncryptedPhrase === '') {
-      this.$router.replace('/setup/disclaimer')
-      return
-    }
-    this.loadAccount()
   },
   methods: {
     /**

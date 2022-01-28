@@ -142,7 +142,7 @@ export default {
 
     await $SolanaManager.initializeFromMnemonic(mnemonic)
 
-    const userAccount = $SolanaManager.getUserAccount()
+    const userAccount = await $SolanaManager.getUserAccount()
 
     if (!userAccount) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
