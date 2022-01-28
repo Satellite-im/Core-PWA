@@ -77,7 +77,6 @@
           <Enhancers :sidebar="showSidebar" />
           <WalletMini v-if="ui.modals.walletMini" />
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
-          <ChatbarReply v-if="recipient" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
         <swiper-slide class="aside-container" v-if="$data.asidebar">
