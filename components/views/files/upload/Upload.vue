@@ -58,37 +58,19 @@ export default Vue.extend({
       alertNsfw: false,
     }
   },
-    mounted() {
-    // let findItem = this.setImageReply.find((item: any) => item.replyId === this.$props.message.id)
-    // const findItem = this.setImageReply.find(
-    //   (item: any) => item.replyId=== this.$props.recipient.address,
-    // )
-    const findItem = this.$Hounddog.getActiveFriend(this.$store.state.friends)
-    if(findItem){
-      console.log('match is found!')
-    }
-  },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
-    
     setImageReply: {
       set(state) {
-        console.log('in set state')
-        // console.log(this.chat)
         this.$store.commit('chat/setImageReply', state)
-        // console.log(this.chat.chatTexts)
-
       },
       get() {
-        console.log("in get statement")
-        // console.log(this.chat.chatTexts)
         return this.chat.replyImage
       },
     },
-    
   },
   methods: {
     /**
@@ -99,11 +81,8 @@ export default Vue.extend({
      */
     async handleFile(event: any) {
       console.log('------')
-       console.log(this.chat)
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
-      
+      console.log(this.chat)
+
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
         const files: File[] = [...event.target.files]
@@ -158,10 +137,10 @@ export default Vue.extend({
           }
 
           this.loadPicture(uploadFile)
-          
+
           this.setImageReply = {
-            replyId: activeFriend.address,
-            replyImage: uploadFile
+            replyId: this.recipient?.address,
+            replyImage: uploadFile,
           }
           console.log('after setChatImage')
           console.log(this.chat)

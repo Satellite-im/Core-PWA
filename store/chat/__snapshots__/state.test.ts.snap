@@ -4,6 +4,6 @@ exports[`state.default 0 1`] = `
 Object {
   "chatTexts": Array [],
   "replies": Array [],
-  "replyImage": Array[]
+  "replyImage": Array [],
 }
 `;
