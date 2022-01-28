@@ -1,4 +1,3 @@
-import * as _ from 'lodash'
 import * as Alerts from './Alerts'
 
 describe('test alert methods', () => {
