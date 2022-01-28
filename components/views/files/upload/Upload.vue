@@ -83,12 +83,12 @@ export default Vue.extend({
         this.$data.count_error = false
         for (let i = 0; i < files.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */
-          const buffer = await files[i].arrayBuffer()
+          const buffer = new Uint8Array(await files[i].arrayBuffer())
           const isHeicType = await isHeic(buffer)
           if (isHeicType) {
             /* convert .heic file to jpeg so that we can convert it for html5 style */
             const oBuffer = await converter({
-              buffer: new Uint8Array(buffer), // the HEIC file buffer
+              buffer, // the HEIC file buffer
               format: 'JPEG', // output format
               quality: 1,
             })

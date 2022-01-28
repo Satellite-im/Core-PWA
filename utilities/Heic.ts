@@ -5,8 +5,7 @@
  * @returns return if file is .heic (ios Image)
  * @example
  */
-export const isHeic = (buffer: any) => {
-  const uint8Buffer: any = new Uint8Array(buffer)
+export const isHeic = (uint8Buffer: any) => {
   if (!uint8Buffer || uint8Buffer.length < 24) return false
   return (
     uint8Buffer[20] === 0x68 &&
