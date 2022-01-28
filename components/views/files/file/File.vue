@@ -28,7 +28,7 @@ export default Vue.extend({
   props: {
     item: {
       type: Object as PropType<FileType | Folder>,
-      default: () => {},
+      required: true,
     },
     file: {
       type: Object as PropType<TextileImage>,
