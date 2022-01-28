@@ -46,7 +46,7 @@ export const wireRefuseConnectionMessage = t.intersection([
 
 export const KeyboardStates = t.union([
   t.literal('TYPING'),
-  t.literal('NOT_TYPING')
+  t.literal('NOT_TYPING'),
 ])
 
 export const wireKeyboardState = t.intersection([
