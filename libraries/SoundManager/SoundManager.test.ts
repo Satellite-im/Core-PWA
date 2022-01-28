@@ -1,5 +1,3 @@
-import { Howl } from 'howler'
-
 import SoundManager, { Sounds } from './SoundManager'
 
 describe('init', () => {
