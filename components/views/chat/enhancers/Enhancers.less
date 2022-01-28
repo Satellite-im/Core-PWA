@@ -39,10 +39,10 @@
   right: @normal-spacing !important;
   bottom: @chatbar-size !important;
   margin-bottom: @light-spacing;
-  &:extend(.round-corners);
-  &:extend(.background-semitransparent-light);
   overflow: hidden;
   z-index: @base-z-index + 100;
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
   &:extend(.blur);
 
   &.side-open {
@@ -54,7 +54,7 @@
 }
 
 .emoji-picker {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   &:extend(.full-width);
   min-height: @full;
   max-height: @full;
@@ -64,6 +64,7 @@
 }
 .emoji-picker__search {
   display: flex;
+  margin-bottom: @normal-spacing;
 }
 .input,
 .search-box,
@@ -71,9 +72,7 @@
   flex: 1;
   width: @full !important;
 }
-.emoji-picker__search {
-  margin-bottom: @normal-spacing;
-}
+
 .emoji-picker h5 {
   margin-bottom: 0;
   color: #b1b1b1;
