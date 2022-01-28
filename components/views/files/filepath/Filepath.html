@@ -2,7 +2,7 @@
   <ul>
     <li v-on:click="() => pull(path.length)">
       <a>
-        <home-icon size="1x" /> &nbsp;
+        <home-icon size="1.5x" />
       </a>
     </li>
     <li
@@ -10,10 +10,8 @@
       :data-self-path="JSON.stringify(path.slice(0, i + 1))"
       v-on:click="jumpTo"
       :class="i === path.length - 1 ? 'is-active' : ''"
-      >
-      <a>
-        {{ link }}
-      </a>
+    >
+      <a> {{ link }} </a>
     </li>
   </ul>
 </nav>

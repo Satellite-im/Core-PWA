@@ -1,6 +1,9 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
-    <li v-for="link, i in route" :class="`${i === route.length - 1 ? 'is-active' : ''}`">
+    <li
+      v-for="link, i in route"
+      :class="`${i === route.length - 1 ? 'is-active' : ''}`"
+    >
       <a :href="buildLink(i)">{{ link }}</a>
     </li>
   </ul>

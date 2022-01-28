@@ -1,10 +1,12 @@
-<div class="swithcher">
+<div class="switcher">
+  <list-icon
+    size="1x"
+    :class="`control-icon ${view === 'list' ? 'active' : ''}`"
+    @click="switchView('list')"
+  />
   <grid-icon
     size="1x"
-    :class="`control-icon ${view === 'grid' ? 'active' : ''}`" 
-    v-on:click="switchView('grid')" />
-  <columns-icon
-    size="1x"
-    :class="`control-icon ${view === 'list' ? 'active' : ''}`" 
-    v-on:click="switchView('list')" />
+    :class="`control-icon ${view === 'grid' ? 'active' : ''}`"
+    @click="switchView('grid')"
+  />
 </div>
