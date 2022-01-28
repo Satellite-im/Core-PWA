@@ -2,19 +2,6 @@ import { Howl } from 'howler'
 
 import SoundManager, { Sounds } from './SoundManager'
 
-window.HTMLMediaElement.prototype.load = () => {
-  /* do nothing */
-}
-window.HTMLMediaElement.prototype.play = () => {
-  /* do nothing */
-}
-window.HTMLMediaElement.prototype.pause = () => {
-  /* do nothing */
-}
-window.HTMLMediaElement.prototype.addTextTrack = () => {
-  /* do nothing */
-}
-
 describe('init', () => {
   it('should pass', () => {
     expect(Sounds).toMatchSnapshot(`
@@ -56,21 +43,17 @@ describe('Manage sounds', () => {
   })
 
   test('sound plays', () => {
+    window.HTMLMediaElement.prototype.load = () => {
+      return Promise.resolve()
+    }
+    window.HTMLMediaElement.prototype.play = () => {
+      return Promise.resolve()
+    }
+    window.HTMLMediaElement.prototype.pause = () => {
+      return Promise.resolve()
+    }
     const spy = jest.spyOn(inst.sounds[Sounds.CALL], 'play')
     const result: any = inst.playSound(Sounds.CALL)
-
-    // Some sort of lead for the `Error: Not implemented: HTMLMediaElement.prototype.play` error, also `prototype.pause`
-    //
-    // const playStub = jest
-    //         .spyOn(window.HTMLMediaElement.prototype, 'play')
-    //         .mockImplementation(() => new Promise<void>((resolve, reject) => {
-    //             return {}
-    //         }))
-    // const loadStub = jest
-    //         .spyOn(window.HTMLMediaElement.prototype, 'load')
-    //         .mockImplementation(() => {})
-    // expect(playStub).not.toHaveBeenCalled();
-    // expect(loadStub).not.toHaveBeenCalled();
 
     expect(spy).toHaveBeenCalled()
     expect(result).toMatchSnapshot()
