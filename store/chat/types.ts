@@ -1,6 +1,7 @@
-import { ReplyObj, ChatTextObj } from '~/types/chat/chat'
+import { ReplyObj, ChatTextObj, ReplyImageObj} from '~/types/chat/chat'
 
 export interface ChatState {
   replies: ReplyObj[],
-  chatTexts: ChatTextObj[]
+  chatTexts: ChatTextObj[],
+  replyImage: ReplyImageObj[]
 }

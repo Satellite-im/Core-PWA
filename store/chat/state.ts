@@ -2,7 +2,8 @@ import { ChatState } from './types'
 
 const InitialChatState = (): ChatState => ({
   replies: [],
-  chatTexts: []
+  chatTexts: [],
+  replyImage: []
 })
 
 export default InitialChatState

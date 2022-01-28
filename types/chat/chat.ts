@@ -7,3 +7,8 @@ export type ChatTextObj = {
     userId: string,
     value: string
 }
+
+export type ReplyImageObj = {
+  replyId: string,
+  replyImage: object
+}
