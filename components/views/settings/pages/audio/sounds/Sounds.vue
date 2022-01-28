@@ -3,25 +3,25 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SoundsTypes } from '~/store/sounds/types'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   name: 'NotificationsSettingsSounds',
   layout: 'sounds',
   data() {
     return {
-      SoundsTypes,
+      Sounds,
     }
   },
   computed: {
     ...mapState(['sounds']),
   },
   methods: {
-    sound(key: SoundsTypes) {
+    sound(key: Sounds) {
       return this.sounds[key]
     },
-    toggleSound(key: SoundsTypes, value: boolean) {
-      this.$store.commit('sounds/set', { key: SoundsTypes[key], value })
+    toggleSound(key: Sounds, value: boolean) {
+      this.$store.commit('sounds/set', { key: Sounds[key], value })
     },
   },
   mounted() {},
