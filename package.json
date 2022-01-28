@@ -52,6 +52,7 @@
     "filesize": "^7.0.0",
     "fp-ts": "^2.11.5",
     "fuse.js": "^6.4.6",
+    "heic-convert": "^1.2.4",
     "howler": "^2.2.3",
     "io-ts": "^2.2.16",
     "io-ts-promise": "^2.0.2",
