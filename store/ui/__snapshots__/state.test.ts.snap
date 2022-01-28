@@ -4,6 +4,7 @@ exports[`init should return the initial settings state 1`] = `
 Object {
   "activeChannel": undefined,
   "chatbarContent": "",
+  "chatbarFocus": false,
   "contextMenuPosition": Object {
     "x": 0,
     "y": 0,
