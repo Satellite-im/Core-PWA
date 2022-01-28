@@ -1,5 +1,5 @@
 <template>
-  <div class="editable-cointainer">
+  <div class="editable-container">
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
@@ -21,8 +21,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { toHTML } from '~/libraries/ui/Markdown'
 import { mapState } from 'vuex'
+import { toHTML } from '~/libraries/ui/Markdown'
 import Cursor from '~/libraries/ui/Cursor'
 
 export default Vue.extend({
@@ -124,9 +124,7 @@ export default Vue.extend({
         case 'Delete':
           if (
             this.$refs?.editable &&
-            Cursor.getCurrentCursorPosition(
-              this.$refs?.editable as HTMLElement,
-            ) === 0
+            this.$refs?.editable?.innerText === '\n'
           ) {
             e.preventDefault()
           }
@@ -169,7 +167,7 @@ export default Vue.extend({
   not screen and (min-device-pixel-ratio: 2),
   not screen and (min-resolution: 192dpi),
   not screen and (min-resolution: 2dppx) {
-  .editable-cointainer {
+  .editable-container {
     .chat-row-content {
       // Chrome bug for emoji spacing on non-retina screens
       .emoji {
@@ -179,9 +177,8 @@ export default Vue.extend({
   }
 }
 
-.editable-cointainer {
+.editable-container {
   position: relative;
-  min-height: 48px;
   width: 100%;
 
   .placeholder {
@@ -191,8 +188,6 @@ export default Vue.extend({
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding-top: 11px;
-    padding-bottom: 11px;
     left: 0;
     right: 0;
     -webkit-user-select: none;
@@ -203,13 +198,10 @@ export default Vue.extend({
 
   .editable-input {
     width: 100%;
-    padding-top: 11px;
-    padding-bottom: 11px;
     display: inline-block;
     overflow-wrap: break-word;
     word-break: break-word;
     white-space: break-spaces !important;
-    line-height: 22px;
 
     .chat-row-content {
       .emoji {

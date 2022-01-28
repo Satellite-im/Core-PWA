@@ -326,6 +326,11 @@ export default Vue.extend({
 
 <style lang="less">
 .messageuser {
+  &.editable-container {
+    > div {
+      padding: 14px 0;
+    }
+  }
   blockquote {
     border-left: 4px solid @text-muted;
     padding-left: @light-spacing;

@@ -6,9 +6,7 @@
     class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
     :class="editable ? 'active' : 'inactive'"
   >
-    <banknote-icon size="1x"
-      :class="`control-icon `"
-    />
+    <banknote-icon size="1x" :class="`control-icon `" />
   </div>
   <div
     id="glyph-toggle"
@@ -17,7 +15,8 @@
     class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
     :class="editable ? 'active' : 'inactive'"
   >
-    <box-select-icon size="1x"
+    <box-select-icon
+      size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'glyphs' ? 'primary' : ''}`"
     />
   </div>
@@ -28,7 +27,8 @@
     class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
     :class="editable ? 'active' : 'inactive'"
   >
-    <smile-icon size="1x"
+    <smile-icon
+      size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
     />
   </div>
@@ -36,10 +36,7 @@
     :data-tooltip="$t('ui.send')"
     class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
     :class="editable ? 'active' : 'inactive'"
-    >
-    <arrow-right-icon size="1x"
-      class="control-icon"
-      @click="sendMessage"
-    />
+  >
+    <arrow-right-icon size="1x" class="control-icon" @click="sendMessage" />
   </div>
 </div>

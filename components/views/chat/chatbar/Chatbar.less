@@ -40,10 +40,12 @@
 
   .file-upload-wrap {
     padding-top: 8px;
-    margin: 0 @light-spacing;
+    margin-right: @light-spacing;
     order: 1;
     align-self: flex-start;
     font-size: @icon-size;
+    position: sticky;
+    top: 0;
   }
 
   .chatbar-wrap {
@@ -51,12 +53,10 @@
     &:extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
     border-radius: 20px;
-    padding: 0 0.75rem;
+    padding: 0 16px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-self: stretch;
-    border: 1px solid transparent;
     width: calc(@full - (@normal-spacing * 2));
     display: inline-flex;
     align-content: center;
@@ -106,9 +106,20 @@
       word-break: break-all;
     }
 
+    .editable-container {
+      min-height: 48px;
+      overflow-y: scroll;
+      max-height: 50vh;
+      margin-right: -160px;
+    }
+
     #chatbar-controls {
+      width: 150px;
       order: 3;
       align-self: flex-start;
+      position: sticky;
+      top: 0;
+      padding-top: 11px;
     }
 
     .control-icon {

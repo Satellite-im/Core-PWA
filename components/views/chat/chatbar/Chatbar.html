@@ -27,7 +27,7 @@
       v-model="text"
       :placeholder="$t('ui.talk')"
       :enabled="Boolean(recipient)"
-      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
+      :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :handleInputKeydownProps="handleInputKeydown"
       :handleInputKeyupProps="handleInputKeyup"
       :handleDropProps="handleDrop"
