@@ -2,11 +2,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { FolderPlusIcon } from 'satellite-lucide-icons'
+import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
+
+import { FilesViewEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
     FolderPlusIcon,
+    FilePlusIcon,
   },
   props: {
     handleFile: {
@@ -20,28 +23,25 @@ export default Vue.extend({
   },
   data() {
     return {
-      text: '',
+      text: '' as string,
+      input: { show: false as boolean, type: '' as FilesViewEnum },
     }
   },
   methods: {
-    /**
-     * @method show
-     * @description Shows modals by committing the modal name with status as true to toggleModal in state
-     * @param modalName Name of modal to show
-     * @example v-on:click="show('newfolder')"
-     */
-    show(modalName: String) {
-      this.$store.commit('ui/toggleModal', { name: modalName, state: true })
+    toggleInput(type: FilesViewEnum) {
+      if (!this.input.show) {
+        this.input.show = true
+        this.input.type = type
+        return
+      }
+      if (type !== this.input.type) {
+        this.input.type = type
+        return
+      }
+      this.input.show = !this.input.show
     },
-    /**
-     * @method hide
-     * @description Hides modals by committing the modal name with status as false to toggleModal in state
-     * @param modalName Name of modal to hide
-     * @example v-on:click="hide('newfolder')"
-     */
-    hide(modalName: String) {
-      this.$store.commit('ui/toggleModal', { name: modalName, state: false })
-    },
+    // todo
+    addFile() {},
   },
 })
 </script>

@@ -2,23 +2,12 @@
   <div :class="$device.isMobile ? 'mobile-file-aside' : 'hidden-file-aside'">
     <FilesAside />
   </div>
-
   <div class="files-top">
     <FilesFilepath :path="path" :pull="pull" :setPath="setPath" />
   </div>
   <div class="files-container">
     <div class="files-left">
-      <InteractablesInput
-        size="small"
-        input-kind="text"
-        type="dark"
-        :placeholder="$t('pages.files.browse.search')"
-      />
-      <UiSpacer :height="10" />
       <FilesControls :changeView="changeView" />
-      <FilesTopbar />
-      <UiSpacer :height="10" />
-      <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
       <div v-if="view === 'list'">
         <FilesList
           :path="getPath().children"

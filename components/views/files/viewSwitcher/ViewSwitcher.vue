@@ -2,12 +2,12 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { GridIcon, ColumnsIcon } from 'satellite-lucide-icons'
+import { GridIcon, ListIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {
     GridIcon,
-    ColumnsIcon,
+    ListIcon,
   },
   props: {
     changeView: {
@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      view: 'grid',
+      view: 'grid' as 'grid' | 'list',
     }
   },
   methods: {
