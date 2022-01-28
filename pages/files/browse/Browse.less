@@ -6,16 +6,6 @@
     display: flex;
     flex-direction: row;
   }
-  .two-thirds {
-    width: 66%;
-    float: left;
-  }
-  .one-third {
-    width: 33%;
-    float: left;
-    text-align: right;
-    &:extend(.font-muted);
-  }
 
   .files-left {
     &:extend(.full-width);
@@ -27,9 +17,6 @@
   .files-top {
     &:extend(.full-width);
     display: inline-flex;
-    margin-bottom: @normal-spacing;
-  }
-  .input {
     margin-bottom: @normal-spacing;
   }
 
@@ -48,7 +35,6 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #files {
-    min-width: 100vw;
-    margin-top: 2.5rem;
+    margin-top: 3.5rem;
   }
 }
