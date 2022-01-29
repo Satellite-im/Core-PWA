@@ -80,8 +80,6 @@ export default Vue.extend({
     },
     existMessage(textileObj: any) {
       const curUserMInfo = textileObj.conversations[this.user.address]
-      console.log(' this.user.name: ', this.user.name)
-      console.log('curUserMInfo: ', curUserMInfo)
       if (
         !curUserMInfo ||
         (curUserMInfo.lastUpdate <= 0 &&
