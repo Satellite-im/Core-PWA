@@ -25,9 +25,6 @@ export default class SoundManager {
    * @constructs SoundManager
    */
   constructor(volume: number = 1.0) {
-    //
-    // Init 'sounds' property
-    //
     this.sounds = {} as Record<Sounds, Howl>
     for (const [key, value] of Object.entries(Config.sounds) as [
       Sounds,
