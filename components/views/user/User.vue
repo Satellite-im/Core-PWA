@@ -22,6 +22,9 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
+  computed: {
+    ...mapState(['ui']),
+  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -42,19 +45,13 @@ export default Vue.extend({
         { text: 'Remove Friend', func: this.testFunc },
         { text: 'Profile', func: this.handleShowProfile },
       ],
+      lastUpdate: '',
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
-    getLastBoundary(): String {
-      const curUserMInfo = this.textile.conversations[this.user.address]
-      return curUserMInfo && curUserMInfo.lastInbound
-        ? this.$dayjs(curUserMInfo.lastInbound).fromNow()
-        : ''
     },
   },
   methods: {
@@ -82,6 +79,23 @@ export default Vue.extend({
         state: !this.ui.modals.userProfile,
       })
       this.$store.commit('ui/setUserProfile', this.user)
+    },
+    getLastBoundary() {
+      const curUserMInfo =
+        this.$store.state.textile.conversations[this.user.address]
+      const uLastUpdate =
+        (this.user.lastUpdate || curUserMInfo?.lastUpdate) ?? 0
+      const today = new Date().setHours(0, 0, 0, 0)
+      if (uLastUpdate) {
+        const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
+        if (today === uDay) {
+          return this.$dayjs(uLastUpdate).format('HH:mm')
+        } else {
+          return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
+        }
+      }
+
+      return ''
     },
   },
 })

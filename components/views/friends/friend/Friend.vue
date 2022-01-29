@@ -15,6 +15,7 @@ import {
 import { Friend } from '~/types/ui/friends'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { AddFriendEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -85,6 +86,13 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
           friendRequest: this.$props.friend.request,
+        })
+        const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
+        this.$store.commit('textile/setConversation', {
+          address: this.$props.friend.address,
+          messages: [],
+          limit: query.limit,
+          skip: query.skip,
         })
       } finally {
         this.loading = AddFriendEnum.EMPTY
