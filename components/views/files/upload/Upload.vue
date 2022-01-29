@@ -6,8 +6,10 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
+import { isHeic } from '~/utilities/Heic'
 import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
+const converter = require('heic-convert')
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -72,13 +74,33 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
       if (this.editable) {
-        const files: File[] = event.target.files
+        const files: File[] = [...event.target.files]
         this.$parent.$data.showFilePreview = files.length > 0
         if (files.length > 8) {
           this.$data.count_error = true
           return
         }
         this.$data.count_error = false
+        for (let i = 0; i < files.length; i++) {
+          /* checking .heic file needs file array buffer because sometimes its file type return empty string */
+          const buffer = new Uint8Array(await files[i].arrayBuffer())
+          const isHeicType = isHeic(buffer)
+          if (isHeicType) {
+            /* convert .heic file to jpeg so that we can convert it for html5 style */
+            const oBuffer = await converter({
+              buffer, // the HEIC file buffer
+              format: 'JPEG', // output format
+              quality: 1,
+            })
+            files[i] = new File(
+              [oBuffer.buffer],
+              `${files[i].name.split('.')[0] || 'newImage'}.jpeg`,
+              {
+                type: 'image/jpeg',
+              },
+            )
+          }
+        }
         this.$data.files = await Promise.all(
           [...files].map(async (file: File) => {
             const uploadFile = {

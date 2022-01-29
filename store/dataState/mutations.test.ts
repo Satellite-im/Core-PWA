@@ -1,30 +1,28 @@
-import { types } from 'util'
-import * as mutations from '~/store/dataState/mutations'
-import { expect } from '@jest/globals'
+import mutations from '~/store/dataState/mutations'
+import { DataStateType } from '~/store/dataState/types'
 
-describe.skip("mutations.default.setDataState", () => {
-    test("0", () => {
-        let result: any = mutations.default.setDataState({ files: types.DataStateType.Empty, friends: null, search: null }, { key: "search", value: types.DataStateType.Updating })
-        expect(result).toMatchSnapshot()
+describe('init', () => {
+  const InitialDataStateState = {
+    files: DataStateType.Ready,
+    friends: DataStateType.Ready,
+    search: DataStateType.Ready,
+  }
+  let inst: any
+
+  beforeEach(() => {
+    inst = mutations
+  })
+
+  it('should set dataState state', () => {
+    inst.setDataState(InitialDataStateState, {
+      key: 'files',
+      value: DataStateType.Updating,
     })
 
-    test("1", () => {
-        let result: any = mutations.default.setDataState({ files: types.DataStateType.Empty, friends: null, search: null }, { key: "friends", value: types.DataStateType.Ready })
-        expect(result).toMatchSnapshot()
+    expect(InitialDataStateState).toEqual({
+      files: DataStateType.Updating,
+      friends: DataStateType.Ready,
+      search: DataStateType.Ready,
     })
-
-    test("2", () => {
-        let result: any = mutations.default.setDataState({ files: types.DataStateType.Loading, friends: null, search: null }, { key: "files", value: types.DataStateType.Loading })
-        expect(result).toMatchSnapshot()
-    })
-
-    test("3", () => {
-        let result: any = mutations.default.setDataState({ files: types.DataStateType.Updating, friends: null, search: null }, { key: "files", value: types.DataStateType.Loading })
-        expect(result).toMatchSnapshot()
-    })
-
-    test("4", () => {
-        let result: any = mutations.default.setDataState({ files: types.DataStateType.Updating, friends: null, search: null }, { key: "friends", value: types.DataStateType.Ready })
-        expect(result).toMatchSnapshot()
-    })
+  })
 })
