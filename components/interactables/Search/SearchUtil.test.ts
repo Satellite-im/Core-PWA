@@ -8,6 +8,13 @@ describe("SearchUtil.getTextCommandMap", () => {
     })
 })
 
+describe("SearchUtil.getTextCommandMap2", () => {
+    test("8", () => {
+        let result: any = SearchUtil.getTextCommandMap()
+        expect(result).toMatchSnapshot()
+    })
+})
+
 describe("SearchUtil.getCommandTypeParams", () => {
     test("0", () => {
         let result: any = SearchUtil.getCommandTypeParams()
