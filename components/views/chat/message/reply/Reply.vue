@@ -41,7 +41,7 @@ export default Vue.extend({
     return { showReplies: false, replyHover: '' }
   },
   mounted() {
-    let findItem = this.setChatReply.find(
+    const findItem = this.setChatReply.find(
       (item: any) => item.replyId === this.$props.message.id,
     )
 
@@ -65,7 +65,7 @@ export default Vue.extend({
      */
     makeReplyText() {
       const replyLength = Object.keys(this.$props.message.replies).length
-      let baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
+      const baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
 
       const getNamesList = (
         replies: any[],
@@ -122,7 +122,7 @@ export default Vue.extend({
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
+        floating: !!this.$device.isMobile,
         position: [e.clientX, e.clientY],
         containerWidth: this.$el.clientWidth,
       })

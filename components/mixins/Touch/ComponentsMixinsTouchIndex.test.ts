@@ -2,14 +2,14 @@ import * as index from '~/components/mixins/Touch/index'
 
 describe('index.Touch.created', () => {
   test('0', () => {
-    let result: any = index.Touch.created()
+    const result: any = index.Touch.created()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('index.Touch.methods.sidebarSwipeHandler', () => {
   test('0', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Florida' },
       $device: 'https://croplands.org/app/a/confirm?t=',
       sidebar:
@@ -19,7 +19,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('1', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Florida' },
       $device: 'Www.GooGle.com',
       sidebar:
@@ -29,7 +29,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('2', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Alabama' },
       $device: 'Www.GooGle.com',
       sidebar:
@@ -39,7 +39,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('3', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Florida' },
       $device: 'https://croplands.org/app/a/reset?token=',
       sidebar:
@@ -49,7 +49,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('4', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Florida' },
       $device: 'https://api.telegram.org/bot',
       sidebar:
@@ -59,7 +59,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('5', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: '' },
       $device: '',
       sidebar: '',
@@ -70,14 +70,14 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
 
 describe('index.Touch.created', () => {
   test('0', () => {
-    let result: any = index.Touch.created()
+    const result: any = index.Touch.created()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('index.Touch.methods.sidebarSwipeHandler', () => {
   test('0', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Abruzzo' },
       $device: 'https://api.telegram.org/',
       sidebar:
@@ -87,7 +87,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('1', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Abruzzo' },
       $device: 'https://api.telegram.org/bot',
       sidebar:
@@ -97,7 +97,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('2', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Alabama' },
       $device: 'http://www.example.com/route/123?foo=bar',
       sidebar:
@@ -107,7 +107,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('3', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Abruzzo' },
       $device: 'http://base.com',
       sidebar:
@@ -117,7 +117,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('4', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: 'Florida' },
       $device: 'https://croplands.org/app/a/reset?token=',
       sidebar:
@@ -127,7 +127,7 @@ describe('index.Touch.methods.sidebarSwipeHandler', () => {
   })
 
   test('5', () => {
-    let result: any = index.Touch.methods.sidebarSwipeHandler({
+    const result: any = index.Touch.methods.sidebarSwipeHandler({
       $store: { state: '' },
       $device: '',
       sidebar: '',

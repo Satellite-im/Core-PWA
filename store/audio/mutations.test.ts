@@ -1,9 +1,9 @@
-import * as mutations from '~/store/audio/mutations'
 import { expect } from '@jest/globals'
+import * as mutations from '~/store/audio/mutations'
 
 describe('mutations.default.mute', () => {
   test('0', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: -100,
       inputVolume: -1,
       muted: true,
@@ -15,7 +15,7 @@ describe('mutations.default.mute', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: -1,
       inputVolume: 100,
       muted: true,
@@ -27,7 +27,7 @@ describe('mutations.default.mute', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: 0,
       inputVolume: 1,
       muted: true,
@@ -39,7 +39,7 @@ describe('mutations.default.mute', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: 1,
       inputVolume: -100,
       muted: true,
@@ -51,7 +51,7 @@ describe('mutations.default.mute', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: -1,
       inputVolume: -1,
       muted: true,
@@ -63,7 +63,7 @@ describe('mutations.default.mute', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.mute({
+    const result: any = mutations.default.mute({
       previousVolume: NaN,
       inputVolume: NaN,
       muted: false,
@@ -77,7 +77,7 @@ describe('mutations.default.mute', () => {
 
 describe('mutations.default.setMuted', () => {
   test('0', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: 100,
         inputVolume: 100,
@@ -92,7 +92,7 @@ describe('mutations.default.setMuted', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: 0,
         inputVolume: -100,
@@ -107,7 +107,7 @@ describe('mutations.default.setMuted', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: 0,
         inputVolume: -100,
@@ -122,7 +122,7 @@ describe('mutations.default.setMuted', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: -1,
         inputVolume: 0,
@@ -137,7 +137,7 @@ describe('mutations.default.setMuted', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: -100,
         inputVolume: -1,
@@ -152,7 +152,7 @@ describe('mutations.default.setMuted', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setMuted(
+    const result: any = mutations.default.setMuted(
       {
         previousVolume: -Infinity,
         inputVolume: -Infinity,
@@ -173,7 +173,7 @@ describe('mutations.default.setMuted', () => {
 
 describe('mutations.default.deafen', () => {
   test('0', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: 1,
       inputVolume: 100,
       muted: false,
@@ -185,7 +185,7 @@ describe('mutations.default.deafen', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: -1,
       inputVolume: 100,
       muted: false,
@@ -197,7 +197,7 @@ describe('mutations.default.deafen', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: -100,
       inputVolume: 1,
       muted: false,
@@ -209,7 +209,7 @@ describe('mutations.default.deafen', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: 100,
       inputVolume: 1,
       muted: false,
@@ -221,7 +221,7 @@ describe('mutations.default.deafen', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: 0,
       inputVolume: 100,
       muted: true,
@@ -233,7 +233,7 @@ describe('mutations.default.deafen', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.deafen({
+    const result: any = mutations.default.deafen({
       previousVolume: -Infinity,
       inputVolume: -Infinity,
       muted: true,
@@ -251,7 +251,7 @@ describe('mutations.default.deafen', () => {
 
 describe('mutations.default.setVolume', () => {
   test('0', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: 0,
         inputVolume: 100,
@@ -266,7 +266,7 @@ describe('mutations.default.setVolume', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: 0,
         inputVolume: 100,
@@ -281,7 +281,7 @@ describe('mutations.default.setVolume', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: -100,
         inputVolume: 100,
@@ -296,7 +296,7 @@ describe('mutations.default.setVolume', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: 100,
         inputVolume: 0,
@@ -311,7 +311,7 @@ describe('mutations.default.setVolume', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: -100,
         inputVolume: -100,
@@ -326,7 +326,7 @@ describe('mutations.default.setVolume', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setVolume(
+    const result: any = mutations.default.setVolume(
       {
         previousVolume: -Infinity,
         inputVolume: -Infinity,
@@ -347,7 +347,7 @@ describe('mutations.default.setVolume', () => {
 
 describe('mutations.default.setSoundLevel', () => {
   test('0', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: -1,
         inputVolume: -1,
@@ -362,7 +362,7 @@ describe('mutations.default.setSoundLevel', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: 1,
         inputVolume: 0,
@@ -377,7 +377,7 @@ describe('mutations.default.setSoundLevel', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: -1,
         inputVolume: -100,
@@ -392,7 +392,7 @@ describe('mutations.default.setSoundLevel', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: -100,
         inputVolume: -100,
@@ -407,7 +407,7 @@ describe('mutations.default.setSoundLevel', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: -1,
         inputVolume: 0,
@@ -422,7 +422,7 @@ describe('mutations.default.setSoundLevel', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setSoundLevel(
+    const result: any = mutations.default.setSoundLevel(
       {
         previousVolume: Infinity,
         inputVolume: Infinity,
@@ -443,7 +443,7 @@ describe('mutations.default.setSoundLevel', () => {
 
 describe('mutations.default.setSystemVolume', () => {
   test('0', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: -1,
         inputVolume: -1,
@@ -458,7 +458,7 @@ describe('mutations.default.setSystemVolume', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: -100,
         inputVolume: -100,
@@ -473,7 +473,7 @@ describe('mutations.default.setSystemVolume', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: -1,
         inputVolume: -1,
@@ -488,7 +488,7 @@ describe('mutations.default.setSystemVolume', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: -100,
         inputVolume: 1,
@@ -503,7 +503,7 @@ describe('mutations.default.setSystemVolume', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: -1,
         inputVolume: 100,
@@ -518,7 +518,7 @@ describe('mutations.default.setSystemVolume', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setSystemVolume(
+    const result: any = mutations.default.setSystemVolume(
       {
         previousVolume: NaN,
         inputVolume: NaN,
@@ -535,7 +535,7 @@ describe('mutations.default.setSystemVolume', () => {
 
 describe('mutations.default.setInputVolume', () => {
   test('0', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: 100,
         inputVolume: -1,
@@ -550,7 +550,7 @@ describe('mutations.default.setInputVolume', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: -1,
         inputVolume: -100,
@@ -565,7 +565,7 @@ describe('mutations.default.setInputVolume', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: -1,
         inputVolume: -1,
@@ -580,7 +580,7 @@ describe('mutations.default.setInputVolume', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: 0,
         inputVolume: 0,
@@ -595,7 +595,7 @@ describe('mutations.default.setInputVolume', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: -100,
         inputVolume: 100,
@@ -610,7 +610,7 @@ describe('mutations.default.setInputVolume', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setInputVolume(
+    const result: any = mutations.default.setInputVolume(
       {
         previousVolume: NaN,
         inputVolume: NaN,

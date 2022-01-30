@@ -1,9 +1,9 @@
-import * as getters from '~/store/prerequisites/getters'
 import { expect } from '@jest/globals'
+import * as getters from '~/store/prerequisites/getters'
 
 describe('getters.default.allPrerequisitesReady', () => {
   test('0', () => {
-    let result: any = getters.default.allPrerequisitesReady({
+    const result: any = getters.default.allPrerequisitesReady({
       accountsReady: true,
       textileReady: false,
       p2pReady: false,
@@ -12,7 +12,7 @@ describe('getters.default.allPrerequisitesReady', () => {
   })
 
   test('1', () => {
-    let result: any = getters.default.allPrerequisitesReady({
+    const result: any = getters.default.allPrerequisitesReady({
       accountsReady: true,
       textileReady: true,
       p2pReady: false,
@@ -21,7 +21,7 @@ describe('getters.default.allPrerequisitesReady', () => {
   })
 
   test('2', () => {
-    let result: any = getters.default.allPrerequisitesReady({
+    const result: any = getters.default.allPrerequisitesReady({
       accountsReady: true,
       textileReady: true,
       p2pReady: true,
@@ -30,7 +30,7 @@ describe('getters.default.allPrerequisitesReady', () => {
   })
 
   test('3', () => {
-    let result: any = getters.default.allPrerequisitesReady({
+    const result: any = getters.default.allPrerequisitesReady({
       accountsReady: true,
       textileReady: false,
       p2pReady: true,

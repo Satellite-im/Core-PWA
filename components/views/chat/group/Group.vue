@@ -62,7 +62,7 @@ export default Vue.extend({
       Config.chat.timestampUpdateInterval,
     )
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
   },
   methods: {

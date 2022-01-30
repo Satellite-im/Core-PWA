@@ -1,9 +1,9 @@
-import * as Friends from '~/libraries/ui/Friends'
 import { expect } from '@jest/globals'
+import * as Friends from '~/libraries/ui/Friends'
 
 describe('Friends.getAlphaSorted', () => {
   test('0', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: '!Lov3MyPianoPony',
         typingState: 'NOT_TYPING',
@@ -109,12 +109,12 @@ describe('Friends.getAlphaSorted', () => {
         mailboxId: 'c466a48309794261b64a4f02cfcc3d64',
       },
     ]
-    let result: any = Friends.getAlphaSorted(param1)
+    const result: any = Friends.getAlphaSorted(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: 'NoWiFi4you',
         typingState: 'NOT_TYPING',
@@ -168,12 +168,12 @@ describe('Friends.getAlphaSorted', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getAlphaSorted(param1)
+    const result: any = Friends.getAlphaSorted(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: '!Lov3MyPianoPony',
         typingState: 'NOT_TYPING',
@@ -279,12 +279,12 @@ describe('Friends.getAlphaSorted', () => {
         mailboxId: '9876',
       },
     ]
-    let result: any = Friends.getAlphaSorted(param1)
+    const result: any = Friends.getAlphaSorted(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: 'YouarenotAllowed2Use',
         typingState: 'TYPING',
@@ -364,12 +364,12 @@ describe('Friends.getAlphaSorted', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getAlphaSorted(param1)
+    const result: any = Friends.getAlphaSorted(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: '$p3onyycat',
         typingState: 'NOT_TYPING',
@@ -475,19 +475,19 @@ describe('Friends.getAlphaSorted', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getAlphaSorted(param1)
+    const result: any = Friends.getAlphaSorted(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = Friends.getAlphaSorted([])
+    const result: any = Friends.getAlphaSorted([])
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('Friends.getFilteredFriends', () => {
   test('0', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: 'YouarenotAllowed2Use',
         typingState: 'TYPING',
@@ -567,12 +567,12 @@ describe('Friends.getFilteredFriends', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getFilteredFriends(param1, 'ea')
+    const result: any = Friends.getFilteredFriends(param1, 'ea')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: 'accessdenied4u',
         typingState: 'NOT_TYPING',
@@ -626,12 +626,12 @@ describe('Friends.getFilteredFriends', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getFilteredFriends(param1, 'eveniet')
+    const result: any = Friends.getFilteredFriends(param1, 'eveniet')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: '!Lov3MyPianoPony',
         typingState: 'NOT_TYPING',
@@ -659,12 +659,12 @@ describe('Friends.getFilteredFriends', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getFilteredFriends(param1, 'natus')
+    const result: any = Friends.getFilteredFriends(param1, 'natus')
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: 'NoWiFi4you',
         typingState: 'NOT_TYPING',
@@ -718,12 +718,12 @@ describe('Friends.getFilteredFriends', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getFilteredFriends(param1, 'ea')
+    const result: any = Friends.getFilteredFriends(param1, 'ea')
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let param1: any = [
+    const param1: any = [
       {
         publicKey: '$p3onyycat',
         typingState: 'NOT_TYPING',
@@ -778,12 +778,12 @@ describe('Friends.getFilteredFriends', () => {
         mailboxId: undefined,
       },
     ]
-    let result: any = Friends.getFilteredFriends(param1, 'eveniet')
+    const result: any = Friends.getFilteredFriends(param1, 'eveniet')
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = Friends.getFilteredFriends([], '')
+    const result: any = Friends.getFilteredFriends([], '')
     expect(result).toMatchSnapshot()
   })
 })

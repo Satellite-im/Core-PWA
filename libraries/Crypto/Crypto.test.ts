@@ -1,6 +1,6 @@
-import * as Crypto from '~/libraries/Crypto/Crypto'
 import * as web3 from '@solana/web3.js'
 import { expect } from '@jest/globals'
+import * as Crypto from '~/libraries/Crypto/Crypto'
 
 describe.skip('init', () => {
   let inst: any
@@ -10,7 +10,7 @@ describe.skip('init', () => {
   })
 
   test('0', () => {
-    let result: any = inst.init(web3.Keypair.generate())
+    const result: any = inst.init(web3.Keypair.generate())
     expect(result).toMatchSnapshot()
   })
 })
@@ -42,26 +42,26 @@ describe.skip('computeSharedSecret', () => {
   })
 
   test('0', () => {
-    let param1: any = new web3.PublicKey(1000)
-    let result: any = inst.computeSharedSecret(param1)
+    const param1: any = new web3.PublicKey(1000)
+    const result: any = inst.computeSharedSecret(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let param1: any = new web3.PublicKey('Becky Bednar')
-    let result: any = inst.computeSharedSecret(param1)
+    const param1: any = new web3.PublicKey('Becky Bednar')
+    const result: any = inst.computeSharedSecret(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let param1: any = new web3.PublicKey(10)
-    let result: any = inst.computeSharedSecret(param1)
+    const param1: any = new web3.PublicKey(10)
+    const result: any = inst.computeSharedSecret(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let param1: any = new web3.PublicKey('')
-    let result: any = inst.computeSharedSecret(param1)
+    const param1: any = new web3.PublicKey('')
+    const result: any = inst.computeSharedSecret(param1)
     expect(result).toMatchSnapshot()
   })
 })
@@ -75,32 +75,32 @@ describe.skip('aesKeyFromSharedSecret', () => {
   })
 
   test('0', () => {
-    let result: any = inst.aesKeyFromSharedSecret('NoWiFi4you')
+    const result: any = inst.aesKeyFromSharedSecret('NoWiFi4you')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.aesKeyFromSharedSecret('$p3onyycat')
+    const result: any = inst.aesKeyFromSharedSecret('$p3onyycat')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst.aesKeyFromSharedSecret('YouarenotAllowed2Use')
+    const result: any = inst.aesKeyFromSharedSecret('YouarenotAllowed2Use')
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst.aesKeyFromSharedSecret('accessdenied4u')
+    const result: any = inst.aesKeyFromSharedSecret('accessdenied4u')
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let result: any = inst.aesKeyFromSharedSecret('!Lov3MyPianoPony')
+    const result: any = inst.aesKeyFromSharedSecret('!Lov3MyPianoPony')
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = inst.aesKeyFromSharedSecret('')
+    const result: any = inst.aesKeyFromSharedSecret('')
     expect(result).toMatchSnapshot()
   })
 })
@@ -113,32 +113,32 @@ describe.skip('initializeRecipient', () => {
   })
 
   test('0', async () => {
-    let param1: any = new web3.PublicKey(1)
+    const param1: any = new web3.PublicKey(1)
     await inst.initializeRecipient(param1)
   })
 
   test('1', async () => {
-    let param1: any = new web3.PublicKey('Maurice Purdy')
+    const param1: any = new web3.PublicKey('Maurice Purdy')
     await inst.initializeRecipient(param1)
   })
 
   test('2', async () => {
-    let param1: any = new web3.PublicKey(1000)
+    const param1: any = new web3.PublicKey(1000)
     await inst.initializeRecipient(param1)
   })
 
   test('3', async () => {
-    let param1: any = new web3.PublicKey(10)
+    const param1: any = new web3.PublicKey(10)
     await inst.initializeRecipient(param1)
   })
 
   test('4', async () => {
-    let param1: any = new web3.PublicKey('Gail Hoppe')
+    const param1: any = new web3.PublicKey('Gail Hoppe')
     await inst.initializeRecipient(param1)
   })
 
   test('5', async () => {
-    let param1: any = new web3.PublicKey('')
+    const param1: any = new web3.PublicKey('')
     await inst.initializeRecipient(param1)
   })
 })
@@ -228,38 +228,38 @@ describe.skip('separateIvFromData', () => {
   })
 
   test('0', () => {
-    let param1: any = new Uint8Array([-1, -1, -1, -100, 1])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([-1, -1, -1, -100, 1])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let param1: any = new Uint8Array([1, 0, 100, 100, 0])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([1, 0, 100, 100, 0])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let param1: any = new Uint8Array([100, 0, -1, 1, 0])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([100, 0, -1, 1, 0])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let param1: any = new Uint8Array([1, 100, -100, 1, 100])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([1, 100, -100, 1, 100])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let param1: any = new Uint8Array([-100, 1, -100, -1, -100])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([-100, 1, -100, -1, -100])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let param1: any = new Uint8Array([])
-    let result: any = inst.separateIvFromData(param1)
+    const param1: any = new Uint8Array([])
+    const result: any = inst.separateIvFromData(param1)
     expect(result).toMatchSnapshot()
   })
 })
@@ -272,7 +272,7 @@ describe.skip('isInitialized', () => {
   })
 
   test('0', () => {
-    let result: any = inst.isInitialized()
+    const result: any = inst.isInitialized()
     expect(result).toMatchSnapshot()
   })
 })
@@ -285,7 +285,7 @@ describe.skip('decryptFrom', () => {
   })
 
   test('0', () => {
-    let result: any = inst.decryptFrom(
+    const result: any = inst.decryptFrom(
       '192.168.1.5',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
     )
@@ -293,7 +293,7 @@ describe.skip('decryptFrom', () => {
   })
 
   test('1', () => {
-    let result: any = inst.decryptFrom(
+    const result: any = inst.decryptFrom(
       '0.0.0.0',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
     )
@@ -301,7 +301,7 @@ describe.skip('decryptFrom', () => {
   })
 
   test('2', () => {
-    let result: any = inst.decryptFrom('', '')
+    const result: any = inst.decryptFrom('', '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -314,17 +314,17 @@ describe.skip('getSecret', () => {
   })
 
   test('0', () => {
-    let result: any = inst.getSecret('0.0.0.0')
+    const result: any = inst.getSecret('0.0.0.0')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.getSecret('192.168.1.5')
+    const result: any = inst.getSecret('192.168.1.5')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst.getSecret('')
+    const result: any = inst.getSecret('')
     expect(result).toMatchSnapshot()
   })
 })
@@ -401,8 +401,8 @@ describe.skip('signMessageWithKey', () => {
   })
 
   test('0', () => {
-    let param1: any = new Uint8Array([0, 0, -1, -1, -1])
-    let result: any = inst.signMessageWithKey(
+    const param1: any = new Uint8Array([0, 0, -1, -1, -1])
+    const result: any = inst.signMessageWithKey(
       param1,
       'Sorry, The video you are looking for does not exist.',
     )
@@ -410,14 +410,17 @@ describe.skip('signMessageWithKey', () => {
   })
 
   test('1', () => {
-    let param1: any = new Uint8Array([100, 1, 0, 0, 0])
-    let result: any = inst.signMessageWithKey(param1, 'Invalid [%s] value. %s')
+    const param1: any = new Uint8Array([100, 1, 0, 0, 0])
+    const result: any = inst.signMessageWithKey(
+      param1,
+      'Invalid [%s] value. %s',
+    )
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let param1: any = new Uint8Array([1, 1, -100, 1, -1])
-    let result: any = inst.signMessageWithKey(
+    const param1: any = new Uint8Array([1, 1, -100, 1, -1])
+    const result: any = inst.signMessageWithKey(
       param1,
       'TypeError exception should be raised',
     )
@@ -425,8 +428,8 @@ describe.skip('signMessageWithKey', () => {
   })
 
   test('3', () => {
-    let param1: any = new Uint8Array([-100, 0, -1, 100, 100])
-    let result: any = inst.signMessageWithKey(
+    const param1: any = new Uint8Array([-100, 0, -1, 100, 100])
+    const result: any = inst.signMessageWithKey(
       param1,
       'Invalid data: No data found in any of the field(s)!!!',
     )
@@ -434,8 +437,8 @@ describe.skip('signMessageWithKey', () => {
   })
 
   test('4', () => {
-    let param1: any = new Uint8Array([-1, 0, 1, 0, 1])
-    let result: any = inst.signMessageWithKey(
+    const param1: any = new Uint8Array([-1, 0, 1, 0, 1])
+    const result: any = inst.signMessageWithKey(
       param1,
       'Counterparty sent error: %s',
     )
@@ -443,8 +446,8 @@ describe.skip('signMessageWithKey', () => {
   })
 
   test('5', () => {
-    let param1: any = new Uint8Array([])
-    let result: any = inst.signMessageWithKey(param1, '')
+    const param1: any = new Uint8Array([])
+    const result: any = inst.signMessageWithKey(param1, '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -457,36 +460,36 @@ describe.skip('signMessage', () => {
   })
 
   test('0', () => {
-    let result: any = inst.signMessage('Ran out of iterations')
+    const result: any = inst.signMessage('Ran out of iterations')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.signMessage('Connection is closed')
+    const result: any = inst.signMessage('Connection is closed')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst.signMessage('No updates are to be performed.')
+    const result: any = inst.signMessage('No updates are to be performed.')
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst.signMessage(
+    const result: any = inst.signMessage(
       'Uploaded file was not added to the resource. ',
     )
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let result: any = inst.signMessage(
+    const result: any = inst.signMessage(
       'Could not find an existing submission in location.  rubric is original.',
     )
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = inst.signMessage('')
+    const result: any = inst.signMessage('')
     expect(result).toMatchSnapshot()
   })
 })

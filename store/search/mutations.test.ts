@@ -1,9 +1,9 @@
-import * as mutations from '~/store/search/mutations'
 import { expect } from '@jest/globals'
+import * as mutations from '~/store/search/mutations'
 
 describe('mutations.default.setSearchQuery', () => {
   test('0', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
         at: 100,
@@ -11,7 +11,7 @@ describe('mutations.default.setSearchQuery', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: 'Edmond',
         address: undefined,
@@ -41,7 +41,7 @@ describe('mutations.default.setSearchQuery', () => {
         value: 'Elio',
       },
     ]
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       {
         query: 'DROP TABLE tmp;',
         result: {
@@ -60,7 +60,7 @@ describe('mutations.default.setSearchQuery', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       { query: 'UPDATE Projects SET pname = %s WHERE pid = %s', result: null },
       "SELECT * FROM Movies WHERE Title=’Jurassic Park’ AND Director='Steven Spielberg';",
     )
@@ -68,7 +68,7 @@ describe('mutations.default.setSearchQuery', () => {
   })
 
   test('2', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
         at: -100,
@@ -88,7 +88,7 @@ describe('mutations.default.setSearchQuery', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: '0.0.0.0',
@@ -111,7 +111,7 @@ describe('mutations.default.setSearchQuery', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       {
         query: 'UPDATE Projects SET pname = %s WHERE pid = %s',
         result: {
@@ -130,7 +130,7 @@ describe('mutations.default.setSearchQuery', () => {
   })
 
   test('3', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
         at: 1,
@@ -138,7 +138,7 @@ describe('mutations.default.setSearchQuery', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: 'Michael',
         address: undefined,
@@ -168,7 +168,7 @@ describe('mutations.default.setSearchQuery', () => {
         value: 'Dillenberg',
       },
     ]
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       {
         query: 'DELETE FROM Projects WHERE pid = %s',
         result: {
@@ -186,7 +186,7 @@ describe('mutations.default.setSearchQuery', () => {
   })
 
   test('4', () => {
-    let object: any = [
+    const object: any = [
       {
         id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
         at: 0,
@@ -200,7 +200,7 @@ describe('mutations.default.setSearchQuery', () => {
         user: undefined,
       },
     ]
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       {
         query: 'UNLOCK TABLES;',
         result: {
@@ -218,7 +218,7 @@ describe('mutations.default.setSearchQuery', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setSearchQuery(
+    const result: any = mutations.default.setSearchQuery(
       {
         query: '',
         result: {
@@ -238,7 +238,7 @@ describe('mutations.default.setSearchQuery', () => {
 
 describe('mutations.default.search', () => {
   test('0', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
         at: -5.48,
@@ -264,7 +264,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: undefined,
@@ -273,7 +273,7 @@ describe('mutations.default.search', () => {
         value: 'Dillenberg',
       },
     ]
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       { query: 'UNLOCK TABLES;', result: null },
       {
         query:
@@ -289,7 +289,7 @@ describe('mutations.default.search', () => {
   })
 
   test('1', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
         at: -100,
@@ -315,7 +315,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: 'Anas',
         address: '192.168.1.5',
@@ -338,7 +338,7 @@ describe('mutations.default.search', () => {
         value: 'elio@example.com',
       },
     ]
-    let object4: any = [
+    const object4: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
         at: 100,
@@ -364,7 +364,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: undefined,
         address: '192.168.1.5',
@@ -373,7 +373,7 @@ describe('mutations.default.search', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       {
         query: 'DELETE FROM Projects WHERE pid = %s',
         result: {
@@ -398,7 +398,7 @@ describe('mutations.default.search', () => {
   })
 
   test('2', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
         at: 100,
@@ -406,7 +406,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: '0.0.0.0',
@@ -443,7 +443,7 @@ describe('mutations.default.search', () => {
         value: 'Elio',
       },
     ]
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       { query: 'UPDATE Projects SET pname = %s WHERE pid = %s', result: null },
       {
         query: 'DROP TABLE tmp;',
@@ -458,7 +458,7 @@ describe('mutations.default.search', () => {
   })
 
   test('3', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
         at: 0,
@@ -484,7 +484,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: 'Michael',
         address: '192.168.1.5',
@@ -507,7 +507,7 @@ describe('mutations.default.search', () => {
         value: 'elio@example.com',
       },
     ]
-    let object4: any = [
+    const object4: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
         at: 100,
@@ -515,7 +515,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: undefined,
         address: '192.168.1.5',
@@ -552,7 +552,7 @@ describe('mutations.default.search', () => {
         value: 'Elio',
       },
     ]
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       {
         query: 'DELETE FROM Projects WHERE pid = %s',
         result: {
@@ -577,7 +577,7 @@ describe('mutations.default.search', () => {
   })
 
   test('4', () => {
-    let object2: any = [
+    const object2: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
         at: -100,
@@ -591,7 +591,7 @@ describe('mutations.default.search', () => {
         user: undefined,
       },
     ]
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: undefined,
@@ -628,7 +628,7 @@ describe('mutations.default.search', () => {
         value: 'Elio',
       },
     ]
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       { query: 'DROP TABLE tmp;', result: null },
       {
         query:
@@ -644,7 +644,7 @@ describe('mutations.default.search', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.search(
+    const result: any = mutations.default.search(
       { query: '', result: null },
       {
         query: '',

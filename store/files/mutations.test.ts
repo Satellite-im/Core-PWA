@@ -1,9 +1,9 @@
-import * as mutations from '~/store/files/mutations'
 import { expect } from '@jest/globals'
+import * as mutations from '~/store/files/mutations'
 
 describe('mutations.default.fetchFiles', () => {
   test('0', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'George',
         modified: 200,
@@ -15,7 +15,7 @@ describe('mutations.default.fetchFiles', () => {
         children: [null, null, null, null, null],
       },
     ]
-    let object2: any = [
+    const object2: any = [
       {
         name: 'Michael',
         modified: 500,
@@ -33,7 +33,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: 'Anas',
         modified: 400,
@@ -51,7 +51,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: false },
       },
     ]
-    let object4: any = [
+    const object4: any = [
       {
         name: 'Pierre Edouard',
         modified: 404,
@@ -69,7 +69,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: false },
       },
     ]
-    let object5: any = [
+    const object5: any = [
       {
         name: 'Anas',
         modified: 429,
@@ -87,7 +87,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: false },
       },
     ]
-    let object6: any = [
+    const object6: any = [
       {
         name: 'Michael',
         modified: 500,
@@ -105,19 +105,19 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: false },
       },
     ]
-    let param2: any = [
+    const param2: any = [
       { name: 'Anas', modified: 404, children: object2 },
       { name: 'George', modified: 404, children: object3 },
       { name: 'Michael', modified: 404, children: object4 },
       { name: 'Pierre Edouard', modified: 400, children: object5 },
       { name: 'Jean-Philippe', modified: 404, children: object6 },
     ]
-    let result: any = mutations.default.fetchFiles({ tree: object }, param2)
+    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Jean-Philippe',
         modified: 400,
@@ -143,7 +143,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let object2: any = [
+    const object2: any = [
       {
         name: 'Anas',
         modified: 404,
@@ -169,7 +169,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: false },
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: 'Edmond',
         modified: 404,
@@ -195,7 +195,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: true },
       },
     ]
-    let object4: any = [
+    const object4: any = [
       {
         name: 'George',
         modified: 500,
@@ -221,13 +221,13 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: true },
       },
     ]
-    let object5: any = [
+    const object5: any = [
       { name: 'Michael', modified: 200, children: object },
       { name: 'Anas', modified: 429, children: object2 },
       { name: 'George', modified: 200, children: object3 },
       { name: 'Pierre Edouard', modified: 500, children: object4 },
     ]
-    let object6: any = [
+    const object6: any = [
       {
         name: 'George',
         modified: 500,
@@ -269,7 +269,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: true },
       },
     ]
-    let object7: any = [
+    const object7: any = [
       {
         name: 'Pierre Edouard',
         modified: 500,
@@ -311,17 +311,17 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let param2: any = [
+    const param2: any = [
       { name: 'Jean-Philippe', modified: 400, children: object6 },
       { name: 'George', modified: 404, children: object7 },
     ]
-    let result: any = mutations.default.fetchFiles({ tree: object5 }, param2)
+    const result: any = mutations.default.fetchFiles({ tree: object5 }, param2)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let object: any = [{ name: 'George', modified: 500, children: [null] }]
-    let object2: any = [
+    const object: any = [{ name: 'George', modified: 500, children: [null] }]
+    const object2: any = [
       {
         name: 'George',
         modified: 404,
@@ -339,7 +339,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: 'George',
         modified: 400,
@@ -357,7 +357,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let object4: any = [
+    const object4: any = [
       {
         name: 'George',
         modified: 404,
@@ -375,7 +375,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: false },
       },
     ]
-    let object5: any = [
+    const object5: any = [
       {
         name: 'Michael',
         modified: 500,
@@ -393,7 +393,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: true },
       },
     ]
-    let object6: any = [
+    const object6: any = [
       {
         name: 'Edmond',
         modified: 404,
@@ -411,19 +411,19 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: false },
       },
     ]
-    let param2: any = [
+    const param2: any = [
       { name: 'Michael', modified: 500, children: object2 },
       { name: 'George', modified: 429, children: object3 },
       { name: 'Michael', modified: 200, children: object4 },
       { name: 'Anas', modified: 404, children: object5 },
       { name: 'Michael', modified: 429, children: object6 },
     ]
-    let result: any = mutations.default.fetchFiles({ tree: object }, param2)
+    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Pierre Edouard',
         modified: 200,
@@ -436,7 +436,7 @@ describe('mutations.default.fetchFiles', () => {
         children: [null, null, null, null],
       },
     ]
-    let param2: any = [
+    const param2: any = [
       {
         name: 'Edmond',
         modified: 500,
@@ -462,12 +462,12 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: true },
       },
     ]
-    let result: any = mutations.default.fetchFiles({ tree: object }, param2)
+    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Pierre Edouard',
         modified: 404,
@@ -475,7 +475,7 @@ describe('mutations.default.fetchFiles', () => {
       },
       { name: 'Anas', modified: 500, children: [null, null, null, null, null] },
     ]
-    let object2: any = [
+    const object2: any = [
       {
         name: 'Michael',
         modified: 200,
@@ -517,7 +517,7 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: false, shared: false },
       },
     ]
-    let object3: any = [
+    const object3: any = [
       {
         name: 'Jean-Philippe',
         modified: 500,
@@ -559,16 +559,16 @@ describe('mutations.default.fetchFiles', () => {
         meta: { liked: true, shared: false },
       },
     ]
-    let param2: any = [
+    const param2: any = [
       { name: 'George', modified: 404, children: object2 },
       { name: 'George', modified: 404, children: object3 },
     ]
-    let result: any = mutations.default.fetchFiles({ tree: object }, param2)
+    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = mutations.default.fetchFiles({ tree: [] }, [])
+    const result: any = mutations.default.fetchFiles({ tree: [] }, [])
     expect(result).toMatchSnapshot()
   })
 })

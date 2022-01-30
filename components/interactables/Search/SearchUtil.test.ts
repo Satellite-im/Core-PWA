@@ -2,42 +2,42 @@ import SearchUtil from './SearchUtil'
 
 describe('SearchUtil.getTextCommandMap', () => {
   test('0', () => {
-    let result: any = SearchUtil.getTextCommandMap()
+    const result: any = SearchUtil.getTextCommandMap()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getCommandTypeParams', () => {
   test('0', () => {
-    let result: any = SearchUtil.getCommandTypeParams()
+    const result: any = SearchUtil.getCommandTypeParams()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getCommandMetaList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getCommandMetaList()
+    const result: any = SearchUtil.getCommandMetaList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getSearchResultGroupList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getSearchResultGroupList()
+    const result: any = SearchUtil.getSearchResultGroupList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getSearchOrderTypeList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getSearchOrderTypeList()
+    const result: any = SearchUtil.getSearchOrderTypeList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.filterSearchRecommendResult', () => {
   test('0', () => {
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: undefined,
@@ -60,7 +60,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key1: object, key3: [], key0: [], key2: [] },
       null,
     )
@@ -68,7 +68,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('1', () => {
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: undefined,
@@ -91,7 +91,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'Elio',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key1: object, key3: [], key0: [], key2: [] },
       null,
     )
@@ -99,7 +99,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('2', () => {
-    let object: any = [
+    const object: any = [
       {
         name: undefined,
         address: undefined,
@@ -108,7 +108,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key1: object, key3: [], key0: [], key2: [] },
       null,
     )
@@ -116,7 +116,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('3', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Jean-Philippe',
         address: '192.168.1.5',
@@ -153,7 +153,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'Elio',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key0: object, key2: [], key4: [], key3: [], key1: [] },
       null,
     )
@@ -163,35 +163,35 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
 
 describe('SearchUtil.getCommandMetaList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getCommandMetaList()
+    const result: any = SearchUtil.getCommandMetaList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getTextCommandMap', () => {
   test('0', () => {
-    let result: any = SearchUtil.getTextCommandMap()
+    const result: any = SearchUtil.getTextCommandMap()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getSearchResultGroupList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getSearchResultGroupList()
+    const result: any = SearchUtil.getSearchResultGroupList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.getSearchOrderTypeList', () => {
   test('0', () => {
-    let result: any = SearchUtil.getSearchOrderTypeList()
+    const result: any = SearchUtil.getSearchOrderTypeList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.filterSearchRecommendResult', () => {
   test('0', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Michael',
         address: '192.168.1.5',
@@ -207,7 +207,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key0: object, key2: [], key4: [], key3: [], key1: [] },
       null,
     )
@@ -215,7 +215,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('1', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Edmond',
         address: '0.0.0.0',
@@ -231,7 +231,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'Elio',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key0: object, key2: [], key4: [], key3: [], key1: [] },
       null,
     )
@@ -239,7 +239,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('2', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'George',
         address: '192.168.1.5',
@@ -255,7 +255,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'Dillenberg',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key0: object, key2: [], key4: [], key3: [], key1: [] },
       null,
     )
@@ -263,7 +263,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('3', () => {
-    let object: any = [
+    const object: any = [
       {
         name: 'Edmond',
         address: '192.168.1.5',
@@ -286,7 +286,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
         value: 'elio@example.com',
       },
     ]
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key1: object, key0: [] },
       null,
     )
@@ -294,7 +294,7 @@ describe('SearchUtil.filterSearchRecommendResult', () => {
   })
 
   test('4', () => {
-    let result: any = SearchUtil.filterSearchRecommendResult(
+    const result: any = SearchUtil.filterSearchRecommendResult(
       { key0: [], key2: [], key4: [], key3: [], key1: [] },
       null,
     )

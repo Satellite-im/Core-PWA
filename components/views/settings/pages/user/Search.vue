@@ -4,9 +4,9 @@
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { PlusIcon, XIcon } from 'satellite-lucide-icons'
+import { mapState } from 'vuex'
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
-import { mapState } from 'vuex'
 
 declare module 'vue/types/vue' {
   interface Vue {

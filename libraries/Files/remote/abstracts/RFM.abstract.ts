@@ -13,12 +13,15 @@ export abstract class RFM implements RFMInterface {
 
     this._fileSystem = fileSystem
   }
+
   updateIndex(index: FileSystem): void {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
+
   getIndex(): Promise<Item[]> {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
+
   delete(file: Fil): boolean {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }

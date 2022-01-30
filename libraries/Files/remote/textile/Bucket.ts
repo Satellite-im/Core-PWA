@@ -1,12 +1,12 @@
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 
+import { TextileErrors } from '../../errors/Errors'
 import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { TextileErrors } from '../../errors/Errors'
 
 export class Bucket extends RFM implements RFMInterface {
   private creds: { id: any; pass: any } = { id: null, pass: null }

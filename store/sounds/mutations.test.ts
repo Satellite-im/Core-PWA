@@ -1,8 +1,8 @@
-import mutations from '~/store/sounds/mutations'
 import { SoundsState } from './types'
+import mutations from '~/store/sounds/mutations'
 
 describe('init', () => {
-  let InitialSettingsState = {
+  const InitialSettingsState = {
     message: true,
     call: true,
     mute: true,

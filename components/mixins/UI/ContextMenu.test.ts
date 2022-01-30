@@ -1,9 +1,9 @@
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
 describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
-  //AP-373
+  // AP-373
   test('0', () => {
-    let object: any = [
+    const object: any = [
       {
         addEventListener: () => undefined,
         dispatchEvent: () => false,
@@ -20,7 +20,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
         removeEventListener: () => undefined,
       },
     ]
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: false,
       cancelBubble: true,
       cancelable: true,
@@ -48,7 +48,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
   })
 
   test('1', () => {
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: true,
       cancelBubble: false,
       cancelable: false,
@@ -80,7 +80,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
   })
 
   test('2', () => {
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: false,
       cancelBubble: true,
       cancelable: true,
@@ -112,7 +112,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
   })
 
   test('3', () => {
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: true,
       cancelBubble: true,
       cancelable: true,
@@ -144,7 +144,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
   })
 
   test('4', () => {
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: true,
       cancelBubble: true,
       cancelable: true,
@@ -176,7 +176,7 @@ describe.skip('ContextMenu.ContextMenu.methods.contextMenu', () => {
   })
 
   test('5', () => {
-    let result: any = ContextMenu.methods.contextMenu({
+    const result: any = ContextMenu.methods.contextMenu({
       bubbles: true,
       cancelBubble: false,
       cancelable: false,

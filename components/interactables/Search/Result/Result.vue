@@ -12,7 +12,7 @@ import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
 import { searchResult } from '~/mock/search'
 
-Vue.component('paginate', VuejsPaginate)
+Vue.component('Paginate', VuejsPaginate)
 
 declare module 'vue/types/vue' {
   interface Vue {

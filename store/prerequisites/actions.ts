@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { ActionsArguments } from '~/types/store/store'
 import { PrerequisiteState } from './types'
+import { ActionsArguments } from '~/types/store/store'
 
 export default {
   /**

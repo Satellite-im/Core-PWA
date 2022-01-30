@@ -65,11 +65,11 @@ export default Vue.extend({
             ? this.$props.message.from
             : this.$props.message.to,
       })
-      let clickX = e.clientX
-      let clickY = e.clientY
+      const clickX = e.clientX
+      const clickY = e.clientY
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
+        floating: !!this.$device.isMobile,
         position: [clickX, clickY],
         containerWidth: this.$el.clientWidth,
       })

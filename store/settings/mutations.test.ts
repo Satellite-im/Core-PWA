@@ -1,9 +1,9 @@
-import * as mutations from '~/store/settings/mutations'
 import { expect } from '@jest/globals'
+import * as mutations from '~/store/settings/mutations'
 
 describe('mutations.default.echoCancellation', () => {
   test('0', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -41,7 +41,7 @@ describe('mutations.default.echoCancellation', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -79,7 +79,7 @@ describe('mutations.default.echoCancellation', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -109,7 +109,7 @@ describe('mutations.default.echoCancellation', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -139,7 +139,7 @@ describe('mutations.default.echoCancellation', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -169,7 +169,7 @@ describe('mutations.default.echoCancellation', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.echoCancellation(
+    const result: any = mutations.default.echoCancellation(
       {
         audioInput: '',
         audioOutput: '',
@@ -209,7 +209,7 @@ describe('mutations.default.echoCancellation', () => {
 
 describe('mutations.default.noiseSuppression', () => {
   test('0', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -239,7 +239,7 @@ describe('mutations.default.noiseSuppression', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -277,7 +277,7 @@ describe('mutations.default.noiseSuppression', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -307,7 +307,7 @@ describe('mutations.default.noiseSuppression', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -337,7 +337,7 @@ describe('mutations.default.noiseSuppression', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -375,7 +375,7 @@ describe('mutations.default.noiseSuppression', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.noiseSuppression(
+    const result: any = mutations.default.noiseSuppression(
       {
         audioInput: '',
         audioOutput: '',
@@ -407,7 +407,7 @@ describe('mutations.default.noiseSuppression', () => {
 
 describe('mutations.default.bitrate', () => {
   test('0', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -437,7 +437,7 @@ describe('mutations.default.bitrate', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -467,7 +467,7 @@ describe('mutations.default.bitrate', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -497,7 +497,7 @@ describe('mutations.default.bitrate', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -527,7 +527,7 @@ describe('mutations.default.bitrate', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -557,7 +557,7 @@ describe('mutations.default.bitrate', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.bitrate(
+    const result: any = mutations.default.bitrate(
       {
         audioInput: '',
         audioOutput: '',
@@ -597,7 +597,7 @@ describe('mutations.default.bitrate', () => {
 
 describe('mutations.default.audioOutput', () => {
   test('0', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -627,7 +627,7 @@ describe('mutations.default.audioOutput', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -657,7 +657,7 @@ describe('mutations.default.audioOutput', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -687,7 +687,7 @@ describe('mutations.default.audioOutput', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -717,7 +717,7 @@ describe('mutations.default.audioOutput', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -747,7 +747,7 @@ describe('mutations.default.audioOutput', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.audioOutput(
+    const result: any = mutations.default.audioOutput(
       {
         audioInput: '',
         audioOutput: '',
@@ -779,7 +779,7 @@ describe('mutations.default.audioOutput', () => {
 
 describe('mutations.default.sampleSize', () => {
   test('0', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -809,7 +809,7 @@ describe('mutations.default.sampleSize', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -839,7 +839,7 @@ describe('mutations.default.sampleSize', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -877,7 +877,7 @@ describe('mutations.default.sampleSize', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -907,7 +907,7 @@ describe('mutations.default.sampleSize', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -953,7 +953,7 @@ describe('mutations.default.sampleSize', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.sampleSize(
+    const result: any = mutations.default.sampleSize(
       {
         audioInput: '',
         audioOutput: '',
@@ -993,7 +993,7 @@ describe('mutations.default.sampleSize', () => {
 
 describe('mutations.default.audioInput', () => {
   test('0', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1023,7 +1023,7 @@ describe('mutations.default.audioInput', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1053,7 +1053,7 @@ describe('mutations.default.audioInput', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1083,7 +1083,7 @@ describe('mutations.default.audioInput', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1113,7 +1113,7 @@ describe('mutations.default.audioInput', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1143,7 +1143,7 @@ describe('mutations.default.audioInput', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.audioInput(
+    const result: any = mutations.default.audioInput(
       {
         audioInput: '',
         audioOutput: '',
@@ -1175,7 +1175,7 @@ describe('mutations.default.audioInput', () => {
 
 describe('mutations.default.videoInput', () => {
   test('0', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1205,7 +1205,7 @@ describe('mutations.default.videoInput', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1235,7 +1235,7 @@ describe('mutations.default.videoInput', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1265,7 +1265,7 @@ describe('mutations.default.videoInput', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1295,7 +1295,7 @@ describe('mutations.default.videoInput', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1325,7 +1325,7 @@ describe('mutations.default.videoInput', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.videoInput(
+    const result: any = mutations.default.videoInput(
       {
         audioInput: '',
         audioOutput: '',
@@ -1357,7 +1357,7 @@ describe('mutations.default.videoInput', () => {
 
 describe('mutations.default.captureMouse', () => {
   test('0', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1387,7 +1387,7 @@ describe('mutations.default.captureMouse', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1417,7 +1417,7 @@ describe('mutations.default.captureMouse', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1447,7 +1447,7 @@ describe('mutations.default.captureMouse', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1477,7 +1477,7 @@ describe('mutations.default.captureMouse', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1507,7 +1507,7 @@ describe('mutations.default.captureMouse', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.captureMouse(
+    const result: any = mutations.default.captureMouse(
       {
         audioInput: '',
         audioOutput: '',
@@ -1539,7 +1539,7 @@ describe('mutations.default.captureMouse', () => {
 
 describe('mutations.default.setKeybinds', () => {
   test('0', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1569,7 +1569,7 @@ describe('mutations.default.setKeybinds', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1599,7 +1599,7 @@ describe('mutations.default.setKeybinds', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1629,7 +1629,7 @@ describe('mutations.default.setKeybinds', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1659,7 +1659,7 @@ describe('mutations.default.setKeybinds', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1689,7 +1689,7 @@ describe('mutations.default.setKeybinds', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.setKeybinds(
+    const result: any = mutations.default.setKeybinds(
       {
         audioInput: '',
         audioOutput: '',
@@ -1721,7 +1721,7 @@ describe('mutations.default.setKeybinds', () => {
 
 describe('mutations.default.updateKeybinding', () => {
   test('0', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1759,7 +1759,7 @@ describe('mutations.default.updateKeybinding', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1805,7 +1805,7 @@ describe('mutations.default.updateKeybinding', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1843,7 +1843,7 @@ describe('mutations.default.updateKeybinding', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1881,7 +1881,7 @@ describe('mutations.default.updateKeybinding', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1919,7 +1919,7 @@ describe('mutations.default.updateKeybinding', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.updateKeybinding(
+    const result: any = mutations.default.updateKeybinding(
       {
         audioInput: '',
         audioOutput: '',
@@ -1967,7 +1967,7 @@ describe('mutations.default.updateKeybinding', () => {
 
 describe('mutations.default.embeddedLinks', () => {
   test('0', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -1997,7 +1997,7 @@ describe('mutations.default.embeddedLinks', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2027,7 +2027,7 @@ describe('mutations.default.embeddedLinks', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2065,7 +2065,7 @@ describe('mutations.default.embeddedLinks', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2095,7 +2095,7 @@ describe('mutations.default.embeddedLinks', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2125,7 +2125,7 @@ describe('mutations.default.embeddedLinks', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.embeddedLinks(
+    const result: any = mutations.default.embeddedLinks(
       {
         audioInput: '',
         audioOutput: '',
@@ -2157,7 +2157,7 @@ describe('mutations.default.embeddedLinks', () => {
 
 describe('mutations.default.displayCurrentActivity', () => {
   test('0', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: 'v1.2.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2187,7 +2187,7 @@ describe('mutations.default.displayCurrentActivity', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: '4.0.0-beta1\t',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2217,7 +2217,7 @@ describe('mutations.default.displayCurrentActivity', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: 'v4.0.0-rc.4',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2247,7 +2247,7 @@ describe('mutations.default.displayCurrentActivity', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: '1.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2277,7 +2277,7 @@ describe('mutations.default.displayCurrentActivity', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: '^5.0.0',
         audioOutput: '/PDFData/rothfuss/data/UCF101/prepared_videos',
@@ -2307,7 +2307,7 @@ describe('mutations.default.displayCurrentActivity', () => {
   })
 
   test('5', () => {
-    let result: any = mutations.default.displayCurrentActivity(
+    const result: any = mutations.default.displayCurrentActivity(
       {
         audioInput: '',
         audioOutput: '',

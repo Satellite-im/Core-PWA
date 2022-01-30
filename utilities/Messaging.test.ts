@@ -1,9 +1,9 @@
-import * as Messaging from '~/utilities/Messaging'
 import { expect } from '@jest/globals'
+import * as Messaging from '~/utilities/Messaging'
 
 describe('Messaging.refreshTimestampInterval', () => {
   test('0', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       -5.48,
       () => '{\n  "type": "RECEIVE_MESSAGE"\n}',
       100000,
@@ -12,7 +12,7 @@ describe('Messaging.refreshTimestampInterval', () => {
   })
 
   test('1', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       -100,
       () => '{\n  "type": "ADD_TODO"\n}',
       1000,
@@ -21,7 +21,7 @@ describe('Messaging.refreshTimestampInterval', () => {
   })
 
   test('2', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       -5.48,
       () => '{\n  "type": "RECEIVE_MESSAGE"\n}',
       3,
@@ -30,7 +30,7 @@ describe('Messaging.refreshTimestampInterval', () => {
   })
 
   test('3', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       100,
       () => '{\n  "type": "RECEIVE_MESSAGE"\n}',
       2,
@@ -39,7 +39,7 @@ describe('Messaging.refreshTimestampInterval', () => {
   })
 
   test('4', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       -5.48,
       () => '{\n  "type": "RECEIVE_MESSAGE"\n}',
       1,
@@ -48,7 +48,7 @@ describe('Messaging.refreshTimestampInterval', () => {
   })
 
   test('5', () => {
-    let result: any = Messaging.refreshTimestampInterval(
+    const result: any = Messaging.refreshTimestampInterval(
       -Infinity,
       () => '',
       -Infinity,

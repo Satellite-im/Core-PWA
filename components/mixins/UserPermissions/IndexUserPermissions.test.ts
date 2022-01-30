@@ -7,7 +7,7 @@ describe('index.UserPermissions.methods.getUserPermissions', () => {
 })
 
 describe.skip('index.UserPermissions.methods.requestUserPermissions', () => {
-  //AP-374
+  // AP-374
   test('0', async () => {
     await index.UserPermissions.methods.requestUserPermissions(undefined)
   })

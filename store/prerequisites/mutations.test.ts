@@ -1,9 +1,9 @@
-import * as mutations from '~/store/prerequisites/mutations'
 import { expect } from '@jest/globals'
+import * as mutations from '~/store/prerequisites/mutations'
 
 describe('mutations.default.setTextileReady', () => {
   test('0', () => {
-    let result: any = mutations.default.setTextileReady(
+    const result: any = mutations.default.setTextileReady(
       { accountsReady: true, textileReady: true, p2pReady: true },
       true,
     )
@@ -11,7 +11,7 @@ describe('mutations.default.setTextileReady', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setTextileReady(
+    const result: any = mutations.default.setTextileReady(
       { accountsReady: true, textileReady: false, p2pReady: false },
       false,
     )
@@ -19,7 +19,7 @@ describe('mutations.default.setTextileReady', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setTextileReady(
+    const result: any = mutations.default.setTextileReady(
       { accountsReady: true, textileReady: true, p2pReady: false },
       true,
     )
@@ -27,7 +27,7 @@ describe('mutations.default.setTextileReady', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setTextileReady(
+    const result: any = mutations.default.setTextileReady(
       { accountsReady: true, textileReady: false, p2pReady: false },
       true,
     )
@@ -35,7 +35,7 @@ describe('mutations.default.setTextileReady', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setTextileReady(
+    const result: any = mutations.default.setTextileReady(
       { accountsReady: true, textileReady: false, p2pReady: true },
       false,
     )
@@ -45,7 +45,7 @@ describe('mutations.default.setTextileReady', () => {
 
 describe('mutations.default.setP2PReady', () => {
   test('0', () => {
-    let result: any = mutations.default.setP2PReady(
+    const result: any = mutations.default.setP2PReady(
       { accountsReady: true, textileReady: false, p2pReady: false },
       false,
     )
@@ -53,7 +53,7 @@ describe('mutations.default.setP2PReady', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setP2PReady(
+    const result: any = mutations.default.setP2PReady(
       { accountsReady: true, textileReady: true, p2pReady: false },
       true,
     )
@@ -61,7 +61,7 @@ describe('mutations.default.setP2PReady', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setP2PReady(
+    const result: any = mutations.default.setP2PReady(
       { accountsReady: true, textileReady: false, p2pReady: true },
       true,
     )
@@ -69,7 +69,7 @@ describe('mutations.default.setP2PReady', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setP2PReady(
+    const result: any = mutations.default.setP2PReady(
       { accountsReady: false, textileReady: false, p2pReady: true },
       true,
     )
@@ -77,7 +77,7 @@ describe('mutations.default.setP2PReady', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setP2PReady(
+    const result: any = mutations.default.setP2PReady(
       { accountsReady: false, textileReady: false, p2pReady: false },
       true,
     )
@@ -87,7 +87,7 @@ describe('mutations.default.setP2PReady', () => {
 
 describe('mutations.default.setAccountsReady', () => {
   test('0', () => {
-    let result: any = mutations.default.setAccountsReady(
+    const result: any = mutations.default.setAccountsReady(
       { accountsReady: true, textileReady: true, p2pReady: true },
       true,
     )
@@ -95,7 +95,7 @@ describe('mutations.default.setAccountsReady', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.setAccountsReady(
+    const result: any = mutations.default.setAccountsReady(
       { accountsReady: false, textileReady: true, p2pReady: false },
       true,
     )
@@ -103,7 +103,7 @@ describe('mutations.default.setAccountsReady', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.setAccountsReady(
+    const result: any = mutations.default.setAccountsReady(
       { accountsReady: false, textileReady: false, p2pReady: true },
       false,
     )
@@ -111,7 +111,7 @@ describe('mutations.default.setAccountsReady', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.setAccountsReady(
+    const result: any = mutations.default.setAccountsReady(
       { accountsReady: false, textileReady: false, p2pReady: false },
       false,
     )
@@ -119,7 +119,7 @@ describe('mutations.default.setAccountsReady', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.setAccountsReady(
+    const result: any = mutations.default.setAccountsReady(
       { accountsReady: true, textileReady: false, p2pReady: true },
       false,
     )
@@ -129,7 +129,7 @@ describe('mutations.default.setAccountsReady', () => {
 
 describe('mutations.default.resetState', () => {
   test('0', () => {
-    let result: any = mutations.default.resetState({
+    const result: any = mutations.default.resetState({
       accountsReady: false,
       textileReady: true,
       p2pReady: true,
@@ -138,7 +138,7 @@ describe('mutations.default.resetState', () => {
   })
 
   test('1', () => {
-    let result: any = mutations.default.resetState({
+    const result: any = mutations.default.resetState({
       accountsReady: true,
       textileReady: false,
       p2pReady: true,
@@ -147,7 +147,7 @@ describe('mutations.default.resetState', () => {
   })
 
   test('2', () => {
-    let result: any = mutations.default.resetState({
+    const result: any = mutations.default.resetState({
       accountsReady: false,
       textileReady: true,
       p2pReady: false,
@@ -156,7 +156,7 @@ describe('mutations.default.resetState', () => {
   })
 
   test('3', () => {
-    let result: any = mutations.default.resetState({
+    const result: any = mutations.default.resetState({
       accountsReady: true,
       textileReady: true,
       p2pReady: true,
@@ -165,7 +165,7 @@ describe('mutations.default.resetState', () => {
   })
 
   test('4', () => {
-    let result: any = mutations.default.resetState({
+    const result: any = mutations.default.resetState({
       accountsReady: true,
       textileReady: false,
       p2pReady: false,

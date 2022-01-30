@@ -1,9 +1,9 @@
+import Mousetrap from 'mousetrap'
 import { UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 // @ts-ignore
-import Mousetrap from 'mousetrap'
 
 const $Sounds = new SoundManager()
 

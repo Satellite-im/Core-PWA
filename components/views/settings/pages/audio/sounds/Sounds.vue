@@ -16,6 +16,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['sounds']),
   },
+  mounted() {},
   methods: {
     sound(key: SoundsTypes) {
       return this.sounds[key]
@@ -24,7 +25,6 @@ export default Vue.extend({
       this.$store.commit('sounds/set', { key: SoundsTypes[key], value })
     },
   },
-  mounted() {},
 })
 </script>
 
