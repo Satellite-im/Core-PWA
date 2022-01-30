@@ -79,10 +79,10 @@ export default Vue.extend({
       this.$store.commit('ui/setUserProfile', this.user)
     },
     existMessage(textileObj: any) {
-      const curUserMInfo = textileObj.conversations[this.user.address]
+      const currentUserInfo = textileObj.conversations[this.user.address]
       if (
-        !curUserMInfo ||
-        (curUserMInfo.lastUpdate <= 0 &&
+        !currentUserInfo ||
+        (currentUserInfo.lastUpdate <= 0 &&
           this.user.account.from === this.user.address)
       ) {
         this.$data.existConversation = false
