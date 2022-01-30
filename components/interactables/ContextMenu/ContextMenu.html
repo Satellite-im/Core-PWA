@@ -6,12 +6,16 @@
   v-click-outside="close"
 >
   <TypographySubtitle :size="6" :text="title" v-if="title.length" />
-  <div v-for="item of ui.contextMenuValues" >
-    <div v-if="item.text === 'quickReaction'" class="quickReactions"> 
-      <p v-for="reaction of mostUsedEmojis" @click="handle(() => {item.func(reaction)})" class="reaction">
+  <div v-for="item of ui.contextMenuValues">
+    <div v-if="item.text === 'quickReaction'" class="quickReactions">
+      <p
+        v-for="reaction of mostUsedEmojis"
+        @click="handle(() => {item.func(reaction)})"
+        class="reaction"
+      >
         {{ reaction.content }}
       </p>
     </div>
-    <p v-else @click="handle(item.func)"> {{ item.text }} </p>
+    <p v-else @click="handle(item.func)">{{ item.text }}</p>
   </div>
 </div>

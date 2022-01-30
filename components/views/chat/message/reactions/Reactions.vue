@@ -57,7 +57,9 @@ export default Vue.extend({
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
-        messageID: this.$props.reply.id ? this.$props.reply.id : this.$props.message.id,
+        messageID: this.$props.reply.id
+          ? this.$props.reply.id
+          : this.$props.message.id,
         to:
           this.$props.message.to === myTextilePublicKey
             ? this.$props.message.from
@@ -104,7 +106,9 @@ export default Vue.extend({
      * @example
      */
     didIReact(reaction: any) {
-      return reaction.reactors.includes(this.$store.state.accounts.details.textilePubkey)
+      return reaction.reactors.includes(
+        this.$store.state.accounts.details.textilePubkey,
+      )
     },
     getReactorsList(reactors: string[], limit = 3) {
       const numberOfReactors = reactors.length
@@ -115,7 +119,7 @@ export default Vue.extend({
             (i === 0 ? '' : ',') +
             reactorsList +
             getUsernameFromState(reactorPublickey, this.$store.state),
-          ''
+          '',
         )
 
       return `${list}${

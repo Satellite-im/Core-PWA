@@ -62,7 +62,7 @@ export default Vue.extend({
     filteredResult() {
       return this.result.filter((user: User) => {
         const isAlreadyExist = this.selected.find(
-          (selectedUser) => selectedUser.name === user.name
+          (selectedUser) => selectedUser.name === user.name,
         )
         if (isAlreadyExist) return false
         return true
@@ -116,7 +116,7 @@ export default Vue.extend({
      */
     searchResult() {
       this.result = this.friends.all.filter((user: User) =>
-        user.name.toLowerCase().includes(this.search.toLowerCase())
+        user.name.toLowerCase().includes(this.search.toLowerCase()),
       )
       this.selection = -1
     },

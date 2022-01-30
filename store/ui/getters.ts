@@ -9,7 +9,7 @@ const getters = {
   },
   showSidebar: (state: UIState) => {
     return state.showSidebar
-  }
+  },
 }
 
 export default getters

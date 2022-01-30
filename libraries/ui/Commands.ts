@@ -41,7 +41,7 @@ export function parseCommand(text: string): CurrentCommand {
  */
 export function isArgsValid(
   command: Command,
-  currentArgs: Array<String> = []
+  currentArgs: Array<String> = [],
 ): boolean {
   return command.args.every((a, i) => {
     if (a.name === currentArgs[i]) {

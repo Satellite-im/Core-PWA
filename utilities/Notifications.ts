@@ -93,7 +93,7 @@ export const Notifications = class Notifications {
       'localNotificationReceived',
       (notification: any) => {
         return notification
-      }
+      },
     )
   }
 
@@ -144,7 +144,7 @@ export const Notifications = class Notifications {
   async sendNotifications(
     type: string,
     titleText: string,
-    message: string
+    message: string,
   ): Promise<void> {
     if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
       // browser notification api

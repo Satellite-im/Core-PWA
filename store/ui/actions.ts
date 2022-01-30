@@ -49,10 +49,10 @@ export default {
       rootState.settings.keybinds
     Mousetrap.reset()
     Mousetrap.bind(toggleMute, () =>
-      dispatch('audio/toggleMute', null, { root: true })
+      dispatch('audio/toggleMute', null, { root: true }),
     )
     Mousetrap.bind(toggleDeafen, () =>
-      dispatch('audio/toggleDeafen', null, { root: true })
+      dispatch('audio/toggleDeafen', null, { root: true }),
     )
     Mousetrap.bind(openSettings, () => dispatch('openSettings'))
   },

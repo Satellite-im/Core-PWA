@@ -1,4 +1,6 @@
-<div :class="`loading-inline ${muted ? 'muted' : ''} ${spaced ? 'spaced' : ''}`">
+<div
+  :class="`loading-inline ${muted ? 'muted' : ''} ${spaced ? 'spaced' : ''}`"
+>
   <loader-icon size="1x" class="spin" />
   <TypographyText class="loading-text" :text="text" />
 </div>

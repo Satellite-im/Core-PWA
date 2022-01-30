@@ -20,7 +20,7 @@ export const ContextMenu = {
       this.$store.commit('ui/setContextMenuPosition', e)
       this.$store.commit(
         'ui/setContextMenuValues',
-        this.$data.contextMenuValues
+        this.$data.contextMenuValues,
       )
     },
   },

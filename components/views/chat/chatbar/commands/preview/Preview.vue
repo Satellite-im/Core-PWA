@@ -30,8 +30,8 @@ export default Vue.extend({
         containsCommand(this.ui.chatbarContent) &&
         commands.some((cmd) =>
           cmd.name.startsWith(
-            parseCommand(this.ui.chatbarContent).name.toLowerCase()
-          )
+            parseCommand(this.ui.chatbarContent).name.toLowerCase(),
+          ),
         )
       )
     },
@@ -53,8 +53,8 @@ export default Vue.extend({
     commands() {
       return commands.filter((cmd) =>
         cmd.name.startsWith(
-          parseCommand(this.ui.chatbarContent).name.toLowerCase()
-        )
+          parseCommand(this.ui.chatbarContent).name.toLowerCase(),
+        ),
       )
     },
   },

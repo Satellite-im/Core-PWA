@@ -5,7 +5,7 @@ Useful for storing phrase words.
 ## Usage
 
 ```vue
-  <TypographyNumberedWord word="Elephant" :number="1" />
+<TypographyNumberedWord word="Elephant" :number="1" />
 ```
 
 ## Props

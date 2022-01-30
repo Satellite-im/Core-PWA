@@ -8,13 +8,13 @@ ADDRESS_TYPE_INPUT.addVariant(0, BufferLayout.nu64('index'), 'dwellerServer')
 ADDRESS_TYPE_INPUT.addVariant(
   1,
   BufferLayout.nu64('index'),
-  'dwellerMemberStatus'
+  'dwellerMemberStatus',
 )
 ADDRESS_TYPE_INPUT.addVariant(2, BufferLayout.nu64('index'), 'serverMember')
 ADDRESS_TYPE_INPUT.addVariant(
   3,
   BufferLayout.nu64('index'),
-  'serverAdministrator'
+  'serverAdministrator',
 )
 ADDRESS_TYPE_INPUT.addVariant(4, BufferLayout.nu64('index'), 'serverChannel')
 ADDRESS_TYPE_INPUT.addVariant(5, BufferLayout.nu64('index'), 'serverGroup')
@@ -29,12 +29,12 @@ LAYOUT.addVariant(
     BufferLayout.seq(BufferLayout.u8(), 64, 'hash'),
     BufferLayout.seq(BufferLayout.u8(), 128, 'status'),
   ]),
-  'initializeDweller'
+  'initializeDweller',
 )
 LAYOUT.addVariant(
   2,
   BufferLayout.struct([BufferLayout.seq(BufferLayout.u8(), 32, 'name')]),
-  'initializeServer'
+  'initializeServer',
 )
 
 const dwellerAccountLayout = BufferLayout.struct([
@@ -60,7 +60,7 @@ const serverAccountLayout = BufferLayout.struct([
 
 const instructionMaxSpan = Math.max(
   // @ts-ignore
-  ...Object.values(LAYOUT.registry).map((r) => r.span)
+  ...Object.values(LAYOUT.registry).map((r) => r.span),
 )
 
 function encodeInstructionData(instruction: ServerInstructionType) {
