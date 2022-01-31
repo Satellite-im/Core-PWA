@@ -8,6 +8,7 @@ import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
+import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -78,8 +79,8 @@ export default Vue.extend({
       })
       this.$store.commit('ui/setUserProfile', this.user)
     },
-    existMessage(textileObj: any) {
-      const currentUserInfo = textileObj.conversations[this.user.address]
+    existMessage(textileObj: Conversation) {
+      const currentUserInfo = textileObj[this.user.address]
       if (
         currentUserInfo?.lastUpdate <= 0 &&
         this.user.account.from === this.user.address
@@ -90,15 +91,13 @@ export default Vue.extend({
       }
     },
   },
-  mounted() {
-    this.existMessage(this.$store.state.textile)
-  },
   watch: {
-    textile: {
+    'textile.conversations': {
       handler(newValue) {
         this.existMessage(newValue)
       },
       deep: true,
+      immediate: true,
     },
   },
 })
