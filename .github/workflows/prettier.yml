@@ -1,31 +1,24 @@
+name: Check & fix styling (prettier)
+
 on:
-  issue_comment:
-    types: [opened]
+  push:
 
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    name: Run Prettier
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
+          ref: ${{ github.head_ref }}
 
-      - uses: actions/setup-node@v2
+      - name: Run prettier
+        uses: permafrost-dev/prettier-docker-ga@main
         with:
-          node-version: "16"
-          cache: 'npm'
+          args: --config .prettierrc ./src
 
-      - run: npm ci
-
-      - name: run prettier command
-        uses: ykpythemind/run_prettier_action@v1
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          prettier_command: ./node_modules/.bin/prettier --write
-          GITHUB_TOKEN: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
-
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply prettier changes
-          skip_fetch: true
+          commit_message: Fix styling
