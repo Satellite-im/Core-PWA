@@ -37,7 +37,7 @@
           autoplay
         ></video>
       </div>
-      <MediaUser v-else-if="recipient" :user="recipient" />
+      <MediaUser v-else-if="recipient" :user="recipient" calling />
     </div>
     <audio
       :src-object.prop="remoteAudioStream"

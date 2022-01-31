@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init should return the initial settings state 1`] = `
+Object {
+  "activeCall": "",
+  "activeStream": Object {
+    "createdAt": 0,
+  },
+  "connectedPeer": "",
+  "incomingCall": "",
+  "initialized": false,
+  "localTracks": Object {
+    "audio": Object {},
+    "video": Object {},
+  },
+  "remoteTracks": Object {
+    "audio": Object {},
+    "video": Object {},
+  },
+  "streaming": true,
+}
+`;

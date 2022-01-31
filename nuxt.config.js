@@ -16,6 +16,14 @@ export default defineNuxtConfig({
   router: {
     mode: 'hash',
     middleware: ['authenticated'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/friends/list/:id',
+        components: {
+          default: resolve(__dirname, 'pages/friends/list'),
+        },
+      })
+    },
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
