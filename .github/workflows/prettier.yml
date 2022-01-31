@@ -1,4 +1,4 @@
-name: Check & fix styling (prettier)
+name: Prettier
 
 on:
   pull_request:
@@ -12,13 +12,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Run prettier
-        uses: permafrost-dev/prettier-docker-ga@main
+      - uses: eduardbme/eduardbme/github-action-prettier@2.3.2
         with:
-          args: --config .prettierrc ./src
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Fix styling
+         args: . --check 
