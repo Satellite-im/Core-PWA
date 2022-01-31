@@ -20,6 +20,11 @@ export default Vue.extend({
     EditIcon,
     MoreVerticalIcon,
   },
+  data() {
+    return {
+      hasMoreSettings: false,
+    }
+  },
   props: {
     setReplyChatbarContent: {
       type: Function,
