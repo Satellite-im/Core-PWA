@@ -1,6 +1,6 @@
 on:
   issue_comment:
-    types: [created]
+    types: [opened]
 
 jobs:
   prettier:
