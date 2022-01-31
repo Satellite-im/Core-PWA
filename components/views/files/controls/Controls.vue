@@ -11,14 +11,11 @@ export default Vue.extend({
     FolderPlusIcon,
     FilePlusIcon,
   },
+  // todo - best practice would be emitting rather than passing function as a prop
   props: {
-    handleFile: {
-      type: Function,
-      default: () => () => {},
-    },
     changeView: {
       type: Function,
-      default: () => () => {},
+      required: true,
     },
   },
   data() {
