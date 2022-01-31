@@ -12,6 +12,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-      - uses: eduardbme/eduardbme/github-action-prettier@2.3.2
+      - uses: eduardbme/eduardbme/github-action-prettier@2.5.1
         with:
          args: . --check 
