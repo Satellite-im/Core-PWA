@@ -5,7 +5,7 @@ Meter component, useful for sound levels or upload progress.
 ## Usage
 
 ```vue
-  <UiMeter :value="25" :solid="true" />
+<UiMeter :value="25" :solid="true" />
 ```
 
 ## Props

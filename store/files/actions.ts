@@ -20,13 +20,13 @@ export default {
       commit(
         'dataState/setDataState',
         { key: 'files', value: DataStateType.Loading },
-        { root: true }
+        { root: true },
       )
     } else {
       commit(
         'dataState/setDataState',
         { key: 'files', value: DataStateType.Updating },
-        { root: true }
+        { root: true },
       )
     }
     await new Promise((resolve) => setTimeout(resolve, 3000))
@@ -34,7 +34,7 @@ export default {
     commit(
       'dataState/setDataState',
       { key: 'files', value: DataStateType.Ready },
-      { root: true }
+      { root: true },
     )
   },
 }

@@ -1,11 +1,11 @@
 export enum LogLevel {
   PROD = 'PROD',
-  DEV = 'DEV'
+  DEV = 'DEV',
 }
 
 /**
  * @class
- * @description This method should be used for ALL logging you plan to leave in the application. 
+ * @description This method should be used for ALL logging you plan to leave in the application.
  * DO NOT use normal logging, the use of this class will make it easier to enable / disable different log levels.
  */
 export default class Logger {
@@ -37,7 +37,7 @@ export default class Logger {
     }
   }
 
-   /**
+  /**
    * @method _log
    * @description Log data in a formatted manner, programatically.
    * @param tag This is usually the file or feature that is logging
@@ -46,7 +46,12 @@ export default class Logger {
    * @param level to log to, anything below prod will not be shown unless debug is enabled in the config.
    * @returns Blob stripped of EXIF data
    */
-  log(tag: string, desc: string, data: object = {}, level: LogLevel = LogLevel.PROD) {
+  log(
+    tag: string,
+    desc: string,
+    data: object = {},
+    level: LogLevel = LogLevel.PROD,
+  ) {
     this._log(tag, desc, data, level)
   }
 }
