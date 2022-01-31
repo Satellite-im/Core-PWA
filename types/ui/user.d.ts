@@ -13,6 +13,7 @@ export type User = {
   userAccount?: any
   mailboxId?: string
   textilePubkey?: string
+  lastUpdate: number
 }
 
 export interface UserRegistrationData {

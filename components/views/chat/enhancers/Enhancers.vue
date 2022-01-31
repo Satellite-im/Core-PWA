@@ -98,6 +98,7 @@ export default Vue.extend({
         })
       } else {
         this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
+        this.$store.dispatch('ui/setChatbarFocus', true)
       }
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
       this.toggleEnhancers()

@@ -68,6 +68,9 @@ export default {
       return convo?.conversation ?? []
     })
 
+    const lastInbound =
+      rootState.textile.conversations[address]?.lastInbound ?? 0
+
     //  if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
       conversation = await $MailboxManager.getConversation({
@@ -77,7 +80,6 @@ export default {
     }
     // otherwise, combine new textile messages with stored messages
     else {
-      const lastInbound = rootState.textile.conversations[address].lastInbound
       const textileMessages = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,
         query,
@@ -96,6 +98,7 @@ export default {
     const dbData: DexieMessage = {
       conversation,
       key: address,
+      lastInbound,
     }
     db.conversations.put(dbData)
 
@@ -152,7 +155,8 @@ export default {
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-      dispatch('storeMessage', { address: sender.address, message })
+
+      dispatch('storeInMessage', { address: sender.address, message })
     })
   },
   /**
@@ -513,5 +517,38 @@ export default {
       .where('key')
       .equals(address)
       .modify((convo) => convo.conversation.push(message))
+  },
+
+  async storeInMessage(
+    {}: ActionsArguments<TextileState>,
+    {
+      address,
+      message,
+    }: {
+      address: string
+      message: Message
+    },
+  ) {
+    // replace old message with new edited version
+    if (message.editedAt !== undefined) {
+      db.conversations.get(address).then((convo) => {
+        if (!convo) {
+          return
+        }
+        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
+        convo.conversation[index] = message
+        db.conversations.put(convo)
+      })
+      return
+    }
+
+    // add regular message to indexeddb
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((convo) => {
+        convo.conversation.push(message)
+        convo.lastInbound = message.at
+      })
   },
 }

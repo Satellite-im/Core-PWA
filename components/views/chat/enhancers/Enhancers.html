@@ -52,13 +52,16 @@
             <div v-for="(emojiGroup, category) in emojis" :key="category">
               <TypographyText :text="category" />
               <div class="emojis">
-                <div v-if="category === 'Frequently used' && mostUsedEmojis.length">
+                <div
+                  v-if="category === 'Frequently used' && mostUsedEmojis.length"
+                >
                   <span
                     v-for="(emoji, index) in mostUsedEmojis"
                     :key="index"
                     @click="addEmoji(emoji.content, emoji.code)"
                     :title="index"
-                    >{{ emoji.content }}</span>
+                    >{{ emoji.content }}</span
+                  >
                 </div>
                 <div v-else>
                   <span
@@ -66,7 +69,8 @@
                     :key="emojiName"
                     @click="addEmoji(emoji, emojiName)"
                     :title="emojiName"
-                    >{{ emoji }}</span>
+                    >{{ emoji }}</span
+                  >
                 </div>
               </div>
             </div>

@@ -17,8 +17,8 @@ export default Vue.extend({
       type: Function,
     },
     editable: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   components: {
     BanknoteIcon,

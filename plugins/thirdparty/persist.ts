@@ -14,38 +14,35 @@ const mutationsBlacklist = [
   'toggleMediaIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
-  'ui/setReplyChatbarContent',
 ]
 
 // State properties path to blacklist saving to store
-const propertiesBlacklist = [
+const commonProperties = [
+  'friends.all',
+  'prerequisites',
+  'webrtc.activeStream',
+  'webrtc.connectedPeer',
+  'webrtc.incomingCall',
+  'ui.replyChatbarContent',
+]
+
+const propertiesNoStorePin = [
   'accounts.pin',
   'accounts.mnemonic',
   'accounts.locked',
   'accounts.error',
   'accounts.loading',
   'accounts.registrationStatus',
-  'friends.all',
-  'prerequisites',
-  'webrtc.activeStream',
-  'webrtc.connectedPeer',
-  'webrtc.incomingCall',
+  ...commonProperties,
 ]
 
-const propertiesBlacklistWhenStorePin = [
-  'friends.all',
-  'prerequisites',
-  'webrtc.activeStream',
-  'webrtc.connectedPeer',
-  'webrtc.incomingCall',
-]
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
     reducer: (state: any) => {
-      let blackList = propertiesBlacklist
+      let blackList = propertiesNoStorePin
       if (state.accounts.storePin && !state.accounts.locked) {
-        blackList = propertiesBlacklistWhenStorePin
+        blackList = commonProperties
       }
       // Lodash omit is not so performant, but it's actually fine
       // for blacklisting the state to be persisted

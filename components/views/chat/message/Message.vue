@@ -147,6 +147,7 @@ export default Vue.extend({
         messageID: this.$props.message.id,
         to: to === myTextilePublicKey ? from : to,
       })
+      this.$store.dispatch('ui/setChatbarFocus', true)
     },
     /**
      * @method emojiReaction DocsTODO

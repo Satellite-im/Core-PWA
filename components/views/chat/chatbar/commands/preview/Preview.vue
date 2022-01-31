@@ -6,7 +6,7 @@ import { mapState } from 'vuex'
 import { CurrentCommand } from '~/types/utils/commands'
 import {
   commands,
-  containsCommand,
+  hasCommandPreview,
   parseCommand,
 } from '~/libraries/ui/Commands'
 
@@ -26,14 +26,7 @@ export default Vue.extend({
      * @example
      */
     hasCommand() {
-      return (
-        containsCommand(this.ui.chatbarContent) &&
-        commands.some((cmd) =>
-          cmd.name.startsWith(
-            parseCommand(this.ui.chatbarContent).name.toLowerCase()
-          )
-        )
-      )
+      return hasCommandPreview(this.ui.chatbarContent)
     },
     /**
      * @method command DocsTODO
@@ -53,8 +46,8 @@ export default Vue.extend({
     commands() {
       return commands.filter((cmd) =>
         cmd.name.startsWith(
-          parseCommand(this.ui.chatbarContent).name.toLowerCase()
-        )
+          parseCommand(this.ui.chatbarContent).name.toLowerCase(),
+        ),
       )
     },
   },
