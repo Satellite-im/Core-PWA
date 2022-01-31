@@ -140,15 +140,15 @@ export default {
   setReplyChatbarContent(
     state: UIState,
     message: {
-      id: String
-      from: String
-      payload: String
+      id: string
+      from: string
+      payload: string
     },
   ) {
     state.replyChatbarContent = message
   },
   settingReaction(state: UIState, status: boolean) {
-    state.settingReaction = status
+    state.settingReaction = status // TODO: check this mutation, probably a bug
   },
   /**
    * Called when user click the Edit Message on Context Menu or Edit action in message listings
@@ -173,9 +173,9 @@ export default {
   saveEditMessage(
     state: UIState,
     message: {
-      id: String
-      from: String
-      payload: String
+      id: string
+      from: string
+      payload: string
     },
   ) {
     const messages: any[] = [...state.messages]
@@ -278,7 +278,7 @@ export default {
   setHoveredGlyphInfo(state: UIState, values: Object | undefined) {
     state.hoveredGlyphInfo = values
   },
-  updateRecentReactions(state: UIState, emoji: String) {
+  updateRecentReactions(state: UIState, emoji: string) {
     const newRecentReactions = state.recentReactions
     if (!state.recentReactions.includes(emoji)) {
       newRecentReactions.unshift(emoji)
@@ -321,5 +321,8 @@ export default {
   },
   updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
+  },
+  setChatbarFocus(state: UIState, status: boolean) {
+    state.chatbarFocus = status
   },
 }

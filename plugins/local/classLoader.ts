@@ -15,6 +15,7 @@ import { Alerts } from '~/libraries/ui/Alerts'
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
 import BucketManager from '~/libraries/Textile/BucketManager'
+import Cursor from '~/libraries/ui/Cursor'
 
 declare module 'vue/types/vue' {
   interface Vue {

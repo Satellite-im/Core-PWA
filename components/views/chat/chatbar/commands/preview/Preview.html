@@ -1,15 +1,26 @@
-<div id="command-preview" v-if="hasCommand" :class="ui.chatbarContent.id ? 'has-reply' : ''">
+<div
+  id="command-preview"
+  v-if="hasCommand"
+  :class="{'has-reply': ui.replyChatbarContent.id, 'with-sidebar': ui.showSidebar}"
+>
   <TypographySubtitle :size="6" text="Commands" />
   <div id="commands" class="hidden-scroll" v-scroll-lock="true">
     <UiScroll verticalScroll scrollbarVisibility="scroll">
-      <div v-for="command in commands" class="command" v-on:click="completeCommand(command)">
+      <div
+        v-for="command in commands"
+        class="command"
+        v-on:click="completeCommand(command)"
+      >
         <span class="tag args">
           /{{ command.name }}
           <span v-if="command.args.length">
             &nbsp;
-            <span v-for="arg in command.args"> &lt;{{ arg.name }} , {{ arg.options }}&gt;</span>
+            <span v-for="arg in command.args">
+              &lt;{{ arg.name }} , {{ arg.options }}&gt;</span
+            >
           </span>
-        </span> - <span class="command-desc">{{ command.description }}</span>
+        </span>
+        - <span class="command-desc">{{ command.description }}</span>
       </div>
     </UiScroll>
   </div>

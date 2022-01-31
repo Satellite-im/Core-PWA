@@ -8,7 +8,7 @@ export enum ThemeNames {
 
 export type Theme = {
   name: ThemeNames
-  class: String
+  class: string
 }
 
 export enum FlairColors {
@@ -24,7 +24,7 @@ export enum FlairColors {
 }
 
 export type Flair = {
-  text: String
+  text: string
   value: FlairColors
 }
 
@@ -102,13 +102,13 @@ export enum ModalWindows {
 }
 
 export interface EnhancerInfo {
-  show: Boolean
-  floating?: Boolean
-  position?: Number[]
-  defaultWidth?: String
-  defaultHeight?: String
-  containerWidth?: Number
-  route: String
+  show: boolean
+  floating?: boolean
+  position?: number[]
+  defaultWidth?: string
+  defaultHeight?: string
+  containerWidth?: number
+  route: string
 }
 
 export interface EmojiUsage {
@@ -124,45 +124,46 @@ export interface RecentGlyph {
 }
 
 export interface UIState {
-  contextMenuStatus: Boolean
-  contextMenuValues: Array<Object>
-  quickProfile: Object | Boolean
-  userProfile: Object
-  contextMenuPosition: Object
-  quickProfilePosition: Object
-  showSettings: Boolean
-  settingsSideBar: Boolean
-  showSidebarUsers: Boolean
-  showSearchResult: Boolean
+  contextMenuStatus: boolean
+  contextMenuValues: object[]
+  quickProfile: object | boolean
+  userProfile: object
+  contextMenuPosition: object
+  quickProfilePosition: object
+  showSettings: boolean
+  settingsSideBar: boolean
+  showSidebarUsers: boolean
+  showSearchResult: boolean
   showSidebar: boolean
-  modals: Object
-  glyphModalPack: String
-  chatbarContent: String
+  modals: object
+  glyphModalPack: string
+  chatbarContent: string
+  chatbarFocus: boolean
   replyChatbarContent: {
-    id: String
-    from: String
-    payload: String
+    id: string
+    from: string
+    payload: string
   }
-  showPinned: Boolean
-  fullscreen: Boolean
+  showPinned: boolean
+  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: Boolean
-  isTyping: Object | Boolean
-  isReacted: Boolean
+  isScrollOver: boolean
+  isTyping: object | boolean
+  isReacted: boolean
   activeChannel: Channel | undefined
-  settingReaction: Object
-  hoveredGlyphInfo: Object | undefined
-  glyphMarketplaceView: Object
+  settingReaction: object
+  hoveredGlyphInfo: object | undefined
+  glyphMarketplaceView: object
   editMessage: {
     id: string
     from: string
     payload: string
   }
-  recentReactions: Array<String>
-  mostEmojiUsed: Array<EmojiUsage>
-  recentGlyphs: Array<RecentGlyph>
+  recentReactions: string[]
+  mostEmojiUsed: EmojiUsage[]
+  recentGlyphs: RecentGlyph[]
   theme: {
     base: Theme
     flair: Flair

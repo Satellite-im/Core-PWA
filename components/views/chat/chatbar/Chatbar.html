@@ -3,12 +3,12 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <ChatbarReply v-if="recipient" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'show-file-preview': showFilePreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
     ref="wrap"
   >
-
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
         :editable="recipient ? true : false"
@@ -24,18 +24,16 @@
     >
       <terminal-icon size="1x" />
     </div>
-    <div
-      v-focus="ui.replyChatbarContent"
-      :contenteditable="recipient ? true : false"
-      autocapitalize="off"
-      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
-      ref="messageuser"
+    <Editable
+      v-model="text"
       :placeholder="$t('ui.talk')"
-      @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
-      @drop="handleDrop"
-      @paste="handlePaste"
-    ></div>
+      :enabled="Boolean(recipient)"
+      :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
+      :handleInputKeydownProps="handleInputKeydown"
+      :handleInputKeyupProps="handleInputKeyup"
+      :handleDropProps="handleDrop"
+      :handlePasteProps="handlePaste"
+    />
 
     <ChatbarControls
       :editable="recipient ? true : false"

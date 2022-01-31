@@ -41,7 +41,7 @@ export function parseCommand(text: string): CurrentCommand {
  */
 export function isArgsValid(
   command: Command,
-  currentArgs: Array<String> = []
+  currentArgs: Array<String> = [],
 ): boolean {
   return command.args.every((a, i) => {
     if (a.name === currentArgs[i]) {
@@ -53,6 +53,15 @@ export function isArgsValid(
       possibleValues.includes(currentArgs[i]?.toLowerCase())
     )
   })
+}
+
+export function hasCommandPreview(text: string) {
+  return (
+    containsCommand(text) &&
+    commands.some((cmd) =>
+      cmd.name.startsWith(parseCommand(text).name.toLowerCase()),
+    )
+  )
 }
 
 export const commands: Command[] = [
