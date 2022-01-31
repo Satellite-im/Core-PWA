@@ -83,8 +83,17 @@ export default Vue.extend({
     getLastBoundary() {
       const currentUserInfo =
         this.$store.state.textile.conversations[this.user.address]
+      const lastMessageAt = currentUserInfo?.messages
+        ? Math.max.apply(
+            null,
+            Object.values(currentUserInfo.messages).map((msg: any) => msg.at),
+          )
+        : 0
       const uLastUpdate =
-        (this.user.lastUpdate || currentUserInfo?.lastUpdate) ?? 0
+        (this.user.lastUpdate ||
+          currentUserInfo?.lastUpdate ||
+          lastMessageAt > 0) ??
+        0
       const today = new Date().setHours(0, 0, 0, 0)
       if (uLastUpdate) {
         const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
@@ -95,7 +104,7 @@ export default Vue.extend({
         }
       }
 
-      return ''
+      return 'No message'
     },
   },
 })
