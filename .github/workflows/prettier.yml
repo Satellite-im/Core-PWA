@@ -1,17 +1,20 @@
 name: Prettier
 
-on:
-  pull_request:
+on: [pull_request]
 
 jobs:
-  prettier:
+  cleanup_tasks:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-      - uses: eduardbme/eduardbme/github-action-prettier@2.5.1
-        with:
-         args: . --check 
+    - name: Cloning the repository
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Prettify the Code
+      uses: lwerner-lshigh/prettier_action_java@v1.1.1
+      with:
+        prettier_options: '--no-semi --write .'
+        branch: ${{ github.head_ref }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
