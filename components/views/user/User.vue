@@ -45,7 +45,6 @@ export default Vue.extend({
         { text: 'Remove Friend', func: this.testFunc },
         { text: 'Profile', func: this.handleShowProfile },
       ],
-      lastUpdate: '',
     }
   },
   computed: {
