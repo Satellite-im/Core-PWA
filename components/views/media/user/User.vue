@@ -10,7 +10,7 @@ export default Vue.extend({
       type: Object as PropType<User>,
       default: () => {},
     },
-    talking: {
+    calling: {
       type: Boolean,
       default: false,
     },

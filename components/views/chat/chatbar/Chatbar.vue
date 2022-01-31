@@ -12,7 +12,6 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { Config } from '~/config'
 import { setCaretPosition } from '~/libraries/ui/Chatbar'
 
 declare module 'vue/types/vue' {

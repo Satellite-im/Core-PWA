@@ -7,6 +7,7 @@ import QrcodeVue from 'qrcode.vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
@@ -20,13 +21,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: 'https://example.com',
       size: 150,
       error: '',
       accountID: '',
       searching: false,
       friend: null as Friend | null,
     }
+  },
+  computed: {
+    ...mapState(['accounts']),
+    friendInviteUrl(): string {
+      return `${location.origin}/#/friends/list/${this.accounts.active}`
+    },
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
@@ -88,6 +94,12 @@ export default Vue.extend({
         this.error = error
       }
     },
+  },
+  mounted() {
+    if (this.$route.params && this.$route.params.id) {
+      this.$data.accountID = this.$route.params.id
+      this._searchFriend()
+    }
   },
 })
 </script>

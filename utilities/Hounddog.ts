@@ -6,12 +6,14 @@ import { FriendsState } from '~/store/friends/types'
 import { RootState } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 
-// Hounddog is used to clean up searching and finding data in our application.
+// Hounddog, is used to clean up searching and finding data in our application.
 export default class Hounddog {
   private _WebRTC: WebRTC
   private _TextileManager: TextileManager
   private _SolanaManager: SolanaManager
-  private _Store: { state: RootState }
+  private _Store: {
+    state: RootState
+  }
 
   constructor(store: { state: RootState }) {
     this._WebRTC = Vue.prototype.$WebRTC
@@ -20,6 +22,13 @@ export default class Hounddog {
     this._Store = store
   }
 
+  /** @function
+   * Find friends based on identifiers {name,address,textilePubkey}
+   * @name findFriend
+   * @argument identifier Identifier for the search (query)
+   * @argument state Object that contains an array that will be searched
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   findFriend(
     identifier:
       | Friend['name']
@@ -38,6 +47,13 @@ export default class Hounddog {
     })
   }
 
+  /** @function
+   * Find friends who are currently active by address
+   * @name findFriendByAddress
+   * @argument address Address as the identifier for the search (query)
+   * @argument state Object that contains an array that will be searched for an active chat
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   findFriendByAddress(
     address: string,
     state: FriendsState,
@@ -46,24 +62,49 @@ export default class Hounddog {
     return search
   }
 
+  /** @function
+   * Find friends who are currently active
+   * @name getActiveFriend
+   * @argument state Object that contains an array that will be searched for an active chat
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   getActiveFriend(state: FriendsState): Friend | undefined {
     return state.all.find((f) => {
       return f.activeChat === true
     })
   }
 
+  /** @function
+   * Determine the existence of a friend
+   * @name friendExists
+   * @argument state Object that contains an array that will be searched for an active chat
+   * @argument friend Friend profile that will be used as the identifier in the search query
+   * @returns True if friend is found (exists), False if friend is not found (does not exist)
+   */
   friendExists(state: FriendsState, friend: Friend): Boolean {
     const search = state.all.find((fr: Friend) => fr.address === friend.address)
     return Boolean(search)
   }
 
+  /** @function
+   * Find the first retrieved active call
+   * @name matchesActiveCall
+   * @argument state Object that contains an array that will be searched for the active call
+   * @returns object containing an active call in the form of the Friend interface if an active call are found, returns undefined if no active calls are found
+   */
   matchesActiveCall(state: any): Friend {
     return state.friends.all.find(
       (friend: Friend) => friend.address === state.webrtc.activeCall,
     )
   }
 
-  matchesSomeActiveCall(state: any): Friend {
+  /** @function
+   * Find at minimum a single active call in the array (state), a single active call being found will return true; else it returns false
+   * @name matchesSomeActiveCall
+   * @argument state Object that contains an array that will be searched for the active call
+   * @returns True if an active call are found, False if no active calls are found
+   */
+  matchesSomeActiveCall(state: any): Boolean {
     return state.friends.all.some(
       (friend: Friend) => friend.address === state.webrtc.activeCall,
     )
