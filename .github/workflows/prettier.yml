@@ -1,6 +1,10 @@
 name: Prettier
 
-on: [pull_request]
+on:
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .github/workflows/prettier.yml
 
 jobs:
   cleanup_tasks:
