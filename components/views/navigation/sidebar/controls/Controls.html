@@ -1,6 +1,6 @@
 <div id="controls">
   <InteractablesButton
-    :type="audio.muted ? 'danger' : 'dark'"
+    :type="audioMuted ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
     :data-tooltip="$t('controls.mute')"
@@ -21,7 +21,7 @@
     <headphones-icon size="1x"></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
-    :type="video.disabled ? 'danger' : 'dark'"
+    :type="videoMuted ? 'danger' : 'dark'"
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
     :data-tooltip="$t('controls.toggle')"

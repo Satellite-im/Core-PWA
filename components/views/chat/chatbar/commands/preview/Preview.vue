@@ -6,7 +6,7 @@ import { mapState } from 'vuex'
 import { CurrentCommand } from '~/types/utils/commands'
 import {
   commands,
-  containsCommand,
+  hasCommandPreview,
   parseCommand,
 } from '~/libraries/ui/Commands'
 

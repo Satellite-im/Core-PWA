@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init should return the initial media state 1`] = `
+Object {
+  "activeCall": "0x0",
+  "incomingCall": "",
+  "streaming": false,
+}
+`;

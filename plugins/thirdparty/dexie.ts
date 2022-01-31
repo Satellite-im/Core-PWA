@@ -4,6 +4,7 @@ import { Message } from '~/types/textile/mailbox'
 export type DexieMessage = {
   key: string
   conversation: Message[]
+  lastInbound: number
 }
 class SatelliteDB extends Dexie {
   public conversations: Dexie.Table<DexieMessage, string>

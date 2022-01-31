@@ -55,6 +55,15 @@ export function isArgsValid(
   })
 }
 
+export function hasCommandPreview(text: string) {
+  return (
+    containsCommand(text) &&
+    commands.some((cmd) =>
+      cmd.name.startsWith(parseCommand(text).name.toLowerCase()),
+    )
+  )
+}
+
 export const commands: Command[] = [
   {
     name: 'reload',

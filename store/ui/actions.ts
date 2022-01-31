@@ -64,4 +64,7 @@ export default {
   async clearKeybinds({ dispatch }: ActionsArguments<UIState>) {
     Mousetrap.reset()
   },
+  setChatbarFocus({ commit }: ActionsArguments<UIState>, status: boolean) {
+    commit('setChatbarFocus', status)
+  },
 }
