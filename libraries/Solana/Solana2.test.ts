@@ -6,7 +6,7 @@ describe("Solana.getClusterFromNetworkConfig", () => {
     test("0", () => {
         let result: any = Solana.getClusterFromNetworkConfig("mainnet-beta")
         expect(result).toMatchSnapshot()
-    })
+    });
 
     test("1", () => {
         let result: any = Solana.getClusterFromNetworkConfig("testnet")
