@@ -1,23 +1,31 @@
-name: Prettier
-
 on:
-  pull_request:
+  issue_comment:
+    types: [created]
 
 jobs:
   prettier:
     runs-on: ubuntu-latest
-
+    name: Run Prettier
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.head_ref }}
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
 
-    - name: Prettify code
-      uses: creyD/prettier_action@v3.1
-      with:
-        prettier_options: --write .
-        only_changed: True
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: run prettier command
+        uses: ykpythemind/run_prettier_action@v1
+        with:
+          prettier_command: ./node_modules/.bin/prettier --write
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply prettier changes
+          skip_fetch: true
