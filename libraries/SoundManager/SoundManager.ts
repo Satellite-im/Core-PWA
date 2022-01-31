@@ -27,7 +27,7 @@ export default class SoundManager {
     this.sounds = {} as Record<Sounds, Howl>
     for (const [key, value] of Object.entries(Config.sounds) as [
       Sounds,
-      string
+      string,
     ][]) {
       this.sounds[key] = new Howl({
         src: [`${Config.ipfs.gateway}${value}`],
