@@ -81,11 +81,10 @@ export default Vue.extend({
     },
     existMessage(textileObj: Conversation) {
       const currentUserInfo = textileObj[this.user.address]
-      this.$data.existConversation =
+      this.$data.existConversation = !(
         currentUserInfo?.lastUpdate <= 0 &&
         this.user.account.from === this.user.address
-          ? false
-          : true
+      )
     },
   },
   watch: {
