@@ -17,10 +17,10 @@ export type Folder = {
 }
 
 export type UploadDropItemType = {
-  file: File
-  url: string
+  file: File,
+  url: string,
   nsfw: {
-    checking: boolean
+    checking: boolean,
     status: boolean
   }
 }

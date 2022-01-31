@@ -103,7 +103,7 @@ export function setCaretPosition(node: Node, position: number) {
         if (offset >= position) {
           setCaretPosition(
             sibling,
-            position - (offset - sibling.textContent.length),
+            position - (offset - sibling.textContent.length)
           )
           break
         }

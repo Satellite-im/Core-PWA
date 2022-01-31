@@ -1,10 +1,10 @@
 // Remote file management
-import { Item } from '../../abstracts/Item.abstract'
-import { FileSystemErrors } from '../../errors/Errors'
-import { Fil } from '../../Fil'
-import { RFMInterface } from '../interface/RFM.interface'
+import { Item } from "../../abstracts/Item.abstract"
+import { FileSystemErrors } from "../../errors/Errors"
+import { Fil } from "../../Fil"
+import { RFMInterface } from "../interface/RFM.interface"
 
-export abstract class RFM implements RFMInterface {
+export abstract class RFM implements RFMInterface{
   private _fileSystem: FileSystem
 
   constructor(fileSystem: FileSystem) {

@@ -1,4 +1,4 @@
-import { SoundsState } from './types'
+import { SoundsState } from "./types"
 
 const InitialSettingsState = (): SoundsState => ({
   message: true,
