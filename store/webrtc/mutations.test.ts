@@ -324,8 +324,10 @@ describe('Mutate WebRTC by updating', () => {
   })
 
   it('should update time of creation', () => {
-    // This particular test suite somehow has an error: TypeError: Cannot set properties of undefined (setting 'createdAt')
-    // How we bypassed it is by passing `state.webrtc` instead of just plainly `state` like in the other unit test
+    /*
+     * This particular test suite somehow has an error: TypeError: Cannot set properties of undefined (setting 'createdAt')
+     * How we bypassed it is by passing `state.webrtc` instead of just plainly `state` like in the other unit test
+     */
 
     const localStateForUnitTest = { ...state }
     const dummyDate = Date.now()
