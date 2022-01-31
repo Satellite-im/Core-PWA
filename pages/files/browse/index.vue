@@ -58,11 +58,8 @@ export default Vue.extend({
       return files
     },
     /**
-     * Push a new child name to the path array
-     */
-    /**
      * @method push DocsTODO
-     * @description
+     * @description Push a new child name to the path array
      * @param item
      * @example
      */
@@ -72,11 +69,8 @@ export default Vue.extend({
       }
     },
     /**
-     * Pull n items from the file path array
-     */
-    /**
      * @method pull DocsTODO
-     * @description
+     * @description Pull n items from the file path array
      * @param count
      * @example
      */
@@ -86,11 +80,8 @@ export default Vue.extend({
       }
     },
     /**
-     * Manually override the path array from a child component
-     */
-    /**
      * @method setPath DocsTODO
-     * @description
+     * @description Manually override the path array from a child component
      * @param pth
      * @example
      */
@@ -98,11 +89,8 @@ export default Vue.extend({
       this.$data.path = pth
     },
     /**
-     * Triggered when a file is changed on the input
-     */
-    /**
      * @method handleFile DocsTODO
-     * @description
+     * @description Triggered when a file is changed on the input
      * @param event
      * @example
      */
@@ -114,11 +102,8 @@ export default Vue.extend({
       this.loadPicture(this.$data.file)
     },
     /**
-     * Load a picture into a data URL push to data
-     */
-    /**
      * @method loadPicture DocsTODO
-     * @description
+     * @description Load a picture into a data URL push to data
      * @param file
      * @example
      */
