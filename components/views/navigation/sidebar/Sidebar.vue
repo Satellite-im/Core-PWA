@@ -16,6 +16,7 @@ import {
 import { DataStateType } from '~/store/dataState/types'
 import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
+import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -82,12 +83,12 @@ export default Vue.extend({
         this.$router.push({ path: '/friends/list' })
       }
     },
-    sortUserList(textileObj: any) {
-      this.$store.commit('friends/sortFriends', textileObj)
+    sortUserList(conversations: Conversation) {
+      this.$store.commit('friends/sortFriends', conversations)
     },
   },
   watch: {
-    textile: {
+    'textile.conversations': {
       handler(newValue) {
         this.sortUserList(newValue)
       },

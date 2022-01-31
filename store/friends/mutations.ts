@@ -1,6 +1,6 @@
 import { FriendsState } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
-import { TextileState } from '../textile/types'
+import { Conversation } from '../textile/types'
 
 const mutations = {
   setIncomingRequests(
@@ -82,10 +82,10 @@ const mutations = {
       (fr) => fr.textilePubkey !== friendTextilePublicKey,
     )
   },
-  sortFriends(state: FriendsState, textileObj: TextileState) {
+  sortFriends(state: FriendsState, rConversations: Conversation) {
     state.all = state.all
       .map((user) => {
-        const converstaion = textileObj.conversations[user.address]
+        const converstaion = rConversations[user.address]
         user.lastUpdate = converstaion?.lastUpdate || 0
         return user
       })
