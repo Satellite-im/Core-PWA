@@ -33,7 +33,7 @@ export function htmlTag(
       .join(' ')
 
   let attributeString = ''
-  for (let attr in attributes) {
+  for (const attr in attributes) {
     // Removes falsy attributes
     if (
       Object.prototype.hasOwnProperty.call(attributes, attr) &&
@@ -52,7 +52,7 @@ export function htmlTag(
     ? htmlTag('span', mdClosingSymbol, { class: 'md-symbol' })
     : ''
 
-  let unclosedTag = `${openDec}<${tagName}${attributeString}>`
+  const unclosedTag = `${openDec}<${tagName}${attributeString}>`
 
   if (isClosed)
     return (
@@ -128,7 +128,7 @@ const rules: MarkdownRules = {
   text: {
     ...markdown.defaultRules.text,
     match: (source) =>
-      /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
+      /^[\s\S]+?(?=[^0-9A-Za-z\s\u00C0-\uFFFF-]|\n\n|\n|\w+:\S|$)/.exec(source),
     html: (node, output, state) => {
       if (state.escapeHTML) return markdown.sanitizeText(node.content)
 

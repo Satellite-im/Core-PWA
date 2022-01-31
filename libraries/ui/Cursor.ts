@@ -7,7 +7,7 @@ export default class Cursor {
    * @method getCurrentCursorPosition
    * @static
    * @description Get current cursor position
-   * @param parentElement Elemeet to get cursor position
+   * @param parentElement Element to get cursor position
    * @returns cursor position
    */
   static getCurrentCursorPosition(parentElement: HTMLElement) {
@@ -54,13 +54,13 @@ export default class Cursor {
    * @static
    * @description Set current cursor position
    * @param chars position to set cursor
-   * @param element Elemeet to set cursor position
+   * @param element Element to set cursor position
    */
   static setCurrentCursorPosition(chars: number, element: HTMLElement) {
     if (chars >= 0) {
       const selection = window.getSelection()
 
-      let range = Cursor._createRange(element, chars)
+      const range = Cursor._createRange(element, chars)
       if (range && selection) {
         range.collapse(false)
         selection.removeAllRanges()
@@ -128,10 +128,10 @@ export default class Cursor {
       range.setStart(node, 0)
     }
 
-    let rows = node.innerText.split('\n\n')
+    const rows = node.innerText.split('\n\n')
     let elementIndex = 0
 
-    for (let [row, el] of rows.entries()) {
+    for (const [row, el] of rows.entries()) {
       if (el.length >= chars) {
         elementIndex = row
         break

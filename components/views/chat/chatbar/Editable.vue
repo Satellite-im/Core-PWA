@@ -41,19 +41,19 @@ export default Vue.extend({
     },
     handleInputKeydownProps: {
       type: Function as PropType<(e: KeyboardEvent) => void>,
-      default: () => void {},
+      default: () => () => {},
     },
     handleInputKeyupProps: {
       type: Function as PropType<(e: KeyboardEvent) => void>,
-      default: () => void {},
+      default: () => () => {},
     },
     handleDropProps: {
       type: Function as PropType<(e: DragEvent) => void>,
-      default: () => void {},
+      default: () => () => {},
     },
     handlePasteProps: {
       type: Function as PropType<(e: ClipboardEvent) => void>,
-      default: () => void {},
+      default: () => () => {},
     },
   },
   computed: {
@@ -84,6 +84,7 @@ export default Vue.extend({
     }
     this.$store.dispatch('ui/setChatbarFocus', true)
   },
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
   beforeDestroy() {
     document.removeEventListener('selectionchange', this.onSelectionChange)
   },
@@ -124,7 +125,7 @@ export default Vue.extend({
         case 'Delete':
           if (
             this.$refs?.editable &&
-            this.$refs?.editable?.innerText === '\n'
+            (this.$refs?.editable as HTMLElement).innerText === '\n'
           ) {
             e.preventDefault()
           }
