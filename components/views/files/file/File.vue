@@ -82,6 +82,10 @@ export default Vue.extend({
     mouseOver() {
       this.iconHover = true
     },
+    /**
+     * @method mouseLeave
+     * @description reinstate regular click behavior (handler)
+     */
     mouseLeave() {
       this.iconHover = false
     },
