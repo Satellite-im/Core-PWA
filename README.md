@@ -3,14 +3,13 @@
 # Satellite Core-PWA
 
 #### Dev Site (Most up-to-date): [dev.Satellite.one](https://dev.satellite.one)
-
 #### Release Site: [Satellite.one](https://satellite.one)
 
 # Running
 
 ## Environment
 
-It's important to setup your environment before running `Core-PWA`. This will require you
+It's important to setup your environment before running `Core-PWA`. This will require you 
 to add some keys. See the `.env.example` file to get started.
 
 Start by copying the `.env.example` to a `.env` file. This stores secure information and is not pushed to production.
@@ -19,7 +18,7 @@ Start by copying the `.env.example` to a `.env` file. This stores secure informa
 cp .env.example .env
 ```
 
-Currently, the only environment variable you need is a [Textile](https://www.textile.io) API key.
+Currently, the only environment variable you need is a [Textile](https://www.textile.io) API key. 
 
 ## Install Submodules
 
@@ -37,3 +36,4 @@ Please document all new methods and files.
 # Contributors
 
 ![GitHub Contributors Image](https://contrib.rocks/image?repo=Satellite-im/Core-PWA)
+

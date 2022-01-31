@@ -71,13 +71,13 @@ export default class IdentityManager {
     const message = this.generateMessageForEntropy(wallet.address, secret)
     const signedText = await cryptoInstance.signMessageWithKey(
       wallet.keypair.secretKey,
-      message,
+      message
     )
     const hash = await cryptoInstance.hash(signedText)
 
     if (hash === null) {
       throw new Error(
-        'No account is provided. Please provide an account to this application.',
+        'No account is provided. Please provide an account to this application.'
       )
     }
     // The following line converts the hash in hex to an array of 32 integers.
@@ -91,7 +91,7 @@ export default class IdentityManager {
 
     if (array.length !== 32) {
       throw new Error(
-        'Hash of signature is not the correct size! Something went wrong!',
+        'Hash of signature is not the correct size! Something went wrong!'
       )
     }
 
@@ -132,7 +132,7 @@ export default class IdentityManager {
     this.client = await Client.withKeyInfo({ key: Config.textile.key })
 
     this.users = await Users.withKeyInfo({
-      key: Config.textile.key,
+      key: Config.textile.key
     })
 
     await this.users.getToken(identity)
@@ -142,7 +142,7 @@ export default class IdentityManager {
     return {
       client: this.client,
       token,
-      users: this.users,
+      users: this.users
     }
   }
 

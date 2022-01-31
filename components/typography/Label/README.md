@@ -1,11 +1,9 @@
 # Description
-
 Generic Label component.
 
 # Usage
-
 ```vue
-<TypographyLabel text="Satellite-Absolute" />
+    <TypographyLabel text="Satellite-Absolute" />
 ```
 
 # Props

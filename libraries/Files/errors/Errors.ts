@@ -1,5 +1,5 @@
 export enum TextileErrors {
-  MISSING_WALLET = 'A wallet is mandatory for using Textile methods.',
+  MISSING_WALLET = 'A wallet is mandatory for using Textile methods.'
 }
 
 export enum FileSystemErrors {

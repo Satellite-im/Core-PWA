@@ -183,7 +183,7 @@ const SearchUtil = {
    */
   filterSearchRecommendResult(
     recommends: SearchRecommend,
-    queryItem: SearchQueryItem | null,
+    queryItem: SearchQueryItem | null
   ): SearchRecommendResultItem[] {
     if (queryItem == null) {
       return [] as SearchRecommendResultItem[]
