@@ -32,11 +32,6 @@ export default Vue.extend({
     MessageSquareIcon,
     MenuIcon,
   },
-  data() {
-    return {
-      userList: [],
-    }
-  },
   props: {
     toggle: {
       type: Function,
@@ -97,10 +92,8 @@ export default Vue.extend({
         this.sortUserList(newValue)
       },
       deep: true,
+      immediate: true,
     },
-  },
-  mounted() {
-    this.sortUserList(this.$store.state.textile)
   },
 })
 </script>
