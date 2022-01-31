@@ -81,9 +81,8 @@ export default Vue.extend({
     existMessage(textileObj: any) {
       const currentUserInfo = textileObj.conversations[this.user.address]
       if (
-        !currentUserInfo ||
-        (currentUserInfo.lastUpdate <= 0 &&
-          this.user.account.from === this.user.address)
+        currentUserInfo?.lastUpdate <= 0 &&
+        this.user.account.from === this.user.address
       ) {
         this.$data.existConversation = false
       } else {
