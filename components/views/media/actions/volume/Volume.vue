@@ -48,7 +48,7 @@ export default Vue.extend({
   mounted() {
     document.addEventListener('click', this.hideSlider)
   },
-  beforeUnmount() {
+  beforeDestroy() {
     document.removeEventListener('click', this.hideSlider)
   },
   methods: {

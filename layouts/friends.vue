@@ -13,7 +13,7 @@
     >
       <UiGlobal />
 
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -22,7 +22,7 @@
             :open-modal="toggleModal"
           />
           <Sidebar
-            :show-menu="toggleMenu"
+            :showMenu="toggleMenu"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
@@ -31,10 +31,10 @@
         <swiper-slide class="dynamic-content">
           <menu-icon
             class="toggle--sidebar"
+            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
-            @click="toggleMenu"
           />
           <Nuxt id="friends" ref="chat" />
         </swiper-slide>
@@ -51,26 +51,27 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
+import { MenuIcon } from 'satellite-lucide-icons'
+
 export default Vue.extend({
   name: 'ChatLayout',
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   data() {
     return {
-      sidebar: !this.$device.isMobile,
+      sidebar: this.$device.isMobile ? false : true,
       swiperOption: {
         initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        noSwiping: !this.$device.isMobile,
-        allowTouchMove: !!this.$device.isMobile,
+        noSwiping: this.$device.isMobile ? false : true,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {

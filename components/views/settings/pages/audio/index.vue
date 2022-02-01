@@ -4,10 +4,7 @@
 import Vue from 'vue'
 
 import { mapState } from 'vuex'
-import {
-  Bitrates,
-  SampleSizes,
-} from '~/components/views/settings/pages/audio/options'
+import { Bitrates, SampleSizes } from '~/components/views/settings/pages/audio/options'
 import {
   PermissionRequestOptions,
   UserPermissions,
@@ -163,7 +160,7 @@ export default Vue.extend({
     this.setupDefaults()
     this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
   },
-  beforeUnmount() {
+  beforeDestroy() {
     if (this.$data.stream) {
       this.$data.stream
         .getAudioTracks()
@@ -201,7 +198,7 @@ export default Vue.extend({
         // Update gain based on inputVolume
         gainNode.gain.setValueAtTime(
           this.audio.inputVolume / 100,
-          audioContext.currentTime,
+          audioContext.currentTime
         )
         requestAnimationFrame(draw)
 
@@ -359,8 +356,7 @@ export default Vue.extend({
      * @example
      */
     hasConstraint(prop: keyof MediaTrackConstraintSet): Boolean {
-      const supports =
-        this.$envinfo.navigator.mediaDevices.getSupportedConstraints()
+      const supports = this.$envinfo.navigator.mediaDevices.getSupportedConstraints()
       return Boolean(supports[prop])
     },
     /**

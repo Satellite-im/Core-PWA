@@ -1,5 +1,4 @@
 import { TypeOf } from 'io-ts'
-import { SignalData } from 'simple-peer'
 import {
   wireDataMessage,
   wireIdentificationMessage,
@@ -8,6 +7,7 @@ import {
   wireKeyboardState,
   KeyboardStates,
 } from './Encoders'
+import { SignalData } from 'simple-peer'
 
 export interface WireEventListeners {
   ERROR: (data: { peerId: string; error: Error }) => void

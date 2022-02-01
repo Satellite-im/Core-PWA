@@ -7,7 +7,7 @@ export default Vue.extend({
   props: {
     text: {
       type: String,
-      default() {
+      default: function () {
         return this.$t('internal.missing_text')
       },
     },

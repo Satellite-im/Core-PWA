@@ -1,43 +1,46 @@
 <div id="actions">
-  <div class="has-tooltip has-tooltip-primary" data-tooltip="Video">
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Video">
     <InteractablesButton
       class="left"
       :type="video.disabled ? 'danger' : 'dark'"
       size="small"
-      :action="toggleVideo"
-    >
+      :action="toggleVideo">
       <video-off-icon v-if="video.disabled" size="1.2x" />
       <video-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
+  <div 
     class="has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('controls.mute')"
-  >
+    :data-tooltip="$t('controls.mute')">
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
-      :action="toggleMute"
-    >
+      :action="toggleMute">
       <mic-icon v-if="!audioMuted" size="1.2x" />
       <mic-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
+  <div 
     class="has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('controls.not_available')"
-  >
-    <InteractablesButton type="dark" disabled size="small" :action="() => {}">
+    :data-tooltip="$t('controls.not_available')">
+    <InteractablesButton
+      type="dark"
+      disabled
+      size="small"
+      :action="() => {}">
       <screen-share-icon size="1.2x" />
     </InteractablesButton>
   </div>
-  <div class="has-tooltip has-tooltip-primary" data-tooltip="Hangup">
+  <div 
+    class="has-tooltip has-tooltip-primary"
+    data-tooltip="Hangup">
     <InteractablesButton
       class="right"
       type="danger"
       size="small"
-      :action="() => hangUp()"
-    >
+      :action="() => hangUp()">
       <phone-off-icon size="1.2x" />
     </InteractablesButton>
   </div>

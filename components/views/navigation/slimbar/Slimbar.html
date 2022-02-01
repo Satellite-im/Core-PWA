@@ -1,10 +1,7 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
-    <div
-      data-tooltip="Home"
-      v-on:click="$router.push('/chat/direct')"
-      class="circle-group has-tooltip-right has-tooltip-primary"
-    >
+    <div data-tooltip="Home" v-on:click="$router.push('/chat/direct')"
+      class="circle-group has-tooltip-right has-tooltip-primary">
       <UiCircle type="icon" :size="40">
         <satellite-icon size="0.75x" />
       </UiCircle>
@@ -13,70 +10,39 @@
       <div id="list-container">
         <UiHorizontalRule v-if="unreads.length > 0" />
 
-        <div
-          class="unread has-tooltip-right has-tooltip-primary"
-          v-for="user in unreads"
-          v-on:click="$router.push('/chat/direct')"
-          :data-tooltip="user.name"
-        >
+        <div class="unread has-tooltip-right has-tooltip-primary" v-for="user in unreads"
+          v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">
           <UiCircle type="random" :size="40" :seed="user.address" />
           <span class="label">{{user.count}}</span>
         </div>
 
         <UiHorizontalRule v-if="unreads.length > 0" />
-        <div
-          class="server has-tooltip-right has-tooltip-primary"
-          v-for="server in servers"
-          v-on:click="$router.push('/server/chat')"
-          :data-tooltip="server.name"
-        >
-          <UiCircle
-            type="random"
-            :size="40"
-            :seed="server.address"
-            :name="server.name"
-          />
+        <div class="server has-tooltip-right has-tooltip-primary" v-for="server in servers"
+          v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
+          <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
         </div>
+
       </div>
     </UiScroll>
     <div id="list-container" v-else>
-      <div
-        class="unread has-tooltip-bottom has-tooltip-primary"
-        v-for="user in unreads"
-        v-on:click="$router.push('/chat/direct')"
-        :data-tooltip="user.name"
-      >
+      <div class="unread has-tooltip-bottom has-tooltip-primary" v-for="user in unreads"
+        v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">
         <UiCircle type="random" :size="40" :seed="user.address" />
         <span class="label">{{user.count}}</span>
       </div>
-      <div
-        class="server has-tooltip-bottom has-tooltip-primary"
-        v-for="server in servers"
-        v-on:click="$router.push('/server/chat')"
-        :data-tooltip="server.name"
-      >
-        <UiCircle
-          type="random"
-          :size="40"
-          :seed="server.address"
-          :name="server.name"
-        />
+      <div class="server has-tooltip-bottom has-tooltip-primary" v-for="server in servers"
+        v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
+        <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
       </div>
     </div>
-    <div
-      class="circle-group has-tooltip-right has-tooltip-primary"
-      :data-tooltip="$t('servers.new_server')"
-      v-on:click="openModal"
-    >
+    <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('servers.new_server')"
+      v-on:click="openModal">
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
       </UiCircle>
     </div>
-    <div
-      class="circle-group has-tooltip-right has-tooltip-primary"
-      :data-tooltip="$t('pages.settings.settings')"
-      v-on:click="$store.commit('ui/toggleSettings', true)"
-    >
+    <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('pages.settings.settings')"
+      v-on:click="$store.commit('ui/toggleSettings', true)">
       <UiCircle type="icon" :size="40">
         <settings-icon size="0.75x" />
       </UiCircle>

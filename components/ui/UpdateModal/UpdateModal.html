@@ -1,20 +1,16 @@
-<div class="update-modal">
-  <UiModal nopad>
+<div class="update-modal" >
+  <UiModal
+    nopad
+  >
     <div class="update-content" v-click-outside="toggleVisibility">
       <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
       <UiSpacer :height="50" />
-      <TypographyTitle
-        :size="6"
-        :text="`Update ${releaseData.tag_name} is Here!`"
-      />
+      <TypographyTitle :size="6" :text="`Update ${releaseData.tag_name} is Here!`" />
       <pre>
         <vue-markdown :source="releaseData.body" :breaks="false"/>
       </pre>
-      <TypographyText
-        v-if="requiresUpdate"
-        :text="$t('modal.update_modal.update_required')"
-      />
-
+      <TypographyText v-if="requiresUpdate" :text="$t('modal.update_modal.update_required')" />
+      
       <UiSpacer :height="50" />
       <div>
         <!-- <InteractablesButton

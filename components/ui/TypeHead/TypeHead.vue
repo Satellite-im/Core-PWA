@@ -68,10 +68,10 @@ export default Vue.extend({
     }
   },
   watch: {
-    list() {
+    list: function () {
       this.update()
     },
-    searchText() {
+    searchText: function () {
       this.update()
     },
   },

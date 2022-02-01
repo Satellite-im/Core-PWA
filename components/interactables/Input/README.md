@@ -1,17 +1,15 @@
 # Description
-
 Generic input component.
 
 # Usage
-
 ```vue
-<InteractablesInput
-  v-model="something"
-  delete-icon="true"
-  size="small"
-  input-kind="number"
-  type="dark"
-/>
+  <InteractablesInput
+    v-model="something"
+    delete-icon="true"
+    size="small"
+    input-kind="number"
+    type="dark"
+  />
 ```
 
 # Props

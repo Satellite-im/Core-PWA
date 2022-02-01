@@ -52,7 +52,7 @@ export default Vue.extend({
       let files = this.files.tree
       for (let i = 0; i < this.$data.path.length; i++) {
         files = files.children.filter(
-          (item: any) => item.name === this.$data.path[i],
+          (item: any) => item.name === this.$data.path[i]
         )[0]
       }
       return files

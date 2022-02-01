@@ -1,106 +1,86 @@
-import { expect } from '@jest/globals'
 import * as FriendsProgram_layout from '~/libraries/Solana/FriendsProgram/FriendsProgram.layout'
+import { expect } from '@jest/globals'
 
-describe('FriendsProgram_layout.encodeInstructionData', () => {
-  test('0', () => {
-    const inst: any = new Uint8Array([1, 1])
-    const inst2: any = new Uint8Array([-100, 0])
-    const inst3: any = new Uint8Array([-100, 1])
-    const inst4: any = new Uint8Array([0, 0])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      acceptRequest: { tex: object },
+describe("FriendsProgram_layout.encodeInstructionData", () => {
+    test("0", () => {
+        let inst: any = new Uint8Array([1, 1])
+        let inst2: any = new Uint8Array([-100, 0])
+        let inst3: any = new Uint8Array([-100, 1])
+        let inst4: any = new Uint8Array([0, 0])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ acceptRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('1', () => {
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      removeRequest: {},
+    test("1", () => {
+        let result: any = FriendsProgram_layout.encodeInstructionData({ removeRequest: {} })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('2', () => {
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      removeFriend: {},
+    test("2", () => {
+        let result: any = FriendsProgram_layout.encodeInstructionData({ removeFriend: {} })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('3', () => {
-    const inst: any = new Uint8Array([-1, 1])
-    const inst2: any = new Uint8Array([0, -1])
-    const inst3: any = new Uint8Array([-1, -100])
-    const inst4: any = new Uint8Array([0, -100])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      makeRequest: { tex: object },
+    test("3", () => {
+        let inst: any = new Uint8Array([-1, 1])
+        let inst2: any = new Uint8Array([0, -1])
+        let inst3: any = new Uint8Array([-1, -100])
+        let inst4: any = new Uint8Array([0, -100])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ makeRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('4', () => {
-    const inst: any = new Uint8Array([0, -1])
-    const inst2: any = new Uint8Array([100, -1])
-    const inst3: any = new Uint8Array([0, -100])
-    const inst4: any = new Uint8Array([0, -1])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      makeRequest: { tex: object },
+    test("4", () => {
+        let inst: any = new Uint8Array([0, -1])
+        let inst2: any = new Uint8Array([100, -1])
+        let inst3: any = new Uint8Array([0, -100])
+        let inst4: any = new Uint8Array([0, -1])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ makeRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 })
 
-describe('FriendsProgram_layout.encodeInstructionData', () => {
-  test('0', () => {
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      removeFriend: {},
+describe("FriendsProgram_layout.encodeInstructionData", () => {
+    test("0", () => {
+        let result: any = FriendsProgram_layout.encodeInstructionData({ removeFriend: {} })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('1', () => {
-    const inst: any = new Uint8Array([0, 100])
-    const inst2: any = new Uint8Array([100, 1])
-    const inst3: any = new Uint8Array([1, 100])
-    const inst4: any = new Uint8Array([1, -1])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      makeRequest: { tex: object },
+    test("1", () => {
+        let inst: any = new Uint8Array([0, 100])
+        let inst2: any = new Uint8Array([100, 1])
+        let inst3: any = new Uint8Array([1, 100])
+        let inst4: any = new Uint8Array([1, -1])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ makeRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('2', () => {
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      denyRequest: {},
+    test("2", () => {
+        let result: any = FriendsProgram_layout.encodeInstructionData({ denyRequest: {} })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('3', () => {
-    const inst: any = new Uint8Array([0, -100])
-    const inst2: any = new Uint8Array([-100, -1])
-    const inst3: any = new Uint8Array([-100, 1])
-    const inst4: any = new Uint8Array([100, 1])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      makeRequest: { tex: object },
+    test("3", () => {
+        let inst: any = new Uint8Array([0, -100])
+        let inst2: any = new Uint8Array([-100, -1])
+        let inst3: any = new Uint8Array([-100, 1])
+        let inst4: any = new Uint8Array([100, 1])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ makeRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('4', () => {
-    const inst: any = new Uint8Array([-1, 100])
-    const inst2: any = new Uint8Array([1, -1])
-    const inst3: any = new Uint8Array([100, 0])
-    const inst4: any = new Uint8Array([-1, -1])
-    const object: any = [inst, inst2, inst3, inst4]
-    const result: any = FriendsProgram_layout.encodeInstructionData({
-      makeRequest: { tex: object },
+    test("4", () => {
+        let inst: any = new Uint8Array([-1, 100])
+        let inst2: any = new Uint8Array([1, -1])
+        let inst3: any = new Uint8Array([100, 0])
+        let inst4: any = new Uint8Array([-1, -1])
+        let object: any = [inst, inst2, inst3, inst4]
+        let result: any = FriendsProgram_layout.encodeInstructionData({ makeRequest: { tex: object } })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 })

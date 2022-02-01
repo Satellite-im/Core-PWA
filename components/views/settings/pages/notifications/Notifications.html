@@ -11,25 +11,18 @@
       />
     </div>
   </div>
-  <TypographyLabel
-    :text="$t('pages.settings.notifications.labels.current_platform')"
-  /><TypographyText :text="Platform" />
+  <TypographyLabel :text="$t('pages.settings.notifications.labels.current_platform')"/><TypographyText :text="Platform"/>
   <br />
-
+  
   <div class="columns is-desktop">
     <div class="column">
+
       <span v-if="Platform === 'web' || Platform === 'electron'">
         <span v-if="Platform === 'web'">
           <TypographyLabel :text="$t('pages.settings.notifications.enabled')" />
           <br />
-          <TypographyText
-            v-if="NotificationStatus === 'granted'"
-            :text="$t('pages.settings.notifications.web.granted')"
-          />
-          <TypographyText
-            v-if="NotificationStatus === 'denied'"
-            :text="$t('pages.settings.notifications.web.denied')"
-          />
+          <TypographyText v-if="NotificationStatus === 'granted'" :text="$t('pages.settings.notifications.web.granted')"/>
+          <TypographyText v-if="NotificationStatus === 'denied'" :text="$t('pages.settings.notifications.web.denied')"/>
         </span>
 
         <!-- 
@@ -42,9 +35,7 @@
           :action="requestPermission"
         /> -->
         <br />
-        <TypographyLabel
-          :text="$t('pages.settings.notifications.send_label')"
-        />
+        <TypographyLabel :text="$t('pages.settings.notifications.send_label')" />
         <InteractablesInputGroup
           v-if="NotificationStatus === 'granted' || Platform === 'electron'"
           class="modal-input"
@@ -53,7 +44,7 @@
           v-model="$data.NotificationText"
           :placeholder="$t('pages.settings.notifications.send_placeholder')"
           :action="sendNotification"
-        >
+          >
           <arrow-right-icon size="1x" />
         </InteractablesInputGroup>
       </span>
@@ -70,6 +61,6 @@
       </span>
     </div>
   </div>
-
+  
   <SettingsPagesNotificationsSounds />
 </div>

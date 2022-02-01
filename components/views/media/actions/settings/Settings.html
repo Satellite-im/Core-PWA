@@ -1,8 +1,11 @@
-<div id="media-settings" :data-tooltip="$t('controls.not_available')">
+<div
+  id="media-settings"
+  :data-tooltip="$t('controls.not_available')"
+>
   <ul id="settings-menu" v-if="menuOpen" ref="menu" v-click-outside="hideMenu">
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
-        <div class="word">{{$t('media.settings.audio_quality')}}</div>
+        <div class="word">{{$t('media.settings.audio_quality')}} </div>
         <chevron-right-icon class="icon" size="0.5x" />
       </div>
       <div class="item-body">
@@ -48,5 +51,5 @@
     </li>
   </ul>
 
-  <settings-icon size="1x" disabled />
+  <settings-icon size="1x" disabled/>
 </div>

@@ -1,49 +1,34 @@
+import * as SimpleWrap from "~/utilities/SimpleWrap"
 import { expect } from '@jest/globals'
-import * as SimpleWrap from '~/utilities/SimpleWrap'
 
-describe('SimpleWrap.SimpleWrap', () => {
-  test('0', () => {
-    const result: any = SimpleWrap.SimpleWrap('This is a Text', {
-      replace: 'path/to/file.ext\\\\$1\\\\$1C:\\\\path\\to\\file.ext',
-      tag: 'Michael',
+describe("SimpleWrap.SimpleWrap", () => {
+    test("0", () => {
+        let result: any = SimpleWrap.SimpleWrap("This is a Text", { replace: "path/to/file.ext\\\\$1\\\\$1C:\\\\path\\to\\file.ext", tag: "Michael" })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('1', () => {
-    const result: any = SimpleWrap.SimpleWrap('foo bar', {
-      replace: '\\\\$1path/to/file.ext',
-      tag: 'Jean-Philippe',
+    test("1", () => {
+        let result: any = SimpleWrap.SimpleWrap("foo bar", { replace: "\\\\$1path/to/file.ext", tag: "Jean-Philippe" })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('2', () => {
-    const result: any = SimpleWrap.SimpleWrap('Hello, world!', {
-      replace: 'path/to/file.ext\\\\$1\\\\$1C:\\\\path\\to\\file.ext',
-      tag: 'Pierre Edouard',
+    test("2", () => {
+        let result: any = SimpleWrap.SimpleWrap("Hello, world!", { replace: "path/to/file.ext\\\\$1\\\\$1C:\\\\path\\to\\file.ext", tag: "Pierre Edouard" })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('3', () => {
-    const result: any = SimpleWrap.SimpleWrap('foo bar', {
-      replace: '\\\\$1',
-      tag: 'Jean-Philippe',
+    test("3", () => {
+        let result: any = SimpleWrap.SimpleWrap("foo bar", { replace: "\\\\$1", tag: "Jean-Philippe" })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('4', () => {
-    const result: any = SimpleWrap.SimpleWrap('Hello, world!', {
-      replace: 'C:\\\\path\\to\\file.ext\\\\$1',
-      tag: 'Pierre Edouard',
+    test("4", () => {
+        let result: any = SimpleWrap.SimpleWrap("Hello, world!", { replace: "C:\\\\path\\to\\file.ext\\\\$1", tag: "Pierre Edouard" })
+        expect(result).toMatchSnapshot()
     })
-    expect(result).toMatchSnapshot()
-  })
 
-  test('5', () => {
-    const result: any = SimpleWrap.SimpleWrap('', { replace: '', tag: '' })
-    expect(result).toMatchSnapshot()
-  })
+    test("5", () => {
+        let result: any = SimpleWrap.SimpleWrap("", { replace: "", tag: "" })
+        expect(result).toMatchSnapshot()
+    })
 })

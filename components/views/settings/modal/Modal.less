@@ -1,3 +1,4 @@
+
 p {
   font-family: @secondary-font;
   font-size: 16px;
@@ -23,11 +24,11 @@ p {
     box-sizing: border-box;
   }
 
-  .sidebar {
+  .sidebar {      
     width: @sidebar-size;
     box-sizing: border-box;
   }
-
+  
   .not-sidebar {
     width: 100%;
     box-sizing: border-box;
@@ -56,18 +57,16 @@ p {
   height: @full;
   font-size: @text-size;
   transition: margin-left @animation-speed;
-
-  .title,
-  .subtitle {
+  
+  .title, .subtitle {
     font-size: @text-size;
   }
   .ps {
-    width: 100%;
+    width:100%;
     padding: @normal-spacing * 2;
     margin: 0;
   }
-  .is-primary.input,
-  .is-dark.input {
+  .is-primary.input, .is-dark.input {
     background: @semitransparent-lightest-gradient !important;
   }
 }
@@ -81,6 +80,7 @@ p {
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
+
   .settings-modal #settings {
     width: 100vw;
     height: 100vh;

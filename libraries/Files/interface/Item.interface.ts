@@ -1,4 +1,4 @@
-import { Directory } from '../Directory'
+import { Directory } from "../Directory"
 
 export interface ItemInterface {
   path: string

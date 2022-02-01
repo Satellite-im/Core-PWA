@@ -140,8 +140,9 @@ export default Vue.extend({
               ),
               aspectRatioClass: 'iframe-container-16-9',
             }
+          } else {
+            return {}
           }
-          return {}
         })
       }
     },

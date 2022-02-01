@@ -10,18 +10,16 @@ export default Vue.extend({
     realm: {
       type: Object as PropType<Realm>,
       default: {},
-    },
+    }
   },
   computed: {
-    networkName() {
-      return (
-        this.$props.realm.id.charAt(0).toUpperCase() +
-        this.$props.realm.id.slice(1)
-      )
-    },
-  },
+    networkName() { 
+      return this.$props.realm.id.charAt(0).toUpperCase() + this.$props.realm.id.slice(1)
+    }
+  }
 })
 </script>
+
 
 <style lang="less">
 .inline-realm {

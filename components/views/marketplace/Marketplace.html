@@ -16,25 +16,13 @@
     </div>
     <div class="buttons-bar">
       <InteractablesButtonGroup v-model="subject" :action="changeSubject">
-        <InteractablesButton
-          :text="$t('market_place.glyphs')"
-          size="small"
-          type="dark"
-        >
+        <InteractablesButton :text="$t('market_place.glyphs')"  size="small" type="dark">
           <smile-icon size="1x" />
         </InteractablesButton>
-        <InteractablesButton
-          :text="$t('market_place.themes')"
-          size="small"
-          type="dark"
-        >
+        <InteractablesButton :text="$t('market_place.themes')"  size="small" type="dark">
           <layers-icon size="1x" />
         </InteractablesButton>
-        <InteractablesButton
-          :text="$t('market_place.nfts')"
-          size="small"
-          type="dark"
-        >
+        <InteractablesButton :text="$t('market_place.nfts')"  size="small" type="dark">
           <box-icon size="1x" />
         </InteractablesButton>
       </InteractablesButtonGroup>
