@@ -10,13 +10,12 @@ describe('Test class Logger', () => {
     const data1 = undefined!
     const level1 = undefined!
 
-    //    Method call
+    // Method call
     const logger = new Logger(debug1)
     logger.log(tag1, desc1, data1, level1)
 
     expect(console.log).toBeCalledTimes(1)
   })
-
   it('Logger-log with data', () => {
     // Arguments
     const debug1 = undefined!
