@@ -1,9 +1,11 @@
 # Description
+
 Generic Title component.
 
 # Usage
+
 ```vue
-    <TypographyTitle :size="1" text="Satellite-Absolute" />
+<TypographyTitle :size="1" text="Satellite-Absolute" />
 ```
 
 # Props

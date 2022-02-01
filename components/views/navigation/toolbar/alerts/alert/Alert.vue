@@ -10,13 +10,13 @@ export default Vue.extend({
     alert: {
       type: Object as PropType<Alert>,
       required: true,
-      default: {}
+      default: {},
     },
   },
   data() {
     return {
       localAlert: this.$props.alert,
-      hidden: false
+      hidden: false,
     }
   },
   mounted() {
@@ -30,10 +30,10 @@ export default Vue.extend({
       this.$Alerts.delete(this.$props.alert.id)
       this.$data.hidden = true
       setTimeout(() => {
-          this.$emit('sync', this.$Alerts.all)
+        this.$emit('sync', this.$Alerts.all)
       }, 250)
     },
-  }
+  },
 })
 </script>
 

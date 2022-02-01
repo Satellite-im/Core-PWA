@@ -1,9 +1,9 @@
-import * as state from '~/store/files/state'
 import { expect } from '@jest/globals'
+import * as state from '~/store/files/state'
 
-describe("state.default", () => {
-    test("0", () => {
-        let result: any = state.default()
-        expect(result).toMatchSnapshot()
-    })
+describe('state.default', () => {
+  test('0', () => {
+    const result: any = state.default()
+    expect(result).toMatchSnapshot()
+  })
 })

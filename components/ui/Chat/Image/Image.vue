@@ -1,8 +1,8 @@
 <template src="./Image.html" />
 <script lang="ts">
-import Vue, {PropType} from 'vue'
-import {FileMessage, ImageMessage} from "~/types/textile/mailbox";
+import Vue, { PropType } from 'vue'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
+import { FileMessage, ImageMessage } from '~/types/textile/mailbox'
 
 export default Vue.extend({
   components: {
@@ -23,7 +23,7 @@ export default Vue.extend({
       default: false,
     },
     image: {
-      type: Object as PropType<ImageMessage>
+      type: Object as PropType<ImageMessage>,
     },
   },
   data() {
@@ -44,16 +44,13 @@ export default Vue.extend({
      * @param bytes bytes of current file
      * @example bytesToSize(this.file.size)
      */
-    bytesToSize (bytes: number) {
+    bytesToSize(bytes: number) {
       const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
       if (bytes === 0) return '0 Bytes'
       const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
     },
-    async downloadImage(imageURL: string) {
-
-
-    },
+    async downloadImage(imageURL: string) {},
     /**
      * @method openImage DocsTODO
      * @description

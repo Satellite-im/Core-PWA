@@ -1,17 +1,26 @@
 <div :class="`inline-realm ${realm.disabled ? 'realm-disabled' : ''}`">
   <div class="status">
-    <UiCircle 
+    <UiCircle
       type="icon"
       :icon="realm.disabled ? 'x' : 'check'"
       :color="realm.disabled ? 'rgb(22, 22, 30)' : '#00b894'"
-      :size="38" />
+      :size="38"
+    />
   </div>
   <div class="details">
     <TypographySubtitle :text="realm.nickname" :size="6" />
-    <TypographySubtitle :text="`Running on ${networkName}`" class="detail" :size="6" />
+    <TypographySubtitle
+      :text="`Running on ${networkName}`"
+      class="detail"
+      :size="6"
+    />
     <div>
       <TypographySubtitle text="Available" class="detail" :size="6" />
-      <TypographySubtitle :text="(!realm.disabled).toString()" :class="`detail ${realm.disabled ? 'color-danger' : 'green'}`" :size="6" />
+      <TypographySubtitle
+        :text="(!realm.disabled).toString()"
+        :class="`detail ${realm.disabled ? 'color-danger' : 'green'}`"
+        :size="6"
+      />
     </div>
   </div>
 </div>

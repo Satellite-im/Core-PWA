@@ -5,16 +5,28 @@
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord :word="word" v-if="isOdd(i + 1)" :number="i + 1" />
+          <TypographyNumberedWord
+            :word="word"
+            v-if="isOdd(i + 1)"
+            :number="i + 1"
+          />
         </div>
       </div>
       <div class="column">
         <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord :word="word" v-if="!isOdd(i + 1)" :number="i + 1" />
+          <TypographyNumberedWord
+            :word="word"
+            v-if="!isOdd(i + 1)"
+            :number="i + 1"
+          />
         </div>
       </div>
     </div>
     <UiSpacer :size="45" />
-    <InteractablesButton full-width :text="$t('pages.phrase.done')" :action="confirm"/>
+    <InteractablesButton
+      full-width
+      :text="$t('pages.phrase.done')"
+      :action="confirm"
+    />
   </div>
 </div>

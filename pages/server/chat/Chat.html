@@ -1,11 +1,7 @@
 <div id="server-direct">
   <div id="encrypted-yellow">
     <key-icon size="1x" />
-    &nbsp;
-    {{$t('conversation.encrypted')}}
+    &nbsp; {{$t('conversation.encrypted')}}
   </div>
-  <Conversation
-    :messages="ui.messages"
-    :loading="loading"
-  />
+  <Conversation :messages="ui.messages" :loading="loading" />
 </div>
