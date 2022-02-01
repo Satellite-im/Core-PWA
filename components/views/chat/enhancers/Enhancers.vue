@@ -21,17 +21,17 @@ export default Vue.extend({
     ImageIcon,
     EmojiPicker,
   },
-  props: {
-    sidebar: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       search: '',
       clickEvent: () => {},
     }
+  },
+  props: {
+    sidebar: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapState(['ui']),
@@ -112,7 +112,7 @@ export default Vue.extend({
     setRoute(route: string) {
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: !!this.$device.isMobile,
+        floating: this.$device.isMobile ? true : false,
         route,
       })
     },
@@ -136,7 +136,7 @@ export default Vue.extend({
       ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
-          floating: !!this.$device.isMobile,
+          floating: this.$device.isMobile ? true : false,
         })
       }
       if (this.ui.settingReaction.status) {

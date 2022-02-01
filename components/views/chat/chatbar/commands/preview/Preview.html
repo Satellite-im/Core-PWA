@@ -1,7 +1,7 @@
 <div
   id="command-preview"
   v-if="hasCommand"
-  :class="ui.chatbarContent.id ? 'has-reply' : ''"
+  :class="{'has-reply': ui.replyChatbarContent.id, 'with-sidebar': ui.showSidebar}"
 >
   <TypographySubtitle :size="6" text="Commands" />
   <div id="commands" class="hidden-scroll" v-scroll-lock="true">

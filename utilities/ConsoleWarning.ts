@@ -9,7 +9,7 @@
 import { EnvInfo } from './EnvInfo'
 
 export const ConsoleWarning = (clientVersion: string, currentState: object) => {
-  const envinfo = new EnvInfo()
+  let envinfo = new EnvInfo();
 
   console.log(
     '%c⚠️ Do not share anything from console with others. Do not run commands sent by others online.',

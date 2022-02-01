@@ -2,10 +2,7 @@
   <div class="columns is-desktop">
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.subtitle')"
-      />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.accounts.subtitle')" />
     </div>
   </div>
 
@@ -17,8 +14,7 @@
         readonly
         type="primary"
         :action="() => $toast.show($t('ui.copied'))"
-        :text="accounts.active"
-      >
+        :text="accounts.active">
         <clipboard-icon size="1x" />
       </InteractablesInputGroup>
     </div>
@@ -27,7 +23,10 @@
   <div class="columns is-desktop">
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
-      <InteractablesInput readonly type="primary" :text="accounts.gasPrice" />
+      <InteractablesInput 
+        readonly
+        type="primary"
+        :text="accounts.gasPrice" />
     </div>
   </div>
 
@@ -35,14 +34,8 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.accounts.devices')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.no_devices')"
-      />
+      <TypographyTitle :size="6" :text="$t('pages.settings.accounts.devices')" />
+      <TypographySubtitle :size="6" :text="$t('pages.settings.accounts.no_devices')" />
     </div>
   </div>
 

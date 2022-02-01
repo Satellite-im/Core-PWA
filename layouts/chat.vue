@@ -15,7 +15,7 @@
       }`"
     >
       <UiGlobal />
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -27,7 +27,7 @@
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
-            :show-menu="toggleMenu"
+            :showMenu="toggleMenu"
           />
         </swiper-slide>
         <swiper-slide
@@ -35,10 +35,10 @@
         >
           <menu-icon
             class="toggle--sidebar"
+            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
-            @click="toggleMenu"
           />
           <Toolbar
             id="toolbar"
@@ -63,8 +63,9 @@
             :contents="ui.messages"
             :prevent-scroll-offset="500"
             :class="
-              $store.state.friends.all.find(
-                (friend) => friend.address === $store.state.webrtc.activeCall,
+              this.$store.state.friends.all.find(
+                (friend) =>
+                  friend.address === this.$store.state.webrtc.activeCall,
               )
                 ? 'media-open'
                 : 'media-unopen'
@@ -78,7 +79,7 @@
           <ChatbarCommandsPreview :message="ui.chatbarContent" />
           <Chatbar :recipient="recipient" />
         </swiper-slide>
-        <swiper-slide v-if="$data.asidebar" class="aside-container">
+        <swiper-slide class="aside-container" v-if="$data.asidebar">
           <GroupAside
             :toggle="() => ($data.asidebar = !$data.asidebar)"
             :selected-group="
@@ -100,9 +101,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
+
+import { MenuIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -113,14 +115,14 @@ export default Vue.extend({
   middleware: ['authenticated'],
   data() {
     return {
-      sidebar: !this.$device.isMobile,
+      sidebar: this.$device.isMobile ? false : true,
       asidebar: !this.$device.isMobile,
       swiperOption: {
         initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        noSwiping: !this.$device.isMobile,
-        allowTouchMove: !!this.$device.isMobile,
+        noSwiping: this.$device.isMobile ? false : true,
+        allowTouchMove: this.$device.isMobile ? true : false,
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {

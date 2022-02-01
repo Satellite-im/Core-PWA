@@ -36,7 +36,7 @@ export default class SearchQuery {
   insertCommand(
     command: SearchCommand,
     value: string,
-    position: number,
+    position: number
   ): SearchQueryItem | null {
     if (position >= this.queryItems.length) {
       return null
@@ -198,7 +198,7 @@ export default class SearchQuery {
   setQueryByHTML(html: HTMLElement) {
     this.setQuery(
       html.textContent ? html.textContent : '',
-      this.caretPosition(html),
+      this.caretPosition(html)
     )
   }
 
@@ -213,7 +213,7 @@ export default class SearchQuery {
         (queryItem) =>
           queryItem.command +
           (queryItem.command !== SearchCommand.Empty ? ':' : '') +
-          queryItem.value,
+          queryItem.value
       )
       .join(' ')
     return ret

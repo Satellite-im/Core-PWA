@@ -26,8 +26,8 @@ export default Vue.extend({
     data: {
       type: Object as PropType<SearchResultItem>,
       default: {} as SearchResultItem,
-    },
-  },
+    }
+  }
 })
 </script>
 <style scoped lang="less">

@@ -1,9 +1,7 @@
 # Description
-
 Generic input group component.
 
 # Usage
-
 ```vue
 <InteractablesInputGroup
   v-model="input2Text"

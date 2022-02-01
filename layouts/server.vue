@@ -14,7 +14,7 @@
     >
       <UiGlobal />
 
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper class="swiper" :options="swiperOption" ref="swiper">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -24,7 +24,7 @@
           />
           <ServerSidebar
             :toggle="() => ($data.sidebar = !$data.sidebar)"
-            :show-menu="toggleMenu"
+            :showMenu="toggleMenu"
             :sidebar="sidebar"
           />
           <Enhancers />

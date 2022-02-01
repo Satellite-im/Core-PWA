@@ -1,7 +1,8 @@
 import { without } from 'lodash'
-import { EnhancerInfo, Flair, Theme, UIState, RecentGlyph } from './types'
+import { EnhancerInfo, Flair, Theme, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
+import { RecentGlyph } from '~/store/ui/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {

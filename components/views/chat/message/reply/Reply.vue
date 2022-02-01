@@ -7,10 +7,7 @@ import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 
 import { UIMessage, Group } from '~/types/messaging'
-import {
-  getUsernameFromState,
-  getFullUserInfoFromState,
-} from '~/utilities/Messaging'
+import { getUsernameFromState, getFullUserInfoFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
   components: {
@@ -41,9 +38,7 @@ export default Vue.extend({
     return { showReplies: false, replyHover: '' }
   },
   mounted() {
-    const findItem = this.setChatReply.find(
-      (item: any) => item.replyId === this.$props.message.id,
-    )
+    let findItem = this.setChatReply.find((item: any) => item.replyId === this.$props.message.id)
 
     if (findItem) {
       this.$data.showReplies = findItem.value
@@ -57,7 +52,7 @@ export default Vue.extend({
       },
       get() {
         return this.chat.replies
-      },
+      }
     },
     /**
      * makeReplyText: generates the "Replies from _____" text in a chat
@@ -65,13 +60,13 @@ export default Vue.extend({
      */
     makeReplyText() {
       const replyLength = Object.keys(this.$props.message.replies).length
-      const baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
+      let baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
 
       const getNamesList = (
         replies: any[],
         limit = 2,
         initialText = '',
-        separator = ' and ',
+        separator = ' and '
       ) =>
         replies
           .slice(0, limit)
@@ -80,7 +75,7 @@ export default Vue.extend({
               text +
               (i > 0 && i < limit ? separator : '') +
               getUsernameFromState(reply.from, this.$store.state),
-            initialText,
+            initialText
           )
 
       const names = getNamesList(this.$props.message.replies, 2, baseReply)
@@ -122,7 +117,7 @@ export default Vue.extend({
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: !!this.$device.isMobile,
+        floating: this.$device.isMobile ? true : false,
         position: [e.clientX, e.clientY],
         containerWidth: this.$el.clientWidth,
       })
@@ -134,10 +129,7 @@ export default Vue.extend({
      * @example
      */
     showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(
-        this.$props.message.from,
-        this.$store.state,
-      )
+      const selectedUser = getFullUserInfoFromState(this.$props.message.from, this.$store.state)
       this.$store.commit('ui/setQuickProfilePosition', e)
       this.$store.commit('ui/quickProfile', selectedUser)
     },
@@ -151,7 +143,7 @@ export default Vue.extend({
 
       this.setChatReply = {
         replyId: this.$props.message.id,
-        value: this.$data.showReplies,
+        value: this.$data.showReplies
       }
     },
   },

@@ -2,9 +2,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { SunIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { Realm } from '~/types/ui/realm'
+
+import { SunIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {

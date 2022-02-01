@@ -30,16 +30,10 @@ export default Vue.extend({
      * @example Intl.DateTimeFormat().resolvedOptions().timeZone
      */
     getUserTimeZone() {
-      if (
-        !this.info.locations.includes(
-          Intl.DateTimeFormat().resolvedOptions().timeZone,
-        )
-      ) {
-        this.info.locations.push(
-          Intl.DateTimeFormat().resolvedOptions().timeZone,
-        )
+      if (this.info.locations.indexOf(Intl.DateTimeFormat().resolvedOptions().timeZone) === -1) {
+      this.info.locations.push(Intl.DateTimeFormat().resolvedOptions().timeZone)
       }
-    },
+      },
   },
 })
 </script>

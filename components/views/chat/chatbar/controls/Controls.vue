@@ -12,12 +12,6 @@ import {
 } from 'satellite-lucide-icons'
 
 export default Vue.extend({
-  components: {
-    BanknoteIcon,
-    SmileIcon,
-    BoxSelectIcon,
-    ArrowRightIcon,
-  },
   props: {
     sendMessage: {
       type: Function,
@@ -25,6 +19,12 @@ export default Vue.extend({
     editable: {
       type: Boolean,
     },
+  },
+  components: {
+    BanknoteIcon,
+    SmileIcon,
+    BoxSelectIcon,
+    ArrowRightIcon,
   },
   computed: {
     ...mapState(['ui']),

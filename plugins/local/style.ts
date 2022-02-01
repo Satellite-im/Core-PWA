@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-Vue.component('VStyle', {
-  render(createElement) {
+Vue.component('v-style', {
+  render: function (createElement) {
     return createElement('style', this.$slots.default)
-  },
+  }
 })

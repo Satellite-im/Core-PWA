@@ -1,7 +1,7 @@
 <template>
   <div class="sounds-item">
     <TypographyTitle :size="7" :text="title" />
-    <InteractablesSwitch :is-enabled="value" @toggle="toggle" />
+    <InteractablesSwitch :isEnabled="value" @toggle="toggle" />
   </div>
 </template>
 
@@ -31,12 +31,12 @@ export default Vue.extend({
     }
   },
   computed: {},
-  mounted(): void {},
   methods: {
     toggle(value: Boolean) {
       this.$emit('toggle', value)
     },
   },
+  mounted(): void {},
 })
 </script>
 

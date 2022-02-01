@@ -1,5 +1,6 @@
 <template>
-  <div class="spacer" :style="`height: ${height}px`" />
+  <div
+class="spacer" :style="`height: ${height}px`" />
 </template>
 <script lang="ts">
 import Vue from 'vue'

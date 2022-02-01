@@ -4,9 +4,7 @@ video {
   overflow: hidden;
 }
 
-.plyr__video-wrapper,
-.plyr__poster,
-.plyr {
+.plyr__video-wrapper, .plyr__poster, .plyr {
   &:extend(.round-corners);
 }
 
@@ -27,9 +25,7 @@ video {
   color: @secondary-text !important;
   padding: 0;
 
-  &:hover,
-  .plyr_control,
-  span {
+  &:hover, .plyr_control, span {
     color: @secondary-text !important;
   }
   &::after {
@@ -41,7 +37,7 @@ video {
   &:extend(.blur);
   background: @semitransparent-dark-gradient !important;
   color: @secondary-text !important;
-
+  
   &::before {
     border-top-color: @midground !important;
   }
@@ -61,7 +57,7 @@ video {
   background: @primary-color !important;
 }
 
-.plyr--full-ui input[type='range'] {
+.plyr--full-ui input[type=range] {
   color: @primary-color !important;
 }
 
