@@ -16,7 +16,7 @@
             :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"
             >{{ link.text }}</NuxtLink
           >
-          <a 
+          <a
             v-else
             v-on:click="customAction(link.to)"
             :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"

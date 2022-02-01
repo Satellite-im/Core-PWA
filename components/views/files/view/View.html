@@ -9,7 +9,8 @@
     <div class="controls">
       <div
         :data-tooltip="$t('ui.unpin')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+      >
         <archive-icon size="1x" />
       </div>
       <a
@@ -17,18 +18,21 @@
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
         :href="file.location"
         target="_blank"
-        :download="file.name">
+        :download="file.name"
+      >
         <download-icon size="1x" />
       </a>
       <div
         :data-tooltip="$t('controls.share_link')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+      >
         <link-icon size="1x" />
       </div>
       <div
         :data-tooltip="$t('ui.close')"
         v-on:click="close"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+      >
         <x-icon size="1x" />
       </div>
     </div>
@@ -38,11 +42,12 @@
   </div>
   <div v-else class="no-preview">
     <a
-        :data-tooltip="$t('controls.download')"
-        class="has-tooltip has-tooltip-primary has-tooltip-top"
-        :href="file.location"
-        target="_blank"
-        :download="file.name">
+      :data-tooltip="$t('controls.download')"
+      class="has-tooltip has-tooltip-primary has-tooltip-top"
+      :href="file.location"
+      target="_blank"
+      :download="file.name"
+    >
       <download-icon size="1x" class="file-icon" />
     </a>
     <TypographyTitle :size="4" :text="file.name" />

@@ -13,10 +13,18 @@ export const Touch = {
     sidebarSwipeHandler(currThis: any) {
       return function (direction: string) {
         const showSettings = currThis.$store.state.ui.showSettings
-        if (direction === 'left' && currThis.$device.isMobile && !showSettings) {
+        if (
+          direction === 'left' &&
+          currThis.$device.isMobile &&
+          !showSettings
+        ) {
           currThis.sidebar = false
         }
-        if (direction === 'right' && currThis.$device.isMobile && !showSettings) {
+        if (
+          direction === 'right' &&
+          currThis.$device.isMobile &&
+          !showSettings
+        ) {
           currThis.sidebar = true
         }
       }

@@ -4,7 +4,7 @@
     v-click-outside="toggleWalletMini"
     :class="`${showSidebar ? 'side-open' : 'side-close'}`"
   >
-    <WalletMiniBody :updateMethod="updateMethod" />
+    <WalletMiniBody :update-method="updateMethod" />
   </div>
 </template>
 <script lang="ts">

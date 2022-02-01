@@ -1,5 +1,5 @@
-import { Item } from "../../abstracts/Item.abstract"
-import { Fil } from "../../Fil"
+import { Item } from '../../abstracts/Item.abstract'
+import { Fil } from '../../Fil'
 
 export interface RFMInterface {
   updateIndex(index: FileSystem): void

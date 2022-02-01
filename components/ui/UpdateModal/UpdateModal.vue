@@ -3,9 +3,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
 import { RefreshCwIcon, XIcon } from 'satellite-lucide-icons'
 import VueMarkdown from 'vue-markdown'
+import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
 
 export default Vue.extend({
   components: {
@@ -46,7 +46,7 @@ export default Vue.extend({
     toggleVisibility() {
       this.$store.commit('ui/toggleModal', {
         name: 'changelog',
-        state: !this.ui.modals['changelog'],
+        state: !this.ui.modals.changelog,
       })
     },
   },

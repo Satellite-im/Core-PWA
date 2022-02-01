@@ -16,7 +16,6 @@
     <x-icon v-if="icon === 'x'" :size="size" />
     <message-square-icon v-if="icon === 'message-square'" :size="size" />
     <layout-icon v-if="icon === 'layout'" :size="size" />
-
   </span>
 </template>
 <script lang="ts">
@@ -39,7 +38,6 @@ import {
   XIcon,
   MessageSquareIcon,
   LayoutIcon,
-
 } from 'satellite-lucide-icons'
 
 type Icon =

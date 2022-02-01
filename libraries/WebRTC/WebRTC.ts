@@ -1,10 +1,10 @@
-import { Config } from '~/config'
 import Vue from 'vue'
+import { Peer } from './Peer'
+import { Config } from '~/config'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
 import { Wire } from '~/libraries/WebRTC/Wire'
 import { WebRTCEventListeners, WireEvents } from '~/libraries/WebRTC/types'
-import { Peer } from './Peer'
 import { WebRTCError } from '~/store/webrtc/types'
 
 export default class WebRTC extends Emitter<WebRTCEventListeners> {

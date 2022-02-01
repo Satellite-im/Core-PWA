@@ -1,17 +1,17 @@
 import InitialSettingsState from '~/store/sounds/state'
 
 describe('init', () => {
-    let inst: any
+  let inst: any
 
-    beforeEach(() => {
-        inst = InitialSettingsState()
-    })
+  beforeEach(() => {
+    inst = InitialSettingsState()
+  })
 
-    it('should return the initial settings state', () => {
-        expect(inst).toMatchSnapshot()
-    })
+  it('should return the initial settings state', () => {
+    expect(inst).toMatchSnapshot()
+  })
 
-    it('should not return the initial settings state', () => {
-        expect(inst).not.toEqual({})
-    })
+  it('should not return the initial settings state', () => {
+    expect(inst).not.toEqual({})
+  })
 })

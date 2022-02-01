@@ -5,9 +5,11 @@ Object {
   "call": true,
   "connected": true,
   "deafen": true,
-  "message": true,
+  "hangup": true,
   "mute": true,
+  "newMessage": true,
   "undeafen": true,
+  "unmute": true,
   "upload": true,
 }
 `;

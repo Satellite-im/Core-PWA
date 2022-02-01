@@ -10,7 +10,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { FileType, Folder } from '~/types/files/file'
-import {TextileImage} from "~/types/textile/manager";
+import { TextileImage } from '~/types/textile/manager'
 
 export default Vue.extend({
   components: {
@@ -25,7 +25,7 @@ export default Vue.extend({
       default: () => {},
     },
     file: {
-      type: Object as PropType<TextileImage>
+      type: Object as PropType<TextileImage>,
     },
     handler: {
       type: Function,
@@ -61,12 +61,12 @@ export default Vue.extend({
      * @param bytes bytes of current file
      * @example bytesToSize(this.file.size)
      */
-    bytesToSize (bytes: number) {
+    bytesToSize(bytes: number) {
       const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
       if (bytes === 0) return '0 Bytes'
       const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
       return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
-    }
+    },
   },
 })
 </script>

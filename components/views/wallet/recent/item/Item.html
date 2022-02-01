@@ -1,18 +1,24 @@
 <div class="transaction-item">
   <div class="tx-base">
     <div class="circle-holder">
-      <UiCircle type="random" :seed="transaction.user.address" :size="$device.isMobile ? 25 : 35" />
+      <UiCircle
+        type="random"
+        :seed="transaction.user.address"
+        :size="$device.isMobile ? 25 : 35"
+      />
     </div>
     <div>
       <TypographySubtitle :size="6" :text="transaction.user.name" />
-      <TypographyText :text="`${transaction.state.toUpperCase()} ${transaction.memo ? ' - ' + transaction.memo : ''}`" />
+      <TypographyText
+        :text="`${transaction.state.toUpperCase()} ${transaction.memo ? ' - ' + transaction.memo : ''}`"
+      />
     </div>
   </div>
   <div class="tx-amount">
     <TypographyText
       :class="getTransactionColor(transaction)"
-      :text="`${transaction.state === 'sent' ? '-' : '+'}${transaction.amount * 0.10}.00`" />
-    <TypographyText
-      text="just now" />
+      :text="`${transaction.state === 'sent' ? '-' : '+'}${transaction.amount * 0.10}.00`"
+    />
+    <TypographyText text="just now" />
   </div>
 </div>

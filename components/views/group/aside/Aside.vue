@@ -41,7 +41,7 @@ export default Vue.extend({
     members() {
       const filterFriends = (friends: User[], members: string[]) => {
         return friends.filter((friend: User) =>
-          members.includes(friend.address)
+          members.includes(friend.address),
         )
       }
       return filterFriends(this.friends, this.selectedGroup.members)

@@ -8,7 +8,7 @@ import { XIcon } from 'satellite-lucide-icons'
 // It takes a word and a number and displays them neatly
 export default Vue.extend({
   components: {
-    XIcon
+    XIcon,
   },
   props: {
     /**
@@ -16,23 +16,23 @@ export default Vue.extend({
      */
     word: {
       type: String,
-      default: 'Null'
+      default: 'Null',
     },
     /**
      * Top left number to display
      */
     number: {
       type: Number,
-      default: 0
+      default: 0,
     },
     /**
      * Remove numbered word
      */
     isRemoval: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 })
 </script>
 
