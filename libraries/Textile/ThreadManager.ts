@@ -2,7 +2,6 @@ import {
   Client,
   Identity,
   PrivateKey,
-  PublicKey,
   ThreadID,
   UserMessage,
 } from '@textile/hub'
@@ -19,10 +18,9 @@ import {
   MessageTypes,
 } from '~/types/textile/mailbox'
 import { messageEncoder } from '~/libraries/Textile/encoders'
-import { Message, Messages } from '~/mock/messages'
+import { Message } from '~/mock/messages'
 import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
 import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 
 export default class ThreadManager {
   textile: TextileInitializationData
@@ -32,6 +30,8 @@ export default class ThreadManager {
   token: string | null
   textileClient: Client
   mailboxID: string
+  testGroupId: string
+  groupChatThreadId: string
   listeners: {
     inbox?: MailboxCallback
     sentbox?: MailboxCallback
@@ -46,6 +46,9 @@ export default class ThreadManager {
     this.textile = textile
     this.senderAddress = senderAddress
     this.threadID = null
+    this.groupChatThreadId =
+      'bafksjy5dna2audqxfrypjxfggapbqopg4ao7v2ljopsxwrsbcojwr2q'
+    this.testGroupId = '70c7858b-fa34-40bc-baae-4aa8830a5374'
     this.token = null
     this.mailboxID = ''
     this.textileClient = textile.client
@@ -65,12 +68,6 @@ export default class ThreadManager {
       )
       if (checkForCollection) {
         await this.getCollection('messageCollection')
-        const text = "whatever it says here doesn't matter"
-        await this.sendMessage<'text'>('messageCollection', {
-          to: 'messageCollection',
-          payload: text,
-          type: 'text',
-        })
       }
       return
     }
@@ -85,7 +82,8 @@ export default class ThreadManager {
    * @argument options Object containing values to pass to textile
    */
   async createThread() {
-    this.threadID = await this.textileClient.newDB(undefined, 'groupChats')
+    // this.threadID = await this.textileClient.newDB(undefined, 'groupChats')
+    this.threadID = ThreadID.fromString('bafky6uhl76s4irvudlxs6woccmda36ta53nkdmv55gwyp4l4h2dsdxi')
     await this.createNewChatCollection()
     return this.threadID
   }
@@ -108,10 +106,6 @@ export default class ThreadManager {
       name: 'messageCollection',
       schema,
     })
-    const check = await this.textileClient.getCollectionInfo(
-      this.threadID,
-      'messageCollection',
-    )
   }
 
   /**
@@ -125,10 +119,7 @@ export default class ThreadManager {
       return new Error(
         'Attempted to interface with a thread before initializing',
       )
-    return await this.textileClient.getCollectionInfo(
-      this.threadID,
-      collectionName,
-    )
+    await this.textileClient.getCollectionInfo(this.threadID, collectionName)
   }
 
   async ensureCollection(collectionName: string): Promise<boolean> {
@@ -153,7 +144,7 @@ export default class ThreadManager {
   async ensureThread(): Promise<boolean> {
     try {
       const thread = await this.textile.users.getThread('groupChats')
-      this.threadID = ThreadID.fromString(thread.id)
+      this.threadID = ThreadID.fromString('bafky6uhl76s4irvudlxs6woccmda36ta53nkdmv55gwyp4l4h2dsdxi')
       return true
     } catch (e) {
       await this.createThread()
@@ -266,39 +257,39 @@ export default class ThreadManager {
     collectionName: string,
     message: MessagePayloads[T],
   ) {
-    const recipient: PublicKey = PublicKey.fromString(collectionName)
-    const encoder = new TextEncoder()
-    const body = encoder.encode(
-      JSON.stringify({
-        from: this.senderAddress,
-        to: collectionName,
-        at: Date.now(),
-        type: message.type,
-        payload: message.payload,
-        reactedTo:
-          message.type === MessagingTypesEnum.REACTION
-            ? message.reactedTo
-            : undefined,
-        repliedTo:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.repliedTo
-            : undefined,
-        replyType:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.replyType
-            : undefined,
-        pack: message.pack,
-      }),
-    )
+    // const recipient: PublicKey = PublicKey.fromString(collectionName)
+    // const encoder = new TextEncoder()
+    // const body = encoder.encode(
+    //   JSON.stringify({
+    //     from: this.senderAddress,
+    //     to: collectionName,
+    //     at: Date.now(),
+    //     type: message.type,
+    //     payload: message.payload,
+    //     reactedTo:
+    //       message.type === MessagingTypesEnum.REACTION
+    //         ? message.reactedTo
+    //         : undefined,
+    //     repliedTo:
+    //       message.type === MessagingTypesEnum.REPLY
+    //         ? message.repliedTo
+    //         : undefined,
+    //     replyType:
+    //       message.type === MessagingTypesEnum.REPLY
+    //         ? message.replyType
+    //         : undefined,
+    //     pack: message.pack,
+    //   }),
+    // )
 
-    const result = await this.textile.users.sendMessage(
-      this.textile.identity,
-      recipient,
-      body,
+    const result = await this.textileClient.create(
+      this.threadID,
+      collectionName,
+      [message],
     )
     console.log(result)
 
-    return this.decodeMessage(userMessageToThread(result))
+    // return this.decodeMessage(userMessageToThread(result))
   }
 
   /**

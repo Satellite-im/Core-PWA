@@ -1,12 +1,12 @@
 import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
-import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
 import {
   getClusterFromNetworkConfig,
   publicKeyFromSeed,
   sleep,
 } from '../Solana'
+import { Config } from '~/config'
+import { SolanaWallet } from '~/types/solana/solana'
 
 export default class SolanaManager {
   accounts: Array<SolanaWallet>
@@ -22,7 +22,7 @@ export default class SolanaManager {
     this.accounts = []
     this.networkIdentifier = Config.solana.network
     this.clusterApiUrl = clusterApiUrl(
-      getClusterFromNetworkConfig(Config.solana.network)
+      getClusterFromNetworkConfig(Config.solana.network),
     )
     this.connection = new Connection(this.clusterApiUrl)
     this.publicKeys = {}
@@ -54,7 +54,7 @@ export default class SolanaManager {
 
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
-      Buffer.from(seedWithPath, 'utf-8')
+      Buffer.from(seedWithPath, 'utf-8'),
     )
 
     const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
@@ -71,7 +71,7 @@ export default class SolanaManager {
    */
   async restoreKeypairFromMnemonic(
     mnemonic: string,
-    accountIndex: number
+    accountIndex: number,
   ): Promise<SolanaWallet | null> {
     if (!bip39.validateMnemonic(mnemonic)) {
       return null
@@ -84,7 +84,7 @@ export default class SolanaManager {
 
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
-      Buffer.from(seedWithPath)
+      Buffer.from(seedWithPath),
     )
     const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
 
@@ -111,7 +111,7 @@ export default class SolanaManager {
 
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
-      Buffer.from(seedWithPath)
+      Buffer.from(seedWithPath),
     )
     const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
 
@@ -132,7 +132,7 @@ export default class SolanaManager {
     identifier: string,
     userPublicKey: PublicKey,
     seed: string,
-    programId: PublicKey
+    programId: PublicKey,
   ): Promise<PublicKey | null> {
     const { key } = await publicKeyFromSeed(userPublicKey, seed, programId)
 
@@ -162,7 +162,7 @@ export default class SolanaManager {
 
     const account = await this.restoreKeypairFromMnemonic(
       this.mnemonic,
-      this.accounts.length
+      this.accounts.length,
     )
 
     if (!account) {
@@ -288,7 +288,7 @@ export default class SolanaManager {
     if (this.payerAccount) {
       return this.connection.getBalance(
         this.payerAccount.publicKey,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
     }
 
@@ -325,13 +325,13 @@ export default class SolanaManager {
       } else {
         signature = await this.connection.requestAirdrop(
           this.payerAccount?.publicKey,
-          1000000000
+          1000000000,
         )
       }
 
       return this.connection.confirmTransaction(
         signature,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
     }
 
@@ -348,7 +348,7 @@ export default class SolanaManager {
     while (true) {
       const accountInfo = await this.connection.getAccountInfo(
         accountKey,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
       if (accountInfo === null) {
         await sleep(3000)
