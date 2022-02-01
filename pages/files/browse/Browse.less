@@ -2,30 +2,27 @@
   padding: @normal-spacing;
 
   .files-container {
-    &:extend(.full-width);
     display: flex;
-    flex-direction: row;
+    gap: @normal-spacing;
+
+    .files-left {
+      flex-grow: 1;
+    }
   }
 
-  .files-left {
-    &:extend(.full-width);
-  }
   .files-right {
     width: 350px;
-    padding: 0 0 @normal-spacing @normal-spacing;
+    height: fit-content;
+    position: sticky;
+    top: 0;
   }
   .files-top {
-    &:extend(.full-width);
-    display: inline-flex;
-    margin-bottom: @normal-spacing;
+    display: flex;
+    margin: @normal-spacing 0;
   }
 
   .mobile-file-aside {
-    padding-bottom: 10px;
-  }
-
-  .hidden-file-aside {
-    display: none;
+    padding-bottom: 8px;
   }
 
   .scroll-area {
