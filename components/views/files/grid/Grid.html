@@ -1,12 +1,22 @@
-<div id="grid-view" :class="$device.isMobile? 'mobile-grid-view': 'hidden-scroll'" v-scroll-lock="true">
-  <FilesView v-if="file" :file="file" :close="() => this.file = false"/>
-  <component :is="!$device.isMobile? 'UiScroll' : 'div'" verticalScroll scrollbarVisibility="scroll" enableWrap>
+<div
+  id="grid-view"
+  :class="$device.isMobile? 'mobile-grid-view': 'hidden-scroll'"
+  v-scroll-lock="true"
+>
+  <FilesView v-if="file" :file="file" :close="() => this.file = false" />
+  <component
+    :is="!$device.isMobile? 'UiScroll' : 'div'"
+    verticalScroll
+    scrollbarVisibility="scroll"
+    enableWrap
+  >
     <div class="files-container">
-      <FilesFile 
-        v-for="item in path" 
-        :item="item" 
+      <FilesFile
+        v-for="item in path"
+        :item="item"
         :key="`${item.name}.${item.modified}`"
-        :handler="handle" />
+        :handler="handle"
+      />
     </div>
   </component>
 </div>

@@ -1,7 +1,6 @@
 <template>
   <div class="loading-bar">
-    <div
-class="bar" :style="`height: ${height}px`" />
+    <div class="bar" :style="`height: ${height}px`" />
   </div>
 </template>
 <script lang="ts">

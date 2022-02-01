@@ -305,10 +305,10 @@ export default Vue.extend({
       deep: true,
     },
     recipient() {
-      let findItem = this.chat.chatTexts.find(
+      const findItem = this.chat.chatTexts.find(
         (item: any) => item.userId === this.$props.recipient?.address,
       )
-      let message = findItem ? findItem.value : ''
+      const message = findItem ? findItem.value : ''
 
       this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {

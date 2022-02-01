@@ -1,8 +1,8 @@
-<div id="files"  class="hidden-scroll" v-scroll-lock="true">
+<div id="files" class="hidden-scroll" v-scroll-lock="true">
   <div :class="$device.isMobile ? 'mobile-file-aside' : 'hidden-file-aside'">
     <FilesAside />
   </div>
-  
+
   <div class="files-top">
     <FilesFilepath :path="path" :pull="pull" :setPath="setPath" />
   </div>
@@ -20,21 +20,23 @@
       <UiSpacer :height="10" />
       <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
       <div v-if="view === 'list'">
-        <FilesList 
+        <FilesList
           :path="getPath().children"
           v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push" />
+          :push="push"
+        />
         <UiLoadersFileTable v-else :rows="5" />
       </div>
       <div v-else>
         <FilesGrid
           :path="getPath().children"
           v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push" />
+          :push="push"
+        />
       </div>
     </div>
     <div :class="$device.isMobile ? 'hidden-file-aside' : 'files-right'">
-      <FilesAside v-if="!$device.isMobile"/>
+      <FilesAside v-if="!$device.isMobile" />
     </div>
   </div>
 </div>

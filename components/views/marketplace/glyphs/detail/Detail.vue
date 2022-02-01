@@ -26,7 +26,7 @@ export default Vue.extend({
     if (this.ui.glyphMarketplaceView.shopId) {
       // @ts-ignore
       this.glyphDetail = this.$mock.marketplace.marketGlyphs.find(
-        (elm: GlyphShopItem) => elm.id === this.ui.glyphMarketplaceView.shopId
+        (elm: GlyphShopItem) => elm.id === this.ui.glyphMarketplaceView.shopId,
       )
     }
   },

@@ -67,6 +67,15 @@ export default Vue.extend({
       },
     },
   },
+  watch: {
+    'textile.conversations': {
+      handler(newValue) {
+        this.sortUserList(newValue)
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     toggleModal() {
       this.$store.commit('ui/toggleModal', {
@@ -85,15 +94,6 @@ export default Vue.extend({
     },
     sortUserList(conversations: Conversation) {
       this.$store.commit('friends/sortFriends', conversations)
-    },
-  },
-  watch: {
-    'textile.conversations': {
-      handler(newValue) {
-        this.sortUserList(newValue)
-      },
-      deep: true,
-      immediate: true,
     },
   },
 })

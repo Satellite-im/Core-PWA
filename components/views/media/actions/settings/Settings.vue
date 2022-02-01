@@ -127,7 +127,7 @@ export default Vue.extend({
                 const itemBody = event.target as HTMLElement
                 if (
                   (itemBody.parentElement as HTMLElement).classList.contains(
-                    'open'
+                    'open',
                   )
                 ) {
                   itemBody.style.overflow = 'visible'
@@ -135,7 +135,7 @@ export default Vue.extend({
               },
               {
                 once: true,
-              }
+              },
             )
           }
           for (let i = 0, ni = items.length; i < ni; i++) {
@@ -171,13 +171,13 @@ export default Vue.extend({
         if (!this.settings.audioInput) {
           this.$store.commit(
             'audioInput',
-            permissionsObject.devices.audioIn[0].value
+            permissionsObject.devices.audioIn[0].value,
           )
         }
         if (!this.settings.audioOutput) {
           this.$store.commit(
             'audioOutput',
-            permissionsObject.devices.audioOut[0].value
+            permissionsObject.devices.audioOut[0].value,
           )
         }
       }
@@ -187,7 +187,7 @@ export default Vue.extend({
       } else if (!this.settings.audioOutput) {
         this.$store.commit(
           'audioOutput',
-          permissionsObject.devices.audioOut[0].value
+          permissionsObject.devices.audioOut[0].value,
         )
       }
     },

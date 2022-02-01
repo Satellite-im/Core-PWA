@@ -1,9 +1,9 @@
+import { matchSorter } from 'match-sorter'
 import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
-import { matchSorter } from 'match-sorter'
 
 export class FileSystem {
   private _self = new Directory('root')
@@ -87,7 +87,7 @@ export class FileSystem {
   }
 
   get exportAll(): object {
-    let newContent: Array<object> = []
+    const newContent: Array<object> = []
     this.content.forEach((item) => {
       newContent.push({ ...this.exportChildren(item) })
     })
@@ -102,14 +102,14 @@ export class FileSystem {
   exportChildren(obj: Item): Item {
     let childrenObj: Item = {}
     if (obj._children) {
-      let child = Array.from(obj._children)
-      let newChildren: Array<object> = []
+      const child = Array.from(obj._children)
+      const newChildren: Array<object> = []
       child.forEach((cItem: Item) => {
         cItem.forEach((element: Item) => {
           if (typeof element === 'object' && Object.keys(element).length > 0) {
-            let cc = this.exportChildren(element)
+            const cc = this.exportChildren(element)
 
-            let newChildrenItem =
+            const newChildrenItem =
               element._type === 'generic'
                 ? {
                     _id: element._id,
@@ -145,7 +145,7 @@ export class FileSystem {
   }
 
   importAll(filesystem: FileSystem, testData: string): void {
-    let rTestData = JSON.parse(testData)
+    const rTestData = JSON.parse(testData)
 
     const directory = new Directory(
       ...Object.values({
