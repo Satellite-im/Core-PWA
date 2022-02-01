@@ -1,7 +1,10 @@
 .image {
-  display: grid;
-  padding: @light-spacing;
+  padding: @light-spacing 0;
   border-radius: @corner-rounding;
+
+  .is-image {
+    cursor: pointer;
+  }
 }
 
 .text {
@@ -10,7 +13,7 @@
 
 .is-normal-image {
   &:extend(.round-corners);
-  max-width: 30vw;
+  max-width: 300px;
   user-select: none;
 }
 
