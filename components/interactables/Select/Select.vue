@@ -2,8 +2,8 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-import { SelectOption } from '~/types/ui/inputs'
 import { SelectSize, SelectStyle } from './types.d'
+import { SelectOption } from '~/types/ui/inputs'
 
 export default Vue.extend({
   model: {
@@ -110,9 +110,9 @@ export default Vue.extend({
         this.open = false
         return
       }
-      let bodyRect = document.body.getBoundingClientRect()
-      let elementRect = this.$el.getBoundingClientRect()
-      this.up = elementRect.top > bodyRect.bottom / 2 ? true : false
+      const bodyRect = document.body.getBoundingClientRect()
+      const elementRect = this.$el.getBoundingClientRect()
+      this.up = elementRect.top > bodyRect.bottom / 2
       this.open = !this.open
     },
     /**

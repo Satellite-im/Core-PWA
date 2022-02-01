@@ -50,12 +50,12 @@ export default Vue.extend({
   methods: {
     /**
      * @method handle DocsTODO
-     * @description 
+     * @description
      * @param item
      * @example
      */
     handle(item: FileType | Folder): void {
-      const hasChildren = ((<Folder>item).children)
+      const hasChildren = (<Folder>item).children
       if (hasChildren) {
         this.push(item)
       } else {

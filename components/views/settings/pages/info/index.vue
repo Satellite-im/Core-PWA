@@ -3,8 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
 import VueMarkdown from 'vue-markdown'
+import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
 
 export default Vue.extend({
   name: 'DeveloperSettings',
@@ -15,7 +15,7 @@ export default Vue.extend({
   data() {
     return {
       cpu: undefined,
-      window: window,
+      window,
       renderer: undefined,
       debugInfo: undefined,
       releaseData: '',

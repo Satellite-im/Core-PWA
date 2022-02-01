@@ -5,13 +5,13 @@ AsideMenu displays list of links in an organized fashion
 ## Usage
 
 ```vue
-  <UiAsideMenu
-    :menu-content="sidebarLayout"
-    :title="title"
-    :toggleable="toggleable"
-    :toggle="toggle"
-    :active="$route.path.split('/')[2]"
-  />
+<UiAsideMenu
+  :menu-content="sidebarLayout"
+  :title="title"
+  :toggleable="toggleable"
+  :toggle="toggle"
+  :active="$route.path.split('/')[2]"
+/>
 ```
 
 ## Props

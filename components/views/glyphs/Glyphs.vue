@@ -2,10 +2,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { marketGlyphs } from '~/mock/marketplace'
-import { GlyphMarketViewStatus } from '~/store/ui/types'
 import { find, findKey, shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
+import { marketGlyphs } from '~/mock/marketplace'
+import { GlyphMarketViewStatus } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {

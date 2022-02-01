@@ -5,7 +5,7 @@ Add white space vertically
 ## Usage
 
 ```vue
-  <UiSpacer :height="24" />
+<UiSpacer :height="24" />
 ```
 
 ## Props

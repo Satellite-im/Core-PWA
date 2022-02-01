@@ -2,7 +2,8 @@
   <span
     v-if="badgeCount > 0"
     class="tag is-primary"
-    :style="`font-size: ${size * 0.4}pt; height: calc(${size * 0.4}pt + 0.25rem);`">
+    :style="`font-size: ${size * 0.4}pt; height: calc(${size * 0.4}pt + 0.25rem);`"
+  >
     {{ badgeCount }}
   </span>
   <p :style="`font-size: ${size}pt;`" v-if="!color">

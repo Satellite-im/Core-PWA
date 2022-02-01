@@ -7,15 +7,17 @@
       <div class="left-content-block">
         <MarketplaceGlyphsFeatured></MarketplaceGlyphsFeatured>
         <div class="recommended-block">
-          <MarketplaceGlyphsRecommended :item="marketGlyphs[2]"></MarketplaceGlyphsRecommended>
-          <MarketplaceGlyphsRecommended :item="marketGlyphs[3]"></MarketplaceGlyphsRecommended>
+          <MarketplaceGlyphsRecommended
+            :item="marketGlyphs[2]"
+          ></MarketplaceGlyphsRecommended>
+          <MarketplaceGlyphsRecommended
+            :item="marketGlyphs[3]"
+          ></MarketplaceGlyphsRecommended>
         </div>
       </div>
       <MarketplaceGlyphsPopular></MarketplaceGlyphsPopular>
     </div>
-    <MarketplaceGlyphsTrending
-      :list="$mock.glyphs"
-    ></MarketplaceGlyphsTrending>
+    <MarketplaceGlyphsTrending :list="$mock.glyphs"></MarketplaceGlyphsTrending>
     <MarketplaceGlyphsShop title="Shop"></MarketplaceGlyphsShop>
   </div>
   <div v-else class="marketplace-glyphs-detail">

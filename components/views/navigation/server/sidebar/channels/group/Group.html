@@ -3,13 +3,20 @@
     <chevron-right-icon size="0.8x" v-if="collapsed" />
     <chevron-down-icon size="0.8x" v-else />
     <span class="server-sidebar-group-name">{{group.name}}</span>
-    <div class="has-tooltip has-tooltip-primary has-tooltip-top add-channel" data-tooltip="Add Channel">
+    <div
+      class="has-tooltip has-tooltip-primary has-tooltip-top add-channel"
+      data-tooltip="Add Channel"
+    >
       <plus-icon size="1x" />
     </div>
   </h5>
-  <div v-for="channel in group.channels" :class="`${collapsed ? 'collapsed' : 'expanded'}`">
+  <div
+    v-for="channel in group.channels"
+    :class="`${collapsed ? 'collapsed' : 'expanded'}`"
+  >
     <ServerSidebarChannelsChannel
-    :localChannel="channels[channel]"
-    :setActiveChannel="setActiveChannel" />
+      :localChannel="channels[channel]"
+      :setActiveChannel="setActiveChannel"
+    />
   </div>
 </div>

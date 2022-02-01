@@ -1,4 +1,9 @@
-<div :class="`volume-control ${isPopup? 'absolute': 'normal'} ${direction}`" ref="volumegroup" @mousedown="hideSlider" tabindex="0">
+<div
+  :class="`volume-control ${isPopup? 'absolute': 'normal'} ${direction}`"
+  ref="volumegroup"
+  @mousedown="hideSlider"
+  tabindex="0"
+>
   <InteractablesVolume
     v-if="!isPopup || showSlider"
     :volume="volume"

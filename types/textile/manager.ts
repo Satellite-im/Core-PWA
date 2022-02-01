@@ -23,8 +23,8 @@ export interface TextileInitializationData {
 }
 
 export type TextileImage = {
-  url: string,
-  name: string,
-  size: number,
-  type: string,
+  url: string
+  name: string
+  size: number
+  type: string
 }

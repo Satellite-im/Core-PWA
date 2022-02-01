@@ -1,4 +1,8 @@
-<vue-custom-scrollbar v-scroll-lock="true" :class="[padded ? 'padded scroll-area' : 'scroll-area', classObject]"
-    :settings="settings" ref="scrollRef">
-    <slot />
+<vue-custom-scrollbar
+  v-scroll-lock="true"
+  :class="[padded ? 'padded scroll-area' : 'scroll-area', classObject]"
+  :settings="settings"
+  ref="scrollRef"
+>
+  <slot />
 </vue-custom-scrollbar>

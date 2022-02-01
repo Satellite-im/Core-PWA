@@ -24,7 +24,7 @@ export default Vue.extend({
       el.addEventListener('contextmenu', this.handleOverflow)
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     const el = document.querySelector('body')
     if (el) {
       el.removeEventListener('contextmenu', this.handleOverflow)
