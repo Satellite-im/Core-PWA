@@ -11,7 +11,7 @@ export default Vue.extend({
      */
     text: {
       type: String,
-      default: function () {
+      default() {
         return this.$t('internal.missing_text')
       },
     },

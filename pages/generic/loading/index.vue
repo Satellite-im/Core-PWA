@@ -19,10 +19,7 @@ export default Vue.extend({
     // (Can happen with persistedStates)
     // Go ahead and load it.
     loadedState(): Boolean {
-      return (
-        this.prerequisites &&
-        this.prerequisites.stateLoaded
-      )
+      return this.prerequisites && this.prerequisites.stateLoaded
     },
     // Ensure we're bound to the P2P servers
     peer2peerBound(): Boolean {

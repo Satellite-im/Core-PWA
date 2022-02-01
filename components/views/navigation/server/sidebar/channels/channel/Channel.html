@@ -1,6 +1,7 @@
 <div
   :class="`server-sidebar-channel ${getChannelClass()}`"
-  v-on:click="setActiveChannel(localChannel)">
+  v-on:click="setActiveChannel(localChannel)"
+>
   <span class="channel-name" v-if="localChannel.type === 'text'">
     <hash-icon size="0.8x" />
     {{localChannel.name}}

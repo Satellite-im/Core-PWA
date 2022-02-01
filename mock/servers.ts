@@ -39,42 +39,42 @@ export const ServerInfo = {
   groups: [
     {
       name: 'Text Channels',
-      channels: [1, 2, 3]
+      channels: [1, 2, 3],
     },
     {
       name: 'Voice Channels',
-      channels: [4, 5, 6]
+      channels: [4, 5, 6],
     },
     {
       name: 'Dev Center',
-      channels: [0, 7, 8, 9]
-    }
+      channels: [0, 7, 8, 9],
+    },
   ],
   channels: {
     '0': {
       id: '0',
       type: 'label',
-      name: 'github.com/Satellite_im'
+      name: 'github.com/Satellite_im',
     },
     '1': {
       id: '1',
       type: 'feed',
-      name: 'feed'
+      name: 'feed',
     },
     '2': {
       id: '2',
       type: 'text',
-      name: 'general'
+      name: 'general',
     },
     '3': {
       id: '3',
       type: 'text',
-      name: 'trade'
+      name: 'trade',
     },
     '4': {
       id: '4',
       type: 'voice',
-      name: 'General Chatter'
+      name: 'General Chatter',
     },
     '5': {
       id: '5',
@@ -83,37 +83,37 @@ export const ServerInfo = {
       users: [
         {
           name: 'RetroPronghorn',
-          address: '0x43aF5230d1493511fBDeAe0Fbe4C5555E087Bf24'
+          address: '0x43aF5230d1493511fBDeAe0Fbe4C5555E087Bf24',
         },
         {
           name: 'im_eatin_cookies',
-          address: '0x5635e06B8655C1455Da640162061c1392DB16357'
+          address: '0x5635e06B8655C1455Da640162061c1392DB16357',
         },
         {
           name: 'XileHorizon',
-          address: '0xD3312142f90B6002D6CF01A9d858BED4e49Afcf7'
-        }
-      ]
+          address: '0xD3312142f90B6002D6CF01A9d858BED4e49Afcf7',
+        },
+      ],
     },
     '6': {
       id: '6',
       type: 'voice',
-      name: 'Development'
+      name: 'Development',
     },
     '7': {
       id: '7',
       type: 'text',
-      name: 'general'
+      name: 'general',
     },
     '8': {
       id: '8',
       type: 'feed',
-      name: 'updates'
+      name: 'updates',
     },
     '9': {
       id: '9',
       type: 'voice',
-      name: 'Dev Chat'
-    }
-  }
+      name: 'Dev Chat',
+    },
+  },
 }

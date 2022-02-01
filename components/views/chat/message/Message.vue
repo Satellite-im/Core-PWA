@@ -95,6 +95,20 @@ export default Vue.extend({
       return this.ui.editMessage.id === this.$props.message.id
     },
   },
+  created() {
+    const setTimestamp = (timePassed: string) => {
+      this.$data.timestamp = timePassed
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.$props.message.at,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeUnmount() {
+    clearInterval(this.$data.refreshTimestampEveryMinute)
+  },
   methods: {
     /**
      * @method wrapEmoji
@@ -173,7 +187,7 @@ export default Vue.extend({
       }
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
+        floating: !!this.$device.isMobile,
         position: [xVal, yVal],
         containerWidth: this.$el.clientWidth,
       })
@@ -238,20 +252,6 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
     },
-  },
-  created() {
-    const setTimestamp = (timePassed: string) => {
-      this.$data.timestamp = timePassed
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.$props.message.at,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval,
-    )
-  },
-  beforeDestroy() {
-    clearInterval(this.$data.refreshTimestampEveryMinute)
   },
 })
 </script>

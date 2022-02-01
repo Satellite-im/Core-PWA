@@ -7,7 +7,6 @@ import {
   ProductItem,
 } from '~/types/marketplace/marketplace'
 
-
 // @ts-ignore
 import * as bg1 from '~/assets/img/glyphShopBg1.png'
 // @ts-ignore

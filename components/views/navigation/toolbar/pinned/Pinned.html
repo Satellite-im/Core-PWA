@@ -1,17 +1,22 @@
-<div id="pinned-messages" v-click-outside="() => {
+<div
+  id="pinned-messages"
+  v-click-outside="() => {
   $store.commit('ui/togglePinned', false)
-}">
+}"
+>
   <div class="pinned-wrap">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
-      enableWrap>
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
       <div class="header">
         <archive-icon size="0.85x" />
-        <TypographySubtitle :size="6":text="$t('messaging.pinned.archived_messages')" />
+        <TypographySubtitle
+          :size="6"
+          :text="$t('messaging.pinned.archived_messages')"
+        />
       </div>
       <div class="filters">
-        <span class="filter active-filter">{{ $t('messaging.pinned.new') }}</span>
+        <span class="filter active-filter"
+          >{{ $t('messaging.pinned.new') }}</span
+        >
         <span class="filter">{{ $t('messaging.pinned.old') }}</span>
         <span class="filter">{{ $t('messaging.pinned.files') }}</span>
       </div>
@@ -21,10 +26,11 @@
           hide-actions
           :message="message"
           :from="$mock.users.filter(u => u.address === message.from)[0].name"
-          :key="message.id" />
+          :key="message.id"
+        />
         <InteractablesButton size="small" type="dark" text="Jump" />
         <x-icon size="1.2x" />
-        </div>
+      </div>
     </UiScroll>
   </div>
 </div>

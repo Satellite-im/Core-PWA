@@ -26,7 +26,14 @@ export default Vue.extend({
      * @example
      */
     hasCommand() {
-      return hasCommandPreview(this.ui.chatbarContent)
+      return (
+        containsCommand(this.ui.chatbarContent) &&
+        commands.some((cmd) =>
+          cmd.name.startsWith(
+            parseCommand(this.ui.chatbarContent).name.toLowerCase(),
+          ),
+        )
+      )
     },
     /**
      * @method command DocsTODO

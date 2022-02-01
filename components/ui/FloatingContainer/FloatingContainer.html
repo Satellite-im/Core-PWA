@@ -1,12 +1,10 @@
-<div 
-  id="floating-container" 
+<div
+  id="floating-container"
   v-click-outside="toggleMethod"
-  :style="customStyles ? {} : { maxHeight: `${height}rem`, width: `${width}rem`, top: `${offsets[0]}rem`, right: `${offsets[1]}rem` }" >
+  :style="customStyles ? {} : { maxHeight: `${height}rem`, width: `${width}rem`, top: `${offsets[0]}rem`, right: `${offsets[1]}rem` }"
+>
   <div class="wrap">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
-      enableWrap>
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
       <!-- Optional floating container label -->
       <div class="header" v-if="heading">
         <flask-conical-icon size="0.85x" />
