@@ -16,15 +16,15 @@ export default Vue.extend({
   computed: {
     ...mapState(['sounds']),
   },
+  mounted() {},
   methods: {
     sound(key: Sounds) {
       return this.sounds[key]
     },
     toggleSound(key: Sounds, value: boolean) {
-      this.$store.commit('sounds/set', { key: Sounds[key], value })
+      this.$store.commit('sounds/set', { key, value })
     },
   },
-  mounted() {},
 })
 </script>
 
