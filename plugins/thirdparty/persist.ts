@@ -24,6 +24,7 @@ const commonProperties = [
   'webrtc.connectedPeer',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
+  'ui.editMessage',
 ]
 
 const propertiesNoStorePin = [

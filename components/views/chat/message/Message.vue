@@ -11,6 +11,7 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
+import { toHTML } from '~/libraries/ui/Markdown'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -85,7 +86,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile', 'accounts']),
-
     hasReactions() {
       return (
         this.$props.message.reactions && this.$props.message.reactions.length
@@ -111,6 +111,14 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method markdownToHtml
+     * @description convert text markdown to html
+     * @param str String to convert
+     */
+    markdownToHtml(text: string) {
+      return toHTML(text, { liveTyping: false })
+    },
+    /**
      * @method wrapEmoji
      * @description Wraps emojis in spans with the emoji class
      * @param str String to wrap emojis within
@@ -125,6 +133,7 @@ export default Vue.extend({
      * @method containsOnlyEmoji
      * @description Check wether or not a string only contains an emoji
      * @param str String to check against
+     * TO DO: is not working very well (:emoji: + "c")
      */
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) === null
@@ -161,7 +170,7 @@ export default Vue.extend({
         messageID: this.$props.message.id,
         to: to === myTextilePublicKey ? from : to,
       })
-      this.$store.dispatch('ui/setChatbarFocus', true)
+      this.$store.dispatch('ui/setChatbarFocus')
     },
     /**
      * @method emojiReaction DocsTODO

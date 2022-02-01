@@ -34,8 +34,8 @@
       :message="message"
     />
     <template v-if="!messageEdit && message.type === 'text'">
-      <VueMarkdown
-        :source="wrapEmoji(message.payload)"
+      <MessageMarkdown
+        :text="wrapEmoji(markdownToHtml(message.payload))"
         :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
       />
       <span class="status editing" v-if="message.editingAt">
