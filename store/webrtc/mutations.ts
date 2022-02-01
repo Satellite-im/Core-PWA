@@ -10,9 +10,6 @@ const mutations = {
   setActiveCall(state: WebRTCState, id: string) {
     state.activeCall = id
   },
-  setConnectedTime(state: WebRTCState, timestamp: number) {
-    state.activeStream.createdAt = timestamp
-  },
   setConnectedPeer(state: WebRTCState, id: string) {
     state.connectedPeer = id
   },

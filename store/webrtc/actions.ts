@@ -5,7 +5,6 @@ import Crypto from '~/libraries/Crypto/Crypto'
 
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
-import StreamManager from '~/libraries/WebRTC/StreamManager'
 import Logger from '~/utilities/Logger'
 import { TracksManager } from '~/libraries/WebRTC/TracksManager'
 
@@ -96,13 +95,13 @@ export default {
     peer?.call.on('CONNECTED', (data) => {
       commit('setIncomingCall', '')
       commit('setActiveCall', data.peerId)
-      commit('setConnectedTime', Date.now())
+      commit('updateCreatedAt', Date.now())
     })
 
     peer?.call.on('HANG_UP', (data) => {
       commit('setIncomingCall', '')
       commit('setActiveCall', '')
-      commit('setConnectedTime', 0)
+      commit('updateCreatedAt', 0)
       commit('updateLocalTracks', {
         audio: {},
         video: {},

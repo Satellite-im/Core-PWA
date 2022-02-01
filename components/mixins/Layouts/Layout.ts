@@ -28,7 +28,7 @@ export default Vue.extend({
      */
     acceptCall() {
       this.$store.dispatch('media/acceptCall')
-      this.$Sounds.playSound(Sounds.CONNECTED)
+      this.$store.dispatch('sounds/playSound', Sounds.CONNECTED)
     },
     /**
      * @method denyCall DocsTODO
@@ -37,7 +37,7 @@ export default Vue.extend({
      */
     denyCall() {
       this.$store.dispatch('media/denyCall')
-      this.$Sounds.playSound(Sounds.HANGUP)
+      this.$store.dispatch('sounds/playSound', Sounds.HANGUP)
     },
     /**
      * @method toggleMarketPlace DocsTODO

@@ -20,6 +20,7 @@ export enum Sounds {
  */
 export default class SoundManager {
   sounds: Record<Sounds, Howl>
+
   /**
    * @constructs SoundManager
    */
@@ -39,6 +40,12 @@ export default class SoundManager {
     }
   }
 
+  /**
+   * @function
+   * init 'sounds' property
+   * @param volume
+   */
+  private initSounds(volume: number = 1.0) {}
   /** @function
    * Check if a specific sound exists
    * @param sound Name of the sound to check
