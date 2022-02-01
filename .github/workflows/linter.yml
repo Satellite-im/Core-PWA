@@ -1,16 +1,14 @@
-name: Prettier + ESLint
-on:
-  pull_request:
-
+name: Linter
+on: push
 jobs:
-  test:
-    name: Check the source code
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: yarn
-      - name: Prettier
-        run: yarn prettier .
-      - name: ESLint
-        run: yarn eslint --fix .
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn
+    - name: Prettier
+      run: yarn prettier .
+    - name: ESLint
+      run: yarn eslint --fix .
+      
