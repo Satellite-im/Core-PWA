@@ -1,6 +1,6 @@
 <div
   id="grid-view"
-  :class="$device.isMobile? 'mobile-grid-view': 'hidden-scroll'"
+  :class="{'hidden-scroll' : $device.isMobile} "
   v-scroll-lock="true"
 >
   <FilesView v-if="file" :file="file" :close="() => this.file = false" />
