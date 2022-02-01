@@ -1,17 +1,9 @@
-export enum SoundsTypes {
-  message = 'message',
-  call = 'call',
-  mute = 'mute',
-  deafen = 'deafen',
-  undeafen = 'undeafen',
-  upload = 'upload',
-  connected = 'connected',
-}
-
 export interface SoundsState {
-  message: boolean
+  newMessage: boolean
+  hangup: boolean
   call: boolean
   mute: boolean
+  unmute: boolean
   deafen: boolean
   undeafen: boolean
   upload: boolean

@@ -3,7 +3,12 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { PhoneIcon, PhoneOffIcon, VideoIcon, VideoOffIcon } from 'satellite-lucide-icons'
+import {
+  PhoneIcon,
+  PhoneOffIcon,
+  VideoIcon,
+  VideoOffIcon,
+} from 'satellite-lucide-icons'
 
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { User } from '~/types/ui/user'
@@ -14,7 +19,7 @@ export default Vue.extend({
     PhoneIcon,
     PhoneOffIcon,
     VideoIcon,
-    VideoOffIcon
+    VideoOffIcon,
   },
   props: {
     user: {
@@ -34,7 +39,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$Sounds.playSound(Sounds.CALL)
+    this.$store.dispatch('sounds/playSound', Sounds.CALL)
   },
   beforeDestroy() {
     this.$Sounds.stopSound(Sounds.CALL)

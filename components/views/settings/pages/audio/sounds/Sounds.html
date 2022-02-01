@@ -4,38 +4,38 @@
     :text="$t('pages.settings.notifications.sounds.title')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.message)"
-    @toggle="toggleSound(SoundsTypes.message, $event)"
+    :value="sound(Sounds.NEW_MESSAGE)"
+    @toggle="toggleSound(Sounds.NEW_MESSAGE, $event)"
     :title="$t('pages.settings.notifications.sounds.message')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.call)"
-    @toggle="toggleSound(SoundsTypes.call, $event)"
+    :value="sound(Sounds.CALL)"
+    @toggle="toggleSound(Sounds.CALL, $event)"
     :title="$t('pages.settings.notifications.sounds.call')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.mute)"
-    @toggle="toggleSound(SoundsTypes.mute, $event)"
+    :value="sound(Sounds.MUTE)"
+    @toggle="toggleSound(Sounds.MUTE, $event)"
     :title="$t('pages.settings.notifications.sounds.mute')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.deafen)"
-    @toggle="toggleSound(SoundsTypes.deafen, $event)"
+    :value="sound(Sounds.DEAFEN)"
+    @toggle="toggleSound(Sounds.DEAFEN, $event)"
     :title="$t('pages.settings.notifications.sounds.deafen')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.undeafen)"
-    @toggle="toggleSound(SoundsTypes.undeafen, $event)"
+    :value="sound(Sounds.UNDEAFEN)"
+    @toggle="toggleSound(Sounds.UNDEAFEN, $event)"
     :title="$t('pages.settings.notifications.sounds.undeafen')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.upload)"
-    @toggle="toggleSound(SoundsTypes.upload, $event)"
+    :value="sound(Sounds.UPLOAD)"
+    @toggle="toggleSound(Sounds.UPLOAD, $event)"
     :title="$t('pages.settings.notifications.sounds.upload')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(SoundsTypes.connected)"
-    @toggle="toggleSound(SoundsTypes.connected, $event)"
+    :value="sound(Sounds.CONNECTED)"
+    @toggle="toggleSound(Sounds.CONNECTED, $event)"
     :title="$t('pages.settings.notifications.sounds.connected')"
   />
 </div>

@@ -47,11 +47,11 @@ export default Vue.extend({
 
       if (muted) {
         peer?.call.unmute(WebRTCEnum.AUDIO)
-        this.$Sounds.playSound(Sounds.UNMUTE)
+        this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
         return
       }
       peer?.call.mute(WebRTCEnum.AUDIO)
-      this.$Sounds.playSound(Sounds.MUTE)
+      this.$store.dispatch('sounds/playSound', Sounds.MUTE)
     },
     /**
      * @method toggleDeafen DocsTODO
@@ -60,9 +60,8 @@ export default Vue.extend({
      */
     toggleDeafen() {
       const deafened = this.audio.deafened
-      if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
-      else this.$Sounds.playSound(Sounds.UNDEAFEN)
-
+      if (!deafened) this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
+      else this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
       this.$store.commit('audio/deafen')
     },
     /**
@@ -79,11 +78,11 @@ export default Vue.extend({
 
       if (muted) {
         peer?.call.unmute(WebRTCEnum.VIDEO)
-        this.$Sounds.playSound(Sounds.UNDEAFEN)
+        this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
         return
       }
       peer?.call.mute(WebRTCEnum.VIDEO)
-      this.$Sounds.playSound(Sounds.DEAFEN)
+      this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
     },
   },
 })

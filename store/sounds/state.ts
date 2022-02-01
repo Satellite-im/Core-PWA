@@ -1,9 +1,11 @@
-import { SoundsState } from "./types"
+import { SoundsState } from './types'
 
 const InitialSettingsState = (): SoundsState => ({
-  message: true,
+  newMessage: true,
+  hangup: true,
   call: true,
   mute: true,
+  unmute: true,
   deafen: true,
   undeafen: true,
   upload: true,
