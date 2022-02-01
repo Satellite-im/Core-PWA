@@ -523,6 +523,8 @@ export default {
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
+    requests: 'Friends request',
+    blocked: 'Blocked friends',
     search_placeholder: 'Some User...',
     add: 'Add Friend',
     add_description:
