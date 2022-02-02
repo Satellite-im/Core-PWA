@@ -23,4 +23,8 @@ describe('Test FileSystem File', () => {
     expect(clonedFile.hash).toEqual(file.hash)
     expect(clonedFile.id).not.toEqual(file.id)
   })
+  it('Correctly sets a file description', () => {
+    file.description = 'setter'
+    expect(file.description).toEqual('setter')
+  })
 })
