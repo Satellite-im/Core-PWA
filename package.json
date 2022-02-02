@@ -166,9 +166,6 @@
   },
   "homepage": "https://github.com/Satellite-im/Core-PWA#readme",
   "lint-staged": {
-    "*": [
-      "eslint --fix .",
-      "prettier --write"
-    ]
+    "*.js": "eslint --cache --fix"
   }
 }

@@ -10,7 +10,6 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['/cypress/*', 'package.json'],
   plugins: [],
   // add your custom rules here
   rules: {
