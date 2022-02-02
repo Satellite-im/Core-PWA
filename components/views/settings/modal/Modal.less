@@ -31,6 +31,7 @@ p {
   .not-sidebar {
     width: 100%;
     box-sizing: border-box;
+    &:extend(.background-semitransparent-dark);
   }
 }
 
@@ -84,6 +85,9 @@ p {
   .settings-modal #settings {
     width: 100vw;
     height: 100vh;
+    .sidebar {
+      flex-basis: 100%;
+    }
   }
 
   .sidebar {
@@ -107,16 +111,7 @@ p {
       width: 100%;
     }
   }
-}
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #settings {
-    width: 100vw;
-    height: 100vh;
-    .sidebar {
-      flex-basis: 100%;
-    }
-  }
   .is-collapsed {
     .sidebar {
       transform: translateX(calc(-@full + 2rem));
