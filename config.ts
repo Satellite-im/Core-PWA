@@ -7,6 +7,8 @@ export const Config = {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
     browser: 'https://hub.textile.io',
+    groupChatThreadID:
+      'bafksjy5dna2audqxfrypjxfggapbqopg4ao7v2ljopsxwrsbcojwr2q',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
