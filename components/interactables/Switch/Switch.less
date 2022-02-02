@@ -18,27 +18,37 @@
     margin-left: -5px;
     font-size: 12px;
   }
+
   .switch-button-control {
     display: inline-block;
 
     .switch-button {
-      height: 1.6em;
-      width: calc(1.6em * 2);
-      border-radius: 1.6em;
+      position: relative;
+      height: 1.6rem;
+      width: calc(1.6rem * 2);
+      border-radius: 1.6rem;
       transition: all @animation-speed-micro ease-in-out;
       cursor: pointer;
 
       .sw-button {
-        height: calc(1.6em - (2 * 2px));
-        width: calc(1.6em - (2 * 2px));
-        border-radius: calc(1.6em - (2 * 2px));
-        transition: all @animation-speed-micro ease-in-out;
+        position: absolute;
+        top: 50%;
+        height: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        width: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        border-radius: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        transition: transform @animation-speed-micro ease-in-out;
+        transform: translateY(-50%) translateX(1px);
       }
 
       &.enabled {
         box-shadow: none;
+
         .sw-button {
-          transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
+          height: calc(1.6rem - (2 * 0.125rem));
+          width: calc(1.6rem - (2 * 0.125rem));
+          border-radius: calc(1.6rem - (2 * 0.125rem));
+          transform: translateY(-50%)
+            translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
         }
       }
 
@@ -51,6 +61,7 @@
         }
       }
     }
+
     .switch-button-label {
       margin-left: 10px;
     }

@@ -232,25 +232,22 @@ button {
 .switch-container {
   .switch-button-control {
     .switch-button {
-      .sw-button {
-        border: 2px solid var(--flair-color);
-        &:extend(.background-flair);
-      }
-
-      border: 2px solid var(--flair-color);
+      border: 0.125rem solid var(--flair-color);
       box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-    }
-    .switch-button.enabled {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
-      .sw-button {
-        background: @white !important;
-      }
-    }
 
-    .switch-button {
       .sw-button {
+        &:extend(.background-flair);
         &:extend(.switch-off-glow-flair);
+      }
+
+      &.enabled {
+        &:extend(.background-flair);
+        &:extend(.glow-flair);
+
+        .sw-button {
+          border: 0.2rem solid var(--flair-color);
+          background: @white !important;
+        }
       }
     }
   }
