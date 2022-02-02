@@ -37,9 +37,9 @@ export default Vue.extend({
       const hasChildren = (<Folder>item).children
       if (hasChildren) {
         this.push(item)
-      } else {
-        this.$data.file = item
+        return
       }
+      this.$data.file = item
     },
   },
 })

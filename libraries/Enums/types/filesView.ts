@@ -1,5 +1,5 @@
 export enum FilesViewEnum {
-  empty = '',
-  folder = 'Folder',
-  file = 'File',
+  EMPTY = '',
+  FOLDER = 'folder',
+  FILE = 'file',
 }

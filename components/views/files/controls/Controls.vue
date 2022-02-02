@@ -24,6 +24,9 @@ export default Vue.extend({
       input: { show: false as boolean, type: '' as FilesViewEnum },
     }
   },
+  computed: {
+    FilesViewEnum: () => FilesViewEnum,
+  },
   methods: {
     toggleInput(type: FilesViewEnum) {
       if (!this.input.show) {

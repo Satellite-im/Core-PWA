@@ -109,9 +109,13 @@ export default {
   pages: {
     files: {
       refresh: 'Refresh',
-      new_folder: 'New Folder',
-      new_folder_prompt: 'New Folder:',
       file_type: 'File Type',
+      controls: {
+        new_folder: 'New Folder',
+        new_file: 'New File',
+        name_folder: 'Name Folder...',
+        name_file: 'Name File...',
+      },
       browse: {
         files: 'Files',
         search: 'Search...',

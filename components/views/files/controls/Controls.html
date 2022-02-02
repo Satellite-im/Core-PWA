@@ -20,17 +20,17 @@
   <div class="add-container">
     <InteractablesButton
       type="primary"
-      text="Add File"
+      :text="$t('pages.files.controls.new_file')"
       size="small"
-      :action="() => toggleInput('File')"
+      :action="() => toggleInput(FilesViewEnum.FILE)"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
     <InteractablesButton
       type="primary"
-      :text="$t('pages.files.new_folder')"
+      :text="$t('pages.files.controls.new_folder')"
       size="small"
-      :action="() => toggleInput('Folder')"
+      :action="() => toggleInput(FilesViewEnum.FOLDER)"
     >
       <folder-plus-icon size="1.3x" />
     </InteractablesButton>
@@ -40,10 +40,10 @@
       type="primary"
       :action="addFile"
       v-if="input.show"
-      :placeholder="`Name ${input.type}...`"
+      :placeholder="input.type===FilesViewEnum.FILE ? $t('pages.files.controls.name_file') : $t('pages.files.controls.name_folder')"
     >
-      <file-plus-icon size="1.3x" v-if="input.type==='File'" />
-      <folder-plus-icon size="1.3x" v-if="input.type==='Folder'" />
+      <file-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FILE" />
+      <folder-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FOLDER" />
     </InteractablesInputGroup>
   </div>
   <div class="switcher-container">
