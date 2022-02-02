@@ -70,22 +70,16 @@ export class Directory extends Item {
     if (this.hasChild(child.name)) return false
 
     if (isEqual(child, this)) {
-      console.log(34)
       throw new Error(FileSystemErrors.DIR_PARADOX)
     }
 
     let parent = this.parent
 
-    console.log(35, isEqual(parent, null))
-    console.log(36, parent)
-
-    while (!isEqual(parent, undefined)) {
-      console.log(1, parent)
-      console.log(2, child)
+    while (!isEqual(parent, null)) {
       if (isEqual(parent, child)) {
         throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
       }
-      parent = parent.parent
+      parent = parent!.parent
     }
 
     this._children.set(child.name, child)
