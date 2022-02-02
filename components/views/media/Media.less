@@ -22,6 +22,9 @@
     align-items: center;
     flex-wrap: wrap;
     .user {
+      width: 16rem;
+      height: 9rem;
+      margin: @xlight-spacing;
       &.full-video {
         position: absolute;
         width: 100% !important;
@@ -29,10 +32,8 @@
         z-index: 100;
       }
       .video-stream-container {
-        height: 9rem;
-        min-width: 16rem;
-        width: 16rem;
-        margin: 0.25rem;
+        height: 100%;
+        width: 100%;
         background: @semitransparent-light-gradient;
         border: 1px solid @foreground;
         border-radius: @corner-rounding;
@@ -51,7 +52,7 @@
           padding: 1rem;
           z-index: @base-z-index + 2;
           .indicator {
-            margin-left: 0.5rem;
+            margin-left: @light-spacing;
           }
         }
       }
@@ -120,8 +121,8 @@
   order: 11;
   font-size: 30px;
   line-height: 28px;
-  margin: 0.25rem 0.25rem;
-  padding: 0.5rem;
+  margin: @xlight-spacing;
+  padding: @light-spacing;
   position: relative;
   &.full {
     line-height: 13px;
