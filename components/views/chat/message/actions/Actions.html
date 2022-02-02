@@ -34,6 +34,7 @@
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('ui.more')"
+    v-if="hasMoreSettings"
   >
     <more-vertical-icon size="1x" :class="'control-icon'" />
   </div>
