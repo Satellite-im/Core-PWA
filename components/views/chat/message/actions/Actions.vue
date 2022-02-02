@@ -56,6 +56,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'accounts']),
+    isEditable(): boolean {
+      return (
+        this.message.from === this.accounts.details.textilePubkey &&
+        !(this.message.type === 'glyph' || this.message.type === 'file')
+      )
+    },
   },
 })
 </script>

@@ -26,7 +26,7 @@
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('controls.edit')"
-    v-if="message.from === accounts.details.textilePubkey"
+    v-if="isEditable"
     @click="editMessage"
   >
     <edit-icon size="1x" :class="'control-icon'" />

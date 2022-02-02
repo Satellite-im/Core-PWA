@@ -275,7 +275,10 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
     })
-    dispatch('storeMessage', { address: friend.address, sendFileResult })
+    dispatch('storeMessage', {
+      address: friend.address,
+      message: sendFileResult,
+    })
   },
   /**
    * @description Sends a reaction message to a given friend
@@ -486,8 +489,7 @@ export default {
   /**
    * @description Store a new sent message in indexeddb. If edited, replace old message
    * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address (textile public key) and the message to be stored,
-   * glyph to be sent, and pack name
+   * @param param1 an object containing the recipient address and message to be stored
    */
   async storeMessage(
     {}: ActionsArguments<TextileState>,
@@ -500,7 +502,7 @@ export default {
     },
   ) {
     // replace old message with new edited version
-    if (message.editedAt !== undefined) {
+    if (message.editedAt) {
       db.conversations.get(address).then((convo) => {
         if (!convo) {
           return
@@ -530,7 +532,7 @@ export default {
     },
   ) {
     // replace old message with new edited version
-    if (message.editedAt !== undefined) {
+    if (message.editedAt) {
       db.conversations.get(address).then((convo) => {
         if (!convo) {
           return

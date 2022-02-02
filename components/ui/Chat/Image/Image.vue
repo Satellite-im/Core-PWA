@@ -24,6 +24,7 @@ export default Vue.extend({
     },
     image: {
       type: Object as PropType<ImageMessage>,
+      required: true,
     },
   },
   data() {
@@ -57,7 +58,6 @@ export default Vue.extend({
      * @example
      */
     openImage() {
-      // @ts-ignore
       window?.open(this.$props.image.url, '_blank').focus()
     },
   },
