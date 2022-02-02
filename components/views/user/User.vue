@@ -79,6 +79,37 @@ export default Vue.extend({
       })
       this.$store.commit('ui/setUserProfile', this.user)
     },
+    getLastUpdate() {
+      const currentUserInfo =
+        this.$store.state.textile.conversations[this.user.address]
+
+      const lastMessageAt = currentUserInfo?.messages
+        ? Math.max.apply(
+            null,
+            Object.values(currentUserInfo.messages).map((msg: any) => msg.at),
+          )
+        : 0
+
+      const uLastUpdate =
+        (this.user.lastUpdate ||
+          currentUserInfo?.lastUpdate ||
+          lastMessageAt) ??
+        0
+
+      const today = new Date().setHours(0, 0, 0, 0)
+
+      if (uLastUpdate) {
+        const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
+
+        if (today === uDay) {
+          return this.$dayjs(uLastUpdate).format('HH:mm')
+        } else {
+          return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
+        }
+      }
+
+      return 'No message'
+    },
   },
 })
 </script>
