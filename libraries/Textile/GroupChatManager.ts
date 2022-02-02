@@ -258,7 +258,7 @@ export class GroupChatManager {
     const encodedBody = encoder.encode(
       JSON.stringify({
         from: this.senderAddress,
-        to: message.to,
+        to: groupChatID,
         at: Date.now(),
         editedAt: Date.now(),
         type: message.type,
