@@ -1,5 +1,6 @@
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
+import { User } from '~/types/ui/user'
 
 export enum ThemeNames {
   DEFAULT = 'default',
@@ -168,4 +169,5 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
+  selectedUserInfo: User | undefined
 }

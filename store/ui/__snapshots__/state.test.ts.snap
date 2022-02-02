@@ -68,6 +68,7 @@ Object {
     "id": "",
     "payload": "",
   },
+  "selectedUserInfo": undefined,
   "settingReaction": Object {
     "groupID": null,
     "messageID": null,

@@ -1,12 +1,14 @@
-<div class="live">
-  <div class="name-and-icon">
-    <radio-icon size="1.2x" class="green" />
-    <TypographySubtitle :size="6" text="Apex" />
+<div class="live" v-if="selUserName">
+  <div class="name-and-icon" v-on:click="activeChat">
+    <radio-icon size="1.2x" class="green" v-if="existLiveChat" />
+    <TypographySubtitle :size="6" :text="selUserName" />
   </div>
   <InteractablesButton
     type="danger"
     size="small"
     :text="$t('controls.end_stream')"
+    :action="hangUp"
+    v-if="existLiveChat"
   >
     <x-icon size="1x"></x-icon>
   </InteractablesButton>
