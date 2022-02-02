@@ -109,8 +109,8 @@ export const Glyphs = {
       `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_07.png`,
       `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_08.png`,
       `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_09.png`,
-      `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_22.png`,
-      `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_23.png`,
+      // `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_22.png`,
+      // `${Config.ipfs.gateway}QmS8UaEimprq4P37ehjDDj7wJ8if3SpjUHfXbXwBfBw5fi/JohnTreanor_GenshinImpactFood_23.png`,
     ],
   },
   genshinTwo: {
