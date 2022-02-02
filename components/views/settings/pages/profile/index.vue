@@ -23,15 +23,11 @@ export default Vue.extend({
     return {
       profileInfo: sampleProfileInfo,
       croppedImage: '',
-      showPhrase: false,
       showCropper: false,
     }
   },
   computed: {
     ...mapState(['accounts', 'ui']),
-    splitPhrase(): Array<String> {
-      return this.accounts.phrase.split(' ')
-    },
     isSmallScreen(): Boolean {
       // @ts-ignore
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
@@ -47,14 +43,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    /**
-     * @method togglePhrase DocsTODO
-     * @description
-     * @example
-     */
-    togglePhrase() {
-      this.$data.showPhrase = !this.$data.showPhrase
-    },
     /**
      * @method toggleCropper DocsTODO
      * @description

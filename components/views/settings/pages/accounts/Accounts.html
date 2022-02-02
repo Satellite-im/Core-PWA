@@ -50,10 +50,27 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <InteractablesSwitch
-        v-model="storePin"
-        :label="$t('pages.unlock.store_pin')"
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.profile.phrase.title')"
       />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.profile.phrase.subtitle')"
+      />
+      <div v-if="showPhrase" class="tag-wrap">
+        <div v-for="word, i in splitPhrase" class="tag-container">
+          <TypographyNumberedWord :word="word" :number="i + 1" />
+        </div>
+      </div>
+      <div v-else>
+        <InteractablesButton
+          text="Reveal Phrase"
+          size="normal"
+          type="primary"
+          :action="togglePhrase"
+        />
+      </div>
     </div>
   </div>
 </div>
