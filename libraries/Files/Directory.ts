@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemErrors } from './errors/Errors'
 import { DIRECTORY_TYPE } from './types/directory'
@@ -68,13 +69,17 @@ export class Directory extends Item {
   addChild(child: Item): boolean {
     if (this.hasChild(child.name)) return false
 
-    if (child === this) throw new Error(FileSystemErrors.DIR_PARADOX)
+    if (isEqual(child, this)) {
+      throw new Error(FileSystemErrors.DIR_PARADOX)
+    }
 
     let parent = this.parent
 
-    while (parent !== null) {
-      if (parent === child) throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
-      parent = parent.parent
+    while (!isEqual(parent, null)) {
+      if (isEqual(parent, child)) {
+        throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)
+      }
+      parent = parent!.parent
     }
 
     this._children.set(child.name, child)
