@@ -20,18 +20,4 @@
       />
     </div>
   </div>
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.network.allow_embeds')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.network.allow_embeds_description')"
-      />
-      <br />
-      <InteractablesSwitch
-        v-model="isAllowEmbeddedLinks"
-        :isEnabled="settings.embeddedLinks"
-      />
-    </div>
-  </div>
 </div>
