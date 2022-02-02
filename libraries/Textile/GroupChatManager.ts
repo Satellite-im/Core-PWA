@@ -121,7 +121,7 @@ export class GroupChatManager {
 
     const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       this.threadID,
-      MailboxSubscriptionType.inbox,
+      groupChatID,
       inboxQuery,
     )
 
@@ -144,7 +144,7 @@ export class GroupChatManager {
     if (lastInbound === undefined) {
       encryptedSentbox = await this.textile.client.find<MessageFromThread>(
         this.threadID,
-        MailboxSubscriptionType.sentbox,
+        groupChatID,
         sentboxQuery,
       )
     }
@@ -244,10 +244,12 @@ export class GroupChatManager {
    * @method editMessage
    * @description Edits a message to the given recipient
    * @param id Message id
+   * @param groupChatID
    * @param message Message to be sent
    */
   async editMessage<T extends MessageTypes>(
     id: string,
+    groupChatID: string,
     message: MessagePayloads[T],
   ) {
     const identity = this.textile.identity
@@ -281,7 +283,7 @@ export class GroupChatManager {
 
     const records = await this.textile.client.find<MessageFromThread>(
       this.threadID,
-      MailboxSubscriptionType.sentbox,
+      groupChatID,
       Query.where('_id').eq(id),
     )
     if (records.length > 0) {
@@ -289,11 +291,7 @@ export class GroupChatManager {
       record.body = body
       record.signature = signature
       delete record._mod
-      await this.textile.client.save(
-        this.threadID,
-        MailboxSubscriptionType.sentbox,
-        [record],
-      )
+      await this.textile.client.save(this.threadID, groupChatID, [record])
       return this.decodeMessage(record)
     }
     return false
