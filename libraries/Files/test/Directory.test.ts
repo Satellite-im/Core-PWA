@@ -37,6 +37,33 @@ describe('Test FileSystem Directory', () => {
       expect(error).toHaveProperty('message', FileSystemErrors.DIR_PARADOX)
     }
   })
+  it("Incorrectly adds directory's ancestor as a child of itself", () => {
+    const topLevelDirectory = new Directory(
+      ...Object.values({
+        name: 'Test Directory',
+        type: DIRECTORY_TYPE.DEFAULT,
+      }),
+    )
+    const secondLevelDirectory = new Directory(
+      ...Object.values(topLevelDirectory),
+    )
+
+    // const currentFile = new Fil(...Object.values(currentMockFileData))
+    // const filesystem = new FileSystem()
+    // const newDirectory = filesystem.createDirectory(null)
+    try {
+      secondLevelDirectory.addChild(topLevelDirectory)
+      console.log(12, topLevelDirectory)
+      console.log(13, secondLevelDirectory)
+    } catch (error) {
+      console.log(11)
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        FileSystemErrors.DIR_PARENT_PARADOX,
+      )
+    }
+  })
   // it("Incorrectly adds directory's ancestor as a child of itself", () => {
   //   const currentMockFileData = {
   //     name: 'TestFile.png',
