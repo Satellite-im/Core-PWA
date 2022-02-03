@@ -3,9 +3,11 @@ import { Item } from '../../abstracts/Item.abstract'
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
+import { FileSystem } from '~/libraries/Files/FileSystem'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM implements RFMInterface {
-  private _fileSystem: FileSystem
+  protected _fileSystem: FileSystem
 
   constructor(fileSystem: FileSystem) {
     if (this.constructor.name === 'RFM')
@@ -14,7 +16,7 @@ export abstract class RFM implements RFMInterface {
     this._fileSystem = fileSystem
   }
 
-  updateIndex(index: FileSystem): void {
+  updateIndex(index: FileSystemExport): void {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 

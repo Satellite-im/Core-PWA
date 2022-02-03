@@ -7,11 +7,14 @@ import {
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
+import { FileSystem } from '~/libraries/Files/FileSystem'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
   private creds: { id: any; pass: any } = { id: null, pass: null }
   private identityManager: IdentityManager
   private _textile: TextileInitializationData | null = null
+  private _index: FileSystemExport | null = null
 
   constructor(fileSystem: FileSystem) {
     super(fileSystem)
@@ -20,6 +23,14 @@ export class Bucket extends RFM implements RFMInterface {
 
   get textile(): TextileInitializationData | null {
     return this._textile
+  }
+
+  get fileSystem(): FileSystem {
+    return this._fileSystem
+  }
+
+  get index(): FileSystemExport | null {
+    return this._index
   }
 
   /**
@@ -54,5 +65,9 @@ export class Bucket extends RFM implements RFMInterface {
     }
 
     return this._textile
+  }
+
+  updateIndex(index: FileSystemExport) {
+    this._index = index
   }
 }

@@ -144,6 +144,7 @@ export class FileSystem {
     return childrenObj
   }
 
+  // todo - refactor. why pass filesystem as param? should be able to use this
   importAll(filesystem: FileSystem, testData: string): void {
     const rTestData = JSON.parse(testData)
 
@@ -157,6 +158,7 @@ export class FileSystem {
     this.importChildren(rTestData, filesystem, directory)
   }
 
+  // todo - refactor. why pass filesystem as param? should be able to use this
   importChildren(item: Item, filesystem: FileSystem, dir: Directory): void {
     if (dir && item._children && item._children.length > 0) {
       item._children.map((cItem: Item) => {

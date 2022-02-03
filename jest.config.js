@@ -39,4 +39,5 @@ module.exports = {
     'node_modules/(?!@mylibrary/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
+  setupFilesAfterEnv: ['./jest-setup.js'],
 }
