@@ -23,11 +23,13 @@ export default Vue.extend({
         const activeTheme = Themes.find((th) => {
           return th.value === state
         })
-        if (activeTheme.name === ThemeNames.DEFAULT) {
-          this.$store.commit(
-            'ui/updateFlair',
-            Flairs.find((flair) => flair.value === FlairColors.SATELLITE),
+        if (activeTheme?.name === ThemeNames.DEFAULT) {
+          const flairValue = Flairs.find(
+            (flair) => flair.value === FlairColors.SATELLITE,
           )
+          if (flairValue) {
+            this.$store.commit('ui/updateFlair', flairValue)
+          }
         }
         this.$store.commit('ui/updateTheme', activeTheme)
       },

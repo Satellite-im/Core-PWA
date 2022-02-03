@@ -25,7 +25,7 @@
       <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
       <br />
       <InteractablesSelect
-        :disabled="theme===ThemeNames.DEFAULT"
+        :disabled="theme === ThemeNames.DEFAULT"
         v-model="flair"
         size="small"
         :options="flairs"
