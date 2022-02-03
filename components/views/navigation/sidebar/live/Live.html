@@ -1,7 +1,11 @@
 <div class="live" v-if="selUserName">
   <div class="name-and-icon" v-on:click="activeChat">
     <radio-icon size="1.2x" class="green" v-if="existLiveChat" />
-    <TypographySubtitle :size="6" :text="selUserName" />
+    <TypographySubtitle
+      :class="`sel-user-name ${existLiveChat ? 'is-exist' : 'is-non-exist'}`"
+      :size="6"
+      :text="selUserName"
+    />
   </div>
   <InteractablesButton
     type="danger"
