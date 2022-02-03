@@ -122,8 +122,7 @@ export default Vue.extend({
       const currentUserInfo = textileObj[this.user.address]
 
       this.$data.existConversation = !(
-        currentUserInfo?.lastUpdate <= 0 &&
-        this.user.account.from === this.user.address
+        !currentUserInfo || currentUserInfo?.lastUpdate <= 0
       )
     },
   },
