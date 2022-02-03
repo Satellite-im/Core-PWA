@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init should return the initial settings state 1`] = `
+Object {
+  "active": "",
+  "encryptedPhrase": "",
+  "error": "",
+  "gasPrice": "",
+  "lastVisited": "",
+  "loading": false,
+  "locked": true,
+  "phrase": "",
+  "pinHash": "",
+  "registered": false,
+  "registrationStatus": "unknown",
+  "storePin": false,
+}
+`;
