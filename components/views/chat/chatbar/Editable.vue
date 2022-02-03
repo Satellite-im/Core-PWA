@@ -1,5 +1,9 @@
 <template>
-  <div class="editable-container">
+  <UiScroll
+    vertical-scroll
+    scrollbar-visibility="scroll"
+    class="editable-container"
+  >
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
@@ -16,7 +20,7 @@
         <span><br /></span>
       </div>
     </div>
-  </div>
+  </UiScroll>
 </template>
 
 <script lang="ts">
