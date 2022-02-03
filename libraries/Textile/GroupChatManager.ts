@@ -36,19 +36,17 @@ export class GroupChatManager {
   textile: TextileInitializationData
   mailboxID: string
   threadID: ThreadID
-  eventEmitter: EventEmitter
   listeners: {
-    inbox?: MailboxCallback
-    sentbox?: MailboxCallback
+    message?: (reply?: Update<any> | undefined, err?: Error | undefined) => void
   }
 
   constructor(textile: TextileInitializationData, senderAddress: string) {
     this.textile = textile
     this.mailboxID = ''
     this.senderAddress = senderAddress
-    this.listeners = {}
     this.threadID = ThreadID.fromString(Config.textile.groupChatThreadID)
-    this.eventEmitter = new EventEmitter()
+
+    this.listeners = {}
   }
 
   /**
@@ -59,7 +57,6 @@ export class GroupChatManager {
   async init(): Promise<string> {
     const users: Users = this.textile.users
     this.mailboxID = await users.getMailboxID()
-    this.eventEmitter.emit('Group Chat Init')
     return this.mailboxID
   }
 
@@ -77,8 +74,6 @@ export class GroupChatManager {
       name: newCollectionUUID,
       schema: groupChatSchema,
     })
-    // TODO: need somewhere to store new UUID for user to access
-    this.eventEmitter.emit(newCollectionUUID)
     return newCollectionUUID
   }
 
@@ -99,59 +94,42 @@ export class GroupChatManager {
     query: ConversationQuery
     lastInbound?: number
   }): Promise<Message[]> {
-    let inboxQuery = Query.where('from').eq(groupChatID).orderByIDDesc()
+    let groupChatQuery = {}
+
+    console.log('lastInbound', lastInbound)
+    console.log('query', query)
+    console.log('groupChatId', groupChatID)
 
     // if messages are stored in indexeddb, only fetch new messages from textile
     if (lastInbound) {
       lastInbound = lastInbound * 1000000 // textile has a more specific unix timestamp, matching theirs
-      inboxQuery = Query.where('from')
-        .eq(groupChatID)
-        .and(PropCommonEnum.MOD)
+      groupChatQuery = Query.where(PropCommonEnum.MOD)
         .ge(lastInbound)
         .orderByIDDesc()
     }
 
-    if (query?.limit) {
-      inboxQuery.limitTo(query.limit)
-    }
+    // if (query?.limit) {
+    //   groupChatQuery.limitTo(query.limit)
+    // }
 
-    if (query?.skip) {
-      inboxQuery.skipNum(query.skip)
-    }
+    // if (query?.skip) {
+    //   groupChatQuery.skipNum(query.skip)
+    // }
 
     const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       this.threadID,
       groupChatID,
-      inboxQuery,
+      groupChatQuery,
     )
 
     const lastMessageTime = encryptedInbox?.[0]?.created_at || 0
     const firstMessageTime =
       encryptedInbox?.[encryptedInbox.length - 1]?.created_at || 0
 
-    const sentboxQuery = Query.where('to')
-      .eq(groupChatID)
-      .and(PropCommonEnum.CREATED_AT)
-      .ge(firstMessageTime)
+    const messages = encryptedInbox
 
-    if (query?.skip && query.skip > 0) {
-      sentboxQuery.and(PropCommonEnum.CREATED_AT).lt(lastMessageTime)
-    }
+    console.log('Messages from Group', messages)
 
-    let encryptedSentbox: MessageFromThread[] = []
-
-    // only fetch sent messages from textile if indexeddb is empty. after that, fetch sent messages from indexeddb
-    if (lastInbound === undefined) {
-      encryptedSentbox = await this.textile.client.find<MessageFromThread>(
-        this.threadID,
-        groupChatID,
-        sentboxQuery,
-      )
-    }
-
-    const messages = [...encryptedInbox, ...encryptedSentbox].sort(
-      (a, b) => a.created_at - b.created_at,
-    )
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
 
     const allSettled = await Promise.allSettled(promises)
@@ -159,6 +137,8 @@ export class GroupChatManager {
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
+
+    console.log(filtered)
     return filtered.map((r) => r.value)
   }
 
@@ -168,31 +148,28 @@ export class GroupChatManager {
    * @param onMessage Callback function to be called
    * @param groupChatId
    */
-  async listenToGroupMessages(
-    onMessage: MessageCallback,
-    onUnsubscribe: CallableFunction,
-    groupChatId: string,
-  ) {
-    const callback = (update?: Update<UserMessage>, err?: any) => {
+  async listenToGroupMessages(onMessage: MessageCallback, groupChatId: string) {
+    this.listeners.message = (update?: Update<UserMessage>, err?: any) => {
       if (update === undefined && err === undefined) {
-        onUnsubscribe()
-        this.eventEmitter.emit('Unsubscribed')
+        delete this.listeners.message
         return
       }
 
       if (update?.instance) {
-        this.decodeMessage(userMessageToGroup(update?.instance)).then(
-          (decrypted) => {
-            onMessage(decrypted)
-          },
-        )
+        console.log('message from listener', update?.instance)
+        // onMessage(userMessageToGroup(update?.instance))
+        // this.decodeMessage(userMessageToGroup(update?.instance)).then(
+        //   (decrypted) => {
+        //     onMessage(decrypted)
+        //   },
+        // )
       }
-      this.eventEmitter.emit('New Message From ')
     }
+
     await this.textile.client.listen(
       this.threadID,
       [{ collectionName: groupChatId }],
-      callback,
+      this.listeners.message,
     )
   }
 

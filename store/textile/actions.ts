@@ -6,9 +6,14 @@ import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
+import {
+  MailboxSubscriptionType,
+  Message,
+  MessagePayloads,
+} from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 
 export default {
   /**
@@ -552,5 +557,75 @@ export default {
         convo.conversation.push(message)
         convo.lastInbound = message.at
       })
+  },
+  /**
+   * @description Fetches messages that comes from a specific user
+   * @param param0 Action Arguments
+   * @param param1 An object containing the address of a friend where messages
+   * you want to fetch comes from
+   */
+  async fetchGroupMessages(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { groupId }: { groupId: string },
+  ) {
+    console.log('Fetch Group Messages')
+
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+    }
+
+    commit('setConversationLoading', { loading: true })
+
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    // const group = await $GroupChatManager.createGroupConversation([])
+
+    // console.log(group)
+
+    const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
+
+    let conversation: Message[] = []
+
+    conversation = await $GroupChatManager.getConversation({
+      groupChatID: groupId,
+      query,
+    })
+
+    await $GroupChatManager.listenToGroupMessages(
+      (message) => console.log('new chat message', message),
+      groupId,
+    )
+    console.log('subscribed')
+
+    commit('setConversationLoading', { loading: false })
+  },
+  /**
+   * @description Fetches messages that comes from a specific user
+   * @param param0 Action Arguments
+   * @param param1 An object containing the address of a friend where messages
+   * you want to fetch comes from
+   */
+  async sendGroupMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { groupId, message }: { groupId: string; message: string },
+  ) {
+    console.log('Send group message', groupId, message)
+
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+    }
+
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    await $GroupChatManager
+      .sendMessage<'text'>(
+        { to: groupId, payload: message, type: 'text' },
+        groupId,
+      )
+      .catch((e) => console.log('error', e))
   },
 }
