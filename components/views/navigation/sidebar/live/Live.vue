@@ -13,7 +13,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'webrtc']),
     existLiveChat(): boolean {
-      return this.$store.state.friends.all.find(
+      return this.$store.state.friends.all.some(
         (friend) => friend.address === this.$store.state.webrtc.activeCall,
       )
     },
