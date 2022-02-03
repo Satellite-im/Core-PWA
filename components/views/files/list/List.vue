@@ -58,6 +58,7 @@ export default Vue.extend({
       const hasChildren = (<Folder>item).children
       if (hasChildren) {
         this.push(item)
+        return
       }
       this.$data.file = item
     },
