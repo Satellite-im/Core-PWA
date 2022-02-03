@@ -63,8 +63,14 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(state: UIState, show: boolean) {
+  toggleSettings(
+    state: UIState,
+    options: { show: boolean; defaultRoute?: string },
+  ) {
+    const { show, defaultRoute } = options
+
     state.showSettings = show
+    state.settingsDefaultRoute = defaultRoute || 'personalize'
   },
   toggleSettingsSidebar(state: UIState, show: boolean) {
     state.settingsSideBar = show

@@ -75,7 +75,7 @@
     <div
       class="circle-group has-tooltip-right has-tooltip-primary"
       :data-tooltip="$t('pages.settings.settings')"
-      v-on:click="$store.commit('ui/toggleSettings', true)"
+      v-on:click="$store.commit('ui/toggleSettings', { show: true })"
     >
       <UiCircle type="icon" :size="40">
         <settings-icon size="0.75x" />

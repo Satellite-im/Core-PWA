@@ -1,8 +1,10 @@
 <div id="status">
-  <UiUserState
-    :user="{address: accounts.active, state: accounts.details.state}"
-    :src="src"
-  />
+  <div @click="openProfile">
+    <UiUserState
+      :user="{address: accounts.active, state: accounts.details.state}"
+      :src="src"
+    />
+  </div>
   <div
     class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
     v-on:click="$toast.show($t('ui.copied'))"

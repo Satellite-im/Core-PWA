@@ -12,6 +12,14 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
+  methods: {
+    openProfile() {
+      this.$store.commit('ui/toggleSettings', {
+        show: true,
+        defaultRoute: 'profile',
+      })
+    },
+  },
 })
 </script>
 

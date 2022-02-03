@@ -132,6 +132,7 @@ export interface UIState {
   quickProfilePosition: object
   showSettings: boolean
   settingsSideBar: boolean
+  settingsDefaultRoute: string
   showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean

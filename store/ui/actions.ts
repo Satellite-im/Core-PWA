@@ -36,7 +36,7 @@ export default {
    * @example Mousetrap.bind('ctrl+s', dispatch('audio/toggleMute') )
    */
   openSettings({ commit, state }: any) {
-    commit('toggleSettings', !state.showSettings)
+    commit('toggleSettings', { show: !state.showSettings })
   },
   /**
    * @method activateKeybinds
