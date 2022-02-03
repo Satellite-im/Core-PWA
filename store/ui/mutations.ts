@@ -2,7 +2,6 @@ import { without } from 'lodash'
 import { EnhancerInfo, Flair, Theme, UIState, RecentGlyph } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { User } from '~/types/ui/user'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -324,8 +323,5 @@ export default {
   },
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
-  },
-  setSelectedUserInfo(state: UIState, selectedUserInfo: User) {
-    state.selectedUserInfo = selectedUserInfo
   },
 }

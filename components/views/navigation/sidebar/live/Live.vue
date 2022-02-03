@@ -18,7 +18,10 @@ export default Vue.extend({
       )
     },
     selUserName(): string {
-      return this.$store.state.ui.selectedUserInfo?.name ?? ''
+      const sUser = this.$store.state.friends.all.find(
+        (friend) => friend.address === this.$store.state.webrtc.activeCall,
+      )
+      return sUser?.name
     },
   },
   methods: {
@@ -29,7 +32,7 @@ export default Vue.extend({
       this.$store.commit('ui/fullscreen', false)
     },
     activeChat() {
-      this.call(['audio'])
+      this.$store.commit('ui/fullscreen', false)
     },
     async call(kinds: TrackKind[]) {
       const activeFriend = this.$Hounddog.getActiveFriend(
