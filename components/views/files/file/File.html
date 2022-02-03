@@ -1,33 +1,32 @@
-<div :class="`${$device.isMobile ? 'file mobile-file' : 'file'}`">
+<div class="file" @click="fileClick">
   <div class="quick-actions">
-    <link-icon size="1x" class="share" v-if="item.meta && item.meta.shared" />
-    <heart-icon size="1x" class="like" v-if="item.meta && item.meta.liked" />
-  </div>
-  <div v-if="item.children" v-on:click="handler(item)">
-    <folder-icon size="1x" class="file-icon folder" />
-    <div class="text-container">
-      <TypographyText :size="6" :text="item.name" />
-      <TypographyText
-        :size="6"
-        :text="`${item.children.length} items`"
-        class="subtext"
-      />
-    </div>
-  </div>
-  <div v-else v-on:click="handler(item)">
-    <file-icon
-      v-if="!isImage(item.type)"
-      size="1x"
-      class="file-icon file-display"
+    <link-icon
+      size="1.25x"
+      class="share"
+      v-if="item.meta && item.meta.shared"
+      @mouseover="mouseOver"
+      @mouseleave="mouseLeave"
     />
-    <div
-      v-else
-      class="image-preview"
-      :style="`background-image: url('${item.location}')`"
-    ></div>
-    <div class="text-container">
-      <TypographyText :size="6" :text="item.name" />
-      <TypographyText :size="6" :text="`${item.size}`" class="subtext" />
-    </div>
+    <heart-icon
+      size="1.25x"
+      class="like"
+      v-if="item.meta && item.meta.liked"
+      @mouseover="mouseOver"
+      @mouseleave="mouseLeave"
+    />
+  </div>
+  <div
+    v-if="isImage(item.type)"
+    class="image-preview"
+    :style="`background-image: url('${item.location}')`"
+  />
+  <div v-else class="icon-container">
+    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
+    <!-- todo - condition for zip image after confirming how type data will come through -->
+    <file-icon v-else size="4x" class="file-type-icon" />
+  </div>
+  <div class="text-container">
+    <TypographyText :size="6" :text="item.name" />
+    <TypographyText :size="6" :text="getSubtext" class="subtext" />
   </div>
 </div>

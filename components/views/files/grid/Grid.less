@@ -1,12 +1,7 @@
 #grid-view {
-  &.mobile-grid-view {
-    height: auto;
-  }
   .files-container {
-    &:extend(.full-width);
-    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: @normal-spacing;
   }
-  display: flexbox;
-  &:extend(.full-width);
-  flex-direction: column;
 }

@@ -12,6 +12,12 @@ import {
 import { FileType, Folder } from '~/types/files/file'
 import { TextileImage } from '~/types/textile/manager'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    iconHover: boolean
+  }
+}
+
 export default Vue.extend({
   components: {
     LinkIcon,
@@ -22,10 +28,11 @@ export default Vue.extend({
   props: {
     item: {
       type: Object as PropType<FileType | Folder>,
-      default: () => {},
+      required: true,
     },
     file: {
       type: Object as PropType<TextileImage>,
+      default: () => {},
     },
     handler: {
       type: Function,
@@ -36,11 +43,14 @@ export default Vue.extend({
     return {
       fileUrl: String,
       fileSize: '',
+      iconHover: false,
     }
   },
   computed: {
-    getFileSize() {
-      return this.bytesToSize(this.file.size)
+    getSubtext() {
+      return this.item.children
+        ? this.item.children.length + ' items'
+        : this.item.type
     },
   },
   methods: {
@@ -51,21 +61,33 @@ export default Vue.extend({
      * @returns Boolean based on if the current image complies with Satellites accepted image types
      * @example
      */
-    isImage(filetype: string) {
+    isImage(filetype: string): boolean {
       const acceptableImages = ['image/png', 'image/jpg']
       return acceptableImages.includes(filetype)
     },
     /**
-     * @method bytesToSize
-     * @description converts bytes to display easily readable file size
-     * @param bytes bytes of current file
-     * @example bytesToSize(this.file.size)
+     * @method fileClick
+     * @description Handle regular file click. avoiding regular behavior(handler) if user clicks heart or link icon
      */
-    bytesToSize(bytes: number) {
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes === 0) return '0 Bytes'
-      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
-      return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
+    fileClick() {
+      if (this.iconHover) {
+        return
+      }
+      this.handler(this.item)
+    },
+    /**
+     * @method mouseOver
+     * @description negate regular click behavior (handler)
+     */
+    mouseOver() {
+      this.iconHover = true
+    },
+    /**
+     * @method mouseLeave
+     * @description reinstate regular click behavior (handler)
+     */
+    mouseLeave() {
+      this.iconHover = false
     },
   },
 })

@@ -1,5 +1,12 @@
 <div id="file-controls">
-  <div class="file-type">
+  <div class="search-container">
+    <InteractablesInput
+      size="small"
+      input-kind="text"
+      type="dark"
+      :placeholder="$t('pages.files.browse.search')"
+      class="search"
+    />
     <InteractablesSelect
       :placeholder="$t('pages.files.file_type')"
       :options="[
@@ -10,18 +17,37 @@
       size="small"
     />
   </div>
-  <div class="file-flex">
+  <div class="add-container">
     <InteractablesButton
       type="primary"
-      :text="$t('pages.files.new_folder')"
+      :text="$t('pages.files.controls.new_file')"
       size="small"
-      :action="()=>{show('newfolder')}"
+      :action="() => toggleInput(FilesViewEnum.FILE)"
     >
-      <folder-plus-icon size="1x" />
+      <file-plus-icon size="1.3x" />
     </InteractablesButton>
-    <FilesUpload :editable="true" type="button" />
+    <InteractablesButton
+      type="primary"
+      :text="$t('pages.files.controls.new_folder')"
+      size="small"
+      :action="() => toggleInput(FilesViewEnum.FOLDER)"
+    >
+      <folder-plus-icon size="1.3x" />
+    </InteractablesButton>
+    <InteractablesInputGroup
+      class="name"
+      size="small"
+      type="primary"
+      :action="addFile"
+      v-if="input.show"
+      :placeholder="input.type===FilesViewEnum.FILE ? $t('pages.files.controls.name_file') : $t('pages.files.controls.name_folder')"
+    >
+      <file-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FILE" />
+      <folder-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FOLDER" />
+    </InteractablesInputGroup>
   </div>
-  <div>
+  <div class="switcher-container">
+    <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />
   </div>
 </div>
