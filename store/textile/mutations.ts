@@ -70,8 +70,7 @@ const mutations = {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
-    // No need to copy since we are going to
-    // update the whole conversation object
+    // No need to copy since we are going to update the whole conversation object
     const {
       messages,
       replies,
