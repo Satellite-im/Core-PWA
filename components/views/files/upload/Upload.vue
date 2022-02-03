@@ -66,6 +66,15 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method resetFileUpload
+     * @description Clear the value of file input so trigger the handleFile for the same file.
+     * @example <input @onclick="resetFileUpload" />
+     */
+    async resetFileUpload() {
+      if (this.$refs.quickUpload)
+        (this.$refs.quickUpload as HTMLFormElement).value = ''
+    },
+    /**
      * @method handleFile
      * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
      * @param event Input event object
