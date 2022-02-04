@@ -1,5 +1,4 @@
 // Remote file management
-import { Item } from '../../abstracts/Item.abstract'
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
@@ -20,7 +19,7 @@ export abstract class RFM implements RFMInterface {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 
-  getIndex(): Promise<Item[]> {
+  get index(): FileSystemExport {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 

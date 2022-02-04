@@ -4,7 +4,6 @@ import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
-import { FILE_TYPE } from './types/file'
 
 export class FileSystem {
   private _self = new Directory('root')

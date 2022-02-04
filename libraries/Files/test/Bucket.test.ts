@@ -31,9 +31,12 @@ describe('Test FileSystem Directory', () => {
     fsImport.openDirectory('dir')
     fsImport.addChild(file2)
     fsImport.goBack()
-    const x: FileSystemExport = fsImport.export
 
-    bucket.fileSystem.import(x)
-    expect(bucket.fileSystem.export).toEqual(x)
+    // need to place in variable or it returns empty after the first time
+    const ex = fsImport.export
+    bucket.updateIndex(ex)
+
+    bucket.fileSystem.import(bucket.index)
+    expect(bucket.index).toEqual(bucket.fileSystem.export)
   })
 })
