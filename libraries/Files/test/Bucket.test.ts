@@ -1,9 +1,6 @@
-import { Directory } from '../Directory'
 import { Fil } from '../Fil'
 import { FileSystem } from '../FileSystem'
 import { Bucket } from '../remote/textile/Bucket'
-import { DIRECTORY_TYPE } from '../types/directory'
-import { FILESYSTEM_TYPE } from '../types/filesystem'
 
 const mockFileData = {
   _name: 'TestFile.png',
@@ -18,15 +15,14 @@ const file2 = new Fil(
 
 describe('Test FileSystem Directory', () => {
   it('Fetch fileSystem export and update Bucket index', () => {
-    const fs = new FileSystem()
-    const bucket = new Bucket(fs)
+    const bucket = new Bucket(new FileSystem())
+
     bucket.updateIndex(bucket.fileSystem.export)
     expect(bucket.index).toEqual(bucket.fileSystem.export)
   })
 
   it('Fetch index and import it into the fileSystem', () => {
-    const fs = new FileSystem()
-    const bucket = new Bucket(fs)
+    const bucket = new Bucket(new FileSystem())
     const fsImport = new FileSystem()
 
     console.log('og fs. expect empty\n', bucket.fileSystem.export)
@@ -36,8 +32,6 @@ describe('Test FileSystem Directory', () => {
     fsImport.createDirectory('dir')
     fsImport.createDirectory('testChildDir')
     bucket.fileSystem.import(fsImport.copy.export)
-    console.log('import fs\n', fsImport.export)
-    console.log('after import\n', bucket.fileSystem.export)
     expect(bucket.fileSystem.export).toEqual(fsImport.export)
   })
 })
