@@ -1,6 +1,7 @@
 import { Fil } from '../Fil'
 import { FileSystem } from '../FileSystem'
 import { Bucket } from '../remote/textile/Bucket'
+import { FileSystemExport } from '../types/filesystem'
 
 const mockFileData = {
   _name: 'TestFile.png',
@@ -25,13 +26,13 @@ describe('Test FileSystem Directory', () => {
     const bucket = new Bucket(new FileSystem())
     const fsImport = new FileSystem()
 
-    console.log('og fs. expect empty\n', bucket.fileSystem.export)
-
     fsImport.addChild(file)
     fsImport.addChild(file2)
     fsImport.createDirectory('dir')
     fsImport.createDirectory('testChildDir')
-    bucket.fileSystem.import(fsImport.copy.export)
-    expect(bucket.fileSystem.export).toEqual(fsImport.export)
+    const x: FileSystemExport = fsImport.export
+
+    bucket.fileSystem.import(x)
+    expect(bucket.fileSystem.export).toEqual(x)
   })
 })

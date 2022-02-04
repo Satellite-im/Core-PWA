@@ -89,13 +89,6 @@ export class FileSystem {
 
   public import(fs: FileSystemExport) {
     fs.content.forEach((e) => {
-      // if (e.type in DIRECTORY_TYPE) {
-      //   this.addChild(e)
-      //   console.log('added folder')
-      // }
-      // if (e.type in FILE_TYPE){
-      //   this.addChild
-      // }
       this.addChild(e)
     })
   }
