@@ -11,7 +11,7 @@ export default Vue.extend({
     FolderPlusIcon,
     FilePlusIcon,
   },
-  // todo - best practice would be emitting rather than passing function as a prop
+  // todo - best practice would be emitting rather than passing function as a prop - AP-639
   props: {
     changeView: {
       type: Function,
@@ -40,7 +40,7 @@ export default Vue.extend({
       }
       this.input.show = !this.input.show
     },
-    // todo
+    // todo - AP-640
     addFile() {},
   },
 })

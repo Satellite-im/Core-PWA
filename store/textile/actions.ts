@@ -71,7 +71,7 @@ export default {
     const lastInbound =
       rootState.textile.conversations[address]?.lastInbound ?? 0
 
-    //  if nothing stored in indexeddb, fetch entire conversation
+    // if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
       conversation = await $MailboxManager.getConversation({
         friendIdentifier: friend.textilePubkey,

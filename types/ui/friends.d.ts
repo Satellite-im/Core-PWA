@@ -25,7 +25,7 @@ export interface Friend extends EncryptedFriend {
   pending: Boolean
   activeChat: Boolean
   account: FriendAccount
-  // possibly break these out into different type. These optional fields come up in the friends list, add, request area
+  // possibly break these out into different types. These optional fields come up in the friends list, add, request area
   request?: IncomingRequest
   photoHash?: string
 }
