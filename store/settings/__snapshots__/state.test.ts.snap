@@ -17,6 +17,7 @@ Object {
   },
   "noiseSuppression": true,
   "sampleSize": 24,
+  "timezone": "America/Denver",
   "userDeniedAudioAccess": false,
   "userHasGivenAudioAccess": false,
   "videoInput": "",

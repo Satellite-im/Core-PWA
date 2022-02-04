@@ -15,31 +15,17 @@
         :size="6"
         :text="$t('pages.settings.profile.info.preferences')"
       />
-      <div class="profile-preferences-location">
+      <div class="profile-preferences-timezone">
         <TypographySubtitle
           :size="6"
           :text="$t('pages.settings.profile.info.location')"
         />
-        <multiselect
-          :options="recommendLocations"
-          :multiple="true"
-          :close-on-select="false"
-          :clear-on-select="false"
-          :preserve-search="true"
-          :placeholder="$t('pages.settings.profile.info.selectLocation')"
-          label="location"
-          track-by="location"
-          v-model="locations"
-          selectLabel=""
-          deselectLabel=""
-          selectedLabel=""
-        >
-        </multiselect>
-        <div class="mg-half">
-          <InteractablesChip
-            v-for="(loc, i) in info.locations"
-            :key="i"
-            :text="loc"
+        <div class="timezone-list">
+          <InteractablesSelect
+            :options="timezones"
+            v-model="timezone"
+            size="small"
+            class="form-control"
           />
         </div>
       </div>
