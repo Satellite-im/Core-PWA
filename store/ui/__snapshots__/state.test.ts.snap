@@ -73,7 +73,7 @@ Object {
     "messageID": null,
     "status": false,
   },
-  "settingsDefaultRoute": "personalize",
+  "settingsRoute": "personalize",
   "settingsSideBar": true,
   "showPinned": false,
   "showSearchResult": false,

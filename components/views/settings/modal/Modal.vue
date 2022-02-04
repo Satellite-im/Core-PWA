@@ -18,7 +18,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      page: this.$store.state.ui.settingsDefaultRoute,
       settingSwiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
@@ -65,7 +64,7 @@ export default Vue.extend({
      * @example
      */
     changeRoute(route: string) {
-      this.$data.page = route
+      this.$store.commit('ui/setSettingsRoute', route)
       if (this.$device.isMobile) {
         this.showSidebar(true)
       }

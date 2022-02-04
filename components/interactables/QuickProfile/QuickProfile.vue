@@ -93,20 +93,21 @@ export default Vue.extend({
     },
     openProfile() {
       if (this.user) {
-        const isMe = this.user.address === this.$store.state.accounts.active
+        const isMe = this.user.address === this.accounts.active
 
         if (isMe) {
           this.$store.commit('ui/toggleSettings', {
             show: true,
             defaultRoute: 'profile',
           })
-        } else {
-          this.$store.commit('ui/toggleModal', {
-            name: 'userProfile',
-            state: true,
-          })
-          this.$store.commit('ui/setUserProfile', this.user)
+          return
         }
+
+        this.$store.commit('ui/toggleModal', {
+          name: 'userProfile',
+          state: true,
+        })
+        this.$store.commit('ui/setUserProfile', this.user)
       }
     },
   },
