@@ -33,10 +33,8 @@ describe('Test FileSystem Directory', () => {
     fsImport.goBack()
 
     // need to place in variable or it returns empty after the first time
-    const ex = fsImport.export
+    const ex: FileSystemExport = fsImport.export
     bucket.updateIndex(ex)
-
-    bucket.fileSystem.import(bucket.index)
-    expect(bucket.index).toEqual(bucket.fileSystem.export)
+    expect(bucket.index).toEqual(ex)
   })
 })
