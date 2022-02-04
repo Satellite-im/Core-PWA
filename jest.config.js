@@ -24,6 +24,11 @@ module.exports = {
     '<rootDir>/cypress',
     '<rootDir>/coverage',
     '<rootDir>/plugins',
+    '<rootDir>/electron',
+    '<rootDir>/libraries/Enums',
+    '<rootDir>/libraries/Files/errors',
+    '<rootDir>/libraries/Files/types',
+    '<rootDir>/types',
   ],
   testEnvironment: 'jsdom',
   transform: {
