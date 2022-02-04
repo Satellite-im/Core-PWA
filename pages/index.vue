@@ -30,6 +30,7 @@ export default Vue.extend({
       }
     },
   },
+  
   watch: {
     // this.$router.replace('/chat/direct')
     allPrerequisitesReady(nextValue) {
@@ -55,6 +56,10 @@ export default Vue.extend({
       return
     }
     this.loadAccount()
+  },
+   destroyed(){
+    //Clear store of all pending photo uploads on close
+    this.$store.commit('chat/resetAllUploadedFiles')
   },
   methods: {
     /**

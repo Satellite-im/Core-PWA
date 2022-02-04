@@ -38,7 +38,7 @@ export default Vue.extend({
     },
     recipient: {
       type: Object as PropType<Friend>,
-      default: () => {},
+      required: true,
     },
   },
   data() {
@@ -59,9 +59,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends']),
+    ...mapState(['ui', 'friends', 'chat']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
+    uploadedFiles: {
+      get() {
+        return this.chat.uploadedFiles[this.$props.recipient?.address]
+      },
+      set(uploadFile) {
+        this.$store.commit('chat/addUploadedFile', uploadFile)
+      },
     },
   },
   methods: {
@@ -101,7 +109,7 @@ export default Vue.extend({
             )
           }
         }
-        this.$data.files = await Promise.all(
+        const tempFiles = await Promise.all(
           [...files].map(async (file: File) => {
             const uploadFile = {
               file,
@@ -111,7 +119,7 @@ export default Vue.extend({
             return uploadFile
           }),
         )
-        this.$data.files.every(async (uploadFile: UploadDropItemType) => {
+        tempFiles.every(async (uploadFile: UploadDropItemType) => {
           if (uploadFile.file.size <= Config.uploadByteLimit) {
             uploadFile.nsfw.checking = true
             try {
@@ -124,7 +132,6 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
-
           this.loadPicture(uploadFile)
         })
         this.$data.uploadStatus = true
@@ -145,6 +152,10 @@ export default Vue.extend({
       reader.onload = function (e: Event | any) {
         if (e.target) item.url = e.target.result
       }
+      this.uploadedFiles = {
+        file: item,
+        address: this.recipient.address,
+      }
       reader.readAsDataURL(item.file)
     },
     /**
@@ -154,15 +165,18 @@ export default Vue.extend({
      * @example @click="cancelUpload"
      */
     cancelUpload() {
-      this.$data.files = []
+      this.$store.commit('chat/clearUploadedFiles', this.recipient.address)
+      this.$data.files = this.uploadedFiles
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$data.uploadStatus = false
       this.$data.count_error = false
       this.$parent.$data.showFilePreview = false
     },
     removeUploadItem(index: number) {
-      this.$data.files.splice(index, 1)
-      this.$data.files = [...this.$data.files]
+      this.$store.commit('chat/removeUploadedFile', {
+        address: this.recipient.address,
+        index: index,
+      })
       if (this.$data.files.length === 0) {
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$data.uploadStatus = false
@@ -245,6 +259,19 @@ export default Vue.extend({
         this.dispatchFile(file)
       })
     },
+  },
+  watch: {
+    recipient() {
+      this.$store.commit(
+        'chat/initUploadedFiles',
+        this.$props.recipient?.address,
+      )
+      this.$data.files = this.uploadedFiles
+    },
+  },
+  mounted() {
+    this.$store.commit('chat/initUploadedFiles', this.$props.recipient?.address)
+    this.$data.files = this.uploadedFiles
   },
 })
 </script>
