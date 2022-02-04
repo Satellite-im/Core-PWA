@@ -30,7 +30,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends', 'accounts']),
+    ...mapState(['ui', 'friends', 'accounts']),
     address() {
       return getAddressFromState(this.group.from, this.$store.state)
     },
@@ -85,8 +85,22 @@ export default Vue.extend({
         this.group.from,
         this.$store.state,
       )
-      this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', selectedUser)
+
+      const openQuickProfile = () => {
+        this.$store.commit('ui/setQuickProfilePosition', e)
+        this.$store.commit('ui/quickProfile', selectedUser)
+      }
+
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 100)
     },
   },
 })
