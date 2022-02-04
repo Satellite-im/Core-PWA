@@ -24,16 +24,16 @@ describe('Test FileSystem Directory', () => {
 
   it('Fetch index and import it into the fileSystem', () => {
     const bucket = new Bucket(new FileSystem())
-    const fsImport = new FileSystem()
+    const fsToImport = new Bucket(new FileSystem())
 
-    fsImport.addChild(file)
-    fsImport.createDirectory('dir')
-    fsImport.openDirectory('dir')
-    fsImport.addChild(file2)
-    fsImport.goBack()
+    fsToImport.fileSystem.addChild(file)
+    fsToImport.fileSystem.createDirectory('dir')
+    fsToImport.fileSystem.openDirectory('dir')
+    fsToImport.fileSystem.addChild(file2)
 
     // need to place in variable or it returns empty after the first time
-    const ex: FileSystemExport = fsImport.export
+    const ex: FileSystemExport = fsToImport.index
+
     bucket.updateIndex(ex)
     expect(bucket.index).toEqual(ex)
   })

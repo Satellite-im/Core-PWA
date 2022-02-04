@@ -28,6 +28,7 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   get index(): FileSystemExport {
+    this.fileSystem.goBackToDirectory('root')
     return this.fileSystem.export
   }
 
