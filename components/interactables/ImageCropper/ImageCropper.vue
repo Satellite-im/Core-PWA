@@ -9,7 +9,8 @@ Vue.use(VueCroppie)
 
 const options = {
   type: 'base64',
-  size: { width: 600, height: 450 },
+  circle: false,
+  size: { width: 600, height: 600 },
   format: 'jpeg',
 }
 
