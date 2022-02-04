@@ -15,13 +15,6 @@ const file2 = new Fil(
 )
 
 describe('Test FileSystem Directory', () => {
-  it('Fetch fileSystem export and update Bucket index', () => {
-    const bucket = new Bucket(new FileSystem())
-
-    bucket.updateIndex(bucket.fileSystem.export)
-    expect(bucket.index).toEqual(bucket.fileSystem.export)
-  })
-
   it('Fetch index and import it into the fileSystem', () => {
     const bucket = new Bucket(new FileSystem())
     const fsToImport = new Bucket(new FileSystem())
