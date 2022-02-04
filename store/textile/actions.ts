@@ -570,8 +570,6 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId }: { groupId: string },
   ) {
-    console.log('Fetch Group Messages')
-
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.groupChatManager?.isInitialized()) {
@@ -582,10 +580,6 @@ export default {
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
-    // const group = await $GroupChatManager.createGroupConversation([])
-
-    // console.log(group)
-
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
     let conversation: MessageFromThread[] = []
@@ -594,12 +588,12 @@ export default {
       groupChatID: groupId,
       query,
     })
+    console.log(conversation, "CONVERSTATION")
 
     await $GroupChatManager.listenToGroupMessages(
       (message) => console.log('new chat message', message),
       groupId,
     )
-    console.log('conversation', conversation)
 
     commit('setConversationLoading', { loading: false })
     return conversation
@@ -614,7 +608,6 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId, message }: { groupId: string; message: string },
   ) {
-    console.log('Send group message', groupId, message)
 
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 

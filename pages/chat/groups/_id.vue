@@ -40,7 +40,7 @@ export default Vue.extend({
         'textile/fetchGroupMessages',
         { groupId: id },
       )
-      console.log(this.$data.groupMessages)
+      console.log(' in FRONTEND', this.$data.groupMessages)
     },
   },
 })

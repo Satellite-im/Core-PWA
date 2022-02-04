@@ -45,8 +45,8 @@
         <UiUser
           v-for="member in members"
           :user="member"
-          :key="member.address"
-          :creatorBadge="member.address == selectedGroup.creator"
+          :key="member"
+          :creatorBadge="member == selectedGroup.creator"
         />
       </UiScroll>
     </div>

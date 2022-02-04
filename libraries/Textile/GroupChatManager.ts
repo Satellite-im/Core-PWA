@@ -1,12 +1,11 @@
-import { EventEmitter } from 'events'
 import {
-  PublicKey,
-  PrivateKey,
   Identity,
+  PrivateKey,
+  PublicKey,
   ThreadID,
+  Update,
   UserMessage,
   Users,
-  Update,
 } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
@@ -14,19 +13,17 @@ import { v4 as uuid } from 'uuid'
 import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
-  MailboxCallback,
-  MessageFromThread,
-  MailboxSubscriptionType,
-  MessageCallback,
-  MessageTypes,
-  MessagePayloads,
   Message,
+  MessageCallback,
+  MessageFromThread,
+  MessagePayloads,
+  MessageTypes,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
 import {
-  PropCommonEnum,
-  MessagingTypesEnum,
   EncodingTypesEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { groupChatSchema } from '~/libraries/Textile/schema'
@@ -54,10 +51,10 @@ export class GroupChatManager {
    * @description Initializes the mailbox for the current user
    * @returns the mailbox id
    */
-  async init(): Promise<string> {
-    const users: Users = this.textile.users
-    this.mailboxID = await users.getMailboxID()
-    return this.mailboxID
+  async init(): Promise<ThreadID> {
+    return (this.threadID = ThreadID.fromString(
+      Config.textile.groupChatThreadID,
+    ))
   }
 
   /**
@@ -103,29 +100,29 @@ export class GroupChatManager {
         .ge(lastInbound)
         .orderByIDDesc()
     }
-    const encryptedInbox = await this.textile.client.find<MessageFromThread>(
+
+    // const lastMessageTime = encryptedInbox?.[0]?.created_at || 0
+    // const firstMessageTime =
+    //   encryptedInbox?.[encryptedInbox.length - 1]?.created_at || 0
+    //
+    // const messages = [...encryptedInbox].sort(
+    //   (a, b) => a.created_at - b.created_at,
+    // )
+    //
+    // const promises = messages.map<Promise<Message>>(this.decodeMessage)
+    //
+    // const checkdecode = this.decodeMessage(userMessageToGroup(messages))
+    // const allSettled = await Promise.allSettled(promises)
+    // console.log('check decode', allSettled)
+    // const filtered = allSettled.filter(
+    //   (r) => r.status === PropCommonEnum.FULFILLED,
+    // ) as PromiseFulfilledResult<Message>[]
+    // return filtered.map((r) => r.value)
+    return await this.textile.client.find<MessageFromThread>(
       this.threadID,
       groupChatID,
       groupChatQuery,
     )
-
-    const lastMessageTime = encryptedInbox?.[0]?.created_at || 0
-    const firstMessageTime =
-      encryptedInbox?.[encryptedInbox.length - 1]?.created_at || 0
-
-    const messages = encryptedInbox
-
-    console.log('Messages from Group', messages)
-    //
-    const promises = messages.map<Promise<Message>>(this.decodeMessage)
-    //
-    const allSettled = await Promise.allSettled(promises)
-    console.log('Messages from Group', allSettled)
-    const filtered = allSettled.filter(
-      (r) => r.status === PropCommonEnum.FULFILLED,
-    ) as PromiseFulfilledResult<Message>[]
-    // return filtered.map((r) => r.value)
-    return messages
   }
 
   /**
@@ -162,39 +159,49 @@ export class GroupChatManager {
    * @param message Message to be sent
    * @param groupChatID
    */
-  async sendMessage<T extends MessageTypes>(
-    message: MessagePayloads[T],
-  ): Promise<Array<string>> {
-    const encoder = new TextEncoder()
-    const body = encoder.encode(
-      JSON.stringify({
-        from: this.senderAddress,
-        to: message.to,
-        at: Date.now(),
-        type: message.type,
-        payload: message.payload,
-        reactedTo:
-          message.type === MessagingTypesEnum.REACTION
-            ? message.reactedTo
-            : undefined,
-        repliedTo:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.repliedTo
-            : undefined,
-        replyType:
-          message.type === MessagingTypesEnum.REPLY
-            ? message.replyType
-            : undefined,
-        pack:
-          message.type === MessagingTypesEnum.GLYPH ? message.pack : undefined,
-      }),
-    )
+  async sendMessage<T extends MessageTypes>(message: MessagePayloads[T]) {
+    // const encoder = new TextEncoder()
+    // const body = encoder.encode(
+    //   JSON.stringify({
+    //     from: this.senderAddress,
+    //     to: message.to,
+    //     at: Date.now(),
+    //     type: message.type,
+    //     payload: message.payload,
+    //     reactedTo:
+    //       message.type === MessagingTypesEnum.REACTION
+    //         ? message.reactedTo
+    //         : undefined,
+    //     repliedTo:
+    //       message.type === MessagingTypesEnum.REPLY
+    //         ? message.repliedTo
+    //         : undefined,
+    //     replyType:
+    //       message.type === MessagingTypesEnum.REPLY
+    //         ? message.replyType
+    //         : undefined,
+    //     pack:
+    //       message.type === MessagingTypesEnum.GLYPH ? message.pack : undefined,
+    //   }),
+    // )
 
     const result = await this.textile.client.create(this.threadID, message.to, [
-      { body },
+      { message },
     ])
 
-    return result
+    // const newMessageToThread = {
+    //   createdAt: 0,
+    //   id: result[0],
+    //   from: this.senderAddress,
+    //   body,
+    //   signature: Buffer.from(this.senderAddress).toString(
+    //     EncodingTypesEnum.BASE64,
+    //   ),
+    //   to: message.to,
+    //   readAt: undefined,
+    // }
+
+    // return this.decodeMessage(userMessageToGroup(newMessageToThread))
   }
 
   /**
@@ -258,16 +265,16 @@ export class GroupChatManager {
    * @description Internal function used to decode messages
    * @param message Message to be decoded
    */
-  decodeMessage = async (message: any): Promise<Message> => {
+  decodeMessage = async (message: MessageFromThread): Promise<Message> => {
     const identity: Identity = this.textile.identity
     const privKey = PrivateKey.fromString(identity.toString())
     // eslint-disable-next-line camelcase
     const { _id, from, read_at, created_at } = message
-
     // Body decryption and parse
     const msgBody = Buffer.from(message.body, EncodingTypesEnum.BASE64)
     const bytes = await privKey.decrypt(msgBody)
     const decoded = new TextDecoder().decode(bytes)
+
     try {
       const parsedBody = JSON.parse(decoded)
       const validation = messageEncoder.decode({
@@ -306,7 +313,15 @@ export class GroupChatManager {
  * @param message the user message to convert
  * @returns the converted message
  */
-function userMessageToGroup(message: UserMessage): MessageFromThread {
+function userMessageToGroup(message: {
+  createdAt: number
+  signature: string
+  readAt: number | undefined
+  from: string
+  id: string
+  to: any
+  body: Uint8Array
+}): MessageFromThread {
   const { body, createdAt, from, id, readAt, signature, to } = message
   return {
     _id: id,
@@ -315,7 +330,7 @@ function userMessageToGroup(message: UserMessage): MessageFromThread {
     read_at: readAt,
     _mod: createdAt,
     from,
-    signature: Buffer.from(signature).toString(EncodingTypesEnum.BASE64),
+    signature,
     to,
   }
 }
