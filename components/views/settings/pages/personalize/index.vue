@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
+import { Themes, Flairs, FlairColors, ThemeNames } from '~/store/ui/types.ts'
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
@@ -23,6 +23,14 @@ export default Vue.extend({
         const activeTheme = Themes.find((th) => {
           return th.value === state
         })
+        if (activeTheme?.name === ThemeNames.DEFAULT) {
+          const flairValue = Flairs.find(
+            (flair) => flair.value === FlairColors.SATELLITE,
+          )
+          if (flairValue) {
+            this.$store.commit('ui/updateFlair', flairValue)
+          }
+        }
         this.$store.commit('ui/updateTheme', activeTheme)
       },
       get() {

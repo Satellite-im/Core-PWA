@@ -16,12 +16,7 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.theme')" />
       <br />
-      <InteractablesSelect
-        v-model="theme"
-        size="small"
-        :options="themes"
-        :selected="ui.theme.base.value"
-      />
+      <InteractablesSelect v-model="theme" size="small" :options="themes" />
     </div>
   </div>
 
@@ -30,11 +25,11 @@
       <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
       <br />
       <InteractablesSelect
+        :disabled="theme === ThemeNames.DEFAULT"
         v-model="flair"
         size="small"
         :options="flairs"
         colorSupport
-        :selected="ui.theme.flair.value"
       />
     </div>
   </div>
