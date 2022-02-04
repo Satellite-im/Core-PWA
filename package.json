@@ -37,6 +37,7 @@
     "@types/uuid": "^8.3.1",
     "@types/vue-markdown": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@vvo/tzdb": "^6.45.0",
     "bip39": "^3.0.4",
     "buffer-layout": "^1.2.2",
     "bulma": "^0.9.2",
@@ -61,8 +62,8 @@
     "less": "^4.1.1",
     "less-loader": "^7.1.1",
     "lodash": "^4.17.21",
-    "match-sorter": "^6.3.1",
     "marked": "^4.0.7",
+    "match-sorter": "^6.3.1",
     "micro-base58": "^0.5.0",
     "mousetrap": "^1.6.5",
     "net": "^1.0.2",
@@ -166,6 +167,9 @@
   },
   "homepage": "https://github.com/Satellite-im/Core-PWA#readme",
   "lint-staged": {
-    "*.{js,ts,vue}": ["eslint --cache --fix", "prettier --write"]
+    "*.{js,ts,vue}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   }
 }
