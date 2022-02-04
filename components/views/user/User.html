@@ -1,4 +1,9 @@
-<div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
+<div
+  class="user"
+  @contextmenu="contextMenu"
+  v-on:click="navigateToUser"
+  v-if="existConversation"
+>
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />

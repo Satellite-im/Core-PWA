@@ -8,6 +8,7 @@ import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
+import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -22,9 +23,6 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
-  computed: {
-    ...mapState(['ui']),
-  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -45,12 +43,23 @@ export default Vue.extend({
         { text: 'Remove Friend', func: this.testFunc },
         { text: 'Profile', func: this.handleShowProfile },
       ],
+      existConversation: false,
     }
   },
   computed: {
+    ...mapState(['ui', 'textile']),
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+  },
+  watch: {
+    'textile.conversations': {
+      handler(newValue) {
+        this.existMessage(newValue)
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {
@@ -103,12 +112,18 @@ export default Vue.extend({
 
         if (today === uDay) {
           return this.$dayjs(uLastUpdate).format('HH:mm')
-        } else {
-          return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
         }
+        return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
       }
 
       return 'No message'
+    },
+    existMessage(textileObj: Conversation) {
+      const currentUserInfo = textileObj[this.user.address]
+
+      this.$data.existConversation = !(
+        !currentUserInfo || currentUserInfo?.lastUpdate <= 0
+      )
     },
   },
 })
