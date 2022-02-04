@@ -27,9 +27,10 @@ describe('Test FileSystem Directory', () => {
     const fsImport = new FileSystem()
 
     fsImport.addChild(file)
-    fsImport.addChild(file2)
     fsImport.createDirectory('dir')
-    fsImport.createDirectory('testChildDir')
+    fsImport.openDirectory('dir')
+    fsImport.addChild(file2)
+    fsImport.goBack()
     const x: FileSystemExport = fsImport.export
 
     bucket.fileSystem.import(x)
