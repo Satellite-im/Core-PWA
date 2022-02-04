@@ -129,7 +129,7 @@
     <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div v-if="dataState.friends !== DataStateType.Loading">
-          <Group v-for="group in groups" :group="group" :key="group.address" />
+          <GroupAside v-for="group in groups" :selectedGroup="group" :key="group.address"/>
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>

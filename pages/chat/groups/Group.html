@@ -1,4 +1,5 @@
 <div id="group">
   <UiChatdEncrypted />
-  <Conversation :messages="media.messages" :loading="loading" />
+  <div v-on:click="sendMessage">send message</div>
+  <Conversation :groupMessages="groupMessages" :loading="false" />
 </div>

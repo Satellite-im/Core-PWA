@@ -9,7 +9,8 @@ export default Vue.extend({
   layout: 'chat',
   data() {
     return {
-      loading: true,
+      groupMessages: [],
+      groupID: '',
     }
   },
   computed: {
@@ -17,9 +18,7 @@ export default Vue.extend({
   },
   mounted() {
     const { id } = this.$route.params
-    console.log('group', id)
-
-    this.$store.dispatch('textile/fetchGroupMessages', { groupId: id })
+    this.getMessages(id)
     // setTimeout(() => {
     //   this.$data.loading = false
     //   this.$store.dispatch('ui/setMessages', this.$mock.messages)
@@ -29,10 +28,19 @@ export default Vue.extend({
   methods: {
     sendMessage() {
       const { id } = this.$route.params
+      this.$data.groupID = { id }
       this.$store.dispatch('textile/sendGroupMessage', {
         groupId: id,
         message: 'This is my first group message',
       })
+    },
+    async getMessages(id: string) {
+      this.$data.groupID = id
+      this.$data.groupMessages = await this.$store.dispatch(
+        'textile/fetchGroupMessages',
+        { groupId: id },
+      )
+      console.log(this.$data.groupMessages)
     },
   },
 })

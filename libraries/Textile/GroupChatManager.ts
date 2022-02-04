@@ -93,12 +93,8 @@ export class GroupChatManager {
     groupChatID: string
     query: ConversationQuery
     lastInbound?: number
-  }): Promise<Message[]> {
+  }): Promise<MessageFromThread[]> {
     let groupChatQuery = {}
-
-    console.log('lastInbound', lastInbound)
-    console.log('query', query)
-    console.log('groupChatId', groupChatID)
 
     // if messages are stored in indexeddb, only fetch new messages from textile
     if (lastInbound) {
@@ -107,15 +103,6 @@ export class GroupChatManager {
         .ge(lastInbound)
         .orderByIDDesc()
     }
-
-    // if (query?.limit) {
-    //   groupChatQuery.limitTo(query.limit)
-    // }
-
-    // if (query?.skip) {
-    //   groupChatQuery.skipNum(query.skip)
-    // }
-
     const encryptedInbox = await this.textile.client.find<MessageFromThread>(
       this.threadID,
       groupChatID,
@@ -129,17 +116,16 @@ export class GroupChatManager {
     const messages = encryptedInbox
 
     console.log('Messages from Group', messages)
-
+    //
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
-
+    //
     const allSettled = await Promise.allSettled(promises)
-
+    console.log('Messages from Group', allSettled)
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
-
-    console.log(filtered)
-    return filtered.map((r) => r.value)
+    // return filtered.map((r) => r.value)
+    return messages
   }
 
   /**
@@ -157,12 +143,9 @@ export class GroupChatManager {
 
       if (update?.instance) {
         console.log('message from listener', update?.instance)
-        // onMessage(userMessageToGroup(update?.instance))
-        // this.decodeMessage(userMessageToGroup(update?.instance)).then(
-        //   (decrypted) => {
-        //     onMessage(decrypted)
-        //   },
-        // )
+        // this.decodeMessage(update?.instance).then((decrypted) => {
+        //   onMessage(decrypted)
+        // })
       }
     }
 
@@ -181,13 +164,12 @@ export class GroupChatManager {
    */
   async sendMessage<T extends MessageTypes>(
     message: MessagePayloads[T],
-    groupChatID: string,
   ): Promise<Array<string>> {
     const encoder = new TextEncoder()
     const body = encoder.encode(
       JSON.stringify({
         from: this.senderAddress,
-        to: groupChatID,
+        to: message.to,
         at: Date.now(),
         type: message.type,
         payload: message.payload,
@@ -208,11 +190,9 @@ export class GroupChatManager {
       }),
     )
 
-    const result = await this.textile.client.create(
-      this.threadID,
-      groupChatID,
-      [body],
-    )
+    const result = await this.textile.client.create(this.threadID, message.to, [
+      { body },
+    ])
 
     return result
   }
@@ -226,7 +206,6 @@ export class GroupChatManager {
    */
   async editMessage<T extends MessageTypes>(
     id: string,
-    groupChatID: string,
     message: MessagePayloads[T],
   ) {
     const identity = this.textile.identity
@@ -235,7 +214,7 @@ export class GroupChatManager {
     const encodedBody = encoder.encode(
       JSON.stringify({
         from: this.senderAddress,
-        to: groupChatID,
+        to: message.to,
         at: Date.now(),
         editedAt: Date.now(),
         type: message.type,
@@ -260,7 +239,7 @@ export class GroupChatManager {
 
     const records = await this.textile.client.find<MessageFromThread>(
       this.threadID,
-      groupChatID,
+      message.to,
       Query.where('_id').eq(id),
     )
     if (records.length > 0) {
@@ -268,7 +247,7 @@ export class GroupChatManager {
       record.body = body
       record.signature = signature
       delete record._mod
-      await this.textile.client.save(this.threadID, groupChatID, [record])
+      await this.textile.client.save(this.threadID, message.to, [record])
       return this.decodeMessage(record)
     }
     return false
@@ -279,10 +258,9 @@ export class GroupChatManager {
    * @description Internal function used to decode messages
    * @param message Message to be decoded
    */
-  decodeMessage = async (message: MessageFromThread): Promise<Message> => {
+  decodeMessage = async (message: any): Promise<Message> => {
     const identity: Identity = this.textile.identity
     const privKey = PrivateKey.fromString(identity.toString())
-
     // eslint-disable-next-line camelcase
     const { _id, from, read_at, created_at } = message
 

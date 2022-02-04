@@ -9,11 +9,13 @@ import { Config } from '~/config'
 import {
   MailboxSubscriptionType,
   Message,
+  MessageFromThread,
   MessagePayloads,
 } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { MessageGroup } from '~/types/messaging'
 
 export default {
   /**
@@ -586,7 +588,7 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    let conversation: Message[] = []
+    let conversation: MessageFromThread[] = []
 
     conversation = await $GroupChatManager.getConversation({
       groupChatID: groupId,
@@ -597,9 +599,10 @@ export default {
       (message) => console.log('new chat message', message),
       groupId,
     )
-    console.log('subscribed')
+    console.log('conversation', conversation)
 
     commit('setConversationLoading', { loading: false })
+    return conversation
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -622,10 +625,7 @@ export default {
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
     await $GroupChatManager
-      .sendMessage<'text'>(
-        { to: groupId, payload: message, type: 'text' },
-        groupId,
-      )
+      .sendMessage<'text'>({ to: groupId, payload: message, type: 'text' })
       .catch((e) => console.log('error', e))
   },
 }

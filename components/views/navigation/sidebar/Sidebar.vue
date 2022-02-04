@@ -95,6 +95,9 @@ export default Vue.extend({
     sortUserList(conversations: Conversation) {
       this.$store.commit('friends/sortFriends', conversations)
     },
+    navigateToGroup(groupId: string) {
+      this.$router.push(`/chat/groups/${groupId}`)
+    },
   },
 })
 </script>

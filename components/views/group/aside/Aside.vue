@@ -47,6 +47,11 @@ export default Vue.extend({
       return filterFriends(this.friends, this.selectedGroup.members)
     },
   },
+  methods: {
+    navigateToGroup(groupId: string) {
+      this.$router.push(`/chat/groups/${groupId}`)
+    },
+  },
 })
 </script>
 
