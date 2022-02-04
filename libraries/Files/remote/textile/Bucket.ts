@@ -1,6 +1,5 @@
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
-
 import { TextileErrors } from '../../errors/Errors'
 import {
   TextileConfig,

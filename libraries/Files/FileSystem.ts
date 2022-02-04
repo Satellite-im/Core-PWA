@@ -4,6 +4,7 @@ import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
+import { FILE_TYPE } from './types/file'
 
 export class FileSystem {
   private _self = new Directory('root')
@@ -67,10 +68,10 @@ export class FileSystem {
   }
 
   /**
-   * @getter copy
-   * @returns {any[]} Returns an array of all content within the CURRENT directory
+   * @getter content
+   * @returns {Item[]} Returns an array of all content within the CURRENT directory
    */
-  get content(): any[] {
+  get content(): Item[] {
     return this.currentDirectory.content
   }
 
@@ -86,103 +87,17 @@ export class FileSystem {
     }
   }
 
-  get exportAll(): object {
-    const newContent: Array<object> = []
-    this.content.forEach((item) => {
-      newContent.push({ ...this.exportChildren(item) })
+  public import(fs: FileSystemExport) {
+    fs.content.forEach((e) => {
+      // if (e.type in DIRECTORY_TYPE) {
+      //   this.addChild(e)
+      //   console.log('added folder')
+      // }
+      // if (e.type in FILE_TYPE){
+      //   this.addChild
+      // }
+      this.addChild(e)
     })
-
-    return {
-      type: FILESYSTEM_TYPE.DEFAULT,
-      version: 1,
-      _children: newContent,
-    }
-  }
-
-  exportChildren(obj: Item): Item {
-    let childrenObj: Item = {}
-    if (obj._children) {
-      const child = Array.from(obj._children)
-      const newChildren: Array<object> = []
-      child.forEach((cItem: Item) => {
-        cItem.forEach((element: Item) => {
-          if (typeof element === 'object' && Object.keys(element).length > 0) {
-            const cc = this.exportChildren(element)
-
-            const newChildrenItem =
-              element._type === 'generic'
-                ? {
-                    _id: element._id,
-                    _name: element._name,
-                    _type: element._type,
-                    _description: element._description,
-                  }
-                : {
-                    _id: element._id,
-                    _name: element._name,
-                    _type: element._type,
-                    _children: cc._children,
-                  }
-
-            newChildren.push(newChildrenItem)
-          }
-        })
-      })
-
-      childrenObj._children = newChildren
-    }
-
-    childrenObj = {
-      ...childrenObj,
-      _id: obj._id,
-      _name: obj._name,
-      _type: obj._type,
-    }
-    if (obj._type === 'generic') {
-      childrenObj._description = obj._description
-    }
-    return childrenObj
-  }
-
-  // todo - refactor. why pass filesystem as param? should be able to use this
-  importAll(filesystem: FileSystem, testData: string): void {
-    const rTestData = JSON.parse(testData)
-
-    const directory = new Directory(
-      ...Object.values({
-        name: 'Directory',
-        type: DIRECTORY_TYPE.DEFAULT,
-      }),
-    )
-
-    this.importChildren(rTestData, filesystem, directory)
-  }
-
-  // todo - refactor. why pass filesystem as param? should be able to use this
-  importChildren(item: Item, filesystem: FileSystem, dir: Directory): void {
-    if (dir && item._children && item._children.length > 0) {
-      item._children.map((cItem: Item) => {
-        filesystem.openDirectory(item._name)
-        if (cItem._type === 'DEFAULT') {
-          const cDirectory = filesystem.createDirectory(cItem._name)
-          if (cDirectory) {
-            this.importChildren(cItem, filesystem, cDirectory)
-          }
-        } else {
-          const cFile = new Fil(
-            ...Object.values({
-              _name: cItem._name,
-              _description: cItem._description,
-              hash: '0x0aef',
-            }),
-          )
-
-          dir.addChild(cFile)
-          filesystem.addChild(cFile)
-        }
-        filesystem.goBack()
-      })
-    }
   }
 
   /**
@@ -412,7 +327,7 @@ export class FileSystem {
   }
 
   checkString(item: Item): boolean {
-    return item._name.includes('')
+    return item.name.includes('')
   }
 
   /**
