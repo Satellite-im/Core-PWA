@@ -2,6 +2,7 @@ import { Directory } from '../Directory'
 import { Fil } from '../Fil'
 import { FileSystem } from '../FileSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
+import { FILESYSTEM_TYPE } from '../types/filesystem'
 
 const mockFileData = {
   _name: 'TestFile.png',
@@ -49,6 +50,15 @@ describe('Test FileSystem', () => {
     it(`Correctly rejects duplicate entries`, () =>
       expect(filesystem.addChild(newDirectory)).toBe(false))
   }
+  it(`Correctly returns filesystem parent`, () =>
+    expect(filesystem.parent).toBe(null))
+  it(`Correctly exports filesystem`, () =>
+    expect(filesystem.export).toMatchObject({
+      version: 1,
+      type: FILESYSTEM_TYPE.DEFAULT,
+    }))
+  it(`Correctly copies entire filesystem`, () =>
+    expect(filesystem.copy).toMatchObject(mockFileSystemData))
   it(`Correctly creates a new directory`, () =>
     expect(filesystem.createDirectory('test_dir_3')).not.toBe(null))
   it(`Correctly creates a new file`, () =>
@@ -65,5 +75,13 @@ describe('Test FileSystem', () => {
     expect(filesystem.hasChild('test_fil_rename')).toBe(true)
     console.log(newDirectory2?.content)
     filesystem.fuzzySearch('generic')
+  })
+  it(`Correctly fails to rename a non-existent child`, () => {
+    filesystem.createFile('test_fil0000', 'Blah blah blah', '0xef123')
+    expect(filesystem.renameChild('abc', 'test_fil_rename')).toBe(null)
+  })
+  it(`Correctly fails to copy a non-existent child`, () => {
+    filesystem.createFile('test_fil111copy', 'Blah blah blah', '0xef123')
+    expect(filesystem.copyChild('abc')).toBe(null)
   })
 })
