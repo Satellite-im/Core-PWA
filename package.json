@@ -61,8 +61,8 @@
     "less": "^4.1.1",
     "less-loader": "^7.1.1",
     "lodash": "^4.17.21",
-    "match-sorter": "^6.3.1",
     "marked": "^4.0.7",
+    "match-sorter": "^6.3.1",
     "micro-base58": "^0.5.0",
     "mousetrap": "^1.6.5",
     "net": "^1.0.2",
@@ -136,6 +136,7 @@
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.1",
     "lint-staged": ">=10",
+    "netlify-plugin-cypress": "^2.2.0",
     "prettier": "^2.2.1",
     "simple-peer": "^9.11.0",
     "ts-jest": "^27.0.7",
@@ -166,6 +167,9 @@
   },
   "homepage": "https://github.com/Satellite-im/Core-PWA#readme",
   "lint-staged": {
-    "*.{js,ts,vue}": ["eslint --cache --fix", "prettier --write"]
+    "*.{js,ts,vue}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   }
 }
