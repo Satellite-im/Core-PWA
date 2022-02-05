@@ -40,6 +40,12 @@ export default Vue.extend({
     TerminalIcon,
     Editable,
   },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+      default: () => {},
+    },
+  },
   data() {
     return {
       showEmojiPicker: false,
@@ -47,11 +53,6 @@ export default Vue.extend({
       showFilePreview: false,
       nsfwUploadError: false,
     }
-  },
-  props: {
-    recipient: {
-      type: Object as PropType<Friend>,
-    },
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -145,6 +146,31 @@ export default Vue.extend({
       return ''
     },
   },
+  watch: {
+    'friends.all': {
+      handler() {
+        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        if (activeFriend)
+          this.$data.recipientTyping =
+            activeFriend.typingState === PropCommonEnum.TYPING
+      },
+      deep: true,
+    },
+    recipient() {
+      const findItem = this.chat.chatTexts.find(
+        (item: any) => item.userId === this.$props.recipient?.address,
+      )
+      const message = findItem ? findItem.value : ''
+
+      this.$store.commit('ui/chatbarContent', message)
+      this.$store.commit('ui/setReplyChatbarContent', {
+        id: '',
+        payload: '',
+        from: '',
+      })
+      this.$store.dispatch('ui/setChatbarFocus', true)
+    },
+  },
   methods: {
     /**
      * @method typingNotifHandler
@@ -168,7 +194,7 @@ export default Vue.extend({
      */
     debounceTypingStop: debounce(function (ctx) {
       ctx.$data.typing = false
-      ctx.typingNotifHandler(PropCommonEnum)
+      ctx.typingNotifHandler(PropCommonEnum.NOT_TYPING)
     }, 500),
     /**
      * @method smartTypingStart
@@ -292,31 +318,6 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
-    },
-  },
-  watch: {
-    'friends.all': {
-      handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-        if (activeFriend)
-          this.$data.recipientTyping =
-            activeFriend.typingState === PropCommonEnum.TYPING
-      },
-      deep: true,
-    },
-    recipient() {
-      const findItem = this.chat.chatTexts.find(
-        (item: any) => item.userId === this.$props.recipient?.address,
-      )
-      const message = findItem ? findItem.value : ''
-
-      this.$store.commit('ui/chatbarContent', message)
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id: '',
-        payload: '',
-        from: '',
-      })
-      this.$store.dispatch('ui/setChatbarFocus', true)
     },
   },
 })
