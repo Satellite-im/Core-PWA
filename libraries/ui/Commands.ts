@@ -55,7 +55,7 @@ export function isArgsValid(
   })
 }
 
-export function hasCommandPreview(text: string) {
+export function hasCommandPreview(text: string): boolean {
   return (
     containsCommand(text) &&
     commands.some((cmd) =>
