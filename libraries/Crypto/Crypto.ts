@@ -1,3 +1,4 @@
+import { TextEncoder, TextDecoder } from 'util'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import ed2curve from 'ed2curve'
 import { sharedKey, signMessage } from 'curve25519-js'
