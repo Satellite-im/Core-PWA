@@ -2,13 +2,13 @@
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
-import { FileSystem } from '~/libraries/Files/FileSystem'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM implements RFMInterface {
-  protected _fileSystem: FileSystem
+  protected _fileSystem: FilSystem
 
-  constructor(fileSystem: FileSystem) {
+  constructor(fileSystem: FilSystem) {
     if (this.constructor.name === 'RFM')
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
 

@@ -5,7 +5,7 @@ import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
 
-export class FileSystem {
+export class FilSystem {
   private _self = new Directory('root')
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
@@ -52,10 +52,10 @@ export class FileSystem {
 
   /**
    * @getter copy
-   * @returns {FileSystem} Returns a copy of the entire filesystem
+   * @returns {FilSystem} Returns a copy of the entire filesystem
    */
-  get copy(): FileSystem {
-    const fsCopy = new FileSystem()
+  get copy(): FilSystem {
+    const fsCopy = new FilSystem()
 
     this.root.content.forEach((item) => {
       const itemCopy = item.copy

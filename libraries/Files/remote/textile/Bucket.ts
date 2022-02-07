@@ -6,7 +6,7 @@ import {
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { FileSystem } from '~/libraries/Files/FileSystem'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
@@ -14,7 +14,7 @@ export class Bucket extends RFM implements RFMInterface {
   private identityManager: IdentityManager
   private _textile: TextileInitializationData | null = null
 
-  constructor(fileSystem: FileSystem) {
+  constructor(fileSystem: FilSystem) {
     super(fileSystem)
     this.identityManager = new IdentityManager()
   }
@@ -23,7 +23,7 @@ export class Bucket extends RFM implements RFMInterface {
     return this._textile
   }
 
-  get fileSystem(): FileSystem {
+  get fileSystem(): FilSystem {
     return this._fileSystem
   }
 

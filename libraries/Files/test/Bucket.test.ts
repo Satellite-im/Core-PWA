@@ -1,5 +1,5 @@
 import { Fil } from '../Fil'
-import { FileSystem } from '../FileSystem'
+import { FilSystem } from '../FilSystem'
 import { Bucket } from '../remote/textile/Bucket'
 import { FileSystemExport } from '../types/filesystem'
 
@@ -16,8 +16,8 @@ const file2 = new Fil(
 
 describe('Test FileSystem Directory', () => {
   it('Fetch index and import it into the fileSystem', () => {
-    const bucket = new Bucket(new FileSystem())
-    const fsToImport = new Bucket(new FileSystem())
+    const bucket = new Bucket(new FilSystem())
+    const fsToImport = new Bucket(new FilSystem())
 
     fsToImport.fileSystem.addChild(file)
     fsToImport.fileSystem.createDirectory('dir')

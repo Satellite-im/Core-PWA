@@ -1,6 +1,6 @@
 import { Directory } from '../Directory'
 import { Fil } from '../Fil'
-import { FileSystem } from '../FileSystem'
+import { FilSystem } from '../FilSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILESYSTEM_TYPE } from '../types/filesystem'
 
@@ -19,8 +19,8 @@ const mockFileSystemData = {
   name: 'root',
 }
 
-describe('Test FileSystem', () => {
-  const filesystem = new FileSystem()
+describe('Test FilSystem', () => {
+  const filesystem = new FilSystem()
   const file = new Fil(...Object.values(mockFileData))
   const file2 = new Fil(
     ...Object.values({ ...mockFileData, name: 'testPng2.png' }),
