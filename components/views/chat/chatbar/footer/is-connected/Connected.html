@@ -1,0 +1,22 @@
+<div
+  v-if="!typing && $Hounddog.getActiveFriend($store.state.friends)"
+  class="is-connected"
+>
+  <circle-icon
+    :class="`status is-${
+      $store.state.webrtc.connectedPeer ? 'online' : 'offline'
+    }`"
+    size="1x"
+  />
+  <TypographyText
+    v-if="$Hounddog.getActiveFriend($store.state.friends)"
+    :text="`${$Hounddog.getActiveFriend($store.state.friends).name}`"
+    :size="6"
+  />
+  <TypographyText
+    :text="`is ${
+      $store.state.webrtc.connectedPeer ? 'connected' : 'not connected'
+    }`"
+    :size="6"
+  />
+</div>
