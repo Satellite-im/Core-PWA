@@ -100,7 +100,7 @@ export default Vue.extend({
         if (!this.ui.quickProfile) {
           openQuickProfile()
         }
-      }, 100)
+      }, 0)
     },
   },
 })
