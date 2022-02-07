@@ -13,12 +13,19 @@
     justify-content: center;
     justify-self: center;
     padding-top: (@light-spacing / 2);
+    cursor: pointer;
   }
   .subtitle {
     margin: 0;
     margin-left: @light-spacing;
     font-family: @primary-font;
     &:extend(.font-secondary);
+  }
+  .sel-user-name.is-exist {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .button {
     padding: 0 @light-spacing 0 @light-spacing;

@@ -8,6 +8,7 @@ import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
+import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -22,9 +23,6 @@ export default Vue.extend({
     CircleIcon,
   },
   mixins: [ContextMenu],
-  computed: {
-    ...mapState(['ui']),
-  },
   props: {
     user: {
       type: Object as PropType<User>,
@@ -45,12 +43,23 @@ export default Vue.extend({
         { text: 'Remove Friend', func: this.testFunc },
         { text: 'Profile', func: this.handleShowProfile },
       ],
+      existConversation: false,
     }
   },
   computed: {
+    ...mapState(['ui', 'textile']),
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+  },
+  watch: {
+    'textile.conversations': {
+      handler(newValue) {
+        this.existMessage(newValue)
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {
@@ -78,6 +87,43 @@ export default Vue.extend({
         state: !this.ui.modals.userProfile,
       })
       this.$store.commit('ui/setUserProfile', this.user)
+    },
+    getLastUpdate() {
+      const currentUserInfo =
+        this.$store.state.textile.conversations[this.user.address]
+
+      const lastMessageAt = currentUserInfo?.messages
+        ? Math.max.apply(
+            null,
+            Object.values(currentUserInfo.messages).map((msg: any) => msg.at),
+          )
+        : 0
+
+      const uLastUpdate =
+        (this.user.lastUpdate ||
+          currentUserInfo?.lastUpdate ||
+          lastMessageAt) ??
+        0
+
+      const today = new Date().setHours(0, 0, 0, 0)
+
+      if (uLastUpdate) {
+        const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
+
+        if (today === uDay) {
+          return this.$dayjs(uLastUpdate).format('HH:mm')
+        }
+        return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
+      }
+
+      return 'No message'
+    },
+    existMessage(textileObj: Conversation) {
+      const currentUserInfo = textileObj[this.user.address]
+
+      this.$data.existConversation = !(
+        !currentUserInfo || currentUserInfo?.lastUpdate <= 0
+      )
     },
   },
 })
