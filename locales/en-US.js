@@ -528,7 +528,8 @@ export default {
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
-    requests: 'Friends request',
+    requests: 'Friend requests',
+    outgoing: 'Outgoing requests',
     blocked: 'Blocked friends',
     search_placeholder: 'Some User...',
     add: 'Add Friend',
@@ -546,6 +547,7 @@ export default {
     send: 'Send',
     message: 'Message',
     options: 'Options',
+    cancel: 'Cancel request',
   },
   market_place: {
     title: 'Marketplace',

@@ -6,24 +6,47 @@
         <!-- Friends Add -->
         <FriendsAdd />
         <!-- Friend Requests -->
-        <div v-if="friends.incomingRequests.length" class="padded_divider">
-          <TypographyHorizontalRuleText
-            plaintext
-            :value="$t('friends.requests')"
-          />
-        </div>
-        <FriendsFriend
-          v-for="friend in friends.incomingRequests"
-          :friend="{
+        <template v-if="friends.incomingRequests.length">
+          <div class="padded_divider">
+            <TypographyHorizontalRuleText
+              plaintext
+              :value="$t('friends.requests')"
+            />
+          </div>
+          <FriendsFriend
+            v-for="friend in friends.incomingRequests"
+            :friend="{
               name: friend.userInfo.name,
               address: friend.from,
               state: 'offline',
               status: friend.userInfo.status,
               request: friend
             }"
-          :key="friend.from"
-          request
-        />
+            :key="friend.from"
+            request
+          />
+        </template>
+        <!-- Outgoing Requests -->
+        <template v-if="friends.outgoingRequests.length">
+          <div class="padded_divider">
+            <TypographyHorizontalRuleText
+              plaintext
+              :value="$t('friends.outgoing')"
+            />
+          </div>
+          <FriendsFriend
+            v-for="friend in friends.outgoingRequests"
+            :friend="{
+              name: friend.userInfo.name,
+              address: friend.to,
+              state: 'offline',
+              status: friend.userInfo.status,
+              request: friend
+            }"
+            :key="friend.to"
+            outgoing
+          />
+        </template>
       </div>
       <div class="column is-half-desktop">
         <!-- Friends List -->
