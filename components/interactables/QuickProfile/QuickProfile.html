@@ -4,10 +4,8 @@
   v-click-outside="close"
   :style="$device.isDesktop ? `top: ${ui.quickProfilePosition.y}px; left: ${ui.quickProfilePosition.x}px;` : ''"
 >
-  <div class="action">
-    <InteractablesClose :action="close" />
-  </div>
   <div class="header">
+    <InteractablesClose :action="close" />
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="user.address"
