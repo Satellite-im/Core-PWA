@@ -124,4 +124,10 @@ export const Config = {
       },
     },
   },
+  cropperOptions: {
+    type: 'base64',
+    circle: false,
+    size: { width: 600, height: 600 },
+    format: 'jpeg',
+  },
 }
