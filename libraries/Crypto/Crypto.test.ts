@@ -6,7 +6,9 @@ describe.skip('init', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -19,7 +21,9 @@ describe.skip('hash', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', async () => {
@@ -38,7 +42,9 @@ describe.skip('computeSharedSecret', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -71,7 +77,9 @@ describe.skip('aesKeyFromSharedSecret', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -109,7 +117,9 @@ describe.skip('initializeRecipient', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', async () => {
@@ -147,7 +157,9 @@ describe.skip('encrypt', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', async () => {
@@ -224,7 +236,9 @@ describe.skip('separateIvFromData', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -268,7 +282,9 @@ describe.skip('isInitialized', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -281,7 +297,9 @@ describe.skip('decryptFrom', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -310,7 +328,9 @@ describe.skip('getSecret', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -333,7 +353,9 @@ describe.skip('decryptWithPassword', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', async () => {
@@ -365,7 +387,9 @@ describe.skip('encryptWithPassword', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', async () => {
@@ -397,7 +421,9 @@ describe.skip('signMessageWithKey', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
@@ -456,7 +482,9 @@ describe.skip('signMessage', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    const DefaultObject = Crypto.default
+    const CryptoConstructor = new DefaultObject()
+    inst = CryptoConstructor
   })
 
   test('0', () => {
