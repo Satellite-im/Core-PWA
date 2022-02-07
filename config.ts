@@ -8,7 +8,7 @@ export const Config = {
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
     browser: 'https://hub.textile.io',
     groupChatThreadID:
-      'bafk5zrvmzwisjsgp27nhgw62vxojbna26fsc5o5jwnatnasuiaznwda',
+      'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',

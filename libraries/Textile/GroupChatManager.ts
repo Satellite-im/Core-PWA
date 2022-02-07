@@ -67,10 +67,11 @@ export class GroupChatManager {
    * @returns a string UUID of the created groupChat
    */
   async createGroupConversation(
-    friendIdentifiers: Array<string>,
+    threadID: ThreadID,
+    // friendIdentifiers: Array<string>,
   ): Promise<string> {
     const newCollectionUUID = uuid()
-    await this.textile.client.newCollection(this.threadID, {
+    await this.textile.client.newCollection(threadID, {
       name: newCollectionUUID,
       schema: groupChatSchema,
     })
@@ -125,7 +126,7 @@ export class GroupChatManager {
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
 
     const allSettled = await Promise.allSettled(promises)
-
+    console.log(promises, allSettled, messages)
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
@@ -194,9 +195,7 @@ export class GroupChatManager {
       }),
     )
 
-    const body = Buffer.from(await publicKey.encrypt(encodedBody)).toString(
-      EncodingTypesEnum.BASE64,
-    )
+    const body = Buffer.from(encodedBody).toString(EncodingTypesEnum.BASE64)
 
     const signature = Buffer.from(await identity.sign(encodedBody)).toString(
       EncodingTypesEnum.BASE64,
@@ -294,43 +293,33 @@ export class GroupChatManager {
    * @param message Message to be decoded
    */
   decodeMessage = async (message: MessageFromThread): Promise<Message> => {
-    const identity: Identity = this.textile.identity
-    const privKey = PrivateKey.fromString(identity.toString())
-
+    // const identity: Identity = this.textile.identity
     // eslint-disable-next-line camelcase
     const { _id, from, read_at, created_at } = message
-
     // Body decryption and parse
     const msgBody = Buffer.from(message.body, EncodingTypesEnum.BASE64)
-    const bytes = await privKey.decrypt(msgBody)
-    const decoded = new TextDecoder().decode(bytes)
+    const decoded = new TextDecoder().decode(msgBody)
+    console.log(decoded, "decoded")
+    try {
+      const parsedBody = JSON.parse(decoded)
+      const validation = messageEncoder.decode({
+        ...parsedBody,
+        id: _id,
+        // eslint-disable-next-line camelcase
+        at: Math.floor(created_at / 1000000), // Convert into unix timestamp
+        from,
+        // eslint-disable-next-line camelcase
+        readAt: read_at,
+      })
+      console.log(validation)
+      if (!isRight(validation)) {
+        throw new Error('Invalid message payload')
+      }
 
-    const payload: MessageFromThread = JSON.parse(decoded)
-    console.log(payload, "payload")
-    const validation = messageEncoder.decode({
-      payload,
-      id: _id,
-      // eslint-disable-next-line camelcase
-      at: Math.floor(created_at / 1000000), // Convert into unix timestamp
-      from,
-      // eslint-disable-next-line camelcase
-      readAt: read_at,
-    })
-    console.log(validation, "validation")
-    return validation
-    // console.log(validation, 'decoded')
-    // try {
-    //
-
-    //
-    //   if (!isRight(validation)) {
-    //     throw new Error('Invalid message payload')
-    //   }
-    //   console.log(validation)
-    //   return validation.right
-    // } catch (_) {
-    //   throw new Error('Invalid message payload')
-    // }
+      return validation.right
+    } catch (_) {
+      throw new Error('Invalid message payload')
+    }
   }
 
   /**
