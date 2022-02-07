@@ -9,11 +9,11 @@ export interface FriendRequest {
   requestId: string
   account: FriendAccount
   pending: boolean
+  userInfo: RawUser | null
 }
 
 export interface IncomingRequest extends FriendRequest {
   from: string
-  userInfo: RawUser | null
   account: FriendAccount
 }
 

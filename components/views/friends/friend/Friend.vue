@@ -37,7 +37,7 @@ export default Vue.extend({
   props: {
     friend: {
       type: Object as PropType<Friend>,
-      default: () => {},
+      required: true,
     },
     request: {
       type: Boolean,
@@ -48,6 +48,10 @@ export default Vue.extend({
       default: false,
     },
     send: {
+      type: Boolean,
+      default: false,
+    },
+    outgoing: {
       type: Boolean,
       default: false,
     },
@@ -117,6 +121,8 @@ export default Vue.extend({
         this.loading = AddFriendEnum.EMPTY
       }
     },
+    // todo - remove friend request for both users on click
+    async cancelRequest() {},
     sendMessageRequest() {
       this.$router.push(`/chat/direct/${this.$props.friend.address}`)
     },

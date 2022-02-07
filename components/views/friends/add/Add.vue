@@ -34,6 +34,12 @@ export default Vue.extend({
       return `${location.origin}/#/friends/list/${this.accounts.active}`
     },
   },
+  mounted() {
+    if (this.$route.params && this.$route.params.id) {
+      this.$data.accountID = this.$route.params.id
+      this._searchFriend()
+    }
+  },
   methods: {
     _searchFriend: debounce(async function (this: any) {
       if (this.accountID.length >= 40) {
@@ -94,12 +100,6 @@ export default Vue.extend({
         this.error = error
       }
     },
-  },
-  mounted() {
-    if (this.$route.params && this.$route.params.id) {
-      this.$data.accountID = this.$route.params.id
-      this._searchFriend()
-    }
   },
 })
 </script>

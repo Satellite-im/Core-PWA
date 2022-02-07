@@ -53,8 +53,11 @@ export default {
       }),
     )
 
-    const outgoingRequests = outgoing.map<OutgoingRequest>((account) =>
-      friendAccountToOutgoingRequest(account),
+    const outgoingRequests = await Promise.all(
+      outgoing.map(async (account) => {
+        const userInfo = await serverProgram.getUser(new PublicKey(account.to))
+        return friendAccountToOutgoingRequest(account, userInfo)
+      }),
     )
 
     commit('setIncomingRequests', incomingRequests)
@@ -130,7 +133,7 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
-    const friend: Omit<Friend, 'publicKey' | 'typingState'> = {
+    const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
       name: rawUser.name,
       profilePicture: rawUser.photoHash,
@@ -161,7 +164,7 @@ export default {
       )
       commit(
         'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(friendAccount).requestId,
+        friendAccountToOutgoingRequest(friendAccount, null).requestId,
       )
       return
     }
@@ -212,7 +215,7 @@ export default {
       if (account) {
         commit(
           'removeOutgoingRequest',
-          friendAccountToOutgoingRequest(account).requestId,
+          friendAccountToOutgoingRequest(account, null).requestId,
         )
       }
     })
@@ -254,6 +257,7 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
@@ -342,11 +346,15 @@ export default {
         friendAccountKey,
       )
 
-      if (parsedFriendRequest)
+      if (parsedFriendRequest) {
+        const userInfo = await serverProgram.getUser(
+          new PublicKey(parsedFriendRequest.to),
+        )
         commit(
           'addOutgoingRequest',
-          friendAccountToOutgoingRequest(parsedFriendRequest),
+          friendAccountToOutgoingRequest(parsedFriendRequest, userInfo),
         )
+      }
     }
   },
   /**
@@ -509,7 +517,7 @@ export default {
     if (transactionId) {
       commit(
         'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(account).requestId,
+        friendAccountToOutgoingRequest(account, null).requestId,
       )
     }
   },
@@ -579,11 +587,13 @@ function friendAccountToIncomingRequest(
  */
 function friendAccountToOutgoingRequest(
   friendAccount: FriendAccount,
+  userInfo: RawUser | null,
 ): OutgoingRequest {
   return {
     requestId: friendAccount.accountId,
     to: friendAccount.to,
     account: friendAccount,
     pending: false,
+    userInfo,
   }
 }

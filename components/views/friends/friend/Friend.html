@@ -52,6 +52,18 @@
       <check-icon size="1x" />
     </InteractablesButton>
   </div>
+  <div class="controls" v-else-if="outgoing">
+    <InteractablesButton
+      type="danger"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      :data-tooltip="$t('friends.cancel')"
+      :loading="loading === 'options'"
+      :action="cancelRequest"
+    >
+      <x-icon size="1x" />
+    </InteractablesButton>
+  </div>
   <div class="controls" v-else>
     <InteractablesButton
       v-if="loading !== 'options'"
