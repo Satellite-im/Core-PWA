@@ -1,25 +1,35 @@
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
-
 import { TextileErrors } from '../../errors/Errors'
 import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
+import { FilSystem } from '~/libraries/Files/FilSystem'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
   private creds: { id: any; pass: any } = { id: null, pass: null }
   private identityManager: IdentityManager
   private _textile: TextileInitializationData | null = null
 
-  constructor(fileSystem: FileSystem) {
+  constructor(fileSystem: FilSystem) {
     super(fileSystem)
     this.identityManager = new IdentityManager()
   }
 
   get textile(): TextileInitializationData | null {
     return this._textile
+  }
+
+  get fileSystem(): FilSystem {
+    return this._fileSystem
+  }
+
+  get index(): FileSystemExport {
+    this.fileSystem.goBackToDirectory('root')
+    return this.fileSystem.export
   }
 
   /**
@@ -54,5 +64,9 @@ export class Bucket extends RFM implements RFMInterface {
     }
 
     return this._textile
+  }
+
+  updateIndex(index: FileSystemExport) {
+    this.fileSystem.import(index)
   }
 }

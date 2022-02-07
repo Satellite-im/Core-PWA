@@ -3,11 +3,13 @@ import { Directory } from '../Directory'
 import { FileSystemErrors } from '../errors/Errors'
 import { ItemInterface } from '../interface/Item.interface'
 import { DIRECTORY_TYPE } from '../types/directory'
+import { FILE_TYPE } from '../types/file'
 
 export abstract class Item implements ItemInterface {
   private _id: string = uuidv4()
   private _name: string = ''
   private _parent: Directory | null | undefined = null
+  abstract type: DIRECTORY_TYPE | FILE_TYPE
 
   /**
    * Update the parent directory for this item

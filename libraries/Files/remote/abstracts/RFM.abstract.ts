@@ -1,24 +1,25 @@
 // Remote file management
-import { Item } from '../../abstracts/Item.abstract'
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
+import { FilSystem } from '~/libraries/Files/FilSystem'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM implements RFMInterface {
-  private _fileSystem: FileSystem
+  protected _fileSystem: FilSystem
 
-  constructor(fileSystem: FileSystem) {
+  constructor(fileSystem: FilSystem) {
     if (this.constructor.name === 'RFM')
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
 
     this._fileSystem = fileSystem
   }
 
-  updateIndex(index: FileSystem): void {
+  updateIndex(index: FileSystemExport): void {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 
-  getIndex(): Promise<Item[]> {
+  get index(): FileSystemExport {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 

@@ -11,6 +11,8 @@ import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { Alerts } from '~/libraries/ui/Alerts'
+import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 // Utils
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
@@ -31,6 +33,8 @@ declare module 'vue/types/vue' {
     $Hounddog: Hounddog
     $Logger: Logger
     $Alerts: Alerts
+    $Bucket: Bucket
+    $FileSystem: FilSystem
   }
 }
 
@@ -48,6 +52,8 @@ declare module '@nuxt/types' {
     $Hounddog: Hounddog
     $Logger: Logger
     $Alerts: Alerts
+    $Bucket: Bucket
+    $FileSystem: FilSystem
   }
 }
 
@@ -61,6 +67,8 @@ Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$Alerts = new Alerts()
+Vue.prototype.$FileSystem = new FilSystem()
+Vue.prototype.$Bucket = new Bucket(Vue.prototype.$FileSystem)
 
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
