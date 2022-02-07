@@ -5,7 +5,7 @@ export const Groups: Group[] = [
   {
     name: 'Satellite',
     // address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
-    address: 'c29557d0-6a23-4972-9578-f0b28c8ef1cd',
+    address: '3f3a36d0-7f8e-4b82-95d8-c695bac3d1b7',
     motd: 'Chatting privately with the world',
     members: [
       '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',

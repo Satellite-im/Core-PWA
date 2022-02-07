@@ -4,10 +4,12 @@ export const groupChatSchema = {
   type: 'object',
   properties: {
     _id: { type: 'string' },
+    created_at: { type: 'number' },
     from: { type: 'string' },
+    body: { type: 'string' },
+    signature: { type: 'string' },
     to: { type: 'string' },
-    at: { type: 'number' },
-    pinned: { type: 'boolean' },
-    payload: { type: 'string' },
+    _mod: { type: 'number' },
+    read_at: { type: 'number' },
   },
 }

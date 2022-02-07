@@ -588,12 +588,18 @@ export default {
       groupChatID: groupId,
       query,
     })
-    console.log(conversation, "CONVERSTATION")
+    console.log(conversation, 'CONVERSTATION')
 
     await $GroupChatManager.listenToGroupMessages(
       (message) => console.log('new chat message', message),
       groupId,
     )
+    commit('setConversation', {
+      address: groupId,
+      messages: conversation,
+      limit: query.limit,
+      skip: query.skip,
+    })
 
     commit('setConversationLoading', { loading: false })
     return conversation
@@ -608,7 +614,6 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId, message }: { groupId: string; message: string },
   ) {
-
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.groupChatManager?.isInitialized()) {
