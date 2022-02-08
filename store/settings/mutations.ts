@@ -42,6 +42,9 @@ const mutations = {
   displayCurrentActivity(state: SettingsState, value: Boolean) {
     state.displayCurrentActivity = value
   },
+  setTimezone(state: SettingsState, value: string) {
+    state.timezone = value
+  },
 }
 
 export default mutations

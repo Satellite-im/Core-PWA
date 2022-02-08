@@ -24,4 +24,5 @@ export interface SettingsState {
   keybinds: Object
   embeddedLinks: Boolean
   displayCurrentActivity: Boolean
+  timezone: string
 }
