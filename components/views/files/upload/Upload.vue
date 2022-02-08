@@ -65,11 +65,20 @@ export default Vue.extend({
     },
     uploadedFiles: {
       get() {
-        return this.chat.uploadedFiles[this.$props.recipient?.address]
+        return this.chat.uploadedFiles[this.$props.recipient?.address] ?? []
       },
       set(uploadFile) {
         this.$store.commit('chat/addUploadedFile', uploadFile)
       },
+    },
+  },
+  watch: {
+    recipient() {
+      this.$store.commit(
+        'chat/initUploadedFiles',
+        this.$props.recipient?.address,
+      )
+      this.$data.files = this.uploadedFiles
     },
   },
   methods: {
@@ -258,15 +267,6 @@ export default Vue.extend({
         this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
-    },
-  },
-  watch: {
-    recipient() {
-      this.$store.commit(
-        'chat/initUploadedFiles',
-        this.$props.recipient?.address,
-      )
-      this.$data.files = this.uploadedFiles
     },
   },
   mounted() {
