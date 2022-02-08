@@ -583,13 +583,10 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
-    let conversation: MessageFromThread[] = []
-
-    conversation = await $GroupChatManager.getConversation({
+    const conversation = await $GroupChatManager.getConversation({
       groupChatID: groupId,
       query,
     })
-    console.log(conversation, 'CONVERSTATION')
 
     await $GroupChatManager.listenToGroupMessages(
       (message) => console.log('new chat message', message),
@@ -603,7 +600,6 @@ export default {
     })
 
     commit('setConversationLoading', { loading: false })
-    return conversation
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -620,14 +616,7 @@ export default {
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
-
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
-
-    // console.log(
-    //   await $GroupChatManager.createGroupConversation(
-    //     ThreadID.fromString(Config.textile.groupChatThreadID),
-    //   ),
-    // )
 
     await $GroupChatManager
       .sendMessage<'text'>({ to: groupId, payload: message, type: 'text' })

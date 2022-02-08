@@ -28,7 +28,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['friends', 'accounts']),
     address() {
-      console.log(this.group, "dsaodkfhgadsoigh")
       return getAddressFromState(this.group.from, this.$store.state)
     },
     username() {

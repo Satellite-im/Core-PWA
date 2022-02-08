@@ -13,7 +13,7 @@ export default Vue.extend({
       default: false,
     },
     messages: {
-      type: Array as PropType<Message>,
+      type: Array as PropType<MessageGroup>,
       default: () => [],
     },
   },
