@@ -6,6 +6,9 @@ import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import Editable from './Editable.vue'
+
+import { bus } from '../../../../layouts/chat';
+
 import {
   parseCommand,
   commands,
@@ -53,6 +56,11 @@ export default Vue.extend({
       showFilePreview: false,
       nsfwUploadError: false,
     }
+  },
+  created() {
+    bus.$on('dropFiles', (data: {items: Array<object>, e: Event}) => {
+      this.handleUpload(data?.items, data?.e)
+    })
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
@@ -277,17 +285,6 @@ export default Vue.extend({
         })
         this.$data.nsfwUploadError = false
         this.text = ''
-      }
-    },
-    /**
-     * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar
-     * @param e Drop event data object
-     * @example v-on:drop="handleDrop"
-     */
-    handleDrop(e: DragEvent) {
-      if (e.dataTransfer) {
-        this.handleUpload(e?.dataTransfer?.items, e)
       }
     },
     /**
