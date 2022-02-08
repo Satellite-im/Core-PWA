@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 
 import { Fil } from '~/libraries/Files/Fil'
@@ -16,10 +15,14 @@ export default Vue.extend({
     return {
       file: false as Fil | boolean,
       view: 'grid',
-      directory: this.$Bucket.fileSystem.currentDirectory.content,
+      fileSystem: this.$Bucket.fileSystem,
     }
   },
-  watch: {},
+  computed: {
+    directory() {
+      return this.$Bucket.fileSystem.currentDirectory.content
+    },
+  },
   mounted(): void {
     const mockFileData = {
       _name: 'TestFile.png',
@@ -31,6 +34,8 @@ export default Vue.extend({
 
     this.$Bucket.fileSystem.addChild(file)
     this.$Bucket.fileSystem.createDirectory('dir')
+    this.$Bucket.fileSystem.openDirectory('dir')
+    this.$Bucket.fileSystem.createDirectory('dir2')
     console.log(this.$Bucket)
   },
   methods: {
@@ -49,36 +54,17 @@ export default Vue.extend({
       }
       if (Object.values(DIRECTORY_TYPE).includes(item.type as DIRECTORY_TYPE)) {
         this.$Bucket.fileSystem.openDirectory(item.name)
-        console.log('folder')
         console.log(this.$Bucket)
-        this.directory = this.$Bucket.fileSystem.currentDirectory.content
       }
     },
-    // getPath(): any {
-    //   if (this.$data.path.length === 0) {
-    //     return this.files.tree
-    //   }
-    //   let files = this.files.tree
-    //   for (let i = 0; i < this.$data.path.length; i++) {
-    //     files = files.children.filter(
-    //       (item: any) => item.name === this.$data.path[i],
-    //     )[0]
-    //   }
-    //   return files
-    // },
-    // push(item: any) {
-    //   if (item.children) {
-    //     this.$data.path.push(item.name)
-    //   }
-    // },
-    // pull(count: number = 1) {
-    //   for (let i = 0; i < count; i++) {
-    //     this.$data.path.pop()
-    //   }
-    // },
-    // setPath(pth: Array<String>) {
-    //   this.$data.path = pth
-    // },
+    pull(count: number = 1) {
+      for (let i = 0; i < count; i++) {
+        this.$data.path.pop()
+      }
+    },
+    setPath(pth: Array<String>) {
+      this.$data.path = pth
+    },
     // async handleFile(event: any) {
     //   this.$data.file = event.target.files[0]
     //   this.$data.nsfw.checking = true
@@ -94,10 +80,6 @@ export default Vue.extend({
     //     if (e.target) self.$data.url = e.target.result
     //   }
     //   reader.readAsDataURL(file)
-    // },
-    // cancelUpload() {
-    //   this.$data.file = false
-    //   this.$data.url = ''
     // },
   },
 })
