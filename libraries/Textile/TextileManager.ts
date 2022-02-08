@@ -33,11 +33,6 @@ export default class TextileManager {
 
     const { client, users } = await this.identityManager.authorize(identity)
 
-    this.creds = {
-      id,
-      pass,
-    }
-
     const textile: TextileInitializationData = {
       identity,
       client,
@@ -45,14 +40,7 @@ export default class TextileManager {
       users,
     }
 
-    this.mailboxManager = new MailboxManager(textile, wallet.address)
-    this.bucketManager = new BucketManager(
-      textile,
-      identity,
-      textile.wallet.address,
-    )
-    await this.bucketManager.init().catch((e) => console.log(e))
-    return this.mailboxManager.init()
+    return this.authenticate(id, pass, textile)
   }
 
   /**
