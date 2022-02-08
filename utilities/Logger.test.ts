@@ -14,7 +14,7 @@ describe('Test class Logger', () => {
     const logger = new Logger(debug1)
     logger.log(tag1, desc1, data1, level1)
 
-    expect(console.log).toBeCalledTimes(1)
+    expect(console.log).toBeCalledTimes(1) // eslint-disable-line
   })
   it('Logger-log with data', () => {
     // Arguments
@@ -31,8 +31,9 @@ describe('Test class Logger', () => {
     const logger = new Logger(debug1)
     logger.log(tag1, desc1, data1, level1)
 
-    expect(console.log).toBeCalledTimes(2) // Is called two times because the script will log the data if the data argument is not an empty object
-    expect(console.log).toBeCalledWith(data1)
+    // Console logs is called two times because the script will log the data if the data argument is not an empty object
+    expect(console.log).toBeCalledTimes(2) // eslint-disable-line
+    expect(console.log).toBeCalledWith(data1) // eslint-disable-line
   })
 
   it('Logger-debug', () => {

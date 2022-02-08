@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FriendsProgram_layout.encodeInstructionData 0 1`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 0 1`] = `
 Object {
   "data": Array [
     1,
@@ -137,7 +137,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 0 2`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 0 2`] = `
 Object {
   "data": Array [
     4,
@@ -146,7 +146,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 1 1`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 1 1`] = `
 Object {
   "data": Array [
     3,
@@ -155,7 +155,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 1 2`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 1 2`] = `
 Object {
   "data": Array [
     0,
@@ -292,7 +292,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 2 1`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 2 1`] = `
 Object {
   "data": Array [
     4,
@@ -301,7 +301,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 2 2`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 2 2`] = `
 Object {
   "data": Array [
     2,
@@ -310,7 +310,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 3 1`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 3 1`] = `
 Object {
   "data": Array [
     0,
@@ -447,7 +447,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 3 2`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 3 2`] = `
 Object {
   "data": Array [
     0,
@@ -584,7 +584,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 4 1`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 4 1`] = `
 Object {
   "data": Array [
     0,
@@ -721,7 +721,7 @@ Object {
 }
 `;
 
-exports[`FriendsProgram_layout.encodeInstructionData 4 2`] = `
+exports[`FriendsProgramLayout.encodeInstructionData 4 2`] = `
 Object {
   "data": Array [
     0,

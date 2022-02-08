@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`io_ts.fromEnum 0 1`] = `
+exports[`IoTS.fromEnum 0 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],
@@ -10,7 +10,7 @@ Type {
 }
 `;
 
-exports[`io_ts.fromEnum 1 1`] = `
+exports[`IoTS.fromEnum 1 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],
@@ -20,7 +20,7 @@ Type {
 }
 `;
 
-exports[`io_ts.fromEnum 2 1`] = `
+exports[`IoTS.fromEnum 2 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],
@@ -30,7 +30,7 @@ Type {
 }
 `;
 
-exports[`io_ts.fromEnum 3 1`] = `
+exports[`IoTS.fromEnum 3 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],
@@ -40,7 +40,7 @@ Type {
 }
 `;
 
-exports[`io_ts.fromEnum 4 1`] = `
+exports[`IoTS.fromEnum 4 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],
@@ -50,7 +50,7 @@ Type {
 }
 `;
 
-exports[`io_ts.fromEnum 5 1`] = `
+exports[`IoTS.fromEnum 5 1`] = `
 Type {
   "decode": [Function],
   "encode": [Function],

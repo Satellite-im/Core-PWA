@@ -1,34 +1,34 @@
 import { expect } from '@jest/globals'
-import * as io_ts from '~/utilities/io-ts'
+import * as IoTS from '~/utilities/io-ts'
 
-describe('io_ts.fromEnum', () => {
+describe('IoTS.fromEnum', () => {
   test('0', () => {
-    const result: any = io_ts.fromEnum('Anas', false)
+    const result: any = IoTS.fromEnum('Anas', false)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    const result: any = io_ts.fromEnum('George', false)
+    const result: any = IoTS.fromEnum('George', false)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    const result: any = io_ts.fromEnum('Anas', true)
+    const result: any = IoTS.fromEnum('Anas', true)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    const result: any = io_ts.fromEnum('Michael', true)
+    const result: any = IoTS.fromEnum('Michael', true)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    const result: any = io_ts.fromEnum('Edmond', false)
+    const result: any = IoTS.fromEnum('Edmond', false)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    const result: any = io_ts.fromEnum('', true)
+    const result: any = IoTS.fromEnum('', true)
     expect(result).toMatchSnapshot()
   })
 })
