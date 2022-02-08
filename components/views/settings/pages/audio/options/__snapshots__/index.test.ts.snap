@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check Bitrates constants should return the Bitrates constants 1`] = `
+Array [
+  Object {
+    "text": "8kbps",
+    "value": 8000,
+  },
+  Object {
+    "text": "64kbps",
+    "value": 64000,
+  },
+  Object {
+    "text": "96kbps",
+    "value": 96000,
+  },
+  Object {
+    "text": "256kbps",
+    "value": 256000,
+  },
+  Object {
+    "text": "320kbps",
+    "value": 320000,
+  },
+  Object {
+    "text": "510kbps",
+    "value": 510000,
+  },
+  Object {
+    "text": "1411kbps",
+    "value": 1411000,
+  },
+]
+`;
+
+exports[`check SampleSizes constants should return the SampleSizes constants 1`] = `
+Array [
+  Object {
+    "text": "2bits",
+    "value": 2,
+  },
+  Object {
+    "text": "8bits",
+    "value": 8,
+  },
+  Object {
+    "text": "24bits",
+    "value": 24,
+  },
+  Object {
+    "text": "32bits",
+    "value": 32,
+  },
+]
+`;
