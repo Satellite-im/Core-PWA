@@ -31,9 +31,7 @@ export class GroupChatManager {
   constructor(textile: TextileInitializationData, senderAddress: string) {
     this.textile = textile
     this.senderAddress = senderAddress
-
     this.threadID = ThreadID.fromString(Config.textile.groupChatThreadID)
-
     this.listeners = {}
   }
 
@@ -44,12 +42,10 @@ export class GroupChatManager {
    */
   async createGroupConversation(): Promise<string> {
     const newCollectionUUID = uuid()
-
     await this.textile.client.newCollection(this.threadID, {
       name: newCollectionUUID,
       schema: groupChatSchema,
     })
-
     return newCollectionUUID
   }
 
@@ -95,11 +91,8 @@ export class GroupChatManager {
       groupChatID,
       groupChatQuery,
     )
-
     const promises = messages.map<Promise<Message>>(this.decodeMessage)
-
     const allSettled = await Promise.allSettled(promises)
-
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
     ) as PromiseFulfilledResult<Message>[]
@@ -210,7 +203,6 @@ export class GroupChatManager {
 
     try {
       const parsedBody = JSON.parse(decoded)
-
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,

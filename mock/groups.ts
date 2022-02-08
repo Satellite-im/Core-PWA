@@ -4,15 +4,12 @@ import { Config } from '~/config'
 export const Groups: Group[] = [
   {
     name: 'Satellite',
-    // address: '0x9bf4001d307dfd62b26a2f1307ee0c0307632d59',
-    // address: '0d9edee0-62af-41be-95fa-bb8fba22e61f',
     address: 'af2e998e-bc77-4fca-ac0d-561078488c93',
     motd: 'Chatting privately with the world',
     members: [
       '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
       '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
     ],
-    // members: [],
     creator: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
   },
   {

@@ -15,7 +15,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['media', 'ui', 'textile']),
+    ...mapState(['media']),
     groupedMessages() {
       const { id } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[id]
