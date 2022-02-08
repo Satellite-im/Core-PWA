@@ -62,17 +62,19 @@ export default class TextileManager {
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
     await this.mailboxManager.init()
+
     this.bucketManager = new BucketManager(
       textile,
       textile.identity,
       textile.wallet.address,
     )
+    await this.bucketManager.init().catch((e) => console.log(e))
+
+    // GroupChatManager initializes itself during the creation
     this.groupChatManager = new GroupChatManager(
       textile,
       textile.wallet.address,
     )
-    await this.groupChatManager.init()
-    await this.bucketManager.init().catch((e) => console.log(e))
   }
 
   /**

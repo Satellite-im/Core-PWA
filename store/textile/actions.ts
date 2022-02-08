@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { ThreadID } from '@textile/hub'
 import { TextileState, TextileError } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -621,6 +622,12 @@ export default {
     }
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    // console.log(
+    //   await $GroupChatManager.createGroupConversation(
+    //     ThreadID.fromString(Config.textile.groupChatThreadID),
+    //   ),
+    // )
 
     await $GroupChatManager
       .sendMessage<'text'>({ to: groupId, payload: message, type: 'text' })
