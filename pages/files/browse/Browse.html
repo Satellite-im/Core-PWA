@@ -2,7 +2,7 @@
   <FilesView v-if="file" :file="file" :close="() => this.file = false" />
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
-    <!-- <FilesFilepath :path="path" :pull="pull" :setPath="setPath" /> -->
+    <FilesFilepath />
   </div>
   <div class="files-container">
     <div class="files-left">
