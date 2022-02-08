@@ -1,5 +1,8 @@
+import Vue from 'vue'
 import { AudioState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import WebRTC from '~/libraries/WebRTC/WebRTC'
 
 const $Sounds = new SoundManager()
 
@@ -9,21 +12,32 @@ export default {
    * @description Toggles mute for outgoing audio
    * @example @click="toggleMute"
    */
-  toggleMute({ commit, state }: any) {
+  toggleMute({ commit, dispatch, state, rootState }: any) {
+    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
+
     const muted = state.muted
-    if (!muted) $Sounds.playSound(Sounds.MUTE)
-    else $Sounds.playSound(Sounds.UNMUTE)
-    commit('mute')
+
+    const { activeCall } = rootState.webrtc
+
+    const peer = $WebRTC.getPeer(activeCall)
+
+    if (muted) {
+      peer?.call.unmute(WebRTCEnum.AUDIO)
+      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
+      return
+    }
+    peer?.call.mute(WebRTCEnum.AUDIO)
+    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
   /**
    * @method toggleDeafen
    * @description Toggles deafen for incoming audio
    * @example @click="toggleDeafen"
    */
-  toggleDeafen({ commit, state }: any) {
+  toggleDeafen({ commit, dispatch, state }: any) {
     const deafened = state.deafened
-    if (!deafened) $Sounds.playSound(Sounds.DEAFEN)
-    else $Sounds.playSound(Sounds.UNDEAFEN)
+    if (!deafened) dispatch('sounds/playSound', Sounds.DEAFEN, { root: true })
+    else dispatch('sounds/playSound', Sounds.UNDEAFEN, { root: true })
     commit('deafen')
   },
 }
