@@ -4,10 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-
-import VueMarkdown from 'vue-markdown'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
@@ -21,7 +18,6 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   components: {
-    VueMarkdown,
     ArchiveIcon,
   },
   mixins: [ContextMenu],
@@ -239,14 +235,16 @@ export default Vue.extend({
         from: this.$props.group.id,
       })
 
-      const recipient = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
-      this.$store.dispatch('textile/editTextMessage', {
-        to: recipient?.textilePubkey,
-        original: this.$props.message,
-        text: message,
-      })
+      if (message !== this.$props.message.payload) {
+        const recipient = this.$Hounddog.getActiveFriend(
+          this.$store.state.friends,
+        )
+        this.$store.dispatch('textile/editTextMessage', {
+          to: recipient?.textilePubkey,
+          original: this.$props.message,
+          text: message,
+        })
+      }
     },
     cancelMessage() {
       this.$store.commit('ui/setEditMessage', {

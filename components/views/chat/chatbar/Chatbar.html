@@ -3,7 +3,7 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
-  <ChatbarCommandsPreview :message="ui.chatbarContent" />
+  <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
   <ChatbarReply v-if="recipient" />
   <div
     class="chatbar-wrap"

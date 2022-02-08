@@ -1,9 +1,9 @@
+// @ts-ignore
 import Mousetrap from 'mousetrap'
 import { UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
-// @ts-ignore
 
 const $Sounds = new SoundManager()
 
@@ -70,5 +70,20 @@ export default {
   },
   toggleChatbarFocus({ commit, state }: ActionsArguments<UIState>) {
     commit('setChatbarFocus', !state.chatbarFocus)
+  },
+  setChatbarContent(
+    { commit, dispatch }: ActionsArguments<UIState>,
+    val: {
+      content: string
+      userId?: string
+    },
+  ) {
+    commit('chatbarContent', val.content)
+    if (val.userId)
+      dispatch(
+        'chat/setChatText',
+        { value: val.content, userId: val.userId },
+        { root: true },
+      )
   },
 }

@@ -1,7 +1,7 @@
 <template src="./Preview.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { CurrentCommand } from '~/types/utils/commands'
 import {
@@ -9,12 +9,17 @@ import {
   hasCommandPreview,
   parseCommand,
 } from '~/libraries/ui/Commands'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
     message: {
       type: String,
       default: '',
+    },
+    recipient: {
+      type: Object as PropType<Friend>,
+      default: null,
     },
   },
   computed: {
@@ -59,7 +64,11 @@ export default Vue.extend({
      * @example
      */
     completeCommand(command: CurrentCommand) {
-      this.$store.commit('ui/chatbarContent', `/${command.name}`)
+      this.$store.dispatch('ui/setChatbarContent', {
+        content: `/${command.name}`,
+        userId: this.$props.recipient?.address,
+      })
+      this.$store.dispatch('ui/setChatbarFocus')
     },
   },
 })

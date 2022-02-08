@@ -74,7 +74,7 @@
             >
               <Nuxt />
             </UiChatScroll>
-            <Enhancers />
+            <Enhancers :recipient="recipient" />
             <WalletMini v-if="ui.modals.walletMini" />
             <Chatbar ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>

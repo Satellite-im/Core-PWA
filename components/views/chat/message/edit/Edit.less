@@ -18,9 +18,6 @@
     &:extend(.round-corners);
     &:extend(.background-semitransparent-lighter);
     &:extend(.more-pad-sides);
-    max-height: 50vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
 
     &.is-error {
       border: 1px solid @red;
@@ -32,6 +29,10 @@
       padding-left: 5px;
       position: sticky;
       top: 0;
+    }
+
+    .editable-container {
+      max-height: 50vh;
     }
   }
   &-bottom {

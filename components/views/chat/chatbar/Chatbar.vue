@@ -32,7 +32,6 @@ declare module 'vue/types/vue' {
     smartTypingStart: Function
     clearChatbar: Function
     handleChatBorderRadius: Function
-    setChatText: ChatTextObj
   }
 }
 
@@ -57,14 +56,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
-    setChatText: {
-      set(state) {
-        this.$store.commit('chat/setChatText', state)
-      },
-      get() {
-        return this.chat.chatTexts
-      },
-    },
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -132,12 +123,11 @@ export default Vue.extend({
        * @param val Value to set the chatbar content to
        * @example set('This is the new chatbar content')
        */
-      set(val: string) {
-        this.$store.commit('ui/chatbarContent', val)
-        this.setChatText = {
+      set(value: string) {
+        this.$store.dispatch('ui/setChatbarContent', {
+          content: value,
           userId: this.$props.recipient?.address,
-          value: this.text,
-        }
+        })
       },
     },
     placeholder() {
@@ -163,12 +153,12 @@ export default Vue.extend({
       )
       const message = findItem ? findItem.value : ''
 
-      this.$store.commit('ui/chatbarContent', message)
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
         from: '',
       })
+      this.$store.dispatch('ui/setChatbarContent', { content: message })
       this.$store.dispatch('ui/setChatbarFocus')
     },
   },
