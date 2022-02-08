@@ -1,7 +1,6 @@
 <template src="./List.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
 import {
   FilterIcon,
   FolderIcon,
@@ -12,8 +11,7 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-
-import { FileType, Folder } from '~/types/files/file'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   components: {
@@ -27,40 +25,14 @@ export default Vue.extend({
     MoreVerticalIcon,
   },
   props: {
-    /**
-     * The array of children to path through
-     */
-    path: {
-      type: Array as PropType<Array<FileType | Folder>>,
+    directory: {
+      type: Array as PropType<Array<Item>>,
       default: () => [],
     },
-    /**
-     * Push a new child to the path
-     */
-    push: {
-      type: Function,
-      default: () => () => {},
-    },
-  },
-  data() {
-    return {
-      file: false,
-    }
   },
   methods: {
-    /**
-     * @method handle DocsTODO
-     * @description
-     * @param item
-     * @example
-     */
-    handle(item: FileType | Folder): void {
-      const hasChildren = (<Folder>item).children
-      if (hasChildren) {
-        this.push(item)
-        return
-      }
-      this.$data.file = item
+    handle(item: Item) {
+      this.$emit('handle', item)
     },
   },
 })

@@ -11,10 +11,12 @@ import {
 
 import { FileType, Folder } from '~/types/files/file'
 import { TextileImage } from '~/types/textile/manager'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 declare module 'vue/types/vue' {
   interface Vue {
     iconHover: boolean
+    handle: () => void
   }
 }
 
@@ -34,15 +36,12 @@ export default Vue.extend({
       type: Object as PropType<TextileImage>,
       default: () => {},
     },
-    handler: {
-      type: Function,
-      default: () => () => {},
-    },
   },
   data() {
     return {
       fileUrl: String,
       fileSize: '',
+      fileHover: false,
       iconHover: false,
     }
   },
@@ -73,7 +72,7 @@ export default Vue.extend({
       if (this.iconHover) {
         return
       }
-      this.handler(this.item)
+      this.$emit('handle', this.item)
     },
     /**
      * @method mouseOver

@@ -2,29 +2,36 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
 
-import { mapState } from 'vuex'
-import { DataStateType } from '~/store/dataState/types'
+import { Fil } from '~/libraries/Files/Fil'
+import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
   data() {
     return {
-      root: 'root',
-      path: [],
-      file: false as File | Boolean,
-      url: '' as String,
-      nsfw: { status: false, checking: false } as Object,
+      file: false as Fil | boolean,
       view: 'grid',
+      directory: this.$Bucket.fileSystem.currentDirectory.content,
     }
   },
-  computed: {
-    ...mapState(['files', 'dataState']),
-    DataStateType: () => DataStateType,
-  },
+  watch: {},
   mounted(): void {
-    this.$store.dispatch('files/fetchFiles')
+    const mockFileData = {
+      _name: 'TestFile.png',
+      _descrption: 'Test file description',
+      hash: 'bafkreichz6yyvllpr6akxiqahvvmipf4qbumfa5srfgvventyxdbwrbaga',
+    }
+
+    const file = new Fil(...Object.values(mockFileData))
+
+    this.$Bucket.fileSystem.addChild(file)
+    this.$Bucket.fileSystem.createDirectory('dir')
+    console.log(this.$Bucket)
   },
   methods: {
     /**
@@ -36,100 +43,62 @@ export default Vue.extend({
     changeView(type: 'grid' | 'list') {
       this.$data.view = type
     },
-    /**
-     * Allows you to get the current path file object
-     */
-    /**
-     * @method getPath DocsTODO
-     * @description
-     * @returns
-     * @example
-     */
-    getPath(): any {
-      if (this.$data.path.length === 0) {
-        return this.files.tree
+    handle(item: Fil | Directory) {
+      if (Object.values(FILE_TYPE).includes(item.type as FILE_TYPE)) {
+        this.file = item
       }
-      let files = this.files.tree
-      for (let i = 0; i < this.$data.path.length; i++) {
-        files = files.children.filter(
-          (item: any) => item.name === this.$data.path[i],
-        )[0]
-      }
-      return files
-    },
-    /**
-     * @method push DocsTODO
-     * @description Push a new child name to the path array
-     * @param item
-     * @example
-     */
-    push(item: any) {
-      if (item.children) {
-        this.$data.path.push(item.name)
+      if (Object.values(DIRECTORY_TYPE).includes(item.type as DIRECTORY_TYPE)) {
+        this.$Bucket.fileSystem.openDirectory(item.name)
+        console.log('folder')
+        console.log(this.$Bucket)
+        this.directory = this.$Bucket.fileSystem.currentDirectory.content
       }
     },
-    /**
-     * @method pull DocsTODO
-     * @description Pull n items from the file path array
-     * @param count
-     * @example
-     */
-    pull(count: number = 1) {
-      for (let i = 0; i < count; i++) {
-        this.$data.path.pop()
-      }
-    },
-    /**
-     * @method setPath DocsTODO
-     * @description Manually override the path array from a child component
-     * @param pth
-     * @example
-     */
-    setPath(pth: Array<String>) {
-      this.$data.path = pth
-    },
-    /**
-     * @method handleFile DocsTODO
-     * @description Triggered when a file is changed on the input
-     * @param event
-     * @example
-     */
-    async handleFile(event: any) {
-      this.$data.file = event.target.files[0]
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-      this.$data.nsfw.checking = false
-      this.loadPicture(this.$data.file)
-    },
-    /**
-     * @method loadPicture DocsTODO
-     * @description Load a picture into a data URL push to data
-     * @param file
-     * @example
-     */
-    loadPicture(file: File) {
-      if (!file) return
-      const self = this
-      const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
-        if (e.target) self.$data.url = e.target.result
-      }
-      reader.readAsDataURL(file)
-    },
-    /**
-     * Clear local data
-     * TODO: Clear input field, this currently breaks
-     * when you upload the same file after cancelling
-     */
-    /**
-     * @method cancelUpload DocsTODO
-     * @description
-     * @example
-     */
-    cancelUpload() {
-      this.$data.file = false
-      this.$data.url = ''
-    },
+    // getPath(): any {
+    //   if (this.$data.path.length === 0) {
+    //     return this.files.tree
+    //   }
+    //   let files = this.files.tree
+    //   for (let i = 0; i < this.$data.path.length; i++) {
+    //     files = files.children.filter(
+    //       (item: any) => item.name === this.$data.path[i],
+    //     )[0]
+    //   }
+    //   return files
+    // },
+    // push(item: any) {
+    //   if (item.children) {
+    //     this.$data.path.push(item.name)
+    //   }
+    // },
+    // pull(count: number = 1) {
+    //   for (let i = 0; i < count; i++) {
+    //     this.$data.path.pop()
+    //   }
+    // },
+    // setPath(pth: Array<String>) {
+    //   this.$data.path = pth
+    // },
+    // async handleFile(event: any) {
+    //   this.$data.file = event.target.files[0]
+    //   this.$data.nsfw.checking = true
+    //   this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
+    //   this.$data.nsfw.checking = false
+    //   this.loadPicture(this.$data.file)
+    // },
+    // loadPicture(file: File) {
+    //   if (!file) return
+    //   const self = this
+    //   const reader = new FileReader()
+    //   reader.onload = function (e: Event | any) {
+    //     if (e.target) self.$data.url = e.target.result
+    //   }
+    //   reader.readAsDataURL(file)
+    // },
+    // cancelUpload() {
+    //   this.$data.file = false
+    //   this.$data.url = ''
+    // },
   },
 })
 </script>
