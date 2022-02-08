@@ -3,7 +3,6 @@
   :class="{'hidden-scroll': !$device.isMobile}"
   v-scroll-lock="true"
 >
-  <FilesView v-if="file" :file="file" :close="() => this.file = false" />
   <component
     :is="!$device.isMobile? 'UiScroll' : 'div'"
     verticalScroll
@@ -34,8 +33,8 @@
         <th></th>
       </thead>
       <tbody>
-        <tr class="item" v-for="item in path">
-          <td class="filename" v-on:click="() => handle(item)">
+        <tr class="item" v-for="item in directory">
+          <td class="filename" @click="handle(item)">
             <span class="icon">
               <folder-icon size="1x" v-if="item.children" />
               <archive-icon

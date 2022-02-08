@@ -34,7 +34,6 @@ declare module 'vue/types/vue' {
     $Logger: Logger
     $Alerts: Alerts
     $Bucket: Bucket
-    $FileSystem: FilSystem
   }
 }
 
@@ -53,7 +52,6 @@ declare module '@nuxt/types' {
     $Logger: Logger
     $Alerts: Alerts
     $Bucket: Bucket
-    $FileSystem: FilSystem
   }
 }
 
@@ -67,8 +65,7 @@ Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$Alerts = new Alerts()
-Vue.prototype.$FileSystem = new FilSystem()
-Vue.prototype.$Bucket = new Bucket(Vue.prototype.$FileSystem)
+Vue.prototype.$Bucket = new Bucket(new FilSystem())
 
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {

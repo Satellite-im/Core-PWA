@@ -3,13 +3,12 @@
   :class="{'hidden-scroll' : $device.isMobile} "
   v-scroll-lock="true"
 >
-  <FilesView v-if="file" :file="file" :close="() => this.file = false" />
   <div class="files-container">
     <FilesFile
-      v-for="item in path"
+      v-for="item in directory"
       :item="item"
       :key="`${item.name}.${item.modified}`"
-      :handler="handle"
+      @handle="handle"
     />
   </div>
 </div>

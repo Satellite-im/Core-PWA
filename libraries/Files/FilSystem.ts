@@ -190,20 +190,20 @@ export class FilSystem {
     return null
   }
 
-  /**
-   * @method printCurrentDirectory
-   */
-  public printCurrentDirectory(): void {
-    console.log(
-      `\n[${this.currentDirectoryPath.join('/')}]:` +
-        (this.currentDirectory.content
-          .map(
-            (item) =>
-              `\n[${item.constructor.name.substring(0, 1)}]-> ${item.name}`,
-          )
-          .join('') || '\n(empty)'),
-    )
-  }
+  // /**
+  //  * @method printCurrentDirectory
+  //  */
+  // public printCurrentDirectory(): void {
+  //   console.log(
+  //     `\n[${this.currentDirectoryPath.join('/')}]:` +
+  //       (this.currentDirectory.content
+  //         .map(
+  //           (item) =>
+  //             `\n[${item.constructor.name.substring(0, 1)}]-> ${item.name}`,
+  //         )
+  //         .join('') || '\n(empty)'),
+  //   )
+  // }
 
   /**
    * @method openDirectory

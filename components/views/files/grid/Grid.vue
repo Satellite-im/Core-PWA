@@ -1,29 +1,14 @@
 <template src="./Grid.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { FileType, Folder } from '~/types/files/file'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   props: {
-    /**
-     * The array of children to path through
-     */
-    path: {
-      type: Array as PropType<Array<FileType | Folder>>,
+    directory: {
+      type: Array as PropType<Array<Item>>,
       default: () => [],
     },
-    /**
-     * Push a new child to the path
-     */
-    push: {
-      type: Function,
-      default: () => () => {},
-    },
-  },
-  data() {
-    return {
-      file: false,
-    }
   },
   methods: {
     /**
@@ -33,13 +18,8 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    handle(item: FileType | Folder): void {
-      const hasChildren = (<Folder>item).children
-      if (hasChildren) {
-        this.push(item)
-        return
-      }
-      this.$data.file = item
+    handle(item: Item) {
+      this.$emit('handle', item)
     },
   },
 })

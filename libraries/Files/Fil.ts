@@ -6,6 +6,8 @@ export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
   private _hash: string = ''
   private _description: string = ''
+  // todo - store file
+  // private _file: File
 
   /**
    * Create a new file instance
@@ -50,6 +52,11 @@ export class Fil extends Item {
    */
   get copy(): Fil {
     return new Fil(`${this.name} copy`, this._description, this._hash)
+  }
+
+  // todo store file size after textile upload
+  get size(): number {
+    return 2342344
   }
 
   /**
