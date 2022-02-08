@@ -42,6 +42,7 @@ describe('Test FileSystem', () => {
   if (newDirectory && newDirectory2) {
     newDirectory2.addChild(file)
     newDirectory2.addChild(file2)
+    console.log(newDirectory2.content)
     filesystem.openDirectory('second dir')
     filesystem.addChild(file3)
     filesystem.addChild(file4)
@@ -72,6 +73,7 @@ describe('Test FileSystem', () => {
     filesystem.renameChild('test_fil', 'test_fil_rename')
     expect(filesystem.hasChild('test_fil')).toBe(false)
     expect(filesystem.hasChild('test_fil_rename')).toBe(true)
+    console.log(newDirectory2?.content)
     filesystem.fuzzySearch('generic')
   })
   it(`Correctly fails to rename a non-existent child`, () => {

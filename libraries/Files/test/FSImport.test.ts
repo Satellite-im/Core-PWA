@@ -11,5 +11,5 @@ describe('Test FileSystem Import/Export', () => {
   it(`Correctly returns a filesystem name (${mockFileSystemData.name})`, () =>
     expect(filesystem.name).toEqual(mockFileSystemData.name))
   filesystem.importAll(filesystem, testData)
-  filesystem.exportAll // eslint-disable-line
+  filesystem.exportAll
 })
