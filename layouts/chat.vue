@@ -33,7 +33,7 @@
         <swiper-slide
           :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
         >
-          <DroppableWrapper :handle-drop-prop="handleDrop">
+          <DroppableWrapper @handle-drop-prop="handleDrop">
             <menu-icon
               class="toggle--sidebar"
               size="1.2x"
@@ -103,7 +103,7 @@
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
-import DroppableWrapper from './droppableWrapper.vue'
+import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'

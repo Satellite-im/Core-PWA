@@ -1,0 +1,9 @@
+<div
+  :class="['droppableWrapper', dragging ? 'droppableWrapper--active' : '']"
+  @drop="handleDrop"
+  @dragenter.stop.prevent="handleDragenter"
+  @dragleave.stop.prevent="handleDragleave"
+  @dragover.stop.prevent
+>
+  <slot></slot>
+</div>
