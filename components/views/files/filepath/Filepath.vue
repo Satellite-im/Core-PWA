@@ -8,6 +8,12 @@ export default Vue.extend({
   components: {
     HomeIcon,
   },
+  data() {
+    return {
+      // needs this for breadcrumbs to work
+      fileSystem: this.$Bucket.fileSystem,
+    }
+  },
   computed: {
     // don't include root, use home icon for that
     path(): string[] {

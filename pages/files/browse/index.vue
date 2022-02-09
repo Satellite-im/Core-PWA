@@ -45,11 +45,10 @@ export default Vue.extend({
     },
     handle(item: Item) {
       if (Object.values(FILE_TYPE).includes(item.type as FILE_TYPE)) {
-        this.file = item
+        this.file = item as Fil
       }
       if (Object.values(DIRECTORY_TYPE).includes(item.type as DIRECTORY_TYPE)) {
         this.$Bucket.fileSystem.openDirectory(item.name)
-        console.log(this.$Bucket)
       }
     },
     // todo-handle upload
