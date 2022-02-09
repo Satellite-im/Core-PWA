@@ -9,7 +9,7 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { FileType } from '~/types/files/file'
+import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
   components: {
@@ -22,7 +22,7 @@ export default Vue.extend({
   },
   props: {
     file: {
-      type: Object as PropType<FileType>,
+      type: Object as PropType<Fil>,
       default: () => {},
     },
     close: {

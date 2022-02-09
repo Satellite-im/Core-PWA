@@ -2,8 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Directory } from '~/libraries/Files/Directory'
-
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Fil } from '~/libraries/Files/Fil'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
@@ -15,7 +14,6 @@ export default Vue.extend({
     return {
       file: false as Fil | boolean,
       view: 'grid',
-      fileSystem: this.$Bucket.fileSystem,
     }
   },
   computed: {
@@ -23,7 +21,7 @@ export default Vue.extend({
       return this.$Bucket.fileSystem.currentDirectory.content
     },
   },
-  mounted(): void {
+  beforeMount(): void {
     const mockFileData = {
       _name: 'TestFile.png',
       _descrption: 'Test file description',
@@ -34,9 +32,6 @@ export default Vue.extend({
 
     this.$Bucket.fileSystem.addChild(file)
     this.$Bucket.fileSystem.createDirectory('dir')
-    this.$Bucket.fileSystem.openDirectory('dir')
-    this.$Bucket.fileSystem.createDirectory('dir2')
-    console.log(this.$Bucket)
   },
   methods: {
     /**
@@ -48,7 +43,7 @@ export default Vue.extend({
     changeView(type: 'grid' | 'list') {
       this.$data.view = type
     },
-    handle(item: Fil | Directory) {
+    handle(item: Item) {
       if (Object.values(FILE_TYPE).includes(item.type as FILE_TYPE)) {
         this.file = item
       }
@@ -57,14 +52,7 @@ export default Vue.extend({
         console.log(this.$Bucket)
       }
     },
-    pull(count: number = 1) {
-      for (let i = 0; i < count; i++) {
-        this.$data.path.pop()
-      }
-    },
-    setPath(pth: Array<String>) {
-      this.$data.path = pth
-    },
+    // todo-handle upload
     // async handleFile(event: any) {
     //   this.$data.file = event.target.files[0]
     //   this.$data.nsfw.checking = true
