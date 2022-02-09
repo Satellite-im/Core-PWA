@@ -2,10 +2,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Fil } from '~/libraries/Files/Fil'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    file: Fil | boolean
+    key: number
+  }
+}
 
 export default Vue.extend({
   name: 'Files',
@@ -14,24 +22,16 @@ export default Vue.extend({
     return {
       file: false as Fil | boolean,
       view: 'grid',
+      key: 1 as number,
     }
   },
   computed: {
+    ...mapState(['bucket']),
     directory() {
-      return this.$Bucket.fileSystem.currentDirectory.content
+      return (
+        this.key && (this.bucket.fileSystem?.currentDirectory?.content ?? [])
+      )
     },
-  },
-  beforeMount(): void {
-    const mockFileData = {
-      _name: 'TestFile.png',
-      _descrption: 'Test file description',
-      hash: 'bafkreichz6yyvllpr6akxiqahvvmipf4qbumfa5srfgvventyxdbwrbaga',
-    }
-
-    const file = new Fil(...Object.values(mockFileData))
-
-    this.$Bucket.fileSystem.addChild(file)
-    this.$Bucket.fileSystem.createDirectory('dir')
   },
   methods: {
     /**
@@ -48,8 +48,11 @@ export default Vue.extend({
         this.file = item as Fil
       }
       if (Object.values(DIRECTORY_TYPE).includes(item.type as DIRECTORY_TYPE)) {
-        this.$Bucket.fileSystem.openDirectory(item.name)
+        this.$store.commit('bucket/openDirectory', item.name)
       }
+    },
+    forceRender() {
+      this.key++
     },
     // todo-handle upload
     // async handleFile(event: any) {

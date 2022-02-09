@@ -12,6 +12,7 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import { TextileConfig } from '~/types/textile/manager'
 
 export default {
   /**
@@ -171,15 +172,13 @@ export default {
     // TODO: move this logic into a startup action
     // Initialize textile
     const { pin } = state
-    dispatch(
-      'textile/initialize',
-      {
-        id: userAccount?.publicKey.toBase58(),
-        pass: pin,
-        wallet: $SolanaManager.getMainSolanaWalletInstance(),
-      },
-      { root: true },
-    )
+    const textileConfig = {
+      id: userAccount?.publicKey.toBase58(),
+      pass: pin,
+      wallet: $SolanaManager.getMainSolanaWalletInstance(),
+    }
+    dispatch('textile/initialize', textileConfig, { root: true })
+    dispatch('bucket/initialize', textileConfig, { root: true })
 
     // Initialize WebRTC with our ID
     dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {

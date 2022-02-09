@@ -10,7 +10,6 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
 
 export default {
   /**
@@ -25,10 +24,8 @@ export default {
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const $Bucket: Bucket = Vue.prototype.$Bucket
 
     await $TextileManager.init(config)
-    await $Bucket.init(config)
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
