@@ -43,6 +43,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      filesDB: {},
       files: [] as Array<UploadDropItemType>,
       uploadStatus: false,
       count_error: false,
@@ -63,6 +64,16 @@ export default Vue.extend({
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
+  },
+  watch: {
+    recipient() {
+      this.$data.filesDB[this.recipient.address] ||= []
+      this.$data.files = this.$data.filesDB[this.recipient.address]
+    },
+  },
+  mounted() {
+    this.$data.filesDB[this.recipient.address] ||= []
+    this.$data.files = this.$data.filesDB[this.recipient.address]
   },
   methods: {
     /**
@@ -110,7 +121,7 @@ export default Vue.extend({
             )
           }
         }
-        this.$data.files = await Promise.all(
+        const tempFiles = await Promise.all(
           [...files].map(async (file: File) => {
             const uploadFile = {
               file,
@@ -120,7 +131,7 @@ export default Vue.extend({
             return uploadFile
           }),
         )
-        this.$data.files.every(async (uploadFile: UploadDropItemType) => {
+        tempFiles.every(async (uploadFile: UploadDropItemType) => {
           if (uploadFile.file.size <= Config.uploadByteLimit) {
             uploadFile.nsfw.checking = true
             try {
@@ -136,6 +147,9 @@ export default Vue.extend({
 
           this.loadPicture(uploadFile)
         })
+        // this allows subsequent file selections to add to the pending files array
+        // instead of overwriting it as it did previously
+        this.$data.filesDB[this.recipient.address].push(...tempFiles)
         this.$data.uploadStatus = true
       }
     },
@@ -163,15 +177,19 @@ export default Vue.extend({
      * @example @click="cancelUpload"
      */
     cancelUpload() {
-      this.$data.files = []
+      this.$data.filesDB[this.recipient.address] = []
+      this.$data.files = this.$data.filesDB[this.recipient.address]
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$data.uploadStatus = false
       this.$data.count_error = false
       this.$parent.$data.showFilePreview = false
     },
     removeUploadItem(index: number) {
-      this.$data.files.splice(index, 1)
-      this.$data.files = [...this.$data.files]
+      this.$data.filesDB[this.recipient.address].splice(index, 1)
+      this.$data.filesDB[this.recipient.address] = [
+        ...this.$data.filesDB[this.recipient.address],
+      ]
+      this.$data.files = this.$data.filesDB[this.recipient.address]
       if (this.$data.files.length === 0) {
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$data.uploadStatus = false
@@ -238,17 +256,18 @@ export default Vue.extend({
      * eslint is expecting return. may need refactoring
      */
     async sendMessage() {
-      const nsfwCheck = this.$data.files.filter((file: UploadDropItemType) => {
-        if (!file.nsfw.status) {
-          return file
-        }
-        if (file.nsfw.status) {
+      const nsfwCheck = this.$data.filesDB[this.recipient.address].filter(
+        (file: UploadDropItemType) => {
+          if (!file.nsfw.status) {
+            return file
+          }
           this.$data.containsNsfw = true
           if (this.$data.files.length === 1) {
             this.alertNsfwFile()
           }
-        }
-      })
+          return null
+        },
+      )
       nsfwCheck.forEach((file: UploadDropItemType) => {
         this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
