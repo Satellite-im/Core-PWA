@@ -1,6 +1,10 @@
+import util from 'util'
 import * as web3 from '@solana/web3.js'
-import { expect } from '@jest/globals'
 import * as Crypto from '~/libraries/Crypto/Crypto'
+
+if (typeof TextEncoder === 'undefined') {
+  global.TextEncoder = util.TextEncoder
+}
 
 describe.skip('init', () => {
   let inst: any
