@@ -14,7 +14,7 @@ export const Groups: Group[] = [
   },
   {
     name: 'Solstice',
-    address: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+    address: 'bd30dd29-402a-46de-90f4-3ef78f4d0f7c',
     motd: "Chillin' in the sun",
     members: [
       '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -27,7 +27,7 @@ export const Groups: Group[] = [
   },
   {
     name: 'Urania',
-    address: '0x07ee55aa48bb72dcc6e9d71256648910de513eca',
+    address: 'ea92dd9a-21a3-443f-8f1c-db263192a99f',
     motd: 'Amusing universe',
     members: ['0xdc76cd25977e0a5ae17155770273ad58648900d3'],
     // members: [],

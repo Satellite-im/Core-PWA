@@ -271,10 +271,22 @@ export default Vue.extend({
           this.text = ''
           return
         }
-        this.$store.dispatch('textile/sendTextMessage', {
-          to: this.recipient.textilePubkey,
-          text: value,
-        })
+
+        // Check if it's a group
+        if (
+          RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+        ) {
+          this.$store.dispatch('textile/sendGroupMessage', {
+            groupId: this.recipient.textilePubkey,
+            message: value,
+          })
+        } else {
+          this.$store.dispatch('textile/sendTextMessage', {
+            to: this.recipient.textilePubkey,
+            text: value,
+          })
+        }
+
         this.$data.nsfwUploadError = false
         this.text = ''
       }

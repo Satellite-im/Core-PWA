@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { ThreadID } from '@textile/hub'
 import { TextileState, TextileError } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -7,16 +6,10 @@ import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import {
-  MailboxSubscriptionType,
-  Message,
-  MessageFromThread,
-  MessagePayloads,
-} from '~/types/textile/mailbox'
+import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { MessageGroup } from '~/types/messaging'
 
 export default {
   /**
@@ -588,10 +581,6 @@ export default {
       query,
     })
 
-    await $GroupChatManager.listenToGroupMessages(
-      (message) => console.log('new chat message', message),
-      groupId,
-    )
     commit('setConversation', {
       address: groupId,
       messages: conversation,
@@ -600,6 +589,45 @@ export default {
     })
 
     commit('setConversationLoading', { loading: false })
+  },
+  /**
+   * @description Subscribes to the user sentbox and eventually
+   * appends sent messages to the active chat
+   */
+  async subscribeToGroup(
+    { commit, dispatch }: ActionsArguments<TextileState>,
+    { groupId }: { groupId: string },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const MailboxManager = $TextileManager.mailboxManager
+
+    if (!MailboxManager) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
+    }
+
+    if (MailboxManager.isSubscribed(MailboxSubscriptionType.sentbox)) {
+      return
+    }
+
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+    }
+
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    await $GroupChatManager.listenToGroupMessages((message) => {
+      if (!message) {
+        return
+      }
+
+      commit('addMessageToConversation', {
+        address: groupId,
+        sender: MessageRouteEnum.INBOUND,
+        message,
+      })
+
+      dispatch('storeInMessage', { address: groupId, message })
+    }, groupId)
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -618,8 +646,20 @@ export default {
     }
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
-    await $GroupChatManager
+    commit('setMessageLoading', { loading: true })
+
+    const result = await $GroupChatManager
       .sendMessage<'text'>({ to: groupId, payload: message, type: 'text' })
       .catch((e) => console.log('error', e))
+
+    commit('addMessageToConversation', {
+      address: groupId,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+
+    dispatch('storeInMessage', { address: groupId, message })
+
+    commit('setMessageLoading', { loading: false })
   },
 }

@@ -32,20 +32,27 @@ export default Vue.extend({
   mounted() {
     const { id } = this.$route.params
     this.getMessages(id)
+    this.subscribeToGroup(id)
   },
   methods: {
-    sendMessage() {
+    sendMessage(message: string) {
       const { id } = this.$route.params
       this.$data.groupID = { id }
       this.$store.dispatch('textile/sendGroupMessage', {
         groupId: id,
-        message: 'This is my first group message',
+        message,
       })
     },
     async getMessages(id: string) {
       this.$data.groupID = id
       this.$data.groupMessages = await this.$store.dispatch(
         'textile/fetchGroupMessages',
+        { groupId: id },
+      )
+    },
+    async subscribeToGroup(id: string) {
+      this.$data.groupMessages = await this.$store.dispatch(
+        'textile/subscribeToGroup',
         { groupId: id },
       )
     },
