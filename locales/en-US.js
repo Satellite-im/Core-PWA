@@ -372,6 +372,7 @@ export default {
           subtitle:
             'Reset Satellite. This will clear any saved accounts. Do not do this without backing up your account first.',
           button: 'Clear Local Storage',
+          message: 'Local storage cleared successfully',
         },
         export: {
           title: 'Export Storage',
@@ -472,6 +473,9 @@ export default {
       friend_not_found: 'Friend not found',
       mailbox_manager_not_found: 'Mailbox manager not found',
       mailbox_manager_not_initialized: 'Mailbox manager not initialized',
+    },
+    storage: {
+      database_not_cleared: 'Could not clear database',
     },
   },
   search: {
