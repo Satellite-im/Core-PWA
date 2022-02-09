@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
+import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
 
 export default Vue.extend({
   name: 'DirectMessages',
@@ -37,6 +38,8 @@ export default Vue.extend({
     }
     if (friends && friends.all && friends.all.length > 0) {
       this.$router.replace(`/chat/direct/${friends.all[0].address}`)
+      const program = new GroupchatsProgram(Vue.prototype.$SolanaManager)
+      // program.createGroup('hello')
       return
     }
     this.$router.replace('/friends/list') // no friends then redirect user to add a friend
