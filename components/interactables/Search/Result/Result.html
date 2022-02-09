@@ -27,10 +27,13 @@
         :placeholder="$t('search.result.users')"
         label="name"
         track-by="name"
-        v-model="users"
+        v-model="queryOptions.friends"
         selectLabel=""
         deselectLabel=""
         selectedLabel=""
+        @input="onChange"
+        @close="onTouch"
+        @select="onSelect"
       >
       </multiselect>
     </div>
@@ -109,6 +112,7 @@
     prev-text="«"
     next-text="»"
     container-class="search-result-pagination"
+    :click-handler="handleClickPaginate"
   />
   <div class="search-result-history">
     <InteractablesChip
