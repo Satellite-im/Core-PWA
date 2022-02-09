@@ -9,6 +9,7 @@ export default Vue.extend({
   data() {
     return {
       isLoading: false,
+      deleteVerify: false,
     }
   },
   methods: {

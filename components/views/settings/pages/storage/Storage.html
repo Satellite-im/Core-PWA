@@ -40,12 +40,28 @@
       />
       <br />
       <InteractablesButton
+        v-if="!deleteVerify"
         type="danger"
         size="small"
-        :loading='isLoading'
+        :loading="isLoading"
         :text="$t('pages.settings.storage.clear.button')"
-        :action="clearLocalStorage"
+        :action="() => deleteVerify = true"
       />
+      <span v-if="deleteVerify">
+        <TypographySubtitle
+          :text="$t('pages.settings.storage.clear.subtitle_warning')"
+          class="detail color-danger"
+          :size="6"
+        />
+        <br />
+        <InteractablesButton
+          type="danger"
+          size="small"
+          :loading="isLoading"
+          :text="$t('pages.settings.storage.clear.confirm_button')"
+          :action="clearLocalStorage"
+        />
+      </span>
     </div>
   </div>
 </div>
