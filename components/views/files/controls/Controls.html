@@ -35,10 +35,11 @@
       <folder-plus-icon size="1.3x" />
     </InteractablesButton>
     <InteractablesInputGroup
+      v-model="text"
       class="name"
       size="small"
       type="primary"
-      :action="addFile"
+      :action="addItem"
       v-if="input.show"
       :placeholder="input.type===FilesViewEnum.FILE ? $t('pages.files.controls.name_file') : $t('pages.files.controls.name_folder')"
     >

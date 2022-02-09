@@ -3,7 +3,6 @@
 import Vue from 'vue'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
-
 import { FilesViewEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
@@ -11,7 +10,6 @@ export default Vue.extend({
     FolderPlusIcon,
     FilePlusIcon,
   },
-  // todo - best practice would be emitting rather than passing function as a prop - AP-639
   props: {
     changeView: {
       type: Function,
@@ -40,8 +38,18 @@ export default Vue.extend({
       }
       this.input.show = !this.input.show
     },
-    // todo - AP-640
-    addFile() {},
+    addItem() {
+      if (!this.text) {
+        return
+      }
+      if (this.input.type === FilesViewEnum.FOLDER) {
+        this.$Bucket.fileSystem.createDirectory(this.text)
+        this.input.show = false
+        return
+      }
+      // add file
+      this.input.show = false
+    },
   },
 })
 </script>

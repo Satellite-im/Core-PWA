@@ -9,7 +9,6 @@ import {
   FileIcon,
 } from 'satellite-lucide-icons'
 
-import { FileType, Folder } from '~/types/files/file'
 import { TextileImage } from '~/types/textile/manager'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
@@ -29,7 +28,7 @@ export default Vue.extend({
   },
   props: {
     item: {
-      type: Object as PropType<FileType | Folder>,
+      type: Object as PropType<Item>,
       required: true,
     },
     file: {

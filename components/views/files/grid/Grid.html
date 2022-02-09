@@ -5,9 +5,9 @@
 >
   <div class="files-container">
     <FilesFile
-      v-for="item in directory"
+      v-for="item, i in directory"
       :item="item"
-      :key="`${item.name}.${item.modified}`"
+      :key="i"
       @handle="handle"
     />
   </div>
