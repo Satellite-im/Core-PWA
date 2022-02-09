@@ -77,7 +77,7 @@
             <Enhancers :sidebar="showSidebar" />
             <WalletMini v-if="ui.modals.walletMini" />
             <ChatbarCommandsPreview :message="ui.chatbarContent" />
-            <Chatbar :recipient="recipient" />
+            <Chatbar ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
@@ -107,8 +107,6 @@ import DroppableWrapper from './droppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
-
-export const bus = new Vue()
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -204,10 +202,7 @@ export default Vue.extend({
      */
     handleDrop(e: DragEvent) {
       if (e?.dataTransfer) {
-        bus.$emit('dropFiles', {
-          items: e.dataTransfer?.items,
-          e,
-        })
+        this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
       }
     },
   },

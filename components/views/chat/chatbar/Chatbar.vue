@@ -7,8 +7,6 @@ import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import Editable from './Editable.vue'
 
-import { bus } from '../../../../layouts/chat';
-
 import {
   parseCommand,
   commands,
@@ -56,11 +54,6 @@ export default Vue.extend({
       showFilePreview: false,
       nsfwUploadError: false,
     }
-  },
-  created() {
-    bus.$on('dropFiles', (data: {items: Array<object>, e: Event}) => {
-      this.handleUpload(data?.items, data?.e)
-    })
   },
   computed: {
     ...mapState(['ui', 'friends', 'chat']),
