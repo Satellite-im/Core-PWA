@@ -48,8 +48,13 @@
         :action="() => deleteVerify = true"
       />
       <span v-if="deleteVerify">
-        <TypographySubtitle
-          :text="$t('pages.settings.storage.clear.subtitle_warning')"
+        <TypographyText
+          :text="$t('pages.settings.storage.clear.subtitle_warning1')"
+          class="detail color-danger no-bottom-pad"
+          :size="6"
+        />
+        <TypographyText
+          :text="$t('pages.settings.storage.clear.subtitle_warning2')"
           class="detail color-danger"
           :size="6"
         />
