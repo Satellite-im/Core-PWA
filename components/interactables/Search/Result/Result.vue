@@ -136,7 +136,10 @@ export default Vue.extend({
       handler(newDateValue) {
         this.$data.queryOptions = {
           ...this.$data.queryOptions,
-          dateRange: newDateValue,
+          dateRange: {
+            start: newDateValue,
+            end: newDateValue,
+          },
         }
       },
     },
