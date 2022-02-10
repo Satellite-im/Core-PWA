@@ -21,12 +21,6 @@ export default Vue.extend({
     ImageIcon,
     EmojiPicker,
   },
-  props: {
-    sidebar: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       search: '',

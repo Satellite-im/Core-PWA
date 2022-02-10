@@ -1,6 +1,10 @@
+import util from 'util'
 import * as web3 from '@solana/web3.js'
-import { expect } from '@jest/globals'
 import * as Crypto from '~/libraries/Crypto/Crypto'
+
+if (typeof TextEncoder === 'undefined') {
+  global.TextEncoder = util.TextEncoder
+}
 
 describe.skip('init', () => {
   let inst: any
@@ -123,6 +127,8 @@ describe.skip('initializeRecipient', () => {
   })
 
   test('0', async () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const param1: any = new web3.PublicKey(1)
     await inst.initializeRecipient(param1)
   })
@@ -133,11 +139,15 @@ describe.skip('initializeRecipient', () => {
   })
 
   test('2', async () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const param1: any = new web3.PublicKey(1000)
     await inst.initializeRecipient(param1)
   })
 
   test('3', async () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const param1: any = new web3.PublicKey(10)
     await inst.initializeRecipient(param1)
   })
@@ -278,7 +288,7 @@ describe.skip('separateIvFromData', () => {
   })
 })
 
-describe.skip('isInitialized', () => {
+describe('isInitialized', () => {
   let inst: any
 
   beforeEach(() => {
@@ -287,7 +297,14 @@ describe.skip('isInitialized', () => {
     inst = CryptoConstructor
   })
 
-  test('0', () => {
+  test('is not initialized', () => {
+    const result: any = inst.isInitialized()
+    expect(result).toMatchSnapshot()
+  })
+
+  test('is initialized', () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const result: any = inst.isInitialized()
     expect(result).toMatchSnapshot()
   })
@@ -303,6 +320,8 @@ describe.skip('decryptFrom', () => {
   })
 
   test('0', () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const result: any = inst.decryptFrom(
       '192.168.1.5',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -311,6 +330,8 @@ describe.skip('decryptFrom', () => {
   })
 
   test('1', () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const result: any = inst.decryptFrom(
       '0.0.0.0',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -319,6 +340,8 @@ describe.skip('decryptFrom', () => {
   })
 
   test('2', () => {
+    inst.init(web3.Keypair.generate())
+    inst.signMessage(new Uint8Array([]), '')
     const result: any = inst.decryptFrom('', '')
     expect(result).toMatchSnapshot()
   })

@@ -10,6 +10,11 @@ export enum CaptureMouseTypes {
   motion = 'motion',
   never = 'never',
 }
+
+export enum SettingsError {
+  DATABASE_NOT_CLEARED = 'errors.storage.database_not_cleared',
+}
+
 export interface SettingsState {
   audioInput: string
   audioOutput: string

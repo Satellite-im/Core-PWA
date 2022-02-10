@@ -1,9 +1,5 @@
 <template>
-  <div
-    id="mini-wallet"
-    v-click-outside="toggleWalletMini"
-    :class="`${showSidebar ? 'side-open' : 'side-close'}`"
-  >
+  <div id="mini-wallet" v-click-outside="toggleWalletMini">
     <WalletMiniBody :update-method="updateMethod" />
   </div>
 </template>
@@ -14,7 +10,6 @@ import { mapState, mapGetters } from 'vuex'
 export default Vue.extend({
   computed: {
     ...mapState(['ui']),
-    ...mapGetters('ui', ['showSidebar']),
   },
   data() {
     return {
