@@ -12,7 +12,7 @@ export default Vue.extend({
     ...mapState(['bucket']),
     // don't include root, use home icon for that
     path(): string[] {
-      return this.bucket.fileSystem.currentDirectoryPath.slice(1)
+      return this.bucket.fileSystem?.currentDirectoryPath?.slice(1) ?? []
     },
   },
   methods: {

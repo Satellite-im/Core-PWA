@@ -13,10 +13,22 @@
 
     .like {
       float: right;
+      &.active {
+        color: @pink;
+      }
+    }
+
+    .link {
+      &.active {
+        color: @blue;
+      }
     }
 
     svg:hover {
       &:extend(.font-secondary);
+    }
+    svg.active {
+      color: @primary-color;
     }
   }
   .icon-container {
@@ -39,6 +51,11 @@
   .text-container {
     padding: @normal-spacing;
 
+    .maintext {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
     .subtext {
       &:extend(.font-muted);
     }

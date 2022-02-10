@@ -14,7 +14,8 @@ import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    iconHover: boolean
+    linkHover: boolean
+    heartHover: boolean
     handle: () => void
   }
 }
@@ -41,7 +42,8 @@ export default Vue.extend({
       fileUrl: String,
       fileSize: '',
       fileHover: false,
-      iconHover: false,
+      linkHover: false,
+      heartHover: false,
     }
   },
   computed: {
@@ -68,24 +70,15 @@ export default Vue.extend({
      * @description Handle regular file click. avoiding regular behavior(handler) if user clicks heart or link icon
      */
     fileClick() {
-      if (this.iconHover) {
+      if (this.linkHover) {
+        this.item.toggleShared()
+        return
+      }
+      if (this.heartHover) {
+        this.item.toggleLiked()
         return
       }
       this.$emit('handle', this.item)
-    },
-    /**
-     * @method mouseOver
-     * @description negate regular click behavior (handler)
-     */
-    mouseOver() {
-      this.iconHover = true
-    },
-    /**
-     * @method mouseLeave
-     * @description reinstate regular click behavior (handler)
-     */
-    mouseLeave() {
-      this.iconHover = false
     },
   },
 })

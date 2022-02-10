@@ -4,9 +4,8 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
-import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -22,7 +21,7 @@ export default Vue.extend({
     return {
       file: false as Fil | boolean,
       view: 'grid',
-      key: 1 as number,
+      key: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
     }
   },
   computed: {
@@ -44,10 +43,10 @@ export default Vue.extend({
       this.$data.view = type
     },
     handle(item: Item) {
-      if (Object.values(FILE_TYPE).includes(item.type as FILE_TYPE)) {
-        this.file = item as Fil
+      if (item instanceof Fil) {
+        this.file = item
       }
-      if (Object.values(DIRECTORY_TYPE).includes(item.type as DIRECTORY_TYPE)) {
+      if (item instanceof Directory) {
         this.$store.commit('bucket/openDirectory', item.name)
       }
     },
