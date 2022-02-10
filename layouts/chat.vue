@@ -152,7 +152,11 @@ export default Vue.extend({
       const isMe =
         this.$route.params.address === this.$typedStore.state.accounts.active
 
-      const recipient = isMe
+      const groupId = this.$route.params.id
+
+      const recipient = groupId
+        ? { textilePubkey: groupId }
+        : isMe
         ? null
         : this.$typedStore.state.friends.all.find(
             (friend) => friend.address === this.$route.params.address,

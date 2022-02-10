@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/types/ui/core'
+import { Message } from '~/types/textile/mailbox'
 
 declare module 'vue/types/vue' {
   interface Vue {

@@ -38,13 +38,18 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    members() {
+    filterMembers() {
       const filterFriends = (friends: User[], members: string[]) => {
         return friends.filter((friend: User) =>
           members.includes(friend.address),
         )
       }
       return filterFriends(this.friends, this.selectedGroup.members)
+    },
+  },
+  methods: {
+    navigateToGroup(groupId: string) {
+      this.$router.push(`/chat/groups/${groupId}`)
     },
   },
 })

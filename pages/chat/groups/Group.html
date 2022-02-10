@@ -1,4 +1,7 @@
 <div id="group">
-  <UiChatdEncrypted />
-  <Conversation :messages="media.messages" :loading="loading" />
+  <UiChatEncrypted />
+  <Conversation
+    :messages="groupedMessages"
+    :loading="$store.state.textile.conversationLoading"
+  />
 </div>
