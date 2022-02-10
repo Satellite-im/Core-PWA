@@ -6,8 +6,7 @@ import { BucketState } from '~/store/bucket/types'
 
 export default {
   /**
-   * @description Initializes the TextileManager class and retrieves the
-   * Textile public key that must be shared to friends in order to receive
+   * @description Initializes the Bucket class
    * messages
    * @param param0 Action Arguments
    * @param config Textile configuration (id, pass, wallet)

@@ -6,8 +6,6 @@ export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
   private _hash: string = ''
   private _description: string = ''
-  // todo - store file
-  // private _file: File
 
   /**
    * Create a new file instance
