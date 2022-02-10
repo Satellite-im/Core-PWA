@@ -6,6 +6,7 @@ import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import Editable from './Editable.vue'
+
 import {
   parseCommand,
   commands,
@@ -277,17 +278,6 @@ export default Vue.extend({
         })
         this.$data.nsfwUploadError = false
         this.text = ''
-      }
-    },
-    /**
-     * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar
-     * @param e Drop event data object
-     * @example v-on:drop="handleDrop"
-     */
-    handleDrop(e: DragEvent) {
-      if (e.dataTransfer) {
-        this.handleUpload(e?.dataTransfer?.items, e)
       }
     },
     /**

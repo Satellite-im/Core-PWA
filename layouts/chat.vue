@@ -33,50 +33,52 @@
         <swiper-slide
           :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
         >
-          <menu-icon
-            class="toggle--sidebar"
-            size="1.2x"
-            full-width
-            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
-            @click="toggleMenu"
-          />
-          <Toolbar
-            id="toolbar"
-            :server="recipient || $mock.users[0]"
-            :user="$mock.users[0]"
-          />
-          <Media
-            v-if="$device.isMobile"
-            :fullscreen="ui.fullscreen"
-            :users="$mock.callUsers"
-            :max-viewable-users="10"
-            :fullscreen-max-viewable-users="6"
-          />
-          <Media
-            v-else
-            :fullscreen="ui.fullscreen"
-            :users="$mock.callUsers"
-            :max-viewable-users="10"
-            :fullscreen-max-viewable-users="20"
-          />
-          <UiChatScroll
-            :contents="ui.messages"
-            :prevent-scroll-offset="500"
-            :class="
-              $store.state.friends.all.find(
-                (friend) => friend.address === $store.state.webrtc.activeCall,
-              )
-                ? 'media-open'
-                : 'media-unopen'
-            "
-            enable-wrap
-          >
-            <Nuxt />
-          </UiChatScroll>
-          <Enhancers :sidebar="showSidebar" />
-          <WalletMini v-if="ui.modals.walletMini" />
-          <ChatbarCommandsPreview :message="ui.chatbarContent" />
-          <Chatbar :recipient="recipient" />
+          <DroppableWrapper @handle-drop-prop="handleDrop">
+            <menu-icon
+              class="toggle--sidebar"
+              size="1.2x"
+              full-width
+              :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
+              @click="toggleMenu"
+            />
+            <Toolbar
+              id="toolbar"
+              :server="recipient || $mock.users[0]"
+              :user="$mock.users[0]"
+            />
+            <Media
+              v-if="$device.isMobile"
+              :fullscreen="ui.fullscreen"
+              :users="$mock.callUsers"
+              :max-viewable-users="10"
+              :fullscreen-max-viewable-users="6"
+            />
+            <Media
+              v-else
+              :fullscreen="ui.fullscreen"
+              :users="$mock.callUsers"
+              :max-viewable-users="10"
+              :fullscreen-max-viewable-users="20"
+            />
+            <UiChatScroll
+              :contents="ui.messages"
+              :prevent-scroll-offset="500"
+              :class="
+                $store.state.friends.all.find(
+                  (friend) => friend.address === $store.state.webrtc.activeCall,
+                )
+                  ? 'media-open'
+                  : 'media-unopen'
+              "
+              enable-wrap
+            >
+              <Nuxt />
+            </UiChatScroll>
+            <Enhancers />
+            <WalletMini v-if="ui.modals.walletMini" />
+            <ChatbarCommandsPreview :message="ui.chatbarContent" />
+            <Chatbar ref="chatbar" :recipient="recipient" />
+          </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
           <GroupAside
@@ -98,16 +100,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
+import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
+import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 
 export default Vue.extend({
   name: 'ChatLayout',
   components: {
     MenuIcon,
+    DroppableWrapper,
   },
   mixins: [Touch, Layout],
   middleware: ['authenticated'],
@@ -188,6 +193,17 @@ export default Vue.extend({
         return this.$store.commit('ui/showSidebar', false)
       }
       this.$store.commit('ui/showSidebar', true)
+    },
+    /**
+     * @method handleDrop
+     * @description Allows the drag and drop of files into the chatbar
+     * @param e Drop event data object
+     * @example v-on:drop="handleDrop"
+     */
+    handleDrop(e: DragEvent) {
+      if (e?.dataTransfer) {
+        this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
+      }
     },
   },
 })

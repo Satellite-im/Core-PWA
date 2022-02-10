@@ -1,11 +1,10 @@
 <div
   id="enhancers"
-  :class="`${sidebar ? 'side-open': 'side-close'}`"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
   v-bind:style="!ui.enhancers.floating ? {
-    left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px', 
-    bottom: ui.enhancers.position[1] + 'px' 
+    left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px',
+    bottom: ui.enhancers.position[1] + 'px'
   } : {}"
 >
   <div class="navbar">
