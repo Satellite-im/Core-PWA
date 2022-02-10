@@ -110,6 +110,7 @@ export default {
     files: {
       refresh: 'Refresh',
       file_type: 'File Type',
+      empty: 'Current directory is empty',
       controls: {
         new_folder: 'New Folder',
         new_file: 'New File',

@@ -9,7 +9,7 @@
       <FilesControls :changeView="changeView" @forceRender="forceRender" />
       <TypographyText
         v-if="!directory.length"
-        text="current directory is empty"
+        :text="$t('pages.files.empty')"
       />
       <div v-else-if="view === 'list'">
         <FilesList :directory="directory" @handle="handle" />
