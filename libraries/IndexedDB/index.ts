@@ -36,12 +36,15 @@ export const searchMessage = async (
   const result = newResult
     .sort((item1, item2) => item2.at - item1.at)
     .filter((item) => {
-      if (item.payload.includes(queryString)) {
+      if (item.payload.toLowerCase().includes(queryString.toLowerCase())) {
         if (dateRange) {
-          const queryDate = new Date(dateRange).setHours(0, 0, 0, 0)
-          const iDate = new Date(item.at).setHours(0, 0, 0, 0)
-          console.log(queryDate, iDate)
-          if (queryDate === iDate) {
+          const startDate = new Date(dateRange.start).setHours(0, 0, 0, 0)
+          const endDate =
+            dateRange.start < dateRange.end
+              ? new Date(dateRange.end).setHours(0, 0, 0, 0)
+              : new Date(dateRange.end).setHours(23, 59, 59, 999)
+          const iDate = new Date(item.at)
+          if (startDate <= iDate.getTime() && iDate.getTime() <= endDate) {
             return item
           }
         } else {
