@@ -77,10 +77,8 @@ const mutations = {
       (fr) => (fr = fr.address === friend.address ? friend : fr),
     )
   },
-  removeFriend(state: FriendsState, friendTextilePublicKey: string) {
-    state.all = state.all.filter(
-      (fr) => fr.textilePubkey !== friendTextilePublicKey,
-    )
+  removeFriend(state: FriendsState, accountId: string) {
+    state.all = state.all.filter((fr) => fr.account.accountId !== accountId)
   },
   sortFriends(state: FriendsState, rConversations: Conversation) {
     state.all = state.all

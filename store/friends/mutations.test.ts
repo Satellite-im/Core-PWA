@@ -533,7 +533,7 @@ describe('mutate friends', () => {
       textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=429',
     }
 
-    inst.removeFriend(InitialFriendsState, payload.textilePubkey)
+    inst.removeFriend(InitialFriendsState, payload.account.accountId)
     expect(InitialFriendsState.all).not.toContainEqual(payload)
   })
 })

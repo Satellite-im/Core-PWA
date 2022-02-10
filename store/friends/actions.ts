@@ -234,12 +234,7 @@ export default {
 
     friendsProgram.addEventListener(FriendsEvents.FRIEND_REMOVED, (account) => {
       if (account) {
-        commit(
-          'removeFriend',
-          account.from === userAccount?.publicKey.toBase58()
-            ? account.to
-            : account.from,
-        )
+        commit('removeFriend', account.accountId)
       }
     })
   },
@@ -555,7 +550,7 @@ export default {
     )
 
     if (transactionId) {
-      commit('removeFriend', friend.textilePubkey)
+      commit('removeFriend', friend.account.accountId)
     }
   },
 }
