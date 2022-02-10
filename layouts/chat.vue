@@ -44,7 +44,7 @@
             <Toolbar
               id="toolbar"
               :server="recipient || $mock.users[0]"
-              :user="$mock.users[0]"
+              :user="recipient || $mock.users[0]"
             />
             <Media
               v-if="$device.isMobile"

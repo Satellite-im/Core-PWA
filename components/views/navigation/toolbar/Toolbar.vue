@@ -107,6 +107,7 @@ export default Vue.extend({
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleSearch(value: string, items: SearchQueryItem[]) {
+      console.log('handleSearch: ')
       this.showSearchResult = true
       this.searchQuery = value
     },
