@@ -44,6 +44,7 @@
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <UiUser
           v-for="member in filterMembers"
+          :key="member.address"
           :user="member"
           :creatorBadge="member == selectedGroup.creator"
         />
