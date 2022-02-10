@@ -1,8 +1,10 @@
 import { db } from '~/plugins/thirdparty/dexie'
 import { User } from '~/types/ui/user'
 import { QueryOptions } from '~/types/ui/query'
+import { AccountsState } from '~/store/accounts/types'
 
 export const searchMessage = async (
+  accounts: AccountsState,
   queryOptions: QueryOptions,
   page: number = 1,
 ) => {
@@ -17,9 +19,10 @@ export const searchMessage = async (
   dbMessages?.forEach((mItem) => {
     mItem?.conversation.forEach((cItem) => {
       /* get user info with textilePubkey instead of address */
-      const user = friends.find(
-        (fItem: User) => fItem.textilePubkey === cItem?.from,
-      )
+      const user =
+        accounts?.details?.textilePubkey === cItem?.from
+          ? accounts.details
+          : friends.find((fItem: User) => fItem.textilePubkey === cItem?.from)
       newResult.push({
         ...cItem,
         user: {

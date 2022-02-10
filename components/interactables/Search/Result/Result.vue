@@ -63,7 +63,7 @@ export default Vue.extend({
      * @returns
      */
     DataStateType: () => DataStateType,
-    ...mapState(['dataState', 'search', 'friends']),
+    ...mapState(['dataState', 'search', 'friends', 'accounts']),
     loading: {
       set(state: DataStateType) {
         this.$store.commit('dataState/setDataState', {
@@ -125,7 +125,11 @@ export default Vue.extend({
     },
     queryOptions: {
       async handler(newQOptions) {
-        this.$data.result = await searchMessage(newQOptions, this.$data.page)
+        this.$data.result = await searchMessage(
+          this.accounts,
+          newQOptions,
+          this.$data.page,
+        )
       },
     },
     date: {
@@ -175,12 +179,19 @@ export default Vue.extend({
         queryString: query,
         friends: this.friends.all,
       }
-      this.$data.result = await searchMessage(this.$data.queryOptions)
+      this.$data.result = await searchMessage(
+        this.accounts,
+        this.$data.queryOptions,
+      )
       this.$data.loading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
       this.$data.page = pageNum
-      this.$data.result = await searchMessage(this.$data.queryOptions, pageNum)
+      this.$data.result = await searchMessage(
+        this.accounts,
+        this.$data.queryOptions,
+        pageNum,
+      )
     },
     onChange(value: any) {
       this.$data.queryOptions = {
