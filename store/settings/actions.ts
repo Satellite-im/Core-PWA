@@ -6,6 +6,7 @@ export default {
     try {
       await db.delete()
       await localStorage.removeItem('Satellite-Store')
+      await location.reload()
     } catch (e) {
       throw new Error(SettingsError.DATABASE_NOT_CLEARED)
     }

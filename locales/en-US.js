@@ -371,7 +371,11 @@ export default {
           title: 'Clear Storage',
           subtitle:
             'Reset Satellite. This will clear any saved accounts. Do not do this without backing up your account first.',
+          subtitle_warning1: 'Are you absolutely sure?',
+          subtitle_warning2:
+            'If you do not have your recovery seed your account will be gone forever.',
           button: 'Clear Local Storage',
+          confirm_button: 'Yes, Really, Clear Local Storage',
           message: 'Local storage cleared successfully',
         },
         export: {
