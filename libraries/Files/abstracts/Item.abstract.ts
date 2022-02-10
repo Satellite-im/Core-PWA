@@ -71,6 +71,14 @@ export abstract class Item implements ItemInterface {
     return this._shared
   }
 
+  toggleLiked() {
+    this._liked = !this._liked
+  }
+
+  toggleShared() {
+    this._shared = !this._shared
+  }
+
   /**
    * Validate that the parent is of the correct instance type
    * @method

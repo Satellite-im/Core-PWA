@@ -1,16 +1,23 @@
-<div class="file" @click="fileClick">
+<div
+  class="file"
+  @click="fileClick"
+  @mouseover="fileHover=true"
+  @mouseleave="fileHover=false"
+>
   <div class="quick-actions">
     <link-icon
       size="1.25x"
-      class="share"
-      @mouseover="mouseOver"
-      @mouseleave="mouseLeave"
+      class="link"
+      :class="{'active' : item.shared }"
+      @mouseover="linkHover=true"
+      @mouseleave="linkHover=false"
     />
     <heart-icon
       size="1.25x"
       class="like"
-      @mouseover="mouseOver"
-      @mouseleave="mouseLeave"
+      :class="{'active' : item.liked }"
+      @mouseover="heartHover=true"
+      @mouseleave="heartHover=false"
     />
   </div>
   <div
@@ -24,7 +31,7 @@
     <file-icon v-else size="4x" class="file-type-icon" />
   </div>
   <div class="text-container">
-    <TypographyText :size="6" :text="item.name" />
+    <TypographyText :size="6" :text="item.name" class="maintext" />
     <TypographyText :size="6" :text="getSubtext" class="subtext" />
   </div>
 </div>

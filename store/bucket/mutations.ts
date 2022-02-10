@@ -17,6 +17,9 @@ const mutations = {
   goBackToDirectory(state: BucketState, name: string) {
     state.fileSystem.goBackToDirectory(name)
   },
+  createFile(state: BucketState, name: string) {
+    state.fileSystem.createFile(name)
+  },
 }
 
 export default mutations

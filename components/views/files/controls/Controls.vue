@@ -43,14 +43,18 @@ export default Vue.extend({
         return
       }
       if (this.input.type === FilesViewEnum.FOLDER) {
+        // add folder
         this.$store.commit('bucket/createDirectory', this.text)
         this.input.show = false
         this.text = ''
         this.$emit('forceRender')
         return
       }
-      // add file
+      // add file todo - gather description
+      this.$store.commit('bucket/createFile', this.text)
       this.input.show = false
+      this.text = ''
+      this.$emit('forceRender')
     },
   },
 })
