@@ -1,4 +1,4 @@
-import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import { db } from '~/plugins/thirdparty/dexie'
 import { User } from '~/types/ui/user'
 import { QueryOptions } from '~/types/ui/query'
 
@@ -14,10 +14,12 @@ export const searchMessage = async (
   const newResult: any[] = []
 
   console.log('dateRange: ', dateRange)
-
   dbMessages?.forEach((mItem) => {
-    const user = friends.find((fItem: User) => fItem.address === mItem?.key)
     mItem?.conversation.forEach((cItem) => {
+      /* get user info with textilePubkey instead of address */
+      const user = friends.find(
+        (fItem: User) => fItem.textilePubkey === cItem?.from,
+      )
       newResult.push({
         ...cItem,
         user: {
@@ -41,6 +43,7 @@ export const searchMessage = async (
         return item
       }
     }
+    return false
   })
 
   const skip = (page - 1) * 10
