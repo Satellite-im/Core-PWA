@@ -96,7 +96,7 @@ export default Vue.extend({
       if (this.editable) {
         const files: File[] = [...event.target.files]
         this.$parent.$data.showFilePreview = files.length > 0
-        if (files.length > 8) {
+        if (files.length + this.$data.files.length > 8) {
           this.$data.count_error = true
           return
         }
