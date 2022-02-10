@@ -17,6 +17,9 @@ export default Vue.extend({
       required: false,
     },
   },
+  computed: {
+    ...mapState(['ui', 'webrtc', 'friends']),
+  },
 })
 </script>
 
