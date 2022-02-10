@@ -33,21 +33,23 @@ export const searchMessage = async (
     })
   })
 
-  const result = newResult.filter((item) => {
-    if (item.payload.includes(queryString)) {
-      if (dateRange) {
-        const queryDate = new Date(dateRange).setHours(0, 0, 0, 0)
-        const iDate = new Date(item.at).setHours(0, 0, 0, 0)
-        console.log(queryDate, iDate)
-        if (queryDate === iDate) {
+  const result = newResult
+    .sort((item1, item2) => item2.at - item1.at)
+    .filter((item) => {
+      if (item.payload.includes(queryString)) {
+        if (dateRange) {
+          const queryDate = new Date(dateRange).setHours(0, 0, 0, 0)
+          const iDate = new Date(item.at).setHours(0, 0, 0, 0)
+          console.log(queryDate, iDate)
+          if (queryDate === iDate) {
+            return item
+          }
+        } else {
           return item
         }
-      } else {
-        return item
       }
-    }
-    return false
-  })
+      return false
+    })
 
   const skip = (page - 1) * 10
 
