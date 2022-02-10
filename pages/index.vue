@@ -85,12 +85,11 @@ export default Vue.extend({
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  text-align: center;
+  text-align: left;
 
   .loader-container {
     min-width: 250px;
     align-self: center;
-    margin-bottom: 25vh;
   }
 }
 </style>
