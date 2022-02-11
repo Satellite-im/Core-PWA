@@ -101,12 +101,12 @@ export const Notifications = class Notifications {
   /* Not sure if this section will be needed yet - in web and android it is not
    revokeNotificationPermission(): void {
      if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
-        Notification api for web doesn't let us revoke, has to happen in browser
+        // Notification api for web doesn't let us revoke, has to happen in browser
      }
      if (this.currentPlatform === 'android') {
-        do something, android doesnt seem to require us asking
+        // do something, android doesnt seem to require us asking
         ;(LocalNotifications as any).requestPermissions().then((result: any) => {
-          LocalNotifications.register()
+        LocalNotifications.register()
           alert(result)
         })
      }
