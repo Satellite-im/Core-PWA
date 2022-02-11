@@ -75,7 +75,7 @@
     v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
   >
     <div class="result-count">
-      {{result.data.totalRows}} {{$t('search.result.results')}}
+      {{result.data.list.length}} {{$t('search.result.results')}}
     </div>
     <div class="result-orderby">
       <div
