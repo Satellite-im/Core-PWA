@@ -201,7 +201,11 @@ describe('Commands.isArgsValid', () => {
       expect(result).toBeTruthy()
     })
     test('1', () => {
-      const object: string = 'ABC' // ABC is not in [a-z0-9], it would be in it if it was rather [a-zA-Z0-9].
+      const object: string = 'ABC' // A-Z is in [a-z0-9] because of the `i` flag at the end of the regex (/^[a-z0-9]+$/i)
+      // Though what makes this string above invalid is because it does not adhere to both the condition of
+      // text.charAt(0) === commandPrefix && (cmd.match(/^[a-z0-9]+$/i) || text.length === 1)
+      // It does not have `/` at the start, hence not adhering to text.charAt(0) === commandPrefix.
+      // And though it adheres to `(cmd.match(/^[a-z0-9]+$/i)`, it does not adhere to `text.length === 1`
       const result: any = Commands.hasCommandPreview(object)
       expect(result).toBeFalsy()
     })
