@@ -16,7 +16,11 @@ export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      // default: () => {},
+      default: () => ({
+        at: 0,
+        from: '',
+        to: '',
+      }),
     },
   },
   data() {
@@ -34,21 +38,24 @@ export default Vue.extend({
       return getUsernameFromState(this.group.from, this.$store.state)
     },
     badge() {
-      // $mock.users.filter(u => u.address === group.from)[0].badge
       return ''
     },
     src(): string {
-      // if sender is you
-      if (this.address === 'unknown') {
+      // To check if the sender is you we just compare the from field
+      // with your textile public key
+      if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {
         const myHash = this.accounts.details.profilePicture
         return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
       }
 
-      const hash = this.friends.all.find(
-        (e: Friend) => e.activeChat,
-      ).profilePicture
+      // Try to find the friend you are talking to
+      const friend = this.$Hounddog.findFriend(this.group.from, this.friends)
 
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      if (friend?.profilePicture) {
+        return `${this.$Config.textile.browser}/ipfs/${friend.profilePicture}`
+      }
+
+      return ''
     },
   },
   created() {
