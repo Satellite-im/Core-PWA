@@ -92,6 +92,7 @@ export default Vue.extend({
       this.close()
     },
     openProfile() {
+      this.close()
       if (this.user) {
         const isMe = this.user.address === this.accounts.active
 
