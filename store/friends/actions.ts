@@ -42,8 +42,13 @@ export default {
 
     const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
 
+    // Groupchat testing
     const groupchatsProgram: GroupchatsProgram = new GroupchatsProgram(
       $SolanaManager,
+    )
+
+    groupchatsProgram.create(
+      'dhfskjdfhsdjkfhsdjkfhdsjkhdjkfdhfskjdfhsdjkfhsdjkfhdsjkhdjkfdfrt',
     )
 
     const { incoming, outgoing } =

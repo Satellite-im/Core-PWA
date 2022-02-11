@@ -2,6 +2,10 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
+  alias: {
+    '@project-serum/anchor': '@project-serum/anchor/dist/cjs/index.js',
+    tslib: 'tslib/tslib.es6.js',
+  },
   bridge: {
     nitro: false,
   },
@@ -198,7 +202,6 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: ['@project-serum/anchor'],
     extend(config, ctx) {
       config.node = {
         fs: 'empty',
