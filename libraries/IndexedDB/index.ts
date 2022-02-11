@@ -36,7 +36,7 @@ export const searchMessage = async (
   const result = newResult
     .sort((item1, item2) => item2.at - item1.at)
     .filter((item) => {
-      if (item.payload.toLowerCase().includes(queryString.toLowerCase())) {
+      if (item.payload?.toLowerCase()?.includes(queryString.toLowerCase())) {
         if (dateRange) {
           const startDate = new Date(dateRange.start).setHours(0, 0, 0, 0)
           const endDate =
