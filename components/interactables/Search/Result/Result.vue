@@ -53,6 +53,7 @@ export default Vue.extend({
         queryString: '',
         friends: [],
         dateRange: null,
+        orderBy: 'new',
       },
     }
   },
@@ -125,11 +126,13 @@ export default Vue.extend({
     },
     queryOptions: {
       async handler(newQOptions) {
+        this.$data.loading = DataStateType.Loading
         this.$data.result = await searchMessage(
           this.accounts,
           newQOptions,
           this.$data.page,
         )
+        this.$data.loading = DataStateType.Ready
       },
     },
     date: {
@@ -167,6 +170,11 @@ export default Vue.extend({
      */
     toggleOrderBy(state: SearchOrderType) {
       this.orderBy = state
+
+      this.$data.queryOptions = {
+        ...this.$data.queryOptions,
+        orderBy: state,
+      }
     },
     /**
      * @method fetchResult DocsTODO
@@ -189,12 +197,14 @@ export default Vue.extend({
       this.$data.loading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
+      this.$data.loading = DataStateType.Loading
       this.$data.page = pageNum
       this.$data.result = await searchMessage(
         this.accounts,
         this.$data.queryOptions,
         pageNum,
       )
+      this.$data.loading = DataStateType.Ready
     },
     onChange(value: any) {
       this.$data.queryOptions = {

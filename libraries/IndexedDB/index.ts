@@ -9,7 +9,7 @@ export const searchMessage = async (
   page: number = 1,
 ) => {
   console.log('queryOptions: ', queryOptions)
-  const { friends, queryString, dateRange } = queryOptions
+  const { friends, queryString, dateRange, orderBy } = queryOptions
   const addresses = friends.map((fItem: User) => fItem.address)
   const dbMessages = await db.conversations.bulkGet(addresses)
 
@@ -34,7 +34,13 @@ export const searchMessage = async (
   })
 
   const result = newResult
-    .sort((item1, item2) => item2.at - item1.at)
+    .sort((item1, item2) =>
+      orderBy === 'new'
+        ? item2.at - item1.at
+        : orderBy === 'old'
+        ? item1.at - item2.at
+        : item1.at,
+    )
     .filter((item) => {
       if (item.payload?.toLowerCase()?.includes(queryString.toLowerCase())) {
         if (dateRange) {
