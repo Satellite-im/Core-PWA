@@ -3,6 +3,7 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
   <ChatbarReply v-if="recipient" />
   <div
     class="chatbar-wrap"
@@ -29,9 +30,10 @@
       :placeholder="$t('ui.talk')"
       :enabled="Boolean(recipient)"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
-      :handleInputKeydownProps="handleInputKeydown"
-      :handleInputKeyupProps="handleInputKeyup"
-      :handlePasteProps="handlePaste"
+      :focus="ui.chatbarFocus"
+      @keydown="handleInputKeydown"
+      @keyup="handleInputKeyup"
+      @paste="handlePaste"
     />
 
     <ChatbarControls
