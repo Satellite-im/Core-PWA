@@ -179,6 +179,7 @@ export default {
   subscribeToFriendsEvents({
     dispatch,
     commit,
+    rootState,
   }: ActionsArguments<FriendsState>) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
@@ -234,7 +235,9 @@ export default {
 
     friendsProgram.addEventListener(FriendsEvents.FRIEND_REMOVED, (account) => {
       if (account) {
-        commit('removeFriend', account.accountId)
+        const address =
+          rootState.accounts.active === account.from ? account.to : account.from
+        commit('removeFriend', address)
       }
     })
   },
@@ -550,7 +553,7 @@ export default {
     )
 
     if (transactionId) {
-      commit('removeFriend', friend.account.accountId)
+      commit('removeFriend', friend.address)
     }
   },
 }

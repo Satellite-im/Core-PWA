@@ -470,6 +470,7 @@ export default {
       request_already_accepted: 'This user is already in your friends',
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
+      friend_not_removed: 'Could not remove friend',
     },
     chat: {
       drop_file_count: 'Sorry, you can only upload 8 files at a time',
