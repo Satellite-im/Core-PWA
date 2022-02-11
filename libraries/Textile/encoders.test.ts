@@ -48,18 +48,13 @@ describe('check all constants', () => {
     expect(messageEncoder).toMatchSnapshot()
   })
   it('function isBase64 to return correctly', () => {
-    //   Text: dummycode
-    //   Base64: ZHVtbXl0ZXh0
     expect(exportedForTesting.isBase64('ZHVtbXl0ZXh0')).toMatchSnapshot()
   })
   it('function isBase64 to return incorrectly', () => {
-    //   Text: dummycode
-    //   Base64: ZHVtbXl0ZXh0
-    //  We are not passing a base64 argument so that we get a false response
+    // We are not passing a base64 argument so that we get a false response
     expect(exportedForTesting.isBase64('abc')).toMatchSnapshot()
   })
   it('base64 to return correctly', () => {
-    console.log(exportedForTesting.base64)
     expect(exportedForTesting.base64).toMatchSnapshot()
   })
 })

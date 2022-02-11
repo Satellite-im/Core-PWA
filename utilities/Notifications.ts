@@ -8,7 +8,7 @@ const isSupported = (): boolean =>
   'PushManager' in window
 
 export const Notifications = class Notifications {
-  currentPlatform: string = 'android' // 'ios', 'android', 'web'
+  currentPlatform: string = 'android' // 'iOS', 'android', 'web'
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
   sendNotification: any = this.sendNotifications
 
@@ -91,26 +91,26 @@ export const Notifications = class Notifications {
       Notification.requestPermission()
     }
     if (this.currentPlatform === 'android') {
-      // and maybe ios?
+      // and maybe iOS?
       LocalNotifications.requestPermissions().then((result: any) => {
         return result
       })
     }
   }
 
-  // // Not sure if this section will be needed yet - in web and android it is not
-  // revokeNotificationPermission(): void {
-  //   if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
-  //     // Notification api for web doesn't let us revoke, has to happen in browser
-  //   }
-  //   if (this.currentPlatform === 'android') {
-  //     // do something, android doesnt seem to require us asking
-  //     // ;(LocalNotifications as any).requestPermissions().then((result: any) => {
-  //     //   // LocalNotifications.register()
-  //     //   alert(result)
-  //     // })
-  //   }
-  // }
+  /* Not sure if this section will be needed yet - in web and android it is not
+   revokeNotificationPermission(): void {
+     if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
+        Notification api for web doesn't let us revoke, has to happen in browser
+     }
+     if (this.currentPlatform === 'android') {
+        do something, android doesnt seem to require us asking
+        ;(LocalNotifications as any).requestPermissions().then((result: any) => {
+          LocalNotifications.register()
+          alert(result)
+        })
+     }
+   } */
 
   /**
    * @method sendNotifications DocsTODO
