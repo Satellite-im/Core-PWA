@@ -174,8 +174,14 @@ export default Vue.extend({
     ) {
       const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
-        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-        activePeer?.send('TYPING_STATE', { state })
+        try {
+          const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+          activePeer?.send('TYPING_STATE', { state })
+        } catch (error: any) {
+          this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
+            error,
+          })
+        }
       }
     },
     /**
