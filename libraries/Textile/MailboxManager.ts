@@ -54,24 +54,6 @@ export class MailboxManager {
     return this.mailboxID
   }
 
-  // /**
-  //  * @method buildMessage
-  //  * @description Generates a Message object from the given data
-  //  * @param to Destination address
-  //  * @param type Message type
-  //  * @param data message data
-  //  * @returns a Message Object
-  //  */
-  // buildMessage(to: string, type: string, data: any) {
-  //   return {
-  //     sender: this.senderAddress,
-  //     to,
-  //     at: Date.now(),
-  //     type,
-  //     payload: data,
-  //   }
-  // }
-
   /**
    * @method getConversation
    * Retrieve a conversation with a specific user, filtered by the given query parameters

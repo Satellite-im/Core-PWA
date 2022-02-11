@@ -32,13 +32,13 @@ export default Vue.extend({
     const [lsMajorVersion, lsMinorVersion, lsPatchVersion] =
       lsVersion.split('.')
 
-    // // A update which requires resetting of the app has occurred.
+    // A update which requires resetting of the app has occurred.
     if (lsMinorVersion !== minorVersion) {
       this.$data.requiresUpdate = true
       this.$data.hasMinorUpdate = true
     }
 
-    // // A version which brings new features without major changes exists
+    // A version which brings new features without major changes exists
     if (lsPatchVersion !== patchVersion) {
       this.$data.hasMinorUpdate = true
     }
@@ -85,7 +85,6 @@ export default Vue.extend({
 
       peer?.call.deny()
 
-      // peer?.send('SIGNAL', { type: 'CALL_DENIED' })
       this.$store.dispatch('webrtc/denyCall')
     },
   },

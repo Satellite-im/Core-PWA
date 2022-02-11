@@ -32,10 +32,6 @@ export default Vue.extend({
         return this.$data.NotificationsEnabled
       },
     },
-    // notificationResponse: () => {
-    //   // @ts-ignore
-    //   return this.$notifications.registerNotificationWatch()
-    // }
   },
   mounted() {
     // Check for new input sources

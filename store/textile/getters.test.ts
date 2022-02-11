@@ -19,7 +19,7 @@ describe('init', () => {
   })
 
   it('should not return the initialized variable of the state', () => {
-    //  An error will be thrown because the arguments passed into the constructor is not proper
+    // An error will be thrown because the arguments passed into the constructor is not proper
     const result: any = inst.getInitialized({})
     expect(result).not.toEqual({})
   })
