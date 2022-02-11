@@ -4,13 +4,14 @@
   v-click-outside="close"
   :style="$device.isDesktop ? `top: ${ui.quickProfilePosition.y}px; left: ${ui.quickProfilePosition.x}px;` : ''"
 >
-  <div class="header avatar-wrapper" @click="openProfile">
+  <div class="header avatar-wrapper">
     <InteractablesClose :action="close" />
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="45"
       :source="src"
+      @click="openProfile"
     />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
