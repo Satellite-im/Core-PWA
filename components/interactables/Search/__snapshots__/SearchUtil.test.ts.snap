@@ -200,12 +200,12 @@ Array [
 exports[`SearchUtil.getSearchResultGroupList 0 1`] = `
 Array [
   Object {
-    "count": 5,
+    "count": 0,
     "title": "Messages",
     "type": "messages",
   },
   Object {
-    "count": 3,
+    "count": 0,
     "title": "Files",
     "type": "files",
   },
@@ -225,12 +225,12 @@ Array [
 exports[`SearchUtil.getSearchResultGroupList 0 2`] = `
 Array [
   Object {
-    "count": 5,
+    "count": 0,
     "title": "Messages",
     "type": "messages",
   },
   Object {
-    "count": 3,
+    "count": 0,
     "title": "Files",
     "type": "files",
   },
@@ -471,12 +471,12 @@ Array [
 exports[`SearchUtil.getSearchResultGroupList 0 1`] = `
 Array [
   Object {
-    "count": 5,
+    "count": 0,
     "title": "Messages",
     "type": "messages",
   },
   Object {
-    "count": 3,
+    "count": 0,
     "title": "Files",
     "type": "files",
   },
@@ -496,12 +496,12 @@ Array [
 exports[`SearchUtil.getSearchResultGroupList 0 2`] = `
 Array [
   Object {
-    "count": 5,
+    "count": 0,
     "title": "Messages",
     "type": "messages",
   },
   Object {
-    "count": 3,
+    "count": 0,
     "title": "Files",
     "type": "files",
   },
