@@ -8,7 +8,7 @@
       :source="data.user.avatar"
     />
     <div class="content">
-      <div class="username">{{ data.user.name }}</div>
+      <div class="username">{{ data.user.name }} {{ new Date(data.at) }}</div>
       <div class="message">{{ data.payload }}</div>
     </div>
   </div>

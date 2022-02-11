@@ -50,7 +50,29 @@ export default Vue.extend({
       searchResult: [] as SearchRecommendResultItem[],
       searchFor: '',
       search: -1,
+      dragDateRange: {
+        start: new Date(),
+        end: new Date(),
+      },
     }
+  },
+  watch: {
+    dragDateRange: {
+      handler(newRange) {
+        const startDate = this.$dayjs(newRange.start).format('YYYY-MM-DD')
+        const endDate = this.$dayjs(newRange.end).format('YYYY-MM-DD')
+        if (startDate !== endDate) {
+          const searchInput = this.$refs.searchInput as HTMLElement
+          this._insertDateRange(`${startDate}~${endDate}`)
+          this._produceItems()
+          this._setCaretPosition(this.caretPosition)
+          this._detectStatus()
+          searchInput.focus()
+          this._prepareSearch()
+          this.emitSearch()
+        }
+      },
+    },
   },
   computed: {
     /**
@@ -126,9 +148,24 @@ export default Vue.extend({
       }
       if (
         this.current.command === SearchCommand.Before ||
-        this.current.command === SearchCommand.During ||
+        // this.current.command === SearchCommand.During ||
         this.current.command === SearchCommand.After
       ) {
+        return true
+      }
+      return false
+    },
+
+    /**
+     * @method isDate DocsTODO
+     * @description
+     * @returns
+     */
+    isDateRange() {
+      if (this.current == null || this.current.value !== '') {
+        return false
+      }
+      if (this.current.command === SearchCommand.During) {
         return true
       }
       return false
@@ -260,12 +297,24 @@ export default Vue.extend({
      * @param date
      */
     _insertDate(date: string) {
+      console.log('date: ', date)
       if (date == null) {
         return
       }
       this.current = this.searchQuery.queryItemFrom(this.caretPosition)
       if (this.current != null) {
         this.searchQuery.setCommandValue(this.current.index, date)
+        this.caretPosition = this.current.cursorEnd
+      }
+    },
+
+    _insertDateRange(dateRange: string) {
+      if (dateRange == null) {
+        return
+      }
+      this.current = this.searchQuery.queryItemFrom(this.caretPosition)
+      if (this.current != null) {
+        this.searchQuery.setCommandValue(this.current.index, dateRange)
         this.caretPosition = this.current.cursorEnd
       }
     },
