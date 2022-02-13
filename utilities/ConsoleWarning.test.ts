@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as ConsoleWarning from '~/utilities/ConsoleWarning'
 import 'jest-canvas-mock'
 
