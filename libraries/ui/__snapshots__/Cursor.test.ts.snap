@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cursor.default.getCurrentCursorPosition 0 1`] = `-1`;
