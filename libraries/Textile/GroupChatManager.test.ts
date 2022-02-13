@@ -189,7 +189,6 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
   })
 })
 
-// @ponicode
 describe('GroupChatManager.GroupChatManager.isInitialized', () => {
   let inst4: any
   let inst3: any
