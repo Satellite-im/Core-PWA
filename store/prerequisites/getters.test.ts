@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as getters from '~/store/prerequisites/getters'
 
 describe('getters.default.allPrerequisitesReady', () => {

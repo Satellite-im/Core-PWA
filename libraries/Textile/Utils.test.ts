@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as utils from '~/libraries/Textile/utils'
 
 describe('utils.stringToTypedBase64', () => {
