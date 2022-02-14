@@ -10,7 +10,7 @@ import { Fil } from '~/libraries/Files/Fil'
 declare module 'vue/types/vue' {
   interface Vue {
     file: Fil | boolean
-    key: number
+    counter: number
   }
 }
 
@@ -21,14 +21,15 @@ export default Vue.extend({
     return {
       file: false as Fil | boolean,
       view: 'grid',
-      key: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
+      counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
     }
   },
   computed: {
     ...mapState(['bucket']),
     directory() {
       return (
-        this.key && (this.bucket.fileSystem?.currentDirectory?.content ?? [])
+        this.counter &&
+        (this.bucket.fileSystem?.currentDirectory?.content ?? [])
       )
     },
   },
@@ -51,7 +52,7 @@ export default Vue.extend({
       }
     },
     forceRender() {
-      this.key++
+      this.counter++
     },
     // todo-handle upload
     // async handleFile(event: any) {

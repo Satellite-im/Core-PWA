@@ -26,34 +26,50 @@ export default Vue.extend({
   computed: {
     FilesViewEnum: () => FilesViewEnum,
   },
+  watch: {
+    'input.type'(newVal) {
+      this.$nextTick(() => {
+        if (!newVal) {
+          return
+        }
+        // @ts-ignore
+        this.$refs.nameInputGroup?.$refs.input.focus()
+      })
+    },
+  },
   methods: {
     toggleInput(type: FilesViewEnum) {
       if (!this.input.show) {
-        this.input.show = true
-        this.input.type = type
+        this.input = { show: true, type }
         return
       }
       if (type !== this.input.type) {
         this.input.type = type
+        this.text = ''
         return
       }
-      this.input.show = !this.input.show
+      this.input = { show: false, type: FilesViewEnum.EMPTY }
+      this.text = ''
     },
     addItem() {
       if (!this.text) {
         return
       }
+      // add folder to filesystem
       if (this.input.type === FilesViewEnum.FOLDER) {
-        // add folder
-        this.$store.commit('bucket/createDirectory', this.text)
-        this.input.show = false
+        try {
+          this.$store.commit('bucket/createDirectory', this.text)
+        } catch (e) {
+          console.log(e)
+        }
+        this.input = { show: false, type: FilesViewEnum.EMPTY }
         this.text = ''
         this.$emit('forceRender')
         return
       }
       // add file todo - gather description
       this.$store.commit('bucket/createFile', this.text)
-      this.input.show = false
+      this.input = { show: false, type: FilesViewEnum.EMPTY }
       this.text = ''
       this.$emit('forceRender')
     },
