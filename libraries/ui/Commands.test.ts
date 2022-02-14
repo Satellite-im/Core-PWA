@@ -191,20 +191,21 @@ describe('Commands.isArgsValid', () => {
   describe('Commands.hasCommandPreview', () => {
     test('0', () => {
       const object: string = '/a'
-      // Regex is [a-z0-9], hence everything that is in these is valid.
-      // Other condition that we need to consider so that it passes the test is that:
-      // it will return true if either the string has / at the start (text.charAt(0) === commandPrefix)
-      // AND
-      // the text is valid for the regex (/^[a-z0-9]+$/i) and has a length of 1 (/ab has a length of 2).
+      /* Regex is [a-z0-9], hence everything that is in these is valid.
+       Other condition that we need to consider so that it passes the test is that:
+       it will return true if either the string has / at the start (text.charAt(0) === commandPrefix)
+       AND
+       the text is valid for the regex (/^[a-z0-9]+$/i) and has a length of 1 (/ab has a length of 2). */
       const result: any = Commands.hasCommandPreview(object)
       expect(result).toBeTruthy()
     })
     test('1', () => {
-      const object: string = 'ABC' // A-Z is in [a-z0-9] because of the `i` flag at the end of the regex (/^[a-z0-9]+$/i)
-      // Though what makes this string above invalid is because it does not adhere to both the condition of
-      // text.charAt(0) === commandPrefix && (cmd.match(/^[a-z0-9]+$/i) || text.length === 1)
-      // It does not have `/` at the start, hence not adhering to text.charAt(0) === commandPrefix.
-      // And though it adheres to `(cmd.match(/^[a-z0-9]+$/i)`, it does not adhere to `text.length === 1`
+      const object: string =
+        'ABC' /* A-Z is in [a-z0-9] because of the `i` flag at the end of the regex (/^[a-z0-9]+$/i)
+       Though what makes this string above invalid is because it does not adhere to both the condition of
+       text.charAt(0) === commandPrefix && (cmd.match(/^[a-z0-9]+$/i) || text.length === 1)
+       It does not have `/` at the start, hence not adhering to text.charAt(0) === commandPrefix.
+       And though it adheres to `(cmd.match(/^[a-z0-9]+$/i)`, it does not adhere to `text.length === 1` */
       const result: any = Commands.hasCommandPreview(object)
       expect(result).toBeFalsy()
     })
