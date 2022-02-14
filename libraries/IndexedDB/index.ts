@@ -33,11 +33,7 @@ export const searchMessage = async (
 
   const result = newResult
     .sort((item1, item2) =>
-      orderBy === 'new'
-        ? item2.at - item1.at
-        : orderBy === 'old'
-        ? item1.at - item2.at
-        : item2.at - item1.at,
+      orderBy === 'old' ? item1.at - item2.at : item2.at - item1.at,
     )
     .filter((item) => {
       if (item.payload?.toLowerCase()?.includes(queryString.toLowerCase())) {
