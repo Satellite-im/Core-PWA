@@ -1,6 +1,17 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
     <div
+      class="circle-group has-tooltip-right has-tooltip-primary"
+      :data-tooltip="$t('servers.new_server')"
+      v-on:click="openModal"
+      v-if="horizontal"
+    >
+      <UiCircle type="icon" :size="40">
+        <plus-icon size="0.75x" />
+      </UiCircle>
+    </div>
+
+    <div
       data-tooltip="Home"
       v-on:click="$router.push('/chat/direct')"
       class="circle-group has-tooltip-right has-tooltip-primary"
@@ -67,6 +78,7 @@
       class="circle-group has-tooltip-right has-tooltip-primary"
       :data-tooltip="$t('servers.new_server')"
       v-on:click="openModal"
+      v-if="!horizontal"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
