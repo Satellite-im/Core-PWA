@@ -8,12 +8,16 @@
     display: inline-flex;
     align-items: center;
     height: @full;
-    &:before{
+    background-color: transparent;
+    color: @white;
+    &:before {
       z-index: @base-z-index + 200 !important;
     }
+    &--primary {
+      color: @primary-color;
+    }
+    &[disabled] {
+      cursor: not-allowed !important;
+    }
   }
-}
-
-.inactive {
-  cursor: not-allowed !important;
 }

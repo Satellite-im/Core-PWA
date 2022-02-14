@@ -37,7 +37,7 @@
     />
 
     <ChatbarControls
-      :editable="recipient ? true : false"
+      :disabled="!recipient || textile.messageLoading"
       :sendMessage="sendMessage"
       id="chatbar-controls"
     />
