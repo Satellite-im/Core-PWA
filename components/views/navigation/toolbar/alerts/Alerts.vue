@@ -11,7 +11,6 @@ export default Vue.extend({
   },
   methods: {
     syncAlerts(alerts) {
-      console.log('syncing')
       this.$data.alerts = alerts
     },
   },

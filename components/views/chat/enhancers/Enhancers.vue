@@ -1,9 +1,10 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
+import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -20,6 +21,12 @@ export default Vue.extend({
     GridIcon,
     ImageIcon,
     EmojiPicker,
+  },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+      default: null,
+    },
   },
   data() {
     return {
@@ -91,8 +98,11 @@ export default Vue.extend({
           reactTo: this.ui.settingReaction.messageID,
         })
       } else {
-        this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
-        this.$store.dispatch('ui/setChatbarFocus', true)
+        this.$store.dispatch('ui/setChatbarContent', {
+          content: this.ui.chatbarContent + emoji,
+          userId: this.$props.recipient?.address,
+        })
+        this.$store.dispatch('ui/setChatbarFocus')
       }
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
       this.toggleEnhancers()

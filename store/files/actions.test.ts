@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as actions from '~/store/files/actions'
 
 describe('actions.default.handler', () => {

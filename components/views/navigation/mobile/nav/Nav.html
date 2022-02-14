@@ -17,7 +17,7 @@
   <div :class="`${$route.path.includes('/settings') ? 'active' : ''}`">
     <settings-icon
       size="1x"
-      v-on:click="$store.commit('ui/toggleSettings', true)"
+      v-on:click="$store.commit('ui/toggleSettings', { show: true })"
     />
   </div>
 </div>

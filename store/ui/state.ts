@@ -7,6 +7,7 @@ const InitialUIState = (): UIState => ({
   showSearchResult: false,
   showSettings: false,
   settingsSideBar: true,
+  settingsRoute: 'personalize',
   quickProfile: false,
   userProfile: {},
   contextMenuValues: [],

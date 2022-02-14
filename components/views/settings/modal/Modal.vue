@@ -18,13 +18,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      page: 'personalize',
       settingSwiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
-        allowTouchMove: !!this.$device.isMobile,
+        allowTouchMove: this.$device.isMobile,
       },
     }
   },
@@ -65,7 +64,7 @@ export default Vue.extend({
      * @example
      */
     changeRoute(route: string) {
-      this.$data.page = route
+      this.$store.commit('ui/setSettingsRoute', route)
       if (this.$device.isMobile) {
         this.showSidebar(true)
       }
@@ -76,7 +75,7 @@ export default Vue.extend({
      * @example
      */
     closeModal() {
-      this.$store.commit('ui/toggleSettings', false)
+      this.$store.commit('ui/toggleSettings', { show: false })
     },
   },
 })

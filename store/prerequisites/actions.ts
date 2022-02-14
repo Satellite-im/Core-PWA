@@ -11,7 +11,5 @@ export default {
    */
   async startup({ dispatch }: ActionsArguments<PrerequisiteState>) {
     Vue.prototype.$Logger.log('WebRTC', 'Identified')
-    // // Load Account
-    // dispatch('accouns/loadAccount')
   },
 }

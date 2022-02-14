@@ -1,19 +1,14 @@
 #command-preview {
   width: calc(@full - 2rem);
   position: absolute;
-  bottom: @chatbar-size;
-  margin: @light-spacing @normal-spacing;
+  bottom: calc(100% + @xlight-spacing);
+  margin: 0 @normal-spacing;
   padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
   min-height: 5rem;
   &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
   z-index: @base-z-index;
-  transition: width @animation-speed;
-
-  &.with-sidebar {
-    width: calc(100% - (@sidebar-size + @servers-size + @normal-spacing * 2));
-  }
 
   #commands {
     height: 7.5rem;
@@ -57,9 +52,5 @@
 
   .command-desc {
     font-size: @mini-text-size;
-  }
-
-  &.has-reply {
-    margin-bottom: 42px;
   }
 }

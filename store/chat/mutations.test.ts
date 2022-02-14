@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as mutations from '~/store/chat/mutations'
 
 describe('mutations.default.setChatReply', () => {
@@ -104,7 +103,7 @@ describe('mutations.default.setChatReply', () => {
   })
 })
 
-describe('mutations.default.setChatText', () => {
+describe('mutations.default.chatText', () => {
   test('0', () => {
     const object2: any = [
       { userId: '12345', value: 'elio@example.com' },
@@ -114,7 +113,7 @@ describe('mutations.default.setChatText', () => {
       { replyId: '9876', value: false },
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     ]
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '12345', value: 'Elio' },
     )
@@ -134,7 +133,7 @@ describe('mutations.default.setChatText', () => {
       { replyId: 'da7588892', value: true },
       { replyId: '12345', value: false },
     ]
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '9876', value: 'elio@example.com' },
     )
@@ -150,7 +149,7 @@ describe('mutations.default.setChatText', () => {
     const object: any = [
       { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
     ]
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '12345', value: 'elio@example.com' },
     )
@@ -170,7 +169,7 @@ describe('mutations.default.setChatText', () => {
       { replyId: '9876', value: true },
       { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
     ]
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
     )
@@ -188,7 +187,7 @@ describe('mutations.default.setChatText', () => {
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
       { replyId: '12345', value: false },
     ]
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
     )
@@ -196,7 +195,7 @@ describe('mutations.default.setChatText', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.setChatText(
+    const result: any = mutations.default.chatText(
       { replies: [], chatTexts: [] },
       { userId: '', value: '' },
     )

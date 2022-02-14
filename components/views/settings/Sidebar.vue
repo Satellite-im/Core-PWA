@@ -32,7 +32,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: 'personalize',
+      route: this.$store.state.ui.settingsRoute,
       sidebarLayout: [
         {
           title: 'General',

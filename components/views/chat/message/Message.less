@@ -51,6 +51,8 @@
     }
   }
   .markdown {
+    white-space: break-spaces;
+    word-wrap: break-word;
     display: inline;
     align-items: center;
     strong {
@@ -76,6 +78,7 @@
   }
   .emoji {
     font-size: 15pt;
+    font-style: initial;
   }
   .bigmoji {
     .emoji {
@@ -90,5 +93,33 @@
       vertical-align: bottom;
       margin-top: 0;
     }
+  }
+
+  .spoiler-container {
+    cursor: pointer;
+    background-color: @gray;
+    border-radius: @corner-rounding-smaller;
+    .spoiler {
+      opacity: 0;
+    }
+
+    .spoiler-open {
+      cursor: text;
+      background-color: @darker-transparent;
+      opacity: 1;
+    }
+  }
+}
+
+// non-Retina-specific stuff here
+@media not screen and (-webkit-min-device-pixel-ratio: 2),
+  not screen and (min--moz-device-pixel-ratio: 2),
+  not screen and (-o-min-device-pixel-ratio: 2/1),
+  not screen and (min-device-pixel-ratio: 2),
+  not screen and (min-resolution: 192dpi),
+  not screen and (min-resolution: 2dppx) {
+  // Chrome bug for emoji spacing on non-retina screens
+  .emoji {
+    letter-spacing: 4px;
   }
 }

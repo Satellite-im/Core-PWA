@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as state from '~/store/dataState/state'
 
 describe('state.default', () => {

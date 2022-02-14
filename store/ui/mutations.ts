@@ -1,5 +1,12 @@
 import { without } from 'lodash'
-import { EnhancerInfo, Flair, Theme, UIState, RecentGlyph } from './types'
+import {
+  EnhancerInfo,
+  Flair,
+  Theme,
+  UIState,
+  RecentGlyph,
+  SettingsRoutes,
+} from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 
@@ -63,8 +70,17 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(state: UIState, show: boolean) {
+  toggleSettings(
+    state: UIState,
+    options: { show: boolean; defaultRoute?: SettingsRoutes },
+  ) {
+    const { show, defaultRoute } = options
+
     state.showSettings = show
+    state.settingsRoute = defaultRoute || 'personalize'
+  },
+  setSettingsRoute(state: UIState, route: SettingsRoutes) {
+    state.settingsRoute = route
   },
   toggleSettingsSidebar(state: UIState, show: boolean) {
     state.settingsSideBar = show
