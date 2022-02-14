@@ -148,7 +148,6 @@ export default Vue.extend({
       }
       if (
         this.current.command === SearchCommand.Before ||
-        // this.current.command === SearchCommand.During ||
         this.current.command === SearchCommand.After
       ) {
         return true
@@ -297,7 +296,6 @@ export default Vue.extend({
      * @param date
      */
     _insertDate(date: string) {
-      console.log('date: ', date)
       if (date == null) {
         return
       }
