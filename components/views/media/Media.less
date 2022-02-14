@@ -31,31 +31,6 @@
         height: 100% !important;
         z-index: 100;
       }
-      .video-stream-container {
-        height: 100%;
-        width: 100%;
-        background: @semitransparent-light-gradient;
-        border: 1px solid @foreground;
-        border-radius: @corner-rounding;
-        .video-stream {
-          width: 100%;
-          height: 100%;
-          border-radius: @corner-rounding;
-        }
-        .indicators {
-          display: flex;
-          flex-flow: row nowrap;
-          justify-content: flex-end;
-          position: absolute;
-          width: 16rem;
-          bottom: 0;
-          padding: 1rem;
-          z-index: @base-z-index + 2;
-          .indicator {
-            margin-left: @light-spacing;
-          }
-        }
-      }
 
       &:nth-child(1) {
         order: 1;
