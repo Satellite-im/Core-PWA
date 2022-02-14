@@ -12,7 +12,6 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileConfig } from '~/types/textile/manager'
 
 export default {
   /**
