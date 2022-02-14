@@ -146,7 +146,7 @@ export default Vue.extend({
       handler(newResult) {
         if (newResult && newResult.data) {
           this.$data.groupList.map((item: any) => {
-            if (item.title === 'Messages') {
+            if (item.type === SearchResultGroupType.Messages) {
               item.count = newResult.data.totalRows
             }
             return item
