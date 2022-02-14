@@ -11,6 +11,7 @@ export const commandPrefix = '/'
  */
 export function containsCommand(text: string) {
   const cmd = text.split(' ')[0].replace(commandPrefix, '')
+
   return (
     text.charAt(0) === commandPrefix &&
     (cmd.match(/^[a-z0-9]+$/i) || text.length === 1) // the || part is needed for showing all the available commands after writing the commandPrefix
