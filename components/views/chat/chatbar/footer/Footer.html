@@ -1,0 +1,7 @@
+<div id="bottom-bar-container">
+  <ChatbarFooterIsConnected :typing="typing" />
+  <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
+  <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
+    {{ lengthCount }}
+  </span>
+</div>

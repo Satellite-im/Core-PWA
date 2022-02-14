@@ -24,6 +24,10 @@ export default {
     is: 'is',
     live: 'Live',
     edited: 'edited',
+    connected: 'connected',
+    not_connected: 'not connected',
+    online: 'online',
+    offline: 'offline',
   },
   wallet: {
     wallet: 'Wallet',
