@@ -8,14 +8,12 @@ export const searchMessage = async (
   queryOptions: QueryOptions,
   page: number = 1,
 ) => {
-  console.log('queryOptions: ', queryOptions)
   const { friends, queryString, dateRange, orderBy } = queryOptions
   const addresses = friends.map((fItem: User) => fItem.address)
   const dbMessages = await db.conversations.bulkGet(addresses)
 
   const newResult: any[] = []
 
-  console.log('dateRange: ', dateRange)
   dbMessages?.forEach((mItem) => {
     mItem?.conversation.forEach((cItem) => {
       /* get user info with textilePubkey instead of address */
@@ -39,7 +37,7 @@ export const searchMessage = async (
         ? item2.at - item1.at
         : orderBy === 'old'
         ? item1.at - item2.at
-        : item1.at,
+        : item2.at - item1.at,
     )
     .filter((item) => {
       if (item.payload?.toLowerCase()?.includes(queryString.toLowerCase())) {

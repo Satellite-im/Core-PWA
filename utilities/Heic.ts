@@ -1,8 +1,8 @@
 /**
  * @method isHeic
- * @description check if file is .heic (ios Image)
+ * @description check if file is .heic (iOS Image)
  * @param buffer Buffer
- * @returns return if file is .heic (ios Image)
+ * @returns return if file is .heic (iOS Image)
  * @example
  */
 export const isHeic = (uint8Buffer: any) => {

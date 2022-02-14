@@ -123,6 +123,20 @@ export interface RecentGlyph {
   count: number
 }
 
+export type SettingsRoutes =
+  | 'personalize'
+  | 'profile'
+  | 'audio'
+  | 'keybinds'
+  | 'accounts'
+  | 'privacy'
+  | 'developer'
+  | 'info'
+  | 'notifications'
+  | 'storage'
+  | 'network'
+  | 'realms'
+
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: object[]
@@ -132,6 +146,7 @@ export interface UIState {
   quickProfilePosition: object
   showSettings: boolean
   settingsSideBar: boolean
+  settingsRoute: SettingsRoutes
   showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean

@@ -80,12 +80,6 @@ export default class IdentityManager {
         'No account is provided. Please provide an account to this application.',
       )
     }
-    // The following line converts the hash in hex to an array of 32 integers.
-    // // @ts-ignore
-    // const array = hash
-    //   .replace('0x', '')
-    //   .match(/.{2}/g)
-    //   .map((hexNoPrefix) => parseInt('0x' + hexNoPrefix))
 
     const array = Buffer.from(hash, 'hex')
 

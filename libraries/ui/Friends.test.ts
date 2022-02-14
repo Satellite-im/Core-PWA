@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as Friends from '~/libraries/ui/Friends'
 
 describe('Friends.getAlphaSorted', () => {

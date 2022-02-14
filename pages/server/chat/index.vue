@@ -20,12 +20,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
-  mounted() {
-    // setTimeout(() => {
-    //   this.$data.loading = false
-    //   this.$store.dispatch('ui/setMessages', this.$mock.messages)
-    // }, 3000)
-  },
+  mounted() {},
 })
 </script>
 

@@ -15,9 +15,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['prerequisites']),
-    // In the rare case our state isn't bound yet
-    // (Can happen with persistedStates)
-    // Go ahead and load it.
+    /* In the rare case our state isn't bound yet
+     (Can happen with persistedStates)
+     Go ahead and load it. */
     loadedState(): Boolean {
       return this.prerequisites && this.prerequisites.stateLoaded
     },
