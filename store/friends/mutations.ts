@@ -85,8 +85,8 @@ const mutations = {
   sortFriends(state: FriendsState, rConversations: Conversation) {
     state.all = state.all
       .map((user) => {
-        const converstaion = rConversations[user.address]
-        user.lastUpdate = converstaion?.lastUpdate || 0
+        const conversation = rConversations[user.address]
+        user.lastUpdate = conversation?.lastUpdate || 0
         return user
       })
       .sort((user1, user2) => user2.lastUpdate - user1.lastUpdate)
