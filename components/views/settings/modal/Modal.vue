@@ -78,6 +78,19 @@ export default Vue.extend({
       this.$store.commit('ui/toggleSettings', { show: false })
     },
   },
+  watch: {
+    'ui.showSettings': {
+      handler(newSValue) {
+        if (newSValue && this.$device.isMobile) {
+          setTimeout(() => {
+            this.changeRoute('profile')
+          }, 100)
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
 })
 </script>
 
