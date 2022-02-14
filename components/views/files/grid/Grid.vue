@@ -9,6 +9,10 @@ export default Vue.extend({
       type: Array as PropType<Array<Item>>,
       default: () => [],
     },
+    counter: {
+      type: Number,
+      required: true,
+    },
   },
   methods: {
     /**
@@ -20,6 +24,9 @@ export default Vue.extend({
      */
     handle(item: Item) {
       this.$emit('handle', item)
+    },
+    forceRender() {
+      this.$emit('forceRender')
     },
   },
 })

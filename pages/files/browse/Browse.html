@@ -16,7 +16,12 @@
         <!-- <UiLoadersFileTable :rows="5" /> -->
       </div>
       <div v-else>
-        <FilesGrid :directory="directory" @handle="handle" />
+        <FilesGrid
+          :directory="directory"
+          @handle="handle"
+          :counter="counter"
+          @forceRender="forceRender"
+        />
       </div>
     </div>
     <FilesAside v-if="!$device.isMobile" class="files-right" />

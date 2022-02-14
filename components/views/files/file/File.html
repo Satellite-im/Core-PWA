@@ -6,16 +6,16 @@
 >
   <div class="quick-actions">
     <link-icon
+      v-if="item.shared"
       size="1.25x"
       class="link"
-      :class="{'active' : item.shared }"
       @mouseover="linkHover=true"
       @mouseleave="linkHover=false"
     />
     <heart-icon
+      v-if="item.liked || fileHover"
       size="1.25x"
       class="like"
-      :class="{'active' : item.liked }"
       @mouseover="heartHover=true"
       @mouseleave="heartHover=false"
     />
@@ -26,7 +26,7 @@
     :style="`background-image: url('${item.location}')`"
   />
   <div v-else class="icon-container">
-    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
+    <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
     <!-- todo - condition for zip image after confirming how type data will come through - AP-641 -->
     <file-icon v-else size="4x" class="file-type-icon" />
   </div>

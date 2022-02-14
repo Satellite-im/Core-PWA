@@ -36,7 +36,7 @@
         <tr class="item" v-for="item in directory">
           <td class="filename" @click="handle(item)">
             <span class="icon">
-              <folder-icon size="1x" v-if="item.children" />
+              <folder-icon size="1x" v-if="item.content" />
               <archive-icon
                 size="1x"
                 v-else-if="item.type && item.type.includes('archive')"

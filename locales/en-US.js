@@ -115,6 +115,9 @@ export default {
       refresh: 'Refresh',
       file_type: 'File Type',
       empty: 'Current directory is empty',
+      add_favorite: 'Added to favorites',
+      remove_favorite: 'Removed from favorites',
+      link_copied: 'Link copied to clipboard',
       controls: {
         new_folder: 'New Folder',
         new_file: 'New File',

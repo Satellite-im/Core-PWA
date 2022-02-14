@@ -11,6 +11,7 @@ import {
 
 import { TextileImage } from '~/types/textile/manager'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -48,8 +49,8 @@ export default Vue.extend({
   },
   computed: {
     getSubtext() {
-      return this.item.children
-        ? this.item.children.length + ' items'
+      return this.item instanceof Directory
+        ? this.item.content.length + ' items'
         : this.item.type
     },
   },
@@ -71,11 +72,16 @@ export default Vue.extend({
      */
     fileClick() {
       if (this.linkHover) {
-        this.item.toggleShared()
+        // todo - add copy link to clipboard IF already shared
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
         return
       }
       if (this.heartHover) {
         this.item.toggleLiked()
+        this.item.liked
+          ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
+          : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+        this.$emit('forceRender')
         return
       }
       this.$emit('handle', this.item)
