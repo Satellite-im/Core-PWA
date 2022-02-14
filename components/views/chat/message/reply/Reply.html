@@ -25,9 +25,9 @@
           <TypographyText :text="$dayjs(reply.at).from()" />
         </div>
         <div class="reply-content">
-          <VueMarkdown
+          <MessageMarkdown
             v-if="reply.replyType === 'text'"
-            :source="reply.payload"
+            :text="markdownToHtml(reply.payload)"
             class="markdown"
           />
           <UiChatImage

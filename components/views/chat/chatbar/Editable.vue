@@ -10,11 +10,12 @@
       :contenteditable="enabled"
       autocapitalize="off"
       class="editable-input"
+      @selectstart="onSelectStart"
       @input="onInput"
       @keydown="handleInputKeydown"
-      @keyup="handleInputKeyupProps"
+      @keyup="handleInputKeyup"
       @paste="handleInputPaste"
-      @drop="handleDropProps"
+      @drop="handleDrop"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -24,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import Vue from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
 import Cursor from '~/libraries/ui/Cursor'
+import { KeybindingEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   props: {
@@ -43,62 +44,55 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
-    handleInputKeydownProps: {
-      type: Function as PropType<(e: KeyboardEvent) => void>,
-      default: () => () => {},
+    focus: {
+      type: Boolean,
+      default: true,
     },
-    handleInputKeyupProps: {
-      type: Function as PropType<(e: KeyboardEvent) => void>,
-      default: () => () => {},
-    },
-    handleDropProps: {
-      type: Function as PropType<(e: DragEvent) => void>,
-      default: () => () => {},
-    },
-    handlePasteProps: {
-      type: Function as PropType<(e: ClipboardEvent) => void>,
-      default: () => () => {},
-    },
-  },
-  computed: {
-    ...mapState(['ui']),
   },
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
     },
-    'ui.chatbarFocus': {
-      handler(value) {
-        if (value) {
-          this.$store.dispatch('ui/setChatbarFocus', false)
-          if (!this.$refs?.editable) return
-          const messageBox = this.$refs?.editable as HTMLElement
-          Cursor.setCurrentCursorPosition(this.$props.value.length, messageBox)
-        }
-      },
+    focus(value) {
+      if (value) {
+        this.focusInput()
+      }
     },
   },
-  async mounted() {
-    document.addEventListener('selectionchange', this.onSelectionChange)
+  mounted() {
     // Handle initial value
-    this.handleNewValue(this.$props.value)
-    // Reset value if in inconsistent state
-    if (this.$store.state.ui.chatbarFocus) {
-      await this.$store.dispatch('ui/setChatbarFocus', false)
-    }
-    this.$store.dispatch('ui/setChatbarFocus', true)
-  },
-  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
-  beforeDestroy() {
-    document.removeEventListener('selectionchange', this.onSelectionChange)
+    this.handleNewValue(this.value)
+    // Then focus
+    this.focusInput()
   },
   methods: {
+    /**
+     * @method focusInput
+     * @description focuses the input
+     */
+    focusInput() {
+      this.$nextTick(() => {
+        if (!this.$refs?.editable) return
+        const messageBox = this.$refs?.editable as HTMLElement
+        Cursor.setCurrentCursorPosition(this.value.length, messageBox)
+      })
+    },
+    /**
+     * @method buildChatbarRow
+     * @description builds the chatbar row
+     * @param {string} text The text to be parsed
+     */
     buildChatbarRow(text: string) {
       return `<div class="chat-row-content"><span>${toHTML(text).replace(
         this.$Config.regex.emojiWrapper,
         (emoji: string) => `<span class="emoji">${emoji}</span>`,
       )}<br /></span></div>`
     },
+    /**
+     * @method handleNewValue
+     * @description Handles the new value
+     * @param {string} newValue The new value
+     */
     handleNewValue(newValue: string) {
       if (!this.$refs?.editable) return
       const messageBox = this.$refs?.editable as HTMLElement
@@ -113,6 +107,11 @@ export default Vue.extend({
       messageBox.innerHTML = rows.join('')
       Cursor.setCurrentCursorPosition(pos, messageBox)
     },
+    /**
+     * @method handleInputPaste
+     * @description Handles the paste event and emits same event to parent
+     * @param {ClipboardEvent} e The paste event
+     */
     handleInputPaste(e: ClipboardEvent) {
       e.preventDefault()
       const text = e.clipboardData?.getData('text/plain') || ''
@@ -121,12 +120,17 @@ export default Vue.extend({
       } else {
         document.execCommand('paste', false, text)
       }
-      this.handlePasteProps(e)
+      this.$emit('paste', e)
     },
+    /**
+     * @method handleInputKeydown
+     * @description Handles the keydown event and emits same event to parent
+     * @param {KeyboardEvent} e The keydown event
+     */
     handleInputKeydown(e: KeyboardEvent) {
       switch (e.key) {
-        case 'Backspace':
-        case 'Delete':
+        case KeybindingEnum.BACKSPACE:
+        case KeybindingEnum.DELETE:
           if (
             this.$refs?.editable &&
             (this.$refs?.editable as HTMLElement).innerText === '\n'
@@ -135,20 +139,29 @@ export default Vue.extend({
           }
           return
       }
-      this.handleInputKeydownProps(e)
+      this.$emit('keydown', e)
     },
-    onSelectionChange() {
-      const selection = document.getSelection()
-      const messageBox = this.$refs?.editable as HTMLElement
-      if (selection && selection.rangeCount > 0) {
-        const node = selection.getRangeAt(0)
-          .commonAncestorContainer as HTMLElement
-        // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
-        if (node.innerText === '\n' && messageBox.innerText === '\n') {
-          Cursor.setCurrentCursorPosition(0, messageBox)
-        }
-      }
+    /**
+     * @method handleInputKeyup
+     * @description Handles the keyup event and emits same event to parent
+     * @param {KeyboardEvent} e The keyup event
+     */
+    handleInputKeyup(e: KeyboardEvent) {
+      this.$emit('keyup', e)
     },
+    /**
+     * @method handleDrop
+     * @description Handles the drag event and emits same event to parent
+     * @param {DragEvent} e The drag event
+     */
+    handleDrop(e: DragEvent) {
+      this.$emit('drop', e)
+    },
+    /**
+     * @method onInput
+     * @description Handles the input event and emits same event to parent
+     * @param {KeyboardEvent} e The input event
+     */
     onInput(e: KeyboardEvent) {
       const messageBox = e.target as HTMLElement
       let finalValue = ''
@@ -160,6 +173,20 @@ export default Vue.extend({
             : row + '\n' // Close the row
       })
       this.$emit('input', finalValue)
+    },
+    /**
+     * @method onSelectStart
+     * @description Prevents the selection of text if there is only a newline
+     * @param {Event} e The selectstart event
+     */
+    onSelectStart(e: Event) {
+      const messageBox = this.$refs?.editable as HTMLElement
+      if (messageBox.innerText === '\n') {
+        // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
+        e.preventDefault()
+        // This is needed in order to correctly place the cursor on click
+        Cursor.setCurrentCursorPosition(0, messageBox)
+      }
     },
   },
 })

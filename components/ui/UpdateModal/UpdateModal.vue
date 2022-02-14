@@ -27,11 +27,11 @@ export default Vue.extend({
     this.getReleaseBody()
   },
   methods: {
-    // clearAndReload() {
-    // commented out until we can test this - we probably won't want to clean all of local storage'
-    //   localStorage.removeItem('local-version')
-    //   window.location.reload()
-    // },
+    /* clearAndReload() {
+     commented out until we can test this - we probably won't want to clean all of local storage'
+       localStorage.removeItem('local-version')
+       window.location.reload()
+     }, */
     skipVersion() {
       localStorage.setItem('local-version', this.$config.clientVersion)
       this.$data.requiresUpdate = false

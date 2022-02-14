@@ -1,6 +1,7 @@
 import * as markdown from 'simple-markdown'
 
 interface Options {
+  liveTyping?: boolean
   escapeHTML?: boolean
   cssModuleNames?: Record<string, string>
 }
@@ -77,7 +78,7 @@ const rules: MarkdownRules = {
         null,
         state,
         {},
-        node.symbol,
+        state.liveTyping && node.symbol,
       )
     },
   },
@@ -94,7 +95,7 @@ const rules: MarkdownRules = {
         null,
         state,
         {},
-        node.symbol,
+        state.liveTyping && node.symbol,
       )
     },
   },
@@ -111,15 +112,17 @@ const rules: MarkdownRules = {
         null,
         state,
         {},
-        node.symbol,
+        state.liveTyping && node.symbol,
       )
     },
   },
   newline: markdown.defaultRules.newline,
   escape: {
     ...markdown.defaultRules.escape,
-    parse: (capture) => ({
-      content: `${htmlTag('span', '\\', { class: 'md-symbol' })}${capture[1]}`,
+    parse: (capture, parse, state) => ({
+      content: `${
+        state.liveTyping ? htmlTag('span', '\\', { class: 'md-symbol' }) : ''
+      }${capture[1]}`,
     }),
     html: (node) => {
       return node.content
@@ -143,7 +146,7 @@ const rules: MarkdownRules = {
         parse,
         state,
       )
-      return { ...parsed, symbol: capture.input?.slice(0, 1) }
+      return { ...parsed, symbol: capture[1] }
     },
     html: (node, output, state) => {
       return htmlTag(
@@ -152,7 +155,7 @@ const rules: MarkdownRules = {
         null,
         state,
         {},
-        node.symbol,
+        state.liveTyping && node.symbol,
       )
     },
   },
@@ -170,7 +173,7 @@ const rules: MarkdownRules = {
         null,
         state,
         {},
-        node.symbol,
+        state.liveTyping && node.symbol,
       )
     },
   },
@@ -194,15 +197,22 @@ const rules: MarkdownRules = {
       }
     },
     html: (node, output, state) => {
-      return htmlTag(
-        'span',
-        output(node.content, state),
-        { class: 'md-url' },
-        state,
-        {},
-        node.symbol,
-        node.closeSymbol,
-      )
+      return state.liveTyping
+        ? htmlTag(
+            'span',
+            output(node.content, state),
+            { class: 'md-url' },
+            state,
+            {},
+            node.symbol,
+            node.closeSymbol,
+          )
+        : htmlTag(
+            'a',
+            output(node.content, state),
+            { href: node.target, target: '_blank' },
+            state,
+          )
     },
   },
   url: {
@@ -219,12 +229,19 @@ const rules: MarkdownRules = {
       }
     },
     html: (node, output, state) => {
-      return htmlTag(
-        'span',
-        output(node.content, state),
-        { class: 'md-url' },
-        state,
-      )
+      return state.liveTyping
+        ? htmlTag(
+            'span',
+            output(node.content, state),
+            { class: 'md-url' },
+            state,
+          )
+        : htmlTag(
+            'a',
+            output(node.content, state),
+            { href: node.target, target: '_blank' },
+            state,
+          )
     },
   },
   spoiler: {
@@ -237,14 +254,26 @@ const rules: MarkdownRules = {
       }
     },
     html: (node, output, state) => {
-      return htmlTag(
-        'span',
-        output(node.content, state),
-        null,
-        state,
-        {},
-        node.symbol,
-      )
+      return state.liveTyping
+        ? htmlTag(
+            'span',
+            output(node.content, state),
+            null,
+            state,
+            {},
+            node.symbol,
+          )
+        : htmlTag(
+            'span',
+            htmlTag(
+              'span',
+              output(node.content, state),
+              { class: 'spoiler' },
+              state,
+            ),
+            { class: 'spoiler-container' },
+            state,
+          )
     },
   },
 }
@@ -259,7 +288,8 @@ export function toHTML(source: string, options: Options = {}) {
   const state = {
     inline: true,
     inQuote: false,
-    escapeHTML: options.escapeHTML || true,
+    liveTyping: options.liveTyping ?? true,
+    escapeHTML: options.escapeHTML ?? true,
     cssModuleNames: options.cssModuleNames || null,
   }
 

@@ -2,9 +2,9 @@ import { Buckets, Identity, PushPathResult, Root } from '@textile/hub'
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
 
-// TODO: Buckets are not yet secure - AP-402
-// encrypt storage and allow the recipent to decrypt with
-// their priv key.
+/* TODO: Buckets are not yet secure - AP-402
+ encrypt storage and allow the recipent to decrypt with
+ their priv key. */
 export default class BucketManager {
   buckets: Buckets | null
   bucketKey: Root['key'] | null
