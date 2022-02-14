@@ -46,10 +46,9 @@ describe('test alert methods', () => {
     const updatedPublicStore = inst.all
     const deletedAlert = updatedPublicStore.find((alert) => {
       return alert.id === alertToBeDeleted!.id
-    }) // The find() method returns the value of the first element in the provided array that satisfies the provided
-    // testing function. If no values satisfy the testing function, undefined is returned.
-
-    // Because the selected alert has been deleted, we will expect it to return undefined
+    }) /* The find() method returns the value of the first element in the provided array that satisfies the provided
+     testing function. If no values satisfy the testing function, undefined is returned.
+     Because the selected alert has been deleted, we will expect it to return undefined */
 
     expect(deletedAlert).toBe(undefined)
     expect(result).toEqual(inst.all) // We expect that the result from the mutated array to equal the latest public story

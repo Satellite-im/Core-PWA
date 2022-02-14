@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as mutations from '~/store/chat/mutations'
 
 describe('mutations.default.setChatReply', () => {

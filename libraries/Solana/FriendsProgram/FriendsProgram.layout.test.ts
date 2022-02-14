@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as FriendsProgramLayout from '~/libraries/Solana/FriendsProgram/FriendsProgram.layout'
 
 describe('FriendsProgramLayout.encodeInstructionData', () => {

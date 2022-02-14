@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as mutations from '~/store/video/mutations'
 
 describe('mutations.default.toggleCamera', () => {

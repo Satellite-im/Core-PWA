@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import * as Messaging from '~/utilities/Messaging'
 
 describe('Messaging.refreshTimestampInterval', () => {

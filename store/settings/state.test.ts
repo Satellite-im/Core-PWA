@@ -9,7 +9,7 @@ describe('init', () => {
   })
 
   it('should return the initial settings state', () => {
-    //   Due to timezone property being different in many developers, we will manually insert each field rather than using snapshot
+    //  Due to timezone property being different in many developers, we will manually insert each field rather than using snapshot
     expect(inst).toMatchObject({
       audioInput: '',
       audioOutput: '',
