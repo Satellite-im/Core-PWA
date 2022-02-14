@@ -7,6 +7,7 @@ import { mapState } from 'vuex'
 import {
   UsersIcon,
   UserPlusIcon,
+  PlusIcon,
   PlusCircleIcon,
   FolderIcon,
   MessageSquareIcon,
@@ -28,6 +29,7 @@ export default Vue.extend({
   components: {
     UsersIcon,
     UserPlusIcon,
+    PlusIcon,
     PlusCircleIcon,
     FolderIcon,
     MessageSquareIcon,
