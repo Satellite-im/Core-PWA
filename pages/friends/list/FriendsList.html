@@ -35,7 +35,7 @@
             />
           </div>
           <FriendsFriend
-            v-for="friend in friends.outgoingRequests"
+            v-for="friend in alphaSortedOutgoing"
             :friend="{
               name: friend.userInfo.name,
               address: friend.to,

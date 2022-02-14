@@ -9,7 +9,7 @@ export interface FriendRequest {
   requestId: string
   account: FriendAccount
   pending: boolean
-  userInfo: RawUser | null
+  userInfo: RawUser
 }
 
 export interface IncomingRequest extends FriendRequest {
