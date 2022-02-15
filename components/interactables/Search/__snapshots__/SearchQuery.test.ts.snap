@@ -492,3 +492,5 @@ exports[`SearchQuery.default.setQuery 3 1`] = `undefined`;
 exports[`SearchQuery.default.setQuery 4 1`] = `undefined`;
 
 exports[`SearchQuery.default.setQuery 5 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQueryByHTML found element 1`] = `undefined`;
