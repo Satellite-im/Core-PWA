@@ -2,24 +2,19 @@
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
-import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM implements RFMInterface {
-  protected _fileSystem: FilSystem
-
-  constructor(fileSystem: FilSystem) {
+  constructor() {
     if (this.constructor.name === 'RFM')
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
-
-    this._fileSystem = fileSystem
   }
 
   updateIndex(index: FileSystemExport): void {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 
-  get index(): FileSystemExport {
+  get index(): FileSystemExport | null {
     throw new Error(FileSystemErrors.METHOD_MISSING)
   }
 

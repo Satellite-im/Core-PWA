@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -28,7 +27,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['bucket']),
     directory() {
       return this.counter && (this.fileSystem?.currentDirectory?.content ?? [])
     },

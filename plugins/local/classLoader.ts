@@ -67,7 +67,7 @@ Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$Alerts = new Alerts()
-Vue.prototype.$Bucket = new Bucket(new TextileFS())
+Vue.prototype.$Bucket = new Bucket()
 Vue.prototype.$FileSystem = new TextileFS()
 
 // Add typed store alias to Vue prototype

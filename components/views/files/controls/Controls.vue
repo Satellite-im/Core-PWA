@@ -4,7 +4,6 @@ import Vue from 'vue'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
 import { FilesViewEnum } from '~/libraries/Enums/enums'
-import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 
 export default Vue.extend({
   components: {
@@ -29,6 +28,7 @@ export default Vue.extend({
     FilesViewEnum: () => FilesViewEnum,
   },
   watch: {
+    // only set focus if the input is rendered
     'input.type'(newVal) {
       this.$nextTick(() => {
         if (!newVal) {
@@ -55,6 +55,7 @@ export default Vue.extend({
     },
     addItem() {
       if (!this.text) {
+        this.error = `Please enter a ${this.input.type} name`
         return
       }
       // add folder to filesystem

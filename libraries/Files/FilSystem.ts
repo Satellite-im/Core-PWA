@@ -390,7 +390,7 @@ export class FilSystem {
   }
 
   /**
-   * @method setupAndFind
+   * @method getDirectoryFromPath
    * Get a directory given a string path to the directory
    * @argument {string} dirPath string path to the directory to get
    * @returns {Directory | null} returns the directory or null if it can't be found
