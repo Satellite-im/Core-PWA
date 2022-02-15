@@ -19,7 +19,7 @@
   <div class="toolbar-spacer"></div>
   <div class="controls">
     <div
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
       data-tooltip="Alerts"
       @click="$data.showAlerts = !$data.showAlerts"
     >
@@ -34,14 +34,14 @@
       heading="Alerts"
       :width="25"
       :height="25"
-      :class="`alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
+      :class="`has-tooltip-hidden-touch alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
       <ToolbarAlerts />
     </UiFloatingContainer>
     <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary 
+      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch
       ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
       :data-tooltip="webrtc.connectedPeer ? $t('controls.call') : $t('controls.not_connected')"
       v-if="server"
@@ -50,7 +50,7 @@
       <phone-call-icon size="1x" class="control-icon" />
     </div>
     <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary 
+      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch 
       ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
       :data-tooltip="webrtc.connectedPeer ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
@@ -59,7 +59,7 @@
       <video-icon size="1x" class="control-icon" />
     </div>
     <div
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary"
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
       :class="ui.showPinned ? 'primary' : ''"
       data-tooltip="Archived Messages"
       @click="() => {

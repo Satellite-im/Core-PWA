@@ -3,7 +3,7 @@
     id="send-money-toggle"
     :data-tooltip="$t('wallet.send_money')"
     v-on:click="toggleMiniWallet"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
     :class="editable ? 'active' : 'inactive'"
   >
     <banknote-icon size="1x" :class="`control-icon `" />
@@ -12,7 +12,7 @@
     id="glyph-toggle"
     :data-tooltip="$t('ui.glyphs')"
     v-on:click="toggleEnhancers('glyphs')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
     :class="editable ? 'active' : 'inactive'"
   >
     <box-select-icon
@@ -24,7 +24,7 @@
     id="emoji-toggle"
     :data-tooltip="$t('ui.emotes')"
     v-on:click="toggleEnhancers('emotes')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
     :class="editable ? 'active' : 'inactive'"
   >
     <smile-icon
@@ -34,7 +34,7 @@
   </div>
   <div
     :data-tooltip="$t('ui.send')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
     :class="editable ? 'active' : 'inactive'"
   >
     <arrow-right-icon size="1x" class="control-icon" @click="sendMessage" />
