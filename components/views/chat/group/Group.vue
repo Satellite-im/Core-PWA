@@ -44,7 +44,7 @@ export default Vue.extend({
       // To check if the sender is you we just compare the from field
       // with your textile public key
       if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {
-        const myHash = this.accounts.details.profilePicture
+        const myHash = this.accounts.details?.profilePicture
         return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
       }
 
@@ -52,7 +52,7 @@ export default Vue.extend({
       const friend = this.$Hounddog.findFriend(this.group.from, this.friends)
 
       if (friend?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${friend.profilePicture}`
+        return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
       }
 
       return ''
