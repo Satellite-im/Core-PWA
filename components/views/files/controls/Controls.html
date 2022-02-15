@@ -48,6 +48,7 @@
       <folder-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FOLDER" />
     </InteractablesInputGroup>
   </div>
+  <TypographyError v-if="error" :text="error" class="error" />
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />

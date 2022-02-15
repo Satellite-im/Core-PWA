@@ -6,11 +6,13 @@ import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
 declare module 'vue/types/vue' {
   interface Vue {
     file: Fil | boolean
     counter: number
+    fileSystem: FilSystem
   }
 }
 
@@ -22,15 +24,13 @@ export default Vue.extend({
       file: false as Fil | boolean,
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
+      fileSystem: this.$FileSystem,
     }
   },
   computed: {
     ...mapState(['bucket']),
     directory() {
-      return (
-        this.counter &&
-        (this.bucket.fileSystem?.currentDirectory?.content ?? [])
-      )
+      return this.counter && (this.fileSystem?.currentDirectory?.content ?? [])
     },
   },
   methods: {
@@ -48,7 +48,7 @@ export default Vue.extend({
         this.file = item
       }
       if (item instanceof Directory) {
-        this.$store.commit('bucket/openDirectory', item.name)
+        this.fileSystem.openDirectory(item.name)
       }
     },
     forceRender() {

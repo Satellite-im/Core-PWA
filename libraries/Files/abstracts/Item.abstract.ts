@@ -122,8 +122,6 @@ export abstract class Item implements ItemInterface {
       this._parent = newParent
 
       if (prevParent) prevParent.removeChild(this.name)
-
-      if (newParent) newParent.addChild(this)
     }
   }
 }

@@ -18,7 +18,6 @@ export default {
     const $Bucket: Bucket = Vue.prototype.$Bucket
 
     await $Bucket.init(config)
-    commit('updateFileSystem', $Bucket.fileSystem)
     commit('bucketInitialized', true)
   },
 }

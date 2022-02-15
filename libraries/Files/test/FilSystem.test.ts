@@ -1,4 +1,5 @@
 import { Directory } from '../Directory'
+import { FileSystemErrors } from '../errors/Errors'
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
@@ -23,14 +24,13 @@ describe('Test FilSystem', () => {
   const filesystem = new FilSystem()
   const file = new Fil(...Object.values(mockFileData))
   const file2 = new Fil(
-    ...Object.values({ ...mockFileData, name: 'testPng2.png' }),
+    ...Object.values({ name: 'testPng2.png', ...mockFileData }),
   )
-  const file3 = new Fil(...Object.values({ ...mockFileData, name: 'abc.png' }))
+  const file3 = new Fil(...Object.values({ name: 'abc.png', ...mockFileData }))
   const file4 = new Fil(
-    ...Object.values({ ...mockFileData, name: 'cc123.png' }),
+    ...Object.values({ name: 'cc123.png', ...mockFileData }),
   )
   const directory = new Directory(...Object.values(mockDirectoryData))
-  directory.addChild(file)
   directory.addChild(file)
   filesystem.addChild(file)
   filesystem.addChild(directory)
@@ -46,8 +46,14 @@ describe('Test FilSystem', () => {
     filesystem.addChild(file3)
     filesystem.addChild(file4)
     filesystem.goBack()
-    it(`Correctly rejects duplicate entries`, () =>
-      expect(filesystem.addChild(newDirectory)).toBe(false))
+    it(`Correctly rejects duplicate entries`, () => {
+      try {
+        filesystem.addChild(newDirectory)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+        expect(error).toHaveProperty('message', FileSystemErrors.DUPLICATE_NAME)
+      }
+    })
   }
   it(`Correctly returns filesystem parent`, () =>
     expect(filesystem.parent).toBe(null))

@@ -4,6 +4,7 @@ import Vue from 'vue'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
 import { FilesViewEnum } from '~/libraries/Enums/enums'
+import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 
 export default Vue.extend({
   components: {
@@ -21,6 +22,7 @@ export default Vue.extend({
     return {
       text: '' as string,
       input: { show: false as boolean, type: '' as FilesViewEnum },
+      error: '' as string,
     }
   },
   computed: {
@@ -58,17 +60,25 @@ export default Vue.extend({
       // add folder to filesystem
       if (this.input.type === FilesViewEnum.FOLDER) {
         try {
-          this.$store.commit('bucket/createDirectory', this.text)
-        } catch (e) {
-          console.log(e)
+          this.$FileSystem.createDirectory(this.text)
+        } catch (e: any) {
+          this.error = e?.message ?? ''
+          return
         }
+        this.error = ''
         this.input = { show: false, type: FilesViewEnum.EMPTY }
         this.text = ''
         this.$emit('forceRender')
         return
       }
       // add file todo - gather description
-      this.$store.commit('bucket/createFile', this.text)
+      try {
+        this.$FileSystem.createFile(this.text)
+      } catch (e: any) {
+        this.error = e?.message ?? ''
+        return
+      }
+      this.error = ''
       this.input = { show: false, type: FilesViewEnum.EMPTY }
       this.text = ''
       this.$emit('forceRender')

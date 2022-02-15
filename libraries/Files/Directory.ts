@@ -67,7 +67,9 @@ export class Directory extends Item {
    * @returns {boolean} returns true or false depending on if a child exists in the directory
    */
   addChild(child: Item): boolean {
-    if (this.hasChild(child.name)) return false
+    if (this.hasChild(child.name)) {
+      throw new Error(FileSystemErrors.DUPLICATE_NAME)
+    }
 
     if (isEqual(child, this)) {
       throw new Error(FileSystemErrors.DIR_PARADOX)
