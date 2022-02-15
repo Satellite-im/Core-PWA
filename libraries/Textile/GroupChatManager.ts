@@ -105,7 +105,7 @@ export class GroupChatManager {
       if (group.address === groupChatID) {
         return group.encryptionKey
       }
-      return group.encryptionKey
+      return undefined
     })
     if (!group) {
       throw new Error(AccountsError.CANNOT_FIND_GROUP)
@@ -140,7 +140,7 @@ export class GroupChatManager {
         if (group.address === groupChatId) {
           return group.encryptionKey
         }
-        return group.encryptionKey
+        return undefined
       })
       if (!group) {
         throw new Error(AccountsError.CANNOT_FIND_GROUP)
@@ -201,7 +201,7 @@ export class GroupChatManager {
       if (group.address === message.to) {
         return group.encryptionKey
       }
-      return group.encryptionKey
+      return undefined
     })
     if (!group) {
       throw new Error(AccountsError.CANNOT_FIND_GROUP)
