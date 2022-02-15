@@ -416,21 +416,23 @@ describe('SearchQuery.default.setQuery', () => {
   })
 })
 
-describe.skip('SearchQuery.default.setQueryByHTML', () => {
+let spy: any
+beforeAll(() => {
+  spy = jest.spyOn(document, 'getElementById')
+})
+
+describe('SearchQuery.default.setQueryByHTML', () => {
   let inst2: any
+  let mockElement: any
 
   beforeEach(() => {
     inst2 = new SearchQuery.default()
+    mockElement = document.createElement('div:first-of-type')
+    spy.mockReturnValue(mockElement)
   })
 
-  test('0', () => {
-    let result: any = inst2.setQueryByHTML(
-      document.querySelector(
-        'canvas:first-of-type',
-        'span:first-of-type',
-        'div:first-of-type',
-      ),
-    )
+  test('found element', () => {
+    const result: any = inst2.setQueryByHTML(mockElement)
     expect(result).toMatchSnapshot()
   })
 }) // AP-780
