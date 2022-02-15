@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <div class="loader-container">
-      <UiLoadersLoadingBar />
-      <TypographyTitle :size="5" :text="$t('pages.loading.loading')" />
-      <TypographySubtitle :size="6" :text="loadingStep" />
-    </div>
+    <UiLoadersPageLoader
+      :is-loading="true"
+      :title="$t('pages.loading.loading')"
+      :subtitle="loadingStep"
+    />
   </div>
 </template>
 
@@ -85,12 +85,6 @@ export default Vue.extend({
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  text-align: center;
-
-  .loader-container {
-    min-width: 250px;
-    align-self: center;
-    margin-bottom: 25vh;
-  }
+  text-align: left;
 }
 </style>
