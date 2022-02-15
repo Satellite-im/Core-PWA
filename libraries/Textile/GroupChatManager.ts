@@ -1,7 +1,9 @@
-import { PublicKey, ThreadID, Update } from '@textile/hub'
+import { Identity, PrivateKey, PublicKey, ThreadID, Update } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
 import { v4 as uuid } from 'uuid'
+import Vue from 'vue'
+import { Keypair } from '@solana/web3.js'
 import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
@@ -19,16 +21,28 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { groupChatSchema } from '~/libraries/Textile/schema'
+import Crypto from '~/libraries/Crypto/Crypto'
+import { RootState } from '~/types/store/store'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
+import { AccountsError, RegistrationStatus } from '~/store/accounts/types'
+import { Groups } from '~/mock/groups'
 
 export class GroupChatManager {
   senderAddress: string
   textile: TextileInitializationData
   threadID: ThreadID
+  identity: Identity
   listeners: {
     message?: (reply?: Update<any> | undefined, err?: Error | undefined) => void
   }
 
-  constructor(textile: TextileInitializationData, senderAddress: string) {
+  constructor(
+    textile: TextileInitializationData,
+    senderAddress: string,
+    identity: Identity,
+  ) {
+    this.identity = identity
     this.textile = textile
     this.senderAddress = senderAddress
     this.threadID = ThreadID.fromString(Config.textile.groupChatThreadID)
@@ -91,7 +105,18 @@ export class GroupChatManager {
       groupChatID,
       groupChatQuery,
     )
-    const promises = messages.map<Promise<Message>>(this.decodeMessage)
+    const group = Groups.find((group) => {
+      if (group.address === groupChatID) {
+        return group.encryptionKey
+      }
+      return group.encryptionKey
+    })
+    if (!group) {
+      throw new Error(AccountsError.CANNOT_FIND_GROUP)
+    }
+    const promises = messages.map<Promise<Message>>((message) =>
+      this.decodeMessage(message, group.encryptionKey),
+    )
     const allSettled = await Promise.allSettled(promises)
     const filtered = allSettled.filter(
       (r) => r.status === PropCommonEnum.FULFILLED,
@@ -115,11 +140,22 @@ export class GroupChatManager {
         delete this.listeners.message
         return
       }
+      const group = Groups.find((group) => {
+        if (group.address === groupChatId) {
+          return group.encryptionKey
+        }
+        return group.encryptionKey
+      })
+      if (!group) {
+        throw new Error(AccountsError.CANNOT_FIND_GROUP)
+      }
 
       if (update?.instance) {
-        this.decodeMessage(update?.instance).then((decoded) => {
-          onMessage(decoded)
-        })
+        this.decodeMessage(update.instance, group.encryptionKey)
+          .then()
+          .then((decoded) => {
+            onMessage(decoded)
+          })
       }
     }
 
@@ -138,6 +174,7 @@ export class GroupChatManager {
    */
   async sendMessage<T extends MessageTypes>(message: MessagePayloads[T]) {
     const identity = this.textile.identity
+    const $Crypto: Crypto = Vue.prototype.$Crypto
     const publicKey = PublicKey.fromString(identity.public.toString())
     const encoder = new TextEncoder()
     const encodedBody = encoder.encode(
@@ -164,16 +201,30 @@ export class GroupChatManager {
       }),
     )
 
+    const group = Groups.find((group) => {
+      if (group.address === message.to) {
+        return group.encryptionKey
+      }
+      return group.encryptionKey
+    })
+    if (!group) {
+      throw new Error(AccountsError.CANNOT_FIND_GROUP)
+    }
+
     const body = Buffer.from(encodedBody).toString(EncodingTypesEnum.BASE64)
+
+    const encryptMessage = await $Crypto.encryptWithPassword(
+      body,
+      group.encryptionKey,
+    )
 
     const signature = Buffer.from(await identity.sign(encodedBody)).toString(
       EncodingTypesEnum.BASE64,
     )
-
     const messageToSend = {
       created_at: Date.now(),
       from: publicKey.toString(),
-      body,
+      body: encryptMessage,
       signature,
       to: message.to,
       _mod: Date.now(),
@@ -185,24 +236,31 @@ export class GroupChatManager {
       [messageToSend],
     )
 
-    return this.decodeMessage({ ...messageToSend, _id: messageID[0] })
+    return this.decodeMessage(
+      { ...messageToSend, _id: messageID[0] },
+      group.encryptionKey,
+    )
   }
 
   /**
    * @method decodeMessage
    * @description Internal function used to decode messages
    * @param message Message to be decoded
+   * @param groupChatId
+   * @param groupEncryption
    */
-  decodeMessage = async (message: MessageFromThread): Promise<Message> => {
+  async decodeMessage(
+    message: MessageFromThread,
+    groupEncryption: string,
+  ): Promise<Message> {
     // eslint-disable-next-line camelcase
     const { _id, from, read_at, created_at, body } = message
-
-    // Body decryption and parse
-    const msgBody = Buffer.from(body, EncodingTypesEnum.BASE64)
+    const decryptedBody = await this.decryptGroupMessage(body, groupEncryption)
+    const msgBody = Buffer.from(decryptedBody, EncodingTypesEnum.BASE64)
     const decoded = new TextDecoder().decode(msgBody)
-
     try {
       const parsedBody = JSON.parse(decoded)
+
       const validation = messageEncoder.decode({
         ...parsedBody,
         id: _id,
@@ -228,5 +286,22 @@ export class GroupChatManager {
    */
   isInitialized() {
     return Boolean(this.threadID)
+  }
+
+  /**
+   * @method decryptGroup
+   * @description Encrypts the randomly generated UUID of a newly created group
+   * @returns true | false
+   */
+  async decryptGroupMessage(
+    body: string,
+    groupPassword: string,
+  ): Promise<string> {
+    const $Crypto: Crypto = Vue.prototype.$Crypto
+    const decryptedBody = await $Crypto.decryptWithPassword(body, groupPassword)
+    if (!decryptedBody) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+    return decryptedBody
   }
 }
