@@ -7,8 +7,8 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -145,7 +145,7 @@ export default {
 
     await $SolanaManager.initializeFromMnemonic(mnemonic)
 
-    const userAccount = $SolanaManager.getUserAccount()
+    const userAccount = $SolanaManager.getActiveAccount()
 
     if (!userAccount) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
@@ -153,9 +153,9 @@ export default {
 
     commit('setActiveAccount', userAccount?.publicKey.toBase58())
 
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+    const userInfo = await usersProgram.getCurrentUserInfo()
 
     if (userInfo === null) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
@@ -242,9 +242,9 @@ export default {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+    const userInfo = await usersProgram.getCurrentUserInfo()
 
     if (userInfo) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
@@ -269,7 +269,7 @@ export default {
 
     const imagePath = await uploadPicture(userData.image)
 
-    await serverProgram.createUser(userData.name, imagePath, userData.status)
+    await usersProgram.create(userData.name, imagePath, userData.status)
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 

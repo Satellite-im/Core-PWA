@@ -50,6 +50,8 @@ export const Config = {
     groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
+    usersPrograId: '7MaC2xrAmmFsuRBEkD6BEL3eJpXCmaikYhLM3eKBPhAH',
+    groupchatsPrograId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
   },
   // Realms are just different chains we support
   realms: [
