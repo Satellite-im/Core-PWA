@@ -6,7 +6,10 @@ import {
   RegistrationStatus,
   UserRegistrationPayload,
 } from './types'
-import Crypto from '~/libraries/Crypto/Crypto'
+
+
+
+import Crypto from '~/libraries/Crypto/Crypto'   
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
@@ -27,7 +30,7 @@ export default {
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
-    const pinHash = await $Crypto.hash(pin)
+        const pinHash = await $Crypto.hash(pin)
 
     // The cleartext version of the pin will not be
     // persisted
