@@ -7,7 +7,7 @@
   <ChatbarReply v-if="recipient" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient || textile.messageLoading, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
@@ -28,13 +28,12 @@
     <Editable
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient)"
+      :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @keyup="handleInputKeyup"
       @paste="handlePaste"
-      :disabled="true"
     />
 
     <ChatbarControls
