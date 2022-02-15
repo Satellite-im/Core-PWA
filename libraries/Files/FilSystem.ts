@@ -82,7 +82,7 @@ export class FilSystem {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
       version: 1,
-      content: this.content,
+      content: this.root.content,
     }
   }
 

@@ -24,8 +24,6 @@ describe('Test FileSystem Directory', () => {
     fs.openDirectory('dir')
     fs.addChild(file2)
 
-    fs.goBackToDirectory('root')
-
     // need to place in variable or it returns empty after the first time
     const ex: FileSystemExport = fs.export
 
