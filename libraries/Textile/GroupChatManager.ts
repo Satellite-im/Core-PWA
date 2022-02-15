@@ -1,9 +1,8 @@
-import { Identity, PrivateKey, PublicKey, ThreadID, Update } from '@textile/hub'
+import { Identity, PublicKey, ThreadID, Update } from '@textile/hub'
 import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
 import { v4 as uuid } from 'uuid'
 import Vue from 'vue'
-import { Keypair } from '@solana/web3.js'
 import { messageEncoder } from './encoders'
 import {
   ConversationQuery,
@@ -22,10 +21,7 @@ import {
 import { Config } from '~/config'
 import { groupChatSchema } from '~/libraries/Textile/schema'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { RootState } from '~/types/store/store'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-import { AccountsError, RegistrationStatus } from '~/store/accounts/types'
+import { AccountsError } from '~/store/accounts/types'
 import { Groups } from '~/mock/groups'
 
 export class GroupChatManager {
@@ -151,11 +147,11 @@ export class GroupChatManager {
       }
 
       if (update?.instance) {
-        this.decodeMessage(update.instance, group.encryptionKey)
-          .then()
-          .then((decoded) => {
+        this.decodeMessage(update.instance, group.encryptionKey).then(
+          (decoded) => {
             onMessage(decoded)
-          })
+          },
+        )
       }
     }
 
@@ -213,7 +209,7 @@ export class GroupChatManager {
 
     const body = Buffer.from(encodedBody).toString(EncodingTypesEnum.BASE64)
 
-    const encryptMessage = await $Crypto.encryptWithPassword(
+    const encryptedMessage = await $Crypto.encryptWithPassword(
       body,
       group.encryptionKey,
     )
@@ -224,7 +220,7 @@ export class GroupChatManager {
     const messageToSend = {
       created_at: Date.now(),
       from: publicKey.toString(),
-      body: encryptMessage,
+      body: encryptedMessage,
       signature,
       to: message.to,
       _mod: Date.now(),
@@ -290,8 +286,8 @@ export class GroupChatManager {
 
   /**
    * @method decryptGroup
-   * @description Encrypts the randomly generated UUID of a newly created group
-   * @returns true | false
+   * @description Decrypts the message from a groups encryptionKey
+   * @returns decryptedBody string
    */
   async decryptGroupMessage(
     body: string,
