@@ -67,13 +67,17 @@ export default Vue.extend({
   },
   watch: {
     recipient() {
-      this.$data.filesDB[this.recipient.address] ||= []
-      this.$data.files = this.$data.filesDB[this.recipient.address]
+      if (this.recipient?.address) {
+        this.$data.filesDB[this.recipient.address] ||= []
+        this.$data.files = this.$data.filesDB[this.recipient.address]
+      }
     },
   },
   mounted() {
-    this.$data.filesDB[this.recipient.address] ||= []
-    this.$data.files = this.$data.filesDB[this.recipient.address]
+    if (this.recipient?.address) {
+      this.$data.filesDB[this.recipient.address] ||= []
+      this.$data.files = this.$data.filesDB[this.recipient.address]
+    }
   },
   methods: {
     /**
@@ -256,22 +260,24 @@ export default Vue.extend({
      * eslint is expecting return. may need refactoring
      */
     async sendMessage() {
-      const nsfwCheck = this.$data.filesDB[this.recipient.address].filter(
-        (file: UploadDropItemType) => {
-          if (!file.nsfw.status) {
-            return file
-          }
-          this.$data.containsNsfw = true
-          if (this.$data.files.length === 1) {
-            this.alertNsfwFile()
-          }
-          return null
-        },
-      )
-      nsfwCheck.forEach((file: UploadDropItemType) => {
-        this.$data.fileAmount = nsfwCheck.length
-        this.dispatchFile(file)
-      })
+      if (this.recipient?.address) {
+        const nsfwCheck = this.$data.filesDB[this.recipient.address].filter(
+          (file: UploadDropItemType) => {
+            if (!file.nsfw.status) {
+              return file
+            }
+            this.$data.containsNsfw = true
+            if (this.$data.files.length === 1) {
+              this.alertNsfwFile()
+            }
+            return null
+          },
+        )
+        nsfwCheck.forEach((file: UploadDropItemType) => {
+          this.$data.fileAmount = nsfwCheck.length
+          this.dispatchFile(file)
+        })
+      }
     },
   },
 })
