@@ -86,13 +86,13 @@
       <wallet-icon class="control-icon" size="1x" />
     </div>
     <div class="vertical-divider"></div>
-    <InteractablesSearchInput
+    <SearchInput
       @search="handleSearch"
       @change="handleChange"
       :placeholder="$t('search.search')"
       :searchRecommend="searchRecommend"
     />
-    <InteractablesSearchResult
+    <SearchResult
       :searchQuery="searchQuery"
       :show="showSearchResult"
       :user="user"

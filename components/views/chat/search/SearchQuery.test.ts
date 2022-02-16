@@ -1,4 +1,4 @@
-import * as SearchQuery from '~/components/interactables/Search/SearchQuery'
+import * as SearchQuery from '~/components/views/Chat/search/SearchQuery'
 import * as search from '~/types/search/search'
 
 const SearchQueryDefault = SearchQuery.default
@@ -432,6 +432,7 @@ describe('SearchQuery.default.setQueryByHTML', () => {
   let mockElement: any
 
   beforeEach(() => {
+    // eslint-disable-next-line new-cap
     inst2 = new SearchQuery.default()
     mockElement = document.createElement('div:first-of-type')
     spy.mockReturnValue(mockElement)
