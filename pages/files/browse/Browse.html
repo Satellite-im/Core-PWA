@@ -11,18 +11,18 @@
         v-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
-      <div v-else-if="view === 'list'">
-        <FilesList :directory="directory" @handle="handle" />
-        <!-- <UiLoadersFileTable :rows="5" /> -->
-      </div>
-      <div v-else>
-        <FilesGrid
-          :directory="directory"
-          @handle="handle"
-          :counter="counter"
-          @forceRender="forceRender"
-        />
-      </div>
+      <FilesList
+        v-else-if="view === 'list'"
+        :directory="directory"
+        @handle="handle"
+      />
+      <FilesGrid
+        v-else
+        :directory="directory"
+        @handle="handle"
+        :counter="counter"
+        @forceRender="forceRender"
+      />
     </div>
     <FilesAside v-if="!$device.isMobile" class="files-right" />
   </div>

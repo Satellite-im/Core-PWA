@@ -121,6 +121,7 @@ export default {
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
+        folder_name: 'Please enter a folder name',
       },
       browse: {
         files: 'Files',

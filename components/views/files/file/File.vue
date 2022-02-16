@@ -72,7 +72,7 @@ export default Vue.extend({
      */
     fileClick() {
       if (this.linkHover) {
-        // todo - add copy link to clipboard IF already shared
+        // todo - handle link click. maybe copy link to clipboard. maybe unshare if that's possible
         this.$toast.show(this.$t('pages.files.link_copied') as string)
         return
       }

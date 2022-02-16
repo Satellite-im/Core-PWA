@@ -20,18 +20,25 @@ export default Vue.extend({
     return {
       text: '' as string,
       error: '' as string,
-      files: [] as Array<File>,
     }
   },
   methods: {
+    /**
+     * @method addFile
+     * @description Trigger click on invisible file input on button click
+     */
     addFile() {
       // @ts-ignore
       this.$refs?.upload.click()
     },
 
+    /**
+     * @method addFolder
+     * @description Add new folder to fileSystem
+     */
     addFolder() {
       if (!this.text) {
-        this.error = 'Please enter a folder name'
+        this.error = this.$t('pages.files.controls.folder_name') as string
         return
       }
       // add folder to filesystem
@@ -41,8 +48,8 @@ export default Vue.extend({
         this.error = e?.message ?? ''
         return
       }
-      this.error = ''
       this.text = ''
+      this.error = ''
       this.$emit('forceRender')
     },
 
@@ -53,7 +60,6 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.files = []
       this.error = ''
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] = [
         ...event.target.files,
@@ -61,13 +67,15 @@ export default Vue.extend({
         return { file, nsfw: await this.$Security.isNSFW(file) }
       })
 
+      const files: File[] = []
+
       for await (const el of nsfwResults) {
         if (!el.nsfw) {
-          this.files.push(el.file)
+          files.push(el.file)
         }
       }
 
-      this.files.forEach((file) => {
+      files.forEach((file) => {
         try {
           this.$FileSystem.createFile(file)
         } catch (e: any) {
@@ -76,9 +84,18 @@ export default Vue.extend({
         this.$emit('forceRender')
       })
 
-      if (nsfwResults.length !== this.files.length) {
+      if (nsfwResults.length !== files.length) {
         this.error = this.$t('errors.chat.contains_nsfw') as string
       }
+    },
+
+    /**
+     * @method resetFileUpload
+     * @description Clear the value of file input handleFile will be called even if it's the same file again
+     * @example <input @onclick="resetFileUpload" />
+     */
+    async resetFileUpload() {
+      if (this.$refs.upload) (this.$refs.upload as HTMLFormElement).value = ''
     },
   },
 })
