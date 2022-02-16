@@ -5,10 +5,16 @@ import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   props: {
+    /**
+     * Directory items to be displayed
+     */
     directory: {
       type: Array as PropType<Array<Item>>,
       default: () => [],
     },
+    /**
+     * counter to force reactivity for Map
+     */
     counter: {
       type: Number,
       required: true,
@@ -16,15 +22,16 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method handle DocsTODO
-     * @description
-     * @param item
-     * @returns
-     * @example
+     * @method handle
+     * @description Emit item to be handled in pages/files/browse/index.vue
      */
     handle(item: Item) {
       this.$emit('handle', item)
     },
+    /**
+     * @method handle
+     * @description force reactivity for Map
+     */
     forceRender() {
       this.$emit('forceRender')
     },

@@ -86,6 +86,11 @@ export class FilSystem {
     }
   }
 
+  /**
+   * @method import
+   * @param {FileSystemExport} fs
+   * @description sets global file system based on parameter. will be fetched from Bucket
+   */
   public import(fs: FileSystemExport) {
     fs.content.forEach((e) => {
       this.addChild(e)

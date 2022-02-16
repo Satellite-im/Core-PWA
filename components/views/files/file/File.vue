@@ -9,7 +9,6 @@ import {
   FileIcon,
 } from 'satellite-lucide-icons'
 
-import { TextileImage } from '~/types/textile/manager'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 
@@ -29,13 +28,12 @@ export default Vue.extend({
     FileIcon,
   },
   props: {
+    /**
+     * File or Directory to be displayed in detail
+     */
     item: {
       type: Object as PropType<Item>,
       required: true,
-    },
-    file: {
-      type: Object as PropType<TextileImage>,
-      default: () => {},
     },
   },
   data() {
@@ -48,7 +46,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    getSubtext() {
+    /**
+     * @returns Directory child count or item type
+     */
+    getSubtext(): string {
       return this.item instanceof Directory
         ? this.item.content.length + ' items'
         : this.item.type
@@ -68,7 +69,7 @@ export default Vue.extend({
     },
     /**
      * @method fileClick
-     * @description Handle regular file click. avoiding regular behavior(handler) if user clicks heart or link icon
+     * @description Handle regular file click. avoiding regular behavior(handle) if user clicks heart or link icon
      */
     fileClick() {
       if (this.linkHover) {

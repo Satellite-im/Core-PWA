@@ -7,18 +7,20 @@ export default Vue.extend({
   components: {
     HomeIcon,
   },
-  // data() {
-  //   return {
-  //     fileSystem: this.$FileSystem,
-  //   }
-  // },
   computed: {
-    // don't include root, use home icon for that
+    /**
+     * @returns string array of file paths to current directory (not including root)
+     */
     path(): string[] {
       return this.$FileSystem.currentDirectoryPath?.slice(1) ?? []
     },
   },
   methods: {
+    /**
+     * @method goBackToDirectory
+     * @description Navigate to specific directory in file system
+     * @param string directory name
+     */
     goBackToDirectory(dir: string) {
       this.$FileSystem.goBackToDirectory(dir)
     },

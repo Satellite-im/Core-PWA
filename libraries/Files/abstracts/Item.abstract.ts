@@ -63,25 +63,41 @@ export abstract class Item implements ItemInterface {
     return this._parent !== undefined ? this._parent : null
   }
 
+  /**
+   * @getter
+   * @returns the liked status
+   */
   get liked(): boolean {
     return this._liked
   }
 
+  /**
+   * @getter
+   * @returns the shared status
+   */
   get shared(): boolean {
     return this._shared
   }
 
+  /**
+   * @method toggleLiked
+   * @description toggle liked status
+   */
   toggleLiked() {
     this._liked = !this._liked
   }
 
+  /**
+   * @method toggleShared
+   * @description toggle shared status
+   */
   toggleShared() {
     this._shared = !this._shared
   }
 
   /**
    * Validate that the parent is of the correct instance type
-   * @method
+   * @method validateParent
    * @param {string} newName - The new name of the associated file.
    */
   private validateParent(parent: Directory | null): boolean {

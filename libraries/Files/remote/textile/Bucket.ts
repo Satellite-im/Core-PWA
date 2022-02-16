@@ -19,14 +19,27 @@ export class Bucket extends RFM implements RFMInterface {
     this.identityManager = new IdentityManager()
   }
 
+  /**
+   * @getter
+   * @returns textile data
+   */
   get textile(): TextileInitializationData | null {
     return this._textile
   }
 
+  /**
+   * @getter
+   * @returns file system export data
+   */
   get index(): FileSystemExport | null {
     return this._index
   }
 
+  /**
+   * @method updateIndex
+   * @param index FileSystemExport
+   * @description sets file system import data
+   */
   updateIndex(index: FileSystemExport) {
     this._index = index
   }

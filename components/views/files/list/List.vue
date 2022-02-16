@@ -25,12 +25,19 @@ export default Vue.extend({
     MoreVerticalIcon,
   },
   props: {
+    /**
+     * Directory items to be displayed
+     */
     directory: {
       type: Array as PropType<Array<Item>>,
       default: () => [],
     },
   },
   methods: {
+    /**
+     * @method handle
+     * @description Emit item to be handled in pages/files/browse/index.vue
+     */
     handle(item: Item) {
       this.$emit('handle', item)
     },

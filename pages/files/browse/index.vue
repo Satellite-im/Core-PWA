@@ -27,6 +27,10 @@ export default Vue.extend({
     }
   },
   computed: {
+    /**
+     * @returns Current directory items
+     * @description included counter to force rendering on Map updates
+     */
     directory() {
       return this.counter && (this.fileSystem?.currentDirectory?.content ?? [])
     },
@@ -41,6 +45,11 @@ export default Vue.extend({
     changeView(type: 'grid' | 'list') {
       this.$data.view = type
     },
+    /**
+     * @method handle
+     * @description emitted from child components. Either open file view or directory
+     * @param item
+     */
     handle(item: Item) {
       if (item instanceof Fil) {
         this.file = item
@@ -49,6 +58,10 @@ export default Vue.extend({
         this.fileSystem.openDirectory(item.name)
       }
     },
+    /**
+     * @method forceRender
+     * @description Force render of new directory items after directory/file upload
+     */
     forceRender() {
       this.counter++
     },

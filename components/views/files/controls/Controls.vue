@@ -11,6 +11,9 @@ export default Vue.extend({
   },
   // todo - best practice would be emitting rather than passing function as a prop - AP-639
   props: {
+    /**
+     * Switch between grid/table view
+     */
     changeView: {
       type: Function,
       required: true,
@@ -94,7 +97,7 @@ export default Vue.extend({
 
     /**
      * @method resetFileUpload
-     * @description Clear the value of file input handleFile will be called even if it's the same file again
+     * @description Clear the value of file input. handleFile will be called even if it's the same file again
      * @example <input @onclick="resetFileUpload" />
      */
     async resetFileUpload() {
