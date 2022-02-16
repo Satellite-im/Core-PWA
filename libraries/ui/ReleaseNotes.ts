@@ -15,5 +15,4 @@ export async function ReleaseNotes(): Promise<any> {
     responseBody = await response.json()
     return responseBody
   }
-  return responseBody
 }
