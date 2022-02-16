@@ -308,3 +308,7 @@ async function uploadPicture(image: string) {
 
   return result?.path.root.toString() ?? ''
 }
+
+export const exportForTesting = {
+  uploadPicture,
+}
