@@ -28,8 +28,7 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      // @ts-ignore
-      this.$refs?.upload.click()
+      if (this.$refs.upload) (this.$refs?.upload as HTMLButtonElement).click()
     },
 
     /**
