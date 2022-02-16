@@ -7,7 +7,6 @@ describe('ReleaseNotes.ReleaseNotes', () => {
     fetchMock.resetMocks()
   })
   test('0', async () => {
-    // What we will check here is that
     fetchMock.mockResponseOnce(JSON.stringify({ mockedField: 'mockedData' }))
 
     const result = await ReleaseNotes.ReleaseNotes()
