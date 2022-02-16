@@ -64,6 +64,10 @@ export default Vue.extend({
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] = [
         ...event.target.files,
       ].map(async (file) => {
+        // don't scan large files to prevent crash
+        if (file.size > this.$Config.uploadByteLimit) {
+          return { file, nsfw: false }
+        }
         return { file, nsfw: await this.$Security.isNSFW(file) }
       })
 
