@@ -48,26 +48,28 @@ export default Vue.extend({
 
     /**
      * @method handleFile
-     * @description Handles file in event object by NSFW checking. Triggered when a file is changed on the input.
+     * @description remove nsfw files then upload to filesystem
      * @param event Input event object
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
       this.files = []
       this.error = ''
-      const nsfwResults = [...event.target.files].map(async (file) => {
+      const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] = [
+        ...event.target.files,
+      ].map(async (file) => {
         return { file, nsfw: await this.$Security.isNSFW(file) }
       })
 
-      for await (const e of nsfwResults) {
-        if (!e.nsfw) {
-          this.files.push(e.file)
+      for await (const el of nsfwResults) {
+        if (!el.nsfw) {
+          this.files.push(el.file)
         }
       }
 
       this.files.forEach((file) => {
         try {
-          this.$FileSystem.createFile(file.name)
+          this.$FileSystem.createFile(file)
         } catch (e: any) {
           this.error = e?.message ?? ''
           return

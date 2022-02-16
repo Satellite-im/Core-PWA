@@ -4,15 +4,14 @@ import { Bucket } from '../remote/textile/Bucket'
 import { FileSystemExport } from '../types/filesystem'
 
 const mockFileData = {
-  _name: 'TestFile.png',
-  _descrption: 'Test file description',
+  name: 'TestFile.png',
   hash: '0x0aef',
+  size: 42345,
+  descrption: 'Test file description',
 }
 
-const file = new Fil(...Object.values(mockFileData))
-const file2 = new Fil(
-  ...Object.values({ name: 'testPng2.png', ...mockFileData }),
-)
+const file = new Fil(mockFileData)
+const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
   it('Fetch index and import it into the fileSystem', () => {

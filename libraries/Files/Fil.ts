@@ -6,6 +6,7 @@ export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
   private _hash: string = ''
   private _description: string = ''
+  private _size: number = 0
 
   /**
    * Create a new file instance
@@ -14,10 +15,21 @@ export class Fil extends Item {
    * @param {string} description - Short description or associated text for the file
    * @param {string} hash - Hash location of the file on chain (Usually IPFS Hash)
    */
-  constructor(name: string = '', description: string = '', hash: string = '') {
+  constructor({
+    name,
+    hash,
+    size,
+    description,
+  }: {
+    name: string
+    hash: string
+    size: number
+    description?: string
+  }) {
     super(name || 'un-named file')
-    this._description = description
-    this._hash = hash
+    this._description = description || ''
+    this._hash = hash || ''
+    this._size = size || 0
   }
 
   /**
@@ -49,12 +61,17 @@ export class Fil extends Item {
    * @getter
    */
   get copy(): Fil {
-    return new Fil(`${this.name} copy`, this._description, this._hash)
+    return new Fil({
+      name: `${this.name} copy`,
+      hash: this.hash,
+      size: this.size,
+      description: this.description,
+    })
   }
 
   // todo store file size after textile upload
   get size(): number {
-    return 2342344
+    return this._size
   }
 
   /**

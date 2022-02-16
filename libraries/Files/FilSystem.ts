@@ -98,8 +98,12 @@ export class FilSystem {
    * @argument {any[]} options list of additional arguments to pass to new file
    * @returns {Fil | null} Returns the new file if successfully created, else null
    */
-  public createFile(fileName: string, ...options: any[]): Fil | null {
-    const newFile = new Fil(fileName, ...options)
+  public createFile(file: File): Fil | null {
+    const newFile = new Fil({
+      name: file.name,
+      hash: 'asd7x89',
+      size: file.size,
+    })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
   }
