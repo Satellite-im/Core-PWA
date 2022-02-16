@@ -165,10 +165,13 @@ export class GroupChatManager {
   /**
    * @method sendMessage
    * @description Sends a message to the given groupChat
+   * @param to
    * @param message Message to be sent
-   * @param groupChatID
    */
-  async sendMessage<T extends MessageTypes>(message: MessagePayloads[T]) {
+  async sendMessage<T extends MessageTypes>(
+    to: string,
+    message: MessagePayloads[T],
+  ) {
     const identity = this.textile.identity
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const publicKey = PublicKey.fromString(identity.public.toString())
@@ -231,7 +234,6 @@ export class GroupChatManager {
       message.to,
       [messageToSend],
     )
-
     return this.decodeMessage(
       { ...messageToSend, _id: messageID[0] },
       group.encryptionKey,

@@ -250,21 +250,41 @@ export default Vue.extend({
      * @description Sends a singular file to textile.
      */
     async dispatchFile(file: FileType) {
-      await this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient?.textilePubkey,
-          file,
-        })
-        .then(() => {
-          this.finishUploads()
-        })
-        .catch((error) => {
-          if (error) {
-            this.$Logger.log('file send error', error)
-            document.body.style.cursor = PropCommonEnum.DEFAULT
-            this.$store.dispatch('textile/clearUploadStatus')
-          }
-        })
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+      ) {
+        await this.$store
+          .dispatch('textile/sendGroupFileMessage', {
+            groupID: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      } else {
+        await this.$store
+          .dispatch('textile/sendFileMessage', {
+            to: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      }
     },
     /**
      * @method sendMessage

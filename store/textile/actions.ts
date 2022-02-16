@@ -659,7 +659,11 @@ export default {
     commit('setMessageLoading', { loading: true })
 
     const result = await $GroupChatManager
-      .sendMessage<'text'>({ to: groupId, payload: message, type: 'text' })
+      .sendMessage<'text'>(groupId, {
+        to: groupId,
+        payload: message,
+        type: 'text',
+      })
       .catch((e) => console.log('error', e))
 
     commit('addMessageToConversation', {
@@ -671,5 +675,53 @@ export default {
     dispatch('storeInMessage', { address: groupId, message })
 
     commit('setMessageLoading', { loading: false })
+  },
+  /**
+   * @description Sends a File message to a given group
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * file: UploadDropItemType to be sent users bucket for textile
+   */
+  async sendGroupFileMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { groupID, file }: { groupID: string; file: UploadDropItemType },
+  ) {
+    document.body.style.cursor = PropCommonEnum.WAIT
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const path = `/${file.file.name}`
+    $TextileManager.bucketManager?.getBucket()
+    const result = await $TextileManager.bucketManager?.pushFile(
+      file.file,
+      path,
+      (progress: number) => {
+        commit('setUploadingFileProgress', {
+          progress,
+          name: file.file.name,
+        })
+      },
+    )
+    const fileURL = `${Config.textile.browser}${result?.root}${path}`
+
+    const sendFileResult =
+      await $TextileManager.groupChatManager?.sendMessage<'file'>(groupID, {
+        to: groupID,
+        payload: {
+          url: fileURL,
+          name: file.file.name,
+          size: file.file.size,
+          type: file.file.type,
+        },
+        type: 'file',
+      })
+
+    commit('addMessageToConversation', {
+      address: groupID,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: sendFileResult,
+    })
+    dispatch('storeMessage', {
+      address: groupID,
+      message: sendFileResult,
+    })
   },
 }
