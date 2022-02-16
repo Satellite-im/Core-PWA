@@ -10,7 +10,6 @@ import { isHeic } from '~/utilities/Heic'
 import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 const converter = require('heic-convert')
-
 declare module 'vue/types/vue' {
   interface Vue {
     loadPicture: (item: UploadDropItemType) => void
@@ -20,7 +19,6 @@ declare module 'vue/types/vue' {
     alertNsfwFile: () => void
   }
 }
-
 export default Vue.extend({
   name: 'Upload',
   components: {
@@ -148,7 +146,6 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
-
           this.loadPicture(uploadFile)
         })
         // this allows subsequent file selections to add to the pending files array
