@@ -72,7 +72,6 @@ export default Vue.extend({
           this.$FileSystem.createFile(file)
         } catch (e: any) {
           this.error = e?.message ?? ''
-          return
         }
         this.$emit('forceRender')
       })
