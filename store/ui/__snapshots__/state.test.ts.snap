@@ -75,6 +75,7 @@ Object {
   },
   "settingsRoute": "personalize",
   "settingsSideBar": true,
+  "showMedia": false,
   "showPinned": false,
   "showSearchResult": false,
   "showSettings": false,
