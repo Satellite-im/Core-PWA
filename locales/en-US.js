@@ -119,10 +119,8 @@ export default {
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
       controls: {
-        new_folder: 'New Folder',
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        name_file: 'Name File...',
       },
       browse: {
         files: 'Files',

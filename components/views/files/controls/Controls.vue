@@ -3,7 +3,6 @@
 import Vue from 'vue'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
-import { FilesViewEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
@@ -20,69 +19,65 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
-      input: { show: false as boolean, type: '' as FilesViewEnum },
       error: '' as string,
+      files: [] as Array<File>,
     }
   },
-  computed: {
-    FilesViewEnum: () => FilesViewEnum,
-  },
-  watch: {
-    // only set focus if the input is rendered
-    'input.type'(newVal) {
-      this.$nextTick(() => {
-        if (!newVal) {
-          return
-        }
-        // @ts-ignore
-        this.$refs.nameInputGroup?.$refs.input.focus()
-      })
-    },
-  },
   methods: {
-    toggleInput(type: FilesViewEnum) {
-      if (!this.input.show) {
-        this.input = { show: true, type }
-        return
-      }
-      if (type !== this.input.type) {
-        this.input.type = type
-        this.text = ''
-        return
-      }
-      this.input = { show: false, type: FilesViewEnum.EMPTY }
-      this.text = ''
+    addFile() {
+      // @ts-ignore
+      this.$refs?.upload.click()
     },
-    addItem() {
+
+    addFolder() {
       if (!this.text) {
-        this.error = `Please enter a ${this.input.type} name`
+        this.error = 'Please enter a folder name'
         return
       }
       // add folder to filesystem
-      if (this.input.type === FilesViewEnum.FOLDER) {
-        try {
-          this.$FileSystem.createDirectory(this.text)
-        } catch (e: any) {
-          this.error = e?.message ?? ''
-          return
-        }
-        this.error = ''
-        this.input = { show: false, type: FilesViewEnum.EMPTY }
-        this.text = ''
-        this.$emit('forceRender')
-        return
-      }
-      // add file todo - gather description
       try {
-        this.$FileSystem.createFile(this.text)
+        this.$FileSystem.createDirectory(this.text)
       } catch (e: any) {
         this.error = e?.message ?? ''
         return
       }
       this.error = ''
-      this.input = { show: false, type: FilesViewEnum.EMPTY }
       this.text = ''
       this.$emit('forceRender')
+    },
+
+    /**
+     * @method handleFile
+     * @description Handles file in event object by NSFW checking. Triggered when a file is changed on the input.
+     * @param event Input event object
+     * @example <input @change="handleFile" />
+     */
+    async handleFile(event: any) {
+      this.files = []
+      this.error = ''
+      const nsfwResults = [...event.target.files].map(async (file) => {
+        return { file, nsfw: await this.$Security.isNSFW(file) }
+      })
+
+      for await (const e of nsfwResults) {
+        if (!e.nsfw) {
+          this.files.push(e.file)
+        }
+      }
+
+      this.files.forEach((file) => {
+        try {
+          this.$FileSystem.createFile(file.name)
+        } catch (e: any) {
+          this.error = e?.message ?? ''
+          return
+        }
+        this.$emit('forceRender')
+      })
+
+      if (nsfwResults.length !== this.files.length) {
+        this.error = this.$t('errors.chat.contains_nsfw') as string
+      }
     },
   },
 })

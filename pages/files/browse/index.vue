@@ -52,23 +52,6 @@ export default Vue.extend({
     forceRender() {
       this.counter++
     },
-    // todo-handle upload
-    // async handleFile(event: any) {
-    //   this.$data.file = event.target.files[0]
-    //   this.$data.nsfw.checking = true
-    //   this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-    //   this.$data.nsfw.checking = false
-    //   this.loadPicture(this.$data.file)
-    // },
-    // loadPicture(file: File) {
-    //   if (!file) return
-    //   const self = this
-    //   const reader = new FileReader()
-    //   reader.onload = function (e: Event | any) {
-    //     if (e.target) self.$data.url = e.target.result
-    //   }
-    //   reader.readAsDataURL(file)
-    // },
   },
 })
 </script>

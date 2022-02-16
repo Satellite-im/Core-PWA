@@ -6,7 +6,6 @@ import {
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
