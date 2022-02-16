@@ -677,6 +677,46 @@ export default {
     commit('setMessageLoading', { loading: false })
   },
   /**
+   * @description Sends a glyph message to a given group
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * glyph to be sent, and pack name
+   */
+  async sendGroupGlyphMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { groupID, src, pack }: { groupID: string; src: string; pack: string },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+
+    commit('setMessageLoading', { loading: true })
+
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    const result = await $GroupChatManager.sendMessage<'glyph'>(groupID, {
+      to: groupID,
+      payload: src,
+      pack,
+      type: 'glyph',
+    })
+
+    commit('addMessageToConversation', {
+      address: groupID,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+    dispatch('storeMessage', { address: groupID, message: result })
+
+    commit('setMessageLoading', { loading: false })
+  },
+  /**
    * @description Sends a File message to a given group
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
