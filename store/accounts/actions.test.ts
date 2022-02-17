@@ -12,8 +12,6 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { Config } from '~/config'
 
 Vue.prototype.$Config = Config
-
-// const DefaultTextileManager = TextileManager
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Crypto = new Crypto()
 
