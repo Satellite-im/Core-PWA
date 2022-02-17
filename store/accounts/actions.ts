@@ -145,13 +145,13 @@ export default {
 
     await $SolanaManager.initializeFromMnemonic(mnemonic)
 
-    const userAccount = $SolanaManager.getActiveAccount()
+    const payerAccount = $SolanaManager.getActiveAccount()
 
-    if (!userAccount) {
+    if (!payerAccount) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    commit('setActiveAccount', userAccount?.publicKey.toBase58())
+    commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
@@ -162,7 +162,7 @@ export default {
     }
 
     // Initialize Encryption Engine
-    dispatch('initializeEncryptionEngine', userAccount)
+    dispatch('initializeEncryptionEngine', payerAccount)
 
     commit('setUserDetails', {
       username: userInfo.name,
@@ -177,28 +177,15 @@ export default {
     dispatch(
       'textile/initialize',
       {
-        id: userAccount?.publicKey.toBase58(),
+        id: payerAccount?.publicKey.toBase58(),
         pass: pin,
         wallet: $SolanaManager.getMainSolanaWalletInstance(),
       },
       { root: true },
     )
 
-    // initialize bucket and file system
-    const $Bucket: Bucket = Vue.prototype.$Bucket
-    const fsExport = await $Bucket.init({
-      id: userAccount?.publicKey.toBase58(),
-      pass: pin!,
-      wallet: $SolanaManager.getMainSolanaWalletInstance(),
-      name: 'personal-files',
-    })
-    if (fsExport) {
-      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      $FileSystem.import(fsExport)
-    }
-
     // Initialize WebRTC with our ID
-    dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
+    dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
       root: true,
     })
 
@@ -235,13 +222,6 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     const userInfo = await usersProgram.getCurrentUserInfo()
@@ -259,7 +239,7 @@ export default {
       await dispatch(
         'textile/initialize',
         {
-          id: userAccount?.publicKey.toBase58(),
+          id: payerAccount?.publicKey.toBase58(),
           pass: pin,
           wallet: $SolanaManager.getMainSolanaWalletInstance(),
         },
@@ -273,15 +253,15 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
-    commit('setActiveAccount', userAccount.publicKey.toBase58())
+    commit('setActiveAccount', payerAccount.publicKey.toBase58())
 
     // Initialize Encryption Engine
-    dispatch('initializeEncryptionEngine', userAccount)
+    dispatch('initializeEncryptionEngine', payerAccount)
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
       photoHash: imagePath,
-      address: userAccount.publicKey.toBase58(),
+      address: payerAccount.publicKey.toBase58(),
     })
   },
   /**
