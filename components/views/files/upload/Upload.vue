@@ -262,8 +262,7 @@ export default Vue.extend({
       this.$data.files.forEach((file: UploadDropItemType) => {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
-        }
-        if (file.nsfw.status) {
+        } else {
           this.$data.containsNsfw = true
           if (this.$data.files.length === 1) {
             this.alertNsfwFile()
