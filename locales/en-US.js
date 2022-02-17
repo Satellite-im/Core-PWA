@@ -377,7 +377,7 @@ export default {
       storage: {
         title: 'Storage',
         subtitle:
-          'Control how your data is stored. You can export your local storage information as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+          'Control how your data is stored. You can export your local storage information (coming soon) as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
         clear: {
           title: 'Clear Storage',
           subtitle:

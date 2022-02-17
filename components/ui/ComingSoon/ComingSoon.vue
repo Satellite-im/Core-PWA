@@ -32,6 +32,11 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    hide: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   methods: {
     preventClickthrough(event: Event) {
