@@ -6,7 +6,7 @@ import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
-  Config.solana.groupchatsPrograId,
+  Config.solana.groupchatsProgramId,
 )
 
 const groupSeed = Buffer.from(utils.bytes.utf8.encode('groupchat'))

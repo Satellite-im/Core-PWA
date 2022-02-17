@@ -4,7 +4,6 @@
 import Vue from 'vue'
 import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
-import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
 
 export default Vue.extend({
   name: 'DirectMessages',
