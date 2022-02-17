@@ -2,7 +2,6 @@ import mutations from '~/store/textile/mutations'
 import InitialTextileState from '~/store/textile/state'
 
 describe('init', () => {
-  //   const InitialTextileState = InitialTextileState()
   let inst: any
 
   beforeEach(() => {
