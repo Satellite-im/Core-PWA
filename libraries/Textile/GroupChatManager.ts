@@ -209,7 +209,6 @@ export class GroupChatManager {
     if (!group) {
       throw new Error(AccountsError.CANNOT_FIND_GROUP)
     }
-    console.log(message)
 
     const body = Buffer.from(encodedBody).toString(EncodingTypesEnum.BASE64)
 
