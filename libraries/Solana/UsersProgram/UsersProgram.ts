@@ -7,7 +7,7 @@ import { Config } from '~/config'
 
 const { PublicKey, SystemProgram } = web3
 
-export const USERS_PROGRAM_ID = new PublicKey(Config.solana.usersPrograId)
+export const USERS_PROGRAM_ID = new PublicKey(Config.solana.usersProgramId)
 
 const userSeed = Buffer.from(utils.bytes.utf8.encode('user'))
 
