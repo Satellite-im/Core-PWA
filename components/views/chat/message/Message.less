@@ -10,9 +10,10 @@
 
 .is-message {
   color: @text;
+
   .pinned-message {
     border: 1px solid @primary-color;
-    &:extend(.round-corners);
+    &: extend(.round-corners);
     padding: @normal-spacing;
     margin-top: @normal-spacing;
     margin-bottom: @light-spacing;
@@ -21,28 +22,33 @@
       top: -(@light-spacing);
       left: @light-spacing;
       padding: 0 @light-spacing;
-      &:extend(.background-primary);
+      &: extend(.background-primary);
       border-radius: @corner-rounding-smaller;
       font-size: @mini-text-size;
       position: absolute;
     }
   }
+
   .sat-icon-container {
     margin-right: @light-spacing;
     margin-top: 0.3rem;
     width: 20px;
     height: 20px;
   }
+
   .inline-meta {
     margin-bottom: @light-spacing;
     display: inline-flex;
+
     .is-text {
       opacity: 0.8;
       margin-top: 0.3rem;
       margin-left: @light-spacing;
     }
+
     .satellite-circle {
       position: relative;
+
       svg {
         margin: -0.2rem;
         width: 13px;
@@ -50,14 +56,17 @@
       }
     }
   }
+
   .markdown {
     white-space: break-spaces;
     word-wrap: break-word;
     display: inline;
     align-items: center;
+
     strong {
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
     }
+
     p {
       font-size: @text-size;
       display: inline;
@@ -70,16 +79,19 @@
   }
 
   .message-hover {
-    &:extend(.background-semitransparent-light);
+    &: extend(.background-semitransparent-light);
   }
+
   .glyph {
     width: 192px;
     height: 192px;
   }
+
   .emoji {
     font-size: 15pt;
     font-style: initial;
   }
+
   .bigmoji {
     .emoji {
       font-size: 36pt;
@@ -87,8 +99,10 @@
       animation-duration: 500ms;
     }
   }
+
   .status {
     font-size: @micro-text-size;
+
     &.editing {
       vertical-align: bottom;
       margin-top: 0;
@@ -99,6 +113,7 @@
     cursor: pointer;
     background-color: @gray;
     border-radius: @corner-rounding-smaller;
+
     .spoiler {
       opacity: 0;
     }
@@ -113,11 +128,11 @@
 
 // non-Retina-specific stuff here
 @media not screen and (-webkit-min-device-pixel-ratio: 2),
-  not screen and (min--moz-device-pixel-ratio: 2),
-  not screen and (-o-min-device-pixel-ratio: 2/1),
-  not screen and (min-device-pixel-ratio: 2),
-  not screen and (min-resolution: 192dpi),
-  not screen and (min-resolution: 2dppx) {
+not screen and (min--moz-device-pixel-ratio: 2),
+not screen and (-o-min-device-pixel-ratio: 2/1),
+not screen and (min-device-pixel-ratio: 2),
+not screen and (min-resolution: 192dpi),
+not screen and (min-resolution: 2dppx) {
   // Chrome bug for emoji spacing on non-retina screens
   .emoji {
     letter-spacing: 4px;

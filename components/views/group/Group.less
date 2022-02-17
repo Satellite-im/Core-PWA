@@ -4,15 +4,19 @@
       stroke: @midground;
       stroke-width: 100;
     }
+
     &.is-online {
-      &:extend(.color-success);
+      &: extend(.color-success);
     }
+
     &.is-offline {
-      &:extend(.font-gray);
+      &: extend(.font-gray);
     }
+
     &.is-idle {
-      &:extend(.color-warning);
+      &: extend(.color-warning);
     }
+
     position: absolute;
     top: 33.5px;
     left: 30px;
@@ -21,7 +25,7 @@
   }
 
   &:hover {
-    &:extend(.background-semitransparent-light);
+    &: extend(.background-semitransparent-light);
   }
 
   .circle {
@@ -31,7 +35,7 @@
 
   .group-info {
     .title {
-      margin: 0 0 1.25rem 0;
+      margin: 0 0 1.25rem;
       text-overflow: ellipsis;
       min-width: 0;
       font-size: @title-text;
@@ -46,6 +50,7 @@
     .subtitle {
       font-size: @mini-text-size;
     }
+
     min-width: 0;
     padding-left: @light-spacing;
     display: inline-flex;
@@ -54,14 +59,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   display: inline-flex;
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
   padding: 0.35rem;
-  &:extend(.round-corners);
+  &: extend(.round-corners);
   cursor: pointer;
   position: relative;
   user-select: none;
-  &:extend(.full-width);
+  &: extend(.full-width);
 }

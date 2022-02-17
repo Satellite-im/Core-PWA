@@ -3,11 +3,13 @@
   align-items: center;
   justify-content: space-around;
   gap: @light-spacing;
+
   .timer {
-    &:extend(.background-semitransparent-dark);
+    &: extend(.background-semitransparent-dark);
     padding: @xlight-spacing @light-spacing;
-    &:extend(.round-corners);
+    &: extend(.round-corners);
   }
+
   .pack-list {
     display: flex;
     flex-grow: 2;
@@ -15,14 +17,17 @@
     border-right: @mini-light-border;
     padding: 0 @light-spacing;
     align-items: center;
+
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   .glyph-item,
   .circle {
     margin-right: @light-spacing;
   }
+
   .market-place {
     cursor: pointer;
   }

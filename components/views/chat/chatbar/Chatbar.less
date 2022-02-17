@@ -1,12 +1,14 @@
 #chatbar {
   position: relative;
   margin-top: @light-spacing;
-  &:extend(.full-width);
+  &: extend(.full-width);
+
   &.has-reply {
     margin-top: 0;
   }
+
   .chat-label {
-    &:extend(.background-primary);
+    &: extend(.background-primary);
     font-size: @mini-text-size;
     font-weight: bold;
     width: 1.5rem;
@@ -19,20 +21,25 @@
     align-self: flex-start;
     margin-top: 11px;
   }
+
   textarea.has-command {
     font-family: @primary-font;
   }
+
   .quick-upload {
     margin-left: @normal-spacing;
   }
+
   .green {
     background: @green;
-    &:extend(.font-white);
+    &: extend(.font-white);
   }
+
   .red {
     background: @red;
-    &:extend(.font-white);
+    &: extend(.font-white);
   }
+
   .control-wrap {
     display: flex;
     justify-self: center;
@@ -49,7 +56,7 @@
 
   .chatbar-wrap {
     position: relative;
-    &:extend(.background-semitransparent-light);
+    &: extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
     border-radius: 20px;
     padding: 0 16px;
@@ -81,7 +88,7 @@
 
       .control-icon {
         &:nth-child(4) {
-          &:extend(.color-danger);
+          &: extend(.color-danger);
         }
       }
     }
@@ -96,8 +103,8 @@
       order: 2;
       background-color: transparent;
       border: none;
-      font-family: 'Poppins';
-      &:extend(.font-primary);
+      font-family: Poppins;
+      &: extend(.font-primary);
       outline: none;
       resize: none;
       font-size: @text-size;
@@ -125,11 +132,13 @@
       &:nth-child(1) {
         margin-right: 0;
       }
+
       &:nth-child(3) {
         margin-left: 0;
       }
+
       &:nth-child(4) {
-        &:extend(.font-accent);
+        &: extend(.font-accent);
       }
     }
   }

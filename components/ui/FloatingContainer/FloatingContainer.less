@@ -1,8 +1,9 @@
 #floating-container {
-  &:extend(.background-semitransparent-light);
-  &:extend(.round-corners);
-  &:extend(.bordered);
-  &:extend(.blur);
+  &: extend(.background-semitransparent-light);
+  &: extend(.round-corners);
+  &: extend(.bordered);
+  &: extend(.blur);
+
   .wrap {
     .header {
       .subtitle {
@@ -14,8 +15,10 @@
       font-family: @primary-font;
       margin-bottom: @light-spacing;
     }
+
     overflow: hidden;
   }
+
   position: absolute;
   display: inline-flex;
   max-height: 50vh;
@@ -25,6 +28,6 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #floating-container {
-    right: 0rem !important;
+    right: 0 !important;
   }
 }

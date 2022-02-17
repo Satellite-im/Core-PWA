@@ -1,7 +1,9 @@
 .accounts {
-  &:extend(.half-width);
+  &: extend(.half-width);
+
   .accounts-heading {
     display: inline-flex;
+
     .is-text {
       margin-left: @light-spacing;
     }
@@ -10,15 +12,16 @@
   .accounts-footer {
     display: inline-flex;
     align-items: center;
+
     .is-text {
       margin-left: @light-spacing;
     }
   }
 
   .account-list {
-    &:extend(.background-semitransparent-light);
-    &:extend(.round-corners);
-    &:extend(.bordered);
+    &: extend(.background-semitransparent-light);
+    &: extend(.round-corners);
+    &: extend(.bordered);
     padding: @normal-spacing;
   }
 
@@ -30,6 +33,7 @@
     display: inline-flex;
     align-items: center;
     margin-top: @light-spacing;
+
     .is-text {
       margin-left: @light-spacing;
     }

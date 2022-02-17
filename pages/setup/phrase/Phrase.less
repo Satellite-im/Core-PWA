@@ -21,7 +21,7 @@
 
         .tag,
         .tag-container {
-          &:extend(.full-width);
+          &: extend(.full-width);
         }
 
         .tag {
@@ -36,7 +36,8 @@
   .container {
     margin: 0 @normal-spacing;
     justify-content: flex-start;
-    &:extend(.full-width);
+    &: extend(.full-width);
+
     .phrase-body {
       margin-top: @normal-spacing;
       align-self: flex-start;
@@ -47,12 +48,13 @@
 
       .is-button {
         margin-top: auto;
-        &:extend(.full-width);
+        &: extend(.full-width);
         justify-self: flex-end;
         margin-bottom: @normal-spacing;
       }
     }
   }
+
   .spacer {
     flex: 1;
   }

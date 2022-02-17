@@ -2,29 +2,34 @@
   #container {
     position: relative;
     flex: 1;
-    &:extend(.full-width);
+    &: extend(.full-width);
     height: calc(@full - 3rem);
     overflow-y: scroll;
+
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   .navbar {
-    &:extend(.full-width);
+    &: extend(.full-width);
     display: inline-flex;
-    padding: 0.75rem 0.5rem 0.5rem 0.5rem;
-    &:extend(.background-semitransparent-dark);
+    padding: 0.75rem 0.5rem 0.5rem;
+    &: extend(.background-semitransparent-dark);
+
     .button {
-      &:extend(.full-width);
+      &: extend(.full-width);
 
       &:nth-child(1) {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         border-right: 0;
       }
+
       &:nth-child(2) {
         border-radius: 0;
       }
+
       &:nth-child(3) {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
@@ -32,6 +37,7 @@
       }
     }
   }
+
   height: @enhancers-height;
   width: @enhancers-width;
   position: absolute;
@@ -42,24 +48,26 @@
   overflow: hidden;
   z-index: @base-z-index + 100;
   margin-right: 1rem;
-  &:extend(.round-corners);
-  &:extend(.background-semitransparent-light);
-  &:extend(.blur);
+  &: extend(.round-corners);
+  &: extend(.background-semitransparent-light);
+  &: extend(.blur);
 }
 
 .emoji-picker {
-  font-family: 'Montserrat', sans-serif;
-  &:extend(.full-width);
+  font-family: Montserrat, sans-serif;
+  &: extend(.full-width);
   min-height: @full;
   max-height: @full;
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
 }
+
 .emoji-picker__search {
   display: flex;
   margin-bottom: @normal-spacing;
 }
+
 .input,
 .search-box,
 .emoji-picker__search div {
@@ -74,31 +82,35 @@
   font-size: 0.8rem;
   cursor: default;
 }
+
 .emoji-picker .emojis {
   display: flex;
   flex-wrap: wrap;
   font-size: 1.5rem;
   justify-content: space-between;
 }
-.emoji-picker .emojis:after {
-  content: '';
+
+.emoji-picker .emojis::after {
+  content: "";
   flex: auto;
 }
+
 .emoji-picker .emojis span {
   cursor: pointer;
   user-select: none;
   padding: 0.2rem;
   border-radius: 5px;
 }
+
 .emoji-picker .emojis span:hover {
-  &:extend(.background-semitransparent-dark);
+  &: extend(.background-semitransparent-dark);
   cursor: pointer;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #enhancers {
-    width: calc(100vw - @normal-spacing*2);
-    min-width: calc(100vw - @normal-spacing*2);
+    width: calc(100vw - @normal-spacing* 2);
+    min-width: calc(100vw - @normal-spacing* 2);
     margin-right: 0;
   }
 }

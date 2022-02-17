@@ -3,14 +3,15 @@
   overflow: hidden;
   min-width: 0;
   text-overflow: ellipsis;
-  padding: 0.4rem 0rem;
-  &:extend(.round-corners);
+  padding: 0.4rem 0;
+  &: extend(.round-corners);
   cursor: pointer;
   position: relative;
   user-select: none;
-  &:extend(.full-width);
+  &: extend(.full-width);
   align-items: center;
-  &:extend(.light-padding);
+  &: extend(.light-padding);
+
   .creator {
     margin-left: 0.5rem;
     font-size: 12px;
@@ -18,7 +19,7 @@
   }
 
   &:hover {
-    &:extend(.background-semitransparent-lightest);
+    &: extend(.background-semitransparent-lightest);
   }
 
   .user-info {

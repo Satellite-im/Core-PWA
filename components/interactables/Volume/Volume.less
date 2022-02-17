@@ -1,12 +1,15 @@
 .volume-slider {
-  &:extend(.round-corners);
+  &: extend(.round-corners);
+
   .blank {
-    &:extend(.full-width);
+    &: extend(.full-width);
     flex: 1;
     min-height: 1px;
   }
+
   .vue-slider-dot-tooltip-inner {
-    &:extend(.background-primary);
+    &: extend(.background-primary);
+
     &::after {
       width: 0;
       height: 0;
@@ -15,6 +18,7 @@
       border-left: 5px solid @primary-color;
       margin-left: -1px;
     }
+
     border-color: transparent;
     border-radius: 2px;
     font-size: @micro-text-size;
@@ -25,14 +29,15 @@
   }
 
   .vue-slider-process {
-    &:extend(.background-primary);
+    &: extend(.background-primary);
   }
 
   .vue-slider-dot-handle {
     &:hover {
-      box-shadow: 0 0 0 2pt rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 0 2pt rgb(255 255 255 / 50%);
       border: 1px solid @gray;
     }
+
     height: 13px;
     margin-left: 1px;
     width: 13px;
@@ -44,8 +49,10 @@
   &--ttb {
     height: 8rem;
   }
+
   &--ltr {
-    &:extend(.full-width);
+    &: extend(.full-width);
+
     .vue-slider-dot-tooltip-inner {
       &::after {
         width: 0;
@@ -56,8 +63,10 @@
         margin-left: -1px;
       }
     }
+
     display: block;
   }
+
   background: transparent;
   display: flex;
   padding: 0.65rem 0;

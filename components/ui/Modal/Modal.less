@@ -1,20 +1,22 @@
 .modal-card-head {
-  &:extend(.full-width);
+  &: extend(.full-width);
+
   .title {
     font-size: @title-text;
   }
+
   background: transparent;
   border-bottom: none;
   font-size: @text-size;
 }
 
 .modal-background {
-  &:extend(.blur-less);
+  &: extend(.blur-less);
   background: transparent !important;
 }
 
 .modal-card-body {
-  &:extend(.bordered);
+  &: extend(.bordered);
   font-weight: normal !important;
   font-size: @text-size;
   width: fit-content;
@@ -36,6 +38,7 @@
   z-index: @base-z-index + 103;
   position: absolute;
 }
+
 .close {
   position: absolute;
   right: @large-spacing;
@@ -47,34 +50,38 @@
   cursor: pointer;
   z-index: @base-z-index + 5;
 }
+
 .label {
   padding: 0 !important;
 }
 
 .modal-card {
-  &:extend(.round-corners);
-  &:extend(.blur-more);
-  &:extend(.background-semitransparent-dark);
+  &: extend(.round-corners);
+  &: extend(.blur-more);
+  &: extend(.background-semitransparent-dark);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .modal {
     height: 100%;
+
     &.small {
       height: 40vh;
       margin-top: auto;
     }
   }
+
   .modal-card {
     height: @full;
-    &:extend(.full-width);
-    margin: 0px;
+    &: extend(.full-width);
+    margin: 0;
     max-height: @full;
   }
 
   .modal-card-body {
-    &:extend(.full-width);
+    &: extend(.full-width);
     width: 100vw;
+
     & > div {
       height: @full;
     }

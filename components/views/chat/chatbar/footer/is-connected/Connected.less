@@ -11,6 +11,7 @@
     &:first-of-type {
       font-weight: bold;
     }
+
     margin-left: 0.4rem;
     margin-bottom: 0;
     line-height: 1.6rem;
@@ -27,16 +28,19 @@
       stroke-width: 5;
       paint-order: stroke;
     }
+
     &.is-online {
-      &:extend(.color-success);
+      &: extend(.color-success);
       fill: @green;
     }
+
     &.is-offline {
-      &:extend(.font-gray);
+      &: extend(.font-gray);
       fill: @gray;
     }
+
     &.is-idle {
-      &:extend(.color-warning);
+      &: extend(.color-warning);
       fill: @yellow;
     }
   }

@@ -1,16 +1,19 @@
 .button-group {
   .button {
     &:first-child {
-      border-radius: @corner-rounding 0px 0px @corner-rounding;
+      border-radius: @corner-rounding 0 0 @corner-rounding;
     }
+
     &:last-child {
-      border-radius: 0px @corner-rounding @corner-rounding 0px;
+      border-radius: 0 @corner-rounding @corner-rounding 0;
     }
+
     cursor: pointer;
     border-radius: 0;
     margin: 0;
     border: none;
   }
+
   &.is-normal-width {
     .button {
       &:not(:first-child) {
@@ -18,13 +21,17 @@
         border-left: none;
       }
     }
+
     display: inline;
   }
+
   &.is-full-width {
-    &:extend(.full-width);
+    &: extend(.full-width);
+
     .button {
       flex-grow: 1;
     }
+
     display: flex;
   }
 }

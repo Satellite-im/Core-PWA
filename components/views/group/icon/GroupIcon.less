@@ -1,7 +1,7 @@
 .group-icon {
   .circle {
-    &:extend(.bordered);
-    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
+    &: extend(.bordered);
+    box-shadow: 0 5px 5px 5px rgb(0 0 0 / 10%);
     border-radius: @half;
   }
 
@@ -15,7 +15,7 @@
     }
 
     .group-el-1 {
-      left: 0px;
+      left: 0;
       bottom: 5px;
       width: 20px;
       height: 20px;
@@ -74,15 +74,16 @@
       bottom: 0;
       right: 0;
       font-size: @micro-text-size;
-      &:extend(.background-primary);
+      &: extend(.background-primary);
       border-radius: @half;
       line-height: 1.2;
       padding: 0.1rem 0.27rem;
       text-align: center;
-      &:extend(.font-primary);
+      &: extend(.font-primary);
       font-family: @primary-font;
     }
   }
+
   width: 40px;
   height: 40px;
 }

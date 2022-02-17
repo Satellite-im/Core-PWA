@@ -1,9 +1,10 @@
 #wallet-mini-send {
   padding: @normal-spacing;
 }
+
 .flex-row {
   display: inline-flex;
-  &:extend(.full-width);
+  &: extend(.full-width);
   flex-direction: row;
 
   .input-container {
@@ -11,24 +12,30 @@
     margin-right: @normal-spacing;
   }
 }
+
 .title {
-  &:extend(.color-success);
+  &: extend(.color-success);
 }
+
 .centered {
   justify-content: center;
   margin-top: @normal-spacing;
   margin-bottom: @normal-spacing;
 }
+
 #send-payment {
   margin-top: @normal-spacing;
+
   .is-button {
     width: calc(@half - 0.25em);
   }
 }
+
 .details {
-  &:extend(.bordered);
-  &:extend(.light-padding);
-  &:extend(.background-semitransparent-light);
+  &: extend(.bordered);
+  &: extend(.light-padding);
+  &: extend(.background-semitransparent-light);
+
   .is-text {
     font-family: @primary-font;
   }

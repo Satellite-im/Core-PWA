@@ -1,4 +1,5 @@
 @size: 75px;
+
 @size-mobile: 55px;
 
 #profile-settings {
@@ -9,21 +10,26 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  &:extend(.full-width);
+  &: extend(.full-width);
+
   .profile-left {
     padding: @normal-spacing 0;
   }
+
   .profile-layout {
-    &:extend(.full-width);
+    &: extend(.full-width);
     display: flex;
     flex-wrap: wrap;
+
     .profile-left {
-      &:extend(.full-width);
+      &: extend(.full-width);
       margin-top: 0;
     }
   }
+
   .profile-photo-column {
     max-width: 75px;
+
     .profile-photo {
       height: @size-mobile;
       width: @size-mobile;
@@ -51,21 +57,24 @@
 .profile-main {
   background: @midground-alt;
   padding: @normal-spacing;
-  &:extend(.round-corners);
+  &: extend(.round-corners);
 }
 
 .profile-photo-column {
   max-width: 100px;
+
   .profile-photo {
     position: relative;
     height: @size;
     width: @size;
     cursor: pointer;
+
     .is-rounded,
     .is-square {
       max-width: @full !important;
       max-height: @full !important;
     }
+
     .plus-button {
       z-index: 2;
       right: 0;
@@ -83,12 +92,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    &:extend(.full-width);
+    &: extend(.full-width);
   }
 }
 
 .profile-image-cropper {
-  &:extend(.full-width);
+  &: extend(.full-width);
   height: @full;
   z-index: 5;
   display: flex;
@@ -101,16 +110,18 @@
   left: 0;
   right: 0;
   top: 0;
+
   .content {
     position: relative;
     width: 500px;
+
     .cropper-mask {
       position: fixed;
       background: @foreground !important;
       opacity: 0.6;
       z-index: 9;
       height: @full;
-      &:extend(.full-width);
+      &: extend(.full-width);
       top: 0;
       left: 0;
     }

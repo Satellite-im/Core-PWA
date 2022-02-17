@@ -5,35 +5,40 @@
       left: 16px;
       top: 16px;
       font-size: 12px;
-      &:extend(.font-white);
+      &: extend(.font-white);
       background: @green;
       padding: 8px 10px;
       border-radius: 4px;
     }
+
     .favorite {
       position: absolute;
       right: 16px;
       top: 16px;
       font-size: 18px;
     }
-    border-radius: 4px 4px 0px 0px;
-    &:extend(.full-width);
+
+    border-radius: 4px 4px 0 0;
+    &: extend(.full-width);
     position: relative;
     height: 170px;
     background: @primary-color-alt;
     background-position: center;
     background-size: cover;
   }
+
   .card-text {
     .name {
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 8px;
     }
+
     .description {
       font-size: 12px;
       margin-bottom: 8px;
     }
+
     .price {
       .btn-buy {
         display: flex;
@@ -42,29 +47,32 @@
         width: 40px;
         height: 40px;
         border-radius: 20px;
-        &:extend(.font-secondary);
+        &: extend(.font-secondary);
         font-size: 12px;
-        &:extend(.background-primary-gradient);
-        &:extend(.glow-primary);
+        &: extend(.background-primary-gradient);
+        &: extend(.glow-primary);
       }
+
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       font-size: 24px;
       font-weight: 600;
     }
-    &:extend(.full-width);
+
+    &: extend(.full-width);
     height: 145px;
     padding: 16px;
-    &:extend(.background-semitransparent-dark);
+    &: extend(.background-semitransparent-dark);
   }
+
   font-family: @primary-font;
-  &:extend(.round-corners);
+  &: extend(.round-corners);
   overflow: hidden;
   min-width: 200px;
-  &:extend(.full-width);
+  &: extend(.full-width);
   max-width: @full;
-  &:extend(.bordered);
+  &: extend(.bordered);
   background: transparent;
   box-shadow: none;
 }

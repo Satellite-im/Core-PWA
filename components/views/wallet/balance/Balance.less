@@ -1,14 +1,17 @@
 #wallet-balance {
   .balance-heading {
     display: inline-flex;
+
     .is-text {
       margin-left: @light-spacing;
     }
   }
+
   .wallet-body {
     display: flex;
+
     .title {
-      &:extend(.color-success);
+      &: extend(.color-success);
       margin-top: @normal-spacing;
       margin-bottom: @light-spacing;
     }
@@ -19,7 +22,7 @@
 
     .wallet-body-left,
     .wallet-body.right {
-      &:extend(.full-width);
+      &: extend(.full-width);
     }
 
     .wallet-body-right .is-text {
@@ -34,18 +37,21 @@
       .modal-input {
         width: 70%;
       }
+
       .select {
         margin-left: @light-spacing;
         width: 30%;
       }
+
       display: inline-flex;
-      &:extend(.full-width);
+      &: extend(.full-width);
       margin-bottom: @light-spacing;
     }
   }
-  &:extend(.full-width);
-  &:extend(.background-semitransparent-light);
-  &:extend(.round-corners);
+
+  &: extend(.full-width);
+  &: extend(.background-semitransparent-light);
+  &: extend(.round-corners);
   padding: @normal-spacing;
-  &:extend(.bordered);
+  &: extend(.bordered);
 }

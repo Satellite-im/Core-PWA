@@ -1,61 +1,73 @@
 .marketplace-glyphs {
   .subtitle {
-    &:extend(.font-secondary);
+    &: extend(.font-secondary);
   }
+
   .home-content {
     display: flex;
     margin-bottom: @large-spacing;
+
     .left-content-block {
       flex-grow: 2;
       flex-basis: 0;
       margin-right: @normal-spacing;
+
       .recommended-block {
         margin-top: @normal-spacing;
         display: flex;
+
         .glyph-card:first-child {
-          margin-right: @normal-spacing!important;
+          margin-right: @normal-spacing !important;
         }
       }
     }
+
     .glyph-popular {
       flex-grow: 1;
       flex-basis: 0;
     }
+
     .badges {
       .badge-new,
       .badge-sale {
         margin-right: @light-spacing;
       }
     }
+
     .btns {
       .navigator button {
         font-size: 0.6rem;
-        &:extend(.round-corners);
+        &: extend(.round-corners);
       }
     }
   }
+
   .marketplace-glyphs-detail {
     .go-back {
       display: flex;
       align-items: center;
       cursor: pointer;
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
     }
   }
+
   .badges {
     display: flex;
     align-items: center;
+
     .badge-new,
     .badge-sale {
-      &:extend(.font-white);
+      &: extend(.font-white);
       background: @green;
       padding: 8px 10px;
       border-radius: 4px;
       margin-right: @xlight-spacing;
     }
+
     .badge-new {
       background: @green;
     }
+
     .badge-sale {
       background: @red;
     }

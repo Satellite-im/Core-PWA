@@ -1,25 +1,30 @@
 .context-menu {
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  &:extend(.font-secondary);
-  &:extend(.round-corners);
+  &: extend(.background-semitransparent-dark);
+  &: extend(.blur);
+  &: extend(.font-secondary);
+  &: extend(.round-corners);
+
   .subtitle {
     margin: 0 0 @light-spacing @light-spacing;
     font-size: @mini-text-size;
   }
+
   p {
     padding: 4px 8px;
     border-radius: 2px;
     font-size: 14px;
   }
+
   p:hover {
-    &:extend(.background-primary);
-    &:extend(.font-secondary);
+    &: extend(.background-primary);
+    &: extend(.font-secondary);
   }
+
   .quickReactions {
     .reaction {
-      &:extend(.background-semitransparent-light);
+      &: extend(.background-semitransparent-light);
     }
+
     p {
       display: flex;
       flex-grow: 1;
@@ -28,22 +33,31 @@
       align-items: center;
       border-radius: unset;
     }
+
     p:first-of-type {
       border-radius: @corner-rounding 0 0 @corner-rounding;
     }
+
     p:last-of-type {
       border-radius: 0 @corner-rounding @corner-rounding 0;
     }
+
     p:hover {
-      &:extend(.background-semitransparent-lighter);
-      text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color,
-        1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
+      &: extend(.background-semitransparent-lighter);
+      text-shadow:
+        -1px 0 1px @primary-color,
+        0 1px 1px @primary-color,
+        1px 0 1px @primary-color,
+        0 -1px 1px @primary-color,
+        0 0 12px @gray;
     }
+
     display: flex;
     flex-flow: row nowrap;
     margin-bottom: @light-spacing;
     justify-content: center;
   }
+
   position: fixed;
   z-index: 999;
   outline: none;

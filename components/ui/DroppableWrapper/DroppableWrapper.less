@@ -4,8 +4,9 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  &:after {
-    content: '';
+
+  &::after {
+    content: "";
     display: block;
     position: absolute;
     top: 0;
@@ -19,10 +20,11 @@
     transition: 0.2s ease-in-out;
     z-index: 100;
   }
+
   &.droppableWrapper--active {
-    &:after {
+    &::after {
       border-color: @primary-color;
-      background-color: rgba(@primary-color, 0.25);
+      background-color: rgb(@primary-color 0.25);
     }
   }
 }

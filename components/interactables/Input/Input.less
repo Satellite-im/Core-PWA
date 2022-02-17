@@ -1,20 +1,25 @@
 .input-label {
   text-align: left;
 }
+
 .is-full-width {
-  &:extend(.full-width);
+  &: extend(.full-width);
 }
+
 .search-box {
   &.right-icon {
     input {
       padding-right: 34px;
     }
   }
+
   .search-clear {
-    &:extend(.font-primary);
+    &: extend(.font-primary);
+
     &:focus {
       background: @background;
     }
+
     position: absolute;
     font-size: @tiny-icon-size;
     top: 0;
@@ -26,11 +31,13 @@
     z-index: 2;
     cursor: pointer;
   }
+
   position: relative;
 }
 
 .input {
   font-size: @text-size;
+
   &.is-normal {
     height: 2.3rem;
   }

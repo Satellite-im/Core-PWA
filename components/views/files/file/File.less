@@ -3,7 +3,7 @@
   flex-direction: column;
   min-height: 224px;
   border-radius: @corner-rounding-smaller;
-  &:extend(.background-semitransparent-light);
+  &: extend(.background-semitransparent-light);
   cursor: pointer;
 
   .quick-actions {
@@ -16,18 +16,19 @@
     }
 
     svg:hover {
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
     }
   }
+
   .icon-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    padding-top: 36px; // half of the text area height. this centers
-
+    padding-top: 36px;
+    // half of the text area height. this centers
     .file-type-icon {
-      &:extend(.font-accent);
+      &: extend(.font-accent);
     }
   }
 
@@ -44,8 +45,9 @@
       overflow: hidden;
       white-space: nowrap;
     }
+
     .subtext {
-      &:extend(.font-muted);
+      &: extend(.font-muted);
     }
   }
 }

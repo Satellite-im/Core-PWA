@@ -1,7 +1,7 @@
 .table {
   thead {
     th {
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
       border-bottom-width: 1px;
       border-bottom-color: @text-muted;
     }
@@ -9,7 +9,7 @@
 
   tr {
     td {
-      &:extend(.font-primary);
+      &: extend(.font-primary);
       border-bottom-color: @foreground;
     }
   }
@@ -30,6 +30,7 @@
     text-overflow: ellipsis;
     max-width: 200px;
   }
+
   .sort {
     font-size: 9pt;
     cursor: pointer;
@@ -40,7 +41,7 @@
   }
 
   .feather-folder {
-    &:extend(.font-orange);
+    &: extend(.font-orange);
   }
 
   .feather-image {
@@ -48,13 +49,14 @@
   }
 
   .feather-archive {
-    &:extend(.color-danger);
+    &: extend(.color-danger);
   }
 
   .feather-file {
-    &:extend(.font-pink);
+    &: extend(.font-pink);
   }
-  &:extend(.full-width);
+
+  &: extend(.full-width);
   font-size: @text-size;
   background: transparent;
   margin: 0;

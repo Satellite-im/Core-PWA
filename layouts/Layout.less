@@ -1,6 +1,9 @@
 @media_open_offset: 16rem;
+
 @mobile_media_open_offset: 12rem;
+
 @mobile_candybar_media_open_offset: 18rem;
+
 #app-wrap {
   &.is-collapsed {
     #mobile-nav {
@@ -10,6 +13,7 @@
 
   .media-open {
     padding-top: @media_open_offset;
+
     &::-webkit-scrollbar-track {
       margin-top: @media_open_offset;
     }
@@ -27,6 +31,7 @@
 
   .swiper {
     width: 100%;
+
     .swiper-wrapper {
       box-sizing: border-box;
     }
@@ -56,7 +61,7 @@
   }
 
   .dynamic-content {
-    &:extend(.full-width);
+    &: extend(.full-width);
     position: relative;
     user-select: text;
     display: flex;
@@ -72,12 +77,12 @@
     }
 
     .media-open {
-      &:extend(.full-width);
+      &: extend(.full-width);
       flex: 1;
     }
 
     #chatbar {
-      &:extend(.full-width);
+      &: extend(.full-width);
       min-width: 0;
       justify-content: flex-end;
       transition: height @animation-speed;
@@ -88,18 +93,22 @@
       .media-open {
         flex: 0;
       }
+
       #chatbar {
         height: 0;
         margin-top: 0;
       }
+
       .scroll-area {
         height: 0;
       }
+
       #pinned-messages {
         .scroll-area {
           height: auto;
         }
       }
+
       #mediastream {
         height: calc(@full - @toolbar-height - @light-spacing);
       }
@@ -120,9 +129,11 @@
       z-index: @base-z-index + 10;
       top: 1.8rem;
     }
+
     #toolbar {
       padding-left: 3rem;
     }
+
     .breadcrumb {
       padding-top: @xlarge-spacing + @light-spacing;
     }
@@ -130,7 +141,7 @@
 
   &.is-collapsed-aside {
     #aside {
-      transform: translateX(calc(@sidebar-size));
+      transform: translateX(calc(@sidebar - size));
     }
 
     &.group {
@@ -149,6 +160,7 @@
 
 .desktop .dynamic-content.swiper-slide-next {
   padding-right: calc(@sidebar-size + @servers-size);
+
   #mediastream {
     width: calc(100% - @sidebar-size - @servers-size);
   }
@@ -163,24 +175,29 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   .media-open {
     padding-top: @mobile_media_open_offset !important;
+
     &::-webkit-scrollbar-track {
       margin-top: @mobile_media_open_offset + 1rem !important;
     }
   }
+
   .dynamic-content {
     pointer-events: none;
   }
+
   &.is-collapsed {
     .dynamic-content {
       pointer-events: all;
     }
   }
+
   #app {
     &.is-collapsed-aside {
       #aside {
         transform: translateX(@full);
       }
     }
+
     &.is-collapsed {
       .breadcrumb {
         padding-top: @normal-spacing;
@@ -190,10 +207,12 @@
 
   .dynamic-content.swiper-slide-next {
     padding-right: 0;
+
     #mediastream {
       width: 100%;
     }
   }
+
   .sidebar-container {
     width: 100vw !important;
   }
@@ -202,11 +221,12 @@
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
   .media-open {
     padding-top: @mobile_candybar_media_open_offset !important;
+
     &::-webkit-scrollbar-track {
       margin-top: @mobile_candybar_media_open_offset + 1rem !important;
     }
   }
 }
 
-@import url('~/assets/styles/platforms/iOS.less');
-@import url('~/assets/styles/themes/moonless_night.less');
+@import url("~/assets/styles/platforms/iOS.less");
+@import url("~/assets/styles/themes/moonless_night.less");

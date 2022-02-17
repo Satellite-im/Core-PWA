@@ -1,8 +1,10 @@
 #custom-cursor-area {
-  &:extend(.full-width);
+  &: extend(.full-width);
+
   > * {
     pointer-events: none;
   }
+
   height: @full;
 }
 
@@ -10,12 +12,12 @@
   top: 0;
   left: 0;
   position: absolute;
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
   pointer-events: none;
   user-select: none;
   z-index: 55555555;
   backface-visibility: hidden;
   will-change: transform;
-  box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px 30px rgb(255 255 255 / 10%);
 }

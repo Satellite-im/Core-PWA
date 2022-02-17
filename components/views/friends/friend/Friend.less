@@ -1,39 +1,47 @@
 .friend {
   &:hover {
-    &:extend(.background-semitransparent-light);
+    &: extend(.background-semitransparent-light);
   }
+
   .circle {
     align-self: center;
   }
+
   .description {
     margin-left: @normal-spacing;
+
     p,
     h1 {
       margin: 0;
       font-size: @mini-text-size;
     }
+
     h1 {
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
     }
+
     p {
-      &:extend(.font-muted);
+      &: extend(.font-muted);
     }
   }
+
   .controls {
     justify-self: flex-end;
     align-self: center;
     float: right;
     min-width: 4.8rem;
   }
+
   .spacer {
     flex: 1;
   }
+
   position: relative;
-  &:extend(.more-pad-sides);
+  &: extend(.more-pad-sides);
   display: flex;
   align-items: center;
   user-select: none;
-  &:extend(.round-corners);
+  &: extend(.round-corners);
   margin: 0 @light-spacing;
 }
 

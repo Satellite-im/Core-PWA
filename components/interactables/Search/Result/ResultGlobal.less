@@ -4,23 +4,27 @@
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
+
   li {
     display: block;
     margin: 2px;
+
     a {
       display: block;
       padding: 5px 10px;
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
       border-radius: @corner-rounding-smaller;
     }
+
     &.active {
       a {
-        &:extend(.background-primary);
+        &: extend(.background-primary);
       }
     }
+
     &.disabled {
       a {
-        &:extend(.font-muted);
+        &: extend(.font-muted);
       }
     }
   }

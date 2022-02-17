@@ -8,8 +8,8 @@
   font-size: @text-size;
   font-family: @secondary-font;
   margin: 0 1rem;
-  &:extend(.background-primary-gradient);
-  &:extend(.blur);
+  &: extend(.background-primary-gradient);
+  &: extend(.blur);
   border-top: @light-border;
   border-left: @light-border;
   border-right: @light-border;
@@ -19,11 +19,12 @@
   align-items: center;
 
   strong {
-    &:extend(.font-secondary);
+    &: extend(.font-secondary);
   }
 
   .markdown {
     width: calc(@full - @small-icon-size - 0.25rem);
+
     p {
       display: flex;
       align-items: center;
@@ -39,7 +40,7 @@
     cursor: pointer;
     display: flex;
     font-size: @small-icon-size;
-    &:extend(.font-primary);
+    &: extend(.font-primary);
   }
 }
 

@@ -5,28 +5,35 @@
       max-width: @full;
       margin-top: @normal-spacing;
     }
+
     .columns {
       .column {
         .tag,
         .tag-container {
-          &:extend(.full-width);
+          &: extend(.full-width);
         }
+
         .tag {
           margin: @xlight-spacing 0;
         }
+
         padding: @xlight-spacing;
       }
+
       margin: @normal-spacing auto 0;
       max-width: @full;
       width: 24rem;
     }
+
     width: 32rem;
     align-self: center;
     padding: 0 @normal-spacing;
   }
+
   .input-error {
     margin-top: @normal-spacing;
   }
+
   margin: 0 auto;
   max-width: 40rem;
   display: flex;
@@ -39,6 +46,7 @@
     .columns {
       margin: 0;
     }
+
     .input-account-body {
       .recover-account.button {
         margin-top: auto;
@@ -49,6 +57,7 @@
       .columns {
         width: 18rem;
       }
+
       margin: 0;
       padding-top: 10vh;
       width: 100%;
@@ -57,6 +66,7 @@
       align-self: flex-start;
       height: 100%;
     }
+
     padding-bottom: @normal-spacing;
   }
 }

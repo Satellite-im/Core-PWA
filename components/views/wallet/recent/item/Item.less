@@ -4,29 +4,36 @@
 
 .transaction-item {
   display: inline-flex;
-  &:extend(.full-width);
+  &: extend(.full-width);
   margin-bottom: @light-spacing;
+
   .tx-base {
     display: inline-flex;
+
     .circle-holder {
       margin-right: @light-spacing;
     }
+
     .subtitle {
-      &:extend(.font-secondary);
+      &: extend(.font-secondary);
       font-size: @text-size;
     }
+
     .is-text {
       opacity: 0.85;
       font-size: @micro-text-size;
     }
   }
+
   .tx-amount {
     flex: 1;
     text-align: right;
+
     .is-text {
       opacity: 0.85;
       font-size: @micro-text-size;
     }
+
     .txamount {
       opacity: 1;
       font-family: @primary-font;

@@ -3,43 +3,52 @@
     .owner-name {
       display: flex;
       align-items: center;
+
       .circle {
         margin-right: @light-spacing;
       }
     }
+
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .glyph-detail-card {
     .bg-header {
-      &:extend(.full-width);
+      &: extend(.full-width);
       height: 5rem;
       background-position: center;
       background-size: @full;
       background-repeat: no-repeat;
       padding: @normal-spacing;
     }
+
     .glyph-content {
-      &:extend(.full-width);
+      &: extend(.full-width);
       display: flex;
       padding: @xlarge-spacing;
-      &:extend(.background-semitransparent-dark);
+      &: extend(.background-semitransparent-dark);
+
       .glyph-list {
         flex-grow: 4;
         flex-basis: 0;
-        &:extend(.light-padding);
+        &: extend(.light-padding);
+
         div {
           display: inline-block;
           margin: 0 @light-spacing @light-spacing 0;
         }
       }
+
       .glyph-content-text {
         flex-grow: 3;
         flex-basis: 0;
+
         .is-text {
           margin-bottom: @xlarge-spacing;
         }
+
         .glyph-name {
           .subtitle {
             margin-right: @light-spacing;
@@ -47,14 +56,16 @@
         }
       }
     }
-    &:extend(.full-width);
+
+    &: extend(.full-width);
     max-width: @full;
     font-family: @primary-font;
-    &:extend(.round-corners);
+    &: extend(.round-corners);
     overflow: hidden;
     margin-top: @normal-spacing;
-    &:extend(.bordered);
+    &: extend(.bordered);
     background: transparent;
   }
+
   margin-top: @xlarge-spacing;
 }

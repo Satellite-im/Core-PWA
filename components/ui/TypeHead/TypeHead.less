@@ -1,35 +1,41 @@
 .typehead-container {
   position: relative;
+
   .search-options {
     position: absolute;
     left: 0;
     margin-top: @light-spacing * 1.5;
-    &:extend(.bordered);
+    &: extend(.bordered);
     z-index: @base-z-index + 2;
-    &:extend(.background-semitransparent-light);
-    &:extend(.blur);
-    &:extend(.full-width);
-    &:extend(.round-corners);
+    &: extend(.background-semitransparent-light);
+    &: extend(.blur);
+    &: extend(.full-width);
+    &: extend(.round-corners);
     padding: @xlight-spacing / 2 0;
+
     .search-option-group {
       padding: @light-spacing 0;
+
       li {
         font-size: 16px;
         padding: 5px 10px;
         text-align: center;
+
         &:hover,
         &.active {
-          &:extend(.background-primary);
-          &:extend(.glow-primary);
-          &:extend(.font-secondary);
+          &: extend(.background-primary);
+          &: extend(.glow-primary);
+          &: extend(.font-secondary);
           cursor: pointer;
-          &:extend(.round-corners);
+          &: extend(.round-corners);
+
           span:last-child {
-            &:extend(.font-secondary);
+            &: extend(.font-secondary);
           }
         }
+
         span:last-child {
-          &:extend(.font-muted);
+          &: extend(.font-muted);
         }
       }
     }

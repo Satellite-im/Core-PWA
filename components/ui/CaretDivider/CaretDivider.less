@@ -1,14 +1,17 @@
 .caret_divider {
-  &:extend(.full-width);
+  &: extend(.full-width);
+
   .caret_text {
-    &:extend(.font-secondary);
-    &:extend(.glow-danger);
+    &: extend(.font-secondary);
+    &: extend(.glow-danger);
+
     .triangle,
-    .triangle:before,
-    .triangle:after {
+    .triangle::before,
+    .triangle::after {
       width: 20px;
       height: 20px;
     }
+
     .triangle {
       overflow: hidden;
       position: absolute;
@@ -18,21 +21,27 @@
       cursor: pointer;
       pointer-events: none;
     }
-    .triangle:before,
-    .triangle:after {
+
+    .triangle::before,
+    .triangle::after {
       position: absolute;
       background: @red;
       pointer-events: auto;
-      content: '';
+      content: "";
     }
-    .triangle:before {
-      transform: scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%)
+
+    .triangle::before {
+      transform:
+        scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%)
         skewX(30deg) scaleY(0.866) translateX(-24%);
     }
-    .triangle:after {
-      transform: scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%)
+
+    .triangle::after {
+      transform:
+        scaleX(1.155) skewY(-30deg) rotate(-30deg) translateY(-42.3%)
         skewX(-30deg) scaleY(0.866) translateX(24%);
     }
+
     user-select: none;
     background: @red;
     border-radius: @corner-rounding-smaller 0 0 @corner-rounding-smaller;
@@ -43,6 +52,7 @@
     padding: 0 0 0 @light-spacing;
     height: 20px;
   }
+
   border-bottom: 1px solid @red;
   position: relative;
   margin-top: @light-spacing;

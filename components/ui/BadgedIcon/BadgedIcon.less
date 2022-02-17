@@ -1,7 +1,8 @@
 .badged-icon {
-  &:extend(.font-accent);
+  &: extend(.font-accent);
+
   .dynamic-icon {
-    filter: drop-shadow(0px 3px 2px @primary-color);
+    filter: drop-shadow(0 3px 2px @primary-color);
   }
 
   .center {
@@ -22,11 +23,14 @@
       .tag-number {
         background: @primary-color-alt;
       }
+
       background: @background;
     }
+
     &:not(body).is-primary {
-      &:extend(.background-primary);
+      &: extend(.background-primary);
     }
+
     position: absolute;
     padding: 0.25rem;
     right: -0.25rem;
@@ -35,6 +39,7 @@
     text-align: right;
     font-family: @primary-font;
   }
+
   display: inline-flex;
   position: relative;
 }

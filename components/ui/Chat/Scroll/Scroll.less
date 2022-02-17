@@ -1,6 +1,6 @@
 .scroll-area {
   margin: auto;
-  &:extend(.full-width);
+  &: extend(.full-width);
   height: @full;
   white-space: nowrap;
 }
@@ -27,6 +27,7 @@
   /* Scroll Width */
   &::-webkit-scrollbar {
     width: 5px;
+
     &:hover {
       width: 11px;
     }
@@ -34,19 +35,19 @@
 
   /* Scroll Track */
   &::-webkit-scrollbar-track {
-    &:extend(.round-corners);
+    &: extend(.round-corners);
   }
 
   /* Scroll Handle */
   &::-webkit-scrollbar-thumb {
-    &:extend(.background-primary);
-    &:extend(.round-corners);
+    &: extend(.background-primary);
+    &: extend(.round-corners);
   }
 }
 
 .new-message-alert {
   position: absolute;
-  &:extend(.background-primary);
+  &: extend(.background-primary);
   cursor: pointer;
   font-size: 14px;
   width: calc(@full - @normal-spacing * 1.8);
@@ -54,6 +55,7 @@
   border-radius: 0 0 @corner-rounding @corner-rounding;
   z-index: @base-z-index + 11;
   padding: (@light-spacing / 2) @light-spacing;
+
   span {
     float: right;
   }
@@ -63,6 +65,7 @@
   .offset {
     top: 17rem;
   }
+
   .new-message-alert {
     min-width: 100vw - @sidebar-size;
   }

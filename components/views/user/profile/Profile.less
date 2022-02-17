@@ -8,13 +8,16 @@
     height: 120px;
     object-fit: cover;
   }
+
   .photo {
     max-height: 424px;
     margin-top: -88px;
   }
+
   .photo-sm {
     display: none;
   }
+
   .profile-body {
     display: flex;
     gap: @large-spacing;
@@ -25,6 +28,7 @@
       display: flex;
       flex-direction: column;
     }
+
     .details-info {
       display: flex;
       flex-direction: row;
@@ -43,6 +47,7 @@
         }
       }
     }
+
     .buttons {
       padding-bottom: @normal-spacing;
       margin-left: auto;
@@ -51,6 +56,7 @@
         display: none;
       }
     }
+
     .about {
       display: flex;
       flex-direction: column;
@@ -61,6 +67,7 @@
         font-size: 12px;
         margin-bottom: 0.5rem;
       }
+
       p {
         font-size: 12px;
       }
@@ -78,11 +85,13 @@
     .photo {
       display: none;
     }
+
     .photo-sm {
       display: block;
       max-height: 212px;
       margin: -88px 8px 0 0;
     }
+
     .profile-body {
       padding-top: 0;
     }
@@ -97,20 +106,24 @@
     .profile-body {
       padding: @large-spacing;
     }
+
     .photo-sm {
       display: none;
     }
   }
 }
+
 @media only screen and (max-width: @mobile-small-breakpoint) {
   #profile {
     .profile-body {
       .buttons {
         margin-left: initial;
         padding: initial;
+
         &.desktop {
           display: none;
         }
+
         &.mobile {
           display: flex;
         }

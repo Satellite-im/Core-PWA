@@ -2,47 +2,52 @@
   --app-height: 100vh;
   --flair-color: @primary-color;
 }
+
 @flair-glow: 0 5px 14px -5px var(--flair-color);
-@switch-off-flair-glow: -5px 0px 20px -2px var(--flair-color);
+
+@switch-off-flair-glow: -5px 0 20px -2px var(--flair-color);
 
 html,
 body {
   position: fixed;
   overflow: hidden;
   height: @full;
-  &:extend(.full-width);
+  &: extend(.full-width);
   overscroll-behavior: none;
   caret-color: var(--flair-color) !important;
 }
 
 html {
-  &:extend(.background-gradient);
+  &: extend(.background-gradient);
 }
 
 .background-flair {
   background: var(--flair-color) !important;
 }
+
 .glow-flair {
   box-shadow: @flair-glow !important;
 }
+
 .color-flair {
   color: var(--flair-color) !important;
 }
+
 .switch-off-glow-flair {
   box-shadow: @switch-off-flair-glow !important;
 }
 
 ::selection {
-  &:extend(.font-secondary);
-  &:extend(.background-flair);
+  &: extend(.font-secondary);
+  &: extend(.background-flair);
 }
 
 .hidden-scroll {
   overflow-y: auto;
   position: relative;
-
   -ms-overflow-style: none;
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
     scrollbar-width: none;
@@ -50,7 +55,7 @@ html {
 }
 
 #app {
-  &:extend(.font-primary);
+  &: extend(.font-primary);
 }
 
 .is-secondary-background {
@@ -58,13 +63,12 @@ html {
 }
 
 .is-collapsed .menu-toggle {
-  &:extend(.font-accent);
+  &: extend(.font-accent);
 }
 // UI Kit
-
 .card {
   background: black;
-  &:extend(.font-primary);
+  &: extend(.font-primary);
 }
 
 .toasted-container.top-center {
@@ -72,10 +76,11 @@ html {
 }
 
 .toasted-container .toasted {
-  &:extend(.background-flair);
+  &: extend(.background-flair);
   color: @secondary-text !important;
   font-family: @primary-font;
 }
+
 .loading-bar {
   .bar {
     background: @text;
@@ -93,49 +98,49 @@ html {
 //Menu
 .menu-list {
   a {
-    &:extend(.font-primary);
+    &: extend(.font-primary);
 
     &.is-active {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
     }
 
     &:hover:not(.is-active) {
-      &:extend(.background-semitransparent-light);
-      &:extend(.font-primary);
+      &: extend(.background-semitransparent-light);
+      &: extend(.font-primary);
     }
   }
 
   li {
     &.is-active {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
     }
 
     a.is-active {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
     }
 
     &:not(.is-active)&:hover {
-      &:extend(.background-semitransparent-light);
+      &: extend(.background-semitransparent-light);
     }
   }
 }
 
 .menu-label {
-  &:extend(.font-muted);
+  &: extend(.font-muted);
 }
 
 .version {
-  &:extend(.font-muted);
+  &: extend(.font-muted);
 }
 
 // Server labels
 #list-container {
   .unread {
     .label {
-      &:extend(.background-flair);
+      &: extend(.background-flair);
     }
   }
 }
@@ -143,16 +148,16 @@ html {
 // Buttons
 .button {
   &.is-primary {
-    &:extend(.background-flair);
-    &:extend(.glow-flair);
+    &: extend(.background-flair);
+    &: extend(.glow-flair);
   }
 
   &.is-primary.is-outlined {
-    &:extend(.font-accent);
+    &: extend(.font-accent);
   }
 
   #custom-cursor-area {
-    &:extend(.font-primary);
+    &: extend(.font-primary);
   }
 
   &.is-danger,
@@ -161,19 +166,19 @@ html {
     box-shadow: @danger-glow !important;
 
     &:hover {
-      &:extend(.glow-danger);
+      &: extend(.glow-danger);
       background: @danger-gradient;
     }
   }
 
   &.is-danger.is-outlined {
-    &:extend(.color-danger);
-    &:extend(.glow-danger);
+    &: extend(.color-danger);
+    &: extend(.glow-danger);
 
     &:hover,
     &:focus {
       background: @danger-gradient;
-      &:extend(.glow-danger);
+      &: extend(.glow-danger);
     }
   }
 }
@@ -181,10 +186,11 @@ html {
 .button-group {
   .button {
     &.active {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
-      &:extend(.font-primary);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
+      &: extend(.font-primary);
     }
+
     &:hover {
       border: none;
     }
@@ -197,30 +203,30 @@ button {
 }
 
 .button.is-dark.is-outlined {
-  &:extend(.font-primary);
+  &: extend(.font-primary);
   border-color: @foreground;
 
   &:hover,
   &:focus {
     background: @foreground;
     border-color: @foreground;
-    &:extend(.font-secondary);
+    &: extend(.font-secondary);
   }
 
   &.active {
-    &:extend(.background-flair);
+    &: extend(.background-flair);
     border-color: @foreground;
-    &:extend(.font-secondary);
+    &: extend(.font-secondary);
   }
 }
 
 .button.is-dark {
-  &:extend(.background-semitransparent-lighter);
-  &:extend(.font-secondary);
+  &: extend(.background-semitransparent-lighter);
+  &: extend(.font-secondary);
 
   &:hover {
     background: @foreground-alt;
-    &:extend(.font-secondary);
+    &: extend(.font-secondary);
   }
 }
 
@@ -233,16 +239,16 @@ button {
   .switch-button-control {
     .switch-button {
       border: 0.125rem solid var(--flair-color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
+      box-shadow: inset 0 0 2px 0 rgb(0 0 0 / 33%);
 
       .sw-button {
-        &:extend(.background-flair);
-        &:extend(.switch-off-glow-flair);
+        &: extend(.background-flair);
+        &: extend(.switch-off-glow-flair);
       }
 
       &.enabled {
-        &:extend(.background-flair);
-        &:extend(.glow-flair);
+        &: extend(.background-flair);
+        &: extend(.glow-flair);
 
         .sw-button {
           border: 0.2rem solid var(--flair-color);
@@ -259,34 +265,35 @@ button {
   &::after {
     border-top-color: var(--flair-color) !important;
   }
-  &:extend(.background-flair);
+
+  &: extend(.background-flair);
 }
 
 //Breadcrumb
 .breadcrumb li:not(.is-active) a {
-  &:extend(.color-flair);
+  &: extend(.color-flair);
 }
 
 //Multiselect & chip items
 .multiselect {
   .multiselect__input {
-    &:extend(.background-flair);
+    &: extend(.background-flair);
     color: @text;
   }
 
   .multiselect__content-wrapper {
     border: 1px solid var(--flair-color);
-    &:extend(.glow-flair);
+    &: extend(.glow-flair);
   }
 
   .multiselect__tags {
-    &:extend(.background-flair);
+    &: extend(.background-flair);
     border: 1px solid var(--flair-color);
   }
 }
 
 .chip-item {
-  &:extend(.background-flair);
+  &: extend(.background-flair);
   border: 1px solid var(--flair-color);
 }
 
@@ -294,19 +301,20 @@ button {
 .toggle-sidebar,
 .toggle--sidebar,
 .menu-toggle {
-  &:extend(.color-flair);
+  &: extend(.color-flair);
 }
 
 //Select
 .is-primary {
   .custom-select {
     color: @text;
+
     .selected {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
 
       &:hover {
-        &:extend(.glow-primary);
+        &: extend(.glow-primary);
       }
     }
   }
@@ -318,8 +326,9 @@ progress.progress {
 
   &.is-primary {
     border-color: var(--flair-color) !important;
+
     &::-webkit-progress-value {
-      &:extend(.background-flair);
+      &: extend(.background-flair);
     }
   }
 
@@ -332,14 +341,16 @@ progress.progress {
     .button,
     div {
       &.is-primary {
-        &:extend(.background-flair);
-        &:extend(.glow-flair);
+        &: extend(.background-flair);
+        &: extend(.glow-flair);
       }
+
       .tag-inverted {
         background: @midground !important;
       }
     }
   }
+
   background: @background !important;
 }
 
@@ -352,53 +363,53 @@ progress.progress {
 .ps__rail-y:hover > .ps__thumb-y,
 .ps__rail-y:focus > .ps__thumb-y,
 .ps__rail-y.ps--clicking .ps__thumb-y {
-  &:extend(.background-flair);
+  &: extend(.background-flair);
 }
 
 .auto-scroll {
   /* Scroll Handle */
   &::-webkit-scrollbar-thumb {
-    &:extend(.background-flair);
+    &: extend(.background-flair);
   }
+
   /* Custom Scroll for Firefox */
   scrollbar-color: var(--flair-color) transparent !important;
 }
 
 .new-message-alert {
-  &:extend(.background-flair);
+  &: extend(.background-flair);
 }
 
 // Files
 .file {
   .file-icon {
-    &:extend(.color-flair);
+    &: extend(.color-flair);
   }
 }
 
 //Search Input
 .search-query-highlight {
-  &:extend(.background-flair);
-  &:extend(.glow-flair);
+  &: extend(.background-flair);
+  &: extend(.glow-flair);
 }
 
 .search-option-group {
   li {
     &:hover:not(:first-child),
     &.active {
-      &:extend(.background-flair);
-      &:extend(.glow-flair);
+      &: extend(.background-flair);
+      &: extend(.glow-flair);
     }
   }
 }
 
 //------------- Navigation -------------
-
 a.link {
-  &:extend(.color-flair);
+  &: extend(.color-flair);
 
   &:hover {
-    &:extend(.color-flair);
-    &:extend(.glow-flair);
+    &: extend(.color-flair);
+    &: extend(.glow-flair);
   }
 }
 
@@ -407,27 +418,27 @@ a.link {
 .vc-weekday,
 .search-result-header,
 .add-more-filters {
-  &:extend(.color-flair);
+  &: extend(.color-flair);
 }
 
 .add-more-filters {
   &:hover {
-    &:extend(.background-flair);
+    &: extend(.background-flair);
     color: @white !important;
   }
-  &:extend(.color-flair);
+
+  &: extend(.color-flair);
 }
 
 li .is-active,
 li.active,
 input.date-input {
-  &:extend(.background-flair);
-  &:extend(.glow-flair);
+  &: extend(.background-flair);
+  &: extend(.glow-flair);
   border: none !important;
 }
 
 // ------------- Ui Elements-------------
-
 * {
   border-color: var(--flair-color);
 }
@@ -435,48 +446,52 @@ input.date-input {
 // Chatbar
 #chatbar {
   .chatbar-controls {
-    div[data-tooltip='Send'] {
-      &:extend(.color-flair);
+    div[data-tooltip="Send"] {
+      &: extend(.color-flair);
     }
   }
 }
 
 .is-chatbar-reply {
-  &:extend(.background-flair);
+  &: extend(.background-flair);
 }
 
 // Inputs
-
 .has-tooltip-primary {
-  &:before {
+  &::before {
     background: transparent;
     background: @semitransparent-dark-gradient !important;
-    &:extend(.blur-less);
+    &: extend(.blur-less);
     font-family: @primary-font !important;
     color: @secondary-text !important;
     z-index: 100000;
   }
 }
+
 .input {
-  &:extend(.input-bg);
-  &:extend(.font-primary);
+  &: extend(.input-bg);
+  &: extend(.font-primary);
   box-shadow: none !important;
+
   &:active,
   &:focus {
     background: @semitransparent-lightest-gradient !important;
   }
 }
+
 .select select {
   background: @midground;
-  &:extend(.font-primary);
+  &: extend(.font-primary);
 }
+
 ::placeholder {
   color: @text-muted !important;
 }
+
 .is-primary.input,
 .is-dark.input {
-  &:extend(.input-bg);
-  &:extend(.font-primary);
+  &: extend(.input-bg);
+  &: extend(.font-primary);
   border: none;
 
   &:active,
@@ -485,11 +500,13 @@ input.date-input {
     outline: none;
   }
 }
+
 .select.is-primary select {
-  &:extend(.background-primary-gradient);
+  &: extend(.background-primary-gradient);
   border: none;
   outline: none;
-  &:extend(.glow-primary);
+  &: extend(.glow-primary);
+
   &::after,
   &::before {
     border-color: @secondary-text;
@@ -511,20 +528,19 @@ input.date-input {
 //Icon
 .icon,
 .file-type-icon {
-  &:extend(.color-flair);
+  &: extend(.color-flair);
 }
 
 // Typography
 .title {
-  &:extend(.font-primary);
+  &: extend(.font-primary);
 }
 
 .subtitle {
-  &:extend(.font-muted);
+  &: extend(.font-muted);
 }
 
 // generic
-
 .mg-none {
   margin: 0 !important;
 }
@@ -538,7 +554,7 @@ input.date-input {
 }
 
 li.active {
-  &:extend(.background-primary-gradient);
+  &: extend(.background-primary-gradient);
 }
 
 *:focus {
@@ -550,12 +566,12 @@ li.active {
 }
 
 code {
-  &:extend(.background-semitransparent-lighter);
-  &:extend(.font-accent);
+  &: extend(.background-semitransparent-lighter);
+  &: extend(.font-accent);
 }
 
 strong {
-  &:extend(.font-secondary);
+  &: extend(.font-secondary);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

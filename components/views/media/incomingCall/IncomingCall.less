@@ -11,13 +11,13 @@
   background-size: cover !important;
   background-position: center !important;
   height: 80%;
-  &:extend(.full-width);
+  &: extend(.full-width);
 }
 
 .gradient-cover {
   background: linear-gradient(transparent, #000 80%);
   height: @full;
-  &:extend(.full-width);
+  &: extend(.full-width);
   position: absolute;
 }
 
@@ -29,7 +29,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  &:extend(.full-width);
+  &: extend(.full-width);
 }
 
 .user-info {
@@ -39,6 +39,7 @@
     font-family: @primary-font;
     margin-bottom: 0;
   }
+
   .user-status {
     opacity: 0.5;
     color: #fff;
@@ -49,21 +50,24 @@
     max-width: @full;
     margin-bottom: @normal-spacing;
   }
+
   position: absolute;
-  &:extend(.full-width);
+  &: extend(.full-width);
   bottom: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px 20px;
 }
+
 .button {
-  &:extend(.full-width);
+  &: extend(.full-width);
   margin: @normal-spacing;
 
   &:nth-child(1) {
     margin-left: 0;
   }
+
   &:nth-child(2) {
     margin-right: 0;
   }
@@ -71,7 +75,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .content {
-    &:extend(.full-width);
+    &: extend(.full-width);
     height: @full;
   }
 

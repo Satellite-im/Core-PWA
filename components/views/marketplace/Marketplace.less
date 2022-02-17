@@ -10,6 +10,7 @@
     margin-bottom: -@normal-spacing;
     margin-left: -@normal-spacing;
     margin-right: -@normal-spacing;
+
     .scroll-area {
       padding-left: @normal-spacing;
       padding-right: @normal-spacing;
@@ -18,8 +19,9 @@
 
   .side-bar {
     width: 312px;
-    &:extend(.background-semitransparent-dark);
+    &: extend(.background-semitransparent-dark);
   }
+
   .body-panel {
     width: 784px;
     padding: 32px;
@@ -27,21 +29,24 @@
     .top-bar {
       display: flex;
       align-items: center;
+
       .search {
         flex-grow: 1;
         margin-right: 32px;
       }
+
       .filter {
         flex-shrink: 0;
         margin-right: 32px;
       }
+
       .action {
         flex-shrink: 0;
       }
     }
 
     .buttons-bar {
-      margin: 24px 0px;
+      margin: 24px 0;
       display: flex;
       justify-content: center;
     }

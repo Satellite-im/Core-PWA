@@ -1,15 +1,15 @@
 .audio {
-  &:extend(.half-width);
+  &: extend(.half-width);
   max-width: 400px;
   margin: @normal-spacing 0;
 }
 
 .plyr--audio {
-  &:extend(.round-corners);
+  &: extend(.round-corners);
 
   .plyr__controls {
-    &:extend(.round-corners);
-    &:extend(.bordered);
+    &: extend(.round-corners);
+    &: extend(.bordered);
     background: @semitransparent-light-gradient !important;
     color: @secondary-text !important;
   }
@@ -21,7 +21,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .audio {
-    &:extend(.full-width);
+    &: extend(.full-width);
     max-width: @full;
   }
 }

@@ -3,44 +3,51 @@
     .btn-group {
       display: flex;
       justify-content: space-between;
+
       .favorite {
         font-size: 18px;
       }
     }
-    &:extend(.full-width);
+
+    &: extend(.full-width);
     height: 5rem;
     background-position: center;
     background-size: @full;
     background-repeat: no-repeat;
     padding: @normal-spacing;
   }
+
   .card-text {
     .name {
       font-size: 14px;
       font-weight: 600;
       margin-bottom: 8px;
     }
+
     .description {
       font-size: 12px;
       margin-bottom: 8px;
     }
+
     .glyph-img {
       margin-top: @normal-spacing;
       display: flex;
       justify-content: space-between;
       align-items: baseline;
     }
-    &:extend(.full-width);
+
+    &: extend(.full-width);
     height: 11rem;
     padding: @normal-spacing;
-    &:extend(.background-semitransparent-dark);
+    &: extend(.background-semitransparent-dark);
   }
+
   font-family: @primary-font;
-  &:extend(.round-corners);
+  &: extend(.round-corners);
   overflow: hidden;
-  &:extend(.full-width);
+  &: extend(.full-width);
   max-width: @full;
-  &:extend(.bordered);
+  &: extend(.bordered);
   background: transparent;
   box-shadow: none;
 }

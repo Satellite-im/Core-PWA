@@ -5,12 +5,12 @@
   }
 
   .active {
-    &:extend(.background-primary);
-    &:extend(.font-secondary);
+    &: extend(.background-primary);
+    &: extend(.font-secondary);
     border-radius: @corner-rounding-smaller;
 
     &:hover {
-      &:extend(.background-primary);
+      &: extend(.background-primary);
     }
   }
 
@@ -21,11 +21,12 @@
     display: inline-flex;
     align-items: center;
     border-radius: @corner-rounding-smaller;
-    &:extend(.full-width);
+    &: extend(.full-width);
 
     .dynamic-icon {
       margin-right: @light-spacing;
     }
+
     &:hover {
       background: @foreground;
     }

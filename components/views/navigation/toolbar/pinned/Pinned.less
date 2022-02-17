@@ -3,16 +3,17 @@
   display: inline-flex;
   top: calc(@toolbar-height - @light-spacing);
   width: 22rem;
-  &:extend(.background-semitransparent-light);
-  &:extend(.round-corners);
-  &:extend(.bordered);
-  &:extend(.blur);
+  &: extend(.background-semitransparent-light);
+  &: extend(.round-corners);
+  &: extend(.bordered);
+  &: extend(.blur);
   max-height: 50vh;
   overflow: hidden;
 
   .pinned-wrap {
     overflow: hidden;
   }
+
   img {
     max-width: @full;
   }
@@ -22,6 +23,7 @@
       font-size: @micro-text-size !important;
       font-family: @primary-font;
     }
+
     font-size: @micro-text-size !important;
     font-family: @primary-font;
   }
@@ -33,6 +35,7 @@
   .filters {
     text-align: right;
   }
+
   .filter {
     font-size: @text-size;
     display: inline-block;
@@ -53,14 +56,15 @@
     .is-message {
       margin-bottom: 0;
     }
+
     .wrap {
       position: relative;
       padding: 0 @light-spacing;
       padding-bottom: @light-spacing;
       margin-bottom: @light-spacing;
-      &:extend(.background-semitransparent-lighter);
-      &:extend(.round-corners);
-      &:extend(.bordered);
+      &: extend(.background-semitransparent-lighter);
+      &: extend(.round-corners);
+      &: extend(.bordered);
 
       .button {
         padding: 0 @light-spacing;
@@ -70,9 +74,11 @@
         top: @light-spacing;
         right: @light-spacing;
       }
+
       .button.is-dark {
         right: 2rem;
       }
+
       svg {
         position: absolute;
         right: @light-spacing;
@@ -80,6 +86,7 @@
         font-size: @text-size;
         cursor: pointer;
       }
+
       .badged-icon {
         svg {
           right: -0.4rem;
