@@ -15,7 +15,6 @@ const mutationsBlacklist = [
   'ui/setMessages',
   'ui/sendMessage',
   'chat/addFile',
-  'chat/setFiles',
 ]
 
 // State properties path to blacklist saving to store
