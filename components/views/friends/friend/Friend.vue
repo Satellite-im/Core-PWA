@@ -70,6 +70,7 @@ export default Vue.extend({
         this.friend?.request?.userInfo?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    AddFriendEnum: () => AddFriendEnum,
   },
   methods: {
     async createFriendRequest() {
@@ -126,7 +127,17 @@ export default Vue.extend({
       }
     },
     // todo - remove friend request for both users on click
-    async cancelRequest() {},
+    async cancelRequest() {
+      this.loading = AddFriendEnum.REMOVE
+      try {
+        await this.$store.dispatch(
+          'friends/removeFriendRequest',
+          this.friend.request,
+        )
+      } finally {
+        this.loading = AddFriendEnum.EMPTY
+      }
+    },
     sendMessageRequest() {
       this.$router.push(`/chat/direct/${this.$props.friend.address}`)
     },

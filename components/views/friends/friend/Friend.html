@@ -12,7 +12,7 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.accept')"
-      :loading="loading === 'accept'"
+      :loading="loading === AddFriendEnum.ACCEPT"
       :action="acceptFriendRequest"
     >
       <check-icon size="1x" />
@@ -23,7 +23,7 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.decline')"
-      :loading="loading === 'decline'"
+      :loading="loading === AddFriendEnum.DECLINE"
       :action="declineFriendRequest"
     >
       <x-icon size="1x" />
@@ -46,7 +46,7 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.send')"
-      :loading="loading === 'sending'"
+      :loading="loading === AddFriendEnum.SENDING"
       :action="createFriendRequest"
     >
       <check-icon size="1x" />
@@ -58,7 +58,7 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.cancel')"
-      :loading="loading === 'options'"
+      :loading="loading === AddFriendEnum.REMOVE"
       :action="cancelRequest"
     >
       <x-icon size="1x" />
@@ -80,7 +80,7 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.options')"
-      :loading="loading === 'options'"
+      :loading="loading === AddFriendEnum.OPTIONS"
       :action="contextMenu"
     >
       <more-vertical-icon size="1x" />
