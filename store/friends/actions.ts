@@ -26,7 +26,6 @@ import {
 import { ActionsArguments } from '~/types/store/store'
 import { RawUser } from '~/types/ui/user'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
 
 export default {
   /**
@@ -41,15 +40,6 @@ export default {
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
-
-    // Groupchat testing
-    const groupchatsProgram: GroupchatsProgram = new GroupchatsProgram(
-      $SolanaManager,
-    )
-
-    groupchatsProgram.create(
-      'dhfskjdfhsdjkfhsdjkfhdsjkhdjkfdhfskjdfhsdjkfhsdjkfhdsjkhdjkfdfrt',
-    )
 
     const { incoming, outgoing } =
       await friendsProgram.getFriendAccountsByStatus(FriendStatus.PENDING)

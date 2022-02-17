@@ -17,7 +17,7 @@ export type Groupchats = {
         },
         {
           name: 'signer'
-          isMut: true
+          isMut: false
           isSigner: true
         },
         {
@@ -34,7 +34,9 @@ export type Groupchats = {
       args: [
         {
           name: 'groupHash'
-          type: 'string'
+          type: {
+            array: ['u8', 32]
+          }
         },
         {
           name: 'groupId'
@@ -66,7 +68,7 @@ export type Groupchats = {
         },
         {
           name: 'signer'
-          isMut: true
+          isMut: false
           isSigner: true
         },
         {
@@ -101,7 +103,7 @@ export type Groupchats = {
         },
         {
           name: 'successor'
-          isMut: true
+          isMut: false
           isSigner: false
         },
         {
@@ -158,7 +160,7 @@ export type Groupchats = {
         },
         {
           name: 'successor'
-          isMut: true
+          isMut: false
           isSigner: false
         },
         {
@@ -299,7 +301,7 @@ export const IDL: Groupchats = {
         },
         {
           name: 'signer',
-          isMut: true,
+          isMut: false,
           isSigner: true,
         },
         {
@@ -316,7 +318,9 @@ export const IDL: Groupchats = {
       args: [
         {
           name: 'groupHash',
-          type: 'string',
+          type: {
+            array: ['u8', 32],
+          },
         },
         {
           name: 'groupId',
@@ -348,7 +352,7 @@ export const IDL: Groupchats = {
         },
         {
           name: 'signer',
-          isMut: true,
+          isMut: false,
           isSigner: true,
         },
         {
@@ -383,7 +387,7 @@ export const IDL: Groupchats = {
         },
         {
           name: 'successor',
-          isMut: true,
+          isMut: false,
           isSigner: false,
         },
         {
@@ -440,7 +444,7 @@ export const IDL: Groupchats = {
         },
         {
           name: 'successor',
-          isMut: true,
+          isMut: false,
           isSigner: false,
         },
         {

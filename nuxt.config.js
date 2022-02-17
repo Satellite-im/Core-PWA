@@ -3,7 +3,6 @@ import pkg from './package.json'
 
 export default defineNuxtConfig({
   alias: {
-    '@project-serum/anchor': '@project-serum/anchor/dist/cjs/index.js',
     tslib: 'tslib/tslib.es6.js',
   },
   bridge: {
