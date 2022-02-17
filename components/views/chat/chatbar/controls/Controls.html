@@ -1,13 +1,20 @@
 <div class="chatbar-controls">
-  <button
-    id="send-money-toggle"
-    :data-tooltip="$t('wallet.send_money')"
-    @click="toggleMiniWallet"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
-    :disabled="disabled"
+  <UiComingSoon
+    :tooltipText="$t('coming_soon.send_money')"
+    :tooltipPosition="'top'"
+    :marginTopOverride="'4px'"
   >
-    <banknote-icon size="1x" :class="`control-icon `" />
-  </button>
+    <!-- to add disable color to icon, had to add color="grey" to the icon -->
+    <button
+      id="send-money-toggle"
+      :data-tooltip="$t('wallet.send_money')"
+      @click="toggleMiniWallet"
+      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+      :disabled="disabled"
+    >
+      <banknote-icon size="1x" :class="`control-icon `" color="grey" />
+    </button>
+  </UiComingSoon>
   <button
     id="glyph-toggle"
     :data-tooltip="$t('ui.glyphs')"

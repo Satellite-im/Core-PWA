@@ -1,0 +1,13 @@
+<div
+  class="has-tooltip-primary tooltip-container"
+  :class="`has-tooltip-${tooltipPosition}`"
+  :data-tooltip="tooltipText"
+>
+  <div
+    class="coming-soon"
+    :style="{'margin-top': marginTopOverride}"
+    @click="preventClickthrough"
+  >
+    <slot></slot>
+  </div>
+</div>

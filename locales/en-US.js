@@ -1,4 +1,8 @@
 export default {
+  coming_soon: {
+    communities: 'Communities\nComing Soon',
+    send_money: 'Send Money\nComing Soon',
+  },
   global: {
     name: 'Satellite.im',
     encrypted: 'Encrypted',
