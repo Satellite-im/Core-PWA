@@ -15,6 +15,7 @@ declare module 'vue/types/vue' {
     testFunc: () => void
     navigateToUser: () => void
     handleShowProfile: () => void
+    removeUser: () => void
   }
 }
 export default Vue.extend({
@@ -40,10 +41,11 @@ export default Vue.extend({
         { text: 'Send Message', func: this.navigateToUser },
         { text: 'Voice Call', func: this.testFunc },
         { text: 'Video Call', func: this.testFunc },
-        { text: 'Remove Friend', func: this.testFunc },
+        { text: 'Remove Friend', func: this.removeUser },
         { text: 'Profile', func: this.handleShowProfile },
       ],
       existConversation: false,
+      isLoading: false,
     }
   },
   computed: {
@@ -65,6 +67,19 @@ export default Vue.extend({
   methods: {
     testFunc() {
       this.$Logger.log('User Context', 'Test func')
+    },
+    async removeUser() {
+      this.isLoading = true
+      try {
+        await this.$store.dispatch('friends/removeFriend', this.user)
+        this.$router.replace('/chat/direct')
+      } catch (e) {
+        this.$toast.success(
+          this.$t('errors.friends.friend_not_removed') as string,
+        )
+      } finally {
+        this.isLoading = false
+      }
     },
     /**
      * @method navigateToUser

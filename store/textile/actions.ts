@@ -236,6 +236,7 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { to, file }: { to: string; file: UploadDropItemType },
   ) {
+    commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const path = `/${file.file.name}`
@@ -280,6 +281,7 @@ export default {
       address: friend.address,
       message: sendFileResult,
     })
+    commit('setMessageLoading', { loading: false })
   },
   /**
    * @description Sends a reaction message to a given friend

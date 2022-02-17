@@ -6,8 +6,9 @@ import { FileSystemErrors } from '../errors/Errors'
 describe('Test FileSystem Directory', () => {
   const mockFileData = {
     name: 'TestFile.png',
-    descrption: 'Test file description',
     hash: '0x0aef',
+    size: 4235,
+    descrption: 'Test file description',
   }
 
   const mockDirectoryData = {
@@ -15,7 +16,7 @@ describe('Test FileSystem Directory', () => {
     type: DIRECTORY_TYPE.DEFAULT,
   }
 
-  const file = new Fil(...Object.values(mockFileData))
+  const file = new Fil(mockFileData)
   const directory = new Directory(...Object.values(mockDirectoryData))
 
   it('Correctly returns a directory name', () =>

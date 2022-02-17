@@ -10,7 +10,6 @@ import { isHeic } from '~/utilities/Heic'
 import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 const converter = require('heic-convert')
-
 declare module 'vue/types/vue' {
   interface Vue {
     loadPicture: (item: UploadDropItemType) => void
@@ -20,7 +19,6 @@ declare module 'vue/types/vue' {
     alertNsfwFile: () => void
   }
 }
-
 export default Vue.extend({
   name: 'Upload',
   components: {
@@ -67,13 +65,17 @@ export default Vue.extend({
   },
   watch: {
     recipient() {
-      this.$data.filesDB[this.recipient.address] ||= []
-      this.$data.files = this.$data.filesDB[this.recipient.address]
+      if (this.recipient?.address) {
+        this.$data.filesDB[this.recipient.address] ||= []
+        this.$data.files = this.$data.filesDB[this.recipient.address]
+      }
     },
   },
   mounted() {
-    this.$data.filesDB[this.recipient.address] ||= []
-    this.$data.files = this.$data.filesDB[this.recipient.address]
+    if (this.recipient?.address) {
+      this.$data.filesDB[this.recipient.address] ||= []
+      this.$data.files = this.$data.filesDB[this.recipient.address]
+    }
   },
   methods: {
     /**
@@ -144,7 +146,6 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
-
           this.loadPicture(uploadFile)
         })
         // this allows subsequent file selections to add to the pending files array
@@ -256,22 +257,24 @@ export default Vue.extend({
      * eslint is expecting return. may need refactoring
      */
     async sendMessage() {
-      const nsfwCheck = this.$data.filesDB[this.recipient.address].filter(
-        (file: UploadDropItemType) => {
-          if (!file.nsfw.status) {
-            return file
-          }
-          this.$data.containsNsfw = true
-          if (this.$data.files.length === 1) {
-            this.alertNsfwFile()
-          }
-          return null
-        },
-      )
-      nsfwCheck.forEach((file: UploadDropItemType) => {
-        this.$data.fileAmount = nsfwCheck.length
-        this.dispatchFile(file)
-      })
+      if (this.recipient?.address) {
+        const nsfwCheck = this.$data.filesDB[this.recipient.address].filter(
+          (file: UploadDropItemType) => {
+            if (!file.nsfw.status) {
+              return file
+            }
+            this.$data.containsNsfw = true
+            if (this.$data.files.length === 1) {
+              this.alertNsfwFile()
+            }
+            return null
+          },
+        )
+        nsfwCheck.forEach((file: UploadDropItemType) => {
+          this.$data.fileAmount = nsfwCheck.length
+          this.dispatchFile(file)
+        })
+      }
     },
   },
 })

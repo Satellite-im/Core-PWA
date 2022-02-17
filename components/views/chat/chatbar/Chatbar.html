@@ -28,7 +28,7 @@
     <Editable
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient)"
+      :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
@@ -37,7 +37,7 @@
     />
 
     <ChatbarControls
-      :editable="recipient ? true : false"
+      :disabled="!recipient"
       :sendMessage="sendMessage"
       id="chatbar-controls"
     />

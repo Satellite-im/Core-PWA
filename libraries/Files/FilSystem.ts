@@ -82,10 +82,15 @@ export class FilSystem {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
       version: 1,
-      content: this.content,
+      content: this.root.content,
     }
   }
 
+  /**
+   * @method import
+   * @param {FileSystemExport} fs
+   * @description sets global file system based on parameter. will be fetched from Bucket
+   */
   public import(fs: FileSystemExport) {
     fs.content.forEach((e) => {
       this.addChild(e)
@@ -98,8 +103,12 @@ export class FilSystem {
    * @argument {any[]} options list of additional arguments to pass to new file
    * @returns {Fil | null} Returns the new file if successfully created, else null
    */
-  public createFile(fileName: string, ...options: any[]): Fil | null {
-    const newFile = new Fil(fileName, ...options)
+  public createFile(file: File, hash?: string): Fil | null {
+    const newFile = new Fil({
+      name: file.name,
+      hash: hash || 'asd7x89',
+      size: file.size,
+    })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
   }
@@ -188,21 +197,6 @@ export class FilSystem {
     }
 
     return null
-  }
-
-  /**
-   * @method printCurrentDirectory
-   */
-  public printCurrentDirectory(): void {
-    console.log(
-      `\n[${this.currentDirectoryPath.join('/')}]:` +
-        (this.currentDirectory.content
-          .map(
-            (item) =>
-              `\n[${item.constructor.name.substring(0, 1)}]-> ${item.name}`,
-          )
-          .join('') || '\n(empty)'),
-    )
   }
 
   /**
@@ -405,7 +399,7 @@ export class FilSystem {
   }
 
   /**
-   * @method setupAndFind
+   * @method getDirectoryFromPath
    * Get a directory given a string path to the directory
    * @argument {string} dirPath string path to the directory to get
    * @returns {Directory | null} returns the directory or null if it can't be found

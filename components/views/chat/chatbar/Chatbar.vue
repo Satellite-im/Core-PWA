@@ -55,7 +55,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat']),
+    ...mapState(['ui', 'friends', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -174,8 +174,14 @@ export default Vue.extend({
     ) {
       const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
-        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-        activePeer?.send('TYPING_STATE', { state })
+        try {
+          const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+          activePeer?.send('TYPING_STATE', { state })
+        } catch (error: any) {
+          this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
+            error,
+          })
+        }
       }
     },
     /**
@@ -302,8 +308,9 @@ export default Vue.extend({
      */
     handleUpload(items: Array<object>, e: Event) {
       const arrOfFiles: File[] = [...items]
-        .filter((f: any) => f.type.includes(MessagingTypesEnum.IMAGE))
+        .filter((f: any) => !f.type.includes(MessagingTypesEnum.TEXT))
         .map((f: any) => f.getAsFile())
+
       if (arrOfFiles.length) {
         e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }

@@ -1,51 +1,28 @@
 <template src="./Filepath.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-
+import Vue from 'vue'
 import { HomeIcon } from 'satellite-lucide-icons'
-
-import { FileType, Folder } from '~/types/files/file'
 
 export default Vue.extend({
   components: {
     HomeIcon,
   },
-  props: {
+  computed: {
     /**
-     * The array of children to path through
+     * @returns string array of file paths to current directory (not including root)
      */
-    path: {
-      type: Array as PropType<Array<FileType | Folder>>,
-      default: () => [],
-    },
-    /**
-     * Pull n amount of children off the path
-     */
-    pull: {
-      type: Function,
-      default: () => () => {},
-    },
-    /**
-     * Set the path array manually
-     */
-    setPath: {
-      type: Function,
-      default: () => () => {},
+    path(): string[] {
+      return this.$FileSystem.currentDirectoryPath?.slice(1) ?? []
     },
   },
   methods: {
     /**
-     * Gets the data path attribute and manually updates parent path
+     * @method goBackToDirectory
+     * @description Navigate to specific directory in file system
+     * @param string directory name
      */
-    /**
-     * @method jumpTo DocsTODO
-     * @description
-     * @param e
-     * @returns
-     * @example
-     */
-    jumpTo(e: Event | any) {
-      this.setPath(JSON.parse(e.currentTarget.getAttribute('data-self-path')))
+    goBackToDirectory(dir: string) {
+      this.$FileSystem.goBackToDirectory(dir)
     },
   },
 })
