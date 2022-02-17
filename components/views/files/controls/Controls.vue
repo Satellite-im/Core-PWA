@@ -3,6 +3,7 @@
 import Vue from 'vue'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
+const convert = require('heic-convert')
 
 export default Vue.extend({
   components: {
@@ -65,12 +66,34 @@ export default Vue.extend({
       this.error = ''
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] = [
         ...event.target.files,
-      ].map(async (file) => {
+      ].map(async (file: File) => {
         // don't scan large files to prevent crash
         if (file.size > this.$Config.uploadByteLimit) {
           return { file, nsfw: false }
         }
-        return { file, nsfw: await this.$Security.isNSFW(file) }
+        // convert heic to jpg for scan. return original heic if sfw
+        if (file.type === 'image/heic') {
+          const buffer = new Uint8Array(await file.arrayBuffer())
+          const outputBuffer = await convert({
+            buffer,
+            format: 'JPEG',
+            quality: 1,
+          })
+          const fileJpg = new File([outputBuffer.buffer], file.name, {
+            type: 'image/jpeg',
+          })
+          return { file, nsfw: await this.$Security.isNSFW(fileJpg) }
+        }
+
+        // todo - fix this as part of AP-807. marks nsfw if unscannable image type (tiff)
+        let nsfw
+        try {
+          nsfw = await this.$Security.isNSFW(file)
+        } catch {
+          nsfw = true
+        }
+
+        return { file, nsfw }
       })
 
       const files: File[] = []
