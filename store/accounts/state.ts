@@ -13,7 +13,7 @@ const InitialAccountsState = (): AccountsState => ({
   loading: false,
   registered: false,
   registrationStatus: RegistrationStatus.UNKNOWN,
-  lastVisited: '',
+  lastVisited: '/',
 })
 
 export default InitialAccountsState

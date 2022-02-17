@@ -31,20 +31,17 @@ export default Vue.extend({
     },
   },
   watch: {
-    // this.$router.replace('/chat/direct')
     allPrerequisitesReady(nextValue) {
       if (nextValue) {
-        if (
-          this.accounts.lastVisited &&
-          this.accounts.lastVisited !== this.$route.path
-        ) {
-          const matcher = this.$router.match(this.accounts.lastVisited)
-          if (matcher.matched.length > 0) {
-            this.$router.replace(this.accounts.lastVisited)
-            return
-          }
+        if (this.accounts.lastVisited === this.$route.path) {
+          this.$router.replace('/chat/direct')
+          return
         }
-        this.$router.replace('/chat/direct')
+
+        const matcher = this.$router.match(this.accounts.lastVisited)
+        if (matcher.matched.length > 0) {
+          this.$router.replace(this.accounts.lastVisited)
+        }
       }
     },
   },
