@@ -764,4 +764,91 @@ export default {
       message: sendFileResult,
     })
   },
+  /**
+   * @description Sends a reply message to a given group
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * the text message and the id of the message the user replied to
+   */
+  async sendGroupReplyMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    {
+      to,
+      replyTo,
+      text,
+      replyType,
+    }: {
+      to: string
+      replyTo: string
+      text: string
+      replyType: 'file' | 'text' | 'media'
+    },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+
+    commit('setMessageLoading', { loading: true })
+    commit(
+      'ui/setReplyChatbarContent',
+      {
+        id: '',
+        payload: '',
+        from: '',
+      },
+      { root: true },
+    )
+
+    const result = await $GroupChatManager.sendMessage<'reply'>(to, {
+      to,
+      payload: text,
+      repliedTo: replyTo,
+      type: 'reply',
+      replyType,
+    })
+
+    commit('addMessageToConversation', {
+      address: to,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+    dispatch('storeMessage', { address: to, message: result })
+    commit('setMessageLoading', { loading: false })
+  },
+  /**
+   * @description Sends a reaction message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key),
+   * the emoji and the id of the message the user reacted to
+   */
+  async sendGroupReactionMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { to, reactTo, emoji }: { to: string; reactTo: string; emoji: string },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const result = await $GroupChatManager.sendMessage<'reaction'>(to, {
+      to,
+      payload: emoji,
+      reactedTo: reactTo,
+      type: 'reaction',
+    })
+    commit('addMessageToConversation', {
+      address: to,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: result,
+    })
+    dispatch('storeMessage', { address: to, message: result })
+  },
 }

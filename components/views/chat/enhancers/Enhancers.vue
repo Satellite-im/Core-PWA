@@ -109,17 +109,37 @@ export default Vue.extend({
      * @example v-on:select="addEmoji"
      */
     addEmoji(emoji: any, emojiName: string) {
-      if (this.ui.settingReaction.status) {
-        this.$store.dispatch('textile/sendReactionMessage', {
-          to: this.ui.settingReaction.to,
-          emoji,
-          reactTo: this.ui.settingReaction.messageID,
-        })
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+      ) {
+        if (this.ui.settingReaction.status) {
+          this.$store.dispatch('textile/sendGroupReactionMessage', {
+            to: this.ui.settingReaction.to,
+            emoji,
+            reactTo: this.ui.settingReaction.messageID,
+          })
+        } else {
+          this.$store.dispatch('ui/setChatbarContent', {
+            content: this.ui.chatbarContent + emoji,
+            userId: this.$props.recipient?.address,
+          })
+          this.$store.dispatch('ui/setChatbarFocus')
+        }
+        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
+        this.toggleEnhancers()
       } else {
-        this.$emit('click', emoji)
+        if (this.ui.settingReaction.status) {
+          this.$store.dispatch('textile/sendReactionMessage', {
+            to: this.ui.settingReaction.to,
+            emoji,
+            reactTo: this.ui.settingReaction.messageID,
+          })
+        } else {
+          this.$emit('click', emoji)
+        }
+        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
+        this.toggleEnhancers()
       }
-      this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
-      this.toggleEnhancers()
     },
     /**
      * @method setRoute DocsTODO
