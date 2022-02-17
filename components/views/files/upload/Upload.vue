@@ -153,6 +153,7 @@ export default Vue.extend({
         this.$data.filesDB[this.recipient.address].push(...tempFiles)
         this.$data.uploadStatus = true
       }
+      this.$store.dispatch('ui/setChatbarFocus')
     },
     handleTouchPreview(event: Event) {
       event.stopPropagation()
