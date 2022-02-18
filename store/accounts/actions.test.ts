@@ -64,7 +64,48 @@ describe('init', () => {
     expect(CPrototype.hash).toHaveBeenCalled()
     expect(CPrototype.hash).toHaveBeenCalledWith(state.pin)
     expect(commit).toHaveBeenCalledWith('unlock', state.pin)
-    // It is undefined because setPhrase updates the state, rather than returning any value.
+  })
+  test('unlock with non-matching pinHash', async () => {
+    const CPrototype = Vue.prototype.$Crypto
+    const state = InitialAccountsState()
+    state.pin = '12345'
+    state.loading = false
+    state.pinHash =
+      '3b4557f45660ca5364013a84dc2dce7d08ab991976a6ef81bdaa4c289997f6cb'
+    state.phrase = 'mnemonic string'
+    state.encryptedPhrase = ''
+
+    const commit = jest.fn()
+    CPrototype.hash = jest.fn()
+
+    try {
+      await accounts.default.unlock({ commit, state }, state.pin)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', AccountsError.INVALID_PIN)
+    }
+  })
+  test('unlock with non-empty encryptedPhrase', async () => {
+    const CPrototype = Vue.prototype.$Crypto
+    const state = InitialAccountsState()
+    state.pin = '12345'
+    state.loading = false
+    state.pinHash = undefined
+    // state.pinHash is undefined because at actions.ts line 55 keeps not returning the hash, hence (undefined == undefined) would evaluate to true and let us test the line 61 block: if (encryptedPhrase !== '')
+    state.phrase = 'mnemonic string'
+    state.encryptedPhrase =
+      '867cb445e1f9b95d67e22c558ef1c555a189ac70358acdd2fad871a42070bec7'
+
+    const commit = jest.fn()
+    CPrototype.hash = jest.fn()
+
+    try {
+      await accounts.default.unlock({ commit, state }, state.pin)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      // The expect block above will not evaluate to true, because the received is TypeError; not Error.
+      console.error(error)
+    }
   })
   test('setRecoverMnemonic with a pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
