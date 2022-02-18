@@ -74,6 +74,7 @@ export default Vue.extend({
     },
   },
   mounted() {
+    console.log('test')
     this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
   },
   methods: {
@@ -101,6 +102,7 @@ export default Vue.extend({
           this.$data.count_error = true
           return
         }
+        const address = this.recipient.address
         this.$data.count_error = false
         for (let i = 0; i < files.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */
@@ -145,6 +147,10 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
+          this.$store.commit('chat/addFile', {
+            file: uploadFile,
+            address,
+          })
           this.loadPicture(uploadFile)
         })
         this.files.push(...newFiles)
@@ -167,10 +173,6 @@ export default Vue.extend({
         if (e.target) item.url = e.target.result
       }
       reader.readAsDataURL(item.file)
-      this.$store.commit('chat/addFile', {
-        file: item,
-        address: this.recipient.address,
-      })
     },
     /**
      * @method cancelUpload
