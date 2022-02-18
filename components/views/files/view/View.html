@@ -4,7 +4,7 @@
       <TypographyTitle :text="file.name" :size="6" />
       <TypographyText :text="file.type" :size="6" />
       <TypographyText :text="$filesize(file.size)" :size="6" />
-      <TypographyText :text="$dayjs(file.modified).from()" :size="6" />
+      <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
     </div>
     <div class="controls">
       <div
@@ -16,18 +16,19 @@
       <a
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="file.location"
+        :href="path"
         target="_blank"
         :download="file.name"
       >
         <download-icon size="1x" />
       </a>
-      <div
+      <a
         :data-tooltip="$t('controls.share_link')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+        @click="share"
       >
         <link-icon size="1x" />
-      </div>
+      </a>
       <div
         :data-tooltip="$t('ui.close')"
         v-on:click="close"
@@ -44,7 +45,7 @@
     <a
       :data-tooltip="$t('controls.download')"
       class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :href="file.location"
+      :href="path"
       target="_blank"
       :download="file.name"
     >
@@ -53,6 +54,6 @@
     <TypographyTitle :size="4" :text="file.name" />
     <TypographySubtitle :size="6" :text="file.type" />
     <TypographySubtitle :text="$filesize(file.size)" :size="6" />
-    <TypographySubtitle :text="$dayjs(file.modified).from()" :size="6" />
+    <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
   </div>
 </div>

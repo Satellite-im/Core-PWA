@@ -88,11 +88,11 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * @method toggleShared
-   * @description toggle shared status
+   * @method shareItem
+   * @description set shared status to true
    */
-  toggleShared() {
-    this._shared = !this._shared
+  shareItem() {
+    this._shared = true
   }
 
   /**

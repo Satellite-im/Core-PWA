@@ -3,6 +3,7 @@
   @click="fileClick"
   @mouseover="fileHover=true"
   @mouseleave="fileHover=false"
+  @contextmenu="contextMenu"
 >
   <div class="quick-actions">
     <link-icon
@@ -20,11 +21,7 @@
       @mouseleave="heartHover=false"
     />
   </div>
-  <div
-    v-if="isImage(item.type)"
-    class="image-preview"
-    :style="`background-image: url('${item.location}')`"
-  />
+  <img v-if="isImage" class="image-preview" :src="path" />
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
     <!-- todo - condition for zip image after confirming how type data will come through - AP-641 -->

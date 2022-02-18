@@ -12,6 +12,7 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
 
 export default {
   /**
@@ -171,13 +172,24 @@ export default {
     // TODO: move this logic into a startup action
     // Initialize textile
     const { pin } = state
-    const textileConfig = {
+    dispatch(
+      'textile/initialize',
+      {
+        id: userAccount?.publicKey.toBase58(),
+        pass: pin,
+        wallet: $SolanaManager.getMainSolanaWalletInstance(),
+      },
+      { root: true },
+    )
+
+    // initialize bucket
+    const $Bucket: Bucket = Vue.prototype.$Bucket
+    await $Bucket.init({
       id: userAccount?.publicKey.toBase58(),
-      pass: pin,
+      pass: pin!,
       wallet: $SolanaManager.getMainSolanaWalletInstance(),
-    }
-    dispatch('textile/initialize', textileConfig, { root: true })
-    dispatch('bucket/initialize', textileConfig, { root: true })
+      name: 'personal-files',
+    })
 
     // Initialize WebRTC with our ID
     dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {

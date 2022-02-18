@@ -104,9 +104,9 @@ export default Vue.extend({
         }
       }
 
-      files.forEach((file) => {
+      files.forEach(async (file) => {
         try {
-          this.$FileSystem.createFile(file)
+          await this.$FileSystem.uploadFile(file)
         } catch (e: any) {
           this.error = e?.message ?? ''
         }

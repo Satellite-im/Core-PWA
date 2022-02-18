@@ -23,23 +23,36 @@ export default Vue.extend({
   props: {
     file: {
       type: Object as PropType<Fil>,
-      default: () => {},
+      required: true,
     },
     close: {
       type: Function,
-      default: () => () => {},
+      required: true,
+    },
+  },
+  computed: {
+    path(): string {
+      return this.$Config.textile.browser + this.file.hash
     },
   },
   methods: {
     /**
-     * @method open DocsTODO
-     * @description
-     * @param location
-     * @returns
-     * @example
+     * @method open
+     * @description open file in new tab onclick
      */
-    open(location: string): void {
-      window.open(location)
+    open() {
+      window.open(this.path)
+    },
+    /**
+     * @method share
+     * @description copy link to clipboard and toggle shared status
+     */
+    share() {
+      navigator.clipboard.writeText(this.path).then(() => {
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
+      })
+      this.file.shareItem()
+      this.$emit('forceRender')
     },
   },
 })

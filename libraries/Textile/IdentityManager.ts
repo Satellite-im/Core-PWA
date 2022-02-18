@@ -64,7 +64,7 @@ export default class IdentityManager {
    * @param wallet a Solana Wallet instance
    * @returns the identity
    */
-  async initFromWallet(wallet: SolanaWallet) {
+  async initFromWallet(wallet: SolanaWallet): Promise<Identity> {
     const cryptoInstance = new Crypto()
 
     const secret = await cryptoInstance.hash('Satellite.im')
@@ -113,7 +113,7 @@ export default class IdentityManager {
    * @param privateKey string representation of a private key
    * @returns the identity
    */
-  initFromPrivateKey(privateKey: string) {
+  initFromPrivateKey(privateKey: string): Identity {
     this.identity = PrivateKey.fromString(privateKey)
     return this.identity
   }
@@ -140,7 +140,7 @@ export default class IdentityManager {
     }
   }
 
-  isInitialized() {
+  isInitialized(): boolean {
     return Boolean(this.identity)
   }
 }
