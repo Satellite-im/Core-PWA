@@ -259,7 +259,7 @@ export default Vue.extend({
         }
         this.text = ''
         if (this.ui.replyChatbarContent.from) {
-          await this.$store.dispatch('textile/sendReplyMessage', {
+          this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
@@ -272,18 +272,17 @@ export default Vue.extend({
         if (
           RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
         ) {
-          await this.$store.dispatch('textile/sendGroupMessage', {
+          this.$store.dispatch('textile/sendGroupMessage', {
             groupId: this.recipient.textilePubkey,
             message: value,
           })
         } else {
-          await this.$store.dispatch('textile/sendTextMessage', {
+          this.$store.dispatch('textile/sendTextMessage', {
             to: this.recipient.textilePubkey,
             text: value,
           })
         }
         this.$data.nsfwUploadError = false
-        this.$store.dispatch('ui/setChatbarFocus')
       }
     },
     /**
