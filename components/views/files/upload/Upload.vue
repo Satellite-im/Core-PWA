@@ -74,7 +74,6 @@ export default Vue.extend({
     },
   },
   mounted() {
-    console.log('test')
     this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
   },
   methods: {
