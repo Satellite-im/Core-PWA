@@ -257,6 +257,7 @@ export default Vue.extend({
         if (!this.recipient || isEmpty) {
           return
         }
+        this.text = ''
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
@@ -264,7 +265,6 @@ export default Vue.extend({
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.text = ''
           return
         }
 
@@ -282,9 +282,7 @@ export default Vue.extend({
             text: value,
           })
         }
-
         this.$data.nsfwUploadError = false
-        this.text = ''
       }
     },
     /**
