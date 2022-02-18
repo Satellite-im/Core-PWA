@@ -4,28 +4,27 @@ import { Bucket } from '../remote/textile/Bucket'
 import { FileSystemExport } from '../types/filesystem'
 
 const mockFileData = {
-  _name: 'TestFile.png',
-  _descrption: 'Test file description',
+  name: 'TestFile.png',
   hash: '0x0aef',
+  size: 42345,
+  descrption: 'Test file description',
 }
 
-const file = new Fil(...Object.values(mockFileData))
-const file2 = new Fil(
-  ...Object.values({ name: 'testPng2.png', ...mockFileData }),
-)
+const file = new Fil(mockFileData)
+const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
   it('Fetch index and import it into the fileSystem', () => {
-    const bucket = new Bucket(new FilSystem())
-    const fsToImport = new Bucket(new FilSystem())
+    const bucket = new Bucket()
+    const fs = new FilSystem()
 
-    fsToImport.fileSystem.addChild(file)
-    fsToImport.fileSystem.createDirectory('dir')
-    fsToImport.fileSystem.openDirectory('dir')
-    fsToImport.fileSystem.addChild(file2)
+    fs.addChild(file)
+    fs.createDirectory('dir')
+    fs.openDirectory('dir')
+    fs.addChild(file2)
 
     // need to place in variable or it returns empty after the first time
-    const ex: FileSystemExport = fsToImport.index
+    const ex: FileSystemExport = fs.export
 
     bucket.updateIndex(ex)
     expect(bucket.index).toEqual(ex)

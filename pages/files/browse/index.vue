@@ -2,29 +2,38 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
+import { Fil } from '~/libraries/Files/Fil'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
-import { mapState } from 'vuex'
-import { DataStateType } from '~/store/dataState/types'
+declare module 'vue/types/vue' {
+  interface Vue {
+    file: Fil | boolean
+    counter: number
+    fileSystem: FilSystem
+  }
+}
 
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
   data() {
     return {
-      root: 'root',
-      path: [],
-      file: false as File | Boolean,
-      url: '' as String,
-      nsfw: { status: false, checking: false } as Object,
+      file: false as Fil | boolean,
       view: 'grid',
+      counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
+      fileSystem: this.$FileSystem,
     }
   },
   computed: {
-    ...mapState(['files', 'dataState']),
-    DataStateType: () => DataStateType,
-  },
-  mounted(): void {
-    this.$store.dispatch('files/fetchFiles')
+    /**
+     * @returns Current directory items
+     * @description included counter to force rendering on Map updates
+     */
+    directory() {
+      return this.counter && (this.fileSystem?.currentDirectory?.content ?? [])
+    },
   },
   methods: {
     /**
@@ -37,98 +46,24 @@ export default Vue.extend({
       this.$data.view = type
     },
     /**
-     * Allows you to get the current path file object
-     */
-    /**
-     * @method getPath DocsTODO
-     * @description
-     * @returns
-     * @example
-     */
-    getPath(): any {
-      if (this.$data.path.length === 0) {
-        return this.files.tree
-      }
-      let files = this.files.tree
-      for (let i = 0; i < this.$data.path.length; i++) {
-        files = files.children.filter(
-          (item: any) => item.name === this.$data.path[i],
-        )[0]
-      }
-      return files
-    },
-    /**
-     * @method push DocsTODO
-     * @description Push a new child name to the path array
+     * @method handle
+     * @description emitted from child components. Either open file view or directory
      * @param item
-     * @example
      */
-    push(item: any) {
-      if (item.children) {
-        this.$data.path.push(item.name)
+    handle(item: Item) {
+      if (item instanceof Fil) {
+        this.file = item
+      }
+      if (item instanceof Directory) {
+        this.fileSystem.openDirectory(item.name)
       }
     },
     /**
-     * @method pull DocsTODO
-     * @description Pull n items from the file path array
-     * @param count
-     * @example
+     * @method forceRender
+     * @description Force render of new directory items after directory/file upload
      */
-    pull(count: number = 1) {
-      for (let i = 0; i < count; i++) {
-        this.$data.path.pop()
-      }
-    },
-    /**
-     * @method setPath DocsTODO
-     * @description Manually override the path array from a child component
-     * @param pth
-     * @example
-     */
-    setPath(pth: Array<String>) {
-      this.$data.path = pth
-    },
-    /**
-     * @method handleFile DocsTODO
-     * @description Triggered when a file is changed on the input
-     * @param event
-     * @example
-     */
-    async handleFile(event: any) {
-      this.$data.file = event.target.files[0]
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-      this.$data.nsfw.checking = false
-      this.loadPicture(this.$data.file)
-    },
-    /**
-     * @method loadPicture DocsTODO
-     * @description Load a picture into a data URL push to data
-     * @param file
-     * @example
-     */
-    loadPicture(file: File) {
-      if (!file) return
-      const self = this
-      const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
-        if (e.target) self.$data.url = e.target.result
-      }
-      reader.readAsDataURL(file)
-    },
-    /**
-     * Clear local data
-     * TODO: Clear input field, this currently breaks
-     * when you upload the same file after cancelling
-     */
-    /**
-     * @method cancelUpload DocsTODO
-     * @description
-     * @example
-     */
-    cancelUpload() {
-      this.$data.file = false
-      this.$data.url = ''
+    forceRender() {
+      this.counter++
     },
   },
 })
