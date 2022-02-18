@@ -73,11 +73,6 @@ export default Vue.extend({
         this.focusInput()
       }
     },
-    enabled(value) {
-      if (value && this.focus) {
-        this.focusInput()
-      }
-    },
   },
   mounted() {
     // Handle initial value

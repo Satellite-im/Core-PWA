@@ -257,14 +257,14 @@ export default Vue.extend({
         if (!this.recipient || isEmpty) {
           return
         }
+        this.text = ''
         if (this.ui.replyChatbarContent.from) {
-          this.$store.dispatch('textile/sendReplyMessage', {
+          await this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.text = ''
           return
         }
 
@@ -272,20 +272,18 @@ export default Vue.extend({
         if (
           RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
         ) {
-          this.$store.dispatch('textile/sendGroupMessage', {
+          await this.$store.dispatch('textile/sendGroupMessage', {
             groupId: this.recipient.textilePubkey,
             message: value,
           })
         } else {
-          this.$store.dispatch('textile/sendTextMessage', {
+          await this.$store.dispatch('textile/sendTextMessage', {
             to: this.recipient.textilePubkey,
             text: value,
           })
         }
-
         this.$data.nsfwUploadError = false
-        this.text = ''
-        this.$store.commit('ui/setChatbarFocus', true)
+        this.$store.dispatch('ui/setChatbarFocus')
       }
     },
     /**
