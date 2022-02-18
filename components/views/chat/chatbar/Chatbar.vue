@@ -19,7 +19,6 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { ChatTextObj } from '~/types/chat/chat'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -317,6 +316,9 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
+    },
+    handleChatTextFromOutside(text: string) {
+      this.$refs.editable?.handleTextFromOutside(text)
     },
   },
 })

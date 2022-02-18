@@ -98,11 +98,7 @@ export default Vue.extend({
           reactTo: this.ui.settingReaction.messageID,
         })
       } else {
-        this.$store.dispatch('ui/setChatbarContent', {
-          content: this.ui.chatbarContent + emoji,
-          userId: this.$props.recipient?.address,
-        })
-        this.$store.dispatch('ui/setChatbarFocus')
+        this.$emit('click', emoji)
       }
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
       this.toggleEnhancers()
