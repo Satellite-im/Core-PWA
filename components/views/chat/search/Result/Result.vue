@@ -47,7 +47,7 @@ export default Vue.extend({
       users: [],
       channels: [],
       date: null,
-      page: 0,
+      page: 1,
       result: {} as any,
       queryOptions: {
         queryString: '',

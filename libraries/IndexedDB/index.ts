@@ -10,54 +10,55 @@ export const searchMessage = async (
 ) => {
   const { friends, queryString, dateRange } = queryOptions
   const addresses = friends.map((fItem: User) => fItem.address)
-  const dbMessages = await db.conversations.bulkGet(addresses)
 
-  const newResult: any[] = []
+  let list: any[] = []
 
-  dbMessages?.forEach((mItem) => {
-    mItem?.conversation.forEach((cItem) => {
-      /* get user info with textilePubkey instead of address */
-      const user =
-        accounts?.details?.textilePubkey === cItem?.from
-          ? accounts.details
-          : friends.find((fItem: User) => fItem.textilePubkey === cItem?.from)
-      newResult.push({
-        ...cItem,
-        user: {
-          name: user?.name,
-          address: user?.address,
-        },
-      })
-    })
-  })
-
-  const result = newResult
-    .sort((item1, item2) => item2.at - item1.at)
-    .filter((item) => {
-      if (item.payload?.toLowerCase()?.includes(queryString.toLowerCase())) {
-        if (dateRange) {
-          const startDate = new Date(dateRange.start).setHours(0, 0, 0, 0)
-          const endDate =
-            dateRange.start < dateRange.end
-              ? new Date(dateRange.end).setHours(0, 0, 0, 0)
-              : new Date(dateRange.end).setHours(23, 59, 59, 999)
-          const iDate = new Date(item.at)
-          if (startDate <= iDate.getTime() && iDate.getTime() <= endDate) {
-            return item
-          }
-        } else {
-          return item
-        }
-      }
-      return false
-    })
+  let totalRows: number = 0
 
   const skip = (page - 1) * 10
 
+  await db.conversations1
+    .where('address')
+    .anyOf(addresses)
+    .and((message) => {
+      return message.payload?.toLowerCase()?.includes(queryString.toLowerCase())
+    })
+    .count((count: number) => {
+      totalRows = count
+    })
+
+  await db.conversations1
+    .where('address')
+    .anyOf(addresses)
+    .and((message) => {
+      return message.payload?.toLowerCase()?.includes(queryString.toLowerCase())
+    })
+    .offset(skip)
+    .limit(10)
+    .toArray()
+    .then((messageArray) => {
+      messageArray = messageArray.map((cItem) => {
+        const user =
+          accounts?.details?.textilePubkey === cItem?.from
+            ? accounts.details
+            : friends.find((fItem: User) => fItem.textilePubkey === cItem?.from)
+
+        return {
+          ...cItem,
+          user: {
+            name: user?.name,
+            address: user?.address,
+          },
+        }
+      })
+
+      list = messageArray
+    })
+
   return {
     data: {
-      totalRows: result.length,
-      list: result.splice(skip, 10),
+      totalRows,
+      list,
       perPage: 10,
       page,
     },
