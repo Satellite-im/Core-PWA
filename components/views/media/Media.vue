@@ -3,23 +3,11 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import {
-  VideoIcon,
-  VideoOffIcon,
-  MicIcon,
-  MicOffIcon,
-} from 'satellite-lucide-icons'
 import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
-  components: {
-    VideoIcon,
-    VideoOffIcon,
-    MicIcon,
-    MicOffIcon,
-  },
   props: {
     users: {
       type: Array as PropType<Array<User>>,

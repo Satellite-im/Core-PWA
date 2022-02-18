@@ -14,4 +14,8 @@ export default {
     const status = state[call]
     if (status) $Sounds.playSound(call)
   },
+  stopSound({ state }: ActionsArguments<SoundsState>, call: Sounds) {
+    const status = state[call]
+    if (status) $Sounds.stopSound(call)
+  },
 }
