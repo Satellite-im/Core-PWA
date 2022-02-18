@@ -65,9 +65,13 @@ export default {
 
     let conversation: Message[] = []
 
-    const dbMessages = await db.conversations.get(address).then((convo) => {
-      return convo?.conversation ?? []
-    })
+    const dbMessages = await db.conversations1
+      .where('address')
+      .anyOf(address)
+      .toArray()
+      .then((convo) => {
+        return convo
+      })
 
     const lastInbound =
       rootState.textile.conversations[address]?.lastInbound ?? 0
@@ -101,7 +105,12 @@ export default {
       key: address,
       lastInbound,
     }
-    db.conversations.put(dbData)
+
+    conversation.forEach((cItem) => {
+      db.transaction('rw', db.conversations1, () => {
+        db.conversations1.put({ ...cItem, address }, cItem.id)
+      })
+    })
 
     commit('setConversation', {
       address: friend.address,
@@ -157,7 +166,7 @@ export default {
         message,
       })
 
-      dispatch('storeInMessage', { address: sender.address, message })
+      dispatch('storeMessage', { address: sender.address, message })
     })
   },
   /**
@@ -504,57 +513,11 @@ export default {
       message: Message
     },
   ) {
-    // replace old message with new edited version
-    if (message.editedAt) {
-      db.conversations.get(address).then((convo) => {
-        if (!convo) {
-          return
-        }
-        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
-        convo.conversation[index] = message
-        db.conversations.put(convo)
-      })
-      return
-    }
-
     // add regular message to indexeddb
-    db.conversations
-      .where('key')
-      .equals(address)
-      .modify((convo) => convo.conversation.push(message))
-  },
 
-  async storeInMessage(
-    {}: ActionsArguments<TextileState>,
-    {
-      address,
-      message,
-    }: {
-      address: string
-      message: Message
-    },
-  ) {
-    // replace old message with new edited version
-    if (message.editedAt) {
-      db.conversations.get(address).then((convo) => {
-        if (!convo) {
-          return
-        }
-        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
-        convo.conversation[index] = message
-        db.conversations.put(convo)
-      })
-      return
-    }
-
-    // add regular message to indexeddb
-    db.conversations
-      .where('key')
-      .equals(address)
-      .modify((convo) => {
-        convo.conversation.push(message)
-        convo.lastInbound = message.at
-      })
+    db.transaction('rw', db.conversations1, () => {
+      db.conversations1.put({ ...message, address }, message.id)
+    })
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -628,7 +591,7 @@ export default {
         message,
       })
 
-      dispatch('storeInMessage', { address: groupId, message })
+      dispatch('storeMessage', { address: groupId, message })
     }, groupId)
   },
   /**
@@ -660,7 +623,7 @@ export default {
       message: result,
     })
 
-    dispatch('storeInMessage', { address: groupId, message })
+    dispatch('storeMessage', { address: groupId, message })
 
     commit('setMessageLoading', { loading: false })
   },
