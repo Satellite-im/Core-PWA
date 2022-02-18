@@ -285,6 +285,7 @@ export default Vue.extend({
 
         this.$data.nsfwUploadError = false
         this.text = ''
+        this.$store.commit('ui/setChatbarFocus', true)
       }
     },
     /**
