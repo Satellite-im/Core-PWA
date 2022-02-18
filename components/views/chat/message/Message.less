@@ -118,8 +118,10 @@
   not screen and (min-device-pixel-ratio: 2),
   not screen and (min-resolution: 192dpi),
   not screen and (min-resolution: 2dppx) {
-  // Chrome bug for emoji spacing on non-retina screens
-  .emoji {
-    letter-spacing: 4px;
+  .is-message {
+    // Chrome bug for emoji spacing on non-retina screens
+    .emoji {
+      letter-spacing: 4px;
+    }
   }
 }
