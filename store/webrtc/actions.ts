@@ -96,6 +96,7 @@ export default {
       commit('setIncomingCall', '')
       commit('setActiveCall', data.peerId)
       commit('updateCreatedAt', Date.now())
+      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('HANG_UP', (data) => {
@@ -111,6 +112,7 @@ export default {
         audio: {},
         video: {},
       })
+      commit('ui/showMedia', false, { root: true })
     })
 
     peer?.call.on('LOCAL_TRACK_CREATED', ({ track }) => {

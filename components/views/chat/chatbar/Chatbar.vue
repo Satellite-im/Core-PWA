@@ -19,7 +19,6 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { ChatTextObj } from '~/types/chat/chat'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -258,6 +257,7 @@ export default Vue.extend({
         if (!this.recipient || isEmpty) {
           return
         }
+        this.text = ''
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
@@ -265,7 +265,6 @@ export default Vue.extend({
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.text = ''
           return
         }
 
@@ -283,9 +282,7 @@ export default Vue.extend({
             text: value,
           })
         }
-
         this.$data.nsfwUploadError = false
-        this.text = ''
       }
     },
     /**
@@ -317,6 +314,9 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
+    },
+    handleChatTextFromOutside(text: string) {
+      this.$refs.editable?.handleTextFromOutside(text)
     },
   },
 })

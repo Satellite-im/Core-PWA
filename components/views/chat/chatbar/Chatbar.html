@@ -3,6 +3,7 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
   <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
   <ChatbarReply v-if="recipient" />
   <div
@@ -26,6 +27,7 @@
       <terminal-icon size="1x" />
     </div>
     <Editable
+      ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
       :enabled="Boolean(recipient) && !textile.messageLoading"
