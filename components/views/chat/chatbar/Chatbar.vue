@@ -253,10 +253,8 @@ export default Vue.extend({
           this.text.length > this.$Config.chat.maxChars
             ? this.text.slice(0, this.$Config.chat.maxChars)
             : this.text
-        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(value)
-        if (!this.recipient || isEmpty) {
-          return
-        }
+        const isEmpty = value.trim().length === 0
+        if (isEmpty) return
         this.text = ''
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
