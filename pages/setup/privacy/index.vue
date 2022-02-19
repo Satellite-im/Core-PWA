@@ -6,13 +6,16 @@ import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'PrivacyScreen',
-  data() {
-    return {
-      registry: true,
-    }
-  },
   computed: {
     ...mapState(['ui', 'accounts', 'settings']),
+    registry: {
+      set(state) {
+        this.$store.commit('accounts/setRegistry', state)
+      },
+      get() {
+        return !this.accounts ? false : this.accounts.registry
+      },
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)

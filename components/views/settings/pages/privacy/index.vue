@@ -7,13 +7,13 @@ import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
 export default Vue.extend({
   name: 'PrivacySettings',
   layout: 'settings',
-  data() {
-    return {
-      registry: true,
-    }
-  },
   computed: {
     ...mapState(['ui', 'accounts', 'settings']),
+    registry: {
+      get() {
+        return !this.accounts ? false : this.accounts.registry
+      },
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
