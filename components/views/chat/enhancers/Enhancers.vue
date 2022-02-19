@@ -44,11 +44,16 @@ export default Vue.extend({
       get() {
         return this.ui.enhancers.route
       },
-      set(data: string) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: true,
-          route: data,
-        })
+      set(newRoute: string) {
+        const prevRoute = this.ui.enhancers.route
+        if (newRoute !== prevRoute) {
+          this.$store.commit('ui/toggleEnhancers', {
+            show: true,
+            route: newRoute,
+          })
+        } else if (newRoute === 'emotes') {
+          this.openEmoji()
+        }
       },
     },
   },
@@ -78,6 +83,17 @@ export default Vue.extend({
           this.$refs.emojiInvoker?.click()
         }, 0)
       })
+    },
+    /**
+     * @method navbarClickHandler
+     * @description Without this handler user can click on the navbar padding and emojis will disappear
+     */
+    navbarClickHandler(event: Event) {
+      const target = event.target as Element
+      const button = target.closest('button')
+      if (!button) {
+        this.openEmoji()
+      }
     },
     /**
      * Adds emoji to current text input
