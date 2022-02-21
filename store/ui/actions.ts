@@ -12,9 +12,8 @@ export default {
     commit('setMessages', messages)
   },
   sendMessage({ commit, rootState }: ActionsArguments<UIState>, message: any) {
-    if (message.user.address !== rootState.accounts.active) {
+    if (message.user.address !== rootState.accounts.active)
       $Sounds.playSound(Sounds.NEW_MESSAGE)
-    }
     commit('sendMessage', message)
   },
   setIsScrollOver({ commit }: ActionsArguments<UIState>, status: boolean) {
