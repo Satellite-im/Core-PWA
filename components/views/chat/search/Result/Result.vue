@@ -53,6 +53,7 @@ export default Vue.extend({
         queryString: '',
         friends: [],
         dateRange: null,
+        orderBy: 'new',
       },
     }
   },
@@ -117,19 +118,31 @@ export default Vue.extend({
      * @param
      * @returns
      */
-    searchQuery(query) {
-      if (!this.show || query !== this.searchQuery) {
-        return
-      }
-      this.fetchResult(query)
+    searchQuery: {
+      handler(query) {
+        if (!this.show || query !== this.searchQuery) {
+          return
+        }
+        this.fetchResult(query)
+      },
     },
     queryOptions: {
       async handler(newQOptions) {
+        this.loading = DataStateType.Loading
+        if (
+          newQOptions.queryString.includes('after') ||
+          newQOptions.queryString.includes('before') ||
+          newQOptions.queryString.includes('during')
+        ) {
+          newQOptions.dateRange = null
+          this.$data.date = null
+        }
         this.$data.result = await searchMessage(
           this.accounts,
           newQOptions,
           this.$data.page,
         )
+        this.loading = DataStateType.Ready
       },
     },
     date: {
@@ -167,6 +180,11 @@ export default Vue.extend({
      */
     toggleOrderBy(state: SearchOrderType) {
       this.orderBy = state
+
+      this.$data.queryOptions = {
+        ...this.$data.queryOptions,
+        orderBy: state,
+      }
     },
     /**
      * @method fetchResult DocsTODO
@@ -175,26 +193,30 @@ export default Vue.extend({
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async fetchResult(query: string): Promise<void> {
-      this.$data.loading = DataStateType.Loading
+      this.loading = DataStateType.Loading
       await new Promise((resolve) => setTimeout(resolve, 3000))
       this.$data.queryOptions = {
         ...this.$data.queryOptions,
         queryString: query,
         friends: this.friends.all,
       }
+      this.$data.page = 1
       this.$data.result = await searchMessage(
         this.accounts,
         this.$data.queryOptions,
+        1,
       )
-      this.$data.loading = DataStateType.Ready
+      this.loading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
+      this.loading = DataStateType.Loading
       this.$data.page = pageNum
       this.$data.result = await searchMessage(
         this.accounts,
         this.$data.queryOptions,
         pageNum,
       )
+      this.loading = DataStateType.Ready
     },
     onChange(value: any) {
       this.$data.queryOptions = {

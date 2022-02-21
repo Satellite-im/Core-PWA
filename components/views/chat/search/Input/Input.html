@@ -70,4 +70,18 @@
       :max-date="new Date()"
     ></v-calendar>
   </div>
+
+  <div
+    refs="datePicker"
+    :class="{'date-selection': true}"
+    v-if="isDateRange && isFocus"
+  >
+    <v-date-picker
+      is-dark
+      is-range
+      v-model="dragDateRange"
+      :max-date="new Date()"
+      value=""
+    ></v-date-picker>
+  </div>
 </div>

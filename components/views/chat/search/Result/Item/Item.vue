@@ -8,7 +8,7 @@
       :source="data.user.avatar"
     />
     <div class="content">
-      <div class="username">{{ data.user.name }}</div>
+      <div class="username">{{ data.user.name }} {{ dateFormat(data.at) }}</div>
       <div class="message">{{ data.payload }}</div>
     </div>
   </div>
@@ -26,6 +26,11 @@ export default Vue.extend({
     data: {
       type: Object as PropType<SearchResultItem>,
       default: {} as SearchResultItem,
+    },
+  },
+  methods: {
+    dateFormat(str: string) {
+      return this.$dayjs(str).format('YYYY-MM-DD HH:mm A')
     },
   },
 })
