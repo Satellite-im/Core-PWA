@@ -148,6 +148,9 @@ export default {
         send: 'Send',
         cancel: 'Cancel',
       },
+      errors: {
+        file_name: 'File with name already exists in this directory',
+      },
     },
     unlock: {
       decrypt: 'Decrypt Account',

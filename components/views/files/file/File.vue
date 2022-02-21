@@ -6,6 +6,7 @@ import {
   HeartIcon,
   FolderIcon,
   FileIcon,
+  BriefcaseIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
@@ -18,6 +19,7 @@ declare module 'vue/types/vue' {
     linkHover: boolean
     heartHover: boolean
     path: string
+    load: boolean
     handle: () => void
     like: () => void
     share: () => void
@@ -32,6 +34,7 @@ export default Vue.extend({
     HeartIcon,
     FolderIcon,
     FileIcon,
+    BriefcaseIcon,
   },
   mixins: [ContextMenu],
   props: {
@@ -50,6 +53,7 @@ export default Vue.extend({
       fileHover: false,
       linkHover: false,
       heartHover: false,
+      load: false,
       contextMenuValues: [
         { text: 'Favorite', func: this.like },
         { text: 'Share', func: this.share },
@@ -69,6 +73,9 @@ export default Vue.extend({
     },
     isImage() {
       return this.item.name.match(this.$Config.regex.image)
+    },
+    isArchive() {
+      return this.item.name.match(this.$Config.regex.archive)
     },
     path(): string {
       return this.item instanceof Fil
@@ -108,6 +115,10 @@ export default Vue.extend({
      * @description copy link to clipboard
      */
     share() {
+      if (this.item instanceof Directory) {
+        this.$toast.show(this.$t('todo - share folders') as string)
+        return
+      }
       this.item.shareItem()
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
@@ -118,12 +129,22 @@ export default Vue.extend({
      * @method rename
      * @description todo
      */
-    rename() {},
+    rename() {
+      this.$toast.show(this.$t('todo - rename items') as string)
+    },
     /**
      * @method delete
      * @description todo
      */
-    delete() {},
+    async delete() {
+      this.load = true
+      if (this.item instanceof Fil) {
+        await this.$FileSystem.removeFile(this.item.name)
+      }
+      this.$FileSystem.removeChild(this.item.name)
+      this.load = false
+      this.$emit('forceRender')
+    },
   },
 })
 </script>

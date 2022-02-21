@@ -1,4 +1,4 @@
-import { Buckets, PushPathResult, Root } from '@textile/hub'
+import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { TextileErrors } from '../../errors/Errors'
@@ -90,16 +90,6 @@ export class Bucket extends RFM implements RFMInterface {
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
     this.key = result.root.key
 
-    // const testFile = await new File(['hello'], 'test_fil.txt', {
-    //   type: 'text/plain',
-    // })
-
-    // const x = await this.pushFile(testFile)
-
-    // console.log(x)
-
-    // this.remove('test_fil.txt')
-
     return this._textile
   }
 
@@ -107,9 +97,7 @@ export class Bucket extends RFM implements RFMInterface {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
-    return await (
-      await this.buckets.links(this.key)
-    ).ipns
+    return (await this.buckets.links(this.key)).ipns
   }
 
   /**
@@ -118,7 +106,6 @@ export class Bucket extends RFM implements RFMInterface {
    * @param {File} file file to be uploaded
    * @returns Promise whether it was uploaded or not
    */
-
   async pushFile(file: File): Promise<PushPathResult> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
@@ -127,14 +114,16 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   /**
-   * @method remove
+   * @method removeFile
    * @description Remove file from bucket
-   * @param {string} path file name
+   * @param {string} name file name
+   * @returns Promise whether it was removed or not
+   *
    */
-  async remove(path: string) {
+  async removeFile(name: string): Promise<RemovePathResponse> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
-    this.buckets.removePath(this.key, path)
+    return await this.buckets.removePath(this.key, name)
   }
 }

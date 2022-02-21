@@ -1,4 +1,6 @@
+<UiLoadersSpinner v-if="load" spinning class="spin" />
 <div
+  v-else
   class="file"
   @click="fileClick"
   @mouseover="fileHover=true"
@@ -24,7 +26,7 @@
   <img v-if="isImage" class="image-preview" :src="path" />
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
-    <!-- todo - condition for zip image after confirming how type data will come through - AP-641 -->
+    <briefcase-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
     <file-icon v-else size="4x" class="file-type-icon" />
   </div>
   <div class="text-container">
