@@ -100,28 +100,10 @@ export default Vue.extend({
       return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
     },
     remoteTracks() {
-      const { activeCall } = this.webrtc
-      const videoId = this.webrtc.remoteTracks.video.id
-      const videoMuted = this.webrtc.remoteTracks.video.muted
+      const { id, muted } = this.webrtc.remoteTracks.audio
 
-      const audioId = this.webrtc.remoteTracks.audio.id
-      const audioMuted = this.webrtc.remoteTracks.audio.muted
-
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      const remoteVideoTrack = peer?.call.getTrackById(videoId)
-      const remoteAudioTrack = peer?.call.getTrackById(audioId)
-
-      const anyTrack = !!(
-        remoteVideoTrack ||
-        remoteAudioTrack ||
-        videoMuted ||
-        audioMuted
-      )
-
-      return !anyTrack
+      return Boolean(id || muted)
     },
-
     recipient() {
       const isMe = this.$route.params.address === this.accounts.active
       const recipient = isMe
