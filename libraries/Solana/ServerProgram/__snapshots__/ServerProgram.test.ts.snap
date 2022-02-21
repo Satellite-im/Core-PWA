@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ServerProgram.default.getUserPublicKey 0 1`] = `Promise {}`;
-
 exports[`ServerProgram.default.initializeUser 0 1`] = `
 TransactionInstruction {
   "data": Object {
@@ -238,7 +236,7 @@ TransactionInstruction {
     Object {
       "isSigner": true,
       "isWritable": true,
-      "pubkey": "7ModDC7xegHh13aytpvTePfwvbMuktwtcMbrBzGapnwL",
+      "pubkey": "2JG5EWZAXQnr8qAsns8DQ3aFtgPa7ASjmUP3pHUURcds",
     },
   ],
   "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
@@ -481,7 +479,7 @@ TransactionInstruction {
     Object {
       "isSigner": true,
       "isWritable": true,
-      "pubkey": "GN1k2nob4yhQkixvn5GMmWFMmNfqg8hN8bYt3CJTFhQb",
+      "pubkey": "5NLRG3c6AoMBrjm25v3Vb8pAbzFnDnjLoHPnggRvaH7t",
     },
   ],
   "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
@@ -724,7 +722,7 @@ TransactionInstruction {
     Object {
       "isSigner": true,
       "isWritable": true,
-      "pubkey": "9ek1UqrMwBtgdACCTgVeZTXBcHneRrpAUCAwmqjURhA4",
+      "pubkey": "1JAHVbMDaj3uAmSiQiGqoHjhy5iD7vFSk7EaC5vpc9H",
     },
   ],
   "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
@@ -967,7 +965,7 @@ TransactionInstruction {
     Object {
       "isSigner": true,
       "isWritable": true,
-      "pubkey": "F9YsLsABz1Q4uuzhsrNjM2fM4fuG8tAoukhWrMDrJz3f",
+      "pubkey": "14mzKAPCqsXeYsAYGBmxsg6KCeuLxMnWGKusYbU8Yb7b",
     },
   ],
   "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
@@ -1210,259 +1208,16 @@ TransactionInstruction {
     Object {
       "isSigner": true,
       "isWritable": true,
-      "pubkey": "BXhU9noH51sbfMcmnSCo2ZNfiraJndKoE7nr8pA7gPq9",
+      "pubkey": "FWhA52LGi8stiWmptUKLDw4Fj9hvsfJLxkXfShiApPnV",
     },
   ],
   "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
 }
 `;
 
-exports[`ServerProgram.default.initializeUser 5 1`] = `
-TransactionInstruction {
-  "data": Object {
-    "data": Array [
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ],
-    "type": "Buffer",
-  },
-  "keys": Array [
-    Object {
-      "isSigner": true,
-      "isWritable": true,
-      "pubkey": "BDhm4zaKjkTeJxPBJoJKaX3nuw9Dt2cLz3u3a8SvQsRj",
-    },
-  ],
-  "programId": "FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz",
-}
-`;
+exports[`ServerProgram.default.initializeUser ServerProgram.default.getUserPublicKey 0 1`] = `Promise {}`;
 
-exports[`ServerProgram.default.isInitialized 0 1`] = `false`;
-
-exports[`ServerProgram.default.parseUserInfo 0 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 0 1`] = `
 Object {
   "name": "Michael",
   "photoHash": "https://accounts.google.com/o/oauth2/revoke?token=%s",
@@ -1576,7 +1331,7 @@ Object {
 }
 `;
 
-exports[`ServerProgram.default.parseUserInfo 1 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 1 1`] = `
 Object {
   "name": "Michael",
   "photoHash": "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
@@ -1690,7 +1445,7 @@ Object {
 }
 `;
 
-exports[`ServerProgram.default.parseUserInfo 2 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 2 1`] = `
 Object {
   "name": "Jean-Philippe",
   "photoHash": "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
@@ -1804,7 +1559,7 @@ Object {
 }
 `;
 
-exports[`ServerProgram.default.parseUserInfo 3 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 3 1`] = `
 Object {
   "name": "Michael",
   "photoHash": "https://accounts.google.com/o/oauth2/revoke?token=%s",
@@ -1918,7 +1673,7 @@ Object {
 }
 `;
 
-exports[`ServerProgram.default.parseUserInfo 4 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 4 1`] = `
 Object {
   "name": "Anas",
   "photoHash": "https://croplands.org/app/a/confirm?t=",
@@ -2032,7 +1787,7 @@ Object {
 }
 `;
 
-exports[`ServerProgram.default.parseUserInfo 5 1`] = `
+exports[`ServerProgram.default.initializeUser ServerProgram.default.parseUserInfo 5 1`] = `
 Object {
   "name": "",
   "photoHash": "",
@@ -2040,3 +1795,5 @@ Object {
   "status": "",
 }
 `;
+
+exports[`ServerProgram.default.isInitialized 0 1`] = `false`;
