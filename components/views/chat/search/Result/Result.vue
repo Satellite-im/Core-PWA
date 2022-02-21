@@ -11,7 +11,6 @@ import SearchUtil from '../SearchUtil'
 import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
 import { searchMessage } from '~/libraries/IndexedDB/index'
-import { QueryOptions } from '~/types/ui/query'
 
 Vue.component('Paginate', VuejsPaginate)
 
@@ -140,6 +139,18 @@ export default Vue.extend({
             start: newDateValue,
             end: newDateValue,
           },
+        }
+      },
+    },
+    result: {
+      handler(newResult) {
+        if (newResult?.data) {
+          this.$data.groupList.map((item: any) => {
+            if (item.type === SearchResultGroupType.Messages) {
+              item.count = newResult.data.totalRows
+            }
+            return item
+          })
         }
       },
     },
