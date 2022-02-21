@@ -9,6 +9,7 @@ export class FilSystem {
   private _self = new Directory('root')
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
+  private _version: number = 1
 
   /**
    * @getter currentDirectory
@@ -81,7 +82,7 @@ export class FilSystem {
   get export(): FileSystemExport {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
-      version: 1,
+      version: this._version,
       content: this.root.content,
     }
   }
@@ -95,6 +96,7 @@ export class FilSystem {
     fs.content.forEach((e) => {
       this.addChild(e)
     })
+    this._version = fs.version
   }
 
   /**

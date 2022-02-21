@@ -54,6 +54,7 @@ export default Vue.extend({
       }
       this.text = ''
       this.error = ''
+      this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$emit('forceRender')
     },
 
@@ -121,9 +122,10 @@ export default Vue.extend({
       this.load = false
       this.$emit('forceRender')
 
-      console.log('after name filter', sameNameResults)
-      console.log('nsfw', nsfwResults)
-      console.log('final', files)
+      // only update index if files have been updated
+      if (files.length) {
+        this.$Bucket.updateIndex(this.$FileSystem.export)
+      }
 
       if (sameNameResults.length !== originalFiles.length) {
         this.error = this.$t('pages.files.errors.file_name') as string

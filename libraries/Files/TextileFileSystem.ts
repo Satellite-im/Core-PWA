@@ -1,4 +1,4 @@
-import { PushPathResult, RemovePathResponse } from '@textile/hub'
+import { PushPathResult } from '@textile/hub'
 import Vue from 'vue'
 import { FilSystem } from './FilSystem'
 import { Bucket } from './remote/textile/Bucket'

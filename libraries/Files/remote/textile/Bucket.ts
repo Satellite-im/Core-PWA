@@ -1,4 +1,10 @@
-import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
+import {
+  Buckets,
+  Path,
+  PushPathResult,
+  RemovePathResponse,
+  Root,
+} from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { TextileErrors } from '../../errors/Errors'
@@ -8,7 +14,10 @@ import {
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+import {
+  FileSystemExport,
+  FILESYSTEM_TYPE,
+} from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
   private creds: { id: any; pass: any } = { id: null, pass: null }
@@ -42,15 +51,6 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   /**
-   * @method updateIndex
-   * @param index FileSystemExport
-   * @description sets file system import data
-   */
-  updateIndex(index: FileSystemExport) {
-    this._index = index
-  }
-
-  /**
    * @method init
    * @description Initializes bucket
    * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
@@ -61,7 +61,7 @@ export class Bucket extends RFM implements RFMInterface {
     pass,
     wallet,
     name,
-  }: BucketConfig): Promise<TextileInitializationData> {
+  }: BucketConfig): Promise<FileSystemExport | null> {
     if (!wallet) {
       throw new Error(TextileErrors.MISSING_WALLET)
     }
@@ -90,7 +90,41 @@ export class Bucket extends RFM implements RFMInterface {
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
     this.key = result.root.key
 
-    return this._textile
+    const hash = ((await this.buckets.listPath(this.key, 'index.json')) as Path)
+      ?.item?.path
+
+    this._index = await fetch(Config.textile.browser + hash)
+      .then((res) => {
+        return res.json()
+      })
+      .then((data) => {
+        return data
+      })
+      .catch(() => {
+        return {
+          type: FILESYSTEM_TYPE.DEFAULT,
+          version: 1,
+          content: [],
+        }
+      })
+    return this._index
+  }
+
+  /**
+   * @method updateIndex
+   * @param index FileSystemExport
+   * @description sets file system import data
+   */
+  updateIndex(index: FileSystemExport) {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    this._index = index
+    this.buckets.pushPath(
+      this.key,
+      'index.json',
+      Buffer.from(JSON.stringify(index)),
+    )
   }
 
   async ipnsLink(): Promise<string> {

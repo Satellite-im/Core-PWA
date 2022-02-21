@@ -108,6 +108,7 @@ export default Vue.extend({
       this.item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+      this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$emit('forceRender')
     },
     /**
@@ -123,6 +124,7 @@ export default Vue.extend({
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
+      this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$emit('forceRender')
     },
     /**
@@ -134,7 +136,7 @@ export default Vue.extend({
     },
     /**
      * @method delete
-     * @description todo
+     * @description delete folder/file from filesystem. If file, also remove from textile bucket
      */
     async delete() {
       this.load = true
@@ -142,6 +144,7 @@ export default Vue.extend({
         await this.$FileSystem.removeFile(this.item.name)
       }
       this.$FileSystem.removeChild(this.item.name)
+      this.$Bucket.updateIndex(this.$FileSystem.export)
       this.load = false
       this.$emit('forceRender')
     },

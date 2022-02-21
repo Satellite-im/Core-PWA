@@ -13,6 +13,8 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
 export default {
   /**
@@ -182,14 +184,18 @@ export default {
       { root: true },
     )
 
-    // initialize bucket
+    // initialize bucket and file system
     const $Bucket: Bucket = Vue.prototype.$Bucket
-    await $Bucket.init({
+    const fsExport = await $Bucket.init({
       id: userAccount?.publicKey.toBase58(),
       pass: pin!,
       wallet: $SolanaManager.getMainSolanaWalletInstance(),
       name: 'personal-files',
     })
+    if (fsExport) {
+      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+      $FileSystem.import(fsExport)
+    }
 
     // Initialize WebRTC with our ID
     dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
