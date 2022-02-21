@@ -29,4 +29,9 @@ describe('Test FileSystem Directory', () => {
     bucket.updateIndex(ex)
     expect(bucket.index).toEqual(ex)
   })
+  it('get uninitialized textile', () => {
+    const bucket = new Bucket()
+
+    expect(bucket.textile).toBeNull()
+  })
 })
