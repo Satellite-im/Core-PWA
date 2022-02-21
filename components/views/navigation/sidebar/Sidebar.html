@@ -150,8 +150,8 @@
   </div>
   <InteractablesButton
     class="quick-mobile-chat"
-    @click="toggleModal"
-    v-if="$device.isMobile"
+    v-if="$device.isMobile  && users.length"
+    :action="gotoAddFriends"
   >
     <plus-icon size="1.2x" />
   </InteractablesButton>
