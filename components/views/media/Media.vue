@@ -99,6 +99,11 @@ export default Vue.extend({
 
       return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
     },
+    remoteTracks() {
+      const { id, muted } = this.webrtc.remoteTracks.audio
+
+      return Boolean(id || muted)
+    },
     recipient() {
       const isMe = this.$route.params.address === this.accounts.active
       const recipient = isMe
