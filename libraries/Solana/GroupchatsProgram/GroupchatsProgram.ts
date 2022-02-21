@@ -156,7 +156,7 @@ export default class GroupchatsProgram extends EventEmitter {
    * @method invite
    * Invite new user into Group
    * @param groupId Group Id
-   * @param recipient: receipient address
+   * @param recipient: recipient address
    */
   async invite(groupId: string, recipient: string) {
     // Throws if the program is not set
