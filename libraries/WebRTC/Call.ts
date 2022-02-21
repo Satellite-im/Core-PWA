@@ -75,8 +75,15 @@ export class Call extends Emitter<CallEventListeners> {
       .getUserMedia(constraintsToApply)
       .then((stream) => (this.stream = stream))
       .catch((err) => {
-        // @ts-ignore
-        Logger.log('Call.ts Error:', err)
+        let message = err.message
+        if (
+          err.name === 'NotAllowedError' ||
+          err.name === 'PermissionDeniedError'
+        ) {
+          // permission denied in browser
+          message = 'errors.webRTC.permission_denied'
+        }
+        throw new Error(message)
       })
 
     const { audio, video } = this.getLocalTracks()

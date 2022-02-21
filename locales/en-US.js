@@ -493,6 +493,9 @@ export default {
     storage: {
       database_not_cleared: 'Could not clear database',
     },
+    webRTC: {
+      permission_denied: 'Permission denied',
+    },
   },
   search: {
     search: 'Search... ',
