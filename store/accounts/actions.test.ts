@@ -1,11 +1,11 @@
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock'
 import Vue from 'vue'
+import { AccountsError } from './types'
 import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import * as accounts from '~/store/accounts/actions'
 import InitialAccountsState from '~/store/accounts/state'
-import { AccountsError } from './types'
 
 Vue.prototype.$Config = Config
 Vue.prototype.$TextileManager = new TextileManager()
@@ -40,25 +40,6 @@ describe('init', () => {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', AccountsError.PIN_TOO_SHORT)
     }
-  })
-  test.skip('unlock with a with a correct, pin, pinHash, and encryptedPhrase', async () => {
-    const CPrototype = Vue.prototype.$Crypto
-    const state = InitialAccountsState()
-    state.pin = '12345'
-    state.loading = false
-    state.pinHash =
-      '3b4557f45660ca5364013a84dc2dce7d08ab991976a6ef81bdaa4c289997f6cb'
-    state.phrase = 'mnemonic string'
-    state.encryptedPhrase =
-      '867cb445e1f9b95d67e22c558ef1c555a189ac70358acdd2fad871a42070bec7'
-
-    const commit = jest.fn()
-    CPrototype.hash = jest.fn()
-
-    await accounts.default.unlock({ commit, state }, state.pin)
-    expect(CPrototype.hash).toHaveBeenCalled()
-    expect(CPrototype.hash).toHaveBeenCalledWith(state.pin)
-    expect(commit).toHaveBeenCalledWith('unlock', state.pin)
   })
   test('unlock with non-matching pinHash', async () => {
     const CPrototype = Vue.prototype.$Crypto
@@ -155,85 +136,6 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.PIN_TOO_SHORT)
   })
-  test.skip('unlock with a non-empty encryptedPhrase', async () => {
-    const CPrototype = Vue.prototype.$Crypto
-    const state = InitialAccountsState()
-    state.pin = '12345'
-    state.loading = false
-    state.pinHash =
-      '3b4557f45660ca5364013a84dc2dce7d08ab991976a6ef81bdaa4c289997f6cb'
-    state.phrase = 'mnemonic string'
-    state.encryptedPhrase = '0xencryptedPhrase'
-
-    const commit = jest.fn()
-    CPrototype.decryptWithPassword = jest.fn()
-
-    async function retrieveResult() {
-      return await accounts.default.unlock({ commit, state }, state.pin)
-    }
-
-    ;(async () => {
-      const result = retrieveResult()
-      result.then((r) => {
-        // expect(CPrototype.decryptWithPassword).toHaveBeenCalled()
-        console.log(r)
-      })
-    })()
-
-    // result.then((res) => {
-    //   console.log(res)
-    // })
-    // if (result) {
-    //   console.log(result)
-    //   expect(commit).toBeCalled()
-    // }
-
-    // await expect(async () => {
-    //   await accounts.default.unlock({ commit, state }, state.pin)
-    // }).rejects.toThrowError(AccountsError.PIN_TOO_SHORT)
-  })
-  // test('unlock with non-matching pinHash', async () => {
-  //   const CPrototype = Vue.prototype.$Crypto
-  //   const state = InitialAccountsState()
-  //   state.pin = '12345'
-  //   state.loading = false
-  //   state.pinHash =
-  //     '3b4557f45660ca5364013a84dc2dce7d08ab991976a6ef81bdaa4c289997f6cb'
-  //   state.phrase = 'mnemonic string'
-  //   state.encryptedPhrase = ''
-
-  //   const commit = jest.fn()
-  //   CPrototype.hash = jest.fn()
-
-  //   try {
-  //     await accounts.default.unlock({ commit, state }, state.pin)
-  //   } catch (error) {
-  //     expect(error).toBeInstanceOf(Error)
-  //     expect(error).toHaveProperty('message', AccountsError.INVALID_PIN)
-  //   }
-  // })
-  // test('unlock with non-empty encryptedPhrase', async () => {
-  //   const CPrototype = Vue.prototype.$Crypto
-  //   const state = InitialAccountsState()
-  //   state.pin = '12345'
-  //   state.loading = false
-  //   state.pinHash = undefined
-  //   // state.pinHash is undefined because at actions.ts line 55 keeps not returning the hash, hence (undefined == undefined) would evaluate to true and let us test the line 61 block: if (encryptedPhrase !== '')
-  //   state.phrase = 'mnemonic string'
-  //   state.encryptedPhrase =
-  //     '867cb445e1f9b95d67e22c558ef1c555a189ac70358acdd2fad871a42070bec7'
-
-  //   const commit = jest.fn()
-  //   CPrototype.hash = jest.fn()
-
-  //   try {
-  //     await accounts.default.unlock({ commit, state }, state.pin)
-  //   } catch (error) {
-  //     expect(error).toBeInstanceOf(Error)
-  //     // The expect block above will not evaluate to true, because the received is TypeError; not Error.
-  //     console.error(error)
-  //   }
-  // })
   test('setRecoverMnemonic with a pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = InitialAccountsState()
