@@ -90,12 +90,6 @@ describe('ServerProgram.default.initializeUser', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('5', () => {
-    let result: any = inst10.initializeUser(web3.Keypair.generate(), '', '', '')
-    expect(result).toMatchSnapshot()
-  })
-})
-
 describe('ServerProgram.default.getUserPublicKey', () => {
   let inst2: any
 
