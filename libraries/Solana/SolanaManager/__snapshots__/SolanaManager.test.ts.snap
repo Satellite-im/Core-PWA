@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SolanaManager.default.getAccount 0 1`] = `undefined`;
+
+exports[`SolanaManager.default.getAccount 1 1`] = `undefined`;
+
+exports[`SolanaManager.default.getAccount 2 1`] = `undefined`;
+
+exports[`SolanaManager.default.getActiveAccount 0 1`] = `undefined`;
+
+exports[`SolanaManager.default.getAllAccounts 0 1`] = `Array []`;
+
+exports[`SolanaManager.default.getCurrentAccountBalance 0 1`] = `null`;
+
+exports[`SolanaManager.default.getDerivedPublicKey 0 1`] = `undefined`;
+
+exports[`SolanaManager.default.getDerivedPublicKey 1 1`] = `undefined`;
+
+exports[`SolanaManager.default.getDerivedPublicKey 2 1`] = `undefined`;
+
+exports[`SolanaManager.default.getDerivedPublicKey 3 1`] = `undefined`;
+
+exports[`SolanaManager.default.getDerivedPublicKey 4 1`] = `undefined`;
+
+exports[`SolanaManager.default.getPath 0 1`] = `"m/44'/501'/100'/0'"`;
+
+exports[`SolanaManager.default.getPath 1 1`] = `"m/44'/501'/-1'/0'"`;
+
+exports[`SolanaManager.default.getPath 2 1`] = `"m/44'/501'/-100'/0'"`;
+
+exports[`SolanaManager.default.getPath 3 1`] = `"m/44'/501'/0'/0'"`;
+
+exports[`SolanaManager.default.getPath 4 1`] = `"m/44'/501'/-Infinity'/0'"`;
+
+exports[`SolanaManager.default.isInitialized 0 1`] = `false`;
