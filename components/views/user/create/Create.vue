@@ -96,7 +96,7 @@ export default Vue.extend({
      * @example
      */
     confirm() {
-      const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(this.name)
+      const isEmpty = this.name.trim().length === 0
       if (this.name.length < 5 || isEmpty) {
         this.error = this.$t('user.registration.username_error') as string
         return false

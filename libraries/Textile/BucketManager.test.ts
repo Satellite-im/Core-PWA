@@ -1,7 +1,7 @@
-import * as BucketManager from '~/libraries/Textile/BucketManager'
 import * as hub from '@textile/hub'
 import * as index from '@textile/grpc-authentication/dist/cjs/index'
 import * as web3 from '@solana/web3.js'
+import * as BucketManager from '~/libraries/Textile/BucketManager'
 
 describe('BucketManager.default.progressParse', () => {
   let inst48: any
@@ -54,13 +54,15 @@ describe('BucketManager.default.progressParse', () => {
   let inst2: any
   let inst5: any
   let inst6: any
+  let DefaultBucketManager: any
 
   beforeEach(() => {
     inst48 = new hub.Client(undefined, true)
     inst47 = new Uint8Array([])
     inst46 = new Uint8Array([])
     inst49 = new Uint8Array([])
-    inst50 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst50 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst46,
@@ -85,7 +87,8 @@ describe('BucketManager.default.progressParse', () => {
     inst42 = new Uint8Array([])
     inst41 = new Uint8Array([])
     inst44 = new Uint8Array([])
-    inst45 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst45 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst41,
@@ -110,7 +113,8 @@ describe('BucketManager.default.progressParse', () => {
     inst37 = new Uint8Array([])
     inst36 = new Uint8Array([])
     inst39 = new Uint8Array([])
-    inst40 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst40 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst36,
@@ -140,7 +144,8 @@ describe('BucketManager.default.progressParse', () => {
     inst32 = new Uint8Array([])
     inst31 = new Uint8Array([])
     inst34 = new Uint8Array([])
-    inst35 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst35 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst31,
@@ -170,7 +175,8 @@ describe('BucketManager.default.progressParse', () => {
     inst27 = new Uint8Array([])
     inst26 = new Uint8Array([])
     inst29 = new Uint8Array([])
-    inst30 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst30 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst26,
@@ -200,7 +206,8 @@ describe('BucketManager.default.progressParse', () => {
     inst22 = new Uint8Array([])
     inst21 = new Uint8Array([])
     inst24 = new Uint8Array([])
-    inst25 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst25 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst21,
@@ -230,7 +237,8 @@ describe('BucketManager.default.progressParse', () => {
     inst17 = new Uint8Array([])
     inst16 = new Uint8Array([])
     inst19 = new Uint8Array([])
-    inst20 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst20 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst16,
@@ -260,7 +268,8 @@ describe('BucketManager.default.progressParse', () => {
     inst12 = new Uint8Array([])
     inst11 = new Uint8Array([])
     inst14 = new Uint8Array([])
-    inst15 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst15 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst11,
@@ -290,7 +299,8 @@ describe('BucketManager.default.progressParse', () => {
     inst7 = new Uint8Array([])
     inst = new Uint8Array([])
     inst9 = new Uint8Array([])
-    inst10 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst10 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst,
@@ -320,7 +330,8 @@ describe('BucketManager.default.progressParse', () => {
     inst3 = new Uint8Array([])
     inst2 = new Uint8Array([])
     inst5 = new Uint8Array([])
-    inst6 = new BucketManager.default(
+    DefaultBucketManager = BucketManager.default
+    inst6 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst2,
@@ -349,32 +360,32 @@ describe('BucketManager.default.progressParse', () => {
   })
 
   test('0', () => {
-    let result: any = inst6.progressParse(10, 0)
+    const result: any = inst6.progressParse(10, 0)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst10.progressParse(2, 300)
+    const result: any = inst10.progressParse(2, 300)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst15.progressParse(16, 10000)
+    const result: any = inst15.progressParse(16, 10000)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst20.progressParse(1, 0.0)
+    const result: any = inst20.progressParse(1, 0.0)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let result: any = inst25.progressParse(256, 0.0)
+    const result: any = inst25.progressParse(256, 0.0)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = inst45.progressParse(NaN, NaN)
+    const result: any = inst45.progressParse(NaN, NaN)
     expect(result).toMatchSnapshot()
   })
 })
@@ -389,7 +400,8 @@ describe('BucketManager.default.getBucket', () => {
     inst4 = new hub.Client(undefined, undefined)
     inst3 = new Uint8Array([])
     inst2 = new Uint8Array([])
-    inst5 = new BucketManager.default(
+    const DefaultBucketManager = BucketManager.default
+    inst5 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst2,
@@ -427,7 +439,8 @@ describe('BucketManager.default.getLinks', () => {
     inst4 = new hub.Client(undefined, false)
     inst3 = new Uint8Array([])
     inst2 = new Uint8Array([])
-    inst5 = new BucketManager.default(
+    const DefaultBucketManager = BucketManager.default
+    inst5 = new DefaultBucketManager(
       {
         identity: {
           sign: () => inst2,

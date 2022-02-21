@@ -11,7 +11,7 @@
         :title="$t('pages.privacy.register.title')"
         :text="$t('pages.privacy.register.subtitle')"
       >
-        <InteractablesSwitch isLocked />
+        <InteractablesSwitch isLocked v-model="registry" />
       </SettingsUnit>
       <SettingsUnit
         :title="$t('pages.privacy.pin.title')"

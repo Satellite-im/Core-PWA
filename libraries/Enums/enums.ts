@@ -9,7 +9,6 @@ import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 import { SocialAccountTypesEnum } from '~/libraries/Enums/types/social'
 import { AddFriendEnum } from '~/libraries/Enums/types/addFriend'
-import { FilesViewEnum } from '~/libraries/Enums/types/filesView'
 
 export {
   KeybindingEnum,
@@ -23,5 +22,4 @@ export {
   WebRTCEnum,
   AddFriendEnum,
   SocialAccountTypesEnum,
-  FilesViewEnum,
 }

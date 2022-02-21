@@ -40,3 +40,20 @@
     }
   }
 }
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .profile-card {
+    &-body {
+      .profile-preferences {
+        &-timezone {
+          .timezone-list {
+            .items {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

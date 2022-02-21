@@ -1,5 +1,8 @@
 <div id="actions">
-  <div class="has-tooltip has-tooltip-primary" data-tooltip="Video">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    data-tooltip="Video"
+  >
     <InteractablesButton
       class="left"
       :type="video.disabled ? 'danger' : 'dark'"
@@ -11,7 +14,7 @@
     </InteractablesButton>
   </div>
   <div
-    class="has-tooltip has-tooltip-primary"
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.mute')"
   >
     <InteractablesButton
@@ -24,14 +27,17 @@
     </InteractablesButton>
   </div>
   <div
-    class="has-tooltip has-tooltip-primary"
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.not_available')"
   >
     <InteractablesButton type="dark" disabled size="small" :action="() => {}">
       <screen-share-icon size="1.2x" />
     </InteractablesButton>
   </div>
-  <div class="has-tooltip has-tooltip-primary" data-tooltip="Hangup">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    data-tooltip="Hangup"
+  >
     <InteractablesButton
       class="right"
       type="danger"

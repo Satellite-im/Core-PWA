@@ -4,11 +4,12 @@ import { FILE_TYPE } from '../types/file'
 describe('Test FileSystem File', () => {
   const mockFileData = {
     name: 'TestFile.png',
-    description: 'Test file description',
     hash: '0x0aef',
+    size: 455,
+    description: 'Test file description',
   }
 
-  const file = new Fil(...Object.values(mockFileData))
+  const file = new Fil(mockFileData)
 
   it(`Correctly returns a file name (${mockFileData.name})`, () =>
     expect(file.name).toEqual(mockFileData.name))
@@ -18,9 +19,12 @@ describe('Test FileSystem File', () => {
     expect(file.type).toEqual(FILE_TYPE.GENERIC))
   it(`Correctly returns a file hash (${mockFileData.hash})`, () =>
     expect(file.hash).toEqual(mockFileData.hash))
+  it(`Correctly returns a file size (${mockFileData.size})`, () =>
+    expect(file.size).toEqual(mockFileData.size))
   it('Correctly clones a file', () => {
     const clonedFile: Fil = file.copy
     expect(clonedFile.hash).toEqual(file.hash)
+    expect(clonedFile.size).toEqual(file.size)
     expect(clonedFile.id).not.toEqual(file.id)
   })
   it('Correctly sets a file description', () => {

@@ -117,6 +117,10 @@ export default Vue.extend({
       this.loading = AddFriendEnum.OPTIONS
       try {
         await this.$store.dispatch('friends/removeFriend', this.friend)
+      } catch (e) {
+        this.$toast.success(
+          this.$t('errors.friends.friend_not_removed') as string,
+        )
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }

@@ -8,6 +8,9 @@ const mutations = {
   setStorePin(state: AccountsState, storePin: boolean) {
     state.storePin = storePin
   },
+  setRegistry(state: AccountsState, registry: boolean) {
+    state.registry = registry
+  },
   setPinHash(state: AccountsState, pinHash: string) {
     state.pinHash = pinHash
   },

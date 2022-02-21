@@ -1,4 +1,8 @@
 export default {
+  coming_soon: {
+    communities: 'Communities\nComing Soon',
+    send_money: 'Send Money\nComing Soon',
+  },
   global: {
     name: 'Satellite.im',
     encrypted: 'Encrypted',
@@ -24,6 +28,10 @@ export default {
     is: 'is',
     live: 'Live',
     edited: 'edited',
+    connected: 'connected',
+    not_connected: 'not connected',
+    online: 'online',
+    offline: 'offline',
   },
   wallet: {
     wallet: 'Wallet',
@@ -110,11 +118,14 @@ export default {
     files: {
       refresh: 'Refresh',
       file_type: 'File Type',
+      empty: 'Current directory is empty',
+      add_favorite: 'Added to favorites',
+      remove_favorite: 'Removed from favorites',
+      link_copied: 'Link copied to clipboard',
       controls: {
-        new_folder: 'New Folder',
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        name_file: 'Name File...',
+        folder_name: 'Please enter a folder name',
       },
       browse: {
         files: 'Files',
@@ -366,7 +377,7 @@ export default {
       storage: {
         title: 'Storage',
         subtitle:
-          'Control how your data is stored. You can export your local storage information as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+          'Control how your data is stored. You can export your local storage information (coming soon) as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
         clear: {
           title: 'Clear Storage',
           subtitle:
@@ -466,6 +477,7 @@ export default {
       request_already_accepted: 'This user is already in your friends',
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
+      friend_not_removed: 'Could not remove friend',
     },
     chat: {
       drop_file_count: 'Sorry, you can only upload 8 files at a time',

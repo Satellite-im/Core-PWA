@@ -9,12 +9,14 @@ import {
   FileIcon,
 } from 'satellite-lucide-icons'
 
-import { FileType, Folder } from '~/types/files/file'
-import { TextileImage } from '~/types/textile/manager'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    iconHover: boolean
+    linkHover: boolean
+    heartHover: boolean
+    handle: () => void
   }
 }
 
@@ -26,30 +28,30 @@ export default Vue.extend({
     FileIcon,
   },
   props: {
+    /**
+     * File or Directory to be displayed in detail
+     */
     item: {
-      type: Object as PropType<FileType | Folder>,
+      type: Object as PropType<Item>,
       required: true,
-    },
-    file: {
-      type: Object as PropType<TextileImage>,
-      default: () => {},
-    },
-    handler: {
-      type: Function,
-      default: () => () => {},
     },
   },
   data() {
     return {
       fileUrl: String,
       fileSize: '',
-      iconHover: false,
+      fileHover: false,
+      linkHover: false,
+      heartHover: false,
     }
   },
   computed: {
-    getSubtext() {
-      return this.item.children
-        ? this.item.children.length + ' items'
+    /**
+     * @returns Directory child count or item type
+     */
+    getSubtext(): string {
+      return this.item instanceof Directory
+        ? this.item.content.length + ' items'
         : this.item.type
     },
   },
@@ -67,27 +69,23 @@ export default Vue.extend({
     },
     /**
      * @method fileClick
-     * @description Handle regular file click. avoiding regular behavior(handler) if user clicks heart or link icon
+     * @description Handle regular file click. avoiding regular behavior(handle) if user clicks heart or link icon
      */
     fileClick() {
-      if (this.iconHover) {
+      if (this.linkHover) {
+        // todo - handle link click. maybe copy link to clipboard. maybe unshare if that's possible
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
         return
       }
-      this.handler(this.item)
-    },
-    /**
-     * @method mouseOver
-     * @description negate regular click behavior (handler)
-     */
-    mouseOver() {
-      this.iconHover = true
-    },
-    /**
-     * @method mouseLeave
-     * @description reinstate regular click behavior (handler)
-     */
-    mouseLeave() {
-      this.iconHover = false
+      if (this.heartHover) {
+        this.item.toggleLiked()
+        this.item.liked
+          ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
+          : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+        this.$emit('forceRender')
+        return
+      }
+      this.$emit('handle', this.item)
     },
   },
 })
