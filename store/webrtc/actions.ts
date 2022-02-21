@@ -86,17 +86,18 @@ export default {
         return
       }
       commit('setIncomingCall', data.peerId)
+      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('OUTGOING_CALL', (data) => {
       commit('setActiveCall', data.peerId)
+      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('CONNECTED', (data) => {
       commit('setIncomingCall', '')
       commit('setActiveCall', data.peerId)
       commit('updateCreatedAt', Date.now())
-      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('HANG_UP', (data) => {
