@@ -494,7 +494,7 @@ export default {
       database_not_cleared: 'Could not clear database',
     },
     webRTC: {
-      permission_denied: 'Permission denied',
+      permission_denied: 'Permission denied, please check your browser settings.',
     },
   },
   search: {
