@@ -2,7 +2,7 @@
   <div
     id="app-wrap"
     :class="`${$store.state.ui.theme.base.class}
-    ${showSidebar ? 'is-open' : 'is-collapsed'} ${
+    ${showSidebar ? 'is-open' : 'is-collapsed chat-page'} ${
       asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
     } ${selectedGroup ? 'active-group' : null}`"
   >
