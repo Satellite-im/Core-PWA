@@ -630,4 +630,3 @@ describe('ServerProgram.default.isInitialized', () => {
       expect(result).toMatchSnapshot()
     })
   })
-})
