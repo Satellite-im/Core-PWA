@@ -86,10 +86,12 @@ export default {
         return
       }
       commit('setIncomingCall', data.peerId)
+      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('OUTGOING_CALL', (data) => {
       commit('setActiveCall', data.peerId)
+      commit('ui/showMedia', true, { root: true })
     })
 
     peer?.call.on('CONNECTED', (data) => {
@@ -111,6 +113,7 @@ export default {
         audio: {},
         video: {},
       })
+      commit('ui/showMedia', false, { root: true })
     })
 
     peer?.call.on('LOCAL_TRACK_CREATED', ({ track }) => {

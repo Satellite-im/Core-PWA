@@ -2,6 +2,7 @@ import { AccountsState, RegistrationStatus } from './types'
 
 const InitialAccountsState = (): AccountsState => ({
   storePin: false,
+  registry: true,
   locked: true,
   error: '',
   pinHash: '',

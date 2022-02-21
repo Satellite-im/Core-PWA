@@ -62,6 +62,14 @@
           box-shadow: -5px 0px 20px -2px @gray !important;
         }
       }
+
+      &.locked.enabled {
+        box-shadow: unset !important;
+        background: @gray !important;
+        .sw-button {
+          background: @white !important;
+        }
+      }
     }
     .switch-button.locked {
       .sw-button {

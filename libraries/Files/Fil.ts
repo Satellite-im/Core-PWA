@@ -6,50 +6,73 @@ export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
   private _hash: string = ''
   private _description: string = ''
+  private _size: number = 0
 
   /**
-   * Create a new file instance
+   * Create a new Fil instance
    * @constructor
-   * @param {string} name - Name of the file.
-   * @param {string} description - Short description or associated text for the file
-   * @param {string} hash - Hash location of the file on chain (Usually IPFS Hash)
+   * @param param0 name,textile hash, file size, file description
    */
-  constructor(name: string = '', description: string = '', hash: string = '') {
+  constructor({
+    name,
+    hash,
+    size,
+    description,
+  }: {
+    name: string
+    hash: string
+    size: number
+    description?: string
+  }) {
     super(name || 'un-named file')
-    this._description = description
-    this._hash = hash
+    this._description = description || ''
+    this._hash = hash || ''
+    this._size = size || 0
   }
 
   /**
-   * Get the file description
    * @getter
+   * @returns file description
    */
   get description(): string {
     return this._description
   }
 
   /**
-   * Get the file type in plain text
    * @getter
+   * @returns file type in plain text
    */
   get type(): FILE_TYPE {
     return this._type
   }
 
   /**
-   * Returns the hash of the file (usually IPFS)
    * @getter
+   * @returns hash of the file (usually IPFS)
    */
   get hash(): string {
     return this._hash
   }
 
   /**
-   * Get a new copy of the file
    * @getter
+   * @returns Get a new copy of the file
    */
   get copy(): Fil {
-    return new Fil(`${this.name} copy`, this._description, this._hash)
+    return new Fil({
+      name: `${this.name} copy`,
+      hash: this.hash,
+      size: this.size,
+      description: this.description,
+    })
+  }
+
+  /**
+   * @getter
+   * @returns file size
+   */
+  get size(): number {
+    return this._size
   }
 
   /**

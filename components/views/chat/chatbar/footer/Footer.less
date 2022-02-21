@@ -1,0 +1,28 @@
+#bottom-bar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0px 5px 20px;
+
+  .charlimit {
+    float: right;
+    margin-right: 2rem;
+    font-size: @mini-text-size;
+    user-select: none;
+    -webkit-user-select: none;
+    &:extend(.font-muted);
+    margin-left: auto;
+    &.is-error {
+      &:extend(.color-danger);
+    }
+  }
+  &.is-error {
+    border: 1px solid @red;
+
+    .control-icon {
+      &:nth-child(4) {
+        &:extend(.color-danger);
+      }
+    }
+  }
+}

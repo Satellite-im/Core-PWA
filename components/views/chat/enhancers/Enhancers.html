@@ -7,7 +7,7 @@
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
 >
-  <div class="navbar">
+  <div class="navbar" @click="navbarClickHandler">
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"

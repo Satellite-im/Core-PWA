@@ -13,6 +13,7 @@ Object {
   "pinHash": "",
   "registered": false,
   "registrationStatus": "unknown",
+  "registry": true,
   "storePin": false,
 }
 `;

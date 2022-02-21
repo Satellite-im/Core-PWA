@@ -22,7 +22,7 @@ export default Vue.extend({
     sendMessage: {
       type: Function,
     },
-    editable: {
+    disabled: {
       type: Boolean,
     },
   },
@@ -36,7 +36,7 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
-      if (this.editable) {
+      if (!this.disabled) {
         if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
           this.$store.commit('ui/toggleEnhancers', {
             show: true,
@@ -53,7 +53,7 @@ export default Vue.extend({
       }
     },
     toggleMiniWallet() {
-      if (this.editable) {
+      if (!this.disabled) {
         this.$store.commit('ui/toggleModal', {
           name: 'walletMini',
           state: !this.ui.modals.walletMini,

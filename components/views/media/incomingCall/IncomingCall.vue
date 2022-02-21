@@ -42,7 +42,7 @@ export default Vue.extend({
     this.$store.dispatch('sounds/playSound', Sounds.CALL)
   },
   beforeUnmount() {
-    this.$Sounds.stopSound(Sounds.CALL)
+    this.$store.dispatch('sounds/stopSound', Sounds.CALL)
   },
 })
 </script>

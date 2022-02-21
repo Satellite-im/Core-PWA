@@ -66,7 +66,6 @@ export default {
   },
   async setChatbarFocus({ dispatch }: ActionsArguments<UIState>) {
     await dispatch('toggleChatbarFocus')
-    dispatch('toggleChatbarFocus')
   },
   toggleChatbarFocus({ commit, state }: ActionsArguments<UIState>) {
     commit('setChatbarFocus', !state.chatbarFocus)

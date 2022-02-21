@@ -10,6 +10,7 @@ export enum RegistrationStatus {
 
 export interface AccountsState {
   storePin: boolean
+  registry: boolean
   loading?: boolean
   locked: boolean
   pin?: string
