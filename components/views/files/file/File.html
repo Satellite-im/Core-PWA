@@ -1,8 +1,7 @@
-<UiLoadersSpinner v-if="load" spinning class="spin" />
 <div
-  v-else
   class="file"
-  @click="fileClick"
+  :class="{'clickable' : !ui.isLoadingFileIndex}"
+  v-on="ui.isLoadingFileIndex ? {} : {click: fileClick}"
   @mouseover="fileHover=true"
   @mouseleave="fileHover=false"
   @contextmenu="contextMenu"

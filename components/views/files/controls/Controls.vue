@@ -1,6 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
 const convert = require('heic-convert')
@@ -24,8 +25,10 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string>,
-      load: false as boolean,
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     /**
@@ -45,19 +48,19 @@ export default Vue.extend({
         this.errors.push(this.$t('pages.files.controls.folder_name') as string)
         return
       }
-      this.load = true
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
       // add folder to filesystem
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(e?.message ?? '')
-        this.load = false
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
         return
       }
       this.text = ''
       this.errors = []
       await this.$Bucket.updateIndex(this.$FileSystem.export)
-      this.load = false
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
 
@@ -69,7 +72,8 @@ export default Vue.extend({
      */
     async handleFile(event: any) {
       this.errors = []
-      this.load = true
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
+
       const originalFiles: File[] = [...event.target.files]
       // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
       const protectedNameFiles: File[] = originalFiles.filter(
@@ -134,7 +138,8 @@ export default Vue.extend({
         await this.$Bucket.updateIndex(this.$FileSystem.export)
       }
 
-      this.load = false
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+
       this.$emit('forceRender')
 
       if (protectedNameFiles.length !== originalFiles.length) {

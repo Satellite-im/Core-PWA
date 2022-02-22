@@ -1,6 +1,7 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
@@ -55,7 +56,6 @@ export default Vue.extend({
       fileHover: false,
       linkHover: false,
       heartHover: false,
-      load: false,
       contextMenuValues: [
         { text: 'Favorite', func: this.like },
         { text: 'Share', func: this.share },
@@ -65,6 +65,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['ui']),
     /**
      * @returns Directory child count or item type
      */
@@ -106,11 +107,13 @@ export default Vue.extend({
      * @description toggle like on file and force render for files
      */
     async like() {
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
       this.item.toggleLiked()
       this.item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
       await this.$Bucket.updateIndex(this.$FileSystem.export)
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
     /**
@@ -123,12 +126,14 @@ export default Vue.extend({
         return
       }
       if (!this.item.shared) {
+        this.$store.commit('ui/setIsLoadingFileIndex', true)
         this.item.shareItem()
         await this.$Bucket.updateIndex(this.$FileSystem.export)
       }
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
     /**
@@ -143,13 +148,13 @@ export default Vue.extend({
      * @description delete folder/file from filesystem. If file, also remove from textile bucket
      */
     async delete() {
-      this.load = true
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
       if (this.item instanceof Fil) {
         await this.$FileSystem.removeFile(this.item.name)
       }
       this.$FileSystem.removeChild(this.item.name)
       await this.$Bucket.updateIndex(this.$FileSystem.export)
-      this.load = false
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
   },
