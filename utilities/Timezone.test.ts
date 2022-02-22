@@ -7,7 +7,6 @@ describe('init', () => {
       return obj.alternativeName === 'Singapore Time'
     })
 
-    expect(result).toMatchSnapshot()
     expect(result.length).not.toBeNull()
     expect(result.length).toBeGreaterThan(0)
     expect(nonDaylightTimezone.currentTimeFormat).toEqual(
