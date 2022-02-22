@@ -47,6 +47,7 @@ export const Config = {
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
+    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
   },

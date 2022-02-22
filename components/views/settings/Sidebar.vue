@@ -83,10 +83,10 @@ export default Vue.extend({
         {
           title: 'Developer',
           links: [
-            {
+            /* {
               to: 'developer',
               text: 'Mock & Tweak',
-            },
+            }, */
             {
               to: 'notifications',
               text: 'Notifications',

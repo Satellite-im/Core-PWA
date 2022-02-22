@@ -4,21 +4,22 @@ describe('init', () => {
   test('getTimezoneDropdowns', () => {
     const result = Timezone.getTimezoneDropdowns()
     const nonDaylightTimezone = result.find((obj) => {
-      return obj.alternativeName === 'Western Indonesia Time'
+      return obj.alternativeName === 'Singapore Time'
     })
 
-    expect(result.length).toEqual(316) // As of 17 Feb 2022, there are 316 timezones on @vvo/tzdb.
+    expect(result.length).not.toBeNull()
+    expect(result.length).toBeGreaterThan(0)
     expect(nonDaylightTimezone.currentTimeFormat).toEqual(
-      '+07:00 Western Indonesia Time - Jakarta, Surabaya, Medan, Bandung',
+      '+08:00 Singapore Time - Singapore, Woodlands, Marine Parade',
     ) // Make sure that the nonDaylightTimezone exists.
   })
   test('getUtfOffsetInMins for an existing timezone', () => {
-    const result = Timezone.getUtfOffsetInMins('Asia/Jakarta')
+    const result = Timezone.getUtfOffsetInMins('Asia/Singapore')
 
-    expect(result).toBe(420)
+    expect(result).toBe(480)
   })
   test('getUtfOffsetInMins for a non existing timezone', () => {
-    const result = Timezone.getUtfOffsetInMins('Asia/Jayakarta')
+    const result = Timezone.getUtfOffsetInMins('Asia/Singapura')
 
     expect(result).toBeNull()
   })

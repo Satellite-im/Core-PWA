@@ -70,9 +70,14 @@ export default Vue.extend({
 
       const peer = this.$WebRTC.getPeer(identifier)
 
-      await peer?.call.createLocalTracks(kinds)
-
-      await peer?.call.answer()
+      try {
+        await peer?.call.createLocalTracks(kinds)
+        await peer?.call.answer()
+      } catch (error) {
+        if (error instanceof Error) {
+          this.$toast.error(this.$t(error.message) as string)
+        }
+      }
     },
     /**
      * @method denyCall DocsTODO
