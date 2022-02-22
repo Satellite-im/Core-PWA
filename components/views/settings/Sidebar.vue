@@ -87,10 +87,10 @@ export default Vue.extend({
               to: 'developer',
               text: 'Mock & Tweak',
             },
-            {
+            /* {
               to: 'notifications',
               text: 'Notifications',
-            },
+            }, */
             {
               to: 'info',
               text: 'App Info',
