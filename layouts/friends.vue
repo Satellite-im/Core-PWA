@@ -75,6 +75,12 @@ export default Vue.extend({
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
               const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+
+              // force virtual keyboard hide on mobile when swiper slide change
+              if (newShowSidebar) {
+                document.activeElement.blur()
+              }
+
               if (this.showSidebar !== newShowSidebar) {
                 this.$store.commit('ui/showSidebar', newShowSidebar)
               }
