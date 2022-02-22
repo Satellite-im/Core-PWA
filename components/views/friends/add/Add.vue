@@ -22,6 +22,7 @@ export default Vue.extend({
   data() {
     return {
       size: 150,
+      featureReadyToShow: false,
       error: '',
       accountID: '',
       searching: false,
