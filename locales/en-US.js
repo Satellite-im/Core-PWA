@@ -494,7 +494,8 @@ export default {
       database_not_cleared: 'Could not clear database',
     },
     webRTC: {
-      permission_denied: 'Permission denied, please check your browser settings.',
+      permission_denied:
+        'Permission denied, please check your browser settings.',
     },
   },
   search: {
@@ -554,6 +555,7 @@ export default {
     request_sent: 'Friend request successfully sent!',
     requests: 'Friend requests',
     outgoing: 'Outgoing requests',
+    all: 'List of friends',
     blocked: 'Blocked friends',
     search_placeholder: 'Some User...',
     add: 'Add Friend',
