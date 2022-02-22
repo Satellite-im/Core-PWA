@@ -1,7 +1,7 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
     <div
-      class="circle-group has-tooltip-right has-tooltip-primary"
+      class="circle-group has-tooltip-top has-tooltip-primary"
       :data-tooltip="$t('servers.new_server')"
       v-on:click="openModal"
       v-if="horizontal"
@@ -14,7 +14,7 @@
     <div
       data-tooltip="Home"
       v-on:click="$router.push('/chat/direct')"
-      class="circle-group has-tooltip-right has-tooltip-primary"
+      class="circle-group has-tooltip-top has-tooltip-primary"
     >
       <UiCircle type="icon" :size="40">
         <satellite-icon size="0.75x" />
@@ -25,7 +25,7 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
 
         <div
-          class="unread has-tooltip-right has-tooltip-primary"
+          class="unread has-tooltip-top has-tooltip-primary"
           v-for="user in unreads"
           v-on:click="$router.push('/chat/direct')"
           :data-tooltip="user.name"
@@ -37,7 +37,7 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
         <UiComingSoon :tooltipText="$t('coming_soon.communities')">
           <div
-            class="server has-tooltip-right has-tooltip-primary"
+            class="server has-tooltip-top has-tooltip-primary"
             v-for="server in servers"
             v-on:click="$router.push('/server/chat')"
             :data-tooltip="server.name"
