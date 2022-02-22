@@ -40,21 +40,24 @@ export default Vue.extend({
      * @method addFolder
      * @description Add new folder to fileSystem
      */
-    addFolder() {
+    async addFolder() {
       if (!this.text) {
         this.error = this.$t('pages.files.controls.folder_name') as string
         return
       }
+      this.load = true
       // add folder to filesystem
       try {
-        this.$FileSystem.createDirectory(this.text)
+        this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.error = e?.message ?? ''
+        this.load = false
         return
       }
       this.text = ''
       this.error = ''
-      this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$Bucket.updateIndex(this.$FileSystem.export)
+      this.load = false
       this.$emit('forceRender')
     },
 
@@ -119,13 +122,14 @@ export default Vue.extend({
       } catch (e: any) {
         this.error = e?.message ?? ''
       }
-      this.load = false
-      this.$emit('forceRender')
 
       // only update index if files have been updated
       if (files.length) {
-        this.$Bucket.updateIndex(this.$FileSystem.export)
+        await this.$Bucket.updateIndex(this.$FileSystem.export)
       }
+
+      this.load = false
+      this.$emit('forceRender')
 
       if (sameNameResults.length !== originalFiles.length) {
         this.error = this.$t('pages.files.errors.file_name') as string

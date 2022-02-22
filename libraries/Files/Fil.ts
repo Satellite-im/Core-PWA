@@ -17,17 +17,24 @@ export class Fil extends Item {
     name,
     hash,
     size,
+    liked,
+    shared,
     description,
+    type,
   }: {
     name: string
     hash: string
     size: number
+    liked?: boolean
+    shared?: boolean
     description?: string
+    type?: FILE_TYPE
   }) {
-    super(name || 'un-named file')
+    super({ name: name || 'un-named file', liked, shared })
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
+    this._type = type || FILE_TYPE.GENERIC
   }
 
   /**
@@ -63,6 +70,8 @@ export class Fil extends Item {
       name: `${this.name} copy`,
       hash: this.hash,
       size: this.size,
+      liked: this.liked,
+      shared: this.shared,
       description: this.description,
     })
   }

@@ -115,12 +115,12 @@ export class Bucket extends RFM implements RFMInterface {
    * @param index FileSystemExport
    * @description sets file system import data
    */
-  updateIndex(index: FileSystemExport) {
+  async updateIndex(index: FileSystemExport) {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
     this._index = index
-    this.buckets.pushPath(
+    await this.buckets.pushPath(
       this.key,
       'index.json',
       Buffer.from(JSON.stringify(index)),

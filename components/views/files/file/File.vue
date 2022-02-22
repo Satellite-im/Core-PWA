@@ -103,28 +103,30 @@ export default Vue.extend({
      * @method like
      * @description toggle like on file and force render for files
      */
-    like() {
+    async like() {
       this.item.toggleLiked()
       this.item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$emit('forceRender')
     },
     /**
      * @method share
      * @description copy link to clipboard
      */
-    share() {
+    async share() {
       if (this.item instanceof Directory) {
         this.$toast.show(this.$t('todo - share folders') as string)
         return
       }
-      this.item.shareItem()
+      if (!this.item.shared) {
+        this.item.shareItem()
+        await this.$Bucket.updateIndex(this.$FileSystem.export)
+      }
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
-      this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$emit('forceRender')
     },
     /**

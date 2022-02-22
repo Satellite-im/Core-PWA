@@ -19,12 +19,24 @@ export abstract class Item implements ItemInterface {
    * @param {string} name - Name of the item.
    * @param {Parent} parent - Optional parent of the item.
    */
-  constructor(name: string, parent?: Directory | null) {
+  constructor({
+    name,
+    liked,
+    shared,
+    parent,
+  }: {
+    name: string
+    shared?: boolean
+    liked?: boolean
+    parent?: Directory
+  }) {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
 
     this._name = name
-    this._parent = parent
+    this._shared = shared || false
+    this._liked = liked || false
+    this._parent = parent || null
   }
 
   /**

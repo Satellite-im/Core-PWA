@@ -19,7 +19,11 @@ export class TextileFileSystem extends FilSystem {
    */
   async uploadFile(file: File) {
     const result: PushPathResult = await this.bucket.pushFile(file)
-    this.createFile(file, result.path.path)
+    this.createFile({
+      name: file.name,
+      hash: result.path.path,
+      size: file.size,
+    })
   }
 
   /**
