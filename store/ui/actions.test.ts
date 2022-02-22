@@ -281,4 +281,30 @@ describe('init', () => {
     await actions.default.toggleChatbarFocus({ commit, state })
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', !state.chatbarFocus)
   })
+  test('setChatbarContent without userId', async () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+    const val = {
+      content: 'content',
+    }
+    // const state = { ...initialState }
+    await actions.default.setChatbarContent({ commit, dispatch }, val)
+    expect(commit).toHaveBeenCalledWith('chatbarContent', val.content)
+  })
+  test('setChatbarContent with userId', async () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+    const val = {
+      content: 'content',
+      userId: '0x1',
+    }
+    // const state = { ...initialState }
+    await actions.default.setChatbarContent({ commit, dispatch }, val)
+    expect(commit).toHaveBeenCalledWith('chatbarContent', val.content)
+    expect(dispatch).toHaveBeenCalledWith(
+      'chat/setChatText',
+      { value: val.content, userId: val.userId },
+      { root: true },
+    )
+  })
 })
