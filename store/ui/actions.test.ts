@@ -1,3 +1,4 @@
+import Mousetrap from 'mousetrap'
 import * as actions from '~/store/ui/actions'
 import { DataStateType } from '~/store/dataState/types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -280,6 +281,12 @@ describe('init', () => {
     const state = { ...initialState }
     await actions.default.toggleChatbarFocus({ commit, state })
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', !state.chatbarFocus)
+  })
+  test('clearKeybinds', async () => {
+    const dispatch = jest.fn()
+    Mousetrap.reset = jest.fn()
+    await actions.default.clearKeybinds({ dispatch })
+    expect(Mousetrap.reset).toHaveBeenCalled()
   })
   test('setChatbarContent without userId', async () => {
     const commit = jest.fn()
