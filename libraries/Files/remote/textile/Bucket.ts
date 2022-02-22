@@ -90,7 +90,7 @@ export class Bucket extends RFM implements RFMInterface {
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
     this.key = result.root.key
 
-    const hash = ((await this.buckets.listPath(this.key, 'index.json')) as Path)
+    const hash = ((await this.buckets.listPath(this.key, 'sat.json')) as Path)
       ?.item?.path
 
     this._index = await fetch(Config.textile.browser + hash)
@@ -122,7 +122,7 @@ export class Bucket extends RFM implements RFMInterface {
     this._index = index
     await this.buckets.pushPath(
       this.key,
-      'index.json',
+      'sat.json',
       Buffer.from(JSON.stringify(index)),
     )
   }

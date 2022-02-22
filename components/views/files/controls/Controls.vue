@@ -23,7 +23,7 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
-      error: '' as string,
+      errors: [] as Array<string>,
       load: false as boolean,
     }
   },
@@ -42,7 +42,7 @@ export default Vue.extend({
      */
     async addFolder() {
       if (!this.text) {
-        this.error = this.$t('pages.files.controls.folder_name') as string
+        this.errors.push(this.$t('pages.files.controls.folder_name') as string)
         return
       }
       this.load = true
@@ -50,12 +50,12 @@ export default Vue.extend({
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
-        this.error = e?.message ?? ''
+        this.errors.push(e?.message ?? '')
         this.load = false
         return
       }
       this.text = ''
-      this.error = ''
+      this.errors = []
       await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.load = false
       this.$emit('forceRender')
@@ -68,12 +68,18 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.error = ''
+      this.errors = []
       this.load = true
       const originalFiles: File[] = [...event.target.files]
-      const sameNameResults: File[] = originalFiles.filter((file: File) => {
-        return !this.$FileSystem.hasChild(file.name)
-      })
+      // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
+      const protectedNameFiles: File[] = originalFiles.filter(
+        (file) => !(file.name === 'sat.json'),
+      )
+      const sameNameResults: File[] = protectedNameFiles.filter(
+        (file: File) => {
+          return !this.$FileSystem.hasChild(file.name)
+        },
+      )
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // todo - fix with AP-807. don't scan large files to prevent crash
@@ -120,7 +126,7 @@ export default Vue.extend({
           }),
         )
       } catch (e: any) {
-        this.error = e?.message ?? ''
+        this.errors.push(e?.message ?? '')
       }
 
       // only update index if files have been updated
@@ -131,15 +137,14 @@ export default Vue.extend({
       this.load = false
       this.$emit('forceRender')
 
-      if (sameNameResults.length !== originalFiles.length) {
-        this.error = this.$t('pages.files.errors.file_name') as string
-        if (sameNameResults.length !== files.length) {
-          this.error += `, ${this.$t('errors.chat.contains_nsfw') as string}`
-          return
-        }
+      if (protectedNameFiles.length !== originalFiles.length) {
+        this.errors.push(this.$t('pages.files.errors.reserved_name') as string)
+      }
+      if (sameNameResults.length !== protectedNameFiles.length) {
+        this.errors.push(this.$t('pages.files.errors.file_name') as string)
       }
       if (nsfwResults.length !== files.length) {
-        this.error = this.$t('errors.chat.contains_nsfw') as string
+        this.errors.push(this.$t('errors.chat.contains_nsfw') as string)
       }
     },
 

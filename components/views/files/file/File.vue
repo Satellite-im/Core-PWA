@@ -7,6 +7,7 @@ import {
   FolderIcon,
   FileIcon,
   BriefcaseIcon,
+  ImageIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
@@ -35,6 +36,7 @@ export default Vue.extend({
     FolderIcon,
     FileIcon,
     BriefcaseIcon,
+    ImageIcon,
   },
   mixins: [ContextMenu],
   props: {
@@ -146,7 +148,7 @@ export default Vue.extend({
         await this.$FileSystem.removeFile(this.item.name)
       }
       this.$FileSystem.removeChild(this.item.name)
-      this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.load = false
       this.$emit('forceRender')
     },

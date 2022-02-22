@@ -48,7 +48,13 @@
       multiple
     />
   </div>
-  <TypographyError v-if="error" :text="error" class="error" />
+  <TypographyError
+    v-if="errors.length"
+    v-for="error in errors"
+    :key="error"
+    :text="error"
+    class="error"
+  />
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />

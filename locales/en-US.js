@@ -149,6 +149,7 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
+        reserved_name: 'sat.json is a reserved file name',
         file_name: 'File with name already exists in this directory',
       },
     },
@@ -497,7 +498,8 @@ export default {
       database_not_cleared: 'Could not clear database',
     },
     webRTC: {
-      permission_denied: 'Permission denied, please check your browser settings.',
+      permission_denied:
+        'Permission denied, please check your browser settings.',
     },
   },
   search: {
