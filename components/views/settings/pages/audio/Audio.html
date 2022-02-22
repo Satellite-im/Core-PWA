@@ -171,14 +171,15 @@
     </SettingsUnit>
   </div>
 
-  <!-- Screen Share 
+  <!-- Screen Share -->
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.screen.title')"
-  /> -->
+    v-if="featureReadyToShow"
+  />
 
-  <!-- Capture Mouse 
-  <div class="columns is-desktop">
+  <!-- Capture Mouse -->
+  <div class="columns is-desktop" v-if="featureReadyToShow">
     <SettingsUnit
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
@@ -189,7 +190,7 @@
         size="small"
       />
     </SettingsUnit>
-  </div> -->
+  </div>
 
   <!-- Notification Sounds -->
   <TypographyHorizontalRuleText
