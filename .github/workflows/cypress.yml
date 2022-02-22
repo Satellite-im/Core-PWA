@@ -7,7 +7,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-         working-directory: ./
+         working-directory: ./home/runner/work/Core-PWA/Core-PWA/
          install-command: yarn --frozen-lockfile --silent
       - name: Cypress run
         uses: cypress-io/github-action@v2
