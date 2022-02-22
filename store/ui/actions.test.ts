@@ -1,10 +1,151 @@
 import Mousetrap from 'mousetrap'
 import * as actions from '~/store/ui/actions'
+import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
+import { CaptureMouseTypes } from '~/store/settings/types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 const $Sounds = new SoundManager()
 
+const initialRootState: any = {
+  accounts: {
+    storePin: true,
+    loading: true,
+    locked: true,
+    pin: '',
+    pinHash: '',
+    active: '',
+    gasPrice: '',
+    phrase: '',
+    error: '',
+    encryptedPhrase: '',
+    registered: true,
+    details: {
+      name: '',
+      address: '',
+      status: '',
+      state: 'idle',
+      unreadCount: 123,
+      profilePicture: '',
+      badge: 'community',
+      userAccount: '',
+      mailboxId: '',
+      textilePubkey: '',
+    },
+    registrationStatus: RegistrationStatus.IN_PROGRESS,
+    lastVisited: '',
+  },
+  dataState: {
+    files: DataStateType.Empty,
+    friends: DataStateType.Loading,
+    search: DataStateType.Ready,
+  },
+  friends: {
+    incomingRequests: [
+      {
+        requestId: '',
+        account: {
+          accountId: '',
+          from: '',
+          status: 123,
+          fromMailboxId: '',
+          toMailboxId: '',
+          to: '',
+        },
+        pending: true,
+        from: '',
+        userInfo: {
+          name: '',
+          servers: {},
+          status: '',
+          photoHash: '',
+        },
+      },
+    ],
+    outgoingRequests: [
+      {
+        to: '',
+        requestId: '',
+        account: {
+          accountId: '',
+          from: '',
+          status: 123,
+          fromMailboxId: '',
+          toMailboxId: '',
+          to: '',
+        },
+        pending: true,
+      },
+    ],
+    all: [
+      {
+        publicKey: 'NoWiFi4you',
+        typingState: 'NOT_TYPING',
+        item: {},
+        pending: true,
+        activeChat: true,
+        encryptedTextilePubkey: '',
+        name: 'Taurus Nix',
+        address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+        account: {
+          accountId: 'Checking Account',
+          from: '.',
+          status: 429,
+          fromMailboxId: '12345',
+          toMailboxId: 'v4.0.0-rc.4',
+          to: './path/to/file',
+        },
+        textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+        status: '',
+        state: 'idle',
+        unreadCount: 123,
+        profilePicture: '',
+        badge: 'community',
+        userAccount: '',
+        mailboxId: '',
+      },
+    ],
+  },
+  textile: {
+    initialized: true,
+    conversations: {},
+    conversationLoading: true,
+    messageLoading: true,
+    uploadProgress: {
+      abc: {
+        progress: 42,
+        finished: false,
+        name: 'file.pdf',
+      },
+    },
+  },
+  prerequisites: {
+    accountsReady: true,
+    textileReady: true,
+    p2pReady: true,
+  },
+  settings: {
+    audioInput: '',
+    audioOutput: '',
+    videoInput: '',
+    captureMouse: CaptureMouseTypes.always,
+    noiseSuppression: true,
+    echoCancellation: true,
+    bitrate: 96000,
+    sampleSize: 24,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    userHasGivenAudioAccess: false,
+    userDeniedAudioAccess: false,
+    keybinds: {
+      toggleMute: 'alt+m',
+      toggleDeafen: 'alt+d',
+      openSettings: 'alt+s',
+      callActiveChat: 'alt+c',
+    },
+    embeddedLinks: true,
+    displayCurrentActivity: true,
+  },
+}
 const initialState = {
   contextMenuStatus: false,
   showSidebarUsers: true,
@@ -282,6 +423,16 @@ describe('init', () => {
     await actions.default.toggleChatbarFocus({ commit, state })
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', !state.chatbarFocus)
   })
+  test('activateKeybinds', async () => {
+    const dispatch = jest.fn()
+    const rootState = { ...initialRootState }
+    Mousetrap.reset = jest.fn()
+    Mousetrap.bind = jest.fn()
+    await actions.default.activateKeybinds({ dispatch, rootState })
+    expect(Mousetrap.reset).toHaveBeenCalled()
+    expect(Mousetrap.bind).toHaveBeenCalled()
+    expect(Mousetrap.bind).toBeCalledTimes(3)
+  })
   test('clearKeybinds', async () => {
     const dispatch = jest.fn()
     Mousetrap.reset = jest.fn()
@@ -294,7 +445,6 @@ describe('init', () => {
     const val = {
       content: 'content',
     }
-    // const state = { ...initialState }
     await actions.default.setChatbarContent({ commit, dispatch }, val)
     expect(commit).toHaveBeenCalledWith('chatbarContent', val.content)
   })
@@ -305,7 +455,6 @@ describe('init', () => {
       content: 'content',
       userId: '0x1',
     }
-    // const state = { ...initialState }
     await actions.default.setChatbarContent({ commit, dispatch }, val)
     expect(commit).toHaveBeenCalledWith('chatbarContent', val.content)
     expect(dispatch).toHaveBeenCalledWith(
