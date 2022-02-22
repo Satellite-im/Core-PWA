@@ -138,6 +138,7 @@
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.1",
     "lint-staged": ">=10",
+    "netlify-plugin-cypress": "^2.2.0",
     "prettier": "^2.2.1",
     "simple-peer": "^9.11.0",
     "ts-jest": "^27.0.7",
