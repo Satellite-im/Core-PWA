@@ -1,21 +1,12 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
-    <div
-      class="circle-group has-tooltip-top has-tooltip-primary"
-      :data-tooltip="$t('servers.new_server')"
-      v-on:click="openModal"
-      v-if="horizontal"
-    >
+    <div class="circle-group" v-on:click="openModal" v-if="horizontal">
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
       </UiCircle>
     </div>
 
-    <div
-      data-tooltip="Home"
-      v-on:click="$router.push('/chat/direct')"
-      class="circle-group has-tooltip-top has-tooltip-primary"
-    >
+    <div v-on:click="$router.push('/chat/direct')" class="circle-group">
       <UiCircle type="icon" :size="40">
         <satellite-icon size="0.75x" />
       </UiCircle>
@@ -25,10 +16,9 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
 
         <div
-          class="unread has-tooltip-top has-tooltip-primary"
+          class="unread"
           v-for="user in unreads"
           v-on:click="$router.push('/chat/direct')"
-          :data-tooltip="user.name"
         >
           <UiCircle type="random" :size="40" :seed="user.address" />
           <span class="label">{{user.count}}</span>
@@ -37,10 +27,9 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
         <UiComingSoon :tooltipText="$t('coming_soon.communities')">
           <div
-            class="server has-tooltip-top has-tooltip-primary"
+            class="server"
             v-for="server in servers"
             v-on:click="$router.push('/server/chat')"
-            :data-tooltip="server.name"
           >
             <UiCircle
               type="random"
