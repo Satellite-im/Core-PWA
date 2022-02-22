@@ -17,12 +17,13 @@
   >
     <corner-down-right-icon size="1x" :class="'control-icon'" />
   </div>
-  <!--<div
+  <div 
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('messaging.pin')"
+    v-if="featureReadyToShow"
   >
     <archive-icon size="1x" :class="'control-icon'" />
-  </div>-->
+  </div>
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('controls.edit')"
