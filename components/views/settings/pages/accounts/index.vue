@@ -15,6 +15,7 @@ export default Vue.extend({
   data() {
     return {
       showPhrase: false,
+      featureReadyToShow: false,
     }
   },
   computed: {
