@@ -1,7 +1,7 @@
-import Groups from '../groups'
+import * as Groups from '../groups'
 
 describe('init', () => {
   it('gets the constant', () => {
-    expect(Groups).toMatchSnapshot()
+    expect(Groups.Groups).toMatchSnapshot()
   })
 })
