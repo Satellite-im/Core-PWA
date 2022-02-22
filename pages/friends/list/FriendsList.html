@@ -75,7 +75,7 @@
         <div v-else>
           <UiLoadersFriend :count="5" />
         </div>
-        <div v-if="Object.entries($mock.blocked).length" class="padded_divider">
+        <!--<div v-if="Object.entries($mock.blocked).length" class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
             :value="$t('friends.blocked')"
@@ -86,7 +86,7 @@
           :friend="friend"
           :key="friend.address"
           blocked
-        />
+        />-->
       </div>
     </div>
   </UiScroll>
