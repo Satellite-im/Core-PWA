@@ -175,10 +175,11 @@
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.screen.title')"
+    v-if="featureReadyToShow"
   />
 
   <!-- Capture Mouse -->
-  <div class="columns is-desktop">
+  <div class="columns is-desktop" v-if="featureReadyToShow">
     <SettingsUnit
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
