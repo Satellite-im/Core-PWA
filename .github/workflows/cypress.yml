@@ -4,6 +4,8 @@ jobs:
   cypress-run:
     runs-on: ubuntu-20.04
     steps:
+      - name: RM
+      - run: rm package.json
       - name: Checkout
         uses: actions/checkout@v2
       - name: Cypress run
