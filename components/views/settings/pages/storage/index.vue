@@ -10,6 +10,7 @@ export default Vue.extend({
     return {
       isLoading: false,
       deleteVerify: false,
+      featureReadyToShow: false,
     }
   },
   methods: {

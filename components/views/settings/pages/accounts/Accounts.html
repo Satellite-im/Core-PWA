@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div class="columns is-desktop">
+  <div class="columns is-desktop" v-if="featureReadyToShow">
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
       <InteractablesInput readonly type="primary" :text="accounts.gasPrice" />
