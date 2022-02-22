@@ -4,8 +4,9 @@ jobs:
   cypress-run:
     runs-on: ubuntu-20.04
     steps:
-      - run: rm package.json
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+         install-command: yarn --frozen-lockfile --silent
       - name: Cypress run
         uses: cypress-io/github-action@v2
