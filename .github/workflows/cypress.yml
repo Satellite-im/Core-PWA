@@ -1,13 +1,16 @@
-name: End-to-end tests
-on: [push]
+name: GitHub Actions Demo
+on: [pull_request]
 jobs:
-  cypress-run:
-    runs-on: ubuntu-20.04
-    steps:
+ cypress-run:
+    runs-on: ubuntu-latest
+    steps: 
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
         with:
-         working-directory: ./home/runner/work/Core-PWA/Core-PWA/
-         install-command: yarn --frozen-lockfile --silent
+            node:version: '16'
+      - name: Install dependencies
+        run: npm install       
       - name: Cypress run
         uses: cypress-io/github-action@v2
