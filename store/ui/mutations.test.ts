@@ -4,6 +4,7 @@ import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
+import state from '../friends/state'
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)
@@ -2995,6 +2996,23 @@ describe('mutations', () => {
         id: dateNow,
         at: dateNow,
         type: 'group',
+        from: dateNow,
+        to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+        messages: [
+          {
+            id: dateNow,
+            at: dateNow,
+            type: 'text',
+            payload: 'payload',
+            reactions: [],
+            replies: [],
+          },
+        ],
+      },
+      {
+        id: dateNow,
+        at: dateNow,
+        type: 'group',
         from: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
         to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
         messages: [
@@ -3875,6 +3893,100 @@ describe('mutations', () => {
       pack: object.pack,
       url: object.url,
       count: 1, // This emoji has been not been used in the past, by sending this message (via this unit): we've incremented this to 1 from 0.
+    })
+  })
+  test('setTypingUser', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setTypingUser(localizedState, true)
+    expect(localizedState.isTyping).toBeTruthy()
+  })
+  test('settingReaction', () => {
+    const localizedState = { ...initialState }
+    mutations.default.settingReaction(localizedState, true)
+    expect(localizedState.settingReaction).toBeTruthy()
+  })
+  test('setActiveChannel', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      type: 'payload',
+      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
+      name: 'Retha Larkin',
+    }
+    mutations.default.setActiveChannel(localizedState, object)
+    expect(localizedState.activeChannel).toMatchObject(object)
+  })
+  test('setReplyChatbarContent', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      payload: 'payload',
+      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
+      from: 'Retha Larkin',
+    }
+    mutations.default.setReplyChatbarContent(localizedState, object)
+    expect(localizedState.replyChatbarContent).toMatchObject(object)
+  })
+  test('setEditMessage', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      payload: 'payload',
+      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
+      from: 'Retha Larkin',
+    }
+    mutations.default.setEditMessage(localizedState, object)
+    expect(localizedState.editMessage).toMatchObject(object)
+  })
+  test('saveEditMessage with existing message', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      payload: 'payload',
+      id: dateNow,
+      from: dateNow,
+    }
+    mutations.default.saveEditMessage(localizedState, object)
+    expect(localizedState.messages).toContainEqual({
+      at: dateNow,
+      from: dateNow,
+      id: dateNow,
+      messages: [
+        {
+          at: dateNow,
+          id: dateNow,
+          payload: object.payload,
+          reactions: [],
+          replies: [],
+          type: 'text',
+        },
+      ],
+      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+      type: 'group',
+    })
+  })
+  test('saveEditMessage with non-existing message', () => {
+    const localizedState = { ...initialState }
+    const newDateNow = 1645622021469
+    const object = {
+      payload: 'not payload',
+      id: newDateNow,
+      from: newDateNow,
+    }
+    mutations.default.saveEditMessage(localizedState, object)
+    // Because our Date.now() is different, the messages will not be updated with our new payload. Hence the .not matcher
+    expect(localizedState.messages).not.toContainEqual({
+      at: newDateNow,
+      from: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
+      id: newDateNow,
+      messages: [
+        {
+          at: newDateNow,
+          id: newDateNow,
+          payload: object.payload,
+          reactions: [],
+          replies: [],
+          type: 'text',
+        },
+      ],
+      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+      type: 'group',
     })
   })
 })
