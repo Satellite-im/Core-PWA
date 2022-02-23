@@ -7,7 +7,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     route() {
-      // return this.$route.path.split('/').filter((v: String) => v !== '')
       return `${this.ui.settingsRoute}`
     },
   },
