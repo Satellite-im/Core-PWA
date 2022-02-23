@@ -277,7 +277,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
     })
-    dispatch('storeMessage', {
+    await dispatch('storeMessage', {
       address: friend.address,
       message: sendFileResult,
     })
@@ -321,7 +321,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    dispatch('storeMessage', { address: friend.address, message: result })
+    await dispatch('storeMessage', { address: friend.address, message: result })
   },
   /**
    * @description Sends a reply message to a given friend
@@ -383,7 +383,7 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    dispatch('storeMessage', { address: friend.address, message: result })
+    await dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
 
@@ -434,14 +434,20 @@ export default {
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
       })
-      dispatch('storeMessage', { address: friend.address, message: result })
+      await dispatch('storeMessage', {
+        address: friend.address,
+        message: result,
+      })
     } else {
       commit('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: original,
       })
-      dispatch('storeMessage', { address: friend.address, message: original })
+      await dispatch('storeMessage', {
+        address: friend.address,
+        message: original,
+      })
     }
   },
   /**
@@ -485,7 +491,8 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    dispatch('storeMessage', { address: friend.address, message: result })
+
+    await dispatch('storeMessage', { address: friend.address, message: result })
 
     commit('setMessageLoading', { loading: false })
   },
