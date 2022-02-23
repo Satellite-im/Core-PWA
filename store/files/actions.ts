@@ -29,7 +29,6 @@ export default {
         { root: true },
       )
     }
-    await new Promise((resolve) => setTimeout(resolve, 3000))
     commit('fetchFiles', Files)
     commit(
       'dataState/setDataState',
