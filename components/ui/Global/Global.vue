@@ -78,6 +78,11 @@ export default Vue.extend({
           this.$toast.error(this.$t(error.message) as string)
         }
       }
+
+      const callingPath = `/chat/direct/${identifier}`
+      if (this.$route.path !== callingPath) {
+        this.$router.push(callingPath)
+      }
     },
     /**
      * @method denyCall DocsTODO
