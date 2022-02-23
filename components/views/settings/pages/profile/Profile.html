@@ -56,7 +56,7 @@
       </div>
       
       <UiSpacer :height="isSmallScreen ? 10 : 24" />
-      <div class="columns is-desktop">
+      <div class="columns is-desktop" v-if="featureReadyToShow">
         <div class="column">
           <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
           <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
