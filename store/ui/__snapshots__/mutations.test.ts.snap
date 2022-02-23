@@ -1,5 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`mutations sendMessage with the same lastMessageSender 1`] = `
+Object {
+  "at": 1645617999076,
+  "from": "0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c",
+  "id": 1645617999076,
+  "messages": Array [
+    Object {
+      "at": 1645617999076,
+      "id": 1645617999076,
+      "payload": "message",
+      "reactions": Array [],
+      "replies": Array [],
+      "type": "text",
+    },
+    Object {
+      "at": 1645617999076,
+      "id": 1645617999076,
+      "payload": "elio@example.com",
+      "reactions": Array [],
+      "replies": Array [],
+      "type": "text",
+    },
+  ],
+  "to": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+  "type": "group",
+}
+`;
+
 exports[`mutations.default.addReaction 0 1`] = `undefined`;
 
 exports[`mutations.default.addReaction 1 1`] = `undefined`;
