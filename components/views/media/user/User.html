@@ -4,7 +4,12 @@
   </div>
 
   <div v-if="videoStream" class="video-stream-container">
-    <video class="video-stream" :src-object.prop="videoStream" autoplay></video>
+    <video
+      class="video-stream"
+      :src-object.prop="videoStream"
+      playsinline
+      :id="`${isLocal ? 'local' : 'remote'}-video`"
+    ></video>
   </div>
 
   <div class="media-user" v-else-if="user">

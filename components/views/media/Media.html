@@ -11,6 +11,7 @@
       :user="accounts.details"
       :videoStream="localVideoStream"
       :audioMuted="localAudioMuted"
+      :isLocal="true"
     />
 
     <MediaUser
@@ -21,6 +22,7 @@
       :audioStream="remoteAudioStream"
       :audioMuted="remoteAudioMuted"
       :calling="!remoteTracks"
+      :isLocal="false"
     />
 
     <div
