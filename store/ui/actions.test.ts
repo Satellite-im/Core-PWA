@@ -413,8 +413,13 @@ describe('init', () => {
     })
   })
   test('setChatbarFocus', async () => {
+    const dispatch = jest.fn()
+    await actions.default.setChatbarFocus({ dispatch })
+    expect(dispatch).toHaveBeenCalledWith('toggleChatbarFocus')
+  })
+  test('toggleChatbarFocus', async () => {
     const commit = jest.fn()
-    await actions.default.setChatbarFocus({ commit })
+    await actions.default.toggleChatbarFocus({ commit })
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', false)
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', true)
   })

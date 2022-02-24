@@ -284,11 +284,9 @@ export default Vue.extend({
 
       this.$data.fileAmount = nsfwCheck.length
 
-      await Promise.all(
-        nsfwCheck.map(async (file: UploadDropItemType) => {
-          await this.dispatchFile(file)
-        }),
-      )
+      for (const file of nsfwCheck) {
+        await this.dispatchFile(file)
+      }
 
       this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
