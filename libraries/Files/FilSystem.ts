@@ -124,8 +124,7 @@ export class FilSystem {
    */
   exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
-      const { name, liked, shared, type, hash, size, description }: ExportFile =
-        item
+      const { name, liked, shared, type, hash, size, description } = item
       return {
         name,
         liked,
@@ -136,7 +135,7 @@ export class FilSystem {
         description,
       }
     }
-    const { name, liked, shared, type }: ExportDirectory = item
+    const { name, liked, shared, type } = item
 
     return {
       name,
