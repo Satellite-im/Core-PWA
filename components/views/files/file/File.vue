@@ -132,11 +132,11 @@ export default Vue.extend({
         this.$store.commit('ui/setIsLoadingFileIndex', true)
         this.item.shareItem()
         await this.$Bucket.updateIndex(this.$FileSystem.export)
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
       }
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
     /**

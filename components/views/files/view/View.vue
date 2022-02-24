@@ -37,21 +37,19 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method open
-     * @description open file in new tab onclick
-     */
-    open() {
-      window.open(this.path)
-    },
-    /**
      * @method share
      * @description copy link to clipboard and toggle shared status
      */
-    share() {
+    async share() {
+      if (!this.file.shared) {
+        this.$store.commit('ui/setIsLoadingFileIndex', true)
+        this.file.shareItem()
+        await this.$Bucket.updateIndex(this.$FileSystem.export)
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
+      }
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
-      this.file.shareItem()
       this.$emit('forceRender')
     },
   },
