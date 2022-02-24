@@ -2,7 +2,7 @@
 @mobile_media_open_offset: 12rem;
 @mobile_candybar_media_open_offset: 18rem;
 #app-wrap {
-  &.is-collapsed {
+  &.is-collapsed.chat-page {
     #mobile-nav {
       transform: translate(0, @mobile-nav-size);
     }
@@ -198,6 +198,11 @@
   }
   .sidebar-container {
     width: 100vw !important;
+  }
+
+  #friends,
+  #files {
+    margin-bottom: 80px;
   }
 }
 
