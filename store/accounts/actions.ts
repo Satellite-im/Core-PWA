@@ -18,10 +18,14 @@ import { FilSystem } from '~/libraries/Files/FilSystem'
 
 export default {
   /**
-   * @method setPin DocsTODO
-   * @description
-   * @param pin
+   * @method setPin
+   * @description sets the user pin password and stores its
+   * hash inside the Vuex state
+   * @param pin the choosen pin password
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/setPin', 'myPassword123')
+   * ```
    */
   async setPin({ commit }: ActionsArguments<AccountsState>, pin: string) {
     if (pin.length < 5) {
@@ -32,16 +36,19 @@ export default {
 
     const pinHash = await $Crypto.hash(pin)
 
-    // The cleartext version of the pin will not be
-    // persisted
+    // The cleartext version of the pin will not be persisted
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
   /**
-   * @method unlock DocsTODO
-   * @description
-   * @param pin
+   * @method unlock
+   * @description performs all the actions to unlock the app by
+   * decrypting the wallet information
+   * @param pin pin password in use
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/unlock', 'myPassword123')
+   * ```
    */
   async unlock(
     { commit, state }: ActionsArguments<AccountsState>,
@@ -73,10 +80,12 @@ export default {
     commit('unlock', pin)
   },
   /**
-   * @method generateWallet DocsTODO
-   * @description
-   * @param
+   * @method generateWallet
+   * @description Generates a new Solana hierarchical wallet
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/generateWallet')
+   * ```
    */
   async generateWallet({ commit, state }: ActionsArguments<AccountsState>) {
     const { pin } = state
@@ -104,10 +113,14 @@ export default {
     commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method setRecoverMnemonic DocsTODO
-   * @description
-   * @param mnemonic
+   * @method setRecoverMnemonic
+   * @description Encrypts the wallet mnemonic phrase using the user pin
+   * password and stores it inside Vuex store
+   * @param mnemonic the mnemonic phrase to store
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/setRecoverMnemonic','my seed phrase')
+   * ```
    */
   async setRecoverMnemonic(
     { commit, state }: ActionsArguments<AccountsState>,
@@ -125,10 +138,13 @@ export default {
     await commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method loadAccount DocsTODO
-   * @description
-   * @param
+   * @method loadAccount
+   * @description Performs all the action needed to retrieve the user account
+   * from Solana
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/loadAccount')
+   * ```
    */
   async loadAccount({
     commit,
@@ -161,7 +177,6 @@ export default {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
-    // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', payerAccount)
 
     commit('setUserDetails', {
@@ -169,36 +184,23 @@ export default {
       ...userInfo,
     })
 
-    commit('prerequisites/setAccountsReady', true, { root: true })
-
-    // TODO: move this logic into a startup action
-    // Initialize textile
-    const { pin } = state
-    dispatch(
-      'textile/initialize',
-      {
-        id: payerAccount?.publicKey.toBase58(),
-        pass: pin,
-        wallet: $SolanaManager.getMainSolanaWalletInstance(),
-      },
-      { root: true },
-    )
-
-    // Initialize WebRTC with our ID
-    dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
-      root: true,
-    })
-
-    // Dispatch an action to fetch friends and friends requests
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
+    dispatch('startup', payerAccount)
   },
   /**
-   * @method registerUser DocsTODO
-   * @description
-   * @param userData
+   * @method registerUser
+   * @description Registers a new user on the Solana blockchain
+   * @param userData User information to register
    * @example
+   * ```typescript
+   * this.$store.dispatch(
+   *  'accounts/registerUser',
+   *  {
+   *    name: 'My Name',
+   *    image: 'linkToMyImage',
+   *    status: 'My amazing status message 🚀'
+   *  }
+   * );
+   * ```
    */
   async registerUser(
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
@@ -255,25 +257,65 @@ export default {
 
     commit('setActiveAccount', payerAccount.publicKey.toBase58())
 
-    // Initialize Encryption Engine
     dispatch('initializeEncryptionEngine', payerAccount)
+
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
       photoHash: imagePath,
       address: payerAccount.publicKey.toBase58(),
     })
+
+    dispatch('startup', payerAccount)
   },
   /**
-   * @method initializeEncryptionEngine DocsTODO
-   * @description
-   * @param userAccount
+   * @method initializeEncryptionEngine
+   * @description Initializes the Crypto class with the current user keypair
+   * @param userAccount keypair of the current user
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/initializeEncriptionEngin', currentUserAccount)
+   * ```
    */
-  async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
+  async initializeEncryptionEngine(
+    _: ActionsArguments<AccountsState>,
+    userAccount: Keypair,
+  ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
     await $Crypto.init(userAccount)
+  },
+  async startup(
+    { dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    payerAccount: Keypair,
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    const { initialized: textileInitialized } = rootState.textile
+    const { initialized: webrtcInitialized } = rootState.webrtc
+
+    if (!textileInitialized) {
+      const { pin } = state
+      dispatch(
+        'textile/initialize',
+        {
+          id: payerAccount?.publicKey.toBase58(),
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
+
+    if (!webrtcInitialized) {
+      dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
+        root: true,
+      })
+    }
+
+    dispatch('friends/fetchFriends', {}, { root: true })
+    dispatch('friends/fetchFriendRequests', {}, { root: true })
+    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
   },
 }
 

@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
-    ...mapGetters('prerequisites', ['allPrerequisitesReady']),
+    ...mapGetters(['allPrerequisitesReady']),
     ...mapState(['accounts']),
     // Helper method for prettier loading messages
     loadingStep(): string {
@@ -32,17 +32,8 @@ export default Vue.extend({
   },
   watch: {
     allPrerequisitesReady(nextValue) {
-      if (nextValue) {
-        if (this.accounts.lastVisited === this.$route.path) {
-          this.$router.replace('/chat/direct')
-          return
-        }
-
-        const matcher = this.$router.match(this.accounts.lastVisited)
-        if (matcher.matched.length > 0) {
-          this.$router.replace(this.accounts.lastVisited)
-        }
-      }
+      if (!nextValue) return
+      this.eventuallyRedirect()
     },
   },
   mounted() {
@@ -51,9 +42,21 @@ export default Vue.extend({
       this.$router.replace('/setup/disclaimer')
       return
     }
+
     this.loadAccount()
   },
   methods: {
+    eventuallyRedirect() {
+      if (this.accounts.lastVisited === this.$route.path) {
+        this.$router.replace('/chat/direct')
+        return
+      }
+
+      const matcher = this.$router.match(this.accounts.lastVisited)
+      if (matcher.matched.length > 0) {
+        this.$router.replace(this.accounts.lastVisited)
+      }
+    },
     /**
      * @method loadAccount
      * @description Load user account by dispatching the loadAccount action in store/accounts/actions.ts,

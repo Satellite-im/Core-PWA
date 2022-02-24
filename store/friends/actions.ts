@@ -188,8 +188,6 @@ export default {
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const userAccount = $SolanaManager.getActiveAccount()
-
     friendsProgram.subscribeToFriendsEvents()
 
     friendsProgram.addEventListener(

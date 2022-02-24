@@ -35,6 +35,7 @@ export default class UsersProgram extends EventEmitter {
 
     const provider = new Provider(this.solana.connection, new Wallet(payer), {
       commitment: Config.solana.defaultCommitment,
+      preflightCommitment: Config.solana.defaultPreflightCommitment,
     })
 
     this.program = new Program<Users>(
