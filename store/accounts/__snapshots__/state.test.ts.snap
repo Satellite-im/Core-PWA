@@ -6,6 +6,7 @@ Object {
   "encryptedPhrase": "",
   "error": "",
   "gasPrice": "",
+  "initialized": false,
   "lastVisited": "/",
   "loading": false,
   "locked": true,
