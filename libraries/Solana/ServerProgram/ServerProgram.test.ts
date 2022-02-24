@@ -1,16 +1,18 @@
+import * as web3 from '@solana/web3.js'
+import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import * as ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
-import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import * as web3 from '@solana/web3.js'
+const ServerProgramDefault = ServerProgram.default
+
 describe('ServerProgram.default.isInitialized', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new ServerProgram.default(undefined)
+    inst2 = new ServerProgramDefault(undefined)
   })
 
   test('0', () => {
-    let result: any = inst2.isInitialized()
+    const result: any = inst2.isInitialized()
     expect(result).toMatchSnapshot()
   })
 })
@@ -19,11 +21,11 @@ describe('ServerProgram.default.getUserPublicKey', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new ServerProgram.default(undefined)
+    inst2 = new ServerProgramDefault(undefined)
   })
 
   test('0', () => {
-    let result: any = inst2.getUserPublicKey(web3.Keypair.generate())
+    const result: any = inst2.getUserPublicKey(web3.Keypair.generate())
     expect(result).toMatchSnapshot()
   })
 })
@@ -41,20 +43,20 @@ describe('ServerProgram.default.parseUserInfo', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst10 = new ServerProgram.default(undefined)
-    inst9 = new ServerProgram.default(undefined)
-    inst8 = new ServerProgram.default(undefined)
-    inst7 = new ServerProgram.default(undefined)
-    inst6 = new ServerProgram.default(undefined)
-    inst5 = new ServerProgram.default(undefined)
-    inst4 = new ServerProgram.default(undefined)
-    inst3 = new ServerProgram.default(undefined)
-    inst = new ServerProgram.default(undefined)
-    inst2 = new ServerProgram.default(undefined)
+    inst10 = new ServerProgramDefault(undefined)
+    inst9 = new ServerProgramDefault(undefined)
+    inst8 = new ServerProgramDefault(undefined)
+    inst7 = new ServerProgramDefault(undefined)
+    inst6 = new ServerProgramDefault(undefined)
+    inst5 = new ServerProgramDefault(undefined)
+    inst4 = new ServerProgramDefault(undefined)
+    inst3 = new ServerProgramDefault(undefined)
+    inst = new ServerProgramDefault(undefined)
+    inst2 = new ServerProgramDefault(undefined)
   })
 
   test('0', () => {
-    let object: any = [
+    const object: any = [
       [
         'https://api.telegram.org/bot',
         'https://croplands.org/app/a/reset?token=',
@@ -80,7 +82,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'Www.GooGle.com',
       ],
     ]
-    let object2: any = [
+    const object2: any = [
       [
         'http://base.com',
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -106,7 +108,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://api.telegram.org/',
       ],
     ]
-    let object3: any = [
+    const object3: any = [
       [
         'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
         'https://twitter.com/path?abc',
@@ -132,7 +134,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'http://www.croplands.org/account/confirm?t=',
       ],
     ]
-    let object4: any = [
+    const object4: any = [
       [
         'Www.GooGle.com',
         'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
@@ -158,8 +160,8 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'http://base.com',
       ],
     ]
-    let object5: any = [object, object2, object3, object4]
-    let result: any = inst2.parseUserInfo({
+    const object5: any = [object, object2, object3, object4]
+    const result: any = inst2.parseUserInfo({
       name: 'Michael',
       status: 'canceled',
       photo_hash: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -169,7 +171,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
   })
 
   test('1', () => {
-    let object: any = [
+    const object: any = [
       [
         'google.com',
         'http://www.example.com/route/123?foo=bar',
@@ -195,7 +197,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://twitter.com/path?abc',
       ],
     ]
-    let object2: any = [
+    const object2: any = [
       [
         'http://base.com',
         'http://www.croplands.org/account/confirm?t=',
@@ -221,7 +223,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://croplands.org/app/a/confirm?t=',
       ],
     ]
-    let object3: any = [
+    const object3: any = [
       [
         'Www.GooGle.com',
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -247,7 +249,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://croplands.org/app/a/reset?token=',
       ],
     ]
-    let object4: any = [
+    const object4: any = [
       [
         'http://www.croplands.org/account/confirm?t=',
         'https://',
@@ -273,8 +275,8 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://api.telegram.org/bot',
       ],
     ]
-    let object5: any = [object, object2, object3, object4]
-    let result: any = inst.parseUserInfo({
+    const object5: any = [object, object2, object3, object4]
+    const result: any = inst.parseUserInfo({
       name: 'Michael',
       status: 'draft',
       photo_hash: 'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
@@ -284,7 +286,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
   })
 
   test('2', () => {
-    let object: any = [
+    const object: any = [
       ['https://', 'www.google.com', 'Www.GooGle.com', 'www.google.com'],
       [
         'www.google.com',
@@ -305,7 +307,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://croplands.org/app/a/reset?token=',
       ],
     ]
-    let object2: any = [
+    const object2: any = [
       [
         'www.google.com',
         'https://',
@@ -331,7 +333,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'www.google.com',
       ],
     ]
-    let object3: any = [
+    const object3: any = [
       [
         'https://',
         'https://api.telegram.org/',
@@ -357,7 +359,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://twitter.com/path?abc',
       ],
     ]
-    let object4: any = [
+    const object4: any = [
       [
         'https://croplands.org/app/a/confirm?t=',
         'www.google.com',
@@ -383,8 +385,8 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
       ],
     ]
-    let object5: any = [object, object2, object3, object4]
-    let result: any = inst3.parseUserInfo({
+    const object5: any = [object, object2, object3, object4]
+    const result: any = inst3.parseUserInfo({
       name: 'Jean-Philippe',
       status: 'done',
       photo_hash: 'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
@@ -394,7 +396,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
   })
 
   test('3', () => {
-    let object: any = [
+    const object: any = [
       [
         'https://',
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -420,7 +422,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
       ],
     ]
-    let object2: any = [
+    const object2: any = [
       [
         'google.com',
         'http://base.com',
@@ -446,7 +448,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'google.com',
       ],
     ]
-    let object3: any = [
+    const object3: any = [
       [
         'https://twitter.com/path?abc',
         'www.google.com',
@@ -472,7 +474,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'google.com',
       ],
     ]
-    let object4: any = [
+    const object4: any = [
       [
         'https://croplands.org/app/a/reset?token=',
         'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -498,8 +500,8 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://croplands.org/app/a/confirm?t=',
       ],
     ]
-    let object5: any = [object, object2, object3, object4]
-    let result: any = inst4.parseUserInfo({
+    const object5: any = [object, object2, object3, object4]
+    const result: any = inst4.parseUserInfo({
       name: 'Michael',
       status: 'processing',
       photo_hash: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
@@ -509,7 +511,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
   })
 
   test('4', () => {
-    let object: any = [
+    const object: any = [
       [
         'https://',
         'http://www.example.com/route/123?foo=bar',
@@ -530,7 +532,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://',
       ],
     ]
-    let object2: any = [
+    const object2: any = [
       [
         'https://api.telegram.org/bot',
         'google.com',
@@ -556,7 +558,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'www.google.com',
       ],
     ]
-    let object3: any = [
+    const object3: any = [
       [
         'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
         'https://api.telegram.org/bot',
@@ -582,7 +584,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://api.telegram.org/',
       ],
     ]
-    let object4: any = [
+    const object4: any = [
       [
         'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
         'http://www.croplands.org/account/confirm?t=',
@@ -608,8 +610,8 @@ describe('ServerProgram.default.parseUserInfo', () => {
         'https://croplands.org/app/a/confirm?t=',
       ],
     ]
-    let object5: any = [object, object2, object3, object4]
-    let result: any = inst5.parseUserInfo({
+    const object5: any = [object, object2, object3, object4]
+    const result: any = inst5.parseUserInfo({
       name: 'Anas',
       status: 'pending',
       photo_hash: 'https://croplands.org/app/a/confirm?t=',
@@ -619,7 +621,7 @@ describe('ServerProgram.default.parseUserInfo', () => {
   })
 
   test('5', () => {
-    let result: any = inst10.parseUserInfo({
+    const result: any = inst10.parseUserInfo({
       name: '',
       status: '',
       photo_hash: '',
