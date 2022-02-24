@@ -102,8 +102,8 @@ export class FilSystem {
    */
   get flat(): ExportItem[] {
     const flatDeepByKey = (
-      data: Array<ExportDirectory | ExportFile>,
-      key: keyof ExportDirectory | ExportFile,
+      data: Array<ExportItem | ExportFile>,
+      key: keyof ExportDirectory | keyof ExportFile,
     ) => {
       return data.reduce((prev, el) => {
         prev.push(el)
