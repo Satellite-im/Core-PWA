@@ -1,10 +1,9 @@
 <div
   class="file"
   :class="ui.isLoadingFileIndex ? 'disabled' : 'clickable'"
-  v-on="ui.isLoadingFileIndex ? {} : {click: fileClick}"
+  v-on="ui.isLoadingFileIndex ? {} : {click: fileClick, contextmenu: contextMenu}"
   @mouseover="fileHover=true"
   @mouseleave="fileHover=false"
-  @contextmenu="contextMenu"
 >
   <div class="quick-actions">
     <link-icon

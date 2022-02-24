@@ -48,10 +48,6 @@ export default Vue.extend({
       type: Object as PropType<Item>,
       required: true,
     },
-    load: {
-      type: Boolean,
-      required: true,
-    },
   },
   data() {
     return {
