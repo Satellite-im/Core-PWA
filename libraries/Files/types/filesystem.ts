@@ -19,13 +19,13 @@ export interface ExportFile extends ExportSharedProps {
 
 export interface ExportDirectory extends ExportSharedProps {
   // eslint-disable-next-line no-use-before-define
-  children?: ExportContent
+  children?: ExportItem
 }
 
-export type ExportContent = ExportFile | ExportDirectory
+export type ExportItem = ExportFile | ExportDirectory
 
 export type FileSystemExport = {
   type: FILESYSTEM_TYPE
   version: number
-  content: Array<ExportContent>
+  content: Array<ExportItem>
 }

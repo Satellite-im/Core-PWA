@@ -5,7 +5,7 @@ import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import {
   FileSystemExport,
-  ExportContent,
+  ExportItem,
   FILESYSTEM_TYPE,
   ExportFile,
   ExportDirectory,
@@ -97,12 +97,32 @@ export class FilSystem {
   }
 
   /**
+   * @method flat
+   * @returns {ExportItem[]} flattened list of files in order to check if file exists
+   */
+  get flat(): ExportItem[] {
+    const flatDeepByKey = (
+      data: Array<ExportDirectory | ExportFile>,
+      key: keyof ExportDirectory | ExportFile,
+    ) => {
+      return data.reduce((prev, el) => {
+        prev.push(el)
+        if (el[key]) {
+          prev.push(...flatDeepByKey(el[key], key))
+        }
+        return prev
+      }, [])
+    }
+    return flatDeepByKey(this.export.content, 'children')
+  }
+
+  /**
    * @method exportChildren
    * @param {Item} item
    * @description recursively converts item to the proper format for export
-   * @returns {ExportContent} Item in ExportContent format
+   * @returns {ExportItem} Item in ExportItem format
    */
-  exportChildren(item: Item): ExportContent {
+  exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
       const { name, liked, shared, type, hash, size, description }: ExportFile =
         item
@@ -146,7 +166,7 @@ export class FilSystem {
    * @param {FileSystemExport} fs
    * @description recursively adds files and directories from JSON export
    */
-  public importChildren(item: ExportContent) {
+  public importChildren(item: ExportItem) {
     if (item.type in FILE_TYPE) {
       const { name, hash, size, liked, shared, description } =
         item as ExportFile
@@ -158,7 +178,7 @@ export class FilSystem {
       const type = item.type as DIRECTORY_TYPE
       this.createDirectory({ name, liked, shared, type })
       this.openDirectory(name)
-      children.forEach((item: ExportContent) => {
+      children.forEach((item: ExportItem) => {
         this.importChildren(item)
       })
       this.goBack()
@@ -246,7 +266,7 @@ export class FilSystem {
    * @returns {boolean} returns truthy if child by name exists in filesystem
    */
   public hasChild(childName: string): boolean {
-    return this.currentDirectory.hasChild(childName)
+    return this.flat.some((item) => item.name === childName)
   }
 
   /**
