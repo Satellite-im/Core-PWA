@@ -153,14 +153,16 @@ export class FilSystem {
       const type = item.type as FILE_TYPE
       this.createFile({ name, hash, size, liked, shared, description, type })
     }
-    const { name, liked, shared, children } = item as ExportDirectory
-    const type = item.type as DIRECTORY_TYPE
-    this.createDirectory({ name, liked, shared, type })
-    this.openDirectory(name)
-    children.forEach((item: ExportContent) => {
-      this.importChildren(item)
-    })
-    this.goBack()
+    if (item.type in DIRECTORY_TYPE) {
+      const { name, liked, shared, children } = item as ExportDirectory
+      const type = item.type as DIRECTORY_TYPE
+      this.createDirectory({ name, liked, shared, type })
+      this.openDirectory(name)
+      children.forEach((item: ExportContent) => {
+        this.importChildren(item)
+      })
+      this.goBack()
+    }
   }
 
   /**

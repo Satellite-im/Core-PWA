@@ -8,9 +8,6 @@
   &.clickable {
     cursor: pointer;
   }
-  &.disabled {
-    cursor: not-allowed;
-  }
 
   .quick-actions {
     width: @full;
@@ -24,6 +21,14 @@
 
     svg:hover {
       &:extend(.font-secondary);
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+
+    .quick-actions {
+      display: none;
     }
   }
   .icon-container {
