@@ -1,4 +1,3 @@
-import * as Marketplace from '../marketplace'
 import * as Messages from '../messages'
 
 describe('init', () => {
