@@ -65,11 +65,11 @@ export default {
     Mousetrap.reset()
   },
   async setChatbarFocus({ dispatch }: ActionsArguments<UIState>) {
-    await dispatch('toggleChatbarFocus')
+    await dispatch('toggleChatbarFocus', false)
+    dispatch('toggleChatbarFocus', true)
   },
-  async toggleChatbarFocus({ commit }: ActionsArguments<UIState>) {
-    await commit('setChatbarFocus', false)
-    await commit('setChatbarFocus', true)
+  toggleChatbarFocus({ commit }: ActionsArguments<UIState>, flag: boolean) {
+    commit('setChatbarFocus', flag)
   },
   setChatbarContent(
     { commit, dispatch }: ActionsArguments<UIState>,
