@@ -112,10 +112,10 @@ export default Vue.extend({
     async like() {
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       this.item.toggleLiked()
+      await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
