@@ -123,14 +123,12 @@ export default Vue.extend({
         }
       }
 
-      try {
-        await Promise.all(
-          files.map(async (file) => {
-            return await this.$FileSystem.uploadFile(file)
-          }),
-        )
-      } catch (e: any) {
-        this.errors.push(e?.message ?? '')
+      for (const file of files) {
+        try {
+          await this.$FileSystem.uploadFile(file)
+        } catch (e: any) {
+          this.errors.push(e?.message ?? '')
+        }
       }
 
       // only update index if files have been updated
