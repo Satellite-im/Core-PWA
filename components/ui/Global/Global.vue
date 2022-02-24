@@ -14,7 +14,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Global',
   computed: {
-    ...mapState(['ui', 'media']),
+    ...mapState(['ui', 'media', 'webrtc']),
     ModalWindows: () => ModalWindows,
   },
   mounted() {
@@ -66,7 +66,11 @@ export default Vue.extend({
      * @example
      */
     async acceptCall(kinds: TrackKind[]) {
-      const identifier = this.$store.state.webrtc.incomingCall
+      if (this.webrtc.activeCall) {
+        this.hangUp()
+      }
+
+      const identifier = this.webrtc.incomingCall
 
       const peer = this.$WebRTC.getPeer(identifier)
 
@@ -93,12 +97,23 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      const identifier = this.$store.state.webrtc.incomingCall
+      const identifier = this.webrtc.incomingCall
       const peer = this.$WebRTC.getPeer(identifier)
 
       peer?.call.deny()
 
       this.$store.dispatch('webrtc/denyCall')
+    },
+    /**
+     * @method hangUp
+     * @description Hangs up active call
+     * @example
+     */
+    hangUp() {
+      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      peer?.call.hangUp()
+      this.$store.dispatch('webrtc/hangUp')
+      this.$store.commit('ui/fullscreen', false)
     },
   },
 })
