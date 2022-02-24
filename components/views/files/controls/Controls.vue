@@ -36,7 +36,16 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      if (this.$refs.upload) (this.$refs?.upload as HTMLButtonElement).click()
+      if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
+    },
+
+    /**
+     * @method resetFileUpload
+     * @description Clear the value of file input. handleFile will be called even if it's the same file again
+     * @example <input @onclick="resetFileUpload" />
+     */
+    resetFileUpload() {
+      if (this.$refs.upload) (this.$refs.upload as HTMLFormElement).value = ''
     },
 
     /**
@@ -44,6 +53,7 @@ export default Vue.extend({
      * @description Add new folder to fileSystem
      */
     async addFolder() {
+      this.errors = []
       if (!this.text) {
         this.errors.push(this.$t('pages.files.controls.folder_name') as string)
         return
@@ -58,7 +68,6 @@ export default Vue.extend({
         return
       }
       this.text = ''
-      this.errors = []
       await this.$Bucket.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
@@ -149,15 +158,6 @@ export default Vue.extend({
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw') as string)
       }
-    },
-
-    /**
-     * @method resetFileUpload
-     * @description Clear the value of file input. handleFile will be called even if it's the same file again
-     * @example <input @onclick="resetFileUpload" />
-     */
-    async resetFileUpload() {
-      if (this.$refs.upload) (this.$refs.upload as HTMLFormElement).value = ''
     },
   },
 })

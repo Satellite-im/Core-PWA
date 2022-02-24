@@ -67,7 +67,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     /**
-     * @returns Directory child count or item type
+     * @returns if directory, child count. if file, size
      */
     getSubtext(): string {
       return this.item instanceof Directory
@@ -80,6 +80,9 @@ export default Vue.extend({
     isArchive() {
       return this.item.name.match(this.$Config.regex.archive)
     },
+    /**
+     * @returns path inside textile bucket
+     */
     path(): string {
       return this.item instanceof Fil
         ? this.$Config.textile.browser + this.item.hash
