@@ -90,7 +90,7 @@ describe('Test FilSystem', () => {
     filesystem.renameChild('test_fil_two.txt', 'test_fil_rename.txt')
     expect(filesystem.hasChild('test_fil_two.txt')).toBe(false)
     expect(filesystem.hasChild('test_fil_rename.txt')).toBe(true)
-    filesystem.fuzzySearch('generic')
+    filesystem.fuzzySearch('GENERIC')
   })
   it(`Correctly fails to rename a non-existent child`, () => {
     expect(filesystem.renameChild('abc', 'test_fil_rename')).toBe(null)

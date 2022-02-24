@@ -1,6 +1,7 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { Bucket } from '../remote/textile/Bucket'
+import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemExport } from '../types/filesystem'
 
 const mockFileData = {
@@ -10,25 +11,28 @@ const mockFileData = {
   descrption: 'Test file description',
 }
 
+const mockDirectoryData = {
+  name: 'dir',
+  liked: false,
+  shared: false,
+  type: DIRECTORY_TYPE.DEFAULT,
+}
+
 const file = new Fil(mockFileData)
 const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
-  it('Fetch index and import it into the fileSystem', () => {
-    expect('').toEqual('')
-    // const bucket = new Bucket()
-    // const fs = new FilSystem()
+  it('export file system and update version number', () => {
+    const fs = new FilSystem()
 
-    // fs.addChild(file)
-    // fs.createDirectory('dir')
-    // fs.openDirectory('dir')
-    // fs.addChild(file2)
+    fs.addChild(file)
+    fs.createDirectory(mockDirectoryData)
+    fs.openDirectory('dir')
+    fs.addChild(file2)
 
-    // // need to place in variable or it returns empty after the first time
-    // const ex: FileSystemExport = fs.export
+    const ex: FileSystemExport = fs.export
 
-    // bucket.updateIndex(ex)
-    // expect(bucket.index).toEqual(ex)
+    expect(ex.version + 1).toEqual(fs.export.version)
   })
   it('get uninitialized textile', () => {
     const bucket = new Bucket()

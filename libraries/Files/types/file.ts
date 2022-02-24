@@ -3,7 +3,7 @@
  * if we don't have a filetype supported, we can just default to generic.
  */
 export enum FILE_TYPE {
-  GENERIC = 'generic',
-  IMAGE_PNG = 'img/png',
-  ARCHIVE = 'archive/zip',
+  GENERIC = 'GENERIC',
+  IMAGE_PNG = 'IMG/PNG',
+  ARCHIVE = 'ARCHIVE/ZIP',
 }

@@ -9,8 +9,8 @@ export class Directory extends Item {
   private _children = new Map()
 
   /**
-   * @param  {string=''} name Name of the new directory
-   * @param  {DIRECTORY_TYPE=DIRECTORY_TYPE.DEFAULT} type directory type of the new folder
+   * @constructor
+   * @param {object} param0 directory info - name, liked, shared, type
    * @returns {Directory}
    */
   constructor({
@@ -45,7 +45,7 @@ export class Directory extends Item {
   }
 
   /**
-   * @getter
+   * @getter copy
    * @returns {Directory} returns a cloned copy of this directory
    */
   get copy(): Directory {

@@ -96,6 +96,12 @@ export class FilSystem {
     }
   }
 
+  /**
+   * @method exportChildren
+   * @param {Item} item
+   * @description recursively converts item to the proper format for export
+   * @returns {ExportContent} Item in ExportContent format
+   */
   exportChildren(item: Item): ExportContent {
     if (item instanceof Fil) {
       const { name, liked, shared, type, hash, size, description }: ExportFile =
@@ -136,27 +142,25 @@ export class FilSystem {
   }
 
   /**
-   * @method import
+   * @method importChildren
    * @param {FileSystemExport} fs
-   * @description sets global file system based on parameter. will be fetched from Bucket
+   * @description recursively adds files and directories from JSON export
    */
   public importChildren(item: ExportContent) {
-    if (item.type === FILE_TYPE.GENERIC) {
+    if (item.type in FILE_TYPE) {
       const { name, hash, size, liked, shared, description } =
         item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({ name, hash, size, liked, shared, description, type })
     }
-    if (item.type === DIRECTORY_TYPE.DEFAULT) {
-      const { name, liked, shared, children } = item as ExportDirectory
-      const type = item.type as DIRECTORY_TYPE
-      this.createDirectory({ name, liked, shared, type })
-      this.openDirectory(name)
-      children.forEach((item: ExportContent) => {
-        this.importChildren(item)
-      })
-      this.goBack()
-    }
+    const { name, liked, shared, children } = item as ExportDirectory
+    const type = item.type as DIRECTORY_TYPE
+    this.createDirectory({ name, liked, shared, type })
+    this.openDirectory(name)
+    children.forEach((item: ExportContent) => {
+      this.importChildren(item)
+    })
+    this.goBack()
   }
 
   /**
