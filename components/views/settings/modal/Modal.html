@@ -28,8 +28,12 @@
           <SettingsPagesPersonalize
             v-if="this.ui.settingsRoute === 'personalize'"
           />
-          <SettingsPagesAccounts v-if="this.ui.settingsRoute === 'accounts'" />
-          <SettingsPagesAudio v-if="this.ui.settingsRoute === 'audio'" />
+          <SettingsPagesAccounts
+            v-if="this.ui.settingsRoute === 'accounts & Devices'"
+          />
+          <SettingsPagesAudio
+            v-if="this.ui.settingsRoute === 'audio & Video'"
+          />
           <SettingsPagesDeveloper
             v-if="this.ui.settingsRoute === 'developer'"
           />

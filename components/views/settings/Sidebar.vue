@@ -46,7 +46,7 @@ export default Vue.extend({
               text: 'Profile',
             },
             {
-              to: 'audio',
+              to: 'audio & Video',
               text: 'Audio & Video',
             },
             {
@@ -54,7 +54,7 @@ export default Vue.extend({
               text: 'Keybinds',
             },
             {
-              to: 'accounts',
+              to: 'accounts & Devices',
               text: 'Accounts & Devices',
             },
             {
