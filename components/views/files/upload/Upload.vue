@@ -70,12 +70,12 @@ export default Vue.extend({
   },
   watch: {
     recipient() {
-      this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
+      this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
       this.$parent.$data.showFilePreview = this.files.length > 0
     },
   },
   mounted() {
-    this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
+    this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
   },
   methods: {
     /**
