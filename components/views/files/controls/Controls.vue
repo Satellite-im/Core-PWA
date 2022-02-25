@@ -2,8 +2,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
+import { isHeic } from '~/utilities/Heic'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -100,8 +100,8 @@ export default Vue.extend({
             return { file, nsfw: false }
           }
           // convert heic to jpg for scan. return original heic if sfw
-          if (file.type === 'image/heic') {
-            const buffer = new Uint8Array(await file.arrayBuffer())
+          const buffer = new Uint8Array(await file.arrayBuffer())
+          if (isHeic(buffer)) {
             const outputBuffer = await convert({
               buffer,
               format: 'JPEG',

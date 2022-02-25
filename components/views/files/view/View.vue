@@ -1,6 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -31,6 +32,8 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapState(['ui']),
+
     path(): string {
       return this.$Config.textile.browser + this.file.hash
     },
