@@ -6,6 +6,7 @@ import {
   UIState,
   RecentGlyph,
   SettingsRoutes,
+  Position,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
@@ -32,8 +33,8 @@ export default {
   setContextMenuPosition(state: UIState, e: any) {
     state.contextMenuPosition = { x: e.x, y: e.y }
   },
-  setQuickProfilePosition(state: UIState, e: any) {
-    state.quickProfilePosition = { x: e.x, y: e.y }
+  setQuickProfilePosition(state: UIState, position: Position) {
+    state.quickProfilePosition = position
   },
   quickProfile(state: UIState, profile: Object | boolean) {
     state.quickProfile = profile

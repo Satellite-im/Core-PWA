@@ -130,6 +130,9 @@ export default Vue.extend({
         state: !this.ui.modals[modalName],
       })
     },
+    openProfile() {
+      this.$store.dispatch('ui/showProfile', this.user)
+    },
     async call(kinds: TrackKind[]) {
       if (!this.webrtc.connectedPeer) return
       const activeFriend = this.$Hounddog.getActiveFriend(

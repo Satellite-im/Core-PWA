@@ -5,8 +5,6 @@
   z-index: @base-z-index + 100;
   padding: 0 @normal-spacing;
   min-width: 500px;
-  user-select: none;
-  pointer-events: none;
 
   .vertical-divider {
     height: 30px;
@@ -58,6 +56,7 @@
   .circle {
     align-self: center;
     justify-self: center;
+    cursor: pointer;
   }
 
   .circle-container {
@@ -74,6 +73,8 @@
     max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
+    user-select: none;
+    pointer-events: none;
 
     .title {
       margin: 0;

@@ -1,11 +1,12 @@
 <div id="toolbar">
   <div class="circle-container">
-    <UiUserState :user="user" v-if="!server || $device.isMobile" />
+    <UiUserState :user="user" v-if="!server || $device.isMobile" :clickHandler='openProfile'/>
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
       :size="35"
       :source="src"
+      @click='openProfile'
       v-if='!$device.isMobile'
     />
   </div>

@@ -4,11 +4,9 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
 import { Group } from '~/types/messaging'
-import { Friend } from '~/types/ui/friends'
 import {
   getUsernameFromState,
   getAddressFromState,
-  getFullUserInfoFromState,
   refreshTimestampInterval,
 } from '~/utilities/Messaging'
 
@@ -80,27 +78,11 @@ export default Vue.extend({
      * @param e Event object from group component click
      * @example v-on:click="showQuickProfile"
      */
-    showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(
-        this.group.from,
-        this.$store.state,
-      )
-
-      const openQuickProfile = () => {
-        this.$store.commit('ui/setQuickProfilePosition', e)
-        this.$store.commit('ui/quickProfile', selectedUser)
-      }
-
-      if (!this.ui.quickProfile) {
-        openQuickProfile()
-        return
-      }
-
-      setTimeout(() => {
-        if (!this.ui.quickProfile) {
-          openQuickProfile()
-        }
-      }, 0)
+    showQuickProfile(e: MouseEvent) {
+      this.$store.dispatch('ui/showQuickProfile', {
+        textilePublicKey: this.$props.group.from,
+        position: { x: e.x, y: e.y },
+      })
     },
   },
 })
