@@ -7,7 +7,7 @@ module.exports = {
   extends: [
     '@nuxtjs/eslint-config-typescript',
     'plugin:nuxt/recommended',
-    'plugin:vue/vue3-recommended',
+    // 'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended',
   ],
   ignorePatterns: ['/cypress/*', 'package.json'],
