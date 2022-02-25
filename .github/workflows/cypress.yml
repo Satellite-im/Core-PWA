@@ -11,7 +11,7 @@ jobs:
         with:
             node:version: '16'
       - name: Install dependencies
-        run: yarn && git submodule update --init --recursive && yarn build && yarn generate && PORT=3000 yarn dev
+        run: yarn && git submodule update --init --recursive && yarn dev
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
