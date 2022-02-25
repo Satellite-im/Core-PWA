@@ -9,6 +9,8 @@ export const Config = {
     browser: 'https://hub.textile.io',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
+    fsTable: 'sat.json',
+    bucketName: 'personal-files',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
@@ -51,7 +53,6 @@ export const Config = {
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
     usersProgramId: '7MaC2xrAmmFsuRBEkD6BEL3eJpXCmaikYhLM3eKBPhAH',
-    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
   },
   // Realms are just different chains we support
   realms: [

@@ -112,7 +112,7 @@ export default Vue.extend({
     async like() {
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       this.item.toggleLiked()
-      await this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       this.item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
@@ -131,7 +131,7 @@ export default Vue.extend({
       if (!this.item.shared) {
         this.$store.commit('ui/setIsLoadingFileIndex', true)
         this.item.shareItem()
-        await this.$Bucket.updateIndex(this.$FileSystem.export)
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
         this.$store.commit('ui/setIsLoadingFileIndex', false)
       }
       navigator.clipboard.writeText(this.path).then(() => {
@@ -156,7 +156,7 @@ export default Vue.extend({
         await this.$FileSystem.removeFile(this.item.name)
       }
       this.$FileSystem.removeChild(this.item.name)
-      await this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },

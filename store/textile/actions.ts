@@ -10,6 +10,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
 export default {
   /**
@@ -32,8 +33,12 @@ export default {
     commit('textileInitialized', true)
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
-    // Set Textile Ready prerequisite as true
-    // commit('prerequisites/setTextileReady', true, { root: true })
+    const fsExport = $TextileManager.bucket?.index
+
+    if (fsExport) {
+      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+      $FileSystem.import(fsExport)
+    }
   },
   /**
    * @description Fetches messages that comes from a specific user
