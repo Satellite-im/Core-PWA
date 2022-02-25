@@ -9,7 +9,7 @@ export class TextileFileSystem extends FilSystem {
    * @returns {Bucket} bucket global to upload files to textile
    */
   get bucket() {
-    return Vue.prototype.$Bucket
+    return Vue.prototype.$TextileManager.bucket
   }
 
   /**

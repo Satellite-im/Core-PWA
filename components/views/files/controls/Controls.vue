@@ -68,7 +68,7 @@ export default Vue.extend({
         return
       }
       this.text = ''
-      await this.$Bucket.updateIndex(this.$FileSystem.export)
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
     },
@@ -142,7 +142,7 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
-        await this.$Bucket.updateIndex(this.$FileSystem.export)
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
       this.$store.commit('ui/setIsLoadingFileIndex', false)

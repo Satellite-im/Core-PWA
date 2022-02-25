@@ -9,6 +9,7 @@ export enum RegistrationStatus {
 }
 
 export interface AccountsState {
+  initialized: boolean
   storePin: boolean
   registry: boolean
   loading?: boolean

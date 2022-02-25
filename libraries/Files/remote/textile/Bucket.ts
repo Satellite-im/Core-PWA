@@ -7,29 +7,22 @@ import {
 } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
-import { TextileErrors } from '../../errors/Errors'
 import { Config } from '~/config'
-import {
-  BucketConfig,
-  TextileInitializationData,
-} from '~/types/textile/manager'
-import IdentityManager from '~/libraries/Textile/IdentityManager'
+import { TextileInitializationData } from '~/types/textile/manager'
 import {
   FileSystemExport,
   FILESYSTEM_TYPE,
 } from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
-  private creds: { id: any; pass: any } = { id: null, pass: null }
-  private identityManager: IdentityManager
-  private _textile: TextileInitializationData | null = null
+  private _textile: TextileInitializationData
   private _index: FileSystemExport | null = null
   private buckets: Buckets | null
   private key: Root['key'] | null
 
-  constructor() {
+  constructor(textile: TextileInitializationData) {
     super()
-    this.identityManager = new IdentityManager()
+    this._textile = textile
     this.buckets = null
     this.key = null
   }
@@ -56,58 +49,42 @@ export class Bucket extends RFM implements RFMInterface {
    * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
    * @returns a promise that resolves when the initialization completes
    */
-  async init({
-    id,
-    pass,
-    wallet,
-    name,
-  }: BucketConfig): Promise<FileSystemExport | null> {
-    if (!wallet) {
-      throw new Error(TextileErrors.MISSING_WALLET)
-    }
-
-    const identity = await this.identityManager.initFromWallet(wallet)
-    const { client, users } = await this.identityManager.authorize(identity)
-
-    this.creds = {
-      id,
-      pass,
-    }
-
-    this._textile = {
-      identity,
-      client,
-      wallet,
-      users,
-    }
-
+  async init(name: string): Promise<FileSystemExport> {
     if (!Config.textile.key) {
       throw new Error('Textile key not found')
     }
+
     this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
-    await this.buckets.getToken(identity)
+    await this.buckets.getToken(this._textile.identity)
+
     const result = await this.buckets.getOrCreate(name)
+
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
+
     this.key = result.root.key
 
-    const hash = ((await this.buckets.listPath(this.key, 'sat.json')) as Path)
-      ?.item?.path
+    try {
+      const path: Path | void = await this.buckets.listPath(
+        this.key,
+        Config.textile.fsTable,
+      )
 
-    this._index = await fetch(Config.textile.browser + hash)
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        return data
-      })
-      .catch(() => {
-        return {
-          type: FILESYSTEM_TYPE.DEFAULT,
-          version: 1,
-          content: [],
-        }
-      })
-    return this._index
+      const hash = path?.item?.path
+
+      this._index = await fetch(Config.textile.browser + hash).then((res) =>
+        res.json(),
+      )
+
+      if (!this._index) throw new Error('Index not found')
+
+      return this._index
+    } catch (e) {
+      return {
+        type: FILESYSTEM_TYPE.DEFAULT,
+        version: 1,
+        content: [],
+      }
+    }
   }
 
   /**
@@ -122,7 +99,7 @@ export class Bucket extends RFM implements RFMInterface {
     this._index = index
     await this.buckets.pushPath(
       this.key,
-      'sat.json',
+      Config.textile.fsTable,
       Buffer.from(JSON.stringify(index)),
     )
   }
