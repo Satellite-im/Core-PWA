@@ -11,14 +11,18 @@ export default Vue.extend({
   computed: {
     groupedMessages() {
       const { address } = this.$route.params
-      const conversation = this.$typedStore.state.textile.conversations[address]
+      if (address) {
+        const conversation =
+          this.$typedStore.state.textile.conversations[address]
 
-      if (!conversation) {
-        return []
+        if (!conversation) {
+          return []
+        }
+
+        const { messages, replies, reactions } = conversation
+        return groupMessages(messages, replies, reactions)
       }
-
-      const { messages, replies, reactions } = conversation
-      return groupMessages(messages, replies, reactions)
+      return null
     },
   },
   mounted() {

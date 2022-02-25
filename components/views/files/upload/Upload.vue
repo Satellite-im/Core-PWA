@@ -42,7 +42,7 @@ export default Vue.extend({
     },
     recipient: {
       type: Object as PropType<Friend>,
-      required: true,
+      default: null,
     },
   },
   data() {
@@ -70,12 +70,16 @@ export default Vue.extend({
   },
   watch: {
     recipient() {
-      this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
-      this.$parent.$data.showFilePreview = this.files.length > 0
+      if (this.recipient) {
+        this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
+        this.$parent.$data.showFilePreview = this.files.length > 0
+      }
     },
   },
   mounted() {
-    this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
+    if (this.recipient) {
+      this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
+    }
   },
   methods: {
     /**
@@ -95,7 +99,7 @@ export default Vue.extend({
      */
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
-      if (this.editable) {
+      if (this.editable && this.recipient) {
         const files: File[] = [...event.target.files]
         this.$parent.$data.showFilePreview = files.length > 0
         if (files.length + this.$data.files.length > 8) {
@@ -189,19 +193,21 @@ export default Vue.extend({
       this.$parent.$data.showFilePreview = false
     },
     removeUploadItem(index: number) {
-      this.files.splice(index, 1)
-      if (this.$data.files.length === 0) {
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.uploadStatus = false
-        this.count_error = false
-        this.$parent.$data.showFilePreview = false
-        this.$store.commit('chat/deleteFiles', this.recipient.address)
-        return
+      if (this.recipient) {
+        this.files.splice(index, 1)
+        if (this.$data.files.length === 0) {
+          document.body.style.cursor = PropCommonEnum.DEFAULT
+          this.uploadStatus = false
+          this.count_error = false
+          this.$parent.$data.showFilePreview = false
+          this.$store.commit('chat/deleteFiles', this.recipient.address)
+          return
+        }
+        this.$store.commit('chat/setFiles', {
+          files: this.files,
+          address: this.recipient.address,
+        })
       }
-      this.$store.commit('chat/setFiles', {
-        files: this.files,
-        address: this.recipient.address,
-      })
     },
     closeNsfwAlert() {
       this.$data.alertNsfw = false
@@ -240,21 +246,23 @@ export default Vue.extend({
      * @description Sends a singular file to textile.
      */
     async dispatchFile(file: FileType) {
-      await this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient?.textilePubkey,
-          file,
-        })
-        .then(() => {
-          this.finishUploads()
-        })
-        .catch((error) => {
-          if (error) {
-            this.$Logger.log('file send error', error)
-            document.body.style.cursor = PropCommonEnum.DEFAULT
-            this.$store.dispatch('textile/clearUploadStatus')
-          }
-        })
+      if (this.recipient) {
+        await this.$store
+          .dispatch('textile/sendFileMessage', {
+            to: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      }
     },
     /**
      * @method sendMessage
@@ -276,7 +284,9 @@ export default Vue.extend({
         this.$data.fileAmount = nsfwCheck.length
         this.dispatchFile(file)
       })
-      this.$store.commit('chat/deleteFiles', this.recipient.address)
+      if (this.recipient) {
+        this.$store.commit('chat/deleteFiles', this.recipient.address)
+      }
     },
   },
 })

@@ -42,7 +42,7 @@ export default Vue.extend({
   props: {
     recipient: {
       type: Object as PropType<Friend>,
-      default: () => {},
+      default: null,
     },
   },
   data() {

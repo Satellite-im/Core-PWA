@@ -151,21 +151,24 @@ export default Vue.extend({
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient() {
-      // It should not happen that someone tries to write to himself, but we should check
-      // anyway
-      const isMe =
-        this.$route.params.address === this.$typedStore.state.accounts.active
+      const { id, address } = this.$route.params
+      if (address) {
+        // It should not happen that someone tries to write to himself, but we should check
+        // anyway
+        const isMe = address === this.$typedStore.state.accounts.active
 
-      const groupId = this.$route.params.id
+        const groupId = id
 
-      const recipient = groupId
-        ? { textilePubkey: groupId }
-        : isMe
-        ? null
-        : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address,
-          )
-      return recipient
+        const recipient = groupId
+          ? { textilePubkey: groupId }
+          : isMe
+          ? null
+          : this.$typedStore.state.friends.all.find(
+              (friend) => friend.address === address,
+            )
+        return recipient
+      }
+      return null
     },
   },
   watch: {
