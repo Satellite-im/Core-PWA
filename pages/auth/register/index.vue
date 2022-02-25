@@ -48,7 +48,7 @@ export default Vue.extend({
         status: userData.status,
       })
 
-      this.$router.replace('/chat/direct')
+      this.$router.push({ path: '/chat/direct', replace: true })
     },
   },
 })
