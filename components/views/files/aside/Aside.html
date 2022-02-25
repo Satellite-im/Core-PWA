@@ -8,9 +8,11 @@
       :action="() => {}"
     />
   </div>
-  <UiProgress :progress="80" />
+  <UiProgress :progress="progress" />
   <div>
-    <span class="usage-text"> <span class="red">3.8GB</span> of 4GB </span>
+    <span class="usage-text">
+      <span class="red">{{totalSize}}</span> of 4GB
+    </span>
   </div>
   <UiSpacer :height="10" />
   <div>

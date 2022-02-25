@@ -151,6 +151,7 @@ export default {
       errors: {
         reserved_name: 'sat.json is a reserved file name',
         file_name: 'File with name already exists in this file system',
+        limit: 'This upload would exceed your storage limit',
       },
     },
     unlock: {

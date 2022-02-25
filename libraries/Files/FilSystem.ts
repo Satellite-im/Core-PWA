@@ -11,6 +11,7 @@ import {
   ExportDirectory,
 } from './types/filesystem'
 import { FILE_TYPE } from './types/file'
+import { Config } from '~/config'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })
@@ -114,6 +115,26 @@ export class FilSystem {
       }, [])
     }
     return flatDeepByKey(this.export.content, 'children')
+  }
+
+  /**
+   * @method totalSize
+   * @returns {number} total size of all tracked files
+   */
+  get totalSize(): number {
+    return this.flat.reduce(
+      (total, curr) =>
+        curr.type in FILE_TYPE ? total + (curr as ExportFile).size : total,
+      0,
+    )
+  }
+
+  /**
+   * @method percentStorageUsed
+   * @returns {number} percentage of available storage used
+   */
+  get percentStorageUsed(): number {
+    return (this.totalSize / Config.personalFilesLimit) * 100
   }
 
   /**
