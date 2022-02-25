@@ -294,8 +294,8 @@ export default {
     const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
-    if (!textileInitialized) {
-      const { pin } = state
+    const { pin } = state
+    if (!textileInitialized && pin) {
       dispatch(
         'textile/initialize',
         {
