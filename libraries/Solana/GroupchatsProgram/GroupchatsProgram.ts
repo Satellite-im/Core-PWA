@@ -1,7 +1,21 @@
 import { EventEmitter } from 'events'
 import { Program, Provider, utils, Wallet } from '@project-serum/anchor'
-import { PublicKey, SystemProgram } from '@solana/web3.js'
-import { Groupchats, IDL } from './GroupchatsProgram.types'
+import {
+  GetProgramAccountsFilter,
+  KeyedAccountInfo,
+  PublicKey,
+  SystemProgram,
+} from '@solana/web3.js'
+import {
+  Group,
+  Groupchats,
+  GroupEvents,
+  GroupEventsFilter,
+  IDL,
+  InvitationAccount,
+  InvitationAccountsFilter,
+  RawGroup,
+} from './GroupchatsProgram.types'
 import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
@@ -150,6 +164,151 @@ export default class GroupchatsProgram extends EventEmitter {
       },
       signers: [payer],
     })
+  }
+
+  buildInvitationAccountFilter(
+    filter: InvitationAccountsFilter,
+  ): GetProgramAccountsFilter[] {
+    const filters = []
+    const offsets: { [key: string]: number } = {
+      recipient: 72,
+      sender: 8,
+      groupId: 80,
+    }
+
+    for (const [key, value] of Object.entries(filter)) {
+      filters.push({
+        memcmp: {
+          offset: offsets[key],
+          bytes: value.toString(),
+        },
+      })
+    }
+    return filters
+  }
+
+  /**
+   * Returns invitation accounts with optional filtering
+   * @param filter {InvitationAccountsFilter}
+   * @returns Promise<InvitationAccount[]>
+   */
+  async getInvitationAccounts(
+    filter: InvitationAccountsFilter = {},
+  ): Promise<InvitationAccount[]> {
+    const program = this._getProgram()
+
+    const filters = this.buildInvitationAccountFilter(filter)
+    const accounts = await program.account.invitation.all(filters)
+
+    return accounts as InvitationAccount[]
+  }
+
+  /**
+   * Returns group by given id
+   * @param groupId {string} id of the group
+   * @returns Promise<Group>
+   */
+  async getGroupById(groupId: string): Promise<Group> {
+    const groupHash = this._getGroupHash(groupId)
+    const groupPDA = this._groupPDAPublicKey(groupHash)
+
+    const group = (await this.getGroup(groupPDA[0])) as RawGroup
+
+    return {
+      ...group,
+      id: groupId,
+      admin: group.admin.toString(),
+      creator: group.creator.toString(),
+    }
+  }
+
+  /**
+   * Returns groups the user is a member of
+   * @param address {string} user address
+   * @returns Promise<Group[]>
+   */
+  async getUserGroups(address: string | PublicKey): Promise<Group[]> {
+    const inviteAccounts = await this.getInvitationAccounts({
+      recipient: address,
+    })
+
+    const program = this._getProgram()
+    const keys = inviteAccounts.map((acc) => acc.account.groupKey)
+    const groups = (await program.account.group.fetchMultiple(
+      keys,
+    )) as RawGroup[]
+
+    return groups
+      .filter((group) => !!group)
+      .map((group: RawGroup, i) => ({
+        name: '<unnamed>',
+        ...group,
+        admin: group.admin.toString(),
+        creator: group.creator.toString(),
+        id: inviteAccounts[i]?.account.groupId,
+      }))
+  }
+
+  protected buildEventFilter(
+    type: GroupEvents,
+    filter: GroupEventsFilter,
+  ): GetProgramAccountsFilter[] {
+    switch (type) {
+      case GroupEvents.NEW_INVITATION:
+        return this.buildInvitationAccountFilter(filter)
+      default:
+        throw new Error('Invalid event type')
+    }
+  }
+
+  protected decodeEventPayload(
+    type: GroupEvents,
+    info: KeyedAccountInfo,
+  ): InvitationAccount {
+    const coder = this._getProgram().coder
+    const { accountId, accountInfo } = info
+    switch (type) {
+      case GroupEvents.NEW_INVITATION:
+        return {
+          publicKey: accountId,
+          account: coder.accounts.decode('invitation', accountInfo.data),
+        }
+      default:
+        throw new Error('Invalid event type')
+    }
+  }
+
+  /**
+   * Subscribe to group events
+   * @param type {GroupEvents} event type to subscribe
+   * @param filter {GroupEventsFilter} event filter
+   * @param callback {(payload: InvitationAccount) => void} event handler
+   * @returns {number} subscription id to unsubscribe
+   */
+  subscribe(
+    type: GroupEvents,
+    callback: (payload: InvitationAccount) => void,
+    filter: GroupEventsFilter = {},
+  ): number {
+    if (!this.solana) throw new Error('Solana not initialized')
+
+    return this.solana.connection.onProgramAccountChange(
+      GROUPCHATS_PROGRAM_ID,
+      (info) => callback(this.decodeEventPayload(type, info)),
+      Config.solana.defaultCommitment,
+      this.buildEventFilter(type, filter),
+    )
+  }
+
+  /**
+   * Unsubscribe from group events
+   * @param id {number} event subscription id
+   * @returns {number} subscription id to unsubscribe
+   */
+  unsubscribe(id: number): Promise<void> {
+    if (!this.solana) throw new Error('Solana not initialized')
+
+    return this.solana.connection.removeProgramAccountChangeListener(id)
   }
 
   /**

@@ -8,5 +8,6 @@ export enum DataStateType {
 export interface DataState {
   files: DataStateType
   friends: DataStateType
+  groups: DataStateType
   search: DataStateType
 }

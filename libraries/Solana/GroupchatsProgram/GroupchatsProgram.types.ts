@@ -1,3 +1,5 @@
+import { PublicKey } from '@solana/web3.js'
+
 export type Groupchats = {
   version: '0.1.0'
   name: 'groupchats'
@@ -564,4 +566,43 @@ export const IDL: Groupchats = {
       msg: 'Group not empty',
     },
   ],
+}
+
+export interface InvitationAccount {
+  publicKey: PublicKey
+  account: {
+    sender: PublicKey
+    groupKey: PublicKey
+    recipient: PublicKey
+    groupId: string
+  }
+}
+
+export interface RawGroup {
+  name?: string
+  admin: PublicKey
+  creator: PublicKey
+  members: number
+  openInvites: boolean
+}
+
+export interface Group {
+  id: string
+  name?: string
+  admin: string
+  creator: string
+  members: number
+  openInvites: boolean
+}
+
+export interface InvitationAccountsFilter {
+  recipient?: string | PublicKey
+  sender?: string | PublicKey
+  groupId?: string
+}
+
+export type GroupEventsFilter = InvitationAccountsFilter
+
+export enum GroupEvents {
+  NEW_INVITATION,
 }
