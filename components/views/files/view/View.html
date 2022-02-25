@@ -39,9 +39,7 @@
       </div>
     </div>
   </div>
-  <div class="image-container" v-if="file.type.includes('image')">
-    <img class="file-image" :src="file.location" />
-  </div>
+  <img v-if="isImage" class="file-image" :src="path" />
   <div v-else class="no-preview">
     <a
       :data-tooltip="$t('controls.download')"
