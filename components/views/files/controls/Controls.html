@@ -23,6 +23,7 @@
       :text="$t('pages.files.controls.new_file')"
       size="small"
       :action="addFile"
+      :loading="ui.isLoadingFileIndex"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
@@ -33,6 +34,8 @@
       type="primary"
       :action="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
+      :loading="ui.isLoadingFileIndex"
+      :disabled="ui.isLoadingFileIndex"
     >
       <folder-plus-icon size="1.3x" />
     </InteractablesInputGroup>
@@ -45,7 +48,13 @@
       multiple
     />
   </div>
-  <TypographyError v-if="error" :text="error" class="error" />
+  <TypographyError
+    v-if="errors.length"
+    v-for="error in errors"
+    :key="error"
+    :text="error"
+    class="error"
+  />
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />

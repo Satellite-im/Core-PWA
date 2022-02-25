@@ -29,7 +29,7 @@ export default Vue.extend({
       this.$emit('handle', item)
     },
     /**
-     * @method handle
+     * @method forceRender
      * @description force reactivity for Map
      */
     forceRender() {

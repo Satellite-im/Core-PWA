@@ -13,6 +13,7 @@
         :type="inputKind"
         :placeholder="placeholder"
         :maxLength="textLimit? limitCount : $Config.chat.maxChars"
+        :disabled="disabled"
         v-on:keyup.enter="action"
         @input="update"
       />

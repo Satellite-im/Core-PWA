@@ -1,6 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -23,23 +24,36 @@ export default Vue.extend({
   props: {
     file: {
       type: Object as PropType<Fil>,
-      default: () => {},
+      required: true,
     },
     close: {
       type: Function,
-      default: () => () => {},
+      required: true,
+    },
+  },
+  computed: {
+    ...mapState(['ui']),
+
+    path(): string {
+      return this.$Config.textile.browser + this.file.hash
     },
   },
   methods: {
     /**
-     * @method open DocsTODO
-     * @description
-     * @param location
-     * @returns
-     * @example
+     * @method share
+     * @description copy link to clipboard and toggle shared status
      */
-    open(location: string): void {
-      window.open(location)
+    async share() {
+      if (!this.file.shared) {
+        this.$store.commit('ui/setIsLoadingFileIndex', true)
+        this.file.shareItem()
+        await this.$Bucket.updateIndex(this.$FileSystem.export)
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
+      }
+      navigator.clipboard.writeText(this.path).then(() => {
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
+      })
+      this.$emit('forceRender')
     },
   },
 })

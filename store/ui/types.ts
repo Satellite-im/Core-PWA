@@ -184,4 +184,5 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
+  isLoadingFileIndex: boolean
 }

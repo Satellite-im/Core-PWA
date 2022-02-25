@@ -9,29 +9,36 @@ export class Fil extends Item {
   private _size: number = 0
 
   /**
-   * Create a new Fil instance
    * @constructor
-   * @param param0 name,textile hash, file size, file description
+   * @param param0 Fil info - name, hash, size, liked, shared, description, type
+   * @returns {Fil}
    */
   constructor({
     name,
     hash,
     size,
+    liked,
+    shared,
     description,
+    type,
   }: {
     name: string
     hash: string
     size: number
+    liked?: boolean
+    shared?: boolean
     description?: string
+    type?: FILE_TYPE
   }) {
-    super(name || 'un-named file')
+    super({ name: name || 'un-named file', liked, shared })
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
+    this._type = type || FILE_TYPE.GENERIC
   }
 
   /**
-   * @getter
+   * @getter description
    * @returns file description
    */
   get description(): string {
@@ -39,7 +46,7 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter
+   * @getter type
    * @returns file type in plain text
    */
   get type(): FILE_TYPE {
@@ -47,7 +54,7 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter
+   * @getter hash
    * @returns hash of the file (usually IPFS)
    */
   get hash(): string {
@@ -55,7 +62,7 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter
+   * @getter copy
    * @returns Get a new copy of the file
    */
   get copy(): Fil {
@@ -63,12 +70,14 @@ export class Fil extends Item {
       name: `${this.name} copy`,
       hash: this.hash,
       size: this.size,
+      liked: this.liked,
+      shared: this.shared,
       description: this.description,
     })
   }
 
   /**
-   * @getter
+   * @getter size
    * @returns file size
    */
   get size(): number {
@@ -76,8 +85,7 @@ export class Fil extends Item {
   }
 
   /**
-   * Update the files description text
-   * @setter
+   * @setter file description text
    * @param {string} content the content to set the file description to
    */
   set description(content: string) {

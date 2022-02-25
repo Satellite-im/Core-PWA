@@ -13,8 +13,8 @@ const mockFileData = {
 }
 
 const mockDirectoryData = {
-  _name: 'Test Directory',
-  _type: DIRECTORY_TYPE.DEFAULT,
+  name: 'Test Directory',
+  type: DIRECTORY_TYPE.DEFAULT,
 }
 
 const mockFileSystemData = {
@@ -27,7 +27,7 @@ describe('Test FilSystem', () => {
   const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
   const file3 = new Fil({ ...mockFileData, name: 'abc.png' })
   const file4 = new Fil({ ...mockFileData, name: 'cc123.png' })
-  const directory = new Directory(...Object.values(mockDirectoryData))
+  const directory = new Directory(mockDirectoryData)
   directory.addChild(file)
   filesystem.addChild(file)
   filesystem.addChild(directory)
@@ -41,7 +41,7 @@ describe('Test FilSystem', () => {
   it(`Correctly returns a filesystem name (${mockFileSystemData.name})`, () =>
     expect(filesystem.name).toEqual(mockFileSystemData.name))
   const newDirectory = filesystem.copyChild('Test Directory')
-  const newDirectory2 = filesystem.createDirectory('second dir')
+  const newDirectory2 = filesystem.createDirectory({ name: 'second dir' })
   if (newDirectory && newDirectory2) {
     newDirectory2.addChild(file)
     newDirectory2.addChild(file2)
@@ -68,19 +68,29 @@ describe('Test FilSystem', () => {
   it(`Correctly copies entire filesystem`, () =>
     expect(filesystem.copy).toMatchObject(mockFileSystemData))
   it(`Correctly creates a new directory`, () =>
-    expect(filesystem.createDirectory('test_dir_3')).not.toBe(null))
+    expect(filesystem.createDirectory({ name: 'test_dir_3' })).not.toBe(null))
   it(`Correctly creates a new file`, () =>
-    expect(filesystem.createFile(testFile)).not.toBe(null))
+    expect(
+      filesystem.createFile({
+        name: testFile.name,
+        hash: '0089349da',
+        size: testFile.size,
+      }),
+    ).not.toBe(null))
   it(`Correctly deletes a directory`, () =>
     expect(filesystem.removeChild('test_dir_3')).toBe(true))
   it(`Correctly deletes a file`, () =>
     expect(filesystem.removeChild('test_fil.txt')).toBe(true))
   it(`Correctly renames a child`, () => {
-    filesystem.createFile(testFileTwo)
+    filesystem.createFile({
+      name: testFileTwo.name,
+      hash: '0089349da',
+      size: testFileTwo.size,
+    })
     filesystem.renameChild('test_fil_two.txt', 'test_fil_rename.txt')
     expect(filesystem.hasChild('test_fil_two.txt')).toBe(false)
     expect(filesystem.hasChild('test_fil_rename.txt')).toBe(true)
-    filesystem.fuzzySearch('generic')
+    filesystem.fuzzySearch('GENERIC')
   })
   it(`Correctly fails to rename a non-existent child`, () => {
     expect(filesystem.renameChild('abc', 'test_fil_rename')).toBe(null)

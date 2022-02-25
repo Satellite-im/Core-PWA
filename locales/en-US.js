@@ -148,6 +148,10 @@ export default {
         send: 'Send',
         cancel: 'Cancel',
       },
+      errors: {
+        reserved_name: 'sat.json is a reserved file name',
+        file_name: 'File with name already exists in this file system',
+      },
     },
     unlock: {
       decrypt: 'Decrypt Account',

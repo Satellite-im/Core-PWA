@@ -1,22 +1,37 @@
+import {
+  Buckets,
+  Path,
+  PushPathResult,
+  RemovePathResponse,
+  Root,
+} from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { TextileErrors } from '../../errors/Errors'
+import { Config } from '~/config'
 import {
-  TextileConfig,
+  BucketConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+import {
+  FileSystemExport,
+  FILESYSTEM_TYPE,
+} from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
   private creds: { id: any; pass: any } = { id: null, pass: null }
   private identityManager: IdentityManager
   private _textile: TextileInitializationData | null = null
   private _index: FileSystemExport | null = null
+  private buckets: Buckets | null
+  private key: Root['key'] | null
 
   constructor() {
     super()
     this.identityManager = new IdentityManager()
+    this.buckets = null
+    this.key = null
   }
 
   /**
@@ -36,26 +51,17 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   /**
-   * @method updateIndex
-   * @param index FileSystemExport
-   * @description sets file system import data
-   */
-  updateIndex(index: FileSystemExport) {
-    this._index = index
-  }
-
-  /**
-   * @method
-   * Initialization function that creates a Textile identity
-   * and initializes the Mailbox
-   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
+   * @method init
+   * @description Initializes bucket
+   * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
    * @returns a promise that resolves when the initialization completes
    */
   async init({
     id,
     pass,
     wallet,
-  }: TextileConfig): Promise<TextileInitializationData> {
+    name,
+  }: BucketConfig): Promise<FileSystemExport | null> {
     if (!wallet) {
       throw new Error(TextileErrors.MISSING_WALLET)
     }
@@ -75,6 +81,83 @@ export class Bucket extends RFM implements RFMInterface {
       users,
     }
 
-    return this._textile
+    if (!Config.textile.key) {
+      throw new Error('Textile key not found')
+    }
+    this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
+    await this.buckets.getToken(identity)
+    const result = await this.buckets.getOrCreate(name)
+    if (!result.root) throw new Error(`failed to open bucket ${name}`)
+    this.key = result.root.key
+
+    const hash = ((await this.buckets.listPath(this.key, 'sat.json')) as Path)
+      ?.item?.path
+
+    this._index = await fetch(Config.textile.browser + hash)
+      .then((res) => {
+        return res.json()
+      })
+      .then((data) => {
+        return data
+      })
+      .catch(() => {
+        return {
+          type: FILESYSTEM_TYPE.DEFAULT,
+          version: 1,
+          content: [],
+        }
+      })
+    return this._index
+  }
+
+  /**
+   * @method updateIndex
+   * @param index FileSystemExport
+   * @description sets file system import data
+   */
+  async updateIndex(index: FileSystemExport) {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    this._index = index
+    await this.buckets.pushPath(
+      this.key,
+      'sat.json',
+      Buffer.from(JSON.stringify(index)),
+    )
+  }
+
+  async ipnsLink(): Promise<string> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return (await this.buckets.links(this.key)).ipns
+  }
+
+  /**
+   * @method pushFile
+   * @description Remove file from bucket
+   * @param {File} file file to be uploaded
+   * @returns Promise whether it was uploaded or not
+   */
+  async pushFile(file: File): Promise<PushPathResult> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return await this.buckets.pushPath(this.key, file.name, file)
+  }
+
+  /**
+   * @method removeFile
+   * @description Remove file from bucket
+   * @param {string} name file name
+   * @returns Promise whether it was removed or not
+   *
+   */
+  async removeFile(name: string): Promise<RemovePathResponse> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return await this.buckets.removePath(this.key, name)
   }
 }
