@@ -15,5 +15,4 @@ jobs:
       - name: Update submodules
         run: git submodule update --init --recursive
       - name: Cypress run
-        run: npx cypress run
-        
+        uses: cypress-io/github-action@v2
