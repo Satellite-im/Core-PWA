@@ -125,6 +125,7 @@
     "babel-jest": "^27.3.1",
     "cypress": "9.5.0",
     "cypress-file-upload": "^5.0.8",
+    "cypress-plugin-snapshots": "^1.4.4",
     "dotenv-cli": "^4.0.0",
     "electron": "^13.2.1",
     "encoding": "^0.1.13",
