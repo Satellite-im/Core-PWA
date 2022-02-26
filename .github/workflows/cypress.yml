@@ -16,8 +16,3 @@ jobs:
         run: git submodule update --init --recursive
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        with:
-          browser: chrome
-          wait-on: 'http://localhost:3000'
-          # wait for 1 minute for the server to respond
-          wait-on-timeout: 60
