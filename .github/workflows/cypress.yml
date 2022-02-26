@@ -14,5 +14,7 @@ jobs:
         run: yarn
       - name: Update submodules
         run: git submodule update --init --recursive
+      - name: Compile
+        run: yarn dev
       - name: Cypress run
         uses: cypress-io/github-action@v2
