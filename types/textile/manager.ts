@@ -28,3 +28,7 @@ export type TextileImage = {
   size: number
   type: string
 }
+
+export interface BucketConfig extends TextileConfig {
+  name: string
+}

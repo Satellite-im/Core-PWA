@@ -29,6 +29,7 @@ const mutations = {
   },
   setActiveAccount(state: AccountsState, activeAccountPubkey: string) {
     state.active = activeAccountPubkey
+    state.initialized = true
   },
   setUserDetails(state: AccountsState, details: UserRegistrationData) {
     state.details = {
@@ -37,6 +38,7 @@ const mutations = {
       profilePicture: details.photoHash,
       address: state.active,
       state: 'online',
+      lastUpdate: Date.now(),
     }
   },
   updateMailboxId(state: AccountsState, mailboxId: string) {

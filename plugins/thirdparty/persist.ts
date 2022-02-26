@@ -19,13 +19,16 @@ const mutationsBlacklist = [
 
 // State properties path to blacklist saving to store
 const commonProperties = [
+  'webrtc.initialized',
+  'textile.initialized',
+  'accounts.initialized',
   'friends.all',
-  'prerequisites',
   'webrtc.activeStream',
   'webrtc.connectedPeer',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',
+  'ui.isLoadingFileIndex',
   'chat.files',
 ]
 

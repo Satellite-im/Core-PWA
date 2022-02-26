@@ -84,6 +84,7 @@
         class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
         data-tooltip="New Chat"
         @click="toggleModal"
+        v-if="!$device.isMobile"
       >
         <plus-circle-icon size="1x" />
       </div>
@@ -147,4 +148,11 @@
     <SidebarControls />
     <SidebarStatus />
   </div>
+  <InteractablesButton
+    class="quick-mobile-chat"
+    v-if="$device.isMobile  && users.length"
+    :action="gotoAddFriends"
+  >
+    <plus-icon size="1.2x" />
+  </InteractablesButton>
 </div>

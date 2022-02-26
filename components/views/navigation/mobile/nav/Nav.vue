@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import {
   HomeIcon,
@@ -9,6 +10,7 @@ import {
   FolderIcon,
   UsersIcon,
   SettingsIcon,
+  ShoppingBagIcon,
 } from 'satellite-lucide-icons'
 
 export default Vue.extend({
@@ -18,6 +20,10 @@ export default Vue.extend({
     FolderIcon,
     UsersIcon,
     SettingsIcon,
+    ShoppingBagIcon,
+  },
+  computed: {
+    ...mapState(['accounts']),
   },
 })
 </script>

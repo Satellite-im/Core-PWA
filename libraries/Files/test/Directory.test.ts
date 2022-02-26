@@ -8,16 +8,20 @@ describe('Test FileSystem Directory', () => {
     name: 'TestFile.png',
     hash: '0x0aef',
     size: 4235,
+    liked: false,
+    shared: false,
     descrption: 'Test file description',
   }
 
   const mockDirectoryData = {
     name: 'Test Directory',
+    liked: false,
+    shared: false,
     type: DIRECTORY_TYPE.DEFAULT,
   }
 
   const file = new Fil(mockFileData)
-  const directory = new Directory(...Object.values(mockDirectoryData))
+  const directory = new Directory(mockDirectoryData)
 
   it('Correctly returns a directory name', () =>
     expect(directory.name).toEqual(mockDirectoryData.name))
@@ -38,9 +42,9 @@ describe('Test FileSystem Directory', () => {
     }
   })
   it("Incorrectly adds directory's ancestor as a child of itself", () => {
-    const topLevelDirectory = new Directory('level1')
-    const secondLevelDirectory = new Directory('level2')
-    const thirdLevelDirectory = new Directory('level3')
+    const topLevelDirectory = new Directory({ name: 'level1' })
+    const secondLevelDirectory = new Directory({ name: 'level2' })
+    const thirdLevelDirectory = new Directory({ name: 'level3' })
     try {
       thirdLevelDirectory.addChild(topLevelDirectory)
       topLevelDirectory.addChild(secondLevelDirectory)

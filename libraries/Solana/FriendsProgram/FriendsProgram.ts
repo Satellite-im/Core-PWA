@@ -637,17 +637,17 @@ export default class FriendsProgram extends EventEmitter {
 
     const { connection } = this.solana
 
-    const userAccount = this.solana.getUserAccount()
-    if (!userAccount) {
+    const payerAccount = this.solana.getActiveAccount()
+    if (!payerAccount) {
       throw new Error('User account not found')
     }
 
     const fromKeyAndStatus = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), status]),
+      Buffer.from([...payerAccount.publicKey.toBytes(), status]),
     )
 
     const statusAndToKey = base58(
-      Buffer.from([status, ...userAccount.publicKey.toBytes()]),
+      Buffer.from([status, ...payerAccount.publicKey.toBytes()]),
     )
 
     const outgoing = await connection.getProgramAccounts(FRIENDS_PROGRAM_ID, {
@@ -693,8 +693,8 @@ export default class FriendsProgram extends EventEmitter {
     }
 
     const { connection } = this.solana
-    const userAccount = this.solana.getUserAccount()
-    if (!userAccount) {
+    const payerAccount = this.solana.getActiveAccount()
+    if (!payerAccount) {
       throw new Error('User account not found')
     }
 
@@ -703,7 +703,7 @@ export default class FriendsProgram extends EventEmitter {
     // formatted that way
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const incomingRequestBytes = base58(
-      Buffer.from([FriendStatus.PENDING, ...userAccount.publicKey.toBytes()]),
+      Buffer.from([FriendStatus.PENDING, ...payerAccount.publicKey.toBytes()]),
     )
 
     const incomingRequestsFilter: GetProgramAccountsFilter = {
@@ -723,7 +723,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const newFriendFromOutgoingBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.ACCEPTED]),
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.ACCEPTED]),
     )
 
     const newFriendFromOutgoingFilter: GetProgramAccountsFilter = {
@@ -741,7 +741,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestDeniedBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.REFUSED]),
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REFUSED]),
     )
 
     const friendRequestDeniedFilter: GetProgramAccountsFilter = {
@@ -761,7 +761,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestRemovedBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.REMOVED]),
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REMOVED]),
     )
 
     const friendRequestRemovedFilter: GetProgramAccountsFilter = {
@@ -776,7 +776,7 @@ export default class FriendsProgram extends EventEmitter {
     )
 
     const friendRequestRemovedMirroredBytes = base58(
-      Buffer.from([FriendStatus.REMOVED, ...userAccount.publicKey.toBytes()]),
+      Buffer.from([FriendStatus.REMOVED, ...payerAccount.publicKey.toBytes()]),
     )
 
     const friendRequestRemovedMirroredFilter: GetProgramAccountsFilter = {
