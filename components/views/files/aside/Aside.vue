@@ -12,6 +12,9 @@ export default Vue.extend({
     totalSize(): string {
       return this.$filesize(this.$FileSystem.totalSize)
     },
+    sizeLimit(): string {
+      return this.$filesize(this.$Config.personalFilesLimit)
+    },
   },
   watch: {
     totalSize() {
