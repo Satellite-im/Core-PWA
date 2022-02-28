@@ -243,12 +243,10 @@ export function getAddressFromState(
   textilePublicKey: string,
   state: RootState,
 ) {
-  const address =
-    state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey,
-    )?.address || PropCommonEnum.UNKNOWN
-
-  return address
+  return (
+    getFullUserInfoFromState(textilePublicKey, state)?.address ||
+    PropCommonEnum.UNKNOWN
+  )
 }
 
 export function getFullUserInfoFromState(
