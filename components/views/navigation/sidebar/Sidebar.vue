@@ -79,10 +79,10 @@ export default Vue.extend({
     },
   },
   methods: {
-    toggleModal() {
+    toggleModal(type: 'quickchat' | 'creategroup') {
       this.$store.commit('ui/toggleModal', {
-        name: 'quickchat',
-        state: !this.ui.modals.quickchat,
+        name: type,
+        state: !this.ui.modals[type],
       })
     },
     gotoAddFriends() {

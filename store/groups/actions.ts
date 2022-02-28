@@ -49,14 +49,22 @@ export default {
 
     const groupId = await groupChatManager.createGroupConversation()
 
+    console.log('groupId')
+
     // generate random groupPassword
     // use pubKey of current user to encrypt groupId
     // create group in solana using encrypted groupId
     await groupChatProgram.create(groupId)
 
+    console.time('start')
+    await new Promise((resolve) => setTimeout(resolve, 20000))
+    console.timeEnd('start')
+
     const group = await groupChatProgram.getGroupById(groupId)
 
     commit('addGroup', group)
+
+    return groupId
   },
 
   /**
@@ -93,14 +101,13 @@ export default {
    */
   async sendGroupInvite(
     { commit, state, rootState, dispatch }: ActionsArguments<GroupsState>,
-    group: Group,
-    recipient: string,
+    { group, recipient }: { group: Group; recipient: string },
   ) {
     const groupProgram = getGroupChatProgram()
     await groupProgram.invite(group.id, recipient)
 
     commit('updateGroup', {
-      ...group,
+      id: group.id,
       members: group.members + 1,
     })
   },

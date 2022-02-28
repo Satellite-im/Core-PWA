@@ -153,6 +153,8 @@ export default class GroupchatsProgram extends EventEmitter {
     const groupPDA = this._groupPDAPublicKey(groupHash)
     const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupPDA[0])
 
+    console.log('group pda creation', groupPDA[0].toBase58())
+
     // GroupID must be encrypted
     await program.rpc.create(groupHash, groupId, true, {
       accounts: {
