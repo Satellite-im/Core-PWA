@@ -85,9 +85,10 @@ export default Vue.extend({
 
       // if these files go over the storage limit, prevent upload
       if (
-        this.$FileSystem.totalSize +
-          originalFiles.reduce((total, curr) => total + curr.size, 0) >
-        this.$Config.personalFilesLimit
+        originalFiles.reduce(
+          (total, curr) => total + curr.size,
+          this.$FileSystem.totalSize,
+        ) > this.$Config.personalFilesLimit
       ) {
         this.errors.push(this.$t('pages.files.errors.limit') as string)
         return
