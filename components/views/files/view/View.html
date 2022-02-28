@@ -39,7 +39,11 @@
       </div>
     </div>
   </div>
-  <img v-if="isImage" class="file-image" :src="path" />
+  <img
+    v-if="isImage && file.size < $Config.uploadByteLimit"
+    class="file-image"
+    :src="path"
+  />
   <div v-else class="no-preview">
     <a
       :data-tooltip="$t('controls.download')"
