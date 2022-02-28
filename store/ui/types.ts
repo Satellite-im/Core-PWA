@@ -123,19 +123,32 @@ export interface RecentGlyph {
   count: number
 }
 
-export type SettingsRoutes =
-  | 'personalize'
-  | 'profile'
-  | 'audio'
-  | 'keybinds'
-  | 'accounts'
-  | 'privacy'
-  | 'developer'
-  | 'info'
-  | 'notifications'
-  | 'storage'
-  | 'network'
-  | 'realms'
+export enum SettingsRoutes {
+  PERSONALIZE = 'personalize',
+  PROFILE = 'profile',
+  AUDIO_AND_VIDEO = 'audio & Video',
+  KEY_BINDS = 'keybinds',
+  ACCOUNTS_AND_DEVICES = 'accounts',
+  PRIVACY = 'privacy',
+  DEVELOPER = 'developer',
+  INFO = 'info',
+  NOTIFICATIONS = 'notifications',
+  STORAGE = 'storage',
+  NETWORK = 'network',
+  REALMS = 'realms',
+}
+// | 'personalize'
+// | 'profile'
+// | 'audio'
+// | 'keybinds'
+// | 'accounts'
+// | 'privacy'
+// | 'developer'
+// | 'info'
+// | 'notifications'
+// | 'storage'
+// | 'network'
+// | 'realms'
 
 export interface UIState {
   contextMenuStatus: boolean
