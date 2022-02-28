@@ -30,7 +30,7 @@ export default Vue.extend({
      */
     directory: {
       type: Array as PropType<Array<Item>>,
-      default: () => [],
+      required: true,
     },
   },
   methods: {

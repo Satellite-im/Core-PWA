@@ -124,7 +124,8 @@ export class FilSystem {
    */
   exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
-      const { name, liked, shared, type, hash, size, description } = item
+      const { name, liked, shared, type, hash, size, description, modified } =
+        item
       return {
         name,
         liked,
@@ -133,15 +134,17 @@ export class FilSystem {
         hash,
         size,
         description,
+        modified,
       }
     }
-    const { name, liked, shared, type } = item
+    const { name, liked, shared, type, modified } = item
 
     return {
       name,
       liked,
       shared,
       type,
+      modified,
       children: (item as Directory).content.map((item) => {
         return this.exportChildren(item)
       }),
@@ -167,15 +170,25 @@ export class FilSystem {
    */
   public importChildren(item: ExportItem) {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
-      const { name, hash, size, liked, shared, description } =
+      const { name, hash, size, liked, shared, description, modified } =
         item as ExportFile
       const type = item.type as FILE_TYPE
-      this.createFile({ name, hash, size, liked, shared, description, type })
+      this.createFile({
+        name,
+        hash,
+        size,
+        liked,
+        shared,
+        description,
+        type,
+        modified,
+      })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
-      const { name, liked, shared, children } = item as ExportDirectory
+      const { name, liked, shared, children, modified } =
+        item as ExportDirectory
       const type = item.type as DIRECTORY_TYPE
-      this.createDirectory({ name, liked, shared, type })
+      this.createDirectory({ name, liked, shared, type, modified })
       this.openDirectory(name)
       children.forEach((item: ExportItem) => {
         this.importChildren(item)
@@ -197,6 +210,7 @@ export class FilSystem {
     shared,
     description,
     type,
+    modified,
   }: {
     name: string
     hash: string
@@ -205,6 +219,7 @@ export class FilSystem {
     shared?: boolean
     description?: string
     type?: FILE_TYPE
+    modified?: number
   }): Fil | null {
     const newFile = new Fil({
       name,
@@ -214,6 +229,7 @@ export class FilSystem {
       shared,
       description,
       type,
+      modified,
     })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
@@ -230,13 +246,15 @@ export class FilSystem {
     liked,
     shared,
     type,
+    modified,
   }: {
     name: string
     liked?: boolean
     shared?: boolean
     type?: DIRECTORY_TYPE
+    modified?: number
   }): Directory | null {
-    const newDir = new Directory({ name, liked, shared, type })
+    const newDir = new Directory({ name, liked, shared, type, modified })
     const inserted = this.currentDirectory.addChild(newDir)
     return inserted ? newDir : null
   }

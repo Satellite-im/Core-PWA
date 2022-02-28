@@ -17,15 +17,17 @@ export class Directory extends Item {
     name,
     liked,
     shared,
+    modified,
     type,
   }: {
     name: string
     liked?: boolean
     shared?: boolean
+    modified?: number
     type?: DIRECTORY_TYPE
   }) {
-    super({ name: name || 'un-named directory', liked, shared })
-    this._type = type ?? DIRECTORY_TYPE.DEFAULT
+    super({ name: name || 'un-named directory', liked, shared, modified })
+    this._type = type || DIRECTORY_TYPE.DEFAULT
   }
 
   /**
@@ -42,6 +44,16 @@ export class Directory extends Item {
    */
   get type(): DIRECTORY_TYPE {
     return this._type
+  }
+
+  /**
+   * @getter modified
+   * @returns last modified timestamp
+   */
+  get modified(): number {
+    return this.content.length
+      ? Math.max(...this.content.map((item) => item.modified))
+      : this.modifiedVal
   }
 
   /**

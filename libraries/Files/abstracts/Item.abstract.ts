@@ -11,7 +11,9 @@ export abstract class Item implements ItemInterface {
   private _parent: Directory | null | undefined = null
   private _liked: boolean = false
   private _shared: boolean = false
+  private _modified: number
   abstract type: DIRECTORY_TYPE | FILE_TYPE
+  abstract modified: number
 
   /**
    * Update the parent directory for this item
@@ -24,11 +26,13 @@ export abstract class Item implements ItemInterface {
     liked,
     shared,
     parent,
+    modified,
   }: {
     name: string
     shared?: boolean
     liked?: boolean
     parent?: Directory
+    modified?: number
   }) {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
@@ -37,6 +41,7 @@ export abstract class Item implements ItemInterface {
     this._shared = shared || false
     this._liked = liked || false
     this._parent = parent || null
+    this._modified = modified || Date.now()
   }
 
   /**
@@ -89,6 +94,15 @@ export abstract class Item implements ItemInterface {
    */
   get shared(): boolean {
     return this._shared
+  }
+
+  /**
+   * @protected
+   * @getter modifiedVal
+   * @returns last modified timestamp
+   */
+  protected get modifiedVal(): number {
+    return this._modified
   }
 
   /**
