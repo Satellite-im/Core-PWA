@@ -3,7 +3,17 @@
  * if we don't have a filetype supported, we can just default to generic.
  */
 export enum FILE_TYPE {
-  GENERIC = 'GENERIC',
-  IMAGE_PNG = 'IMG/PNG',
-  ARCHIVE = 'ARCHIVE/ZIP',
+  GENERIC = 'generic',
+  // images
+  APNG = 'image/apng',
+  AVIF = 'image/avif',
+  GIF = 'image/gif',
+  JPG = 'image/jpeg',
+  PNG = 'image/png',
+  SVG = 'image/svg+xml',
+  WEBP = 'image/webp',
+  // archives
+  ZIP = 'application/zip',
+  RAR = 'application/vnd.rar',
+  SEVENZIP = 'application/x-7z-compressed',
 }

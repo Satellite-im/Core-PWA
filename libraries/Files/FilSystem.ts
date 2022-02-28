@@ -166,13 +166,13 @@ export class FilSystem {
    * @description recursively adds files and directories from JSON export
    */
   public importChildren(item: ExportItem) {
-    if (item.type in FILE_TYPE) {
+    if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
       const { name, hash, size, liked, shared, description } =
         item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({ name, hash, size, liked, shared, description, type })
     }
-    if (item.type in DIRECTORY_TYPE) {
+    if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
       const { name, liked, shared, children } = item as ExportDirectory
       const type = item.type as DIRECTORY_TYPE
       this.createDirectory({ name, liked, shared, type })
