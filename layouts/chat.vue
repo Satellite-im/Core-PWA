@@ -25,7 +25,7 @@
           />
           <Sidebar
             :users="friends.all"
-            :groups="$mock.groups"
+            :groups="groups.all"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
@@ -146,7 +146,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media', 'friends']),
+    ...mapState(['audio', 'ui', 'media', 'friends', 'groups']),
     ...mapGetters('ui', ['showSidebar']),
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400

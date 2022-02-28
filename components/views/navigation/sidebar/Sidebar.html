@@ -90,13 +90,22 @@
       <div
         class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
         data-tooltip="New Chat"
-        @click="toggleModal"
-        v-if="!$device.isMobile"
+        @click="()=>toggleModal('quickchat')"
+        v-if="!$device.isMobile && toggleView"
+      >
+        <plus-circle-icon size="1x" />
+      </div>
+      <div
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
+        data-tooltip="New Group"
+        @click="()=>toggleModal('creategroup')"
+        v-if="!$device.isMobile && !toggleView"
       >
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <FriendsQuick v-click-outside="toggleModal" />
+    <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
+    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
