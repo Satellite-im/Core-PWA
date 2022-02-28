@@ -45,11 +45,5 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  const allPrerequisitesReady =
-    store.getters['prerequisites/allPrerequisitesReady']
-  if (!allPrerequisitesReady) {
-    return eventuallyRedirect('/')
-  }
-
   store.commit('accounts/setLastVisited', route.path)
 }

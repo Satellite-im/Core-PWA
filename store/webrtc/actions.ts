@@ -6,7 +6,6 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
-import { TracksManager } from '~/libraries/WebRTC/TracksManager'
 
 export default {
   /**
@@ -29,9 +28,11 @@ export default {
       $Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
       commit('setConnectedPeer', peerId)
     })
+
     $WebRTC.on('ERROR', () => {
       commit('setConnectedPeer', '')
     })
+
     commit('setInitialized', true)
   },
   /**
@@ -46,7 +47,6 @@ export default {
     identifier: string,
   ) {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-    const $TracksManager: TracksManager = Vue.prototype.$TracksManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
     if (!$WebRTC.initialized) {
@@ -72,13 +72,6 @@ export default {
         { root: true },
       )
     })
-
-    // peer?.communicationBus.on('RAW_DATA', (message) => {
-    //   if (message.data.type === 'CALL_DENIED') {
-    //     peer?.call.hangUp()
-    //     dispatch('hangUp')
-    //   }
-    // })
 
     peer?.call.on('INCOMING_CALL', (data) => {
       // if incoming call is activer call return before toggling incoming call

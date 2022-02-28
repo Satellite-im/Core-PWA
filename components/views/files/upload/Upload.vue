@@ -70,16 +70,12 @@ export default Vue.extend({
   },
   watch: {
     recipient() {
-      if (this.recipient) {
-        this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
-        this.$parent.$data.showFilePreview = this.files.length > 0
-      }
+      this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
+      this.$parent.$data.showFilePreview = this.files.length > 0
     },
   },
   mounted() {
-    if (this.recipient) {
-      this.files = cloneDeep(this.chat.files?.[this.recipient.address]) ?? []
-    }
+    this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
   },
   methods: {
     /**
@@ -106,7 +102,8 @@ export default Vue.extend({
           this.$data.count_error = true
           return
         }
-        const address = this.recipient.address
+        const address = this.recipient?.address
+        if (!address) return
         this.$data.count_error = false
         for (let i = 0; i < files.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */

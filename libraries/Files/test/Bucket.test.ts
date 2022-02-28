@@ -1,6 +1,5 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
-import { Bucket } from '../remote/textile/Bucket'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemExport } from '../types/filesystem'
 
@@ -34,9 +33,5 @@ describe('Test FileSystem Directory', () => {
 
     expect(ex.version + 1).toEqual(fs.export.version)
   })
-  it('get uninitialized textile', () => {
-    const bucket = new Bucket()
-
-    expect(bucket.textile).toBeNull()
-  })
+  // TODO: add test for Bucket
 })

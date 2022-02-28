@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`state.default 0 1`] = `
-Object {
-  "accountsReady": false,
-  "p2pReady": true,
-  "textileReady": false,
-}
-`;

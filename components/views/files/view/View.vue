@@ -47,7 +47,7 @@ export default Vue.extend({
       if (!this.file.shared) {
         this.$store.commit('ui/setIsLoadingFileIndex', true)
         this.file.shareItem()
-        await this.$Bucket.updateIndex(this.$FileSystem.export)
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
         this.$store.commit('ui/setIsLoadingFileIndex', false)
       }
       navigator.clipboard.writeText(this.path).then(() => {
