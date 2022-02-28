@@ -28,7 +28,7 @@
       <TypographyLabel :text="$t('pages.settings.changelog')" />
       <br />
       <pre>
-        <vue-markdown :source="releaseData.body" :breaks="false"/>
+        <vue-markdown :source="releaseData && releaseData.body" :breaks="false"/>
       </pre>
     </div>
   </div>

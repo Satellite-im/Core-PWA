@@ -24,8 +24,8 @@ export default Vue.extend({
   computed: {
     ...mapState(['accounts']),
   },
-  mounted() {
-    this.getReleaseBody()
+  async mounted() {
+    await this.getReleaseBody()
     this.debugInfo = this.$envinfo.debugInfo
     this.cpu = this.$envinfo.cpu
     this.renderer = this.$envinfo.renderer
