@@ -49,7 +49,9 @@
             </span>
             {{ item.name }}
           </td>
-          <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
+          <td v-if="!$device.isMobile">
+            {{ $dayjs(item.modified).fromNow() }}
+          </td>
           <td v-if="!$device.isMobile">
             {{ item.type ? item.type : item.children ? 'Folder' : '-' }}
           </td>

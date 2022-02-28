@@ -77,7 +77,7 @@ export default Vue.extend({
         { text: 'Copy Link', func: (this as any).testFunc },
       ],
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.$props.message.at).from(),
+      timestamp: this.$dayjs(this.$props.message.at).fromNow(),
     }
   },
   computed: {
