@@ -119,11 +119,6 @@ const initialRootState: any = {
       },
     },
   },
-  prerequisites: {
-    accountsReady: true,
-    textileReady: true,
-    p2pReady: true,
-  },
   settings: {
     audioInput: '',
     audioOutput: '',

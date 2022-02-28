@@ -47,7 +47,6 @@ export default Vue.extend({
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
 
     this.$store.commit('accounts/lock')
-    this.$store.commit('prerequisites/resetState')
   },
   methods: {
     /**

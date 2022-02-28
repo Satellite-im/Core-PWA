@@ -13,6 +13,7 @@
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
+        v-if="recipient"
         :editable="recipient ? true : false"
         :recipient="recipient"
         type="quick"

@@ -2,7 +2,7 @@
   <div class="registration-body">
     <UserCreate :onConfirm="confirm" v-if="hasToRegister" />
     <UiLoadersPageLoader
-      :is-loading="!hasToRegister && !isRegistered"
+      :is-loading="!hasToRegister && !allPrerequisitesReady"
       :title="$t('pages.loading.loading')"
       :subtitle="registrationStep"
     />
