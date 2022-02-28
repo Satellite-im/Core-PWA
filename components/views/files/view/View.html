@@ -32,7 +32,7 @@
       </a>
       <div
         :data-tooltip="$t('ui.close')"
-        v-on:click="close"
+        @click="$emit('close')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
       >
         <x-icon size="1x" />

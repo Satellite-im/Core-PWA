@@ -26,10 +26,6 @@ export default Vue.extend({
       type: Object as PropType<Fil>,
       required: true,
     },
-    close: {
-      type: Function,
-      required: true,
-    },
   },
   computed: {
     ...mapState(['ui']),
