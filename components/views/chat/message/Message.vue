@@ -129,10 +129,9 @@ export default Vue.extend({
      * @method containsOnlyEmoji
      * @description Check wether or not a string only contains an emoji
      * @param str String to check against
-     * TO DO: is not working very well (:emoji: + "c")
      */
     containsOnlyEmoji(str: string): boolean {
-      return str.match(this.$Config.regex.isEmoji) === null
+      return str.match(this.$Config.regex.isEmoji) !== null
     },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')

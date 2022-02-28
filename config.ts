@@ -107,8 +107,9 @@ export const Config = {
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
     // determine if filetype is archive
     archive: '^.*.(zip|vnd.rar|x-7z-compressed)$',
-    // Regex to check if string contains only emoji's. Note: doesn't yet support emoji modifiers
-    isEmoji: /\w*[{Emoji_Presentation}\u200D]+/gu,
+    // Regex to check if string contains only emoji's.
+    isEmoji:
+      /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
     // Check for link
