@@ -42,9 +42,10 @@
               @click="toggleMenu"
             />
             <Toolbar
+              v-if="recipient"
               id="toolbar"
-              :server="recipient || $mock.users[0]"
-              :user="recipient || $mock.users[0]"
+              :server="recipient"
+              :user="recipient"
             />
             <Media
               v-if="$device.isMobile"
@@ -75,7 +76,7 @@
               <Nuxt />
             </UiChatScroll>
             <WalletMini v-if="ui.modals.walletMini" />
-            <Chatbar ref="chatbar" :recipient="recipient" />
+            <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
@@ -183,7 +184,6 @@ export default Vue.extend({
   mounted() {
     this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
-    this.$store.commit('ui/setTypingUser', this.$mock.users[0])
 
     const appHeight = () => {
       const doc = document.documentElement
