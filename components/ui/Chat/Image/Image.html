@@ -2,9 +2,9 @@
   <div class="image-mask" v-if="showfull">
     <div class="image-container">
       <img
-        :class="`is-image-in-mask`"
+        class="is-image-in-mask"
         :src="image.url"
-        v-click-outside="() => $data.showfull = !$data.showfull"
+        v-click-outside="showfull = !showfull"
       />
       <a class="link" :href="image.url" target="_blank">
         {{ $t('files.view_original') }}
@@ -12,8 +12,9 @@
     </div>
   </div>
   <img
-    :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
+    class="is-image"
+    :class="full ? 'is-full-image' : 'is-normal-image'"
     :src="image.url"
-    v-on:click="() => $data.showfull = !$data.showfull"
+    @click="showfull = !showfull"
   />
 </div>
