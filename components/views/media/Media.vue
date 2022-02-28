@@ -42,9 +42,6 @@ export default Vue.extend({
     remoteAudioMuted() {
       return this.webrtc.remoteTracks.audio.muted
     },
-    propsToWatch() {
-      return { users: this.users, fullscreen: this.fullscreen }
-    },
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
@@ -116,9 +113,9 @@ export default Vue.extend({
     ...mapState(['audio']),
   },
   watch: {
-    propsToWatch({ fullscreen }) {
+    fullscreen(value) {
       const media: HTMLElement = this.$refs.media as HTMLElement
-      if (!fullscreen) {
+      if (!value) {
         const blocks = media.querySelectorAll('.user, .more-user')
         if (!media) return
         for (let j = 0; j < blocks.length; j++) {

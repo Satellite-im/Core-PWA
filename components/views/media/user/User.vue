@@ -43,14 +43,9 @@ export default Vue.extend({
       default: false,
     },
   },
-  computed: {
-    propsToWatch() {
-      return { videoStream: this.videoStream }
-    },
-  },
   watch: {
-    propsToWatch({ videoStream }) {
-      if (videoStream) {
+    videoStream(value) {
+      if (value) {
         this.$nextTick(() => {
           this.playVideo()
         })
@@ -68,7 +63,7 @@ export default Vue.extend({
         `#${this.isLocal ? 'local' : 'remote'}-video`,
       ) as HTMLVideoElement
 
-      video.play()
+      video?.play()
     },
   },
 })
