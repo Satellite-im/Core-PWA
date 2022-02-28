@@ -13,6 +13,6 @@ export async function ReleaseNotes(): Promise<any> {
       'https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest',
     )
     responseBody = await response.json()
-    return responseBody
   }
+  return responseBody
 }

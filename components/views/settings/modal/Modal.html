@@ -23,26 +23,44 @@
             v-on:click="toggleSidebar"
             class="menu--toggle"
           />
-          <UiBreadcrumbs />
+          <SettingsBreadcrumbs />
           <InteractablesClose :action="closeModal" />
           <SettingsPagesPersonalize
-            v-if="this.ui.settingsRoute === 'personalize'"
+            v-if="this.ui.settingsRoute === SettingsRoutes.PERSONALIZE"
           />
-          <SettingsPagesAccounts v-if="this.ui.settingsRoute === 'accounts'" />
-          <SettingsPagesAudio v-if="this.ui.settingsRoute === 'audio'" />
+          <SettingsPagesAccounts
+            v-if="this.ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
+          />
+          <SettingsPagesAudio
+            v-if="this.ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
+          />
           <SettingsPagesDeveloper
-            v-if="this.ui.settingsRoute === 'developer'"
+            v-if="this.ui.settingsRoute === SettingsRoutes.DEVELOPER"
           />
-          <SettingsPagesInfo v-if="this.ui.settingsRoute === 'info'" />
-          <SettingsPagesKeybinds v-if="this.ui.settingsRoute === 'keybinds'" />
+          <SettingsPagesInfo
+            v-if="this.ui.settingsRoute === SettingsRoutes.INFO"
+          />
+          <SettingsPagesKeybinds
+            v-if="this.ui.settingsRoute === SettingsRoutes.KEY_BINDS"
+          />
           <SettingsPagesNotifications
             v-if="this.ui.settingsRoute === 'notifications'"
           />
-          <SettingsPagesProfile v-if="this.ui.settingsRoute === 'profile'" />
-          <SettingsPagesStorage v-if="this.ui.settingsRoute === 'storage'" />
-          <SettingsPagesNetwork v-if="this.ui.settingsRoute === 'network'" />
-          <SettingsPagesRealms v-if="this.ui.settingsRoute === 'realms'" />
-          <SettingsPagesPrivacy v-if="this.ui.settingsRoute === 'privacy'" />
+          <SettingsPagesProfile
+            v-if="this.ui.settingsRoute === SettingsRoutes.PROFILE"
+          />
+          <SettingsPagesStorage
+            v-if="this.ui.settingsRoute === SettingsRoutes.STORAGE"
+          />
+          <SettingsPagesNetwork
+            v-if="this.ui.settingsRoute === SettingsRoutes.NETWORK"
+          />
+          <SettingsPagesRealms
+            v-if="this.ui.settingsRoute === SettingsRoutes.REALMS"
+          />
+          <SettingsPagesPrivacy
+            v-if="this.ui.settingsRoute === SettingsRoutes.PRIVACY"
+          />
         </UiScroll>
       </swiper-slide>
     </swiper>
