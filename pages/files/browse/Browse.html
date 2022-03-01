@@ -2,7 +2,7 @@
   <FilesView
     v-if="file"
     :file="file"
-    :close="() => this.file = false"
+    @close="file = false"
     @forceRender="forceRender"
   />
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
