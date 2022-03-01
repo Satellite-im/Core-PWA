@@ -52,7 +52,7 @@
     "emoji-mart-vue-fast": "^10.0.1",
     "events": "^3.3.0",
     "faker": "^5.5.3",
-    "filesize": "^7.0.0",
+    "filesize": "^8.0.7",
     "fp-ts": "^2.11.5",
     "fuse.js": "^6.4.6",
     "heic-convert": "^1.2.4",
