@@ -32,6 +32,19 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
+  watch: {
+    'ui.showSettings': {
+      handler(newSValue) {
+        if (newSValue && this.$device.isMobile) {
+          setTimeout(() => {
+            this.changeRoute('profile')
+          }, 100)
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   mounted() {
     this.showSidebar(false)
   },
@@ -78,19 +91,6 @@ export default Vue.extend({
      */
     closeModal() {
       this.$store.commit('ui/toggleSettings', { show: false })
-    },
-  },
-  watch: {
-    'ui.showSettings': {
-      handler(newSValue) {
-        if (newSValue && this.$device.isMobile) {
-          setTimeout(() => {
-            this.changeRoute('profile')
-          }, 100)
-        }
-      },
-      deep: true,
-      immediate: true,
     },
   },
 })
