@@ -101,7 +101,7 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.PIN_TOO_SHORT)
   })
-  test.skip('unlock with set phrase', async () => {
+  test('unlock with set phrase', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = {
       storePin: false,
@@ -132,7 +132,12 @@ describe('init', () => {
     }
 
     const commit = jest.fn()
-    CPrototype.hash = jest.fn()
+    // CPrototype.hash = jest.fn()
+    // CPrototype.hash.mockReturnValueOnce(
+    //   'fddd5093b61663c64c309a0352b3762e4f6b7277b1ec7f2ac64f4b696c66ab91',
+    // )
+    // CPrototype.decryptWithPassword = jest.fn()
+    // CPrototype.decryptWithPassword.mockReturnValueOnce('decrypted phrase')
 
     const result = async () => {
       await accounts.default.unlock({ commit, state }, state.pin)
