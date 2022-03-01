@@ -1,0 +1,28 @@
+.breadcrumb {
+  a {
+    text-transform: capitalize;
+    &:extend(.font-accent);
+  }
+  li + li::before {
+    &:extend(.font-primary);
+  }
+  li.is-active a {
+    &:extend(.font-muted);
+  }
+  li.is-disabled a {
+    &:extend(.font-muted);
+  }
+  font-family: @primary-font;
+  font-size: @text-size;
+  li {
+    max-width: 100%;
+  }
+
+  li > a {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}

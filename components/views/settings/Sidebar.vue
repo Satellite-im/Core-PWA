@@ -13,6 +13,7 @@
 import Vue from 'vue'
 
 import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
+import { SettingsRoutes } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
@@ -38,27 +39,27 @@ export default Vue.extend({
           title: 'General',
           links: [
             {
-              to: 'personalize',
+              to: SettingsRoutes.PERSONALIZE,
               text: 'Personalize',
             },
             {
-              to: 'profile',
+              to: SettingsRoutes.PROFILE,
               text: 'Profile',
             },
             {
-              to: 'audio',
+              to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',
             },
             {
-              to: 'keybinds',
+              to: SettingsRoutes.KEY_BINDS,
               text: 'Keybinds',
             },
             {
-              to: 'accounts',
+              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
               text: 'Accounts & Devices',
             },
             {
-              to: 'privacy',
+              to: SettingsRoutes.PRIVACY,
               text: 'Privacy',
             },
           ] as Array<SidebarLink>,
@@ -67,15 +68,15 @@ export default Vue.extend({
           title: 'Realms & Security',
           links: [
             {
-              to: 'realms',
+              to: SettingsRoutes.REALMS,
               text: 'Realms',
             },
             {
-              to: 'storage',
+              to: SettingsRoutes.STORAGE,
               text: 'Storage',
             },
             {
-              to: 'network',
+              to: SettingsRoutes.NETWORK,
               text: 'Network',
             },
           ] as Array<SidebarLink>,
@@ -92,7 +93,7 @@ export default Vue.extend({
               text: 'Notifications',
             }, */
             {
-              to: 'info',
+              to: SettingsRoutes.INFO,
               text: 'App Info',
             },
           ] as Array<SidebarLink>,
