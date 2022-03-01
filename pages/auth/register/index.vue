@@ -54,8 +54,6 @@ export default Vue.extend({
         image: userData.photoHash,
         status: userData.status,
       })
-
-      this.$router.push({ path: '/chat/direct', replace: true })
     },
   },
 })
