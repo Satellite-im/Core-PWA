@@ -26,16 +26,14 @@ export default Vue.extend({
       type: Object as PropType<Fil>,
       required: true,
     },
-    close: {
-      type: Function,
-      required: true,
-    },
   },
   computed: {
     ...mapState(['ui']),
-
     path(): string {
       return this.$Config.textile.browser + this.file.hash
+    },
+    isImage(): boolean {
+      return Boolean(this.file.name.match(this.$Config.regex.image))
     },
   },
   methods: {

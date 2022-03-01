@@ -79,8 +79,9 @@ export default Vue.extend({
       if (this.route !== 'emotes') return
       this.$nextTick(() => {
         setTimeout(() => {
+          /* For avoid double toggle of emoji Invoker */
           // @ts-ignore
-          this.$refs.emojiInvoker?.click()
+          if (!this.$refs.emojiPicker) this.$refs.emojiInvoker?.click()
         }, 0)
       })
     },

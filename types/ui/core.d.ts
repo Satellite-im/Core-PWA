@@ -4,6 +4,7 @@ export type Group = {
   motd: string
   members: Array<string>
   creator: string
+  encryptionKey: string
 }
 
 export type Server = {

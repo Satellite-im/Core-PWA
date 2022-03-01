@@ -48,7 +48,6 @@
     <UiChatImage
       v-if="message.type === 'image'"
       :image="message.payload"
-      :url="message.payload.url"
       alt=""
     />
     <MessageGlyph
