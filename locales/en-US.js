@@ -141,6 +141,7 @@ export default {
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
         shared_items: 'Shared Items',
+        coming_soon: 'Coming soon',
       },
       upload: {
         close: 'Close',
