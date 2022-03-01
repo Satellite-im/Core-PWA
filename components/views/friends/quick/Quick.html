@@ -1,4 +1,8 @@
-<div id="quick-chat" v-if="$store.state.ui.modals.quickchat">
+<div
+  id="quick-chat"
+  :class="`quick-chat ${ui.showMedia ? 'quick-chat--compact' : ''}`"
+  v-if="ui.modals.quickchat"
+>
   <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
   <TypographyText :text="$t('pages.chat.new_chat_description')" />
   <SettingsPagesUserSearch

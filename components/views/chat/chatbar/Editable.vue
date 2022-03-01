@@ -16,6 +16,8 @@
       @keyup="handleInputKeyup"
       @paste="handleInputPaste"
       @drop="handleDrop"
+      @focus="onFocus"
+      @blur="onBlur"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -29,6 +31,14 @@ import Vue from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
 import Cursor from '~/libraries/ui/Cursor'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
+
+function getCurrentRange() {
+  const sel = document.getSelection()
+  if (sel && sel.rangeCount > 0) {
+    return sel.getRangeAt(0)
+  }
+  return document.createRange()
+}
 
 export default Vue.extend({
   props: {
@@ -49,11 +59,21 @@ export default Vue.extend({
       default: true,
     },
   },
+  data() {
+    return {
+      currentRange: null as Range | null,
+    }
+  },
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
     },
     focus(value) {
+      if (value) {
+        this.focusInput()
+      }
+    },
+    enabled(value) {
       if (value) {
         this.focusInput()
       }
@@ -106,6 +126,28 @@ export default Vue.extend({
       })
       messageBox.innerHTML = rows.join('')
       Cursor.setCurrentCursorPosition(pos, messageBox)
+    },
+    /**
+     * @method handleTextFromOutside
+     * @description Handles the text from outside
+     * @param text The text to be parsed
+     */
+    handleTextFromOutside(text: string) {
+      const range = this.currentRange
+      const sel = document.getSelection()
+      if (range) {
+        range.deleteContents()
+        range.collapse(false)
+        sel?.removeAllRanges()
+        sel?.addRange(range)
+        document.execCommand('insertText', false, text)
+        return
+      }
+      // if a range is not available, insert at the end of the chat
+      this.focusInput()
+      this.$nextTick(() => {
+        document.execCommand('insertText', false, text)
+      })
     },
     /**
      * @method handleInputPaste
@@ -162,8 +204,8 @@ export default Vue.extend({
      * @description Handles the input event and emits same event to parent
      * @param {KeyboardEvent} e The input event
      */
-    onInput(e: KeyboardEvent) {
-      const messageBox = e.target as HTMLElement
+    onInput() {
+      const messageBox = this.$refs?.editable as HTMLElement
       let finalValue = ''
       messageBox.innerText.split('\n\n').forEach((row, i) => {
         finalValue +=
@@ -187,6 +229,31 @@ export default Vue.extend({
         // This is needed in order to correctly place the cursor on click
         Cursor.setCurrentCursorPosition(0, messageBox)
       }
+    },
+    /**
+     * @method onSelectionChange
+     * @description Handles the selectionchange event
+     */
+    onSelectionChange() {
+      this.currentRange = getCurrentRange()
+    },
+    /**
+     * @method onFocus
+     * @description Handles the focus event and emits same event to parent
+     * @param {Event} e The focus event
+     */
+    onFocus(e: Event) {
+      document.addEventListener('selectionchange', this.onSelectionChange)
+      this.$emit('focus', e)
+    },
+    /**
+     * @method onBlur
+     * @description Handles the blur event and emits same event to parent
+     * @param {Event} e The blur event
+     */
+    onBlur(e: Event) {
+      document.removeEventListener('selectionchange', this.onSelectionChange)
+      this.$emit('blur', e)
     },
   },
 })

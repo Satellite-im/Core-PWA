@@ -3,6 +3,7 @@
 exports[`state.default 0 1`] = `
 Object {
   "chatTexts": Array [],
+  "files": Object {},
   "replies": Array [],
 }
 `;

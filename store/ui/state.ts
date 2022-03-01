@@ -6,6 +6,7 @@ const InitialUIState = (): UIState => ({
   showSidebar: true,
   showSearchResult: false,
   showSettings: false,
+  showMedia: false,
   settingsSideBar: true,
   settingsRoute: 'personalize',
   quickProfile: false,
@@ -60,6 +61,7 @@ const InitialUIState = (): UIState => ({
     base: Themes[0],
     flair: Flairs[0],
   },
+  isLoadingFileIndex: false,
 })
 
 export default InitialUIState

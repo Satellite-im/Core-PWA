@@ -24,6 +24,7 @@ export default Vue.extend({
       profileInfo: sampleProfileInfo,
       croppedImage: '',
       showCropper: false,
+      featureReadyToShow: false,
     }
   },
   computed: {

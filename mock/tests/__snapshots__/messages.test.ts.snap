@@ -1,0 +1,326 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init gets the Messages constant 1`] = `
+Array [
+  Object {
+    "at": 1620515543000,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-00-01",
+    "messages": Array [
+      Object {
+        "at": 1620515543000,
+        "id": "00-00-10",
+        "payload": "Cosmic ipsum probe solstice vernal equinox red dwarf libration double star perigee cosmos cislunar hyperbolic orbit pole star black body meteor shower Jupiter transparency",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515543400,
+        "id": "00-00-11",
+        "payload": "Doppler shift quasar astronomer conjunction dark matter solar Pluto cosmonaut azimuth inner planets supernova new moon libration",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515543000,
+        "id": "00-123193-10",
+        "payload": Object {
+          "filename": "satellite.tar.gz",
+          "size": 19203,
+          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "type": "application/tar",
+        },
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "file",
+      },
+    ],
+    "to": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "type": "group",
+  },
+  Object {
+    "at": 1620515543400,
+    "type": "divider",
+  },
+  Object {
+    "at": 1620515543000,
+    "from": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "id": "00-00-02",
+    "messages": Array [
+      Object {
+        "at": 1620515545000,
+        "id": "00-00-13",
+        "payload": "I am a ~~tast~~ **test**. :smile:",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-20-04",
+        "payload": "And a follow up to that response message",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+    ],
+    "to": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "type": "group",
+  },
+  Object {
+    "at": 1620515543000,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-00-03",
+    "messages": Array [
+      Object {
+        "at": 1620515543000,
+        "id": "00-00-10",
+        "payload": "Uranus orbit seeing globular cluster Milky Way quasar total eclipse gas giant penumbra quarter moon sun Kirkwood gaps orbital eccentricity vacuum occultation background radiation helium Mir perihelion Neptune inclination Mars corona circumpolar terrestrial binary star perturbation nebula revolve ",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515543000,
+        "id": "00-123193-10",
+        "payload": Object {
+          "filename": "satellite.tar.gz",
+          "size": 19203,
+          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "type": "application/tar",
+        },
+        "pinned": true,
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "file",
+      },
+      Object {
+        "at": 1620515543400,
+        "id": "00-00-11",
+        "payload": "NASA precession cislunar dark matter terminator bolometer red shift yellow dwarf white giant north star transparency celestial probe azimuth ephemeris Venus albedo perigee star",
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "text",
+      },
+    ],
+    "to": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "type": "group",
+  },
+  Object {
+    "at": 1620515543000,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-01-84",
+    "messages": Array [
+      Object {
+        "at": 1620515543000,
+        "id": "00-00-10",
+        "payload": Object {
+          "author": "The Blender Foundation",
+          "filename": "big_buck_bunny.mp4",
+          "src": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          "title": "Big Buck Bunny",
+        },
+        "reactions": Array [
+          Object {
+            "emoji": "🔥",
+            "reactors": Array [
+              "Jpanay",
+            ],
+          },
+        ],
+        "replies": Array [],
+        "type": "video",
+      },
+    ],
+    "to": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "type": "group",
+  },
+  Object {
+    "at": 1620515543800,
+    "type": "divider",
+  },
+  Object {
+    "at": 1620515543000,
+    "from": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "id": "00-00-08",
+    "messages": Array [
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "pinned": true,
+        "reactions": Array [],
+        "replies": Array [
+          Object {
+            "at": 1620515583000,
+            "from": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+            "id": "01-432-138",
+            "payload": "This is a late message reply",
+            "reactions": Array [],
+            "to": "00-d0-10",
+            "type": "text",
+          },
+        ],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515543400,
+        "id": "00-c0-11",
+        "payload": Object {
+          "type": "img/png",
+          "url": "https://i.redd.it/buk8te6ried61.png",
+        },
+        "pinned": true,
+        "reactions": Array [],
+        "replies": Array [],
+        "type": "image",
+      },
+    ],
+    "to": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "type": "group",
+  },
+  Object {
+    "at": 1620515543000,
+    "id": "00-WO-03",
+    "type": "caret_divider",
+  },
+  Object {
+    "at": 1620515543000,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-CX-03",
+    "messages": Array [
+      Object {
+        "at": 1620515543000,
+        "id": "00-UM-10",
+        "payload": "Mir local arm starlight day eccentricity Saturn falling star Mars astronomy gravitation",
+        "reactions": Array [],
+        "replies": Array [
+          Object {
+            "at": 1620515543000,
+            "from": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+            "id": "02-432-138",
+            "payload": "This is a message reply",
+            "reactions": Array [
+              Object {
+                "emoji": "🔥",
+                "reactors": Array [
+                  "Jpanay",
+                ],
+              },
+            ],
+            "to": "00-00-03",
+            "type": "text",
+          },
+          Object {
+            "at": 1620515563000,
+            "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+            "id": "02-432-338",
+            "payload": "This is a message reply",
+            "reactions": Array [],
+            "to": "00-00-03",
+            "type": "text",
+          },
+          Object {
+            "at": 1620515563000,
+            "from": "0xdc76cd25977e0a5ae17155770273ad58648913d3",
+            "id": "02-432-338",
+            "payload": "This is a message reply 3",
+            "reactions": Array [],
+            "to": "00-00-03",
+            "type": "text",
+          },
+          Object {
+            "at": 1620515563000,
+            "from": "0x9bf4001d307dfd62b26a2f1307ee0c0307632d59",
+            "id": "02-432-338",
+            "payload": "This is a message reply 4",
+            "reactions": Array [],
+            "to": "00-00-03",
+            "type": "text",
+          },
+        ],
+        "type": "text",
+      },
+      Object {
+        "at": 1620515543000,
+        "id": "00-1293-10",
+        "payload": Object {
+          "author": "Test Audio",
+          "filename": "breakaway.mp3",
+          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "title": "Break Away",
+        },
+        "reactions": Array [
+          Object {
+            "emoji": "👍",
+            "reactors": Array [
+              "Taurus Nix",
+              "Stephen Strange",
+            ],
+          },
+          Object {
+            "emoji": "🔥",
+            "reactors": Array [
+              "Krombopulos Michael",
+              "Taurus Nix",
+              "Stephen Strange",
+              "John Thundergun",
+              "Halley Themis",
+            ],
+          },
+          Object {
+            "emoji": "🤯",
+            "reactors": Array [
+              "Taurus Nix",
+              "Halley Themis",
+              "Stephen Strange",
+            ],
+          },
+        ],
+        "replies": Array [],
+        "type": "audio",
+      },
+    ],
+    "to": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "type": "group",
+  },
+]
+`;
+
+exports[`init gets the PinnedMessages constant 1`] = `
+Array [
+  Object {
+    "at": 1620515545000,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-d0-10",
+    "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+    "reactions": Array [],
+    "replies": Array [
+      Object {
+        "at": 1620515583000,
+        "from": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+        "id": "01-432-138",
+        "payload": "This is a late message reply",
+        "reactions": Array [],
+        "to": "00-d0-10",
+        "type": "text",
+      },
+    ],
+    "type": "text",
+  },
+  Object {
+    "at": 1620515543400,
+    "from": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "id": "00-c0-11",
+    "payload": Object {
+      "type": "img/png",
+      "url": "https://i.redd.it/buk8te6ried61.png",
+    },
+    "reactions": Array [],
+    "replies": Array [],
+    "type": "image",
+  },
+]
+`;

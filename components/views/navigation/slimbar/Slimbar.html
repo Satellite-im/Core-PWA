@@ -1,10 +1,12 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
-    <div
-      data-tooltip="Home"
-      v-on:click="$router.push('/chat/direct')"
-      class="circle-group has-tooltip-right has-tooltip-primary"
-    >
+    <div class="circle-group" v-on:click="openModal" v-if="horizontal">
+      <UiCircle type="icon" :size="40">
+        <plus-icon size="0.75x" />
+      </UiCircle>
+    </div>
+
+    <div v-on:click="$router.push('/chat/direct')" class="circle-group">
       <UiCircle type="icon" :size="40">
         <satellite-icon size="0.75x" />
       </UiCircle>
@@ -14,29 +16,29 @@
         <UiHorizontalRule v-if="unreads.length > 0" />
 
         <div
-          class="unread has-tooltip-right has-tooltip-primary"
+          class="unread"
           v-for="user in unreads"
           v-on:click="$router.push('/chat/direct')"
-          :data-tooltip="user.name"
         >
           <UiCircle type="random" :size="40" :seed="user.address" />
           <span class="label">{{user.count}}</span>
         </div>
 
         <UiHorizontalRule v-if="unreads.length > 0" />
-        <div
-          class="server has-tooltip-right has-tooltip-primary"
-          v-for="server in servers"
-          v-on:click="$router.push('/server/chat')"
-          :data-tooltip="server.name"
-        >
-          <UiCircle
-            type="random"
-            :size="40"
-            :seed="server.address"
-            :name="server.name"
-          />
-        </div>
+        <UiComingSoon :tooltipText="$t('coming_soon.communities')">
+          <div
+            class="server"
+            v-for="server in servers"
+            v-on:click="$router.push('/server/chat')"
+          >
+            <UiCircle
+              type="random"
+              :size="40"
+              :seed="server.address"
+              :name="server.name"
+            />
+          </div>
+        </UiComingSoon>
       </div>
     </UiScroll>
     <div id="list-container" v-else>
@@ -67,6 +69,7 @@
       class="circle-group has-tooltip-right has-tooltip-primary"
       :data-tooltip="$t('servers.new_server')"
       v-on:click="openModal"
+      v-if="!horizontal"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />

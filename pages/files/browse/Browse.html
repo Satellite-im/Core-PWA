@@ -1,26 +1,33 @@
 <div id="files" class="hidden-scroll" v-scroll-lock="true">
+  <FilesView
+    v-if="file"
+    :file="file"
+    @close="file = false"
+    @forceRender="forceRender"
+  />
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
-    <FilesFilepath :path="path" :pull="pull" :setPath="setPath" />
+    <FilesFilepath />
   </div>
   <div class="files-container">
     <div class="files-left">
-      <FilesControls :changeView="changeView" />
-      <div v-if="view === 'list'">
-        <FilesList
-          :path="getPath().children"
-          v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push"
-        />
-        <UiLoadersFileTable v-else :rows="5" />
-      </div>
-      <div v-else>
-        <FilesGrid
-          :path="getPath().children"
-          v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push"
-        />
-      </div>
+      <FilesControls :changeView="changeView" @forceRender="forceRender" />
+      <TypographyText
+        v-if="!directory.length"
+        :text="$t('pages.files.empty')"
+      />
+      <FilesList
+        v-else-if="view === 'list'"
+        :directory="directory"
+        @handle="handle"
+      />
+      <FilesGrid
+        v-else
+        :directory="directory"
+        @handle="handle"
+        :counter="counter"
+        @forceRender="forceRender"
+      />
     </div>
     <FilesAside v-if="!$device.isMobile" class="files-right" />
   </div>

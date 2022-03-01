@@ -1,3 +1,4 @@
+import { Bucket } from '../Files/remote/textile/Bucket'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import {
@@ -7,12 +8,14 @@ import {
 } from '~/types/textile/manager'
 import BucketManager from '~/libraries/Textile/BucketManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { Config } from '~/config'
 
 export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
   bucketManager?: BucketManager
+  bucket?: Bucket
   groupChatManager?: GroupChatManager
 
   constructor() {
@@ -70,10 +73,15 @@ export default class TextileManager {
     )
     await this.bucketManager.init().catch((e) => console.log(e))
 
+    // Initialize bucket
+    this.bucket = new Bucket(textile)
+    await this.bucket.init(Config.textile.bucketName)
+
     // GroupChatManager initializes itself during the creation
     this.groupChatManager = new GroupChatManager(
       textile,
       textile.wallet.address,
+      textile.identity,
     )
   }
 

@@ -26,7 +26,7 @@ export default Vue.extend({
   data() {
     return {
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.group.at).from(),
+      timestamp: this.$dayjs(this.group.at).fromNow(),
     }
   },
   computed: {

@@ -1,5 +1,6 @@
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import { RawUser, User } from '~/types/ui/user'
+import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
+import { User } from '~/types/ui/user'
 
 export interface EncryptedFriend extends User {
   encryptedTextilePubkey: string
@@ -9,7 +10,7 @@ export interface FriendRequest {
   requestId: string
   account: FriendAccount
   pending: boolean
-  userInfo: RawUser
+  userInfo: UserInfo | null
 }
 
 export interface IncomingRequest extends FriendRequest {
@@ -25,6 +26,7 @@ export interface Friend extends EncryptedFriend {
   pending: Boolean
   activeChat: Boolean
   account: FriendAccount
+  address: string
   // possibly break these out into different types. These optional fields come up in the friends list, add, request area
   request?: IncomingRequest
   photoHash?: string

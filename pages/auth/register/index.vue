@@ -18,6 +18,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('accounts', ['getRegistrationStatus']),
+    ...mapGetters(['allPrerequisitesReady']),
     hasToRegister() {
       return this.getRegistrationStatus === RegistrationStatus.UNKNOWN
     },
@@ -32,23 +33,27 @@ export default Vue.extend({
             'user.registration.reg_status.sending_transaction',
           )
         default:
-          return this.$i18n.t('user.registration.reg_status.registered')
+          return this.$i18n.t('user.loading.loading_account')
       }
     },
     isRegistered() {
       return this.getRegistrationStatus === RegistrationStatus.REGISTERED
     },
   },
+  watch: {
+    allPrerequisitesReady(nextValue) {
+      if (!nextValue) return
+      this.$router.replace('/chat/direct')
+    },
+  },
   mounted() {},
   methods: {
     async confirm(userData: UserRegistrationData) {
-      await this.$store.dispatch('accounts/registerUser', {
+      this.$store.dispatch('accounts/registerUser', {
         name: userData.username,
         image: userData.photoHash,
         status: userData.status,
       })
-
-      this.$router.replace('/chat/direct')
     },
   },
 })

@@ -46,6 +46,7 @@ export default Vue.extend({
       browserAllowsAudioOut: true,
       micLevel: 0,
       stream: null,
+      featureReadyToShow: false,
       updateInterval: null,
       captureMouses: [
         {

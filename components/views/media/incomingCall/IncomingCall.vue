@@ -41,8 +41,9 @@ export default Vue.extend({
   mounted() {
     this.$store.dispatch('sounds/playSound', Sounds.CALL)
   },
-  beforeUnmount() {
-    this.$Sounds.stopSound(Sounds.CALL)
+  // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+  beforeDestroy() {
+    this.$store.dispatch('sounds/stopSound', Sounds.CALL)
   },
 })
 </script>

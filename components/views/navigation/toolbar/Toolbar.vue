@@ -150,9 +150,14 @@ export default Vue.extend({
 
       const peer = this.$WebRTC.getPeer(identifier)
 
-      const tracks = await peer?.call.createLocalTracks(kinds)
-
-      await peer?.call.start()
+      try {
+        await peer?.call.createLocalTracks(kinds)
+        await peer?.call.start()
+      } catch (error) {
+        if (error instanceof Error) {
+          this.$toast.error(this.$t(error.message) as string)
+        }
+      }
     },
   },
 })

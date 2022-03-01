@@ -44,11 +44,16 @@ export default Vue.extend({
       get() {
         return this.ui.enhancers.route
       },
-      set(data: string) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: true,
-          route: data,
-        })
+      set(newRoute: string) {
+        const prevRoute = this.ui.enhancers.route
+        if (newRoute !== prevRoute) {
+          this.$store.commit('ui/toggleEnhancers', {
+            show: true,
+            route: newRoute,
+          })
+        } else if (newRoute === 'emotes') {
+          this.openEmoji()
+        }
       },
     },
   },
@@ -74,10 +79,22 @@ export default Vue.extend({
       if (this.route !== 'emotes') return
       this.$nextTick(() => {
         setTimeout(() => {
+          /* For avoid double toggle of emoji Invoker */
           // @ts-ignore
-          this.$refs.emojiInvoker?.click()
+          if (!this.$refs.emojiPicker) this.$refs.emojiInvoker?.click()
         }, 0)
       })
+    },
+    /**
+     * @method navbarClickHandler
+     * @description Without this handler user can click on the navbar padding and emojis will disappear
+     */
+    navbarClickHandler(event: Event) {
+      const target = event.target as Element
+      const button = target.closest('button')
+      if (!button) {
+        this.openEmoji()
+      }
     },
     /**
      * Adds emoji to current text input
@@ -98,11 +115,7 @@ export default Vue.extend({
           reactTo: this.ui.settingReaction.messageID,
         })
       } else {
-        this.$store.dispatch('ui/setChatbarContent', {
-          content: this.ui.chatbarContent + emoji,
-          userId: this.$props.recipient?.address,
-        })
-        this.$store.dispatch('ui/setChatbarFocus')
+        this.$emit('click', emoji)
       }
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
       this.toggleEnhancers()

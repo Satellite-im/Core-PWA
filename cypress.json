@@ -1,5 +1,9 @@
 {
   "projectId": "4offi6",
   "baseUrl": "http://localhost:3000",
-  "numTestsKeptInMemory": 0
+  "numTestsKeptInMemory": 1,
+  "ignoreTestFiles": [
+    "**/__snapshots__/*",
+    "**/__image_snapshots__/*"
+  ]
 }

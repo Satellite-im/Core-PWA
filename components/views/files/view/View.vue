@@ -1,6 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -9,7 +10,7 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { FileType } from '~/types/files/file'
+import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
   components: {
@@ -22,24 +23,35 @@ export default Vue.extend({
   },
   props: {
     file: {
-      type: Object as PropType<FileType>,
-      default: () => {},
+      type: Object as PropType<Fil>,
+      required: true,
     },
-    close: {
-      type: Function,
-      default: () => () => {},
+  },
+  computed: {
+    ...mapState(['ui']),
+    path(): string {
+      return this.$Config.textile.browser + this.file.hash
+    },
+    isImage(): boolean {
+      return Boolean(this.file.name.match(this.$Config.regex.image))
     },
   },
   methods: {
     /**
-     * @method open DocsTODO
-     * @description
-     * @param location
-     * @returns
-     * @example
+     * @method share
+     * @description copy link to clipboard and toggle shared status
      */
-    open(location: string): void {
-      window.open(location)
+    async share() {
+      if (!this.file.shared) {
+        this.$store.commit('ui/setIsLoadingFileIndex', true)
+        this.file.shareItem()
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
+      }
+      navigator.clipboard.writeText(this.path).then(() => {
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
+      })
+      this.$emit('forceRender')
     },
   },
 })

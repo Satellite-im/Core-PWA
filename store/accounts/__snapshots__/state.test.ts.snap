@@ -6,13 +6,15 @@ Object {
   "encryptedPhrase": "",
   "error": "",
   "gasPrice": "",
-  "lastVisited": "",
+  "initialized": false,
+  "lastVisited": "/",
   "loading": false,
   "locked": true,
   "phrase": "",
   "pinHash": "",
   "registered": false,
   "registrationStatus": "unknown",
+  "registry": true,
   "storePin": false,
 }
 `;

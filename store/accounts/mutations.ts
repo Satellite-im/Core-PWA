@@ -8,6 +8,9 @@ const mutations = {
   setStorePin(state: AccountsState, storePin: boolean) {
     state.storePin = storePin
   },
+  setRegistry(state: AccountsState, registry: boolean) {
+    state.registry = registry
+  },
   setPinHash(state: AccountsState, pinHash: string) {
     state.pinHash = pinHash
   },
@@ -26,6 +29,7 @@ const mutations = {
   },
   setActiveAccount(state: AccountsState, activeAccountPubkey: string) {
     state.active = activeAccountPubkey
+    state.initialized = true
   },
   setUserDetails(state: AccountsState, details: UserRegistrationData) {
     state.details = {
@@ -34,6 +38,7 @@ const mutations = {
       profilePicture: details.photoHash,
       address: state.active,
       state: 'online',
+      lastUpdate: Date.now(),
     }
   },
   updateMailboxId(state: AccountsState, mailboxId: string) {

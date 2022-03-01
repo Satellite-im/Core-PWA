@@ -23,6 +23,7 @@ export default Vue.extend({
   data() {
     return {
       hasMoreSettings: false,
+      featureReadyToShow: false,
     }
   },
   props: {

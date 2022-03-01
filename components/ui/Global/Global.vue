@@ -70,9 +70,22 @@ export default Vue.extend({
 
       const peer = this.$WebRTC.getPeer(identifier)
 
-      await peer?.call.createLocalTracks(kinds)
+      try {
+        await peer?.call.createLocalTracks(kinds)
+        await peer?.call.answer()
+      } catch (error) {
+        if (error instanceof Error) {
+          this.$toast.error(this.$t(error.message) as string)
+        }
+      }
 
-      await peer?.call.answer()
+      const callingPath = `/chat/direct/${identifier}`
+      if (this.$route.path !== callingPath) {
+        this.$router.push(callingPath)
+      }
+      if (this.ui.showSettings) {
+        this.$store.commit('ui/toggleSettings', { show: false })
+      }
     },
     /**
      * @method denyCall DocsTODO

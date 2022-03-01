@@ -19,7 +19,6 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { ChatTextObj } from '~/types/chat/chat'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -55,7 +54,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat']),
+    ...mapState(['ui', 'friends', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -254,10 +253,9 @@ export default Vue.extend({
           this.text.length > this.$Config.chat.maxChars
             ? this.text.slice(0, this.$Config.chat.maxChars)
             : this.text
-        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(value)
-        if (!this.recipient || isEmpty) {
-          return
-        }
+        const isEmpty = value.trim().length === 0
+        if (isEmpty) return
+        this.text = ''
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
@@ -265,7 +263,6 @@ export default Vue.extend({
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.text = ''
           return
         }
 
@@ -283,9 +280,7 @@ export default Vue.extend({
             text: value,
           })
         }
-
         this.$data.nsfwUploadError = false
-        this.text = ''
       }
     },
     /**
@@ -308,14 +303,18 @@ export default Vue.extend({
      */
     handleUpload(items: Array<object>, e: Event) {
       const arrOfFiles: File[] = [...items]
-        .filter((f: any) => f.type.includes(MessagingTypesEnum.IMAGE))
+        .filter((f: any) => !f.type.includes(MessagingTypesEnum.TEXT))
         .map((f: any) => f.getAsFile())
+
       if (arrOfFiles.length) {
         e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
+    },
+    handleChatTextFromOutside(text: string) {
+      this.$refs.editable?.handleTextFromOutside(text)
     },
   },
 })

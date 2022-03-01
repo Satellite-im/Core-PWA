@@ -5,4 +5,6 @@ export interface ItemInterface {
   name: string
   id: string
   parent: Directory | null
+  liked: boolean
+  shared: boolean
 }

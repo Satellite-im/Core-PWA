@@ -119,11 +119,6 @@ describe("Retrieving friend's profile", () => {
         },
       },
     },
-    prerequisites: {
-      accountsReady: true,
-      textileReady: true,
-      p2pReady: true,
-    },
   }
 
   beforeEach(() => {

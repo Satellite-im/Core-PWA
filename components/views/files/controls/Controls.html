@@ -22,30 +22,39 @@
       type="primary"
       :text="$t('pages.files.controls.new_file')"
       size="small"
-      :action="() => toggleInput(FilesViewEnum.FILE)"
+      :action="addFile"
+      :loading="ui.isLoadingFileIndex"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
-    <InteractablesButton
-      type="primary"
-      :text="$t('pages.files.controls.new_folder')"
-      size="small"
-      :action="() => toggleInput(FilesViewEnum.FOLDER)"
-    >
-      <folder-plus-icon size="1.3x" />
-    </InteractablesButton>
     <InteractablesInputGroup
+      v-model="text"
       class="name"
       size="small"
       type="primary"
-      :action="addFile"
-      v-if="input.show"
-      :placeholder="input.type===FilesViewEnum.FILE ? $t('pages.files.controls.name_file') : $t('pages.files.controls.name_folder')"
+      :action="addFolder"
+      :placeholder="$t('pages.files.controls.name_folder')"
+      :loading="ui.isLoadingFileIndex"
+      :disabled="ui.isLoadingFileIndex"
     >
-      <file-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FILE" />
-      <folder-plus-icon size="1.3x" v-if="input.type===FilesViewEnum.FOLDER" />
+      <folder-plus-icon size="1.3x" />
     </InteractablesInputGroup>
+    <input
+      ref="upload"
+      type="file"
+      @click="resetFileUpload"
+      @change="handleFile"
+      style="width: 0; height: 0"
+      multiple
+    />
   </div>
+  <TypographyError
+    v-if="errors.length"
+    v-for="error in errors"
+    :key="error"
+    :text="error"
+    class="error"
+  />
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />

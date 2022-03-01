@@ -18,7 +18,7 @@
     <TypographyText :size="6" :text="getLastUpdate()" />
     <TypographyTag :text="user.unreads.toString()" v-if="user.unreads > 0" />
   </div>
-  <div class='user-loader'>
-    <UiLoadersSpinner :spinning='isLoading' />
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
   </div>
 </div>

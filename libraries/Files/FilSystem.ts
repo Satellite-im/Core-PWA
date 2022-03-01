@@ -3,12 +3,20 @@ import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
-import { FileSystemExport, FILESYSTEM_TYPE } from './types/filesystem'
+import {
+  FileSystemExport,
+  ExportItem,
+  FILESYSTEM_TYPE,
+  ExportFile,
+  ExportDirectory,
+} from './types/filesystem'
+import { FILE_TYPE } from './types/file'
 
 export class FilSystem {
-  private _self = new Directory('root')
+  private _self = new Directory({ name: 'root' })
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
+  private _version: number = 1
 
   /**
    * @getter currentDirectory
@@ -58,7 +66,7 @@ export class FilSystem {
     const fsCopy = new FilSystem()
 
     this.root.content.forEach((item) => {
-      const itemCopy = item.copy
+      const itemCopy = (item as Directory | Fil).copy
       itemCopy.name = item.name
       fsCopy.addChild(itemCopy)
     })
@@ -81,25 +89,132 @@ export class FilSystem {
   get export(): FileSystemExport {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
-      version: 1,
-      content: this.content,
+      version: this._version++,
+      content: this.root.content.map((item) => {
+        return this.exportChildren(item)
+      }),
     }
   }
 
+  /**
+   * @method flat
+   * @returns {ExportItem[]} flattened list of files in order to check if file exists
+   */
+  get flat(): ExportItem[] {
+    const flatDeepByKey = (
+      data: Array<ExportItem | ExportFile>,
+      key: keyof ExportDirectory | keyof ExportFile,
+    ) => {
+      return data.reduce((prev, el) => {
+        prev.push(el)
+        if (el[key]) {
+          prev.push(...flatDeepByKey(el[key], key))
+        }
+        return prev
+      }, [])
+    }
+    return flatDeepByKey(this.export.content, 'children')
+  }
+
+  /**
+   * @method exportChildren
+   * @param {Item} item
+   * @description recursively converts item to the proper format for export
+   * @returns {ExportItem} Item in ExportItem format
+   */
+  exportChildren(item: Item): ExportItem {
+    if (item instanceof Fil) {
+      const { name, liked, shared, type, hash, size, description } = item
+      return {
+        name,
+        liked,
+        shared,
+        type,
+        hash,
+        size,
+        description,
+      }
+    }
+    const { name, liked, shared, type } = item
+
+    return {
+      name,
+      liked,
+      shared,
+      type,
+      children: (item as Directory).content.map((item) => {
+        return this.exportChildren(item)
+      }),
+    }
+  }
+
+  /**
+   * @method import
+   * @param {FileSystemExport} fs
+   * @description sets global file system based on parameter. will be fetched from Bucket
+   */
   public import(fs: FileSystemExport) {
-    fs.content.forEach((e) => {
-      this.addChild(e)
+    fs.content.forEach((item) => {
+      this.importChildren(item)
     })
+    this._version = fs.version
+  }
+
+  /**
+   * @method importChildren
+   * @param {FileSystemExport} fs
+   * @description recursively adds files and directories from JSON export
+   */
+  public importChildren(item: ExportItem) {
+    if (item.type in FILE_TYPE) {
+      const { name, hash, size, liked, shared, description } =
+        item as ExportFile
+      const type = item.type as FILE_TYPE
+      this.createFile({ name, hash, size, liked, shared, description, type })
+    }
+    if (item.type in DIRECTORY_TYPE) {
+      const { name, liked, shared, children } = item as ExportDirectory
+      const type = item.type as DIRECTORY_TYPE
+      this.createDirectory({ name, liked, shared, type })
+      this.openDirectory(name)
+      children.forEach((item: ExportItem) => {
+        this.importChildren(item)
+      })
+      this.goBack()
+    }
   }
 
   /**
    * @method createFile
-   * @argument {string} fileName name of the new file to create
-   * @argument {any[]} options list of additional arguments to pass to new file
+   * @param {object} param0 object containing file information
    * @returns {Fil | null} Returns the new file if successfully created, else null
    */
-  public createFile(fileName: string, ...options: any[]): Fil | null {
-    const newFile = new Fil(fileName, ...options)
+  public createFile({
+    name,
+    hash,
+    size,
+    liked,
+    shared,
+    description,
+    type,
+  }: {
+    name: string
+    hash: string
+    size: number
+    liked?: boolean
+    shared?: boolean
+    description?: string
+    type?: FILE_TYPE
+  }): Fil | null {
+    const newFile = new Fil({
+      name,
+      hash,
+      size,
+      liked,
+      shared,
+      description,
+      type,
+    })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
   }
@@ -108,13 +223,20 @@ export class FilSystem {
    * @method createDirectory
    * @argument {string} dirName name of the new directory to create
    * @argument {type} DIRECTORY_TYPE Default for now
-   * @returns {Fil | null} Returns the new directory if successfully created, else null
+   * @returns {Directory | null} Returns the new directory if successfully created, else null
    */
-  public createDirectory(
-    dirName: string,
-    type = DIRECTORY_TYPE.DEFAULT,
-  ): Directory | null {
-    const newDir = new Directory(dirName, type)
+  public createDirectory({
+    name,
+    liked,
+    shared,
+    type,
+  }: {
+    name: string
+    liked?: boolean
+    shared?: boolean
+    type?: DIRECTORY_TYPE
+  }): Directory | null {
+    const newDir = new Directory({ name, liked, shared, type })
     const inserted = this.currentDirectory.addChild(newDir)
     return inserted ? newDir : null
   }
@@ -143,7 +265,7 @@ export class FilSystem {
    * @returns {boolean} returns truthy if child by name exists in filesystem
    */
   public hasChild(childName: string): boolean {
-    return this.currentDirectory.hasChild(childName)
+    return this.flat.some((item) => item.name === childName)
   }
 
   /**
@@ -188,21 +310,6 @@ export class FilSystem {
     }
 
     return null
-  }
-
-  /**
-   * @method printCurrentDirectory
-   */
-  public printCurrentDirectory(): void {
-    console.log(
-      `\n[${this.currentDirectoryPath.join('/')}]:` +
-        (this.currentDirectory.content
-          .map(
-            (item) =>
-              `\n[${item.constructor.name.substring(0, 1)}]-> ${item.name}`,
-          )
-          .join('') || '\n(empty)'),
-    )
   }
 
   /**
@@ -405,7 +512,7 @@ export class FilSystem {
   }
 
   /**
-   * @method setupAndFind
+   * @method getDirectoryFromPath
    * Get a directory given a string path to the directory
    * @argument {string} dirPath string path to the directory to get
    * @returns {Directory | null} returns the directory or null if it can't be found

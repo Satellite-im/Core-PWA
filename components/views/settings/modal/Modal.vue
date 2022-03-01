@@ -4,6 +4,7 @@
 import { MenuIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { SettingsRoutes } from '~/store/ui/types'
 
 type Swiper = {
   $swiper: {
@@ -25,10 +26,24 @@ export default Vue.extend({
         noSwiping: !this.$device.isMobile,
         allowTouchMove: this.$device.isMobile,
       },
+      SettingsRoutes,
     }
   },
   computed: {
     ...mapState(['ui']),
+  },
+  watch: {
+    'ui.showSettings': {
+      handler(newSValue) {
+        if (newSValue && this.$device.isMobile) {
+          setTimeout(() => {
+            this.changeRoute('profile')
+          }, 100)
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   mounted() {
     this.showSidebar(false)

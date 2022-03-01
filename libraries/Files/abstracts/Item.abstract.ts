@@ -9,6 +9,8 @@ export abstract class Item implements ItemInterface {
   private _id: string = uuidv4()
   private _name: string = ''
   private _parent: Directory | null | undefined = null
+  private _liked: boolean = false
+  private _shared: boolean = false
   abstract type: DIRECTORY_TYPE | FILE_TYPE
 
   /**
@@ -17,12 +19,24 @@ export abstract class Item implements ItemInterface {
    * @param {string} name - Name of the item.
    * @param {Parent} parent - Optional parent of the item.
    */
-  constructor(name: string, parent?: Directory | null) {
+  constructor({
+    name,
+    liked,
+    shared,
+    parent,
+  }: {
+    name: string
+    shared?: boolean
+    liked?: boolean
+    parent?: Directory
+  }) {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
 
     this._name = name
-    this._parent = parent
+    this._shared = shared || false
+    this._liked = liked || false
+    this._parent = parent || null
   }
 
   /**
@@ -40,7 +54,7 @@ export abstract class Item implements ItemInterface {
    * @getter
    * @returns the item name
    */
-  get name() {
+  get name(): string {
     return this._name
   }
 
@@ -48,7 +62,7 @@ export abstract class Item implements ItemInterface {
    * @getter
    * @returns a unique identifier for the item
    */
-  get id() {
+  get id(): string {
     return this._id
   }
 
@@ -56,14 +70,46 @@ export abstract class Item implements ItemInterface {
    * @getter
    * @returns the parent directory
    */
-  get parent() {
+  get parent(): Directory | null {
     // Make sure we always return either null or the parent. Never undefined.
     return this._parent !== undefined ? this._parent : null
   }
 
   /**
+   * @getter
+   * @returns the liked status
+   */
+  get liked(): boolean {
+    return this._liked
+  }
+
+  /**
+   * @getter
+   * @returns the shared status
+   */
+  get shared(): boolean {
+    return this._shared
+  }
+
+  /**
+   * @method toggleLiked
+   * @description toggle liked status
+   */
+  toggleLiked() {
+    this._liked = !this._liked
+  }
+
+  /**
+   * @method shareItem
+   * @description set shared status to true
+   */
+  shareItem() {
+    this._shared = true
+  }
+
+  /**
    * Validate that the parent is of the correct instance type
-   * @method
+   * @method validateParent
    * @param {string} newName - The new name of the associated file.
    */
   private validateParent(parent: Directory | null): boolean {
@@ -79,7 +125,7 @@ export abstract class Item implements ItemInterface {
    * @param {string} newName - The new name of the associated file.
    */
   set name(newName: string) {
-    const filenameTest = new RegExp('[\\/:"*?<>|]+')
+    const filenameTest = /[/:"*?<>|]+/
 
     if (!newName || typeof newName !== 'string' || !newName.trim().length)
       throw new Error(FileSystemErrors.NO_EMPTY_STRING)
@@ -104,8 +150,6 @@ export abstract class Item implements ItemInterface {
       this._parent = newParent
 
       if (prevParent) prevParent.removeChild(this.name)
-
-      if (newParent) newParent.addChild(this)
     }
   }
 }

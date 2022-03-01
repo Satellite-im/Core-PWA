@@ -1,72 +1,140 @@
+import {
+  Buckets,
+  Path,
+  PushPathResult,
+  RemovePathResponse,
+  Root,
+} from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
-import { TextileErrors } from '../../errors/Errors'
+import { Config } from '~/config'
+import { TextileInitializationData } from '~/types/textile/manager'
 import {
-  TextileConfig,
-  TextileInitializationData,
-} from '~/types/textile/manager'
-import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { FilSystem } from '~/libraries/Files/FilSystem'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+  FileSystemExport,
+  FILESYSTEM_TYPE,
+} from '~/libraries/Files/types/filesystem'
 
 export class Bucket extends RFM implements RFMInterface {
-  private creds: { id: any; pass: any } = { id: null, pass: null }
-  private identityManager: IdentityManager
-  private _textile: TextileInitializationData | null = null
+  private _textile: TextileInitializationData
+  private _index: FileSystemExport | null = null
+  private buckets: Buckets | null
+  private key: Root['key'] | null
 
-  constructor(fileSystem: FilSystem) {
-    super(fileSystem)
-    this.identityManager = new IdentityManager()
+  constructor(textile: TextileInitializationData) {
+    super()
+    this._textile = textile
+    this.buckets = null
+    this.key = null
   }
 
+  /**
+   * @getter
+   * @returns textile data
+   */
   get textile(): TextileInitializationData | null {
     return this._textile
   }
 
-  get fileSystem(): FilSystem {
-    return this._fileSystem
-  }
-
-  get index(): FileSystemExport {
-    this.fileSystem.goBackToDirectory('root')
-    return this.fileSystem.export
+  /**
+   * @getter
+   * @returns file system export data
+   */
+  get index(): FileSystemExport | null {
+    return this._index
   }
 
   /**
-   * @method
-   * Initialization function that creates a Textile identity
-   * and initializes the Mailbox
-   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
+   * @method init
+   * @description Initializes bucket
+   * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
    * @returns a promise that resolves when the initialization completes
    */
-  async init({
-    id,
-    pass,
-    wallet,
-  }: TextileConfig): Promise<TextileInitializationData> {
-    if (!wallet) {
-      throw new Error(TextileErrors.MISSING_WALLET)
+  async init(name: string): Promise<FileSystemExport> {
+    if (!Config.textile.key) {
+      throw new Error('Textile key not found')
     }
 
-    const identity = await this.identityManager.initFromWallet(wallet)
-    const { client, users } = await this.identityManager.authorize(identity)
+    this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
+    await this.buckets.getToken(this._textile.identity)
 
-    this.creds = {
-      id,
-      pass,
+    const result = await this.buckets.getOrCreate(name)
+
+    if (!result.root) throw new Error(`failed to open bucket ${name}`)
+
+    this.key = result.root.key
+
+    try {
+      const path: Path | void = await this.buckets.listPath(
+        this.key,
+        Config.textile.fsTable,
+      )
+
+      const hash = path?.item?.path
+
+      this._index = await fetch(Config.textile.browser + hash).then((res) =>
+        res.json(),
+      )
+
+      if (!this._index) throw new Error('Index not found')
+
+      return this._index
+    } catch (e) {
+      return {
+        type: FILESYSTEM_TYPE.DEFAULT,
+        version: 1,
+        content: [],
+      }
     }
-
-    this._textile = {
-      identity,
-      client,
-      wallet,
-      users,
-    }
-
-    return this._textile
   }
 
-  updateIndex(index: FileSystemExport) {
-    this.fileSystem.import(index)
+  /**
+   * @method updateIndex
+   * @param index FileSystemExport
+   * @description sets file system import data
+   */
+  async updateIndex(index: FileSystemExport) {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    this._index = index
+    await this.buckets.pushPath(
+      this.key,
+      Config.textile.fsTable,
+      Buffer.from(JSON.stringify(index)),
+    )
+  }
+
+  async ipnsLink(): Promise<string> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return (await this.buckets.links(this.key)).ipns
+  }
+
+  /**
+   * @method pushFile
+   * @description Remove file from bucket
+   * @param {File} file file to be uploaded
+   * @returns Promise whether it was uploaded or not
+   */
+  async pushFile(file: File): Promise<PushPathResult> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return await this.buckets.pushPath(this.key, file.name, file)
+  }
+
+  /**
+   * @method removeFile
+   * @description Remove file from bucket
+   * @param {string} name file name
+   * @returns Promise whether it was removed or not
+   *
+   */
+  async removeFile(name: string): Promise<RemovePathResponse> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+    return await this.buckets.removePath(this.key, name)
   }
 }

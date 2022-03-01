@@ -10,7 +10,6 @@ import {
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import {
   FriendAccount,
   FriendsEvents,
@@ -24,8 +23,10 @@ import {
   OutgoingRequest,
 } from '~/types/ui/friends'
 import { ActionsArguments } from '~/types/store/store'
-import { RawUser } from '~/types/ui/user'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import UsersProgram, {
+  UserInfo,
+} from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 export default {
   /**
@@ -39,23 +40,21 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     const { incoming, outgoing } =
       await friendsProgram.getFriendAccountsByStatus(FriendStatus.PENDING)
 
     const incomingRequests = await Promise.all(
       incoming.map(async (account) => {
-        const userInfo = await serverProgram.getUser(
-          new PublicKey(account.from),
-        )
+        const userInfo = await usersProgram.getUserInfo(account.from)
         return friendAccountToIncomingRequest(account, userInfo)
       }),
     )
 
     const outgoingRequests = await Promise.all(
       outgoing.map(async (account) => {
-        const userInfo = await serverProgram.getUser(new PublicKey(account.to))
+        const userInfo = await usersProgram.getUserInfo(account.to)
         return friendAccountToOutgoingRequest(account, userInfo)
       }),
     )
@@ -109,7 +108,7 @@ export default {
     friendAccount: FriendAccount,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
     // Check if the request was originally sent by the current user (outgoing)
@@ -128,16 +127,18 @@ export default {
       friendKey,
       encryptedTextilePubkey,
     )
-    const rawUser = await serverProgram.getUser(new PublicKey(friendKey))
-    if (!rawUser) {
+
+    const userInfo = await usersProgram.getUserInfo(friendKey)
+
+    if (!userInfo) {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
-      name: rawUser.name,
-      profilePicture: rawUser.photoHash,
-      status: rawUser.status,
+      name: userInfo.name,
+      profilePicture: userInfo.photoHash,
+      status: userInfo.status,
       encryptedTextilePubkey,
       textilePubkey,
       item: {},
@@ -185,9 +186,7 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
-
-    const userAccount = $SolanaManager.getActiveAccount()
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     friendsProgram.subscribeToFriendsEvents()
 
@@ -195,9 +194,7 @@ export default {
       FriendsEvents.NEW_REQUEST,
       async (account) => {
         if (account) {
-          const userInfo = await serverProgram.getUser(
-            new PublicKey(account.from),
-          )
+          const userInfo = await usersProgram.getUserInfo(account.from)
           commit(
             'addIncomingRequest',
             friendAccountToIncomingRequest(account, userInfo),
@@ -255,7 +252,7 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
@@ -269,16 +266,10 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     const friendAccountKey = await friendsProgram.computeFriendAccountKey(
-      userAccount.publicKey,
+      payerAccount.publicKey,
       friendToKey,
     )
 
@@ -287,7 +278,7 @@ export default {
     const friendAccountMirroredKey =
       await friendsProgram.computeFriendAccountKey(
         friendToKey,
-        userAccount.publicKey,
+        payerAccount.publicKey,
       )
 
     let friendAccountMirroredInfo = await friendsProgram.getFriend(
@@ -296,7 +287,7 @@ export default {
 
     if (!friendAccountInfo) {
       friendAccountInfo = await friendsProgram.createFriend(
-        userAccount.publicKey,
+        payerAccount.publicKey,
         friendToKey,
       )
     }
@@ -304,7 +295,7 @@ export default {
     if (!friendAccountMirroredInfo) {
       friendAccountMirroredInfo = await friendsProgram.createFriend(
         friendToKey,
-        userAccount.publicKey,
+        payerAccount.publicKey,
       )
     }
 
@@ -334,7 +325,7 @@ export default {
     const transactionHash = await friendsProgram.createFriendRequest(
       friendAccountKey,
       friendAccountMirroredKey,
-      userAccount,
+      payerAccount,
       friendToKey,
       Buffer.from(encryptedTextilePublicKey.padStart(128, '0')),
     )
@@ -345,9 +336,7 @@ export default {
       )
 
       if (parsedFriendRequest) {
-        const userInfo = await serverProgram.getUser(
-          new PublicKey(parsedFriendRequest.to),
-        )
+        const userInfo = await usersProgram.getUserInfo(parsedFriendRequest.to)
         commit(
           'addOutgoingRequest',
           friendAccountToOutgoingRequest(parsedFriendRequest, userInfo),
@@ -382,12 +371,6 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
@@ -396,7 +379,7 @@ export default {
     const computedFriendAccountKey =
       await friendsProgram.computeFriendAccountKey(
         new PublicKey(account.from),
-        userAccount.publicKey,
+        payerAccount.publicKey,
       )
 
     const friendFromKey = friendRequest.account.from
@@ -413,7 +396,7 @@ export default {
     const transactionId = await friendsProgram.acceptFriendRequest(
       computedFriendAccountKey,
       new PublicKey(account.from),
-      userAccount,
+      payerAccount,
       Buffer.from(encryptedIdentityPublicKey.padStart(128, '0')),
     )
 
@@ -439,12 +422,6 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
@@ -454,13 +431,13 @@ export default {
     const computedFriendAccountKey =
       await friendsProgram.computeFriendAccountKey(
         new PublicKey(account.from),
-        userAccount.publicKey,
+        payerAccount.publicKey,
       )
 
     const transactionId = await friendsProgram.denyFriendRequest(
       computedFriendAccountKey,
       new PublicKey(account.from),
-      userAccount,
+      payerAccount,
     )
 
     if (transactionId) {
@@ -488,12 +465,6 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateOutgoingRequest', { ...friendRequest, pending: true })
@@ -502,13 +473,13 @@ export default {
 
     const computedFriendAccountMirroredKey =
       await friendsProgram.computeFriendAccountKey(
-        userAccount.publicKey,
+        payerAccount.publicKey,
         new PublicKey(account.to),
       )
 
     const transactionId = await friendsProgram.removeFriendRequest(
       computedFriendAccountMirroredKey,
-      userAccount,
+      payerAccount,
       new PublicKey(account.to),
     )
 
@@ -537,19 +508,13 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
-
-    if (!userAccount) {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     const { account } = friend
 
     const transactionId = await friendsProgram.removeFriend(
       account,
-      userAccount,
+      payerAccount,
     )
 
     if (transactionId) {
@@ -566,7 +531,7 @@ export default {
  */
 function friendAccountToIncomingRequest(
   friendAccount: FriendAccount,
-  userInfo: RawUser | null,
+  userInfo: UserInfo | null,
 ): IncomingRequest {
   return {
     requestId: friendAccount.accountId,
@@ -585,7 +550,7 @@ function friendAccountToIncomingRequest(
  */
 function friendAccountToOutgoingRequest(
   friendAccount: FriendAccount,
-  userInfo: RawUser | null,
+  userInfo: UserInfo | null,
 ): OutgoingRequest {
   return {
     requestId: friendAccount.accountId,

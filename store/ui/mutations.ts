@@ -23,6 +23,9 @@ export default {
   showSidebar(state: UIState, enabled: boolean) {
     state.showSidebar = enabled
   },
+  showMedia(state: UIState, show: boolean) {
+    state.showMedia = show
+  },
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values
   },
@@ -339,5 +342,8 @@ export default {
   },
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
+  },
+  setIsLoadingFileIndex(state: UIState, status: boolean) {
+    state.isLoadingFileIndex = status
   },
 }

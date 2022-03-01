@@ -2,6 +2,9 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
+  alias: {
+    tslib: 'tslib/tslib.es6.js',
+  },
   bridge: {
     nitro: false,
   },

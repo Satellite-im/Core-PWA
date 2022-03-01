@@ -454,7 +454,7 @@ input.date-input {
     &:extend(.blur-less);
     font-family: @primary-font !important;
     color: @secondary-text !important;
-    z-index: 100000;
+    z-index: 100000 !important;
   }
 }
 .input {
@@ -556,6 +556,11 @@ code {
 
 strong {
   &:extend(.font-secondary);
+}
+
+.locked,
+.disabled * {
+  cursor: no-drop !important;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

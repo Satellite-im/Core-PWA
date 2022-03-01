@@ -13,6 +13,7 @@ import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
 import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 export default Vue.extend({
   components: {
@@ -22,6 +23,7 @@ export default Vue.extend({
   data() {
     return {
       size: 150,
+      featureReadyToShow: false,
       error: '',
       accountID: '',
       searching: false,
@@ -68,9 +70,9 @@ export default Vue.extend({
       this.error = ''
       try {
         const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-        const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+        const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-        const friend = await serverProgram.getUser(new PublicKey(accountID))
+        const friend = await usersProgram.getUserInfo(accountID)
         if (!friend) {
           this.error = this.$t('friends.not_found') as string
           return

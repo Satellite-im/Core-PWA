@@ -2,7 +2,7 @@
 @mobile_media_open_offset: 12rem;
 @mobile_candybar_media_open_offset: 18rem;
 #app-wrap {
-  &.is-collapsed {
+  &.is-collapsed.chat-page {
     #mobile-nav {
       transform: translate(0, @mobile-nav-size);
     }
@@ -150,7 +150,8 @@
 .desktop .dynamic-content.swiper-slide-next {
   padding-right: calc(@sidebar-size + @servers-size);
   #mediastream {
-    width: calc(100% - @sidebar-size - @servers-size);
+    width: calc(@full - (@normal-spacing * 2));
+    margin: 0 1rem;
   }
 }
 
@@ -191,11 +192,17 @@
   .dynamic-content.swiper-slide-next {
     padding-right: 0;
     #mediastream {
-      width: 100%;
+      width: calc(@full - (@normal-spacing * 2));
+      margin: 0 1rem;
     }
   }
   .sidebar-container {
     width: 100vw !important;
+  }
+
+  #friends,
+  #files {
+    margin-bottom: 80px;
   }
 }
 

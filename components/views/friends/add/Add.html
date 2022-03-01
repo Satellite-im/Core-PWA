@@ -20,6 +20,7 @@
     @requestSent="onFriendRequestSent"
     send
   />
+  <span v-if="featureReadyToShow">
   <UiSpacer :height="10" />
   <TypographyHorizontalRuleText plaintext value="OR" />
   <UiSpacer :height="10" />
@@ -46,4 +47,5 @@
       </div>
     </div>
   </div>
+</span>
 </div>

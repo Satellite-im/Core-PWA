@@ -20,6 +20,7 @@ export default Vue.extend({
       timezones: getTimezoneDropdowns(),
       languages: [],
       recommendLocations,
+      featureReadyToShow: false,
     }
   },
   computed: {

@@ -1,17 +1,16 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
-    <li v-on:click="() => pull(path.length)">
-      <a>
+    <li>
+      <a @click="goBackToDirectory('root')" style="display: flex">
         <home-icon size="1.5x" />
       </a>
     </li>
     <li
-      v-for="link, i in path"
-      :data-self-path="JSON.stringify(path.slice(0, i + 1))"
-      v-on:click="jumpTo"
-      :class="i === path.length - 1 ? 'is-active' : ''"
+      v-for="name,i in path"
+      @click="goBackToDirectory(name)"
+      :class="{'is-active' : i === path.length - 1 }"
     >
-      <a> {{ link }} </a>
+      <a> {{ name }} </a>
     </li>
   </ul>
 </nav>

@@ -1,20 +1,32 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
+import { mapState } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
   FolderIcon,
   FileIcon,
+  BriefcaseIcon,
+  ImageIcon,
 } from 'satellite-lucide-icons'
+import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
-import { FileType, Folder } from '~/types/files/file'
-import { TextileImage } from '~/types/textile/manager'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
+import { Fil } from '~/libraries/Files/Fil'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    iconHover: boolean
+    linkHover: boolean
+    heartHover: boolean
+    path: string
+    load: boolean
+    handle: () => void
+    like: () => void
+    share: () => void
+    rename: () => void
+    delete: () => void
   }
 }
 
@@ -24,70 +36,129 @@ export default Vue.extend({
     HeartIcon,
     FolderIcon,
     FileIcon,
+    BriefcaseIcon,
+    ImageIcon,
   },
+  mixins: [ContextMenu],
   props: {
+    /**
+     * File or Directory to be displayed in detail
+     */
     item: {
-      type: Object as PropType<FileType | Folder>,
+      type: Object as PropType<Item>,
       required: true,
-    },
-    file: {
-      type: Object as PropType<TextileImage>,
-      default: () => {},
-    },
-    handler: {
-      type: Function,
-      default: () => () => {},
     },
   },
   data() {
     return {
       fileUrl: String,
       fileSize: '',
-      iconHover: false,
+      fileHover: false,
+      linkHover: false,
+      heartHover: false,
+      contextMenuValues: [
+        { text: 'Favorite', func: this.like },
+        { text: 'Share', func: this.share },
+        { text: 'Rename', func: this.rename },
+        { text: 'Delete', func: this.delete },
+      ],
     }
   },
   computed: {
-    getSubtext() {
-      return this.item.children
-        ? this.item.children.length + ' items'
-        : this.item.type
+    ...mapState(['ui']),
+    /**
+     * @returns if directory, child count. if file, size
+     */
+    getSubtext(): string {
+      return this.item instanceof Directory
+        ? this.item.content.length + ' items'
+        : this.$filesize((this.item as Fil).size)
+    },
+    isImage(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.image))
+    },
+    isArchive(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.archive))
+    },
+    /**
+     * @returns path inside textile bucket
+     */
+    path(): string {
+      return this.item instanceof Fil
+        ? this.$Config.textile.browser + this.item.hash
+        : ''
     },
   },
   methods: {
     /**
-     * @method isImage
-     * @description Checks if files filetype complies with Satellites accepted image types
-     * @param fileType Files MIME type (a.k.a filetype)
-     * @returns Boolean based on if the current image complies with Satellites accepted image types
-     * @example
-     */
-    isImage(filetype: string): boolean {
-      const acceptableImages = ['image/png', 'image/jpg']
-      return acceptableImages.includes(filetype)
-    },
-    /**
      * @method fileClick
-     * @description Handle regular file click. avoiding regular behavior(handler) if user clicks heart or link icon
+     * @description Handle regular file click. avoiding regular behavior(handle) if user clicks heart or link icon
      */
     fileClick() {
-      if (this.iconHover) {
+      if (this.linkHover) {
+        this.share()
         return
       }
-      this.handler(this.item)
+      if (this.heartHover) {
+        this.like()
+        return
+      }
+      this.$emit('handle', this.item)
     },
     /**
-     * @method mouseOver
-     * @description negate regular click behavior (handler)
+     * @method like
+     * @description toggle like on file and force render for files
      */
-    mouseOver() {
-      this.iconHover = true
+    async like() {
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.item.toggleLiked()
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      this.item.liked
+        ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
+        : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$emit('forceRender')
     },
     /**
-     * @method mouseLeave
-     * @description reinstate regular click behavior (handler)
+     * @method share
+     * @description copy link to clipboard
      */
-    mouseLeave() {
-      this.iconHover = false
+    async share() {
+      if (this.item instanceof Directory) {
+        this.$toast.show(this.$t('todo - share folders') as string)
+        return
+      }
+      if (!this.item.shared) {
+        this.$store.commit('ui/setIsLoadingFileIndex', true)
+        this.item.shareItem()
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
+      }
+      navigator.clipboard.writeText(this.path).then(() => {
+        this.$toast.show(this.$t('pages.files.link_copied') as string)
+      })
+      this.$emit('forceRender')
+    },
+    /**
+     * @method rename
+     * @description todo
+     */
+    rename() {
+      this.$toast.show(this.$t('todo - rename items') as string)
+    },
+    /**
+     * @method delete
+     * @description delete folder/file from filesystem. If file, also remove from textile bucket
+     */
+    async delete() {
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      if (this.item instanceof Fil) {
+        await this.$FileSystem.removeFile(this.item.name)
+      }
+      this.$FileSystem.removeChild(this.item.name)
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$emit('forceRender')
     },
   },
 })

@@ -2,12 +2,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
 export default Vue.extend({
   name: 'Quick',
   data() {
     return {
       friends: [],
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     confirm() {

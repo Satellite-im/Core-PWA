@@ -1,6 +1,7 @@
 import { isEqual } from 'lodash'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemErrors } from './errors/Errors'
+import { Fil } from './Fil'
 import { DIRECTORY_TYPE } from './types/directory'
 
 export class Directory extends Item {
@@ -8,23 +9,30 @@ export class Directory extends Item {
   private _children = new Map()
 
   /**
-   * @param  {string=''} name Name of the new directory
-   * @param  {DIRECTORY_TYPE=DIRECTORY_TYPE.DEFAULT} type directory type of the new folder
+   * @constructor
+   * @param {object} param0 directory info - name, liked, shared, type
    * @returns {Directory}
    */
-  constructor(
-    name: string = '',
-    type: DIRECTORY_TYPE = DIRECTORY_TYPE.DEFAULT,
-  ) {
-    super(name || 'un-named directory')
-    this._type = DIRECTORY_TYPE[type] ? type : DIRECTORY_TYPE.DEFAULT
+  constructor({
+    name,
+    liked,
+    shared,
+    type,
+  }: {
+    name: string
+    liked?: boolean
+    shared?: boolean
+    type?: DIRECTORY_TYPE
+  }) {
+    super({ name: name || 'un-named directory', liked, shared })
+    this._type = type ?? DIRECTORY_TYPE.DEFAULT
   }
 
   /**
    * @getter content
    * @returns {Array} containing directory contents
    */
-  get content(): Array<any> {
+  get content(): Array<Item> {
     return Array.from(this._children.values())
   }
 
@@ -37,14 +45,19 @@ export class Directory extends Item {
   }
 
   /**
-   * @getter
+   * @getter copy
    * @returns {Directory} returns a cloned copy of this directory
    */
   get copy(): Directory {
-    const dirCopy = new Directory(`${this.name} copy`, this.type)
+    const dirCopy = new Directory({
+      name: `${this.name} copy`,
+      liked: this.liked,
+      shared: this.shared,
+      type: this.type,
+    })
 
     this.content.forEach((item) => {
-      const itemCopy = item.copy
+      const itemCopy = (item as Directory | Fil).copy
       itemCopy.name = item.name
       dirCopy.addChild(itemCopy)
     })
@@ -67,7 +80,9 @@ export class Directory extends Item {
    * @returns {boolean} returns true or false depending on if a child exists in the directory
    */
   addChild(child: Item): boolean {
-    if (this.hasChild(child.name)) return false
+    if (this.hasChild(child.name)) {
+      throw new Error(FileSystemErrors.DUPLICATE_NAME)
+    }
 
     if (isEqual(child, this)) {
       throw new Error(FileSystemErrors.DIR_PARADOX)

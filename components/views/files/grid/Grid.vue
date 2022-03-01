@@ -1,45 +1,39 @@
 <template src="./Grid.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { FileType, Folder } from '~/types/files/file'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   props: {
     /**
-     * The array of children to path through
+     * Directory items to be displayed
      */
-    path: {
-      type: Array as PropType<Array<FileType | Folder>>,
+    directory: {
+      type: Array as PropType<Array<Item>>,
       default: () => [],
     },
     /**
-     * Push a new child to the path
+     * counter to force reactivity for Map
      */
-    push: {
-      type: Function,
-      default: () => () => {},
+    counter: {
+      type: Number,
+      required: true,
     },
-  },
-  data() {
-    return {
-      file: false,
-    }
   },
   methods: {
     /**
-     * @method handle DocsTODO
-     * @description
-     * @param item
-     * @returns
-     * @example
+     * @method handle
+     * @description Emit item to be handled in pages/files/browse/index.vue
      */
-    handle(item: FileType | Folder): void {
-      const hasChildren = (<Folder>item).children
-      if (hasChildren) {
-        this.push(item)
-        return
-      }
-      this.$data.file = item
+    handle(item: Item) {
+      this.$emit('handle', item)
+    },
+    /**
+     * @method forceRender
+     * @description force reactivity for Map
+     */
+    forceRender() {
+      this.$emit('forceRender')
     },
   },
 })

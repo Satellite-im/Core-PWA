@@ -1,4 +1,8 @@
 export default {
+  coming_soon: {
+    communities: 'Communities\nComing Soon',
+    send_money: 'Send Money\nComing Soon',
+  },
   global: {
     name: 'Satellite.im',
     encrypted: 'Encrypted',
@@ -114,11 +118,14 @@ export default {
     files: {
       refresh: 'Refresh',
       file_type: 'File Type',
+      empty: 'Current directory is empty',
+      add_favorite: 'Added to favorites',
+      remove_favorite: 'Removed from favorites',
+      link_copied: 'Link copied to clipboard',
       controls: {
-        new_folder: 'New Folder',
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        name_file: 'Name File...',
+        folder_name: 'Please enter a folder name',
       },
       browse: {
         files: 'Files',
@@ -134,12 +141,18 @@ export default {
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
         shared_items: 'Shared Items',
+        coming_soon: 'Coming soon',
       },
       upload: {
         close: 'Close',
         scanning_image: 'Scanning Image...',
         send: 'Send',
         cancel: 'Cancel',
+      },
+      errors: {
+        reserved_name: 'sat.json is a reserved file name',
+        empty_file: 'File needs to have a size of 1 byte or greater',
+        file_name: 'File with name already exists in this file system',
       },
     },
     unlock: {
@@ -370,7 +383,7 @@ export default {
       storage: {
         title: 'Storage',
         subtitle:
-          'Control how your data is stored. You can export your local storage information as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+          'Control how your data is stored. You can export your local storage information (coming soon) as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
         clear: {
           title: 'Clear Storage',
           subtitle:
@@ -459,6 +472,8 @@ export default {
     accounts: {
       pin_too_short: 'Pin must be at least 5 characters.',
       invalid_pin: 'Pin does not match',
+      invalid_group_id: 'GroupID is invalid',
+      cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
         'We were unable to verify your passphrase. Please check it and try again.',
       mnemonic_not_present: 'Problem with passphrase, please try again.',
@@ -485,6 +500,10 @@ export default {
     },
     storage: {
       database_not_cleared: 'Could not clear database',
+    },
+    webRTC: {
+      permission_denied:
+        'Permission denied, please check your browser settings.',
     },
   },
   search: {
@@ -544,6 +563,7 @@ export default {
     request_sent: 'Friend request successfully sent!',
     requests: 'Friend requests',
     outgoing: 'Outgoing requests',
+    all: 'List of friends',
     blocked: 'Blocked friends',
     search_placeholder: 'Some User...',
     add: 'Add Friend',

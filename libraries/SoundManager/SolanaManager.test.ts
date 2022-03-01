@@ -1,14 +1,15 @@
 import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+const SolanaManagerDefault = SolanaManager.default
 
 describe.skip('SolanaManager.default.stringToBuffer', () => {
   // AP-329
   test('0', () => {
-    const result: any = SolanaManager.default.stringToBuffer('Foo bar', 100)
+    const result: any = SolanaManagerDefault.stringToBuffer('Foo bar', 100)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    const result: any = SolanaManager.default.stringToBuffer(
+    const result: any = SolanaManagerDefault.stringToBuffer(
       'This is a Text',
       -5.48,
     )
@@ -16,12 +17,12 @@ describe.skip('SolanaManager.default.stringToBuffer', () => {
   })
 
   test('2', () => {
-    const result: any = SolanaManager.default.stringToBuffer('foo bar', -100)
+    const result: any = SolanaManagerDefault.stringToBuffer('foo bar', -100)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    const result: any = SolanaManager.default.stringToBuffer(
+    const result: any = SolanaManagerDefault.stringToBuffer(
       'Hello, world!',
       100,
     )
@@ -29,15 +30,12 @@ describe.skip('SolanaManager.default.stringToBuffer', () => {
   })
 
   test('4', () => {
-    const result: any = SolanaManager.default.stringToBuffer(
-      'This is a Text',
-      1,
-    )
+    const result: any = SolanaManagerDefault.stringToBuffer('This is a Text', 1)
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    const result: any = SolanaManager.default.stringToBuffer('', -Infinity)
+    const result: any = SolanaManagerDefault.stringToBuffer('', -Infinity)
     expect(result).toMatchSnapshot()
   })
 })
@@ -45,7 +43,7 @@ describe.skip('SolanaManager.default.stringToBuffer', () => {
 describe.skip('SolanaManager.default.waitForAccount', () => {
   // AP-329
   test('0', () => {
-    const result: any = SolanaManager.default.waitForAccount(
+    const result: any = SolanaManagerDefault.waitForAccount(
       'Foo bar',
       'Foo bar',
     )
@@ -53,7 +51,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
   })
 
   test('1', () => {
-    const result: any = SolanaManager.default.waitForAccount(
+    const result: any = SolanaManagerDefault.waitForAccount(
       'Hello, world!',
       'foo bar',
     )
@@ -61,7 +59,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
   })
 
   test('2', () => {
-    const result: any = SolanaManager.default.waitForAccount(
+    const result: any = SolanaManagerDefault.waitForAccount(
       'Foo bar',
       'This is a Text',
     )
@@ -69,7 +67,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
   })
 
   test('3', () => {
-    const result: any = SolanaManager.default.waitForAccount(
+    const result: any = SolanaManagerDefault.waitForAccount(
       'foo bar',
       'foo bar',
     )
@@ -77,7 +75,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
   })
 
   test('4', () => {
-    const result: any = SolanaManager.default.waitForAccount(
+    const result: any = SolanaManagerDefault.waitForAccount(
       'This is a Text',
       'Hello, world!',
     )
@@ -85,7 +83,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
   })
 
   test('5', () => {
-    const result: any = SolanaManager.default.waitForAccount('', '')
+    const result: any = SolanaManagerDefault.waitForAccount('', '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -93,7 +91,7 @@ describe.skip('SolanaManager.default.waitForAccount', () => {
 describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   // AP-329
   test('0', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds(
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds(
       'This is a Text',
       'foo bar',
       'foo bar',
@@ -102,7 +100,7 @@ describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   })
 
   test('1', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds(
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds(
       'foo bar',
       'Foo bar',
       'Hello, world!',
@@ -111,7 +109,7 @@ describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   })
 
   test('2', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds(
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds(
       'Foo bar',
       'foo bar',
       'Hello, world!',
@@ -120,7 +118,7 @@ describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   })
 
   test('3', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds(
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds(
       'foo bar',
       'This is a Text',
       'foo bar',
@@ -129,7 +127,7 @@ describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   })
 
   test('4', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds(
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds(
       'foo bar',
       'foo bar',
       'foo bar',
@@ -138,7 +136,7 @@ describe.skip('SolanaManager.default.publicKeyFromSeeds', () => {
   })
 
   test('5', () => {
-    const result: any = SolanaManager.default.publicKeyFromSeeds('', '', '')
+    const result: any = SolanaManagerDefault.publicKeyFromSeeds('', '', '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -164,7 +162,7 @@ describe.skip('SolanaManager.default.getClusterFromNetworkConfig', () => {
   })
 
   test('3', () => {
-    const result: any = SolanaManager.default.getClusterFromNetworkConfig('')
+    const result: any = SolanaManagerDefault.getClusterFromNetworkConfig('')
     expect(result).toMatchSnapshot()
   })
 })

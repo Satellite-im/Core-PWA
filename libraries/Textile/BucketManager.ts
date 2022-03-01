@@ -1,4 +1,4 @@
-import { Buckets, Identity, PushPathResult, Root } from '@textile/hub'
+import { Buckets, Identity, PushPathResult, Root, Links } from '@textile/hub'
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
 
@@ -184,7 +184,7 @@ export default class BucketManager {
     return roots.find((bucket) => bucket.name === this.bucketName)
   }
 
-  async getLinks(): Promise<any> {
+  async getLinks(): Promise<Links | undefined> {
     if (!this.buckets || !this.bucketKey) return undefined
     const links = await this.buckets.links(this.bucketKey)
     return links

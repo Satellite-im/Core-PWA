@@ -5,47 +5,24 @@
 >
   <MediaHeading />
   <div id="media" ref="media">
-    <!--TODO: Move to MediaUser -->
-    <div
-      class="user"
+    <MediaUser
       id="local_video"
       @dblclick="handleDoubleClick('local_video')"
-    >
-      <div v-if="localVideoStream" class="video-stream-container">
-        <video
-          class="video-stream"
-          :src-object.prop="localVideoStream"
-          autoplay
-          muted
-        ></video>
-      </div>
-      <MediaUser v-else :user="accounts.details" />
-    </div>
-    <!--TODO: Move to MediaUser -->
-    <div
-      class="user"
+      :user="accounts.details"
+      :videoStream="localVideoStream"
+      :audioMuted="localAudioMuted"
+    />
+
+    <MediaUser
       id="remote_video"
       @dblclick="handleDoubleClick('remote_video')"
-    >
-      <div v-if="remoteVideoStream" class="video-stream-container">
-        <div class="indicators">
-          <mic-off-icon class="indicator" v-if="remoteAudioMuted" size="1.2x" />
-        </div>
-        <video
-          class="video-stream"
-          :src-object.prop="remoteVideoStream"
-          autoplay
-        ></video>
-      </div>
-      <MediaUser v-else-if="recipient" :user="recipient" calling />
-    </div>
-    <audio
-      :src-object.prop="remoteAudioStream"
-      v-if="remoteAudioStream"
-      autoplay
+      :user="recipient"
+      :videoStream="remoteVideoStream"
+      :audioStream="remoteAudioStream"
+      :audioMuted="remoteAudioMuted"
+      :calling="!remoteTracks"
     />
-    <!-- <MediaUser v-for="item in computedUsers" :key="item.name" ref="user"
-      :user="{ name: item.name, profilePicture: item.profilePicture, publicKey: item.address }" /> -->
+
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
       class="more-user"

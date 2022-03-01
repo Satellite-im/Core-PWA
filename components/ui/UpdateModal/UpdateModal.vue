@@ -18,13 +18,14 @@ export default Vue.extend({
       hasMinorUpdate: false,
       requiresUpdate: false,
       releaseData: {},
+      isLoading: false,
     }
   },
   computed: {
     ...mapState(['ui']),
   },
-  mounted() {
-    this.getReleaseBody()
+  async mounted() {
+    await this.getReleaseBody()
   },
   methods: {
     /* clearAndReload() {
@@ -39,9 +40,14 @@ export default Vue.extend({
       this.toggleVisibility()
     },
     async getReleaseBody() {
-      await ReleaseNotes().then((releaseData) => {
-        this.releaseData = releaseData
-      })
+      this.isLoading = true
+      try {
+        await ReleaseNotes().then((releaseData) => {
+          this.releaseData = releaseData
+        })
+      } finally {
+        this.isLoading = false
+      }
     },
     toggleVisibility() {
       this.$store.commit('ui/toggleModal', {

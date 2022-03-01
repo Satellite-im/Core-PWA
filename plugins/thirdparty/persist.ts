@@ -2,7 +2,7 @@
  * This plugin enables persistent storage to the state.
  */
 
-import { omit, remove } from 'lodash'
+import { omit } from 'lodash'
 import { VuexPersistence } from 'vuex-persist'
 
 // Add mutations here to blacklist saving to store
@@ -14,17 +14,22 @@ const mutationsBlacklist = [
   'toggleMediaIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
+  'chat/addFile',
 ]
 
 // State properties path to blacklist saving to store
 const commonProperties = [
+  'webrtc.initialized',
+  'textile.initialized',
+  'accounts.initialized',
   'friends.all',
-  'prerequisites',
   'webrtc.activeStream',
   'webrtc.connectedPeer',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',
+  'ui.isLoadingFileIndex',
+  'chat.files',
 ]
 
 const propertiesNoStorePin = [

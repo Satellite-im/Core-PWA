@@ -1,32 +1,44 @@
-<div class="file" @click="fileClick">
+<div
+  class="file"
+  :class="ui.isLoadingFileIndex ? 'disabled' : 'clickable'"
+  v-on="ui.isLoadingFileIndex ? {} : {click: fileClick, contextmenu: contextMenu}"
+  @mouseover="fileHover=true"
+  @mouseleave="fileHover=false"
+>
   <div class="quick-actions">
     <link-icon
+      v-if="item.shared"
       size="1.25x"
-      class="share"
-      v-if="item.meta && item.meta.shared"
-      @mouseover="mouseOver"
-      @mouseleave="mouseLeave"
+      class="link"
+      @mouseover="linkHover=true"
+      @mouseleave="linkHover=false"
     />
     <heart-icon
+      v-if="item.liked || fileHover"
       size="1.25x"
       class="like"
-      v-if="item.meta && item.meta.liked"
-      @mouseover="mouseOver"
-      @mouseleave="mouseLeave"
+      @mouseover="heartHover=true"
+      @mouseleave="heartHover=false"
     />
   </div>
-  <div
-    v-if="isImage(item.type)"
+  <!-- todo- only showing images under a certain size because large images slow it down a LOT. maybe add thumbnail to index  -->
+  <img
+    v-if="isImage && item.size < $Config.uploadByteLimit"
     class="image-preview"
-    :style="`background-image: url('${item.location}')`"
+    :src="path"
   />
   <div v-else class="icon-container">
-    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
-    <!-- todo - condition for zip image after confirming how type data will come through - AP-641 -->
+    <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
+    <briefcase-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
+    <image-icon
+      v-else-if="isImage && item.size > $Config.uploadByteLimit"
+      size="4x"
+      class="file-type-icon"
+    />
     <file-icon v-else size="4x" class="file-type-icon" />
   </div>
   <div class="text-container">
-    <TypographyText :size="6" :text="item.name" />
+    <TypographyText :size="6" :text="item.name" class="maintext" />
     <TypographyText :size="6" :text="getSubtext" class="subtext" />
   </div>
 </div>

@@ -3,6 +3,7 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
   <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
   <ChatbarReply v-if="recipient" />
   <div
@@ -12,6 +13,7 @@
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
+        v-if="recipient"
         :editable="recipient ? true : false"
         :recipient="recipient"
         type="quick"
@@ -26,9 +28,10 @@
       <terminal-icon size="1x" />
     </div>
     <Editable
+      ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient)"
+      :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
@@ -37,7 +40,7 @@
     />
 
     <ChatbarControls
-      :editable="recipient ? true : false"
+      :disabled="!recipient"
       :sendMessage="sendMessage"
       id="chatbar-controls"
     />

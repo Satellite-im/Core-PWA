@@ -7,7 +7,7 @@
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
 >
-  <div class="navbar">
+  <div class="navbar" @click="navbarClickHandler">
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"
@@ -37,7 +37,11 @@
         v-bind:events.click="clickEvent"
         @click.stop="clickEvent"
       ></div>
-      <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+      <div
+        ref="emojiPicker"
+        slot="emoji-picker"
+        slot-scope="{ emojis, insert, display }"
+      >
         <div class="emoji-picker">
           <div class="emoji-picker__search">
             <InteractablesInput
