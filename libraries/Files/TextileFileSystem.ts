@@ -1,8 +1,6 @@
 import { PushPathResult } from '@textile/hub'
 import Vue from 'vue'
 import { FilSystem } from './FilSystem'
-import { Bucket } from './remote/textile/Bucket'
-
 export class TextileFileSystem extends FilSystem {
   /**
    * @getter bucket
