@@ -124,7 +124,9 @@ export class FilSystem {
   get totalSize(): number {
     return this.flat.reduce(
       (total, curr) =>
-        curr.type in FILE_TYPE ? total + (curr as ExportFile).size : total,
+        (Object.values(FILE_TYPE) as string[]).includes(curr.type)
+          ? total + (curr as ExportFile).size
+          : total,
       0,
     )
   }
