@@ -1,30 +1,27 @@
 #view-file {
-  .image-container {
-    width: 100vw;
-    display: inline-flex;
-    justify-content: center;
-  }
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: @base-z-index + 35;
+
   .file-image {
+    display: flex;
+    margin: auto;
     max-width: 80vw;
-    justify-self: center;
-    align-self: center;
     max-height: 80vh;
     &:extend(.round-corners);
   }
   .file-icon {
     font-size: 50pt;
-    align-self: center;
-    justify-self: center;
-    margin: 0 auto;
+    margin: auto;
     margin-bottom: @normal-spacing;
   }
   .no-preview {
     display: flex;
     flex-direction: column;
     text-align: center;
-    align-items: center;
-    justify-content: center;
-    height: 50vh;
+    margin: auto;
     .subtitle {
       display: block;
       text-align: center;
@@ -33,18 +30,21 @@
   }
 
   .file-nav {
-    width: 100vw;
+    width: @full;
     display: flex;
-    flex-direction: row;
+    position: absolute;
+    margin: @normal-spacing;
 
     .file-info {
-      margin: @normal-spacing;
       .title {
         &:extend(.font-secondary);
       }
     }
 
     .controls {
+      margin-left: auto;
+      margin-right: @normal-spacing;
+
       .control {
         display: inline-flex;
         font-size: @icon-size;
@@ -58,18 +58,6 @@
           cursor: not-allowed;
         }
       }
-      justify-items: flex-end;
-      align-items: flex-end;
-      flex: 1;
-      text-align: right;
     }
   }
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: @base-z-index + 100;
-  align-content: center;
 }

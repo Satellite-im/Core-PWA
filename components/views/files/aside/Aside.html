@@ -4,8 +4,9 @@
     <InteractablesButton
       :text="$t('pages.files.aside.upgrade')"
       size="small"
-      type="success"
       :action="() => {}"
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch upgrade"
+      :data-tooltip="$t('pages.files.aside.coming_soon')"
     />
   </div>
   <UiProgress :progress="progress" />

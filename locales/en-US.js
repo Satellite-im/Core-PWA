@@ -141,6 +141,7 @@ export default {
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
         shared_items: 'Shared Items',
+        coming_soon: 'Coming soon',
       },
       upload: {
         close: 'Close',
@@ -150,6 +151,7 @@ export default {
       },
       errors: {
         reserved_name: 'sat.json is a reserved file name',
+        empty_file: 'File needs to have a size of 1 byte or greater',
         file_name: 'File with name already exists in this file system',
         limit: 'This upload would exceed your storage limit',
       },
@@ -471,6 +473,8 @@ export default {
     accounts: {
       pin_too_short: 'Pin must be at least 5 characters.',
       invalid_pin: 'Pin does not match',
+      invalid_group_id: 'GroupID is invalid',
+      cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
         'We were unable to verify your passphrase. Please check it and try again.',
       mnemonic_not_present: 'Problem with passphrase, please try again.',

@@ -95,14 +95,17 @@ export default Vue.extend({
       }
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
-      const protectedNameFiles: File[] = originalFiles.filter(
+      const protectedNameResults: File[] = originalFiles.filter(
         (file) => !(file.name === 'sat.json'),
       )
-      const sameNameResults: File[] = protectedNameFiles.filter(
-        (file: File) => {
-          return !this.$FileSystem.hasChild(file.name)
-        },
+      // filter out files with 0 bytes size
+      const emptyFileResults: File[] = protectedNameResults.filter(
+        (file) => !(file.size === 0),
       )
+      // filter out files with the same name as another file
+      const sameNameResults: File[] = emptyFileResults.filter((file) => {
+        return !this.$FileSystem.hasChild(file.name)
+      })
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // todo - fix with AP-807. don't scan large files to prevent crash
@@ -159,10 +162,13 @@ export default Vue.extend({
 
       this.$emit('forceRender')
 
-      if (protectedNameFiles.length !== originalFiles.length) {
+      if (originalFiles.length !== protectedNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.reserved_name') as string)
       }
-      if (sameNameResults.length !== protectedNameFiles.length) {
+      if (protectedNameResults.length !== emptyFileResults.length) {
+        this.errors.push(this.$t('pages.files.errors.empty_file') as string)
+      }
+      if (emptyFileResults.length !== sameNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.file_name') as string)
       }
       if (nsfwResults.length !== files.length) {
