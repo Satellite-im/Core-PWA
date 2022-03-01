@@ -33,9 +33,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-
     path(): string {
       return this.$Config.textile.browser + this.file.hash
+    },
+    isImage(): boolean {
+      return Boolean(this.file.name.match(this.$Config.regex.image))
     },
   },
   methods: {
