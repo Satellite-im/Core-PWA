@@ -74,11 +74,11 @@ export default Vue.extend({
         ? this.item.content.length + ' items'
         : this.$filesize((this.item as Fil).size)
     },
-    isImage() {
-      return this.item.name.match(this.$Config.regex.image)
+    isImage(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.image))
     },
-    isArchive() {
-      return this.item.name.match(this.$Config.regex.archive)
+    isArchive(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
     /**
      * @returns path inside textile bucket
