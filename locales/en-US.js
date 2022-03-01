@@ -472,6 +472,8 @@ export default {
     accounts: {
       pin_too_short: 'Pin must be at least 5 characters.',
       invalid_pin: 'Pin does not match',
+      invalid_group_id: 'GroupID is invalid',
+      cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
         'We were unable to verify your passphrase. Please check it and try again.',
       mnemonic_not_present: 'Problem with passphrase, please try again.',
