@@ -11,7 +11,8 @@ body {
   overflow: hidden;
   height: @full;
   &:extend(.full-width);
-  overscroll-behavior: none;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   caret-color: var(--flair-color) !important;
 }
 
