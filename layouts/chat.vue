@@ -191,6 +191,9 @@ export default Vue.extend({
     window.addEventListener('resize', appHeight)
     appHeight()
     this.showInitialSidebar()
+    if (this.$device.isMobile) {
+      this.$store.commit('ui/toggleSettings', { show: false })
+    }
   },
   methods: {
     toggleMenu() {
