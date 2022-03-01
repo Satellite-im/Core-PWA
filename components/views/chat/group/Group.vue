@@ -79,10 +79,22 @@ export default Vue.extend({
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: MouseEvent) {
-      this.$store.dispatch('ui/showQuickProfile', {
-        textilePublicKey: this.$props.group.from,
-        position: { x: e.x, y: e.y },
-      })
+      const openQuickProfile = () => {
+        this.$store.dispatch('ui/showQuickProfile', {
+          textilePublicKey: this.$props.group.from,
+          position: { x: e.x, y: e.y },
+        })
+      }
+
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 0)
     },
   },
 })
