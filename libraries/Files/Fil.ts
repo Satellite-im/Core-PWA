@@ -89,7 +89,7 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter modifiedVal
+   * @getter modified
    * @returns last modified timestamp
    */
   get modified(): number {

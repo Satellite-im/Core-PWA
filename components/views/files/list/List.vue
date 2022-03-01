@@ -32,6 +32,16 @@ export default Vue.extend({
       type: Array as PropType<Array<Item>>,
       required: true,
     },
+    /**
+     * counter to force reactivity for Map
+     */
+    counter: {
+      type: Number,
+      required: true,
+    },
+  },
+  created() {
+    setInterval(this.forceRender, this.$Config.chat.timestampUpdateInterval)
   },
   methods: {
     /**
@@ -40,6 +50,13 @@ export default Vue.extend({
      */
     handle(item: Item) {
       this.$emit('handle', item)
+    },
+    /**
+     * @method forceRender
+     * @description force reactivity for Map
+     */
+    forceRender() {
+      this.$emit('forceRender')
     },
   },
 })

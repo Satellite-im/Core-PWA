@@ -19,13 +19,15 @@
       <FilesList
         v-else-if="view === 'list'"
         :directory="directory"
+        :counter="counter"
         @handle="handle"
+        @forceRender="forceRender"
       />
       <FilesGrid
         v-else
         :directory="directory"
-        @handle="handle"
         :counter="counter"
+        @handle="handle"
         @forceRender="forceRender"
       />
     </div>
