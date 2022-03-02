@@ -93,7 +93,7 @@ export const Config = {
   },
   chat: {
     defaultMessageLimit: 50,
-    defalutLoadMoreLimit: 20,
+    defaultLoadMoreLimit: 20,
     messageMaxChars: 256,
     timestampUpdateInterval: 60 * 1000,
     maxChars: 256,
