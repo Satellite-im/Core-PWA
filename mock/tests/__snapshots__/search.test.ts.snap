@@ -1,0 +1,241 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init gets the searchRecommend constant 1`] = `
+Object {
+  "channels": Array [
+    Object {
+      "address": "0x9bf4001d307dfd62b26a2f1307ee0c0307632d59",
+      "name": "Satellite",
+      "value": "satellite",
+    },
+    Object {
+      "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+      "name": "Solstice",
+      "value": "solstice",
+    },
+  ],
+  "has": Array [
+    Object {
+      "key": "link",
+      "value": "link",
+    },
+    Object {
+      "key": "embed",
+      "value": "embed",
+    },
+    Object {
+      "key": "file",
+      "value": "file",
+    },
+    Object {
+      "key": "video",
+      "value": "video",
+    },
+    Object {
+      "key": "image",
+      "value": "image",
+    },
+    Object {
+      "key": "sound",
+      "value": "sound",
+    },
+  ],
+  "users": Array [
+    Object {
+      "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+      "name": "Taurus Nix",
+      "value": "taurus_nix",
+    },
+    Object {
+      "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+      "name": "Halley Themis",
+      "value": "halley_themis",
+    },
+  ],
+}
+`;
+
+exports[`init gets the searchResult constant 1`] = `
+Object {
+  "data": Object {
+    "list": Array [
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+          "id": "halley_themis",
+          "name": "Halley Themis",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+          "id": "halley_themis",
+          "name": "Halley Themis",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+          "id": "halley_themis",
+          "name": "Halley Themis",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+          "id": "halley_themis",
+          "name": "Halley Themis",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+          "id": "taurus_nix",
+          "name": "Taurus Nix",
+        },
+      },
+      Object {
+        "at": 1620515545000,
+        "id": "00-d0-10",
+        "payload": "Radiant shooting star wavelength helium local arm penumbra total eclipse Lagrange points nova Doppler shift full moon spectroscope universe sky ionosphere NASA orbital eccentricity superior planets visual magnitude heliocentric",
+        "type": "text",
+        "user": Object {
+          "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+          "id": "halley_themis",
+          "name": "Halley Themis",
+        },
+      },
+    ],
+    "page": 0,
+    "perPage": 10,
+    "totalRows": 100,
+  },
+  "recommends": Object {
+    "channels": Array [
+      Object {
+        "address": "0x9bf4001d307dfd62b26a2f1307ee0c0307632d59",
+        "name": "Satellite",
+        "value": "satellite",
+      },
+      Object {
+        "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+        "name": "Solstice",
+        "value": "solstice",
+      },
+    ],
+    "has": Array [
+      Object {
+        "key": "link",
+        "value": "link",
+      },
+      Object {
+        "key": "embed",
+        "value": "embed",
+      },
+      Object {
+        "key": "file",
+        "value": "file",
+      },
+      Object {
+        "key": "video",
+        "value": "video",
+      },
+      Object {
+        "key": "image",
+        "value": "image",
+      },
+      Object {
+        "key": "sound",
+        "value": "sound",
+      },
+    ],
+    "users": Array [
+      Object {
+        "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+        "name": "Taurus Nix",
+        "value": "taurus_nix",
+      },
+      Object {
+        "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+        "name": "Halley Themis",
+        "value": "halley_themis",
+      },
+    ],
+  },
+}
+`;
