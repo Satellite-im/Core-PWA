@@ -95,7 +95,7 @@ export const Config = {
     defaultMessageLimit: 50,
     defalutLoadMoreLimit: 20,
     messageMaxChars: 256,
-    timestampUpdateInterval: 60 * 1000,
+    timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 256,
   },
   routingMiddleware: {

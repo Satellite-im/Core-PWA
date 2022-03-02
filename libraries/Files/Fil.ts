@@ -19,6 +19,7 @@ export class Fil extends Item {
     size,
     liked,
     shared,
+    modified,
     description,
     type,
   }: {
@@ -27,10 +28,11 @@ export class Fil extends Item {
     size: number
     liked?: boolean
     shared?: boolean
+    modified?: number
     description?: string
     type?: FILE_TYPE
   }) {
-    super({ name: name || 'un-named file', liked, shared })
+    super({ name: name || 'un-named file', liked, shared, modified })
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
@@ -70,9 +72,11 @@ export class Fil extends Item {
       name: `${this.name} copy`,
       hash: this.hash,
       size: this.size,
+      modified: this.modified,
       liked: this.liked,
       shared: this.shared,
       description: this.description,
+      type: this.type,
     })
   }
 
@@ -82,6 +86,14 @@ export class Fil extends Item {
    */
   get size(): number {
     return this._size
+  }
+
+  /**
+   * @getter modified
+   * @returns last modified timestamp
+   */
+  get modified(): number {
+    return this.modifiedVal
   }
 
   /**

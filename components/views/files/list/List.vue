@@ -30,8 +30,31 @@ export default Vue.extend({
      */
     directory: {
       type: Array as PropType<Array<Item>>,
-      default: () => [],
+      required: true,
     },
+    /**
+     * counter to force reactivity for Map
+     */
+    counter: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      timer: null,
+    }
+  },
+  mounted() {
+    this.$data.timer = setInterval(
+      this.forceRender,
+      this.$Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeDestroy() {
+    if (this.$data.timer) {
+      clearInterval(this.$data.timer)
+    }
   },
   methods: {
     /**
@@ -40,6 +63,13 @@ export default Vue.extend({
      */
     handle(item: Item) {
       this.$emit('handle', item)
+    },
+    /**
+     * @method forceRender
+     * @description force reactivity for Map
+     */
+    forceRender() {
+      this.$emit('forceRender')
     },
   },
 })

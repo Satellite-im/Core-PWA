@@ -33,7 +33,7 @@
         <th></th>
       </thead>
       <tbody>
-        <tr class="item" v-for="item in directory">
+        <tr class="item" v-for="item, i in directory" :key="i + counter">
           <td class="filename" @click="handle(item)">
             <span class="icon">
               <folder-icon size="1x" v-if="item.content" />

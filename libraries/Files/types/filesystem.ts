@@ -9,6 +9,7 @@ interface ExportSharedProps {
   liked: boolean
   shared: boolean
   type: FILE_TYPE | DIRECTORY_TYPE
+  modified: number
 }
 
 export interface ExportFile extends ExportSharedProps {
