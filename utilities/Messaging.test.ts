@@ -1,4 +1,5 @@
 import * as Messaging from '~/utilities/Messaging'
+// dummy comment
 
 describe('Messaging.refreshTimestampInterval', () => {
   test('0', () => {
