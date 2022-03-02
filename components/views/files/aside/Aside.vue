@@ -15,6 +15,9 @@ export default Vue.extend({
     sizeLimit(): string {
       return this.$filesize(this.$Config.personalFilesLimit)
     },
+    sizeColor(): string {
+      return this.progress > 90 ? 'red' : 'green'
+    },
   },
   watch: {
     totalSize() {

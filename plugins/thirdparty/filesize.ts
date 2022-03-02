@@ -1,11 +1,11 @@
 import Vue from 'vue'
 
-import fileSize from 'filesize'
+import { filesize } from '~/utilities/Filesize'
 
 declare module '@nuxt/types' {
   interface Context {
-    $filesize: typeof fileSize
+    $filesize: typeof Function
   }
 }
 
-Vue.prototype.$filesize = fileSize
+Vue.prototype.$filesize = filesize

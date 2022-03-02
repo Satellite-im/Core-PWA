@@ -140,4 +140,8 @@ export const Config = {
     size: { width: 600, height: 600 },
     format: 'jpeg',
   },
+  locale:
+    navigator.languages && navigator.languages.length
+      ? navigator.languages[0]
+      : navigator.language,
 }

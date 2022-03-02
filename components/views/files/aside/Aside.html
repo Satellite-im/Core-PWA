@@ -12,7 +12,7 @@
   <UiProgress :progress="progress" />
   <div>
     <span class="usage-text">
-      <span class="red">{{totalSize}}</span> of {{sizeLimit}}
+      <span :class="sizeColor">{{totalSize}}</span> of {{sizeLimit}}
     </span>
   </div>
   <UiSpacer :height="10" />
