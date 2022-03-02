@@ -9,7 +9,7 @@
     display: flex;
     margin: auto;
     max-width: 80vw;
-    max-height: 80vh;
+    max-height: 60vh;
     &:extend(.round-corners);
   }
   .file-icon {
@@ -36,8 +36,12 @@
     margin: @normal-spacing;
 
     .file-info {
+      max-width: 50vw;
       .title {
         &:extend(.font-secondary);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
 
