@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Commitment } from '@solana/web3.js'
 
 export const Config = {
@@ -105,6 +104,8 @@ export const Config = {
   regex: {
     // Regex to identify if a filetype is an image we support
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
+    // check if file is svg
+    svg: '^.*.(svg)$',
     // determine if filetype is archive
     archive: '^.*.(zip|vnd.rar|x-7z-compressed)$',
     // Regex to check if string contains only emoji's.

@@ -11,6 +11,7 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { Fil } from '~/libraries/Files/Fil'
+import encode from '~/utilities/EncodeSvg'
 
 export default Vue.extend({
   components: {
@@ -27,6 +28,11 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      svgSrc: '' as string,
+    }
+  },
   computed: {
     ...mapState(['ui']),
     path(): string {
@@ -35,6 +41,14 @@ export default Vue.extend({
     isImage(): boolean {
       return Boolean(this.file.name.match(this.$Config.regex.image))
     },
+    isSvg(): boolean {
+      return Boolean(this.file.name.match(this.$Config.regex.svg))
+    },
+  },
+  mounted() {
+    if (this.isSvg) {
+      this.encodeSvg()
+    }
   },
   methods: {
     /**
@@ -52,6 +66,13 @@ export default Vue.extend({
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
       this.$emit('forceRender')
+    },
+    /**
+     * @method encodeSvg
+     * @description converts svg at path to usable data string
+     */
+    async encodeSvg() {
+      this.svgSrc = await encode(this.path)
     },
   },
 })

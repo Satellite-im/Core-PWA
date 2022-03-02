@@ -15,6 +15,7 @@ import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
+import encode from '~/utilities/EncodeSvg'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -51,11 +52,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      fileUrl: String,
-      fileSize: '',
       fileHover: false,
       linkHover: false,
       heartHover: false,
+      svgSrc: '',
       contextMenuValues: [
         { text: 'Favorite', func: this.like },
         { text: 'Share', func: this.share },
@@ -80,6 +80,9 @@ export default Vue.extend({
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
+    isSvg(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.svg))
+    },
     /**
      * @returns path inside textile bucket
      */
@@ -88,6 +91,11 @@ export default Vue.extend({
         ? this.$Config.textile.browser + this.item.hash
         : ''
     },
+  },
+  mounted() {
+    if (this.isSvg) {
+      this.encodeSvg()
+    }
   },
   methods: {
     /**
@@ -159,6 +167,13 @@ export default Vue.extend({
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$emit('forceRender')
+    },
+    /**
+     * @method encodeSvg
+     * @description converts svg at path to usable data string
+     */
+    async encodeSvg() {
+      this.svgSrc = await encode(this.path)
     },
   },
 })
