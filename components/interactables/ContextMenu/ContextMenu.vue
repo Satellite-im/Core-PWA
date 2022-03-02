@@ -56,6 +56,7 @@ export default Vue.extend({
      */
     handleOverflow() {
       const contextMenu = this.$refs.contextMenu as HTMLElement
+      if (!contextMenu) return
       const position = this.ui.contextMenuPosition
       let clickX = position.x
       let clickY = position.y
