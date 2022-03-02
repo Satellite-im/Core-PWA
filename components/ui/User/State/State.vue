@@ -5,6 +5,7 @@
       :seed="user.address"
       :size="size"
       :source="src"
+      @click="clickHandler"
     />
 
     <circle-icon
@@ -46,6 +47,11 @@ export default Vue.extend({
       type: Number,
       default: 35,
       required: false,
+    },
+    clickHandler: {
+      type: Function,
+      required: false,
+      default: () => {},
     },
   },
 })

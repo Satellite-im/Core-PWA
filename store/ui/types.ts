@@ -199,3 +199,8 @@ export interface UIState {
   }
   isLoadingFileIndex: boolean
 }
+
+export type Position = {
+  x: number
+  y: number
+}

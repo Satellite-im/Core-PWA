@@ -1,9 +1,11 @@
 // @ts-ignore
 import Mousetrap from 'mousetrap'
-import { UIState } from './types'
+import { Position, UIState } from './types'
 import { Channel } from '~/types/ui/server'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
+import { getFullUserInfoFromState } from '~/utilities/Messaging'
+import { User } from '~/types/ui/user'
 
 const $Sounds = new SoundManager()
 
@@ -84,5 +86,31 @@ export default {
         { value: val.content, userId: val.userId },
         { root: true },
       )
+  },
+  showQuickProfile(
+    { commit, state, rootState }: ActionsArguments<UIState>,
+    payload: { textilePublicKey: string; position: Position },
+  ) {
+    if (!payload?.textilePublicKey || !payload?.position) {
+      return
+    }
+
+    const selectedUser = getFullUserInfoFromState(
+      payload.textilePublicKey,
+      rootState,
+    )
+
+    commit('setQuickProfilePosition', payload.position)
+    commit('quickProfile', selectedUser)
+  },
+  showProfile({ commit, state }: ActionsArguments<UIState>, user: User) {
+    if (!user) {
+      return
+    }
+    commit('toggleModal', {
+      name: 'userProfile',
+      state: true,
+    })
+    commit('setUserProfile', user)
   },
 }

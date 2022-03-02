@@ -4,10 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 import { UIMessage, Group } from '~/types/messaging'
-import {
-  getUsernameFromState,
-  getFullUserInfoFromState,
-} from '~/utilities/Messaging'
+import { getUsernameFromState } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 
 export default Vue.extend({
@@ -138,13 +135,11 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(
-        this.$props.message.from,
-        this.$store.state,
-      )
-      this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', selectedUser)
+    showQuickProfile(e: MouseEvent) {
+      this.$store.dispatch('ui/showQuickProfile', {
+        textilePublicKey: this.$props.message.from,
+        position: { x: e.x, y: e.y },
+      })
     },
     /**
      * @method toggleReplies DocsTODO
