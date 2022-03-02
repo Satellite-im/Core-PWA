@@ -124,6 +124,15 @@ export default Vue.extend({
       }
       this.fetchResult(query)
     },
+    queryOptions: {
+      async handler(newQOptions) {
+        this.$data.result = await filterMessages(
+          this.accounts,
+          newQOptions,
+          this.$data.page,
+        )
+      },
+    },
     date: {
       handler(newDateValue) {
         this.$data.queryOptions = {
