@@ -104,7 +104,11 @@ export default Vue.extend({
           return
         }
         const address = this.recipient?.address
-        if (!address) return
+        if (
+          !address &&
+          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+        )
+          return
         this.$data.count_error = false
         for (let i = 0; i < files.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */
