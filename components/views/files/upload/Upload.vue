@@ -17,7 +17,7 @@ declare module 'vue/types/vue' {
     files: UploadDropItemType[]
     uploadStatus: boolean
     count_error: boolean
-    loadPicture: (item: UploadDropItemType) => void
+    loadPicture: (item: UploadDropItemType, callback: Function) => void
     cancelUpload: () => void
     finishUploads: () => void
     dispatchFile: (file: UploadDropItemType) => void
@@ -76,6 +76,7 @@ export default Vue.extend({
   },
   mounted() {
     this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
+    this.$parent.$data.showFilePreview = this.files.length > 0
   },
   methods: {
     /**
@@ -126,7 +127,7 @@ export default Vue.extend({
           }
         }
         const newFiles = await Promise.all(
-          [...files].map(async (file: File) => {
+          files.map(async (file: File) => {
             const uploadFile = {
               file,
               nsfw: { status: false, checking: false },
@@ -148,11 +149,12 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
-          this.$store.commit('chat/addFile', {
-            file: uploadFile,
-            address,
-          })
-          this.loadPicture(uploadFile)
+          this.loadPicture(uploadFile, () =>
+            this.$store.commit('chat/addFile', {
+              file: uploadFile,
+              address,
+            }),
+          )
         })
         this.files.push(...newFiles)
         this.$data.uploadStatus = true
@@ -166,13 +168,17 @@ export default Vue.extend({
      * @method loadPicture
      * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
      * @param file File to load
+     * @param callback Function to be called after the data URL is created
      * @example this.loadPicture(this.$data.file)
      */
-    loadPicture(item: UploadDropItemType) {
+    loadPicture(item: UploadDropItemType, callback: Function) {
       if (!item.file) return
       const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
-        if (e.target) item.url = e.target.result
+      reader.onload = (e: Event | any) => {
+        if (e.target) {
+          item.url = e.target.result
+          if (callback) callback()
+        }
       }
       reader.readAsDataURL(item.file)
     },
