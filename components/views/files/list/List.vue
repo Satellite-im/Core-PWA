@@ -40,8 +40,21 @@ export default Vue.extend({
       required: true,
     },
   },
-  created() {
-    setInterval(this.forceRender, this.$Config.chat.timestampUpdateInterval)
+  data() {
+    return {
+      timer: null,
+    }
+  },
+  mounted() {
+    this.$data.timer = setInterval(
+      this.forceRender,
+      this.$Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   },
   methods: {
     /**
