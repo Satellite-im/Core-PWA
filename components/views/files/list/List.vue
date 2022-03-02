@@ -52,8 +52,8 @@ export default Vue.extend({
     )
   },
   beforeDestroy() {
-    if (this.timer) {
-      clearInterval(this.timer)
+    if (this.$data.timer) {
+      clearInterval(this.$data.timer)
     }
   },
   methods: {
