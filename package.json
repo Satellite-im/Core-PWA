@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn install --check-files && nuxi dev",
+    "dev:tracker": "yarn bittorrent-tracker -p 5001",
     "build": "nuxt build",
     "start": "nuxi start",
     "generate": "nuxt generate",
