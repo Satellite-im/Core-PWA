@@ -118,6 +118,7 @@ export default {
     commit('friends/setActive', friend, { root: true })
 
     commit('setConversationLoading', { loading: false })
+    commit('setMessageLoading', { loading: false })
 
     // TODO: only for testing
     dispatch('subscribeToMailbox')
