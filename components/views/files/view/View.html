@@ -39,11 +39,10 @@
       </div>
     </div>
   </div>
-  <img v-if="isSvg" class="file-image" :src="svgSrc" />
   <img
-    v-else-if="isImage && file.size < $Config.uploadByteLimit"
+    v-if="isImage && file.size < $Config.uploadByteLimit"
     class="file-image"
-    :src="path"
+    :src="isSvg ? svgSrc : path"
   />
   <div v-else class="no-preview">
     <a

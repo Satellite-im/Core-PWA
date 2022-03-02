@@ -21,12 +21,11 @@
       @mouseleave="heartHover=false"
     />
   </div>
-  <img v-if="isSvg" class="image-preview" :src="svgSrc" />
   <!-- todo- only showing images under a certain size because large images slow it down a LOT. maybe add thumbnail to index  -->
   <img
-    v-else-if="isImage && item.size < $Config.uploadByteLimit"
+    v-if="isImage && item.size < $Config.uploadByteLimit"
     class="image-preview"
-    :src="path"
+    :src="isSvg ? svgSrc : path"
   />
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
