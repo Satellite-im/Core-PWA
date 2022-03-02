@@ -1,10 +1,13 @@
+import 'fake-indexeddb/auto'
 import * as idb from './index'
 import { db } from '~/plugins/thirdparty/dexie'
 import { RegistrationStatus } from '~/store/accounts/types'
+import { QueryOptions } from '~/types/ui/query'
 
 describe('', () => {
   test('', async () => {
     const argumentAccounts = {
+      initialized: true,
       storePin: true,
       registry: true,
       loading: false,
@@ -24,7 +27,7 @@ describe('', () => {
       registrationStatus: RegistrationStatus.FUNDING_ACCOUNT,
       lastVisited: 'Rem pariatur molestiae numquam ea et vel iure.',
     }
-    const argumentQueryOptions = {
+    const argumentQueryOptions: QueryOptions = {
       queryString:
         'Pariatur inventore repudiandae quaerat ut. Velit unde nobis voluptatem. Nemo dolorem dolore ea aut est voluptates voluptate dolores. Ut consequatur ut ut enim et. Et veniam maiores aut cupiditate.',
       friends: [
@@ -33,7 +36,7 @@ describe('', () => {
           address:
             'Voluptas possimus deleniti occaecati voluptas mollitia necessitatibus quisquam. Atque quas ab qui assumenda voluptatem nesciunt incidunt deleniti fugiat. Qui enim tempore. Eligendi et sunt sapiente natus fuga voluptate ut.',
           state: 'mobile',
-          badge: {},
+          badge: 'verified',
           userAccount: '',
           lastUpdate: 79526,
         },
@@ -42,7 +45,7 @@ describe('', () => {
           address:
             'Voluptas possimus deleniti occaecati voluptas mollitia necessitatibus quisquam. Atque quas ab qui assumenda voluptatem nesciunt incidunt deleniti fugiat. Qui enim tempore. Eligendi et sunt sapiente natus fuga voluptate ut.',
           state: 'mobile',
-          badge: {},
+          badge: 'verified',
           userAccount: '',
           lastUpdate: 79526,
         },
@@ -56,7 +59,7 @@ describe('', () => {
 
     db.conversations.bulkGet = jest.fn()
 
-    const result = await idb.searchMessage(
+    const result = await idb.filterMessages(
       argumentAccounts,
       argumentQueryOptions,
     )

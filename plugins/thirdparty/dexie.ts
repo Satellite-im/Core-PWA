@@ -6,7 +6,7 @@ export type DexieMessage = {
   conversation: Message[]
   lastInbound: number
 }
-class SatelliteDB extends Dexie {
+export class SatelliteDB extends Dexie {
   public conversations: Dexie.Table<DexieMessage, string>
 
   public constructor() {
