@@ -121,8 +121,7 @@ export default {
    */
   async subscribeToGroupInvites(
     { commit, state, dispatch }: ActionsArguments<GroupsState>,
-    group: Group,
-    recipient: string,
+    { group, recipient }: { group: Group; recipient: string },
   ) {
     // TODO or unsubscribe if subscribed?
     if (state.subscriptionId === null) {

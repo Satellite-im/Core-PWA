@@ -305,7 +305,7 @@ export default class GroupchatsProgram extends EventEmitter {
   /**
    * Unsubscribe from group events
    * @param id {number} event subscription id
-   * @returns {number} subscription id to unsubscribe
+   * @returns Promise<void>
    */
   unsubscribe(id: number): Promise<void> {
     if (!this.solana) throw new Error('Solana not initialized')
