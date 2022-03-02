@@ -10,13 +10,15 @@
   </div>
   <EnhancersGlyphsNav />
   <div class="glyph-content">
-    <virtual-list
-      class="virtual-list"
-      :data-key="'id'"
-      :data-sources="filteredGlyphs"
-      :data-component="packGroup"
-      :keeps="15"
-    />
+    <UiScroll verticalScroll scrollbarVisibility="scroll">
+      <virtual-list
+        class="virtual-list"
+        :data-key="'id'"
+        :data-sources="filteredGlyphs"
+        :data-component="packGroup"
+        :keeps="15"
+      />
+    </UiScroll>
   </div>
 
   <EnhancersGlyphsItemInfo />

@@ -15,11 +15,14 @@
     &:extend(.round-corners);
   }
   .glyph-content {
+    position: relative;
     font-size: 0.75rem;
+    height: 325px;
   }
   .virtual-list {
-    height: 325px;
-    overflow-y: auto;
+    height: 100%;
+
+    /* overflow-y: auto;
     padding-bottom: 80px;
     &::-webkit-scrollbar {
       width: 5px;
@@ -27,6 +30,6 @@
     &::-webkit-scrollbar-thumb {
       background-color: var(--flair-color);
       border-radius: 6px;
-    }
+    } */
   }
 }

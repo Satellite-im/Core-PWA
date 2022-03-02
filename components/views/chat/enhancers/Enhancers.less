@@ -50,8 +50,6 @@
 .emoji-picker {
   font-family: 'Montserrat', sans-serif;
   &:extend(.full-width);
-  min-height: @full;
-  max-height: @full;
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
@@ -75,12 +73,10 @@
   cursor: default;
 }
 .emoji-picker .emojis {
-  display: flex;
-  flex-wrap: wrap;
   font-size: 1.5rem;
   justify-content: space-between;
 
-  & > div{
+  & > div {
     max-width: 100%;
   }
 }
@@ -88,6 +84,12 @@
   content: '';
   flex: auto;
 }
+
+.emoji-picker .emojis div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .emoji-picker .emojis span {
   display: inline-block;
   cursor: pointer;
