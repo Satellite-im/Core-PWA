@@ -1,4 +1,4 @@
-import * as Search from '../Search'
+import * as Search from '../search'
 
 describe('init', () => {
   it('gets the searchRecommend constant', () => {
