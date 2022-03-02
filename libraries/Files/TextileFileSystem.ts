@@ -1,6 +1,9 @@
 import { PushPathResult } from '@textile/hub'
 import Vue from 'vue'
 import { FilSystem } from './FilSystem'
+import { Bucket } from './remote/textile/Bucket'
+import { FILE_TYPE } from './types/file'
+
 export class TextileFileSystem extends FilSystem {
   /**
    * @getter bucket
@@ -21,6 +24,9 @@ export class TextileFileSystem extends FilSystem {
       name: file.name,
       hash: result.path.path,
       size: file.size,
+      type: (Object.values(FILE_TYPE) as string[]).includes(file.type)
+        ? (file.type as FILE_TYPE)
+        : FILE_TYPE.GENERIC,
     })
   }
 
