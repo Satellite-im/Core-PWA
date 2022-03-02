@@ -18,6 +18,7 @@
       @input="input"
     ></div>
   </div>
+  <!-- temporarily disabled due to conflicts with solr search filters (from:, has:, etc...)
   <div :class="{'search-options': true}" v-if="isOption">
     <ul class="search-option-group">
       <li class="search-option-heading">
@@ -43,6 +44,7 @@
       </template>
     </ul>
   </div>
+  -->
   <div :class="{'search-recommends': true}" v-if="isSearch">
     <ul class="search-recommend-group">
       <li class="search-for">

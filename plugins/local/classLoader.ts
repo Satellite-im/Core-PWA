@@ -18,6 +18,7 @@ import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
 import BucketManager from '~/libraries/Textile/BucketManager'
 import Cursor from '~/libraries/ui/Cursor'
+import SearchIndex from '~/libraries/SearchIndex'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -61,6 +62,10 @@ Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
+Vue.prototype.$SearchIndex = new SearchIndex({
+  ref: 'id',
+  fields: ['conversation', 'from', 'to', 'payload'],
+})
 Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)

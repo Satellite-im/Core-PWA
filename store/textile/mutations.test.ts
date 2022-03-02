@@ -1,5 +1,12 @@
+import Vue from 'vue'
 import mutations from '~/store/textile/mutations'
 import InitialTextileState from '~/store/textile/state'
+import SearchIndex from '~/libraries/SearchIndex'
+
+Vue.prototype.$SearchIndex = new SearchIndex({
+  ref: 'id',
+  fields: ['payload'],
+})
 
 describe('init', () => {
   let inst: any

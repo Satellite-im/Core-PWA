@@ -1,11 +1,16 @@
+import Vue from 'vue'
 import { TextileState } from './types'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
+import SearchIndex from '~/libraries/SearchIndex'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
     state.initialized = status
+  },
+  setActiveConversation(state: TextileState, address: string) {
+    state.activeConversation = address
   },
   setConversation(
     state: TextileState,
@@ -15,12 +20,14 @@ const mutations = {
       limit,
       skip,
       end,
+      active = true,
     }: {
       address: string
       messages: Message[]
       limit: number
       skip: number
       end: boolean
+      active: boolean
     },
   ) {
     const initialValues = {
@@ -31,6 +38,8 @@ const mutations = {
       lastUpdate: state.conversations[address]?.lastUpdate || 0, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
     const tracked = updateMessageTracker(messages, initialValues)
+
+    if (active) state.activeConversation = address
 
     state.conversations = {
       ...state.conversations,
@@ -60,6 +69,9 @@ const mutations = {
         end: false,
       },
     }
+
+    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
+    $SearchIndex.update([])
   },
   addMessageToConversation(
     state: TextileState,
@@ -103,6 +115,8 @@ const mutations = {
         end,
       },
     }
+    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
+    $SearchIndex.update(Object.values(tracked.messages))
   },
   setConversationLoading(
     state: TextileState,
