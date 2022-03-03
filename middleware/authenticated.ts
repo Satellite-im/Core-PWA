@@ -20,6 +20,7 @@ interface Arguments {
  */
 export default function ({ store, route, redirect }: Arguments) {
   const { locked, phrase } = store.state.accounts
+  const { allPrerequisitesReady } = store.getters
 
   const eventuallyRedirect = memoize(
     (path: string) => {
@@ -44,6 +45,8 @@ export default function ({ store, route, redirect }: Arguments) {
   if (Config.routingMiddleware.prerequisitesCheckBypass.includes(domain)) {
     return
   }
+
+  if (!allPrerequisitesReady) return eventuallyRedirect('/')
 
   store.commit('accounts/setLastVisited', route.path)
 }
