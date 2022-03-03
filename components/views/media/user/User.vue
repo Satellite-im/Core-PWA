@@ -38,6 +38,33 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    isLocal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  watch: {
+    videoStream(value) {
+      if (value) {
+        this.$nextTick(() => {
+          this.playVideo()
+        })
+      }
+    },
+  },
+  mounted() {
+    if (this.videoStream) {
+      this.playVideo()
+    }
+  },
+  methods: {
+    playVideo() {
+      const video = document.querySelector(
+        `#${this.isLocal ? 'local' : 'remote'}-video`,
+      ) as HTMLVideoElement
+
+      video?.play()
+    },
   },
 })
 </script>
