@@ -72,6 +72,22 @@ const mutations = {
     })
     state.all = fList
   },
+  setNote(
+    state: FriendsState,
+    opts: {
+      id: string
+      note: string
+    },
+  ) {
+    state.all = state.all.map((fr) =>
+      fr.address === opts.id
+        ? {
+            ...fr,
+            note: opts.note,
+          }
+        : fr,
+    )
+  },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map(
       (fr) => (fr = fr.address === friend.address ? friend : fr),
