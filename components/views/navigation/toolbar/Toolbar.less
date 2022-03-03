@@ -2,7 +2,6 @@
   flex: 1;
   display: flex;
   height: @toolbar-height;
-  z-index: @base-z-index + 100;
   padding: 0 @normal-spacing;
   min-width: 500px;
 
@@ -109,16 +108,16 @@
     min-height: @toolbar-height;
     padding-top: @light-spacing;
 
-    .circle-container{
+    .circle-container {
       order: 1;
       margin-left: 24px;
       height: auto;
     }
 
-    .controls{
+    .controls {
       background: none;
       box-shadow: unset;
-      .control-button{
+      .control-button {
         padding: 2px;
         width: 24px;
         min-width: 24px;
@@ -128,14 +127,13 @@
         justify-content: center;
         align-items: center;
       }
-      .control-icon{
+      .control-icon {
         display: block;
         margin: 0;
         width: 18px;
         height: 18px;
       }
     }
-
   }
   .alerts-floating-container {
     top: calc(@toolbar-height - @light-spacing);
