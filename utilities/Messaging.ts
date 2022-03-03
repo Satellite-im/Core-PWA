@@ -277,3 +277,9 @@ export function refreshTimestampInterval(
     action(updatedTimestamp)
   }, interval)
 }
+
+export const exportedForTesting = {
+  messageRepliesToUIReplies,
+  getMessageUIReactions,
+  replyMessageToUIReply,
+}
