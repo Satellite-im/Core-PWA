@@ -9,7 +9,7 @@
     display: flex;
     margin: auto;
     max-width: 80vw;
-    max-height: 80vh;
+    max-height: 60vh;
     &:extend(.round-corners);
   }
   .file-icon {
@@ -36,24 +36,26 @@
     margin: @normal-spacing;
 
     .file-info {
+      max-width: 50vw;
       .title {
         &:extend(.font-secondary);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
 
     .controls {
+      display: flex;
+      height: fit-content;
       margin-left: auto;
-      margin-right: @normal-spacing;
+      margin-right: @large-spacing;
+      gap: @normal-spacing;
 
       .control {
-        display: inline-flex;
+        display: flex;
         font-size: @icon-size;
-        margin: @normal-spacing @light-spacing;
         &:extend(.font-secondary);
-
-        &:nth-child(4) {
-          margin-right: @normal-spacing;
-        }
         &.disabled {
           cursor: not-allowed;
         }
