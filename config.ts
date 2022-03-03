@@ -95,9 +95,9 @@ export const Config = {
   chat: {
     defaultMessageLimit: 50,
     defaultLoadMoreLimit: 20,
-    messageMaxChars: 256,
+    messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
-    maxChars: 256,
+    maxChars: 2048,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
