@@ -22,6 +22,7 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
+      featureReadyToShow: false,
     }
   },
   computed: {
