@@ -90,6 +90,7 @@ export enum FILE_TYPE {
   AVI = 'video/x-msvideo',
   MP4 = 'video/mp4',
   MPEG = 'video/mpeg',
+  MOV = 'video/quicktime',
   OGV = 'video/ogg',
   TS = 'video/mp2t',
   WEBM = 'video/webm',
