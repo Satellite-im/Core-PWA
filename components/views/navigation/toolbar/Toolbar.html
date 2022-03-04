@@ -1,13 +1,17 @@
 <div id="toolbar">
   <div class="circle-container">
-    <UiUserState :user="user" v-if="!server || $device.isMobile" :clickHandler='openProfile'/>
+    <UiUserState
+      :user="user"
+      v-if="!server || $device.isMobile"
+      :clickHandler="openProfile"
+    />
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
       :size="35"
       :source="src"
-      @click='openProfile'
-      v-if='!$device.isMobile'
+      @click="openProfile"
+      v-if="!$device.isMobile"
     />
   </div>
   <div class="user-info">
@@ -19,17 +23,23 @@
     />
   </div>
   <div class="controls">
-    <div
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-      data-tooltip="Alerts"
-      @click="$data.showAlerts = !$data.showAlerts"
+    <UiComingSoon
       v-if="!$device.isMobile"
+      :tooltipText="$t('coming_soon.alerts')"
+      :tooltipPosition="'bottom'"
     >
-      <bell-icon
-        size="1x"
-        :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-      />
-    </div>
+      <div
+        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+        @click="$data.showAlerts = !$data.showAlerts"
+      >
+        <bell-icon
+          size="1x"
+          :class="`control-icon ${showAlerts ? 'primary' : ''}`"
+          color="grey"
+        />
+      </div>
+    </UiComingSoon>
+
     <UiFloatingContainer
       v-if="showAlerts"
       :offsets="showSidebar ? [4.2] : [4.2, 2.3]"
@@ -60,34 +70,51 @@
     >
       <video-icon size="1x" class="control-icon" />
     </div>
-    <div
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-      :class="ui.showPinned ? 'primary' : ''"
-      data-tooltip="Archived Messages"
+    <UiComingSoon
       v-if="!$device.isMobile"
-      @click="() => {
+      :tooltipText="$t('coming_soon.archived')"
+      :tooltipPosition="'bottom'"
+    >
+      <div
+        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+        :class="ui.showPinned ? 'primary' : ''"
+        data-tooltip="Archived Messages"
+        @click="() => {
         $store.commit('ui/togglePinned', !ui.showPinned)
       }"
-    >
-      <archive-icon size="1x" class="control-icon" />
-    </div>
+      >
+        <archive-icon size="1x" class="control-icon" color="grey" />
+      </div>
+    </UiComingSoon>
+
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <div
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+    <UiComingSoon
       v-if="!$device.isMobile"
-      @click="() => toggleModal(ModalWindows.MARKETPLACE)"
-      data-tooltip="Marketplace"
+      :tooltipText="$t('coming_soon.marketplace')"
+      :tooltipPosition="'bottom'"
     >
-      <shopping-bag-icon class="control-icon" size="1x" />
-    </div>
-    <div
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      <div
+        class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+        @click="() => toggleModal(ModalWindows.MARKETPLACE)"
+        data-tooltip="Marketplace"
+      >
+        <shopping-bag-icon class="control-icon" size="1x" color="grey" />
+      </div>
+    </UiComingSoon>
+    <UiComingSoon
       v-if="!$device.isMobile"
-      @click="() => toggleModal(ModalWindows.WALLET)"
-      data-tooltip="Wallet"
+      :tooltipText="$t('coming_soon.wallet')"
+      :tooltipPosition="'bottom'"
     >
-      <wallet-icon class="control-icon" size="1x" />
-    </div>
+      <div
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+        @click="() => toggleModal(ModalWindows.WALLET)"
+        data-tooltip="Wallet"
+      >
+        <wallet-icon class="control-icon" size="1x" color="grey" />
+      </div>
+    </UiComingSoon>
+
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <InteractablesSearchInput
       v-if="!$device.isMobile"
