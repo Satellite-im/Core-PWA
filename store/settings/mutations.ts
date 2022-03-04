@@ -45,6 +45,9 @@ const mutations = {
   setTimezone(state: SettingsState, value: string) {
     state.timezone = value
   },
+  removeAppState(state: SettingsState, value: Boolean) {
+    state.removeState = value
+  },
 }
 
 export default mutations

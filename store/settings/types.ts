@@ -30,4 +30,5 @@ export interface SettingsState {
   embeddedLinks: Boolean
   displayCurrentActivity: Boolean
   timezone: string
+  removeState: Boolean
 }
