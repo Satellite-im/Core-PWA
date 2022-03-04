@@ -1,10 +1,4 @@
-import {
-  Buckets,
-  Path,
-  PushPathResult,
-  RemovePathResponse,
-  Root,
-} from '@textile/hub'
+import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
@@ -57,24 +51,19 @@ export class Bucket extends RFM implements RFMInterface {
     this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
     await this.buckets.getToken(this._textile.identity)
 
-    const result = await this.buckets.getOrCreate(name)
+    const result = await this.buckets.getOrCreate(name, { encrypted: true })
 
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
 
     this.key = result.root.key
 
     try {
-      const path: Path | void = await this.buckets.listPath(
+      for await (const data of this.buckets.pullPath(
         this.key,
         Config.textile.fsTable,
-      )
-
-      const hash = path?.item?.path
-
-      this._index = await fetch(Config.textile.browser + hash).then((res) =>
-        res.json(),
-      )
-
+      )) {
+        this._index = JSON.parse(new TextDecoder().decode(data))
+      }
       if (!this._index) throw new Error('Index not found')
 
       return this._index
@@ -122,6 +111,24 @@ export class Bucket extends RFM implements RFMInterface {
       throw new Error('Bucket or bucket key not found')
     }
     return await this.buckets.pushPath(this.key, file.name, file)
+  }
+
+  /**
+   * @method pullFile
+   * @description Remove file from bucket
+   * @param {File} file file to be pulled
+   * @returns Promise whether it was uploaded or not
+   */
+  async pullFile(name: string, type: string): Promise<File | undefined> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+
+    const data = []
+    for await (const bytes of this.buckets.pullPath(this.key, name)) {
+      data.push(bytes)
+    }
+    return new File(data, name, { type: type || '' })
   }
 
   /**

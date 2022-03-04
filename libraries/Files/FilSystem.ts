@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { matchSorter } from 'match-sorter'
 import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
@@ -11,6 +12,7 @@ import {
   ExportDirectory,
 } from './types/filesystem'
 import { FILE_TYPE } from './types/file'
+import { Bucket } from './remote/textile/Bucket'
 import { Config } from '~/config'
 
 export class FilSystem {
@@ -140,6 +142,14 @@ export class FilSystem {
   }
 
   /**
+   * @getter bucket
+   * @returns {Bucket} bucket global to upload files to textile
+   */
+  get bucket(): Bucket {
+    return Vue.prototype.$TextileManager.bucket
+  }
+
+  /**
    * @method exportChildren
    * @param {Item} item
    * @description recursively converts item to the proper format for export
@@ -179,10 +189,10 @@ export class FilSystem {
    * @param {FileSystemExport} fs
    * @description sets global file system based on parameter. will be fetched from Bucket
    */
-  public import(fs: FileSystemExport) {
-    fs.content.forEach((item) => {
+  public async import(fs: FileSystemExport) {
+    for (const item of fs.content) {
       this.importChildren(item)
-    })
+    }
     this._version = fs.version
   }
 
@@ -191,13 +201,16 @@ export class FilSystem {
    * @param {FileSystemExport} fs
    * @description recursively adds files and directories from JSON export
    */
-  public importChildren(item: ExportItem) {
+  public async importChildren(item: ExportItem) {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
       const { name, hash, size, liked, shared, description, modified } =
         item as ExportFile
       const type = item.type as FILE_TYPE
+      const file = await this.bucket.pullFile(name, type)
+      console.log(file)
       this.createFile({
         name,
+        file,
         hash,
         size,
         liked,
@@ -227,6 +240,7 @@ export class FilSystem {
    */
   public createFile({
     name,
+    file,
     hash,
     size,
     liked,
@@ -236,6 +250,7 @@ export class FilSystem {
     modified,
   }: {
     name: string
+    file: File
     hash: string
     size: number
     liked?: boolean
@@ -246,6 +261,7 @@ export class FilSystem {
   }): Fil | null {
     const newFile = new Fil({
       name,
+      file,
       hash,
       size,
       liked,

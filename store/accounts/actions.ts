@@ -296,7 +296,7 @@ export default {
 
     const { pin } = state
     if (!textileInitialized && pin) {
-      dispatch(
+      await dispatch(
         'textile/initialize',
         {
           id: payerAccount?.publicKey.toBase58(),

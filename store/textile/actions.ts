@@ -37,7 +37,7 @@ export default {
 
     if (fsExport) {
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      $FileSystem.import(fsExport)
+      await $FileSystem.import(fsExport)
     }
   },
   /**

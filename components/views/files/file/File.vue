@@ -84,9 +84,7 @@ export default Vue.extend({
      * @returns path inside textile bucket
      */
     path(): string {
-      return this.item instanceof Fil
-        ? this.$Config.textile.browser + this.item.hash
-        : ''
+      return this.item instanceof Fil ? this.item.url : ''
     },
   },
   methods: {

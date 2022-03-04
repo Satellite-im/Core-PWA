@@ -7,6 +7,7 @@ export class Fil extends Item {
   private _hash: string = ''
   private _description: string = ''
   private _size: number = 0
+  private _file: File
 
   /**
    * @constructor
@@ -15,6 +16,7 @@ export class Fil extends Item {
    */
   constructor({
     name,
+    file,
     hash,
     size,
     liked,
@@ -24,6 +26,7 @@ export class Fil extends Item {
     type,
   }: {
     name: string
+    file: File
     hash: string
     size: number
     liked?: boolean
@@ -33,6 +36,7 @@ export class Fil extends Item {
     type?: FILE_TYPE
   }) {
     super({ name: name || 'un-named file', liked, shared, modified })
+    this._file = file
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
@@ -70,6 +74,7 @@ export class Fil extends Item {
   get copy(): Fil {
     return new Fil({
       name: `${this.name} copy`,
+      file: this._file,
       hash: this.hash,
       size: this.size,
       modified: this.modified,
@@ -94,6 +99,18 @@ export class Fil extends Item {
    */
   get modified(): number {
     return this.modifiedVal
+  }
+
+  /**
+   * @getter file
+   * @returns last modified timestamp
+   */
+  get file(): File {
+    return this._file
+  }
+
+  get url(): string {
+    return URL.createObjectURL(this.file)
   }
 
   /**
