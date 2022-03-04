@@ -191,7 +191,7 @@ export class FilSystem {
    */
   public async import(fs: FileSystemExport) {
     for (const item of fs.content) {
-      this.importChildren(item)
+      await this.importChildren(item)
     }
     this._version = fs.version
   }

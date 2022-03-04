@@ -16,7 +16,7 @@
       <a
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="path"
+        :href="file.url"
         target="_blank"
         :download="file.name"
       >
@@ -42,13 +42,13 @@
   <img
     v-if="isImage && file.size < $Config.uploadByteLimit"
     class="file-image"
-    :src="path"
+    :src="file.url"
   />
   <div v-else class="no-preview">
     <a
       :data-tooltip="$t('controls.download')"
       class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :href="path"
+      :href="file.url"
       target="_blank"
       :download="file.name"
     >

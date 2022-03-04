@@ -27,6 +27,7 @@ declare module 'vue/types/vue' {
     share: () => void
     rename: () => void
     delete: () => void
+    $filesize: (item: number) => string
   }
 }
 
@@ -79,12 +80,6 @@ export default Vue.extend({
     },
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
-    },
-    /**
-     * @returns path inside textile bucket
-     */
-    path(): string {
-      return this.item instanceof Fil ? this.item.url : ''
     },
   },
   methods: {

@@ -21,7 +21,7 @@ import Cursor from '~/libraries/ui/Cursor'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $Config: any
+    $Config: typeof Config
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
@@ -39,7 +39,7 @@ declare module 'vue/types/vue' {
 
 declare module '@nuxt/types' {
   interface Context {
-    $Config: any
+    $Config: typeof Config
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
