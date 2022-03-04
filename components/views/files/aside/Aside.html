@@ -9,9 +9,11 @@
       :data-tooltip="$t('pages.files.aside.coming_soon')"
     />
   </div>
-  <UiProgress :progress="80" />
+  <UiProgress :progress="progress" />
   <div>
-    <span class="usage-text"> <span class="red">3.8GB</span> of 4GB </span>
+    <span class="usage-text">
+      <span :class="sizeColor">{{totalSize}}</span> of {{sizeLimit}}
+    </span>
   </div>
   <UiSpacer :height="10" />
   <div>

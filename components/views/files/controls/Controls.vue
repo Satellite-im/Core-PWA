@@ -82,8 +82,19 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.errors = []
       this.$store.commit('ui/setIsLoadingFileIndex', true)
-
       const originalFiles: File[] = [...event.target.files]
+
+      // if these files go over the storage limit, prevent upload
+      if (
+        originalFiles.reduce(
+          (total, curr) => total + curr.size,
+          this.$FileSystem.totalSize,
+        ) > this.$Config.personalFilesLimit
+      ) {
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.errors.push(this.$t('pages.files.errors.limit') as string)
+        return
+      }
       // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
       const protectedNameResults: File[] = originalFiles.filter(
         (file) => !(file.name === 'sat.json'),
