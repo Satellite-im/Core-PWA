@@ -153,6 +153,7 @@ export default {
         reserved_name: 'sat.json is a reserved file name',
         empty_file: 'File needs to have a size of 1 byte or greater',
         file_name: 'File with name already exists in this file system',
+        limit: 'This upload would exceed your storage limit',
       },
     },
     unlock: {
