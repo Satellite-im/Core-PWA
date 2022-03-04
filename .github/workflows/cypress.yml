@@ -8,6 +8,3 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           working-directory: ./
-          build: yarn
-          start: yarn dev
-          wait-on: 'http://localhost:3000'
