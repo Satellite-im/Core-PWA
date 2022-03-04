@@ -257,6 +257,8 @@ export default {
         })
       },
     )
+    /* If already canceled */
+    if (!rootState.textile.messageLoading) return
     const fileURL = `${Config.textile.browser}${result?.root}${path}`
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
