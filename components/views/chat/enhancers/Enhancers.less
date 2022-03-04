@@ -79,12 +79,17 @@
   flex-wrap: wrap;
   font-size: 1.5rem;
   justify-content: space-between;
+
+  & > div{
+    max-width: 100%;
+  }
 }
 .emoji-picker .emojis:after {
   content: '';
   flex: auto;
 }
 .emoji-picker .emojis span {
+  display: inline-block;
   cursor: pointer;
   user-select: none;
   padding: 0.2rem;

@@ -32,6 +32,7 @@ export default Vue.extend({
     return {
       search: '',
       clickEvent: () => {},
+      featureReadyToShow: false,
     }
   },
   computed: {

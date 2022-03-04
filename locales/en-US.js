@@ -2,6 +2,10 @@ export default {
   coming_soon: {
     communities: 'Communities\nComing Soon',
     send_money: 'Send Money\nComing Soon',
+    alerts: 'Alerts\nComing Soon',
+    marketplace: 'Marketplace\nComing Soon',
+    wallet: 'Wallet\nComing Soon',
+    archived: 'Archived Messages\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
