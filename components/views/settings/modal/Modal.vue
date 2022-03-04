@@ -72,9 +72,9 @@ export default Vue.extend({
       if ($swiper) {
         if (show) {
           $swiper.slideNext()
-        } else {
-          $swiper.slidePrev()
+          return
         }
+        $swiper.slidePrev()
       }
       this.$store.commit('ui/toggleSettingsSidebar', show)
     },
