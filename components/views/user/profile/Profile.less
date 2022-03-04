@@ -93,7 +93,9 @@
   #profile {
     width: @full;
     height: @full;
-
+    .close-button {
+      top: 2.5rem !important;
+    }
     .profile-body {
       padding: @large-spacing;
     }
@@ -115,6 +117,15 @@
           display: flex;
         }
       }
+    }
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  #profile {
+    .close-button {
+      top: 2.5rem !important;
     }
   }
 }
