@@ -103,12 +103,16 @@ export class Fil extends Item {
 
   /**
    * @getter file
-   * @returns last modified timestamp
+   * @returns file object fetched from textile bucket
    */
   get file(): File {
     return this._file
   }
 
+  /**
+   * @getter url
+   * @returns link of localally stored File for image preview and downloads
+   */
   get url(): string {
     return URL.createObjectURL(this.file)
   }

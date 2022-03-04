@@ -20,7 +20,7 @@ export interface ExportFile extends ExportSharedProps {
 
 export interface ExportDirectory extends ExportSharedProps {
   // eslint-disable-next-line no-use-before-define
-  children: ExportItem
+  children: ExportItem[]
 }
 
 export type ExportItem = ExportFile | ExportDirectory

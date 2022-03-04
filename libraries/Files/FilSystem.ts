@@ -207,18 +207,19 @@ export class FilSystem {
         item as ExportFile
       const type = item.type as FILE_TYPE
       const file = await this.bucket.pullFile(name, type)
-      console.log(file)
-      this.createFile({
-        name,
-        file,
-        hash,
-        size,
-        liked,
-        shared,
-        description,
-        type,
-        modified,
-      })
+      if (file) {
+        this.createFile({
+          name,
+          file,
+          hash,
+          size,
+          liked,
+          shared,
+          description,
+          type,
+          modified,
+        })
+      }
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
       const { name, liked, shared, children, modified } =
@@ -226,9 +227,9 @@ export class FilSystem {
       const type = item.type as DIRECTORY_TYPE
       this.createDirectory({ name, liked, shared, type, modified })
       this.openDirectory(name)
-      children.forEach((item: ExportItem) => {
-        this.importChildren(item)
-      })
+      for (const item of children) {
+        await this.importChildren(item)
+      }
       this.goBack()
     }
   }

@@ -62,7 +62,9 @@ export class Bucket extends RFM implements RFMInterface {
         this.key,
         Config.textile.fsTable,
       )) {
-        this._index = JSON.parse(new TextDecoder().decode(data))
+        this._index = JSON.parse(
+          new TextDecoder().decode(data, { stream: true }),
+        )
       }
       if (!this._index) throw new Error('Index not found')
 
@@ -115,9 +117,9 @@ export class Bucket extends RFM implements RFMInterface {
 
   /**
    * @method pullFile
-   * @description Remove file from bucket
+   * @description fetch encrypted file from bucket
    * @param {File} file file to be pulled
-   * @returns Promise whether it was uploaded or not
+   * @returns Promise of File
    */
   async pullFile(name: string, type: string): Promise<File | undefined> {
     if (!this.buckets || !this.key) {
