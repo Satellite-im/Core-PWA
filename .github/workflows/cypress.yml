@@ -1,12 +1,11 @@
-name: Cypress Tests using Cypress Docker Image
-
+name: End-to-end tests
 on: [pull_request]
-
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.18.3-chrome87-ff82
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Cypress run
       - uses: cypress-io/github-action@v2
         with:
