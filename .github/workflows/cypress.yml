@@ -1,12 +1,13 @@
-name: End-to-end tests
+name: example-start-and-yarn-workspaces
 on: [pull_request]
 jobs:
-  cypress-run:
+  single:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cypress run
+      - uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
         with:
-          install-command: yarn --frozen-lockfile --silent
+          working-directory: ./
+          build: yarn
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
