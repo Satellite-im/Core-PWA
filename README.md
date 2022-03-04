@@ -23,7 +23,7 @@ Currently, the only environment variable you need is a [Textile](https://www.tex
 
 ## Install Submodules
 
-Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android`, `electron`, and `locales` submodules. You need the locales module to run and develop locally.
+Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android`, `electron`, and `cypress` submodules.
 
 ## Running Locally
 
