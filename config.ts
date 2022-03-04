@@ -101,8 +101,8 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1048576 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-807
-  personalFilesLimit: 1073741824 * 4, // 4GB - free tier limit
+  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-807
+  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
   regex: {
     // Regex to identify if a filetype is an image we support
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
