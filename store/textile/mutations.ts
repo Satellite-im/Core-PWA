@@ -147,6 +147,9 @@ const mutations = {
       }
     }
   },
+  setFilesLoading(state: TextileState, status: boolean) {
+    state.filesLoading = status
+  },
 }
 
 export default mutations

@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -27,6 +28,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['textile']),
     /**
      * @returns Current directory items
      * @description included counter to force rendering on Map updates

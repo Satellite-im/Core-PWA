@@ -23,7 +23,7 @@
       :text="$t('pages.files.controls.new_file')"
       size="small"
       :action="addFile"
-      :loading="ui.isLoadingFileIndex"
+      :loading="ui.isLoadingFileIndex || textile.filesLoading"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
@@ -34,8 +34,8 @@
       type="primary"
       :action="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
-      :loading="ui.isLoadingFileIndex"
-      :disabled="ui.isLoadingFileIndex"
+      :loading="ui.isLoadingFileIndex || textile.filesLoading"
+      :disabled="ui.isLoadingFileIndex || textile.filesLoading"
     >
       <folder-plus-icon size="1.3x" />
     </InteractablesInputGroup>
