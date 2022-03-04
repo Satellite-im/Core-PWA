@@ -36,6 +36,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
+    isActiveCall() {
+      return this.friends.all.find(
+        (friend: any) =>
+          friend.activeChat && friend.address === this.webrtc.activeCall,
+      )
+    },
     localAudioMuted() {
       return this.webrtc.localTracks.audio.muted
     },

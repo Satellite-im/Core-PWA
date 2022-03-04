@@ -1,8 +1,4 @@
-<div
-  id="mediastream"
-  ref="mediastream"
-  v-if="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.activeCall)"
->
+<div id="mediastream" ref="mediastream" v-if="isActiveCall">
   <MediaHeading />
   <div id="media" ref="media">
     <MediaUser
