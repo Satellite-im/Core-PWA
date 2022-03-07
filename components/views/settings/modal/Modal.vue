@@ -69,7 +69,13 @@ export default Vue.extend({
      */
     showSidebar(show: Boolean) {
       const $swiper = (this.$refs.settingSwiper as Vue & Swiper)?.$swiper
-      show ? $swiper.slideNext() : $swiper.slidePrev()
+      if ($swiper) {
+        if (show) {
+          $swiper.slideNext()
+          return
+        }
+        $swiper.slidePrev()
+      }
       this.$store.commit('ui/toggleSettingsSidebar', show)
     },
     /**

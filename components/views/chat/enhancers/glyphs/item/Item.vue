@@ -56,22 +56,39 @@ export default Vue.extend({
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
+      const { id } = this.$route.params
       if (!this.src || !activeFriend) {
         return
       }
-      this.$store.dispatch('textile/sendGlyphMessage', {
-        to: activeFriend?.textilePubkey,
-        src: this.src,
-        pack: this.pack.name,
-      })
-      this.$store.commit('ui/updateRecentGlyphs', {
-        pack: this.pack,
-        url: this.src,
-      })
-      this.$store.commit('ui/toggleEnhancers', {
-        show: false,
-        floating: !!this.$device.isMobile,
-      })
+      if (id) {
+        this.$store.dispatch('textile/sendGroupGlyphMessage', {
+          groupID: id,
+          src: this.src,
+          pack: this.pack.name,
+        })
+        this.$store.commit('ui/updateRecentGlyphs', {
+          pack: this.pack,
+          url: this.src,
+        })
+        this.$store.commit('ui/toggleEnhancers', {
+          show: false,
+          floating: !!this.$device.isMobile,
+        })
+      } else {
+        this.$store.dispatch('textile/sendGlyphMessage', {
+          to: activeFriend?.textilePubkey,
+          src: this.src,
+          pack: this.pack.name,
+        })
+        this.$store.commit('ui/updateRecentGlyphs', {
+          pack: this.pack,
+          url: this.src,
+        })
+        this.$store.commit('ui/toggleEnhancers', {
+          show: false,
+          floating: !!this.$device.isMobile,
+        })
+      }
     },
     setLoaded() {
       this.isLoaded = true

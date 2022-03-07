@@ -63,7 +63,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat']),
+    ...mapState(['ui', 'friends', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
@@ -104,7 +104,11 @@ export default Vue.extend({
           return
         }
         const address = this.recipient?.address
-        if (!address) return
+        if (
+          !address &&
+          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+        )
+          return
         this.$data.count_error = false
         for (let i = 0; i < files.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */
@@ -203,6 +207,9 @@ export default Vue.extend({
         this.count_error = false
         this.$parent.$data.showFilePreview = false
         this.$store.commit('chat/deleteFiles', this.recipient.address)
+        this.$store.dispatch('textile/clearUploadStatus')
+        if (this.textile.messageLoading)
+          this.$store.commit('textile/setMessageLoading', { loading: false })
         return
       }
       this.$store.commit('chat/setFiles', {
@@ -247,21 +254,41 @@ export default Vue.extend({
      * @description Sends a singular file to textile.
      */
     async dispatchFile(file: FileType) {
-      await this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient?.textilePubkey,
-          file,
-        })
-        .then(() => {
-          this.finishUploads()
-        })
-        .catch((error) => {
-          if (error) {
-            this.$Logger.log('file send error', error)
-            document.body.style.cursor = PropCommonEnum.DEFAULT
-            this.$store.dispatch('textile/clearUploadStatus')
-          }
-        })
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+      ) {
+        await this.$store
+          .dispatch('textile/sendGroupFileMessage', {
+            groupID: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      } else {
+        await this.$store
+          .dispatch('textile/sendFileMessage', {
+            to: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      }
     },
     /**
      * @method sendMessage
