@@ -34,7 +34,7 @@ export default Vue.extend({
     alphaSortedOutgoing() {
       return cloneDeep(this.friends.outgoingRequests).sort(
         (a: OutgoingRequest, b: OutgoingRequest) =>
-          a.userInfo.name.localeCompare(b.userInfo.name),
+          a.userInfo?.name.localeCompare(b.userInfo?.name),
       )
     },
   },
