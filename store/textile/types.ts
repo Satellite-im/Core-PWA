@@ -27,7 +27,6 @@ export interface TextileState {
       name: string
     }
   }
-  filesLoading: boolean
 }
 
 export enum TextileError {

@@ -28,7 +28,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
+    ...mapState(['ui']),
   },
   methods: {
     /**

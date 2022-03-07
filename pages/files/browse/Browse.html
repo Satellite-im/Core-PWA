@@ -12,9 +12,8 @@
   <div class="files-container">
     <div class="files-left">
       <FilesControls :changeView="changeView" @forceRender="forceRender" />
-      <UiLoadersSpinner v-if="textile.filesLoading" spinning />
       <TypographyText
-        v-else-if="!directory.length"
+        v-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
       <FilesList

@@ -6,7 +6,6 @@ const InitialTextileState = (): TextileState => ({
   conversationLoading: false,
   messageLoading: false,
   uploadProgress: {},
-  filesLoading: false,
 })
 
 export default InitialTextileState

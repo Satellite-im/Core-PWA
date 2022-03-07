@@ -4,7 +4,6 @@ exports[`init should return the initial settings state 1`] = `
 Object {
   "conversationLoading": false,
   "conversations": Object {},
-  "filesLoading": false,
   "initialized": false,
   "messageLoading": false,
   "uploadProgress": Object {},

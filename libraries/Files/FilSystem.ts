@@ -157,8 +157,17 @@ export class FilSystem {
    */
   exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
-      const { name, liked, shared, type, hash, size, description, modified } =
-        item
+      const {
+        name,
+        liked,
+        shared,
+        type,
+        hash,
+        size,
+        description,
+        modified,
+        thumbnail,
+      } = item
       return {
         name,
         liked,
@@ -168,6 +177,7 @@ export class FilSystem {
         size,
         description,
         modified,
+        thumbnail,
       }
     }
     const { name, liked, shared, type, modified } = item
@@ -198,28 +208,33 @@ export class FilSystem {
 
   /**
    * @method importChildren
-   * @param {FileSystemExport} fs
+   * @param {ExportItem} item
    * @description recursively adds files and directories from JSON export
    */
   public async importChildren(item: ExportItem) {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
-      const { name, hash, size, liked, shared, description, modified } =
-        item as ExportFile
+      const {
+        name,
+        hash,
+        size,
+        liked,
+        shared,
+        description,
+        modified,
+        thumbnail,
+      } = item as ExportFile
       const type = item.type as FILE_TYPE
-      const file = await this.bucket.pullFile(name, type)
-      if (file) {
-        this.createFile({
-          name,
-          file,
-          hash,
-          size,
-          liked,
-          shared,
-          description,
-          type,
-          modified,
-        })
-      }
+      this.createFile({
+        name,
+        hash,
+        size,
+        liked,
+        shared,
+        description,
+        type,
+        modified,
+        thumbnail,
+      })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
       const { name, liked, shared, children, modified } =
@@ -249,9 +264,10 @@ export class FilSystem {
     description,
     type,
     modified,
+    thumbnail,
   }: {
     name: string
-    file: File
+    file?: File
     hash: string
     size: number
     liked?: boolean
@@ -259,6 +275,7 @@ export class FilSystem {
     description?: string
     type?: FILE_TYPE
     modified?: number
+    thumbnail?: string
   }): Fil | null {
     const newFile = new Fil({
       name,
@@ -270,6 +287,7 @@ export class FilSystem {
       description,
       type,
       modified,
+      thumbnail,
     })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null

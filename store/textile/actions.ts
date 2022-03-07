@@ -36,9 +36,8 @@ export default {
     const fsExport = $TextileManager.bucket?.index
 
     if (fsExport) {
-      commit('setFilesLoading', true)
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      $FileSystem.import(fsExport).then(() => commit('setFilesLoading', false))
+      await $FileSystem.import(fsExport)
     }
   },
   /**

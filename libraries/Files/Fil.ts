@@ -7,7 +7,8 @@ export class Fil extends Item {
   private _hash: string = ''
   private _description: string = ''
   private _size: number = 0
-  private _file: File
+  private _file: File | undefined
+  private _thumbnail: string
 
   /**
    * @constructor
@@ -24,9 +25,10 @@ export class Fil extends Item {
     modified,
     description,
     type,
+    thumbnail,
   }: {
     name: string
-    file: File
+    file?: File
     hash: string
     size: number
     liked?: boolean
@@ -34,13 +36,15 @@ export class Fil extends Item {
     modified?: number
     description?: string
     type?: FILE_TYPE
+    thumbnail?: string
   }) {
     super({ name: name || 'un-named file', liked, shared, modified })
-    this._file = file
+    this._file = file || undefined
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
     this._type = type || FILE_TYPE.GENERIC
+    this._thumbnail = thumbnail || ''
   }
 
   /**
@@ -105,7 +109,7 @@ export class Fil extends Item {
    * @getter file
    * @returns file object fetched from textile bucket
    */
-  get file(): File {
+  get file(): File | undefined {
     return this._file
   }
 
@@ -114,7 +118,7 @@ export class Fil extends Item {
    * @returns link of localally stored File for image preview and downloads
    */
   get url(): string {
-    return URL.createObjectURL(this.file)
+    return this.file ? URL.createObjectURL(this.file) : ''
   }
 
   /**
@@ -123,5 +127,13 @@ export class Fil extends Item {
    */
   set description(content: string) {
     this._description = `${content || ''}`
+  }
+
+  /**
+   * @getter url
+   * @returns link of localally stored File for image preview and downloads
+   */
+  get thumbnail(): string {
+    return this._thumbnail
   }
 }

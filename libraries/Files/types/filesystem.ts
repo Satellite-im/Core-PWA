@@ -16,6 +16,7 @@ export interface ExportFile extends ExportSharedProps {
   hash: string
   size: number
   description: string
+  thumbnail: string
 }
 
 export interface ExportDirectory extends ExportSharedProps {

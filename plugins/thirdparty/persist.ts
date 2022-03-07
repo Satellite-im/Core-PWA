@@ -21,7 +21,6 @@ const mutationsBlacklist = [
 const commonProperties = [
   'webrtc.initialized',
   'textile.initialized',
-  'textile.filesLoading',
   'accounts.initialized',
   'friends.all',
   'webrtc.activeStream',
