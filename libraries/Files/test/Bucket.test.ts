@@ -1,5 +1,6 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
+import { Bucket } from '../remote/textile/Bucket'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemExport } from '../types/filesystem'
 
@@ -33,5 +34,43 @@ describe('Test FileSystem Directory', () => {
 
     expect(ex.version + 1).toEqual(fs.export.version)
   })
-  // TODO: add test for Bucket
+  it('get uninitialized textile', () => {
+    const initializationData = {
+      identity: 'Identity',
+      client: 'Client',
+      users: 'Users',
+      wallet: 'SolanaWallet',
+    }
+    const bucket = new Bucket(initializationData)
+
+    expect(bucket.textile).toBe(initializationData)
+  })
+  it('get uninitialized index', () => {
+    const initializationData = {
+      identity: 'Identity',
+      client: 'Client',
+      users: 'Users',
+      wallet: 'SolanaWallet',
+    }
+    const bucket = new Bucket(initializationData)
+
+    expect(bucket.index).toBeNull()
+  })
+  it.skip('initialize bucket', async () => {
+    const initializationData = {
+      identity: {
+        public: 'Identity',
+      },
+      client: 'Client',
+      users: 'Users',
+      wallet: 'SolanaWallet',
+    }
+    const bucket = new Bucket(initializationData)
+    try {
+      await bucket.init('init')
+    } catch (error) {
+      // Currently throws error: Error: selected encoding not supported
+      console.log(error)
+    }
+  })
 })

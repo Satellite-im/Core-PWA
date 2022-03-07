@@ -4,14 +4,14 @@
     :title="title"
     :toggleable="toggleable"
     :toggle="toggle"
-    :active="route"
+    :active="ui.settingsRoute"
     custom
     :custom-action="customAction"
   />
 </template>
 <script lang="ts">
 import Vue from 'vue'
-
+import { mapState } from 'vuex'
 import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
 import { SettingsRoutes } from '~/store/ui/types'
 
@@ -33,7 +33,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: this.$store.state.ui.settingsRoute,
       sidebarLayout: [
         {
           title: 'General',
@@ -101,6 +100,9 @@ export default Vue.extend({
       ],
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   methods: {
     /**
      * @method customAction DocsTODO
@@ -109,7 +111,6 @@ export default Vue.extend({
      * @example
      */
     customAction(link: string) {
-      this.$data.route = link
       this.$props.handleRouteChange(link)
     },
   },
