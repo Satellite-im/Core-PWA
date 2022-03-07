@@ -253,10 +253,16 @@ export default Vue.extend({
           this.text.length > this.$Config.chat.maxChars
             ? this.text.slice(0, this.$Config.chat.maxChars)
             : this.text
+        this.text = ''
         const isEmpty = value.trim().length === 0
         if (isEmpty) return
-        this.text = ''
-        if (this.ui.replyChatbarContent.from) {
+        if (!this.recipient || isEmpty) {
+          return
+        }
+        if (
+          this.ui.replyChatbarContent.from &&
+          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+        ) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
             text: value,
@@ -270,6 +276,16 @@ export default Vue.extend({
         if (
           RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
         ) {
+          if (this.ui.replyChatbarContent.from) {
+            this.$store.dispatch('textile/sendGroupReplyMessage', {
+              to: this.recipient.textilePubkey,
+              text: value,
+              replyTo: this.ui.replyChatbarContent.messageID,
+              replyType: MessagingTypesEnum.TEXT,
+            })
+            this.text = ''
+            return
+          }
           this.$store.dispatch('textile/sendGroupMessage', {
             groupId: this.recipient.textilePubkey,
             message: value,
