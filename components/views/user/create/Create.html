@@ -10,7 +10,7 @@
                 </div>
                 <div class="column align">
                     <TypographyText class="set-photo-title" :text="$t('user.registration.photo_text')" />
-                    <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
+                    <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*" />
                     <InteractablesButton :action="() => $refs.file.click()" type="primary" size="small"
                         :text="$t('servers.create.photo_button')" outlined />
                 </div>

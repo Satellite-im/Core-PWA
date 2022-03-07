@@ -59,7 +59,10 @@ export default Vue.extend({
         }
       } catch (err: any) {
         this.$Logger.log('error', 'file upload error')
+        this.$toast.show(this.$t('errors.chat.invalid_file') as string)
+        return
       }
+
       this.error = ''
 
       const reader = new FileReader()
