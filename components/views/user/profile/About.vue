@@ -27,13 +27,7 @@ export default Vue.extend({
     ...mapState(['friends', 'ui']),
     note: {
       get(): string {
-        if (
-          this.ui.userProfile &&
-          this.ui.userProfile.metadata &&
-          this.ui.userProfile.metadata.note
-        )
-          return this.ui.userProfile.metadata.note
-        return ''
+        return this.ui?.userProfile?.metadata?.note ?? ''
       },
       set(note: string) {
         const { userProfile } = this.ui
