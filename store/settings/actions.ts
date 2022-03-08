@@ -1,12 +1,14 @@
 import { db } from '~/plugins/thirdparty/dexie'
-import { SettingsError } from '~/store/settings/types'
+import { SettingsError, SettingsState } from '~/store/settings/types'
+import { ActionsArguments } from '~/types/store/store'
 
 export default {
-  async clearLocalStorage() {
+  async clearLocalStorage({ commit }: ActionsArguments<SettingsState>) {
     try {
       await db.delete()
-      await localStorage.removeItem('Satellite-Store')
-      await location.reload()
+      localStorage.clear()
+      commit('removeAppState', true)
+      location.reload()
     } catch (e) {
       throw new Error(SettingsError.DATABASE_NOT_CLEARED)
     }

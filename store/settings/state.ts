@@ -15,6 +15,7 @@ const InitialSettingsState = (): SettingsState => ({
   keybinds: KeybindTypes,
   embeddedLinks: true,
   displayCurrentActivity: true,
+  removeState: false,
 })
 
 export default InitialSettingsState
