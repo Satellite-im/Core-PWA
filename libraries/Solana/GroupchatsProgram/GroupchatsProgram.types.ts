@@ -568,14 +568,17 @@ export const IDL: Groupchats = {
   ],
 }
 
+export interface Invitation {
+  sender: PublicKey
+  groupKey: PublicKey
+  recipient: PublicKey
+  groupId: string
+  encryptionKey: string
+}
+
 export interface InvitationAccount {
   publicKey: PublicKey
-  account: {
-    sender: PublicKey
-    groupKey: PublicKey
-    recipient: PublicKey
-    groupId: string
-  }
+  account: Invitation
 }
 
 export interface RawGroup {

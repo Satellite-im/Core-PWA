@@ -8,6 +8,8 @@ export default Vue.extend({
   name: 'CreateGroup',
   data() {
     return {
+      loading: false,
+      name: '',
       users: '',
     }
   },
@@ -23,23 +25,31 @@ export default Vue.extend({
       // } else {
       //   // logic for creating group chat
       // }
+      try {
+        this.loading = true
+        const usersToInvite = this.users.split(',')
 
-      const usersToInvite = this.users.split(',')
+        const groupId = await this.$store.dispatch('groups/createGroup', {
+          name: this.name,
+        })
 
-      const groupId = await this.$store.dispatch('groups/createGroup')
+        console.log(groupId)
 
-      console.log(groupId)
+        await Promise.all(
+          usersToInvite.map((user) =>
+            this.$store.dispatch('groups/sendGroupInvite', {
+              group: { id: groupId },
+              recipient: user,
+            }),
+          ),
+        )
 
-      await Promise.all(
-        usersToInvite.map((user) =>
-          this.$store.dispatch('groups/sendGroupInvite', {
-            group: { id: groupId },
-            recipient: user,
-          }),
-        ),
-      )
-
-      console.log('done')
+        console.log('done')
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
 
       // close quickchat modal after redirecting to chat
       // this.$store.commit('ui/toggleModal', {

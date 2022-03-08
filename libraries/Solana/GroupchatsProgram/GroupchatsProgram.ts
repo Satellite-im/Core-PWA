@@ -18,6 +18,7 @@ import {
 } from './GroupchatsProgram.types'
 import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import GroupCrypto from '~/libraries/Solana/GroupchatsProgram/GroupCrypto'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
   Config.solana.groupchatsProgramId,
@@ -30,11 +31,20 @@ export default class GroupchatsProgram extends EventEmitter {
   solana?: Solana
   program?: Program<Groupchats>
   subscriptions?: { [eventName: string]: number }
+  _crypto?: GroupCrypto
+
+  get crypto() {
+    if (!this._crypto) {
+      throw new Error('Group crypto not initialized')
+    }
+    return this._crypto
+  }
 
   constructor(solana: Solana) {
     super()
     if (solana) {
       this.init(solana)
+      this._crypto = new GroupCrypto(this._getPayer())
     }
   }
 
@@ -139,9 +149,10 @@ export default class GroupchatsProgram extends EventEmitter {
   /**
    * @method create
    * Create a new group
-   * @param groupId Group Id
+   * @param groupId Group id
+   * @param name Group name
    */
-  async create(groupId: string) {
+  async create(groupId: string, name: string) {
     // Throws if the program is not set
     const program = this._getProgram()
 
@@ -155,17 +166,31 @@ export default class GroupchatsProgram extends EventEmitter {
 
     console.log('group pda creation', groupPDA[0].toBase58())
 
-    // GroupID must be encrypted
-    await program.rpc.create(groupHash, groupId, true, {
-      accounts: {
-        group: groupPDA[0],
-        invitation: inviterPDA[0],
-        signer: payer.publicKey,
-        payer: payer.publicKey,
-        systemProgram: SystemProgram.programId,
-      },
-      signers: [payer],
+    const encrypted = await this.crypto.encryptInvite({
+      groupId,
+      encryptionKey: this.crypto.generateEncryptionKey(),
+      sender: payer.publicKey,
+      recipient: payer.publicKey,
+      groupKey: groupPDA[0],
     })
+
+    await program.rpc.create(
+      groupHash,
+      encrypted.groupId,
+      true,
+      name,
+      encrypted.encryptionKey,
+      {
+        accounts: {
+          group: groupPDA[0],
+          invitation: inviterPDA[0],
+          signer: payer.publicKey,
+          payer: payer.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [payer],
+      },
+    )
   }
 
   buildInvitationAccountFilter(
@@ -234,6 +259,9 @@ export default class GroupchatsProgram extends EventEmitter {
       recipient: address,
     })
 
+    const invites = await Promise.all(
+      inviteAccounts.map((it) => this.crypto.decryptInvite(it.account)),
+    )
     const program = this._getProgram()
     const keys = inviteAccounts.map((acc) => acc.account.groupKey)
     const groups = (await program.account.group.fetchMultiple(
@@ -247,7 +275,7 @@ export default class GroupchatsProgram extends EventEmitter {
         ...group,
         admin: group.admin.toString(),
         creator: group.creator.toString(),
-        id: inviteAccounts[i]?.account.groupId,
+        id: invites[i]?.groupId,
       }))
   }
 
@@ -335,7 +363,20 @@ export default class GroupchatsProgram extends EventEmitter {
 
     const inviteePDA = this._invitePDAPublicKey(user, groupPDA[0])
 
-    await program.rpc.invite(groupId, user, {
+    const [creatorInvite] = await this.getInvitationAccounts({
+      groupId,
+      recipient: payer.publicKey,
+    })
+    if (!creatorInvite) throw new Error('Group not found')
+
+    const decrypted = await this.crypto.decryptInvite(creatorInvite.account)
+
+    const encrypted = await this.crypto.encryptInvite({
+      ...decrypted,
+      recipient: user,
+    })
+
+    await program.rpc.invite(encrypted.groupId, user, encrypted.encryptionKey, {
       accounts: {
         newInvitation: inviteePDA[0],
         group: groupPDA[0],

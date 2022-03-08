@@ -83,6 +83,7 @@ export default class TextileManager {
       textile.wallet.address,
       textile.identity,
     )
+    await this.groupChatManager.init()
   }
 
   /**
