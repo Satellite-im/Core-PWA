@@ -14,7 +14,7 @@ Object {
   "pinHash": "",
   "registered": false,
   "registrationStatus": "unknown",
-  "registry": true,
+  "registry": false,
   "storePin": false,
 }
 `;
