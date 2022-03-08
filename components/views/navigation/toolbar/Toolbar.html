@@ -54,8 +54,8 @@
     </UiFloatingContainer>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-      ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
-      :data-tooltip="webrtc.connectedPeer ? $t('controls.call') : $t('controls.not_connected')"
+      ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio'])"
     >
@@ -63,8 +63,8 @@
     </div>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-      ${!webrtc.connectedPeer || webrtc.activeCall ? 'disabled' : ''}`"
-      :data-tooltip="webrtc.connectedPeer ? $t('controls.video') : $t('controls.not_connected')"
+      ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio', 'video'])"
     >
