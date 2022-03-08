@@ -3,7 +3,9 @@
     <TypographyTitle :size="4" :text="$t('pages.inputAccount.title')" />
     <TypographySubtitle :size="6" :text="$t('pages.inputAccount.subtitle')" />
     <UiTypeHead
-      :list="bipList"
+      :list="bipList.filter(
+        (item) => !this.phrases.includes(item),
+      )"
       size="small"
       type="primary"
       :placeholder="$t('pages.inputAccount.enter')"
