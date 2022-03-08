@@ -46,6 +46,9 @@ export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
     reducer: (state: any) => {
+      if (state.settings.removeState) {
+        return {}
+      }
       let blackList = propertiesNoStorePin
       if (state.accounts.storePin && !state.accounts.locked) {
         blackList = commonProperties

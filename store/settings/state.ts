@@ -17,6 +17,7 @@ const InitialSettingsState = (): SettingsState => ({
   displayCurrentActivity: true,
   serverType: 'satellite',
   ownInfo: '',
+  removeState: false,
 })
 
 export default InitialSettingsState

@@ -20,16 +20,17 @@ export interface SettingsState {
   audioOutput: string
   videoInput: string
   captureMouse: string
-  noiseSuppression: Boolean
-  echoCancellation: Boolean
-  bitrate: Number
-  sampleSize: Number
-  userHasGivenAudioAccess: Boolean
-  userDeniedAudioAccess: Boolean
-  keybinds: Object
-  embeddedLinks: Boolean
-  displayCurrentActivity: Boolean
+  noiseSuppression: boolean
+  echoCancellation: boolean
+  bitrate: number
+  sampleSize: number
+  userHasGivenAudioAccess: boolean
+  userDeniedAudioAccess: boolean
+  keybinds: object
+  embeddedLinks: boolean
+  displayCurrentActivity: boolean
   timezone: string
   serverType: string
   ownInfo: string
+  removeState: boolean
 }
