@@ -7,7 +7,7 @@ import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
 
-export default {
+const webRTCActions = {
   /**
    * @method initialized
    * @description Initializes the WebRTC Manager
@@ -23,18 +23,32 @@ export default {
     const $Logger: Logger = Vue.prototype.$Logger
 
     $WebRTC.init(originator)
-
-    $WebRTC.on('PEER_CONNECT', ({ peerId }) => {
+    $WebRTC.on('PEER_CONNECT', async ({ peerId }) => {
       $Logger.log('WebRTC', 'PEER_CONNECT', { peerId })
-      commit('setConnectedPeer', peerId)
+      const myPeers = await webRTCActions.getActivePeers()
+      commit('setAllConnectedPeers', myPeers)
     })
 
-    $WebRTC.on('ERROR', () => {
-      commit('setConnectedPeer', '')
+    $WebRTC.on('ERROR', async () => {
+      const myPeers = await webRTCActions.getActivePeers()
+      commit('setAllConnectedPeers', myPeers)
     })
 
     commit('setInitialized', true)
   },
+  async getActivePeers() {
+    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
+    const peersArray: string[] = []
+    if ($WebRTC.peers) {
+      $WebRTC.peers.forEach((e) => {
+        if (Object.keys(e.communicationBus.instance.peers).length !== 0) {
+          peersArray.push(e.identifier)
+        }
+      })
+    }
+    return peersArray
+  },
+
   /**
    * @method createPeerConnection
    * @description Connects to a secret channel and waits the peer connection to happen
@@ -157,3 +171,5 @@ export default {
     commit('setActiveCall', '')
   },
 }
+
+export default webRTCActions

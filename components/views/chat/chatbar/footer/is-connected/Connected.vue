@@ -20,6 +20,14 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'webrtc', 'friends']),
   },
+  methods: {
+    friendConnected(friendId: string): boolean {
+      if (this.webrtc) {
+        return this.webrtc.connectedPeers.includes(friendId)
+      }
+      return false
+    },
+  },
 })
 </script>
 

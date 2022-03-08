@@ -134,14 +134,14 @@ export default Vue.extend({
       this.$store.dispatch('ui/showProfile', this.user)
     },
     async call(kinds: TrackKind[]) {
-      if (!this.webrtc.connectedPeer) return
+      if (!this.webrtc.connectedPeers) return
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
       if (!activeFriend) return
       const identifier = activeFriend.address
 
-      if (!this.webrtc.connectedPeer) {
+      if (!this.webrtc.connectedPeers.includes(identifier)) {
         await this.$store.dispatch('webrtc/createPeerConnection', identifier)
         if (!this.webrtc.connectedPeer) return
       }
