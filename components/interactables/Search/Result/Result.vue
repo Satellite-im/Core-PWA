@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignorex
+// @ts-ignore
 import VuejsPaginate from 'vuejs-paginate'
 import { CalendarIcon } from 'satellite-lucide-icons'
 
