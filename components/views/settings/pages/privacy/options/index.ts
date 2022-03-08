@@ -12,3 +12,7 @@ export const ServerTypes = [
     value: 'own',
   },
 ]
+
+export default {
+  ServerTypes,
+}

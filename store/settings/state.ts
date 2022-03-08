@@ -15,7 +15,7 @@ const InitialSettingsState = (): SettingsState => ({
   keybinds: KeybindTypes,
   embeddedLinks: true,
   displayCurrentActivity: true,
-  serverType: '',
+  serverType: 'satellite',
   ownInfo: '',
 })
 

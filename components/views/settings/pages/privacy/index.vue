@@ -5,12 +5,15 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
 import { ServerTypes } from '~/components/views/settings/pages/privacy/options'
+import { validURL } from '~/libraries/ui/Common'
+
 export default Vue.extend({
   name: 'PrivacySettings',
   layout: 'settings',
   data() {
     return {
       ServerTypes,
+      ownInfoError: false,
     }
   },
   computed: {
@@ -25,7 +28,12 @@ export default Vue.extend({
     },
     ownInfo: {
       set(state) {
-        this.$store.commit('settings/setOwnInfo', state)
+        if (validURL(state)) {
+          this.ownInfoError = false
+          this.$store.commit('settings/setOwnInfo', state)
+        } else {
+          this.ownInfoError = true
+        }
       },
       get() {
         return this.settings.ownInfo
@@ -63,3 +71,5 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="less" scoped src="./Privacy.less"></style>
