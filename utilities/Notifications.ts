@@ -83,7 +83,6 @@ export const Notifications = class Notifications {
    * @example
    */
   requestNotificationPermission(): any {
-    // @ts-ignore
     if (
       (this.currentPlatform === 'web' || this.currentPlatform === 'electron') &&
       isSupported()
