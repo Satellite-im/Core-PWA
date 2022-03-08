@@ -193,15 +193,16 @@ export default {
         'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     },
     privacy: {
-      title: 'Privacy Settings',
+      title: 'Signaling Servers',
       subtitle:
-        'Choose which features to enable to best suit your privacy preferences.',
-      newTitle1: 'Signaling Servers',
-      newSubtitle1:
         'Choose which signaling server group you want to use. If you use Satellite signaling servers, you are using servers that Satellite hosts. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use public signaling servers, those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices.',
-      newTitle2: 'Set my own Signaling Server',
-      newSubtitle2:
-        'Enter your http, udp, or websocket URL for your signaling server here’, show a warning if the input is not a valid http, udp, ws url (ip or domain name).',
+      ownInfo: {
+        title: 'Set my own Signaling Server',
+        subtitle:
+          'Enter your http, udp, or websocket URL for your signaling server here',
+        placeholder: 'Please enter ...',
+        errorMsg: 'Invalid the input format',
+      },
       continue: 'Continue',
       register: {
         title: 'Register Username Publicly',
