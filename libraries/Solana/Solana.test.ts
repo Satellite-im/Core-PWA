@@ -27,38 +27,3 @@ describe('Solana.getClusterFromNetworkConfig', () => {
     expect(result).toMatchSnapshot()
   })
 })
-
-describe.skip('Solana.publicKeyFromSeeds', () => {
-  // AP-330
-  test('0', async () => {
-    const inst: any = new Uint8Array([-1, -1, 1, 100, 100])
-    const inst2: any = new Uint8Array([100, 1, 100, 0, 0])
-    const param1: any = [inst, inst2]
-    const param3: any = new web3.PublicKey(10)
-    await Solana.publicKeyFromSeeds(param1, 'Foo bar', param3)
-  })
-
-  test('1', async () => {
-    const inst: any = new Uint8Array([100, -100, 0, 0, -1])
-    const inst2: any = new Uint8Array([-100, -100, 0, -100, 100])
-    const param1: any = [inst, inst2]
-    const param3: any = new web3.PublicKey('Gail Hoppe')
-    await Solana.publicKeyFromSeeds(param1, 'Hello, world!', param3)
-  })
-
-  test('2', async () => {
-    const inst: any = new Uint8Array([-1, 100, -1, 1, 0])
-    const inst2: any = new Uint8Array([1, 1, 100, 0, 1])
-    const param1: any = [inst, inst2]
-    const param3: any = new web3.PublicKey(1000)
-    await Solana.publicKeyFromSeeds(param1, 'This is a Text', param3)
-  })
-
-  test('3', async () => {
-    const inst: any = new Uint8Array([-100, -1, -100, 0, 100])
-    const inst2: any = new Uint8Array([-1, 100, 1, 1, 0])
-    const param1: any = [inst, inst2]
-    const param3: any = new web3.PublicKey('Janet Homenick')
-    await Solana.publicKeyFromSeeds(param1, 'foo bar', param3)
-  })
-})

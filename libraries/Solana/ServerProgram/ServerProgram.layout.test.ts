@@ -1,7 +1,7 @@
+import { expect } from '@jest/globals'
 import * as ServerProgramLayout from '~/libraries/Solana/ServerProgram/ServerProgram.layout'
 
 describe('ServerProgramLayout.encodeInstructionData', () => {
-  // AP-328
   test('0', () => {
     const result: any = ServerProgramLayout.encodeInstructionData({
       initializeDweller: {
