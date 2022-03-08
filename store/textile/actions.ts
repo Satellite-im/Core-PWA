@@ -520,6 +520,13 @@ export default {
       message: Message
     },
   ) {
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((conversation) => {
+        conversation.lastInbound = message.at
+      })
+
     // replace old message with new edited version
     if (message.editedAt) {
       db.conversationMessages.put({ conversation: address, ...message })
@@ -540,6 +547,12 @@ export default {
       message: Message
     },
   ) {
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((conversation) => {
+        conversation.lastInbound = message.at
+      })
     // replace old message with new edited version
     if (message.editedAt) {
       db.conversationMessages.get(message.id).then((oldMessage) => {
