@@ -48,10 +48,11 @@
   .toggle--sidebar {
     cursor: pointer;
     position: absolute;
-    top: @normal-spacing * 2;
+    top: @xlarge-spacing;
     left: @normal-spacing;
     color: @primary-color;
     filter: @primary-text-glow;
+    z-index: @base-z-index + 1;
   }
 
   .dynamic-content {
