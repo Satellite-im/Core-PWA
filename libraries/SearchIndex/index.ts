@@ -39,12 +39,16 @@ export default class SearchIndex {
     return searchIndex
   }
 
-  search(query: string) {
+  search(query: string, retry = false): lunr.Index.Result[] | undefined {
     try {
       return this.index?.search(query)
     } catch (err) {
-      console.warn('invalid search query', err)
-      return []
+      if (retry) {
+        console.warn('invalid search query', err)
+        return []
+      }
+      // retry without punctuation
+      return this.search(query.replace(/[^\w\s]/gi, ''), true)
     }
   }
 
