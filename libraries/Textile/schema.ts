@@ -16,7 +16,7 @@ export const groupChatSchema = {
 
 export const metadataSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  title: 'Message',
+  title: 'Metadata',
   type: 'object',
   properties: {
     _id: { type: 'string' },

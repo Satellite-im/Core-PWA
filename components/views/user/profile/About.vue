@@ -23,9 +23,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
-  data() {
-    return {}
-  },
   computed: {
     ...mapState(['friends', 'ui']),
     note: {
@@ -41,14 +38,10 @@ export default Vue.extend({
       set(note: string) {
         const { userProfile } = this.ui
         let { metadata } = userProfile
-        metadata = !metadata
-          ? {
-              note,
-            }
-          : {
-              ...metadata,
-              note,
-            }
+        metadata = {
+          ...(metadata ?? null),
+          note,
+        }
         this.$store.dispatch('friends/updateFriendMetadata', {
           to: userProfile.address,
           metadata,

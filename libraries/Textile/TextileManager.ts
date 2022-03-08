@@ -87,7 +87,7 @@ export default class TextileManager {
     )
 
     // MetadataManager initializes itself during the creation
-    this.metadataManager = new MetadataManager(textile, textile.wallet.address)
+    this.metadataManager = new MetadataManager(textile)
     await this.metadataManager.init()
   }
 

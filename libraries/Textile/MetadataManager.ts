@@ -8,13 +8,11 @@ const CollectionName = 'metadata'
 const FriendsKey = 'friends'
 
 export class MetadataManager {
-  senderAddress: string
   textile: TextileInitializationData
   threadID?: ThreadID
 
-  constructor(textile: TextileInitializationData, senderAddress: string) {
+  constructor(textile: TextileInitializationData) {
     this.textile = textile
-    this.senderAddress = senderAddress
   }
 
   /**
@@ -22,7 +20,7 @@ export class MetadataManager {
    * Initialize the metadata manager
    */
   async init() {
-    await this.getMetadataCollection()
+    await this._getMetadataCollection()
   }
 
   /**
@@ -30,7 +28,7 @@ export class MetadataManager {
    * Create a metadata collection with specific users
    * @returns a string name of the created metadata collection
    */
-  async getMetadataCollection(): Promise<string> {
+  private async _getMetadataCollection(): Promise<string> {
     const thread = await this.textile.users.getThread('hubmail')
     this.threadID = ThreadID.fromString(thread.id)
     try {
@@ -47,7 +45,7 @@ export class MetadataManager {
    * Get the thread id of the metadata for the current user
    * @returns returns the thread id of the metadata for the current user
    */
-  _threadID(): ThreadID {
+  private _threadID(): ThreadID {
     if (!this.threadID) {
       throw new Error('Metadata manager is not initialized.')
     }
@@ -60,7 +58,7 @@ export class MetadataManager {
    * @param body encoded string data to be decoded
    * @returns returns decoded string from body
    */
-  async decodeBody(body: string) {
+  private async _decodeBody(body: string) {
     const identity: Identity = this.textile.identity
     const privKey = PrivateKey.fromString(identity.toString())
     const msgBody = Buffer.from(body, EncodingTypesEnum.BASE64)
@@ -75,7 +73,7 @@ export class MetadataManager {
    * @param body raw string data to be encoded
    * @returns returns decoded string from encoded string
    */
-  async encodeBody(body: string) {
+  private async _encodeBody(body: string) {
     const publicKey = PublicKey.fromString(
       this.textile.identity.public.toString(),
     )
@@ -93,7 +91,7 @@ export class MetadataManager {
    * @param key key field to be identified
    * @returns returns the current user's metadata
    */
-  async _findRecord({
+  private async _findRecord({
     to,
     key,
   }: {
@@ -101,7 +99,7 @@ export class MetadataManager {
     key?: string
   }): Promise<MetadataFromThread | null> {
     const threadID = this._threadID()
-    const query = Query.where('from').eq(this.senderAddress)
+    const query = Query.where('from').eq(this.textile.wallet.address)
     if (to) {
       query.and('to').eq(to)
     }
@@ -134,7 +132,7 @@ export class MetadataManager {
     to?: string
     key?: string
   }): Promise<Object | null> {
-    const query = Query.where('from').eq(this.senderAddress)
+    const query = Query.where('from').eq(this.textile.wallet.address)
     if (to) {
       query.and('to').eq(to)
     }
@@ -143,7 +141,7 @@ export class MetadataManager {
     }
     const record = await this._findRecord({ to, key })
     if (!record) return null
-    const body = await this.decodeBody(record.body)
+    const body = await this._decodeBody(record.body)
     return JSON.parse(body)
   }
 
@@ -167,7 +165,7 @@ export class MetadataManager {
     metadata: Object
   }) {
     const threadID = this._threadID()
-    const body = await this.encodeBody(JSON.stringify(metadata))
+    const body = await this._encodeBody(JSON.stringify(metadata))
     const record = await this._findRecord({ to, key })
     if (record) {
       record.body = body
@@ -176,7 +174,7 @@ export class MetadataManager {
     }
     await this.textile.client.create(threadID, CollectionName, [
       {
-        from: this.senderAddress,
+        from: this.textile.wallet.address,
         to,
         key,
         body,
