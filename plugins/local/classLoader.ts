@@ -11,7 +11,6 @@ import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { Alerts } from '~/libraries/ui/Alerts'
-import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
 import Hounddog from '~/utilities/Hounddog'

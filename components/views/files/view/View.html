@@ -40,9 +40,9 @@
     </div>
   </div>
   <img
-    v-if="isImage && file.size < $Config.uploadByteLimit"
+    v-if="file.thumbnail && file.size < $Config.uploadByteLimit"
     class="file-image"
-    :src="file.url"
+    :src="file.thumbnail"
   />
   <div v-else class="no-preview">
     <a

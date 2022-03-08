@@ -29,9 +29,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    isImage(): boolean {
-      return Boolean(this.file.name.match(this.$Config.regex.image))
-    },
+  },
+  async mounted() {
+    console.log(this.$FileSystem)
+    if (!this.file.file) {
+      console.log('no file found')
+    }
   },
   methods: {
     /**

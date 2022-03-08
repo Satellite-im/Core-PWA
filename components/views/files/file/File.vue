@@ -75,9 +75,6 @@ export default Vue.extend({
         ? this.item.content.length + ' items'
         : this.$filesize((this.item as Fil).size)
     },
-    isImage(): boolean {
-      return Boolean(this.item.name.match(this.$Config.regex.image))
-    },
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
     },

@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { matchSorter } from 'match-sorter'
 import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
@@ -12,7 +11,6 @@ import {
   ExportDirectory,
 } from './types/filesystem'
 import { FILE_TYPE } from './types/file'
-import { Bucket } from './remote/textile/Bucket'
 import { Config } from '~/config'
 
 export class FilSystem {
@@ -139,14 +137,6 @@ export class FilSystem {
    */
   get percentStorageUsed(): number {
     return (this.totalSize / Config.personalFilesLimit) * 100
-  }
-
-  /**
-   * @getter bucket
-   * @returns {Bucket} bucket global to upload files to textile
-   */
-  get bucket(): Bucket {
-    return Vue.prototype.$TextileManager.bucket
   }
 
   /**

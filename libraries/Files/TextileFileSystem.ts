@@ -1,10 +1,22 @@
+import Vue from 'vue'
 import { PushPathResult } from '@textile/hub'
+import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
+import { Bucket } from './remote/textile/Bucket'
 import { isHeic } from '~/utilities/Heic'
+import { Config } from '~/config'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {
+  /**
+   * @getter bucket
+   * @returns {Bucket} bucket global to upload files to textile
+   */
+  get bucket(): Bucket {
+    return Vue.prototype.$TextileManager.bucket
+  }
+
   /**
    * @method uploadFile
    * @description Upload file to the bucket and create in the file system afterwards
@@ -39,7 +51,10 @@ export class TextileFileSystem extends FilSystem {
    * @description create thumbnail if embeddable image format, otherwise return ''
    * @param {File} file
    */
-  private async _createThumbnail(file: File): Promise<string> {
+  private async _createThumbnail(file: File): Promise<string | undefined> {
+    if (!file.name.match(Config.regex.image)) {
+      return
+    }
     const buffer = new Uint8Array(await file.arrayBuffer())
     if (isHeic(buffer)) {
       const outputBuffer = await convert({
@@ -47,13 +62,19 @@ export class TextileFileSystem extends FilSystem {
         format: 'JPEG',
         quality: 1,
       })
-      return new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsArrayBuffer(outputBuffer)
-        reader.onload = () => resolve(reader.result?.toString() || '')
-        reader.onerror = (error) => reject(error)
-      })
+      return await this._fileToData(
+        await skaler(
+          new File([outputBuffer.buffer], file.name, {
+            type: 'image/jpeg',
+          }),
+          { width: 400 },
+        ),
+      )
     }
+    return await this._fileToData(await skaler(file, { width: 400 }))
+  }
+
+  private _fileToData(file: File) {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
       reader.readAsDataURL(file)

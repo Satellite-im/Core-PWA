@@ -23,14 +23,6 @@ export class Bucket extends RFM implements RFMInterface {
 
   /**
    * @getter
-   * @returns textile data
-   */
-  get textile(): TextileInitializationData | null {
-    return this._textile
-  }
-
-  /**
-   * @getter
    * @returns file system export data
    */
   get index(): FileSystemExport | null {
@@ -40,7 +32,7 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method init
    * @description Initializes bucket
-   * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
+   * @param name bucket name
    * @returns a promise that resolves when the initialization completes
    */
   async init(name: string): Promise<FileSystemExport> {
@@ -58,14 +50,19 @@ export class Bucket extends RFM implements RFMInterface {
     this.key = result.root.key
 
     try {
-      for await (const data of this.buckets.pullPath(
+      const data = []
+      for await (const bytes of this.buckets.pullPath(
         this.key,
         Config.textile.fsTable,
       )) {
-        this._index = JSON.parse(
-          new TextDecoder().decode(data, { stream: true }),
-        )
+        data.push(bytes)
       }
+      this._index = JSON.parse(
+        await new Blob(data, {
+          type: 'application/json',
+        }).text(),
+      )
+
       if (!this._index) throw new Error('Index not found')
 
       return this._index
