@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` all prerequisites not ready 1`] = `undefined`;
+
+exports[` param3 path included in config 1`] = `undefined`;
+
+exports[` store.commit called 1`] = `undefined`;
+
+exports[` store.commit called 2`] = `undefined`;
+
+exports[` the user is not authenticated 1`] = `undefined`;
+
+exports[` the wallet has not been created yet 1`] = `undefined`;
