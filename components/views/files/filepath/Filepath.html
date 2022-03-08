@@ -1,14 +1,18 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
     <li>
-      <a @click="goBackToDirectory('root')" style="display: flex">
+      <a
+        @click="!ui.isLoadingFileIndex && goBackToDirectory('root')"
+        :class="{'disabled' : ui.isLoadingFileIndex }"
+        style="display: flex"
+      >
         <home-icon size="1.5x" />
       </a>
     </li>
     <li
       v-for="name,i in path"
-      @click="goBackToDirectory(name)"
-      :class="{'is-active' : i === path.length - 1 }"
+      @click="!ui.isLoadingFileIndex && goBackToDirectory(name)"
+      :class="{'is-active' : i === path.length - 1, 'disabled' : ui.isLoadingFileIndex}"
     >
       <a> {{ name }} </a>
     </li>

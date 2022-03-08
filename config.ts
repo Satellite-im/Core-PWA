@@ -105,7 +105,7 @@ export const Config = {
   uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-807
   personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
   regex: {
-    // Regex to identify if a filetype is an image we support
+    // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
     // determine if filetype is archive
     archive: '^.*.(zip|vnd.rar|x-7z-compressed)$',

@@ -27,13 +27,23 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      load: false as boolean,
+    }
+  },
   computed: {
     ...mapState(['ui']),
   },
   async mounted() {
-    console.log(this.$FileSystem)
     if (!this.file.file) {
-      console.log('no file found')
+      this.load = true
+      const fsFile: Fil = this.$FileSystem.getChild(this.file.name) as Fil
+      fsFile.file = await this.$TextileManager.bucket?.pullFile(
+        this.file.name,
+        this.file.type,
+      )
+      this.load = false
     }
   },
   methods: {

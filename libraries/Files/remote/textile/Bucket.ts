@@ -115,7 +115,8 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method pullFile
    * @description fetch encrypted file from bucket
-   * @param {File} file file to be pulled
+   * @param {string} name file name
+   * @param {string} type file mime type
    * @returns Promise of File
    */
   async pullFile(name: string, type: string): Promise<File | undefined> {

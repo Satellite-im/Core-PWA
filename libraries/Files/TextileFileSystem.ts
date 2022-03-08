@@ -52,7 +52,11 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file
    */
   private async _createThumbnail(file: File): Promise<string | undefined> {
-    if (!file.name.match(Config.regex.image)) {
+    // if file is not an embeddable image, set blank thumbnail
+    if (
+      !file.name.match(Config.regex.image) ||
+      file.name.match('^.*.(heic)$')
+    ) {
       return
     }
     const buffer = new Uint8Array(await file.arrayBuffer())

@@ -321,7 +321,7 @@ export class FilSystem {
    * @argument {string} childName name of the child to fetch
    * @returns {Directory | Item} returns directory or Fil
    */
-  public getChild(childName: string): Directory | Item {
+  public getChild(childName: string): Item {
     return this.currentDirectory.getChild(childName)
   }
 

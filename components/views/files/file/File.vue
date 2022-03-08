@@ -68,12 +68,18 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     /**
-     * @returns if directory, child count. if file, size
+     * @returns {string} if directory, child count. if file, size
      */
     getSubtext(): string {
       return this.item instanceof Directory
         ? this.item.content.length + ' items'
         : this.$filesize((this.item as Fil).size)
+    },
+    /**
+     * @returns {boolean} if item has discrete MIME type of image
+     */
+    isImage(): boolean {
+      return this.item.type.split('/')[0] === 'image'
     },
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
@@ -123,11 +129,11 @@ export default Vue.extend({
         this.item.shareItem()
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
         this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$emit('forceRender')
       }
       navigator.clipboard.writeText(this.path).then(() => {
         this.$toast.show(this.$t('pages.files.link_copied') as string)
       })
-      this.$emit('forceRender')
     },
     /**
      * @method rename

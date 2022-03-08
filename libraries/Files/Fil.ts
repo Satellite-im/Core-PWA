@@ -114,6 +114,14 @@ export class Fil extends Item {
   }
 
   /**
+   * @setter file
+   * @param {File} file file object
+   */
+  set file(file: File | undefined) {
+    this._file = file
+  }
+
+  /**
    * @getter url
    * @returns link of localally stored File for image preview and downloads
    */
@@ -122,18 +130,18 @@ export class Fil extends Item {
   }
 
   /**
-   * @setter file description text
-   * @param {string} content the content to set the file description to
-   */
-  set description(content: string) {
-    this._description = `${content || ''}`
-  }
-
-  /**
    * @getter url
    * @returns link of localally stored File for image preview and downloads
    */
   get thumbnail(): string {
     return this._thumbnail
+  }
+
+  /**
+   * @setter file description text
+   * @param {string} content the content to set the file description to
+   */
+  set description(content: string) {
+    this._description = `${content || ''}`
   }
 }
