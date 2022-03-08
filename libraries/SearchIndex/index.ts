@@ -40,7 +40,12 @@ export default class SearchIndex {
   }
 
   search(query: string) {
-    return this.index?.search(query)
+    try {
+      return this.index?.search(query)
+    } catch (err) {
+      console.warn('invalid search query', err)
+      return []
+    }
   }
 
   subscribe(observable: any, callback: any) {
