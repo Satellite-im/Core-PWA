@@ -4,12 +4,14 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ServerTypes } from '~/components/views/settings/pages/privacy/options'
+import { validURL } from '~/libraries/ui/Common'
 
 export default Vue.extend({
   name: 'PrivacyScreen',
   data() {
     return {
       ServerTypes,
+      ownInfoError: false,
     }
   },
   computed: {
@@ -24,7 +26,12 @@ export default Vue.extend({
     },
     ownInfo: {
       set(state) {
-        this.$store.commit('settings/setOwnInfo', state)
+        if (validURL(state)) {
+          this.ownInfoError = false
+          this.$store.commit('settings/setOwnInfo', state)
+        } else {
+          this.ownInfoError = true
+        }
       },
       get() {
         return this.settings.ownInfo
