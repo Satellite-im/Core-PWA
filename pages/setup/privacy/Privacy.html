@@ -2,10 +2,29 @@
   <div class="privacy-body">
     <div class="columns">
       <div class="column center">
-        <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
-        <TypographyText :text="$t('pages.privacy.subtitle')" />
+        <TypographyTitle
+          :size="6"
+          :text="serverType === 'own' ? $t('pages.privacy.newTitle2') : $t('pages.privacy.newTitle1')"
+        />
+        <TypographySubtitle
+          :size="6"
+          :text="serverType === 'own' ? $t('pages.privacy.newSubtitle2') : $t('pages.privacy.newSubtitle1')"
+        />
       </div>
     </div>
+    <div class="column">
+      <InteractablesSelect
+        :options="ServerTypes"
+        v-model="serverType"
+        size="small"
+        class="form-control"
+      />
+    </div>
+    <div class="column" v-if="serverType === 'own'">
+      <InteractablesInput v-model="ownInfo" type="dark" size="small" />
+    </div>
+
+    <div class="columns" v-if="serverType === 'own'"></div>
     <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
       <div class="columns">
         <div class="column">

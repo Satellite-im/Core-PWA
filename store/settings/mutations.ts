@@ -48,6 +48,12 @@ const mutations = {
   removeAppState(state: SettingsState, value: boolean) {
     state.removeState = value
   },
+  setServerType(state: SettingsState, value: string) {
+    state.serverType = value
+  },
+  setOwnInfo(state: SettingsState, value: string) {
+    state.ownInfo = value
+  },
 }
 
 export default mutations
