@@ -45,7 +45,7 @@ const webRTCActions = {
   async getActivePeers() {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
     const peersArray: string[] = []
-    if ($WebRTC.peers) {
+    if ($WebRTC.peers.size > 0) {
       $WebRTC.peers.forEach((e) => {
         if (Object.keys(e.communicationBus.instance.peers).length !== 0) {
           peersArray.push(e.identifier)
