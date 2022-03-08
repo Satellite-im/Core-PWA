@@ -18,11 +18,6 @@ import { Fil } from '~/libraries/Files/Fil'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    linkHover: boolean
-    heartHover: boolean
-    path: string
-    load: boolean
-    handle: () => void
     like: () => void
     share: () => void
     rename: () => void
@@ -81,6 +76,9 @@ export default Vue.extend({
     isImage(): boolean {
       return this.item.type.split('/')[0] === 'image'
     },
+    /**
+     * @returns {boolean} if item is archive file type
+     */
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
@@ -120,20 +118,21 @@ export default Vue.extend({
      * @description copy link to clipboard
      */
     async share() {
-      if (this.item instanceof Directory) {
-        this.$toast.show(this.$t('todo - share folders') as string)
-        return
-      }
-      if (!this.item.shared) {
-        this.$store.commit('ui/setIsLoadingFileIndex', true)
-        this.item.shareItem()
-        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
-        this.$emit('forceRender')
-      }
-      navigator.clipboard.writeText(this.path).then(() => {
-        this.$toast.show(this.$t('pages.files.link_copied') as string)
-      })
+      this.$toast.show(this.$t('todo - share') as string)
+      // if (this.item instanceof Directory) {
+      //   this.$toast.show(this.$t('todo - share folders') as string)
+      //   return
+      // }
+      // if (!this.item.shared) {
+      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
+      //   this.item.shareItem()
+      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
+      //   this.$emit('forceRender')
+      // }
+      // navigator.clipboard.writeText(this.path).then(() => {
+      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
+      // })
     },
     /**
      * @method rename

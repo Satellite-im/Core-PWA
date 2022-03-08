@@ -48,8 +48,9 @@ export class TextileFileSystem extends FilSystem {
 
   /**
    * @method _createThumbnail
-   * @description create thumbnail if embeddable image format, otherwise return ''
+   * @description create thumbnail if embeddable image format
    * @param {File} file
+   * @returns {Promise<string>} base64 thumbnail
    */
   private async _createThumbnail(file: File): Promise<string | undefined> {
     // if file is not an embeddable image, set blank thumbnail
@@ -78,7 +79,13 @@ export class TextileFileSystem extends FilSystem {
     return await this._fileToData(await skaler(file, { width: 400 }))
   }
 
-  private _fileToData(file: File) {
+  /**
+   * @method _fileToData
+   * @description convert File to base64 string
+   * @param {File} file
+   * @returns {Promise<string>} base64 thumbnail
+   */
+  private _fileToData(file: File): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
       reader.readAsDataURL(file)

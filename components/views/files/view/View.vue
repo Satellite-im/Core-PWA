@@ -35,6 +35,9 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
+  /**
+   * if no file data available, pull encrypted file from textile bucket and save as blob
+   */
   async mounted() {
     if (!this.file.file) {
       this.load = true
@@ -52,16 +55,17 @@ export default Vue.extend({
      * @description copy link to clipboard and toggle shared status
      */
     async share() {
-      if (!this.file.shared) {
-        this.$store.commit('ui/setIsLoadingFileIndex', true)
-        this.file.shareItem()
-        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
-      }
-      navigator.clipboard.writeText(this.path).then(() => {
-        this.$toast.show(this.$t('pages.files.link_copied') as string)
-      })
-      this.$emit('forceRender')
+      this.$toast.show(this.$t('todo - share') as string)
+      // if (!this.file.shared) {
+      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
+      //   this.file.shareItem()
+      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
+      // }
+      // navigator.clipboard.writeText(this.path).then(() => {
+      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
+      // })
+      // this.$emit('forceRender')
     },
   },
 })

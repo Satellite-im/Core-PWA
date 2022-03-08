@@ -92,6 +92,10 @@ export class Bucket extends RFM implements RFMInterface {
     )
   }
 
+  /**
+   * @method ipnsLink
+   * @returns {Promise<string>} ipns bucket link
+   */
   async ipnsLink(): Promise<string> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
@@ -101,7 +105,7 @@ export class Bucket extends RFM implements RFMInterface {
 
   /**
    * @method pushFile
-   * @description Remove file from bucket
+   * @description Add file to bucket
    * @param {File} file file to be uploaded
    * @returns Promise whether it was uploaded or not
    */

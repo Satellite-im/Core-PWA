@@ -12,7 +12,7 @@ export class Fil extends Item {
 
   /**
    * @constructor
-   * @param param0 Fil info - name, hash, size, liked, shared, description, type
+   * @param param0  name, file, hash, size, liked, shared, modified, description, type, thumbnail
    * @returns {Fil}
    */
   constructor({
@@ -86,6 +86,7 @@ export class Fil extends Item {
       shared: this.shared,
       description: this.description,
       type: this.type,
+      thumbnail: this.thumbnail,
     })
   }
 
