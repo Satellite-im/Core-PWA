@@ -30,4 +30,6 @@ export interface SettingsState {
   embeddedLinks: Boolean
   displayCurrentActivity: Boolean
   timezone: string
+  serverType: string
+  ownInfo: string
 }

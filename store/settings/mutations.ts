@@ -45,6 +45,12 @@ const mutations = {
   setTimezone(state: SettingsState, value: string) {
     state.timezone = value
   },
+  setServerType(state: SettingsState, value: string) {
+    state.serverType = value
+  },
+  setOwnInfo(state: SettingsState, value: string) {
+    state.ownInfo = value
+  },
 }
 
 export default mutations

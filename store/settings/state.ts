@@ -15,6 +15,8 @@ const InitialSettingsState = (): SettingsState => ({
   keybinds: KeybindTypes,
   embeddedLinks: true,
   displayCurrentActivity: true,
+  serverType: '',
+  ownInfo: '',
 })
 
 export default InitialSettingsState
