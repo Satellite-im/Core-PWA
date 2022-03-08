@@ -1,16 +1,11 @@
 <div id="privacy-settings">
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="serverType === 'own' ? $t('pages.privacy.newTitle2') : $t('pages.privacy.newTitle1')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="serverType === 'own' ? $t('pages.privacy.newSubtitle2') : $t('pages.privacy.newSubtitle1')"
-      />
+      <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
     </div>
-
+  </div>
+  <div class="columns">
     <div class="column">
       <InteractablesSelect
         :options="ServerTypes"
@@ -19,12 +14,30 @@
         class="form-control"
       />
     </div>
-
-    <div class="column" v-if="serverType === 'own'">
-      <InteractablesInput v-model="ownInfo" type="dark" size="small" />
-    </div>
   </div>
   <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.privacy.ownInfo.title')"
+        :text="$t('pages.privacy.ownInfo.subtitle')"
+        v-if="serverType === 'own'"
+      >
+        <InteractablesInput
+          v-model="ownInfo"
+          type="dark"
+          size="small"
+          :placeholder="$t('pages.privacy.ownInfo.placeholder')"
+          class="ownInfoInput"
+        />
+        <TypographySubtitle
+          class="color-danger"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorMsg')"
+          v-if="ownInfoError"
+        />
+      </SettingsUnit>
+    </div>
     <div class="columns is-desktop">
       <SettingsUnit
         :title="$t('pages.privacy.register.title')"
