@@ -36,6 +36,12 @@ const webRTCActions = {
 
     commit('setInitialized', true)
   },
+  /**
+   * @method getActivePeers
+   * @description returns an array of the user id's that have an open/active webtorrent signal
+   * @example
+   * this.$store.dispatch('webrtc/getActivePeers') // ['userid1', 'userid2']
+   */
   async getActivePeers() {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
     const peersArray: string[] = []
