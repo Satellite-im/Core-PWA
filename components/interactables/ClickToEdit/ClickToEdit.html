@@ -3,8 +3,9 @@
     class="cte-input"
     ref="input"
     contenteditable=""
-    @focus="focus"
-    @blur="blur"
-    @input="input"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    @input="handleInput"
+    @keydown.enter="handleEnter"
   ></div>
 </div>

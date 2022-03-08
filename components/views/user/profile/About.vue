@@ -10,7 +10,7 @@
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
-      <UserProfileClickToEdit
+      <InteractablesClickToEdit
         v-model="note"
         :placeholder="$t('modal.profile.about.click_note')"
       />

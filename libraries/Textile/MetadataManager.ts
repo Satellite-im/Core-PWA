@@ -17,6 +17,10 @@ export class MetadataManager {
     this.senderAddress = senderAddress
   }
 
+  /**
+   * @method init
+   * Initialize the metadata manager
+   */
   async init() {
     await this.getMetadataCollection()
   }
@@ -40,7 +44,8 @@ export class MetadataManager {
 
   /**
    * @method _threadID
-   * @description returns the thread id of the metadata for the current user
+   * Get the thread id of the metadata for the current user
+   * @returns returns the thread id of the metadata for the current user
    */
   _threadID(): ThreadID {
     if (!this.threadID) {
@@ -49,6 +54,12 @@ export class MetadataManager {
     return this.threadID
   }
 
+  /**
+   * @method decodeBody
+   * Decode the string using current user's private key
+   * @param body encoded string data to be decoded
+   * @returns returns decoded string from body
+   */
   async decodeBody(body: string) {
     const identity: Identity = this.textile.identity
     const privKey = PrivateKey.fromString(identity.toString())
@@ -58,6 +69,12 @@ export class MetadataManager {
     return decoded
   }
 
+  /**
+   * @method encodeBody
+   * Encode the string using current user's public key
+   * @param body raw string data to be encoded
+   * @returns returns decoded string from encoded string
+   */
   async encodeBody(body: string) {
     const publicKey = PublicKey.fromString(
       this.textile.identity.public.toString(),
@@ -70,6 +87,12 @@ export class MetadataManager {
     return encoded
   }
 
+  /**
+   * Find the current user's metadata identified by `to` and `key`
+   * @param to address field to be identified
+   * @param key key field to be identified
+   * @returns returns the current user's metadata
+   */
   async _findRecord({
     to,
     key,
@@ -98,6 +121,12 @@ export class MetadataManager {
     return record
   }
 
+  /**
+   * Get the current user's metadata identified by `to` and `key`
+   * @param to address field to be identified
+   * @param key key field to be identified
+   * @returns returns the current user's metadata
+   */
   async getMetadata({
     to,
     key,
@@ -123,6 +152,11 @@ export class MetadataManager {
     return metadata as FriendMetadata
   }
 
+  /**
+   * Update the current user's metadata identified by `to` and `key`
+   * @param to address field to be identified
+   * @param key key field to be identified
+   */
   async updateMetadata({
     to,
     key,
@@ -138,18 +172,22 @@ export class MetadataManager {
     if (record) {
       record.body = body
       await this.textile.client.save(threadID, CollectionName, [record])
-    } else {
-      await this.textile.client.create(threadID, CollectionName, [
-        {
-          from: this.senderAddress,
-          to,
-          key,
-          body,
-        },
-      ])
+      return
     }
+    await this.textile.client.create(threadID, CollectionName, [
+      {
+        from: this.senderAddress,
+        to,
+        key,
+        body,
+      },
+    ])
   }
 
+  /**
+   * Update the current user's friend metadata
+   * @param to friend address field
+   */
   async updateFriendMetadata({
     to,
     metadata,

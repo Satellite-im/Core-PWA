@@ -7,6 +7,8 @@
 }
 
 .cte-input {
+  -webkit-user-select: text;
+  user-select: text;
   width: 100%;
   background-color: transparent;
   height: auto;
@@ -19,7 +21,9 @@
   padding: @xlight-spacing;
   margin: 0 -@light-spacing;
   border-radius: @corner-rounding-smaller;
-  &:hover,
+  &:hover {
+    background-color: rgba(@background-hover, 0.5);
+  }
   &:focus {
     background-color: @background-hover;
   }
