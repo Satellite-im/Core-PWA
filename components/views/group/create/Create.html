@@ -9,17 +9,26 @@
     size="small"
     input-kind="text"
     type="dark"
+    :placeholder="$t('pages.chat.new_group_name')"
+    class="search"
+    v-model="name"
+  />
+  <InteractablesInput
+    size="small"
+    input-kind="text"
+    type="dark"
     :placeholder="$t('pages.files.browse.search')"
     class="search"
     v-model="users"
   />
-  <div v-if="users" class="submit-container">
+  <div v-if="name" class="submit-container">
     <InteractablesButton
       type="primary"
       size="small"
       :text="$t('pages.chat.new_group')"
       class="create-server-btn"
       :action="confirm"
+      :loading="loading"
     />
   </div>
 </div>

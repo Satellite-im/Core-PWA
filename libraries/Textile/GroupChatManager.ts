@@ -25,11 +25,11 @@ import { AccountsError } from '~/store/accounts/types'
 import { Groups } from '~/mock/groups'
 
 export class GroupChatManager {
+  private _threadID?: ThreadID
   senderAddress: string
   textile: TextileInitializationData
-  threadID: ThreadID
-  identity: Identity
   listeners: {
+  identity: Identity
     message?: (reply?: Update<any> | undefined, err?: Error | undefined) => void
   }
 
@@ -41,8 +41,18 @@ export class GroupChatManager {
     this.identity = identity
     this.textile = textile
     this.senderAddress = senderAddress
-    this.threadID = ThreadID.fromString(Config.textile.groupChatThreadID)
     this.listeners = {}
+  }
+
+  get threadID() {
+    if (!this._threadID) {
+      throw new Error('GroupChatManager not initialized')
+    }
+    return this._threadID
+  }
+
+  async init() {
+    this._threadID = await this.getThreadID()
   }
 
   /**
@@ -56,7 +66,28 @@ export class GroupChatManager {
       name: newCollectionUUID,
       schema: groupChatSchema,
     })
-    return newCollectionUUID
+    return `${this.threadID}/${newCollectionUUID}`
+  }
+
+  async getThreadName(): Promise<string> {
+    const crypto = new Crypto()
+    const name = crypto.signMessageWithKey(
+      this.textile.wallet.keypair.secretKey,
+      `groupChats`,
+    )
+
+    return crypto.hash(name)
+  }
+
+  async getThreadID(): Promise<ThreadID> {
+    const name = await this.getThreadName()
+    console.log('getThreadName', name)
+    try {
+      const thread = await this.textile.client.getThread(name)
+      return ThreadID.fromString(thread.id)
+    } catch (e) {
+      return await this.textile.client.newDB(undefined, name)
+    }
   }
 
   /**

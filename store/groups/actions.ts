@@ -43,7 +43,10 @@ export default {
    * @description create new group chat
    * @example
    */
-  async createGroup({ commit }: ActionsArguments<GroupsState>) {
+  async createGroup(
+    { commit }: ActionsArguments<GroupsState>,
+    { name }: { name: string },
+  ) {
     const groupChatProgram = getGroupChatProgram()
     const groupChatManager = getGroupChatManager()
 
@@ -54,7 +57,7 @@ export default {
     // generate random groupPassword
     // use pubKey of current user to encrypt groupId
     // create group in solana using encrypted groupId
-    await groupChatProgram.create(groupId)
+    await groupChatProgram.create(groupId, name)
 
     console.time('start')
     await new Promise((resolve) => setTimeout(resolve, 20000))
