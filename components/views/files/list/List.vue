@@ -69,6 +69,13 @@ export default Vue.extend({
     handle(item: Item) {
       this.$emit('handle', item)
     },
+    /**
+     * @method forceRender
+     * @description force reactivity for Map
+     */
+    forceRender() {
+      this.$emit('forceRender')
+    },
     sort() {
       this.$toast.show(this.$t('todo - sort') as string)
     },
