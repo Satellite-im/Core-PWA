@@ -91,3 +91,7 @@ sw.*
 
 # Vim swap files
 *.swp
+
+#cypress linked folder
+cypress
+
