@@ -39,10 +39,10 @@ export default Vue.extend({
     return {
       menuHover: false as boolean,
       contextMenuValues: [
-        { text: 'Favorite', func: this.handle },
-        { text: 'Share', func: this.handle },
-        { text: 'Rename', func: this.handle },
-        { text: 'Delete', func: this.handle },
+        { text: 'Favorite', func: this.todo },
+        { text: 'Share', func: this.todo },
+        { text: 'Rename', func: this.todo },
+        { text: 'Delete', func: this.todo },
       ],
     }
   },
@@ -77,6 +77,9 @@ export default Vue.extend({
      */
     forceRender() {
       this.$emit('forceRender')
+    },
+    todo() {
+      this.$toast.show(this.$t('todo') as string)
     },
   },
 })
