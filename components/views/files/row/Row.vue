@@ -1,9 +1,8 @@
-<template src="./List.html"></template>
+<template src="./Row.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import {
-  FilterIcon,
   FolderIcon,
   ArchiveIcon,
   FileIcon,
@@ -12,12 +11,12 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
+import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
 
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   components: {
-    FilterIcon,
     FileIcon,
     FolderIcon,
     ArchiveIcon,
@@ -26,25 +25,25 @@ export default Vue.extend({
     UnlockIcon,
     MoreVerticalIcon,
   },
+  mixins: [ContextMenu],
   props: {
     /**
-     * Directory items to be displayed
+     * File or Directory to be displayed in detail
      */
-    directory: {
-      type: Array as PropType<Array<Item>>,
-      required: true,
-    },
-    /**
-     * counter to force reactivity for Map
-     */
-    counter: {
-      type: Number,
+    item: {
+      type: Object as PropType<Item>,
       required: true,
     },
   },
   data() {
     return {
-      timer: null,
+      menuHover: false as boolean,
+      contextMenuValues: [
+        { text: 'Favorite', func: this.handle },
+        { text: 'Share', func: this.handle },
+        { text: 'Rename', func: this.handle },
+        { text: 'Delete', func: this.handle },
+      ],
     }
   },
   computed: {
@@ -66,8 +65,11 @@ export default Vue.extend({
      * @method handle
      * @description Emit item to be handled in pages/files/browse/index.vue
      */
-    handle(item: Item) {
-      this.$emit('handle', item)
+    handle() {
+      if (this.menuHover) {
+        return
+      }
+      this.$emit('handle', this.item)
     },
     /**
      * @method forceRender
@@ -76,10 +78,7 @@ export default Vue.extend({
     forceRender() {
       this.$emit('forceRender')
     },
-    sort() {
-      this.$toast.show(this.$t('todo - sort') as string)
-    },
   },
 })
 </script>
-<style scoped lang="less" src="./List.less"></style>
+<style scoped lang="less" src="./Row.less"></style>
