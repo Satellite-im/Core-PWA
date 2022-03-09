@@ -23,13 +23,13 @@ Currently, the only environment variable you need is a [Textile](https://www.tex
 
 ## Install Submodules
 
-Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android` and `electron` submodules. We want Satellite.im to be as modular as possible so you only get what you want when you clone the project. Other folders like `locales` and `cypress` will be moved out later but we need a way to avoid git submodule issues when we are in heavy devleopment.
+Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android` and `electron` submodules.
 
 ## Running Locally
 
 To start running locally complete the Environment setup and then run `yarn dev`.
 
-## Running the e2e/integration/cypress tests
+## Running cypress tests
 
 ```
  npx cypress run --browser chrome
