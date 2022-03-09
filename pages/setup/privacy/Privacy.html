@@ -35,11 +35,25 @@
               class="ownInfoInput"
             />
 
-            <TypographySubtitle
+            <TypographyText
               class="color-danger"
               type="danger"
               :size="6"
               :text="$t('pages.privacy.ownInfo.errorMsg')"
+              v-if="ownInfoError"
+            />
+            <TypographyText
+              class="color-danger ml-3"
+              type="danger"
+              :size="6"
+              :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
+              v-if="ownInfoError"
+            />
+            <TypographyText
+              class="color-danger ml-3"
+              type="danger"
+              :size="6"
+              :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
               v-if="ownInfoError"
             />
           </div>
@@ -115,6 +129,7 @@
         <InteractablesButton
           class="right"
           type="primary"
+          :disabled="ownInfoError"
           :action="generateWallet"
         >
           {{ $t('pages.privacy.continue') }}
