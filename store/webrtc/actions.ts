@@ -71,6 +71,7 @@ export default {
         { id: peerId, typingState: state },
         { root: true },
       )
+      dispatch('subscribeToMailbox')
     })
 
     peer?.call.on('INCOMING_CALL', (data) => {

@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init gets the ServerInfo constant 1`] = `
+Object {
+  "channels": Object {
+    "0": Object {
+      "id": "0",
+      "name": "github.com/Satellite_im",
+      "type": "label",
+    },
+    "1": Object {
+      "id": "1",
+      "name": "feed",
+      "type": "feed",
+    },
+    "2": Object {
+      "id": "2",
+      "name": "general",
+      "type": "text",
+    },
+    "3": Object {
+      "id": "3",
+      "name": "trade",
+      "type": "text",
+    },
+    "4": Object {
+      "id": "4",
+      "name": "General Chatter",
+      "type": "voice",
+    },
+    "5": Object {
+      "id": "5",
+      "name": "Gaming",
+      "type": "voice",
+      "users": Array [
+        Object {
+          "address": "0x43aF5230d1493511fBDeAe0Fbe4C5555E087Bf24",
+          "name": "RetroPronghorn",
+        },
+        Object {
+          "address": "0x5635e06B8655C1455Da640162061c1392DB16357",
+          "name": "im_eatin_cookies",
+        },
+        Object {
+          "address": "0xD3312142f90B6002D6CF01A9d858BED4e49Afcf7",
+          "name": "XileHorizon",
+        },
+      ],
+    },
+    "6": Object {
+      "id": "6",
+      "name": "Development",
+      "type": "voice",
+    },
+    "7": Object {
+      "id": "7",
+      "name": "general",
+      "type": "text",
+    },
+    "8": Object {
+      "id": "8",
+      "name": "updates",
+      "type": "feed",
+    },
+    "9": Object {
+      "id": "9",
+      "name": "Dev Chat",
+      "type": "voice",
+    },
+  },
+  "groups": Array [
+    Object {
+      "channels": Array [
+        1,
+        2,
+        3,
+      ],
+      "name": "Text Channels",
+    },
+    Object {
+      "channels": Array [
+        4,
+        5,
+        6,
+      ],
+      "name": "Voice Channels",
+    },
+    Object {
+      "channels": Array [
+        0,
+        7,
+        8,
+        9,
+      ],
+      "name": "Dev Center",
+    },
+  ],
+}
+`;
+
+exports[`init gets the Servers constant 1`] = `
+Array [
+  Object {
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "name": "Solana Fans",
+  },
+  Object {
+    "address": "0x00000000219ab540356cbb839cbe05303d7705fa",
+    "name": "Satellite.im",
+  },
+  Object {
+    "address": "0xbe0eb53f46cd790cd13851d5eff43d12404d33e8",
+    "name": "Gaming",
+  },
+  Object {
+    "address": "0x73bceb1cd57c711feac4224d062b0f6ff338501e",
+    "name": "Blockchain Devs",
+  },
+]
+`;
+
+exports[`init gets the Unreads constant 1`] = `
+Array [
+  Object {
+    "address": "0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c",
+    "count": 4,
+    "name": "Phoenix Kalindi",
+  },
+  Object {
+    "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
+    "count": 1,
+    "name": "Ariel Larissa",
+  },
+]
+`;
