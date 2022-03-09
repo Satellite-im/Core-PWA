@@ -120,7 +120,7 @@ const initialRootState: RootState = {
     initialized: true,
     incomingCall: '',
     activeCall: '',
-    connectedPeer: '',
+    connectedPeers: [],
     activeStream: {
       createdAt: 0,
     },
