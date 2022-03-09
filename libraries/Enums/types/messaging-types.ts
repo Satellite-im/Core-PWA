@@ -7,6 +7,7 @@ export enum MessagingTypesEnum {
   GROUP = 'group',
   GLYPH = 'glyph',
   DIVIDER = 'divider',
+  STRING = 'string',
 }
 
 export type MessagingType = keyof typeof MessagingTypesEnum

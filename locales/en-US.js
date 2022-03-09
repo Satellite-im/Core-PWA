@@ -129,7 +129,6 @@ export default {
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        folder_name: 'Please enter a folder name',
       },
       browse: {
         files: 'Files',
@@ -154,6 +153,8 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
+        folder_name: 'Please enter a folder name',
+        no_slash: 'Folder name cannot contain /',
         reserved_name: 'sat.json is a reserved file name',
         empty_file: 'File needs to have a size of 1 byte or greater',
         file_name: 'File with name already exists in this file system',

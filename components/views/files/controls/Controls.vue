@@ -55,7 +55,11 @@ export default Vue.extend({
     async addFolder() {
       this.errors = []
       if (!this.text) {
-        this.errors.push(this.$t('pages.files.controls.folder_name') as string)
+        this.errors.push(this.$t('pages.files.errors.folder_name') as string)
+        return
+      }
+      if (this.text.includes('/')) {
+        this.errors.push(this.$t('pages.files.errors.no_slash') as string)
         return
       }
       this.$store.commit('ui/setIsLoadingFileIndex', true)
