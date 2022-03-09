@@ -1,7 +1,10 @@
 {
-  "projectId": "4offi6",
-  "baseUrl": "http://localhost:3000",
-  "numTestsKeptInMemory": 1,
-  "pageLoadTimeout": 120000,
-  "defaultCommandTimeout": 10000
+   "projectId":"4offi6",
+   "baseUrl":"http://localhost:3000",
+   "numTestsKeptInMemory":1,
+   "pageLoadTimeout":120000,
+   "defaultCommandTimeout":10000,
+   "cypress-plugin-snapshots":{
+      "serverPort":3000
+   }
 }
