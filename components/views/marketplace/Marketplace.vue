@@ -21,6 +21,13 @@ export default Vue.extend({
     return {
       subject: 'Glyphs',
       marketCategories,
+      swiperOption: {
+        initialSlide: this.$device.isMobile ? 1 : 0,
+        resistanceRatio: 0,
+        slidesPerView: 'auto',
+        noSwiping: !this.$device.isMobile,
+        allowTouchMove: !!this.$device.isMobile,
+      },
     }
   },
   methods: {
