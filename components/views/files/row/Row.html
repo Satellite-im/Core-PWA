@@ -6,7 +6,7 @@
     <folder-icon v-if="item.content" />
     <archive-icon v-else-if="item.type.includes('archive')" />
     <image-icon v-else-if="item.type.includes('image')" />
-    <file-icon v-else class="icon" />
+    <file-icon v-else />
     <span> {{ item.name }} </span>
   </td>
   <td v-if="!$device.isMobile">{{ $dayjs(item.modified).fromNow() }}</td>
