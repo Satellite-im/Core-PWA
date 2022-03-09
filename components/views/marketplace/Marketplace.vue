@@ -38,4 +38,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Marketplace.less"></style>
+<style lang="less" src="./Marketplace.less"></style>

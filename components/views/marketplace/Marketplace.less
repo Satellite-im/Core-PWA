@@ -1,4 +1,4 @@
-.market-place {
+.marketplace-wrapper {
   display: flex;
   height: @full;
   max-height: @full;
@@ -44,6 +44,25 @@
       margin: 24px 0px;
       display: flex;
       justify-content: center;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .marketplace-wrapper {
+    .listing-panel {
+      max-height: calc(100vh - 200px);
+      height: calc(100vh - 200px);
+      .listing {
+        display: block;
+        .item {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    .body-panel {
+      max-width: 100%;
+      padding: 1.5rem 1rem;
     }
   }
 }

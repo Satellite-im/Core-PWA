@@ -61,3 +61,22 @@
     }
   }
 }
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .marketplace-glyphs {
+    .home-content {
+      display: block;
+      .left-content-block {
+        margin-right: 0;
+      }
+    }
+    .glyph-shop-section {
+      .shop-list {
+        display: block;
+        & > div {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
