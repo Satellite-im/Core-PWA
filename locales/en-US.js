@@ -200,7 +200,9 @@ export default {
         subtitle:
           'Enter your http, udp, or websocket URL for your signaling server here',
         placeholder: 'Please enter ...',
-        errorMsg: 'Invalid the input format',
+        errorMsg: 'Invalid input format. Please add on the following format',
+        errorSampleUrl1: '- http://localhost:3000',
+        errorSampleUrl2: '- wss://www.example.com/socketserver',
       },
       continue: 'Continue',
       register: {
