@@ -74,7 +74,7 @@ export default Vue.extend({
      * @returns {boolean} if item has discrete MIME type of image
      */
     isImage(): boolean {
-      return this.item.type.split('/')[0] === 'image'
+      return this.item.type.includes('image')
     },
     /**
      * @returns {boolean} if item is archive file type
