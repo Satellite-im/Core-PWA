@@ -319,7 +319,9 @@ export default Vue.extend({
      */
     handleUpload(items: Array<object>, e: Event) {
       const arrOfFiles: File[] = [...items]
-        .filter((f: any) => !f.type.includes(MessagingTypesEnum.TEXT))
+        .filter((f: any) => {
+          return f.kind !== MessagingTypesEnum.STRING
+        })
         .map((f: any) => f.getAsFile())
 
       if (arrOfFiles.length) {
