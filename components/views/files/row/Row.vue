@@ -49,17 +49,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
-  mounted() {
-    this.$data.timer = setInterval(
-      this.forceRender,
-      this.$Config.chat.timestampUpdateInterval,
-    )
-  },
-  beforeDestroy() {
-    if (this.$data.timer) {
-      clearInterval(this.$data.timer)
-    }
-  },
   methods: {
     /**
      * @method handle
@@ -72,12 +61,8 @@ export default Vue.extend({
       this.$emit('handle', this.item)
     },
     /**
-     * @method forceRender
-     * @description force reactivity for Map
+     * @description handle in AP-1054
      */
-    forceRender() {
-      this.$emit('forceRender')
-    },
     todo() {
       this.$toast.show(this.$t('todo') as string)
     },
