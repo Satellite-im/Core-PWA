@@ -28,8 +28,8 @@ export class GroupChatManager {
   private _threadID?: ThreadID
   senderAddress: string
   textile: TextileInitializationData
-  listeners: {
   identity: Identity
+  listeners: {
     message?: (reply?: Update<any> | undefined, err?: Error | undefined) => void
   }
 
