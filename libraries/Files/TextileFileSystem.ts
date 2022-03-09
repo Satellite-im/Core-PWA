@@ -67,7 +67,7 @@ export class TextileFileSystem extends FilSystem {
         format: 'JPEG',
         quality: 1,
       })
-      return await this._fileToData(
+      return this._fileToData(
         await skaler(
           new File([outputBuffer.buffer], file.name, {
             type: 'image/jpeg',
@@ -76,7 +76,7 @@ export class TextileFileSystem extends FilSystem {
         ),
       )
     }
-    return await this._fileToData(await skaler(file, { width: 400 }))
+    return this._fileToData(await skaler(file, { width: 400 }))
   }
 
   /**
