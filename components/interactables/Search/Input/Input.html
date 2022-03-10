@@ -1,5 +1,5 @@
 <div class="search-container" v-click-outside="lostFocus">
-  <div :class="{'search-box': true, focus: isFocus}">
+  <div :class="{'search-box': true, focus: isFocus}" class="disabled">
     <div :class="{'search-placeholder': true, hide: !isEmpty}">
       {{placeholder}}
     </div>
@@ -12,7 +12,7 @@
     <div
       ref="searchInput"
       class="search-input"
-      @mousedown="setFocus"
+      @mousedown="/* setFocus disable temporarily until search rework */"
       @keydown="keydown"
       @keyup="keyup"
       @input="input"
