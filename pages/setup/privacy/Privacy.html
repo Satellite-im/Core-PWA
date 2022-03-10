@@ -6,60 +6,7 @@
         <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
       </div>
     </div>
-    <div class="columns">
-      <div class="column">
-        <InteractablesSelect
-          :options="ServerTypes"
-          v-model="serverType"
-          size="small"
-          class="form-control"
-        />
-      </div>
-    </div>
 
-    <div class="columns" v-if="serverType === 'own'">
-      <div class="column">
-        <div class="columns is-mobile">
-          <div class="column">
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.privacy.ownInfo.title')"
-            />
-            <TypographyText :text="$t('pages.privacy.ownInfo.subtitle')" />
-
-            <InteractablesInput
-              v-model="ownInfo"
-              type="dark"
-              size="small"
-              :placeholder="$t('pages.privacy.ownInfo.placeholder')"
-              class="ownInfoInput"
-            />
-
-            <TypographyText
-              class="color-danger"
-              type="danger"
-              :size="6"
-              :text="$t('pages.privacy.ownInfo.errorMsg')"
-              v-if="ownInfoError"
-            />
-            <TypographyText
-              class="color-danger ml-3"
-              type="danger"
-              :size="6"
-              :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-              v-if="ownInfoError"
-            />
-            <TypographyText
-              class="color-danger ml-3"
-              type="danger"
-              :size="6"
-              :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-              v-if="ownInfoError"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
     <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
       <div class="columns">
         <div class="column">
@@ -121,6 +68,67 @@
           </div>
         </div>
       </div>
+
+      <div class="columns">
+        <div class="column">
+          <TypographySubtitle
+            :size="6"
+            :text="$t('pages.privacy.serverType.title')"
+          />
+          <TypographyText :text="$t('pages.privacy.serverType.subtitle')" />
+
+          <InteractablesSelect
+            :options="ServerTypes"
+            v-model="serverType"
+            size="small"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="columns" v-if="serverType === 'own'">
+        <div class="column">
+          <div class="columns is-mobile">
+            <div class="column">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.privacy.ownInfo.title')"
+              />
+              <TypographyText :text="$t('pages.privacy.ownInfo.subtitle')" />
+
+              <InteractablesInput
+                v-model="ownInfo"
+                type="dark"
+                size="small"
+                :placeholder="$t('pages.privacy.ownInfo.placeholder')"
+                class="ownInfoInput"
+              />
+
+              <TypographyText
+                class="color-danger"
+                type="danger"
+                :size="6"
+                :text="$t('pages.privacy.ownInfo.errorMsg')"
+                v-if="ownInfoError"
+              />
+              <TypographyText
+                class="color-danger ml-3"
+                type="danger"
+                :size="6"
+                :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
+                v-if="ownInfoError"
+              />
+              <TypographyText
+                class="color-danger ml-3"
+                type="danger"
+                :size="6"
+                :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
+                v-if="ownInfoError"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </UiScroll>
     <br />
     <div class="spacer"></div>
@@ -129,7 +137,7 @@
         <InteractablesButton
           class="right"
           type="primary"
-          :disabled="ownInfoError"
+          :disabled="serverType === 'own' && (ownInfoError || !ownInfo)"
           :action="generateWallet"
         >
           {{ $t('pages.privacy.continue') }}

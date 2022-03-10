@@ -5,17 +5,50 @@
       <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
     </div>
   </div>
-  <div class="columns">
-    <div class="column">
-      <InteractablesSelect
-        :options="ServerTypes"
-        v-model="serverType"
-        size="small"
-        class="form-control"
-      />
-    </div>
-  </div>
   <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.privacy.register.title')"
+        :text="$t('pages.privacy.register.subtitle')"
+      >
+        <InteractablesSwitch isLocked v-model="registry" />
+      </SettingsUnit>
+      <SettingsUnit
+        :title="$t('pages.privacy.pin.title')"
+        :text="$t('pages.privacy.pin.subtitle')"
+      >
+        <InteractablesSwitch v-model="storePin" />
+      </SettingsUnit>
+    </div>
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.privacy.embeds.title')"
+        :text="$t('pages.privacy.embeds.subtitle')"
+      >
+        <InteractablesSwitch v-model="embeddedLinks" />
+      </SettingsUnit>
+      <SettingsUnit
+        :title="$t('pages.privacy.activity.title')"
+        :text="$t('pages.privacy.activity.subtitle')"
+      >
+        <InteractablesSwitch v-model="displayCurrentActivity" />
+      </SettingsUnit>
+    </div>
+
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.privacy.serverType.title')"
+        :text="$t('pages.privacy.serverType.subtitle')"
+      >
+        <InteractablesSelect
+          :options="ServerTypes"
+          v-model="serverType"
+          size="small"
+          class="form-control"
+        />
+      </SettingsUnit>
+    </div>
+
     <div class="columns is-desktop">
       <SettingsUnit
         :title="$t('pages.privacy.ownInfo.title')"
@@ -50,34 +83,6 @@
           :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
           v-if="ownInfoError"
         />
-      </SettingsUnit>
-    </div>
-    <div class="columns is-desktop">
-      <SettingsUnit
-        :title="$t('pages.privacy.register.title')"
-        :text="$t('pages.privacy.register.subtitle')"
-      >
-        <InteractablesSwitch isLocked v-model="registry" />
-      </SettingsUnit>
-      <SettingsUnit
-        :title="$t('pages.privacy.pin.title')"
-        :text="$t('pages.privacy.pin.subtitle')"
-      >
-        <InteractablesSwitch v-model="storePin" />
-      </SettingsUnit>
-    </div>
-    <div class="columns is-desktop">
-      <SettingsUnit
-        :title="$t('pages.privacy.embeds.title')"
-        :text="$t('pages.privacy.embeds.subtitle')"
-      >
-        <InteractablesSwitch v-model="embeddedLinks" />
-      </SettingsUnit>
-      <SettingsUnit
-        :title="$t('pages.privacy.activity.title')"
-        :text="$t('pages.privacy.activity.subtitle')"
-      >
-        <InteractablesSwitch v-model="displayCurrentActivity" />
       </SettingsUnit>
     </div>
   </UiScroll>
