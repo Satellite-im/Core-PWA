@@ -11,7 +11,7 @@ Vue.prototype.$Config = Config
 const DefaultLogger = Logger.default
 Vue.prototype.$Logger = new DefaultLogger(Vue.prototype.$Config.debug)
 Vue.prototype.$TextileManager = new TextileManager()
-Vue.prototype.$FileSystem = new TextileFileSystem()
+// Vue.prototype.$FileSystem = new TextileFileSystem()
 
 describe('actions.default.initialize', () => {
   test('', async () => {
@@ -24,8 +24,8 @@ describe('actions.default.initialize', () => {
       JestTextileManager.bucket = jest.fn()
       JestTextileManager.bucket.index = jest.fn()
       JestTextileManager.bucket.index.mockReturnValueOnce('index')
-      const JestFS = Vue.prototype.$FileSystem
-      JestFS.import = jest.fn()
+      // const JestFS = Vue.prototype.$FileSystem
+      // JestFS.import = jest.fn()
       await actions.default.initialize({ commit }, { id: 'id', pass: 'pass' })
       expect(JestTextileManager.init).toHaveBeenCalled()
       expect(JestTextileManager.init).toHaveBeenCalledWith({
@@ -39,7 +39,7 @@ describe('actions.default.initialize', () => {
         'public key',
         { root: true },
       )
-      expect(JestFS.import).toHaveBeenCalled()
+      // expect(JestFS.import).toHaveBeenCalled()
     } catch (error) {
       console.error(error)
     }

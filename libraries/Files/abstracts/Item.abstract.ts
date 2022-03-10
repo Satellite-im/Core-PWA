@@ -111,7 +111,6 @@ export abstract class Item implements ItemInterface {
    */
   toggleLiked() {
     this._liked = !this._liked
-    this._modified = Date.now()
   }
 
   /**
@@ -120,7 +119,6 @@ export abstract class Item implements ItemInterface {
    */
   shareItem() {
     this._shared = true
-    this._modified = Date.now()
   }
 
   /**

@@ -8,7 +8,7 @@ const mockFileData = {
   name: 'TestFile.png',
   hash: '0x0aef',
   size: 42345,
-  descrption: 'Test file description',
+  description: 'Test file description',
 }
 
 const mockDirectoryData = {
@@ -33,17 +33,6 @@ describe('Test FileSystem Directory', () => {
     const ex: FileSystemExport = fs.export
 
     expect(ex.version + 1).toEqual(fs.export.version)
-  })
-  it('get uninitialized textile', () => {
-    const initializationData = {
-      identity: 'Identity',
-      client: 'Client',
-      users: 'Users',
-      wallet: 'SolanaWallet',
-    }
-    const bucket = new Bucket(initializationData)
-
-    expect(bucket.textile).toBe(initializationData)
   })
   it('get uninitialized index', () => {
     const initializationData = {

@@ -11,7 +11,6 @@ import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { Alerts } from '~/libraries/ui/Alerts'
-import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
 import Hounddog from '~/utilities/Hounddog'
@@ -21,7 +20,7 @@ import Cursor from '~/libraries/ui/Cursor'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $Config: any
+    $Config: typeof Config
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
@@ -39,7 +38,7 @@ declare module 'vue/types/vue' {
 
 declare module '@nuxt/types' {
   interface Context {
-    $Config: any
+    $Config: typeof Config
     $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager

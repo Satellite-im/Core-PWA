@@ -18,15 +18,11 @@ import { Fil } from '~/libraries/Files/Fil'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    linkHover: boolean
-    heartHover: boolean
-    path: string
-    load: boolean
-    handle: () => void
     like: () => void
     share: () => void
     rename: () => void
     delete: () => void
+    $filesize: (item: number) => string
   }
 }
 
@@ -67,26 +63,24 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     /**
-     * @returns if directory, child count. if file, size
+     * @returns {string} if directory, child count. if file, size
      */
     getSubtext(): string {
       return this.item instanceof Directory
         ? this.item.content.length + ' items'
         : this.$filesize((this.item as Fil).size)
     },
+    /**
+     * @returns {boolean} if item has discrete MIME type of image
+     */
     isImage(): boolean {
-      return Boolean(this.item.name.match(this.$Config.regex.image))
-    },
-    isArchive(): boolean {
-      return Boolean(this.item.name.match(this.$Config.regex.archive))
+      return this.item.type.includes('image')
     },
     /**
-     * @returns path inside textile bucket
+     * @returns {boolean} if item is archive file type
      */
-    path(): string {
-      return this.item instanceof Fil
-        ? this.$Config.textile.browser + this.item.hash
-        : ''
+    isArchive(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
   },
   methods: {
@@ -124,20 +118,21 @@ export default Vue.extend({
      * @description copy link to clipboard
      */
     async share() {
-      if (this.item instanceof Directory) {
-        this.$toast.show(this.$t('todo - share folders') as string)
-        return
-      }
-      if (!this.item.shared) {
-        this.$store.commit('ui/setIsLoadingFileIndex', true)
-        this.item.shareItem()
-        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
-      }
-      navigator.clipboard.writeText(this.path).then(() => {
-        this.$toast.show(this.$t('pages.files.link_copied') as string)
-      })
-      this.$emit('forceRender')
+      this.$toast.show(this.$t('todo - share') as string)
+      // if (this.item instanceof Directory) {
+      //   this.$toast.show(this.$t('todo - share folders') as string)
+      //   return
+      // }
+      // if (!this.item.shared) {
+      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
+      //   this.item.shareItem()
+      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
+      //   this.$emit('forceRender')
+      // }
+      // navigator.clipboard.writeText(this.path).then(() => {
+      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
+      // })
     },
     /**
      * @method rename

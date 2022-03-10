@@ -42,6 +42,7 @@ const strip = (e: any) => {
   let recess = 0
   const pieces = []
   let i = 0
+
   if (dv.getUint16(offset) === 0xffd8) {
     offset += 2
     let app1 = dv.getUint16(offset)

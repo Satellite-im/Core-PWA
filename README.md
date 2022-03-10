@@ -23,11 +23,27 @@ Currently, the only environment variable you need is a [Textile](https://www.tex
 
 ## Install Submodules
 
-Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android`, `electron`, and `cypress` submodules.
+Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android` and `electron` submodules.
 
 ## Running Locally
 
 To start running locally complete the Environment setup and then run `yarn dev`.
+
+## Running Cypress tests
+
+To run Cypress tests you need to do yarn dev in order to build out the localhost:3000, that's the one we use as the baseUrl
+
+When the localhost:3000 is running you can either use
+
+- `npx cypress open` - this will open the test runner and you can test all the tests in bulk or run a specific test
+
+or
+
+- `npx cypress run --browser chrome` - this will run the tests in the terminal
+
+if you want to run a specific test on terminal you can also use
+
+- `npx cypress run --spec "cypress/integration/test-name-here.js" --browser chrome`
 
 # Contributing
 
