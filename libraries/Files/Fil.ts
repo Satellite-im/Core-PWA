@@ -124,7 +124,7 @@ export class Fil extends Item {
 
   /**
    * @getter url
-   * @returns link of localally stored File for image preview and downloads
+   * @returns link of locally stored File for image preview and downloads
    */
   get url(): string {
     return this.file ? URL.createObjectURL(this.file) : ''
