@@ -1,0 +1,15 @@
+{
+  "fixturesFolder": false,
+  "supportFile": false,
+  "pluginsFile": false,
+  "baseUrl": "http://localhost:3000",
+  "integrationFolder": "cypress/integration/pair-chat",
+  "testFiles": "**/chat-second-user.js",
+  "defaultCommandTimeout": 15000,
+  "numTestsKeptInMemory": 0,
+  "pageLoadTimeout": 120000,
+  "watchForFileChanges": false,
+  "videosFolder": "cypress/videos-chat-pair/second-user",
+  "screenshotsFolder": "cypress/screenshots-chat-pair/second-user",
+  "$schema": "https://on.cypress.io/cypress.schema.json"
+}

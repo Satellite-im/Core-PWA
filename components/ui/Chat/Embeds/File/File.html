@@ -13,6 +13,7 @@
     :href="file.url"
     target="_blank"
     class="button is-primary"
+    data-cy="chat-file"
     v-if="!file.type.includes('image')"
   >
     <download-icon size="1x" class="download control-icon" />

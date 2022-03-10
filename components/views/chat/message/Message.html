@@ -37,6 +37,7 @@
       <MessageMarkdown
         :text="wrapEmoji(markdownToHtml(message.payload))"
         :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
+        :data-cy="`chat-message`"
       />
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
