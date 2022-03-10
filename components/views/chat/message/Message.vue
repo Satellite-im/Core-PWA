@@ -47,14 +47,9 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    setMessageHover: {
-      type: Function,
-      default: () => {},
-    },
   },
   data() {
     return {
-      messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
         { text: 'quickReaction', func: (this as any).quickReaction },
@@ -135,14 +130,6 @@ export default Vue.extend({
     },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
-    },
-    /**
-     * @method mouseOver DocsTODO
-     * @description
-     * @example
-     */
-    mouseOver() {
-      this.$data.messageHover = !this.$data.messageHover
     },
     /**
      * @method setReplyChatbarContent DocsTODO

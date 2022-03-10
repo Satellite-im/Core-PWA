@@ -68,9 +68,14 @@
     position: relative;
     word-break: break-word;
   }
-
-  .message-hover {
+  .message-actions{
+    display: none;
+  }
+  :hover {
     &:extend(.background-semitransparent-light);
+    .message-actions{
+      display: flex;
+    }
   }
   .glyph {
     width: 192px;

@@ -28,6 +28,11 @@ export default Vue.extend({
       showfull: false,
     }
   },
+  methods: {
+    clickHandler(event: MouseEvent): void {
+      this.showfull = !this.showfull
+    },
+  },
 })
 </script>
 <style scoped lang="less" src="./Image.less"></style>
