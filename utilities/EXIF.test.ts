@@ -8,7 +8,7 @@ describe('', () => {
       name: 'TestFile.png',
       hash: '0x0aef',
       size: 4337487,
-      descrption: 'Test file description',
+      description: 'Test file description',
     }
 
     const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
@@ -35,7 +35,7 @@ describe('', () => {
       name: 'TestFile.png',
       hash: '0x0aef',
       size: 4337487,
-      descrption: 'Test file description',
+      description: 'Test file description',
       type: 'image/jpeg',
     }
 

@@ -10,7 +10,7 @@ describe('Test FileSystem Directory', () => {
     size: 4235,
     liked: false,
     shared: false,
-    descrption: 'Test file description',
+    description: 'Test file description',
   }
 
   const mockDirectoryData = {

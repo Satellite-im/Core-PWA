@@ -8,7 +8,7 @@ const mockFileData = {
   name: 'TestFile.png',
   hash: '0x0aef',
   size: 42345,
-  descrption: 'Test file description',
+  description: 'Test file description',
 }
 
 const mockDirectoryData = {
