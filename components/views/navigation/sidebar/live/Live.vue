@@ -26,6 +26,7 @@ export default Vue.extend({
   },
   methods: {
     hangUp() {
+      if (!this.webrtc.activeCall) return
       const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
       peer?.call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
