@@ -13,16 +13,20 @@
       &:extend(.font-accent);
     }
   }
+  li {
+    font-family: @primary-font;
+    font-size: @text-size;
 
-  li + li::before {
-    &:extend(.font-primary);
+    + li::before {
+      &:extend(.font-primary);
+    }
+    &.is-active a {
+      &:extend(.font-muted);
+    }
+    &.disabled a {
+      cursor: not-allowed;
+    }
   }
-
-  li.is-active a {
-    &:extend(.font-muted);
-  }
-  font-family: @primary-font;
-  font-size: @text-size;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

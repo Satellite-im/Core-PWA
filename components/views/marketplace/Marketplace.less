@@ -1,10 +1,11 @@
-.market-place {
+.marketplace-wrapper {
   display: flex;
   height: @full;
   max-height: @full;
   overflow: hidden;
 
   .listing-panel {
+    max-width: 100%;
     max-height: 480px;
     height: 480px;
     margin-bottom: -@normal-spacing;
@@ -44,6 +45,32 @@
       margin: 24px 0px;
       display: flex;
       justify-content: center;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .marketplace-wrapper {
+    .listing-panel {
+      max-width: calc(100% - 2rem);
+      max-height: calc(100vh - 200px);
+      height: calc(100vh - 200px);
+      .listing {
+        display: block;
+        .item {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    .body-panel {
+      max-width: 100%;
+      padding: 1.5rem 1rem;
+      .top-bar {
+        margin-top: 2rem;
+        .close-button {
+          right: 3rem;
+        }
+      }
     }
   }
 }

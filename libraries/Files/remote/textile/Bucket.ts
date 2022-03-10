@@ -1,10 +1,4 @@
-import {
-  Buckets,
-  Path,
-  PushPathResult,
-  RemovePathResponse,
-  Root,
-} from '@textile/hub'
+import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
@@ -29,14 +23,6 @@ export class Bucket extends RFM implements RFMInterface {
 
   /**
    * @getter
-   * @returns textile data
-   */
-  get textile(): TextileInitializationData | null {
-    return this._textile
-  }
-
-  /**
-   * @getter
    * @returns file system export data
    */
   get index(): FileSystemExport | null {
@@ -46,7 +32,7 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method init
    * @description Initializes bucket
-   * @param param0 Bucket Configuration that includes id, password, SolanaWallet instance, and bucket name
+   * @param name bucket name
    * @returns a promise that resolves when the initialization completes
    */
   async init(name: string): Promise<FileSystemExport> {
@@ -57,22 +43,24 @@ export class Bucket extends RFM implements RFMInterface {
     this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
     await this.buckets.getToken(this._textile.identity)
 
-    const result = await this.buckets.getOrCreate(name)
+    const result = await this.buckets.getOrCreate(name, { encrypted: true })
 
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
 
     this.key = result.root.key
 
     try {
-      const path: Path | void = await this.buckets.listPath(
+      const data = []
+      for await (const bytes of this.buckets.pullPath(
         this.key,
         Config.textile.fsTable,
-      )
-
-      const hash = path?.item?.path
-
-      this._index = await fetch(Config.textile.browser + hash).then((res) =>
-        res.json(),
+      )) {
+        data.push(bytes)
+      }
+      this._index = JSON.parse(
+        await new Blob(data, {
+          type: 'application/json',
+        }).text(),
       )
 
       if (!this._index) throw new Error('Index not found')
@@ -104,6 +92,10 @@ export class Bucket extends RFM implements RFMInterface {
     )
   }
 
+  /**
+   * @method ipnsLink
+   * @returns {Promise<string>} ipns bucket link
+   */
   async ipnsLink(): Promise<string> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
@@ -113,7 +105,7 @@ export class Bucket extends RFM implements RFMInterface {
 
   /**
    * @method pushFile
-   * @description Remove file from bucket
+   * @description Add file to bucket
    * @param {File} file file to be uploaded
    * @returns Promise whether it was uploaded or not
    */
@@ -122,6 +114,25 @@ export class Bucket extends RFM implements RFMInterface {
       throw new Error('Bucket or bucket key not found')
     }
     return await this.buckets.pushPath(this.key, file.name, file)
+  }
+
+  /**
+   * @method pullFile
+   * @description fetch encrypted file from bucket
+   * @param {string} name file name
+   * @param {string} type file mime type
+   * @returns Promise of File
+   */
+  async pullFile(name: string, type: string): Promise<File | undefined> {
+    if (!this.buckets || !this.key) {
+      throw new Error('Bucket or bucket key not found')
+    }
+
+    const data = []
+    for await (const bytes of this.buckets.pullPath(this.key, name)) {
+      data.push(bytes)
+    }
+    return new File(data, name, { type: type || '' })
   }
 
   /**
