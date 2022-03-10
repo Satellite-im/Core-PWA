@@ -1,28 +1,33 @@
-it('Verify error when adding a wrong order passphrase', () => {
-  cy.visit('/')
-  cy.get('[data-cy=add-input]').type('test001', { log: false })
-  cy.get('[data-cy=submit-input]').click()
-  cy.contains('Import Account').click()
-  cy.get('[data-cy=add-passphrase]').type(
-    'over tilt regret diamond rubber example there fire roof sheriff always boring',
-    { log: false },
-  )
-  cy.get('[data-cy=add-passphrase]').type('{enter}')
-  cy.contains('Recover Account').click()
-  cy.contains(
-    'We were unable to verify your passphrase. Please check it and try again.',
-  ).should('be.visible')
-})
+const faker = require('faker')
+const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-it('Verify behavior when adding less than 12 words', () => {
-  cy.visit('/')
-  cy.get('[data-cy=add-input]').type('test001', { log: false })
-  cy.get('[data-cy=submit-input]').click()
-  cy.contains('Import Account').click()
-  cy.get('[data-cy=add-passphrase]').type(
-    'over tilt regret diamond rubber example there fire roof sheriff always',
-    { log: false },
-  )
-  cy.get('[data-cy=add-passphrase]').type('{enter}')
-  cy.get('.recover-account').should('be.disabled')
+describe('Import Account - Negative Tests', () => {
+  it('Verify error when adding a wrong order passphrase', () => {
+    cy.importAccountPINscreen(randomPIN)
+    cy.contains('Import Account', { timeout: 60000 }).click()
+    cy.get('[data-cy=add-passphrase]', { timeout: 30000 })
+      .should('be.visible')
+      .type(
+        'over tilt regret diamond rubber example there fire roof sheriff always boring{enter}',
+        { log: false },
+        { force: true },
+      )
+    cy.contains('Recover Account').click()
+    cy.contains(
+      'We were unable to verify your passphrase. Please check it and try again.',
+    ).should('be.visible')
+  })
+
+  it('Verify behavior when adding less than 12 words', () => {
+    cy.importAccountPINscreen(randomPIN)
+    cy.contains('Import Account', { timeout: 60000 }).click()
+    cy.get('[data-cy=add-passphrase]', { timeout: 30000 })
+      .should('be.visible')
+      .type(
+        'over tilt regret diamond rubber example there fire roof sheriff always{enter}',
+        { log: false },
+        { force: true },
+      )
+    cy.get('.recover-account').should('be.disabled')
+  })
 })
