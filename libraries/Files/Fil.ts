@@ -7,14 +7,17 @@ export class Fil extends Item {
   private _hash: string = ''
   private _description: string = ''
   private _size: number = 0
+  private _file: File | undefined
+  private _thumbnail: string
 
   /**
    * @constructor
-   * @param param0 Fil info - name, hash, size, liked, shared, description, type
+   * @param param0  name, file, hash, size, liked, shared, modified, description, type, thumbnail
    * @returns {Fil}
    */
   constructor({
     name,
+    file,
     hash,
     size,
     liked,
@@ -22,8 +25,10 @@ export class Fil extends Item {
     modified,
     description,
     type,
+    thumbnail,
   }: {
     name: string
+    file?: File
     hash: string
     size: number
     liked?: boolean
@@ -31,12 +36,15 @@ export class Fil extends Item {
     modified?: number
     description?: string
     type?: FILE_TYPE
+    thumbnail?: string
   }) {
     super({ name: name || 'un-named file', liked, shared, modified })
+    this._file = file || undefined
     this._description = description || ''
     this._hash = hash || ''
     this._size = size || 0
     this._type = type || FILE_TYPE.GENERIC
+    this._thumbnail = thumbnail || ''
   }
 
   /**
@@ -70,6 +78,7 @@ export class Fil extends Item {
   get copy(): Fil {
     return new Fil({
       name: `${this.name} copy`,
+      file: this._file,
       hash: this.hash,
       size: this.size,
       modified: this.modified,
@@ -77,6 +86,7 @@ export class Fil extends Item {
       shared: this.shared,
       description: this.description,
       type: this.type,
+      thumbnail: this.thumbnail,
     })
   }
 
@@ -94,6 +104,38 @@ export class Fil extends Item {
    */
   get modified(): number {
     return this.modifiedVal
+  }
+
+  /**
+   * @getter file
+   * @returns file object fetched from textile bucket
+   */
+  get file(): File | undefined {
+    return this._file
+  }
+
+  /**
+   * @setter file
+   * @param {File} file file object
+   */
+  set file(file: File | undefined) {
+    this._file = file
+  }
+
+  /**
+   * @getter url
+   * @returns link of locally stored File for image preview and downloads
+   */
+  get url(): string {
+    return this.file ? URL.createObjectURL(this.file) : ''
+  }
+
+  /**
+   * @getter url
+   * @returns link of localally stored File for image preview and downloads
+   */
+  get thumbnail(): string {
+    return this._thumbnail
   }
 
   /**

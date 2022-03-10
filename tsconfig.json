@@ -23,7 +23,7 @@
       "nuxt-i18n",
       "@nuxtjs/device",
       "@nuxtjs/toast",
-      "types/modules/satellite-lucide-icons.d.ts",
+      "types/modules",
       "jest"
     ]
   },

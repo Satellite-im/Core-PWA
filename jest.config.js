@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
-  setupFiles: ['jest-canvas-mock', 'dotenv/config'],
+  setupFiles: ['jest-canvas-mock', 'dotenv/config', './jest-setup.js'],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
@@ -39,5 +39,4 @@ module.exports = {
     'node_modules/(?!@mylibrary/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
-  setupFilesAfterEnv: ['./jest-setup.js'],
 }

@@ -27,14 +27,27 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      load: false as boolean,
+    }
+  },
   computed: {
     ...mapState(['ui']),
-    path(): string {
-      return this.$Config.textile.browser + this.file.hash
-    },
-    isImage(): boolean {
-      return Boolean(this.file.name.match(this.$Config.regex.image))
-    },
+  },
+  /**
+   * if no file data available, pull encrypted file from textile bucket and save as blob
+   */
+  async mounted() {
+    if (!this.file.file) {
+      this.load = true
+      const fsFile: Fil = this.$FileSystem.getChild(this.file.name) as Fil
+      fsFile.file = await this.$TextileManager.bucket?.pullFile(
+        this.file.name,
+        this.file.type,
+      )
+      this.load = false
+    }
   },
   methods: {
     /**
@@ -42,16 +55,17 @@ export default Vue.extend({
      * @description copy link to clipboard and toggle shared status
      */
     async share() {
-      if (!this.file.shared) {
-        this.$store.commit('ui/setIsLoadingFileIndex', true)
-        this.file.shareItem()
-        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
-      }
-      navigator.clipboard.writeText(this.path).then(() => {
-        this.$toast.show(this.$t('pages.files.link_copied') as string)
-      })
-      this.$emit('forceRender')
+      this.$toast.show(this.$t('todo - share') as string)
+      // if (!this.file.shared) {
+      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
+      //   this.file.shareItem()
+      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
+      // }
+      // navigator.clipboard.writeText(this.path).then(() => {
+      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
+      // })
+      // this.$emit('forceRender')
     },
   },
 })

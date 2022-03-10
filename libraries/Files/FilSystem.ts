@@ -147,8 +147,17 @@ export class FilSystem {
    */
   exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
-      const { name, liked, shared, type, hash, size, description, modified } =
-        item
+      const {
+        name,
+        liked,
+        shared,
+        type,
+        hash,
+        size,
+        description,
+        modified,
+        thumbnail,
+      } = item
       return {
         name,
         liked,
@@ -158,6 +167,7 @@ export class FilSystem {
         size,
         description,
         modified,
+        thumbnail,
       }
     }
     const { name, liked, shared, type, modified } = item
@@ -179,22 +189,30 @@ export class FilSystem {
    * @param {FileSystemExport} fs
    * @description sets global file system based on parameter. will be fetched from Bucket
    */
-  public import(fs: FileSystemExport) {
-    fs.content.forEach((item) => {
-      this.importChildren(item)
-    })
+  public async import(fs: FileSystemExport) {
+    for (const item of fs.content) {
+      await this.importChildren(item)
+    }
     this._version = fs.version
   }
 
   /**
    * @method importChildren
-   * @param {FileSystemExport} fs
+   * @param {ExportItem} item
    * @description recursively adds files and directories from JSON export
    */
-  public importChildren(item: ExportItem) {
+  public async importChildren(item: ExportItem) {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
-      const { name, hash, size, liked, shared, description, modified } =
-        item as ExportFile
+      const {
+        name,
+        hash,
+        size,
+        liked,
+        shared,
+        description,
+        modified,
+        thumbnail,
+      } = item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({
         name,
@@ -205,6 +223,7 @@ export class FilSystem {
         description,
         type,
         modified,
+        thumbnail,
       })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
@@ -213,9 +232,9 @@ export class FilSystem {
       const type = item.type as DIRECTORY_TYPE
       this.createDirectory({ name, liked, shared, type, modified })
       this.openDirectory(name)
-      children.forEach((item: ExportItem) => {
-        this.importChildren(item)
-      })
+      for (const item of children) {
+        await this.importChildren(item)
+      }
       this.goBack()
     }
   }
@@ -227,6 +246,7 @@ export class FilSystem {
    */
   public createFile({
     name,
+    file,
     hash,
     size,
     liked,
@@ -234,8 +254,10 @@ export class FilSystem {
     description,
     type,
     modified,
+    thumbnail,
   }: {
     name: string
+    file?: File
     hash: string
     size: number
     liked?: boolean
@@ -243,9 +265,11 @@ export class FilSystem {
     description?: string
     type?: FILE_TYPE
     modified?: number
+    thumbnail?: string
   }): Fil | null {
     const newFile = new Fil({
       name,
+      file,
       hash,
       size,
       liked,
@@ -253,6 +277,7 @@ export class FilSystem {
       description,
       type,
       modified,
+      thumbnail,
     })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
@@ -296,7 +321,7 @@ export class FilSystem {
    * @argument {string} childName name of the child to fetch
    * @returns {Directory | Item} returns directory or Fil
    */
-  public getChild(childName: string): Directory | Item {
+  public getChild(childName: string): Item {
     return this.currentDirectory.getChild(childName)
   }
 

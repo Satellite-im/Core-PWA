@@ -34,17 +34,6 @@ describe('Test FileSystem Directory', () => {
 
     expect(ex.version + 1).toEqual(fs.export.version)
   })
-  it('get uninitialized textile', () => {
-    const initializationData = {
-      identity: 'Identity',
-      client: 'Client',
-      users: 'Users',
-      wallet: 'SolanaWallet',
-    }
-    const bucket = new Bucket(initializationData)
-
-    expect(bucket.textile).toBe(initializationData)
-  })
   it('get uninitialized index', () => {
     const initializationData = {
       identity: 'Identity',

@@ -13,10 +13,12 @@
       >
         <archive-icon size="1x" />
       </div>
+      <UiLoadersSpinner v-if="load" class="control disabled" spinning />
       <a
+        v-else
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="path"
+        :href="file.url"
         target="_blank"
         :download="file.name"
       >
@@ -39,16 +41,15 @@
       </div>
     </div>
   </div>
-  <img
-    v-if="isImage && file.size < $Config.uploadByteLimit"
-    class="file-image"
-    :src="path"
-  />
+  <img v-if="file.thumbnail" class="file-image" :src="file.thumbnail" />
   <div v-else class="no-preview">
+    <UiLoadersSpinner v-if="load" class="file-icon" spinning />
     <a
+      v-else
       :data-tooltip="$t('controls.download')"
       class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :href="path"
+      :class="{'disabled' : load}"
+      :href="file.url"
       target="_blank"
       :download="file.name"
     >
