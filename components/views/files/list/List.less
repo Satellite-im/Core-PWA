@@ -1,63 +1,26 @@
 .table {
-  thead {
-    th {
-      &:extend(.font-secondary);
-      border-bottom-width: 1px;
-      border-bottom-color: @text-muted;
-    }
-  }
-
-  tr {
-    td {
-      &:extend(.font-primary);
-      border-bottom-color: @foreground;
-    }
-  }
-
-  .centered {
-    text-align: center;
-  }
-
-  .icon {
-    width: 30px;
-  }
-
-  .filename {
-    font-family: @primary-font;
-    cursor: pointer;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-  .sort {
-    font-size: 9pt;
-    cursor: pointer;
-  }
-
-  .options {
-    cursor: pointer;
-  }
-
-  .feather-folder {
-    &:extend(.font-orange);
-  }
-
-  .feather-image {
-    color: @jade;
-  }
-
-  .feather-archive {
-    &:extend(.color-danger);
-  }
-
-  .feather-file {
-    &:extend(.font-pink);
-  }
+  cursor: pointer;
   &:extend(.full-width);
   font-size: @text-size;
   background: transparent;
-  margin: 0;
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  th {
+    &:extend(.font-secondary);
+    border-bottom-width: 1px;
+    border-bottom-color: @text-muted;
+
+    &:first-of-type {
+      padding-left: @xlarge-spacing;
+    }
+
+    svg {
+      font-size: 9pt;
+    }
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

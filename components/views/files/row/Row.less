@@ -1,0 +1,21 @@
+tr {
+  td {
+    &:extend(.font-primary);
+    border-bottom-color: @foreground;
+    vertical-align: middle;
+
+    &.filename {
+      font-family: @primary-font;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 200px;
+
+      svg {
+        color: @primary-color;
+        width: 1em;
+        height: 1em;
+      }
+    }
+  }
+}
