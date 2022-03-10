@@ -2,7 +2,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
+import {
+  FolderPlusIcon,
+  FilePlusIcon,
+  AlertTriangleIcon,
+  XIcon,
+} from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/Heic'
 const convert = require('heic-convert')
 
@@ -10,6 +15,8 @@ export default Vue.extend({
   components: {
     FolderPlusIcon,
     FilePlusIcon,
+    AlertTriangleIcon,
+    XIcon,
   },
   // todo - best practice would be emitting rather than passing function as a prop - AP-639
   props: {
