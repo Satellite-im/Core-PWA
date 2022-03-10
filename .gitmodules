@@ -8,8 +8,3 @@
 	url = https://github.com/Satellite-im/electron.git
 	ignore = all
 	branch = master
-[submodule "cypress"]
-	path = cypress
-	url = https://github.com/Satellite-im/cypress
-	ignore = all
-	branch = main
