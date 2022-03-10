@@ -1,6 +1,7 @@
 <template src="./List.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   FilterIcon,
   FolderIcon,
@@ -11,6 +12,7 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
+
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
@@ -45,6 +47,9 @@ export default Vue.extend({
       timer: null,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   mounted() {
     this.$data.timer = setInterval(
       this.forceRender,
@@ -70,6 +75,9 @@ export default Vue.extend({
      */
     forceRender() {
       this.$emit('forceRender')
+    },
+    sort() {
+      this.$toast.show(this.$t('todo - sort') as string)
     },
   },
 })
