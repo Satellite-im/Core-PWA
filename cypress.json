@@ -7,6 +7,6 @@
   "env": {
     "cypress-plugin-snapshots": {
       "serverEnabled": false
-    } 
+    }
   }
 }
