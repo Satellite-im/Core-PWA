@@ -65,6 +65,7 @@ export default Vue.extend({
       searchList: [] as Array<string | Object>,
       isFocus: false,
       browseIndex: -1,
+      mouseMove: false,
     }
   },
   watch: {
@@ -112,6 +113,12 @@ export default Vue.extend({
       this.isFocus = false
       this.searchText = ''
     },
+    parentOver(ev: MouseEvent) {
+      this.mouseMove = true
+    },
+    parentLeave(ev: MouseEvent) {
+      this.mouseMove = false
+    },
     onMultipleItemSelected(items: any) {
       this.$emit('onMultipleSelected', items)
       this.isFocus = false
@@ -119,12 +126,14 @@ export default Vue.extend({
     },
     onUpBrowseItem(event: KeyboardEvent) {
       event.preventDefault()
+      this.mouseMove = false
       if (this.browseIndex > 0) {
         this.browseIndex--
       }
     },
     onDownBrowseItem(event: KeyboardEvent) {
       event.preventDefault()
+      this.mouseMove = false
       if (this.browseIndex < this.searchList.length - 1) {
         this.browseIndex++
       }

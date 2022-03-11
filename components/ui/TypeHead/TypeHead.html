@@ -15,7 +15,12 @@
     v-on:keydown.down="onDownBrowseItem"
   />
   <div v-if="isFocus && searchList.length" class="search-options">
-    <ul class="search-option-group">
+    <ul
+      :class="`${mouseMove ? 'allow-hover' : 'unallow-hover'}`"
+      class="search-option-group"
+      @mouseover="parentOver"
+      @mouseleave="parentLeave"
+    >
       <li
         v-for="(item, i) in searchList"
         :class="{'active': i === browseIndex}"

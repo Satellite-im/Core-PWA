@@ -35,3 +35,21 @@
     }
   }
 }
+
+.unallow-hover {
+  li:hover {
+    background: none !important;
+    box-shadow: none !important;
+  }
+  li.active {
+    background: var(--flair-color) !important;
+    box-shadow: 0 5px 14px -5px var(--flair-color) !important;
+  }
+}
+
+.allow-hover {
+  li.active {
+    background: none !important;
+    box-shadow: none !important;
+  }
+}
