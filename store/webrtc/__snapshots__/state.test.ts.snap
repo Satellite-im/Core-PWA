@@ -6,7 +6,7 @@ Object {
   "activeStream": Object {
     "createdAt": 0,
   },
-  "connectedPeer": "",
+  "connectedPeers": Array [],
   "incomingCall": "",
   "initialized": false,
   "localTracks": Object {

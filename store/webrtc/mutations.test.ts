@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as WebRTC from '~/store/webrtc/mutations'
 
 describe('Mutate WebRTC by setting', () => {
@@ -7,7 +8,7 @@ describe('Mutate WebRTC by setting', () => {
       initialized: true,
       incomingCall: '',
       activeCall: '',
-      connectedPeer: '',
+      connectedPeers: [],
       streaming: true,
       activeStream: {
         createdAt: 123,
@@ -132,12 +133,12 @@ describe('Mutate WebRTC by setting', () => {
     })
   })
 
-  it('should set connected peer', () => {
+  it('should set connected peers', () => {
     const localStateForUnitTest = { ...state }
-    inst.setConnectedPeer(localStateForUnitTest, '0x0')
+    inst.setAllConnectedPeers(localStateForUnitTest, ['0x0', '0x1', '0x2'])
 
     expect(localStateForUnitTest).toMatchObject({
-      connectedPeer: '0x0',
+      connectedPeers: ['0x0', '0x1', '0x2'],
     })
   })
 })
@@ -149,7 +150,7 @@ describe('Mutate WebRTC by updating', () => {
       initialized: true,
       incomingCall: '',
       activeCall: '',
-      connectedPeer: '',
+      connectedPeers: [],
       streaming: true,
       activeStream: {
         createdAt: 123,

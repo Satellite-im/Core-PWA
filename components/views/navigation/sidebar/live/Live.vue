@@ -41,9 +41,9 @@ export default Vue.extend({
       )
       if (!activeFriend) return
       const identifier = activeFriend.address
-      if (!this.webrtc.connectedPeer) {
+      if (!this.webrtc.connectedPeers.includes(identifier)) {
         await this.$store.dispatch('webrtc/createPeerConnection', identifier)
-        if (!this.webrtc.connectedPeer) return
+        if (!this.webrtc.connectedPeers.includes(identifier)) return
       }
       // Trying to call the same user while call is already active
       if (identifier === this.$store.state.webrtc.activeCall) {

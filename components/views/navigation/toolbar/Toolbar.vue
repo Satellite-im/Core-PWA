@@ -73,6 +73,15 @@ export default Vue.extend({
         return this.ui.showSearchResult
       },
     },
+    enableRTC(): boolean {
+      const activeFriend = this.$Hounddog.getActiveFriend(
+        this.$store.state.friends,
+      )
+      if (activeFriend) {
+        return this.webrtc.connectedPeers.includes(activeFriend.address)
+      }
+      return false
+    },
     searchQuery: {
       set(state) {
         this.$store.commit('search/setSearchQuery', state)
@@ -134,16 +143,16 @@ export default Vue.extend({
       this.$store.dispatch('ui/showProfile', this.user)
     },
     async call(kinds: TrackKind[]) {
-      if (!this.webrtc.connectedPeer) return
+      if (!this.webrtc.connectedPeers) return
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
       if (!activeFriend) return
       const identifier = activeFriend.address
 
-      if (!this.webrtc.connectedPeer) {
+      if (!this.webrtc.connectedPeers.includes(identifier)) {
         await this.$store.dispatch('webrtc/createPeerConnection', identifier)
-        if (!this.webrtc.connectedPeer) return
+        if (!this.webrtc.connectedPeers.includes(identifier)) return
       }
 
       // Trying to call the same user while call is already active

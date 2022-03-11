@@ -20,6 +20,21 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'webrtc', 'friends']),
   },
+  methods: {
+    /**
+     * @method friendConnected
+     * @description Send the user ID/address in, get a boolean of it the signal is currently open
+     * @param friendId Address of the current user
+     * @example
+     * friendConnected('user1') // true
+     */
+    friendConnected(friendId: string): boolean {
+      if (this.webrtc) {
+        return this.webrtc.connectedPeers.includes(friendId)
+      }
+      return false
+    },
+  },
 })
 </script>
 

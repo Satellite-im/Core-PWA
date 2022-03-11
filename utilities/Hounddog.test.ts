@@ -231,7 +231,7 @@ describe('Retrieve WebRTC calls with success', () => {
       initialized: true,
       incomingCall: '',
       activeCall: '',
-      connectedPeer: '',
+      connectedPeers: [],
       streaming: true,
       activeStream: {
         createdAt: 123,
@@ -366,7 +366,7 @@ describe('Retrieve WebRTC calls with failure', () => {
       initialized: true,
       incomingCall: '',
       activeCall: '',
-      connectedPeer: '',
+      connectedPeers: [],
       streaming: true,
       activeStream: {
         createdAt: 123,
