@@ -52,7 +52,7 @@ export interface FriendAccount {
   accountId: string
   from: string
   status: number
-  to: string
   fromMailboxId: string
   toMailboxId: string
+  to: string
 }

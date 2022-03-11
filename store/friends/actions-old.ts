@@ -1,10 +1,6 @@
-import PeerId from 'peer-id'
-import { keys } from 'libp2p-crypto'
 import { PublicKey } from '@solana/web3.js'
-
 import Vue from 'vue'
 import { DataStateType } from '../dataState/types'
-import { TextileError } from '../textile/types'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
@@ -13,13 +9,14 @@ import {
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
+import FriendsProgram from '~/libraries/Solana/FriendsProgramOld/FriendsProgram'
+import FriendsProgramEx from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 
 import {
   FriendAccount,
   FriendsEvents,
   FriendStatus,
-} from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
+} from '~/libraries/Solana/FriendsProgramOld/FriendsProgram.types'
 import { AccountsError } from '~/store/accounts/types'
 import {
   Friend,
@@ -32,46 +29,8 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 import UsersProgram, {
   UserInfo,
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
-import { MetadataManager } from '~/libraries/Textile/MetadataManager'
-import { FriendMetadata } from '~/types/textile/metadata'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
-  async initialize({
-    dispatch,
-    commit,
-    state,
-  }: ActionsArguments<FriendsState>) {
-    const $Hounddog = Vue.prototype.$Hounddog
-
-    commit(
-      'dataState/setDataState',
-      { key: 'friends', value: DataStateType.Loading },
-      { root: true },
-    )
-
-    const friends = await db.friends.toArray()
-    db.search.friends.update(friends)
-    friends.forEach((friend) => {
-      const friendExists = $Hounddog.friendExists(state, friend)
-
-      if (!friendExists) {
-        commit('addFriend', { ...friend, stored: true })
-        return
-      }
-      commit('updateFriend', { ...friend, stored: true })
-    })
-
-    commit(
-      'dataState/setDataState',
-      { key: 'friends', value: DataStateType.Ready },
-      { root: true },
-    )
-
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
-  },
   /**
    * @method fetchFriendRequests DocsTODO
    * @description
@@ -85,9 +44,8 @@ export default {
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
-      FriendStatus.PENDING,
-    )
+    const { incoming, outgoing } =
+      await friendsProgram.getFriendAccountsByStatus(FriendStatus.PENDING)
 
     const incomingRequests = await Promise.all(
       incoming.map(async (account) => {
@@ -121,17 +79,14 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
-      FriendStatus.ACCEPTED,
-    )
+    const { incoming, outgoing } =
+      await friendsProgram.getFriendAccountsByStatus(FriendStatus.ACCEPTED)
 
     const allFriendsData = [...incoming, ...outgoing]
 
-    await Promise.all(
-      allFriendsData.map(async (friendData) => {
-        dispatch('fetchFriendDetails', friendData)
-      }),
-    )
+    allFriendsData.forEach((friendData) => {
+      dispatch('fetchFriendDetails', friendData)
+    })
 
     // // Attempt RTC Connection to all friends
     // // TODO: We should probably only try to connect to friends we're actually chatting with
@@ -154,7 +109,6 @@ export default {
     { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount,
   ) {
-    // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
@@ -182,13 +136,6 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
-    const peerId = await PeerId.createFromPubKey(
-      keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
-        new PublicKey(friendKey).toBytes(),
-      ).bytes,
-    )
-
-    const stored = state.all.some((friend) => friend.address === friendKey)
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
       name: userInfo.name,
@@ -198,17 +145,20 @@ export default {
       textilePubkey,
       item: {},
       pending: false,
-      stored,
+      activeChat: false,
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
-      peerId: peerId.toB58String(),
     }
+
     const $Hounddog = Vue.prototype.$Hounddog
     const friendExists = $Hounddog.friendExists(state, friend)
 
     if (!friendExists) {
       commit('addFriend', friend)
+
+      // Try create the webrtc connection
+      dispatch('webrtc/createPeerConnection', friend.address, { root: true })
 
       // Eventually delete the related friend request
       commit(
@@ -219,104 +169,9 @@ export default {
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(friendAccount, null).requestId,
       )
-      dispatch('syncFriendIDB', friend)
       return
     }
-
     commit('updateFriend', friend)
-    dispatch('syncFriendIDB', friend)
-
-    // Try update the webrtc connection
-    if (rootState.textile.activeConversation === friendKey) {
-      dispatch(
-        'conversation/setConversation',
-        {
-          id: friend.peerId,
-          type: 'friend',
-          participants: [],
-        },
-        { root: true },
-      )
-      dispatch('conversation/addParticipant', friend.address, { root: true })
-      return
-    }
-    commit(
-      'conversation/updateParticipant',
-      {
-        address: friend.address,
-        peerId: friend.peerId,
-      },
-      { root: true },
-    )
-  },
-  /**
-   * @method syncFriendIDB sync a friend with the local indexedDB
-   * @param arguments AccountArguments (dispatch)
-   * @param friend Friend
-   * @returns void
-   */
-  async syncFriendIDB(
-    { commit }: ActionsArguments<FriendsState>,
-    friend: Friend,
-  ) {
-    const record = {
-      address: friend.address,
-      name: friend.name,
-      photoHash: friend.photoHash,
-      textilePubkey: friend.textilePubkey,
-      lastUpdate: friend.lastUpdate,
-    }
-    db.search.friends.add(record)
-    if (
-      (await db.friends.where('address').equals(friend.address).count()) === 0
-    ) {
-      await db.friends.add(record)
-    }
-    await db.friends.update(record.address, record)
-
-    // update stored state
-    commit('friends/setStored', friend, { root: true })
-  },
-
-  /**
-   * @description Update a metadata to a given friend
-   * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address and metadata
-   */
-  async updateFriendMetadata(
-    { commit, rootState, dispatch }: ActionsArguments<FriendsState>,
-    { to, metadata }: { to: string; metadata: FriendMetadata },
-  ) {
-    const friend = rootState.friends.all.find((fr) => fr.address === to)
-
-    if (!friend) {
-      throw new Error(TextileError.FRIEND_NOT_FOUND)
-    }
-    const updatedFriend = {
-      ...friend,
-      metadata,
-    }
-    commit('friends/updateFriend', updatedFriend, { root: true })
-    if (rootState.ui.userProfile) {
-      const userProfile: Friend = rootState.ui.userProfile as Friend
-      if (userProfile.address === to) {
-        commit('ui/setUserProfile', updatedFriend, { root: true })
-      }
-    }
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    if (!$TextileManager.metadataManager) {
-      throw new Error(TextileError.METADATA_MANAGER_NOT_FOUND)
-    }
-    const $MetadataManager: MetadataManager = $TextileManager.metadataManager
-    friend.metadata = metadata
-    await $MetadataManager.updateFriendMetadata({ to, metadata })
-  },
-  setFriendState(
-    { commit }: ActionsArguments<FriendsState>,
-    { address, state }: { address: string; state: string },
-  ) {
-    commit('friends/updateFriend', { address, state }, { root: true })
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO
@@ -377,22 +232,13 @@ export default {
       },
     )
 
-    friendsProgram.addEventListener(
-      FriendsEvents.FRIEND_REMOVED,
-      async (account) => {
-        if (account) {
-          const address =
-            rootState.accounts.active === account.from
-              ? account.to
-              : account.from
-          commit('removeFriend', address)
-          if (this.app.router.currentRoute?.params?.address === address) {
-            this.app.router.replace('/chat/direct')
-          }
-          await db.friends.where('address').equals(address).delete()
-        }
-      },
-    )
+    friendsProgram.addEventListener(FriendsEvents.FRIEND_REMOVED, (account) => {
+      if (account) {
+        const address =
+          rootState.accounts.active === account.from ? account.to : account.from
+        commit('removeFriend', address)
+      }
+    })
   },
   /**
    * @method createFriendRequest DocsTODO
@@ -540,12 +386,6 @@ export default {
 
     const friendFromKey = friendRequest.account.from
 
-    const friendCheck = await friendsProgram.getParsedFriend(
-      computedFriendAccountKey,
-    )
-    if (friendCheck?.status === 2) {
-      return
-    }
     // Initialize current recipient for encryption
     await $Crypto.initializeRecipient(new PublicKey(friendFromKey))
 
@@ -659,7 +499,7 @@ export default {
    * @example
    */
   async removeFriend(
-    { commit, rootState }: ActionsArguments<FriendsState>,
+    { commit }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -672,7 +512,7 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { account, address } = friend
+    const { account } = friend
 
     const transactionId = await friendsProgram.removeFriend(
       account,
@@ -681,10 +521,6 @@ export default {
 
     if (transactionId) {
       commit('removeFriend', friend.address)
-      if (this.app.router.currentRoute?.params?.address === friend.address) {
-        this.app.router.replace('/chat/direct')
-      }
-      await db.friends.where('address').equals(address).delete()
     }
   },
 }
@@ -725,9 +561,4 @@ function friendAccountToOutgoingRequest(
     pending: false,
     userInfo,
   }
-}
-
-export const exportForTesting = {
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
 }

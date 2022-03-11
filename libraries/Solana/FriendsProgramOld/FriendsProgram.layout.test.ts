@@ -1,4 +1,4 @@
-import * as FriendsProgramLayout from '~/libraries/Solana/FriendsProgram/FriendsProgram.layout'
+import * as FriendsProgramLayout from '~/libraries/Solana/FriendsProgramOld/FriendsProgram.layout'
 
 describe('FriendsProgramLayout.encodeInstructionData', () => {
   test('0', () => {

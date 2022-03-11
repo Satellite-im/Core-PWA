@@ -6,7 +6,7 @@ import { ProgramAccountInfo } from '~/types/solana/solana'
 import {
   FriendAccount,
   FriendsInstructionType,
-} from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
+} from '~/libraries/Solana/FriendsProgramOld/FriendsProgram.types'
 
 /// Address type input
 const ADDRESS_TYPE_INPUT = BufferLayout.union(BufferLayout.u8('addressType'))
