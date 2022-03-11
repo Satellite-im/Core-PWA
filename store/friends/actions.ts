@@ -1,8 +1,30 @@
-import PeerId from 'peer-id'
-import { keys } from 'libp2p-crypto'
 import { PublicKey } from '@solana/web3.js'
-
+import { keys } from 'libp2p-crypto'
+import PeerId from 'peer-id'
 import Vue from 'vue'
+import Crypto from '~/libraries/Crypto/Crypto'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
+import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
+import {
+  FriendAccount,
+  FriendsEvents,
+  FriendStatus,
+} from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram, {
+  UserInfo,
+} from '~/libraries/Solana/UsersProgram/UsersProgram'
+import { MetadataManager } from '~/libraries/Textile/MetadataManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { AccountsError } from '~/store/accounts/types'
+import { ActionsArguments } from '~/types/store/store'
+import { FriendMetadata } from '~/types/textile/metadata'
+import {
+  Friend,
+  FriendRequest,
+  IncomingRequest,
+  OutgoingRequest,
+} from '~/types/ui/friends'
 import { DataStateType } from '../dataState/types'
 import { TextileError } from '../textile/types'
 import {
@@ -11,30 +33,6 @@ import {
   FriendsError,
   FriendsState,
 } from './types'
-import Crypto from '~/libraries/Crypto/Crypto'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
-
-import {
-  FriendAccount,
-  FriendsEvents,
-  FriendStatus,
-} from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import { AccountsError } from '~/store/accounts/types'
-import {
-  Friend,
-  FriendRequest,
-  IncomingRequest,
-  OutgoingRequest,
-} from '~/types/ui/friends'
-import { ActionsArguments } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import UsersProgram, {
-  UserInfo,
-} from '~/libraries/Solana/UsersProgram/UsersProgram'
-import { MetadataManager } from '~/libraries/Textile/MetadataManager'
-import { FriendMetadata } from '~/types/textile/metadata'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
   async initialize({
@@ -85,9 +83,8 @@ export default {
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
-      FriendStatus.PENDING,
-    )
+    const { incoming, outgoing } =
+      await friendsProgram.getFriendAccountsByStatus(FriendStatus.PENDING)
 
     const incomingRequests = await Promise.all(
       incoming.map(async (account) => {
@@ -121,9 +118,8 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
-      FriendStatus.ACCEPTED,
-    )
+    const { incoming, outgoing } =
+      await friendsProgram.getFriendAccountsByStatus(FriendStatus.ACCEPTED)
 
     const allFriendsData = [...incoming, ...outgoing]
 
@@ -335,7 +331,7 @@ export default {
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    friendsProgram.subscribeToFriendsEvents()
+    friendsProgram.subscribeToEvents()
 
     friendsProgram.addEventListener(
       FriendsEvents.NEW_REQUEST,
@@ -405,6 +401,7 @@ export default {
     { commit }: ActionsArguments<FriendsState>,
     { friendToKey }: CreateFriendRequestArguments,
   ) {
+    console.log('friendrequest')
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -416,57 +413,20 @@ export default {
       throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
     }
 
-    const payerAccount = await $SolanaManager.getActiveAccount()
-
-    if (!payerAccount) {
-      throw new Error(AccountsError.PAYER_NOT_PRESENT)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const friendAccountKey = await friendsProgram.computeFriendAccountKey(
-      payerAccount.publicKey,
-      friendToKey,
+    const friendRequestKey = await friendsProgram.requestKey(friendToKey)
+
+    let friendAccountInfo = await friendsProgram.getFriendAccount(
+      friendRequestKey,
     )
-
-    let friendAccountInfo = await friendsProgram.getFriend(friendAccountKey)
-
-    const friendAccountMirroredKey =
-      await friendsProgram.computeFriendAccountKey(
-        friendToKey,
-        payerAccount.publicKey,
-      )
-
-    let friendAccountMirroredInfo = await friendsProgram.getFriend(
-      friendAccountMirroredKey,
-    )
-
-    if (!friendAccountInfo) {
-      friendAccountInfo = await friendsProgram.createFriend(
-        payerAccount.publicKey,
-        friendToKey,
-      )
-    }
-
-    if (!friendAccountMirroredInfo) {
-      friendAccountMirroredInfo = await friendsProgram.createFriend(
-        friendToKey,
-        payerAccount.publicKey,
-      )
-    }
-
-    if (
-      friendAccountInfo.status === FriendStatus.PENDING ||
-      friendAccountMirroredInfo.status === FriendStatus.PENDING
-    ) {
-      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
-    }
-
-    if (
-      friendAccountInfo.status === FriendStatus.ACCEPTED ||
-      friendAccountMirroredInfo.status === FriendStatus.ACCEPTED
-    ) {
-      throw new Error(FriendsError.REQUEST_ALREADY_ACCEPTED)
+    if (friendAccountInfo) {
+      if (friendAccountInfo.status === FriendStatus.PENDING) {
+        throw new Error(FriendsError.REQUEST_ALREADY_SENT)
+      }
+      if (friendAccountInfo.status === FriendStatus.ACCEPTED) {
+        throw new Error(FriendsError.REQUEST_ALREADY_ACCEPTED)
+      }
     }
 
     // Initialize current recipient for encryption
@@ -478,26 +438,16 @@ export default {
       textilePublicKey,
     )
 
-    const transactionHash = await friendsProgram.createFriendRequest(
-      friendAccountKey,
-      friendAccountMirroredKey,
-      payerAccount,
-      friendToKey,
-      Buffer.from(encryptedTextilePublicKey.padStart(128, '0')),
-    )
+    await friendsProgram.makeRequest(friendToKey, encryptedTextilePublicKey)
 
-    if (transactionHash) {
-      const parsedFriendRequest = await friendsProgram.getParsedFriend(
-        friendAccountKey,
+    friendAccountInfo = await friendsProgram.getFriendAccount(friendRequestKey)
+
+    if (friendAccountInfo) {
+      const userInfo = await usersProgram.getUserInfo(friendAccountInfo.to)
+      commit(
+        'addOutgoingRequest',
+        friendAccountToOutgoingRequest(friendAccountInfo, userInfo),
       )
-
-      if (parsedFriendRequest) {
-        const userInfo = await usersProgram.getUserInfo(parsedFriendRequest.to)
-        commit(
-          'addOutgoingRequest',
-          friendAccountToOutgoingRequest(parsedFriendRequest, userInfo),
-        )
-      }
     }
   },
   /**
@@ -521,22 +471,14 @@ export default {
       throw new Error(FriendsError.TEXTILE_NOT_INITIALIZED)
     }
 
-    const payerAccount = await $SolanaManager.getActiveAccount()
-
-    if (!payerAccount) {
-      throw new Error(AccountsError.PAYER_NOT_PRESENT)
-    }
-
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
     const { account } = friendRequest
 
-    const computedFriendAccountKey =
-      await friendsProgram.computeFriendAccountKey(
-        new PublicKey(account.from),
-        payerAccount.publicKey,
-      )
+    const friendAccountKey = await friendsProgram.requestKey(
+      new PublicKey(account.from),
+    )
 
     const friendFromKey = friendRequest.account.from
 
@@ -555,16 +497,12 @@ export default {
       textilePublicKey,
     )
 
-    const transactionId = await friendsProgram.acceptFriendRequest(
-      computedFriendAccountKey,
-      new PublicKey(account.from),
-      payerAccount,
-      Buffer.from(encryptedIdentityPublicKey.padStart(128, '0')),
+    await friendsProgram.acceptRequest(
+      friendAccountKey,
+      encryptedIdentityPublicKey,
     )
 
-    if (transactionId) {
-      dispatch('fetchFriendDetails', account)
-    }
+    dispatch('fetchFriendDetails', account)
   },
   /**
    * @method denyFriendRequest DocsTODO
@@ -590,24 +528,16 @@ export default {
 
     const { account } = friendRequest
 
-    const computedFriendAccountKey =
-      await friendsProgram.computeFriendAccountKey(
-        new PublicKey(account.from),
-        payerAccount.publicKey,
-      )
-
-    const transactionId = await friendsProgram.denyFriendRequest(
-      computedFriendAccountKey,
+    const friendAccountKey = await friendsProgram.requestKey(
       new PublicKey(account.from),
-      payerAccount,
     )
 
-    if (transactionId) {
-      commit(
-        'removeIncomingRequest',
-        friendAccountToIncomingRequest(account, null).requestId,
-      )
-    }
+    await friendsProgram.denyRequest(friendAccountKey)
+
+    commit(
+      'removeIncomingRequest',
+      friendAccountToIncomingRequest(account, null).requestId,
+    )
   },
   /**
    * @method removeFriendRequest DocsTODO
@@ -633,24 +563,16 @@ export default {
 
     const { account } = friendRequest
 
-    const computedFriendAccountMirroredKey =
-      await friendsProgram.computeFriendAccountKey(
-        payerAccount.publicKey,
-        new PublicKey(account.to),
-      )
-
-    const transactionId = await friendsProgram.removeFriendRequest(
-      computedFriendAccountMirroredKey,
-      payerAccount,
+    const friendAccountKey = await friendsProgram.requestKey(
       new PublicKey(account.to),
     )
 
-    if (transactionId) {
-      commit(
-        'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(account, null).requestId,
-      )
-    }
+    await friendsProgram.removeRequest(friendAccountKey)
+
+    commit(
+      'removeOutgoingRequest',
+      friendAccountToOutgoingRequest(account, null).requestId,
+    )
   },
   /**
    * @method removeFriend DocsTODO
@@ -659,7 +581,7 @@ export default {
    * @example
    */
   async removeFriend(
-    { commit, rootState }: ActionsArguments<FriendsState>,
+    { commit }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -674,18 +596,13 @@ export default {
 
     const { account, address } = friend
 
-    const transactionId = await friendsProgram.removeFriend(
-      account,
-      payerAccount,
-    )
+    await friendsProgram.removeFriend(new PublicKey(account.accountId))
 
-    if (transactionId) {
-      commit('removeFriend', friend.address)
-      if (this.app.router.currentRoute?.params?.address === friend.address) {
-        this.app.router.replace('/chat/direct')
-      }
-      await db.friends.where('address').equals(address).delete()
+    commit('removeFriend', friend.address)
+    if (this.app.router.currentRoute?.params?.address === friend.address) {
+      this.app.router.replace('/chat/direct')
     }
+    await db.friends.where('address').equals(address).delete()
   },
 }
 
