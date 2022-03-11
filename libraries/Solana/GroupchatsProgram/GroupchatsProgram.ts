@@ -342,11 +342,11 @@ export default class GroupchatsProgram extends EventEmitter {
    * @param groupId {string} group id
    * @returns Promise<User[]>
    */
-  async getGroupUsers(groupId: string): Promise<PublicKey[]> {
+  async getGroupUsers(groupId: string): Promise<string[]> {
     const inviteAccounts = await this.getInvitationAccounts({
       groupKey: this.getGroupAddressById(groupId),
     })
-    return inviteAccounts.map((it) => it.account.recipient)
+    return inviteAccounts.map((it) => it.account.recipient.toBase58())
   }
 
   protected buildEventFilter(

@@ -5,6 +5,7 @@ import { DataState } from '~/store/dataState/types'
 import { FriendsState } from '~/store/friends/types'
 import { TextileState } from '~/store/textile/types'
 import { WebRTCState } from '~/store/webrtc/types'
+import { GroupsState } from '~/store/groups/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -12,6 +13,7 @@ export interface RootState {
   friends: FriendsState
   textile: TextileState
   webrtc: WebRTCState
+  groups: GroupsState
 }
 
 export type RootStore = Store<RootState>

@@ -7,6 +7,7 @@ import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import {
   GroupEvents,
   InvitationAccount,
@@ -24,6 +25,11 @@ const getGroupChatManager = (): GroupChatManager => {
 const getGroupChatProgram = (): GroupchatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
   return new GroupchatsProgram($SolanaManager)
+}
+
+const getUsersProgram = (): UsersProgram => {
+  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+  return new UsersProgram($SolanaManager)
 }
 
 const getUserAccount = () => {
@@ -58,7 +64,7 @@ export default {
     await groupChatProgram.create(groupId, name)
     const group = await groupChatProgram.waitForGroupReady(groupId)
 
-    commit('addGroup', group)
+    await commit('addGroup', group)
 
     return groupId
   },
@@ -119,20 +125,23 @@ export default {
     commit,
   }: ActionsArguments<GroupsState>) {
     // TODO or unsubscribe if subscribed?
-    if (state.subscriptionId === null) {
-      const { publicKey } = getUserAccount()
-      const groupProgram = getGroupChatProgram()
-
-      const callback = async (payload: InvitationAccount) => {
-        const invite = await groupProgram.crypto.decryptInvite(payload.account)
-        await dispatch('addGroup', invite.groupId)
-      }
-
-      const num = groupProgram.subscribe(GroupEvents.NEW_INVITATION, callback, {
-        recipient: publicKey.toBase58(),
-      })
-      commit('setSubscriptionId', num)
+    if (state.subscriptionId !== null) {
+      await dispatch('unsubscribeFromGroupInvites')
     }
+    const { publicKey } = getUserAccount()
+    const groupProgram = getGroupChatProgram()
+
+    const callback = async (payload: InvitationAccount) => {
+      console.log('subscribeToGroupInvites:callback called', payload)
+      const invite = await groupProgram.crypto.decryptInvite(payload.account)
+      await dispatch('addGroup', invite.groupId)
+    }
+
+    const num = groupProgram.subscribe(GroupEvents.NEW_INVITATION, callback, {
+      recipient: publicKey.toBase58(),
+    })
+    commit('setSubscriptionId', num)
+    console.log('subscribeToGroupInvites DONE')
   },
 
   /**
@@ -148,6 +157,7 @@ export default {
       const groupProgram = getGroupChatProgram()
       await groupProgram.unsubscribe(state.subscriptionId)
       commit('setSubscriptionId', null)
+      console.log('unsubscribeFromGroupInvites DONE')
     }
   },
 
@@ -167,5 +177,25 @@ export default {
 
       commit('addGroup', group)
     }
+  },
+
+  /**
+   * @method fetchGroups
+   * @description fetch groups in which user participates
+   * @example
+   */
+  async fetchGroupMembers(
+    { commit }: ActionsArguments<GroupsState>,
+    { groupId }: { groupId: string },
+  ) {
+    const groupChatProgram = getGroupChatProgram()
+    const usersProgram = getUsersProgram()
+
+    const addresses = await groupChatProgram.getGroupUsers(groupId)
+    const info = await usersProgram.getUsersInfo(addresses)
+
+    commit('setGroupMembersInfo', { groupId, info })
+
+    return info
   },
 }

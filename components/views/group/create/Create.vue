@@ -33,8 +33,6 @@ export default Vue.extend({
           name: this.name,
         })
 
-        console.log(groupId)
-
         await Promise.all(
           usersToInvite.filter(Boolean).map((user: string) =>
             this.$store.dispatch('groups/sendGroupInvite', {
@@ -43,19 +41,16 @@ export default Vue.extend({
             }),
           ),
         )
-
-        console.log('done')
       } catch (e) {
         console.log(e)
       } finally {
         this.loading = false
       }
 
-      // close quickchat modal after redirecting to chat
-      // this.$store.commit('ui/toggleModal', {
-      //   name: 'creategroup',
-      //   state: false,
-      // })
+      this.$store.commit('ui/toggleModal', {
+        name: 'creategroup',
+        state: false,
+      })
     },
   },
 })
