@@ -57,6 +57,16 @@ export class Directory extends Item {
   }
 
   /**
+   * @getter size
+   * @returns {number} dir size in bytes
+   */
+  get size(): number {
+    return this.content.length
+      ? this.content.reduce((total, item) => total + item.size, 0)
+      : 0
+  }
+
+  /**
    * @getter copy
    * @returns {Directory} returns a cloned copy of this directory
    */
