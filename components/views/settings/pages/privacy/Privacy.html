@@ -65,23 +65,29 @@
         class="color-danger"
         type="danger"
         :size="6"
-        :text="$t('pages.privacy.ownInfo.errorMsg')"
-        v-if="ownInfoError"
+        :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
+        v-if="lengthError"
       />
-      <TypographyText
-        class="color-danger ml-3"
-        type="danger"
-        :size="6"
-        :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-        v-if="ownInfoError"
-      />
-      <TypographyText
-        class="color-danger ml-3"
-        type="danger"
-        :size="6"
-        :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-        v-if="ownInfoError"
-      />
+      <span v-if="formatError">
+        <TypographyText
+          class="color-danger"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
+        />
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
+        />
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
+        />
+      </span>
     </SettingsUnit>
   </div>
 </div>
