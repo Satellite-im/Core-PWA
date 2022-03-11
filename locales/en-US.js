@@ -486,6 +486,9 @@ export default {
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
     },
+    sign_in: {
+      invalid_file: 'Unable to upload invalid file',
+    },
     friends: {
       request_already_sent: 'You have already sent a request to this user',
       request_already_accepted: 'This user is already in your friends',
@@ -498,7 +501,6 @@ export default {
       unable_preview: 'Unable to preview file',
       upload_blocked: 'Upload Blocked',
       contains_nsfw: 'Unable to upload file/s due to NSFW status',
-      invalid_file: 'Unable to upload invalid file',
     },
     textile: {
       friend_not_found: 'Friend not found',
