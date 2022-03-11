@@ -1,5 +1,5 @@
 <div class="search-container" v-click-outside="lostFocus">
-  <div :class="{'search-box': true, focus: isFocus}">
+  <div :class="{'search-box': true, focus: isFocus}" class="disabled">
     <div :class="{'search-placeholder': true, hide: !isEmpty}">
       {{placeholder}}
     </div>
@@ -12,12 +12,13 @@
     <div
       ref="searchInput"
       class="search-input"
-      @mousedown="setFocus"
+      @mousedown="/* setFocus disable temporarily until search rework */"
       @keydown="keydown"
       @keyup="keyup"
       @input="input"
     ></div>
   </div>
+  <!-- temporarily disabled due to conflicts with solr search filters (from:, has:, etc...)
   <div :class="{'search-options': true}" v-if="isOption">
     <ul class="search-option-group">
       <li class="search-option-heading">
@@ -59,6 +60,7 @@
       </li>
     </ul>
   </div>
+  -->
   <div
     refs="datePicker"
     :class="{'date-selection': true}"

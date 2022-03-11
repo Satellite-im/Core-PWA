@@ -8,10 +8,9 @@ import { CalendarIcon } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
 import SearchUtil from '../SearchUtil'
+
 import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
-import { searchMessage } from '~/libraries/IndexedDB/index'
-import { QueryOptions } from '~/types/ui/query'
 
 Vue.component('Paginate', VuejsPaginate)
 
@@ -23,6 +22,7 @@ declare module 'vue/types/vue' {
     result: any
   }
 }
+
 export default Vue.extend({
   components: {
     CalendarIcon,
@@ -123,15 +123,6 @@ export default Vue.extend({
       }
       this.fetchResult(query)
     },
-    queryOptions: {
-      async handler(newQOptions) {
-        this.$data.result = await searchMessage(
-          this.accounts,
-          newQOptions,
-          this.$data.page,
-        )
-      },
-    },
     date: {
       handler(newDateValue) {
         this.$data.queryOptions = {
@@ -141,6 +132,18 @@ export default Vue.extend({
             end: newDateValue,
           },
         }
+      },
+    },
+    queryOptions: {
+      async handler(newQOptions) {
+        this.$data.result = await this.$store.dispatch(
+          'textile/searchConversations',
+          {
+            query: newQOptions,
+            page: this.$data.page,
+            accounts: this.accounts,
+          },
+        )
       },
     },
   },
@@ -176,24 +179,30 @@ export default Vue.extend({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async fetchResult(query: string): Promise<void> {
       this.$data.loading = DataStateType.Loading
-      await new Promise((resolve) => setTimeout(resolve, 3000))
       this.$data.queryOptions = {
         ...this.$data.queryOptions,
         queryString: query,
         friends: this.friends.all,
       }
-      this.$data.result = await searchMessage(
-        this.accounts,
-        this.$data.queryOptions,
+      this.$data.result = await this.$store.dispatch(
+        'textile/searchConversations',
+        {
+          query: this.$data.queryOptions,
+          page: this.$data.page,
+          accounts: this.accounts,
+        },
       )
       this.$data.loading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
       this.$data.page = pageNum
-      this.$data.result = await searchMessage(
-        this.accounts,
-        this.$data.queryOptions,
-        pageNum,
+      this.$data.result = await this.$store.dispatch(
+        'textile/searchConversations',
+        {
+          query: this.$data.queryOptions,
+          page: this.$data.page,
+          accounts: this.accounts,
+        },
       )
     },
     onChange(value: any) {
