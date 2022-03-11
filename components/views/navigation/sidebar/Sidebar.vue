@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-
+import { sortBy } from 'lodash'
 import {
   UsersIcon,
   UserPlusIcon,
@@ -15,9 +15,9 @@ import {
 } from 'satellite-lucide-icons'
 
 import { DataStateType } from '~/store/dataState/types'
-import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
+import GroupInvite from '~/components/views/group/invite/Invite.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -34,6 +34,7 @@ export default Vue.extend({
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
+    GroupInvite,
   },
   props: {
     toggle: {
@@ -42,10 +43,6 @@ export default Vue.extend({
     },
     users: {
       type: Array as PropType<Array<User>>,
-      default: () => [],
-    },
-    groups: {
-      type: Array as PropType<Array<Group>>,
       default: () => [],
     },
     showMenu: {
@@ -59,7 +56,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile']),
+    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile', 'groups']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -67,6 +64,9 @@ export default Vue.extend({
       set(value: Boolean) {
         this.$store.commit('ui/showSidebarUsers', value)
       },
+    },
+    sortedGroups() {
+      return sortBy(this.groups.all, 'name')
     },
   },
   watch: {
@@ -78,11 +78,28 @@ export default Vue.extend({
       immediate: true,
     },
   },
+  beforeMount() {
+    this.$store.dispatch('groups/fetchGroups', {}, { root: true })
+    this.$store.dispatch('groups/subscribeToGroupInvites', {}, { root: true })
+  },
+  beforeDestroy() {
+    this.$store.dispatch(
+      'groups/unsubscribeFromGroupInvites',
+      {},
+      { root: true },
+    )
+  },
   methods: {
     toggleModal(type: 'quickchat' | 'creategroup') {
       this.$store.commit('ui/toggleModal', {
         name: type,
         state: !this.ui.modals[type],
+      })
+    },
+    closeGroupInviteModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: false },
       })
     },
     gotoAddFriends() {

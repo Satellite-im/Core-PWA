@@ -18,11 +18,22 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { Config } from '~/config'
 import { groupChatSchema } from '~/libraries/Textile/schema'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { AccountsError } from '~/store/accounts/types'
-import { Groups } from '~/mock/groups'
+
+const decodeGroupID = (
+  input: string,
+): { threadID: ThreadID; collectionName: string } => {
+  const [thread, collection] = input.split('|')
+
+  if (!thread || !collection) throw new Error('Unable to decode group id')
+
+  return {
+    threadID: ThreadID.fromString(thread),
+    collectionName: collection,
+  }
+}
 
 export class GroupChatManager {
   private _threadID?: ThreadID
@@ -66,7 +77,7 @@ export class GroupChatManager {
       name: newCollectionUUID,
       schema: groupChatSchema,
     })
-    return `${this.threadID}/${newCollectionUUID}`
+    return `${this.threadID}|${newCollectionUUID}`
   }
 
   async getThreadName(): Promise<string> {
@@ -81,7 +92,6 @@ export class GroupChatManager {
 
   async getThreadID(): Promise<ThreadID> {
     const name = await this.getThreadName()
-    console.log('getThreadName', name)
     try {
       const thread = await this.textile.client.getThread(name)
       return ThreadID.fromString(thread.id)
@@ -99,21 +109,23 @@ export class GroupChatManager {
    * @returns an array of messages
    */
   async getConversation({
-    groupChatID,
+    group,
     query,
     lastInbound,
   }: {
-    groupChatID: string
+    group: { id: string; encryptionKey: string }
     query: ConversationQuery
     lastInbound?: number
   }): Promise<Message[]> {
-    let groupChatQuery = Query.where('to').eq(groupChatID).orderByIDDesc()
+    const { threadID, collectionName } = decodeGroupID(group.id)
+
+    let groupChatQuery = Query.where('to').eq(group.id).orderByIDDesc()
 
     // if messages are stored in indexeddb, only fetch new messages from textile
     if (lastInbound) {
       lastInbound = lastInbound * 1000000 // textile has a more specific unix timestamp, matching theirs
       groupChatQuery = Query.where('to')
-        .eq(groupChatID)
+        .eq(group.id)
         .and(PropCommonEnum.MOD)
         .ge(lastInbound)
         .orderByIDDesc()
@@ -128,19 +140,11 @@ export class GroupChatManager {
     }
 
     const messages = await this.textile.client.find<MessageFromThread>(
-      this.threadID,
-      groupChatID,
+      threadID,
+      collectionName,
       groupChatQuery,
     )
-    const group = Groups.find((group) => {
-      if (group.address === groupChatID) {
-        return group.encryptionKey
-      }
-      return undefined
-    })
-    if (!group) {
-      throw new Error(AccountsError.CANNOT_FIND_GROUP)
-    }
+
     const promises = messages.map<Promise<Message>>((message) =>
       this.decodeMessage(message, group.encryptionKey),
     )
@@ -156,9 +160,12 @@ export class GroupChatManager {
    * @method listenToGroupMessages
    * @description Starts a watcher on inbox messages
    * @param onMessage Callback function to be called
-   * @param groupChatId
+   * @param group
    */
-  async listenToGroupMessages(onMessage: MessageCallback, groupChatId: string) {
+  async listenToGroupMessages(
+    onMessage: MessageCallback,
+    group: { id: string; encryptionKey: string },
+  ) {
     this.listeners.message = (
       update?: Update<MessageFromThread>,
       err?: any,
@@ -166,15 +173,6 @@ export class GroupChatManager {
       if (update === undefined && err === undefined) {
         delete this.listeners.message
         return
-      }
-      const group = Groups.find((group) => {
-        if (group.address === groupChatId) {
-          return group.encryptionKey
-        }
-        return undefined
-      })
-      if (!group) {
-        throw new Error(AccountsError.CANNOT_FIND_GROUP)
       }
 
       if (update?.instance) {
@@ -185,10 +183,10 @@ export class GroupChatManager {
         )
       }
     }
-
+    const { threadID, collectionName } = decodeGroupID(group.id)
     await this.textile.client.listen(
-      this.threadID,
-      [{ collectionName: groupChatId }],
+      threadID,
+      [{ collectionName }],
       this.listeners.message,
     )
   }
@@ -196,13 +194,14 @@ export class GroupChatManager {
   /**
    * @method sendMessage
    * @description Sends a message to the given groupChat
-   * @param to
+   * @param group
    * @param message Message to be sent
    */
   async sendMessage<T extends MessageTypes>(
-    to: string,
+    group: { id: string; encryptionKey: string },
     message: MessagePayloads[T],
   ) {
+    const { threadID, collectionName } = decodeGroupID(group.id)
     const identity = this.textile.identity
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const publicKey = PublicKey.fromString(identity.public.toString())
@@ -231,16 +230,6 @@ export class GroupChatManager {
       }),
     )
 
-    const group = Groups.find((group) => {
-      if (group.address === message.to) {
-        return group.encryptionKey
-      }
-      return undefined
-    })
-    if (!group) {
-      throw new Error(AccountsError.CANNOT_FIND_GROUP)
-    }
-
     const body = Buffer.from(encodedBody).toString(EncodingTypesEnum.BASE64)
 
     const encryptedMessage = await $Crypto.encryptWithPassword(
@@ -261,8 +250,8 @@ export class GroupChatManager {
     }
 
     const messageID = await this.textile.client.create(
-      this.threadID,
-      message.to,
+      threadID,
+      collectionName,
       [messageToSend],
     )
     return this.decodeMessage(

@@ -25,7 +25,10 @@ export default class SolanaManager {
     this.clusterApiUrl = clusterApiUrl(
       getClusterFromNetworkConfig(Config.solana.network),
     )
-    this.connection = new Connection(this.clusterApiUrl)
+    this.connection = new Connection(
+      this.clusterApiUrl,
+      Config.solana.defaultCommitment,
+    )
     this.publicKeys = {}
   }
 

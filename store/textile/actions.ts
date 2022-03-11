@@ -15,6 +15,14 @@ import { QueryOptions } from '~/types/ui/query'
 import SearchIndex from '~/libraries/SearchIndex'
 import { AccountsState } from '~/store/accounts/types'
 import { User } from '~/types/ui/user'
+import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { AccountsError } from '~/store/accounts/types'
+
+const getGroupChatProgram = (): GroupchatsProgram => {
+  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+  return new GroupchatsProgram($SolanaManager)
+}
 
 export default {
   /**
@@ -590,8 +598,13 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
+    const group = rootState.groups.all.find(it => it.id === groupId)
+    if (!group) {
+      throw new Error(AccountsError.CANNOT_FIND_GROUP)
+    }
+
     const conversation = await $GroupChatManager.getConversation({
-      groupChatID: groupId,
+      group,
       query,
     })
 
@@ -610,7 +623,7 @@ export default {
    * appends sent messages to the active chat
    */
   async subscribeToGroup(
-    { commit, dispatch }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId }: { groupId: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -628,6 +641,11 @@ export default {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
 
+    const group = rootState.groups.all.find(it => it.id === groupId)
+    if (!group) {
+      throw new Error(AccountsError.CANNOT_FIND_GROUP)
+    }
+
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
     await $GroupChatManager.listenToGroupMessages((message) => {
@@ -642,7 +660,7 @@ export default {
       })
 
       dispatch('storeInMessage', { address: groupId, message })
-    }, groupId)
+    }, group)
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -654,32 +672,40 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId, message }: { groupId: string; message: string },
   ) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    try {
+      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    if (!$TextileManager.groupChatManager?.isInitialized()) {
-      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
-    }
-    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+      if (!$TextileManager.groupChatManager?.isInitialized()) {
+        throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+      }
+      const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
-    commit('setMessageLoading', { loading: true })
+      commit('setMessageLoading', { loading: true })
 
-    const result = await $GroupChatManager
-      .sendMessage<'text'>(groupId, {
-        to: groupId,
-        payload: message,
-        type: 'text',
+      const group = rootState.groups.all.find(it => it.id === groupId)
+      if (!group) throw new Error('Group not found')
+
+      const result = await $GroupChatManager
+        .sendMessage<'text'>(group, {
+          to: group.id,
+          payload: message,
+          type: 'text',
+        })
+        .catch((e) => console.log('error', e))
+
+      commit('addMessageToConversation', {
+        address: groupId,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: result,
       })
-      .catch((e) => console.log('error', e))
 
-    commit('addMessageToConversation', {
-      address: groupId,
-      sender: MessageRouteEnum.OUTBOUND,
-      message: result,
-    })
+      dispatch('storeInMessage', { address: groupId, message })
 
-    dispatch('storeInMessage', { address: groupId, message })
-
-    commit('setMessageLoading', { loading: false })
+    } catch (e) {
+      console.log(e)
+    } finally {
+      commit('setMessageLoading', { loading: false })
+    }
   },
   /**
    * @description Sends a glyph message to a given group

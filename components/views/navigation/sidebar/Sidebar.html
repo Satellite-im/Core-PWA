@@ -106,6 +106,7 @@
     </div>
     <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
     <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
+    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -145,11 +146,11 @@
     </div>
     <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.groups !== DataStateType.Loading">
           <GroupAside
-            v-for="group in groups"
+            v-for="group in sortedGroups"
             :selectedGroup="group"
-            :key="group.address"
+            :key="group.id"
           />
         </div>
         <UiLoadersAddress v-else :count="4" inverted />

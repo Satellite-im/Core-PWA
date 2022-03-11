@@ -52,18 +52,11 @@ export default {
 
     const groupId = await groupChatManager.createGroupConversation()
 
-    console.log('groupId')
-
     // generate random groupPassword
     // use pubKey of current user to encrypt groupId
     // create group in solana using encrypted groupId
     await groupChatProgram.create(groupId, name)
-
-    console.time('start')
-    await new Promise((resolve) => setTimeout(resolve, 20000))
-    console.timeEnd('start')
-
-    const group = await groupChatProgram.getGroupById(groupId)
+    const group = await groupChatProgram.waitForGroupReady(groupId)
 
     commit('addGroup', group)
 
@@ -117,27 +110,44 @@ export default {
 
   /**
    * @method sendGroupInvite
-   * @description invites user into group chat
-   * @param group {Group} target group
-   * @param recipient {string} recipient address
+   * @description subscribe to group chat invites
    * @example
    */
-  async subscribeToGroupInvites(
-    { commit, state, dispatch }: ActionsArguments<GroupsState>,
-    { group, recipient }: { group: Group; recipient: string },
-  ) {
+  async subscribeToGroupInvites({
+    state,
+    dispatch,
+    commit,
+  }: ActionsArguments<GroupsState>) {
     // TODO or unsubscribe if subscribed?
     if (state.subscriptionId === null) {
       const { publicKey } = getUserAccount()
       const groupProgram = getGroupChatProgram()
 
-      const callback = (payload: InvitationAccount) => {
-        dispatch('addGroup', payload.account.groupId)
+      const callback = async (payload: InvitationAccount) => {
+        const invite = await groupProgram.crypto.decryptInvite(payload.account)
+        await dispatch('addGroup', invite.groupId)
       }
 
-      groupProgram.subscribe(GroupEvents.NEW_INVITATION, callback, {
+      const num = groupProgram.subscribe(GroupEvents.NEW_INVITATION, callback, {
         recipient: publicKey.toBase58(),
       })
+      commit('setSubscriptionId', num)
+    }
+  },
+
+  /**
+   * @method unsubscribeFromGroupInvites
+   * @description remove group chat invites listener
+   * @example
+   */
+  async unsubscribeFromGroupInvites({
+    state,
+    commit,
+  }: ActionsArguments<GroupsState>) {
+    if (state.subscriptionId) {
+      const groupProgram = getGroupChatProgram()
+      await groupProgram.unsubscribe(state.subscriptionId)
+      commit('setSubscriptionId', null)
     }
   },
 

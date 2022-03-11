@@ -15,12 +15,15 @@ const mutationsBlacklist = [
   'ui/setMessages',
   'ui/sendMessage',
   'chat/addFile',
+  'textile/setMessageLoading',
+  'groups/setSubscriptionId',
 ]
 
 // State properties path to blacklist saving to store
 const commonProperties = [
   'webrtc.initialized',
   'textile.initialized',
+  'textile.messageLoading',
   'accounts.initialized',
   'friends.all',
   'webrtc.activeStream',
@@ -30,6 +33,7 @@ const commonProperties = [
   'ui.editMessage',
   'ui.isLoadingFileIndex',
   'chat.files',
+  'groups.subscriptionId',
 ]
 
 const propertiesNoStorePin = [
