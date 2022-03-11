@@ -14,6 +14,7 @@ export abstract class Item implements ItemInterface {
   private _modified: number
   abstract type: DIRECTORY_TYPE | FILE_TYPE
   abstract modified: number
+  abstract size: number
 
   /**
    * Update the parent directory for this item
