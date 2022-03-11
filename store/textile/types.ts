@@ -17,6 +17,7 @@ export interface Conversation {
 }
 export interface TextileState {
   initialized: boolean
+  activeConversation: string
   conversations: Conversation
   conversationLoading: boolean
   messageLoading: boolean

@@ -10,8 +10,8 @@ const mutations = {
   setActiveCall(state: WebRTCState, id: string) {
     state.activeCall = id
   },
-  setConnectedPeer(state: WebRTCState, id: string) {
-    state.connectedPeer = id
+  setAllConnectedPeers(state: WebRTCState, ids: string[]) {
+    state.connectedPeers = ids
   },
   updateLocalTracks(
     state: WebRTCState,

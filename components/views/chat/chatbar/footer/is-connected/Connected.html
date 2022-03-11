@@ -3,7 +3,7 @@
   class="is-connected"
 >
   <circle-icon
-    :class="`status is-${ webrtc.connectedPeer ? $t('ui.online') : $t('ui.offline') }`"
+    :class="`status is-${ friendConnected($Hounddog.getActiveFriend(friends).address) ? $t('ui.online') : $t('ui.offline') }`"
     size="1x"
   />
   <TypographyText
@@ -12,7 +12,7 @@
     :size="6"
   />
   <TypographyText
-    :text="`is ${ webrtc.connectedPeer ? $t('ui.connected') : $t('ui.not_connected') }`"
+    :text="`is ${ friendConnected($Hounddog.getActiveFriend(friends).address) ? $t('ui.connected') : $t('ui.not_connected') }`"
     :size="6"
   />
 </div>

@@ -208,6 +208,16 @@ export default {
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
+    if (!state.initialized) {
+      const mnemonic = state.phrase
+
+      if (mnemonic === '') {
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
+
+      await $SolanaManager.initializeFromMnemonic(mnemonic)
+    }
+
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
     const balance = await $SolanaManager.getCurrentAccountBalance()

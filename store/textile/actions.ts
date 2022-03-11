@@ -8,9 +8,13 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
-import { db, DexieMessage } from '~/plugins/thirdparty/dexie'
+import { db, DexieConversation, DexieMessage } from '~/plugins/thirdparty/dexie'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
+import { QueryOptions } from '~/types/ui/query'
+import SearchIndex from '~/libraries/SearchIndex'
+import { AccountsState } from '~/store/accounts/types'
+import { User } from '~/types/ui/user'
 
 export default {
   /**
@@ -48,7 +52,7 @@ export default {
    */
   async fetchMessages(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { address }: { address: string },
+    { address, setActive = true }: { address: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -70,9 +74,10 @@ export default {
 
     let conversation: Message[] = []
 
-    const dbMessages = await db.conversations.get(address).then((convo) => {
-      return convo?.conversation ?? []
-    })
+    const dbMessages: DexieMessage[] =
+      (await db.conversationMessages
+        .where({ conversation: address })
+        .toArray()) || []
 
     const lastInbound =
       rootState.textile.conversations[address]?.lastInbound ?? 0
@@ -101,18 +106,21 @@ export default {
     }
 
     // store latest data in indexeddb
-    const dbData: DexieMessage = {
-      conversation,
+    const dbData: DexieConversation = {
       key: address,
       lastInbound,
     }
     db.conversations.put(dbData)
+    db.conversationMessages.bulkPut(
+      conversation.map((c) => ({ ...c, conversation: address })),
+    )
 
     commit('setConversation', {
       address: friend.address,
       messages: conversation,
       limit: query.limit,
       skip: query.skip,
+      active: setActive,
     })
 
     commit('friends/setActive', friend, { root: true })
@@ -512,24 +520,21 @@ export default {
       message: Message
     },
   ) {
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((conversation) => {
+        conversation.lastInbound = message.at
+      })
+
     // replace old message with new edited version
     if (message.editedAt) {
-      db.conversations.get(address).then((convo) => {
-        if (!convo) {
-          return
-        }
-        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
-        convo.conversation[index] = message
-        db.conversations.put(convo)
-      })
+      db.conversationMessages.put({ conversation: address, ...message })
       return
     }
 
     // add regular message to indexeddb
-    db.conversations
-      .where('key')
-      .equals(address)
-      .modify((convo) => convo.conversation.push(message))
+    db.conversationMessages.add({ conversation: address, ...message })
   },
 
   async storeInMessage(
@@ -542,27 +547,26 @@ export default {
       message: Message
     },
   ) {
+    db.conversations
+      .where('key')
+      .equals(address)
+      .modify((conversation) => {
+        conversation.lastInbound = message.at
+      })
     // replace old message with new edited version
     if (message.editedAt) {
-      db.conversations.get(address).then((convo) => {
-        if (!convo) {
-          return
+      db.conversationMessages.get(message.id).then((oldMessage) => {
+        if (oldMessage) {
+          db.conversationMessages.put({ conversation: address, ...message })
+        } else {
+          db.conversationMessages.add({ conversation: address, ...message })
         }
-        const index = convo.conversation.map((e) => e.id).indexOf(message.id)
-        convo.conversation[index] = message
-        db.conversations.put(convo)
       })
       return
     }
 
     // add regular message to indexeddb
-    db.conversations
-      .where('key')
-      .equals(address)
-      .modify((convo) => {
-        convo.conversation.push(message)
-        convo.lastInbound = message.at
-      })
+    db.conversationMessages.add({ conversation: address, ...message })
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -572,7 +576,7 @@ export default {
    */
   async fetchGroupMessages(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupId }: { groupId: string },
+    { groupId, setActive = true }: { groupId: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -596,6 +600,7 @@ export default {
       messages: conversation,
       limit: query.limit,
       skip: query.skip,
+      active: setActive,
     })
 
     commit('setConversationLoading', { loading: false })
@@ -850,5 +855,74 @@ export default {
       message: result,
     })
     dispatch('storeMessage', { address: to, message: result })
+  },
+  /**
+   * @description Search for text within the specified conversations
+   * @param param0 Action Arguments
+   * @param param1 an object containing the query options, accounts, page, and limit,
+   * a search result object is returned
+   */
+  async searchConversations(
+    { state }: ActionsArguments<TextileState>,
+    {
+      query,
+      accounts,
+      page = 1,
+      perPage = 10,
+    }: {
+      query: QueryOptions
+      accounts: AccountsState
+      page: number
+      perPage: number
+    },
+  ) {
+    const { queryString, dateRange, friends } = query
+    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
+    const startDate =
+      dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
+    const endDate =
+      dateRange && new Date(dateRange.end).setHours(23, 59, 59, 999).valueOf()
+
+    const messages = friends
+      .map(({ address }) =>
+        Object.values(state.conversations[address]?.messages),
+      )
+      .reduce((list, acc) => [...acc, ...list], [])
+      .filter((message) => {
+        if (!startDate || !endDate) return true
+        const msgDate = new Date(message?.at).valueOf()
+        return msgDate >= startDate && msgDate <= endDate
+      })
+      .map((message) => {
+        const user =
+          accounts?.details?.textilePubkey === message?.from
+            ? accounts.details
+            : friends.find(
+                (fItem: User) => fItem.textilePubkey === message?.from,
+              )
+        return {
+          ...message,
+          user: {
+            name: user?.name,
+            address: user?.address,
+          },
+        }
+      })
+
+    $SearchIndex.update(messages)
+    const searchResult = await $SearchIndex.search(queryString)
+    const result = searchResult?.reduce((acc: any[], item: any) => {
+      return [...acc, messages.find((m: any) => m.id === item.ref)]
+    }, [])
+    const skip = (page - 1) * perPage
+
+    return {
+      data: {
+        totalRows: result?.length,
+        list: result?.splice(skip, perPage),
+        perPage,
+        page,
+      },
+    }
   },
 }

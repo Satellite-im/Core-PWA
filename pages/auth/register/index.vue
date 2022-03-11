@@ -46,7 +46,6 @@ export default Vue.extend({
       this.$router.replace('/chat/direct')
     },
   },
-  mounted() {},
   methods: {
     async confirm(userData: UserRegistrationData) {
       this.$store.dispatch('accounts/registerUser', {
