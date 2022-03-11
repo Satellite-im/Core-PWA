@@ -36,7 +36,7 @@ export default Vue.extend({
         console.log(groupId)
 
         await Promise.all(
-          usersToInvite.map((user) =>
+          usersToInvite.filter(Boolean).map((user: string) =>
             this.$store.dispatch('groups/sendGroupInvite', {
               group: { id: groupId },
               recipient: user,

@@ -12,6 +12,9 @@ const mutations = {
       item.id !== group.id ? item : { ...item, ...group },
     )
   },
+  setSubscriptionId(state: GroupsState, value: number | null) {
+    state.subscriptionId = value
+  },
 }
 
 export default mutations

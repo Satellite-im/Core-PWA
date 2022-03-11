@@ -26,6 +26,7 @@ const InitialUIState = (): UIState => ({
     changelog: false,
     glyph: false,
     userProfile: false,
+    groupInvite: { isOpen: false },
   },
   glyphModalPack: '',
   chatbarContent: '',

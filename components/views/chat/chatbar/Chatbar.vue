@@ -245,6 +245,7 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      console.log('rec', this.recipient)
       // @ts-ignore
       await this.$refs['file-upload']?.sendMessage()
       if (this.recipient) {
@@ -274,7 +275,9 @@ export default Vue.extend({
 
         // Check if it's a group
         if (
-          RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+          RegExp(this.$Config.regex.uuidv4).test(
+            this.recipient.textilePubkey.split('|')[1],
+          )
         ) {
           if (this.ui.replyChatbarContent.from) {
             this.$store.dispatch('textile/sendGroupReplyMessage', {

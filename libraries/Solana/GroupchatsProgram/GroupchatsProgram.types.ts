@@ -48,6 +48,18 @@ export type Groupchats = {
           name: 'openInvites'
           type: 'bool'
         },
+        {
+          name: 'name'
+          type: 'string'
+        },
+        {
+          name: 'encryptionKey'
+          type: 'string'
+        },
+        {
+          name: 'dbType'
+          type: 'u8'
+        },
       ]
     },
     {
@@ -93,10 +105,18 @@ export type Groupchats = {
           name: 'recipient'
           type: 'publicKey'
         },
+        {
+          name: 'encryptionKey'
+          type: 'string'
+        },
+        {
+          name: 'dbType'
+          type: 'u8'
+        },
       ]
     },
     {
-      name: 'modify'
+      name: 'modifySuccessor'
       accounts: [
         {
           name: 'group'
@@ -114,10 +134,47 @@ export type Groupchats = {
           isSigner: true
         },
       ]
+      args: []
+    },
+    {
+      name: 'modifyOpenIvites'
+      accounts: [
+        {
+          name: 'group'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'admin'
+          isMut: false
+          isSigner: true
+        },
+      ]
       args: [
         {
           name: 'openInvites'
           type: 'bool'
+        },
+      ]
+    },
+    {
+      name: 'modifyName'
+      accounts: [
+        {
+          name: 'group'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'admin'
+          isMut: false
+          isSigner: true
+        },
+      ]
+      args: [
+        {
+          name: 'name'
+          type: 'string'
         },
       ]
     },
@@ -232,6 +289,10 @@ export type Groupchats = {
             name: 'members'
             type: 'u8'
           },
+          {
+            name: 'name'
+            type: 'string'
+          },
         ]
       }
     },
@@ -255,6 +316,14 @@ export type Groupchats = {
           {
             name: 'groupId'
             type: 'string'
+          },
+          {
+            name: 'encryptionKey'
+            type: 'string'
+          },
+          {
+            name: 'dbType'
+            type: 'u8'
           },
         ]
       }
@@ -280,6 +349,16 @@ export type Groupchats = {
       code: 6003
       name: 'NotEmpty'
       msg: 'Group not empty'
+    },
+    {
+      code: 6004
+      name: 'IncorrectField'
+      msg: 'The field is too short or too long'
+    },
+    {
+      code: 6005
+      name: 'InputError'
+      msg: 'Parameters order mismatch'
     },
   ]
 }
@@ -332,6 +411,18 @@ export const IDL: Groupchats = {
           name: 'openInvites',
           type: 'bool',
         },
+        {
+          name: 'name',
+          type: 'string',
+        },
+        {
+          name: 'encryptionKey',
+          type: 'string',
+        },
+        {
+          name: 'dbType',
+          type: 'u8',
+        },
       ],
     },
     {
@@ -377,10 +468,18 @@ export const IDL: Groupchats = {
           name: 'recipient',
           type: 'publicKey',
         },
+        {
+          name: 'encryptionKey',
+          type: 'string',
+        },
+        {
+          name: 'dbType',
+          type: 'u8',
+        },
       ],
     },
     {
-      name: 'modify',
+      name: 'modifySuccessor',
       accounts: [
         {
           name: 'group',
@@ -398,10 +497,47 @@ export const IDL: Groupchats = {
           isSigner: true,
         },
       ],
+      args: [],
+    },
+    {
+      name: 'modifyOpenIvites',
+      accounts: [
+        {
+          name: 'group',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: false,
+          isSigner: true,
+        },
+      ],
       args: [
         {
           name: 'openInvites',
           type: 'bool',
+        },
+      ],
+    },
+    {
+      name: 'modifyName',
+      accounts: [
+        {
+          name: 'group',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: false,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: 'name',
+          type: 'string',
         },
       ],
     },
@@ -516,6 +652,10 @@ export const IDL: Groupchats = {
             name: 'members',
             type: 'u8',
           },
+          {
+            name: 'name',
+            type: 'string',
+          },
         ],
       },
     },
@@ -539,6 +679,14 @@ export const IDL: Groupchats = {
           {
             name: 'groupId',
             type: 'string',
+          },
+          {
+            name: 'encryptionKey',
+            type: 'string',
+          },
+          {
+            name: 'dbType',
+            type: 'u8',
           },
         ],
       },
@@ -564,6 +712,16 @@ export const IDL: Groupchats = {
       code: 6003,
       name: 'NotEmpty',
       msg: 'Group not empty',
+    },
+    {
+      code: 6004,
+      name: 'IncorrectField',
+      msg: 'The field is too short or too long',
+    },
+    {
+      code: 6005,
+      name: 'InputError',
+      msg: 'Parameters order mismatch',
     },
   ],
 }
@@ -596,12 +754,14 @@ export interface Group {
   creator: string
   members: number
   openInvites: boolean
+  encryptionKey: string
 }
 
 export interface InvitationAccountsFilter {
   recipient?: string | PublicKey
   sender?: string | PublicKey
   groupId?: string
+  groupKey?: string | PublicKey
 }
 
 export type GroupEventsFilter = InvitationAccountsFilter

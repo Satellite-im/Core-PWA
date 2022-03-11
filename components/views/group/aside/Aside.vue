@@ -51,6 +51,13 @@ export default Vue.extend({
     navigateToGroup(groupId: string) {
       this.$router.push(`/chat/groups/${groupId}`)
     },
+    groupInvite(group: Group) {
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: true, group },
+      })
+      console.log('groupInvite', group)
+    },
   },
 })
 </script>
