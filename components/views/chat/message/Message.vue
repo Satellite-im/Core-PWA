@@ -248,4 +248,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./Message.less"></style>
+<style lang="less" scoped src="./Message.less"></style>
