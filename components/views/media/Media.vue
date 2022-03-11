@@ -37,6 +37,17 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
     isActiveCall() {
+      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      const remoteTracksLength =
+        peer && Object.keys(peer?.call?.tracksManager?.tracks).length
+
+      if (peer && remoteTracksLength === 0) {
+        peer?.call.hangUp()
+        this.$store.dispatch('webrtc/hangUp')
+        this.$store.commit('ui/fullscreen', false)
+        return
+      }
+
       return this.friends.all.find(
         (friend: any) =>
           friend.activeChat && friend.address === this.webrtc.activeCall,
