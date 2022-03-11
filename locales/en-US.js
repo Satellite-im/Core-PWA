@@ -192,15 +192,22 @@ export default {
         'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     },
     privacy: {
-      title: 'Signaling Servers',
+      title: 'Privacy Settings',
       subtitle:
-        'Choose which signaling server group you want to use. If you use Satellite signaling servers, you are using servers that Satellite hosts. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use public signaling servers, those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices.',
+        'Choose which features to enable to best suit your privacy preferences.',
+      serverType: {
+        title: 'Signaling Servers',
+        subtitle:
+          'Choose which signaling server group you want to use. If you use Satellite signaling servers, you are using servers that Satellite hosts. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use public signaling servers, those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices.',
+      },
       ownInfo: {
         title: 'Set my own Signaling Server',
         subtitle:
           'Enter your http, udp, or websocket URL for your signaling server here',
         placeholder: 'Please enter ...',
-        errorMsg: 'Invalid input format. Please add on the following format',
+        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
+        formatErrorMsg:
+          'Invalid input format. Please add on the following format',
         errorSampleUrl1: '- http://localhost:3000',
         errorSampleUrl2: '- wss://www.example.com/socketserver',
       },

@@ -11,7 +11,8 @@ export default Vue.extend({
   data() {
     return {
       ServerTypes,
-      ownInfoError: false,
+      formatError: false,
+      lengthError: false,
     }
   },
   computed: {
@@ -26,11 +27,17 @@ export default Vue.extend({
     },
     ownInfo: {
       set(state) {
-        if (validURL(state)) {
-          this.ownInfoError = false
+        if (validURL(state) && state.length < 2049) {
+          this.formatError = false
+          this.lengthError = false
           this.$store.commit('settings/setOwnInfo', state)
-        } else {
-          this.ownInfoError = true
+          return
+        }
+        if (state.length > 2048) {
+          this.lengthError = true
+        }
+        if (!validURL(state)) {
+          this.formatError = true
         }
       },
       get() {
