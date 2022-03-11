@@ -3,16 +3,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ServerTypes } from '~/components/views/settings/pages/privacy/options'
 import { validURL } from '~/libraries/ui/Common'
 
 export default Vue.extend({
   name: 'PrivacyScreen',
   data() {
     return {
-      ServerTypes,
       formatError: false,
       lengthError: false,
+      serverTypes: [
+        {
+          text: this.$t('pages.privacy.ownInfo.satelliteServer'),
+          value: 'satellite',
+        },
+        {
+          text: this.$t('pages.privacy.ownInfo.publicServer'),
+          value: 'public',
+        },
+        {
+          text: this.$t('pages.privacy.ownInfo.userDefinedServer'),
+          value: 'own',
+        },
+      ],
     }
   },
   computed: {
