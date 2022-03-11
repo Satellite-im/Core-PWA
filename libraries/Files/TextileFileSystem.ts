@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { PushPathResult } from '@textile/hub'
-import { skaler as SkalerImported } from 'skaler'
+import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
 import { Bucket } from './remote/textile/Bucket'
@@ -71,7 +71,7 @@ export class TextileFileSystem extends FilSystem {
         quality: 1,
       })
       return this._fileToData(
-        await SkalerImported(
+        await skaler(
           new File([outputBuffer.buffer], file.name, {
             type: 'image/jpeg',
           }),
@@ -79,7 +79,7 @@ export class TextileFileSystem extends FilSystem {
         ),
       )
     }
-    return this._fileToData(await SkalerImported(file, { width: 400 }))
+    return this._fileToData(await skaler(file, { width: 400 }))
   }
 
   /**
