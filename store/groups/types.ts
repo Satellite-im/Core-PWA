@@ -1,3 +1,10 @@
+export interface GroupMemberInfo {
+  name: string
+  photoHash: string
+  status: string
+  address: string
+}
+
 export interface Group {
   id: string
   name?: string
@@ -5,6 +12,8 @@ export interface Group {
   creator: string
   members: number
   openInvites: boolean
+  encryptionKey: string
+  membersInfo?: GroupMemberInfo[]
 }
 
 export interface GroupsState {

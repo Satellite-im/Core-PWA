@@ -201,6 +201,7 @@ export class GroupChatManager {
     group: { id: string; encryptionKey: string },
     message: MessagePayloads[T],
   ) {
+    console.log('addr', this.senderAddress)
     const { threadID, collectionName } = decodeGroupID(group.id)
     const identity = this.textile.identity
     const $Crypto: Crypto = Vue.prototype.$Crypto
@@ -285,8 +286,8 @@ export class GroupChatManager {
         at: created_at, // eslint-disable-line camelcase
         from,
         readAt: read_at, // eslint-disable-line camelcase
+        sender: parsedBody.from,
       })
-
       if (!isRight(validation)) {
         throw new Error('Invalid message payload')
       }

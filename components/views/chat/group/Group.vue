@@ -9,6 +9,7 @@ import {
   getAddressFromState,
   refreshTimestampInterval,
 } from '~/utilities/Messaging'
+import { GroupMemberInfo } from '~/store/groups/types'
 
 export default Vue.extend({
   props: {
@@ -20,6 +21,10 @@ export default Vue.extend({
         to: '',
       }),
     },
+    groupId: {
+      type: String as PropType<string>,
+      default: () => '',
+    },
   },
   data() {
     return {
@@ -28,12 +33,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'accounts']),
+    ...mapState(['ui', 'friends', 'accounts', 'groups']),
     address() {
-      return getAddressFromState(this.group.from, this.$store.state)
+      const address = this.getGroupMember(this.group.sender)?.name
+      return address || getAddressFromState(this.group.from, this.$store.state)
     },
     username() {
-      return getUsernameFromState(this.group.from, this.$store.state)
+      const name = this.getGroupMember(this.group.sender)?.name
+      return name || getUsernameFromState(this.group.from, this.$store.state)
     },
     badge() {
       return ''
@@ -44,6 +51,12 @@ export default Vue.extend({
       if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {
         const myHash = this.accounts.details?.profilePicture
         return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
+      }
+
+      // Try to find the group chat member
+      const photoHash = this.getGroupMember(this.group.sender)?.photoHash
+      if (photoHash) {
+        return `${this.$Config.textile.browser}/ipfs/${photoHash}`
       }
 
       // Try to find the friend you are talking to
@@ -95,6 +108,13 @@ export default Vue.extend({
           openQuickProfile()
         }
       }, 0)
+    },
+    getGroupMember(address: string): GroupMemberInfo | void {
+      if (this.groupId) {
+        const group = this.groups.all.find((it) => it.id === this.groupId)
+        console.log('group', group)
+        return group?.membersInfo?.find((it) => it.address === address)
+      }
     },
   },
 })

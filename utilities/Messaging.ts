@@ -115,6 +115,7 @@ export function groupMessages(
         type: MessagingTypesEnum.GROUP,
         at: currentMessage.at,
         from: currentMessage.from,
+        sender: currentMessage.sender, // TODO add types
         to: currentMessage.to,
         messages: [
           {

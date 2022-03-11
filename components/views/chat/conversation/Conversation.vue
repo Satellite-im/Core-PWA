@@ -15,6 +15,10 @@ export default Vue.extend({
       type: Array as PropType<MessageGroup>,
       default: () => [],
     },
+    groupId: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     ...mapState(['ui', 'textile']),

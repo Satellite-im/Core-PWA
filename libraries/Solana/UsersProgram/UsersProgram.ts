@@ -158,10 +158,26 @@ export default class UsersProgram extends EventEmitter {
     }
 
     return {
+      address,
       name: userInfo.name as string,
       photoHash: userInfo.photoHash as string,
       status: userInfo.status as string,
     }
+  }
+
+  /**
+   * @method getUsersInfo
+   * Fetch multiple users information from the user program
+   * @param addresses array af user addresses
+   * @returns the parsed users info
+   */
+  async getUsersInfo(addresses: string[]) {
+    const program = this._getProgram()
+    const pubKeys = await Promise.all(
+      addresses.map(async (it) => (await this._userPDAPublicKey(it))[0]),
+    )
+    const users = await program.account.user.fetchMultiple(pubKeys)
+    return users.map((it, i) => ({ ...it, address: addresses[i] }))
   }
 
   /**
