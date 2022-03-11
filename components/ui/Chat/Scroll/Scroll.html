@@ -3,6 +3,7 @@
   ref="scrollRef"
   v-scroll-lock="true"
   :settings="settings"
+  @ps-scroll-y="onScrolled"
 >
   <slot />
   <div

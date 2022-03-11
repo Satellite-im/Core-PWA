@@ -90,12 +90,6 @@ export default Vue.extend({
       },
     }, */
   },
-  mounted() {
-    this.$el.addEventListener('scroll', this.onScrolled)
-  },
-  beforeUnmount() {
-    this.$el.removeEventListener('scroll', this.onScrolled)
-  },
   methods: {
     /**
      * @method autoScrollToBottom DocsTODO
