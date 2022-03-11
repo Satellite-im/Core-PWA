@@ -51,10 +51,11 @@ export default Vue.extend({
       recipientTyping: false,
       showFilePreview: false,
       nsfwUploadError: false,
+      chatEventsTimer: 5,
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat', 'textile']),
+    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -140,9 +141,45 @@ export default Vue.extend({
     'friends.all': {
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-        if (activeFriend)
+
+        const activeFriendConnected = this.webrtc.connectedPeers.includes(
+          activeFriend?.address,
+        )
+
+        if (activeFriendConnected)
           this.$data.recipientTyping =
-            activeFriend.typingState === PropCommonEnum.TYPING
+            activeFriend?.typingState === PropCommonEnum.TYPING
+
+        if (!activeFriendConnected) {
+          this.$data.recipientTyping = false
+        }
+
+        if (this.$data.recipientTyping) {
+          const closeCounter = this.$watch('chatEventsTimer', (value) => {
+            const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+
+            if (activeFriend?.typingState === PropCommonEnum.NOT_TYPING) {
+              this.$data.chatEventsTimer = 5
+              closeCounter()
+              return
+            }
+
+            if (value > 0) {
+              setTimeout(() => {
+                this.$data.chatEventsTimer--
+              }, 1000)
+              return
+            }
+
+            this.$data.recipientTyping = false
+            this.$data.typing = false
+            this.$data.chatEventsTimer = 5
+
+            closeCounter()
+          })
+
+          this.$data.chatEventsTimer--
+        }
       },
       deep: true,
     },
