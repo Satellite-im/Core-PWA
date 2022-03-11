@@ -212,6 +212,9 @@ export default {
           'Invalid input format. Please add on the following format',
         errorSampleUrl1: '- http://localhost:3000',
         errorSampleUrl2: '- wss://www.example.com/socketserver',
+        satelliteServer: 'Satellite Signaling Servers',
+        publicServer: 'Public Signaling Servers',
+        userDefinedServer: 'Set my own',
       },
       continue: 'Continue',
       register: {

@@ -102,14 +102,13 @@
                 :placeholder="$t('pages.privacy.ownInfo.placeholder')"
                 class="ownInfoInput"
               />
-              <span v-if="lengthError">
-                <TypographyText
-                  class="color-danger"
-                  type="danger"
-                  :size="6"
-                  :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
-                />
-              </span>
+              <TypographyText
+                class="color-danger"
+                type="danger"
+                :size="6"
+                :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
+                v-if="lengthError"
+              />
               <span v-if="formatError">
                 <TypographyText
                   class="color-danger"
