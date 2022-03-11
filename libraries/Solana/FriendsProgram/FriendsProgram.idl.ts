@@ -91,26 +91,10 @@ export type Friends = {
           isMut: false
           isSigner: true
         },
-      ]
-      args: []
-    },
-    {
-      name: 'closeRequest'
-      accounts: [
-        {
-          name: 'request'
-          isMut: true
-          isSigner: false
-        },
-        {
-          name: 'user'
-          isMut: false
-          isSigner: true
-        },
         {
           name: 'payer'
           isMut: true
-          isSigner: false
+          isSigner: true
         },
       ]
       args: []
@@ -175,7 +159,7 @@ export type Friends = {
         kind: 'enum'
         variants: [
           {
-            name: 'Uninitilized'
+            name: 'Uninitialized'
           },
           {
             name: 'Pending'
@@ -187,10 +171,7 @@ export type Friends = {
             name: 'Denied'
           },
           {
-            name: 'RemovedFriend'
-          },
-          {
-            name: 'RequestRemoved'
+            name: 'Removed'
           },
         ]
       }
@@ -236,16 +217,6 @@ export type Friends = {
       code: 6007
       name: 'PayerMismatch'
       msg: 'Account was not created by provided user'
-    },
-    {
-      code: 6008
-      name: 'NotRemoved'
-      msg: 'Request is not removed yet'
-    },
-    {
-      code: 6009
-      name: 'AlreadyRemoved'
-      msg: 'Request is already removed'
     },
   ]
 }
@@ -343,26 +314,10 @@ export const IDL: Friends = {
           isMut: false,
           isSigner: true,
         },
-      ],
-      args: [],
-    },
-    {
-      name: 'closeRequest',
-      accounts: [
-        {
-          name: 'request',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: false,
-          isSigner: true,
-        },
         {
           name: 'payer',
           isMut: true,
-          isSigner: false,
+          isSigner: true,
         },
       ],
       args: [],
@@ -427,7 +382,7 @@ export const IDL: Friends = {
         kind: 'enum',
         variants: [
           {
-            name: 'Uninitilized',
+            name: 'Uninitialized',
           },
           {
             name: 'Pending',
@@ -439,10 +394,7 @@ export const IDL: Friends = {
             name: 'Denied',
           },
           {
-            name: 'RemovedFriend',
-          },
-          {
-            name: 'RequestRemoved',
+            name: 'Removed',
           },
         ],
       },
@@ -488,16 +440,6 @@ export const IDL: Friends = {
       code: 6007,
       name: 'PayerMismatch',
       msg: 'Account was not created by provided user',
-    },
-    {
-      code: 6008,
-      name: 'NotRemoved',
-      msg: 'Request is not removed yet',
-    },
-    {
-      code: 6009,
-      name: 'AlreadyRemoved',
-      msg: 'Request is already removed',
     },
   ],
 }

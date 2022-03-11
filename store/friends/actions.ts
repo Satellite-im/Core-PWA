@@ -5,6 +5,7 @@ import Vue from 'vue'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
+
 import {
   FriendAccount,
   FriendsEvents,
