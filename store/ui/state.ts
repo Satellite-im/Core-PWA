@@ -31,6 +31,7 @@ const InitialUIState = (): UIState => ({
     changelog: false,
     glyph: false,
     userProfile: false,
+    callToAction: false,
   },
   glyphModalPack: '',
   chatbarContent: '',

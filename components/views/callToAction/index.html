@@ -1,0 +1,74 @@
+<div class="call-to-action">
+  <div class="body-panel">
+    <div class="top-bar">
+      <div class="action">
+        <InteractablesClose :action="closeModal" />
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="content-center">
+        <satellite-icon class="modal-top-icon" size="3.5x" />
+      </div>
+
+      <TypographyTitle
+        class="modal-title content-center"
+        :size="12"
+        :text="$t('modal.call_to_action.title')"
+      ></TypographyTitle>
+
+      <TypographyText
+        class="modal-subtitle"
+        :text="$t('modal.call_to_action.subtitle')"
+      ></TypographyText>
+
+      <ul class="upcoming-feature-list">
+        <li>
+          <TypographyText
+            :text="$t('modal.call_to_action.item1')"
+          ></TypographyText>
+        </li>
+
+        <li>
+          <TypographyText
+            :text="$t('modal.call_to_action.item2')"
+          ></TypographyText>
+        </li>
+
+        <li>
+          <TypographyText
+            :text="$t('modal.call_to_action.item3')"
+          ></TypographyText>
+        </li>
+
+        <li>
+          <TypographyText
+            :text="$t('modal.call_to_action.item4')"
+          ></TypographyText>
+        </li>
+
+        <li>
+          <TypographyText
+            :text="$t('modal.call_to_action.item5')"
+          ></TypographyText>
+        </li>
+      </ul>
+
+      <hr class="divider" />
+
+      <TypographyText
+        :text="$t('modal.call_to_action.description')"
+      ></TypographyText>
+
+      <InteractablesButton
+        class="keep-btn"
+        size="small"
+        type="primary"
+        :text="$t('modal.call_to_action.btn')"
+        :action="showTwitter"
+      >
+        <radio-icon size="1.5x"
+      /></InteractablesButton>
+    </div>
+  </div>
+</div>

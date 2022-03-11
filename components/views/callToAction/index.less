@@ -1,0 +1,81 @@
+.call-to-action {
+  display: flex;
+
+  height: @full;
+
+  max-height: @full;
+
+  overflow: hidden;
+
+  .body-panel {
+    width: 784px;
+
+    padding: 32px;
+
+    .top-bar {
+      display: flex;
+
+      align-items: center;
+
+      height: 24px;
+
+      .search {
+        flex-grow: 1;
+
+        margin-right: 32px;
+      }
+
+      .filter {
+        flex-shrink: 0;
+
+        margin-right: 32px;
+      }
+
+      .action {
+        flex-shrink: 0;
+      }
+    }
+
+    .main-content {
+      .modal-top-icon {
+        fill: white;
+
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-weight: 300;
+      }
+
+      .modal-subtitle {
+        font-size: 12pt;
+
+        margin-bottom: 10px;
+      }
+
+      .upcoming-feature-list {
+        list-style-type: disc;
+
+        margin-left: 15px;
+
+        li {
+          margin-top: 2px;
+
+          margin-bottom: 2px;
+        }
+      }
+
+      .content-center {
+        display: flex;
+
+        justify-content: center;
+      }
+
+      .keep-btn {
+        width: 100%;
+
+        margin-top: 20px;
+      }
+    }
+  }
+}
