@@ -5,7 +5,7 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
  * @method isNSFW
  * @description Checks if an image is NSFW using nsfwjs
  * @param {File} file File object to be scanned
- * @returns boolean of nsfw status
+ * @returns {Promise} nsfw status
  */
 export default async function isNSFW(file: File): Promise<boolean> {
   const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.WEBM, FILE_TYPE.OGV]
