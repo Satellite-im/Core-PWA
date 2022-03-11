@@ -126,8 +126,11 @@ export default Vue.extend({
         if (!media) return
         for (let j = 0; j < blocks.length; j++) {
           const block = blocks[j] as HTMLElement
-          block.style.width = this.$device.isMobile ? '160px' : '16rem'
-          block.style.height = this.$device.isMobile ? '90px' : '9rem'
+          /* set media user width to 16rem if 1:1 call on mobile, otherwise set smaller  */
+          block.style.width =
+            this.$device.isMobile && blocks.length > 2 ? '160px' : '16rem'
+          block.style.height =
+            this.$device.isMobile && blocks.length > 2 ? '90px' : '9rem'
         }
         media.style.paddingTop = ''
         media.style.paddingBottom = ''
