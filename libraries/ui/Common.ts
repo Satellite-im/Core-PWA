@@ -9,5 +9,5 @@ export function validURL(text: string): boolean {
       '(\\#[-a-z\\d_]*)?$',
     'i',
   )
-  return (!!text.match(pattern) && !(text.length > 2048)) || !text
+  return !!pattern.test(text) || !text
 }
