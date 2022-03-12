@@ -39,7 +39,6 @@ describe('Privacy Page Toggles Tests', () => {
         expect($btn).to.not.have.class('enabled')
         expect($btn).to.have.class('locked')
         cy.wrap($btn).realHover()
-        cy.wait(5000) // To see that hover displays a forbidden icon
         // Move back cursor to top left again
         cy.get('body').realHover({ position: 'topLeft' })
       }
