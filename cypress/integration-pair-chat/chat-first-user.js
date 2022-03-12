@@ -3,7 +3,7 @@ const recoverySeed =
   'core radio verb scout shuffle moment pottery maple need ostrich train around{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const redirectedURL = 'http://localhost:3000/#/auth/unlock' // URL redirected from root
-const longMessage = faker.lorem.words(50) // generate random sentence
+const longMessage = faker.lorem.words(250) // generate random sentence
 
 describe('Chat features with two accounts at the same time - First User', () => {
   before(() => {
@@ -41,6 +41,9 @@ describe('Chat features with two accounts at the same time - First User', () => 
   it('Type a long message in chat bar without sending it', () => {
     //Validate Chat Screen is loaded
     cy.contains('Chat User A', { timeout: 300000 }).should('be.visible')
-    cy.get('.messageuser').should('be.visible').type(longMessage)
+    //Attempt 3 times to ensure that if first account loads before, second account will see the typing indicator
+    for (let times = 0; times < 3; times++) {
+      cy.get('.messageuser').should('be.visible').type(longMessage).clear()
+    }
   })
 })
