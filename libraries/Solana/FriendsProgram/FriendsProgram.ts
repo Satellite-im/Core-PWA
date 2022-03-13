@@ -1,9 +1,7 @@
 import { EventEmitter } from 'events'
 import {
-  Idl,
   IdlTypes,
   Program,
-  ProgramAccount,
   Provider,
   utils,
   Wallet,
@@ -55,11 +53,7 @@ export default class FriendsProgram extends EventEmitter {
       commitment: Config.solana.defaultCommitment,
     })
 
-    this.program = new Program<Friends>(
-      IDL,
-      FRIENDS_PROGRAM_ID.toBase58(),
-      provider,
-    )
+    this.program = new Program<Friends>(IDL, FRIENDS_PROGRAM_ID, provider)
   }
 
   /**
@@ -104,6 +98,15 @@ export default class FriendsProgram extends EventEmitter {
   }
 
   /**
+   * @method getPayer
+   * Retrieve the active account from Solana wallet
+   * @returns the payer account
+   */
+  getPayer() {
+    return this._getPayer()
+  }
+
+  /**
    * @method makeRequest
    * make frend request
    * @param to receipient key
@@ -113,13 +116,12 @@ export default class FriendsProgram extends EventEmitter {
 
     const payer = this._getPayer()
 
-    const request = this.requestKey(to)
-
+    const request = this.requestKey(payer.publicKey, to)
     await program.rpc.makeRequest(payer.publicKey, to, k, {
       accounts: {
         request,
         user: payer.publicKey,
-        payer,
+        payer: payer.publicKey,
         systemProgram: SystemProgram.programId,
       },
       signers: [payer],
@@ -139,7 +141,7 @@ export default class FriendsProgram extends EventEmitter {
     await program.rpc.denyRequest({
       accounts: {
         request,
-        user: payer,
+        user: payer.publicKey,
       },
       signers: [payer],
     })
@@ -203,19 +205,10 @@ export default class FriendsProgram extends EventEmitter {
     })
   }
 
-  public requestKey(to: PublicKey) {
-    const { publicKey: from } = this._getPayer()
-    let first, second
-    if (from < to) {
-      first = from
-      second = to
-    } else {
-      first = to
-      second = from
-    }
+  public requestKey(from: PublicKey, to: PublicKey) {
     const program = this._getProgram()
     const request = utils.publicKey.findProgramAddressSync(
-      [first.toBuffer(), second.toBuffer()],
+      [from.toBuffer(), to.toBuffer()],
       program.programId,
     )
     return request[0]
@@ -273,8 +266,16 @@ export default class FriendsProgram extends EventEmitter {
    */
   async getFriendAccount(requestKey: PublicKey) {
     const program = this._getProgram()
-    const account = await program.account.friendRequest.fetch(requestKey)
-    return this._parseAccount({ publicKey: requestKey, account })
+    try {
+      const account = await program.account.friendRequest.fetch(requestKey)
+      if (account === null) {
+        return null
+      }
+      return this._parseAccount({ publicKey: requestKey, account })
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 
   /**
