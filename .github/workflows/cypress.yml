@@ -1,9 +1,9 @@
 name: Cypress
 on: [pull_request]
 jobs:
- cypress-run:
+  cypress-run:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Update submodules
@@ -11,12 +11,13 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Cypress run
-      - uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v2
         with:
-         working-directory: ./
-         install: false
-         start: yarn dev
-         command: npx cypress run --browser chrome
-         wait-on: http://localhost:3000
-         wait-on-timeout: 300
-         headless: true
+            working-directory: ./
+            install: false
+            start: yarn dev
+            command: npx cypress run
+            wait-on: http://localhost:3000
+            wait-on-timeout: 300
+            headless: true
+            browser: chrome
