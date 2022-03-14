@@ -8,7 +8,7 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
  * @returns {Promise} nsfw status
  */
 export default async function isNSFW(file: File): Promise<boolean> {
-  const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.WEBM, FILE_TYPE.OGV]
+  const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.MOV, FILE_TYPE.WEBM, FILE_TYPE.OGV]
   const imgTypes = [
     FILE_TYPE.APNG,
     FILE_TYPE.AVIF,
@@ -28,11 +28,17 @@ export default async function isNSFW(file: File): Promise<boolean> {
   // if embeddable video
   if (vidTypes.some((type) => file.type.includes(type))) {
     const vid = document.createElement('video')
-    // if browser can't check
-    if (!vid.canPlayType(file.type)) {
-      return false
-    }
     vid.src = URL.createObjectURL(file)
+    await (async () => {
+      return new Promise((resolve) => {
+        vid.onloadeddata = () => {
+          resolve(true)
+          vid.muted = true
+          vid.play()
+        }
+      })
+    })()
+
     const model = await nsfwjs.load()
     predictions = await model.classify(vid)
   }
