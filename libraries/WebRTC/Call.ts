@@ -254,28 +254,39 @@ export class Call extends Emitter<CallEventListeners> {
     this.peer.signal(this.signalingBuffer)
   }
 
+  /**
+   * @method deny
+   * @description Signals to peer that we are denying their incoming call
+   * @example call.deny()
+   */
   deny() {
-    if (!this.signalingBuffer) {
-      console.warn('No call to deny')
-      this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
-      return
-    }
-
     this.communicationBus.send({
       type: 'REFUSE',
       payload: { peerId: this.communicationBus.identifier },
       sentAt: Date.now(),
     })
+    this._onClose()
   }
 
   /**
    * @method hangUp
-   * @description It's used to close the call
-   * @example
-   * const call = new Call(wireInstance)
-   * call.hangUp()
+   * @description Hangs up active webrtc call
+   * @example call.hangUp()
    */
   hangUp() {
+    if (!this.signalingBuffer) {
+      this.deny()
+      return
+    }
+    this._onClose()
+  }
+
+  /**
+   * @method destroy
+   * @description Destroys peer instance and all related streams and tracks
+   * @example call.destroy()
+   */
+  destroy() {
     this.peer?.destroy()
     this.stream?.getTracks().forEach((track) => track.stop())
     this.remoteStream?.getTracks().forEach((track) => track.stop())
@@ -549,7 +560,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer close event
    */
   protected _onClose() {
-    this.hangUp()
+    this.destroy()
     delete this.signalingBuffer
     this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
   }
