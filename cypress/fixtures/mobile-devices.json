@@ -9,19 +9,19 @@
       },
       {
         "id": 2,
-        "description": "Iphone 13 Pro Max and Iphone 12 Pro Max",
+        "description": "iPhone 13 Pro Max and iPhone 12 Pro Max",
         "width": 428,
         "height": 926
       },
       {
         "id": 3,
-        "description": "Iphone 13 Mini",
+        "description": "iPhone 13 Mini",
         "width": 360,
         "height": 780
       },
       {
         "id": 4,
-        "description": "Iphone 13 Pro and Iphone 13",
+        "description": "iPhone 13 Pro and iPhone 13",
         "width": 390,
         "height": 844
       },
@@ -51,13 +51,13 @@
       },
       {
         "id": 9,
-        "description": "Ipad Air",
+        "description": "iPad Air",
         "width": 820,
         "height": 1180
       },
       {
         "id": 10,
-        "description": "Iphone SE 2020",
+        "description": "iPhone SE 2020",
         "width": 375,
         "height": 667
       }
