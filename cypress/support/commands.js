@@ -37,12 +37,16 @@ Cypress.Commands.add('visitRootPage', () => {
   cy.window().then((win) => {
     win.sessionStorage.clear()
   })
+  cy.clearCookies()
+  cy.clearLocalStorage()
   cy.visit('/')
   cy.url().then(($url) => {
     if (!($url === redirectedURL)) {
-      cy.clearLocalStorage()
+      cy.window().then((win) => {
+        win.sessionStorage.clear()
+      })
       cy.clearCookies()
-      cy.wait(100)
+      cy.clearLocalStorage()
       cy.visit('/')
     }
   })
@@ -59,10 +63,13 @@ Cypress.Commands.add('createAccount', (pin) => {
   cy.get('[data-cy=submit-input]').click()
   cy.get('.is-primary > #custom-cursor-area').click()
   cy.get('.switch-button').each(($btn, index, $List) => {
-    if ($btn.hasClass('enabled')) {
-      cy.wrap($btn).click().should('not.have.class', 'enabled')
-    } else {
-      cy.wrap($btn).click().should('have.class', 'enabled')
+    // Ignore locked switch toggle
+    if (!$btn.hasClass('locked')) {
+      if ($btn.hasClass('enabled')) {
+        cy.wrap($btn).click().should('not.have.class', 'enabled')
+      } else {
+        cy.wrap($btn).click().should('have.class', 'enabled')
+      }
     }
   })
   cy.get('#custom-cursor-area').click()
@@ -136,10 +143,12 @@ Cypress.Commands.add('createAccountPrivacyToggles', () => {
   cy.get('.switch-button')
     .should('be.visible')
     .each(($btn, index, $List) => {
-      if ($btn.hasClass('enabled')) {
-        cy.wrap($btn).click().should('not.have.class', 'enabled')
-      } else {
-        cy.wrap($btn).click().should('have.class', 'enabled')
+      if (!$btn.hasClass('locked')) {
+        if ($btn.hasClass('enabled')) {
+          cy.wrap($btn).click().should('not.have.class', 'enabled')
+        } else {
+          cy.wrap($btn).click().should('have.class', 'enabled')
+        }
       }
     })
   cy.get('#custom-cursor-area').should('be.visible').click()
@@ -160,7 +169,9 @@ Cypress.Commands.add('createAccountUserInput', (username, status) => {
   cy.get('[data-cy=username-input]', { timeout: 30000 })
     .should('be.visible')
     .type(randomName)
-  cy.get('[data-cy=status-input]').should('be.visible').type(randomStatus)
+  cy.get('[data-cy=status-input]', { timeout: 30000 })
+    .should('be.visible')
+    .type(randomStatus)
 })
 
 Cypress.Commands.add('createAccountAddImage', (filepath) => {
