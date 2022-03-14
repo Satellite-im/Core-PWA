@@ -9,5 +9,5 @@ jobs:
         with:
           working-directory: ./
           install: false
-          command: npx cypress run browser --chrome
+          command: npx cypress run --browser chrome
           start: yarn dev
