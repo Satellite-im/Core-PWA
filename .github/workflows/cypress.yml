@@ -1,12 +1,16 @@
 name: Cypress
 on: [pull_request]
 jobs:
-  single:
+ cypress-run:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with: 
-          command: yarn
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Install dependencies
+        run: yarn
+      - name: Cypress run
       - uses: cypress-io/github-action@v2
         with:
           working-directory: ./
