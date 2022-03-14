@@ -18,16 +18,20 @@ export default async function isNSFW(file: File): Promise<boolean> {
     FILE_TYPE.SVG,
     FILE_TYPE.WEBP,
   ]
-  // if unscannable/unembeddable type - return false
+  // if unscannable/unembeddable type
   if (![...vidTypes, ...imgTypes].includes(file.type as FILE_TYPE)) {
     return false
   }
 
   let predictions: nsfwjs.predictionType[]
 
-  // if embeddable video, handle appropriately
+  // if embeddable video
   if (vidTypes.some((type) => file.type.includes(type))) {
     const vid = document.createElement('video')
+    // if browser can't check
+    if (!vid.canPlayType(file.type)) {
+      return false
+    }
     vid.src = URL.createObjectURL(file)
     const model = await nsfwjs.load()
     predictions = await model.classify(vid)

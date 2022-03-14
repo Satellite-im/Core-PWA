@@ -51,7 +51,7 @@ export enum FILE_TYPE {
   OGA = 'audio/ogg',
   OPUS = 'audio/opus',
   WAV = 'audio/wav',
-  WEBA = 'audio/webm',
+  WEBMA = 'audio/webm',
   TGPA = 'audio/3gpp',
   TGPA2 = 'audio/3gpp2',
 
