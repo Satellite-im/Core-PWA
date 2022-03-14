@@ -5,11 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with: 
+          command: yarn
       - uses: cypress-io/github-action@v2
         with:
           working-directory: ./
           install: false
           start: yarn dev
-          command: yarn && npx cypress run --browser chrome
+          command: npx cypress run --browser chrome
 
           
