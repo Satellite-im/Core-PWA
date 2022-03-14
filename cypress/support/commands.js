@@ -1,6 +1,5 @@
 import 'cypress-file-upload'
 import 'cypress-localstorage-commands'
-import { addMatchImageSnapshotCommand } from "../../node_modules/cypress-image-snapshot/command"
 
 addMatchImageSnapshotCommand()
 
