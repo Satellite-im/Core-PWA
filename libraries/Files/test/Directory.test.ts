@@ -74,6 +74,18 @@ describe('Test FileSystem Directory', () => {
       )
     }
   })
+
+  it('Correctly retrieves imported modified value', () => {
+    const mockDirTwo = {
+      name: 'Test Directory',
+      liked: false,
+      shared: false,
+      type: DIRECTORY_TYPE.DEFAULT,
+      modified: 1647250139467,
+    }
+    const directoryTwo = new Directory(mockDirTwo)
+    expect(directoryTwo.modified).toEqual(1647250139467)
+  })
   it('Correctly displays content', () => {
     const content = directory.content
     expect(content).not.toEqual(null)
