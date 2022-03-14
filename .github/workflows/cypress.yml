@@ -1,4 +1,4 @@
-name: example-start-and-yarn-workspaces
+name: Cypress
 on: [pull_request]
 jobs:
   single:
