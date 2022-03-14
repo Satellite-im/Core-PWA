@@ -13,10 +13,10 @@ jobs:
       - name: Cypress run
       - uses: cypress-io/github-action@v2
         with:
-          working-directory: ./
-          install: false
-          start: yarn dev
-          command: npx cypress run --browser chrome
-          wait-on: http://localhost:3000
-          wait-on-timeout: 300
-          headless: true
+         working-directory: ./
+         install: false
+         start: yarn dev
+         command: npx cypress run --browser chrome
+         wait-on: http://localhost:3000
+         wait-on-timeout: 300
+         headless: true
