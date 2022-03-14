@@ -143,33 +143,7 @@ export default Vue.extend({
       this.$store.dispatch('ui/showProfile', this.user)
     },
     async call(kinds: TrackKind[]) {
-      if (!this.webrtc.connectedPeers) return
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
-      if (!activeFriend) return
-      const identifier = activeFriend.address
-
-      if (!this.webrtc.connectedPeers.includes(identifier)) {
-        await this.$store.dispatch('webrtc/createPeerConnection', identifier)
-        if (!this.webrtc.connectedPeers.includes(identifier)) return
-      }
-
-      // Trying to call the same user while call is already active
-      if (identifier === this.$store.state.webrtc.activeCall) {
-        return
-      }
-
-      const peer = this.$WebRTC.getPeer(identifier)
-
-      try {
-        await peer?.call.createLocalTracks(kinds)
-        await peer?.call.start()
-      } catch (error) {
-        if (error instanceof Error) {
-          this.$toast.error(this.$t(error.message) as string)
-        }
-      }
+      await this.$store.dispatch('webrtc/call', kinds)
     },
   },
 })

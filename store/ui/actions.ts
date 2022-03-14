@@ -48,17 +48,26 @@ export default {
    * @example mounted (){ activateKeybinds() }
    */
   async activateKeybinds({ dispatch, rootState }: ActionsArguments<UIState>) {
-    const { toggleMute, toggleDeafen, openSettings } =
+    const { toggleMute, toggleDeafen, openSettings, callActiveChat } =
       // @ts-ignore
       rootState.settings.keybinds
     Mousetrap.reset()
-    Mousetrap.bind(toggleMute, () =>
-      dispatch('audio/toggleMute', null, { root: true }),
-    )
-    Mousetrap.bind(toggleDeafen, () =>
-      dispatch('audio/toggleDeafen', null, { root: true }),
-    )
-    Mousetrap.bind(openSettings, () => dispatch('openSettings'))
+    Mousetrap.bind(toggleMute, (event: KeyboardEvent) => {
+      event.preventDefault()
+      dispatch('audio/toggleMute', null, { root: true })
+    })
+    Mousetrap.bind(toggleDeafen, (event: KeyboardEvent) => {
+      event.preventDefault()
+      dispatch('audio/toggleDeafen', null, { root: true })
+    })
+    Mousetrap.bind(openSettings, (event: KeyboardEvent) => {
+      event.preventDefault()
+      dispatch('openSettings')
+    })
+    Mousetrap.bind(callActiveChat, (event: KeyboardEvent) => {
+      event.preventDefault()
+      dispatch('webrtc/call', ['audio'], { root: true })
+    })
   },
   /**
    * @method clearKeybinds

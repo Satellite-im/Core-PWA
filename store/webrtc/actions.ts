@@ -6,6 +6,7 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
+import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 
@@ -187,6 +188,42 @@ const webRTCActions = {
   },
   hangUp({ commit }: ActionsArguments<WebRTCState>) {
     commit('setActiveCall', '')
+  },
+  async call(
+    { commit, state, dispatch, rootState }: ActionsArguments<WebRTCState>,
+    kinds: TrackKind[],
+  ) {
+    if (!state.connectedPeers) return
+
+    const $Hounddog = Vue.prototype.$Hounddog
+
+    const activeFriend = $Hounddog.getActiveFriend(rootState.friends)
+
+    if (!activeFriend) return
+
+    const identifier = activeFriend.address
+
+    if (!state.connectedPeers.includes(identifier)) {
+      await dispatch('webrtc/createPeerConnection', identifier)
+      if (!state.connectedPeers.includes(identifier)) return
+    }
+
+    // Trying to call the same user while call is already active
+    if (identifier === state.activeCall) return
+
+    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
+
+    const peer = $WebRTC.getPeer(identifier)
+
+    try {
+      await peer?.call.createLocalTracks(kinds)
+      await peer?.call.start()
+    } catch (error) {
+      if (error instanceof Error) {
+        // @ts-ignore
+        this.app.$toast.error(this.app.i18n.t(error.message) as string)
+      }
+    }
   },
 }
 
