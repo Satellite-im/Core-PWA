@@ -13,5 +13,6 @@ jobs:
           install: false
           start: yarn dev
           command: npx cypress run --browser chrome
+          wait-on: http://localhost:3000
 
           
