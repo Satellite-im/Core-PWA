@@ -10,7 +10,7 @@ jobs:
         run: git submodule update --init --recursive
       - name: Install dependencies
         run: yarn
-      - name: Make envfile
+      - name: Create .env file
         uses: SpicyPizza/create-envfile@v1.3
         with:
           ENVIRONMENT: dev
@@ -24,7 +24,6 @@ jobs:
             working-directory: ./
             install: false
             start: yarn dev
-            command: npx cypress run --browser chrome --headless
+            command: npx cypress run --spec "cypress/integration/localstorage-validations.js"--browser chrome --headless
             wait-on: http://localhost:3000
             wait-on-timeout: 300
-            browser: chrome
