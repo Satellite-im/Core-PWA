@@ -1,6 +1,6 @@
 export enum BlockKeysEnum {
-  CAPSLOCK = 'capslock',
-  DELETE = 'delete',
+  capslock = 'capslock',
+  del = 'delete',
 }
 
 export type BlockKeys = keyof typeof BlockKeysEnum

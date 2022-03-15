@@ -348,6 +348,7 @@ export default {
         save: 'Save',
         cancel: 'Cancel',
         reset_all: 'Reset All Keybinds',
+        singleHotkeyError: 'Single key already exist',
         systemHotkeyError:
           'That is browser/system shortcut. Please input other keys.',
         existHotkeyError: 'Key already bound',
