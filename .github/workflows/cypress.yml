@@ -29,7 +29,7 @@ jobs:
             working-directory: ./
             install: false
             start: yarn dev
-            command: npx cypress run --spec cypress/integration/chat-features.js --browser chrome --headless
+            command: npx cypress run --browser chrome --headless
             wait-on: http://localhost:3000
             wait-on-timeout: 300
       - name: Artifacts
