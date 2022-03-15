@@ -38,6 +38,14 @@ export default Vue.extend({
       default: false,
     },
     /**
+     * Used for set disabled status
+     */
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    /**
      * Abstraction of native "type"
      */
     inputKind: {
