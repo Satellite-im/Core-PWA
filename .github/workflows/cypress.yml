@@ -10,14 +10,12 @@ jobs:
         run: git submodule update --init --recursive
       - name: Install dependencies
         run: yarn
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          ENVIRONMENT: "dev"
-          NUXT_TEXTILE_API_KEY: ${{ secrets.NUXT_ENV_TEXTILE_API_KEY }}
-          directory: ./
-          file_name: .env
-          fail_on_empty: false
+      - name: Create env file
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          echo NUXT_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
+          cat .env
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
