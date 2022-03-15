@@ -15,7 +15,11 @@
       }`"
     >
       <UiGlobal />
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper
+        ref="swiper"
+        class="swiper"
+        :options="{ ...swiperOption, initialSlide: swiperSlideIndex }"
+      >
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -23,22 +27,32 @@
             :unreads="$mock.unreads"
             :open-modal="toggleModal"
           />
+          <MobileSidebar
+            v-if="$device.isMobile"
+            :users="friends.all"
+            :groups="$mock.groups"
+            :sidebar="showSidebar"
+            :show-menu="toggleMenu"
+          />
           <Sidebar
+            v-if="!$device.isMobile"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
         </swiper-slide>
+        <!-- Hide swiper slide when no friends and mobile -->
         <swiper-slide
+          v-if="!(isNoFriends && $device.isMobile)"
           :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
         >
           <DroppableWrapper @handle-drop-prop="handleDrop">
             <menu-icon
+              v-if="!showSidebar"
               class="toggle--sidebar"
               size="1.2x"
               full-width
-              :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
               @click="toggleMenu"
             />
             <Toolbar
@@ -106,6 +120,7 @@ import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
+import { DataStateType } from '~/store/dataState/types'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -120,7 +135,6 @@ export default Vue.extend({
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
       swiperOption: {
-        initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
@@ -128,7 +142,10 @@ export default Vue.extend({
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
-              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+              const activeIndex = this.$refs.swiper.$swiper.activeIndex
+              this.$store.commit('ui/setSwiperSlideIndex', activeIndex)
+
+              const newShowSidebar = activeIndex === 0
 
               // force virtual keyboard hide on mobile when swiper slide change
               if (newShowSidebar) {
@@ -146,8 +163,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media', 'friends']),
-    ...mapGetters('ui', ['showSidebar']),
+    DataStateType: () => DataStateType,
+    ...mapState(['audio', 'ui', 'media', 'friends', 'dataState']),
+    ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
@@ -168,6 +186,12 @@ export default Vue.extend({
           )
       return recipient
     },
+    isNoFriends() {
+      return (
+        this.dataState.friends !== this.DataStateType.Loading &&
+        !this.friends.all.length
+      )
+    },
   },
   watch: {
     showSidebar(newValue, oldValue) {
@@ -177,8 +201,10 @@ export default Vue.extend({
           : this.$refs.swiper.$swiper.slideNext()
       }
     },
-    $route() {
-      this.showInitialSidebar()
+    swiperSlideIndex(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.$refs.swiper.$swiper.slideTo(newValue)
+      }
     },
   },
   mounted() {
@@ -190,17 +216,18 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-    this.showInitialSidebar()
     if (this.$device.isMobile) {
       this.$store.commit('ui/toggleSettings', { show: false })
     }
   },
   methods: {
     toggleMenu() {
+      // on mobile ,if no friends, there's no need to toggle sidebar
+      if (this.$device.isMobile && this.isNoFriends) {
+        return
+      }
+
       this.$store.commit('ui/showSidebar', !this.showSidebar)
-    },
-    showInitialSidebar() {
-      this.$store.commit('ui/showSidebar', true)
     },
     /**
      * @method handleDrop

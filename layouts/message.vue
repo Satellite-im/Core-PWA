@@ -2,7 +2,9 @@
   <div
     id="app-wrap"
     :class="`${
-      showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed'
+      showSidebar && swiperSlideIndex == 0
+        ? 'is-open'
+        : 'is-collapsed message-page'
     } ${$store.state.ui.theme.base.class}`"
   >
     <div
@@ -40,21 +42,8 @@
             :sidebar="showSidebar"
           />
         </swiper-slide>
-        <swiper-slide v-if="!$device.isMobile" class="dynamic-content">
-          <menu-icon
-            class="toggle--sidebar"
-            size="1.2x"
-            full-width
-            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
-            @click="toggleMenu"
-          />
-          <Nuxt id="friends" ref="chat" />
-        </swiper-slide>
-        <swiper-slide v-if="$device.isMobile" class="dynamic-content">
-          <FriendsMobileList />
-        </swiper-slide>
-        <swiper-slide v-if="$device.isMobile" class="dynamic-content">
-          <FriendsMobileAdd />
+        <swiper-slide class="dynamic-content">
+          <Nuxt id="new-message" ref="message" />
         </swiper-slide>
       </swiper>
     </div>
@@ -69,15 +58,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 
 export default Vue.extend({
-  name: 'ChatLayout',
-  components: {
-    MenuIcon,
-  },
+  name: 'MessageLayout',
   mixins: [Touch, Layout],
   middleware: 'authenticated',
   data() {
@@ -101,13 +86,18 @@ export default Vue.extend({
               if (newShowSidebar) {
                 document.activeElement.blur()
               }
+
+              // if slide is 0, set showSidebar true
+              // reason? some css action is related with showSidebar flag
+              if (newShowSidebar) {
+                this.$store.commit('ui/showSidebar', true)
+              }
             }
           },
         },
       },
     }
   },
-
   computed: {
     ...mapState(['friends', 'dataState']),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
@@ -125,16 +115,29 @@ export default Vue.extend({
         this.$refs.swiper.$swiper.slideTo(newValue)
       }
     },
+    $route() {
+      this.showInitialSidebar()
+    },
   },
   mounted() {
-    if (this.ui.showMobileAddFriend) {
-      this.$refs.swiper.$swiper.slideTo(2)
-      this.$store.commit('ui/showMobileAddFriend', false)
-    }
+    this.showInitialSidebar()
   },
   methods: {
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
+    },
+    showInitialSidebar() {
+      // if no friends (means user is new account) && mobile,
+      // show home screen with 'No friends yet' graphic (active slider index = 0)
+      const { friends } = this
+      if (friends && friends.all && friends.all.length === 0) {
+        return this.$store.commit('ui/showSidebar', true)
+      }
+
+      if (this.$device.isMobile && !this.$route.query?.sidebar) {
+        return this.$store.commit('ui/showSidebar', false)
+      }
+      this.$store.commit('ui/showSidebar', true)
     },
   },
 })

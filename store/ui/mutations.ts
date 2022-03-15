@@ -347,4 +347,10 @@ export default {
   setIsLoadingFileIndex(state: UIState, status: boolean) {
     state.isLoadingFileIndex = status
   },
+  setSwiperSlideIndex(state: UIState, index: number) {
+    state.swiperSlideIndex = index
+  },
+  showMobileAddFriend(state: UIState, enabled: boolean) {
+    state.showMobileAddFriend = enabled
+  },
 }

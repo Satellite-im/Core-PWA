@@ -22,7 +22,15 @@
             :unreads="$mock.unreads"
             :open-modal="toggleModal"
           />
+          <MobileSidebar
+            v-if="$device.isMobile"
+            :users="friends.all"
+            :groups="$mock.groups"
+            :sidebar="showSidebar"
+            :show-menu="toggleMenu"
+          />
           <Sidebar
+            v-if="!$device.isMobile"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"

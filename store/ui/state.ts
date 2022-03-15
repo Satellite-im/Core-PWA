@@ -62,6 +62,8 @@ const InitialUIState = (): UIState => ({
     flair: Flairs[0],
   },
   isLoadingFileIndex: false,
+  swiperSlideIndex: 0,
+  showMobileAddFriend: false, // flag to swipe slide 2 which is add friend slide
 })
 
 export default InitialUIState

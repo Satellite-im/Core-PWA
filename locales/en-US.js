@@ -72,6 +72,7 @@ export default {
     typing: 'typing',
     many_typing: 'many users are typing',
     new_messages: 'New Messages',
+    say_hi: 'Say hi! 👋',
     pinned: {
       archived_messages: 'Archived Messages',
       new: 'New',
@@ -450,6 +451,9 @@ export default {
         gifs: 'Gifs',
         search: 'Search...',
       },
+    },
+    newMessage: {
+      new_message: 'New Message',
     },
   },
   servers: {

@@ -198,6 +198,8 @@ export interface UIState {
     flair: Flair
   }
   isLoadingFileIndex: boolean
+  swiperSlideIndex: number
+  showMobileAddFriend: boolean
 }
 
 export type Position = {

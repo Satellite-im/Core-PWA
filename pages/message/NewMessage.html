@@ -1,0 +1,41 @@
+<div id="new-message" v-scroll-lock="true">
+  <div class="title">
+    <a class="font-accent" v-on:click="goBack">
+      <arrow-left-icon outlined />
+    </a>
+    <TypographyTitle :text="$t('pages.newMessage.new_message')" :size="5" />
+    <a
+      :class="selectedAddress === undefined ? 'font-muted' : 'font-primary'"
+      class="is-active"
+      v-on:click="() => navigateToChat()"
+    >
+      <pencil-icon />
+    </a>
+  </div>
+  <div class="search">
+    <InteractablesInput
+      v-model="search"
+      :placeholder="`${$t('ui.search')}...`"
+      input-kind="text"
+      :delete-icon="true"
+      type="dark"
+      full-width
+      :autofocus="true"
+    />
+  </div>
+  <div class="scrolling hidden-scroll friends">
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <div
+        v-if="dataState.friends !== DataStateType.Loading && searchResult.length"
+      >
+        <MessageFriend
+          v-for="(friend, i) in searchResult"
+          :key="i"
+          :user="friend"
+          :selectedAddress="selectedAddress"
+          :selectUserAddress="selectUserAddress"
+        />
+      </div>
+    </UiScroll>
+  </div>
+</div>

@@ -77,11 +77,13 @@ Object {
   "settingsRoute": "personalize",
   "settingsSideBar": true,
   "showMedia": false,
+  "showMobileAddFriend": false,
   "showPinned": false,
   "showSearchResult": false,
   "showSettings": false,
   "showSidebar": true,
   "showSidebarUsers": true,
+  "swiperSlideIndex": 0,
   "theme": Object {
     "base": Object {
       "class": "",

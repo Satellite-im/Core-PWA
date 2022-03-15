@@ -1,6 +1,6 @@
 <div id="mobile-nav">
   <div>
-    <home-icon size="1x" v-on:click="() => $router.push('/chat/direct')" />
+    <home-icon size="1x" v-on:click="()=> navigateToHome()" />
   </div>
   <div :class="`${$route.path.includes('/files') ? 'active' : ''}`">
     <folder-icon size="1x" v-on:click="() => $router.push('/files/browse')" />
@@ -15,7 +15,7 @@
     />
   </div>
   <div :class="`${$route.path.includes('/friends') ? 'active' : ''}`">
-    <users-icon size="1x" v-on:click="() => $router.push('/friends/list')" />
+    <users-icon size="1x" v-on:click="navigateToFriend" />
   </div>
   <div :class="`${$route.path.includes('/settings') ? 'active' : ''}`">
     <div v-on:click="$store.commit('ui/toggleSettings',  { show: true })">
