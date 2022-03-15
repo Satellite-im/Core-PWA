@@ -487,7 +487,7 @@ export default {
         'File is too large, please upload a file smaller than 8MB.',
     },
     sign_in: {
-      invalid_file: 'Unable to upload invalid file',
+      invalid_file: 'Unable to upload, invalid file.',
     },
     friends: {
       request_already_sent: 'You have already sent a request to this user',
