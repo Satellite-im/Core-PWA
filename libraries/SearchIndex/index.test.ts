@@ -1,5 +1,6 @@
 import SearchIndex from './index'
-global.console.warn = jest.fn()
+// global.console.warn = jest.fn()
+// TODO: Add coverage for the warning being logged
 
 describe('', () => {
   test('update', async () => {
@@ -79,10 +80,10 @@ describe('', () => {
     idx.update(data)
     const observable = jest.fn()
     observable.subscribe = jest.fn()
-    // function callback(bool) {
-    //   return bool
-    // }
-    // idx.subscribe(observable, callback)
+    /* function callback(bool) {
+      return bool
+    }
+    idx.subscribe(observable, callback) */
     const callback = jest.fn()
     idx.subscribe(observable, callback)
     expect(observable.subscribe).toHaveBeenCalled()
@@ -105,11 +106,5 @@ describe('', () => {
       '1',
       '3',
     ])
-    // expect(idx.search('world')?.map((r) => r.ref)).toEqual(['2', '3'])
-    // expect(idx.search('hello world')?.map((r) => r.ref)).toEqual([
-    //   '3',
-    //   '1',
-    //   '2',
-    // ])
   })
 })
