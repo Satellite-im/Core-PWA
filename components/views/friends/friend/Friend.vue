@@ -59,7 +59,9 @@ export default Vue.extend({
   data() {
     return {
       loading: '' as AddFriendEnum,
-      contextMenuValues: [{ text: 'Remove Friend', func: this.removeFriend }],
+      contextMenuValues: [
+        { text: this.$t('context.remove'), func: this.removeFriend },
+      ],
     }
   },
   computed: {

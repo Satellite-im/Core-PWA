@@ -152,13 +152,6 @@ export default {
         send: 'Send',
         cancel: 'Cancel',
       },
-      context: {
-        fav: 'Favorite',
-        unfav: 'Unfavorite',
-        share: 'Share',
-        rename: 'Rename',
-        delete: 'Delete',
-      },
       errors: {
         folder_name: 'Please enter a folder name',
         no_slash: 'Folder name cannot contain /',
@@ -641,5 +634,28 @@ export default {
         friends: 'Friends',
       },
     },
+  },
+  context: {
+    // files
+    fav: 'Favorite',
+    unfav: 'Unfavorite',
+    share: 'Share',
+    unshare: 'Unshare',
+    rename: 'Rename',
+    delete: 'Delete',
+    // friends
+    send: 'Send Message',
+    voice: 'Voice Call',
+    video: 'Video Call',
+    remove: 'Remove Friend',
+    profile: 'Profile',
+    // message
+    edit: 'Edit Message',
+    reaction: 'Add Reaction',
+    reply: 'Reply',
+    copy_msg: 'Copy Message',
+    copy_img: 'Copy Image',
+    save: 'Save Image',
+    copy_link: 'Copy Link',
   },
 }

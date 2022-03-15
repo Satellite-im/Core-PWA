@@ -79,13 +79,18 @@ export default Vue.extend({
       return [
         {
           text: this.item.liked
-            ? this.$t('pages.files.context.unfav')
-            : this.$t('pages.files.context.fav'),
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
           func: this.like,
         },
-        { text: this.$t('pages.files.context.share'), func: this.share },
-        { text: this.$t('pages.files.context.rename'), func: this.rename },
-        { text: this.$t('pages.files.context.delete'), func: this.delete },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.delete },
       ]
     },
   },

@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
@@ -44,9 +45,22 @@ export default Vue.extend({
      * @param func Function to execute
      * @example @click="handle(item.func)"
      */
-    handle(func: any) {
+    handle(func: Function) {
       func()
       this.close()
+    },
+    /**
+     * @method handle
+     * @description Executes callback function and closes the ContextMenu component
+     * @param func Function to execute
+     * @example @click="handle(item.func)"
+     */
+    isRedText(item: ContextMenuItem): boolean {
+      const redTextList = [
+        this.$t('pages.files.context.delete'),
+        this.$t('context.remove'),
+      ]
+      return redTextList.includes(item.text)
     },
     /**
      * @method handleOverflow

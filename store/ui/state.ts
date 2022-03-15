@@ -1,4 +1,10 @@
-import { UIState, GlyphMarketViewStatus, Themes, Flairs } from './types'
+import {
+  UIState,
+  GlyphMarketViewStatus,
+  Themes,
+  Flairs,
+  SettingsRoutes,
+} from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -8,7 +14,7 @@ const InitialUIState = (): UIState => ({
   showSettings: false,
   showMedia: false,
   settingsSideBar: true,
-  settingsRoute: 'personalize',
+  settingsRoute: SettingsRoutes.PERSONALIZE,
   quickProfile: false,
   userProfile: {},
   contextMenuValues: [],

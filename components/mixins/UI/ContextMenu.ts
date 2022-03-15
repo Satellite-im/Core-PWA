@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { ContextMenuItem } from '~/store/ui/types'
 declare module 'vue/types/vue' {
   interface Vue {
-    contextMenuValues: { text: string; func: Function }[]
+    contextMenuValues: ContextMenuItem[]
   }
 }
 export default Vue.extend({
