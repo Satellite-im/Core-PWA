@@ -24,6 +24,17 @@ jobs:
             working-directory: ./
             install: false
             start: yarn dev
-            command: npx cypress run --browser chrome --headless
+            command: npx cypress run cypress/integration/chat-features.js --browser chrome --headless
             wait-on: http://localhost:3000
             wait-on-timeout: 300
+      - name: Artifacts
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
