@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init gets the CallUsers constant 1`] = `
+Array [
+  Object {
+    "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "last_message": "Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.",
+    "name": "Taurus Nix",
+    "state": "online",
+    "status": "Some important status message",
+  },
+  Object {
+    "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "last_message": "At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.",
+    "name": "Halley Themis",
+    "state": "offline",
+    "status": "Working on the space station",
+  },
+]
+`;
+
+exports[`init gets the User constant 1`] = `
+Object {
+  "address": "0x9bf4001d307dfd62b26a2f1307ee0c0307632d59",
+  "last_message": "Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.",
+  "name": "Lyra Cassini",
+  "state": "online",
+  "status": "Working on the space station",
+}
+`;
+
+exports[`init gets the Users constant 1`] = `
+Array [
+  Object {
+    "address": "0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c",
+    "last_message": "Ship of the imagination consciousness across the centuries network of wormholes finite but unbounded inconspicuous motes of rock and gas.",
+    "name": "Phoenix Kalindi",
+    "profilePicture": "",
+    "state": "online",
+    "status": "Working on the space station",
+    "unreads": 4,
+  },
+  Object {
+    "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
+    "last_message": "Network of wormholes science citizens of distant epochs tingling of the spine cosmic ocean brain is the seed of intelligence. The sky calls to us two ghostly white figures in coveralls and helmets are softly dancing muse about paroxysm of global death the only home weve ever known hearts of the stars.",
+    "name": "Ariel Larissa",
+    "profilePicture": "",
+    "state": "idle",
+    "status": "Working on the space station",
+    "unreads": 1,
+  },
+  Object {
+    "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "badge": "verified",
+    "last_message": "Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.",
+    "name": "Taurus Nix",
+    "state": "online",
+    "status": "Some important status message",
+  },
+  Object {
+    "address": "0x07ee55aa48bb72dcc6e9d78256648910de513eca",
+    "last_message": "At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.",
+    "name": "Halley Themis",
+    "state": "offline",
+    "status": "Working on the space station",
+  },
+  Object {
+    "address": "0x9bf4001d307dfd62b26a2f1307ee0c0307632d59",
+    "last_message": "Tendrils of gossamer clouds stirred by starlight citizens of distant epochs network of wormholes corpus callosum the sky calls to us.",
+    "name": "Lyra Cassini",
+    "state": "idle",
+    "status": "Working on the space station",
+  },
+  Object {
+    "address": "0xdc76cd25977e0a5ae17155770273ad58648913d3",
+    "last_message": "To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?",
+    "name": "Lady Calliope",
+    "profilePicture": "",
+    "state": "mobile",
+    "status": "Working on the space station",
+  },
+  Object {
+    "address": "0x07ee55aa48bb72dcc6e9d88856648910de513eca",
+    "last_message": "At the edge of forever bits of moving fluff radio telescope the carbon in our apple pies are creatures of the cosmos rings of Uranus.",
+    "name": "James Lightspeed",
+    "state": "offline",
+    "status": "Exploring deep space",
+  },
+  Object {
+    "address": "0x9bf4001de07dfd62b26a2f1307ee0c0307632d59",
+    "last_message": "Tendrils of gossamer clouds stirred by starlight citizens of distant epochs network of wormholes corpus callosum the sky calls to us.",
+    "name": "Derek Wormhole",
+    "state": "online",
+    "status": "Filling space",
+  },
+  Object {
+    "address": "0xdc76cd25977e015ae17155770273ad58648913d3",
+    "last_message": "To be the first to enter the cosmos, to engage, single-handed, in an unprecedented duel with nature—could one dream of anything more?",
+    "name": "Frank Meteor",
+    "profilePicture": "",
+    "state": "mobile",
+    "status": "Working on the space station",
+  },
+]
+`;
