@@ -51,7 +51,7 @@
             :text="$t('friends.add') + 's'"
             size="small"
             type="primary"
-            :action="gotoAddFriends"
+            :action="showAddFriend"
           >
             <user-plus-icon size="1.2x" />
           </InteractablesButton>
