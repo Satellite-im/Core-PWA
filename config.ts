@@ -98,6 +98,7 @@ export const Config = {
     messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
+    typingInputThrottle: 2000,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],

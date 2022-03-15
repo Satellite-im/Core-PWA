@@ -6,6 +6,7 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
+import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 
 const webRTCActions = {
@@ -101,7 +102,7 @@ const webRTCActions = {
           { id: peerId, typingState: PropCommonEnum.NOT_TYPING },
           { root: true },
         )
-      }, 2000)
+      }, Config.chat.typingInputThrottle * 3)
       dispatch('textile/subscribeToMailbox', {}, { root: true })
     })
 

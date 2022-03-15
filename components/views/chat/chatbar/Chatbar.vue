@@ -19,6 +19,7 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -190,7 +191,7 @@ export default Vue.extend({
      */
     throttleTyping: throttle(function (ctx) {
       ctx.typingNotifHandler(PropCommonEnum.TYPING)
-    }, 2000),
+    }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
