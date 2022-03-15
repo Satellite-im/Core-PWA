@@ -14,6 +14,7 @@
       :type="inputKind"
       :placeholder="placeholder"
       @input="update"
+      ref="input"
     />
     <button
       v-if="deleteIcon && internalText.length"
