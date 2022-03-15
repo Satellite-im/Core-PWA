@@ -4,7 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'

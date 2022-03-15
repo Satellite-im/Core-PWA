@@ -1,6 +1,11 @@
-// @ts-nocheck
+import Vue from 'vue'
 import { mapState } from 'vuex'
-export const ContextMenu = {
+declare module 'vue/types/vue' {
+  interface Vue {
+    contextMenuValues: { text: string; func: Function }[]
+  }
+}
+export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
@@ -18,12 +23,7 @@ export const ContextMenu = {
         this.$store.commit('ui/toggleContextMenu', true)
       }
       this.$store.commit('ui/setContextMenuPosition', e)
-      this.$store.commit(
-        'ui/setContextMenuValues',
-        this.$data.contextMenuValues,
-      )
+      this.$store.commit('ui/setContextMenuValues', this.contextMenuValues)
     },
   },
-}
-
-export default ContextMenu
+})

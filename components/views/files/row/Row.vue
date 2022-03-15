@@ -11,7 +11,7 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 

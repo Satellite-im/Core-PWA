@@ -13,7 +13,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { Friend } from '~/types/ui/friends'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { AddFriendEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 

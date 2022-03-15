@@ -10,8 +10,7 @@ import {
   BriefcaseIcon,
   ImageIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -52,12 +51,6 @@ export default Vue.extend({
       fileHover: false,
       linkHover: false,
       heartHover: false,
-      contextMenuValues: [
-        { text: 'Favorite', func: this.like },
-        { text: 'Share', func: this.share },
-        { text: 'Rename', func: this.rename },
-        { text: 'Delete', func: this.remove },
-      ],
     }
   },
   computed: {
@@ -81,6 +74,17 @@ export default Vue.extend({
      */
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
+    },
+    /**
+     * @returns {boolean} if item is archive file type
+     */
+    contextMenuValues() {
+      return [
+        { text: this.item.liked ? 'Un-favorite' : 'Favorite', func: this.like },
+        { text: 'Share', func: this.share },
+        { text: 'Rename', func: this.rename },
+        { text: 'Delete', func: this.delete },
+      ]
     },
   },
   methods: {

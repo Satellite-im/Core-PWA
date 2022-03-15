@@ -6,7 +6,7 @@ import { mapState } from 'vuex'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
 
