@@ -19,9 +19,9 @@
         <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
           <menu-icon
             v-if="$device.isMobile"
-            size="1x"
+            size="1.5x"
             v-on:click="toggleSidebar"
-            class="menu--toggle"
+            class="menu-toggle"
           />
           <SettingsBreadcrumbs />
           <InteractablesClose :action="closeModal" />
