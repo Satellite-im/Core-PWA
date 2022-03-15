@@ -120,7 +120,7 @@ export default Vue.extend({
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
       swiperOption: {
-        initialSlide: this.$device.isMobile ? 1 : 0,
+        initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
@@ -200,9 +200,6 @@ export default Vue.extend({
       this.$store.commit('ui/showSidebar', !this.showSidebar)
     },
     showInitialSidebar() {
-      if (this.$device.isMobile && this.$route.params.address) {
-        return this.$store.commit('ui/showSidebar', false)
-      }
       this.$store.commit('ui/showSidebar', true)
     },
     /**
