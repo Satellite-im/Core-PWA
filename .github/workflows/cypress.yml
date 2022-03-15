@@ -24,6 +24,6 @@ jobs:
             working-directory: ./
             install: false
             start: yarn dev
-            command: npx cypress run --spec "cypress/integration/localstorage-validations.js"--browser chrome --headless
+            command: npx cypress run --spec "cypress/integration/localstorage-validations.js" --browser chrome --headless
             wait-on: http://localhost:3000
             wait-on-timeout: 300
