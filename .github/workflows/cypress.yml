@@ -28,7 +28,7 @@ jobs:
             wait-on: http://localhost:3000
             wait-on-timeout: 300
       - name: Artifacts
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: cypress-screenshots
