@@ -50,10 +50,9 @@ export default Vue.extend({
       this.close()
     },
     /**
-     * @method handle
-     * @description Executes callback function and closes the ContextMenu component
-     * @param func Function to execute
-     * @example @click="handle(item.func)"
+     * @method isRedText
+     * @description sets red text class based on text value
+     * @param {ContextMenuItem} item context item
      */
     isRedText(item: ContextMenuItem): boolean {
       const redTextList = [
