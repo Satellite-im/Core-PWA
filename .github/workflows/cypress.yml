@@ -1,0 +1,29 @@
+name: Cypress
+on: [pull_request]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Install dependencies
+        run: yarn
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          ENVIRONMENT: dev
+          TEXTILE_API_KEY: ${{ secrets.TEXTILE_API_KEY }}
+          directory: ./
+          file_name: .env
+          fail_on_empty: false
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+            working-directory: ./
+            install: false
+            start: yarn dev
+            command: npx cypress run --spec cypress/integration/localstorage-validations.js --browser chrome --headless
+            wait-on: http://localhost:3000
+            wait-on-timeout: 300
