@@ -14,7 +14,7 @@ jobs:
         run: |
           touch .env
           echo ENVIRONMENT="dev" >> .env
-          echo NUXT_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
+          echo NUXT_ENV_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
           cat .env
       - name: Read .env file
         id: envfile
