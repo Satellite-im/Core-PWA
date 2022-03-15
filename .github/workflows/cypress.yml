@@ -13,7 +13,7 @@ jobs:
       - name: Create .env file
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          ENVIRONMENT: dev
+          ENVIRONMENT: "dev"
           TEXTILE_API_KEY: ${{ secrets.NUXT_ENV_TEXTILE_API_KEY }}
           directory: ./
           file_name: .env
