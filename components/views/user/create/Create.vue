@@ -61,7 +61,7 @@ export default Vue.extend({
         }
       } catch (err: any) {
         this.$Logger.log('error', 'file upload error')
-        this.$toast.show(this.$t('errors.sign_in.invalid_file') as string)
+        this.error = this.$t('errors.sign_in.invalid_file') as string
         this.resetFileInput()
         return
       }
