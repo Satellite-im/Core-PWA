@@ -16,7 +16,7 @@ jobs:
             working-directory: ./
             install: false
             start: yarn dev
-            command: npx cypress run
+            command: npx cypress run --browser chrome --headless
             wait-on: http://localhost:3000
             wait-on-timeout: 300
             browser: chrome
