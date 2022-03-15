@@ -75,15 +75,17 @@ export default Vue.extend({
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
-    /**
-     * @returns {boolean} if item is archive file type
-     */
     contextMenuValues() {
       return [
-        { text: this.item.liked ? 'Un-favorite' : 'Favorite', func: this.like },
-        { text: 'Share', func: this.share },
-        { text: 'Rename', func: this.rename },
-        { text: 'Delete', func: this.delete },
+        {
+          text: this.item.liked
+            ? this.$t('pages.files.context.unfav')
+            : this.$t('pages.files.context.fav'),
+          func: this.like,
+        },
+        { text: this.$t('pages.files.context.share'), func: this.share },
+        { text: this.$t('pages.files.context.rename'), func: this.rename },
+        { text: this.$t('pages.files.context.delete'), func: this.delete },
       ]
     },
   },

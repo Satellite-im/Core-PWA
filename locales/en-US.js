@@ -152,6 +152,13 @@ export default {
         send: 'Send',
         cancel: 'Cancel',
       },
+      context: {
+        fav: 'Favorite',
+        unfav: 'Unfavorite',
+        share: 'Share',
+        rename: 'Rename',
+        delete: 'Delete',
+      },
       errors: {
         folder_name: 'Please enter a folder name',
         no_slash: 'Folder name cannot contain /',
