@@ -2,6 +2,10 @@
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
+
+import vueCustomScrollbar from 'vue-custom-scrollbar'
+import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 
@@ -9,11 +13,17 @@ export default Vue.extend({
   name: 'Scroll',
   components: {
     ChevronDownIcon,
+    vueCustomScrollbar,
   },
   props: {
-    autoScroll: {
+    verticalScroll: {
       type: Boolean,
       default: true,
+      required: false,
+    },
+    horizontalScroll: {
+      type: Boolean,
+      default: false,
       required: false,
     },
     preventScrollOffset: {
@@ -26,53 +36,41 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    contents: {
-      /* Content Type could be any value in below array */
-      type: [Array, Object, String, Number],
-      default: '',
+    scrollbarVisibility: {
+      type: String,
+      default: 'always',
       required: false,
     },
   },
   data() {
     return {
-      loaded: false,
+      settings: {
+        suppressScrollY: !this.verticalScroll,
+        suppressScrollX: !this.horizontalScroll,
+        wheelPropagation: false,
+      },
       newMessageAlert: false,
     }
   },
   computed: {
+    ...mapState(['ui', 'textile']),
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
-        'auto-scroll': this.autoScroll,
+        'scrollbar-visible': ['always', 'scroll'].includes(
+          this.scrollbarVisibility,
+        ),
+        always: this.scrollbarVisibility === 'always',
         dark: this.theme === 'dark',
       }
     },
   },
   watch: {
-    contents: {
-      deep: true,
-      handler() {
-        const lastMsg = this.contents[this.contents.length - 1]
-        if (
-          (lastMsg.from === this.$mock.user.address ||
-            !this.$store.state.ui.unreadMessage) &&
-          !this.$store.state.ui.isReacted
-        ) {
-          this.autoScrollToBottom()
-          return
-        }
-        this.newMessageAlert = true
-        this.$store.dispatch('ui/setIsReacted', false)
-      },
+    'textile.conversationLoading'(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.autoScrollToBottom()
+      }
     },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.autoScrollToBottom()
-    })
-  },
-  beforeDestroy() {
-    this.loaded = false
   },
   methods: {
     /**
@@ -81,15 +79,11 @@ export default Vue.extend({
      * @example
      */
     autoScrollToBottom() {
-      const interval = this.loaded ? 100 : 1000
-      if (this.$el && this.autoScroll) {
+      if (this.$el) {
         setTimeout(() => {
-          this.$nextTick(() => {
-            this.$el.scrollTop = 0
-            this.loaded = true
-            this.$store.dispatch('ui/setIsScrollOver', false)
-          })
-        }, interval)
+          this.$el.scrollTop = this.$el.scrollHeight
+          this.$store.dispatch('ui/setIsScrollOver', false)
+        }, 100)
       }
     },
     /**
@@ -102,13 +96,13 @@ export default Vue.extend({
 
       if (
         Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
-        !this.$store.state.ui.isScrollOver
+        !this.ui.isScrollOver
       ) {
         this.$store.dispatch('ui/setIsScrollOver', true)
         return
       }
 
-      if (this.$store.state.ui.isScrollOver) {
+      if (!this.ui.isScrollOver) {
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },
