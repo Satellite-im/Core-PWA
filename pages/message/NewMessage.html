@@ -5,7 +5,7 @@
     </a>
     <TypographyTitle :text="$t('pages.newMessage.new_message')" :size="5" />
     <a
-      :class="selectedAddress === undefined ? 'font-muted' : 'font-primary'"
+      :class="selectedAddress === '' ? 'font-muted' : 'font-primary'"
       class="is-active"
       v-on:click="() => navigateToChat()"
     >

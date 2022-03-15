@@ -1,7 +1,7 @@
 <div
   :class="`user ${isLoading ? 'is-loading' : ''}`"
   @contextmenu="contextMenu"
-  v-on:click="() => selectUserAddress(user.address)"
+  v-on:click="toggleSelect"
 >
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
@@ -24,5 +24,5 @@
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
-  <input type="checkbox" :checked="user.address === selectedAddress" />
+  <input type="checkbox" v-model="checked" />
 </div>

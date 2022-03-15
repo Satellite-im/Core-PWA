@@ -10,7 +10,7 @@ import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    selectUser: () => void
+    selectUserAddress: (address: string) => void
   }
 }
 
@@ -30,17 +30,17 @@ export default Vue.extend({
       type: Function,
       default: (address: string) => {},
     },
-    selectedAddress: undefined,
+    selectedAddress: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       existConversation: false,
       isLoading: false,
-      address: undefined,
-    } as {
-      existConversation: boolean
-      isLoading: boolean
-      address: string | undefined
+      address: '',
+      checked: false,
     }
   },
   computed: {
@@ -57,6 +57,19 @@ export default Vue.extend({
       },
       deep: true,
       immediate: true,
+    },
+    /**
+     * Watch checked state
+     * if false, set selected as ''
+     * if true, set selected user address
+     */
+    checked(newValue, oldValue) {
+      if (oldValue === newValue) return
+      if (newValue === false) {
+        this.selectUserAddress('')
+      } else {
+        this.selectUserAddress(this.user.address)
+      }
     },
   },
   methods: {
@@ -96,6 +109,9 @@ export default Vue.extend({
       this.$data.existConversation = !(
         !currentUserInfo || currentUserInfo?.lastUpdate <= 0
       )
+    },
+    toggleSelect() {
+      this.checked = !this.checked
     },
   },
 })

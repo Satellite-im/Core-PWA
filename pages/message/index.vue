@@ -14,11 +14,9 @@ export default Vue.extend({
   layout: 'message',
   data() {
     return {
-      selectedAddress: undefined,
+      selectedAddress: '',
       search: '',
       result: [],
-    } as {
-      selectedAddress: string | undefined
     }
   },
   computed: {
@@ -39,7 +37,7 @@ export default Vue.extend({
   watch: {
     search(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.selectedAddress = undefined
+        this.selectedAddress = ''
       }
     },
   },
@@ -57,7 +55,7 @@ export default Vue.extend({
      * @description navigate to chat page with selected address
      */
     navigateToChat() {
-      if (!this.selectedAddress) {
+      if (this.selectedAddress === '') {
         return
       }
       this.$store.commit('ui/setSwiperSlideIndex', 1)
