@@ -38,7 +38,6 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     TerminalIcon,
-    Editable,
   },
   props: {
     recipient: {
@@ -154,6 +153,7 @@ export default Vue.extend({
       )
       const message = findItem ? findItem.value : ''
 
+      this.$refs.editable?.resetHistory()
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
