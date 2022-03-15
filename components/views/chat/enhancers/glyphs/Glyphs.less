@@ -21,12 +21,23 @@
     height: 325px;
     overflow-y: auto;
     padding-bottom: 80px;
+
     &::-webkit-scrollbar {
       width: 5px;
+      &:hover {
+        width: 11px;
+      }
     }
+
+    /* Scroll Track */
+    &::-webkit-scrollbar-track {
+      &:extend(.round-corners);
+    }
+
+    /* Scroll Handle */
     &::-webkit-scrollbar-thumb {
       background-color: var(--flair-color);
-      border-radius: 6px;
+      &:extend(.round-corners);
     }
   }
 }
