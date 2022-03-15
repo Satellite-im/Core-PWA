@@ -164,7 +164,7 @@ export default Vue.extend({
     this.setupDefaults()
     this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
   },
-  beforeUnmount() {
+  beforeDestroy() {
     if (this.$data.stream) {
       this.$data.stream
         .getAudioTracks()

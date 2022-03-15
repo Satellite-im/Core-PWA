@@ -71,7 +71,7 @@ export default Vue.extend({
       this.autoScrollToBottom()
     })
   },
-  beforeUnmount() {
+  beforeDestroy() {
     this.loaded = false
   },
   methods: {

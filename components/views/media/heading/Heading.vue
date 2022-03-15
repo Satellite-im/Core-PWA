@@ -23,7 +23,7 @@ export default Vue.extend({
     this.timer = false
     this.setTimer()
   },
-  beforeUnmount() {
+  beforeDestroy() {
     this.clearTimer()
   },
   methods: {
