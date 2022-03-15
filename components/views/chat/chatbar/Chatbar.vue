@@ -52,7 +52,6 @@ export default Vue.extend({
       recipientTyping: false,
       showFilePreview: false,
       nsfwUploadError: false,
-      chatEventsTimer: 5,
     }
   },
   computed: {
@@ -143,8 +142,9 @@ export default Vue.extend({
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
 
-        this.$data.recipientTyping =
-          activeFriend?.typingState === PropCommonEnum.TYPING
+        if (activeFriend)
+          this.$data.recipientTyping =
+            activeFriend.typingState === PropCommonEnum.TYPING
       },
       deep: true,
     },
