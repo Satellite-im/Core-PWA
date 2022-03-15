@@ -10,6 +10,14 @@ jobs:
         run: git submodule update --init --recursive
       - name: Install dependencies
         run: yarn
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          ENVIRONMENT: dev
+          TEXTILE_API_KEY: ${{ secrets.TEXTILE_API_KEY }}
+          directory: ./
+          file_name: .env
+          fail_on_empty: false
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
