@@ -52,20 +52,10 @@ export default Vue.extend({
   methods: {
     /**
      * @method share
-     * @description copy link to clipboard and toggle shared status
+     * @description Emit to share item - pages/files/browse/index.vue
      */
-    async share() {
-      this.$toast.show(this.$t('todo - share') as string)
-      // if (!this.file.shared) {
-      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
-      //   this.file.shareItem()
-      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
-      // }
-      // navigator.clipboard.writeText(this.path).then(() => {
-      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
-      // })
-      // this.$emit('forceRender')
+    share() {
+      this.$emit('share', this.file)
     },
   },
 })

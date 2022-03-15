@@ -24,6 +24,10 @@
         v-for="item, i in directory"
         :key="i + counter"
         :item="item"
+        @like="like"
+        @share="share"
+        @rename="rename"
+        @remove="remove"
         @handle="handle"
       />
     </tbody>

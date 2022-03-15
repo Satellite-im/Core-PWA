@@ -39,10 +39,10 @@ export default Vue.extend({
     return {
       menuHover: false as boolean,
       contextMenuValues: [
-        { text: 'Favorite', func: this.todo },
-        { text: 'Share', func: this.todo },
-        { text: 'Rename', func: this.todo },
-        { text: 'Delete', func: this.todo },
+        { text: 'Favorite', func: this.like },
+        { text: 'Share', func: this.share },
+        { text: 'Rename', func: this.rename },
+        { text: 'Delete', func: this.remove },
       ],
     }
   },
@@ -61,10 +61,32 @@ export default Vue.extend({
       this.$emit('handle', this.item)
     },
     /**
-     * @description handle in AP-1054
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
      */
-    todo() {
-      this.$toast.show(this.$t('todo') as string)
+    like() {
+      this.$emit('like', this.item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share() {
+      this.$emit('share', this.item)
+    },
+    /**
+     * @method rename
+     * @description Emit to rename item - pages/files/browse/index.vue
+     */
+    rename() {
+      this.$emit('rename', this.item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove() {
+      this.$emit('remove', this.item)
     },
   },
 })

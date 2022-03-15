@@ -63,6 +63,13 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method forceRender
+     * @description refresh items timestamp - called every minute
+     */
+    forceRender() {
+      this.$emit('forceRender')
+    },
+    /**
      * @method handle
      * @description Emit item to be handled in pages/files/browse/index.vue
      */
@@ -70,11 +77,32 @@ export default Vue.extend({
       this.$emit('handle', item)
     },
     /**
-     * @method forceRender
-     * @description force reactivity for Map
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
      */
-    forceRender() {
-      this.$emit('forceRender')
+    like(item: Item) {
+      this.$emit('like', item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share(item: Item) {
+      this.$emit('share', item)
+    },
+    /**
+     * @method rename
+     * @description Emit to rename item - pages/files/browse/index.vue
+     */
+    rename(item: Item) {
+      this.$emit('rename', item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove(item: Item) {
+      this.$emit('remove', item)
     },
     sort() {
       this.$toast.show(this.$t('todo - sort') as string)
