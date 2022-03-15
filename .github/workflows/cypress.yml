@@ -1,0 +1,45 @@
+name: Cypress
+on: [pull_request]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Install dependencies
+        run: yarn
+      - name: Create env file
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          echo NUXT_ENV_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
+          cat .env
+      - name: Read .env file
+        id: envfile
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./.env
+      - name: Echo .env
+        run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+            working-directory: ./
+            install: false
+            start: yarn dev
+            command: npx cypress run --browser chrome --headless
+            wait-on: http://localhost:3000
+            wait-on-timeout: 300
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
