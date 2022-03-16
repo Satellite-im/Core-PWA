@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { debounce } from 'lodash'
+import { debounce, throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import Editable from './Editable.vue'
 
@@ -19,6 +19,7 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -26,7 +27,7 @@ declare module 'vue/types/vue' {
     text: string
     updateText: Function
     handleUpload: Function
-    debounceTypingStop: Function
+    throttleTyping: Function
     typingNotifHandler: Function
     smartTypingStart: Function
     clearChatbar: Function
@@ -54,7 +55,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat', 'textile']),
+    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -140,6 +141,7 @@ export default Vue.extend({
     'friends.all': {
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+
         if (activeFriend)
           this.$data.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
@@ -184,22 +186,18 @@ export default Vue.extend({
       }
     },
     /**
-     * @method debounceTypingStop
-     * @description Debounces the typing event so that we only send the typing stopped after it's been
-     * the configured amount of time since they last triggered a keyup event.
+     * @method throttleTyping
+     * @description Throttles the typing event so that we only send the typing once every two seconds
      */
-    debounceTypingStop: debounce(function (ctx) {
-      ctx.$data.typing = false
-      ctx.typingNotifHandler(PropCommonEnum.NOT_TYPING)
-    }, 500),
+    throttleTyping: throttle(function (ctx) {
+      ctx.typingNotifHandler(PropCommonEnum.TYPING)
+    }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
      */
     smartTypingStart() {
-      if (this.$data.typing) return
-      this.$data.typing = true
-      this.typingNotifHandler(PropCommonEnum.TYPING)
+      this.throttleTyping(this)
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -234,9 +232,6 @@ export default Vue.extend({
           break
       }
       this.smartTypingStart()
-    },
-    handleInputKeyup() {
-      this.debounceTypingStop(this)
     },
     /**
      * @method sendMessage

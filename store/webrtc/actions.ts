@@ -6,6 +6,8 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import { ActionsArguments } from '~/types/store/store'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
+import { Config } from '~/config'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
 
 const webRTCActions = {
   /**
@@ -85,13 +87,23 @@ const webRTCActions = {
 
     const peer = $WebRTC.getPeer(identifier)
 
+    let prevTimeout: ReturnType<typeof setTimeout>
+
     peer?.communicationBus.on('TYPING_STATE', ({ state, peerId }) => {
       commit(
         'friends/setTyping',
-        { id: peerId, typingState: state },
+        { id: peerId, typingState: PropCommonEnum.TYPING },
         { root: true },
       )
-      dispatch('subscribeToMailbox')
+      clearTimeout(prevTimeout)
+      prevTimeout = setTimeout(() => {
+        commit(
+          'friends/setTyping',
+          { id: peerId, typingState: PropCommonEnum.NOT_TYPING },
+          { root: true },
+        )
+      }, Config.chat.typingInputThrottle * 3)
+      dispatch('textile/subscribeToMailbox', {}, { root: true })
     })
 
     peer?.call.on('INCOMING_CALL', (data) => {
