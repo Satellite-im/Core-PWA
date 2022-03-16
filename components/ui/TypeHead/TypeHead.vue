@@ -118,6 +118,7 @@ export default Vue.extend({
     onItemClicked(item: any) {
       this.$emit('onSelected', item)
       this.isFocus = false
+      this.unpauseMouse = false
       this.searchText = ''
     },
     parentOver(ev: MouseEvent) {
@@ -132,13 +133,6 @@ export default Vue.extend({
       this.$emit('onMultipleSelected', items)
       this.isFocus = false
       this.searchText = ''
-    },
-    onUpBrowseItem(event: KeyboardEvent) {
-      event.preventDefault()
-      this.mouseMove = false
-      if (this.browseIndex > 0) {
-        this.browseIndex--
-      }
     },
     onDownBrowseItem(event: KeyboardEvent) {
       event.preventDefault()
