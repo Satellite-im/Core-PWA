@@ -1,42 +1,8 @@
-export interface CreateFriendParams {
-  createAccount: {
-    friend: { friendKey: Uint8Array }
-  }
-}
-
-export interface InitFriendRequestParams {
-  makeRequest: { tex: [Uint8Array, Uint8Array, Uint8Array, Uint8Array] }
-}
-
-export interface InitAcceptFriendRequestParams {
-  acceptRequest: { tex: [Uint8Array, Uint8Array, Uint8Array, Uint8Array] }
-}
-
-export interface InitDenyFriendRequestParams {
-  denyRequest: {}
-}
-
-export interface InitRemoveFriendRequestParams {
-  removeRequest: {}
-}
-
-export interface InitRemoveFriendParams {
-  removeFriend: {}
-}
-
-export type FriendsInstructionType =
-  | CreateFriendParams
-  | InitFriendRequestParams
-  | InitAcceptFriendRequestParams
-  | InitDenyFriendRequestParams
-  | InitRemoveFriendRequestParams
-  | InitRemoveFriendParams
-
 export enum FriendStatus {
-  NOT_ASSIGNED,
+  UNINITALIZED,
   PENDING,
   ACCEPTED,
-  REFUSED,
+  DENIED,
   REMOVED,
 }
 
