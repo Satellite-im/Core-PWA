@@ -636,4 +636,27 @@ export default {
       },
     },
   },
+  context: {
+    // files
+    fav: 'Favorite',
+    unfav: 'Unfavorite',
+    share: 'Share',
+    unshare: 'Unshare',
+    rename: 'Rename',
+    delete: 'Delete',
+    // friends
+    send: 'Send Message',
+    voice: 'Voice Call',
+    video: 'Video Call',
+    remove: 'Remove Friend',
+    profile: 'Profile',
+    // message
+    edit: 'Edit Message',
+    reaction: 'Add Reaction',
+    reply: 'Reply',
+    copy_msg: 'Copy Message',
+    copy_img: 'Copy Image',
+    save: 'Save Image',
+    copy_link: 'Copy Link',
+  },
 }

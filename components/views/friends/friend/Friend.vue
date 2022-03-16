@@ -13,7 +13,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { Friend } from '~/types/ui/friends'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { AddFriendEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 
@@ -59,7 +59,9 @@ export default Vue.extend({
   data() {
     return {
       loading: '' as AddFriendEnum,
-      contextMenuValues: [{ text: 'Remove Friend', func: this.removeFriend }],
+      contextMenuValues: [
+        { text: this.$t('context.remove'), func: this.removeFriend },
+      ],
     }
   },
   computed: {

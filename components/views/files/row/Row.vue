@@ -11,7 +11,7 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
@@ -38,16 +38,28 @@ export default Vue.extend({
   data() {
     return {
       menuHover: false as boolean,
-      contextMenuValues: [
-        { text: 'Favorite', func: this.like },
-        { text: 'Share', func: this.share },
-        { text: 'Rename', func: this.rename },
-        { text: 'Delete', func: this.remove },
-      ],
     }
   },
   computed: {
     ...mapState(['ui']),
+    contextMenuValues() {
+      return [
+        {
+          text: this.item.liked
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
+          func: this.like,
+        },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.remove },
+      ]
+    },
   },
   methods: {
     /**
@@ -55,7 +67,7 @@ export default Vue.extend({
      * @description Emit item to be handled in pages/files/browse/index.vue
      */
     handle() {
-      if (this.menuHover) {
+      if (this.$data.menuHover) {
         return
       }
       this.$emit('handle', this.item)

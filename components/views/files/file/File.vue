@@ -10,8 +10,7 @@ import {
   BriefcaseIcon,
   ImageIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -23,6 +22,8 @@ declare module 'vue/types/vue' {
     rename: () => void
     remove: () => void
     $filesize: (item: number) => string
+    linkHover: boolean
+    heartHover: boolean
   }
 }
 
@@ -47,17 +48,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      fileUrl: String,
-      fileSize: '',
-      fileHover: false,
-      linkHover: false,
-      heartHover: false,
-      contextMenuValues: [
-        { text: 'Favorite', func: this.like },
-        { text: 'Share', func: this.share },
-        { text: 'Rename', func: this.rename },
-        { text: 'Delete', func: this.remove },
-      ],
+      fileSize: '' as string,
+      fileHover: false as boolean,
+      linkHover: false as boolean,
+      heartHover: false as boolean,
     }
   },
   computed: {
@@ -81,6 +75,24 @@ export default Vue.extend({
      */
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
+    },
+    contextMenuValues() {
+      return [
+        {
+          text: this.item.liked
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
+          func: this.like,
+        },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.remove },
+      ]
     },
   },
   methods: {

@@ -4,7 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
@@ -13,6 +13,9 @@ import { toHTML } from '~/libraries/ui/Markdown'
 declare module 'vue/types/vue' {
   interface Vue {
     setReplyChatbarContent: () => void
+    quickReaction: (emoji: String) => void
+    editMessage: () => void
+    emojiReaction: (e: MouseEvent) => void
   }
 }
 
@@ -57,12 +60,12 @@ export default Vue.extend({
       messageHover: false,
       disData: 'DataFromTheProperty',
       contextMenuValues: [
-        { text: 'quickReaction', func: (this as any).quickReaction },
-        { text: 'Edit Message', func: (this as any).editMessage },
-        { text: 'Add Reaction', func: (this as any).emojiReaction },
-        { text: 'Reply', func: this.setReplyChatbarContent },
+        { text: 'quickReaction', func: this.quickReaction },
+        { text: this.$t('context.edit'), func: this.editMessage },
+        { text: this.$t('context.reaction'), func: this.emojiReaction },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
         {
-          text: 'Copy Message',
+          text: this.$t('context.copy_msg'),
           func: () => {
             const { type, payload } = this.$props.message
             let finalPayload = payload
@@ -72,9 +75,9 @@ export default Vue.extend({
             this.$envinfo.navigator.clipboard.writeText(finalPayload)
           },
         },
-        { text: 'Copy Image', func: (this as any).testFunc },
-        { text: 'Save Image', func: (this as any).testFunc },
-        { text: 'Copy Link', func: (this as any).testFunc },
+        { text: this.$t('context.copy_img'), func: (this as any).testFunc },
+        { text: this.$t('context.save'), func: (this as any).testFunc },
+        { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ],
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
