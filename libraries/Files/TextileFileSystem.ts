@@ -56,7 +56,7 @@ export class TextileFileSystem extends FilSystem {
     // if file is not an embeddable image, set blank thumbnail
     if (
       !file.name.match(Config.regex.image) &&
-      !file.name.match('^.*.(heic)$')
+      !file.name.match(/^.*.(heic)$/i)
     ) {
       return
     }
