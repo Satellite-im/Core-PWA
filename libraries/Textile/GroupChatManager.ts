@@ -22,19 +22,6 @@ import { groupChatSchema } from '~/libraries/Textile/schema'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { AccountsError } from '~/store/accounts/types'
 
-const decodeGroupID = (
-  input: string,
-): { threadID: ThreadID; collectionName: string } => {
-  const [thread, collection] = input.split('|')
-
-  if (!thread || !collection) throw new Error('Unable to decode group id')
-
-  return {
-    threadID: ThreadID.fromString(thread),
-    collectionName: collection,
-  }
-}
-
 export class GroupChatManager {
   private _threadID?: ThreadID
   senderAddress: string
@@ -117,7 +104,7 @@ export class GroupChatManager {
     query: ConversationQuery
     lastInbound?: number
   }): Promise<Message[]> {
-    const { threadID, collectionName } = decodeGroupID(group.id)
+    const { threadID, collectionName } = this.decodeGroupID(group.id)
 
     let groupChatQuery = Query.where('to').eq(group.id).orderByIDDesc()
 
@@ -183,7 +170,7 @@ export class GroupChatManager {
         )
       }
     }
-    const { threadID, collectionName } = decodeGroupID(group.id)
+    const { threadID, collectionName } = this.decodeGroupID(group.id)
     await this.textile.client.listen(
       threadID,
       [{ collectionName }],
@@ -202,7 +189,7 @@ export class GroupChatManager {
     message: MessagePayloads[T],
   ) {
     console.log('addr', this.senderAddress)
-    const { threadID, collectionName } = decodeGroupID(group.id)
+    const { threadID, collectionName } = this.decodeGroupID(group.id)
     const identity = this.textile.identity
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const publicKey = PublicKey.fromString(identity.public.toString())
@@ -304,7 +291,7 @@ export class GroupChatManager {
    * @returns true | false
    */
   isInitialized() {
-    return Boolean(this.threadID)
+    return Boolean(this._threadID)
   }
 
   /**
@@ -322,5 +309,23 @@ export class GroupChatManager {
       throw new Error(AccountsError.INVALID_PIN)
     }
     return decryptedBody
+  }
+
+  /**
+   * Helper method to extract threadID and collectionName from group id string
+   * @param input {string} group id
+   */
+  decodeGroupID(input: string): {
+    threadID: ThreadID
+    collectionName: string
+  } {
+    const [thread, collection] = input.split('|')
+
+    if (!thread || !collection) throw new Error('Unable to decode group id')
+
+    return {
+      threadID: ThreadID.fromString(thread),
+      collectionName: collection,
+    }
   }
 }

@@ -106,7 +106,9 @@ export default Vue.extend({
         const address = this.recipient?.address
         if (
           !address &&
-          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey.split('|')[1])
+          !RegExp(this.$Config.regex.uuidv4).test(
+            this.recipient.textilePubkey.split('|')[1],
+          )
         )
           return
         this.$data.count_error = false
@@ -255,7 +257,9 @@ export default Vue.extend({
      */
     async dispatchFile(file: FileType) {
       if (
-        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey.split('|')[1])
+        RegExp(this.$Config.regex.uuidv4).test(
+          this.recipient.textilePubkey.split('|')[1],
+        )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {

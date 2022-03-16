@@ -43,8 +43,12 @@ Object {
   "modals": Object {
     "changelog": false,
     "createServer": false,
+    "creategroup": false,
     "error": false,
     "glyph": false,
+    "groupInvite": Object {
+      "isOpen": false,
+    },
     "marketplace": false,
     "newfolder": false,
     "quickchat": false,
