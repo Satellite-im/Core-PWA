@@ -55,10 +55,7 @@ export default Vue.extend({
      * @param {ContextMenuItem} item context item
      */
     isRedText(item: ContextMenuItem): boolean {
-      const redTextList = [
-        this.$t('pages.files.context.delete'),
-        this.$t('context.remove'),
-      ]
+      const redTextList = [this.$t('context.delete'), this.$t('context.remove')]
       return redTextList.includes(item.text)
     },
     /**

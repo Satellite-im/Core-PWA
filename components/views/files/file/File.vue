@@ -22,6 +22,8 @@ declare module 'vue/types/vue' {
     rename: () => void
     remove: () => void
     $filesize: (item: number) => string
+    linkHover: boolean
+    heartHover: boolean
   }
 }
 
@@ -46,11 +48,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      fileUrl: String,
-      fileSize: '',
-      fileHover: false,
-      linkHover: false,
-      heartHover: false,
+      fileSize: '' as string,
+      fileHover: false as boolean,
+      linkHover: false as boolean,
+      heartHover: false as boolean,
     }
   },
   computed: {
@@ -90,7 +91,7 @@ export default Vue.extend({
           func: this.share,
         },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.delete },
+        { text: this.$t('context.delete'), func: this.remove },
       ]
     },
   },
