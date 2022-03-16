@@ -66,6 +66,7 @@ export default Vue.extend({
       isFocus: false,
       browseIndex: -1,
       mouseMove: false,
+      unpauseMouse: false,
     }
   },
   watch: {
@@ -78,6 +79,7 @@ export default Vue.extend({
   },
   methods: {
     update() {
+      this.unpauseMouse = false
       if (!this.searchText) {
         this.searchList = []
         return
@@ -102,6 +104,11 @@ export default Vue.extend({
         return this.browseIndex !== -1
       })
     },
+    unpauseMouseSelect() {
+      // mouseMove immediately set to true if you were hovering over the newly visible word list,
+      // this prevents hover animation until you move the mouse after the list is shown
+      this.unpauseMouse = true
+    },
     setFocus() {
       this.isFocus = true
     },
@@ -114,7 +121,9 @@ export default Vue.extend({
       this.searchText = ''
     },
     parentOver(ev: MouseEvent) {
-      this.mouseMove = true
+      if (this.unpauseMouse) {
+        this.mouseMove = true
+      }
     },
     parentLeave(ev: MouseEvent) {
       this.mouseMove = false

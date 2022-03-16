@@ -18,6 +18,7 @@
     <ul
       :class="`${mouseMove ? 'allow-hover' : 'unallow-hover'}`"
       class="search-option-group"
+      @mousemove="unpauseMouseSelect"
       @mouseover="parentOver"
       @mouseleave="parentLeave"
     >
