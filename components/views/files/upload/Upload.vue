@@ -118,6 +118,26 @@ export default Vue.extend({
 
         this.count_error = false
 
+        for (let i = 0; i < newFiles.length; i++) {
+          /* checking .heic file needs file array buffer because sometimes its file type return empty string */
+          const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
+          const isHeicType = isHeic(buffer)
+          if (isHeicType) {
+            /* convert .heic file to jpeg so that we can convert it for html5 style */
+            const oBuffer = await converter({
+              buffer, // the HEIC file buffer
+              format: 'JPEG', // output format
+              quality: 1,
+            })
+            newFiles[i] = new File(
+              [oBuffer.buffer],
+              `${newFiles[i].name.split('.')[0] || 'newImage'}.jpeg`,
+              {
+                type: 'image/jpeg',
+              },
+            )
+          }
+        }
         const filesToUpload = await Promise.all(
           newFiles.map(async (file: File) => {
             const result: UploadDropItemType = {
@@ -125,26 +145,7 @@ export default Vue.extend({
               nsfw: { status: false, checking: false },
               url: '',
             }
-            if (!file.type) {
-              /* checking .heic file needs file array buffer because sometimes its file type return empty string */
-              const buffer = new Uint8Array(await file.arrayBuffer())
-              const isHeicType = isHeic(buffer)
-              if (isHeicType) {
-                /* convert .heic file to jpeg so that we can convert it for html5 style */
-                const oBuffer = await converter({
-                  buffer, // the HEIC file buffer
-                  format: 'JPEG', // output format
-                  quality: 1,
-                })
-                result.file = new File(
-                  [oBuffer.buffer],
-                  `${file.name.split('.')[0] || 'newImage'}.jpeg`,
-                  {
-                    type: 'image/jpeg',
-                  },
-                )
-              }
-            }
+
             return result
           }),
         )
