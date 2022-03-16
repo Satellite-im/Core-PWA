@@ -63,8 +63,8 @@ export class TextileFileSystem extends FilSystem {
     if (file.name.match('^.*.(svg)$')) {
       return this._fileToData(file)
     }
-    const buffer = new Uint8Array(await file.arrayBuffer())
-    if (isHeic(buffer)) {
+    if (isHeic(file)) {
+      const buffer = new Uint8Array(await file.arrayBuffer())
       const outputBuffer = await convert({
         buffer,
         format: 'JPEG',
