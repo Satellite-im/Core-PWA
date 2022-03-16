@@ -145,6 +145,43 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.INVALID_PIN)
   })
+  test('loadAccount with empty mnemonic', async () => {
+    const state = {
+      storePin: false,
+      locked: false,
+      error: '',
+      pinHash:
+        'fddd5093b61663c64c309a0352b3762e4f6b7277b1ec7f2ac64f4b696c66ab91',
+      active: '4tyqWRnsZ9frgvRusFuTY71MdhHPK8jBiPZAUBfvK31C',
+      gasPrice: '',
+      phrase: '', // Empty because this is the mnemonic
+      encryptedPhrase:
+        'AhJ3ybxW6ZnjiX5RSoNUXGvDVkMRFHiMYeYTvgkBMUETCK3YoCmBRnGFQfbM0sCsWJauMUFvIIxucgDbrLcYK5PK/rL00VBlLilQp1dZwGfiEGrE0br4DTWCjkvefwtL',
+      loading: false,
+      registered: false,
+      registrationStatus: 'unknown',
+      lastVisited: '/chat/direct/HFi9WT7vwxhDBi2MNfGUkrCrQrUkVdDKjuhix1RwnVG7',
+      details: {
+        address: '4tyqWRnsZ9frgvRusFuTY71MdhHPK8jBiPZAUBfvK31C',
+        name: 'asdasdsa',
+        profilePicture: '',
+        state: 'online',
+        status: 'dasdad',
+        textilePubkey:
+          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
+      },
+      pin: '?{fDn4s8I5~sb@*F858{]CZ@A',
+    }
+
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+
+    const result = async () => {
+      await accounts.default.loadAccount({ commit, state, dispatch })
+    }
+
+    expect(result).rejects.toThrowError(AccountsError.MNEMONIC_NOT_PRESENT)
+  })
   test('generate wallet with invalid pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const SMPrototype = Vue.prototype.$SolanaManager
