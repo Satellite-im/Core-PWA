@@ -30,13 +30,18 @@ const mutations = {
       active: boolean
     },
   ) {
+    const lastMessageUpdate = messages.length
+      ? messages[messages.length - 1].at
+      : 0
+
     const initialValues = {
       messages: state.conversations[address]?.messages || [],
       replies: state.conversations[address]?.replies || [],
       reactions: state.conversations[address]?.reactions || [],
       lastInbound: state.conversations[address]?.lastInbound || 0, // the last time a message was received by any member of conversation, EXCEPT account owner
-      lastUpdate: state.conversations[address]?.lastUpdate || 0, // the last time a message was received by any member of conversation, INCLUDING account owner
+      lastUpdate: state.conversations[address]?.lastUpdate || lastMessageUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
+
     const tracked = updateMessageTracker(messages, initialValues)
 
     if (active) state.activeConversation = address
