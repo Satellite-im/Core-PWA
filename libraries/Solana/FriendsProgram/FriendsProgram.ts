@@ -28,9 +28,9 @@ export const FRIENDS_PROGRAM_ID = new PublicKey(
 )
 
 export default class FriendsProgram extends EventEmitter {
-  solana?: Solana
-  program?: Program<Friends>
-  subscriptions?: { [eventName: string]: number }
+  protected solana?: Solana
+  protected program?: Program<Friends>
+  protected subscriptions?: { [eventName: string]: number }
 
   constructor(solana: Solana) {
     super()
@@ -58,7 +58,7 @@ export default class FriendsProgram extends EventEmitter {
 
   /**
    * @method _getSolana
-   * Returns the solana instance for friends
+   * Get the solana instance for friends
    * @returns the solana instance
    */
   protected _getSolana() {
@@ -108,16 +108,23 @@ export default class FriendsProgram extends EventEmitter {
 
   /**
    * @method makeRequest
-   * make frend request
-   * @param to receipient key
+   * Make friend request
+   * @param request friend request account publickey
+   * @param first sender or recipient public key, whichever is greater (in bytes)
+   * @param second sender or recipient public key, whichever is smaller (in bytes)
+   * @param k textile encryption key for sender
+   * @returns transaction hash string of make friend request
    */
-  async makeRequest(to: PublicKey, k: String) {
+  async makeRequest(
+    request: PublicKey,
+    first: PublicKey,
+    second: PublicKey,
+    k: String,
+  ) {
     const program = this._getProgram()
 
     const payer = this._getPayer()
-
-    const request = this.requestKey(payer.publicKey, to)
-    await program.rpc.makeRequest(payer.publicKey, to, k, {
+    const tx = await program.rpc.makeRequest(first, second, k, {
       accounts: {
         request,
         user: payer.publicKey,
@@ -126,105 +133,153 @@ export default class FriendsProgram extends EventEmitter {
       },
       signers: [payer],
     })
+    return tx
   }
 
   /**
    * @method denyRequest
-   * deny friend request
-   * @param request friend request key
+   * Deny friend request
+   * @param request friend request account public key
+   * @returns transaction hash string of deny friend request
    */
   async denyRequest(request: PublicKey) {
     const program = this._getProgram()
 
     const payer = this._getPayer()
 
-    await program.rpc.denyRequest({
+    const tx = await program.rpc.denyRequest({
       accounts: {
         request,
         user: payer.publicKey,
       },
       signers: [payer],
     })
+    return tx
   }
 
   /**
    * @method acceptRequest
-   * accept friend request
-   * @param request
+   * Accept friend request
+   * @param request friend request account public key
+   * @param k textile encryption key for recipient
+   * @returns transaction hash of accept friend request
    */
   async acceptRequest(request: PublicKey, k: String) {
     const program = this._getProgram()
 
     const payer = this._getPayer()
 
-    await program.rpc.acceptRequest(k, {
+    const tx = await program.rpc.acceptRequest(k, {
       accounts: {
         request,
         user: payer.publicKey,
       },
       signers: [payer],
     })
+    return tx
   }
 
   /**
    * @method removeRequest
-   * remove friend request
-   * @param request friend request key
+   * Remove friend request
+   * @param request friend request account public key
    */
   async removeRequest(request: PublicKey) {
     const program = this._getProgram()
 
     const payer = this._getPayer()
 
-    await program.rpc.removeRequest({
+    const tx = await program.rpc.removeRequest({
       accounts: {
         request,
         user: payer.publicKey,
-        payer,
+        payer: payer.publicKey,
       },
       signers: [payer],
     })
+    return tx
   }
 
   /**
    * @method removeFriend
-   * remove friend
-   * @param to
+   * Remove friend
+   * @param request friend request account public key
    */
   async removeFriend(request: PublicKey) {
     const program = this._getProgram()
 
     const payer = this._getPayer()
 
-    await program.rpc.removeFriend({
+    const tx = await program.rpc.removeFriend({
       accounts: {
         request,
         user: payer.publicKey,
       },
       signers: [payer],
     })
-  }
-
-  public requestKey(from: PublicKey, to: PublicKey) {
-    const program = this._getProgram()
-    const request = utils.publicKey.findProgramAddressSync(
-      [from.toBuffer(), to.toBuffer()],
-      program.programId,
-    )
-    return request[0]
+    return tx
   }
 
   /**
-   * @method getAccountsByStatus
-   * Gets all the friend accounts related to the program, filtered by the
-   * given status code
+   * @method computeAccountKeys
+   * Computes the friend account public key from 2 given public keys
+   * @param from the public key to be used at position 0
+   * @param to the public key to be used at position 1
+   * @returns the computed public key
+   */
+  public computeAccountKeys(from: PublicKey, to: PublicKey) {
+    const program = this._getProgram()
+    let first = from
+    let second = to
+    if (from.toBytes() < to.toBytes()) {
+      first = to
+      second = from
+    }
+    const request = utils.publicKey.findProgramAddressSync(
+      [first.toBuffer(), second.toBuffer()],
+      program.programId,
+    )
+    return { request: request[0], first, second }
+  }
+
+  /**
+   * @method getIncomingAccountsByStatus
+   * Gets all incoming friend accounts related to the program, filtered by the given status code
    * @param status the status code to filter
    * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
-   * @returns a list of incoming and outgoing requests filtered by status
+   * @returns a list of incoming filtered by status
    */
-  async getFriendAccountsByStatus(
+  async getIncomingAccountsByStatus(
     status: FriendStatus,
-  ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
+  ): Promise<FriendAccount[]> {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const statusAndToKey = base58(
+      Buffer.from([status, ...payer.publicKey.toBytes()]),
+    )
+
+    const incomingTemp = await program.account.friendRequest.all([
+      {
+        memcmp: { offset: 32 + 8, bytes: statusAndToKey },
+      },
+    ])
+
+    const incoming = incomingTemp.map(this._parseAccount)
+    return incoming
+  }
+
+  /**
+   * @method getOutgoingAccountsByStatus
+   * Gets all outgoing friend accounts related to the program, filtered by given status code
+   * @param status the status code to filter
+   * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
+   * @returns a list of outgoing filtered by status
+   */
+  async getOutgoingAccountsByStatus(
+    status: FriendStatus,
+  ): Promise<FriendAccount[]> {
     const program = this._getProgram()
 
     const payer = this._getPayer()
@@ -233,25 +288,30 @@ export default class FriendsProgram extends EventEmitter {
       Buffer.from([...payer.publicKey.toBytes(), status]),
     )
 
-    const statusAndToKey = base58(
-      Buffer.from([status, ...payer.publicKey.toBytes()]),
-    )
-
     const outgoingTemp = await program.account.friendRequest.all([
       {
         memcmp: { offset: 8, bytes: fromKeyAndStatus },
       },
     ])
 
-    const incomingTemp = await program.account.friendRequest.all([
-      {
-        memcmp: { offset: 8 + 32, bytes: statusAndToKey },
-      },
-    ])
-
     const outgoing = outgoingTemp.map(this._parseAccount)
-    const incoming = incomingTemp.map(this._parseAccount)
+    return outgoing
+  }
 
+  /**
+   * @method getAccountsByStatus
+   * Gets all the friend accounts related to the program, filtered by given status code
+   * @param status the status code to filter
+   * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
+   * @returns a list of incoming and outgoing requests filtered by status
+   */
+  async getAccountsByStatus(
+    status: FriendStatus,
+  ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
+    const [incoming, outgoing] = await Promise.all([
+      this.getIncomingAccountsByStatus(status),
+      this.getOutgoingAccountsByStatus(status),
+    ])
     return {
       incoming,
       outgoing,
@@ -259,21 +319,17 @@ export default class FriendsProgram extends EventEmitter {
   }
 
   /**
-   * @method getFriendAccount
+   * @method getAccount
    * Retrieves a friend account from a given public key
-   * @param requestKey the public key of the friend account
+   * @param accountKey the public key of the friend account
    * @returns the raw friend account object
    */
-  async getFriendAccount(requestKey: PublicKey) {
+  async getAccount(accountKey: PublicKey) {
     const program = this._getProgram()
     try {
-      const account = await program.account.friendRequest.fetch(requestKey)
-      if (account === null) {
-        return null
-      }
-      return this._parseAccount({ publicKey: requestKey, account })
+      const account = await program.account.friendRequest.fetch(accountKey)
+      return this._parseAccount({ publicKey: accountKey, account })
     } catch (error) {
-      console.log(error)
       return null
     }
   }
@@ -291,11 +347,32 @@ export default class FriendsProgram extends EventEmitter {
     publicKey: PublicKey
     account: TypeDef<Friends['accounts'][0], IdlTypes<Friends>>
   }): FriendAccount {
-    const { from, to, status, fromEncryptedKey, toEncryptedKey } = account
+    const {
+      from,
+      to,
+      status: statusObject,
+      fromEncryptedKey,
+      toEncryptedKey,
+    }: {
+      from: PublicKey
+      to: PublicKey
+      status: any
+      fromEncryptedKey: any
+      toEncryptedKey: any
+    } = account
+    const status = statusObject.pending
+      ? FriendStatus.PENDING
+      : statusObject.accepted
+      ? FriendStatus.ACCEPTED
+      : statusObject.denied
+      ? FriendStatus.DENIED
+      : statusObject.removed
+      ? FriendStatus.REMOVED
+      : FriendStatus.UNINITALIZED
     return {
       accountId: publicKey.toString(),
       from: from.toString(),
-      status: status as unknown as number,
+      status,
       to: to.toString(),
       fromMailboxId: fromEncryptedKey as string,
       toMailboxId: toEncryptedKey as string,
@@ -377,7 +454,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestDeniedBytes = base58(
-      Buffer.from([...payer.publicKey.toBytes(), FriendStatus.REFUSED]),
+      Buffer.from([...payer.publicKey.toBytes(), FriendStatus.DENIED]),
     )
 
     const friendRequestDeniedFilter: GetProgramAccountsFilter = {
@@ -409,6 +486,21 @@ export default class FriendsProgram extends EventEmitter {
       this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
       Config.solana.defaultCommitment,
       [friendRemovedFilter],
+    )
+
+    const friendRequestRemovedMirroredBytes = base58(
+      Buffer.from([FriendStatus.REMOVED, ...payer.publicKey.toBytes()]),
+    )
+
+    const friendRequestRemovedMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32 + 8, bytes: friendRequestRemovedMirroredBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
+      Config.solana.defaultCommitment,
+      [friendRequestRemovedMirroredFilter],
     )
   }
 
