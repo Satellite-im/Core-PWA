@@ -58,6 +58,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.get('.toggle-sidebar').should('be.visible').click()
 
       //Validate message and emojis are sent
+      cy.waitForMessagesToLoad()
       cy.chatFeaturesSendMessage(randomMessage)
       cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
 
