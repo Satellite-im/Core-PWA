@@ -1,5 +1,4 @@
 const faker = require('faker')
-const { cpSync } = require('fs')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
   'black blossom pink damage together artwork coil west clown turn chimney physical'
