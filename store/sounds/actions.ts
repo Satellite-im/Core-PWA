@@ -18,4 +18,7 @@ export default {
     const status = state[call]
     if (status) $Sounds.stopSound(call)
   },
+  setMuteSounds({ state }: ActionsArguments<SoundsState>, flag: boolean) {
+    $Sounds.setMuteSounds(flag)
+  },
 }

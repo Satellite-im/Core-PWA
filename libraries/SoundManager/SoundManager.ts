@@ -1,4 +1,4 @@
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 import { Config } from '~/config'
 
 // Keep this type in sync with Config.sounds
@@ -78,6 +78,10 @@ export default class SoundManager {
     this.existsSound(sound)
 
     this.sounds[sound].stop()
+  }
+
+  setMuteSounds(flag: boolean) {
+    Howler.mute(flag)
   }
 
   /** @function

@@ -39,19 +39,7 @@ export default Vue.extend({
      * @example
      */
     toggleMute() {
-      const muted = this.audioMuted
-
-      const { activeCall } = this.webrtc
-
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      if (muted) {
-        peer?.call.unmute(WebRTCEnum.AUDIO)
-        this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
-        return
-      }
-      peer?.call.mute(WebRTCEnum.AUDIO)
-      this.$store.dispatch('sounds/playSound', Sounds.MUTE)
+      this.$store.dispatch('audio/toggleMute')
     },
     /**
      * @method toggleDeafen DocsTODO
@@ -59,10 +47,7 @@ export default Vue.extend({
      * @example
      */
     toggleDeafen() {
-      const deafened = this.audio.deafened
-      if (!deafened) this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
-      else this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
-      this.$store.commit('audio/deafen')
+      this.$store.dispatch('audio/toggleDeafen')
     },
     /**
      * @method toggleVideo DocsTODO
