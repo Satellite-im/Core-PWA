@@ -150,6 +150,7 @@ const webRTCActions = {
 
       if (track.kind === 'audio') {
         commit('audio/setMuted', !track.enabled, { root: true })
+        commit('video/setDisabled', true, { root: true })
       }
 
       if (track.kind === 'video') {
