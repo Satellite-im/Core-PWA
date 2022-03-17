@@ -1,0 +1,35 @@
+.cta {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  padding: 40px @large-spacing @normal-spacing;
+  &:extend(.modal-gradient);
+  color: @secondary-text;
+
+  .sat-icon {
+    fill: @white;
+    margin: auto auto @normal-spacing;
+  }
+  .main-title {
+    text-align: center;
+    font-weight: 400;
+  }
+  .title {
+    color: @secondary-text;
+    &.sub {
+      margin-bottom: @normal-spacing;
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: @light-spacing;
+    list-style-type: disc;
+    margin-left: @normal-spacing;
+  }
+
+  .button {
+    margin-top: @normal-spacing;
+  }
+}

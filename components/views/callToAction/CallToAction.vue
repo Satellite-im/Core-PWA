@@ -1,4 +1,4 @@
-<template src="./index.html"></template>
+<template src="./CallToAction.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -6,8 +6,6 @@ import Vue from 'vue'
 import { RadioIcon, SatelliteIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
-  name: 'CallToAction',
-
   components: {
     RadioIcon,
     SatelliteIcon,
@@ -34,4 +32,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./index.less"></style>
+<style scoped lang="less" src="./CallToAction.less"></style>
