@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Dayjs } from 'dayjs'
-import Cursor from '~/libraries/ui/Cursor'
 import { Config } from '~/config'
+import Cursor from '~/libraries/ui/Cursor'
 
 export type Operation = {
   type: 'insert_text' | 'remove_text'
