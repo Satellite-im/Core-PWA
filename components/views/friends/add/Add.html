@@ -21,31 +21,31 @@
     send
   />
   <span v-if="featureReadyToShow">
-  <UiSpacer :height="10" />
-  <TypographyHorizontalRuleText plaintext value="OR" />
-  <UiSpacer :height="10" />
-  <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
-  <TypographyText :text="$t('friends.add_qrcode_description')" />
-  <UiSpacer :height="10" />
-  <div class="card">
-    <div class="card-content">
-      <div class="content">
-        <div class="columns">
-          <div class="column">
-            <TypographyText :text="$t('friends.scan_code')" />
-            <InteractablesButton
-              type="primary"
-              size="small"
-              :text="$t('friends.camera_scan')"
-            />
-          </div>
-          <div class="column">
-            <TypographyText :text="$t('friends.friend_code')" />
-            <qrcode-vue :value="friendInviteUrl" :size="size" level="H" />
+    <UiSpacer :height="10" />
+    <TypographyHorizontalRuleText plaintext value="OR" />
+    <UiSpacer :height="10" />
+    <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
+    <TypographyText :text="$t('friends.add_qrcode_description')" />
+    <UiSpacer :height="10" />
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+          <div class="columns">
+            <div class="column">
+              <TypographyText :text="$t('friends.scan_code')" />
+              <InteractablesButton
+                type="primary"
+                size="small"
+                :text="$t('friends.camera_scan')"
+              />
+            </div>
+            <div class="column">
+              <TypographyText :text="$t('friends.friend_code')" />
+              <qrcode-vue :value="friendInviteUrl" :size="size" level="H" />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</span>
+  </span>
 </div>

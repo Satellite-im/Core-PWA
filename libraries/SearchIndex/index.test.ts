@@ -1,5 +1,5 @@
 import SearchIndex from './index'
-import * as index from "~/libraries/SearchIndex/index"
+import * as index from '~/libraries/SearchIndex/index'
 
 describe('index.default.serialize', () => {
   let inst2: any

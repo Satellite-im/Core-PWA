@@ -10,4 +10,14 @@ describe('Cursor.default.getCurrentCursorPosition', () => {
     )
     expect(result).toMatchSnapshot()
   })
+
+  describe('Cursor.default.setCurrentCursorPosition', () => {
+    test('0', () => {
+      let result: any = Cursor.default.setCurrentCursorPosition(
+        -Infinity,
+        document.querySelector('Foo bar', 'Foo bar', 'Foo bar'),
+      )
+      expect(result).toMatchSnapshot()
+    })
+  })
 })

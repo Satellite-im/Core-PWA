@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.getTrack 0 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.getTrack 1 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.getTrack 2 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.getTrack 3 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.removeAllTracks 0 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.removeTrack 0 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.removeTrack 1 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.removeTrack 2 1`] = `undefined`;
+
+exports[`Mutate Tracks Manager TracksManager.TracksManager.removeTrack 3 1`] = `undefined`;

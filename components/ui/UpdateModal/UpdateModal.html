@@ -12,9 +12,7 @@
         <vue-markdown :source="releaseData.body" :breaks="false"/>
       </pre>
       <div class="update-modal-spinner" v-if="isLoading">
-        <UiLoadersSpinner
-          spinning
-        />
+        <UiLoadersSpinner spinning />
       </div>
 
       <TypographyText
