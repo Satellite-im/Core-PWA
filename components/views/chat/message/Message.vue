@@ -164,14 +164,6 @@ export default Vue.extend({
       this.$envinfo.navigator.clipboard.writeText(this.message.payload)
     },
     /**
-     * @method mouseOver DocsTODO
-     * @description
-     * @example
-     */
-    mouseOver() {
-      this.$data.messageHover = !this.$data.messageHover
-    },
-    /**
      * @method setReplyChatbarContent DocsTODO
      * @description
      * @example
