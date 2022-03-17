@@ -1,9 +1,10 @@
-<template src="./Nav.html" />
+<template src="./Nav.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 
 import { ShoppingBagIcon, ClockIcon } from 'satellite-lucide-icons'
+import { ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -26,8 +27,8 @@ export default Vue.extend({
   methods: {
     toggleMarketPlace() {
       this.$store.commit('ui/toggleModal', {
-        name: 'marketplace',
-        state: !this.ui.modals.marketplace,
+        name: ModalWindows.CALLTOACTION,
+        state: !this.ui.modals[ModalWindows.CALLTOACTION],
       })
     },
   },
