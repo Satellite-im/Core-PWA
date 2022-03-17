@@ -9,6 +9,8 @@ import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 
+import { User } from '~/types/ui/user'
+
 export default Vue.extend({
   name: 'Scroll',
   components: {
@@ -41,6 +43,15 @@ export default Vue.extend({
       default: 'always',
       required: false,
     },
+    user: {
+     type: Object as PropType<User>,
+      default: () => ({
+        name: '',
+        address: '',
+        status: '',
+      }),
+      required: true,
+    },
   },
   data() {
     return {
@@ -54,6 +65,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile']),
+    messages() {
+        return this.textile.conversations[this.user.address]?.messages
+    },
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
@@ -70,6 +84,9 @@ export default Vue.extend({
       if (newValue !== oldValue) {
         this.autoScrollToBottom()
       }
+    },
+    messages() {
+      this.autoScrollToBottom()
     },
   },
   methods: {
