@@ -33,11 +33,17 @@ describe('Snapshots Testing', () => {
   })
 
   it('Import account - Buffering screen', () => {
-    cy.snapshotTestContains('Linking Satellites...', 60000)
+    cy.contains('Linking Satellites...').should('be.visible')
+    cy.snapshotTestContains(
+      'Aligning satellites to retrieve your account',
+      60000,
+    )
   })
 
   it('Import account - Main Screen Loaded', () => {
-    cy.snapshotTestContains('SnapQA', 60000)
+    cy.contains('SnapQA', { timeout: 60000 })
+    cy.get('body').realClick({ position: 'topLeft' })
+    cy.snapshotTestContains('SnapQA')
   })
 
   it('Import account - Go to files', () => {
@@ -158,6 +164,9 @@ describe('Snapshots Testing', () => {
     //User input fill and finishing account creation
     cy.createAccountUserInput(randomName, randomStatus)
     cy.createAccountSubmit()
-    cy.snapshotTestContains('Linking Satellites...', 20000)
+    cy.snapshotTestContains(
+      'Aligning satellites to retrieve your account...',
+      20000,
+    )
   })
 })

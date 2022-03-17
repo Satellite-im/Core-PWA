@@ -43,7 +43,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.contains('Chat User A', { timeout: 300000 }).should('be.visible')
     //Attempt 3 times to ensure that if first account loads before, second account will see the typing indicator
     for (let times = 0; times < 3; times++) {
-      cy.get('.messageuser').should('be.visible').type(longMessage).clear()
+      cy.get('.editable-input').should('be.visible').type(longMessage).clear()
     }
   })
 })

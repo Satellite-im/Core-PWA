@@ -21,6 +21,7 @@ describe('Chat features with two accounts - First User', () => {
   })
 
   it('Send message to user B', () => {
+    cy.waitForMessagesToLoad()
     cy.chatFeaturesSendMessage(randomMessage)
     cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
   })
@@ -75,6 +76,8 @@ describe('Chat features with two accounts - First User', () => {
   })
 
   it('Assert message received from user A', () => {
+    //Adding assertion to validate that messages are displayed
+    cy.waitForMessagesToLoad()
     cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
   })
 
