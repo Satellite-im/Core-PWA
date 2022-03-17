@@ -4,9 +4,9 @@ import * as ed25519 from 'ed25519-hd-key'
 import { Config } from '~/config'
 import { SolanaWallet } from '~/types/solana/solana'
 import {
-    getClusterFromNetworkConfig,
-    publicKeyFromSeed,
-    sleep
+  getClusterFromNetworkConfig,
+  publicKeyFromSeed,
+  sleep,
 } from '../Solana'
 
 export default class SolanaManager {

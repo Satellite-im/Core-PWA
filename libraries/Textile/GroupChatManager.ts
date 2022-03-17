@@ -6,20 +6,20 @@ import Vue from 'vue'
 import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
 import {
-    EncodingTypesEnum,
-    MessagingTypesEnum,
-    PropCommonEnum
+  EncodingTypesEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { groupChatSchema } from '~/libraries/Textile/schema'
 import { Groups } from '~/mock/groups'
 import { AccountsError } from '~/store/accounts/types'
 import {
-    ConversationQuery,
-    Message,
-    MessageCallback,
-    MessageFromThread,
-    MessagePayloads,
-    MessageTypes
+  ConversationQuery,
+  Message,
+  MessageCallback,
+  MessageFromThread,
+  MessagePayloads,
+  MessageTypes,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { messageEncoder } from './encoders'

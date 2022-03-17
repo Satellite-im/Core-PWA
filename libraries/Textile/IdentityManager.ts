@@ -6,7 +6,6 @@ import { SolanaWallet } from '~/types/solana/solana'
 // @ts-ignore
 import { AuthData } from '../Interfaces'
 
-
 export default class IdentityManager {
   client?: Client
   users?: Users

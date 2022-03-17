@@ -2,10 +2,13 @@ import { without } from 'lodash'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import {
-    EnhancerInfo,
-    Flair, Position, RecentGlyph,
-    SettingsRoutes, Theme,
-    UIState
+  EnhancerInfo,
+  Flair,
+  Position,
+  RecentGlyph,
+  SettingsRoutes,
+  Theme,
+  UIState,
 } from './types'
 
 export default {

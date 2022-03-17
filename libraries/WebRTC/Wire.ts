@@ -4,16 +4,16 @@ import Peer, { SignalData } from 'simple-peer'
 import Vue from 'vue'
 import Emitter from '~/libraries/WebRTC/Emitter'
 import {
-    WireEventListeners,
-    WireIdentificationMessage,
-    WireMessage
+  WireEventListeners,
+  WireIdentificationMessage,
+  WireMessage,
 } from '~/libraries/WebRTC/types'
 import {
-    wireDataMessage,
-    wireIdentificationMessage,
-    wireKeyboardState,
-    wireRefuseConnectionMessage,
-    wireSignalMessage
+  wireDataMessage,
+  wireIdentificationMessage,
+  wireKeyboardState,
+  wireRefuseConnectionMessage,
+  wireSignalMessage,
 } from './encoders'
 
 /**

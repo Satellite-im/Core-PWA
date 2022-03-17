@@ -5,7 +5,6 @@ import groupBy from 'lodash/groupBy'
 import sortBy from 'lodash/sortBy'
 import { Friend } from '~/types/ui/friends'
 
-
 /**
  * @ported
  * Ported from Satellite Legacy

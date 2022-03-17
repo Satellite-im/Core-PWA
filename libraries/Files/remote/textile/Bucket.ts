@@ -2,7 +2,7 @@ import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
 import { Config } from '~/config'
 import {
   FileSystemExport,
-  FILESYSTEM_TYPE
+  FILESYSTEM_TYPE,
 } from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { RFM } from '../abstracts/RFM.abstract'

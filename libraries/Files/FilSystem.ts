@@ -6,7 +6,11 @@ import { Fil } from './Fil'
 import { DIRECTORY_TYPE } from './types/directory'
 import { FILE_TYPE } from './types/file'
 import {
-    ExportDirectory, ExportFile, ExportItem, FileSystemExport, FILESYSTEM_TYPE
+  ExportDirectory,
+  ExportFile,
+  ExportItem,
+  FileSystemExport,
+  FILESYSTEM_TYPE,
 } from './types/filesystem'
 
 export class FilSystem {

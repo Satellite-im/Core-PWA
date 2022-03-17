@@ -4,7 +4,6 @@ import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { IDL, Users } from './UsersProgram.types'
 
-
 const { PublicKey, SystemProgram } = web3
 
 export const USERS_PROGRAM_ID = new PublicKey(Config.solana.usersProgramId)

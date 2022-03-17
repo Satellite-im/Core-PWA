@@ -1,9 +1,12 @@
 import { TypeOf } from 'io-ts'
 import { SignalData } from 'simple-peer'
 import {
-    KeyboardStates, wireDataMessage,
-    wireIdentificationMessage, wireKeyboardState, wireRefuseConnectionMessage,
-    wireSignalMessage
+  KeyboardStates,
+  wireDataMessage,
+  wireIdentificationMessage,
+  wireKeyboardState,
+  wireRefuseConnectionMessage,
+  wireSignalMessage,
 } from './Encoders'
 
 export interface WireEventListeners {

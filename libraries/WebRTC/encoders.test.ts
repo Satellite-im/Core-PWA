@@ -1,5 +1,11 @@
 import {
-    KeyboardStates, wireBaseMessage, wireDataMessage, wireIdentificationMessage, wireKeyboardState, wireRefuseConnectionMessage, wireSignalMessage
+  KeyboardStates,
+  wireBaseMessage,
+  wireDataMessage,
+  wireIdentificationMessage,
+  wireKeyboardState,
+  wireRefuseConnectionMessage,
+  wireSignalMessage,
 } from '~/libraries/WebRTC/encoders'
 
 describe('check all constants', () => {

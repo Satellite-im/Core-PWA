@@ -1,7 +1,6 @@
 import { Item } from './abstracts/Item.abstract'
 import { FILE_TYPE } from './types/file'
 
-
 export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
   private _hash: string = ''

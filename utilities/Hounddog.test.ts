@@ -3,7 +3,6 @@ import { DataStateType } from '~/store/dataState/types'
 import * as WebRTC from '~/store/webrtc/mutations'
 import * as Hounddog from '~/utilities/Hounddog'
 
-
 describe("Retrieving friend's profile", () => {
   // state.all.find
   let inst: any

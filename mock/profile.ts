@@ -1,9 +1,10 @@
 // @ts-ignore
 import * as url from '~/assets/img/profile.png'
 import {
-    ProfileBadge, ProfileBadgeType, ProfileInfo
+  ProfileBadge,
+  ProfileBadgeType,
+  ProfileInfo,
 } from '~/types/profile/profile'
-
 
 export const profileBadges = [
   {

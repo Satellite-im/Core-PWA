@@ -1,13 +1,21 @@
 import dayjs from 'dayjs'
 import {
-    MeasurementUnitsEnum, MessagingTypesEnum, PropCommonEnum
+  MeasurementUnitsEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Group, MessageGroup, UIReaction, UIReply } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
 import {
-    FileMessage, GlyphMessage, Message, MessagesTracker, ReactionMessage, ReactionsTracker,
-    RepliesTracker, ReplyMessage,
-    TextMessage
+  FileMessage,
+  GlyphMessage,
+  Message,
+  MessagesTracker,
+  ReactionMessage,
+  ReactionsTracker,
+  RepliesTracker,
+  ReplyMessage,
+  TextMessage,
 } from '~/types/textile/mailbox'
 
 function messageRepliesToUIReplies(

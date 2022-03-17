@@ -3,29 +3,29 @@ import Vue from 'vue'
 import Crypto from '~/libraries/Crypto/Crypto'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import {
-    FriendAccount,
-    FriendsEvents,
-    FriendStatus
+  FriendAccount,
+  FriendsEvents,
+  FriendStatus,
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram, {
-    UserInfo
+  UserInfo,
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { ActionsArguments } from '~/types/store/store'
 import {
-    Friend,
-    FriendRequest,
-    IncomingRequest,
-    OutgoingRequest
+  Friend,
+  FriendRequest,
+  IncomingRequest,
+  OutgoingRequest,
 } from '~/types/ui/friends'
 import { DataStateType } from '../dataState/types'
 import {
-    AcceptFriendRequestArguments,
-    CreateFriendRequestArguments,
-    FriendsError,
-    FriendsState
+  AcceptFriendRequestArguments,
+  CreateFriendRequestArguments,
+  FriendsError,
+  FriendsState,
 } from './types'
 
 export default {

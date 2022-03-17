@@ -70,10 +70,9 @@ function encodeInstructionData(instruction: ServerInstructionType) {
 }
 
 export {
-    LAYOUT,
-    encodeInstructionData,
-    dwellerAccountLayout,
-    serverAccountLayout,
-    ADDRESS_TYPE_INPUT,
+  LAYOUT,
+  encodeInstructionData,
+  dwellerAccountLayout,
+  serverAccountLayout,
+  ADDRESS_TYPE_INPUT,
 }
-

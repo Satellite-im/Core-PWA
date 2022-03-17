@@ -1,8 +1,8 @@
 import {
-    SearchChannel,
-    SearchOption,
-    SearchUser,
-    SearchValueHas
+  SearchChannel,
+  SearchOption,
+  SearchUser,
+  SearchValueHas,
 } from '~/types/search/search'
 
 export const searchRecommend = {

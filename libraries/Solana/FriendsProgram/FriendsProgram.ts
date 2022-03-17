@@ -4,9 +4,14 @@ import {
   // eslint-disable-next-line import/named
   GetProgramAccountsFilter,
   // eslint-disable-next-line import/named
-  KeyedAccountInfo, Keypair, PublicKey,
-  sendAndConfirmTransaction, SystemProgram, SYSVAR_RENT_PUBKEY, Transaction,
-  TransactionInstruction
+  KeyedAccountInfo,
+  Keypair,
+  PublicKey,
+  sendAndConfirmTransaction,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+  Transaction,
+  TransactionInstruction,
 } from '@solana/web3.js'
 import { EventEmitter } from 'events'
 import base58 from 'micro-base58'
@@ -17,16 +22,14 @@ import {
   encodeInstructionData,
   friendLayout,
   parseFriendAccount,
-  parseFriendAccounts
+  parseFriendAccounts,
 } from './FriendsProgram.layout'
 import {
   CreateFriendParams,
   FriendAccount,
   FriendsEvents,
-  FriendStatus
+  FriendStatus,
 } from './FriendsProgram.types'
-
-
 
 export const FRIENDS_PROGRAM_ID = new PublicKey(Config.solana.friendsProgramId)
 
