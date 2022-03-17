@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`index.UserPermissions.created 0 1`] = `undefined`;
+
+exports[`index.exportForTesting.formatDevices 0 1`] = `
+Array [
+  Object {
+    "text": "videoinput: FaceTime HD Camera (Built-in) ",
+    "value": "id=csO9c0YpAf274OuCPUA53CNE0YHlIr2yXCi+SqfBZZ8=",
+  },
+  Object {
+    "text": "audioinput: default (Built-in Microphone) ",
+    "value": "id=RKxXByjnabbADGQNNZqLVLdmXlS0YkETYCIbg+XxnvM=",
+  },
+  Object {
+    "text": "audioinput: Built-in Microphone ",
+    "value": "id=r2/xw1xUPIyZunfV1lGrKOma5wTOvCkWfZ368XCndm0=",
+  },
+]
+`;
