@@ -11,7 +11,7 @@ import {
   UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
@@ -38,16 +38,28 @@ export default Vue.extend({
   data() {
     return {
       menuHover: false as boolean,
-      contextMenuValues: [
-        { text: 'Favorite', func: this.todo },
-        { text: 'Share', func: this.todo },
-        { text: 'Rename', func: this.todo },
-        { text: 'Delete', func: this.todo },
-      ],
     }
   },
   computed: {
     ...mapState(['ui']),
+    contextMenuValues() {
+      return [
+        {
+          text: this.item.liked
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
+          func: this.like,
+        },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.remove },
+      ]
+    },
   },
   methods: {
     /**
@@ -55,16 +67,38 @@ export default Vue.extend({
      * @description Emit item to be handled in pages/files/browse/index.vue
      */
     handle() {
-      if (this.menuHover) {
+      if (this.$data.menuHover) {
         return
       }
       this.$emit('handle', this.item)
     },
     /**
-     * @description handle in AP-1054
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
      */
-    todo() {
-      this.$toast.show(this.$t('todo') as string)
+    like() {
+      this.$emit('like', this.item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share() {
+      this.$emit('share', this.item)
+    },
+    /**
+     * @method rename
+     * @description Emit to rename item - pages/files/browse/index.vue
+     */
+    rename() {
+      this.$emit('rename', this.item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove() {
+      this.$emit('remove', this.item)
     },
   },
 })

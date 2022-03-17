@@ -150,9 +150,14 @@ export enum SettingsRoutes {
 // | 'network'
 // | 'realms'
 
+export interface ContextMenuItem {
+  text: string
+  func: Function
+}
+
 export interface UIState {
   contextMenuStatus: boolean
-  contextMenuValues: object[]
+  contextMenuValues: ContextMenuItem[]
   quickProfile: object | boolean
   userProfile: object
   contextMenuPosition: object

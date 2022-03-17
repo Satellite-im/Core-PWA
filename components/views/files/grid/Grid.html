@@ -9,8 +9,11 @@
       v-for="item, i in directory"
       :item="item"
       :key="i + counter"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
       @handle="handle"
-      @forceRender="forceRender"
     />
   </div>
 </div>

@@ -120,7 +120,7 @@ export default Vue.extend({
       })
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
-          // todo - fix with AP-807. don't scan large files to prevent crash
+          // todo - fix with AP-1066. don't scan large files to prevent crash
           if (file.size > this.$Config.uploadByteLimit) {
             return { file, nsfw: false }
           }
@@ -138,7 +138,6 @@ export default Vue.extend({
             return { file, nsfw: await this.$Security.isNSFW(fileJpg) }
           }
 
-          // todo - fix this as part of AP-807. marks nsfw if unscannable image type (tiff)
           let nsfw
           try {
             nsfw = await this.$Security.isNSFW(file)

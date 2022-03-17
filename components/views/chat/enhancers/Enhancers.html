@@ -25,62 +25,64 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <emoji-picker
-      @emoji="addEmoji"
-      :search="search"
+    <UiScroll
+      verticalScroll
+      scrollbarVisibility="scroll"
       v-if="ui.enhancers.route === 'emotes'"
     >
-      <div
-        ref="emojiInvoker"
-        slot="emoji-invoker"
-        slot-scope="{ events: { click: clickEvent }, display, emojis }"
-        v-bind:events.click="clickEvent"
-        @click.stop="clickEvent"
-      ></div>
-      <div
-        ref="emojiPicker"
-        slot="emoji-picker"
-        slot-scope="{ emojis, insert, display }"
-      >
-        <div class="emoji-picker">
-          <div class="emoji-picker__search">
-            <InteractablesInput
-              v-model="search"
-              type="dark"
-              size="small"
-              placeholder="Search..."
-            />
-          </div>
-          <div>
-            <div v-for="(emojiGroup, category) in emojis" :key="category">
-              <TypographyText :text="category" />
-              <div class="emojis">
-                <div
-                  v-if="category === 'Frequently used' && mostUsedEmojis.length"
-                >
-                  <span
-                    v-for="(emoji, index) in mostUsedEmojis"
-                    :key="index"
-                    @click="addEmoji(emoji.content, emoji.code)"
-                    :title="index"
-                    >{{ emoji.content }}</span
+      <emoji-picker @emoji="addEmoji" :search="search">
+        <div
+          ref="emojiInvoker"
+          slot="emoji-invoker"
+          slot-scope="{ events: { click: clickEvent }, display, emojis }"
+          v-bind:events.click="clickEvent"
+          @click.stop="clickEvent"
+        ></div>
+        <div
+          slot="emoji-picker"
+          ref="emojiPicker"
+          slot-scope="{ emojis, insert, display }"
+        >
+          <div class="emoji-picker">
+            <div class="emoji-picker__search">
+              <InteractablesInput
+                v-model="search"
+                type="dark"
+                size="small"
+                placeholder="Search..."
+              />
+            </div>
+            <div>
+              <div v-for="(emojiGroup, category) in emojis" :key="category">
+                <TypographyText :text="category" />
+                <div class="emojis">
+                  <div
+                    v-if="category === 'Frequently used' && mostUsedEmojis.length"
                   >
-                </div>
-                <div v-else>
-                  <span
-                    v-for="(emoji, emojiName) in emojiGroup"
-                    :key="emojiName"
-                    @click="addEmoji(emoji, emojiName)"
-                    :title="emojiName"
-                    >{{ emoji }}</span
-                  >
+                    <span
+                      v-for="(emoji, index) in mostUsedEmojis"
+                      :key="index"
+                      @click="addEmoji(emoji.content, emoji.code)"
+                      :title="index"
+                      >{{ emoji.content }}</span
+                    >
+                  </div>
+                  <div v-else>
+                    <span
+                      v-for="(emoji, emojiName) in emojiGroup"
+                      :key="emojiName"
+                      @click="addEmoji(emoji, emojiName)"
+                      :title="emojiName"
+                      >{{ emoji }}</span
+                    >
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </emoji-picker>
+      </emoji-picker>
+    </UiScroll>
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'"></EnhancersGlyphs>
   </div>
 </div>

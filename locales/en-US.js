@@ -6,6 +6,7 @@ export default {
     marketplace: 'Marketplace\nComing Soon',
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
+    sidebar_search: 'Friends and Group search\ncoming soon',
   },
   global: {
     name: 'Satellite.im',
@@ -634,5 +635,28 @@ export default {
         friends: 'Friends',
       },
     },
+  },
+  context: {
+    // files
+    fav: 'Favorite',
+    unfav: 'Unfavorite',
+    share: 'Share',
+    unshare: 'Unshare',
+    rename: 'Rename',
+    delete: 'Delete',
+    // friends
+    send: 'Send Message',
+    voice: 'Voice Call',
+    video: 'Video Call',
+    remove: 'Remove Friend',
+    profile: 'Profile',
+    // message
+    edit: 'Edit Message',
+    reaction: 'Add Reaction',
+    reply: 'Reply',
+    copy_msg: 'Copy Message',
+    copy_img: 'Copy Image',
+    save: 'Save Image',
+    copy_link: 'Copy Link',
   },
 }

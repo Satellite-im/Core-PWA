@@ -9,3 +9,11 @@ exports[`Solana.getClusterFromNetworkConfig 2 1`] = `"devnet"`;
 exports[`Solana.getClusterFromNetworkConfig 3 1`] = `"devnet"`;
 
 exports[`Solana.getClusterFromNetworkConfig 4 1`] = `"devnet"`;
+
+exports[`Solana.getClusterFromNetworkConfig Solana.sleep 0 1`] = `Promise {}`;
+
+exports[`Solana.getClusterFromNetworkConfig Solana.sleep 1 1`] = `Promise {}`;
+
+exports[`Solana.getClusterFromNetworkConfig Solana.sleep 2 1`] = `Promise {}`;
+
+exports[`Solana.getClusterFromNetworkConfig Solana.sleep 3 1`] = `Promise {}`;

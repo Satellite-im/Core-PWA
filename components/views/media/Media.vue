@@ -77,7 +77,6 @@ export default Vue.extend({
       const { id, muted } = this.webrtc.remoteTracks.video
 
       if (muted) {
-        this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
         return null
       }
 
@@ -92,7 +91,6 @@ export default Vue.extend({
       const { id, muted } = this.webrtc.remoteTracks.audio
 
       if (muted) {
-        this.$store.dispatch('sounds/playSound', Sounds.MUTE)
         return null
       }
 

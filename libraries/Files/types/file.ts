@@ -51,7 +51,7 @@ export enum FILE_TYPE {
   OGA = 'audio/ogg',
   OPUS = 'audio/opus',
   WAV = 'audio/wav',
-  WEBA = 'audio/webm',
+  WEBMA = 'audio/webm',
   TGPA = 'audio/3gpp',
   TGPA2 = 'audio/3gpp2',
 
@@ -72,7 +72,7 @@ export enum FILE_TYPE {
 
   // image - non-embeddable
   BMP = 'image/bmp',
-  HEIC = 'image/heic',
+  HEIC = 'image/heic', // non-embeddable by default, but we convert as needed
   ICO = 'image/vnd.microsoft.icon',
   TIFF = 'image/tiff',
 

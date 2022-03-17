@@ -10,7 +10,7 @@ export default Vue.extend({
      */
     directory: {
       type: Array as PropType<Array<Item>>,
-      default: () => [],
+      required: true,
     },
     /**
      * counter to force reactivity for Map
@@ -29,11 +29,32 @@ export default Vue.extend({
       this.$emit('handle', item)
     },
     /**
-     * @method forceRender
-     * @description force reactivity for Map
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
      */
-    forceRender() {
-      this.$emit('forceRender')
+    like(item: Item) {
+      this.$emit('like', item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share(item: Item) {
+      this.$emit('share', item)
+    },
+    /**
+     * @method rename
+     * @description Emit to rename item - pages/files/browse/index.vue
+     */
+    rename(item: Item) {
+      this.$emit('rename', item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove(item: Item) {
+      this.$emit('remove', item)
     },
   },
 })

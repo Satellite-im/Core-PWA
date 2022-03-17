@@ -11,6 +11,7 @@
       v-model="internalText"
       :class="`input is-${size} is-${type}`"
       :readonly="readonly"
+      :disabled="disabled"
       :type="inputKind"
       :placeholder="placeholder"
       @input="update"

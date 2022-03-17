@@ -1,6 +1,6 @@
-import { stripEXIF } from '../../utilities/EXIF'
-import { isNSFW } from '../../utilities/NSFW'
 import Security from './Security'
+import { stripEXIF } from '~/utilities/EXIF'
+import isNSFW from '~/utilities/NSFW'
 
 describe('check properties', () => {
   it('check stripEXIF', () => {

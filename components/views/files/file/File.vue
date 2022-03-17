@@ -10,8 +10,7 @@ import {
   BriefcaseIcon,
   ImageIcon,
 } from 'satellite-lucide-icons'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
-
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -21,8 +20,10 @@ declare module 'vue/types/vue' {
     like: () => void
     share: () => void
     rename: () => void
-    delete: () => void
+    remove: () => void
     $filesize: (item: number) => string
+    linkHover: boolean
+    heartHover: boolean
   }
 }
 
@@ -47,17 +48,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      fileUrl: String,
-      fileSize: '',
-      fileHover: false,
-      linkHover: false,
-      heartHover: false,
-      contextMenuValues: [
-        { text: 'Favorite', func: this.like },
-        { text: 'Share', func: this.share },
-        { text: 'Rename', func: this.rename },
-        { text: 'Delete', func: this.delete },
-      ],
+      fileSize: '' as string,
+      fileHover: false as boolean,
+      linkHover: false as boolean,
+      heartHover: false as boolean,
     }
   },
   computed: {
@@ -82,13 +76,31 @@ export default Vue.extend({
     isArchive(): boolean {
       return Boolean(this.item.name.match(this.$Config.regex.archive))
     },
+    contextMenuValues() {
+      return [
+        {
+          text: this.item.liked
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
+          func: this.like,
+        },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.remove },
+      ]
+    },
   },
   methods: {
     /**
-     * @method fileClick
-     * @description Handle regular file click. avoiding regular behavior(handle) if user clicks heart or link icon
+     * @method click
+     * @description handle file click depending on various hover statuses
      */
-    fileClick() {
+    click() {
       if (this.linkHover) {
         this.share()
         return
@@ -101,59 +113,31 @@ export default Vue.extend({
     },
     /**
      * @method like
-     * @description toggle like on file and force render for files
+     * @description Emit to like item - pages/files/browse/index.vue
      */
-    async like() {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
-      this.item.toggleLiked()
-      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.item.liked
-        ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
-        : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.$emit('forceRender')
+    like() {
+      this.$emit('like', this.item)
     },
     /**
      * @method share
-     * @description copy link to clipboard
+     * @description Emit to share item - pages/files/browse/index.vue
      */
-    async share() {
-      this.$toast.show(this.$t('todo - share') as string)
-      // if (this.item instanceof Directory) {
-      //   this.$toast.show(this.$t('todo - share folders') as string)
-      //   return
-      // }
-      // if (!this.item.shared) {
-      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
-      //   this.item.shareItem()
-      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
-      //   this.$emit('forceRender')
-      // }
-      // navigator.clipboard.writeText(this.path).then(() => {
-      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
-      // })
+    share() {
+      this.$emit('share', this.item)
     },
     /**
      * @method rename
-     * @description todo
+     * @description Emit to rename item - pages/files/browse/index.vue
      */
     rename() {
-      this.$toast.show(this.$t('todo - rename items') as string)
+      this.$emit('rename', this.item)
     },
     /**
-     * @method delete
-     * @description delete folder/file from filesystem. If file, also remove from textile bucket
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
      */
-    async delete() {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
-      if (this.item instanceof Fil) {
-        await this.$FileSystem.removeFile(this.item.name)
-      }
-      this.$FileSystem.removeChild(this.item.name)
-      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.$emit('forceRender')
+    remove() {
+      this.$emit('remove', this.item)
     },
   },
 })
