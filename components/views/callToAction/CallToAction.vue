@@ -18,12 +18,6 @@ export default Vue.extend({
     },
   },
 
-  data() {
-    return {
-      subject: 'Glyphs',
-    }
-  },
-
   methods: {
     showTwitter() {
       window.open('https://twitter.com/satellite_im', '_blank')
