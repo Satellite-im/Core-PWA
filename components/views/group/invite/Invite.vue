@@ -14,7 +14,7 @@ export default Vue.extend({
     }
   },
   computed: mapState({
-    modal: state => state.ui.modals.groupInvite,
+    modal: (state) => state.ui.modals.groupInvite,
   }),
   methods: {
     async confirm() {

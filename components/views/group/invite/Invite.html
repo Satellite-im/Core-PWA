@@ -1,8 +1,4 @@
-<div
-  id="group-invite"
-  class="group-invite"
-  v-if="modal.isOpen"
->
+<div id="group-invite" class="group-invite" v-if="modal.isOpen">
   <TypographySubtitle :size="6" :text="$t('pages.chat.group_invite')" />
   <TypographyText :text="$t('pages.chat.group_invite_descriptions')" />
   <InteractablesInput
@@ -13,7 +9,7 @@
     class="search"
     v-model="recipient"
   />
-  <small v-if="error" class='error has-text-danger error'>{{error}}</small>
+  <small v-if="error" class="error has-text-danger error">{{error}}</small>
   <div v-if="recipient" class="submit-container">
     <InteractablesButton
       type="primary"
