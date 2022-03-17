@@ -74,7 +74,7 @@ export default Vue.extend({
      * @returns {boolean} if item is archive file type
      */
     isArchive(): boolean {
-      return this.item.name.includes('archive')
+      return this.item.type.includes('archive')
     },
     contextMenuValues() {
       return [
