@@ -1,8 +1,8 @@
 // Remote file management
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 import { FileSystemErrors } from '../../errors/Errors'
 import { Fil } from '../../Fil'
 import { RFMInterface } from '../interface/RFM.interface'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM implements RFMInterface {
   constructor() {

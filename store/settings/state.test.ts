@@ -1,5 +1,5 @@
-import { KeybindTypes, CaptureMouseTypes } from './types'
 import InitialSettingsState from '~/store/settings/state'
+import { CaptureMouseTypes, KeybindTypes } from './types'
 
 describe('init', () => {
   let inst: any

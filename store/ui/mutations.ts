@@ -1,15 +1,12 @@
 import { without } from 'lodash'
-import {
-  EnhancerInfo,
-  Flair,
-  Theme,
-  UIState,
-  RecentGlyph,
-  SettingsRoutes,
-  Position,
-} from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
+import {
+    EnhancerInfo,
+    Flair, Position, RecentGlyph,
+    SettingsRoutes, Theme,
+    UIState
+} from './types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {

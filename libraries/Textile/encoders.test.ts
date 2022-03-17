@@ -1,16 +1,5 @@
 import {
-  rawMessage,
-  decryptedMessage,
-  messageFromThread,
-  reactionMessage,
-  fileMessage,
-  imageMessage,
-  textMessage,
-  mediaMessage,
-  glyphMessage,
-  replyMessage,
-  messageEncoder,
-  exportedForTesting,
+    decryptedMessage, exportedForTesting, fileMessage, glyphMessage, imageMessage, mediaMessage, messageEncoder, messageFromThread, rawMessage, reactionMessage, replyMessage, textMessage
 } from '~/libraries/Textile/encoders'
 
 describe('check all constants', () => {

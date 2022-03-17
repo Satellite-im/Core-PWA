@@ -1,9 +1,9 @@
 import Mousetrap from 'mousetrap'
-import * as actions from '~/store/ui/actions'
+import SoundManager from '~/libraries/SoundManager/SoundManager'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
-import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import * as actions from '~/store/ui/actions'
 
 const $Sounds = new SoundManager()
 

@@ -1,12 +1,12 @@
 import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
-import { RFM } from '../abstracts/RFM.abstract'
-import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
-import { TextileInitializationData } from '~/types/textile/manager'
 import {
   FileSystemExport,
-  FILESYSTEM_TYPE,
+  FILESYSTEM_TYPE
 } from '~/libraries/Files/types/filesystem'
+import { TextileInitializationData } from '~/types/textile/manager'
+import { RFM } from '../abstracts/RFM.abstract'
+import { RFMInterface } from '../interface/RFM.interface'
 
 export class Bucket extends RFM implements RFMInterface {
   private _textile: TextileInitializationData

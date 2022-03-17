@@ -1,10 +1,10 @@
 // @ts-ignore
-import sortBy from 'lodash/sortBy'
+import Fuse from 'fuse.js'
 // @ts-ignore
 import groupBy from 'lodash/groupBy'
-import Fuse from 'fuse.js'
-
+import sortBy from 'lodash/sortBy'
 import { Friend } from '~/types/ui/friends'
+
 
 /**
  * @ported

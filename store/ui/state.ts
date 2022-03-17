@@ -1,9 +1,5 @@
 import {
-  UIState,
-  GlyphMarketViewStatus,
-  Themes,
-  Flairs,
-  SettingsRoutes,
+    Flairs, GlyphMarketViewStatus, SettingsRoutes, Themes, UIState
 } from './types'
 
 const InitialUIState = (): UIState => ({

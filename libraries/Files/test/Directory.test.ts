@@ -1,7 +1,7 @@
 import { Directory } from '../Directory'
+import { FileSystemErrors } from '../errors/Errors'
 import { Fil } from '../Fil'
 import { DIRECTORY_TYPE } from '../types/directory'
-import { FileSystemErrors } from '../errors/Errors'
 
 Date.now = jest.fn(() => 1645617999076)
 const dateNow = Date.now()

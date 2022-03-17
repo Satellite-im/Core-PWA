@@ -1,5 +1,5 @@
-import * as actions from '~/store/files/actions'
 import { DataStateType } from '~/store/dataState/types'
+import * as actions from '~/store/files/actions'
 
 describe('actions.default.handler', () => {
   test('0', () => {

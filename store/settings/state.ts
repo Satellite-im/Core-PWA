@@ -1,4 +1,4 @@
-import { SettingsState, KeybindTypes, CaptureMouseTypes } from './types'
+import { CaptureMouseTypes, KeybindTypes, SettingsState } from './types'
 
 const InitialSettingsState = (): SettingsState => ({
   audioInput: '',

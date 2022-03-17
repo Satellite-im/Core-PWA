@@ -1,6 +1,6 @@
-import * as GroupChatManager from '~/libraries/Textile/GroupChatManager'
-import * as hub from '@textile/hub'
 import * as web3 from '@solana/web3.js'
+import * as hub from '@textile/hub'
+import * as GroupChatManager from '~/libraries/Textile/GroupChatManager'
 
 describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
   let inst19: any

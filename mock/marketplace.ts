@@ -1,16 +1,16 @@
-import { Glyphs } from './glyphs'
-import {
-  CategoryOption,
-  FilterOption,
-  GlyphShopFilterItem,
-  GlyphShopItem,
-  ProductItem,
-} from '~/types/marketplace/marketplace'
-
 // @ts-ignore
 import * as bg1 from '~/assets/img/glyphShopBg1.png'
 // @ts-ignore
 import * as bg2 from '~/assets/img/glyphShopBg2.png'
+import {
+    CategoryOption,
+    FilterOption,
+    GlyphShopFilterItem,
+    GlyphShopItem,
+    ProductItem
+} from '~/types/marketplace/marketplace'
+import { Glyphs } from './glyphs'
+
 
 export const marketCategories = [
   { parentCategory: '', name: 'Personalize', icon: 'user' },

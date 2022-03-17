@@ -1,6 +1,6 @@
-import { SoundsState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
+import { SoundsState } from './types'
 
 const $Sounds = new SoundManager()
 

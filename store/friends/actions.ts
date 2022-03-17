@@ -1,32 +1,32 @@
 import { PublicKey } from '@solana/web3.js'
 import Vue from 'vue'
-import { DataStateType } from '../dataState/types'
-import {
-  AcceptFriendRequestArguments,
-  CreateFriendRequestArguments,
-  FriendsError,
-  FriendsState,
-} from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import {
-  FriendAccount,
-  FriendsEvents,
-  FriendStatus,
+    FriendAccount,
+    FriendsEvents,
+    FriendStatus
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import { AccountsError } from '~/store/accounts/types'
-import {
-  Friend,
-  FriendRequest,
-  IncomingRequest,
-  OutgoingRequest,
-} from '~/types/ui/friends'
-import { ActionsArguments } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram, {
-  UserInfo,
+    UserInfo
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { AccountsError } from '~/store/accounts/types'
+import { ActionsArguments } from '~/types/store/store'
+import {
+    Friend,
+    FriendRequest,
+    IncomingRequest,
+    OutgoingRequest
+} from '~/types/ui/friends'
+import { DataStateType } from '../dataState/types'
+import {
+    AcceptFriendRequestArguments,
+    CreateFriendRequestArguments,
+    FriendsError,
+    FriendsState
+} from './types'
 
 export default {
   /**

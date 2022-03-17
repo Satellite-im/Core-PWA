@@ -1,8 +1,8 @@
 import fs from 'fs'
 import Vue from 'vue'
-import * as TFS from '../TextileFileSystem'
-import { Fil } from '../Fil'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import { Fil } from '../Fil'
+import * as TFS from '../TextileFileSystem'
 Vue.prototype.$TextileManager = new TextileManager()
 
 describe('', () => {

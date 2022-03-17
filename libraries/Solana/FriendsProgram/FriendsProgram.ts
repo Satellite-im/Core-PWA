@@ -1,37 +1,32 @@
-import { EventEmitter } from 'events'
 import {
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
-  PublicKey,
-  sendAndConfirmTransaction,
-  SYSVAR_RENT_PUBKEY,
-  Keypair,
   // eslint-disable-next-line import/named
   ConfirmOptions,
   // eslint-disable-next-line import/named
-  KeyedAccountInfo,
-  // eslint-disable-next-line import/named
   GetProgramAccountsFilter,
+  // eslint-disable-next-line import/named
+  KeyedAccountInfo, Keypair, PublicKey,
+  sendAndConfirmTransaction, SystemProgram, SYSVAR_RENT_PUBKEY, Transaction,
+  TransactionInstruction
 } from '@solana/web3.js'
+import { EventEmitter } from 'events'
 import base58 from 'micro-base58'
+import { Config } from '~/config'
+import { publicKeyFromSeeds, Seeds } from '~/libraries/Solana/Solana'
+import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 import {
   encodeInstructionData,
   friendLayout,
   parseFriendAccount,
-  parseFriendAccounts,
+  parseFriendAccounts
 } from './FriendsProgram.layout'
 import {
   CreateFriendParams,
   FriendAccount,
   FriendsEvents,
-  FriendStatus,
+  FriendStatus
 } from './FriendsProgram.types'
 
-import { Seeds, publicKeyFromSeeds } from '~/libraries/Solana/Solana'
 
-import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
-import { Config } from '~/config'
 
 export const FRIENDS_PROGRAM_ID = new PublicKey(Config.solana.friendsProgramId)
 

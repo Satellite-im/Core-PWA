@@ -1,6 +1,6 @@
-import { ChatState } from './types'
-import { ReplyObj, ChatTextObj } from '~/types/chat/chat'
+import { ChatTextObj, ReplyObj } from '~/types/chat/chat'
 import { UploadDropItemType } from '~/types/files/file'
+import { ChatState } from './types'
 
 const mutations = {
   chatText(state: ChatState, req: ChatTextObj) {

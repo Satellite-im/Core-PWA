@@ -1,13 +1,13 @@
 import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
 import * as ed25519 from 'ed25519-hd-key'
-import {
-  getClusterFromNetworkConfig,
-  publicKeyFromSeed,
-  sleep,
-} from '../Solana'
 import { Config } from '~/config'
 import { SolanaWallet } from '~/types/solana/solana'
+import {
+    getClusterFromNetworkConfig,
+    publicKeyFromSeed,
+    sleep
+} from '../Solana'
 
 export default class SolanaManager {
   accounts: Array<SolanaWallet>

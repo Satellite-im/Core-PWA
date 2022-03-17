@@ -1,9 +1,9 @@
-import { EventEmitter } from 'events'
 import { Program, Provider, utils, Wallet } from '@project-serum/anchor'
 import { PublicKey, SystemProgram } from '@solana/web3.js'
-import { Groupchats, IDL } from './GroupchatsProgram.types'
+import { EventEmitter } from 'events'
 import { Config } from '~/config'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { Groupchats, IDL } from './GroupchatsProgram.types'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
   Config.solana.groupchatsProgramId,

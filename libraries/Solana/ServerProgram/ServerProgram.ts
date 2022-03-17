@@ -1,28 +1,28 @@
 import {
-  ConfirmOptions,
-  Connection,
-  Keypair,
-  PublicKey,
-  sendAndConfirmTransaction,
-  SystemProgram,
-  SYSVAR_RENT_PUBKEY,
-  Transaction,
-  TransactionInstruction,
+    ConfirmOptions,
+    Connection,
+    Keypair,
+    PublicKey,
+    sendAndConfirmTransaction,
+    SystemProgram,
+    SYSVAR_RENT_PUBKEY,
+    Transaction,
+    TransactionInstruction
 } from '@solana/web3.js'
 import base58 from 'micro-base58'
-import {
-  dwellerAccountLayout,
-  encodeInstructionData,
-} from './ServerProgram.layout'
-import { CreateDerivedAccountParams } from './ServerProgram.types'
-import { RawUser } from '~/types/ui/user'
 import { Config } from '~/config'
 import {
-  Seeds,
-  stringFromBuffer,
-  stringToBuffer,
+    Seeds,
+    stringFromBuffer,
+    stringToBuffer
 } from '~/libraries/Solana/Solana'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { RawUser } from '~/types/ui/user'
+import {
+    dwellerAccountLayout,
+    encodeInstructionData
+} from './ServerProgram.layout'
+import { CreateDerivedAccountParams } from './ServerProgram.types'
 
 const SERVER_PROGRAM_ID = new PublicKey(Config.solana.serverProgramId)
 

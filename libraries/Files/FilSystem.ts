@@ -1,17 +1,13 @@
 import { matchSorter } from 'match-sorter'
-import { Directory } from './Directory'
-import { DIRECTORY_TYPE } from './types/directory'
-import { Fil } from './Fil'
-import { Item } from './abstracts/Item.abstract'
-import {
-  FileSystemExport,
-  ExportItem,
-  FILESYSTEM_TYPE,
-  ExportFile,
-  ExportDirectory,
-} from './types/filesystem'
-import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
+import { Item } from './abstracts/Item.abstract'
+import { Directory } from './Directory'
+import { Fil } from './Fil'
+import { DIRECTORY_TYPE } from './types/directory'
+import { FILE_TYPE } from './types/file'
+import {
+    ExportDirectory, ExportFile, ExportItem, FileSystemExport, FILESYSTEM_TYPE
+} from './types/filesystem'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })

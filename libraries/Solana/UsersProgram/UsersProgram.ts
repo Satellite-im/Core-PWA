@@ -1,9 +1,9 @@
+import { Program, Provider, utils, Wallet, web3 } from '@project-serum/anchor'
 import { EventEmitter } from 'events'
-import { Program, Wallet, web3, utils, Provider } from '@project-serum/anchor'
-import { Users, IDL } from './UsersProgram.types'
-
-import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Config } from '~/config'
+import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { IDL, Users } from './UsersProgram.types'
+
 
 const { PublicKey, SystemProgram } = web3
 

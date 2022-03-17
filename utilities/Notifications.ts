@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 

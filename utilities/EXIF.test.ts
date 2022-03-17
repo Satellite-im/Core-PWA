@@ -1,5 +1,5 @@
-import * as exif from './EXIF'
 import { Fil } from '~/libraries/Files/Fil'
+import * as exif from './EXIF'
 // import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 describe('', () => {

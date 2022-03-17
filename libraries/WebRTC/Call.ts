@@ -1,10 +1,10 @@
 import Peer, { SignalData } from 'simple-peer'
+import { Config } from '~/config'
+import Logger from '~/utilities/Logger'
 import Emitter from './Emitter'
 import { TracksManager } from './TracksManager'
 import { CallEventListeners, TrackKind } from './types'
 import { Wire } from './Wire'
-import { Config } from '~/config'
-import Logger from '~/utilities/Logger'
 
 /**
  * @class Call

@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import { AudioState } from './types'
-import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
 
 const $Sounds = new SoundManager()

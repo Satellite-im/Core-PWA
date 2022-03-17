@@ -1,6 +1,6 @@
+import * as web3 from '@solana/web3.js'
 import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
-import * as web3 from '@solana/web3.js'
 
 describe('SolanaManager.default.getPath', () => {
   let inst6: any

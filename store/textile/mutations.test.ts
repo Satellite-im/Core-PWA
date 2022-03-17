@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import SearchIndex from '~/libraries/SearchIndex'
 import mutations from '~/store/textile/mutations'
 import InitialTextileState from '~/store/textile/state'
-import SearchIndex from '~/libraries/SearchIndex'
 
 Vue.prototype.$SearchIndex = new SearchIndex({
   ref: 'id',

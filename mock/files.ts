@@ -1,5 +1,5 @@
-import { FileType, Folder } from '~/types/files/file'
 import { Config } from '~/config'
+import { FileType, Folder } from '~/types/files/file'
 
 export const Files = {
   name: 'root',

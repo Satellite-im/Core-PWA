@@ -1,11 +1,11 @@
 // import { Context } from '@textile/context'
-import { Client, PrivateKey, Identity, Users } from '@textile/hub'
-
+import { Client, Identity, PrivateKey, Users } from '@textile/hub'
+import { Config } from '~/config'
+import Crypto from '~/libraries/Crypto/Crypto'
+import { SolanaWallet } from '~/types/solana/solana'
 // @ts-ignore
 import { AuthData } from '../Interfaces'
-import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
-import Crypto from '~/libraries/Crypto/Crypto'
+
 
 export default class IdentityManager {
   client?: Client

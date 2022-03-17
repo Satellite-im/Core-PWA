@@ -1,7 +1,7 @@
+import { Files } from '~/mock/files'
+import { ActionsArguments } from '~/types/store/store'
 import { DataStateType } from '../dataState/types'
 import { FilesState } from './types'
-import { ActionsArguments } from '~/types/store/store'
-import { Files } from '~/mock/files'
 
 export default {
   handler: () => {},

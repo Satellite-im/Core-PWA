@@ -1,11 +1,11 @@
-import Vue from 'vue'
 import { PushPathResult } from '@textile/hub'
 import skaler from 'skaler'
-import { FilSystem } from './FilSystem'
-import { FILE_TYPE } from './types/file'
-import { Bucket } from './remote/textile/Bucket'
-import { isHeic } from '~/utilities/Heic'
+import Vue from 'vue'
 import { Config } from '~/config'
+import { isHeic } from '~/utilities/Heic'
+import { FilSystem } from './FilSystem'
+import { Bucket } from './remote/textile/Bucket'
+import { FILE_TYPE } from './types/file'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {

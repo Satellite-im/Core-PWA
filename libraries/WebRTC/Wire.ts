@@ -1,20 +1,20 @@
-import Vue from 'vue'
 import { isRight } from 'fp-ts/lib/Either'
-import Peer, { SignalData } from 'simple-peer'
-import {
-  wireDataMessage,
-  wireIdentificationMessage,
-  wireKeyboardState,
-  wireRefuseConnectionMessage,
-  wireSignalMessage,
-} from './encoders'
 import P2PT from 'p2pt'
+import Peer, { SignalData } from 'simple-peer'
+import Vue from 'vue'
 import Emitter from '~/libraries/WebRTC/Emitter'
 import {
-  WireEventListeners,
-  WireIdentificationMessage,
-  WireMessage,
+    WireEventListeners,
+    WireIdentificationMessage,
+    WireMessage
 } from '~/libraries/WebRTC/types'
+import {
+    wireDataMessage,
+    wireIdentificationMessage,
+    wireKeyboardState,
+    wireRefuseConnectionMessage,
+    wireSignalMessage
+} from './encoders'
 
 /**
  * @description A wire is a connection between peers on a specific channel.

@@ -1,14 +1,14 @@
-import { Bucket } from '../Files/remote/textile/Bucket'
+import { Config } from '~/config'
+import BucketManager from '~/libraries/Textile/BucketManager'
+import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import {
-  Creds,
-  TextileConfig,
-  TextileInitializationData,
+    Creds,
+    TextileConfig,
+    TextileInitializationData
 } from '~/types/textile/manager'
-import BucketManager from '~/libraries/Textile/BucketManager'
-import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { Config } from '~/config'
+import { Bucket } from '../Files/remote/textile/Bucket'
 
 export default class TextileManager {
   creds?: Creds

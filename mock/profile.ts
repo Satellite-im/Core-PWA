@@ -1,11 +1,9 @@
-import {
-  ProfileBadgeType,
-  ProfileBadge,
-  ProfileInfo,
-} from '~/types/profile/profile'
-
 // @ts-ignore
 import * as url from '~/assets/img/profile.png'
+import {
+    ProfileBadge, ProfileBadgeType, ProfileInfo
+} from '~/types/profile/profile'
+
 
 export const profileBadges = [
   {

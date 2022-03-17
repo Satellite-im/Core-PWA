@@ -1,6 +1,6 @@
 import { Keypair, PublicKey } from '@solana/web3.js'
-import ed2curve from 'ed2curve'
 import { sharedKey, signMessage } from 'curve25519-js'
+import ed2curve from 'ed2curve'
 import { HashableData } from '~/types/crypto/crypto'
 
 const ivLen = 16 // the IV is always 16 bytes

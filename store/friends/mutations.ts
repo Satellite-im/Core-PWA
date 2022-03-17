@@ -1,6 +1,6 @@
+import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { Conversation } from '../textile/types'
 import { FriendsState } from './types'
-import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 
 const mutations = {
   setIncomingRequests(

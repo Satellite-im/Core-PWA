@@ -1,8 +1,8 @@
-import * as getters from './getters'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
+import * as getters from './getters'
 
 const initialRootState: RootState = {
   accounts: {

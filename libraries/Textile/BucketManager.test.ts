@@ -1,6 +1,6 @@
-import * as hub from '@textile/hub'
-import * as index from '@textile/grpc-authentication/dist/cjs/index'
 import * as web3 from '@solana/web3.js'
+import * as index from '@textile/grpc-authentication/dist/cjs/index'
+import * as hub from '@textile/hub'
 import * as BucketManager from '~/libraries/Textile/BucketManager'
 
 describe('BucketManager.default.progressParse', () => {

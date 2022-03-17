@@ -1,9 +1,9 @@
-import * as Messaging from '~/utilities/Messaging'
+import { MessagingTypesEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
-import { PropCommonEnum, MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { UIReply } from '~/types/messaging'
+import * as Messaging from '~/utilities/Messaging'
 
 const initialRootState: any = {
   accounts: {

@@ -1,6 +1,6 @@
-import { EnvInfo } from './EnvInfo'
 import 'jest-canvas-mock'
 import 'jest-webgl-canvas-mock'
+import { EnvInfo } from './EnvInfo'
 global.console.warn = jest.fn()
 HTMLCanvasElement.prototype.getContext = jest.fn()
 // HTMLCanvasElement. = jest.fn()

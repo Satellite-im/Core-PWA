@@ -2,11 +2,11 @@
 import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import BufferLayout from 'buffer-layout'
-import { ProgramAccountInfo } from '~/types/solana/solana'
 import {
-  FriendAccount,
-  FriendsInstructionType,
+    FriendAccount,
+    FriendsInstructionType
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
+import { ProgramAccountInfo } from '~/types/solana/solana'
 
 /// Address type input
 const ADDRESS_TYPE_INPUT = BufferLayout.union(BufferLayout.u8('addressType'))
@@ -136,10 +136,11 @@ function parseFriendAccounts(accounts: Array<ProgramAccountInfo>) {
 }
 
 export {
-  LAYOUT,
-  encodeInstructionData,
-  ADDRESS_TYPE_INPUT,
-  friendLayout,
-  parseFriendAccount,
-  parseFriendAccounts,
+    LAYOUT,
+    encodeInstructionData,
+    ADDRESS_TYPE_INPUT,
+    friendLayout,
+    parseFriendAccount,
+    parseFriendAccounts,
 }
+

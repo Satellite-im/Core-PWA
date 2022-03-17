@@ -1,5 +1,5 @@
-import actions from './actions'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import actions from './actions'
 
 describe('Manage sounds', () => {
   let inst: any

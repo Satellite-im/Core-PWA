@@ -1,10 +1,9 @@
-import state from '../friends/state'
-import * as mutations from '~/store/ui/mutations'
-
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
+import * as mutations from '~/store/ui/mutations'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
+
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)

@@ -3,26 +3,26 @@ import { Query } from '@textile/threads-client'
 import { isRight } from 'fp-ts/lib/Either'
 import { v4 as uuid } from 'uuid'
 import Vue from 'vue'
-import { messageEncoder } from './encoders'
+import { Config } from '~/config'
+import Crypto from '~/libraries/Crypto/Crypto'
 import {
-  ConversationQuery,
-  Message,
-  MessageCallback,
-  MessageFromThread,
-  MessagePayloads,
-  MessageTypes,
+    EncodingTypesEnum,
+    MessagingTypesEnum,
+    PropCommonEnum
+} from '~/libraries/Enums/enums'
+import { groupChatSchema } from '~/libraries/Textile/schema'
+import { Groups } from '~/mock/groups'
+import { AccountsError } from '~/store/accounts/types'
+import {
+    ConversationQuery,
+    Message,
+    MessageCallback,
+    MessageFromThread,
+    MessagePayloads,
+    MessageTypes
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import {
-  EncodingTypesEnum,
-  MessagingTypesEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
-import { Config } from '~/config'
-import { groupChatSchema } from '~/libraries/Textile/schema'
-import Crypto from '~/libraries/Crypto/Crypto'
-import { AccountsError } from '~/store/accounts/types'
-import { Groups } from '~/mock/groups'
+import { messageEncoder } from './encoders'
 
 export class GroupChatManager {
   senderAddress: string
