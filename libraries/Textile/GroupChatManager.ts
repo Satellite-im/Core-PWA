@@ -188,7 +188,6 @@ export class GroupChatManager {
     group: { id: string; encryptionKey: string },
     message: MessagePayloads[T],
   ) {
-    console.log('addr', this.senderAddress)
     const { threadID, collectionName } = this.decodeGroupID(group.id)
     const identity = this.textile.identity
     const $Crypto: Crypto = Vue.prototype.$Crypto

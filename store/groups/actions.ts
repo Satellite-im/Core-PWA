@@ -132,7 +132,6 @@ export default {
     const groupProgram = getGroupChatProgram()
 
     const callback = async (payload: InvitationAccount) => {
-      console.log('subscribeToGroupInvites:callback called', payload)
       const invite = await groupProgram.crypto.decryptInvite(payload.account)
       await dispatch('addGroup', invite.groupId)
     }
@@ -141,7 +140,6 @@ export default {
       recipient: publicKey.toBase58(),
     })
     commit('setSubscriptionId', num)
-    console.log('subscribeToGroupInvites DONE')
   },
 
   /**
@@ -157,7 +155,6 @@ export default {
       const groupProgram = getGroupChatProgram()
       await groupProgram.unsubscribe(state.subscriptionId)
       commit('setSubscriptionId', null)
-      console.log('unsubscribeFromGroupInvites DONE')
     }
   },
 
