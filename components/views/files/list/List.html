@@ -5,11 +5,11 @@
         {{ $t('pages.files.browse.name') }}
         <filter-icon size="0.8x" />
       </th>
-      <th v-if="!$device.isMobile" @click="sort">
+      <th v-if="!$device.isMobile" class="hide" @click="sort">
         {{ $t('pages.files.browse.modified') }}
         <filter-icon size="0.8x" />
       </th>
-      <th v-if="!$device.isMobile" @click="sort">
+      <th v-if="!$device.isMobile" class="hide" @click="sort">
         {{ $t('pages.files.browse.type') }}
         <filter-icon size="0.8x" />
       </th>
