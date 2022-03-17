@@ -40,9 +40,11 @@ export default Vue.extend({
      */
     async selectImage(e: Event) {
       const target = e.target as HTMLInputElement
+
       if (target.value === null) return
 
       const files = target.files
+
       if (!files?.length) return
 
       // stop upload if picture is too large for nsfw scan
@@ -59,7 +61,11 @@ export default Vue.extend({
         }
       } catch (err: any) {
         this.$Logger.log('error', 'file upload error')
+        this.error = this.$t('errors.sign_in.invalid_file') as string
+        this.resetFileInput()
+        return
       }
+
       this.error = ''
 
       const reader = new FileReader()
@@ -74,6 +80,19 @@ export default Vue.extend({
       reader.readAsDataURL(files[0])
     },
     /**
+     * @method resetFileInput
+     * @description
+     * @returns
+     * @example
+     */
+    resetFileInput() {
+      const fileInputRef = this.$refs.file as HTMLInputElement
+
+      if (fileInputRef) {
+        fileInputRef.value = ''
+      }
+    },
+    /**
      * @method setCroppedImage
      * @description
      * @param image
@@ -83,11 +102,7 @@ export default Vue.extend({
     setCroppedImage(image: string) {
       this.croppedImage = image
 
-      const fileInputRef = this.$refs.file as HTMLInputElement
-
-      if (fileInputRef) {
-        fileInputRef.value = ''
-      }
+      this.resetFileInput()
     },
     /**
      * @method confirm DocsTODO

@@ -18,7 +18,6 @@ describe('BucketManager.default.progressParse', () => {
   let inst37: any
   let inst36: any
   let inst39: any
-  let inst40: any
   let inst33: any
   let inst32: any
   let inst31: any
@@ -114,32 +113,6 @@ describe('BucketManager.default.progressParse', () => {
     inst36 = new Uint8Array([])
     inst39 = new Uint8Array([])
     DefaultBucketManager = BucketManager.default
-    inst40 = new DefaultBucketManager(
-      {
-        identity: {
-          sign: () => inst36,
-          public: { verify: () => true, bytes: inst37 },
-        },
-        client: inst38,
-        users: hub.Users.withUserAuth(
-          {
-            key: 'elio@example.com',
-            sig: '3d4e60b996ff9c5d5788e333a0cba6f238a22c6c0f94788870e1a9ecd482e152',
-            msg: 'Wait time out reached, while waiting for results',
-            token: undefined,
-          },
-          undefined,
-        ),
-        wallet: {
-          mnemonic: 'YouarenotAllowed2Use',
-          keypair: web3.Keypair.generate(),
-          path: undefined,
-          address: '0.0.0.0',
-        },
-      },
-      { sign: () => inst39, public: null },
-      'Becky Bednar',
-    )
     inst33 = new hub.Client(undefined, true)
     inst32 = new Uint8Array([])
     inst31 = new Uint8Array([])
@@ -468,5 +441,46 @@ describe('BucketManager.default.getLinks', () => {
 
   test('0', async () => {
     await inst5.getLinks()
+  })
+
+  describe('BucketManager.default.fetchIndex', () => {
+    let inst4: any
+    let inst3: any
+    let inst2: any
+    let inst5: any
+
+    beforeEach(() => {
+      inst4 = new hub.Client(undefined, true)
+      inst3 = new Uint8Array([])
+      inst2 = new Uint8Array([])
+      inst5 = new BucketManager.default(
+        {
+          identity: {
+            sign: () => inst2,
+            public: { verify: () => false, bytes: inst3 },
+          },
+          client: inst4,
+          users: hub.Users.copyAuth(
+            index.GrpcAuthentication.withUserAuth(
+              () => ({ key: '', sig: '', msg: '', token: '' }),
+              undefined,
+            ),
+            undefined,
+          ),
+          wallet: {
+            mnemonic: undefined,
+            keypair: web3.Keypair.generate(),
+            path: undefined,
+            address: '',
+          },
+        },
+        undefined,
+        '',
+      )
+    })
+
+    test('0', async () => {
+      await inst5.fetchIndex()
+    })
   })
 })

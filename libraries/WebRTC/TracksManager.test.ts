@@ -78,4 +78,89 @@ describe('Mutate Tracks Manager', () => {
     expect(result1).toBeUndefined()
     expect(result2).toBeUndefined()
   })
+
+  describe('TracksManager.TracksManager.removeTrack', () => {
+    let inst4: any
+    let inst3: any
+    let inst: any
+    let inst2: any
+
+    beforeEach(() => {
+      inst4 = new TracksManager.TracksManager()
+      inst3 = new TracksManager.TracksManager()
+      inst = new TracksManager.TracksManager()
+      inst2 = new TracksManager.TracksManager()
+    })
+
+    test('0', () => {
+      let result: any = inst2.removeTrack(
+        '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
+      )
+      expect(result).toMatchSnapshot()
+    })
+
+    test('1', () => {
+      let result: any = inst.removeTrack('7289708e-b17a-477c-8a77-9ab575c4b4d8')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('2', () => {
+      let result: any = inst3.removeTrack(
+        'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+      )
+      expect(result).toMatchSnapshot()
+    })
+
+    test('3', () => {
+      let result: any = inst4.removeTrack('')
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('TracksManager.TracksManager.getTrack', () => {
+    let inst4: any
+    let inst3: any
+    let inst: any
+    let inst2: any
+
+    beforeEach(() => {
+      inst4 = new TracksManager.TracksManager()
+      inst3 = new TracksManager.TracksManager()
+      inst = new TracksManager.TracksManager()
+      inst2 = new TracksManager.TracksManager()
+    })
+
+    test('0', () => {
+      let result: any = inst2.getTrack('a85a8e6b-348b-4011-a1ec-1e78e9620782')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('1', () => {
+      let result: any = inst.getTrack('7289708e-b17a-477c-8a77-9ab575c4b4d8')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('2', () => {
+      let result: any = inst3.getTrack('03ea49f8-1d96-4cd0-b279-0684e3eec3a9')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('3', () => {
+      let result: any = inst4.getTrack('')
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('TracksManager.TracksManager.removeAllTracks', () => {
+    let inst2: any
+
+    beforeEach(() => {
+      inst2 = new TracksManager.TracksManager()
+    })
+
+    test('0', () => {
+      let result: any = inst2.removeAllTracks()
+      expect(result).toMatchSnapshot()
+    })
+  })
 })
