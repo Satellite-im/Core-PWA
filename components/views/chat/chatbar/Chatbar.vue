@@ -240,7 +240,6 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      console.log('rec', this.recipient)
       // @ts-ignore
       await this.$refs['file-upload']?.sendMessage()
       if (this.recipient) {

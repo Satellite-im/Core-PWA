@@ -56,7 +56,6 @@ export default Vue.extend({
         name: 'groupInvite',
         state: { isOpen: true, group },
       })
-      console.log('groupInvite', group)
     },
   },
 })

@@ -112,7 +112,6 @@ export default Vue.extend({
     getGroupMember(address: string): GroupMemberInfo | void {
       if (this.groupId) {
         const group = this.groups.all.find((it) => it.id === this.groupId)
-        console.log('group', group)
         return group?.membersInfo?.find((it) => it.address === address)
       }
     },
