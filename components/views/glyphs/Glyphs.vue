@@ -36,7 +36,7 @@ export default Vue.extend({
         name: ModalWindows.CALLTOACTION,
         state: !this.ui.modals[ModalWindows.CALLTOACTION],
       })
-      // you should refactor this later - Joe
+      // refactor - AP-1104
       // const marketInfo = find(marketGlyphs, ({ glyph }) => {
       //   return glyph.name === this.selectedPack.name
       // })
