@@ -64,8 +64,10 @@
   }
 }
 
-.swiper-slide-active {
-  #view-file {
-    transform: translate3d(calc(@sidebar-size + @servers-size), 0px, 0px);
+@media only screen and (min-width: calc(@mobile-breakpoint + 1px)) {
+  .swiper-slide-active {
+    #view-file {
+      transform: translate3d(calc(@sidebar-size + @servers-size), 0px, 0px);
+    }
   }
 }
