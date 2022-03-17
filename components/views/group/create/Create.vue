@@ -18,13 +18,6 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
-      /* Create Group and Start Chat.  For now Group Messages needs some changes on Solana & IPFS so leave this blank  */
-
-      // if (this.$data.friends.length === 1) {
-      //   this.$router.push(`/chat/group/${this.$data.friends[0].address}`)
-      // } else {
-      //   // logic for creating group chat
-      // }
       try {
         this.loading = true
         const usersToInvite = this.users.split(',')

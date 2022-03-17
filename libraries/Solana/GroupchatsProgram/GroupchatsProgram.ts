@@ -28,22 +28,6 @@ export const GROUPCHATS_PROGRAM_ID = new PublicKey(
 const groupSeed = Buffer.from(utils.bytes.utf8.encode('groupchat'))
 const inviteSeed = Buffer.from(utils.bytes.utf8.encode('invite'))
 
-async function retryPromise<T>(
-  fn: () => Promise<T>,
-  attempts: number,
-  delay: number,
-): Promise<T> {
-  try {
-    return await fn()
-  } catch (e: any) {
-    if (attempts === 1) {
-      return Promise.reject(e)
-    }
-    await new Promise((resolve) => setTimeout(resolve, delay))
-    return retryPromise(fn, attempts - 1, delay)
-  }
-}
-
 export default class GroupchatsProgram extends EventEmitter {
   solana?: Solana
   program?: Program<Groupchats>
@@ -175,11 +159,6 @@ export default class GroupchatsProgram extends EventEmitter {
   async getInvitation(invitationAddress: PublicKey | string) {
     const program = this._getProgram()
     return await program.account.invitation.fetch(invitationAddress)
-  }
-
-  async waitForGroupReady(groupId: string): Promise<Group> {
-    const fn = () => this.getGroupById(groupId)
-    return retryPromise(fn, 50, 1000)
   }
 
   /**

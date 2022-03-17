@@ -58,13 +58,7 @@ export default {
 
     const groupId = await groupChatManager.createGroupConversation()
 
-    // generate random groupPassword
-    // use pubKey of current user to encrypt groupId
-    // create group in solana using encrypted groupId
     await groupChatProgram.create(groupId, name)
-    const group = await groupChatProgram.waitForGroupReady(groupId)
-
-    await commit('addGroup', group)
 
     return groupId
   },
