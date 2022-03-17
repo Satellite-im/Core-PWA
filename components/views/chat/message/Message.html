@@ -4,9 +4,7 @@
   @contextmenu="contextMenu"
 >
   <div
-    @mouseenter="mouseOver"
-    @mouseleave="mouseOver"
-    :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`"
+    :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
   >
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
@@ -27,7 +25,7 @@
       <TypographyText :text="timestamp" />
     </div>
     <MessageActions
-      v-if="messageHover && !hideActions"
+      v-if="!hideActions"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
