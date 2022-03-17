@@ -10,14 +10,21 @@
         full-width
         :style="`${sidebar ? 'display: block' : 'display: none'}`"
       />
-      <InteractablesInput
-        :placeholder="`${$t('ui.search')}...`"
-        size="small"
-        input-kind="text"
-        :delete-icon="true"
-        type="dark"
-        full-width
-      />
+      <UiComingSoon
+        :tooltipText="$t('coming_soon.sidebar_search')"
+        :tooltipPosition="'bottom'"
+        disabled
+      >
+        <InteractablesInput
+          :placeholder="`${$t('ui.search')}...`"
+          size="small"
+          input-kind="text"
+          :delete-icon="true"
+          type="dark"
+          disabled
+          full-width
+        />
+      </UiComingSoon>
     </div>
     <div class="sidebar-nav" v-if="!$device.isMobile">
       <div style="position: relative">

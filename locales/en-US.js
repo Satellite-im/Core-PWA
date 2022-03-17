@@ -6,6 +6,7 @@ export default {
     marketplace: 'Marketplace\nComing Soon',
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
+    sidebar_search: 'Friends and Group search\ncoming soon',
   },
   global: {
     name: 'Satellite.im',
@@ -486,6 +487,9 @@ export default {
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
     },
+    sign_in: {
+      invalid_file: 'Unable to upload, invalid file.',
+    },
     friends: {
       request_already_sent: 'You have already sent a request to this user',
       request_already_accepted: 'This user is already in your friends',
@@ -634,5 +638,28 @@ export default {
         friends: 'Friends',
       },
     },
+  },
+  context: {
+    // files
+    fav: 'Favorite',
+    unfav: 'Unfavorite',
+    share: 'Share',
+    unshare: 'Unshare',
+    rename: 'Rename',
+    delete: 'Delete',
+    // friends
+    send: 'Send Message',
+    voice: 'Voice Call',
+    video: 'Video Call',
+    remove: 'Remove Friend',
+    profile: 'Profile',
+    // message
+    edit: 'Edit Message',
+    reaction: 'Add Reaction',
+    reply: 'Reply',
+    copy_msg: 'Copy Message',
+    copy_img: 'Copy Image',
+    save: 'Save Image',
+    copy_link: 'Copy Link',
   },
 }

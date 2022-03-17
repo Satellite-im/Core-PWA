@@ -81,7 +81,7 @@ export default {
     const { show, defaultRoute } = options
 
     state.showSettings = show
-    state.settingsRoute = defaultRoute || 'personalize'
+    state.settingsRoute = defaultRoute || SettingsRoutes.PERSONALIZE
   },
   setSettingsRoute(state: UIState, route: SettingsRoutes) {
     state.settingsRoute = route

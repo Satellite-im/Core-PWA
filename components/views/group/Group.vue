@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/types/ui/core'
 import { Message } from '~/types/textile/mailbox'
 
@@ -27,10 +27,10 @@ export default Vue.extend({
   data() {
     return {
       contextMenuValues: [
-        { text: 'Send Message', func: this.testFunc },
-        { text: 'Voice Call', func: this.testFunc },
-        { text: 'Video Call', func: this.testFunc },
-        { text: 'Remove Friend', func: this.testFunc },
+        { text: this.$t('context.send'), func: this.testFunc },
+        { text: this.$t('context.voice'), func: this.testFunc },
+        { text: this.$t('context.video'), func: this.testFunc },
+        { text: this.$t('context.remove'), func: this.testFunc },
       ],
     }
   },

@@ -3,6 +3,9 @@ import { Fil } from '../Fil'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemErrors } from '../errors/Errors'
 
+Date.now = jest.fn(() => 1645617999076)
+const dateNow = Date.now()
+
 describe('Test FileSystem Directory', () => {
   const mockFileData = {
     name: 'TestFile.png',
@@ -33,6 +36,20 @@ describe('Test FileSystem Directory', () => {
     const child = directory.getChild(file.name)
     expect(child.id).toEqual(file.id)
   })
+  it('Correctly retrieves directory size after adding a child file/folder', () => {
+    expect(directory.size).toEqual(4235)
+  })
+  it('Correctly retrieves directory last modified timestamp after adding a child file/folder', () => {
+    expect(directory.modified).toEqual(dateNow)
+  })
+  it('Incorrectly adds duplicate file to directory', () => {
+    try {
+      directory.addChild(file)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', FileSystemErrors.DUPLICATE_NAME)
+    }
+  })
   it('Incorrectly adds directory as a child of itself', () => {
     try {
       directory.addChild(directory)
@@ -56,6 +73,18 @@ describe('Test FileSystem Directory', () => {
         FileSystemErrors.DIR_PARENT_PARADOX,
       )
     }
+  })
+
+  it('Correctly retrieves imported modified value', () => {
+    const mockDirTwo = {
+      name: 'Test Directory',
+      liked: false,
+      shared: false,
+      type: DIRECTORY_TYPE.DEFAULT,
+      modified: 1647250139467,
+    }
+    const directoryTwo = new Directory(mockDirTwo)
+    expect(directoryTwo.modified).toEqual(1647250139467)
   })
   it('Correctly displays content', () => {
     const content = directory.content

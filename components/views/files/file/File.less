@@ -4,10 +4,7 @@
   min-height: 234px;
   border-radius: @corner-rounding-smaller;
   &:extend(.background-semitransparent-light);
-
-  &.clickable {
-    cursor: pointer;
-  }
+  cursor: pointer;
 
   .quick-actions {
     width: @full;
@@ -34,7 +31,7 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    padding-top: 36px; // half of the text area height. this centers
+    padding-top: 36px; // half of the text area height, centers icon
 
     .file-type-icon {
       &:extend(.font-accent);

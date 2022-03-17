@@ -98,11 +98,12 @@ export const Config = {
     messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
+    typingInputThrottle: 2000,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-807
+  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-1066
   personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
   regex: {
     // identify if a file type is embeddable image

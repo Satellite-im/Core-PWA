@@ -6,7 +6,7 @@ import { mapState } from 'vuex'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
-import { ContextMenu } from '~/components/mixins/UI/ContextMenu'
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
 
@@ -38,11 +38,11 @@ export default Vue.extend({
   data() {
     return {
       contextMenuValues: [
-        { text: 'Send Message', func: this.navigateToUser },
-        { text: 'Voice Call', func: this.testFunc },
-        { text: 'Video Call', func: this.testFunc },
-        { text: 'Remove Friend', func: this.removeUser },
-        { text: 'Profile', func: this.handleShowProfile },
+        { text: this.$t('context.send'), func: this.navigateToUser },
+        { text: this.$t('context.voice'), func: this.testFunc },
+        { text: this.$t('context.video'), func: this.testFunc },
+        { text: this.$t('context.profile'), func: this.handleShowProfile },
+        { text: this.$t('context.remove'), func: this.removeUser },
       ],
       existConversation: false,
       isLoading: false,

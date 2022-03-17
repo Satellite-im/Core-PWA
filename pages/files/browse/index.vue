@@ -7,14 +7,6 @@ import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    file: Fil | boolean
-    counter: number
-    fileSystem: FilSystem
-  }
-}
-
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
@@ -23,7 +15,7 @@ export default Vue.extend({
       file: false as Fil | boolean,
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
-      fileSystem: this.$FileSystem,
+      fileSystem: this.$FileSystem as FilSystem,
     }
   },
   computed: {
@@ -32,7 +24,10 @@ export default Vue.extend({
      * @description included counter to force rendering on Map updates
      */
     directory() {
-      return this.counter && (this.fileSystem?.currentDirectory?.content ?? [])
+      return (
+        this.$data.counter &&
+        (this.$data.fileSystem?.currentDirectory?.content ?? [])
+      )
     },
   },
   methods: {
@@ -43,12 +38,12 @@ export default Vue.extend({
      * @example
      */
     changeView(type: 'grid' | 'list') {
-      this.$data.view = type
+      this.view = type
     },
     /**
      * @method handle
      * @description emitted from child components. Either open file view or directory
-     * @param item
+     * @param {Item} item
      */
     handle(item: Item) {
       if (item instanceof Fil) {
@@ -59,8 +54,68 @@ export default Vue.extend({
       }
     },
     /**
+     * @method like
+     * @description toggle like boolean, update bucket index
+     * @param {Item} item
+     */
+    async like(item: Item) {
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      item.toggleLiked()
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      item.liked
+        ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
+        : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.forceRender()
+    },
+    /**
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
+     */
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
+      // if (item instanceof Directory) {
+      //   this.$toast.show(this.$t('todo - share folders') as string)
+      //   return
+      // }
+      // if (!item.shared) {
+      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
+      //   item.shareItem()
+      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
+      //   this.$emit('forceRender')
+      // }
+      // navigator.clipboard.writeText(this.path).then(() => {
+      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
+      // })
+    },
+    /**
+     * @method rename
+     * @description rename item in file system
+     * @param {Item} item
+     */
+    rename(item: Item) {
+      this.$toast.show(this.$t('todo - rename items') as string)
+    },
+    /**
+     * @method remove
+     * @description delete item from filesystem. If file, also remove from textile bucket
+     * @param {Item} item
+     */
+    async remove(item: Item) {
+      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      if (item instanceof Fil) {
+        await this.$FileSystem.removeFile(item.name)
+      }
+      this.$FileSystem.removeChild(item.name)
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.forceRender()
+    },
+    /**
      * @method forceRender
-     * @description Force render of new directory items after directory/file upload
+     * @description Force render of new directory items after filesystem update
      */
     forceRender() {
       this.counter++

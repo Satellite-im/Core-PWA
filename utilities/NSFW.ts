@@ -1,38 +1,59 @@
-// @ts-nocheck
 import * as nsfwjs from 'nsfwjs'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 /**
  * @method isNSFW
  * @description Checks if an image is NSFW using nsfwjs
- * @param file Image or GIF
- * @returns Boolean based on predictionResults
- * @example
+ * @param {File} file File object to be scanned
+ * @returns {Promise} nsfw status
  */
-export const isNSFW = (file: File) => {
-  const fileTypePrefix = file.type.split('/')[0]
-  if (fileTypePrefix !== 'image') {
+export default async function isNSFW(file: File): Promise<boolean> {
+  const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.MOV, FILE_TYPE.WEBM, FILE_TYPE.OGV]
+  const imgTypes = [
+    FILE_TYPE.APNG,
+    FILE_TYPE.AVIF,
+    FILE_TYPE.GIF,
+    FILE_TYPE.JPG,
+    FILE_TYPE.PNG,
+    FILE_TYPE.SVG,
+    FILE_TYPE.WEBP,
+  ]
+  // if unscannable/unembeddable type
+  if (![...vidTypes, ...imgTypes].includes(file.type as FILE_TYPE)) {
     return false
   }
-  const fileURL = URL.createObjectURL(file)
-  const imgElement = document.createElement('IMG')
-  imgElement.src = fileURL
 
-  return nsfwjs
-    .load()
-    .then((model) => {
-      return model.classify(imgElement)
-    })
-    .then((predictionsArr) => {
-      const predictionObj = {}
-      for (const prediction of predictionsArr) {
-        predictionObj[prediction.className] = prediction.probability
-      }
+  let predictions: nsfwjs.predictionType[]
 
-      const predictionResults =
-        predictionObj.Porn > 0.4 ||
-        predictionObj.Hentai > 0.6 ||
-        predictionObj.Sexy > 0.7
+  // if embeddable video
+  if (vidTypes.some((type) => file.type.includes(type))) {
+    const vid = document.createElement('video')
+    vid.src = URL.createObjectURL(file)
+    await (async () => {
+      return new Promise((resolve) => {
+        vid.onloadeddata = () => {
+          resolve(true)
+          vid.muted = true
+          vid.play()
+        }
+      })
+    })()
 
-      return predictionResults
-    })
+    const model = await nsfwjs.load()
+    predictions = await model.classify(vid)
+  }
+  // else, it's an embeddable image
+  else {
+    const img = new Image()
+    img.src = URL.createObjectURL(file)
+    const model = await nsfwjs.load()
+    predictions = await model.classify(img)
+  }
+
+  const results: { [key: string]: number } = {}
+  for (const p of predictions) {
+    results[p.className] = p.probability
+  }
+
+  return results.Porn > 0.4 || results.Hentai > 0.6 || results.Sexy > 0.7
 }
