@@ -15,7 +15,7 @@
   <td
     @mouseover="menuHover=true"
     @mouseleave="menuHover=false"
-    @click="contextMenu"
+    v-on="ui.isLoadingFileIndex ? {} : { click: contextMenu }"
   >
     <more-vertical-icon size="1x" />
   </td>
