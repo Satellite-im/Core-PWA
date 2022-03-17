@@ -34,14 +34,10 @@ for (const command of [
 //Command to retry visiting root page when previous PIN data is not cleared correctly
 
 Cypress.Commands.add('visitRootPage', () => {
-  cy.window().then((win) => {
-    win.sessionStorage.clear()
-  })
-  cy.clearCookies()
-  cy.clearLocalStorage()
   cy.visit('/')
-  cy.url().then(($url) => {
-    if (!($url === redirectedURL)) {
+  cy.get('[data-cy=pin-label]').then(($label) => {
+    // retries visiting the page after deleting storage and cookies to delete stored pin
+    if ($label.text() === 'Decrypt Account') {
       cy.window().then((win) => {
         win.sessionStorage.clear()
       })
@@ -250,16 +246,16 @@ Cypress.Commands.add('chatFeaturesProfileName', (value) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
-  cy.get('.messageuser').should('be.visible').type(message)
-  cy.get('.messageuser').type('{enter}') // sending text message
+  cy.get('.editable-input').should('be.visible').type(message, { force: true })
+  cy.get('.editable-input').type('{enter}') // sending text message
   cy.contains(message)
 })
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
   cy.get('#emoji-toggle > .control-icon').click()
   cy.get(emojiLocator).click() // sending emoji
-  cy.get('.messageuser').click()
-  cy.get('.messageuser').type('{enter}')
+  cy.get('.editable-input').click()
+  cy.get('.editable-input').type('{enter}')
   cy.contains(emojiValue)
 })
 
@@ -278,7 +274,7 @@ Cypress.Commands.add('chatFeaturesSendGlyph', () => {
   cy.get('#glyph-toggle').click()
   cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
   cy.get('.glyph-item').first().click()
-  cy.get('.messageuser').click().type('{enter}')
+  cy.get('.editable-input').click().type('{enter}')
 })
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
@@ -289,7 +285,7 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
   cy.get('.file-info > .title').should('contain', 'logo.png')
   cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
   cy.get('.thumbnail').should('be.visible')
-  cy.get('.messageuser').type('{enter}')
+  cy.get('.editable-input').type('{enter}')
   cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
 })
 
@@ -300,15 +296,22 @@ Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
   cy.get('.file-item').should('be.visible')
   cy.get('.file-info > .title').should('contain', 'test-file.txt')
   cy.get('.preview', { timeout: 120000 }).should('exist')
-  cy.get('.messageuser').type('{enter}')
+  cy.get('.editable-input').type('{enter}')
   cy.get('.preview', { timeout: 120000 }).should('not.exist')
+})
+
+Cypress.Commands.add('waitForMessagesToLoad', () => {
+  cy.get('[data-cy=chat-message]', { timeout: 30000 })
+    .last()
+    .scrollIntoView()
+    .should('be.visible')
 })
 
 //Version Release Notes Commands
 
 Cypress.Commands.add('releaseNotesScreenValidation', () => {
   cy.get('[data-cy=version]').should('be.visible').click()
-  cy.contains('Update').should('be.visible')
+  cy.contains('Update', { timeout: 30000 }).should('be.visible')
   cy.contains('is Here!').should('be.visible')
   cy.contains('Got It!').should('be.visible').click()
 })
@@ -345,3 +348,31 @@ Cypress.Commands.add('validatePassphraseLocalStorage', () => {
     expect(valueObject.accounts.phrase).to.eq('')
   })
 })
+
+// Paste Command
+
+Cypress.Commands.add(
+  'paste',
+  { prevSubject: true },
+  function (subject, pasteOptions) {
+    const { pastePayload, pasteType } = pasteOptions
+    const data =
+      pasteType === 'application/json'
+        ? JSON.stringify(pastePayload)
+        : pastePayload
+    // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+    const clipboardData = new DataTransfer()
+    clipboardData.setData(pasteType, data)
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
+    const pasteEvent = new ClipboardEvent('paste', {
+      bubbles: true,
+      cancelable: true,
+      dataType: pasteType,
+      data,
+      clipboardData,
+    })
+    subject[0].dispatchEvent(pasteEvent)
+
+    return subject
+  },
+)

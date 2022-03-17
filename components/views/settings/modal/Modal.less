@@ -84,7 +84,8 @@ p {
 @media only screen and (max-width: @mobile-breakpoint) {
   .settings-modal #settings {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
+
     .sidebar {
       flex-basis: 100%;
     }
@@ -100,7 +101,7 @@ p {
   }
 
   .not-sidebar {
-    height: 100vh;
+    height: 100%;
     .close-button {
       top: @normal-spacing * 3;
       right: @normal-spacing * 2;

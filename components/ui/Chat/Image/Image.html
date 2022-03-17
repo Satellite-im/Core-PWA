@@ -4,7 +4,7 @@
       <img
         class="is-image-in-mask"
         :src="image.url"
-        v-click-outside="() => $data.showfull = !$data.showfull"
+        v-click-outside="clickHandler"
       />
       <a class="link" :href="image.url" target="_blank">
         {{ $t('files.view_original') }}
@@ -16,6 +16,6 @@
     data-cy="chat-image"
     :class="full ? 'is-full-image' : 'is-normal-image'"
     :src="image.url"
-    @click="() => $data.showfull = !$data.showfull"
+    @click="clickHandler"
   />
 </div>
