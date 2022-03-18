@@ -56,9 +56,9 @@ export default async function isNSFW(file: File): Promise<boolean> {
           const envInfo = new EnvInfo()
           const maxDimension = Math.max(img.width, img.height)
           if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
-            resolve(false)
+            resolve(true)
           }
-          resolve(true)
+          resolve(false)
         }
       })
     })()
@@ -81,8 +81,6 @@ export default async function isNSFW(file: File): Promise<boolean> {
   for (const p of predictions) {
     results[p.className] = p.probability
   }
-
-  console.log(results)
 
   return results.Porn > 0.4 || results.Hentai > 0.6 || results.Sexy > 0.7
 }

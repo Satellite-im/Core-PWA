@@ -156,7 +156,7 @@ export const Config = {
     navigator.languages && navigator.languages.length
       ? navigator.languages[0]
       : navigator.language,
-  // https://on690.codesandbox.io/ - needed in order to know the max limits for scaling down an image
+  // https://github.com/jhildenbiddle/canvas-size#test-results
   canvasLimits: {
     web: 8192, // observed limit on my macbook, differs from link above
     ios: 4096,
