@@ -8,13 +8,15 @@ import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
-import { db, DexieConversation, DexieMessage } from '~/plugins/thirdparty/dexie'
+import {
+  db,
+  DexieConversation,
+  DexieMessage,
+} from '~/libraries/SatelliteDB/SatelliteDB'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { QueryOptions } from '~/types/ui/query'
-import SearchIndex from '~/libraries/SearchIndex'
 import { AccountsState, AccountsError } from '~/store/accounts/types'
-import { User } from '~/types/ui/user'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
@@ -120,14 +122,15 @@ export default {
     }
 
     // store latest data in indexeddb
+    const messages = conversation.map((c) => ({ ...c, conversation: address }))
     const dbData: DexieConversation = {
       key: address,
       lastInbound,
     }
     db.conversations.put(dbData)
-    db.conversationMessages.bulkPut(
-      conversation.map((c) => ({ ...c, conversation: address })),
-    )
+    db.conversationMessages.bulkPut(messages)
+    // add the messages to the search index
+    db.search.conversationMessages.addAll(messages)
 
     commit('setConversation', {
       address: friend.address,
@@ -537,18 +540,22 @@ export default {
     db.conversations
       .where('key')
       .equals(address)
-      .modify((conversation) => {
+      .modify((conversation: DexieConversation) => {
         conversation.lastInbound = message.at
       })
 
+    const msg = { conversation: address, ...message }
+    // add the message to the search index
+    db.search.conversationMessages.add(msg)
+
     // replace old message with new edited version
     if (message.editedAt) {
-      db.conversationMessages.put({ conversation: address, ...message })
+      db.conversationMessages.put(msg)
       return
     }
 
     // add regular message to indexeddb
-    db.conversationMessages.add({ conversation: address, ...message })
+    db.conversationMessages.add(msg)
   },
 
   async storeInMessage(
@@ -564,23 +571,29 @@ export default {
     db.conversations
       .where('key')
       .equals(address)
-      .modify((conversation) => {
+      .modify((conversation: DexieConversation) => {
         conversation.lastInbound = message.at
       })
+
+    const msg = { conversation: address, ...message }
+    db.search.conversationMessages.add(msg)
+
     // replace old message with new edited version
     if (message.editedAt) {
-      db.conversationMessages.get(message.id).then((oldMessage) => {
-        if (oldMessage) {
-          db.conversationMessages.put({ conversation: address, ...message })
-        } else {
-          db.conversationMessages.add({ conversation: address, ...message })
-        }
-      })
+      db.conversationMessages
+        .get(message.id)
+        .then((oldMessage?: DexieMessage) => {
+          if (oldMessage) {
+            db.conversationMessages.put(msg)
+          } else {
+            db.conversationMessages.add(msg)
+          }
+        })
       return
     }
 
     // add regular message to indexeddb
-    db.conversationMessages.add({ conversation: address, ...message })
+    db.conversationMessages.add(msg)
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -893,7 +906,6 @@ export default {
     { state }: ActionsArguments<TextileState>,
     {
       query,
-      accounts,
       page = 1,
       perPage = 10,
     }: {
@@ -904,49 +916,37 @@ export default {
     },
   ) {
     const { queryString, dateRange, friends } = query
-    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
     const startDate =
       dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
     const endDate =
       dateRange && new Date(dateRange.end).setHours(23, 59, 59, 999).valueOf()
 
-    const messages = friends
-      .map(({ address }) =>
-        Object.values(state.conversations[address]?.messages),
-      )
-      .reduce((list, acc) => [...acc, ...list], [])
-      .filter((message) => {
-        if (!startDate || !endDate) return true
-        const msgDate = new Date(message?.at).valueOf()
-        return msgDate >= startDate && msgDate <= endDate
-      })
-      .map((message) => {
-        const user =
-          accounts?.details?.textilePubkey === message?.from
-            ? accounts.details
-            : friends.find(
-                (fItem: User) => fItem.textilePubkey === message?.from,
-              )
-        return {
-          ...message,
-          user: {
-            name: user?.name,
-            address: user?.address,
-          },
-        }
-      })
+    // this rebuilds search indexes when changes are made to them with HMR
+    if (!db.search.conversationMessages) {
+      await db.initializeSearchIndexes()
+    }
 
-    $SearchIndex.update(messages)
-    const searchResult = await $SearchIndex.search(queryString)
-    const result = searchResult?.reduce((acc: any[], item: any) => {
-      return [...acc, messages.find((m: any) => m.id === item.ref)]
-    }, [])
+    const result = db.search.conversationMessages.search(
+      `${queryString}${
+        startDate && endDate
+          ? ` AND at >= ${startDate} AND at <= ${endDate}`
+          : ''
+      }`,
+      {
+        fuzzy: 0.3,
+      },
+    )
+
     const skip = (page - 1) * perPage
+    const list = result?.splice(skip, perPage).map((match) => ({
+      ...match,
+      user: friends.find((friend) => friend.address === match.conversation),
+    }))
 
     return {
       data: {
         totalRows: result?.length,
-        list: result?.splice(skip, perPage),
+        list,
         perPage,
         page,
       },

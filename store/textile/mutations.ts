@@ -3,7 +3,7 @@ import { TextileState } from './types'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
-import SearchIndex from '~/libraries/SearchIndex'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
@@ -75,8 +75,7 @@ const mutations = {
       },
     }
 
-    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
-    $SearchIndex.update([])
+    db.search.conversationMessages.removeAll()
   },
   addMessageToConversation(
     state: TextileState,
@@ -105,6 +104,10 @@ const mutations = {
       lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
       lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
+
+    // add to search index
+    db.search.conversationMessages.add({ ...message, conversation: address })
+
     const tracked = updateMessageTracker([message], initialValues)
     state.conversations = {
       ...state.conversations,
@@ -120,8 +123,6 @@ const mutations = {
         end,
       },
     }
-    const $SearchIndex: SearchIndex = Vue.prototype.$SearchIndex
-    $SearchIndex.update(Object.values(tracked.messages))
   },
   setConversationLoading(
     state: TextileState,

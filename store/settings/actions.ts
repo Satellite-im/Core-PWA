@@ -1,4 +1,4 @@
-import { db } from '~/plugins/thirdparty/dexie'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { SettingsError, SettingsState } from '~/store/settings/types'
 import { ActionsArguments } from '~/types/store/store'
 

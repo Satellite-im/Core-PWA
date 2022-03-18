@@ -39,12 +39,46 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 import UsersProgram, {
   UserInfo,
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
-import IdentityManager from '~/libraries/Textile/IdentityManager'
-import { EncodingTypesEnum } from '~/libraries/Enums/enums'
 import { MetadataManager } from '~/libraries/Textile/MetadataManager'
 import { FriendMetadata } from '~/types/textile/metadata'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
+  async initialize({
+    dispatch,
+    commit,
+    state,
+  }: ActionsArguments<FriendsState>) {
+    const $Hounddog = Vue.prototype.$Hounddog
+
+    commit(
+      'dataState/setDataState',
+      { key: 'friends', value: DataStateType.Loading },
+      { root: true },
+    )
+
+    const friends = await db.friends.toArray()
+    db.search.friends.update(friends)
+    friends.forEach((friend) => {
+      const friendExists = $Hounddog.friendExists(state, friend)
+
+      if (!friendExists) {
+        commit('addFriend', { ...friend, stored: true })
+        return
+      }
+      commit('updateFriend', { ...friend, stored: true })
+    })
+
+    commit(
+      'dataState/setDataState',
+      { key: 'friends', value: DataStateType.Ready },
+      { root: true },
+    )
+
+    dispatch('friends/fetchFriends', {}, { root: true })
+    dispatch('friends/fetchFriendRequests', {}, { root: true })
+    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
+  },
   /**
    * @method fetchFriendRequests DocsTODO
    * @description
@@ -123,6 +157,7 @@ export default {
     { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount,
   ) {
+    // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
@@ -150,6 +185,7 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
+    const stored = state.all.some((friend) => friend.address === friendKey)
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
       name: userInfo.name,
@@ -159,12 +195,12 @@ export default {
       textilePubkey,
       item: {},
       pending: false,
+      stored,
       activeChat: false,
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
     }
-
     const $Hounddog = Vue.prototype.$Hounddog
     const friendExists = $Hounddog.friendExists(state, friend)
 
@@ -183,9 +219,40 @@ export default {
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(friendAccount, null).requestId,
       )
+      dispatch('syncFriendIDB', friend)
       return
     }
     commit('updateFriend', friend)
+
+    dispatch('syncFriendIDB', friend)
+  },
+  /**
+   * @method syncFriendIDB sync a friend with the local indexedDB
+   * @param arguments AccountArguments (dispatch)
+   * @param friend Friend
+   * @returns void
+   */
+  async syncFriendIDB(
+    { commit }: ActionsArguments<FriendsState>,
+    friend: Friend,
+  ) {
+    const record = {
+      address: friend.address,
+      name: friend.name,
+      photoHash: friend.photoHash,
+      textilePubkey: friend.textilePubkey,
+      lastUpdate: friend.lastUpdate,
+    }
+    db.search.friends.add(record)
+    if (
+      (await db.friends.where('address').equals(friend.address).count()) === 0
+    ) {
+      await db.friends.add(record)
+    }
+    await db.friends.update(record.address, record)
+
+    // update stored state
+    commit('friends/setStored', friend, { root: true })
   },
 
   /**
