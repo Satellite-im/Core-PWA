@@ -9,7 +9,7 @@ const recoverySeed =
 let imageURL
 
 describe('Chat Features Tests', () => {
-  it('Chat - Send stuff on chat', () => {
+  it('Chat - Send message on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -19,21 +19,25 @@ describe('Chat Features Tests', () => {
     // Click on hamburger menu if width < height
     cy.get('.toggle-sidebar').should('be.visible').click()
 
-    //Validate message and emojis are sent
+    //Validate message is sent
     cy.waitForMessagesToLoad()
     cy.chatFeaturesSendMessage(randomMessage)
-    cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
+  })
 
-    //Validate message can be edited
+  it('Chat - Send Emoji on chat', () => {
+    cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
+  })
+
+  it('Chat - Edit message on chat', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
   it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
     //Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
-    cy.get('#chatbar-controls > span > .tooltip-container')
-      .realHover()
-      .should('have.attr', 'data-tooltip', 'Send Money\nComing Soon')
-    cy.get('body').realHover({ position: 'topLeft' })
+    cy.hoverOnComingSoonIcon(
+      '#chatbar-controls > span > .tooltip-container',
+      'Send Money\nComing Soon',
+    )
   })
 
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
