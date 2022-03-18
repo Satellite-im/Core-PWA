@@ -8,16 +8,16 @@ import {
 } from '@solana/web3.js'
 import {
   Group,
-  Groupchats,
+  GroupChats,
   GroupEvents,
   GroupEventsFilter,
   IDL,
   InvitationAccount,
   InvitationAccountsFilter,
   RawGroup,
-} from './GroupchatsProgram.types'
+} from './GroupChatsProgram.types'
 import { Config } from '~/config'
-import GroupCrypto from '~/libraries/Solana/GroupchatsProgram/GroupCrypto'
+import GroupCrypto from '~/libraries/Solana/GroupChatsProgram/GroupCrypto'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
@@ -29,7 +29,7 @@ const inviteSeed = Buffer.from(utils.bytes.utf8.encode('invite'))
 
 export default class GroupChatsProgram extends EventEmitter {
   solana?: Solana
-  program?: Program<Groupchats>
+  program?: Program<GroupChats>
   subscriptions?: { [eventName: string]: number }
   _crypto?: GroupCrypto
 
@@ -62,7 +62,7 @@ export default class GroupChatsProgram extends EventEmitter {
       commitment: Config.solana.defaultCommitment,
     })
 
-    this.program = new Program<Groupchats>(
+    this.program = new Program<GroupChats>(
       IDL,
       GROUPCHATS_PROGRAM_ID.toBase58(),
       provider,

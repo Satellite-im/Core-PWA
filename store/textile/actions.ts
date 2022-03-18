@@ -15,7 +15,7 @@ import { QueryOptions } from '~/types/ui/query'
 import SearchIndex from '~/libraries/SearchIndex'
 import { AccountsState, AccountsError } from '~/store/accounts/types'
 import { User } from '~/types/ui/user'
-import GroupChatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupChatsProgram'
+import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
 

@@ -1,17 +1,16 @@
 import Vue from 'vue'
-import { dispatch } from 'jest-circus/build/state'
 import { DataStateType } from '../dataState/types'
 import { Group, GroupsError, GroupsState } from './types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import GroupChatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupChatsProgram'
+import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import {
   GroupEvents,
   InvitationAccount,
-} from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram.types'
+} from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram.types'
 
 const getGroupChatManager = (): GroupChatManager => {
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager

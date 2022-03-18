@@ -1,7 +1,7 @@
 import { Keypair } from '@solana/web3.js'
 import base58 from 'micro-base58'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { Invitation } from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram.types'
+import { Invitation } from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram.types'
 
 export default class GroupCrypto {
   protected crypto: Crypto
