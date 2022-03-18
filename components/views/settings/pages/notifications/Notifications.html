@@ -18,8 +18,10 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <span v-if="Platform === 'web' || Platform === 'electron'">
-        <span v-if="Platform === 'web'">
+      <span
+        v-if="Platform === PlatformTypeEnum.WEB || Platform === PlatformTypeEnum.ELECTRON"
+      >
+        <span v-if="Platform === PlatformTypeEnum.WEB">
           <TypographyLabel :text="$t('pages.settings.notifications.enabled')" />
           <br />
           <TypographyText
@@ -46,7 +48,7 @@
           :text="$t('pages.settings.notifications.send_label')"
         />
         <InteractablesInputGroup
-          v-if="NotificationStatus === 'granted' || Platform === 'electron'"
+          v-if="NotificationStatus === 'granted' || Platform === PlatformTypeEnum.ELECTRON"
           class="modal-input"
           size="small"
           type="primary"
@@ -57,7 +59,7 @@
           <arrow-right-icon size="1x" />
         </InteractablesInputGroup>
       </span>
-      <span v-if="Platform === 'android'">
+      <span v-if="Platform === PlatformTypeEnum.ANDROID">
         <InteractablesInputGroup
           class="modal-input"
           size="small"

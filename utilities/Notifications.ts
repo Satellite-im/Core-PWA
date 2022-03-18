@@ -1,6 +1,6 @@
-import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
@@ -8,14 +8,14 @@ const isSupported = (): boolean =>
   'PushManager' in window
 
 export const Notifications = class Notifications {
-  currentPlatform: string = 'android' // 'iOS', 'android', 'web'
+  currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
   sendNotification: any = this.sendNotifications
 
   constructor() {
     const envinfo = new EnvInfo()
-    this.currentPlatform = envinfo.currentPlatform // ios, web, android
-    if (this.currentPlatform === 'web') {
+    this.currentPlatform = envinfo.currentPlatform
+    if (this.currentPlatform === PlatformTypeEnum.WEB) {
       // all mount needs for web/pwa
       if (this.notificationPermission !== 'granted' && isSupported()) {
         Notification.requestPermission().then((result: any) => {
@@ -24,7 +24,7 @@ export const Notifications = class Notifications {
       }
     }
 
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // These are shown in the notification as options the user can interact with outside of the app
       LocalNotifications.registerActionTypes({
         types: [
@@ -84,12 +84,13 @@ export const Notifications = class Notifications {
    */
   requestNotificationPermission(): any {
     if (
-      (this.currentPlatform === 'web' || this.currentPlatform === 'electron') &&
+      (this.currentPlatform === PlatformTypeEnum.WEB ||
+        this.currentPlatform === PlatformTypeEnum.ELECTRON) &&
       isSupported()
     ) {
       Notification.requestPermission()
     }
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // and maybe iOS?
       LocalNotifications.requestPermissions().then((result: any) => {
         return result
@@ -124,7 +125,10 @@ export const Notifications = class Notifications {
     titleText: string,
     message: string,
   ): Promise<void> {
-    if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
+    if (
+      this.currentPlatform === PlatformTypeEnum.WEB ||
+      this.currentPlatform === PlatformTypeEnum.ELECTRON
+    ) {
       // browser notification api
       await new Notification(type, {
         tag: titleText,
@@ -132,7 +136,7 @@ export const Notifications = class Notifications {
       })
     }
 
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({
         notifications: [
           {

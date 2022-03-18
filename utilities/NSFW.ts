@@ -1,4 +1,7 @@
 import * as nsfwjs from 'nsfwjs'
+import skaler from 'skaler'
+import { Config } from '~/config'
+import { EnvInfo } from '~/utilities/EnvInfo'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 /**
@@ -32,9 +35,9 @@ export default async function isNSFW(file: File): Promise<boolean> {
     await (async () => {
       return new Promise((resolve) => {
         vid.onloadeddata = () => {
-          resolve(true)
           vid.muted = true
           vid.play()
+          resolve(true)
         }
       })
     })()
@@ -46,6 +49,30 @@ export default async function isNSFW(file: File): Promise<boolean> {
   else {
     const img = new Image()
     img.src = URL.createObjectURL(file)
+    // determine if image is too big to be scanned
+    const isTooBig: boolean = await (async () => {
+      return new Promise((resolve) => {
+        img.onload = () => {
+          const envInfo = new EnvInfo()
+          const maxDimension = Math.max(img.width, img.height)
+          if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
+            resolve(false)
+          }
+          resolve(true)
+        }
+      })
+    })()
+
+    // if too big to scan, allow upload
+    if (isTooBig) {
+      return false
+    }
+    // if image is somewhat large, scale down so we don't approach RAM limits
+    img.src = URL.createObjectURL(
+      file.size > Config.uploadByteLimit
+        ? await skaler(file, { width: 400 })
+        : file,
+    )
     const model = await nsfwjs.load()
     predictions = await model.classify(img)
   }
@@ -54,6 +81,8 @@ export default async function isNSFW(file: File): Promise<boolean> {
   for (const p of predictions) {
     results[p.className] = p.probability
   }
+
+  console.log(results)
 
   return results.Porn > 0.4 || results.Hentai > 0.6 || results.Sexy > 0.7
 }

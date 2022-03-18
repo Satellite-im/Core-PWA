@@ -123,9 +123,9 @@ export default Vue.extend({
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // todo - fix with AP-1066. don't scan large files to prevent crash
-          if (file.size > this.$Config.uploadByteLimit) {
-            return { file, nsfw: false }
-          }
+          // if (file.size > this.$Config.uploadByteLimit) {
+          //   return { file, nsfw: false }
+          // }
           // convert heic to jpg for scan. return original heic if sfw
           const buffer = new Uint8Array(await file.arrayBuffer())
           if (isHeic(buffer)) {
@@ -143,7 +143,8 @@ export default Vue.extend({
           let nsfw
           try {
             nsfw = await this.$Security.isNSFW(file)
-          } catch {
+          } catch (e) {
+            console.log(e)
             nsfw = true
           }
 
