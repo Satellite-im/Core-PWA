@@ -42,6 +42,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    /**
+     * @returns {boolean} if item is archive file type
+     */
+    isArchive(): boolean {
+      return Boolean(this.item.name.match(this.$Config.regex.archive))
+    },
     contextMenuValues() {
       return [
         {
