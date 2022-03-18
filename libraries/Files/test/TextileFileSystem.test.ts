@@ -1,7 +1,7 @@
 import fs from 'fs'
+import path from 'path'
 import Vue from 'vue'
 import { TextileFileSystem } from '../TextileFileSystem'
-import { Fil } from '../Fil'
 import TextileManager from '~/libraries/Textile/TextileManager'
 Vue.prototype.$TextileManager = new TextileManager()
 
@@ -23,10 +23,9 @@ describe('', () => {
         path: '0x0aef',
       },
     })
-    const testFile = new File(['hello'], 'test_fil.txt', {
+    const file = new File(['hello'], 'test_fil.txt', {
       type: 'text/plain',
     })
-    const file = new Fil(testFile)
     await inst.uploadFile(file)
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
@@ -37,7 +36,7 @@ describe('', () => {
     await inst.removeFile('TestFile.png')
     expect(TMConstructor.bucket.removeFile).toHaveBeenCalled()
   })
-  test.skip('TextileFileSystem.uploadFile but SVG', async () => {
+  test('TextileFileSystem.uploadFile svg', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.bucket = jest.fn()
     TMConstructor.bucket.pushFile = jest.fn()
@@ -46,13 +45,10 @@ describe('', () => {
         path: '0x0aef',
       },
     })
-    const fileBuffer = fs.readFileSync('utilities/assets/svg-image.svg', {
-      flag: 'r',
-    })
-    const testFile = new File([fileBuffer as BlobPart], 'svg-image.svg', {
-      type: 'image/svg',
-    })
-    const file = new Fil(testFile)
+    const buffer = await fs.promises.readFile(
+      path.join('utilities/assets/svg-image.svg'),
+    )
+    const file = new File(buffer, 'svg-image.svg', { type: 'image/svg' })
     await inst.uploadFile(file)
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
