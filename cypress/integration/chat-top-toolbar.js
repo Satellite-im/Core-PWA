@@ -38,12 +38,9 @@ describe('Chat Features Tests', () => {
     )
   })
 
-  it('Chat - Toolbar - Marketplace icon shows Coming Soon', () => {
+  it('Chat - Toolbar - Marketplace icon is displayed', () => {
     cy.get('[data-cy=toolbar-marketplace]').should('be.visible')
-    cy.hoverOnComingSoonIcon(
-      '[data-cy=toolbar-marketplace] > .tooltip-container',
-      'Marketplace\nComing Soon',
-    )
+    cy.hoverOnComingSoonIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
   })
 
   it('Chat - Toolbar - Wallet icon shows Coming Soon', () => {

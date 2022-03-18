@@ -92,20 +92,14 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <UiComingSoon
+    <div
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      @click="() => toggleModal(ModalWindows.CALLTOACTION)"
+      data-tooltip="Marketplace"
       data-cy="toolbar-marketplace"
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.marketplace')"
-      :tooltipPosition="'bottom'"
     >
-      <div
-        class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
-        @click="() => toggleModal(ModalWindows.MARKETPLACE)"
-        data-tooltip="Marketplace"
-      >
-        <shopping-bag-icon class="control-icon" size="1x" color="grey" />
-      </div>
-    </UiComingSoon>
+      <shopping-bag-icon class="control-icon" size="1x" />
+    </div>
     <UiComingSoon
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.wallet')"
