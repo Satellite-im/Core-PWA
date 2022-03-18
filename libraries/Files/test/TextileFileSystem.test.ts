@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import Vue from 'vue'
 import { TextileFileSystem } from '../TextileFileSystem'
-import { Fil } from '../Fil'
 import TextileManager from '~/libraries/Textile/TextileManager'
 Vue.prototype.$TextileManager = new TextileManager()
 
@@ -27,7 +26,6 @@ describe('', () => {
     const file = new File(['hello'], 'test_fil.txt', {
       type: 'text/plain',
     })
-    // const file = new Fil(testFile)
     await inst.uploadFile(file)
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
