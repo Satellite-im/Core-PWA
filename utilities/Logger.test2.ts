@@ -81,7 +81,6 @@ describe('Logger.default._log', () => {
   })
 })
 
-// @ponicode
 describe('Logger.default.log', () => {
   let inst10: any
   let inst9: any
