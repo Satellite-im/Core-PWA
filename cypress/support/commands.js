@@ -307,6 +307,19 @@ Cypress.Commands.add('waitForMessagesToLoad', () => {
     .should('be.visible')
 })
 
+Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
+  cy.get(locator)
+    .realHover()
+    .should('have.attr', 'data-tooltip', expectedMessage)
+  cy.get('body').realHover({ position: 'topLeft' })
+})
+
+Cypress.Commands.add('validateDisabledIcon', (locator) => {
+  cy.get(locator).should('have.class', 'disabled')
+  cy.get(locator).realHover()
+  cy.get('body').realHover({ position: 'topLeft' })
+})
+
 //Version Release Notes Commands
 
 Cypress.Commands.add('releaseNotesScreenValidation', () => {
