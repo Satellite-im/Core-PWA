@@ -1,0 +1,41 @@
+<div class="cta">
+  <InteractablesClose :action="closeModal" />
+  <satellite-icon class="sat-icon" size="3.5x" />
+  <TypographyTitle
+    class="main-title"
+    :size="3"
+    :text="$t('modal.call_to_action.title')"
+  />
+  <TypographyTitle
+    class="sub"
+    :size="6"
+    :text="$t('modal.call_to_action.subtitle')"
+  />
+  <ul>
+    <li>
+      <TypographyText :text="$t('modal.call_to_action.item1')" />
+    </li>
+    <li>
+      <TypographyText :text="$t('modal.call_to_action.item2')" />
+    </li>
+    <li>
+      <TypographyText :text="$t('modal.call_to_action.item3')" />
+    </li>
+    <li>
+      <TypographyText :text="$t('modal.call_to_action.item4')" />
+    </li>
+    <li>
+      <TypographyText :text="$t('modal.call_to_action.item5')" />
+    </li>
+  </ul>
+  <UiHorizontalRule />
+
+  <TypographyText :text="$t('modal.call_to_action.description')" />
+  <InteractablesButton
+    type="primary"
+    :text="$t('modal.call_to_action.btn')"
+    :action="showTwitter"
+  >
+    <radio-icon size="1.5x" />
+  </InteractablesButton>
+</div>

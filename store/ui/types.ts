@@ -99,6 +99,7 @@ export enum ModalWindows {
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
   USERPROFILE = 'userProfile',
+  CALLTOACTION = 'callToAction',
 }
 
 export interface EnhancerInfo {

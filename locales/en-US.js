@@ -639,6 +639,17 @@ export default {
         friends: 'Friends',
       },
     },
+    call_to_action: {
+      title: 'Coming Soon',
+      subtitle: 'Stay tuned for these upcoming features:',
+      item1: 'Watch Parties',
+      item2: 'Servers',
+      item3: 'Community Servers Core',
+      item4: 'Community Servers File Sharing',
+      item5: 'Community Servers Voice, Video, Screen Sharing, and more',
+      description: `We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.`,
+      btn: 'Keep Me Posted',
+    },
   },
   context: {
     // files
