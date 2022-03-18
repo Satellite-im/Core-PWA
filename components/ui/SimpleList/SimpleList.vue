@@ -24,7 +24,7 @@ export default Vue.extend({
      */
     menuContent: {
       type: Array as PropType<SimpleList>,
-      default: () => [],
+      required: true,
     },
   },
 })

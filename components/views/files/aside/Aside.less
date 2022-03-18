@@ -1,33 +1,27 @@
 .files-aside {
-  .flex {
-    .is-text {
-      &:extend(.full-width);
-    }
-    .upgrade {
-      background-color: @gray!important;
-      cursor: not-allowed;
-    }
-    .button {
-      height: 1.4rem;
-      min-width: 4rem;
-      padding: @xlight-spacing @light-spacing;
-      line-height: 1 !important;
-      box-shadow: none !important;
-    }
-    display: inline-flex;
-    flex-direction: row;
-    &:extend(.full-width);
-    margin-bottom: @light-spacing;
-  }
-  .usage-text {
-    font-size: @text-size;
-
-    .red {
-      &:extend(.color-danger);
-    }
-  }
   &:extend(.full-width);
   &:extend(.background-semitransparent-light);
   &:extend(.round-corners);
   padding: @normal-spacing;
+  .upper {
+    display: flex;
+    flex-direction: column;
+    gap: @light-spacing;
+    margin-bottom: @normal-spacing;
+    .flex {
+      display: flex;
+      justify-content: space-between;
+      .button {
+        height: 1.4rem;
+        min-width: 4rem;
+        padding: @xlight-spacing @light-spacing;
+        line-height: 1 !important;
+        background-color: @gray!important;
+        box-shadow: none !important;
+      }
+    }
+    .usage-text {
+      font-size: @text-size;
+    }
+  }
 }
