@@ -13,7 +13,7 @@ describe('Cursor.default.getCurrentCursorPosition', () => {
 
   describe('Cursor.default.setCurrentCursorPosition', () => {
     test('0', () => {
-      let result: any = Cursor.default.setCurrentCursorPosition(
+      const result: any = Cursor.default.setCurrentCursorPosition(
         -Infinity,
         document.querySelector('Foo bar', 'Foo bar', 'Foo bar'),
       )

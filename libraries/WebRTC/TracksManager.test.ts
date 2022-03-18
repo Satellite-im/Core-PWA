@@ -93,26 +93,28 @@ describe('Mutate Tracks Manager', () => {
     })
 
     test('0', () => {
-      let result: any = inst2.removeTrack(
+      const result: any = inst2.removeTrack(
         '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
       )
       expect(result).toMatchSnapshot()
     })
 
     test('1', () => {
-      let result: any = inst.removeTrack('7289708e-b17a-477c-8a77-9ab575c4b4d8')
+      const result: any = inst.removeTrack(
+        '7289708e-b17a-477c-8a77-9ab575c4b4d8',
+      )
       expect(result).toMatchSnapshot()
     })
 
     test('2', () => {
-      let result: any = inst3.removeTrack(
+      const result: any = inst3.removeTrack(
         'a85a8e6b-348b-4011-a1ec-1e78e9620782',
       )
       expect(result).toMatchSnapshot()
     })
 
     test('3', () => {
-      let result: any = inst4.removeTrack('')
+      const result: any = inst4.removeTrack('')
       expect(result).toMatchSnapshot()
     })
   })
@@ -131,22 +133,22 @@ describe('Mutate Tracks Manager', () => {
     })
 
     test('0', () => {
-      let result: any = inst2.getTrack('a85a8e6b-348b-4011-a1ec-1e78e9620782')
+      const result: any = inst2.getTrack('a85a8e6b-348b-4011-a1ec-1e78e9620782')
       expect(result).toMatchSnapshot()
     })
 
     test('1', () => {
-      let result: any = inst.getTrack('7289708e-b17a-477c-8a77-9ab575c4b4d8')
+      const result: any = inst.getTrack('7289708e-b17a-477c-8a77-9ab575c4b4d8')
       expect(result).toMatchSnapshot()
     })
 
     test('2', () => {
-      let result: any = inst3.getTrack('03ea49f8-1d96-4cd0-b279-0684e3eec3a9')
+      const result: any = inst3.getTrack('03ea49f8-1d96-4cd0-b279-0684e3eec3a9')
       expect(result).toMatchSnapshot()
     })
 
     test('3', () => {
-      let result: any = inst4.getTrack('')
+      const result: any = inst4.getTrack('')
       expect(result).toMatchSnapshot()
     })
   })
@@ -159,7 +161,7 @@ describe('Mutate Tracks Manager', () => {
     })
 
     test('0', () => {
-      let result: any = inst2.removeAllTracks()
+      const result: any = inst2.removeAllTracks()
       expect(result).toMatchSnapshot()
     })
   })
