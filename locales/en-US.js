@@ -154,7 +154,7 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        folder_name: 'Please enter a folder name',
+        folder_name: 'Please enter a folder name of at least one character',
         no_slash: 'Folder name cannot contain /',
         reserved_name: 'sat.json is a reserved file name',
         empty_file: 'File needs to have a size of 1 byte or greater',

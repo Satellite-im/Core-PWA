@@ -61,8 +61,10 @@ export default Vue.extend({
      */
     async addFolder() {
       this.errors = []
-      if (!this.text) {
+      // checks for empty input OR input of only spaces
+      if (!this.text || this.text.replace(/\s/g, '').length === 0) {
         this.errors.push(this.$t('pages.files.errors.folder_name') as string)
+        this.text = '' // clear spaces if that's the issue
         return
       }
       if (this.text.includes('/')) {
