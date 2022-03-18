@@ -93,10 +93,10 @@
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <UiComingSoon
+      data-cy="toolbar-marketplace"
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.marketplace')"
       :tooltipPosition="'bottom'"
-      data-cy="toolbar-marketplace"
     >
       <div
         class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
