@@ -1,4 +1,3 @@
-import { result } from 'lodash'
 import * as index from '~/components/mixins/UserPermissions/index'
 
 describe('index.UserPermissions.created', () => {
