@@ -74,6 +74,7 @@ export default Vue.extend({
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
         { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
       if (this.message.type === 'text') {
