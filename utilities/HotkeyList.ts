@@ -30,6 +30,8 @@ export const specialKeys: { [key: string]: string } = {
 
 export const windowsShortcuts = [
   'ctrl+n',
+  'ctrl+c',
+  'ctrl+v',
   'ctrl+shift+n',
   'ctrl+t',
   'ctrl+shift+t',
@@ -112,6 +114,7 @@ export const windowsShortcuts = [
 export const macShortcuts = [
   'meta+n',
   'meta+c',
+  'meta+v',
   'meta+a',
   'meta+r',
   'meta+shift+n',

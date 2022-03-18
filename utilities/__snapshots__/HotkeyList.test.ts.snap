@@ -4,6 +4,7 @@ exports[`check macShortcuts constants should return the macShortcuts constants 1
 Array [
   "meta+n",
   "meta+c",
+  "meta+v",
   "meta+a",
   "meta+r",
   "meta+shift+n",
@@ -80,6 +81,8 @@ Array [
 exports[`check windowsShortcuts constants should return the windowsShortcuts constants 1`] = `
 Array [
   "ctrl+n",
+  "ctrl+c",
+  "ctrl+v",
   "ctrl+shift+n",
   "ctrl+t",
   "ctrl+shift+t",
