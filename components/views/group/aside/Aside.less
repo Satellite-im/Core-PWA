@@ -82,6 +82,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #aside {
+    margin-left: -200px;
     right: 0px;
     top: 0px;
     z-index: @base-z-index + 101;
@@ -89,7 +90,7 @@
     &:extend(.full-width);
 
     #aside-box {
-      margin-left: @normal-spacing;
+    width: 100%;
     }
 
     .info-toggle {
