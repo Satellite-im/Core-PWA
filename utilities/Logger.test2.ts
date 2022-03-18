@@ -26,7 +26,7 @@ describe('Logger.default._log', () => {
   })
 
   test('0', () => {
-    let result: any = inst2._log(
+    const result: any = inst2._log(
       'Alabama',
       'The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality',
       {},
@@ -36,7 +36,7 @@ describe('Logger.default._log', () => {
   })
 
   test('1', () => {
-    let result: any = inst._log(
+    const result: any = inst._log(
       'Alabama',
       'The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality',
       {},
@@ -46,7 +46,7 @@ describe('Logger.default._log', () => {
   })
 
   test('2', () => {
-    let result: any = inst3._log(
+    const result: any = inst3._log(
       'Alabama',
       'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
       {},
@@ -56,7 +56,7 @@ describe('Logger.default._log', () => {
   })
 
   test('3', () => {
-    let result: any = inst4._log(
+    const result: any = inst4._log(
       'Florida',
       'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
       {},
@@ -66,7 +66,7 @@ describe('Logger.default._log', () => {
   })
 
   test('4', () => {
-    let result: any = inst5._log(
+    const result: any = inst5._log(
       'Alabama',
       'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
       {},
@@ -76,7 +76,7 @@ describe('Logger.default._log', () => {
   })
 
   test('5', () => {
-    let result: any = inst9._log('', '', {}, Logger.LogLevel.DEV)
+    const result: any = inst9._log('', '', {}, Logger.LogLevel.DEV)
     expect(result).toMatchSnapshot()
   })
 })
@@ -107,7 +107,7 @@ describe('Logger.default.log', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.log(
+    const result: any = inst2.log(
       'Île-de-France',
       'The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality',
       {},
@@ -117,7 +117,7 @@ describe('Logger.default.log', () => {
   })
 
   test('1', () => {
-    let result: any = inst.log(
+    const result: any = inst.log(
       'Abruzzo',
       'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
       {},
@@ -127,7 +127,7 @@ describe('Logger.default.log', () => {
   })
 
   test('2', () => {
-    let result: any = inst3.log(
+    const result: any = inst3.log(
       'Île-de-France',
       'New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart',
       {},
@@ -137,7 +137,7 @@ describe('Logger.default.log', () => {
   })
 
   test('3', () => {
-    let result: any = inst4.log(
+    const result: any = inst4.log(
       'Abruzzo',
       'New range of formal shirts are designed keeping you in mind. With fits and styling that will make you stand apart',
       {},
@@ -147,7 +147,7 @@ describe('Logger.default.log', () => {
   })
 
   test('4', () => {
-    let result: any = inst5.log(
+    const result: any = inst5.log(
       'Alabama',
       'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
       {},
@@ -157,7 +157,7 @@ describe('Logger.default.log', () => {
   })
 
   test('5', () => {
-    let result: any = inst10.log('', '', {}, Logger.LogLevel.DEV)
+    const result: any = inst10.log('', '', {}, Logger.LogLevel.DEV)
     expect(result).toMatchSnapshot()
   })
 })
