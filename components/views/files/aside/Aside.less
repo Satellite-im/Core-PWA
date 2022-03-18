@@ -2,12 +2,15 @@
   &:extend(.full-width);
   &:extend(.background-semitransparent-light);
   &:extend(.round-corners);
+  display: flex;
+  flex-direction: column;
   padding: @normal-spacing;
+  gap: @normal-spacing;
+
   .upper {
     display: flex;
     flex-direction: column;
     gap: @light-spacing;
-    margin-bottom: @normal-spacing;
     .flex {
       display: flex;
       justify-content: space-between;
