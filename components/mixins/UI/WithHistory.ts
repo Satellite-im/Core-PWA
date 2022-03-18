@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { Dayjs } from 'dayjs'
+import Vue from 'vue'
 import { Config } from '~/config'
 import Cursor from '~/libraries/ui/Cursor'
 
@@ -12,11 +12,17 @@ export type Operation = {
   fn?: Function
 }
 
-export default {
+declare module 'vue/types/vue' {
+  interface Vue {
+    currentPosition: number
+  }
+}
+
+export default Vue.extend({
   data() {
     return {
-      undos: [],
-      redos: [],
+      undos: [] as Operation[],
+      redos: [] as Operation[],
     }
   },
   methods: {
@@ -24,7 +30,10 @@ export default {
       this.undos = []
       this.redos = []
     },
-    buildOp(op: Operation, opt?: { text: string; position: number }) {
+    buildOp(
+      op: Operation,
+      opt?: { text: string; position: number },
+    ): Operation {
       const finalText = opt?.text ?? op.text
       const finalPosition = opt?.position ?? op.position
 
@@ -65,9 +74,8 @@ export default {
     },
     redo() {
       const redos = this.redos
-
       if (redos.length > 0) {
-        const op = redos.at(-1)
+        const op = redos[redos.length - 1]
         op.fn && op.fn()
 
         redos.pop()
@@ -81,9 +89,8 @@ export default {
     },
     undo() {
       const undos = this.undos
-
       if (undos.length > 0) {
-        const op = undos.at(-1)
+        const op = undos[undos.length - 1]
         const inverseOps = this.inverse(op)
         inverseOps.fn && inverseOps.fn()
 
@@ -97,7 +104,7 @@ export default {
       }
     },
     apply(op: Operation) {
-      const lastOp = this.undos.at(-1)
+      const lastOp = this.undos[this.undos.length - 1]
       const merge = Boolean(lastOp) && shouldMerge(op, lastOp)
       if (!lastOp || !merge) {
         this.undos.push(this.buildOp(op))
@@ -110,7 +117,7 @@ export default {
       this.redos = []
     },
   },
-}
+})
 
 const shouldMerge = (op: Operation, prev: Operation | undefined): boolean => {
   if (prev && op.type !== prev.type) {
