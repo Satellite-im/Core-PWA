@@ -1,147 +1,17 @@
 <div class="container">
   <div class="privacy-body">
     <div class="columns">
-      <div class="column center">
-        <TypographySubtitle :size="6" :text="$t('pages.privacy.title')" />
-        <TypographyText :text="$t('pages.privacy.subtitle')" />
+      <div class="column">
+        <SettingsPagesPrivacy ref="privacy"></SettingsPagesPrivacy>
       </div>
     </div>
-
-    <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
-      <div class="columns">
-        <div class="column">
-          <div class="columns is-mobile">
-            <div class="column switch-column">
-              <InteractablesSwitch v-model="registry" isLocked small />
-            </div>
-            <div class="column">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.privacy.register.title')"
-              />
-              <TypographyText :text="$t('pages.privacy.register.subtitle')" />
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="columns is-mobile">
-            <div class="column switch-column">
-              <InteractablesSwitch v-model="storePin" small />
-            </div>
-            <div class="column">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.privacy.pin.title')"
-              />
-              <TypographyText :text="$t('pages.privacy.pin.subtitle')" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <div class="columns is-mobile">
-            <div class="column switch-column">
-              <InteractablesSwitch v-model="embeddedLinks" small />
-            </div>
-            <div class="column">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.privacy.embeds.title')"
-              />
-              <TypographyText :text="$t('pages.privacy.embeds.subtitle')" />
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="columns is-mobile">
-            <div class="column switch-column">
-              <InteractablesSwitch v-model="displayCurrentActivity" small />
-            </div>
-            <div class="column">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.privacy.activity.title')"
-              />
-              <TypographyText :text="$t('pages.privacy.activity.subtitle')" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column">
-          <TypographySubtitle
-            :size="6"
-            :text="$t('pages.privacy.serverType.title')"
-          />
-          <TypographyText :text="$t('pages.privacy.serverType.subtitle')" />
-
-          <InteractablesSelect
-            :options="serverTypes"
-            v-model="serverType"
-            size="small"
-            class="form-control"
-          />
-        </div>
-      </div>
-
-      <div class="columns" v-if="serverType === 'own'">
-        <div class="column">
-          <div class="columns is-mobile">
-            <div class="column">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.privacy.ownInfo.title')"
-              />
-              <TypographyText :text="$t('pages.privacy.ownInfo.subtitle')" />
-
-              <InteractablesInput
-                v-model="ownInfo"
-                type="dark"
-                size="small"
-                :placeholder="$t('pages.privacy.ownInfo.placeholder')"
-                class="ownInfoInput"
-              />
-              <TypographyText
-                class="color-danger"
-                type="danger"
-                :size="6"
-                :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
-                v-if="lengthError"
-              />
-              <span v-if="formatError">
-                <TypographyText
-                  class="color-danger"
-                  type="danger"
-                  :size="6"
-                  :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
-                />
-                <TypographyText
-                  class="color-danger ml-3"
-                  type="danger"
-                  :size="6"
-                  :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-                />
-                <TypographyText
-                  class="color-danger ml-3"
-                  type="danger"
-                  :size="6"
-                  :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-                />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </UiScroll>
-    <br />
     <div class="spacer"></div>
     <div class="columns is-mobile buttons">
       <div class="column">
         <InteractablesButton
           class="right"
           type="primary"
-          :disabled="serverType === 'own' && (lengthError || formatError || !ownInfo)"
+          :disabled="isDisabled()"
           :action="generateWallet"
         >
           {{ $t('pages.privacy.continue') }}
