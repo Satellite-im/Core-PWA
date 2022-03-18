@@ -8,9 +8,10 @@ export default Vue.extend({
   name: 'CreateGroup',
   data() {
     return {
-      loading: false,
+      error: '',
       name: '',
       users: '',
+      isLoading: false,
     }
   },
   computed: {
@@ -19,7 +20,8 @@ export default Vue.extend({
   methods: {
     async confirm() {
       try {
-        this.loading = true
+        this.error = ''
+        this.isLoading = true
         const usersToInvite = this.users.split(',')
 
         const groupId = await this.$store.dispatch('groups/createGroup', {
@@ -34,16 +36,15 @@ export default Vue.extend({
             }),
           ),
         )
-      } catch (e) {
-        console.log(e)
+        this.$store.commit('ui/toggleModal', {
+          name: 'creategroup',
+          state: false,
+        })
+      } catch (e: any) {
+        this.error = `Failed to create group: ${e.message}`
       } finally {
-        this.loading = false
+        this.isLoading = false
       }
-
-      this.$store.commit('ui/toggleModal', {
-        name: 'creategroup',
-        state: false,
-      })
     },
   },
 })

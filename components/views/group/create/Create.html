@@ -21,6 +21,7 @@
     class="search"
     v-model="users"
   />
+  <small class="error has-text-danger error" v-if="error">{{error}}</small>
   <div v-if="name" class="submit-container">
     <InteractablesButton
       type="primary"
@@ -28,7 +29,7 @@
       :text="$t('pages.chat.new_group')"
       class="create-server-btn"
       :action="confirm"
-      :loading="loading"
+      :loading="isLoading"
     />
   </div>
 </div>

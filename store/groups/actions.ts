@@ -6,7 +6,7 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
+import GroupChatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupChatsProgram'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import {
   GroupEvents,
@@ -22,9 +22,9 @@ const getGroupChatManager = (): GroupChatManager => {
   return $TextileManager.groupChatManager
 }
 
-const getGroupChatProgram = (): GroupchatsProgram => {
+const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  return new GroupchatsProgram($SolanaManager)
+  return new GroupChatsProgram($SolanaManager)
 }
 
 const getUsersProgram = (): UsersProgram => {
@@ -34,7 +34,7 @@ const getUsersProgram = (): UsersProgram => {
 
 const getUserAccount = () => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  const account = $SolanaManager.getActiveAccount() // TODO payer or user account?
+  const account = $SolanaManager.getActiveAccount()
 
   if (!account) {
     throw new Error(GroupsError.USER_NOT_INITIALIZED)
@@ -75,7 +75,7 @@ export default {
       { root: true },
     )
 
-    const { publicKey } = getUserAccount() // TODO should we use payer account instead?
+    const { publicKey } = getUserAccount()
     const groupChatProgram = getGroupChatProgram()
     getGroupChatManager()
     const groups = await groupChatProgram.getUserGroups(publicKey)
@@ -118,7 +118,6 @@ export default {
     dispatch,
     commit,
   }: ActionsArguments<GroupsState>) {
-    // TODO or unsubscribe if subscribed?
     if (state.subscriptionId !== null) {
       await dispatch('unsubscribeFromGroupInvites')
     }

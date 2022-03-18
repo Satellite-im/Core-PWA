@@ -17,9 +17,8 @@ import {
   RawGroup,
 } from './GroupchatsProgram.types'
 import { Config } from '~/config'
-import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 import GroupCrypto from '~/libraries/Solana/GroupchatsProgram/GroupCrypto'
-import { User } from '~/types/ui/user'
+import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
   Config.solana.groupchatsProgramId,
@@ -28,7 +27,7 @@ export const GROUPCHATS_PROGRAM_ID = new PublicKey(
 const groupSeed = Buffer.from(utils.bytes.utf8.encode('groupchat'))
 const inviteSeed = Buffer.from(utils.bytes.utf8.encode('invite'))
 
-export default class GroupchatsProgram extends EventEmitter {
+export default class GroupChatsProgram extends EventEmitter {
   solana?: Solana
   program?: Program<Groupchats>
   subscriptions?: { [eventName: string]: number }
@@ -167,7 +166,7 @@ export default class GroupchatsProgram extends EventEmitter {
    * @param groupId Group id
    * @param name Group name
    */
-  async create(groupId: string, name: string): Group {
+  async create(groupId: string, name: string): Promise<Group> {
     // Throws if the program is not set
     const program = this._getProgram()
 
@@ -226,7 +225,6 @@ export default class GroupchatsProgram extends EventEmitter {
       sender: 8,
       groupKey: 40,
       recipient: 72,
-      groupId: 104, // TODO check
     }
 
     for (const [key, value] of Object.entries(filter)) {
@@ -317,9 +315,9 @@ export default class GroupchatsProgram extends EventEmitter {
   }
 
   /**
-   * Returns groups the user is a member of
+   * Returns members of given group
    * @param groupId {string} group id
-   * @returns Promise<User[]>
+   * @returns Promise<string[]> array of user addresses
    */
   async getGroupUsers(groupId: string): Promise<string[]> {
     const inviteAccounts = await this.getInvitationAccounts({
@@ -388,9 +386,7 @@ export default class GroupchatsProgram extends EventEmitter {
     if (!this.solana) throw new Error('Solana not initialized')
     try {
       return await this.solana.connection.removeProgramAccountChangeListener(id)
-    } catch (e: any) {
-      console.log('Unsubscribe failed:', e.message)
-    }
+    } catch (e) {}
   }
 
   /**

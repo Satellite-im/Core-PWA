@@ -15,13 +15,13 @@ import { QueryOptions } from '~/types/ui/query'
 import SearchIndex from '~/libraries/SearchIndex'
 import { AccountsState, AccountsError } from '~/store/accounts/types'
 import { User } from '~/types/ui/user'
-import GroupchatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram'
+import GroupChatsProgram from '~/libraries/Solana/GroupchatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
 
-const getGroupChatProgram = (): GroupchatsProgram => {
+const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  return new GroupchatsProgram($SolanaManager)
+  return new GroupChatsProgram($SolanaManager)
 }
 
 const getGroup = (state: RootState, id: string): Group => {

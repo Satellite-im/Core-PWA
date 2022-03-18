@@ -1,7 +1,7 @@
-import base58 from 'micro-base58'
 import { Keypair } from '@solana/web3.js'
-import { Invitation } from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram.types'
+import base58 from 'micro-base58'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { Invitation } from '~/libraries/Solana/GroupchatsProgram/GroupchatsProgram.types'
 
 export default class GroupCrypto {
   protected crypto: Crypto
@@ -12,7 +12,7 @@ export default class GroupCrypto {
   }
 
   generateEncryptionKey() {
-    // TODO consider to change random key generation
+    // TODO consider to change random key generation AP-1102
     return base58(Keypair.generate().secretKey).slice(0, 16) // becomes 64 length after encryption
   }
 
