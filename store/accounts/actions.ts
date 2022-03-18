@@ -21,7 +21,7 @@ export default {
    * @method setPin
    * @description sets the user pin password and stores its
    * hash inside the Vuex state
-   * @param pin the choosen pin password
+   * @param pin the chosen pin password
    * @example
    * ```typescript
    * this.$store.dispatch('accounts/setPin', 'myPassword123')
