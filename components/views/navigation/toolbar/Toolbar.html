@@ -27,7 +27,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.alerts')"
       :tooltipPosition="'bottom'"
-      :data-cy="`toolbar-alerts`"
+      data-cy="toolbar-alerts"
     >
       <div
         class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
@@ -56,8 +56,8 @@
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
       ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
-      :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
       data-cy="toolbar-enable-audio"
+      :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio'])"
     >
@@ -66,8 +66,8 @@
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
       ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
-      :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       data-cy="toolbar-enable-video"
+      :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio', 'video'])"
     >
@@ -77,7 +77,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.archived')"
       :tooltipPosition="'bottom'"
-      :data-cy="`toolbar-archived-messages`"
+      data-cy="toolbar-archived-messages"
     >
       <div
         class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
@@ -96,7 +96,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.marketplace')"
       :tooltipPosition="'bottom'"
-      :data-cy="`toolbar-marketplace`"
+      data-cy="toolbar-marketplace"
     >
       <div
         class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
@@ -110,7 +110,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.wallet')"
       :tooltipPosition="'bottom'"
-      :data-cy="`toolbar-wallet`"
+      data-cy="toolbar-wallet"
     >
       <div
         class="has-tooltip has-tooltip-primary has-tooltip-bottom"
