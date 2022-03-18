@@ -7,7 +7,7 @@ describe('IdentityManager.default.generateMessageForEntropy', () => {
   })
 
   test('0', () => {
-    let result: any = inst.generateMessageForEntropy(
+    const result: any = inst.generateMessageForEntropy(
       '192.168.1.5',
       '!Lov3MyPianoPony',
     )
@@ -15,7 +15,7 @@ describe('IdentityManager.default.generateMessageForEntropy', () => {
   })
 
   test('1', () => {
-    let result: any = inst.generateMessageForEntropy(
+    const result: any = inst.generateMessageForEntropy(
       '0.0.0.0',
       'accessdenied4u',
     )
@@ -23,7 +23,7 @@ describe('IdentityManager.default.generateMessageForEntropy', () => {
   })
 
   test('2', () => {
-    let result: any = inst.generateMessageForEntropy(
+    const result: any = inst.generateMessageForEntropy(
       '192.168.1.5',
       'NoWiFi4you',
     )
@@ -31,7 +31,7 @@ describe('IdentityManager.default.generateMessageForEntropy', () => {
   })
 
   test('3', () => {
-    let result: any = inst.generateMessageForEntropy(
+    const result: any = inst.generateMessageForEntropy(
       '0.0.0.0',
       'YouarenotAllowed2Use',
     )
@@ -39,12 +39,12 @@ describe('IdentityManager.default.generateMessageForEntropy', () => {
   })
 
   test('4', () => {
-    let result: any = inst.generateMessageForEntropy('0.0.0.0', 'NoWiFi4you')
+    const result: any = inst.generateMessageForEntropy('0.0.0.0', 'NoWiFi4you')
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = inst.generateMessageForEntropy('', '')
+    const result: any = inst.generateMessageForEntropy('', '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -69,7 +69,7 @@ describe('IdentityManager.default.isInitialized', () => {
   })
 
   test('0', () => {
-    let result: any = inst.isInitialized()
+    const result: any = inst.isInitialized()
     expect(result).toMatchSnapshot()
   })
 })
