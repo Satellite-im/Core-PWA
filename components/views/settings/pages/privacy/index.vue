@@ -11,6 +11,7 @@ export default Vue.extend({
   layout: 'settings',
   data() {
     return {
+      maxChars: this.$Config.chat.maxChars,
       formatError: false,
       lengthError: false,
       serverTypes: [
@@ -41,13 +42,13 @@ export default Vue.extend({
     },
     ownInfo: {
       set(state) {
-        if (validURL(state) && state.length < 2049) {
+        if (validURL(state) && state.length < this.maxChars + 1) {
           this.formatError = false
           this.lengthError = false
           this.$store.commit('settings/setOwnInfo', state)
           return
         }
-        if (state.length > 2048) {
+        if (state.length > this.maxChars) {
           this.lengthError = true
         }
         if (!validURL(state)) {
