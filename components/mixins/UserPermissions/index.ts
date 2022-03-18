@@ -140,3 +140,7 @@ export const UserPermissions = {
 }
 
 export default UserPermissions
+
+export const exportForTesting = {
+  formatDevices,
+}

@@ -70,6 +70,14 @@
   >
     <UserProfile :close-modal="() => toggleModal(ModalWindows.USERPROFILE)" />
   </UiModal>
+  <UiModal
+    v-if="ui.modals.callToAction"
+    :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.CALLTOACTION)"
+  >
+    <CallToAction :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)" />
+  </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"

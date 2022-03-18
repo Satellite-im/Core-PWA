@@ -1,21 +1,20 @@
 import fs from 'fs'
 import Vue from 'vue'
-import * as TFS from '../TextileFileSystem'
+import { TextileFileSystem } from '../TextileFileSystem'
 import { Fil } from '../Fil'
 import TextileManager from '~/libraries/Textile/TextileManager'
 Vue.prototype.$TextileManager = new TextileManager()
 
 describe('', () => {
-  const TFSConstructor = new TFS.TextileFileSystem()
-  const inst = TFSConstructor
+  const TextileFileSystemConstructor = new TextileFileSystem()
+  const inst = TextileFileSystemConstructor
   const state = inst.bucket
 
-  test('get bucket TFS', () => {
-    expect('').toEqual('')
+  test('TextileFileSystem.bucket', () => {
     const result: any = inst.bucket
     expect(result).toEqual(state)
   })
-  test('upload file TFS', async () => {
+  test('TextileFileSystem.uploadFile', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.bucket = jest.fn()
     TMConstructor.bucket.pushFile = jest.fn()
@@ -31,14 +30,14 @@ describe('', () => {
     await inst.uploadFile(file)
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
-  test('remove file TFS', async () => {
+  test('TextileFileSystem.removeFile', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.bucket = jest.fn()
     TMConstructor.bucket.removeFile = jest.fn()
     await inst.removeFile('TestFile.png')
     expect(TMConstructor.bucket.removeFile).toHaveBeenCalled()
   })
-  test.skip('upload file TFS svg', async () => {
+  test.skip('TextileFileSystem.uploadFile but SVG', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.bucket = jest.fn()
     TMConstructor.bucket.pushFile = jest.fn()
