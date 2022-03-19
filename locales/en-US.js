@@ -671,7 +671,7 @@ export default {
     reply: 'Reply',
     copy_msg: 'Copy Message',
     copy_img: 'Copy Image',
-    save: 'Save Image',
+    save_img: 'Save Image',
     copy_link: 'Copy Link',
   },
 }

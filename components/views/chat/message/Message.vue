@@ -16,6 +16,7 @@ declare module 'vue/types/vue' {
     quickReaction: (emoji: String) => void
     editMessage: () => void
     emojiReaction: (e: MouseEvent) => void
+    copyMessage: () => void
   }
 }
 
@@ -54,26 +55,6 @@ export default Vue.extend({
   data() {
     return {
       disData: 'DataFromTheProperty',
-      contextMenuValues: [
-        { text: 'quickReaction', func: this.quickReaction },
-        { text: this.$t('context.edit'), func: this.editMessage },
-        { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
-        {
-          text: this.$t('context.copy_msg'),
-          func: () => {
-            const { type, payload } = this.$props.message
-            let finalPayload = payload
-            if (['image', 'video', 'audio', 'file'].includes(type)) {
-              finalPayload = this.$t('conversation.multimedia')
-            }
-            this.$envinfo.navigator.clipboard.writeText(finalPayload)
-          },
-        },
-        { text: this.$t('context.copy_img'), func: (this as any).testFunc },
-        { text: this.$t('context.save'), func: (this as any).testFunc },
-        { text: this.$t('context.copy_link'), func: (this as any).testFunc },
-      ],
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
     }
@@ -87,6 +68,48 @@ export default Vue.extend({
     },
     messageEdit() {
       return this.ui.editMessage.id === this.$props.message.id
+    },
+    contextMenuValues() {
+      const mainList = [
+        { text: 'quickReaction', func: this.quickReaction },
+        { text: this.$t('context.reaction'), func: this.emojiReaction },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        // AP-1120 copy link functionality
+        // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
+      ]
+      if (this.message.type === 'text') {
+        // if your own text message
+        if (this.accounts.details.textilePubkey === this.$props.message.from) {
+          return [
+            ...mainList,
+            {
+              text: this.$t('context.copy_msg'),
+              func: this.copyMessage,
+            },
+            { text: this.$t('context.edit'), func: this.editMessage },
+          ]
+        }
+        // another persons text message
+        return [
+          ...mainList,
+          {
+            text: this.$t('context.copy_msg'),
+            func: this.copyMessage,
+          },
+        ]
+      }
+      // if image message
+      if (
+        this.message.type === 'file' &&
+        this.$props.message.payload.type.includes('image')
+      ) {
+        return [
+          ...mainList,
+          { text: this.$t('context.copy_img'), func: (this as any).testFunc },
+          { text: this.$t('context.save_img'), func: (this as any).testFunc },
+        ]
+      }
+      return mainList
     },
   },
   created() {
@@ -133,6 +156,13 @@ export default Vue.extend({
     },
     testFunc() {
       this.$Logger.log('Message Context', 'Test func')
+    },
+    /**
+     * @method copyMessage
+     * @description copy contents of message. Will only be called if text message
+     */
+    copyMessage() {
+      this.$envinfo.navigator.clipboard.writeText(this.message.payload)
     },
     /**
      * @method setReplyChatbarContent DocsTODO
