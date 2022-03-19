@@ -57,7 +57,7 @@ describe('Privacy Page Toggles Tests', () => {
 
     //Click on button, validate buffering screen and that user is redirected to friends/list
     cy.createAccountSubmit()
-    cy.get('.user-state > .is-rounded > .satellite-circle', {
+    cy.get('[data-cy=user-state]', {
       timeout: 120000,
     })
       .scrollIntoView()
