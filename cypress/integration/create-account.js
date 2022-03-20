@@ -9,7 +9,7 @@ describe('Create Account Validations', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Create Account', () => {
     //Enter PIN screen
-    cy.createAccountPINscreen(randomPIN, false, true, false)
+    cy.createAccountPINscreen(randomPIN, false, false)
 
     //Create or Import account selection screen
     cy.contains(
@@ -106,7 +106,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
 
     //Validating profile picture is null and default satellite circle is displayed
-    cy.get('.user-state > .is-rounded > .satellite-circle', {
+    cy.get('[data-cy=user-state]', {
       timeout: 120000,
     })
       .scrollIntoView()

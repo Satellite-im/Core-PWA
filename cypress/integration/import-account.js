@@ -13,7 +13,7 @@ describe('Import Account Validations', () => {
   })
 
   it('Import account', () => {
-    cy.importAccountPINscreen(randomPIN, false, true, false)
+    cy.importAccountPINscreen(randomPIN, false, false)
     cy.contains('Import Account', { timeout: 60000 })
       .should('be.visible')
       .click()
