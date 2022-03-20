@@ -17,7 +17,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
     cy.createAccount(randomPIN)
 
     //Wait until main page is loaded after creating account
-    cy.get('.user-state > .is-rounded > .satellite-circle', {
+    cy.get('[data-cy=user-state]', {
       timeout: 120000,
     })
       .scrollIntoView()

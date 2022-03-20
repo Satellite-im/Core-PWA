@@ -9,7 +9,7 @@ describe.skip('Snapshots Testing', () => {
   //Import account and snapshot on each screen
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Import account - PIN screen', () => {
-    cy.importAccountPINscreen(randomPIN, false, false, true)
+    cy.importAccountPINscreen(randomPIN, false, true)
   })
 
   it('Import account - Create or Import Account Selection screen', () => {
@@ -137,7 +137,7 @@ describe.skip('Snapshots Testing', () => {
 
   it('Create Account - PIN screen', () => {
     //Open URL and snapshot
-    cy.createAccountPINscreen(randomPIN, false, false, true)
+    cy.createAccountPINscreen(randomPIN, false, true)
   })
 
   it('Create Account - Create or Import Account Selection screen', () => {
