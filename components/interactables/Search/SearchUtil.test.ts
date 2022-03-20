@@ -3,49 +3,49 @@ import * as search from '~/types/search/search'
 
 describe('SearchUtil.default.getTextCommandMap', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getTextCommandMap()
+    const result: any = SearchUtil.default.getTextCommandMap()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.default.getCommandTypeParams', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getCommandTypeParams()
+    const result: any = SearchUtil.default.getCommandTypeParams()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.default.getCommandMetaList', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getCommandMetaList()
+    const result: any = SearchUtil.default.getCommandMetaList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.default.getSearchResultGroupList', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getSearchResultGroupList()
+    const result: any = SearchUtil.default.getSearchResultGroupList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.default.getSearchOrderTypeList', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getSearchOrderTypeList()
+    const result: any = SearchUtil.default.getSearchOrderTypeList()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('SearchUtil.default.getCommandMeta', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getCommandMeta(
+    const result: any = SearchUtil.default.getCommandMeta(
       search.SearchCommand.Before,
     )
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = SearchUtil.default.getCommandMeta(
+    const result: any = SearchUtil.default.getCommandMeta(
       search.SearchCommand.Empty,
     )
     expect(result).toMatchSnapshot()
@@ -54,21 +54,21 @@ describe('SearchUtil.default.getCommandMeta', () => {
 
 describe('SearchUtil.default.getCommandTypeParam', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.getCommandTypeParam(
+    const result: any = SearchUtil.default.getCommandTypeParam(
       search.SearchCommand.Empty,
     )
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = SearchUtil.default.getCommandTypeParam(
+    const result: any = SearchUtil.default.getCommandTypeParam(
       search.SearchCommand.During,
     )
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = SearchUtil.default.getCommandTypeParam(
+    const result: any = SearchUtil.default.getCommandTypeParam(
       search.SearchCommand.Has,
     )
     expect(result).toMatchSnapshot()
@@ -77,7 +77,7 @@ describe('SearchUtil.default.getCommandTypeParam', () => {
 
 describe('SearchUtil.default.filterSearchRecommendResult', () => {
   test('0', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult(
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
       ['Expressway', 'Extensions', 'Lights', 'Extensions'],
       {
         command: 'parse mobile firewall',
@@ -89,7 +89,7 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
   })
 
   test('1', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult(
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
       ['Harbors', 'Expressway', 'Expressway', 'Extensions'],
       {
         command: 'parse mobile firewall',
@@ -101,7 +101,7 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
   })
 
   test('2', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult(
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
       ['Port', 'Port', 'Port', 'Lights'],
       {
         command: 'transmit bluetooth bus',
@@ -113,7 +113,7 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
   })
 
   test('3', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult(
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
       ['Port', 'Port', 'Lights', 'Expressway'],
       {
         command: 'transmit bluetooth bus',
@@ -125,7 +125,7 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
   })
 
   test('4', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult(
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
       ['Extensions', 'Port', 'Harbors', 'Port'],
       {
         command: 'parse mobile firewall',
@@ -137,7 +137,7 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
   })
 
   test('5', () => {
-    let result: any = SearchUtil.default.filterSearchRecommendResult([], {
+    const result: any = SearchUtil.default.filterSearchRecommendResult([], {
       command: '',
       Empty: '',
       value: { toLowerCase: () => '' },

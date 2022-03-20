@@ -33,6 +33,7 @@ const InitialUIState = (): UIState => ({
     glyph: false,
     userProfile: false,
     groupInvite: { isOpen: false },
+    callToAction: false,
   },
   glyphModalPack: '',
   chatbarContent: '',

@@ -1,28 +1,26 @@
 <div class="files-aside">
-  <div class="flex">
-    <TypographyText :size="6" :text="$t('pages.files.aside.free_tier')" />
-    <InteractablesButton
-      :text="$t('pages.files.aside.upgrade')"
-      size="small"
-      :action="() => {}"
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch upgrade"
-      :data-tooltip="$t('pages.files.aside.coming_soon')"
-    />
-  </div>
-  <UiProgress :progress="progress" />
-  <div>
-    <span class="usage-text">
+  <div class="upper">
+    <div class="flex">
+      <TypographyText :size="6" :text="$t('pages.files.aside.free_tier')" />
+      <InteractablesButton
+        :text="$t('pages.files.aside.upgrade')"
+        size="small"
+        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch disabled"
+        :data-tooltip="$t('pages.files.aside.coming_soon')"
+      />
+    </div>
+    <UiProgress :progress="progress" />
+    <div class="usage-text">
       <span :class="sizeColor">{{totalSize}}</span> of {{sizeLimit}}
-    </span>
+    </div>
   </div>
-  <UiSpacer :height="10" />
+
   <div>
     <TypographyText :size="6" :text="$t('pages.files.aside.quick_access')" />
     <UiSimpleList
       :menuContent="[{ text: 'Recent', icon: 'clock', active: true }, { text: 'Deleted', icon: 'trash' }, { text: 'Favorited', icon: 'heart' }]"
     />
   </div>
-  <UiSpacer :height="10" />
   <div>
     <TypographyText :size="6" :text="$t('pages.files.aside.shared_items')" />
     <UiSimpleList

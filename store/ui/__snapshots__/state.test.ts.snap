@@ -41,6 +41,7 @@ Object {
   "isTyping": false,
   "messages": Array [],
   "modals": Object {
+    "callToAction": false,
     "changelog": false,
     "createServer": false,
     "creategroup": false,

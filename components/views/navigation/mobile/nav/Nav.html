@@ -6,13 +6,7 @@
     <folder-icon size="1x" v-on:click="() => $router.push('/files/browse')" />
   </div>
   <div>
-    <shopping-bag-icon
-      size="1x"
-      v-on:click="$store.commit('ui/toggleModal', {
-        name: 'marketplace',
-        state: true
-      })"
-    />
+    <shopping-bag-icon size="1x" @click="toggleModal" />
   </div>
   <div :class="`${$route.path.includes('/friends') ? 'active' : ''}`">
     <users-icon size="1x" v-on:click="() => $router.push('/friends/list')" />

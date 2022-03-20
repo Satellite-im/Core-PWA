@@ -27,6 +27,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.alerts')"
       :tooltipPosition="'bottom'"
+      data-cy="toolbar-alerts"
     >
       <div
         class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
@@ -55,6 +56,7 @@
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
       ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      data-cy="toolbar-enable-audio"
       :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio'])"
@@ -64,6 +66,7 @@
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
       ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      data-cy="toolbar-enable-video"
       :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio', 'video'])"
@@ -74,6 +77,7 @@
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.archived')"
       :tooltipPosition="'bottom'"
+      data-cy="toolbar-archived-messages"
     >
       <div
         class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
@@ -88,23 +92,19 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.marketplace')"
-      :tooltipPosition="'bottom'"
+    <div
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      @click="() => toggleModal(ModalWindows.CALLTOACTION)"
+      data-tooltip="Marketplace"
+      data-cy="toolbar-marketplace"
     >
-      <div
-        class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
-        @click="() => toggleModal(ModalWindows.MARKETPLACE)"
-        data-tooltip="Marketplace"
-      >
-        <shopping-bag-icon class="control-icon" size="1x" color="grey" />
-      </div>
-    </UiComingSoon>
+      <shopping-bag-icon class="control-icon" size="1x" />
+    </div>
     <UiComingSoon
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.wallet')"
       :tooltipPosition="'bottom'"
+      data-cy="toolbar-wallet"
     >
       <div
         class="has-tooltip has-tooltip-primary has-tooltip-bottom"

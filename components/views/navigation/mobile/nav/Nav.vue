@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 import {
   HomeIcon,
   MessageSquareIcon,
@@ -12,6 +11,7 @@ import {
   SettingsIcon,
   ShoppingBagIcon,
 } from 'satellite-lucide-icons'
+import { ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -23,7 +23,15 @@ export default Vue.extend({
     ShoppingBagIcon,
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'ui']),
+  },
+  methods: {
+    toggleModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.CALLTOACTION,
+        state: !this.ui.modals[ModalWindows.CALLTOACTION],
+      })
+    },
   },
 })
 </script>

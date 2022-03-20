@@ -1,6 +1,5 @@
-import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-
 import * as web3 from '@solana/web3.js'
+import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 
 describe('SolanaManager.default.getPath', () => {
   let inst6: any
@@ -20,27 +19,27 @@ describe('SolanaManager.default.getPath', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getPath(100)
+    const result: any = inst2.getPath(100)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.getPath(-1)
+    const result: any = inst.getPath(-1)
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst3.getPath(-100)
+    const result: any = inst3.getPath(-100)
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst4.getPath(0)
+    const result: any = inst4.getPath(0)
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let result: any = inst5.getPath(-Infinity)
+    const result: any = inst5.getPath(-Infinity)
     expect(result).toMatchSnapshot()
   })
 })
@@ -123,27 +122,27 @@ describe('SolanaManager.default.getDerivedPublicKey', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getDerivedPublicKey('Pierre Edouard')
+    const result: any = inst2.getDerivedPublicKey('Pierre Edouard')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.getDerivedPublicKey('Edmond')
+    const result: any = inst.getDerivedPublicKey('Edmond')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst3.getDerivedPublicKey('George')
+    const result: any = inst3.getDerivedPublicKey('George')
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst4.getDerivedPublicKey('Michael')
+    const result: any = inst4.getDerivedPublicKey('Michael')
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    let result: any = inst5.getDerivedPublicKey('')
+    const result: any = inst5.getDerivedPublicKey('')
     expect(result).toMatchSnapshot()
   })
 })
@@ -210,7 +209,7 @@ describe('SolanaManager.default.isInitialized', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.isInitialized()
+    const result: any = inst2.isInitialized()
     expect(result).toMatchSnapshot()
   })
 })
@@ -223,7 +222,7 @@ describe('SolanaManager.default.getAllAccounts', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getAllAccounts()
+    const result: any = inst2.getAllAccounts()
     expect(result).toMatchSnapshot()
   })
 })
@@ -240,17 +239,17 @@ describe('SolanaManager.default.getAccount', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getAccount('0.0.0.0')
+    const result: any = inst2.getAccount('0.0.0.0')
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.getAccount('192.168.1.5')
+    const result: any = inst.getAccount('192.168.1.5')
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst3.getAccount('')
+    const result: any = inst3.getAccount('')
     expect(result).toMatchSnapshot()
   })
 })
@@ -263,7 +262,7 @@ describe('SolanaManager.default.getActiveAccount', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getActiveAccount()
+    const result: any = inst2.getActiveAccount()
     expect(result).toMatchSnapshot()
   })
 })
@@ -276,7 +275,7 @@ describe('SolanaManager.default.getCurrentAccountBalance', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.getCurrentAccountBalance()
+    const result: any = inst2.getCurrentAccountBalance()
     expect(result).toMatchSnapshot()
   })
 })

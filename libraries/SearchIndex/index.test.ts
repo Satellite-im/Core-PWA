@@ -11,14 +11,14 @@ describe('index.default.serialize', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.serialize()
+    const result: any = inst2.serialize()
     expect(result).toMatchSnapshot()
   })
 })
 
 describe('index.default.build', () => {
   test('0', () => {
-    let result: any = index.default.build(
+    const result: any = index.default.build(
       {
         ref: 'Jean-Philippe',
         fields: [
@@ -39,7 +39,7 @@ describe('index.default.build', () => {
   })
 
   test('1', () => {
-    let result: any = index.default.build(
+    const result: any = index.default.build(
       {
         ref: 'Jean-Philippe',
         fields: ['Checking Account', 'Checking Account', 'Investment Account'],
@@ -52,7 +52,7 @@ describe('index.default.build', () => {
   })
 
   test('2', () => {
-    let result: any = index.default.build(
+    const result: any = index.default.build(
       {
         ref: 'Edmond',
         fields: [
@@ -71,7 +71,7 @@ describe('index.default.build', () => {
   })
 
   test('3', () => {
-    let result: any = index.default.build(
+    const result: any = index.default.build(
       {
         ref: 'Pierre Edouard',
         fields: [
@@ -92,7 +92,7 @@ describe('index.default.build', () => {
   })
 
   test('4', () => {
-    let result: any = index.default.build(
+    const result: any = index.default.build(
       { ref: 'George', fields: ['Investment Account'] },
       [
         'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -104,7 +104,7 @@ describe('index.default.build', () => {
   })
 
   test('5', () => {
-    let result: any = index.default.build({ ref: '', fields: [] }, [])
+    const result: any = index.default.build({ ref: '', fields: [] }, [])
     expect(result).toMatchSnapshot()
   })
 })
@@ -145,7 +145,7 @@ describe('index.default.update', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.update([
+    const result: any = inst2.update([
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -154,7 +154,7 @@ describe('index.default.update', () => {
   })
 
   test('1', () => {
-    let result: any = inst.update([
+    const result: any = inst.update([
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -164,7 +164,7 @@ describe('index.default.update', () => {
   })
 
   test('2', () => {
-    let result: any = inst3.update([
+    const result: any = inst3.update([
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
@@ -175,7 +175,7 @@ describe('index.default.update', () => {
   })
 
   test('3', () => {
-    let result: any = inst4.update([
+    const result: any = inst4.update([
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
       'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
     ])
@@ -183,7 +183,7 @@ describe('index.default.update', () => {
   })
 
   test('4', () => {
-    let result: any = inst5.update([])
+    const result: any = inst5.update([])
     expect(result).toMatchSnapshot()
   })
 })
@@ -262,12 +262,12 @@ describe('index.default.search', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.search('', true)
+    const result: any = inst2.search('', true)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.search(
+    const result: any = inst.search(
       'DELETE FROM Projects WHERE pid = %sUPDATE Projects SET pname = %s WHERE pid = %s',
       false,
     )
@@ -275,12 +275,15 @@ describe('index.default.search', () => {
   })
 
   test('2', () => {
-    let result: any = inst3.search('DELETE FROM Projects WHERE pid = %s', true)
+    const result: any = inst3.search(
+      'DELETE FROM Projects WHERE pid = %s',
+      true,
+    )
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    let result: any = inst4.search(
+    const result: any = inst4.search(
       'UPDATE Projects SET pname = %s WHERE pid = %s',
       true,
     )
@@ -288,12 +291,15 @@ describe('index.default.search', () => {
   })
 
   test('4', () => {
-    let result: any = inst5.search('DELETE FROM Projects WHERE pid = %s', false)
+    const result: any = inst5.search(
+      'DELETE FROM Projects WHERE pid = %s',
+      false,
+    )
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    let result: any = inst7.search('', false)
+    const result: any = inst7.search('', false)
     expect(result).toMatchSnapshot()
   })
 })
@@ -330,7 +336,7 @@ describe('index.default.subscribe', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.subscribe(
+    const result: any = inst2.subscribe(
       { subscribe: () => false },
       () => 'return callback value',
     )
@@ -338,7 +344,7 @@ describe('index.default.subscribe', () => {
   })
 
   test('1', () => {
-    let result: any = inst.subscribe(
+    const result: any = inst.subscribe(
       { subscribe: () => true },
       () => 'return callback value',
     )
@@ -346,7 +352,7 @@ describe('index.default.subscribe', () => {
   })
 
   test('2', () => {
-    let result: any = inst3.subscribe({ subscribe: () => false }, () => '')
+    const result: any = inst3.subscribe({ subscribe: () => false }, () => '')
     expect(result).toMatchSnapshot()
   })
 })
@@ -379,17 +385,17 @@ describe('index.default.unsubscribe', () => {
   })
 
   test('0', () => {
-    let result: any = inst2.unsubscribe({ unsubscribe: () => '32-01-2020' })
+    const result: any = inst2.unsubscribe({ unsubscribe: () => '32-01-2020' })
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    let result: any = inst.unsubscribe({ unsubscribe: () => '01-01-2020' })
+    const result: any = inst.unsubscribe({ unsubscribe: () => '01-01-2020' })
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    let result: any = inst3.unsubscribe({ unsubscribe: () => '' })
+    const result: any = inst3.unsubscribe({ unsubscribe: () => '' })
     expect(result).toMatchSnapshot()
   })
 })

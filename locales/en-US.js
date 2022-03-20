@@ -154,7 +154,8 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        folder_name: 'Please enter a folder name',
+        folder_name:
+          'Please enter a folder name of at least one non-space character',
         no_slash: 'Folder name cannot contain /',
         reserved_name: 'sat.json is a reserved file name',
         empty_file: 'File needs to have a size of 1 byte or greater',
@@ -638,6 +639,17 @@ export default {
         friends: 'Friends',
       },
     },
+    call_to_action: {
+      title: 'Coming Soon',
+      subtitle: 'Stay tuned for these upcoming features:',
+      item1: 'Watch Parties',
+      item2: 'Servers',
+      item3: 'Community Servers Core',
+      item4: 'Community Servers File Sharing',
+      item5: 'Community Servers Voice, Video, Screen Sharing, and more',
+      description: `We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.`,
+      btn: 'Keep Me Posted',
+    },
   },
   context: {
     // files
@@ -659,7 +671,7 @@ export default {
     reply: 'Reply',
     copy_msg: 'Copy Message',
     copy_img: 'Copy Image',
-    save: 'Save Image',
+    save_img: 'Save Image',
     copy_link: 'Copy Link',
   },
 }
