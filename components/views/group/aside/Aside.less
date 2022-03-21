@@ -1,14 +1,20 @@
 @sidebar-size: 250px;
 
-#aside {
+//#aside {
   #aside-box {
     &:extend(.round-corners);
     margin-top: @normal-spacing;
     &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
-    margin-right: @normal-spacing;
-    margin-left: @light-spacing;
     &:extend(.light-padding);
+
+    min-width: @sidebar-size;
+    position: relative;
+    height: @full;
+    width: 100%;
+    flex-direction: column;
+    padding-bottom: @light-spacing;
+    z-index: @base-z-index;
   }
 
   .info-toggle {
@@ -66,40 +72,33 @@
         text-align: left;
       }
     }
-  }
-  width: @sidebar-size;
   min-width: @sidebar-size;
   position: relative;
   display: inline-flex;
   height: @full;
-  // background: @midground;
-  display: flex;
   flex-direction: column;
   padding-bottom: @light-spacing;
   z-index: @base-z-index;
-  align-items: center;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  #aside {
-    margin-left: -200px;
-    right: 0px;
-    top: 0px;
-    z-index: @base-z-index + 101;
-    &:extend(.background-dark-gradient);
-    &:extend(.full-width);
 
     #aside-box {
-    width: 100%;
+      min-width: @sidebar-size;
+      position: relative;
+      display: inline-flex;
+      height: @full;
+      flex-direction: column;
+      padding-bottom: @light-spacing;
+      z-index: @base-z-index;
     }
 
     .info-toggle {
       left: -2rem;
     }
-  }
+
   .is-open {
     #aside {
-      transform: translateX(@full);
       .info-toggle {
         left: 0rem;
       }
