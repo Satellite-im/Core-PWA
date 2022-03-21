@@ -1,4 +1,9 @@
-<div :class="classObject" ref="scrollRef" v-on:scroll="onScrolled">
+<div
+  :class="classObject"
+  ref="scrollRef"
+  v-on:scroll="onScrolled"
+  v-scroll-lock="true"
+>
   <slot />
   <div
     v-if="$store.state.ui.unreadMessage > 0"
