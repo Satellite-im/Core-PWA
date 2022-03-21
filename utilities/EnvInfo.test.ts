@@ -26,6 +26,7 @@ describe('init', () => {
       throw new Error('mocked error')
     }
     const envinfo = new EnvInfo()
+    // eslint-disable-next-line no-console
     expect(console.warn).toHaveBeenCalled()
   })
 })

@@ -2,6 +2,7 @@ import * as hub from '@textile/hub'
 import * as index from '@textile/grpc-authentication/dist/cjs/index'
 import * as web3 from '@solana/web3.js'
 import * as BucketManager from '~/libraries/Textile/BucketManager'
+const BucketManagerDefault = BucketManager.default
 
 describe('BucketManager.default.progressParse', () => {
   let inst48: any
@@ -453,7 +454,7 @@ describe('BucketManager.default.getLinks', () => {
       inst4 = new hub.Client(undefined, true)
       inst3 = new Uint8Array([])
       inst2 = new Uint8Array([])
-      inst5 = new BucketManager.default(
+      inst5 = new BucketManagerDefault(
         {
           identity: {
             sign: () => inst2,

@@ -1,9 +1,5 @@
 import * as Users from '../users'
 
-Users.CallUsers
-Users.User
-Users.Users
-
 describe('init', () => {
   it('gets the CallUsers constant', () => {
     expect(Users.CallUsers).toMatchSnapshot()

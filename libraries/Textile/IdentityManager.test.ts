@@ -1,9 +1,11 @@
 import * as IdentityManager from '~/libraries/Textile/IdentityManager'
+const IdentityManagerDefault = IdentityManager.default
+
 describe('IdentityManager.default.generateMessageForEntropy', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new IdentityManager.default()
+    inst = new IdentityManagerDefault()
   })
 
   test('0', () => {
@@ -53,7 +55,7 @@ describe('IdentityManager.default.createRandom', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new IdentityManager.default()
+    inst = new IdentityManagerDefault()
   })
 
   test('0', async () => {
@@ -65,7 +67,7 @@ describe('IdentityManager.default.isInitialized', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new IdentityManager.default()
+    inst = new IdentityManagerDefault()
   })
 
   test('0', () => {

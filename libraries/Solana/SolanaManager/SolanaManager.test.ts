@@ -1,5 +1,6 @@
 import * as web3 from '@solana/web3.js'
 import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+const SolanaManagerDefault = SolanaManager.default
 
 describe('SolanaManager.default.getPath', () => {
   let inst6: any
@@ -10,12 +11,12 @@ describe('SolanaManager.default.getPath', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst6 = new SolanaManager.default()
-    inst5 = new SolanaManager.default()
-    inst4 = new SolanaManager.default()
-    inst3 = new SolanaManager.default()
-    inst = new SolanaManager.default()
-    inst2 = new SolanaManager.default()
+    inst6 = new SolanaManagerDefault()
+    inst5 = new SolanaManagerDefault()
+    inst4 = new SolanaManagerDefault()
+    inst3 = new SolanaManagerDefault()
+    inst = new SolanaManagerDefault()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -48,7 +49,7 @@ describe('SolanaManager.default.generateUserKeypair', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', async () => {
@@ -69,16 +70,16 @@ describe('SolanaManager.default.restoreKeypairFromMnemonic', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst10 = new SolanaManager.default()
-    inst9 = new SolanaManager.default()
-    inst8 = new SolanaManager.default()
-    inst7 = new SolanaManager.default()
-    inst6 = new SolanaManager.default()
-    inst5 = new SolanaManager.default()
-    inst4 = new SolanaManager.default()
-    inst3 = new SolanaManager.default()
-    inst = new SolanaManager.default()
-    inst2 = new SolanaManager.default()
+    inst10 = new SolanaManagerDefault()
+    inst9 = new SolanaManagerDefault()
+    inst8 = new SolanaManagerDefault()
+    inst7 = new SolanaManagerDefault()
+    inst6 = new SolanaManagerDefault()
+    inst5 = new SolanaManagerDefault()
+    inst4 = new SolanaManagerDefault()
+    inst3 = new SolanaManagerDefault()
+    inst = new SolanaManagerDefault()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', async () => {
@@ -114,11 +115,11 @@ describe('SolanaManager.default.getDerivedPublicKey', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst5 = new SolanaManager.default()
-    inst4 = new SolanaManager.default()
-    inst3 = new SolanaManager.default()
-    inst = new SolanaManager.default()
-    inst2 = new SolanaManager.default()
+    inst5 = new SolanaManagerDefault()
+    inst4 = new SolanaManagerDefault()
+    inst3 = new SolanaManagerDefault()
+    inst = new SolanaManagerDefault()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -151,7 +152,7 @@ describe('SolanaManager.default.initializeFromKeypair', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', async () => {
@@ -168,12 +169,12 @@ describe('SolanaManager.default.initializeFromMnemonic', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst6 = new SolanaManager.default()
-    inst5 = new SolanaManager.default()
-    inst4 = new SolanaManager.default()
-    inst3 = new SolanaManager.default()
-    inst = new SolanaManager.default()
-    inst2 = new SolanaManager.default()
+    inst6 = new SolanaManagerDefault()
+    inst5 = new SolanaManagerDefault()
+    inst4 = new SolanaManagerDefault()
+    inst3 = new SolanaManagerDefault()
+    inst = new SolanaManagerDefault()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', async () => {
@@ -205,7 +206,7 @@ describe('SolanaManager.default.isInitialized', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -218,7 +219,7 @@ describe('SolanaManager.default.getAllAccounts', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -233,9 +234,9 @@ describe('SolanaManager.default.getAccount', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst3 = new SolanaManager.default()
-    inst = new SolanaManager.default()
-    inst2 = new SolanaManager.default()
+    inst3 = new SolanaManagerDefault()
+    inst = new SolanaManagerDefault()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -258,7 +259,7 @@ describe('SolanaManager.default.getActiveAccount', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -271,7 +272,7 @@ describe('SolanaManager.default.getCurrentAccountBalance', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', () => {
@@ -284,7 +285,7 @@ describe('SolanaManager.default.requestAirdrop', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new SolanaManager.default()
+    inst2 = new SolanaManagerDefault()
   })
 
   test('0', async () => {
