@@ -33,7 +33,9 @@ describe('Mutate Tracks Manager', () => {
     inst.addTrack(localStateForUnitTest)
     inst.addTrack(localStateForUnitTest) // Add twice to get a warning
 
+    // eslint-disable-next-line no-console
     expect(console.warn).toBeCalledTimes(1)
+    // eslint-disable-next-line no-console
     expect(console.warn).toBeCalledWith(
       `Track already exists ${localStateForUnitTest.id} ${localStateForUnitTest.kind}`,
       inst.tracks,

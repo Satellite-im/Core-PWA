@@ -1,4 +1,4 @@
-import Friends from '../friends'
+import { Friends } from '../friends'
 
 describe('init', () => {
   it('gets the constant', () => {
