@@ -2,12 +2,13 @@ import SearchIndex from './index'
 // global.console.warn = jest.fn()
 // TODO: Add coverage for the warning being logged
 import * as index from '~/libraries/SearchIndex/index'
+const IndexDefault = index.default
 
 describe('index.default.serialize', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst2 = new index.default({ ref: '', fields: [] })
+    inst2 = new IndexDefault({ ref: '', fields: [] })
   })
 
   test('0', () => {
@@ -117,16 +118,16 @@ describe('index.default.update', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst5 = new index.default({ ref: '', fields: [] })
-    inst4 = new index.default({
+    inst5 = new IndexDefault({ ref: '', fields: [] })
+    inst4 = new IndexDefault({
       ref: 'Edmond',
       fields: ['Investment Account', 'Checking Account', 'Credit Card Account'],
     })
-    inst3 = new index.default({
+    inst3 = new IndexDefault({
       ref: 'Anas',
       fields: ['Checking Account', 'Credit Card Account', 'Checking Account'],
     })
-    inst = new index.default({
+    inst = new IndexDefault({
       ref: 'Pierre Edouard',
       fields: [
         'Credit Card Account',
@@ -134,7 +135,7 @@ describe('index.default.update', () => {
         'Credit Card Account',
       ],
     })
-    inst2 = new index.default({
+    inst2 = new IndexDefault({
       ref: 'Michael',
       fields: [
         'Credit Card Account',
@@ -198,8 +199,8 @@ describe('index.default.search', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst7 = new index.default({ ref: '', fields: [] })
-    inst6 = new index.default({
+    inst7 = new IndexDefault({ ref: '', fields: [] })
+    inst6 = new IndexDefault({
       ref: 'George',
       fields: [
         'Credit Card Account',
@@ -209,7 +210,7 @@ describe('index.default.search', () => {
         'Investment Account',
       ],
     })
-    inst5 = new index.default({
+    inst5 = new IndexDefault({
       ref: 'Pierre Edouard',
       fields: [
         'Credit Card Account',
@@ -219,7 +220,7 @@ describe('index.default.search', () => {
         'Checking Account',
       ],
     })
-    inst4 = new index.default({
+    inst4 = new IndexDefault({
       ref: 'George',
       fields: [
         'Credit Card Account',
@@ -229,7 +230,7 @@ describe('index.default.search', () => {
         'Credit Card Account',
       ],
     })
-    inst3 = new index.default({
+    inst3 = new IndexDefault({
       ref: 'Michael',
       fields: [
         'Credit Card Account',
@@ -239,7 +240,7 @@ describe('index.default.search', () => {
         'Credit Card Account',
       ],
     })
-    inst = new index.default({
+    inst = new IndexDefault({
       ref: 'Jean-Philippe',
       fields: [
         'Credit Card Account',
@@ -249,7 +250,7 @@ describe('index.default.search', () => {
         'Checking Account',
       ],
     })
-    inst2 = new index.default({
+    inst2 = new IndexDefault({
       ref: 'Jean-Philippe',
       fields: [
         'Credit Card Account',
@@ -311,9 +312,9 @@ describe('index.default.subscribe', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst4 = new index.default({ ref: '', fields: [] })
-    inst3 = new index.default({ ref: '', fields: [] })
-    inst = new index.default({
+    inst4 = new IndexDefault({ ref: '', fields: [] })
+    inst3 = new IndexDefault({ ref: '', fields: [] })
+    inst = new IndexDefault({
       ref: 'Edmond',
       fields: [
         'Checking Account',
@@ -323,7 +324,7 @@ describe('index.default.subscribe', () => {
         'Credit Card Account',
       ],
     })
-    inst2 = new index.default({
+    inst2 = new IndexDefault({
       ref: 'Michael',
       fields: [
         'Checking Account',
@@ -363,8 +364,8 @@ describe('index.default.unsubscribe', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst3 = new index.default({ ref: '', fields: [] })
-    inst = new index.default({
+    inst3 = new IndexDefault({ ref: '', fields: [] })
+    inst = new IndexDefault({
       ref: 'Edmond',
       fields: [
         'Credit Card Account',
@@ -373,7 +374,7 @@ describe('index.default.unsubscribe', () => {
         'Checking Account',
       ],
     })
-    inst2 = new index.default({
+    inst2 = new IndexDefault({
       ref: 'Jean-Philippe',
       fields: [
         'Credit Card Account',
@@ -498,7 +499,7 @@ describe('', () => {
       { id: '3', text: 'hello world' },
     ]
     idx.update(data)
-
+    // eslint-disable-next-line no-console
     expect(console.warn).toHaveBeenCalled()
     expect(idx.search('$%@*&*#&@*', true)?.map((r) => r.ref)).toEqual([
       '1',

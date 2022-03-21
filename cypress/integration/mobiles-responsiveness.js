@@ -10,7 +10,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
   'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
 
-describe('Run responsiveness tests on several devices', () => {
+describe.skip('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
   data.allDevices.forEach((item) => {

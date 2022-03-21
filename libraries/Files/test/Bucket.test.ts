@@ -59,6 +59,7 @@ describe('Test FileSystem Directory', () => {
       await bucket.init('init')
     } catch (error) {
       // Currently throws error: Error: selected encoding not supported
+      // eslint-disable-next-line no-console
       console.log(error)
     }
   })
