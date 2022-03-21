@@ -37,17 +37,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
     isActiveCall() {
-      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      const remoteTracksLength =
-        peer && Object.keys(peer?.call?.tracksManager?.tracks).length
-
-      if (peer && remoteTracksLength === 0) {
-        peer?.call.hangUp()
-        this.$store.dispatch('webrtc/hangUp')
-        this.$store.commit('ui/fullscreen', false)
-        return
-      }
-
       return this.friends.all.find(
         (friend: any) =>
           friend.activeChat && friend.address === this.webrtc.activeCall,
@@ -255,6 +244,21 @@ export default Vue.extend({
         })
       }
     },
+  },
+  beforeMount() {
+    // TODO: Create mixin/library that will handle call rejoining and closing
+    window.onbeforeunload = async (e) => {
+      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
+
+      if (peer) {
+        peer?.call.hangUp()
+        this.$store.dispatch('webrtc/hangUp')
+        this.$store.commit('ui/fullscreen', false)
+      }
+
+      e.returnValue = null
+      return null
+    }
   },
   methods: {
     /**
