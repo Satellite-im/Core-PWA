@@ -7,7 +7,7 @@
     :action="toggleMute"
     :text="$t('controls.mic')"
   >
-    <mic-off-icon v-if="audio.muted" size="1x"></mic-off-icon>
+    <mic-off-icon v-if="audioMuted" size="1x"></mic-off-icon>
     <mic-icon v-else size="1x"></mic-icon>
   </InteractablesButton>
   <InteractablesButton
@@ -28,7 +28,7 @@
     :text="$t('controls.video')"
     :action="toggleVideo"
   >
-    <video-off-icon v-if="video.disabled" size="1x"></video-off-icon>
+    <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>
     <video-icon v-else size="1x"></video-icon>
   </InteractablesButton>
 </div>

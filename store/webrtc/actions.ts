@@ -9,6 +9,7 @@ import Logger from '~/utilities/Logger'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
+import { initialTracksState } from '~/store/webrtc/state'
 
 const webRTCActions = {
   /**
@@ -131,15 +132,9 @@ const webRTCActions = {
       commit('setIncomingCall', '')
       commit('setActiveCall', '')
       commit('updateCreatedAt', 0)
-      commit('updateLocalTracks', {
-        audio: {},
-        video: {},
-      })
+      commit('updateLocalTracks', initialTracksState)
 
-      commit('updateRemoteTracks', {
-        audio: {},
-        video: {},
-      })
+      commit('updateRemoteTracks', initialTracksState)
       commit('ui/showMedia', false, { root: true })
     })
 
@@ -147,27 +142,10 @@ const webRTCActions = {
       const update = { [track.kind]: { id: track.id, muted: !track.enabled } }
 
       commit('updateLocalTracks', update)
-
-      if (track.kind === 'audio') {
-        commit('audio/setMuted', !track.enabled, { root: true })
-        commit('video/setDisabled', true, { root: true })
-      }
-
-      if (track.kind === 'video') {
-        commit('video/setDisabled', !track.enabled, { root: true })
-      }
     })
 
     peer?.call.on('LOCAL_TRACK_REMOVED', ({ track }) => {
       const update = { [track.kind]: { muted: true } }
-
-      if (track.kind === 'audio') {
-        commit('audio/setMuted', true, { root: true })
-      }
-
-      if (track.kind === 'video') {
-        commit('video/setDisabled', true, { root: true })
-      }
 
       commit('updateLocalTracks', update)
     })

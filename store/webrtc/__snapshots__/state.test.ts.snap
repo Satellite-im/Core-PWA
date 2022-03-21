@@ -10,12 +10,20 @@ Object {
   "incomingCall": "",
   "initialized": false,
   "localTracks": Object {
-    "audio": Object {},
-    "video": Object {},
+    "audio": Object {
+      "muted": false,
+    },
+    "video": Object {
+      "muted": false,
+    },
   },
   "remoteTracks": Object {
-    "audio": Object {},
-    "video": Object {},
+    "audio": Object {
+      "muted": false,
+    },
+    "video": Object {
+      "muted": false,
+    },
   },
   "streaming": true,
 }
