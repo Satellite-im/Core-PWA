@@ -247,7 +247,7 @@ export default Vue.extend({
   },
   beforeMount() {
     // TODO: Create mixin/library that will handle call rejoining and closing
-    window.onbeforeunload = async (e) => {
+    window.onbeforeunload = (e) => {
       const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
 
       if (peer) {
@@ -255,9 +255,7 @@ export default Vue.extend({
         this.$store.dispatch('webrtc/hangUp')
         this.$store.commit('ui/fullscreen', false)
       }
-
-      e.returnValue = null
-      return null
+      return undefined
     }
   },
   methods: {
