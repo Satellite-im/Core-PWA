@@ -1,9 +1,14 @@
+import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
 import { FileSystemErrors } from '../errors/Errors'
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILESYSTEM_TYPE } from '../types/filesystem'
+
+Date.now = jest.fn(() => 1645617999076)
+jest.mock('uuid')
+uuidv4.mockImplementation(() => 'testid')
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -60,9 +65,15 @@ describe('Test FilSystem', () => {
   }
   it(`Correctly returns filesystem parent`, () =>
     expect(filesystem.parent).toBe(null))
+  it(`Correctly returns filesystem content`, () =>
+    expect(filesystem.content).toMatchSnapshot())
+  it(`Correctly returns filesystem totalSize`, () =>
+    expect(filesystem.totalSize).toBe(17349948))
+  it(`Correctly returns filesystem percentStorageUsed`, () =>
+    expect(filesystem.percentStorageUsed).toBe(0.4337487))
   it(`Correctly exports filesystem`, () =>
     expect(filesystem.export).toMatchObject({
-      version: 1,
+      version: 3,
       type: FILESYSTEM_TYPE.DEFAULT,
     }))
   it(`Correctly copies entire filesystem`, () =>
