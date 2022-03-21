@@ -245,6 +245,19 @@ export default Vue.extend({
       }
     },
   },
+  beforeMount() {
+    // TODO: Create mixin/library that will handle call rejoining and closing
+    window.onbeforeunload = (e) => {
+      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
+
+      if (peer) {
+        peer?.call.hangUp()
+        this.$store.dispatch('webrtc/hangUp')
+        this.$store.commit('ui/fullscreen', false)
+      }
+      return undefined
+    }
+  },
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO
