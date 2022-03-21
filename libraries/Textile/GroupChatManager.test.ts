@@ -1,6 +1,6 @@
-import * as GroupChatManager from '~/libraries/Textile/GroupChatManager'
 import * as hub from '@textile/hub'
 import * as web3 from '@solana/web3.js'
+import * as GroupChatManager from '~/libraries/Textile/GroupChatManager'
 
 describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
   let inst19: any
@@ -222,7 +222,7 @@ describe('GroupChatManager.GroupChatManager.isInitialized', () => {
   })
 
   test('0', () => {
-    let result: any = inst5.isInitialized()
+    const result: any = inst5.isInitialized()
     expect(result).toMatchSnapshot()
   })
 })

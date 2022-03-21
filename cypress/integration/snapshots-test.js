@@ -5,7 +5,7 @@ const recoverySeed =
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
-describe('Snapshots Testing', () => {
+describe.skip('Snapshots Testing', () => {
   //Import account and snapshot on each screen
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Import account - PIN screen', () => {
