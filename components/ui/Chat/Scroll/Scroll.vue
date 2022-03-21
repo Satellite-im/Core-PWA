@@ -2,30 +2,18 @@
 
 <script>
 import Vue from 'vue'
-import { mapState } from 'vuex'
-
-import vueCustomScrollbar from 'vue-custom-scrollbar'
-import 'vue-custom-scrollbar/dist/vueScrollbar.css'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
-
-import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'Scroll',
   components: {
     ChevronDownIcon,
-    vueCustomScrollbar,
   },
   props: {
-    verticalScroll: {
+    autoScroll: {
       type: Boolean,
       default: true,
-      required: false,
-    },
-    horizontalScroll: {
-      type: Boolean,
-      default: false,
       required: false,
     },
     preventScrollOffset: {
@@ -38,56 +26,53 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    scrollbarVisibility: {
-      type: String,
-      default: 'always',
+    contents: {
+      /* Content Type could be any value in below array */
+      type: [Array, Object, String, Number],
+      default: '',
       required: false,
-    },
-    user: {
-     type: Object as PropType<User>,
-      default: () => ({
-        name: '',
-        address: '',
-        status: '',
-      }),
-      required: true,
     },
   },
   data() {
     return {
-      settings: {
-        suppressScrollY: !this.verticalScroll,
-        suppressScrollX: !this.horizontalScroll,
-        wheelPropagation: false,
-      },
+      loaded: false,
       newMessageAlert: false,
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
-    messages() {
-        return this.textile.conversations[this.user.address]?.messages
-    },
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
-        'scrollbar-visible': ['always', 'scroll'].includes(
-          this.scrollbarVisibility,
-        ),
-        always: this.scrollbarVisibility === 'always',
+        'auto-scroll': this.autoScroll,
         dark: this.theme === 'dark',
       }
     },
   },
   watch: {
-    'textile.conversationLoading'(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.autoScrollToBottom()
-      }
+    contents: {
+      deep: true,
+      handler() {
+        const lastMsg = this.contents[this.contents.length - 1]
+        if (
+          (lastMsg.from === this.$mock.user.address ||
+            !this.$store.state.ui.unreadMessage) &&
+          !this.$store.state.ui.isReacted
+        ) {
+          this.autoScrollToBottom()
+          return
+        }
+        this.newMessageAlert = true
+        this.$store.dispatch('ui/setIsReacted', false)
+      },
     },
-    messages() {
+  },
+  mounted() {
+    this.$nextTick(() => {
       this.autoScrollToBottom()
-    },
+    })
+  },
+  beforeDestroy() {
+    this.loaded = false
   },
   methods: {
     /**
@@ -96,11 +81,15 @@ export default Vue.extend({
      * @example
      */
     autoScrollToBottom() {
-      if (this.$el) {
+      const interval = this.loaded ? 100 : 1000
+      if (this.$el && this.autoScroll) {
         setTimeout(() => {
-          this.$el.scrollTop = this.$el.scrollHeight
-          this.$store.dispatch('ui/setIsScrollOver', false)
-        }, 100)
+          this.$nextTick(() => {
+            this.$el.scrollTop = 0
+            this.loaded = true
+            this.$store.dispatch('ui/setIsScrollOver', false)
+          })
+        }, interval)
       }
     },
     /**
@@ -113,13 +102,13 @@ export default Vue.extend({
 
       if (
         Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
-        !this.ui.isScrollOver
+        !this.$store.state.ui.isScrollOver
       ) {
         this.$store.dispatch('ui/setIsScrollOver', true)
         return
       }
 
-      if (!this.ui.isScrollOver) {
+      if (this.$store.state.ui.isScrollOver) {
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },

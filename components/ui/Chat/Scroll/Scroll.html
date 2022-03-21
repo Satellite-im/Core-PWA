@@ -1,10 +1,4 @@
-<vue-custom-scrollbar
-  :class="['scroll-area', classObject]"
-  ref="scrollRef"
-  v-scroll-lock="true"
-  :settings="settings"
-  @ps-scroll-y="onScrolled"
->
+<div :class="classObject" ref="scrollRef" v-on:scroll="onScrolled">
   <slot />
   <div
     v-if="$store.state.ui.unreadMessage > 0"
@@ -19,4 +13,4 @@
       <chevron-down-icon size="1x" />
     </span>
   </div>
-</vue-custom-scrollbar>
+</div>
