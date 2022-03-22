@@ -2,6 +2,7 @@
   :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
   v-on:click="action"
   :disabled="loading"
+  :type="htmlType"
   ref="button"
 >
   <!-- {{$attrs['data-tooltip']}} -->
