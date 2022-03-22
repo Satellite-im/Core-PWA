@@ -54,6 +54,16 @@ describe('init', () => {
     })
   })
 
+  it('should setRegistry', () => {
+    const localStateForUnitTest = { ...state }
+    localStateForUnitTest.registry = true
+    inst.setRegistry(localStateForUnitTest, false)
+
+    expect(localStateForUnitTest).toMatchObject({
+      registry: false,
+    })
+  })
+
   it('should setPinHash', () => {
     const localStateForUnitTest = { ...state }
     inst.setPinHash(localStateForUnitTest, '123456')
