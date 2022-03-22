@@ -22,7 +22,6 @@ export default {
     search: 'Search',
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
-    unpin: 'Unpin',
     send: 'Send',
     emotes: 'Emoji',
     glyphs: 'Glyphs',
