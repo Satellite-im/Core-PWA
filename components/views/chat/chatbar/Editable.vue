@@ -31,6 +31,7 @@ import Vue from 'vue'
 import { toHTML } from '~/libraries/ui/Markdown'
 import Cursor from '~/libraries/ui/Cursor'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
+import WithHistory, { Operation } from '~/components/mixins/UI/WithHistory'
 
 function getCurrentRange() {
   const sel = document.getSelection()
@@ -40,7 +41,16 @@ function getCurrentRange() {
   return document.createRange()
 }
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    redo: () => void
+    undo: () => void
+    apply: (op: Operation) => void
+  }
+}
+
 export default Vue.extend({
+  mixins: [WithHistory],
   props: {
     value: {
       type: String,
@@ -61,6 +71,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      currentPosition: 0,
       currentRange: null as Range | null,
     }
   },
@@ -180,6 +191,17 @@ export default Vue.extend({
             e.preventDefault()
           }
           return
+        case KeybindingEnum.z:
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault()
+            if (!e.shiftKey) {
+              this.undo()
+              return
+            }
+
+            this.redo()
+          }
+          return
       }
       this.$emit('keydown', e)
     },
@@ -204,7 +226,17 @@ export default Vue.extend({
      * @description Handles the input event and emits same event to parent
      * @param {KeyboardEvent} e The input event
      */
-    onInput() {
+    onInput(e: InputEvent) {
+      if (e.inputType === 'historyUndo') {
+        this.undo()
+        return
+      }
+
+      if (e.inputType === 'historyRedo') {
+        this.redo()
+        return
+      }
+
       const messageBox = this.$refs?.editable as HTMLElement
       let finalValue = ''
       messageBox.innerText.split('\n\n').forEach((row, i) => {
@@ -214,6 +246,19 @@ export default Vue.extend({
               row.replace(/\n$/, '')
             : row + '\n' // Close the row
       })
+
+      const currentText = this.$props.value
+      this.apply({
+        type:
+          currentText.length > finalValue.length
+            ? 'remove_text'
+            : 'insert_text',
+        text: currentText,
+        insertedText: e.data ?? '',
+        position: this.currentPosition,
+        timestamp: this.$dayjs(),
+      })
+
       this.$emit('input', finalValue)
     },
     /**
@@ -223,6 +268,7 @@ export default Vue.extend({
      */
     onSelectStart(e: Event) {
       const messageBox = this.$refs?.editable as HTMLElement
+      this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       if (messageBox.innerText === '\n') {
         // If the content is just a newline don't select, this will prevent inner html to be deleted from the contenteditable
         e.preventDefault()
@@ -235,6 +281,8 @@ export default Vue.extend({
      * @description Handles the selectionchange event
      */
     onSelectionChange() {
+      const messageBox = this.$refs?.editable as HTMLElement
+      this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
     },
     /**
