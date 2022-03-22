@@ -1,8 +1,8 @@
 name: Add Label
 on:
   pull_request:
-    types: [ opened, synchronize, reopened, edited ]
-
+    types:
+      - opened
 jobs:
   add-label:
     name: Add Label

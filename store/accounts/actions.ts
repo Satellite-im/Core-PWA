@@ -326,6 +326,7 @@ export default {
     dispatch('friends/fetchFriends', {}, { root: true })
     dispatch('friends/fetchFriendRequests', {}, { root: true })
     dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
+    dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
 }
 

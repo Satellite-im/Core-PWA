@@ -99,6 +99,8 @@ export const Config = {
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
     typingInputThrottle: 2000,
+    maxUndoStack: 100,
+    batchUndoSeconds: 5,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],

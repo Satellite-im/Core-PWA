@@ -22,6 +22,7 @@ export enum KeybindingEnum {
   // alphabet
   A = 'A',
   a = 'a',
+  z = 'z',
 }
 
 export type KeyBinding = keyof typeof KeybindingEnum
