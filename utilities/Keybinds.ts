@@ -1,6 +1,8 @@
 export const keyboardRegex = /[a-z0-9\t\n /<>?;:"'`!@#$%^&*()[\]{}_+=|\\-]/gm
 
-const isMac = navigator.platform.toLowerCase().includes('mac')
+const isMac =
+  typeof navigator !== 'undefined' &&
+  /Mac|iPad|iPhone|iPod/.test(navigator.userAgent)
 
 export const specialKeys: { [key: string]: string } = {
   control: isMac ? 'control' : 'ctrl',
