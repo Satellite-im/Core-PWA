@@ -23,6 +23,7 @@ describe.skip('Snapshots Testing', () => {
     )
     cy.get('[data-cy=add-passphrase]')
       .should('be.visible')
+      .click()
       .type(recoverySeed, { log: false }, { force: true })
     cy.get('[data-cy=add-passphrase]').type('{enter}')
   })

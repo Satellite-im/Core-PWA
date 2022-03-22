@@ -25,11 +25,15 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.url().should('contain', '#/auth/unlock')
     cy.get('[data-cy=add-input]')
       .should('be.visible')
+      .click()
+      .wait(500)
+      .clear()
       .type(randomPIN, { log: false }, { force: true })
     cy.get('[data-cy=submit-input]').click()
     cy.contains('Import Account', { timeout: 60000 }).click()
     cy.get('[data-cy=add-passphrase]')
       .should('be.visible')
+      .click()
       .type(recoverySeed, { log: false }, { force: true })
     cy.contains('Recover Account').click()
     Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
@@ -43,7 +47,11 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.contains('Chat User A', { timeout: 300000 }).should('be.visible')
     //Attempt 3 times to ensure that if first account loads before, second account will see the typing indicator
     for (let times = 0; times < 3; times++) {
-      cy.get('.editable-input').should('be.visible').type(longMessage).clear()
+      cy.get('.editable-input')
+        .should('be.visible')
+        .click()
+        .type(longMessage)
+        .clear()
     }
   })
 })

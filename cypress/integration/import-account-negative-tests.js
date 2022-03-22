@@ -7,6 +7,7 @@ describe('Import Account - Negative Tests', () => {
     cy.contains('Import Account', { timeout: 60000 }).click()
     cy.get('[data-cy=add-passphrase]', { timeout: 30000 })
       .should('be.visible')
+      .click()
       .type(
         'over tilt regret diamond rubber example there fire roof sheriff always boring{enter}',
         { log: false },
@@ -23,6 +24,7 @@ describe('Import Account - Negative Tests', () => {
     cy.contains('Import Account', { timeout: 60000 }).click()
     cy.get('[data-cy=add-passphrase]', { timeout: 30000 })
       .should('be.visible')
+      .click()
       .type(
         'over tilt regret diamond rubber example there fire roof sheriff always{enter}',
         { log: false },
