@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`init gets the Details constant 1`] = `
+Object {
+  "balance": 328000,
+  "currency": "usd",
+  "last_update": 1633500930632,
+}
+`;
+
+exports[`init gets the LinkedAccounts constant 1`] = `
+Array [
+  Object {
+    "icon": "credit-card",
+    "name": "Discover Debit",
+    "number": "8312",
+    "type": "credit-card",
+  },
+  Object {
+    "icon": "credit-card",
+    "name": "PNC Credit",
+    "number": "1234",
+    "type": "debit-card",
+  },
+  Object {
+    "icon": "binary",
+    "name": "Ledger Nano",
+    "number": "0000",
+    "type": "hardware",
+  },
+]
+`;
+
+exports[`init gets the RecentTransactions constant 1`] = `
+Array [
+  Object {
+    "amount": 3000,
+    "at": 1633500930632,
+    "direction": "out",
+    "id": "12345",
+    "memo": "Computer Game.",
+    "state": "sent",
+    "user": Object {
+      "address": "0x07ee55aa48bb72dcc6e9d88856648910de513eca",
+      "name": "James Lightspeed",
+    },
+  },
+  Object {
+    "amount": 82000,
+    "at": 1633500930632,
+    "id": "asdfewr21",
+    "memo": "Thanks for lunch.",
+    "state": "received",
+    "user": Object {
+      "address": "0x9bf4001de07dfd62b26a2f1307ee0c0307632d59",
+      "name": "Derek Wormhole",
+    },
+  },
+  Object {
+    "amount": 2000,
+    "at": 1633500930632,
+    "id": "1288roq",
+    "memo": "",
+    "state": "requested",
+    "user": Object {
+      "address": "0x9bf4001de07dfd62b26a2f1307ee0c0307632d59",
+      "name": "Derek Wormhole",
+    },
+  },
+  Object {
+    "amount": 9000,
+    "at": 1633500930632,
+    "id": "12i9qwe",
+    "memo": "",
+    "state": "sent",
+    "user": Object {
+      "address": "0xdc76cd25977e015ae17155770273ad58648913d3",
+      "name": "Frank Meteor",
+    },
+  },
+  Object {
+    "amount": 39000,
+    "at": 1633500930632,
+    "id": "npqw012",
+    "memo": "",
+    "state": "sent",
+    "user": Object {
+      "address": "0xdc76cd25977e015ae17155770273ad58648913d3",
+      "name": "Frank Meteor",
+    },
+  },
+]
+`;
