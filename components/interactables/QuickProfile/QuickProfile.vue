@@ -85,7 +85,7 @@ export default Vue.extend({
       }
     },
     sendMessage() {
-      if (!this.text) return
+      if (this.$Config.regex.empty.test(this.text)) return
       this.$store.dispatch('textile/sendTextMessage', {
         to: this.user?.textilePubkey,
         text: this.text,
