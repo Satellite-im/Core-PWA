@@ -62,7 +62,6 @@
               :fullscreen-max-viewable-users="20"
             />
             <UiChatScroll
-              :contents="ui.messages"
               :prevent-scroll-offset="500"
               :class="
                 $store.state.friends.all.find(
@@ -72,6 +71,7 @@
                   : 'media-unopen'
               "
               enable-wrap
+              :user="recipient"
             >
               <Nuxt />
             </UiChatScroll>
