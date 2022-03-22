@@ -200,7 +200,7 @@ export default {
       serverType: {
         title: 'Signaling Servers',
         subtitle:
-          'Choose which signaling server group you want to use. If you use Satellite signaling servers, you are using servers that Satellite hosts. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use public signaling servers, those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices.',
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
       },
       ownInfo: {
         title: 'Set my own Signaling Server',
@@ -212,8 +212,8 @@ export default {
           'Invalid input format. Please add on the following format',
         errorSampleUrl1: '- http://localhost:3000',
         errorSampleUrl2: '- wss://www.example.com/socketserver',
-        satelliteServer: 'Satellite Signaling Servers',
-        publicServer: 'Public Signaling Servers',
+        satelliteServer: 'Satellite + Public Signaling Servers',
+        publicServer: 'Only Public Signaling Servers',
         userDefinedServer: 'Set my own',
       },
       continue: 'Continue',

@@ -23,10 +23,6 @@ export default Vue.extend({
           text: this.$t('pages.privacy.ownInfo.publicServer'),
           value: 'public',
         },
-        {
-          text: this.$t('pages.privacy.ownInfo.userDefinedServer'),
-          value: 'own',
-        },
       ],
     }
   },
