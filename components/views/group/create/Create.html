@@ -1,0 +1,35 @@
+<div
+  id="create-group"
+  :class="`create-group ${ui.showMedia ? 'create-group--compact' : ''}`"
+  v-if="ui.modals.creategroup"
+>
+  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
+  <TypographyText :text="$t('pages.chat.new_chat_description')" />
+  <InteractablesInput
+    size="small"
+    input-kind="text"
+    type="dark"
+    :placeholder="$t('pages.chat.new_group_name')"
+    class="search"
+    v-model="name"
+  />
+  <InteractablesInput
+    size="small"
+    input-kind="text"
+    type="dark"
+    :placeholder="$t('servers.create.select_friends_placeholder')"
+    class="search"
+    v-model="users"
+  />
+  <small class="error has-text-danger error" v-if="error">{{error}}</small>
+  <div v-if="name" class="submit-container">
+    <InteractablesButton
+      type="primary"
+      size="small"
+      :text="$t('pages.chat.new_group')"
+      class="create-server-btn"
+      :action="confirm"
+      :loading="isLoading"
+    />
+  </div>
+</div>

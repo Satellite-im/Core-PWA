@@ -90,13 +90,23 @@
       <div
         class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
         data-tooltip="New Chat"
-        @click="toggleModal"
-        v-if="!$device.isMobile"
+        @click="()=>toggleModal('quickchat')"
+        v-if="!$device.isMobile && toggleView"
+      >
+        <plus-circle-icon size="1x" />
+      </div>
+      <div
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
+        data-tooltip="New Group"
+        @click="()=>toggleModal('creategroup')"
+        v-if="!$device.isMobile && !toggleView"
       >
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <FriendsQuick v-click-outside="toggleModal" />
+    <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
+    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
+    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -136,11 +146,11 @@
     </div>
     <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div v-if="dataState.groups !== DataStateType.Loading">
           <GroupAside
-            v-for="group in groups"
+            v-for="group in sortedGroups"
             :selectedGroup="group"
-            :key="group.address"
+            :key="group.id"
           />
         </div>
         <UiLoadersAddress v-else :count="4" inverted />

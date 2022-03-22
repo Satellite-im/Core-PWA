@@ -12,6 +12,7 @@ export default Vue.extend({
     return {
       groupMessages: [],
       groupID: '',
+      groupMembers: [],
     }
   },
   computed: {
@@ -33,6 +34,7 @@ export default Vue.extend({
     const { id } = this.$route.params
     this.getMessages(id)
     this.subscribeToGroup(id)
+    this.fetchGroupMembers(id)
   },
   methods: {
     async getMessages(id: string) {
@@ -47,6 +49,9 @@ export default Vue.extend({
         'textile/subscribeToGroup',
         { groupId: id },
       )
+    },
+    async fetchGroupMembers(id: string) {
+      await this.$store.dispatch('groups/fetchGroupMembers', { groupId: id })
     },
   },
 })

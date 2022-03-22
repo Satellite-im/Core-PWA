@@ -6,6 +6,7 @@ describe('init', () => {
     files: DataStateType.Ready,
     friends: DataStateType.Ready,
     search: DataStateType.Ready,
+    groups: DataStateType.Ready,
   }
   let inst: any
 
@@ -23,6 +24,7 @@ describe('init', () => {
       files: DataStateType.Updating,
       friends: DataStateType.Ready,
       search: DataStateType.Ready,
+      groups: DataStateType.Ready,
     })
   })
 })

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { TextileState, TextileError } from './types'
-import { ActionsArguments } from '~/types/store/store'
+import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
@@ -13,8 +13,22 @@ import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { QueryOptions } from '~/types/ui/query'
 import SearchIndex from '~/libraries/SearchIndex'
-import { AccountsState } from '~/store/accounts/types'
+import { AccountsState, AccountsError } from '~/store/accounts/types'
 import { User } from '~/types/ui/user'
+import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { Group } from '~/store/groups/types'
+
+const getGroupChatProgram = (): GroupChatsProgram => {
+  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+  return new GroupChatsProgram($SolanaManager)
+}
+
+const getGroup = (state: RootState, id: string): Group => {
+  const group = state.groups.all.find((it) => it.id === id)
+  if (!group) throw new Error(AccountsError.CANNOT_FIND_GROUP)
+  return group
+}
 
 export default {
   /**
@@ -590,8 +604,10 @@ export default {
 
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
 
+    const group = getGroup(rootState, groupId)
+
     const conversation = await $GroupChatManager.getConversation({
-      groupChatID: groupId,
+      group,
       query,
     })
 
@@ -610,7 +626,7 @@ export default {
    * appends sent messages to the active chat
    */
   async subscribeToGroup(
-    { commit, dispatch }: ActionsArguments<TextileState>,
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId }: { groupId: string },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -628,6 +644,8 @@ export default {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
 
+    const group = getGroup(rootState, groupId)
+
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
     await $GroupChatManager.listenToGroupMessages((message) => {
@@ -642,7 +660,7 @@ export default {
       })
 
       dispatch('storeInMessage', { address: groupId, message })
-    }, groupId)
+    }, group)
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -654,32 +672,38 @@ export default {
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
     { groupId, message }: { groupId: string; message: string },
   ) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    try {
+      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
-    if (!$TextileManager.groupChatManager?.isInitialized()) {
-      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
-    }
-    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+      if (!$TextileManager.groupChatManager?.isInitialized()) {
+        throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+      }
+      const $GroupChatManager: GroupChatManager =
+        $TextileManager.groupChatManager
 
-    commit('setMessageLoading', { loading: true })
+      commit('setMessageLoading', { loading: true })
+      const group = getGroup(rootState, groupId)
 
-    const result = await $GroupChatManager
-      .sendMessage<'text'>(groupId, {
-        to: groupId,
-        payload: message,
-        type: 'text',
+      const result = await $GroupChatManager
+        .sendMessage<'text'>(group, {
+          to: group.id,
+          payload: message,
+          type: 'text',
+        })
+        .catch((e) => console.log('error', e))
+
+      commit('addMessageToConversation', {
+        address: groupId,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: result,
       })
-      .catch((e) => console.log('error', e))
 
-    commit('addMessageToConversation', {
-      address: groupId,
-      sender: MessageRouteEnum.OUTBOUND,
-      message: result,
-    })
-
-    dispatch('storeInMessage', { address: groupId, message })
-
-    commit('setMessageLoading', { loading: false })
+      dispatch('storeInMessage', { address: groupId, message })
+    } catch (e) {
+      console.log(e)
+    } finally {
+      commit('setMessageLoading', { loading: false })
+    }
   },
   /**
    * @description Sends a glyph message to a given group
@@ -703,9 +727,11 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
 
+    const group = getGroup(rootState, groupID)
+
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
-    const result = await $GroupChatManager.sendMessage<'glyph'>(groupID, {
+    const result = await $GroupChatManager.sendMessage<'glyph'>(group, {
       to: groupID,
       payload: src,
       pack,
@@ -733,6 +759,7 @@ export default {
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const group = getGroup(rootState, groupID)
     const path = `/${file.file.name}`
     $TextileManager.bucketManager?.getBucket()
     const result = await $TextileManager.bucketManager?.pushFile(
@@ -748,7 +775,7 @@ export default {
     const fileURL = `${Config.textile.browser}${result?.root}${path}`
 
     const sendFileResult =
-      await $TextileManager.groupChatManager?.sendMessage<'file'>(groupID, {
+      await $TextileManager.groupChatManager?.sendMessage<'file'>(group, {
         to: groupID,
         payload: {
           url: fileURL,

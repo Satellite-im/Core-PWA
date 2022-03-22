@@ -85,7 +85,7 @@ export default class TextileManager {
       textile.wallet.address,
       textile.identity,
     )
-
+    await this.groupChatManager.init()
     // MetadataManager initializes itself during the creation
     this.metadataManager = new MetadataManager(textile)
     await this.metadataManager.init()

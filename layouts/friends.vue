@@ -24,7 +24,7 @@
           <Sidebar
             :show-menu="toggleMenu"
             :users="friends.all"
-            :groups="$mock.groups"
+            :groups="groups.all"
             :sidebar="showSidebar"
           />
         </swiper-slide>
@@ -91,7 +91,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends']),
+    ...mapState(['friends', 'groups']),
     ...mapGetters('ui', ['showSidebar']),
   },
   watch: {
