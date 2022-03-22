@@ -12,8 +12,10 @@
     <file-icon v-else class="file-type-icon" />
     <span> {{ item.name }} </span>
   </td>
-  <td v-if="!$device.isMobile">{{ $dayjs(item.modified).fromNow() }}</td>
-  <td v-if="!$device.isMobile">{{ item.type }}</td>
+  <td v-if="!$device.isMobile" class="open-sidebar-hide">
+    {{ $dayjs(item.modified).fromNow() }}
+  </td>
+  <td v-if="!$device.isMobile" class="open-sidebar-hide">{{ item.type }}</td>
   <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
   <td
     @mouseover="menuHover=true"

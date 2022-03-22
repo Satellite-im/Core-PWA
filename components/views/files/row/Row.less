@@ -1,20 +1,26 @@
-tr {
-  td {
-    &:extend(.font-primary);
-    border-bottom-color: @foreground;
-    vertical-align: middle;
+td {
+  &:extend(.font-primary);
+  border-bottom-color: @foreground;
+  vertical-align: middle;
 
-    &.filename {
-      font-family: @primary-font;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      max-width: 200px;
+  &.filename {
+    font-family: @primary-font;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
 
-      .file-type-icon {
-        width: 1em;
-        height: 1em;
-      }
+    .file-type-icon {
+      width: 1em;
+      height: 1em;
+    }
+  }
+}
+
+@media only screen and (max-width: @medium-breakpoint) {
+  .swiper-slide-next {
+    .open-sidebar-hide {
+      display: none;
     }
   }
 }
