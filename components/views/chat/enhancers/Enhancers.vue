@@ -12,6 +12,7 @@ declare module 'vue/types/vue' {
     toggleEnhancers: () => void
     openEmoji: () => void
     clickEvent: () => void
+    resetSearch: () => void
   }
 }
 
@@ -55,15 +56,21 @@ export default Vue.extend({
         } else if (newRoute === 'emotes') {
           this.openEmoji()
         }
+        this.resetSearch()
       },
     },
   },
   watch: {
     route() {
       this.openEmoji()
+      this.resetSearch()
     },
     'ui.enhancers.show'(value) {
-      if (value) this.openEmoji()
+      if (value) {
+        this.openEmoji()
+      } else {
+        this.resetSearch()
+      }
     },
   },
   mounted() {
@@ -210,6 +217,9 @@ export default Vue.extend({
       )
       const remNumber = Number(value.replace('rem', ''))
       return remNumber * fontSize
+    },
+    resetSearch(): void {
+      this.search = ''
     },
   },
 })
