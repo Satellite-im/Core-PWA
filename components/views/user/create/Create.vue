@@ -106,13 +106,13 @@ export default Vue.extend({
     },
     /**
      * @method confirm DocsTODO
-     * @description
-     * @returns
-     * @example
+     * @description Checks to see if the name is min length, and if it is, passes the username, status, and photohash to parent
+     * @returns boolean
+     * @example this.onConfirm()
      */
     confirm() {
       const isEmpty = this.name.trim().length === 0
-      if (this.name.length < 5 || isEmpty) {
+      if (this.name.trim().length < 5 || isEmpty) {
         this.error = this.$t('user.registration.username_error') as string
         return false
       }
