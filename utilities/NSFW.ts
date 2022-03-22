@@ -69,7 +69,7 @@ export default async function isNSFW(file: File): Promise<boolean> {
     }
     // if image is somewhat large, scale down so we don't approach RAM limits
     img.src = URL.createObjectURL(
-      file.size > Config.uploadByteLimit
+      file.size > Config.nsfwByteLimit
         ? await skaler(file, { width: 400 })
         : file,
     )

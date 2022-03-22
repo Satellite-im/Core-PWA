@@ -111,7 +111,7 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-1066
+  nsfwByteLimit: 1000000 * 8, // 8MB - arbitrary limit for nsfw scan
   personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
   regex: {
     // identify if a file type is embeddable image
@@ -160,7 +160,7 @@ export const Config = {
   canvasLimits: {
     web: 8192, // observed limit on my macbook, differs from link above
     ios: 4096,
-    android: 10836,
+    android: 10836, // lowest android value, some phones can handle more
     electron: 8192, // including for completeness sake
   },
 }

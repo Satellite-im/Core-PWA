@@ -151,7 +151,7 @@ export default Vue.extend({
         )
 
         for (const uploadFile of filesToUpload) {
-          if (uploadFile.file.size <= Config.uploadByteLimit) {
+          if (uploadFile.file.size <= Config.nsfwByteLimit) {
             uploadFile.nsfw.checking = true
             try {
               uploadFile.nsfw.status = await this.$Security.isNSFW(
