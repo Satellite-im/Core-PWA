@@ -3,8 +3,8 @@
   :class="`create-group ${ui.showMedia ? 'create-group--compact' : ''}`"
   v-if="ui.modals.creategroup"
 >
-  <TypographySubtitle :size="6" :text="$t('pages.chat.new_group')" />
-  <TypographyText :text="$t('pages.chat.new_group_descriptions')" />
+  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
+  <TypographyText :text="$t('pages.chat.new_chat_description')" />
   <InteractablesInput
     size="small"
     input-kind="text"
@@ -17,7 +17,7 @@
     size="small"
     input-kind="text"
     type="dark"
-    :placeholder="$t('pages.files.browse.search')"
+    :placeholder="$t('servers.create.select_friends_placeholder')"
     class="search"
     v-model="users"
   />
