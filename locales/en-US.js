@@ -503,6 +503,8 @@ export default {
       unable_preview: 'Unable to preview file',
       upload_blocked: 'Upload Blocked',
       contains_nsfw: 'Unable to upload file/s due to NSFW status',
+      empty_message_error:
+        'Message must contain at least one non-space character',
     },
     textile: {
       friend_not_found: 'Friend not found',

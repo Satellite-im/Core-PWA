@@ -34,5 +34,9 @@
     >
       <arrow-right-icon size="1x" />
     </InteractablesInputGroup>
+    <TypographyError
+      v-if="isEmptyMessage"
+      :text="$t('errors.chat.empty_message_error')"
+    />
   </template>
 </div>
