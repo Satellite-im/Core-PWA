@@ -1,0 +1,16 @@
+<div class="rename">
+  <InteractablesClose :action="closeModal" />
+  <TypographyTitle class="main-title" :size="3" :text="$t('modal.rename')" />
+
+  <InteractablesInputGroup
+    type="primary"
+    v-model="text"
+    :action="rename"
+    :loading="ui.isLoadingFileIndex"
+    :disabled="ui.isLoadingFileIndex"
+    ref="inputGroup"
+  >
+    <save-icon size="1.3x" />
+  </InteractablesInputGroup>
+  <TypographyError v-if="error" :text="error" />
+</div>

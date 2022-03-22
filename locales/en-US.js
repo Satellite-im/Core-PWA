@@ -126,6 +126,7 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
+      rename: 'Rename is complete',
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
@@ -654,6 +655,7 @@ export default {
       description: `We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.`,
       btn: 'Keep Me Posted',
     },
+    rename: 'Rename',
   },
   context: {
     // files

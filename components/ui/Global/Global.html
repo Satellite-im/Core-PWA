@@ -78,6 +78,14 @@
   >
     <CallToAction :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)" />
   </UiModal>
+  <UiModal
+    v-if="ui.modals.renameFile"
+    :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)"
+    v-click-outside="() => toggleModal(ModalWindows.RENAME_FILE)"
+    nopad
+  >
+    <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
+  </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"

@@ -119,20 +119,20 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method pullFile
    * @description fetch encrypted file from bucket
-   * @param {string} name file name
+   * @param {string} path file path in bucket
    * @param {string} type file mime type
    * @returns Promise of File
    */
-  async pullFile(name: string, type: string): Promise<File | undefined> {
+  async pullFile(path: string, type: string): Promise<File | undefined> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
 
     const data = []
-    for await (const bytes of this.buckets.pullPath(this.key, name)) {
+    for await (const bytes of this.buckets.pullPath(this.key, path)) {
       data.push(bytes)
     }
-    return new File(data, name, { type: type || '' })
+    return new File(data, path, { type: type || '' })
   }
 
   /**

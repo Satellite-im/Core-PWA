@@ -91,14 +91,6 @@ export default Vue.extend({
       // })
     },
     /**
-     * @method rename
-     * @description rename item in file system
-     * @param {Item} item
-     */
-    rename(item: Item) {
-      this.$toast.show(this.$t('todo - rename items') as string)
-    },
-    /**
      * @method remove
      * @description delete item from filesystem. If file, also remove from textile bucket
      * @param {Item} item

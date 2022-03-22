@@ -34,6 +34,7 @@ const InitialUIState = (): UIState => ({
     userProfile: false,
     groupInvite: { isOpen: false },
     callToAction: false,
+    renameFile: false,
   },
   glyphModalPack: '',
   chatbarContent: '',
@@ -71,6 +72,7 @@ const InitialUIState = (): UIState => ({
     flair: Flairs[0],
   },
   isLoadingFileIndex: false,
+  renamingItem: undefined,
 })
 
 export default InitialUIState

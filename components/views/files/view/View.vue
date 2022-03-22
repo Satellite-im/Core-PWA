@@ -43,9 +43,10 @@ export default Vue.extend({
       this.load = true
       const fsFile: Fil = this.$FileSystem.getChild(this.file.name) as Fil
       fsFile.file = await this.$TextileManager.bucket?.pullFile(
-        this.file.name,
+        this.file.path,
         this.file.type,
       )
+      console.log(fsFile)
       this.load = false
     }
   },

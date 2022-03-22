@@ -10,6 +10,7 @@ import {
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -346,5 +347,8 @@ export default {
   },
   setIsLoadingFileIndex(state: UIState, status: boolean) {
     state.isLoadingFileIndex = status
+  },
+  setRenameItem(state: UIState, item: Item) {
+    state.renamingItem = item
   },
 }

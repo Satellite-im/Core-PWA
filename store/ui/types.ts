@@ -1,3 +1,4 @@
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
@@ -100,6 +101,7 @@ export enum ModalWindows {
   GLYPH = 'glyph',
   USERPROFILE = 'userProfile',
   CALLTOACTION = 'callToAction',
+  RENAME_FILE = 'renameFile',
 }
 
 export interface EnhancerInfo {
@@ -204,6 +206,7 @@ export interface UIState {
     flair: Flair
   }
   isLoadingFileIndex: boolean
+  renamingItem?: Item
 }
 
 export type Position = {

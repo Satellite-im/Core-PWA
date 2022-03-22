@@ -152,7 +152,7 @@ export class FilSystem {
         liked,
         shared,
         type,
-        hash,
+        path,
         size,
         description,
         modified,
@@ -163,7 +163,7 @@ export class FilSystem {
         liked,
         shared,
         type,
-        hash,
+        path,
         size,
         description,
         modified,
@@ -205,7 +205,7 @@ export class FilSystem {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
       const {
         name,
-        hash,
+        path,
         size,
         liked,
         shared,
@@ -216,7 +216,7 @@ export class FilSystem {
       const type = item.type as FILE_TYPE
       this.createFile({
         name,
-        hash,
+        path,
         size,
         liked,
         shared,
@@ -247,7 +247,7 @@ export class FilSystem {
   public createFile({
     name,
     file,
-    hash,
+    path,
     size,
     liked,
     shared,
@@ -258,7 +258,7 @@ export class FilSystem {
   }: {
     name: string
     file?: File
-    hash: string
+    path: string
     size: number
     liked?: boolean
     shared?: boolean
@@ -270,7 +270,7 @@ export class FilSystem {
     const newFile = new Fil({
       name,
       file,
-      hash,
+      path,
       size,
       liked,
       shared,
@@ -345,20 +345,20 @@ export class FilSystem {
 
   /**
    * @method removeChild
-   * @argument {string} childName name of the child to remove
-   * @returns {boolean} returns truthy if child was removed
+   * @argument {string} currentName name of the child to remove
+   * @argument {string} newName
+   * @returns {Item | null} returns new item or null if no item exists
    */
   public renameChild(currentName: string, newName: string): Item | null {
     const item = this.getChild(currentName)
-
-    if (item) {
-      item.name = newName
-      this.removeChild(currentName)
-      this.addChild(item)
-      return item
+    if (!item) {
+      return null
     }
 
-    return null
+    item.name = newName
+    this.removeChild(currentName)
+    this.addChild(item)
+    return item
   }
 
   /**

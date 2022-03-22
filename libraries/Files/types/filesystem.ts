@@ -13,7 +13,7 @@ interface ExportSharedProps {
 }
 
 export interface ExportFile extends ExportSharedProps {
-  hash: string
+  path: string
   size: number
   description: string
   thumbnail: string
