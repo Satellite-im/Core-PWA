@@ -4,12 +4,9 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import {
-  windowsShortcuts,
-  macShortcuts,
-  specialKeys,
-  keyboardRegex,
-} from '~/utilities/HotkeyList'
+import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+
+import { specialKeys, keyboardRegex } from '~/utilities/Keybinds'
 
 import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 

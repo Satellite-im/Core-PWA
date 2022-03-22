@@ -1,13 +1,13 @@
-// @ts-ignore
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
+import { Position, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
-import { Position, UIState } from './types'
+import { getCorrectKeybind } from '~/utilities/Keybinds'
 
 const $Sounds = new SoundManager()
 
@@ -52,22 +52,25 @@ export default {
       // @ts-ignore
       rootState.settings.keybinds
     Mousetrap.reset()
-    Mousetrap.bind(toggleMute, (event: KeyboardEvent) => {
+    Mousetrap.bind(getCorrectKeybind(toggleMute), (event: KeyboardEvent) => {
       event.preventDefault()
       dispatch('audio/toggleMute', null, { root: true })
     })
-    Mousetrap.bind(toggleDeafen, (event: KeyboardEvent) => {
+    Mousetrap.bind(getCorrectKeybind(toggleDeafen), (event: KeyboardEvent) => {
       event.preventDefault()
       dispatch('audio/toggleDeafen', null, { root: true })
     })
-    Mousetrap.bind(openSettings, (event: KeyboardEvent) => {
+    Mousetrap.bind(getCorrectKeybind(openSettings), (event: KeyboardEvent) => {
       event.preventDefault()
       dispatch('openSettings')
     })
-    Mousetrap.bind(callActiveChat, (event: KeyboardEvent) => {
-      event.preventDefault()
-      dispatch('webrtc/call', ['audio'], { root: true })
-    })
+    Mousetrap.bind(
+      getCorrectKeybind(callActiveChat),
+      (event: KeyboardEvent) => {
+        event.preventDefault()
+        dispatch('webrtc/call', ['audio'], { root: true })
+      },
+    )
   },
   /**
    * @method clearKeybinds
