@@ -35,4 +35,5 @@ export enum TextileError {
   FRIEND_NOT_FOUND = 'errors.textile.friend_not_found',
   MAILBOX_MANAGER_NOT_FOUND = 'errors.textile.mailbox_manager_not_found',
   MAILBOX_MANAGER_NOT_INITIALIZED = 'errors.textile.mailbox_manager_not_initialized',
+  METADATA_MANAGER_NOT_FOUND = 'errors.textile.metadata_manager_not_found',
 }

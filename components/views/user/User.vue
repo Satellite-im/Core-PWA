@@ -96,12 +96,8 @@ export default Vue.extend({
       }
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
-    handleShowProfile() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'userProfile',
-        state: !this.ui.modals.userProfile,
-      })
-      this.$store.commit('ui/setUserProfile', this.user)
+    async handleShowProfile() {
+      this.$store.dispatch('ui/showProfile', this.user)
     },
     getLastUpdate() {
       const currentUserInfo =

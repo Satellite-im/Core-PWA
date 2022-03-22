@@ -1,6 +1,18 @@
 import { PublicKey } from '@solana/web3.js'
+
+import {
+  PublicKey as TextilePublicKey,
+  PrivateKey as TextilePrivateKey,
+  Identity,
+  ThreadID,
+  UserMessage,
+  Users,
+  Query,
+} from '@textile/hub'
+
 import Vue from 'vue'
 import { DataStateType } from '../dataState/types'
+import { TextileError } from '../textile/types'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
@@ -27,6 +39,10 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 import UsersProgram, {
   UserInfo,
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
+import IdentityManager from '~/libraries/Textile/IdentityManager'
+import { EncodingTypesEnum } from '~/libraries/Enums/enums'
+import { MetadataManager } from '~/libraries/Textile/MetadataManager'
+import { FriendMetadata } from '~/types/textile/metadata'
 
 export default {
   /**
@@ -170,6 +186,41 @@ export default {
       return
     }
     commit('updateFriend', friend)
+  },
+
+  /**
+   * @description Update a metadata to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address and metadata
+   */
+  async updateFriendMetadata(
+    { commit, rootState, dispatch }: ActionsArguments<FriendsState>,
+    { to, metadata }: { to: string; metadata: FriendMetadata },
+  ) {
+    const friend = rootState.friends.all.find((fr) => fr.address === to)
+
+    if (!friend) {
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
+    }
+    const updatedFriend = {
+      ...friend,
+      metadata,
+    }
+    commit('friends/updateFriend', updatedFriend, { root: true })
+    if (rootState.ui.userProfile) {
+      const userProfile: Friend = rootState.ui.userProfile as Friend
+      if (userProfile.address === to) {
+        commit('ui/setUserProfile', updatedFriend, { root: true })
+      }
+    }
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.metadataManager) {
+      throw new Error(TextileError.METADATA_MANAGER_NOT_FOUND)
+    }
+    const $MetadataManager: MetadataManager = $TextileManager.metadataManager
+    friend.metadata = metadata
+    await $MetadataManager.updateFriendMetadata({ to, metadata })
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO
