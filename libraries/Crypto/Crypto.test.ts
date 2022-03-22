@@ -160,3 +160,21 @@ describe('Crypto.default.signMessage', () => {
     expect(result).toMatchSnapshot()
   })
 })
+
+describe('Crypto.getRandomString', () => {
+  // consider update jest setup instead of this trick to be able to test other code with crypto usages
+  if (window.crypto === undefined) {
+    window.crypto = require('crypto').webcrypto
+  }
+
+  const inst = new CryptoDefault()
+  test('it should return result typeof string', () => {
+    const result: string = inst.getRandomString(10)
+    expect(typeof result).toBe('string')
+  })
+  test('it should return string with proper length', () => {
+    const length = 20
+    const result: string = inst.getRandomString(length)
+    expect(result.length).toBe(length)
+  })
+})
