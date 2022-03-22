@@ -26,6 +26,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isEmptyMessage: false,
       text: '',
       maxChars: this.$Config.chat.maxChars,
     }
@@ -85,7 +86,11 @@ export default Vue.extend({
       }
     },
     sendMessage() {
-      if (this.$Config.regex.empty.test(this.text)) return
+      if (this.$Config.regex.empty.test(this.text)) {
+        this.isEmptyMessage = true
+        return
+      }
+      this.isEmptyMessage = false
       this.$store.dispatch('textile/sendTextMessage', {
         to: this.user?.textilePubkey,
         text: this.text,
