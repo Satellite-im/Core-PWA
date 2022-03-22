@@ -34,6 +34,7 @@ const commonProperties = [
   'ui.isLoadingFileIndex',
   'chat.files',
   'groups.subscriptionId',
+  'ui.modals',
 ]
 
 const propertiesNoStorePin = [

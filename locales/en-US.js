@@ -451,6 +451,8 @@ export default {
         gifs: 'Gifs',
         search: 'Search...',
       },
+      new_group: 'New Group',
+      new_group_name: 'Add a group name here...',
     },
   },
   servers: {
