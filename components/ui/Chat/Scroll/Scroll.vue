@@ -37,7 +37,7 @@ export default Vue.extend({
         status: '',
       }),
       required: true,
-    },
+    }
   },
   data() {
     return {
@@ -46,7 +46,7 @@ export default Vue.extend({
     }
   },
   computed: {
-     ...mapState(['ui', 'textile']),
+    ...mapState(['ui', 'textile']),
     messages() {
         return this.textile.conversations[this.user.address]?.messages
     },
@@ -59,9 +59,21 @@ export default Vue.extend({
     },
   },
   watch: {
-    messages() {
+    'textile.conversationLoading'(newValue, oldValue) {
+      if (newValue !== oldValue) {
+       this.$nextTick(() => {
+           this.autoScrollToBottom()
+        })
+      }
+    },
+     messages() {
       this.autoScrollToBottom()
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.autoScrollToBottom()
+    })
   },
   beforeDestroy() {
     this.loaded = false
@@ -74,7 +86,7 @@ export default Vue.extend({
      */
     autoScrollToBottom() {
       if (this.$el && this.autoScroll) {
-        this.$el.scrollTop = 0
+        this.$el.scrollTop = this.$el.scrollHeight
         this.loaded = true
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
