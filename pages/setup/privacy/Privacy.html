@@ -1,10 +1,11 @@
 <div class="container">
-  <div class="privacy-body">
-    <div class="columns">
-      <div class="column">
-        <SettingsPagesPrivacy ref="privacy"></SettingsPagesPrivacy>
-      </div>
-    </div>
+  <UiScroll
+    verticalScroll
+    scrollbarVisibility="scroll"
+    class="privacy-body"
+    enableWrap
+  >
+    <SettingsPagesPrivacy ref="privacy"></SettingsPagesPrivacy>
     <div class="spacer"></div>
     <div class="columns is-mobile buttons">
       <div class="column">
@@ -18,5 +19,5 @@
         </InteractablesButton>
       </div>
     </div>
-  </div>
+  </UiScroll>
 </div>

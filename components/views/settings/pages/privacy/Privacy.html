@@ -48,11 +48,13 @@
     </SettingsUnit>
   </div>
 
-  <div class="columns is-desktop ownInfo-input-part">
+  <div
+    v-if="serverType === 'own'"
+    class="columns is-desktop ownInfo-input-part"
+  >
     <SettingsUnit
       :title="$t('pages.privacy.ownInfo.title')"
       :text="$t('pages.privacy.ownInfo.subtitle')"
-      v-if="serverType === 'own'"
     >
       <InteractablesInput
         v-model="ownInfo"

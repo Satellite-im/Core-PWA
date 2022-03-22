@@ -1,20 +1,5 @@
 .container {
   .privacy-body {
-    .subtitle {
-      margin-bottom: @xlight-spacing;
-      text-transform: uppercase;
-    }
-
-    .switch-column {
-      max-width: 75px;
-    }
-
-    .center {
-      text-align: center;
-      .subtitle {
-        font-weight: bold;
-      }
-    }
     .right {
       float: right;
     }
@@ -26,25 +11,14 @@
     align-content: center;
     justify-content: center;
   }
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-content: flex-end;
-  flex-wrap: nowrap;
-  flex-direction: column;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    .center {
-      margin-bottom: @normal-spacing;
-    }
     .privacy-body {
-      padding-top: @normal-spacing;
-      min-height: calc(@full - @normal-spacing);
-      display: flex;
-      flex-direction: column;
-      align-self: flex-start;
+      padding-top: @xlarge-spacing;
+      max-width: calc(@full - @xlarge-spacing);
+      display: block;
     }
     justify-content: flex-start;
     margin: 0;
@@ -61,9 +35,6 @@
       &:extend(.full-width);
       margin: 0;
     }
-    margin-top: auto;
-    margin-bottom: auto;
-    justify-self: flex-end;
   }
 }
 
