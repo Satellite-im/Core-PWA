@@ -136,7 +136,7 @@ export class Bucket extends RFM implements RFMInterface {
     for await (const bytes of this.buckets.pullPath(this.key, id)) {
       data.push(bytes)
     }
-    return new File(data, name, { type: type || '' })
+    return new File(data, name, { type })
   }
 
   /**

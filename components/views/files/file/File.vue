@@ -10,7 +10,6 @@ import {
   ArchiveIcon,
   ImageIcon,
 } from 'satellite-lucide-icons'
-import { cloneDeep } from 'lodash'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'

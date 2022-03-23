@@ -10,6 +10,7 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
+import { filetypeextension } from 'magic-bytes.js'
 import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
@@ -30,6 +31,7 @@ export default Vue.extend({
   data() {
     return {
       load: false as boolean,
+      name: this.file.name as string,
     }
   },
   computed: {
@@ -47,8 +49,17 @@ export default Vue.extend({
         this.file.name,
         this.file.type,
       )
-      console.log(fsFil)
       this.load = false
+    }
+    const fileExt = this.file.name
+      .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+      .toLowerCase()
+    // you only need the first 100 bytes or so to confirm file type
+    const dataExt = filetypeextension(
+      new Uint8Array(await this.file.file.slice(0, 100).arrayBuffer()),
+    )[0]
+    if (fileExt !== dataExt) {
+      this.name += `.${dataExt}`
     }
   },
   methods: {
