@@ -251,7 +251,16 @@ export default class FriendsProgram extends EventEmitter {
     const program = this._getProgram()
     let first = from
     let second = to
-    if (from.toBytes() < to.toBytes()) {
+    const fromOrder = parseInt(
+      Buffer.from(utils.bytes.bs58.decode(from.toBase58())).toString('hex'),
+      16,
+    )
+    const toOrder = parseInt(
+      Buffer.from(utils.bytes.bs58.decode(to.toBase58())).toString('hex'),
+      16,
+    )
+
+    if (fromOrder < toOrder) {
       first = to
       second = from
     }
