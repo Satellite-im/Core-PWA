@@ -124,6 +124,9 @@ describe('Chat features with two accounts - First User', () => {
   it('Assert timestamp is displayed when user A sends a message', () => {
     cy.get('[data-cy=chat-timestamp]')
       .last()
-      .contains(/d+[hour[s]? |minute[s]? |second[s]?]\s/)
+      .invoke('text')
+      .then(($text) => {
+        expect($text).to.match(/d+[hour[s]? |minute[s]? |second[s]?]\s/)
+      })
   })
 })
