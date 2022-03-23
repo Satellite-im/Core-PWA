@@ -1,23 +1,20 @@
-<div class="container">
-  <UiScroll
-    verticalScroll
-    scrollbarVisibility="scroll"
-    class="privacy-body"
-    enableWrap
-  >
-    <SettingsPagesPrivacy ref="privacy"></SettingsPagesPrivacy>
-    <div class="spacer"></div>
-    <div class="columns is-mobile buttons">
-      <div class="column">
-        <InteractablesButton
-          class="right"
-          type="primary"
-          :disabled="isDisabled()"
-          :action="generateWallet"
-        >
-          {{ $t('pages.privacy.continue') }}
-        </InteractablesButton>
+<UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+  <div class="container">
+    <div class="privacy-body">
+      <SettingsPagesPrivacy ref="privacy"></SettingsPagesPrivacy>
+      <div class="spacer"></div>
+      <div class="columns is-mobile buttons">
+        <div class="column">
+          <InteractablesButton
+            class="right"
+            type="primary"
+            :disabled="isDisabled()"
+            :action="generateWallet"
+          >
+            {{ $t('pages.privacy.continue') }}
+          </InteractablesButton>
+        </div>
       </div>
     </div>
-  </UiScroll>
-</div>
+  </div>
+</UiScroll>
