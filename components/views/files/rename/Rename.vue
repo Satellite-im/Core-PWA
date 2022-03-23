@@ -33,6 +33,7 @@ export default Vue.extend({
         ((this.text.lastIndexOf('.') - 1) >>> 0) + 1,
       )
       const input = this.$refs.inputGroup.$refs.input as HTMLInputElement
+      // if file extension is found, highlight everything except the extension
       if (extString) {
         input.focus()
         input.setSelectionRange(0, this.text.length - extString.length)
