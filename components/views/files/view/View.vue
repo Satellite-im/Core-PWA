@@ -58,7 +58,8 @@ export default Vue.extend({
     const dataExt = filetypeextension(
       new Uint8Array(await this.file.file.slice(0, 100).arrayBuffer()),
     )[0]
-    if (fileExt !== dataExt) {
+    // data check will be undefined for .txt
+    if (fileExt !== dataExt && dataExt) {
       this.name += `.${dataExt}`
     }
   },
