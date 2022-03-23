@@ -271,6 +271,7 @@ Cypress.Commands.add('chatFeaturesProfileName', (value) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('.editable-input')
     .should('be.visible')
     .click()
@@ -285,10 +286,14 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#emoji-toggle > .control-icon').click()
   cy.get(emojiLocator).click() // sending emoji
   cy.get('.editable-input').should('be.visible').click().type('{enter}')
-  cy.contains(emojiValue).last().scrollIntoView().should('be.visible')
+  cy.contains(emojiValue)
+    .last()
+    .scrollIntoView({ timeout: 20000 })
+    .should('be.visible')
 })
 
 Cypress.Commands.add(
@@ -310,6 +315,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('chatFeaturesSendGlyph', () => {
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#glyph-toggle').click()
   cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
   cy.get('.glyph-item').first().click()
@@ -317,6 +323,7 @@ Cypress.Commands.add('chatFeaturesSendGlyph', () => {
 })
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
@@ -329,6 +336,7 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
   })
@@ -346,10 +354,7 @@ Cypress.Commands.add('waitForMessagesToLoad', () => {
       cy.get('[data-tooltip="Message"]').click()
     }
   })
-  cy.get('[data-cy=chat-message]', { timeout: 30000 })
-    .last()
-    .scrollIntoView()
-    .should('be.visible')
+  cy.get('[data-cy=chat-message]').last().scrollIntoView()
 })
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
