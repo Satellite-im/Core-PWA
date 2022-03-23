@@ -41,10 +41,10 @@ export class TextileFileSystem extends FilSystem {
   /**
    * @method removeFile
    * @description Remove file/folder from bucket and file system
-   * @param {string} name file name
+   * @param {string} id id and path in bucket
    */
-  async removeFile(name: string) {
-    await this.bucket.removeFile(name)
+  async removeFile(id: string) {
+    await this.bucket.removeFile(id)
   }
 
   /**

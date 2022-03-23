@@ -9,7 +9,6 @@ export default Vue.extend({
   components: {
     SaveIcon,
   },
-
   props: {
     closeModal: {
       type: Function,
@@ -33,7 +32,7 @@ export default Vue.extend({
         ((this.text.lastIndexOf('.') - 1) >>> 0) + 1,
       )
       const input = this.$refs.inputGroup.$refs.input as HTMLInputElement
-      // if file extension is found, highlight everything except the extension
+      // if file extension is found, highlight everything except the [.ext]
       if (extString) {
         input.focus()
         input.setSelectionRange(0, this.text.length - extString.length)
@@ -43,6 +42,10 @@ export default Vue.extend({
     })
   },
   methods: {
+    /**
+     * @method rename
+     * @description attempt to rename child. Update textile files index if successful
+     */
     async rename() {
       try {
         this.$FileSystem.renameChild(this.ui.renameCurrentName, this.text)
