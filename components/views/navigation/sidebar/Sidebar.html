@@ -60,7 +60,7 @@
     <Slimbar
       v-if="$device.isMobile"
       :servers="$mock.servers"
-      :unreads="$mock.unreads"
+      :unreads="users"
       :open-modal="toggleModal"
       horizontal
     />
@@ -159,7 +159,6 @@
   </div>
 
   <div class="filler"></div>
-
   <div class="controls">
     <SidebarLive />
     <SidebarControls />

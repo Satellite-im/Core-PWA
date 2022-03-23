@@ -1,0 +1,14 @@
+<div
+  class="has-tooltip-right has-tooltip-primary unread"
+  :data-tooltip="user.name"
+  @contextmenu="contextMenu"
+  v-on:click="navigateToUser"
+>
+  <UiCircle
+    :type="src ? 'image' : 'random'"
+    :seed="user.address"
+    :source="src"
+    :size="40"
+  />
+  <span class="unread-label" v-if="user.unreadCount > 0">{{user.unreadCount > 99 ? "99+" : user.unreadCount}}</span>
+</div>
