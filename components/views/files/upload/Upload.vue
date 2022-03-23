@@ -96,14 +96,18 @@ export default Vue.extend({
      */
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
+      this.$store.dispatch('ui/setChatbarFocus')
+
       if (this.editable) {
-        const files: File[] = [...event.target.files]
-        this.$parent.$data.showFilePreview = files.length > 0
-        if (files.length + this.$data.files.length > 8) {
-          this.$data.count_error = true
+        const newFiles: File[] = [...event.target.files]
+        this.$parent.$data.showFilePreview = newFiles.length > 0
+        if (newFiles.length + this.$data.files.length > 8) {
+          this.count_error = true
           return
         }
+
         const address = this.recipient?.address
+
         if (
           !address &&
           !RegExp(this.$Config.regex.uuidv4).test(
@@ -111,10 +115,12 @@ export default Vue.extend({
           )
         )
           return
-        this.$data.count_error = false
-        for (let i = 0; i < files.length; i++) {
+
+        this.count_error = false
+
+        for (let i = 0; i < newFiles.length; i++) {
           /* checking .heic file needs file array buffer because sometimes its file type return empty string */
-          const buffer = new Uint8Array(await files[i].arrayBuffer())
+          const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
           const isHeicType = isHeic(buffer)
           if (isHeicType) {
             /* convert .heic file to jpeg so that we can convert it for html5 style */
@@ -123,26 +129,28 @@ export default Vue.extend({
               format: 'JPEG', // output format
               quality: 1,
             })
-            files[i] = new File(
+            newFiles[i] = new File(
               [oBuffer.buffer],
-              `${files[i].name.split('.')[0] || 'newImage'}.jpeg`,
+              `${newFiles[i].name.split('.')[0] || 'newImage'}.jpeg`,
               {
                 type: 'image/jpeg',
               },
             )
           }
         }
-        const newFiles = await Promise.all(
-          files.map(async (file: File) => {
-            const uploadFile = {
+        const filesToUpload = await Promise.all(
+          newFiles.map(async (file: File) => {
+            const result: UploadDropItemType = {
               file,
               nsfw: { status: false, checking: false },
               url: '',
-            } as UploadDropItemType
-            return uploadFile
+            }
+
+            return result
           }),
         )
-        newFiles.forEach(async (uploadFile: UploadDropItemType) => {
+
+        for (const uploadFile of filesToUpload) {
           if (uploadFile.file.size <= Config.uploadByteLimit) {
             uploadFile.nsfw.checking = true
             try {
@@ -161,11 +169,11 @@ export default Vue.extend({
               address,
             }),
           )
-        })
-        this.files.push(...newFiles)
+        }
+
+        this.files.push(...filesToUpload)
         this.$data.uploadStatus = true
       }
-      this.$store.dispatch('ui/setChatbarFocus')
     },
     handleTouchPreview(event: Event) {
       event.stopPropagation()
@@ -300,7 +308,8 @@ export default Vue.extend({
      */
     async sendMessage() {
       const nsfwCheck: UploadDropItemType[] = []
-      this.$data.files.forEach((file: UploadDropItemType) => {
+
+      for (const file of this.files) {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
@@ -309,11 +318,14 @@ export default Vue.extend({
             this.alertNsfwFile()
           }
         }
-      })
-      nsfwCheck.forEach((file: UploadDropItemType) => {
-        this.$data.fileAmount = nsfwCheck.length
-        this.dispatchFile(file)
-      })
+      }
+
+      this.$data.fileAmount = nsfwCheck.length
+
+      for (const file of nsfwCheck) {
+        await this.dispatchFile(file)
+      }
+
       this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
   },

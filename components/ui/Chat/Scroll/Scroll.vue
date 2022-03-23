@@ -2,8 +2,11 @@
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
+
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'Scroll',
@@ -26,11 +29,14 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    contents: {
-      /* Content Type could be any value in below array */
-      type: [Array, Object, String, Number],
-      default: '',
-      required: false,
+    user: {
+     type: Object as PropType<User>,
+      default: () => ({
+        name: '',
+        address: '',
+        status: '',
+      }),
+      required: true,
     },
   },
   data() {
@@ -40,6 +46,10 @@ export default Vue.extend({
     }
   },
   computed: {
+     ...mapState(['ui', 'textile']),
+    messages() {
+        return this.textile.conversations[this.user.address]?.messages
+    },
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
@@ -49,27 +59,9 @@ export default Vue.extend({
     },
   },
   watch: {
-    contents: {
-      deep: true,
-      handler() {
-        const lastMsg = this.contents[this.contents.length - 1]
-        if (
-          (lastMsg.from === this.$mock.user.address ||
-            !this.$store.state.ui.unreadMessage) &&
-          !this.$store.state.ui.isReacted
-        ) {
-          this.autoScrollToBottom()
-          return
-        }
-        this.newMessageAlert = true
-        this.$store.dispatch('ui/setIsReacted', false)
-      },
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
+    messages() {
       this.autoScrollToBottom()
-    })
+    },
   },
   beforeDestroy() {
     this.loaded = false
@@ -81,15 +73,10 @@ export default Vue.extend({
      * @example
      */
     autoScrollToBottom() {
-      const interval = this.loaded ? 100 : 1000
       if (this.$el && this.autoScroll) {
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$el.scrollTop = 0
-            this.loaded = true
-            this.$store.dispatch('ui/setIsScrollOver', false)
-          })
-        }, interval)
+        this.$el.scrollTop = 0
+        this.loaded = true
+        this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },
     /**
@@ -102,13 +89,13 @@ export default Vue.extend({
 
       if (
         Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
-        !this.$store.state.ui.isScrollOver
+        !this.ui.isScrollOver
       ) {
         this.$store.dispatch('ui/setIsScrollOver', true)
         return
       }
 
-      if (this.$store.state.ui.isScrollOver) {
+      if (this.ui.isScrollOver) {
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },
