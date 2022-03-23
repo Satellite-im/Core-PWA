@@ -158,9 +158,9 @@ export const Config = {
       : navigator.language,
   // https://github.com/jhildenbiddle/canvas-size#test-results
   canvasLimits: {
-    web: 8192, // observed limit on my macbook, differs from link above
+    web: 11180, // to cater to firefox. chrome goes up to 16384
     ios: 4096,
     android: 10836, // lowest android value, some phones can handle more
-    electron: 8192, // including for completeness sake
+    electron: 11180, // including for completeness sake
   },
 }
