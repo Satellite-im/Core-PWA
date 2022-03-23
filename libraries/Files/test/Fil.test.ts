@@ -17,7 +17,7 @@ describe('Test FileSystem File', () => {
     expect(file.description).toEqual(mockFileData.description))
   it(`Correctly returns a file type (${FILE_TYPE.GENERIC})`, () =>
     expect(file.type).toEqual(FILE_TYPE.GENERIC))
-  it(`Correctly returns a file hash (${mockFileData.id})`, () =>
+  it(`Correctly returns a file id (${mockFileData.id})`, () =>
     expect(file.id).toEqual(mockFileData.id))
   it(`Correctly returns a file size (${mockFileData.size})`, () =>
     expect(file.size).toEqual(mockFileData.size))

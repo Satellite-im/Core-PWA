@@ -21,7 +21,7 @@ export class Directory extends Item {
     modified,
     type,
   }: {
-    id: string
+    id?: string
     name: string
     liked?: boolean
     shared?: boolean

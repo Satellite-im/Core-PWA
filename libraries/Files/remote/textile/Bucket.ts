@@ -7,6 +7,7 @@ import {
   FileSystemExport,
   FILESYSTEM_TYPE,
 } from '~/libraries/Files/types/filesystem'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export class Bucket extends RFM implements RFMInterface {
   private _textile: TextileInitializationData
@@ -136,7 +137,10 @@ export class Bucket extends RFM implements RFMInterface {
     for await (const bytes of this.buckets.pullPath(this.key, id)) {
       data.push(bytes)
     }
-    return new File(data, name, { type })
+    // if type is unknown(generic), then don't use in File constructor
+    return new File(data, name, {
+      type: type === FILE_TYPE.GENERIC ? '' : type,
+    })
   }
 
   /**
