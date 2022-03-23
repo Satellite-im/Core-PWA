@@ -44,6 +44,8 @@ export default Vue.extend({
     }
 
     this.loadAccount()
+
+    this.$store.dispatch('ui/activateKeybinds')
   },
   methods: {
     eventuallyRedirect() {

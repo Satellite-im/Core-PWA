@@ -426,7 +426,7 @@ describe('init', () => {
     await actions.default.activateKeybinds({ dispatch, rootState })
     expect(Mousetrap.reset).toHaveBeenCalled()
     expect(Mousetrap.bind).toHaveBeenCalled()
-    expect(Mousetrap.bind).toBeCalledTimes(3)
+    expect(Mousetrap.bind).toBeCalledTimes(4)
   })
   test('clearKeybinds', async () => {
     const dispatch = jest.fn()

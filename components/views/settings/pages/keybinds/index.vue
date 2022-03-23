@@ -3,7 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+
 import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+
+import { specialKeys, keyboardRegex } from '~/utilities/Keybinds'
+
 import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
@@ -46,12 +50,22 @@ export default Vue.extend({
      */
     recordKeybind(e: KeyboardEvent) {
       let key = ''
-      if (e.altKey && e.keyCode >= 65 && e.keyCode <= 90) {
-        key = String.fromCharCode(e.keyCode).toLowerCase()
+
+      const char = e.key.toLowerCase()
+      if (!char) return
+
+      const specialKey = specialKeys[char]
+
+      if (specialKey) {
+        key = specialKey
+      } else if (char.match(keyboardRegex)) {
+        key = char
       } else {
-        key = e.key.toLowerCase()
+        return
       }
-      this.errorCheck(e)
+
+      this.errorCheck(key)
+
       if (!this.$data.editingKeybind.error) {
         this.$data.editingKeybind.newString.length === 0
           ? (this.$data.editingKeybind.newString += key)
@@ -152,16 +166,12 @@ export default Vue.extend({
     /**
      * @method errorCheck DocsTODO
      * @description
-     * @param e
+     * @param key
      * @example
      */
-    errorCheck(e: KeyboardEvent) {
-      let key = ''
-      if (e.altKey && e.keyCode >= 65 && e.keyCode <= 90) {
-        key = String.fromCharCode(e.keyCode).toLowerCase()
-      } else {
-        key = e.key.toLowerCase()
-      }
+    errorCheck(key: string) {
+      if (!key) return
+
       const newString = this.$data.editingKeybind.newString
 
       const keyAlreadyBound = newString.split('+').includes(key)
@@ -169,16 +179,23 @@ export default Vue.extend({
       const keyAlreadyExist = this.checkSystemHotkey(newString + '+' + key)
 
       const isModifier = key in ModifierKeysEnum
-      let hasAlphanumeric = false
-      for (const char of newString.split('+')) {
-        if (char.length === 1) {
-          hasAlphanumeric = true
-        }
-      }
+
+      const hasAlphanumeric = newString
+        .split('+')
+        .some((char: string) => char.length === 1)
+
+      const singleKeyAlreadyExist = key.length === 1 && hasAlphanumeric
+
       const modifierAfterAlphanumeric = hasAlphanumeric && isModifier
+
       const hasBlockedChars = key in BlockKeysEnum
 
-      if (keyAlreadyExist) {
+      if (singleKeyAlreadyExist) {
+        this.$data.editingKeybind.error = true
+        this.$data.editingKeybind.errorMessage = this.$t(
+          'pages.settings.keybinds.singleHotkeyError',
+        )
+      } else if (keyAlreadyExist) {
         this.$data.editingKeybind.error = true
         this.$data.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.systemHotkeyError',
