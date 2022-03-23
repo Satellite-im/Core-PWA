@@ -4,6 +4,7 @@ export enum FriendStatus {
   ACCEPTED,
   DENIED,
   REMOVED,
+  REQUEST_REMOVED,
 }
 
 export enum FriendsEvents {
