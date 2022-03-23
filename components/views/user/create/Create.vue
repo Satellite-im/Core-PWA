@@ -23,6 +23,19 @@ export default Vue.extend({
       status: '',
     }
   },
+  computed: {
+    /**
+     * @method accountValidLength
+     * @description If the account isn't the length specified in the config, this returns False, true if correct length
+     * @example this.accountValidLength
+     */
+    accountValidLength(): boolean {
+      if (this.name.trim().length < this.$Config.account.minimumAccountLength) {
+        return false
+      }
+      return true
+    },
+  },
   methods: {
     /**
      * @method toggleCropper DocsTODO
@@ -111,8 +124,7 @@ export default Vue.extend({
      * @example this.onConfirm()
      */
     confirm() {
-      const isEmpty = this.name.trim().length === 0
-      if (this.name.trim().length < 5 || isEmpty) {
+      if (!this.accountValidLength) {
         this.error = this.$t('user.registration.username_error') as string
         return false
       }
