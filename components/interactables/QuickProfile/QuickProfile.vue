@@ -41,6 +41,12 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
+  watch: {
+    text() {
+      if (this.isEmptyMessage && !this.$Config.regex.empty.test(this.text))
+        this.isEmptyMessage = false
+    },
+  },
   mounted() {
     this.handleOverflow()
   },
@@ -90,7 +96,6 @@ export default Vue.extend({
         this.isEmptyMessage = true
         return
       }
-      this.isEmptyMessage = false
       this.$store.dispatch('textile/sendTextMessage', {
         to: this.user?.textilePubkey,
         text: this.text,
