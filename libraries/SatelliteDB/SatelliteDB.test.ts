@@ -33,7 +33,9 @@ describe('SatelliteDB', () => {
   })
 
   test('reinitializing schema', async () => {
-    expect(await db.initializeSchema()).toEqual(db.initializeSchema())
+    db.version = jest.fn()
+    await db.initializeSchema()
+    expect(db.version).not.toHaveBeenCalled()
   })
 
   test('restoring search indexes', async () => {
@@ -64,7 +66,9 @@ describe('SatelliteDB', () => {
     expect(await db.search.friends.search('bar')?.[0]?.address).toEqual(
       where.address,
     )
-    expect(await db.initializeSearchIndexes()).toEqual(undefined)
+    db.keyValue = jest.fn()
+    await db.initializeSearchIndexes()
+    expect(db.keyValue).not.toHaveBeenCalled()
   })
 
   test('upserting records', async () => {
