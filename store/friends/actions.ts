@@ -557,6 +557,8 @@ export default {
     const tx = await friendsProgram.removeRequest(friendAccountKey)
 
     if (tx) {
+      // Close friend
+      // // dispatch('closeFriendRequest', friendRequest)
       commit(
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(account, null).requestId,
@@ -666,6 +668,11 @@ export default {
       FriendsEvents.REQUEST_DENIED,
       async (account) => {
         if (account) {
+          // Close friend
+          // // dispatch(
+          // //   'closeFriendRequest',
+          // //   friendAccountToOutgoingRequest(account, null),
+          // // )
           commit(
             'removeOutgoingRequest',
             friendAccountToOutgoingRequest(account, null).requestId,
@@ -694,6 +701,14 @@ export default {
             rootState.accounts.active === account.from
               ? account.to
               : account.from
+
+          // Close friend
+          // // if (rootState.accounts.active === account.from) {
+          // //   dispatch(
+          // //     'closeFriendRequest',
+          // //     friendAccountToOutgoingRequest(account, null),
+          // //   )
+          // // }
           commit('removeFriend', address)
         }
       },

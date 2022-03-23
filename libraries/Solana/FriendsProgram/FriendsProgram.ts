@@ -193,6 +193,26 @@ export default class FriendsProgram extends EventEmitter {
       accounts: {
         request,
         user: payer.publicKey,
+      },
+      signers: [payer],
+    })
+    return tx
+  }
+
+  /**
+   * @method closeRequest
+   * Close friend request from sender's side
+   * @param request friend request account public key
+   */
+  async closeRequest(request: PublicKey) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const tx = await program.rpc.closeRequest({
+      accounts: {
+        request,
+        user: payer.publicKey,
         payer: payer.publicKey,
       },
       signers: [payer],
@@ -412,7 +432,6 @@ export default class FriendsProgram extends EventEmitter {
   subscribeToEvents() {
     const solana = this._getSolana()
     const payer = this._getPayer()
-    const program = this._getProgram()
     const { connection } = solana
 
     const incomingRequestBytes = base58(
@@ -473,12 +492,12 @@ export default class FriendsProgram extends EventEmitter {
     // original sender of the friend request
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
-    const friendRequestRemovedBytes = base58(
+    const friendRemovedBytes = base58(
       Buffer.from([...payer.publicKey.toBytes(), FriendStatus.REMOVED]),
     )
 
-    const friendRequestRemovedFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 8, bytes: friendRequestRemovedBytes },
+    const friendRemovedFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 8, bytes: friendRemovedBytes },
     }
 
     connection.onProgramAccountChange(
@@ -488,19 +507,37 @@ export default class FriendsProgram extends EventEmitter {
       [friendRemovedFilter],
     )
 
-    const friendRequestRemovedMirroredBytes = base58(
+    const friendRemovedMirroredBytes = base58(
       Buffer.from([FriendStatus.REMOVED, ...payer.publicKey.toBytes()]),
     )
 
-    const friendRequestRemovedMirroredFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 32 + 8, bytes: friendRequestRemovedMirroredBytes },
+    const friendRemovedMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32 + 8, bytes: friendRemovedMirroredBytes },
     }
 
     connection.onProgramAccountChange(
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
       Config.solana.defaultCommitment,
-      [friendRequestRemovedMirroredFilter],
+      [friendRemovedMirroredFilter],
+    )
+
+    // Filter for remove friend requests checks only if an incoming request has been removed
+    // This filter checks the status and recipient public key
+    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    const friendRequestRemovedBytes = base58(
+      Buffer.from([FriendStatus.REQUEST_REMOVED, ...payer.publicKey.toBytes()]),
+    )
+
+    const friendRequestRemovedFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32 + 8, bytes: friendRequestRemovedBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.REQUEST_REMOVED),
+      Config.solana.defaultCommitment,
+      [friendRequestRemovedFilter],
     )
   }
 
