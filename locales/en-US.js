@@ -196,6 +196,25 @@ export default {
       title: 'Privacy Settings',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
+      serverType: {
+        title: 'Signaling Servers',
+        subtitle:
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+      },
+      ownInfo: {
+        title: 'Set my own Signaling Server',
+        subtitle:
+          'Enter your http, udp, or websocket URL for your signaling server here',
+        placeholder: 'Please enter ...',
+        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
+        formatErrorMsg:
+          'Invalid input format. Please add on the following format',
+        errorSampleUrl1: '- http://localhost:3000',
+        errorSampleUrl2: '- wss://www.example.com/socketserver',
+        satelliteServer: 'Satellite + Public Signaling Servers',
+        publicServer: 'Only Public Signaling Servers',
+        userDefinedServer: 'Set my own',
+      },
       continue: 'Continue',
       register: {
         title: 'Register Username Publicly',

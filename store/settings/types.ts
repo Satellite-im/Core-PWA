@@ -31,4 +31,6 @@ export interface SettingsState {
   displayCurrentActivity: boolean
   timezone: string
   removeState: boolean
+  serverType: string
+  ownInfo: string
 }

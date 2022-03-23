@@ -16,6 +16,8 @@ const InitialSettingsState = (): SettingsState => ({
   embeddedLinks: true,
   displayCurrentActivity: true,
   removeState: false,
+  serverType: 'satellite',
+  ownInfo: '',
 })
 
 export default InitialSettingsState
