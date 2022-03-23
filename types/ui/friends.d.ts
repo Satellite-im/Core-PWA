@@ -1,3 +1,4 @@
+import { FriendMetadata } from '../textile/metadata'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
 import { User } from '~/types/ui/user'
@@ -24,12 +25,14 @@ export interface Friend extends EncryptedFriend {
   textilePubkey: string
   item: any // TODO remove unnecessary properties AP-393
   pending: Boolean
+  stored: Boolean
   activeChat: Boolean
   account: FriendAccount
   address: string
   // possibly break these out into different types. These optional fields come up in the friends list, add, request area
   request?: IncomingRequest
   photoHash?: string
+  metadata?: FriendMetadata
 }
 
 export interface OutgoingRequest extends FriendRequest {

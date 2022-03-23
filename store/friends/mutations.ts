@@ -56,6 +56,14 @@ const mutations = {
     })
     state.all = fList
   },
+  setStored(state: FriendsState, friend: Friend, isStored: boolean = true) {
+    const fList: Friend[] = []
+    state.all.forEach((f) => {
+      f.stored = f.address === friend.address ? isStored : f.stored
+      fList.push(f)
+    })
+    state.all = fList
+  },
   setTyping(
     state: FriendsState,
     opts: { id: string; typingState: 'TYPING' | 'NOT_TYPING' },
@@ -71,6 +79,22 @@ const mutations = {
       })
     })
     state.all = fList
+  },
+  setNote(
+    state: FriendsState,
+    opts: {
+      id: string
+      note: string
+    },
+  ) {
+    state.all = state.all.map((fr) =>
+      fr.address === opts.id
+        ? {
+            ...fr,
+            note: opts.note,
+          }
+        : fr,
+    )
   },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map(

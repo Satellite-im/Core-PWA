@@ -7,7 +7,7 @@ import {
   HeartIcon,
   FolderIcon,
   FileIcon,
-  BriefcaseIcon,
+  ArchiveIcon,
   ImageIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
@@ -33,7 +33,7 @@ export default Vue.extend({
     HeartIcon,
     FolderIcon,
     FileIcon,
-    BriefcaseIcon,
+    ArchiveIcon,
     ImageIcon,
   },
   mixins: [ContextMenu],

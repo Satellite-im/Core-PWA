@@ -340,4 +340,9 @@ export default class Crypto {
 
     return this.signMessageWithKey(this.signingKey.secretKey, message)
   }
+
+  getRandomString(length: number): string {
+    const decoder = new TextDecoder('ascii')
+    return decoder.decode(window.crypto.getRandomValues(new Uint8Array(length)))
+  }
 }

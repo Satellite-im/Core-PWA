@@ -24,7 +24,7 @@
   <img v-if="item.thumbnail" class="image-preview" :src="item.thumbnail" />
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
-    <briefcase-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
+    <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
     <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
     <file-icon v-else size="4x" class="file-type-icon" />
   </div>

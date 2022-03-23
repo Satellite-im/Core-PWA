@@ -1,0 +1,29 @@
+.cte-container {
+  position: relative;
+  font-family: @secondary-font;
+  font-size: @text-size;
+  word-spacing: 1px;
+}
+
+.cte-input {
+  -webkit-user-select: text;
+  user-select: text;
+  word-break: break-word;
+  background-color: transparent;
+  height: auto;
+  color: @text;
+  border: 1px solid transparent;
+  &::placeholder {
+    opacity: 1;
+    color: @text;
+  }
+  padding: @xlight-spacing;
+  margin: 0 -@light-spacing;
+  border-radius: @corner-rounding-smaller;
+  &:hover {
+    background-color: rgba(@background-hover, 0.5);
+  }
+  &:focus {
+    background-color: @background-hover;
+  }
+}

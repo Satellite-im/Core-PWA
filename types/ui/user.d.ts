@@ -1,3 +1,4 @@
+import { FriendMetadata } from '../textile/metadata'
 import { BadgeType } from './badge'
 
 export type UserState = 'online' | 'idle' | 'offline' | 'mobile'
@@ -14,6 +15,7 @@ export type User = {
   mailboxId?: string
   textilePubkey?: string
   lastUpdate: number
+  metadata?: FriendMetadata
 }
 
 export interface UserRegistrationData {

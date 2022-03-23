@@ -5,39 +5,40 @@
       <InteractablesClose :action="toggle" />
     </div>
     <div id="actions">
-      <UiCircle :size="35" type="icon" icon="user" />
+      <UiCircle
+        :size="35"
+        type="icon"
+        icon="user"
+        alt="$t('pages.chat.add_member')"
+        :data-tooltip="$t('pages.chat.add_member')"
+        class="has-tooltip-primary"
+        v-on:click="groupInvite(selectedGroup)"
+      />
       <UiCircle
         :size="35"
         type="icon"
         icon="message-square"
-        alt="$t('pages.chat.add_member')"
-        :data-tooltip="$t('pages.chat.add_member')"
+        alt="$t('pages.chat.switch_chat')"
+        :data-tooltip="$t('pages.chat.switch_chat')"
         class="has-tooltip-primary"
+        v-on:click="navigateToGroup(selectedGroup.id)"
       />
       <UiCircle
         :size="35"
         type="icon"
         icon="layout"
-        alt="$t('pages.chat.switch_chat')"
-        :data-tooltip="$t('pages.chat.switch_chat')"
-        class="has-tooltip-primary"
-        v-on:click="navigateToGroup(selectedGroup.address)"
-      />
-      <UiCircle
-        :size="35"
-        type="icon"
-        icon="more-vertical"
         alt="$t('pages.chat.start_watch_party')"
         :data-tooltip="$t('pages.chat.start_watch_party')"
         class="has-tooltip-primary"
       />
+      <UiCircle :size="35" type="icon" icon="more-vertical" />
     </div>
     <UiHorizontalRule />
     <div id="members">
       <div id="members-number">
         <TypographyText
           :size="6"
-          :text="`Members - ${filterMembers.length.toString()}`"
+          :text="`Members - ${selectedGroup.members}`"
         />
       </div>
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
