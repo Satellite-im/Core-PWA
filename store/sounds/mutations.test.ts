@@ -1,4 +1,3 @@
-import { SoundsState } from './types'
 import mutations from '~/store/sounds/mutations'
 
 describe('init', () => {
