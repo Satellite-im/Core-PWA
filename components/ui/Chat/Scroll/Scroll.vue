@@ -61,9 +61,12 @@ export default Vue.extend({
   watch: {
     'textile.conversationLoading'(newValue, oldValue) {
       if (newValue !== oldValue) {
-       this.$nextTick(() => {
            this.autoScrollToBottom()
-        })
+      }
+    },
+    'textile.messageLoading'(value) {
+      if (value === true) {
+           this.autoScrollToBottom()
       }
     },
      messages() {
@@ -86,9 +89,11 @@ export default Vue.extend({
      */
     autoScrollToBottom() {
       if (this.$el && this.autoScroll) {
-        this.$el.scrollTop = this.$el.scrollHeight
-        this.loaded = true
-        this.$store.dispatch('ui/setIsScrollOver', false)
+        this.$nextTick(() => {
+          this.$el.scrollTop = this.$el.scrollHeight
+          this.loaded = true
+          this.$store.dispatch('ui/setIsScrollOver', false)
+        })
       }
     },
     /**
