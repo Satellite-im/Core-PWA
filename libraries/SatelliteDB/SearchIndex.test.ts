@@ -32,6 +32,22 @@ describe('SatelliteDB/SearchIndex', () => {
     expect(idx.search('match')?.map((r) => r.id)).toEqual(['3', '2', '1'])
   })
 
+  test('searchIndex.update()', async () => {
+    const data = [
+      { id: '1', text: 'first match' },
+      { id: '2', text: 'second match' },
+      { id: '3', text: 'third match' },
+    ]
+    idx.update(data)
+    expect(idx.autoSuggest('first')).toEqual([
+      {
+        suggestion: 'first',
+        terms: ['first'],
+        score: 1.0986122886681096,
+      },
+    ])
+  })
+
   test('searchIndex.update() without an id', async () => {
     const data = [{ text: 'foo bar' }]
     expect(() => idx.update(data)).toThrow()

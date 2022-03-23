@@ -9,7 +9,7 @@ const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 let glyphURL, imageURL, fileURL
 
-describe('Chat features with two accounts - First User', () => {
+describe.skip('Chat features with two accounts - First User', () => {
   before(() => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
