@@ -348,7 +348,7 @@ export default {
   setIsLoadingFileIndex(state: UIState, status: boolean) {
     state.isLoadingFileIndex = status
   },
-  setRenameItem(state: UIState, item: Item) {
-    state.renamingItem = item
+  setRenameItem(state: UIState, name: string) {
+    state.renameCurrentName = name
   },
 }

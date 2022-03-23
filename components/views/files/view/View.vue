@@ -41,12 +41,13 @@ export default Vue.extend({
   async mounted() {
     if (!this.file.file) {
       this.load = true
-      const fsFile: Fil = this.$FileSystem.getChild(this.file.name) as Fil
-      fsFile.file = await this.$TextileManager.bucket?.pullFile(
+      const fsFil: Fil = this.$FileSystem.getChild(this.file.name) as Fil
+      fsFil.file = await this.$TextileManager.bucket?.pullFile(
         this.file.id,
         this.file.name,
         this.file.type,
       )
+      console.log(fsFil)
       this.load = false
     }
   },

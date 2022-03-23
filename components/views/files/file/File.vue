@@ -118,7 +118,7 @@ export default Vue.extend({
      * @description Open rename modal
      */
     rename() {
-      this.$store.commit('ui/setRenameItem', cloneDeep(this.item))
+      this.$store.commit('ui/setRenameItem', this.item.name)
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.RENAME_FILE,
         state: !this.ui.modals[ModalWindows.RENAME_FILE],

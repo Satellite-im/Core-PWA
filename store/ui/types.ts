@@ -1,4 +1,3 @@
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
@@ -206,7 +205,7 @@ export interface UIState {
     flair: Flair
   }
   isLoadingFileIndex: boolean
-  renamingItem?: Item
+  renameCurrentName?: string
 }
 
 export type Position = {

@@ -14,7 +14,7 @@
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
         :href="file.url"
         target="_blank"
-        :download="file.name"
+        download
       >
         <download-icon size="1x" />
       </a>
@@ -45,7 +45,7 @@
       :class="{'disabled' : load}"
       :href="file.url"
       target="_blank"
-      :download="file.name"
+      download
     >
       <download-icon size="1x" class="file-icon" />
     </a>

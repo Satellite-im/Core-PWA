@@ -26,7 +26,7 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   mounted() {
-    this.text = this.ui.renamingItem.name
+    this.text = this.ui.renameCurrentName
     this.$nextTick(() => {
       // extension string including .
       const extString = this.text.slice(
@@ -44,7 +44,7 @@ export default Vue.extend({
   methods: {
     async rename() {
       try {
-        this.$FileSystem.renameChild(this.ui.renamingItem.name, this.text)
+        this.$FileSystem.renameChild(this.ui.renameCurrentName, this.text)
       } catch (e: any) {
         this.error = e.message
         return

@@ -72,7 +72,7 @@ const InitialUIState = (): UIState => ({
     flair: Flairs[0],
   },
   isLoadingFileIndex: false,
-  renamingItem: undefined,
+  renameCurrentName: undefined,
 })
 
 export default InitialUIState

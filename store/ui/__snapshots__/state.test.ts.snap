@@ -70,7 +70,7 @@ Object {
     "😂",
     "♥️",
   ],
-  "renamingItem": undefined,
+  "renameCurrentName": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",
