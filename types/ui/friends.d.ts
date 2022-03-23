@@ -25,6 +25,7 @@ export interface Friend extends EncryptedFriend {
   textilePubkey: string
   item: any // TODO remove unnecessary properties AP-393
   pending: Boolean
+  stored: Boolean
   activeChat: Boolean
   account: FriendAccount
   address: string

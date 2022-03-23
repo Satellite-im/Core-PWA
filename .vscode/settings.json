@@ -3,5 +3,6 @@
   "editor.formatOnSave": true,
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "cSpell.words": ["Dexie"]
 }
