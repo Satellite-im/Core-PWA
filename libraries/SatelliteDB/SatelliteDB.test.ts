@@ -32,6 +32,10 @@ describe('SatelliteDB', () => {
     expect(db.search.conversationMessages).toBeInstanceOf(SearchIndex)
   })
 
+  test('reinitializing schema', async () => {
+    expect(await db.initializeSchema()).toEqual(db.initializeSchema())
+  })
+
   test('restoring search indexes', async () => {
     const where = { address: 'foo' }
     const data = { name: 'bar', textilePubkey: 'baz' }
@@ -45,6 +49,22 @@ describe('SatelliteDB', () => {
     expect(await db.search.friends.search('bar')?.[0]?.address).toEqual(
       where.address,
     )
+  })
+
+  test('reinitializing search indexes', async () => {
+    const where = { address: 'foo' }
+    const data = { name: 'bar', textilePubkey: 'baz' }
+    await db.initializeSearchIndexes()
+    await db.upsert('friends', where, data)
+    await db.saveSearchIndexes()
+    await db.close()
+
+    db = new SatelliteDB()
+    await db.initializeSearchIndexes()
+    expect(await db.search.friends.search('bar')?.[0]?.address).toEqual(
+      where.address,
+    )
+    expect(await db.initializeSearchIndexes()).toEqual(undefined)
   })
 
   test('upserting records', async () => {
