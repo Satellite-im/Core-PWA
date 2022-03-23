@@ -1,5 +1,4 @@
 import * as web3 from '@solana/web3.js'
-import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import * as ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 
 const ServerProgramDefault = ServerProgram.default

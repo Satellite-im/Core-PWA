@@ -1,4 +1,3 @@
-import state from '../friends/state'
 import * as mutations from '~/store/ui/mutations'
 
 import { RegistrationStatus } from '~/store/accounts/types'
