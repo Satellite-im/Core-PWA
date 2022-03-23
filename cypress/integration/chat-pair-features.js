@@ -9,7 +9,7 @@ const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 let glyphURL, imageURL, fileURL
 
-describe('Chat features with two accounts - First User', () => {
+describe.skip('Chat features with two accounts - First User', () => {
   before(() => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
@@ -17,7 +17,7 @@ describe('Chat features with two accounts - First User', () => {
 
   it('Ensure chat window from second account is displayed', () => {
     //Validate Chat Screen is loaded
-    cy.contains('Chat User A', { timeout: 180000 }).should('be.visible')
+    cy.contains('Chat User A', { timeout: 240000 }).should('be.visible')
   })
 
   it('Send message to user B', () => {
@@ -122,6 +122,8 @@ describe('Chat features with two accounts - First User', () => {
   })
 
   it('Assert timestamp is displayed when user A sends a message', () => {
-    cy.get('[data-cy=chat-timestamp]').last().should('contain', 'minutes ago')
+    cy.get('[data-cy=chat-timestamp]')
+      .last()
+      .contains(/d+[hour[s]? |minute[s]? |second[s]?]\s/)
   })
 })

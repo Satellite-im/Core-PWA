@@ -1,5 +1,9 @@
 <template>
-  <div class="user-state" :style="`width:${size}px; height:${size}px`">
+  <div
+    class="user-state"
+    data-cy="user-state"
+    :style="`width:${size}px; height:${size}px`"
+  >
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="user.address"

@@ -22,7 +22,6 @@ export default {
     search: 'Search',
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
-    unpin: 'Unpin',
     send: 'Send',
     emotes: 'Emoji',
     glyphs: 'Glyphs',
@@ -471,6 +470,8 @@ export default {
         gifs: 'Gifs',
         search: 'Search...',
       },
+      new_group: 'New Group',
+      new_group_name: 'Add a group name here...',
     },
   },
   servers: {
@@ -690,7 +691,7 @@ export default {
     reply: 'Reply',
     copy_msg: 'Copy Message',
     copy_img: 'Copy Image',
-    save: 'Save Image',
+    save_img: 'Save Image',
     copy_link: 'Copy Link',
   },
 }

@@ -7,22 +7,22 @@ describe('Import Account Validations', () => {
     cy.contains('Import Account', { timeout: 60000 })
       .should('be.visible')
       .click()
-    cy.get('[data-cy=add-passphrase]').should('be.visible').type('b')
+    cy.get('[data-cy=add-passphrase]').should('be.visible').click().type('b')
     cy.contains('baby').click()
     cy.get('.tag').should('be.visible')
   })
 
   it('Import account', () => {
-    cy.importAccountPINscreen(randomPIN, false, true, false)
+    cy.importAccountPINscreen(randomPIN, false, false)
     cy.contains('Import Account', { timeout: 60000 })
       .should('be.visible')
       .click()
     cy.contains(
       'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
     ).should('be.visible')
-    cy.get('[data-cy=add-passphrase]').should('be.visible')
     cy.get('[data-cy=add-passphrase]')
       .should('be.visible')
+      .click()
       .type(
         'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}',
         { log: false },

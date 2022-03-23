@@ -7,12 +7,6 @@
       <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
     </div>
     <div class="controls">
-      <div
-        :data-tooltip="$t('ui.unpin')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-      >
-        <archive-icon size="1x" />
-      </div>
       <UiLoadersSpinner v-if="load" class="control disabled" spinning />
       <a
         v-else

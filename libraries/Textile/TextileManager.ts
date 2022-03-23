@@ -1,4 +1,5 @@
 import { Bucket } from '../Files/remote/textile/Bucket'
+import { MetadataManager } from './MetadataManager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import {
@@ -17,6 +18,7 @@ export default class TextileManager {
   bucketManager?: BucketManager
   bucket?: Bucket
   groupChatManager?: GroupChatManager
+  metadataManager?: MetadataManager
 
   constructor() {
     this.identityManager = new IdentityManager()
@@ -83,6 +85,10 @@ export default class TextileManager {
       textile.wallet.address,
       textile.identity,
     )
+    await this.groupChatManager.init()
+    // MetadataManager initializes itself during the creation
+    this.metadataManager = new MetadataManager(textile)
+    await this.metadataManager.init()
   }
 
   /**

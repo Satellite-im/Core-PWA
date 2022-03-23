@@ -45,6 +45,7 @@ describe('', () => {
       await exif.stripEXIF(file2)
     } catch (error) {
       expect(error).toThrow(TypeError)
+      // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenCalledWith(
         expect.stringContaining(
           `TypeError: Failed to execute 'readAsArrayBuffer' on 'FileReader': parameter 1 is not of type 'Blob'.`,

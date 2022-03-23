@@ -12,16 +12,14 @@ import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { Bucket } from '~/libraries/Files/remote/textile/Bucket'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
-import { FilSystem } from '~/libraries/Files/FilSystem'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
   /**
    * @method setPin
    * @description sets the user pin password and stores its
    * hash inside the Vuex state
-   * @param pin the choosen pin password
+   * @param pin the chosen pin password
    * @example
    * ```typescript
    * this.$store.dispatch('accounts/setPin', 'myPassword123')
@@ -304,6 +302,8 @@ export default {
     const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
+    await db.initializeSearchIndexes()
+
     const { pin } = state
     if (!textileInitialized && pin) {
       dispatch(
@@ -323,9 +323,8 @@ export default {
       })
     }
 
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
+    dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
+    dispatch('friends/initialize', {}, { root: true })
   },
 }
 

@@ -24,7 +24,26 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
   let inst2: any
   let inst5: any
 
-  beforeEach(() => {
+  const getThreadIDMock = jest
+    .spyOn(GroupChatManager.GroupChatManager.prototype, 'getThreadID')
+    .mockImplementation(async () => {
+      return hub.ThreadID.fromString(
+        'bafk6ejcqsusgao54pwp5u2ujhsdqgmipnlan2u67mhyivl46e6d53ly',
+      )
+    })
+
+  const decodeGroupIDMock = jest
+    .spyOn(GroupChatManager.GroupChatManager.prototype, 'decodeGroupID')
+    .mockImplementation(() => {
+      return {
+        threadID: hub.ThreadID.fromString(
+          'bafk6ejcqsusgao54pwp5u2ujhsdqgmipnlan2u67mhyivl46e6d53ly',
+        ),
+        collectionName: '58f64b84-541e-4e0a-a346-fca8d364fdbb',
+      }
+    })
+
+  beforeEach(async () => {
     inst19 = new hub.Client(undefined, false)
     inst18 = new Uint8Array([])
     inst17 = new Uint8Array([])
@@ -48,6 +67,7 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
       },
       '',
     )
+    await inst20.init()
     inst15 = new hub.Client(undefined, false)
     inst14 = new Uint8Array([])
     inst13 = new Uint8Array([])
@@ -76,6 +96,7 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
       },
       'Becky Bednar',
     )
+    await inst16.init()
     inst11 = new hub.Client(undefined, false)
     inst10 = new Uint8Array([])
     inst9 = new Uint8Array([])
@@ -104,6 +125,7 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
       },
       'Becky Bednar',
     )
+    await inst12.init()
     inst7 = new hub.Client(undefined, false)
     inst6 = new Uint8Array([])
     inst = new Uint8Array([])
@@ -132,6 +154,7 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
       },
       'Becky Bednar',
     )
+    await inst8.init()
     inst4 = new hub.Client(undefined, false)
     inst3 = new Uint8Array([])
     inst2 = new Uint8Array([])
@@ -160,32 +183,31 @@ describe('GroupChatManager.GroupChatManager.listenToGroupMessages', () => {
       },
       'Becky Bednar',
     )
+    await inst5.init()
   })
 
   test('0', async () => {
-    await inst5.listenToGroupMessages(() => undefined, 'da7588892')
+    await inst5.listenToGroupMessages(() => undefined, { id: 'da7588892' })
   })
 
   test('1', async () => {
-    await inst8.listenToGroupMessages(() => undefined, '12345')
+    await inst8.listenToGroupMessages(() => undefined, { id: '12345' })
   })
 
   test('2', async () => {
-    await inst12.listenToGroupMessages(
-      () => undefined,
-      'c466a48309794261b64a4f02cfcc3d64',
-    )
+    await inst12.listenToGroupMessages(() => undefined, {
+      id: 'c466a48309794261b64a4f02cfcc3d64',
+    })
   })
 
   test('3', async () => {
-    await inst16.listenToGroupMessages(
-      () => undefined,
-      'bc23a9d531064583ace8f67dad60f6bb',
-    )
+    await inst16.listenToGroupMessages(() => undefined, {
+      id: 'bc23a9d531064583ace8f67dad60f6bb',
+    })
   })
 
   test('4', async () => {
-    await inst20.listenToGroupMessages(() => undefined, '')
+    await inst20.listenToGroupMessages(() => undefined, { id: '' })
   })
 })
 
@@ -195,7 +217,7 @@ describe('GroupChatManager.GroupChatManager.isInitialized', () => {
   let inst2: any
   let inst5: any
 
-  beforeEach(() => {
+  beforeEach(async () => {
     inst4 = new hub.Client(undefined, undefined)
     inst3 = new Uint8Array([])
     inst2 = new Uint8Array([])
@@ -219,6 +241,7 @@ describe('GroupChatManager.GroupChatManager.isInitialized', () => {
       },
       '',
     )
+    await inst5.init()
   })
 
   test('0', () => {

@@ -1,11 +1,13 @@
 // @ts-ignore
 import Mousetrap from 'mousetrap'
-import { Position, UIState } from './types'
-import { Channel } from '~/types/ui/server'
+import Vue from 'vue'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
+import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
-import { User } from '~/types/ui/user'
+import { Position, UIState } from './types'
 
 const $Sounds = new SoundManager()
 
@@ -103,14 +105,31 @@ export default {
     commit('setQuickProfilePosition', payload.position)
     commit('quickProfile', selectedUser)
   },
-  showProfile({ commit, state }: ActionsArguments<UIState>, user: User) {
+  async showProfile(
+    { commit, rootState, dispatch }: ActionsArguments<UIState>,
+    user: Friend,
+  ) {
     if (!user) {
       return
+    }
+    let metadata = null
+    if (!user.metadata) {
+      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+      metadata = await $TextileManager.metadataManager?.getFriendMetadata(
+        user.address,
+      )
     }
     commit('toggleModal', {
       name: 'userProfile',
       state: true,
     })
-    commit('setUserProfile', user)
+    const friend = {
+      ...user,
+    }
+    if (metadata) {
+      friend.metadata = metadata
+      commit('friends/updateFriend', friend, { root: true })
+    }
+    commit('setUserProfile', friend)
   },
 }

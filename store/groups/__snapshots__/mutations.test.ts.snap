@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutations.default.addGroup 0 1`] = `undefined`;
+
+exports[`mutations.default.addGroup 1 1`] = `undefined`;
+
+exports[`mutations.default.addGroup 2 1`] = `undefined`;
+
+exports[`mutations.default.addGroup 3 1`] = `undefined`;
+
+exports[`mutations.default.addGroup 4 1`] = `undefined`;
+
+exports[`mutations.default.addGroup 5 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 0 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 1 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 2 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 3 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 4 1`] = `undefined`;
+
+exports[`mutations.default.setGroupMembersInfo 5 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 0 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 1 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 2 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 3 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 4 1`] = `undefined`;
+
+exports[`mutations.default.updateGroup 5 1`] = `undefined`;

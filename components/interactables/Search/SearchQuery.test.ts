@@ -432,7 +432,7 @@ describe('SearchQuery.default.setQueryByHTML', () => {
   let mockElement: any
 
   beforeEach(() => {
-    inst2 = new SearchQuery.default()
+    inst2 = new SearchQueryDefault()
     mockElement = document.createElement('div:first-of-type')
     spy.mockReturnValue(mockElement)
   })

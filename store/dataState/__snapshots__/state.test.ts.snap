@@ -4,6 +4,7 @@ exports[`state.default 0 1`] = `
 Object {
   "files": "E",
   "friends": "E",
+  "groups": "E",
   "search": "E",
 }
 `;

@@ -38,7 +38,6 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     TerminalIcon,
-    Editable,
   },
   props: {
     recipient: {
@@ -154,6 +153,7 @@ export default Vue.extend({
       )
       const message = findItem ? findItem.value : ''
 
+      this.$refs.editable?.resetHistory()
       this.$store.commit('ui/setReplyChatbarContent', {
         id: '',
         payload: '',
@@ -269,7 +269,9 @@ export default Vue.extend({
 
         // Check if it's a group
         if (
-          RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+          RegExp(this.$Config.regex.uuidv4).test(
+            this.recipient.textilePubkey.split('|')[1],
+          )
         ) {
           if (this.ui.replyChatbarContent.from) {
             this.$store.dispatch('textile/sendGroupReplyMessage', {

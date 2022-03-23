@@ -1,15 +1,14 @@
-import Vue from 'vue'
+import 'fake-indexeddb/auto'
+import db from '~/libraries/SatelliteDB/SatelliteDB'
 import mutations from '~/store/textile/mutations'
 import InitialTextileState from '~/store/textile/state'
-import SearchIndex from '~/libraries/SearchIndex'
-
-Vue.prototype.$SearchIndex = new SearchIndex({
-  ref: 'id',
-  fields: ['payload'],
-})
 
 describe('init', () => {
   let inst: any
+
+  beforeAll(async () => {
+    await db.initializeSearchIndexes()
+  })
 
   beforeEach(() => {
     inst = mutations
@@ -89,8 +88,9 @@ describe('init', () => {
       [newMessage.address]: newObject,
     })
   })
-  it('should resetConversation', () => {
+  it('should resetConversation', async () => {
     const localState = InitialTextileState()
+    await db.initializeSearchIndexes()
     localState.conversations = {
       '0x0': {
         messages: {},
@@ -133,7 +133,7 @@ describe('init', () => {
       [newMessage.address]: newObject,
     })
   })
-  it('should addMessageToConversation', () => {
+  it('should addMessageToConversation', async () => {
     const localState = InitialTextileState()
     localState.conversations = {
       '0x0': {
@@ -161,21 +161,21 @@ describe('init', () => {
       address: '0x0',
       sender: '0x1',
       message: {
-        replyMessage: 'text',
-        reactionMessage: '',
-        fileMessage: '',
-        imageMessage: '',
-        textMessage: '',
-        mediaMessage: '',
-        glyphMessage: '',
+        id: '0x1',
+        from: '0x1',
+        to: '0x0',
+        payload: 'hello, world',
+        type: 'text',
+        at: 123,
+        readAt: 123,
       },
     }
     inst.addMessageToConversation(localState, newMessage)
 
     const newObject = {
       end: false,
-      lastInbound: undefined,
-      lastUpdate: undefined,
+      lastInbound: 123,
+      lastUpdate: 123,
       limit: 1,
       messages: {},
       reactions: {},
