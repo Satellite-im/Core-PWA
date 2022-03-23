@@ -123,7 +123,8 @@ export default Vue.extend({
      * @returns boolean
      * @example this.onConfirm()
      */
-    confirm() {
+    confirm(e: Event) {
+      e.preventDefault()
       if (!this.accountValidLength) {
         this.error = this.$t('user.registration.username_error') as string
         return false
