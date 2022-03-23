@@ -148,6 +148,7 @@ export class FilSystem {
   exportChildren(item: Item): ExportItem {
     if (item instanceof Fil) {
       const {
+        id,
         name,
         liked,
         shared,
@@ -159,6 +160,7 @@ export class FilSystem {
         thumbnail,
       } = item
       return {
+        id,
         name,
         liked,
         shared,
@@ -170,9 +172,10 @@ export class FilSystem {
         thumbnail,
       }
     }
-    const { name, liked, shared, type, modified } = item
+    const { id, name, liked, shared, type, modified } = item
 
     return {
+      id,
       name,
       liked,
       shared,
@@ -204,8 +207,8 @@ export class FilSystem {
   public async importChildren(item: ExportItem) {
     if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
       const {
+        id,
         name,
-        path,
         size,
         liked,
         shared,
@@ -215,8 +218,8 @@ export class FilSystem {
       } = item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({
+        id,
         name,
-        path,
         size,
         liked,
         shared,
@@ -227,10 +230,10 @@ export class FilSystem {
       })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
-      const { name, liked, shared, children, modified } =
+      const { id, name, liked, shared, children, modified } =
         item as ExportDirectory
       const type = item.type as DIRECTORY_TYPE
-      this.createDirectory({ name, liked, shared, type, modified })
+      this.createDirectory({ id, name, liked, shared, type, modified })
       this.openDirectory(name)
       for (const item of children) {
         await this.importChildren(item)
@@ -245,9 +248,9 @@ export class FilSystem {
    * @returns {Fil | null} Returns the new file if successfully created, else null
    */
   public createFile({
+    id,
     name,
     file,
-    path,
     size,
     liked,
     shared,
@@ -256,9 +259,9 @@ export class FilSystem {
     modified,
     thumbnail,
   }: {
+    id: string
     name: string
     file?: File
-    path: string
     size: number
     liked?: boolean
     shared?: boolean
@@ -268,9 +271,9 @@ export class FilSystem {
     thumbnail?: string
   }): Fil | null {
     const newFile = new Fil({
+      id,
       name,
       file,
-      path,
       size,
       liked,
       shared,
@@ -290,19 +293,21 @@ export class FilSystem {
    * @returns {Directory | null} Returns the new directory if successfully created, else null
    */
   public createDirectory({
+    id,
     name,
     liked,
     shared,
     type,
     modified,
   }: {
+    id: string
     name: string
     liked?: boolean
     shared?: boolean
     type?: DIRECTORY_TYPE
     modified?: number
   }): Directory | null {
-    const newDir = new Directory({ name, liked, shared, type, modified })
+    const newDir = new Directory({ id, name, liked, shared, type, modified })
     const inserted = this.currentDirectory.addChild(newDir)
     return inserted ? newDir : null
   }

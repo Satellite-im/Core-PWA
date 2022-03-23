@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import Vue from 'vue'
 import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
@@ -22,12 +23,13 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file file to be uploaded
    */
   async uploadFile(file: File) {
-    await this.bucket.pushFile(file)
+    const id = uuidv4()
+    await this.bucket.pushFile(file, id)
 
     this.createFile({
+      id,
       name: file.name,
       file,
-      path: file.name,
       size: file.size,
       type: (Object.values(FILE_TYPE) as string[]).includes(file.type)
         ? (file.type as FILE_TYPE)

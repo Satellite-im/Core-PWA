@@ -5,6 +5,7 @@ export enum FILESYSTEM_TYPE {
   DEFAULT = 'FS_DEFAULT',
 }
 interface ExportSharedProps {
+  id: string
   name: string
   liked: boolean
   shared: boolean
@@ -13,7 +14,6 @@ interface ExportSharedProps {
 }
 
 export interface ExportFile extends ExportSharedProps {
-  path: string
   size: number
   description: string
   thumbnail: string
