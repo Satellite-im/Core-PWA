@@ -68,9 +68,9 @@ export default Vue.extend({
     'ui.enhancers.show'(value) {
       if (value) {
         this.openEmoji()
-      } else {
-        this.resetSearch()
+        return
       }
+      this.resetSearch()
     },
   },
   mounted() {
