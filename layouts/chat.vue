@@ -182,7 +182,6 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$store.dispatch('ui/activateKeybinds')
     this.$Sounds.changeLevels(this.audio.volume / 100)
 
     const appHeight = () => {
