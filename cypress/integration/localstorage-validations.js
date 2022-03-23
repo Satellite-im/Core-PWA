@@ -5,7 +5,7 @@ const recoverySeed =
 
 describe('Verify passphrase does not get stored in localstorage', () => {
   it('Passphrase in localstorage does not exist before creating account', () => {
-    cy.visit('/').then(() => {
+    cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
         cy.validatePassphraseLocalStorage()
       })
@@ -30,7 +30,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it('Passphrase in localstorage does not exist before importing an account', () => {
-    cy.visit('/').then(() => {
+    cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
         cy.validatePassphraseLocalStorage()
       })

@@ -67,7 +67,7 @@ describe.skip('Run responsiveness tests on several devices', () => {
     })
 
     it(`Release Notes Screen on ${item.description}`, () => {
-      cy.visit('/').then(() => {
+      cy.visitRootPage().then(() => {
         cy.viewport(item.width, item.height)
       })
       cy.releaseNotesScreenValidation()
