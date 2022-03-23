@@ -3,7 +3,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const recoverySeed =
   'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
 
-describe('Chat Features Tests', () => {
+describe.skip('Chat Features Tests', () => {
   before(() => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
