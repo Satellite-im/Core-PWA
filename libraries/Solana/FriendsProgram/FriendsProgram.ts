@@ -404,6 +404,10 @@ export default class FriendsProgram extends EventEmitter {
       ),
     )
 
+    if (!transaction) {
+      throw new Error('Friends program not initialized')
+    }
+
     return sendAndConfirmTransaction(
       connection,
       transaction,

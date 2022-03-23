@@ -502,6 +502,12 @@ export default {
 
     const friendFromKey = friendRequest.account.from
 
+    const friendCheck = await friendsProgram.getParsedFriend(
+      computedFriendAccountKey,
+    )
+    if (friendCheck?.status === 2) {
+      return
+    }
     // Initialize current recipient for encryption
     await $Crypto.initializeRecipient(new PublicKey(friendFromKey))
 
