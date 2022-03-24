@@ -1,7 +1,7 @@
 <div class="profile-card">
   <SettingsProfilePicture :image="info.imageUrl" />
   <div class="profile-card-body">
-    <div class="profile-badges">
+    <div class="profile-badges" v-if="info.badges && info.badges.length">
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.profile.info.badges')"
