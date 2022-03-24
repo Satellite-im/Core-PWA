@@ -4,8 +4,9 @@ import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
 import { Bucket } from './remote/textile/Bucket'
-import { isHeic } from '~/utilities/Heic'
 import { Config } from '~/config'
+import { EnvInfo } from '~/utilities/EnvInfo'
+import { isHeic } from '~/utilities/Heic'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {
@@ -64,21 +65,27 @@ export class TextileFileSystem extends FilSystem {
     if (file.name.match('^.*.(svg)$')) {
       return this._fileToData(file)
     }
-    const buffer = new Uint8Array(await file.arrayBuffer())
-    if (isHeic(buffer)) {
+    if (isHeic(new Uint8Array(await file.slice(0, 256).arrayBuffer()))) {
+      // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
+      if (file.size >= Config.arrayBufferLimit) {
+        return
+      }
+      const buffer = new Uint8Array(await file.arrayBuffer())
       const outputBuffer = await convert({
         buffer,
         format: 'JPEG',
         quality: 1,
       })
-      return this._fileToData(
-        await skaler(
-          new File([outputBuffer.buffer], file.name, {
-            type: 'image/jpeg',
-          }),
-          { width: 400 },
-        ),
-      )
+      const fileJpg = new File([outputBuffer.buffer], file.name, {
+        type: 'image/jpeg',
+      })
+      if (await this._tooLarge(fileJpg)) {
+        return
+      }
+      return this._fileToData(await skaler(fileJpg, { width: 400 }))
+    }
+    if (await this._tooLarge(file)) {
+      return
     }
     return this._fileToData(await skaler(file, { width: 400 }))
   }
@@ -95,6 +102,26 @@ export class TextileFileSystem extends FilSystem {
       reader.readAsDataURL(file)
       reader.onload = () => resolve(reader.result?.toString() || '')
       reader.onerror = (error) => reject(error)
+    })
+  }
+
+  /**
+   * @method _tooLarge
+   * @description determine if file exceeds platform canvas limits
+   * @param {File} file
+   */
+  private _tooLarge(file: File) {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.src = URL.createObjectURL(file)
+      img.onload = () => {
+        const envInfo = new EnvInfo()
+        const maxDimension = Math.max(img.width, img.height)
+        if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
+          resolve(true)
+        }
+        resolve(false)
+      }
     })
   }
 }
