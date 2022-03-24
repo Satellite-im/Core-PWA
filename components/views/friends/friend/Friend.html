@@ -13,6 +13,7 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.accept')"
       :loading="loading === 'accept'"
+      :disabled="loadCheck"
       :action="acceptFriendRequest"
     >
       <check-icon size="1x" />

@@ -58,6 +58,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      loadCheck: false,
       loading: '' as AddFriendEnum,
       contextMenuValues: [
         { text: this.$t('context.remove'), func: this.removeFriend },
@@ -89,6 +90,7 @@ export default Vue.extend({
     },
     async acceptFriendRequest() {
       this.loading = AddFriendEnum.ACCEPT
+      this.loadCheck = true
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
           friendRequest: this.$props.friend.request,
@@ -100,7 +102,11 @@ export default Vue.extend({
           limit: query.limit,
           skip: query.skip,
         })
+      } catch (e: any) {
+        this.loadCheck = false
+        throw new Error(e)
       } finally {
+        this.loadCheck = false
         this.loading = AddFriendEnum.EMPTY
       }
     },
