@@ -107,10 +107,11 @@ export class TextileFileSystem extends FilSystem {
 
   /**
    * @method _tooLarge
-   * @description determine if file exceeds platform canvas limits
-   * @param {File} file
+   * @description determine if image exceeds platform canvas limits
+   * @param {File} file needs to be an embeddable image type
+   * @returns {Promise<boolean>}
    */
-  private _tooLarge(file: File) {
+  private _tooLarge(file: File): Promise<boolean> {
     return new Promise((resolve) => {
       const img = new Image()
       img.src = URL.createObjectURL(file)
