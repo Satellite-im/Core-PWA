@@ -32,7 +32,7 @@ export const profileBadges = [
 
 export const sampleProfileInfo = {
   imageUrl: url,
-  badges: profileBadges,
+  badges: [],
   locations: [] as string[],
   languages: ['English', 'Spanish', 'German'] as string[],
   username: 'username01234#0001',
