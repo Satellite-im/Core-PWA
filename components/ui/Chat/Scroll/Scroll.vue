@@ -69,8 +69,10 @@ export default Vue.extend({
            this.autoScrollToBottom()
       }
     },
-     messages() {
-      this.autoScrollToBottom()
+     messages(newValue, oldValue) {
+      if(newValue !== oldValue) {
+        this.autoScrollToBottom()
+      }
     },
   },
   mounted() {
