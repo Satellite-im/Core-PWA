@@ -12,6 +12,7 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 declare module 'vue/types/vue' {
   interface Vue {
     toggleModal: (modalName: string) => void
+    unsubscribe: () => void
   }
 }
 
@@ -46,6 +47,16 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     ModalWindows: () => ModalWindows,
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'friends/addFriend') {
+        this.$store.dispatch('sounds/playSound', Sounds.NEW_MESSAGE)
+      }
+    })
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
   methods: {
     /**

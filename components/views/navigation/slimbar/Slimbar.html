@@ -22,7 +22,7 @@
           class="unreads"
           v-for="user in unreads"
         >
-          <Unread :key="user.address" :user="user"/>
+          <Unread :key="user.address" :user="user" :active="$route.params.address === user.address"/>
         </div>
         <UiHorizontalRule v-if="servers.length > 0" />
         <UiComingSoon :tooltipText="$t('coming_soon.communities')">
@@ -46,7 +46,7 @@
         class="unreads"
         v-for="user in unreads"
       >
-        <Unread :key="user.address" :user="user"/>
+        <Unread :key="user.address" :user="user" :active="$route.params.address === user.address"/>
       </div>
       <div
         class="server has-tooltip-bottom has-tooltip-primary"

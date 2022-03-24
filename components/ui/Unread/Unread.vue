@@ -4,7 +4,6 @@
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/user'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -29,6 +28,10 @@ export default Vue.extend({
       }),
       required: true,
     },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -47,9 +50,6 @@ export default Vue.extend({
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
-  },
-  mounted() {
-    this.$store.dispatch('sounds/playSound', Sounds.NEW_MESSAGE)
   },
   methods: {
     testFunc() {
