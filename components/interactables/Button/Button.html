@@ -1,7 +1,7 @@
 <button
   :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
   v-on:click="action"
-  :disabled="loading"
+  :disabled="loading || inactive"
   :type="htmlType"
   ref="button"
 >
