@@ -21,6 +21,29 @@
   .circle{
     transition: 0.2s ease-in-out;
   }
+  &-loader{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  &--loading{
+    pointer-events: none;
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(@darker, 0.5);
+    }
+  }
   &:hover{
     .circle{
       border: 3px solid @purple;
