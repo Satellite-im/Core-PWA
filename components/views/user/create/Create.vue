@@ -23,6 +23,19 @@ export default Vue.extend({
       status: '',
     }
   },
+  computed: {
+    /**
+     * @method accountValidLength
+     * @description If the account isn't the length specified in the config, this returns False, true if correct length
+     * @example this.accountValidLength
+     */
+    accountValidLength(): boolean {
+      if (this.name.trim().length < this.$Config.account.minimumAccountLength) {
+        return false
+      }
+      return true
+    },
+  },
   methods: {
     /**
      * @method toggleCropper DocsTODO
@@ -106,13 +119,13 @@ export default Vue.extend({
     },
     /**
      * @method confirm DocsTODO
-     * @description
-     * @returns
-     * @example
+     * @description Checks to see if the name is min length, and if it is, passes the username, status, and photohash to parent
+     * @returns boolean
+     * @example this.onConfirm()
      */
-    confirm() {
-      const isEmpty = this.name.trim().length === 0
-      if (this.name.length < 5 || isEmpty) {
+    confirm(e: Event) {
+      e.preventDefault()
+      if (!this.accountValidLength) {
         this.error = this.$t('user.registration.username_error') as string
         return false
       }

@@ -102,6 +102,9 @@ export const Config = {
     maxUndoStack: 100,
     batchUndoSeconds: 5,
   },
+  account: {
+    minimumAccountLength: 5,
+  },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
