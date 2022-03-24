@@ -154,7 +154,7 @@ export abstract class Item implements ItemInterface {
     if (this.validateParent(this.parent) && this.parent?.hasChild(newName))
       throw new Error(FileSystemErrors.DUPLICATE_NAME)
 
-    this._name = newName.trim()
+    this._name = newName
   }
 
   /**
