@@ -57,9 +57,10 @@ export default Vue.extend({
         this.$store.state.friends,
       )
       const { id } = this.$route.params
-      if (!this.src || !activeFriend) {
-        return
-      }
+
+      if (!this.src) return
+      if (!activeFriend && !id) return
+
       if (id) {
         this.$store.dispatch('textile/sendGroupGlyphMessage', {
           groupID: id,

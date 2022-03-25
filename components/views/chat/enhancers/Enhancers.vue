@@ -210,6 +210,7 @@ export default Vue.extend({
      * @method convertRem
      * @description This converts an rem value into a pixel value
      * @example convertRem('24rem') => if the document font size is 16px, this returns the value of 24*16, or 384.
+     * @todo TODO: Move this function into an utility folder
      */
     convertRem(value: string): number {
       const fontSize = parseFloat(
