@@ -30,9 +30,14 @@ export default Vue.extend({
       showChangeLog: false,
     }
   },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
-    ...mapState(['ui', 'accounts']),
+    ...mapState(['ui', 'accounts', 'meta']),
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)

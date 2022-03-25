@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { UserRegistrationData } from '~/types/ui/user'
 
@@ -16,9 +16,15 @@ export default Vue.extend({
       decrypting: false,
     }
   },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
     ...mapGetters('accounts', ['getRegistrationStatus']),
     ...mapGetters(['allPrerequisitesReady']),
+    ...mapState(['meta']),
     hasToRegister() {
       return this.getRegistrationStatus === RegistrationStatus.UNKNOWN
     },

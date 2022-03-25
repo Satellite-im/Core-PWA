@@ -17,8 +17,13 @@ export default Vue.extend({
       loading: true,
     }
   },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'meta']),
   },
   mounted() {},
 })

@@ -12,8 +12,13 @@ declare module 'vue/types/vue' {
 }
 export default Vue.extend({
   name: 'PhraseScreen',
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'meta']),
     splitPhrase(): Array<String> {
       return this.accounts.phrase.split(' ')
     },

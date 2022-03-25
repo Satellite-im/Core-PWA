@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { PlusCircleIcon } from 'satellite-lucide-icons'
 import * as bip39 from 'bip39'
 
@@ -23,6 +24,14 @@ export default Vue.extend({
       phrases: [],
       bipList: bip39.wordlists.english,
     }
+  },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
+  computed: {
+    ...mapState(['meta']),
   },
   methods: {
     /**
