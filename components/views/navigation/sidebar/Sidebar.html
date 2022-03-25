@@ -123,6 +123,7 @@
             :key="i"
             :user="user"
             :isTyping="ui.isTyping.address === user.address"
+            :isSelected="user.address === $route.params.address"
           />
         </div>
         <div
