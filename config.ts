@@ -33,17 +33,19 @@ export const Config = {
     user_lifespan: 90000,
   },
   webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
+    trackerURLS: process.env.NUXT_ENV_DEVELOPMENT_TRACKER // DEVELOPMENT, yarn dev:tracker to start
+      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER]
+      : null,
+    publicURLs: [
+      'wss://tracker.openwebtorrent.com',
+      'wss://tracker.sloppyta.co:443/announce',
+      'wss://tracker.novage.com.ua:443/announce',
+      'udp://opentracker.i2p.rocks:6969/announce',
+      'http://opentracker.i2p.rocks:6969/announce',
+      'udp://tracker.opentrackr.org:1337/announce',
+      'http://tracker.opentrackr.org:1337/announce',
+    ],
+    satelliteURLS: ['ws://signal.satellite.one'],
   },
   solana: {
     customFaucet: 'https://faucet.satellite.one',

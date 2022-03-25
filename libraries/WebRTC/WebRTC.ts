@@ -19,7 +19,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   //
   // List of functions to execute after init
   protected _fnQueue: Array<Function>
-  protected _announceURLs: Array<string> = Config.webtorrent.announceURLs
+  protected _announceURLs: Array<string> = Config.webtorrent.publicURLs
 
   constructor() {
     super()
