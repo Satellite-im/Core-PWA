@@ -1,4 +1,5 @@
 import * as mutations from '~/store/chat/mutations'
+import { UploadDropItemType } from '~/types/files/file'
 
 describe('mutations.default.setChatReply', () => {
   test('0', () => {
@@ -200,5 +201,100 @@ describe('mutations.default.chatText', () => {
       { userId: '', value: '' },
     )
     expect(result).toMatchSnapshot()
+  })
+})
+
+describe('misc', () => {
+  const object2: any = [
+    { userId: '12345', value: 'Dillenberg' },
+    { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Dillenberg' },
+    { userId: '12345', value: 'elio@example.com' },
+    { userId: '9876', value: 'elio@example.com' },
+  ]
+  const object: any = [
+    { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
+    { replyId: '12345', value: false },
+  ]
+  const object3: UploadDropItemType[] = []
+  const state = { replies: object, chatTexts: object2, files: object3 }
+
+  test('mutations.default.addFile with empty files array', () => {
+    const obj = {
+      file: {
+        file: 'path',
+        url: 'string',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    mutations.default.addFile(state, obj)
+    expect(state.files[obj.address]).toEqual([obj.file])
+  })
+  test.skip('draft mutations.default.addFile with non-empty files array', () => {
+    const state = {
+      replies: object,
+      chatTexts: object2,
+      files: [
+        {
+          file: 'path_file_0',
+          nsfw: { checking: false, status: false },
+          url: 'string',
+        },
+      ],
+    }
+    const obj = {
+      file: {
+        file: 'path',
+        url: 'string',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    mutations.default.addFile(state, obj)
+    expect(state.files[obj.address]).toEqual([obj.file])
+  })
+  test('mutations.default.setFiles', () => {
+    const state = { replies: object, chatTexts: object2, files: object3 }
+    const obj = {
+      files: {
+        file: 'path',
+        url: 'string',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+
+      address: 'address1',
+    }
+
+    mutations.default.setFiles(state, obj)
+    expect(state.files[obj.address]).toEqual(obj.files)
+  })
+  test('mutations.default.deleteFiles', () => {
+    const state = { replies: object, chatTexts: object2, files: object3 }
+    const obj = {
+      files: {
+        file: 'path',
+        url: 'string',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+
+      address: 'address1',
+    }
+
+    mutations.default.setFiles(state, obj)
+    expect(state.files[obj.address]).toEqual(obj.files)
+    mutations.default.deleteFiles(state, obj.address)
+    expect(state.files).not.toEqual(obj.files)
   })
 })
