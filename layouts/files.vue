@@ -68,6 +68,7 @@ import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
+import WithMeta from '~/components/mixins/Meta/WithMeta'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -75,7 +76,7 @@ export default Vue.extend({
     MenuIcon,
     DroppableWrapper,
   },
-  mixins: [Touch, Layout],
+  mixins: [Touch, Layout, WithMeta],
   middleware: 'authenticated',
   data() {
     return {

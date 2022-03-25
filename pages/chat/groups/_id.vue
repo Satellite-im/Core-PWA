@@ -15,13 +15,8 @@ export default Vue.extend({
       groupMembers: [],
     }
   },
-  head() {
-    return {
-      title: this.meta.title,
-    }
-  },
   computed: {
-    ...mapState(['media', 'meta']),
+    ...mapState(['media']),
     groupedMessages() {
       const { id } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[id]

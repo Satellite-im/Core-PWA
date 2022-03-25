@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'AllComponents',
@@ -45,14 +44,6 @@ export default Vue.extend({
       switch1State: false,
       switch2State: true,
     }
-  },
-  head() {
-    return {
-      title: this.meta.title,
-    }
-  },
-  computed: {
-    ...mapState(['meta']),
   },
   methods: {
     testAction(): void {
