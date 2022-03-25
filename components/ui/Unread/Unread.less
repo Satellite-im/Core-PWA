@@ -44,9 +44,19 @@
       background-color: rgba(@darker, 0.5);
     }
   }
-  &:hover, &--active{
+  &--active{
     .circle{
       border: 3px solid @purple;
+    }
+  }
+}
+
+@media only screen and (min-width: @mobile-breakpoint) {
+  .unread{
+    &:hover{
+      .circle{
+        border: 3px solid @purple;
+      }
     }
   }
 }
