@@ -2,10 +2,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'DisclaimerScreen',
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
+    ...mapState(['meta']),
     isLoading() {
       return this.$store.state.accounts.loading
     },

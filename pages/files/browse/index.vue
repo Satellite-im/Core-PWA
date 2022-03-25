@@ -20,8 +20,13 @@ export default Vue.extend({
       fileSystem: this.$FileSystem as FilSystem,
     }
   },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'meta']),
     sort: {
       set(value: FileSort) {
         this.$store.commit('ui/setFileSort', value)

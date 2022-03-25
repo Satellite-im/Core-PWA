@@ -2,13 +2,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
+    ...mapState(['meta']),
     groupedMessages() {
       const { address } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[address]

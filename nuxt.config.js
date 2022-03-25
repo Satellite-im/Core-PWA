@@ -19,7 +19,7 @@ export default defineNuxtConfig({
 
   router: {
     mode: 'hash',
-    middleware: ['authenticated'],
+    middleware: ['meta', 'authenticated'],
     extendRoutes(routes, resolve) {
       routes.push({
         path: '/friends/list/:id',
@@ -32,7 +32,6 @@ export default defineNuxtConfig({
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Satellite-Absolute',
     htmlAttrs: {
       lang: 'en',
     },

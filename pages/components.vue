@@ -266,6 +266,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 export default Vue.extend({
   data() {
@@ -277,6 +278,14 @@ export default Vue.extend({
       inputGroupLoading: false,
       selectValue: 1,
     }
+  },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
+  computed: {
+    ...mapState(['meta']),
   },
   methods: {
     testAction(): void {

@@ -25,9 +25,14 @@ export default Vue.extend({
       featureReadyToShow: false,
     }
   },
+  head() {
+    return {
+      title: this.meta.title,
+    }
+  },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['friends', 'dataState']),
+    ...mapState(['friends', 'dataState', 'meta']),
     alphaSortedFriends() {
       return getAlphaSorted(this.friends.all)
     },
