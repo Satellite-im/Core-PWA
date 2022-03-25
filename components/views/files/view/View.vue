@@ -10,6 +10,7 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
+import { filetypeextension } from 'magic-bytes.js'
 import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
@@ -30,24 +31,59 @@ export default Vue.extend({
   data() {
     return {
       load: false as boolean,
+      name: this.file.name as string,
     }
   },
   computed: {
     ...mapState(['ui']),
   },
   /**
-   * if no file data available, pull encrypted file from textile bucket and save as blob
    */
   async mounted() {
+    this.load = true
+    // if no file data available, pull encrypted file from textile bucket
     if (!this.file.file) {
-      this.load = true
-      const fsFile: Fil = this.$FileSystem.getChild(this.file.name) as Fil
-      fsFile.file = await this.$TextileManager.bucket?.pullFile(
+      const fsFil: Fil = this.$FileSystem.getChild(this.file.name) as Fil
+      fsFil.file = await this.$TextileManager.bucket?.pullFile(
+        this.file.id,
         this.file.name,
         this.file.type,
       )
-      this.load = false
     }
+    // file extension according to file name
+    const fileExt = this.file.name
+      .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+      .toLowerCase()
+    // you only need the first 256 bytes or so to confirm file type
+    const buffer = new Uint8Array(
+      await this.file.file.slice(0, 256).arrayBuffer(),
+    )
+    // file extension according to byte data
+    const dataExt = filetypeextension(buffer)[0]
+
+    // magicbytes declares svg as xml, so we need to manually check
+    const decodedFile = new TextDecoder().decode(buffer)
+    if (decodedFile.includes('xmlns="http://www.w3.org/2000/svg"')) {
+      // if corrupted, set .svg extension
+      if (fileExt !== 'svg') {
+        this.name += '.svg'
+      }
+      this.load = false
+      return
+    }
+
+    // if corrupted txt file
+    if (!dataExt && fileExt !== 'txt') {
+      this.name += '.txt'
+      this.load = false
+      return
+    }
+
+    // if corrupted file with wrong extension, force the correct one
+    if (fileExt !== dataExt && dataExt) {
+      this.name += `.${dataExt}`
+    }
+    this.load = false
   },
   methods: {
     /**

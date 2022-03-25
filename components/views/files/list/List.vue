@@ -91,13 +91,6 @@ export default Vue.extend({
       this.$emit('share', item)
     },
     /**
-     * @method rename
-     * @description Emit to rename item - pages/files/browse/index.vue
-     */
-    rename(item: Item) {
-      this.$emit('rename', item)
-    },
-    /**
      * @method remove
      * @description Emit to delete item - pages/files/browse/index.vue
      */

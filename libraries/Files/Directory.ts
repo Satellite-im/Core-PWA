@@ -14,19 +14,21 @@ export class Directory extends Item {
    * @returns {Directory}
    */
   constructor({
+    id,
     name,
     liked,
     shared,
     modified,
     type,
   }: {
+    id?: string
     name: string
     liked?: boolean
     shared?: boolean
     modified?: number
     type?: DIRECTORY_TYPE
   }) {
-    super({ name: name || 'un-named directory', liked, shared, modified })
+    super({ id, name: name || 'un-named directory', liked, shared, modified })
     this._type = type || DIRECTORY_TYPE.DEFAULT
   }
 
@@ -72,6 +74,7 @@ export class Directory extends Item {
    */
   get copy(): Directory {
     const dirCopy = new Directory({
+      id: this.id,
       name: `${this.name} copy`,
       liked: this.liked,
       shared: this.shared,

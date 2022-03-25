@@ -4,7 +4,6 @@ import { FILE_TYPE } from './types/file'
 
 export class Fil extends Item {
   private _type = FILE_TYPE.GENERIC
-  private _hash: string = ''
   private _description: string = ''
   private _size: number = 0
   private _file: File | undefined
@@ -12,13 +11,13 @@ export class Fil extends Item {
 
   /**
    * @constructor
-   * @param param0  name, file, hash, size, liked, shared, modified, description, type, thumbnail
+   * @param param0  id, name, file, size, liked, shared, modified, description, type, thumbnail
    * @returns {Fil}
    */
   constructor({
+    id,
     name,
     file,
-    hash,
     size,
     liked,
     shared,
@@ -27,9 +26,9 @@ export class Fil extends Item {
     type,
     thumbnail,
   }: {
+    id?: string
     name: string
     file?: File
-    hash: string
     size: number
     liked?: boolean
     shared?: boolean
@@ -38,10 +37,9 @@ export class Fil extends Item {
     type?: FILE_TYPE
     thumbnail?: string
   }) {
-    super({ name: name || 'un-named file', liked, shared, modified })
+    super({ name: name || 'un-named file', liked, shared, modified, id })
     this._file = file || undefined
     this._description = description || ''
-    this._hash = hash || ''
     this._size = size || 0
     this._type = type || FILE_TYPE.GENERIC
     this._thumbnail = thumbnail || ''
@@ -64,14 +62,6 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter hash
-   * @returns hash of the file (usually IPFS)
-   */
-  get hash(): string {
-    return this._hash
-  }
-
-  /**
    * @getter copy
    * @returns Get a new copy of the file
    */
@@ -79,7 +69,6 @@ export class Fil extends Item {
     return new Fil({
       name: `${this.name} copy`,
       file: this._file,
-      hash: this.hash,
       size: this.size,
       modified: this.modified,
       liked: this.liked,

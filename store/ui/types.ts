@@ -100,6 +100,7 @@ export enum ModalWindows {
   GLYPH = 'glyph',
   USERPROFILE = 'userProfile',
   CALLTOACTION = 'callToAction',
+  RENAME_FILE = 'renameFile',
 }
 
 export interface EnhancerInfo {
@@ -204,6 +205,7 @@ export interface UIState {
     flair: Flair
   }
   isLoadingFileIndex: boolean
+  renameCurrentName?: string
 }
 
 export type Position = {

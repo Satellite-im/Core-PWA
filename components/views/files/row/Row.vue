@@ -12,8 +12,8 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -79,6 +79,17 @@ export default Vue.extend({
       this.$emit('handle', this.item)
     },
     /**
+     * @method rename
+     * @description Open rename modal
+     */
+    rename() {
+      this.$store.commit('ui/setRenameItem', this.item.name)
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.RENAME_FILE,
+        state: !this.ui.modals[ModalWindows.RENAME_FILE],
+      })
+    },
+    /**
      * @method like
      * @description Emit to like item - pages/files/browse/index.vue
      */
@@ -91,13 +102,6 @@ export default Vue.extend({
      */
     share() {
       this.$emit('share', this.item)
-    },
-    /**
-     * @method rename
-     * @description Emit to rename item - pages/files/browse/index.vue
-     */
-    rename() {
-      this.$emit('rename', this.item)
     },
     /**
      * @method remove

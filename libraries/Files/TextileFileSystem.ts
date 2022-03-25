@@ -1,5 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
 import Vue from 'vue'
-import { PushPathResult } from '@textile/hub'
 import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
@@ -23,12 +23,13 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file file to be uploaded
    */
   async uploadFile(file: File) {
-    const result: PushPathResult = await this.bucket.pushFile(file)
+    const id = uuidv4()
+    await this.bucket.pushFile(file, id)
 
     this.createFile({
+      id,
       name: file.name,
       file,
-      hash: result.path.path,
       size: file.size,
       type: (Object.values(FILE_TYPE) as string[]).includes(file.type)
         ? (file.type as FILE_TYPE)
@@ -40,10 +41,10 @@ export class TextileFileSystem extends FilSystem {
   /**
    * @method removeFile
    * @description Remove file/folder from bucket and file system
-   * @param {string} name file name
+   * @param {string} id id and path in bucket
    */
-  async removeFile(name: string) {
-    await this.bucket.removeFile(name)
+  async removeFile(id: string) {
+    await this.bucket.removeFile(id)
   }
 
   /**

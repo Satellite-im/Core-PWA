@@ -55,7 +55,7 @@
     :close-modal="() => toggleModal(ModalWindows.GLYPH)"
     nopad
     v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
-    :small="true"
+    small
   >
     <Glyphs
       v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
@@ -77,6 +77,15 @@
     v-click-outside="() => toggleModal(ModalWindows.CALLTOACTION)"
   >
     <CallToAction :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)" />
+  </UiModal>
+  <UiModal
+    v-if="ui.modals.renameFile"
+    :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)"
+    v-click-outside="() => toggleModal(ModalWindows.RENAME_FILE)"
+    small
+    nopad
+  >
+    <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
   </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"

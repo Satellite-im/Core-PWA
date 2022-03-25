@@ -91,14 +91,6 @@ export default Vue.extend({
       // })
     },
     /**
-     * @method rename
-     * @description rename item in file system
-     * @param {Item} item
-     */
-    rename(item: Item) {
-      this.$toast.show(this.$t('todo - rename items') as string)
-    },
-    /**
      * @method remove
      * @description delete item from filesystem. If file, also remove from textile bucket
      * @param {Item} item
@@ -106,7 +98,7 @@ export default Vue.extend({
     async remove(item: Item) {
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       if (item instanceof Fil) {
-        await this.$FileSystem.removeFile(item.name)
+        await this.$FileSystem.removeFile(item.id)
       }
       this.$FileSystem.removeChild(item.name)
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)

@@ -6,7 +6,7 @@ import { DIRECTORY_TYPE } from '../types/directory'
 import { FILE_TYPE } from '../types/file'
 
 export abstract class Item implements ItemInterface {
-  private _id: string = uuidv4()
+  private _id: string = ''
   private _name: string = ''
   private _parent: Directory | null | undefined = null
   private _liked: boolean = false
@@ -23,12 +23,14 @@ export abstract class Item implements ItemInterface {
    * @param {Parent} parent - Optional parent of the item.
    */
   constructor({
+    id,
     name,
     liked,
     shared,
     parent,
     modified,
   }: {
+    id?: string
     name: string
     shared?: boolean
     liked?: boolean
@@ -38,6 +40,7 @@ export abstract class Item implements ItemInterface {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
 
+    this._id = id || uuidv4()
     this._name = name
     this._shared = shared || false
     this._liked = liked || false
@@ -151,7 +154,7 @@ export abstract class Item implements ItemInterface {
     if (this.validateParent(this.parent) && this.parent?.hasChild(newName))
       throw new Error(FileSystemErrors.DUPLICATE_NAME)
 
-    this._name = newName.trim()
+    this._name = newName
   }
 
   /**

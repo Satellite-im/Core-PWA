@@ -53,6 +53,7 @@ Object {
     "marketplace": false,
     "newfolder": false,
     "quickchat": false,
+    "renameFile": false,
     "userProfile": false,
     "wallet": false,
     "walletMini": false,
@@ -69,6 +70,7 @@ Object {
     "😂",
     "♥️",
   ],
+  "renameCurrentName": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",
