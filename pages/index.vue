@@ -18,15 +18,10 @@ export default Vue.extend({
   data() {
     return {}
   },
-  head() {
-    return {
-      title: this.meta.title,
-    }
-  },
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
     ...mapGetters(['allPrerequisitesReady']),
-    ...mapState(['accounts', 'meta']),
+    ...mapState(['accounts']),
     // Helper method for prettier loading messages
     loadingStep(): string {
       switch (this.getActiveAccount) {

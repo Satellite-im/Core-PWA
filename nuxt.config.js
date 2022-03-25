@@ -18,7 +18,7 @@ export default defineNuxtConfig({
 
   router: {
     mode: 'hash',
-    middleware: ['meta', 'authenticated'],
+    middleware: ['authenticated'],
     extendRoutes(routes, resolve) {
       routes.push({
         path: '/friends/list/:id',

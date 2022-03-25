@@ -105,6 +105,7 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
+import WithMeta from '~/components/mixins/Meta/WithMeta'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 
 export default Vue.extend({
@@ -113,7 +114,7 @@ export default Vue.extend({
     MenuIcon,
     DroppableWrapper,
   },
-  mixins: [Touch, Layout],
+  mixins: [Touch, Layout, WithMeta],
   middleware: ['authenticated'],
   data() {
     return {

@@ -7,6 +7,14 @@
     </v-style>
   </div>
 </template>
+<script lang="ts">
+import Vue from 'vue'
+import WithMeta from '~/components/mixins/Meta/WithMeta'
+
+export default Vue.extend({
+  mixins: [WithMeta],
+})
+</script>
 <style lang="less">
 @import 'bulma/css/bulma.css';
 
