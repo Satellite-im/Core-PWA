@@ -146,18 +146,11 @@ export default Vue.extend({
           return 'now'
         }
 
-        if (timeFromUpdate.search('minute') > 0) {
-          const minutes = Number(timeFromUpdate.split(' ')[0])
-
-          if (minutes <= 2) {
-            return 'now'
-          }
-        }
-
         if (timeFromUpdate.search('hour') > 0) {
-          const hours = Number(timeFromUpdate.split(' ')[0])
-
-          if (hours <= 24) {
+          if (
+            this.$dayjs(today).format('DD') !==
+            this.$dayjs(uLastUpdate).format('DD')
+          ) {
             return 'yesterday'
           }
         }
@@ -166,21 +159,11 @@ export default Vue.extend({
           return this.$dayjs(uLastUpdate).format('HH:mma')
         }
 
-        if (timeFromUpdate.search('yesterday') > 0) {
-          return 'yesterday'
-        }
-
         if (timeFromUpdate.search('day') > 0) {
           const yesterday = timeFromUpdate.split(' ')[0] === 'a'
 
           if (yesterday) {
             return 'yesterday'
-          }
-
-          const days = Number(timeFromUpdate.split(' ')[0])
-
-          if (days <= 3) {
-            return days + 'd'
           }
         }
 
@@ -192,11 +175,11 @@ export default Vue.extend({
             this.$dayjs(today).format('YY') !==
             this.$dayjs(uLastUpdate).format('YY')
           ) {
-            return this.$dayjs(uLastUpdate).format('DD/MM/YY')
+            return this.$dayjs(uLastUpdate).format('MM/DD/YYYY')
           }
         }
 
-        return this.$dayjs(uLastUpdate).format('DD/MM')
+        return this.$dayjs(uLastUpdate).format('MM/DD')
       }
 
       return 'No message'
