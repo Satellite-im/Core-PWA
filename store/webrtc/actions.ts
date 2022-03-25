@@ -20,12 +20,12 @@ const webRTCActions = {
    * this.$store.dispatch('webrtc/initialize')
    */
   async initialize(
-    { commit }: ActionsArguments<WebRTCState>,
+    { commit, rootState }: ActionsArguments<WebRTCState>,
     originator: string,
   ) {
     const $WebRTC: WebRTC = Vue.prototype.$WebRTC
     const $Logger: Logger = Vue.prototype.$Logger
-
+    $WebRTC.setAnnounceURLs(rootState.settings.serverType)
     $WebRTC.init(originator)
     $WebRTC.on('PEER_CONNECT', async ({ peerId }) => {
       $Logger.log('WebRTC', 'PEER_CONNECT', { peerId })

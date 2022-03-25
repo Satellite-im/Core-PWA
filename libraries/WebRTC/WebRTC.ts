@@ -19,7 +19,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   //
   // List of functions to execute after init
   protected _fnQueue: Array<Function>
-  protected _announceURLs: Array<string> = Config.webtorrent.publicURLs
+  protected _announceURLs: Array<string> = Config.webtorrent.trackerURLS || []
 
   constructor() {
     super()
@@ -83,8 +83,17 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @param announceURLs list of announce urls
    * @example
    */
-  setAnnounceURLs(announceURLs: Array<string>) {
-    this._announceURLs = announceURLs
+  setAnnounceURLs(option: string) {
+    /* only set urls when NUXT_ENV_DEVELOPMENT_TRACKER does not exist */
+    if (!Config.webtorrent.trackerURLS) {
+      this._announceURLs =
+        option === 'public'
+          ? Config.webtorrent.publicURLs
+          : [
+              ...Config.webtorrent.satelliteURLS,
+              ...Config.webtorrent.publicURLs,
+            ]
+    }
   }
 
   /**
