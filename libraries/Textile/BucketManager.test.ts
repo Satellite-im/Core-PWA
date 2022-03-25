@@ -9,26 +9,11 @@ describe('BucketManager.default.progressParse', () => {
   let inst47: any
   let inst46: any
   let inst49: any
-  let inst50: any
   let inst43: any
   let inst42: any
   let inst41: any
   let inst44: any
   let inst45: any
-  let inst38: any
-  let inst37: any
-  let inst36: any
-  let inst39: any
-  let inst33: any
-  let inst32: any
-  let inst31: any
-  let inst34: any
-  let inst35: any
-  let inst28: any
-  let inst27: any
-  let inst26: any
-  let inst29: any
-  let inst30: any
   let inst23: any
   let inst22: any
   let inst21: any
@@ -62,27 +47,6 @@ describe('BucketManager.default.progressParse', () => {
     inst46 = new Uint8Array([])
     inst49 = new Uint8Array([])
     DefaultBucketManager = BucketManager.default
-    inst50 = new DefaultBucketManager(
-      {
-        identity: {
-          sign: () => inst46,
-          public: { verify: () => false, bytes: inst47 },
-        },
-        client: inst48,
-        users: hub.Users.withUserAuth(
-          { key: '', sig: '', msg: '', token: undefined },
-          undefined,
-        ),
-        wallet: {
-          mnemonic: '',
-          keypair: web3.Keypair.generate(),
-          path: undefined,
-          address: '',
-        },
-      },
-      { sign: () => inst49, public: null },
-      '',
-    )
     inst43 = new hub.Client(undefined, true)
     inst42 = new Uint8Array([])
     inst41 = new Uint8Array([])
@@ -109,73 +73,9 @@ describe('BucketManager.default.progressParse', () => {
       { sign: () => inst44, public: null },
       '',
     )
-    inst38 = new hub.Client(undefined, true)
-    inst37 = new Uint8Array([])
-    inst36 = new Uint8Array([])
-    inst39 = new Uint8Array([])
     DefaultBucketManager = BucketManager.default
-    inst33 = new hub.Client(undefined, true)
-    inst32 = new Uint8Array([])
-    inst31 = new Uint8Array([])
-    inst34 = new Uint8Array([])
     DefaultBucketManager = BucketManager.default
-    inst35 = new DefaultBucketManager(
-      {
-        identity: {
-          sign: () => inst31,
-          public: { verify: () => false, bytes: inst32 },
-        },
-        client: inst33,
-        users: hub.Users.withUserAuth(
-          {
-            key: 'Elio',
-            sig: '3d4e60b996ff9c5d5788e333a0cba6f238a22c6c0f94788870e1a9ecd482e152',
-            msg: 'Warning: ',
-            token: undefined,
-          },
-          undefined,
-        ),
-        wallet: {
-          mnemonic: '$p3onyycat',
-          keypair: web3.Keypair.generate(),
-          path: undefined,
-          address: '0.0.0.0',
-        },
-      },
-      { sign: () => inst34, public: null },
-      'Ronald Keeling',
-    )
-    inst28 = new hub.Client(undefined, true)
-    inst27 = new Uint8Array([])
-    inst26 = new Uint8Array([])
-    inst29 = new Uint8Array([])
     DefaultBucketManager = BucketManager.default
-    inst30 = new DefaultBucketManager(
-      {
-        identity: {
-          sign: () => inst26,
-          public: { verify: () => false, bytes: inst27 },
-        },
-        client: inst28,
-        users: hub.Users.withUserAuth(
-          {
-            key: 'Elio',
-            sig: '3d4e60b996ff9c5d5788e333a0cba6f238a22c6c0f94788870e1a9ecd482e152',
-            msg: 'Bad Authentication data',
-            token: undefined,
-          },
-          undefined,
-        ),
-        wallet: {
-          mnemonic: 'YouarenotAllowed2Use',
-          keypair: web3.Keypair.generate(),
-          path: undefined,
-          address: '192.168.1.5',
-        },
-      },
-      { sign: () => inst29, public: null },
-      'Becky Bednar',
-    )
     inst23 = new hub.Client(undefined, true)
     inst22 = new Uint8Array([])
     inst21 = new Uint8Array([])
