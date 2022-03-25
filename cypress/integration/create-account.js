@@ -40,7 +40,7 @@ describe('Create Account Validations', () => {
 
     //User Image Input
     cy.createAccountAddImage(filepathCorrect)
-    cy.get('.cropper-container', { timeout: 30000 })
+    cy.get('[data-cy=cropper-container]', { timeout: 60000 })
       .should('be.visible')
       .then(() => {
         cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
@@ -64,19 +64,19 @@ describe('Create Account Validations', () => {
 
     //Attempting to add NSFW image and validating error message is displayed
     cy.createAccountAddImage(filepathNsfw)
-    cy.get('.red', { timeout: 30000 }).should(
+    cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
       'have.text',
       'Unable to upload file/s due to NSFW status',
     )
 
     //Now adding a non-NSFW image and validating user can pass to next step
     cy.createAccountAddImage(filepathCorrect)
-    cy.get('.cropper-container', { timeout: 30000 })
+    cy.get('[data-cy=cropper-container]', { timeout: 60000 })
       .should('be.visible')
       .then(() => {
         cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
       })
-    cy.get('.red').should('not.exist')
+    cy.get('[data-cy=error-message]').should('not.exist')
 
     //Finishing Account Creation
     cy.createAccountSubmit()
@@ -97,7 +97,7 @@ describe('Create Account Validations', () => {
 
     //Attempting to add NSFW image and validating error message is displayed
     cy.createAccountAddImage(filepathNsfw)
-    cy.get('.red', { timeout: 30000 }).should(
+    cy.get('[data-cy=error-message]', { timeout: 30000 }).should(
       'have.text',
       'Unable to upload file/s due to NSFW status',
     )
@@ -108,8 +108,6 @@ describe('Create Account Validations', () => {
     //Validating profile picture is null and default satellite circle is displayed
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('exist')
+    }).should('exist')
   })
 })

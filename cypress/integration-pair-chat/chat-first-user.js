@@ -1,25 +1,27 @@
 const faker = require('faker')
 const recoverySeed =
-  'core radio verb scout shuffle moment pottery maple need ostrich train around{enter}'
+  'lonely dust spring orphan pulp angry mystery bracket pottery metal bright damp{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const redirectedURL = 'http://localhost:3000/#/auth/unlock' // URL redirected from root
 const longMessage = faker.lorem.words(250) // generate random sentence
 
 describe('Chat features with two accounts at the same time - First User', () => {
   before(() => {
-    //Visit root page
+    //Delete database before starting
+    new Cypress.Promise(async (resolve) => {
+      const req = indexedDB.deleteDatabase('SatelliteDB')
+      req.onsuccess = function () {
+        resolve()
+      }
+    })
+
+    //Remove local storage, cookies and then visit root page
     cy.window().then((win) => {
       win.sessionStorage.clear()
     })
+    cy.clearCookies()
+    cy.wait(1000)
     cy.visit('/')
-    cy.url().then(($url) => {
-      if (!($url === redirectedURL)) {
-        cy.clearLocalStorage()
-        cy.clearCookies()
-        cy.wait(100)
-        cy.visit('/')
-      }
-    })
 
     //Import account
     cy.url().should('contain', '#/auth/unlock')
@@ -47,9 +49,9 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.contains('Chat User A', { timeout: 300000 }).should('be.visible')
     //Attempt 3 times to ensure that if first account loads before, second account will see the typing indicator
     for (let times = 0; times < 3; times++) {
-      cy.get('.editable-input')
+      cy.get('[data-cy=editable-input]')
         .should('be.visible')
-        .click()
+        .trigger('input')
         .type(longMessage)
         .clear()
     }

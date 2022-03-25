@@ -1,21 +1,21 @@
 const faker = require('faker')
 const recoverySeedAccountOne =
-  'core radio verb scout shuffle moment pottery maple need ostrich train around{enter}'
+  'lonely dust spring orphan pulp angry mystery bracket pottery metal bright damp{enter}'
 const recoverySeedAccountTwo =
-  'festival drastic visual aisle noble off cousin stairs arm seat agent table{enter}'
+  'urban clump gather december smoke upset chicken spice steel hope doll pigeon{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts - First User', () => {
+describe('Chat features with two accounts', () => {
   before(() => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
   })
 
-  it('Ensure chat window from second account is displayed', () => {
+  it('Ensure chat window from first account is displayed', () => {
     //Validate Chat Screen is loaded
     cy.contains('Chat User A', { timeout: 240000 }).should('be.visible')
   })
@@ -46,6 +46,10 @@ describe.skip('Chat features with two accounts - First User', () => {
       })
   })
 
+  it('Glyphs messages cannot be edited', () => {
+    cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
+  })
+
   it('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath)
     cy.get('[data-cy=chat-image]')
@@ -56,6 +60,10 @@ describe.skip('Chat features with two accounts - First User', () => {
       .then((imgSrcValue) => {
         imageURL = imgSrcValue
       })
+  })
+
+  it('Image messages cannot be edited', () => {
+    cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
   it('Send file to user B', () => {
@@ -70,6 +78,10 @@ describe.skip('Chat features with two accounts - First User', () => {
       })
   })
 
+  it('File messages cannot be edited', () => {
+    cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
+  })
+
   it('Ensure chat window from second account is displayed', () => {
     cy.importAccount(randomPIN, recoverySeedAccountTwo)
     cy.contains('Chat User B', { timeout: 180000 }).should('be.visible')
@@ -79,6 +91,11 @@ describe.skip('Chat features with two accounts - First User', () => {
     //Adding assertion to validate that messages are displayed
     cy.waitForMessagesToLoad()
     cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
+  })
+
+  it('Message not sent by same user cannot be edited', () => {
+    cy.contains(randomMessage).last().as('lastmessage')
+    cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
   })
 
   it('Assert emoji received from user A', () => {

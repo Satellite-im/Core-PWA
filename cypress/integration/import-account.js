@@ -24,7 +24,7 @@ describe('Import Account Validations', () => {
       .should('be.visible')
       .click()
       .type(
-        'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}',
+        'veteran intact there despair unique trouble season rebel sort file unit hard{enter}',
         { log: false },
         { force: true },
       )
