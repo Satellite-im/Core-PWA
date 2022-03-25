@@ -8,7 +8,7 @@ describe('Import Account Validations', () => {
       .should('be.visible')
       .click()
     cy.get('[data-cy=add-passphrase]').should('be.visible').click().type('b')
-    cy.contains('baby').click()
+    cy.contains('bag').click()
     cy.get('.tag').should('be.visible')
   })
 
