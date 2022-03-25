@@ -18,17 +18,13 @@
     <UiScroll verticalScroll v-if="!horizontal">
       <div id="list-container">
         <UiHorizontalRule v-if="unreads.length > 0" />
-
         <div
-          class="unread"
+          class="unreads"
           v-for="user in unreads"
-          v-on:click="$router.push('/chat/direct')"
         >
-          <UiCircle type="random" :size="40" :seed="user.address" />
-          <span class="label">{{user.count}}</span>
+          <Unread :key="user.address" :user="user" :active="$route.params.address === user.address"/>
         </div>
-
-        <UiHorizontalRule v-if="unreads.length > 0" />
+        <UiHorizontalRule v-if="servers.length > 0" />
         <UiComingSoon :tooltipText="$t('coming_soon.communities')">
           <div
             class="server"
@@ -47,13 +43,10 @@
     </UiScroll>
     <div id="list-container" v-else>
       <div
-        class="unread has-tooltip-bottom has-tooltip-primary"
+        class="unreads"
         v-for="user in unreads"
-        v-on:click="$router.push('/chat/direct')"
-        :data-tooltip="user.name"
       >
-        <UiCircle type="random" :size="40" :seed="user.address" />
-        <span class="label">{{user.count}}</span>
+        <Unread :key="user.address" :user="user" :active="$route.params.address === user.address"/>
       </div>
       <div
         class="server has-tooltip-bottom has-tooltip-primary"
