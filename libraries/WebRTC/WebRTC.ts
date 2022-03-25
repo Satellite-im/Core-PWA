@@ -93,6 +93,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
               ...Config.webtorrent.satelliteURLS,
               ...Config.webtorrent.publicURLs,
             ]
+      Vue.prototype.$Logger.log('Signaling URLS', this._announceURLs)
     }
   }
 
