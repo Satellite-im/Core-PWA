@@ -15,9 +15,6 @@ export default Vue.extend({
       await this.$store.dispatch('accounts/generateWallet')
       this.$router.push('phrase')
     },
-    isDisabled() {
-      return !this.settings.ownInfo && this.settings.serverType === 'own'
-    },
   },
 })
 </script>
