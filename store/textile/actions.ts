@@ -906,7 +906,7 @@ export default {
    * @description Search for text within the specified conversations
    * @param param0 Action Arguments
    * @param param1 an object containing the query options, accounts, page, and limit,
-   * a search result object is returned
+   * @returns  search result object
    */
   async searchConversations(
     { state }: ActionsArguments<TextileState>,

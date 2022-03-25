@@ -139,14 +139,14 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <InteractablesSearchInput
+    <SearchInput
       v-if="!$device.isMobile"
       @search="handleSearch"
       @change="handleChange"
       :placeholder="$t('search.search')"
       :searchRecommend="searchRecommend"
     />
-    <InteractablesSearchResult
+    <SearchResult
       v-if="!$device.isMobile"
       :searchQuery="searchQuery"
       :show="showSearchResult"

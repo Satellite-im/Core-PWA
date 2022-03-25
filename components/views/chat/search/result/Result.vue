@@ -81,10 +81,7 @@ export default Vue.extend({
      * @returns
      */
     userOptions() {
-      return this.result &&
-        this.result.recommends &&
-        this.result.recommends.users &&
-        this.result.recommends.users.length > 0
+      return this.result?.recommends?.users?.length > 0
         ? this.result.recommends.users
         : []
     },
@@ -94,10 +91,7 @@ export default Vue.extend({
      * @returns
      */
     channelOptions() {
-      return this.result &&
-        this.result.recommends &&
-        this.result.recommends.channels &&
-        this.result.recommends.channels.length > 0
+      return this.result?.recommends?.channels?.length > 0
         ? this.result.recommends.channels
         : []
     },

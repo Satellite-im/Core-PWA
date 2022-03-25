@@ -1,4 +1,4 @@
-import * as SearchQuery from '~/components/interactables/Search/SearchQuery'
+import * as SearchQuery from '~/components/views/chat/search/SearchQuery'
 import * as search from '~/types/search/search'
 
 const SearchQueryDefault = SearchQuery.default
