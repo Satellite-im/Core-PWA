@@ -35,6 +35,7 @@ const commonProperties = [
   'chat.files',
   'groups.subscriptionId',
   'ui.modals',
+  'ui.isScrollOver',
 ]
 
 const propertiesNoStorePin = [

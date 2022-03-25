@@ -4,7 +4,9 @@
   v-on:scroll="onScrolled"
   v-scroll-lock="true"
 >
-  <slot />
+  <div ref="scrollContent" class="chat-scroll-content">
+    <slot />
+  </div>
   <div
     v-if="$store.state.ui.unreadMessage > 0"
     :class="this.$store.state.ui.mediaOpen ? 'new-message-alert' : 'new-message-alert offset'"

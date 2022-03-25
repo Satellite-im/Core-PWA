@@ -1,6 +1,6 @@
 <template src="./Scroll.html" />
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
@@ -21,7 +21,7 @@ export default Vue.extend({
     },
     preventScrollOffset: {
       type: Number,
-      default: 500,
+      default: 10,
       required: false,
     },
     enableWrap: {
@@ -30,26 +30,24 @@ export default Vue.extend({
       required: false,
     },
     user: {
-     type: Object as PropType<User>,
+      type: Object as PropType<User>,
       default: () => ({
         name: '',
         address: '',
         status: '',
       }),
       required: true,
-    }
+    },
   },
   data() {
     return {
-      loaded: false,
       newMessageAlert: false,
+      scrollContainerObserver: null,
+      scrollContentObserver: null,
     }
   },
   computed: {
     ...mapState(['ui', 'textile']),
-    messages() {
-        return this.textile.conversations[this.user.address]?.messages
-    },
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
@@ -59,29 +57,35 @@ export default Vue.extend({
     },
   },
   watch: {
-    'textile.conversationLoading'(newValue, oldValue) {
-      if (newValue !== oldValue) {
-           this.autoScrollToBottom()
-      }
-    },
+    // Once a new message is sent
     'textile.messageLoading'(value) {
       if (value === true) {
-           this.autoScrollToBottom()
-      }
-    },
-     messages(newValue, oldValue) {
-      if(newValue !== oldValue) {
         this.autoScrollToBottom()
       }
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.autoScrollToBottom()
+    const scrollContainerObserver = new ResizeObserver(() => {
+      // Autoscroll to the bottom only if the user is at the bottom of the chat
+      !this.ui.isScrollOver && this.autoScrollToBottom()
     })
+
+    this.scrollContainerObserver = scrollContainerObserver.observe(
+      this.$refs.scrollRef,
+    )
+
+    const scrollContentObserver = new ResizeObserver(() => {
+      // Autoscroll to the bottom only if the user is at the bottom of the chat
+      !this.ui.isScrollOver && this.autoScrollToBottom()
+    })
+
+    this.scrollContentObserver = scrollContentObserver.observe(
+      this.$refs.scrollContent,
+    )
   },
   beforeDestroy() {
-    this.loaded = false
+    if (this.scrollContainerObserver) this.scrollContainerObserver.disconnect()
+    if (this.scrollContentObserver) this.scrollContentObserver.disconnect()
   },
   methods: {
     /**
@@ -93,7 +97,6 @@ export default Vue.extend({
       if (this.$el && this.autoScroll) {
         this.$nextTick(() => {
           this.$el.scrollTop = this.$el.scrollHeight
-          this.loaded = true
           this.$store.dispatch('ui/setIsScrollOver', false)
         })
       }
@@ -107,10 +110,11 @@ export default Vue.extend({
       if (!this.$el) return
 
       if (
-        Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
-        !this.ui.isScrollOver
+        this.$el.scrollHeight - this.preventScrollOffset >
+        this.$el.scrollTop + this.$el.clientHeight
       ) {
-        this.$store.dispatch('ui/setIsScrollOver', true)
+        if (!this.ui.isScrollOver)
+          this.$store.dispatch('ui/setIsScrollOver', true)
         return
       }
 

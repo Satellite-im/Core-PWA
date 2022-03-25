@@ -62,7 +62,7 @@
               :fullscreen-max-viewable-users="20"
             />
             <UiChatScroll
-              :prevent-scroll-offset="500"
+              :prevent-scroll-offset="10"
               :class="
                 $store.state.friends.all.find(
                   (friend) => friend.address === $store.state.webrtc.activeCall,
