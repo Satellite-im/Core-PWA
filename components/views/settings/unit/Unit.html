@@ -1,6 +1,6 @@
 <div class="column unit">
   <TypographyTitle v-if="title.length" :size="6" :text="title" />
   <TypographyText v-if="text.length" :text="text" />
-  <br v-if="text.length" />
+  <br v-if="text.length && breakLine" />
   <slot></slot>
 </div>

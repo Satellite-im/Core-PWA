@@ -38,10 +38,19 @@
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
       :text="$t('pages.privacy.serverType.subtitle')"
+      :breakLine="false"
     >
+      <TypographyText
+        class="color-danger"
+        type="danger"
+        :size="6"
+        :text="$t('pages.privacy.serverType.warning')"
+      />
+      <br />
       <InteractablesSelect
         :options="serverTypes"
         v-model="serverType"
+        @change="onServerTypeChanged"
         size="small"
         class="form-control"
       />

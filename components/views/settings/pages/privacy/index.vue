@@ -85,6 +85,11 @@ export default Vue.extend({
       },
     },
   },
+  methods: {
+    onServerTypeChanged() {
+      location.reload()
+    },
+  },
 })
 </script>
 

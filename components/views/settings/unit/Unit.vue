@@ -11,6 +11,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    breakLine: {
+      type: Boolean,
+      default: true,
+    },
   },
 })
 </script>
