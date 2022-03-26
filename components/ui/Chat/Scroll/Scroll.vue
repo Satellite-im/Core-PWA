@@ -8,12 +8,6 @@ import { ChevronDownIcon } from 'satellite-lucide-icons'
 
 import { User } from '~/types/ui/user'
 
-function doubleRaf(callback) {
-  requestAnimationFrame(() => {
-    requestAnimationFrame(callback)
-  })
-}
-
 export default Vue.extend({
   name: 'Scroll',
   components: {
