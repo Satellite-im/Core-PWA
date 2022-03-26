@@ -1,13 +1,14 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'black blossom pink damage together artwork coil west clown turn chimney physical'
+  'atom sure lecture jungle capital adjust mango increase pizza destroy entire second'
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
 describe.skip('Snapshots Testing', () => {
   //Import account and snapshot on each screen
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
+
   it('Import account - PIN screen', () => {
     cy.importAccountPINscreen(randomPIN, false, true)
   })
@@ -42,9 +43,9 @@ describe.skip('Snapshots Testing', () => {
   })
 
   it('Import account - Main Screen Loaded', () => {
-    cy.contains('SnapQA', { timeout: 60000 })
+    cy.contains('Snap QA', { timeout: 60000 })
     cy.get('body').realClick({ position: 'topLeft' })
-    cy.snapshotTestContains('SnapQA')
+    cy.snapshotTestContains('Snap QA')
   })
 
   it('Import account - Go to files', () => {

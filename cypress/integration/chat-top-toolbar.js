@@ -1,15 +1,15 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
+  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Toolbar Tests', () => {
   before(() => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     //Ensure messages are displayed before starting
-    cy.contains('sadad', { timeout: 180000 }).should('be.visible')
+    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
     cy.get('.toggle-sidebar').should('be.visible').click()
     cy.waitForMessagesToLoad()
   })

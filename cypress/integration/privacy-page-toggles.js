@@ -59,9 +59,7 @@ describe('Privacy Page Toggles Tests', () => {
     cy.createAccountSubmit()
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
     //Going to Settings and Privacy screen
     cy.get('[data-tooltip="Settings"] > .is-rounded > svg', {
       timeout: 30000,

@@ -1,6 +1,6 @@
 const faker = require('faker')
 const userPassphrase =
-  'boring over tilt regret diamond rubber example there fire roof sheriff always'
+  'veteran intact there despair unique trouble season rebel sort file unit hard'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe('Unlock pin should be persisted when store pin is enabled', () => {
@@ -18,9 +18,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     //Wait until main page is loaded after creating account
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
 
     // Go to main URL again and validate that user is prompt to enter pin again
     cy.visit('/').then(() => {
@@ -42,9 +40,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     //Wait until main page is loaded after creating account
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
 
     // Go to main URL again and validate that user is redirected to chat screen and pin was saved
     cy.visit('/').then(() => {
@@ -64,9 +60,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     //Wait until main page is loaded after importing account
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
 
     // Go to main URL again and validate that user is prompt to enter pin again
     cy.visit('/').then(() => {
@@ -84,9 +78,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     //Wait until main page is loaded after importing account
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
 
     // Go to main URL again and validate that user is redirected to chat screen and pin was saved
     cy.visit('/').then(() => {

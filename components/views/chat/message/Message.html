@@ -3,9 +3,7 @@
   :class="textile.messageLoading ? 'loading' : ''"
   @contextmenu="contextMenu"
 >
-  <div
-    :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
-  >
+  <div :class="`message-container ${message.pinned ? 'pinned-message' : ''}`">
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
       Archived
@@ -40,7 +38,11 @@
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
       </span>
-      <span class="status edited" v-else-if="message.editedAt">
+      <span
+        class="status edited"
+        data-cy="message-edited"
+        v-else-if="message.editedAt"
+      >
         ({{$t('ui.edited')}})
       </span>
     </template>

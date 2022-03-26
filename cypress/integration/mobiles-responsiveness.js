@@ -8,7 +8,7 @@ const filepathCorrect = 'images/logo.png'
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
+  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 
 describe.skip('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
@@ -32,7 +32,7 @@ describe.skip('Run responsiveness tests on several devices', () => {
 
       //User Image Input
       cy.createAccountAddImage(filepathCorrect)
-      cy.get('.cropper-container', { timeout: 30000 })
+      cy.get('[data-cy=cropper-container]', { timeout: 30000 })
         .should('be.visible')
         .then(() => {
           cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
@@ -52,7 +52,7 @@ describe.skip('Run responsiveness tests on several devices', () => {
       cy.viewport(item.width, item.height)
 
       //Validate profile name displayed
-      cy.chatFeaturesProfileName('sadad')
+      cy.chatFeaturesProfileName('cypress')
 
       // Click on hamburger menu if width < height
       cy.get('.toggle-sidebar').should('be.visible').click()

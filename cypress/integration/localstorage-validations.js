@@ -1,9 +1,12 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
+  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 
 describe('Verify passphrase does not get stored in localstorage', () => {
+  before(() => {
+    cy.clearDatabase()
+  })
   it('Passphrase in localstorage does not exist before creating account', () => {
     cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
@@ -19,9 +22,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
     //Wait until main page is loaded after creating account
     cy.get('[data-cy=user-state]', {
       timeout: 120000,
-    })
-      .scrollIntoView()
-      .should('be.visible')
+    }).should('be.visible')
 
     // Go to main URL and validate that previous passphrase is not stored in localstorage
     cy.visit('/').then(() => {
@@ -30,6 +31,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it('Passphrase in localstorage does not exist before importing an account', () => {
+    cy.clearDatabase()
     cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
         cy.validatePassphraseLocalStorage()
@@ -42,7 +44,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Wait until main page is loaded after importing account
-    cy.contains('sadad', { timeout: 60000 }).should('be.visible')
+    cy.contains('cypress', { timeout: 60000 }).should('be.visible')
 
     // Go to URL and validate that previous passphrase is not stored in localstorage
     cy.visit('/').then(() => {

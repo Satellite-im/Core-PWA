@@ -1,24 +1,26 @@
 const faker = require('faker')
 const recoverySeed =
-  'festival drastic visual aisle noble off cousin stairs arm seat agent table{enter}'
+  'urban clump gather december smoke upset chicken spice steel hope doll pigeon{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const redirectedURL = 'http://localhost:3000/#/auth/unlock' // URL redirected from root
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   before(() => {
-    //Visit root page
+    //Delete database before starting
+    new Cypress.Promise(async (resolve) => {
+      const req = indexedDB.deleteDatabase('SatelliteDB')
+      req.onsuccess = function () {
+        resolve()
+      }
+    })
+
+    //Remove local storage, cookies and then visit root page
     cy.window().then((win) => {
       win.sessionStorage.clear()
     })
+    cy.clearCookies()
+    cy.wait(1000)
     cy.visit('/')
-    cy.url().then(($url) => {
-      if (!($url === redirectedURL)) {
-        cy.clearLocalStorage()
-        cy.clearCookies()
-        cy.wait(100)
-        cy.visit('/')
-      }
-    })
 
     //Import account
     cy.url().should('contain', '#/auth/unlock')

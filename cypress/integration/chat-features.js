@@ -5,16 +5,16 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const randomTextToCopy = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'boring over tilt regret diamond rubber example there fire roof sheriff always{enter}'
+  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 let imageURL
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     //Validate profile name displayed
-    cy.chatFeaturesProfileName('sadad')
+    cy.chatFeaturesProfileName('cypress')
 
     // Click on hamburger menu if width < height
     cy.get('.toggle-sidebar').should('be.visible').click()
@@ -30,6 +30,12 @@ describe.skip('Chat Features Tests', () => {
 
   it('Chat - Edit message on chat', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
+  })
+
+  it('Chat - Message edited shows edited status', () => {
+    cy.contains(randomNumber)
+      .siblings('[data-cy=message-edited]')
+      .should('contain', '(edited)')
   })
 
   it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
@@ -91,13 +97,13 @@ describe.skip('Chat Features Tests', () => {
       .should('equal', randomTextToCopy)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
-        cy.get('.editable-input').realClick().paste({
+        cy.get('[data-cy=editable-input]').realClick().paste({
           pasteType: 'text',
           pastePayload: clipboardText,
         })
       })
     //Validating that editable input text matches with pasted value
-    cy.get('.editable-input').should('have.text', randomTextToCopy)
+    cy.get('[data-cy=editable-input]').should('have.text', randomTextToCopy)
   })
 
   it.skip('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
@@ -120,7 +126,7 @@ describe.skip('Chat Features Tests', () => {
       .its('navigator.clipboard')
       .invoke('read')
       .then((clipboardImageURL) => {
-        cy.get('.editable-input').realClick().paste({
+        cy.get('[data-cy=editable-input]').realClick().paste({
           pasteType: 'url',
           pastePayload: clipboardImageURL,
         })

@@ -10,6 +10,7 @@
       :contenteditable="enabled"
       autocapitalize="off"
       class="editable-input"
+      data-cy="editable-input"
       @selectstart="onSelectStart"
       @input="onInput"
       @keydown="handleInputKeydown"
