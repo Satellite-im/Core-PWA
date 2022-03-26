@@ -95,10 +95,10 @@ export default Vue.extend({
      */
     autoScrollToBottom() {
       if (this.$el && this.autoScroll) {
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.$el.scrollTop = this.$el.scrollHeight
           this.$store.dispatch('ui/setIsScrollOver', false)
-        })
+        }, 0)
       }
     },
     /**
