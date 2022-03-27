@@ -17,10 +17,14 @@ const mutations = {
   },
   setGroupMembersInfo(
     state: GroupsState,
-    { groupId, info }: { groupId: string; info: GroupMemberInfo[] },
+    {
+      groupId,
+      info,
+      addresses,
+    }: { groupId: string; info: GroupMemberInfo[]; addresses: string[] },
   ) {
     state.all = state.all.map((item) =>
-      item.id !== groupId ? item : { ...item, membersInfo: info },
+      item.id !== groupId ? item : { ...item, membersInfo: info, addresses },
     )
   },
 }

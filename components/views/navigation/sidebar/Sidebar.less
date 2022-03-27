@@ -144,14 +144,18 @@
   }
 }
 
+.sidebar-selector {
+  align-self: flex-end;
+}
+
 .flexy {
   display: inline-flex;
-
   .quick-chat {
     padding-left: @light-spacing;
     display: inline-flex;
-    justify-items: center;
-    align-items: center;
+    justify-items: flex-end;
+    align-self: flex-end;
+    float: right;
     cursor: pointer;
     width: auto;
     z-index: @base-z-index + 4;

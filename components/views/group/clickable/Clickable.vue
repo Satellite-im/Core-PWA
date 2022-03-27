@@ -1,4 +1,4 @@
-<template src="./Group.html"></template>
+<template src="./Clickable.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -51,4 +51,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Group.less"></style>
+<style scoped lang="less" src="./Clickable.less"></style>

@@ -18,6 +18,7 @@ import { DataStateType } from '~/store/dataState/types'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
+import { Group } from '~/store/groups/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -64,6 +65,10 @@ export default Vue.extend({
       set(value: Boolean) {
         this.$store.commit('ui/showSidebarUsers', value)
       },
+    },
+    usersAndGroups() {
+      const combined = [...this.$props.users, ...this.groups.all]
+      return combined.sort((a, b) => a.lastUpdate - b.lastUpdate)
     },
     sortedGroups() {
       return sortBy(this.groups.all, 'name')
