@@ -177,17 +177,11 @@ export default Vue.extend({
       )[0]
 
       // copy to clipboard if png, otherwise convert
-      try {
-        await this.$envinfo.navigator.clipboard.write([
-          new ClipboardItem({
-            'image/png': type === 'image/png' ? blob : this.toPng(blob),
-          }),
-        ])
-      } catch (e: any) {
-        this.$Logger.log('Error', e)
-        this.$toast.show(this.$t('errors.chat.unsupported_type') as string)
-        return
-      }
+      await this.$envinfo.navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': type === 'image/png' ? blob : this.toPng(blob),
+        }),
+      ])
       this.$toast.show(this.$t('ui.copied') as string)
     },
     /**
