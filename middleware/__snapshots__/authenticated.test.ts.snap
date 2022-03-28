@@ -2,7 +2,11 @@
 
 exports[` all prerequisites not ready 1`] = `undefined`;
 
+exports[` eventuallyRedirect(' / ') 1`] = `undefined`;
+
 exports[` param3 path included in config 1`] = `undefined`;
+
+exports[` route.path === path 1`] = `undefined`;
 
 exports[` store.commit called 1`] = `undefined`;
 
