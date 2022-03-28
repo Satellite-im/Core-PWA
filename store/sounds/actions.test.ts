@@ -1,3 +1,4 @@
+import { Howler } from 'howler'
 import actions from './actions'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
@@ -58,5 +59,28 @@ describe('Manage sounds', () => {
     )
 
     expect(result).toMatchSnapshot()
+  })
+
+  test('setMuteSounds', () => {
+    const spy = jest.spyOn(Howler, 'mute')
+    inst.setMuteSounds(
+      {
+        state: {
+          newMessage: true,
+          hangup: true,
+          call: true,
+          mute: false,
+          unmute: true,
+          deafen: true,
+          undeafen: true,
+          upload: true,
+          connected: true,
+        },
+      },
+      false,
+    )
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenLastCalledWith(false)
   })
 })
