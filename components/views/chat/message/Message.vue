@@ -174,13 +174,13 @@ export default Vue.extend({
       const blob = await data.blob()
       const type = filetypemime(
         new Uint8Array(await blob.slice(0, 256).arrayBuffer()),
-      )
+      )[0]
 
       // copy to clipboard if png, otherwise convert
       try {
         await this.$envinfo.navigator.clipboard.write([
           new ClipboardItem({
-            'image/png': type[0] === 'image/png' ? blob : this.toPng(blob),
+            'image/png': type === 'image/png' ? blob : this.toPng(blob),
           }),
         ])
       } catch (e: any) {
