@@ -20,6 +20,7 @@ import { AccountsState, AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -943,6 +944,11 @@ export default {
       },
     )
 
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
+
+    // const friend = await usersProgram.getUserInfo()
+    // console.log(friend)
     const skip = (page - 1) * perPage
     const list = result?.splice(skip, perPage).map((match) => ({
       ...match,

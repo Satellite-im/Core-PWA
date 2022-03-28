@@ -554,6 +554,7 @@ export default {
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',
+      no_results: 'No results',
     },
   },
   media: {

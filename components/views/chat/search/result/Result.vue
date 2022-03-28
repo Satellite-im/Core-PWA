@@ -32,10 +32,6 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    show: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -63,7 +59,7 @@ export default Vue.extend({
      * @returns
      */
     DataStateType: () => DataStateType,
-    ...mapState(['dataState', 'search', 'friends', 'accounts']),
+    ...mapState(['dataState', 'friends', 'accounts']),
     loading: {
       set(state: DataStateType) {
         this.$store.commit('dataState/setDataState', {
@@ -101,22 +97,10 @@ export default Vue.extend({
      * @returns
      */
     givenQueryItems() {
-      return this.search.query.split(' ')
+      return this.searchQuery.split(' ')
     },
   },
   watch: {
-    /**
-     * @method saerchQuery DocsTODO
-     * @description
-     * @param
-     * @returns
-     */
-    searchQuery(query) {
-      if (!this.show || query !== this.searchQuery) {
-        return
-      }
-      this.fetchResult(query)
-    },
     date: {
       handler(newDateValue) {
         this.$data.queryOptions = {
@@ -128,18 +112,9 @@ export default Vue.extend({
         }
       },
     },
-    queryOptions: {
-      async handler(newQOptions) {
-        this.$data.result = await this.$store.dispatch(
-          'textile/searchConversations',
-          {
-            query: newQOptions,
-            page: this.$data.page,
-            accounts: this.accounts,
-          },
-        )
-      },
-    },
+  },
+  mounted() {
+    this.fetchResult(this.searchQuery)
   },
   methods: {
     /**

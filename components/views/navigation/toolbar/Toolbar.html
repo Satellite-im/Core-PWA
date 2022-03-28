@@ -147,9 +147,8 @@
       :searchRecommend="searchRecommend"
     />
     <SearchResult
-      v-if="!$device.isMobile"
+      v-if="!$device.isMobile && searchQuery"
       :searchQuery="searchQuery"
-      :show="showSearchResult"
       :user="user"
       @toggle="toggleSearchResult"
     />
