@@ -41,7 +41,7 @@
     }
     .tabs {
       padding: 0 @large-spacing;
-      border-bottom: 1px solid @gray;
+      border-bottom: 1px solid rgba(@gray, 0.5);
     }
     .buttons {
       padding-bottom: @normal-spacing;
@@ -53,6 +53,7 @@
     }
     .scroll-area {
       padding: 0 @large-spacing 0 @large-spacing;
+      margin: auto;
       max-height: 250px;
       @media only screen and (max-width: @mobile-breakpoint) {
         max-height: calc(var(--app-height) - 468px);
