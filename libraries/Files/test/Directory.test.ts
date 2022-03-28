@@ -59,7 +59,8 @@ describe('Test FileSystem Directory', () => {
     }
   })
   it("Incorrectly adds directory's ancestor as a child of itself", () => {
-    const topLevelDirectory = new Directory({ name: 'level1' })
+    const topLevelDirectory = new Directory({ name: false })
+    expect(topLevelDirectory.size).toEqual(0)
     const secondLevelDirectory = new Directory({ name: 'level2' })
     const thirdLevelDirectory = new Directory({ name: 'level3' })
     try {
