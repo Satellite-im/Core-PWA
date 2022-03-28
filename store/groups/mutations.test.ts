@@ -162,14 +162,4 @@ describe('mutations.default.setGroupMembers', () => {
     mutations.default.setGroupMembers(state, m3)
     expect(state.members).toMatchSnapshot()
   })
-  //
-  // test('4', () => {
-  //   const result: any = mutations.default.setGroupMembers(state(), '9876')
-  //   expect(result).toMatchSnapshot()
-  // })
-  //
-  // test('5', () => {
-  //   const result: any = mutations.default.setGroupMembers(state(), '')
-  //   expect(result).toMatchSnapshot()
-  // })
 })
