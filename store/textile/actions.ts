@@ -96,8 +96,15 @@ export default {
         .where({ conversation: address })
         .toArray()) || []
 
-    const lastInbound =
-      rootState.textile.conversations[address]?.lastInbound ?? 0
+    const lastDbInbound = dbMessages.reduce(
+      (max, msg) => Math.max(max, msg.at),
+      0,
+    )
+
+    const lastInbound = Math.max(
+      lastDbInbound,
+      rootState.textile.conversations[address]?.lastInbound ?? 0,
+    )
 
     // if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
@@ -131,7 +138,7 @@ export default {
     db.conversations.put(dbData)
     db.conversationMessages.bulkPut(messages)
     // add the messages to the search index
-    db.search.conversationMessages.addAll(messages)
+    db.search.conversationMessages.update(messages)
 
     commit('setConversation', {
       address: friend.address,
