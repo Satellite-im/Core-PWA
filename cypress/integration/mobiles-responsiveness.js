@@ -10,11 +10,11 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
   'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 
-describe.skip('Run responsiveness tests on several devices', () => {
+describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
   data.allDevices.forEach((item) => {
-    it(`Create Account on ${item.description}`, () => {
+    it.skip(`Create Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.createAccountPINscreen(randomPIN)
 
@@ -32,7 +32,7 @@ describe.skip('Run responsiveness tests on several devices', () => {
 
       //User Image Input
       cy.createAccountAddImage(filepathCorrect)
-      cy.get('[data-cy=cropper-container]', { timeout: 30000 })
+      cy.get('[data-cy=cropper-container]', { timeout: 60000 })
         .should('be.visible')
         .then(() => {
           cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
@@ -66,7 +66,45 @@ describe.skip('Run responsiveness tests on several devices', () => {
       cy.chatFeaturesEditMessage(randomMessage, randomNumber)
     })
 
-    it(`Release Notes Screen on ${item.description}`, () => {
+    it(`Chat - Marketplace - Coming Soon modal content on ${item.description}`, () => {
+      cy.get('[data-cy=toolbar-marketplace]').click()
+      cy.validateComingSoonModal()
+    })
+
+    it(`Chat - Marketplace - Coming Soon modal button URL on ${item.description}`, () => {
+      cy.validateURLComingSoonModal()
+    })
+
+    it(`Chat - Marketplace - Coming Soon modal can be dismissed on ${item.description}`, () => {
+      cy.closeModal('[data-cy=modal-cta]')
+    })
+
+    it(`Chat - Glyph Pack screen is displayed on ${item.description}`, () => {
+      cy.chatFeaturesSendGlyph()
+      cy.goToLastGlyphOnChat().click()
+      cy.validateGlyphsModal()
+    })
+
+    it(`Chat - Glyph Pack - Coming Soon modal on ${item.description}`, () => {
+      cy.contains('View Glyph Pack').click()
+      cy.get('[data-cy=modal-cta]').should('be.visible')
+      cy.closeModal('[data-cy=modal-cta]')
+    })
+
+    it(`Chat - Glyph Pack screen can be dismissed on ${item.description}`, () => {
+      cy.goToLastGlyphOnChat().click()
+      cy.get('[data-cy=glyphs-modal]').should('be.visible')
+      cy.closeModal('[data-cy=glyphs-modal]')
+    })
+
+    it(`Chat - Glyphs Selection - Coming soon modal on ${item.description}`, () => {
+      cy.get('#glyph-toggle').click()
+      cy.get('[data-cy=glyphs-marketplace]').click()
+      cy.get('[data-cy=modal-cta]').should('be.visible')
+      cy.closeModal('[data-cy=modal-cta]')
+    })
+
+    it.skip(`Release Notes Screen on ${item.description}`, () => {
       cy.visitRootPage().then(() => {
         cy.viewport(item.width, item.height)
       })
