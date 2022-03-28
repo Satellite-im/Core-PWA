@@ -1,6 +1,6 @@
 <div class="search-container" v-click-outside="lostFocus">
-  <div :class="{'search-box': true, focus: isFocus}">
-    <div :class="{'search-placeholder': true, hide: !isEmpty}">
+  <div class="search-box" :class="{'focus' : isFocus}">
+    <div class="search-placeholder" :class="{'hide' : !isEmpty}">
       {{placeholder}}
     </div>
     <div class="search-icon">
@@ -18,7 +18,7 @@
       @input="input"
     ></div>
   </div>
-  <div class="search-options" v-if="false">
+  <!-- <div class="search-options" v-if="isOption">
     <ul class="search-option-group">
       <li class="search-option-heading">
         {{$t('search.input.search_options')}}
@@ -42,8 +42,8 @@
         </li>
       </template>
     </ul>
-  </div>
-  <div :class="{'search-recommends': true}" v-if="isSearch">
+  </div> -->
+  <div class="search-recommends" v-if="isSearch">
     <ul class="search-recommend-group">
       <li class="search-for">
         {{$t('search.input.search_for')}} {{searchFor}}
@@ -64,10 +64,6 @@
     :class="{'date-selection': true}"
     v-if="isDate && isFocus"
   >
-    <v-calendar
-      is-dark
-      @dayclick="clickDateOption"
-      :max-date="new Date()"
-    ></v-calendar>
+    <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" />
   </div>
 </div>
