@@ -1,16 +1,17 @@
-<div id="conversation" v-scroll-lock="true">
-  <UiLoadersMessage :count="3" v-if="loading" />
-  <div class="group" v-for="group in messages" v-else>
-    <div v-if="group.type === 'group'">
-      <Group :group="group" :key="group.id" :groupId="groupId" />
+<div id="conversation" ref="conversation">
+  <virtual-list class="virtual-list" ref="vsl"
+    :data-key="'id'"
+    :data-sources="messages"
+    :data-component="itemComponent"
+    :extra-props="{groupId: groupId}"
+    :start="messages.length - 1"
+                header-class="virtual-list-header"
+  >
+    <div slot="header">
+      <UiChatEncrypted v-if="$route.params.address" />
+      <UiLoadersMessage :count="3" v-if="loading" />
     </div>
-    <div v-if="group.type === 'caret_divider'">
-      <UiCaretDivider text="New Messages" />
-    </div>
-    <div v-else-if="group.type === 'divider'">
-      <TypographyHorizontalRuleText :value="group.at.toString()" />
-    </div>
-  </div>
+  </virtual-list>
   <div v-if="textile.messageLoading" class="zoop">
     <UiLoadersLoadingBar />
   </div>

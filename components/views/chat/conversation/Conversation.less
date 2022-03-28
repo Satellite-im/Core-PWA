@@ -1,8 +1,44 @@
 #conversation {
-  padding: @normal-spacing;
+  //height: 100%;
 
   .separator {
     margin: @normal-spacing 3rem;
+  }
+
+  .virtual-list{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - @toolbar-height - @chatbar-size - @large-spacing);
+    box-sizing: border-box;
+    padding: @normal-spacing @large-spacing;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Custom Scroll for Firefox */
+    scrollbar-color: @primary-color transparent;
+    scrollbar-width: thin;
+
+    /* Scroll Width */
+    &::-webkit-scrollbar {
+      width: 5px;
+      &:hover {
+        width: 11px;
+      }
+    }
+
+    /* Scroll Track */
+    &::-webkit-scrollbar-track {
+      &:extend(.round-corners);
+    }
+
+    /* Scroll Handle */
+    &::-webkit-scrollbar-thumb {
+      &:extend(.background-primary);
+      &:extend(.round-corners);
+    }
+    ::v-deep .virtual-list-header{
+      margin-top: auto;
+    }
   }
 }
 
@@ -10,6 +46,9 @@
   #conversation {
     overflow-x: hidden;
     &:extend(.light-padding);
+    .virtual-list{
+      padding: @normal-spacing @light-spacing;
+    }
   }
 }
 
@@ -19,11 +58,4 @@
 }
 .loading-bar {
   margin-top: -10px !important;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #conversation {
-    padding-left: 0;
-    padding-right: 0;
-  }
 }

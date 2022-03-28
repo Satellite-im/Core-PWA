@@ -12,6 +12,7 @@ import {
 import { GroupMemberInfo } from '~/store/groups/types'
 
 export default Vue.extend({
+  name: 'Group',
   props: {
     group: {
       type: Object as PropType<Group>,
@@ -25,22 +26,30 @@ export default Vue.extend({
       type: String as PropType<string>,
       default: () => '',
     },
+    source: {
+      type: Object as PropType<Group>,
+      default: () => ({
+        at: 0,
+        from: '',
+        to: '',
+      }),
+    },
   },
   data() {
     return {
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.group.at).fromNow(),
+      timestamp: this.$dayjs(this.source.at).fromNow(),
     }
   },
   computed: {
     ...mapState(['ui', 'friends', 'accounts', 'groups']),
     address() {
-      const address = this.getGroupMember(this.group.sender)?.name
-      return address || getAddressFromState(this.group.from, this.$store.state)
+      const address = this.getGroupMember(this.source.sender)?.name
+      return address || getAddressFromState(this.source.from, this.$store.state)
     },
     username() {
-      const name = this.getGroupMember(this.group.sender)?.name
-      return name || getUsernameFromState(this.group.from, this.$store.state)
+      const name = this.getGroupMember(this.source.sender)?.name
+      return name || getUsernameFromState(this.source.from, this.$store.state)
     },
     badge() {
       return ''
@@ -48,19 +57,19 @@ export default Vue.extend({
     src(): string {
       // To check if the sender is you we just compare the from field
       // with your textile public key
-      if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {
+      if (this.source.from === this.$TextileManager?.getIdentityPublicKey()) {
         const myHash = this.accounts.details?.profilePicture
         return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
       }
 
       // Try to find the group chat member
-      const photoHash = this.getGroupMember(this.group.sender)?.photoHash
+      const photoHash = this.getGroupMember(this.source.sender)?.photoHash
       if (photoHash) {
         return `${this.$Config.textile.browser}/ipfs/${photoHash}`
       }
 
       // Try to find the friend you are talking to
-      const friend = this.$Hounddog.findFriend(this.group.from, this.friends)
+      const friend = this.$Hounddog.findFriend(this.source.from, this.friends)
 
       if (friend?.profilePicture) {
         return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
@@ -75,7 +84,7 @@ export default Vue.extend({
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.group.at,
+      this.source.at,
       setTimestamp,
       Config.chat.timestampUpdateInterval,
     )
@@ -94,7 +103,7 @@ export default Vue.extend({
     showQuickProfile(e: MouseEvent) {
       const openQuickProfile = () => {
         this.$store.dispatch('ui/showQuickProfile', {
-          textilePublicKey: this.$props.group.from,
+          textilePublicKey: this.$props.source.from,
           position: { x: e.x, y: e.y },
         })
       }

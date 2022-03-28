@@ -61,20 +61,7 @@
               :max-viewable-users="10"
               :fullscreen-max-viewable-users="20"
             />
-            <UiChatScroll
-              :prevent-scroll-offset="500"
-              :class="
-                $store.state.friends.all.find(
-                  (friend) => friend.address === $store.state.webrtc.activeCall,
-                )
-                  ? 'media-open'
-                  : 'media-unopen'
-              "
-              enable-wrap
-              :user="recipient"
-            >
-              <Nuxt />
-            </UiChatScroll>
+            <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
             <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
