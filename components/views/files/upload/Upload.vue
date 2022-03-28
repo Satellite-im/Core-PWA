@@ -126,14 +126,14 @@ export default Vue.extend({
             /* convert .heic file to jpeg so that we can convert it for html5 style */
             const oBuffer = await converter({
               buffer, // the HEIC file buffer
-              format: 'JPEG', // output format
+              format: 'PNG', // output format
               quality: 1,
             })
             newFiles[i] = new File(
               [oBuffer.buffer],
-              `${newFiles[i].name.split('.')[0] || 'newImage'}.jpeg`,
+              `${newFiles[i].name.split('.')[0] || 'newImage'}.png`,
               {
-                type: 'image/jpeg',
+                type: 'image/png',
               },
             )
           }

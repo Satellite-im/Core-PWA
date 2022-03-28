@@ -4,6 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
+import { filetypemime } from 'magic-bytes.js'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
@@ -17,6 +18,8 @@ declare module 'vue/types/vue' {
     editMessage: () => void
     emojiReaction: (e: MouseEvent) => void
     copyMessage: () => void
+    copyImage: () => void
+    toPng: (blob: Blob) => Blob
   }
 }
 
@@ -105,8 +108,9 @@ export default Vue.extend({
       ) {
         return [
           ...mainList,
-          { text: this.$t('context.copy_img'), func: (this as any).testFunc },
-          { text: this.$t('context.save_img'), func: (this as any).testFunc },
+          { text: this.$t('context.copy_img'), func: this.copyImage },
+          // todo - add save img functionality
+          // { text: this.$t('context.save_img'), func: (this as any).testFunc },
         ]
       }
       return mainList
@@ -154,15 +158,58 @@ export default Vue.extend({
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) !== null
     },
-    testFunc() {
-      this.$Logger.log('Message Context', 'Test func')
-    },
     /**
      * @method copyMessage
      * @description copy contents of message. Will only be called if text message
      */
     copyMessage() {
       this.$envinfo.navigator.clipboard.writeText(this.message.payload)
+    },
+    /**
+     * @method copyImage
+     * @description clipboard API only accepts png. if not png, convert via canvas
+     */
+    async copyImage() {
+      const data = await fetch(this.message.payload.url)
+      const blob = await data.blob()
+      const type = filetypemime(
+        new Uint8Array(await blob.slice(0, 256).arrayBuffer()),
+      )
+
+      // copy to clipboard if png, otherwise convert
+      try {
+        await this.$envinfo.navigator.clipboard.write([
+          new ClipboardItem({
+            'image/png': type[0] === 'image/png' ? blob : this.toPng(blob),
+          }),
+        ])
+      } catch (e: any) {
+        this.$Logger.log('Error', e)
+        this.$toast.show(this.$t('errors.chat.unsupported_type') as string)
+        return
+      }
+      this.$toast.show(this.$t('ui.copied') as string)
+    },
+    /**
+     * @method toPng
+     * @param {Blob} blob embeddable image blob
+     * @description helper function - convert image blob to png for Clipboard API
+     */
+    toPng(blob: Blob) {
+      return new Promise<Blob>((resolve) => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = URL.createObjectURL(blob)
+        img.onload = () => {
+          canvas.width = img.naturalWidth
+          canvas.height = img.naturalHeight
+          ctx?.drawImage(img, 0, 0)
+          canvas.toBlob((pngBlob: Blob) => {
+            resolve(pngBlob)
+          })
+        }
+      })
     },
     /**
      * @method setReplyChatbarContent DocsTODO
