@@ -1,3 +1,4 @@
+import memoize from 'lodash/memoize'
 import * as authenticated from './authenticated'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
@@ -252,5 +253,48 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
     expect(param1.commit).toHaveBeenCalled()
+  })
+  test(`eventuallyRedirect(' / ')`, () => {
+    const inst = authenticated.default
+    initialRootState.accounts.locked = false
+    initialRootState.accounts.phrase = ''
+    const param1 = {
+      state: initialRootState,
+      getters: { allPrerequisitesReady: false },
+      commit: jest.fn(),
+    }
+    const param2: () => void = () => {
+      return 'https://example.com/page1'
+    }
+    const param3 = { chunkName: 'string', path: 'ab/notsetup' }
+
+    expect(
+      inst({
+        store: param1,
+        redirect: param2,
+        route: param3,
+      }),
+    ).toMatchSnapshot()
+  })
+  test(`route.path === path`, () => {
+    const inst = authenticated.default
+    initialRootState.accounts.locked = true
+    const param1 = {
+      state: initialRootState,
+      getters: { allPrerequisitesReady: true },
+      commit: jest.fn(),
+    }
+    const param2: () => void = () => {
+      return 'https://example.com/page1'
+    }
+    const param3 = { chunkName: 'string', path: '/auth/unlock' }
+
+    expect(
+      inst({
+        store: param1,
+        redirect: param2,
+        route: param3,
+      }),
+    ).toMatchSnapshot()
   })
 })
