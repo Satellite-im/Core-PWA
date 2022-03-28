@@ -3149,6 +3149,7 @@ describe('mutations', () => {
         value: '#2761fd',
       },
     },
+    isLoadingFileIndex: true,
   }
 
   test('togglePinned', () => {
@@ -3710,6 +3711,16 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setChatbarFocus(localizedState, true)
     expect(localizedState.chatbarFocus).toBeTruthy()
+  })
+  test('setIsLoadingFileIndex', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setIsLoadingFileIndex(localizedState, false)
+    expect(localizedState.isLoadingFileIndex).toBeFalsy()
+  })
+  test('setRenameItem', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setRenameItem(localizedState, 'new name')
+    expect(localizedState.renameCurrentName).toBe('new name')
   })
   test('setSettingsRoute', () => {
     const localizedState = { ...initialState }
