@@ -1,4 +1,4 @@
-import { GroupsState, Group, GroupMemberInfo } from './types'
+import { GroupsState, Group, GroupMember } from './types'
 
 const mutations = {
   setGroups(state: GroupsState, groups: Group[]) {
@@ -12,20 +12,20 @@ const mutations = {
       item.id !== group.id ? item : { ...item, ...group },
     )
   },
-  setSubscriptionId(state: GroupsState, value: number | null) {
-    state.subscriptionId = value
+  setInviteSubscription(state: GroupsState, value: number | null) {
+    state.inviteSubscription = value
   },
-  setGroupMembersInfo(
+  setGroupSubscriptions(state: GroupsState, value: string[]) {
+    state.groupSubscriptions = value
+  },
+  addGroupSubscription(state: GroupsState, value: string) {
+    state.groupSubscriptions.push(value)
+  },
+  setGroupMembers(
     state: GroupsState,
-    {
-      groupId,
-      info,
-      addresses,
-    }: { groupId: string; info: GroupMemberInfo[]; addresses: string[] },
+    { groupId, members }: { groupId: string; members: GroupMember[] },
   ) {
-    state.all = state.all.map((item) =>
-      item.id !== groupId ? item : { ...item, membersInfo: info, addresses },
-    )
+    state.members[groupId] = members
   },
 }
 

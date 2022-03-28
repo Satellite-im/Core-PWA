@@ -33,7 +33,8 @@ const commonProperties = [
   'ui.editMessage',
   'ui.isLoadingFileIndex',
   'chat.files',
-  'groups.subscriptionId',
+  'groups.inviteSubscription',
+  'groups.groupSubscriptions',
   'ui.modals',
   'ui.isScrollOver',
 ]

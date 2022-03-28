@@ -1,8 +1,10 @@
-import { GroupsState } from '~/store/groups/types'
+import { GroupMembers, GroupsState } from '~/store/groups/types'
 
 const InitialGroupsState: GroupsState = {
   all: [],
-  subscriptionId: null,
+  inviteSubscription: null,
+  groupSubscriptions: [],
+  members: {} as GroupMembers,
 }
 
 export default () => InitialGroupsState

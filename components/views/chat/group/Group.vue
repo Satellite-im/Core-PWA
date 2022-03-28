@@ -9,7 +9,7 @@ import {
   getAddressFromState,
   refreshTimestampInterval,
 } from '~/utilities/Messaging'
-import { GroupMemberInfo } from '~/store/groups/types'
+import { GroupMember } from '~/store/groups/types'
 
 export default Vue.extend({
   props: {
@@ -35,12 +35,16 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'friends', 'accounts', 'groups']),
     address() {
-      const address = this.getGroupMember(this.group.sender)?.name
-      return address || getAddressFromState(this.group.from, this.$store.state)
+      return (
+        this.groupMember?.name ||
+        getAddressFromState(this.group.from, this.$store.state)
+      )
     },
     username() {
-      const name = this.getGroupMember(this.group.sender)?.name
-      return name || getUsernameFromState(this.group.from, this.$store.state)
+      return (
+        this.groupMember?.name ||
+        getUsernameFromState(this.group.from, this.$store.state)
+      )
     },
     badge() {
       return ''
@@ -54,7 +58,7 @@ export default Vue.extend({
       }
 
       // Try to find the group chat member
-      const photoHash = this.getGroupMember(this.group.sender)?.photoHash
+      const photoHash = this.groupMember?.photoHash
       if (photoHash) {
         return `${this.$Config.textile.browser}/ipfs/${photoHash}`
       }
@@ -67,6 +71,11 @@ export default Vue.extend({
       }
 
       return ''
+    },
+    groupMember(): GroupMember | null {
+      return this.groups.members[this.groupId]?.find(
+        (it: GroupMember) => it.address === this.group.sender,
+      )
     },
   },
   created() {
@@ -108,12 +117,6 @@ export default Vue.extend({
           openQuickProfile()
         }
       }, 0)
-    },
-    getGroupMember(address: string): GroupMemberInfo | void {
-      if (this.groupId) {
-        const group = this.groups.all.find((it) => it.id === this.groupId)
-        return group?.membersInfo?.find((it) => it.address === address)
-      }
     },
   },
 })

@@ -1,4 +1,6 @@
+import { cloneDeep } from 'lodash'
 import * as mutations from '~/store/groups/mutations'
+import initialState from '~/store/groups/state'
 
 describe('mutations.default.updateGroup', () => {
   test('0', () => {
@@ -100,52 +102,74 @@ describe('mutations.default.addGroup', () => {
   })
 })
 
-describe('mutations.default.setGroupMembersInfo', () => {
+describe('mutations.default.setGroupMembers', () => {
+  const m1 = {
+    groupId: 'groupId_0',
+    members: [
+      {
+        address: 'address_0',
+        name: 'name_0',
+        photoHash: 'photoHash_0',
+        status: '',
+      },
+    ],
+  }
+  const m2 = {
+    groupId: 'groupId_1',
+    members: [
+      {
+        address: 'address_1',
+        name: 'name_1',
+        photoHash: 'photoHash_1',
+        status: '',
+      },
+    ],
+  }
+  const m3 = {
+    groupId: 'groupId_0',
+    members: [
+      {
+        address: 'address_2',
+        name: 'name_2',
+        photoHash: 'photoHash_2',
+        status: '',
+      },
+    ],
+  }
   test('0', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => 'Anas' } },
-      'c466a48309794261b64a4f02cfcc3d64',
-    )
-    expect(result).toMatchSnapshot()
+    const state = cloneDeep(initialState())
+    mutations.default.setGroupMembers(state, m1)
+    expect(state.members).toMatchSnapshot()
   })
 
   test('1', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => 'Anas' } },
-      'da7588892',
-    )
-    expect(result).toMatchSnapshot()
+    const state = cloneDeep(initialState())
+    mutations.default.setGroupMembers(state, m2)
+    expect(state.members).toMatchSnapshot()
   })
 
   test('2', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => 'Pierre Edouard' } },
-      'bc23a9d531064583ace8f67dad60f6bb',
-    )
-    expect(result).toMatchSnapshot()
+    const state = cloneDeep(initialState())
+    mutations.default.setGroupMembers(state, m1)
+    mutations.default.setGroupMembers(state, m3)
+    expect(state.members).toMatchSnapshot()
   })
 
   test('3', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => 'Anas' } },
-      '9876',
-    )
-    expect(result).toMatchSnapshot()
+    const state = cloneDeep(initialState())
+    mutations.default.setGroupMembers(state, m1)
+    mutations.default.setGroupMembers(state, m2)
+    mutations.default.setGroupMembers(state, m3)
+    expect(state.members).toMatchSnapshot()
   })
-
-  test('4', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => 'Pierre Edouard' } },
-      '9876',
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('5', () => {
-    const result: any = mutations.default.setGroupMembersInfo(
-      { all: { map: () => '' } },
-      '',
-    )
-    expect(result).toMatchSnapshot()
-  })
+  //
+  // test('4', () => {
+  //   const result: any = mutations.default.setGroupMembers(state(), '9876')
+  //   expect(result).toMatchSnapshot()
+  // })
+  //
+  // test('5', () => {
+  //   const result: any = mutations.default.setGroupMembers(state(), '')
+  //   expect(result).toMatchSnapshot()
+  // })
 })

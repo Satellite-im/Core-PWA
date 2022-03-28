@@ -51,7 +51,7 @@ export default Vue.extend({
       )
     },
     async fetchGroupMembers(id: string) {
-      await this.$store.dispatch('groups/fetchGroupMembers', { groupId: id })
+      await this.$store.dispatch('groups/fetchGroupMembers', id)
     },
   },
 })

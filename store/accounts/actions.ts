@@ -306,7 +306,7 @@ export default {
 
     const { pin } = state
     if (!textileInitialized && pin) {
-      dispatch(
+      await dispatch(
         'textile/initialize',
         {
           id: payerAccount?.publicKey.toBase58(),
@@ -325,6 +325,7 @@ export default {
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
     dispatch('friends/initialize', {}, { root: true })
+    dispatch('groups/initialize', {}, { root: true })
   },
 }
 
