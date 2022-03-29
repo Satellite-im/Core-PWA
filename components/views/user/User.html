@@ -1,5 +1,6 @@
 <div
-  :class="`user ${isLoading ? 'is-loading' : ''}`"
+  class="user"
+  v-bind:class="{'is-loading' : isLoading , 'is-selected' : isSelected}"
   @contextmenu="contextMenu"
   v-on:click="navigateToUser"
 >
@@ -14,7 +15,10 @@
       :text="getLastUpdate()"
       v-if="existConversation"
     />
-    <TypographyTag :text="user.unreads.toString()" v-if="user.unreads > 0" />
+    <TypographyTag
+      :text="getFormattedUnreads(user.unreads)"
+      v-if="user.unreads > 0"
+    />
   </div>
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />

@@ -32,6 +32,11 @@ export default Vue.extend({
       type: Object as PropType<User>,
       required: true,
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
     isTyping: {
       type: Boolean,
       default: false,
@@ -132,14 +137,77 @@ export default Vue.extend({
 
       if (uLastUpdate) {
         const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
+        const timeFromUpdate = this.$dayjs().from(
+          this.$dayjs(uLastUpdate),
+          true,
+        )
+
+        if (timeFromUpdate.search('second') > 0) {
+          return 'now'
+        }
+
+        if (timeFromUpdate.search('minute') > 0) {
+          const minutes = Number(timeFromUpdate.split(' ')[0])
+
+          if (minutes <= 2) {
+            return 'now'
+          }
+        }
+
+        if (timeFromUpdate.search('hour') > 0) {
+          const hours = Number(timeFromUpdate.split(' ')[0])
+
+          if (hours <= 24) {
+            return 'yesterday'
+          }
+        }
 
         if (today === uDay) {
-          return this.$dayjs(uLastUpdate).format('HH:mm')
+          return this.$dayjs(uLastUpdate).format('HH:mma')
         }
-        return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
+
+        if (timeFromUpdate.search('yesterday') > 0) {
+          return 'yesterday'
+        }
+
+        if (timeFromUpdate.search('day') > 0) {
+          const yesterday = timeFromUpdate.split(' ')[0] === 'a'
+
+          if (yesterday) {
+            return 'yesterday'
+          }
+
+          const days = Number(timeFromUpdate.split(' ')[0])
+
+          if (days <= 3) {
+            return days + 'd'
+          }
+        }
+
+        if (
+          timeFromUpdate.search('month') > 0 ||
+          timeFromUpdate.search('year') > 0
+        ) {
+          if (
+            this.$dayjs(today).format('YY') !==
+            this.$dayjs(uLastUpdate).format('YY')
+          ) {
+            return this.$dayjs(uLastUpdate).format('DD/MM/YY')
+          }
+        }
+
+        return this.$dayjs(uLastUpdate).format('DD/MM')
       }
 
       return 'No message'
+    },
+    getFormattedUnreads(value: Number) {
+      if (value < 100) {
+        return value.toString()
+      }
+      if (value >= 100) {
+        return '99+'
+      }
     },
     existMessage(textileObj: Conversation) {
       const currentUserInfo = textileObj[this.user.address]
