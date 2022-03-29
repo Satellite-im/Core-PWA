@@ -6,7 +6,7 @@ import { FILE_TYPE } from './types/file'
 import { Bucket } from './remote/textile/Bucket'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
-import { isHeic } from '~/utilities/Heic'
+import { mimeType, isHeic, isMimeEmbeddableImage } from '~/utilities/FileType'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {
@@ -26,16 +26,16 @@ export class TextileFileSystem extends FilSystem {
   async uploadFile(file: File) {
     const id = uuidv4()
     await this.bucket.pushFile(file, id)
+    // read magic byte type, use metadata as backup
+    const type = ((await mimeType(file)) as FILE_TYPE) || file.type
 
     this.createFile({
       id,
       name: file.name,
       file,
       size: file.size,
-      type: (Object.values(FILE_TYPE) as string[]).includes(file.type)
-        ? (file.type as FILE_TYPE)
-        : FILE_TYPE.GENERIC,
-      thumbnail: await this._createThumbnail(file),
+      type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
+      thumbnail: await this._createThumbnail(file, type),
     })
   }
 
@@ -54,18 +54,11 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file
    * @returns {Promise<string>} base64 thumbnail
    */
-  private async _createThumbnail(file: File): Promise<string | undefined> {
-    // if file is not an embeddable image, set blank thumbnail
-    if (
-      !file.name.match(Config.regex.image) &&
-      !file.name.match('^.*.(heic)$')
-    ) {
-      return
-    }
-    if (file.name.match('^.*.(svg)$')) {
-      return this._fileToData(file)
-    }
-    if (isHeic(new Uint8Array(await file.slice(0, 256).arrayBuffer()))) {
+  private async _createThumbnail(
+    file: File,
+    type: FILE_TYPE,
+  ): Promise<string | undefined> {
+    if (await isHeic(file)) {
       // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
       if (file.size >= Config.arrayBufferLimit) {
         return
@@ -83,6 +76,15 @@ export class TextileFileSystem extends FilSystem {
         return
       }
       return this._fileToData(await skaler(fileJpg, { width: 400 }))
+    }
+
+    // to catch non-embeddable image files, set blank thumbnail
+    if (!isMimeEmbeddableImage(type)) {
+      return
+    }
+    // svg cannot be used with skaler, set thumbnail based on full size
+    if (type === FILE_TYPE.SVG) {
+      return this._fileToData(file)
     }
     if (await this._tooLarge(file)) {
       return

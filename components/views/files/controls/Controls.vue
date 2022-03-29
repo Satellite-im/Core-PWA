@@ -8,7 +8,7 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { isHeic } from '~/utilities/Heic'
+import { isHeic, mimeType } from '~/utilities/FileType'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -123,7 +123,7 @@ export default Vue.extend({
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
-          if (isHeic(new Uint8Array(await file.slice(0, 256).arrayBuffer()))) {
+          if (await isHeic(file)) {
             // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
             if (file.size >= this.$Config.arrayBufferLimit) {
               return { file, nsfw: false }
