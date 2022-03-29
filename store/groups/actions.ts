@@ -183,7 +183,7 @@ export default {
     const addresses = await groupChatProgram.getGroupUsers(groupId)
     const info = await usersProgram.getUsersInfo(addresses)
 
-    commit('setGroupMembersInfo', { groupId, info })
+    commit('setGroupMembersInfo', { groupId, info, addresses })
 
     return info
   },

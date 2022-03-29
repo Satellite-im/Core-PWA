@@ -11,9 +11,11 @@ export interface Group {
   admin: string
   creator: string
   members: number
+  addresses: string[]
   openInvites: boolean
   encryptionKey: string
   membersInfo?: GroupMemberInfo[]
+  lastUpdate: number
 }
 
 export interface GroupsState {

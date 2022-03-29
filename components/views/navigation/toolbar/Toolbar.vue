@@ -11,10 +11,12 @@ import {
   CircleIcon,
   BellIcon,
   WalletIcon,
+  UsersIcon,
+  UserPlusIcon,
 } from 'satellite-lucide-icons'
 
 import { mapState, mapGetters } from 'vuex'
-import { Server } from '~/types/ui/core'
+import { Group, Server } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
@@ -30,12 +32,14 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     PhoneCallIcon,
+    UserPlusIcon,
     VideoIcon,
     ArchiveIcon,
     ShoppingBagIcon,
     CircleIcon,
     WalletIcon,
     BellIcon,
+    UsersIcon,
   },
   props: {
     collapsed: {
@@ -65,6 +69,26 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'search', 'audio', 'video', 'webrtc']),
     ...mapGetters('ui', ['showSidebar']),
+    selectedGroup() {
+      return this.$route.params.id // TODO: change with groupid - AP-400
+    },
+    recipient() {
+      // It should not happen that someone tries to write to himself, but we should check
+      // anyway
+      const isMe =
+        this.$route.params.address === this.$typedStore.state.accounts.active
+
+      const groupId = this.$route.params.id
+
+      const recipient = groupId
+        ? { textilePubkey: groupId, type: 'group' }
+        : isMe
+        ? null
+        : this.$typedStore.state.friends.all.find(
+            (friend) => friend.address === this.$route.params.address,
+          )
+      return recipient
+    },
     showSearchResult: {
       set(state) {
         this.$store.commit('ui/showSearchResult', state)
@@ -98,6 +122,20 @@ export default Vue.extend({
     },
   },
   methods: {
+    groupInvite(group: Group) {
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: true, group },
+      })
+    },
+    isGroup(thing: any) {
+      return thing.type && thing.type === 'group'
+    },
+    getGroup() {
+      return this.$store.state.groups.all.find(
+        (g) => g.id === this.$route.params.id,
+      )
+    },
     /**
      * @method handleChange DocsTODO
      * @description
