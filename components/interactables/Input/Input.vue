@@ -114,6 +114,7 @@ export default Vue.extend({
      */
     clearSearch() {
       this.internalText = ''
+      this.update()
     },
   },
 })
