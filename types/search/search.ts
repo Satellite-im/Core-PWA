@@ -137,14 +137,11 @@ export type SearchParam = {
 }
 
 export interface SearchResult {
-  totalRows: number
-  list: {
-    user?: User
-    id: any
-    terms: string[]
-    score: number
-    match: MatchInfo
-  }[]
+  user?: User
+  id: any
+  terms: string[]
+  score: number
+  match: MatchInfo
 }
 
 export type DateOptions = {

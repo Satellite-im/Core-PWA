@@ -37,7 +37,7 @@ export default Vue.extend({
       date: null,
       page: 1 as number,
       perPage: 10 as number,
-      result: {} as SearchResult,
+      result: [] as SearchResult[],
       queryOptions: {
         queryString: '',
         accounts: [],
@@ -59,37 +59,27 @@ export default Vue.extend({
         return this.dataState.search
       },
     },
-    // currPageResults(){
-    //   return this.result.
-    // }
-    /**
-     * @method userOptions DocsTODO
-     * @description
-     * @returns
-     */
-    userOptions() {
-      return this.result?.recommends?.users?.length
-        ? this.result.recommends.users
-        : []
+    currPageResults(): SearchResult[] {
+      return this.$data.result.slice(
+        (this.$data.page - 1) * this.$data.perPage,
+        this.$data.page * this.$data.perPage,
+      )
     },
-    /**
-     * @method channelOptions DocsTODO
-     * @description
-     * @returns
-     */
-    channelOptions() {
-      return this.result?.recommends?.channels?.length
-        ? this.result.recommends.channels
-        : []
-    },
-    /**
-     * @method givenQueryItems DocsTODO
-     * @description
-     * @returns
-     */
-    givenQueryItems() {
-      return this.searchQuery.split(' ')
-    },
+
+    // disabled functionality, will be refactored later
+    // userOptions() {
+    //   return this.result?.recommends?.users?.length
+    //     ? this.result.recommends.users
+    //     : []
+    // },
+    // channelOptions() {
+    //   return this.result?.recommends?.channels?.length
+    //     ? this.result.recommends.channels
+    //     : []
+    // },
+    // givenQueryItems() {
+    //   return this.searchQuery.split(' ')
+    // },
   },
   watch: {
     date: {
@@ -152,7 +142,7 @@ export default Vue.extend({
       )
       this.$data.loading = DataStateType.Ready
     },
-    async handleClickPaginate(pageNum: number) {
+    handleClickPaginate(pageNum: number) {
       this.$data.page = pageNum
     },
     onChange(value: any) {

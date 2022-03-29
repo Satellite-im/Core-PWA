@@ -11,7 +11,7 @@ export default Vue.extend({
   props: {
     data: {
       type: Object as PropType<SearchResultItem>,
-      default: {} as SearchResultItem,
+      required: true,
     },
   },
 })

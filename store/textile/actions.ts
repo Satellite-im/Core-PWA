@@ -922,7 +922,7 @@ export default {
     }: {
       query: QueryOptions
     },
-  ): Promise<SearchResult> {
+  ): Promise<SearchResult[]> {
     const { queryString, dateRange } = query
     const accounts = [...rootState.friends.all, rootState.accounts.details]
 
@@ -947,16 +947,11 @@ export default {
       },
     )
 
-    const list = result?.map((match) => {
+    return result?.map((match) => {
       return {
         ...match,
         user: accounts.find((acct) => acct?.textilePubkey === match.from),
       }
     })
-
-    return {
-      totalRows: result?.length,
-      list,
-    }
   },
 }
