@@ -2,8 +2,16 @@
   <div class="circle-container">
     <UiUserState
       :user="user"
-      v-if="!server || $device.isMobile"
+      v-if="user.state && (!server || $device.isMobile)"
       :clickHandler="openProfile"
+    />
+    <UiCircle
+      :type="src ? 'image' : 'random'"
+      :seed="user.id"
+      :size="35"
+      :source="src"
+      @click="openProfile"
+      v-if="!user.state && !$device.isMobile"
     />
     <UiCircle
       :type="src ? 'image' : 'random'"
@@ -11,7 +19,7 @@
       :size="35"
       :source="src"
       @click="openProfile"
-      v-if="!$device.isMobile"
+      v-if="server && !$device.isMobile"
     />
   </div>
   <div class="user-info">
@@ -19,7 +27,9 @@
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="server ? (server.status || server.state) : user.status"
+      :text="server ? (server.status || server.state) 
+          : user.state ? user.state
+          : `${user.members} ${$tc('groups.member', user.members)}`"
     />
   </div>
   <div class="controls">

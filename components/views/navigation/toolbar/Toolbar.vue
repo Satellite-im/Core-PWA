@@ -20,6 +20,7 @@ import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
+import { Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -44,7 +45,11 @@ export default Vue.extend({
     },
     server: {
       type: Object as PropType<Server>,
-      default: () => {},
+      default: () => ({
+        name: '',
+        address: '',
+        desc: '',
+      }),
     },
     user: {
       type: Object as PropType<User>,
@@ -53,7 +58,6 @@ export default Vue.extend({
         address: '',
         status: '',
       }),
-      required: true,
     },
   },
   data() {

@@ -44,7 +44,7 @@
             <Toolbar
               v-if="recipient"
               id="toolbar"
-              :server="recipient"
+              :server="null"
               :user="recipient"
             />
             <Media
@@ -160,7 +160,9 @@ export default Vue.extend({
       const groupId = this.$route.params.id
 
       const recipient = groupId
-        ? { textilePubkey: groupId }
+        ? this.$typedStore.state.groups.all.find(
+            (group) => group.id === groupId,
+          )
         : isMe
         ? null
         : this.$typedStore.state.friends.all.find(

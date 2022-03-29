@@ -476,6 +476,9 @@ export default {
       new_group_name: 'Add a group name here...',
     },
   },
+  groups: {
+    member: 'member | members',
+  },
   servers: {
     new_server: 'New Community',
     create: {
