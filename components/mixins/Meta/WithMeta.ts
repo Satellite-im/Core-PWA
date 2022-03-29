@@ -3,13 +3,11 @@ import { mapState } from 'vuex'
 
 export default Vue.extend({
   head() {
-    const isUserRegistered = this.accounts.registrationStatus === 'registered'
-
     return {
-      title: isUserRegistered ? this.meta.title : 'Satellite-Absolute',
+      title: this.meta.title,
     }
   },
   computed: {
-    ...mapState(['accounts', 'meta']),
+    ...mapState(['meta']),
   },
 })
