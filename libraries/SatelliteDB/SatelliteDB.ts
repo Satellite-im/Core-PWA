@@ -91,7 +91,7 @@ export class SatelliteDB extends Dexie {
       this.search.friends = new SearchIndex({
         schema: {
           fields: ['address', 'name', 'photoHash', 'textilePubkey'],
-          storeFields: ['address', 'name', 'photoHash', 'textilePubkey'],
+          storeFields: ['address'],
           idField: 'address',
         },
       })
@@ -110,16 +110,7 @@ export class SatelliteDB extends Dexie {
             'type',
             'payload',
           ],
-          storeFields: [
-            'id',
-            'conversation',
-            'from',
-            'to',
-            'at',
-            'readAt',
-            'type',
-            'payload',
-          ],
+          storeFields: ['id', 'conversation', 'from'],
         },
       })
     }

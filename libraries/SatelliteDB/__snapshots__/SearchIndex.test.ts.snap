@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SatelliteDB/SearchIndex searchIndex.update() 1`] = `
+Array [
+  Object {
+    "score": 1.0986122886681096,
+    "suggestion": "first",
+    "terms": Array [
+      "first",
+    ],
+  },
+]
+`;

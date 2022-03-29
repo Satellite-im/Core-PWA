@@ -137,7 +137,7 @@ export default {
     db.conversations.put(dbData)
     db.conversationMessages.bulkPut(messages)
     // add the messages to the search index
-    db.search.conversationMessages.update(messages)
+    db.search.conversationMessages.upsertAll(messages)
 
     commit('setConversation', {
       address: friend.address,
@@ -559,7 +559,7 @@ export default {
 
     const msg = { conversation: address, ...message }
     // add the message to the search index
-    db.search.conversationMessages.add(msg)
+    db.search.conversationMessages.upsert(msg)
 
     // replace old message with new edited version
     if (message.editedAt) {
@@ -589,7 +589,7 @@ export default {
       })
 
     const msg = { conversation: address, ...message }
-    db.search.conversationMessages.add(msg)
+    db.search.conversationMessages.upsert(msg)
 
     // replace old message with new edited version
     if (message.editedAt) {

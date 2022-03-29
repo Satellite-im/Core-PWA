@@ -39,13 +39,7 @@ describe('SatelliteDB/SearchIndex', () => {
       { id: '3', text: 'third match' },
     ]
     idx.update(data)
-    expect(idx.autoSuggest('first')).toEqual([
-      {
-        suggestion: 'first',
-        terms: ['first'],
-        score: 1.0986122886681096,
-      },
-    ])
+    expect(idx.autoSuggest('first')).toMatchSnapshot()
   })
 
   test('searchIndex.update() without an id', async () => {
@@ -99,5 +93,22 @@ describe('SatelliteDB/SearchIndex', () => {
     expect(idx.search('first')?.map((r) => r.id)).toEqual([])
     expect(idx.search('second')?.map((r) => r.id)).toEqual([])
     expect(idx.search('match')?.map((r) => r.id)).toEqual([])
+  })
+
+  test('searchIndex.upsert()', async () => {
+    const data = { id: '1', text: 'foo bar' }
+    idx.upsert(data)
+    idx.upsert({ id: '1', text: 'foo bar baz' })
+    expect(idx.search('foo')?.length).toEqual(1)
+    expect(idx.search('foo')?.[0]?.text).toEqual('foo bar baz')
+  })
+
+  test('searchIndex.upsertAll()', async () => {
+    const data = [
+      { id: '1', text: 'foo bar' },
+      { id: '1', text: 'foo bar baz' },
+    ]
+    idx.upsertAll(data)
+    expect(idx.search('foo')?.map((r) => r.text)).toEqual(['foo bar baz'])
   })
 })
