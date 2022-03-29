@@ -10,11 +10,11 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
   'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
 
-describe('Run responsiveness tests on several devices', () => {
+describe.skip('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
   data.allDevices.forEach((item) => {
-    it.skip(`Create Account on ${item.description}`, () => {
+    it(`Create Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.createAccountPINscreen(randomPIN)
 
@@ -104,7 +104,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.closeModal('[data-cy=modal-cta]')
     })
 
-    it.skip(`Release Notes Screen on ${item.description}`, () => {
+    it(`Release Notes Screen on ${item.description}`, () => {
       cy.visitRootPage().then(() => {
         cy.viewport(item.width, item.height)
       })
