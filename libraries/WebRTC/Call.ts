@@ -103,6 +103,11 @@ export class Call extends Emitter<CallEventListeners> {
         peerId: this.communicationBus.identifier,
         track: video,
       })
+    } else {
+      this.emit('LOCAL_TRACK_REMOVED', {
+        peerId: this.communicationBus.identifier,
+        track: { kind: 'video' },
+      })
     }
 
     return { audio, video }

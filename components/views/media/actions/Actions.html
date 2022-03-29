@@ -5,12 +5,14 @@
   >
     <InteractablesButton
       class="left"
-      :type="video.disabled ? 'danger' : 'dark'"
+      :type="videoMuted ? 'danger' : 'dark'"
       size="small"
       :action="toggleVideo"
+      :loading="isLoading"
+      loadingText=""
     >
-      <video-off-icon v-if="video.disabled" size="1.2x" />
-      <video-icon v-else size="1.2x" />
+      <video-icon v-if="!videoMuted" size="1.2x" />
+      <video-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
@@ -21,6 +23,8 @@
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
       :action="toggleMute"
+      :loading="isLoading"
+      loadingText=""
     >
       <mic-icon v-if="!audioMuted" size="1.2x" />
       <mic-off-icon v-else size="1.2x" />

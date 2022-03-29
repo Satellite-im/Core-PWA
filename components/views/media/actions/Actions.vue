@@ -25,12 +25,17 @@ export default Vue.extend({
     ScreenShareIcon,
     PhoneOffIcon,
   },
+  data() {
+    return {
+      isLoading: false,
+    }
+  },
   computed: {
     ...mapState(['audio', 'video', 'webrtc']),
-    audioMuted() {
+    audioMuted(): boolean {
       return this.webrtc.localTracks.audio.muted
     },
-    videoMuted() {
+    videoMuted(): boolean {
       return this.webrtc.localTracks.video.muted
     },
   },
@@ -41,6 +46,7 @@ export default Vue.extend({
      * @example
      */
     toggleMute() {
+      this.isLoading = true
       const muted = this.audioMuted
 
       const { activeCall } = this.webrtc
@@ -50,17 +56,20 @@ export default Vue.extend({
       if (muted) {
         peer?.call.unmute(WebRTCEnum.AUDIO)
         this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
-        return
+      } else {
+        peer?.call.mute(WebRTCEnum.AUDIO)
+        this.$store.dispatch('sounds/playSound', Sounds.MUTE)
       }
-      peer?.call.mute(WebRTCEnum.AUDIO)
-      this.$store.dispatch('sounds/playSound', Sounds.MUTE)
+
+      this.isLoading = false
     },
     /**
      * @method toggleVideo
      * @description Toggles outgoing video
      * @example
      */
-    toggleVideo() {
+    async toggleVideo() {
+      this.isLoading = true
       const muted = this.videoMuted
 
       const { activeCall } = this.webrtc
@@ -68,12 +77,14 @@ export default Vue.extend({
       const peer = this.$WebRTC.getPeer(activeCall)
 
       if (muted) {
-        peer?.call.unmute(WebRTCEnum.VIDEO)
+        await peer?.call.unmute(WebRTCEnum.VIDEO)
         this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
-        return
+      } else {
+        await peer?.call.mute(WebRTCEnum.VIDEO)
+        this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
       }
-      peer?.call.mute(WebRTCEnum.VIDEO)
-      this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
+
+      this.isLoading = false
     },
     /**
      * @method hangUp
