@@ -2,26 +2,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
 import VuejsPaginate from 'vuejs-paginate'
 import { CalendarIcon } from 'satellite-lucide-icons'
-
 import { mapState } from 'vuex'
-import SearchUtil from '../SearchUtil'
-
-import { SearchOrderType, SearchResultGroupType } from '~/types/search/search'
+import SearchUtil from '~/components/views/chat/search/SearchUtil'
+import {
+  SearchOrderType,
+  SearchResultGroupType,
+  QueryOptions,
+  SearchResult,
+} from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
 
 Vue.component('Paginate', VuejsPaginate)
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    groupBy: SearchResultGroupType
-    orderBy: SearchOrderType
-    fetchResult: (query: string) => Promise<void>
-    result: any
-  }
-}
 
 export default Vue.extend({
   components: {
@@ -37,29 +30,24 @@ export default Vue.extend({
     return {
       groupList: SearchUtil.getSearchResultGroupList(),
       orderTypeList: SearchUtil.getSearchOrderTypeList(),
-      query: '',
-      groupBy: SearchResultGroupType.Messages,
-      orderBy: SearchOrderType.New,
-      users: [],
+      query: '' as string,
+      groupBy: SearchResultGroupType.Messages as SearchResultGroupType,
+      orderBy: SearchOrderType.New as SearchOrderType,
       channels: [],
       date: null,
-      page: 0,
-      result: {} as any,
+      page: 1 as number,
+      perPage: 10 as number,
+      result: {} as SearchResult,
       queryOptions: {
         queryString: '',
-        friends: [],
+        accounts: [],
         dateRange: null,
-      },
+      } as QueryOptions,
     }
   },
   computed: {
-    /**
-     * @method DataStateType DocsTODO
-     * @description
-     * @returns
-     */
-    DataStateType: () => DataStateType,
     ...mapState(['dataState', 'friends', 'accounts']),
+    DataStateType: () => DataStateType,
     loading: {
       set(state: DataStateType) {
         this.$store.commit('dataState/setDataState', {
@@ -71,13 +59,16 @@ export default Vue.extend({
         return this.dataState.search
       },
     },
+    // currPageResults(){
+    //   return this.result.
+    // }
     /**
      * @method userOptions DocsTODO
      * @description
      * @returns
      */
     userOptions() {
-      return this.result?.recommends?.users?.length > 0
+      return this.result?.recommends?.users?.length
         ? this.result.recommends.users
         : []
     },
@@ -87,7 +78,7 @@ export default Vue.extend({
      * @returns
      */
     channelOptions() {
-      return this.result?.recommends?.channels?.length > 0
+      return this.result?.recommends?.channels?.length
         ? this.result.recommends.channels
         : []
     },
@@ -145,39 +136,29 @@ export default Vue.extend({
      * @description
      * @param query
      */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async fetchResult(query: string): Promise<void> {
       this.$data.loading = DataStateType.Loading
       this.$data.queryOptions = {
         ...this.$data.queryOptions,
+        accounts: [...this.friends.all, this.accounts.details],
         queryString: query,
-        friends: this.friends.all,
       }
       this.$data.result = await this.$store.dispatch(
         'textile/searchConversations',
         {
           query: this.$data.queryOptions,
           page: this.$data.page,
-          accounts: this.accounts,
         },
       )
       this.$data.loading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
       this.$data.page = pageNum
-      this.$data.result = await this.$store.dispatch(
-        'textile/searchConversations',
-        {
-          query: this.$data.queryOptions,
-          page: this.$data.page,
-          accounts: this.accounts,
-        },
-      )
     },
     onChange(value: any) {
       this.$data.queryOptions = {
         ...this.$data.queryOptions,
-        friends: value,
+        accounts: value,
       }
     },
   },

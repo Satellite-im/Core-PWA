@@ -1,5 +1,6 @@
 <template src="./Meta.html"></template>
 <script lang="ts">
+import { SearchResult } from 'minisearch'
 import Vue, { PropType } from 'vue'
 import { SearchOrderType } from '~/types/search/search'
 
@@ -10,7 +11,7 @@ export default Vue.extend({
       required: true,
     },
     result: {
-      type: Object,
+      type: Object as PropType<SearchResult>,
       required: true,
     },
     orderBy: {

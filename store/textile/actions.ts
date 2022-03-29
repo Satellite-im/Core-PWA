@@ -15,12 +15,11 @@ import {
 } from '~/libraries/SatelliteDB/SatelliteDB'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
-import { QueryOptions } from '~/types/ui/query'
-import { AccountsState, AccountsError } from '~/store/accounts/types'
+import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+import { SearchResult, QueryOptions } from '~/types/search/search'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -917,19 +916,16 @@ export default {
    * @returns  search result object
    */
   async searchConversations(
-    { state }: ActionsArguments<TextileState>,
+    { rootState }: ActionsArguments<TextileState>,
     {
       query,
-      page = 1,
-      perPage = 10,
     }: {
       query: QueryOptions
-      accounts: AccountsState
-      page: number
-      perPage: number
     },
-  ) {
-    const { queryString, dateRange, friends } = query
+  ): Promise<SearchResult> {
+    const { queryString, dateRange } = query
+    const accounts = [...rootState.friends.all, rootState.accounts.details]
+
     const startDate =
       dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
     const endDate =
@@ -951,24 +947,16 @@ export default {
       },
     )
 
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    // const friend = await usersProgram.getUserInfo()
-    // console.log(friend)
-    const skip = (page - 1) * perPage
-    const list = result?.splice(skip, perPage).map((match) => ({
-      ...match,
-      user: friends.find((friend) => friend.address === match.conversation),
-    }))
+    const list = result?.map((match) => {
+      return {
+        ...match,
+        user: accounts.find((acct) => acct?.textilePubkey === match.from),
+      }
+    })
 
     return {
-      data: {
-        totalRows: result?.length,
-        list,
-        perPage,
-        page,
-      },
+      totalRows: result?.length,
+      list,
     }
   },
 }

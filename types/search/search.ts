@@ -1,3 +1,7 @@
+import { MatchInfo } from 'minisearch'
+import { Friend } from '../ui/friends'
+import { User } from '../ui/user'
+
 export enum SearchCommandType {
   User = 'user',
   Has = 'has',
@@ -102,12 +106,6 @@ export type SearchData = {
   list: SearchResultItem[]
 }
 
-export type SearchResult = {
-  query: string
-  recommend: SearchRecommend
-  data: SearchData
-}
-
 export enum SearchResultGroupType {
   Messages = 'messages',
   Files = 'files',
@@ -136,4 +134,26 @@ export type SearchParam = {
   groupby: SearchResultGroupType
   filters: SearchFilter[]
   orderby: SearchOrderType
+}
+
+export interface SearchResult {
+  totalRows: number
+  list: {
+    user?: User
+    id: any
+    terms: string[]
+    score: number
+    match: MatchInfo
+  }[]
+}
+
+export type DateOptions = {
+  start: string
+  end: string
+}
+
+export type QueryOptions = {
+  queryString: string
+  accounts: Friend[]
+  dateRange: DateOptions | null
 }

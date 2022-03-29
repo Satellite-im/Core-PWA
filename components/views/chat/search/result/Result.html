@@ -1,8 +1,5 @@
 <div v-click-outside="toggle">
-  <div
-    class="search-result"
-    v-if="((result && result.data) || loading === DataStateType.Loading)"
-  >
+  <div class="search-result" v-if="result || loading === DataStateType.Loading">
     <div class="search-result-header">
       {{$t('search.result.search_results')}}
       <InteractablesClose class="close" :action="toggle" />
@@ -67,7 +64,7 @@
     </div>
   </div> -->
     <SearchResultMeta
-      v-if="loading !== DataStateType.Loading && result && result.data && result.data.totalRows"
+      v-if="loading !== DataStateType.Loading && result && result.totalRows"
       :result="result"
       :items="orderTypeList"
       :orderBy="orderBy"
@@ -81,8 +78,8 @@
       <div class="search-result-inner">
         <UiLoadersMessage :count="2" v-if="loading === DataStateType.Loading" />
         <SearchResultItem
-          v-else-if="result.data.list.length"
-          v-for="item, i in result.data.list"
+          v-else-if="result && result.totalRows"
+          v-for="item, i in result.list"
           :data="item"
           :key="i"
         />
@@ -90,8 +87,8 @@
       </div>
     </UiScroll>
     <paginate
-      v-if="result && result.data && result.data.totalRows"
-      :page-count="Math.ceil(result.data.totalRows/result.data.perPage)"
+      v-if="result && result.totalRows > perPage"
+      :page-count="Math.ceil(result.totalRows/perPage)"
       v-model="page"
       prev-text="«"
       next-text="»"
