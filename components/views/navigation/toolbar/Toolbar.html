@@ -93,7 +93,8 @@
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <div
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="!$device.isMobile"
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom control-button"
       @click="() => toggleModal(ModalWindows.CALLTOACTION)"
       data-tooltip="Marketplace"
       data-cy="toolbar-marketplace"
