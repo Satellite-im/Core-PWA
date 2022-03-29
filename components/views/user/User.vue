@@ -133,56 +133,52 @@ export default Vue.extend({
           lastMessageAt) ??
         0
 
-      const today = new Date().setHours(0, 0, 0, 0)
-
       if (uLastUpdate) {
-        const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
-        const timeFromUpdate = this.$dayjs().from(
+        const today = new Date()
+
+        const secondsDif = this.$dayjs().diff(
           this.$dayjs(uLastUpdate),
-          true,
+          'second',
         )
 
-        if (timeFromUpdate.search('second') > 0) {
-          return 'now'
+        if (secondsDif < 30) {
+          return this.$i18n.t('friends.details.now')
         }
 
-        if (timeFromUpdate.search('hour') > 0) {
-          if (
-            this.$dayjs(today).format('DD') !==
-            this.$dayjs(uLastUpdate).format('DD')
-          ) {
-            return 'yesterday'
+        const sameDay =
+          this.$dayjs(today).format('DD') ===
+          this.$dayjs(uLastUpdate).format('DD')
+
+        if (sameDay) {
+          return this.$dayjs(uLastUpdate).format('LT')
+        }
+
+        if (!sameDay) {
+          const daysDif = this.$dayjs().diff(this.$dayjs(uLastUpdate), 'day')
+
+          if (daysDif <= 1) {
+            return this.$i18n.t('friends.details.yesterday')
           }
-        }
 
-        if (today === uDay) {
-          return this.$dayjs(uLastUpdate).format('HH:mma')
-        }
-
-        if (timeFromUpdate.search('day') > 0) {
-          const yesterday = timeFromUpdate.split(' ')[0] === 'a'
-
-          if (yesterday) {
-            return 'yesterday'
+          if (daysDif > 1 && daysDif <= 2) {
+            return `${daysDif} + ${this.$i18n.t('friends.details.days_short')}`
           }
-        }
 
-        if (
-          timeFromUpdate.search('month') > 0 ||
-          timeFromUpdate.search('year') > 0
-        ) {
-          if (
-            this.$dayjs(today).format('YY') !==
-            this.$dayjs(uLastUpdate).format('YY')
-          ) {
-            return this.$dayjs(uLastUpdate).format('MM/DD/YYYY')
+          const sameYear =
+            this.$dayjs(today).format('YYYY') ===
+            this.$dayjs(uLastUpdate).format('YYYY')
+
+          if (!sameYear) {
+            return this.$dayjs(uLastUpdate).format('L')
           }
-        }
 
-        return this.$dayjs(uLastUpdate).format('MM/DD')
+          return this.$dayjs(uLastUpdate)
+            .format('L')
+            .replace(`/${this.$dayjs(uLastUpdate).format('YYYY')}`, '')
+        }
       }
 
-      return 'No message'
+      return this.$i18n.t('friends.details.no_message')
     },
     getFormattedUnreads(value: Number) {
       if (value < 100) {

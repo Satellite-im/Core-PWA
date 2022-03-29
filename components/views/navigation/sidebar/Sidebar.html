@@ -100,13 +100,13 @@
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
           />
-          <div v-for="thing in usersAndGroups">
+          <div v-for="(thing,i) in usersAndGroups">
             <User
               v-if="!thing.admin"
               :key="thing.address"
               :user="thing"
               :isTyping="ui.isTyping.address === thing.address"
-              :isSelected="user.address === $route.params.address"
+              :isSelected="thing.address === $route.params.address"
             />
             <GroupClickable v-else :group="thing" :key="thing.id" />
           </div>

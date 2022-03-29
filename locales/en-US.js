@@ -639,6 +639,12 @@ export default {
     message: 'Message',
     options: 'Options',
     cancel: 'Cancel request',
+    details: {
+      now: 'now',
+      yesterday: 'yesterday',
+      days_short: 'd',
+      no_message: 'no message',
+    },
   },
   market_place: {
     title: 'Marketplace',
