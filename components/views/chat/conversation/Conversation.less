@@ -1,5 +1,6 @@
 #conversation {
-  //height: 100%;
+  height: 100%;
+  overflow: hidden;
 
   .separator {
     margin: @normal-spacing 3rem;
@@ -8,7 +9,8 @@
   .virtual-list{
     display: flex;
     flex-direction: column;
-    height: calc(100vh - @toolbar-height - @chatbar-size - @large-spacing);
+    position: relative;
+    height: 100%;
     box-sizing: border-box;
     padding: @normal-spacing @large-spacing;
     overflow-y: auto;
@@ -39,6 +41,11 @@
     ::v-deep .virtual-list-header{
       margin-top: auto;
     }
+    ::v-deep .zoop {
+      min-height: 24px;
+      overflow: hidden;
+      margin-top: -10px;
+    }
   }
 }
 
@@ -50,12 +57,4 @@
       padding: @normal-spacing @light-spacing;
     }
   }
-}
-
-.zoop {
-  height: 20px;
-  overflow: auto;
-}
-.loading-bar {
-  margin-top: -10px !important;
 }

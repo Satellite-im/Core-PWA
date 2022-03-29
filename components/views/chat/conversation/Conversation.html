@@ -1,18 +1,18 @@
-<div id="conversation" ref="conversation">
+<div id="conversation">
   <virtual-list class="virtual-list" ref="vsl"
     :data-key="'id'"
     :data-sources="messages"
     :data-component="itemComponent"
     :extra-props="{groupId: groupId}"
     :start="messages.length - 1"
-                header-class="virtual-list-header"
+    :estimate-size="48"
+    header-class="virtual-list-header"
+    footer-class="zoop"
   >
     <div slot="header">
       <UiChatEncrypted v-if="$route.params.address" />
       <UiLoadersMessage :count="3" v-if="loading" />
     </div>
+    <UiLoadersLoadingBar v-if="textile.messageLoading" slot="footer"/>
   </virtual-list>
-  <div v-if="textile.messageLoading" class="zoop">
-    <UiLoadersLoadingBar />
-  </div>
 </div>
