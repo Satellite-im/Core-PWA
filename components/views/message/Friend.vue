@@ -44,7 +44,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
+    ...mapState(['textile']),
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''

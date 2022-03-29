@@ -113,6 +113,7 @@ declare module 'vue/types/vue' {
     initRoute: () => void
     searchResult: () => Friend[]
     navigateToBlock: () => void
+    swiperSlideIndex: number
   }
 }
 export default Vue.extend({
@@ -140,7 +141,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['friends', 'dataState', 'ui']),
+    ...mapState(['friends', 'dataState']),
     alphaSortedFriends() {
       return getAlphaSorted(this.searchResult())
     },
@@ -150,6 +151,12 @@ export default Vue.extend({
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
       )
+    },
+    swiperSlideIndex() {
+      return this.$store.state.ui.swiperSlideIndex
+    },
+    showSidebar() {
+      return this.$store.state.ui.showSidebar
     },
   },
   methods: {
@@ -164,12 +171,9 @@ export default Vue.extend({
       )
     },
     toggleMenu() {
-      this.$store.commit('ui/showSidebar', !this.ui.showSidebar)
+      this.$store.commit('ui/showSidebar', !this.showSidebar)
       if (this.$device.isMobile) {
-        this.$store.commit(
-          'ui/setSwiperSlideIndex',
-          1 - this.ui.swiperSlideIndex,
-        )
+        this.$store.commit('ui/setSwiperSlideIndex', 1 - this.swiperSlideIndex)
       }
     },
     /**
@@ -227,7 +231,7 @@ export default Vue.extend({
   .top-bar {
     flex-flow: row;
     display: flex;
-    padding: @large-spacing @large-spacing 0;
+    padding: 0 @large-spacing;
 
     .toggle-sidebar {
       position: relative;
