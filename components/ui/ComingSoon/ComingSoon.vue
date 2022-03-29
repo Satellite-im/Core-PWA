@@ -42,6 +42,11 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    horizontal: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   methods: {
     preventClickthrough(event: Event) {
