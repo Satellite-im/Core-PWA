@@ -120,12 +120,12 @@ export default Vue.extend({
         .slice(0, limit)
         .reduce(
           (reactorsList, reactorPublickey, i) =>
-            (i === 0 ? '' : ',') +
-            reactorsList +
-            getUsernameFromState(reactorPublickey, this.$store.state),
+            `${reactorsList}${i === 0 ? '' : ','}${getUsernameFromState(
+              reactorPublickey,
+              this.$store.state,
+            )}`,
           '',
         )
-
       return `${list}${
         numberOfReactors > limit
           ? `and ${numberOfReactors - limit} more ...`
