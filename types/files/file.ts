@@ -24,3 +24,10 @@ export type UploadDropItemType = {
     status: boolean
   }
 }
+
+export interface FileMessagePayload {
+  name: string
+  size: number
+  type: string
+  url: string
+}

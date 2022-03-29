@@ -37,8 +37,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
   },
-  /**
-   */
   async mounted() {
     this.load = true
     // if no file data available, pull encrypted file from textile bucket

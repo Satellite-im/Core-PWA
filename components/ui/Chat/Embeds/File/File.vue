@@ -1,9 +1,9 @@
-<template src="./File.html" />
+<template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
-import { TextileImage } from '~/types/textile/manager'
-import { FileMessage } from '~/types/textile/mailbox'
+import { isEmbeddableImage } from '~/utilities/FileType'
+import { FileMessagePayload } from '~/types/files/file'
 
 export default Vue.extend({
   components: {
@@ -12,13 +12,26 @@ export default Vue.extend({
   },
   props: {
     file: {
-      type: Object as PropType<FileMessage>,
+      type: Object as PropType<FileMessagePayload>,
       required: true,
     },
   },
+  data() {
+    return { embeddable: false as boolean }
+  },
   computed: {
-    getFileSize() {
+    getFileSize(): string {
       return this.$filesize(this.file.size)
+    },
+  },
+  async mounted() {
+    this.embeddable = await this.isEmbeddable()
+  },
+  methods: {
+    async isEmbeddable() {
+      const data = await fetch(this.file.url)
+      const blob = await data.blob()
+      return isEmbeddableImage(blob)
     },
   },
 })

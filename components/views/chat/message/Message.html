@@ -46,13 +46,8 @@
         ({{$t('ui.edited')}})
       </span>
     </template>
-    <UiChatImage
-      v-if="message.type === 'image'"
-      :image="message.payload"
-      alt=""
-    />
     <MessageGlyph
-      v-else-if="message.type === 'glyph'"
+      v-if="message.type === 'glyph'"
       :source="message.payload"
       :pack="message.pack"
     />

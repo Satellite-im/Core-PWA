@@ -1,21 +1,18 @@
-<div :class="file.type.includes('image') ? 'embedded-image' : 'embedded-file'">
-  <file-icon size="1x" class="file-icon" v-if="!file.type.includes('image')" />
-  <UiChatImage
-    v-if="file.type.includes('image')"
-    :image="file"
-    :alt="file.name"
-  />
-  <div class="file-info" v-if="!file.type.includes('image')">
-    <TypographySubtitle :size="6" :text="`${file.name}`" />
-    <TypographyText :text="`${file.type} - ${getFileSize}`" />
-  </div>
-  <a
-    :href="file.url"
-    target="_blank"
-    class="button is-primary"
-    data-cy="chat-file"
-    v-if="!file.type.includes('image')"
-  >
-    <download-icon size="1x" class="download control-icon" />
-  </a>
+<div :class="embeddable ? 'embedded-image' : 'embedded-file'">
+  <UiChatImage v-if="embeddable" :image="file" :alt="file.name" />
+  <template v-else>
+    <file-icon size="1x" class="file-icon" />
+    <div class="file-info">
+      <TypographySubtitle :size="6" :text="`${file.name}`" />
+      <TypographyText :text="`${file.type} - ${getFileSize}`" />
+    </div>
+    <a
+      :href="file.url"
+      target="_blank"
+      class="button is-primary"
+      data-cy="chat-file"
+    >
+      <download-icon size="1x" class="download" />
+    </a>
+  </template>
 </div>
