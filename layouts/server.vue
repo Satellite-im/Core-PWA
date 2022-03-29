@@ -56,7 +56,7 @@
           />
           <UiChatScroll
             :contents="ui.messages"
-            :prevent-scroll-offset="500"
+            :prevent-scroll-offset="10"
             :class="media.activeCall ? 'media-open' : ''"
             enable-wrap
           >

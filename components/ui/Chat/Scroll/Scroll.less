@@ -15,7 +15,7 @@
 
 .auto-scroll {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
@@ -41,6 +41,13 @@
   &::-webkit-scrollbar-thumb {
     &:extend(.background-primary);
     &:extend(.round-corners);
+  }
+
+  .chat-scroll-content {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    flex-direction: column;
   }
 }
 
