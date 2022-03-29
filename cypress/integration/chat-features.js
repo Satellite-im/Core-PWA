@@ -32,7 +32,7 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it('Chat - Message edited shows edited status', () => {
+  it.skip('Chat - Message edited shows edited status', () => {
     cy.contains(randomNumber)
       .siblings('[data-cy=message-edited]')
       .should('contain', '(edited)')
@@ -63,7 +63,7 @@ describe('Chat Features Tests', () => {
     cy.get('#glyph-toggle').click()
   })
 
-  it('Chat - Copy paste text', () => {
+  it.skip('Chat - Copy paste text', () => {
     //Sending another random message to validate the scenario
     cy.chatFeaturesSendMessage(randomTextToCopy)
 
