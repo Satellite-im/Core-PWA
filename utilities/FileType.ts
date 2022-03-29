@@ -43,3 +43,19 @@ export async function isEmbeddableImage(file: Blob): Promise<boolean> {
   ]
   return valid.includes(filetypemime(buffer as any)[0])
 }
+
+/**
+ * @function isArchive
+ * @description is file an archive
+ * @param {string} type mime type
+ * @returns {boolean}
+ * @example test.zip => true, test.txt => false
+ */
+export function isMimeArchive(type: string): boolean {
+  const valid = [
+    'application/zip',
+    'application/x-7z-compressed',
+    'application/vnd.rar',
+  ]
+  return valid.includes(type)
+}

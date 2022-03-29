@@ -13,7 +13,8 @@ import {
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { ModalWindows } from '~/store/ui/types'
+import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
+import { isMimeArchive } from '~/utilities/FileType'
 
 export default Vue.extend({
   components: {
@@ -46,24 +47,24 @@ export default Vue.extend({
      * @returns {boolean} if item is archive file type
      */
     isArchive(): boolean {
-      return Boolean(this.item.name.match(this.$Config.regex.archive))
+      return isMimeArchive(this.item.type)
     },
-    contextMenuValues() {
+    contextMenuValues(): ContextMenuItem[] {
       return [
         {
           text: this.item.liked
-            ? this.$t('context.unfav')
-            : this.$t('context.fav'),
+            ? (this.$t('context.unfav') as string)
+            : (this.$t('context.fav') as string),
           func: this.like,
         },
         {
           text: this.item.shared
-            ? this.$t('context.unshare')
-            : this.$t('context.share'),
+            ? (this.$t('context.unshare') as string)
+            : (this.$t('context.share') as string),
           func: this.share,
         },
-        { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.rename') as string, func: this.rename },
+        { text: this.$t('context.delete') as string, func: this.remove },
       ]
     },
   },
