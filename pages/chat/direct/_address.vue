@@ -37,7 +37,9 @@ export default Vue.extend({
     }
     if (friends && friends.all && friends.all.length > 0) {
       this.$router.replace(`/chat/direct/${friends.all[0].address}`)
+      return
     }
+    this.$router.replace('/friends/list')
   },
 })
 </script>
