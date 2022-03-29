@@ -8,7 +8,8 @@
       :type="videoMuted ? 'danger' : 'dark'"
       size="small"
       :action="toggleVideo"
-      :inactive="isLoading"
+      :loading="isLoading"
+      loadingText=""
     >
       <video-icon v-if="!videoMuted" size="1.2x" />
       <video-off-icon v-else size="1.2x" />
@@ -22,7 +23,8 @@
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
       :action="toggleMute"
-      :inactive="isLoading"
+      :loading="isLoading"
+      loadingText=""
     >
       <mic-icon v-if="!audioMuted" size="1.2x" />
       <mic-off-icon v-else size="1.2x" />

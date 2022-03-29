@@ -6,7 +6,8 @@
     :data-tooltip="$t('controls.mute')"
     :action="toggleMute"
     :text="$t('controls.mic')"
-    :inactive="isLoading"
+    :loading="isLoading"
+    loadingText=""
   >
     <mic-off-icon v-if="audioMuted" size="1x"></mic-off-icon>
     <mic-icon v-else size="1x"></mic-icon>
@@ -28,7 +29,8 @@
     :data-tooltip="$t('controls.toggle')"
     :text="$t('controls.video')"
     :action="toggleVideo"
-    :inactive="isLoading"
+    :loading="isLoading"
+    loadingText=""
   >
     <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>
     <video-icon v-else size="1x"></video-icon>
