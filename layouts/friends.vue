@@ -40,8 +40,9 @@
             :sidebar="showSidebar"
           />
         </swiper-slide>
-        <swiper-slide v-if="!$device.isMobile" class="dynamic-content">
+        <swiper-slide class="dynamic-content">
           <menu-icon
+            v-if="!$device.isMobile"
             class="toggle--sidebar"
             size="1.2x"
             full-width
@@ -49,9 +50,6 @@
             @click="toggleMenu"
           />
           <Nuxt id="friends" ref="chat" />
-        </swiper-slide>
-        <swiper-slide v-if="$device.isMobile" class="dynamic-content">
-          <FriendsMobileList />
         </swiper-slide>
       </swiper>
     </div>

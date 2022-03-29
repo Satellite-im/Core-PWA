@@ -1,5 +1,10 @@
-<div id="friends-list" v-scroll-lock="true" class="hidden-scroll">
-  <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+<div
+  id="friends-list"
+  :v-scroll-lock="$device.isDesktop ? true : false"
+  :class="$device.isDesktop ? 'hidden-scroll' : '' "
+>
+  <FriendsMobileList v-if="$device.isMobile" />
+  <UiScroll v-else verticalScroll enableWrap scrollbarVisibility="scroll">
     <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
     <div class="columns">
       <div class="column is-half-desktop">
