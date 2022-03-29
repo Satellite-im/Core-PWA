@@ -11,10 +11,10 @@ describe('Chat Toolbar Tests', () => {
     //Ensure messages are displayed before starting
     cy.contains('cypress', { timeout: 180000 }).should('be.visible')
     cy.get('.toggle-sidebar').should('be.visible').click()
-    cy.waitForMessagesToLoad()
   })
 
   it('Chat - Toolbar - Validate audio icon is displayed', () => {
+    cy.waitForMessagesToLoad()
     cy.hoverOnActiveIcon('[data-cy=toolbar-enable-audio]')
   })
 
