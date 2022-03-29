@@ -22,6 +22,7 @@ export enum KeybindingEnum {
   // alphabet
   A = 'A',
   a = 'a',
+  x = 'x',
   z = 'z',
 }
 

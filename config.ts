@@ -105,6 +105,9 @@ export const Config = {
   account: {
     minimumAccountLength: 5,
   },
+  profile: {
+    noteMaxChars: 256,
+  },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
