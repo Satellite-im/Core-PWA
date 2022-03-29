@@ -32,7 +32,7 @@ describe.skip('Run responsiveness tests on several devices', () => {
 
       //User Image Input
       cy.createAccountAddImage(filepathCorrect)
-      cy.get('[data-cy=cropper-container]', { timeout: 30000 })
+      cy.get('[data-cy=cropper-container]', { timeout: 60000 })
         .should('be.visible')
         .then(() => {
           cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
@@ -64,6 +64,44 @@ describe.skip('Run responsiveness tests on several devices', () => {
 
       //Validate message can be edited
       cy.chatFeaturesEditMessage(randomMessage, randomNumber)
+    })
+
+    it(`Chat - Marketplace - Coming Soon modal content on ${item.description}`, () => {
+      cy.get('[data-cy=toolbar-marketplace]').click()
+      cy.validateComingSoonModal()
+    })
+
+    it(`Chat - Marketplace - Coming Soon modal button URL on ${item.description}`, () => {
+      cy.validateURLComingSoonModal()
+    })
+
+    it(`Chat - Marketplace - Coming Soon modal can be dismissed on ${item.description}`, () => {
+      cy.closeModal('[data-cy=modal-cta]')
+    })
+
+    it(`Chat - Glyph Pack screen is displayed on ${item.description}`, () => {
+      cy.chatFeaturesSendGlyph()
+      cy.goToLastGlyphOnChat().click()
+      cy.validateGlyphsModal()
+    })
+
+    it(`Chat - Glyph Pack - Coming Soon modal on ${item.description}`, () => {
+      cy.contains('View Glyph Pack').click()
+      cy.get('[data-cy=modal-cta]').should('be.visible')
+      cy.closeModal('[data-cy=modal-cta]')
+    })
+
+    it(`Chat - Glyph Pack screen can be dismissed on ${item.description}`, () => {
+      cy.goToLastGlyphOnChat().click()
+      cy.get('[data-cy=glyphs-modal]').should('be.visible')
+      cy.closeModal('[data-cy=glyphs-modal]')
+    })
+
+    it(`Chat - Glyphs Selection - Coming soon modal on ${item.description}`, () => {
+      cy.get('#glyph-toggle').click()
+      cy.get('[data-cy=glyphs-marketplace]').click()
+      cy.get('[data-cy=modal-cta]').should('be.visible')
+      cy.closeModal('[data-cy=modal-cta]')
     })
 
     it(`Release Notes Screen on ${item.description}`, () => {
