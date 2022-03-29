@@ -23,12 +23,6 @@ import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    search: any
-    ui: any
-  }
-}
 export default Vue.extend({
   components: {
     PhoneCallIcon,

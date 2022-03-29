@@ -94,11 +94,7 @@ export type SearchResultItem = {
   id: string
   at: number
   type: string
-  user?: {
-    id: string
-    name: string
-    address?: string
-  }
+  user?: User
 }
 
 export type SearchData = {
