@@ -1,4 +1,4 @@
-.typehead-container {
+.typeahead-container {
   position: relative;
   .search-options {
     position: absolute;
@@ -17,7 +17,10 @@
         font-size: 16px;
         padding: 5px 10px;
         text-align: center;
-        &:hover,
+        &:not(.active) {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
         &.active {
           &:extend(.background-primary);
           &:extend(.glow-primary);

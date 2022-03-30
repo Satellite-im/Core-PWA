@@ -1,19 +1,20 @@
-<template src="./TypeHead.html"></template>
+<template src="./TypeAhead.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { InputSize, InputStyle } from '~/components/interactables/Input/types'
+import SearchIndex from '~/libraries/SatelliteDB/SearchIndex'
 
 export default Vue.extend({
   props: {
     /**
-     * list for showing typehead items
+     * List for showing typeahead items
      */
     list: {
       type: Array as PropType<Array<String | Object>>,
-      default: [],
+      default: () => [],
     },
     /**
-     * list for showing typehead items
+     * Method to call when an item is selected
      */
     onSelected: {
       type: Function,
@@ -28,7 +29,7 @@ export default Vue.extend({
       required: false,
     },
     /**
-     * key to point label when object array passed
+     * Key to point label when object array passed
      */
     label: {
       type: String,
@@ -60,9 +61,17 @@ export default Vue.extend({
     },
   },
   data() {
+    const records = this.list.map((item) => {
+      const id = this.label ? (item as any)[this.label] : item
+      return { id }
+    })
     return {
       searchText: '',
-      searchList: [] as Array<string | Object>,
+      searchResults: [] as Array<string | Object>,
+      searchIndex: new SearchIndex({
+        schema: { fields: ['id'] },
+        records,
+      }),
       isFocus: false,
       browseIndex: -1,
     }
@@ -78,28 +87,16 @@ export default Vue.extend({
   methods: {
     update() {
       if (!this.searchText) {
-        this.searchList = []
+        this.searchResults = []
         return
       }
       if (!this.isFocus) this.isFocus = true
 
-      this.browseIndex = -1
-      this.searchList = this.list
-        .filter((item: any) =>
-          this.label
-            ? item[this.label]
-                .toLowerCase()
-                .indexOf(this.searchText.toLowerCase()) === 0
-            : item.toLowerCase().indexOf(this.searchText.toLowerCase()) === 0,
-        )
+      this.browseIndex = 0
+      this.searchResults = this.searchIndex
+        .autoSuggest(this.searchText)
+        .map((match) => match.suggestion)
         .slice(0, this.maxShowCounts)
-
-      this.searchList.every((item: any, index) => {
-        const compare = (this.label ? item[this.label] : item) as string
-        this.browseIndex =
-          compare.toLowerCase() === this.searchText.toLowerCase() ? index : -1
-        return this.browseIndex !== -1
-      })
     },
     setFocus() {
       this.isFocus = true
@@ -107,7 +104,11 @@ export default Vue.extend({
     lostFocus() {
       this.isFocus = false
     },
-    onItemClicked(item: any) {
+    onItemHighlighted(index: number) {
+      this.browseIndex = index
+    },
+    onItemClicked(item: any, index: number) {
+      this.onItemHighlighted(index)
       this.$emit('onSelected', item)
       this.isFocus = false
       this.searchText = ''
@@ -125,21 +126,21 @@ export default Vue.extend({
     },
     onDownBrowseItem(event: KeyboardEvent) {
       event.preventDefault()
-      if (this.browseIndex < this.searchList.length - 1) {
+      if (this.browseIndex < this.searchResults.length - 1) {
         this.browseIndex++
       }
     },
     onEnterPressed() {
       const item =
-        this.browseIndex !== -1 ? this.searchList[this.browseIndex] : null
+        this.browseIndex !== -1 ? this.searchResults[this.browseIndex] : null
       const itemSplitted = this.searchText.trim().toLowerCase().split(' ')
-      if (item) {
-        this.onItemClicked(item)
-      } else if (itemSplitted.length > 1) {
+      if (itemSplitted.length > 1) {
         this.onMultipleItemSelected(itemSplitted)
+      } else if (item) {
+        this.onItemClicked(item, this.browseIndex)
       }
     },
   },
 })
 </script>
-<style scoped lang="less" src="./TypeHead.less"></style>
+<style scoped lang="less" src="./TypeAhead.less"></style>
