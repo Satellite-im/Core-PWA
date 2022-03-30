@@ -241,6 +241,13 @@ describe('init', () => {
       finished: true,
     })
   })
+  it('should setActiveConversation to a specific address', () => {
+    const localState = InitialTextileState()
+    const testAddress = '0xadress'
+    inst.setActiveConversation(localState, testAddress)
+
+    expect(localState.activeConversation).toBe(testAddress)
+  })
   it('should setUploadingFileProgress to 90', () => {
     const localState = InitialTextileState()
     localState.uploadProgress = {
