@@ -916,15 +916,14 @@ export default {
    * @returns  search result object
    */
   async searchConversations(
-    { rootState }: ActionsArguments<TextileState>,
+    {}: ActionsArguments<TextileState>,
     {
       query,
     }: {
       query: QueryOptions
     },
   ): Promise<SearchResult[]> {
-    const { queryString, dateRange } = query
-    const accounts = [...rootState.friends.all, rootState.accounts.details]
+    const { queryString, accounts, dateRange } = query
 
     const startDate =
       dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
