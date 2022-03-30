@@ -1,8 +1,7 @@
-<template src="./File.html" />
+<template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
-import { TextileImage } from '~/types/textile/manager'
 import { FileMessage } from '~/types/textile/mailbox'
 
 export default Vue.extend({
