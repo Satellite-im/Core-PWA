@@ -111,8 +111,9 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-1066
-  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
+  nsfwByteLimit: 1048576 * 8, // 8MB - arbitrary image limit for nsfw scan - binary
+  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit - decimal because stoarge systems typically are
+  arrayBufferLimit: 1073741824 * 2, // 2GB - array buffers larger than this crash - binary
   regex: {
     // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
@@ -156,4 +157,11 @@ export const Config = {
     navigator.languages && navigator.languages.length
       ? navigator.languages[0]
       : navigator.language,
+  // https://github.com/jhildenbiddle/canvas-size#test-results
+  canvasLimits: {
+    web: 11180, // to cater to firefox. chrome goes up to 16384
+    ios: 4096,
+    android: 10836, // lowest android value, some phones can handle more
+    electron: 11180, // including for completeness sake
+  },
 }

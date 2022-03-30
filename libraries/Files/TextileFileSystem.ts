@@ -4,8 +4,9 @@ import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
 import { Bucket } from './remote/textile/Bucket'
-import { isHeic } from '~/utilities/Heic'
 import { Config } from '~/config'
+import { EnvInfo } from '~/utilities/EnvInfo'
+import { mimeType, isHeic, isMimeEmbeddableImage } from '~/utilities/FileType'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {
@@ -25,16 +26,17 @@ export class TextileFileSystem extends FilSystem {
   async uploadFile(file: File) {
     const id = uuidv4()
     await this.bucket.pushFile(file, id)
+    // read magic byte type, use metadata as backup
+    const byteType = (await mimeType(file)) as FILE_TYPE
+    const type = byteType || file.type
 
     this.createFile({
       id,
       name: file.name,
       file,
       size: file.size,
-      type: (Object.values(FILE_TYPE) as string[]).includes(file.type)
-        ? (file.type as FILE_TYPE)
-        : FILE_TYPE.GENERIC,
-      thumbnail: await this._createThumbnail(file),
+      type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
+      thumbnail: await this._createThumbnail(file, byteType),
     })
   }
 
@@ -53,32 +55,40 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file
    * @returns {Promise<string>} base64 thumbnail
    */
-  private async _createThumbnail(file: File): Promise<string | undefined> {
-    // if file is not an embeddable image, set blank thumbnail
-    if (
-      !file.name.match(Config.regex.image) &&
-      !file.name.match('^.*.(heic)$')
-    ) {
-      return
-    }
-    if (file.name.match('^.*.(svg)$')) {
-      return this._fileToData(file)
-    }
-    const buffer = new Uint8Array(await file.arrayBuffer())
-    if (isHeic(buffer)) {
+  private async _createThumbnail(
+    file: File,
+    type: FILE_TYPE,
+  ): Promise<string | undefined> {
+    if (await isHeic(file)) {
+      // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
+      if (file.size >= Config.arrayBufferLimit) {
+        return
+      }
+      const buffer = new Uint8Array(await file.arrayBuffer())
       const outputBuffer = await convert({
         buffer,
         format: 'JPEG',
         quality: 1,
       })
-      return this._fileToData(
-        await skaler(
-          new File([outputBuffer.buffer], file.name, {
-            type: 'image/jpeg',
-          }),
-          { width: 400 },
-        ),
-      )
+      const fileJpg = new File([outputBuffer.buffer], file.name, {
+        type: 'image/jpeg',
+      })
+      if (await this._tooLarge(fileJpg)) {
+        return
+      }
+      return this._fileToData(await skaler(fileJpg, { width: 400 }))
+    }
+
+    // to catch non-embeddable image files, set blank thumbnail
+    if (!isMimeEmbeddableImage(type)) {
+      return
+    }
+    // svg cannot be used with skaler, set thumbnail based on full size
+    if (type === FILE_TYPE.SVG) {
+      return this._fileToData(file)
+    }
+    if (await this._tooLarge(file)) {
+      return
     }
     return this._fileToData(await skaler(file, { width: 400 }))
   }
@@ -95,6 +105,27 @@ export class TextileFileSystem extends FilSystem {
       reader.readAsDataURL(file)
       reader.onload = () => resolve(reader.result?.toString() || '')
       reader.onerror = (error) => reject(error)
+    })
+  }
+
+  /**
+   * @method _tooLarge
+   * @description determine if image exceeds platform canvas limits
+   * @param {File} file needs to be an embeddable image type
+   * @returns {Promise<boolean>}
+   */
+  private _tooLarge(file: File): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.src = URL.createObjectURL(file)
+      img.onload = () => {
+        const envInfo = new EnvInfo()
+        const maxDimension = Math.max(img.width, img.height)
+        if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
+          resolve(true)
+        }
+        resolve(false)
+      }
     })
   }
 }

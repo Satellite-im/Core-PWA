@@ -1,15 +1,18 @@
 import { Capacitor } from '@capacitor/core'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 
 export const EnvInfo = class EnvInfo {
-  currentPlatform: string = 'android'
+  currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   cpu: any = undefined
   renderer: any = undefined
   debugInfo: any = undefined
   process: any = undefined
-  navigator: any = undefined
+  navigator: Navigator = navigator
 
   constructor() {
-    this.currentPlatform = Capacitor.getPlatform()
+    // https://capacitorjs.com/docs/v2/basics/utilities#getplatform
+    // their doc has return type of string but lets use an enum
+    this.currentPlatform = Capacitor.getPlatform() as PlatformTypeEnum
     this.navigator = navigator
 
     if (window.navigator.product === 'Gecko') {

@@ -1,5 +1,9 @@
 import * as nsfwjs from 'nsfwjs'
+import skaler from 'skaler'
+import { Config } from '~/config'
+import { EnvInfo } from '~/utilities/EnvInfo'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { mimeType } from '~/utilities/FileType'
 
 /**
  * @method isNSFW
@@ -18,8 +22,9 @@ export default async function isNSFW(file: File): Promise<boolean> {
     FILE_TYPE.SVG,
     FILE_TYPE.WEBP,
   ]
+  const mime = await mimeType(file)
   // if unscannable/unembeddable type
-  if (![...vidTypes, ...imgTypes].includes(file.type as FILE_TYPE)) {
+  if (![...vidTypes, ...imgTypes].includes(mime as FILE_TYPE)) {
     return false
   }
 
@@ -32,9 +37,9 @@ export default async function isNSFW(file: File): Promise<boolean> {
     await (async () => {
       return new Promise((resolve) => {
         vid.onloadeddata = () => {
-          resolve(true)
           vid.muted = true
           vid.play()
+          resolve(true)
         }
       })
     })()
@@ -46,6 +51,30 @@ export default async function isNSFW(file: File): Promise<boolean> {
   else {
     const img = new Image()
     img.src = URL.createObjectURL(file)
+    // determine if image is too big to be scanned
+    const isTooBig: boolean = await (async () => {
+      return new Promise((resolve) => {
+        img.onload = () => {
+          const envInfo = new EnvInfo()
+          const maxDimension = Math.max(img.width, img.height)
+          if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
+            resolve(true)
+          }
+          resolve(false)
+        }
+      })
+    })()
+
+    // if too big to scan, allow upload
+    if (isTooBig) {
+      return false
+    }
+    // if image is somewhat large, scale down so we don't approach RAM limits
+    img.src = URL.createObjectURL(
+      file.size > Config.nsfwByteLimit
+        ? await skaler(file, { width: 400 })
+        : file,
+    )
     const model = await nsfwjs.load()
     predictions = await model.classify(img)
   }

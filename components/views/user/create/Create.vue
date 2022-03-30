@@ -60,8 +60,9 @@ export default Vue.extend({
 
       if (!files?.length) return
 
-      // stop upload if picture is too large for nsfw scan
-      if (files[0].size > this.$Config.uploadByteLimit) {
+      // stop upload if picture is too large for nsfw scan.
+      // Leaving this in place since nsfw profile pictures would be bad
+      if (files[0].size > this.$Config.nsfwByteLimit) {
         this.error = this.$t('errors.accounts.file_too_large') as string
         return
       }
