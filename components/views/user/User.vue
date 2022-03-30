@@ -134,20 +134,17 @@ export default Vue.extend({
         0
 
       if (uLastUpdate) {
-        const today = new Date()
-
         const secondsDif = this.$dayjs().diff(
           this.$dayjs(uLastUpdate),
           'second',
         )
 
         if (secondsDif < 30) {
-          return this.$i18n.t('friends.details.now')
+          return this.$t('friends.details.now')
         }
 
         const sameDay =
-          this.$dayjs(today).format('DD') ===
-          this.$dayjs(uLastUpdate).format('DD')
+          this.$dayjs().format('DD') === this.$dayjs(uLastUpdate).format('DD')
 
         if (sameDay) {
           return this.$dayjs(uLastUpdate).format('LT')
@@ -157,15 +154,15 @@ export default Vue.extend({
           const daysDif = this.$dayjs().diff(this.$dayjs(uLastUpdate), 'day')
 
           if (daysDif <= 1) {
-            return this.$i18n.t('friends.details.yesterday')
+            return this.$t('friends.details.yesterday')
           }
 
           if (daysDif > 1 && daysDif <= 2) {
-            return `${daysDif} + ${this.$i18n.t('friends.details.days_short')}`
+            return `${daysDif} + ${this.$t('friends.details.days_short')}`
           }
 
           const sameYear =
-            this.$dayjs(today).format('YYYY') ===
+            this.$dayjs().format('YYYY') ===
             this.$dayjs(uLastUpdate).format('YYYY')
 
           if (!sameYear) {
@@ -178,7 +175,7 @@ export default Vue.extend({
         }
       }
 
-      return this.$i18n.t('friends.details.no_message')
+      return this.$t('friends.details.no_message')
     },
     getFormattedUnreads(value: Number) {
       if (value < 100) {
