@@ -117,8 +117,6 @@ export const Config = {
   regex: {
     // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
-    // determine if filetype is archive
-    archive: '^.*.(zip|vnd.rar|x-7z-compressed)$',
     // check for empty string or spaces/nbsp
     empty: /^\s*$/,
     // Regex to check if string contains only emoji's.
