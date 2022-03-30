@@ -89,6 +89,7 @@ export const macShortcuts = [
   'meta+r',
   'meta+shift+n',
   'meta+t',
+  'meta+l',
   'meta+shift+t',
   'meta+alt+arrowright',
   'meta+alt+arrowleft',
