@@ -64,14 +64,8 @@ export default Vue.extend({
     contextMenuValues(): ContextMenuItem[] {
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
-        {
-          text: this.$t('context.reaction'),
-          func: this.emojiReaction,
-        },
-        {
-          text: this.$t('context.reply'),
-          func: this.setReplyChatbarContent,
-        },
+        { text: this.$t('context.reaction'), func: this.emojiReaction },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
@@ -80,20 +74,14 @@ export default Vue.extend({
         if (this.accounts.details.textilePubkey === this.$props.message.from) {
           return [
             ...mainList,
-            {
-              text: this.$t('context.copy_msg'),
-              func: this.copyMessage,
-            },
+            { text: this.$t('context.copy_msg'), func: this.copyMessage },
             { text: this.$t('context.edit'), func: this.editMessage },
           ]
         }
         // another persons text message
         return [
           ...mainList,
-          {
-            text: this.$t('context.copy_msg'),
-            func: this.copyMessage,
-          },
+          { text: this.$t('context.copy_msg'), func: this.copyMessage },
         ]
       }
       // if image message
