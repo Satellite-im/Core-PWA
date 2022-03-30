@@ -4,24 +4,12 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import { filetypemime } from 'magic-bytes.js'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    setReplyChatbarContent: () => void
-    quickReaction: (emoji: String) => void
-    editMessage: () => void
-    emojiReaction: (e: MouseEvent) => void
-    copyMessage: () => void
-    copyImage: () => void
-    toPng: (blob: Blob) => Blob
-  }
-}
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -64,19 +52,25 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile', 'accounts']),
-    hasReactions() {
+    hasReactions(): boolean {
       return (
         this.$props.message.reactions && this.$props.message.reactions.length
       )
     },
-    messageEdit() {
+    messageEdit(): boolean {
       return this.ui.editMessage.id === this.$props.message.id
     },
-    contextMenuValues() {
+    contextMenuValues(): ContextMenuItem[] {
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
-        { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        {
+          text: this.$t('context.reaction') as string,
+          func: this.emojiReaction,
+        },
+        {
+          text: this.$t('context.reply') as string,
+          func: this.setReplyChatbarContent,
+        },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
@@ -86,17 +80,17 @@ export default Vue.extend({
           return [
             ...mainList,
             {
-              text: this.$t('context.copy_msg'),
+              text: this.$t('context.copy_msg') as string,
               func: this.copyMessage,
             },
-            { text: this.$t('context.edit'), func: this.editMessage },
+            { text: this.$t('context.edit') as string, func: this.editMessage },
           ]
         }
         // another persons text message
         return [
           ...mainList,
           {
-            text: this.$t('context.copy_msg'),
+            text: this.$t('context.copy_msg') as string,
             func: this.copyMessage,
           },
         ]
@@ -108,7 +102,7 @@ export default Vue.extend({
       ) {
         return [
           ...mainList,
-          { text: this.$t('context.copy_img'), func: this.copyImage },
+          { text: this.$t('context.copy_img') as string, func: this.copyImage },
           // todo - add save img functionality
           // { text: this.$t('context.save_img'), func: (this as any).testFunc },
         ]
@@ -172,14 +166,11 @@ export default Vue.extend({
     async copyImage() {
       const data = await fetch(this.message.payload.url)
       const blob = await data.blob()
-      const type = filetypemime(
-        new Uint8Array(await blob.slice(0, 256).arrayBuffer()),
-      )[0]
 
       // copy to clipboard if png, otherwise convert
       await this.$envinfo.navigator.clipboard.write([
         new ClipboardItem({
-          'image/png': type === 'image/png' ? blob : this.toPng(blob),
+          'image/png': blob.type === 'image/png' ? blob : this.toPng(blob),
         }),
       ])
       this.$toast.show(this.$t('ui.copied') as string)
