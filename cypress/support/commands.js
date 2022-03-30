@@ -313,11 +313,11 @@ Cypress.Commands.add(
       .should('be.visible')
       .rightclick()
     cy.contains('Edit Message').click()
-    cy.get('.edit-message-body-input')
+    cy.get('[data-cy=edit-message-input]')
       .should('be.visible')
       .trigger('input')
       .type(messageEdited) // editing message
-    cy.get('.edit-message-body-input').type('{enter}')
+    cy.get('[data-cy=edit-message-input]').type('{enter}')
     cy.contains(messageEdited).last().scrollIntoView().should('be.visible')
   },
 )
@@ -448,6 +448,19 @@ Cypress.Commands.add('closeModal', (locator) => {
 
 Cypress.Commands.add('goToLastGlyphOnChat', () => {
   cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('be.visible')
+})
+
+Cypress.Commands.add('validateCharlimit', (text, assert) => {
+  cy.get('.charlimit')
+    .should('be.visible')
+    .should('contain', text)
+    .then(($selector) => {
+      if (assert === true) {
+        cy.wrap($selector).should('have.class', 'is-error')
+      } else {
+        cy.wrap($selector).should('not.have.class', 'is-error')
+      }
+    })
 })
 
 //Version Release Notes Commands

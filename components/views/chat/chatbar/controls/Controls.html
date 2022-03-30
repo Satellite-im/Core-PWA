@@ -42,6 +42,7 @@
   <button
     :data-tooltip="$t('ui.send')"
     class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch send-message-btn"
+    data-cy="send-message"
     :disabled="disabled"
     @click="sendMessage"
   >
