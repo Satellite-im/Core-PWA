@@ -471,6 +471,48 @@ describe('mutate friends', () => {
     expect(InitialFriendsState.all).toContainEqual(payload)
   })
 
+  test('set store true', () => {
+    const payload: any = {
+      name: 'Yusuf Mangunwijaya',
+      address: '0x1',
+      typingState: 'NOT_TYPING',
+      activeChat: true, // Change from false (above) to true
+      account: {
+        accountId: 'Checking Account',
+        from: '.',
+        status: 429,
+        fromMailboxId: '12345',
+        toMailboxId: 'v4.0.0-rc.4',
+        to: './path/to/file',
+      },
+      textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=429',
+    }
+
+    inst.setStored(InitialFriendsState, payload)
+    expect(InitialFriendsState.all).toMatchSnapshot()
+  })
+
+  test('set store false', () => {
+    const payload: any = {
+      name: 'Yusuf Mangunwijaya',
+      address: '0x1',
+      typingState: 'NOT_TYPING',
+      activeChat: true, // Change from false (above) to true
+      account: {
+        accountId: 'Checking Account',
+        from: '.',
+        status: 429,
+        fromMailboxId: '12345',
+        toMailboxId: 'v4.0.0-rc.4',
+        to: './path/to/file',
+      },
+      textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=429',
+    }
+
+    inst.setStored(InitialFriendsState, payload, false)
+    expect(InitialFriendsState.all).toMatchSnapshot()
+  })
+
   test('set typing state', () => {
     const payload: any = {
       name: 'Yusuf Mangunwijaya',
@@ -492,7 +534,7 @@ describe('mutate friends', () => {
       id: payload.address,
       typingState: 'TYPING',
     })
-    expect(InitialFriendsState.all).toContainEqual(payload)
+    expect(InitialFriendsState.all).toMatchSnapshot()
   })
 
   test('update friend', () => {
