@@ -8,7 +8,7 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { isHeic, mimeType } from '~/utilities/FileType'
+import { isHeic } from '~/utilities/FileType'
 const convert = require('heic-convert')
 
 export default Vue.extend({

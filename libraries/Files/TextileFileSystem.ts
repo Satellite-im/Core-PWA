@@ -27,7 +27,8 @@ export class TextileFileSystem extends FilSystem {
     const id = uuidv4()
     await this.bucket.pushFile(file, id)
     // read magic byte type, use metadata as backup
-    const type = ((await mimeType(file)) as FILE_TYPE) || file.type
+    const byteType = (await mimeType(file)) as FILE_TYPE
+    const type = byteType || file.type
 
     this.createFile({
       id,
@@ -35,7 +36,7 @@ export class TextileFileSystem extends FilSystem {
       file,
       size: file.size,
       type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
-      thumbnail: await this._createThumbnail(file, type),
+      thumbnail: await this._createThumbnail(file, byteType),
     })
   }
 
