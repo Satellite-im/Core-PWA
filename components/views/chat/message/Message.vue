@@ -48,6 +48,7 @@ export default Vue.extend({
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
+      blob: undefined as Blob | undefined,
     }
   },
   computed: {
@@ -124,6 +125,10 @@ export default Vue.extend({
   beforeDestroy() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
   },
+  async mounted() {
+    const data = await fetch(this.message.payload.url)
+    this.blob = await data.blob()
+  },
   methods: {
     /**
      * @method markdownToHtml
@@ -164,13 +169,12 @@ export default Vue.extend({
      * @description clipboard API only accepts png. if not png, convert via canvas
      */
     async copyImage() {
-      const data = await fetch(this.message.payload.url)
-      const blob = await data.blob()
-
-      // copy to clipboard if png, otherwise convert
+      if (this.blob.type !== 'image/png') {
+        this.blob = await this.toPng()
+      }
       await this.$envinfo.navigator.clipboard.write([
         new ClipboardItem({
-          'image/png': blob.type === 'image/png' ? blob : this.toPng(blob),
+          'image/png': this.blob,
         }),
       ])
       this.$toast.show(this.$t('ui.copied') as string)
@@ -180,12 +184,12 @@ export default Vue.extend({
      * @param {Blob} blob embeddable image blob
      * @description helper function - convert image blob to png for Clipboard API
      */
-    toPng(blob: Blob) {
+    toPng() {
       return new Promise<Blob>((resolve) => {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const img = new Image()
-        img.src = URL.createObjectURL(blob)
+        img.src = URL.createObjectURL(this.blob)
         img.onload = () => {
           canvas.width = img.naturalWidth
           canvas.height = img.naturalHeight
