@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mutate friends set store false 1`] = `
+Array [
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "badge": "community",
+    "encryptedTextilePubkey": "",
+    "item": Object {},
+    "mailboxId": "",
+    "name": "Taurus Nix",
+    "pending": true,
+    "profilePicture": "",
+    "publicKey": "NoWiFi4you",
+    "state": "idle",
+    "status": "",
+    "stored": undefined,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingState": "NOT_TYPING",
+    "unreadCount": 123,
+    "userAccount": "",
+  },
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0x1",
+    "name": "Yusuf Mangunwijaya",
+    "stored": false,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingState": "NOT_TYPING",
+  },
+]
+`;
+
+exports[`mutate friends set store true 1`] = `
+Array [
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "badge": "community",
+    "encryptedTextilePubkey": "",
+    "item": Object {},
+    "mailboxId": "",
+    "name": "Taurus Nix",
+    "pending": true,
+    "profilePicture": "",
+    "publicKey": "NoWiFi4you",
+    "state": "idle",
+    "status": "",
+    "stored": undefined,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingState": "NOT_TYPING",
+    "unreadCount": 123,
+    "userAccount": "",
+  },
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0x1",
+    "name": "Yusuf Mangunwijaya",
+    "stored": true,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingState": "NOT_TYPING",
+  },
+]
+`;
+
+exports[`mutate friends set typing state 1`] = `
+Array [
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    "badge": "community",
+    "encryptedTextilePubkey": "",
+    "item": Object {},
+    "mailboxId": "",
+    "name": "Taurus Nix",
+    "pending": true,
+    "profilePicture": "",
+    "publicKey": "NoWiFi4you",
+    "state": "idle",
+    "status": "",
+    "stored": undefined,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingState": "NOT_TYPING",
+    "unreadCount": 123,
+    "userAccount": "",
+  },
+  Object {
+    "account": Object {
+      "accountId": "Checking Account",
+      "from": ".",
+      "fromMailboxId": "12345",
+      "status": 429,
+      "to": "./path/to/file",
+      "toMailboxId": "v4.0.0-rc.4",
+    },
+    "activeChat": true,
+    "address": "0x1",
+    "name": "Yusuf Mangunwijaya",
+    "stored": false,
+    "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingState": "TYPING",
+  },
+]
+`;
