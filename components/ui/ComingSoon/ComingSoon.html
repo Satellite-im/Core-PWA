@@ -6,7 +6,7 @@
     :data-tooltip="tooltipText"
   >
     <div
-      :class="`coming-soon ${disabled ? '' : 'grayscaled'}`"
+      :class="`coming-soon ${disabled ? '' : 'grayscaled'} ${horizontal ? 'horizontal' : ''}`"
       :style="{'margin-top': marginTopOverride}"
       @click="preventClickthrough"
     >
