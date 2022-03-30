@@ -1,5 +1,12 @@
-<div :class="classObject" ref="scrollRef" v-on:scroll="onScrolled">
-  <slot />
+<div
+  :class="classObject"
+  ref="scrollRef"
+  v-on:scroll="onScrolled"
+  v-scroll-lock="true"
+>
+  <div ref="scrollContent" class="chat-scroll-content">
+    <slot />
+  </div>
   <div
     v-if="$store.state.ui.unreadMessage > 0"
     :class="this.$store.state.ui.mediaOpen ? 'new-message-alert' : 'new-message-alert offset'"

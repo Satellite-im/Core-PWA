@@ -50,4 +50,42 @@ describe('Chat Toolbar Tests', () => {
       'Wallet\nComing Soon',
     )
   })
+
+  it('Chat - Marketplace - Coming Soon modal content is correct', () => {
+    cy.get('[data-cy=toolbar-marketplace]').click()
+    cy.validateComingSoonModal()
+  })
+
+  it('Chat - Marketplace - Coming Soon modal button has correct URL', () => {
+    cy.validateURLComingSoonModal()
+  })
+
+  it('Chat - Marketplace - Coming Soon modal can be dismissed', () => {
+    cy.closeModal('[data-cy=modal-cta]')
+  })
+
+  it('Chat - Glyph Pack screen is displayed', () => {
+    cy.chatFeaturesSendGlyph()
+    cy.goToLastGlyphOnChat().click()
+    cy.validateGlyphsModal()
+  })
+
+  it('Chat - Glyph Pack - Coming Soon modal', () => {
+    cy.contains('View Glyph Pack').click()
+    cy.get('[data-cy=modal-cta]').should('be.visible')
+    cy.closeModal('[data-cy=modal-cta]')
+  })
+
+  it('Chat - Glyph Pack screen can be dismissed', () => {
+    cy.goToLastGlyphOnChat().click()
+    cy.get('[data-cy=glyphs-modal]').should('be.visible')
+    cy.closeModal('[data-cy=glyphs-modal]')
+  })
+
+  it('Chat - Glyphs Selection - Coming soon modal', () => {
+    cy.get('#glyph-toggle').click()
+    cy.get('[data-cy=glyphs-marketplace]').click()
+    cy.get('[data-cy=modal-cta]').should('be.visible')
+    cy.closeModal('[data-cy=modal-cta]')
+  })
 })

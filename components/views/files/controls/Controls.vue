@@ -8,7 +8,7 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { isHeic } from '~/utilities/Heic'
+import { isHeic } from '~/utilities/FileType'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -122,13 +122,13 @@ export default Vue.extend({
       })
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
-          // todo - fix with AP-1066. don't scan large files to prevent crash
-          if (file.size > this.$Config.uploadByteLimit) {
-            return { file, nsfw: false }
-          }
           // convert heic to jpg for scan. return original heic if sfw
-          const buffer = new Uint8Array(await file.arrayBuffer())
-          if (isHeic(buffer)) {
+          if (await isHeic(file)) {
+            // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
+            if (file.size >= this.$Config.arrayBufferLimit) {
+              return { file, nsfw: false }
+            }
+            const buffer = new Uint8Array(await file.arrayBuffer())
             const outputBuffer = await convert({
               buffer,
               format: 'JPEG',
@@ -143,7 +143,8 @@ export default Vue.extend({
           let nsfw
           try {
             nsfw = await this.$Security.isNSFW(file)
-          } catch {
+          } catch (e: any) {
+            this.$Logger.log('Upload', e)
             nsfw = true
           }
 

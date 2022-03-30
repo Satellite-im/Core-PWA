@@ -11,6 +11,7 @@
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
       <InteractablesClickToEdit
+        ref="noteRef"
         v-model="note"
         :placeholder="$t('modal.profile.about.click_note')"
       />
@@ -23,6 +24,11 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
+  data() {
+    return {
+      observer: null as ResizeObserver | null,
+    }
+  },
   computed: {
     ...mapState(['friends', 'ui']),
     note: {
@@ -41,6 +47,37 @@ export default Vue.extend({
           metadata,
         })
       },
+    },
+  },
+  mounted() {
+    const el = (this.$refs.noteRef as any).$el as HTMLDivElement
+    this.$data.observer = new ResizeObserver(this.handleResize)
+    this.$data.observer.observe(el)
+  },
+  beforeDestroy() {
+    if (this.$data.observer) {
+      const el = (this.$refs.noteRef as any).$el as HTMLDivElement
+      this.$data.observer.unobserve(el)
+    }
+  },
+  methods: {
+    handleResize: (entries: ResizeObserverEntry[]) => {
+      const [entry] = entries
+      const { target } = entry
+
+      const el = target as HTMLDivElement
+      const scrollEl = el.closest('.scroll-area') as HTMLDivElement
+      const aboutEl = el.closest('.about') as HTMLDivElement
+
+      const scrollTop = aboutEl.clientHeight - scrollEl.clientHeight
+
+      if (scrollEl.scrollTop > scrollTop) {
+        scrollEl.scrollTop = scrollTop
+      }
+
+      if (scrollEl.clientHeight === aboutEl.clientHeight) {
+        scrollEl.classList.remove('ps--active-y')
+      }
     },
   },
 })

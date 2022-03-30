@@ -8,6 +8,7 @@
     "dev:cli": "ts-node -P cli.tsconfig.json --",
     "build": "nuxt build",
     "start": "nuxi start",
+    "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
     "android-generate": "nuxt generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..",
     "electron-mac": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-mac",

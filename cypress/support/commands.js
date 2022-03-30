@@ -397,6 +397,59 @@ Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
   cy.get('body').realHover({ position: 'topLeft' })
 })
 
+Cypress.Commands.add('validateComingSoonModal', () => {
+  cy.get('[data-cy=modal-cta]').should('be.visible')
+  cy.get('.sat-icon').should('be.visible')
+  cy.contains('Coming Soon')
+    .should('be.visible')
+    .should('have.class', 'main-title')
+  cy.contains('Stay tuned for these upcoming features:')
+    .should('be.visible')
+    .should('have.class', 'sub')
+  cy.contains('Watch Parties').should('be.visible')
+  cy.contains('Servers').should('be.visible')
+  cy.contains('Community Servers Core').should('be.visible')
+  cy.contains('Community Servers File Sharing').should('be.visible')
+  cy.contains(
+    'Community Servers Voice, Video, Screen Sharing, and more',
+  ).should('be.visible')
+  cy.contains(
+    "We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.",
+  ).should('be.visible')
+  cy.contains('Keep Me Posted').should('be.visible')
+})
+
+Cypress.Commands.add('validateURLComingSoonModal', () => {
+  cy.window().then((win) => {
+    cy.stub(win, 'open').as('open')
+  })
+  cy.contains('Keep Me Posted').click()
+  cy.get('@open').should(
+    'have.been.calledOnceWithExactly',
+    'https://twitter.com/satellite_im',
+    '_blank',
+  )
+})
+
+Cypress.Commands.add('validateGlyphsModal', () => {
+  cy.get('[data-cy=glyphs-modal]').should('be.visible')
+  cy.contains('Astrobunny').should('be.visible')
+  cy.contains('Short description can go here. Lorem ipsum.').should(
+    'be.visible',
+  )
+  cy.get('.img-container').children().should('have.length', 3)
+  cy.contains('View Glyph Pack').should('be.visible')
+})
+
+Cypress.Commands.add('closeModal', (locator) => {
+  cy.get('.close-button').click()
+  cy.get(locator).should('not.exist')
+})
+
+Cypress.Commands.add('goToLastGlyphOnChat', () => {
+  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('be.visible')
+})
+
 //Version Release Notes Commands
 
 Cypress.Commands.add('releaseNotesScreenValidation', () => {

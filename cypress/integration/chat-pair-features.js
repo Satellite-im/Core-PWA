@@ -36,10 +36,7 @@ describe('Chat features with two accounts', () => {
 
   it('Send glyph to user B', () => {
     cy.chatFeaturesSendGlyph()
-    cy.get('[data-cy=chat-glyph]')
-      .last()
-      .scrollIntoView()
-      .should('be.visible')
+    cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSrcValue) => {
         glyphURL = glyphSrcValue
@@ -106,10 +103,7 @@ describe('Chat features with two accounts', () => {
   })
 
   it('Assert glyph received from user A', () => {
-    cy.get('[data-cy=chat-glyph]')
-      .last()
-      .scrollIntoView()
-      .should('be.visible')
+    cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSecondAccountSrc) => {
         expect(glyphSecondAccountSrc).to.be.eq(glyphURL)

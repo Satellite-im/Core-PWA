@@ -22,21 +22,21 @@
   &:extend(.bordered);
   position: fixed;
   width: 18rem;
-  top: 11rem;
+  top: @toolbar-height;
   padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
-  left: @sidebar-size + 2rem;
+  right: calc(18rem + 7rem);
   z-index: @base-z-index + 10;
   display: flex;
   flex-direction: column;
   max-height: 24rem;
 
   &--compact {
-    left: @servers-size + 2rem;
+    right: @servers-size + 2rem;
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .create-group {
-    left: @servers-size + 2rem;
+    right: 0;
   }
 }

@@ -11,15 +11,19 @@
       :size="35"
       :source="src"
       @click="openProfile"
-      v-if="!$device.isMobile"
+      v-if="!$device.isMobile && !isGroup(recipient)"
     />
+    <GroupIcon v-else-if="isGroup(recipient)" :group="getGroup()" />
   </div>
   <div class="user-info">
-    <TypographyTitle :size="6" :text="server ? server.name : user.name" />
+    <TypographyTitle
+      :size="6"
+      :text="isGroup(recipient) ? getGroup().name : user.name"
+    />
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="server ? (server.status || server.state) : user.status"
+      :text="isGroup(recipient) ? `Members: ${getGroup().members}` : user.status"
     />
   </div>
   <div class="controls">
@@ -90,10 +94,29 @@
         <archive-icon size="1x" class="control-icon" color="grey" />
       </div>
     </UiComingSoon>
+    <div
+      v-if="!isGroup(recipient)"
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
+      :data-tooltip="$t('pages.chat.new_group')"
+      @click="toggleModal('creategroup')"
+    >
+      <users-icon size="1x" class="control-icon" />
+    </div>
+    <div
+      v-else
+      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
+      :data-tooltip="$t('pages.chat.add_member')"
+      @click="groupInvite(getGroup())"
+    >
+      <user-plus-icon size="1x" class="control-icon" />
+    </div>
+    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
+    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <div
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom"
+      v-if="!$device.isMobile"
+      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom control-button"
       @click="() => toggleModal(ModalWindows.CALLTOACTION)"
       data-tooltip="Marketplace"
       data-cy="toolbar-marketplace"

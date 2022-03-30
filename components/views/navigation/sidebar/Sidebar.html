@@ -66,27 +66,6 @@
     />
 
     <div class="tabs sidebar-selector padded no-top-pad flexy">
-      <InteractablesButtonGroup
-        v-model="toggleView"
-        :fullWidth="true"
-        :values="[true,false]"
-      >
-        <InteractablesButton
-          :text="$t('messaging.messages')"
-          size="small"
-          type="dark"
-        >
-          <message-square-icon size="1.2x" />
-        </InteractablesButton>
-        <InteractablesButton
-          :text="$t('messaging.groups')"
-          size="small"
-          type="dark"
-        >
-          <users-icon size="1.2x" />
-        </InteractablesButton>
-      </InteractablesButtonGroup>
-
       <div
         class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
         data-tooltip="New Chat"
@@ -105,8 +84,6 @@
       </div>
     </div>
     <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
-    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
-    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
@@ -118,12 +95,15 @@
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
           />
-          <User
-            v-for="(user, i) in users"
-            :key="i"
-            :user="user"
-            :isTyping="ui.isTyping.address === user.address"
-          />
+          <div v-for="thing in usersAndGroups">
+            <User
+              v-if="thing.address"
+              :key="i"
+              :user="thing"
+              :isTyping="ui.isTyping.address === thing.address"
+            />
+            <GroupClickable v-else :group="thing" :key="thing.id" />
+          </div>
         </div>
         <div
           v-else-if="dataState.friends !== DataStateType.Loading && !users.length"
@@ -140,18 +120,6 @@
           >
             <user-plus-icon size="1.2x" />
           </InteractablesButton>
-        </div>
-        <UiLoadersAddress v-else :count="4" inverted />
-      </UiScroll>
-    </div>
-    <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.groups !== DataStateType.Loading">
-          <GroupAside
-            v-for="group in sortedGroups"
-            :selectedGroup="group"
-            :key="group.id"
-          />
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>
