@@ -1,9 +1,5 @@
-<div :class="file.type.includes('image') ? 'embedded-image' : 'embedded-file'">
-  <UiChatImage
-    v-if="file.type.includes('image')"
-    :image="file"
-    :alt="file.name"
-  />
+<div :class="isEmbeddable ? 'embedded-image' : 'embedded-file'">
+  <UiChatImage v-if="isEmbeddable" :image="file" :alt="file.name" />
   <template v-else>
     <file-icon size="1x" class="file-icon" />
     <div class="file-info">
