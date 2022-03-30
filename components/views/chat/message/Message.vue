@@ -65,11 +65,11 @@ export default Vue.extend({
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         {
-          text: this.$t('context.reaction') as string,
+          text: this.$t('context.reaction'),
           func: this.emojiReaction,
         },
         {
-          text: this.$t('context.reply') as string,
+          text: this.$t('context.reply'),
           func: this.setReplyChatbarContent,
         },
         // AP-1120 copy link functionality
@@ -81,17 +81,17 @@ export default Vue.extend({
           return [
             ...mainList,
             {
-              text: this.$t('context.copy_msg') as string,
+              text: this.$t('context.copy_msg'),
               func: this.copyMessage,
             },
-            { text: this.$t('context.edit') as string, func: this.editMessage },
+            { text: this.$t('context.edit'), func: this.editMessage },
           ]
         }
         // another persons text message
         return [
           ...mainList,
           {
-            text: this.$t('context.copy_msg') as string,
+            text: this.$t('context.copy_msg'),
             func: this.copyMessage,
           },
         ]
@@ -103,7 +103,7 @@ export default Vue.extend({
       ) {
         return [
           ...mainList,
-          { text: this.$t('context.copy_img') as string, func: this.copyImage },
+          { text: this.$t('context.copy_img'), func: this.copyImage },
           // todo - add save img functionality
           // { text: this.$t('context.save_img'), func: (this as any).testFunc },
         ]
