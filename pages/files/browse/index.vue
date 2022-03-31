@@ -30,9 +30,6 @@ export default Vue.extend({
       )
     },
   },
-  mounted() {
-    console.log(this.fileSystem)
-  },
   methods: {
     /**
      * @method changeView DocsTODO
