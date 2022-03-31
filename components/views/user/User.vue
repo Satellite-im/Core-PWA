@@ -143,36 +143,23 @@ export default Vue.extend({
           return this.$t('friends.details.now')
         }
 
-        const sameDay =
-          this.$dayjs().format('DD') === this.$dayjs(uLastUpdate).format('DD')
+        const sameDay = this.$dayjs().isSame(uLastUpdate, 'day')
 
         if (sameDay) {
           return this.$dayjs(uLastUpdate).format('LT')
         }
 
-        if (!sameDay) {
-          const daysDif = this.$dayjs().diff(this.$dayjs(uLastUpdate), 'day')
+        const daysDif = this.$dayjs().diff(this.$dayjs(uLastUpdate), 'day')
 
-          if (daysDif <= 1) {
-            return this.$t('friends.details.yesterday')
-          }
-
-          if (daysDif > 1 && daysDif <= 2) {
-            return `${daysDif} + ${this.$t('friends.details.days_short')}`
-          }
-
-          const sameYear =
-            this.$dayjs().format('YYYY') ===
-            this.$dayjs(uLastUpdate).format('YYYY')
-
-          if (!sameYear) {
-            return this.$dayjs(uLastUpdate).format('L')
-          }
-
-          return this.$dayjs(uLastUpdate)
-            .format('L')
-            .replace(`/${this.$dayjs(uLastUpdate).format('YYYY')}`, '')
+        if (daysDif <= 1) {
+          return this.$t('friends.details.yesterday')
         }
+
+        if (daysDif > 1 && daysDif <= 2) {
+          return `${daysDif} + ${this.$t('friends.details.days_short')}`
+        }
+
+        return this.$dayjs(uLastUpdate).format('L')
       }
 
       return this.$t('friends.details.no_message')
