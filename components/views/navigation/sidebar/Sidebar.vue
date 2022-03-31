@@ -68,7 +68,7 @@ export default Vue.extend({
     },
     usersAndGroups() {
       const combined = [...this.$props.users, ...this.groups.all]
-      return combined.sort((a, b) => a.lastUpdate - b.lastUpdate)
+      return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)
     },
     sortedGroups() {
       return sortBy(this.groups.all, 'name')
