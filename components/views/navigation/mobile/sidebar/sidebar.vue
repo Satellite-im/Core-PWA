@@ -7,7 +7,13 @@
           : 'sidebar-inner'
       "
     >
-      <div class="sidebar-search">
+      <div
+        :class="
+          isNoFriends && isChatPage
+            ? 'sidebar-search full-width'
+            : 'sidebar-search'
+        "
+      >
         <InteractablesInput
           :placeholder="`${$t('ui.search')}...`"
           size="small"
@@ -15,6 +21,13 @@
           :delete-icon="true"
           type="dark"
           full-width
+        />
+        <menu-icon
+          v-if="!(isNoFriends && isChatPage)"
+          class="toggle-sidebar"
+          size="1.2x"
+          full-width
+          @click="showMenu"
         />
       </div>
       <div v-if="!$device.isMobile" class="sidebar-nav">
@@ -163,7 +176,6 @@ import {
   UsersIcon,
   UserPlusIcon,
   PlusIcon,
-  PlusCircleIcon,
   FolderIcon,
   MessageSquareIcon,
   MenuIcon,
@@ -187,6 +199,7 @@ export default Vue.extend({
     PlusIcon,
     FolderIcon,
     MessageSquareIcon,
+    MenuIcon,
   },
   props: {
     toggle: {
@@ -226,6 +239,9 @@ export default Vue.extend({
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.users.length
       )
+    },
+    isChatPage() {
+      return this.$route.name?.includes('chat-direct')
     },
   },
   watch: {
@@ -298,6 +314,13 @@ export default Vue.extend({
     flex-direction: column;
     padding-bottom: @normal-spacing;
 
+    .toggle-sidebar {
+      cursor: pointer;
+      position: absolute;
+      z-index: 11;
+      top: 2.5rem;
+      right: 1rem;
+    }
     .no-friends {
       &:extend(.full-width);
       display: inline-flex;
@@ -331,8 +354,11 @@ export default Vue.extend({
     }
     .sidebar-search {
       &:extend(.full-width);
-      padding: @normal-spacing;
-      padding-right: @normal-spacing;
+      padding: 1rem 3rem 1rem 1rem;
+
+      &.full-width {
+        padding-right: 1rem;
+      }
     }
 
     .toggle-sidebar {
