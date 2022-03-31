@@ -1,0 +1,96 @@
+<div v-click-outside="toggle">
+  <div class="search-result" v-if="result && result.data">
+    <div class="search-result-header">
+      {{$t('search.result.search_results')}}
+      <InteractablesClose class="close" :action="toggle" />
+    </div>
+    <!-- <SearchResultGroup
+    :groupList="groupList"
+    :groupBy="groupBy"
+    @toggleGroup="toggleGroupBy"
+  /> -->
+    <!-- <div class="search-result-filters">
+    <div class="container-filter user-options">
+      <multiselect
+        :options="userOptions"
+        :multiple="true"
+        :close-on-select="false"
+        :clear-on-select="false"
+        :preserve-search="true"
+        :placeholder="$t('search.result.users')"
+        label="name"
+        track-by="name"
+        v-model="queryOptions.friends"
+        selectLabel=""
+        deselectLabel=""
+        selectedLabel=""
+        @input="onChange"
+      >
+      </multiselect>
+    </div>
+    <div class="container-filter channel-options">
+      <multiselect
+        :options="channelOptions"
+        :multiple="true"
+        :clear-on-select="false"
+        :preserve-search="true"
+        :placeholder="$t('search.result.conversations')"
+        label="name"
+        track-by="name"
+        v-model="channels"
+        selectLabel=""
+        deselectLabel=""
+        selectedLabel=""
+      >
+      </multiselect>
+    </div>
+    <div class="container-filter date">
+      <v-date-picker v-model="date" is-dark>
+        <template v-slot="{ inputValue, inputEvents }">
+          <calendar-icon size="1x" class="date-icon" />
+          <input
+            :value="inputValue"
+            v-on="inputEvents"
+            class="date-input"
+            :placeholder="$t('search.result.select_date')"
+          />
+        </template>
+      </v-date-picker>
+    </div>
+    <div class="container-filter">
+      <button class="add-more-filters">
+        {{$t('search.result.more_filters')}}
+      </button>
+    </div>
+  </div> -->
+    <SearchResultMeta
+      :result="result"
+      :items="orderTypeList"
+      :orderBy="orderBy"
+      @toggleOrder="toggleOrderBy"
+    />
+    <UiScroll
+      verticalScroll
+      scrollbarVisibility="scroll"
+      class="search-result-content"
+    >
+      <div class="search-result-inner">
+        <SearchResultItem
+          v-for="item, i in result.data"
+          :data="item"
+          :key="i"
+        />
+      </div>
+    </UiScroll>
+    <paginate
+      v-if="result.totalRows > queryOptions.perPage"
+      :page-count="Math.ceil(result.totalRows/queryOptions.perPage)"
+      v-model="page"
+      prev-text="«"
+      next-text="»"
+      container-class="search-result-pagination"
+      :click-handler="handleClickPaginate"
+    />
+    <!-- <SearchResultHistory :items="givenQueryItems" /> -->
+  </div>
+</div>

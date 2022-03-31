@@ -1,3 +1,4 @@
+import { resourceLimits } from 'worker_threads'
 import Vue from 'vue'
 import { TextileState, TextileError } from './types'
 import { ActionsArguments, RootState } from '~/types/store/store'
@@ -15,11 +16,12 @@ import {
 } from '~/libraries/SatelliteDB/SatelliteDB'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
-import { QueryOptions } from '~/types/ui/query'
-import { AccountsState, AccountsError } from '~/store/accounts/types'
+import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
+import { SearchResult, QueryOptions } from '~/types/search/search'
+import { searchResult } from '~/mock/search'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -95,8 +97,15 @@ export default {
         .where({ conversation: address })
         .toArray()) || []
 
-    const lastInbound =
-      rootState.textile.conversations[address]?.lastInbound ?? 0
+    const lastDbInbound = dbMessages.reduce(
+      (max, msg) => Math.max(max, msg.at),
+      0,
+    )
+
+    const lastInbound = Math.max(
+      lastDbInbound,
+      rootState.textile.conversations[address]?.lastInbound ?? 0,
+    )
 
     // if nothing stored in indexeddb, fetch entire conversation
     if (!dbMessages.length) {
@@ -130,7 +139,7 @@ export default {
     db.conversations.put(dbData)
     db.conversationMessages.bulkPut(messages)
     // add the messages to the search index
-    db.search.conversationMessages.addAll(messages)
+    db.search.conversationMessages.upsertAll(messages)
 
     commit('setConversation', {
       address: friend.address,
@@ -552,7 +561,7 @@ export default {
 
     const msg = { conversation: address, ...message }
     // add the message to the search index
-    db.search.conversationMessages.add(msg)
+    db.search.conversationMessages.upsert(msg)
 
     // replace old message with new edited version
     if (message.editedAt) {
@@ -582,7 +591,7 @@ export default {
       })
 
     const msg = { conversation: address, ...message }
-    db.search.conversationMessages.add(msg)
+    db.search.conversationMessages.upsert(msg)
 
     // replace old message with new edited version
     if (message.editedAt) {
@@ -906,22 +915,20 @@ export default {
    * @description Search for text within the specified conversations
    * @param param0 Action Arguments
    * @param param1 an object containing the query options, accounts, page, and limit,
-   * a search result object is returned
+   * @returns  search result object
    */
   async searchConversations(
-    { state }: ActionsArguments<TextileState>,
+    {}: ActionsArguments<TextileState>,
     {
       query,
-      page = 1,
-      perPage = 10,
+      page,
     }: {
       query: QueryOptions
-      accounts: AccountsState
       page: number
-      perPage: number
     },
-  ) {
-    const { queryString, dateRange, friends } = query
+  ): Promise<SearchResult> {
+    const { queryString, accounts, dateRange, perPage } = query
+
     const startDate =
       dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
     const endDate =
@@ -944,18 +951,10 @@ export default {
     )
 
     const skip = (page - 1) * perPage
-    const list = result?.splice(skip, perPage).map((match) => ({
+    const data = result?.map((match) => ({
       ...match,
-      user: friends.find((friend) => friend.address === match.conversation),
+      user: accounts.find((acct) => acct?.textilePubkey === match.from),
     }))
-
-    return {
-      data: {
-        totalRows: result?.length,
-        list,
-        perPage,
-        page,
-      },
-    }
+    return { data: data.slice(skip, perPage * page), totalRows: result?.length }
   },
 }

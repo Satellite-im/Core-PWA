@@ -1,0 +1,16 @@
+.group {
+  padding: 5px 10px 2px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  &:extend(.font-muted);
+  & .group-item {
+    &:hover {
+      &:extend(.font-secondary);
+    }
+    &.active {
+      &:extend(.font-secondary);
+      border-color: @primary-color;
+    }
+    padding: 5px 10px;
+  }
+}

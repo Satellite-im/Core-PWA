@@ -1,0 +1,9 @@
+<div class="group">
+  <div
+    v-for="item in groupList"
+    :class="{'group-item': true, 'active': item.type === groupBy}"
+    @click="$emit('toggleGroup', item.type)"
+  >
+    {{item.title}} {{item.count}}
+  </div>
+</div>

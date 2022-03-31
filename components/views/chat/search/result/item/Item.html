@@ -1,0 +1,13 @@
+<div class="result-item">
+  <UiCircle
+    class="avatar"
+    :type="src ? 'image' : 'random'"
+    :seed="data.user.address"
+    :size="38"
+    :source="src"
+  />
+  <div class="content">
+    <div class="username">{{ data.user.name }}</div>
+    <div class="message">{{ data.payload }}</div>
+  </div>
+</div>
