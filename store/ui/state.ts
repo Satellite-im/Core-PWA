@@ -73,6 +73,7 @@ const InitialUIState = (): UIState => ({
   },
   isLoadingFileIndex: false,
   renameCurrentName: undefined,
+  filePreview: undefined,
 })
 
 export default InitialUIState

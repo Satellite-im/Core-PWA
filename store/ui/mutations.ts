@@ -10,6 +10,7 @@ import {
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
+import { Fil } from '~/libraries/Files/Fil'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -47,6 +48,9 @@ export default {
   },
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
+  },
+  setFilePreview(state: UIState, file: Fil | undefined) {
+    state.filePreview = file
   },
   toggleEnhancers(state: UIState, options: EnhancerInfo) {
     state.enhancers = {

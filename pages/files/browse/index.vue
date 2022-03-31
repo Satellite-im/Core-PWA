@@ -12,7 +12,6 @@ export default Vue.extend({
   layout: 'files',
   data() {
     return {
-      file: false as Fil | boolean,
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
@@ -47,7 +46,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.file = item
+        this.$store.commit('ui/setFilePreview', item)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)

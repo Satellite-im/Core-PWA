@@ -91,6 +91,12 @@
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
   />
+  <FilesView
+    v-if="ui.filePreview"
+    :file="ui.filePreview"
+    @close="closeFilePreview()"
+    @share="share"
+  />
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
