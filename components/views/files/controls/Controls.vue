@@ -61,18 +61,7 @@ export default Vue.extend({
      */
     async addFolder() {
       this.errors = []
-      // checks for empty input OR input of only spaces
-      if (this.$Config.regex.empty.test(this.text)) {
-        this.errors.push(this.$t('pages.files.errors.folder_name') as string)
-        this.text = '' // clear spaces if that's the issue
-        return
-      }
-      if (this.text.includes('/')) {
-        this.errors.push(this.$t('pages.files.errors.no_slash') as string)
-        return
-      }
       this.$store.commit('ui/setIsLoadingFileIndex', true)
-      // add folder to filesystem
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
@@ -109,16 +98,16 @@ export default Vue.extend({
         return
       }
       // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
-      const protectedNameResults: File[] = originalFiles.filter(
-        (file) => !(file.name === 'sat.json'),
+      const invalidNameResults: File[] = originalFiles.filter(
+        (file) => !this.$Config.regex.invalid.test(file.name),
       )
       // filter out files with 0 bytes size
-      const emptyFileResults: File[] = protectedNameResults.filter(
+      const emptyFileResults: File[] = invalidNameResults.filter(
         (file) => !(file.size === 0),
       )
       // filter out files with the same name as another file
       const sameNameResults: File[] = emptyFileResults.filter((file) => {
-        return !this.$FileSystem.hasChild(file.name)
+        return !this.$FileSystem.currentDirectory.hasChild(file.name)
       })
       const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
@@ -176,14 +165,14 @@ export default Vue.extend({
 
       this.$emit('forceRender')
 
-      if (originalFiles.length !== protectedNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.reserved_name') as string)
+      if (originalFiles.length !== invalidNameResults.length) {
+        this.errors.push(this.$t('pages.files.errors.invalid_name') as string)
       }
-      if (protectedNameResults.length !== emptyFileResults.length) {
+      if (invalidNameResults.length !== emptyFileResults.length) {
         this.errors.push(this.$t('pages.files.errors.empty_file') as string)
       }
       if (emptyFileResults.length !== sameNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.file_name') as string)
+        this.errors.push(this.$t('pages.files.errors.item_name') as string)
       }
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw') as string)

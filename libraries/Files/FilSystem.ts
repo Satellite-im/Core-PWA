@@ -298,7 +298,7 @@ export class FilSystem {
     type,
     modified,
   }: {
-    id: string
+    id?: string
     name: string
     liked?: boolean
     shared?: boolean
