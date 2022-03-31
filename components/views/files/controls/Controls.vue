@@ -114,10 +114,6 @@ export default Vue.extend({
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
-            // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
-            if (file.size >= this.$Config.arrayBufferLimit) {
-              return { file, nsfw: false }
-            }
             const buffer = new Uint8Array(await file.arrayBuffer())
             const outputBuffer = await convert({
               buffer,

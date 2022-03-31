@@ -61,10 +61,6 @@ export class TextileFileSystem extends FilSystem {
     type: FILE_TYPE,
   ): Promise<string | undefined> {
     if (await isHeic(file)) {
-      // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
-      if (file.size >= Config.arrayBufferLimit) {
-        return
-      }
       const buffer = new Uint8Array(await file.arrayBuffer())
       const outputBuffer = await convert({
         buffer,
