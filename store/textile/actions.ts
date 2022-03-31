@@ -1,3 +1,4 @@
+import { resourceLimits } from 'worker_threads'
 import Vue from 'vue'
 import { TextileState, TextileError } from './types'
 import { ActionsArguments, RootState } from '~/types/store/store'
@@ -20,6 +21,7 @@ import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsPr
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
 import { SearchResult, QueryOptions } from '~/types/search/search'
+import { searchResult } from '~/mock/search'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -919,11 +921,13 @@ export default {
     {}: ActionsArguments<TextileState>,
     {
       query,
+      page,
     }: {
       query: QueryOptions
+      page: number
     },
-  ): Promise<SearchResult[]> {
-    const { queryString, accounts, dateRange } = query
+  ): Promise<SearchResult> {
+    const { queryString, accounts, dateRange, perPage } = query
 
     const startDate =
       dateRange && new Date(dateRange.start).setHours(0, 0, 0, 0).valueOf()
@@ -946,11 +950,11 @@ export default {
       },
     )
 
-    return result?.map((match) => {
-      return {
-        ...match,
-        user: accounts.find((acct) => acct?.textilePubkey === match.from),
-      }
-    })
+    const skip = (page - 1) * perPage
+    const data = result?.map((match) => ({
+      ...match,
+      user: accounts.find((acct) => acct?.textilePubkey === match.from),
+    }))
+    return { data: data.slice(skip, perPage * page), totalRows: result?.length }
   },
 }

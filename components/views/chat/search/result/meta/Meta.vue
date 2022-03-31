@@ -11,7 +11,7 @@ export default Vue.extend({
       required: true,
     },
     result: {
-      type: Array as PropType<Array<SearchResult>>,
+      type: Object as PropType<SearchResult>,
       required: true,
     },
     orderBy: {

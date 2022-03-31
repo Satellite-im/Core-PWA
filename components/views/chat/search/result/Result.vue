@@ -35,13 +35,13 @@ export default Vue.extend({
       orderBy: SearchOrderType.New as SearchOrderType,
       channels: [],
       date: null,
-      page: 1 as number,
-      perPage: 10 as number,
       result: [] as SearchResult[],
+      page: 1 as number,
       queryOptions: {
         queryString: '',
         accounts: [],
         dateRange: null,
+        perPage: 10,
       } as QueryOptions,
     }
   },
@@ -59,13 +59,6 @@ export default Vue.extend({
         return this.dataState.search
       },
     },
-    currPageResults(): SearchResult[] {
-      return this.$data.result.slice(
-        (this.$data.page - 1) * this.$data.perPage,
-        this.$data.page * this.$data.perPage,
-      )
-    },
-
     // disabled functionality, will be refactored later
     // userOptions() {
     //   return this.result?.recommends?.users?.length
@@ -142,8 +135,17 @@ export default Vue.extend({
       )
       this.$data.loading = DataStateType.Ready
     },
-    handleClickPaginate(pageNum: number) {
+    async handleClickPaginate(pageNum: number) {
+      this.$data.loading = DataStateType.Loading
       this.$data.page = pageNum
+      this.$data.result = await this.$store.dispatch(
+        'textile/searchConversations',
+        {
+          query: this.$data.queryOptions,
+          page: this.$data.page,
+        },
+      )
+      this.$data.loading = DataStateType.Ready
     },
     onChange(value: any) {
       this.$data.queryOptions = {

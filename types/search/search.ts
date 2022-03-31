@@ -133,11 +133,14 @@ export type SearchParam = {
 }
 
 export interface SearchResult {
-  user?: User
-  id: any
-  terms: string[]
-  score: number
-  match: MatchInfo
+  data: {
+    user?: User
+    id: any
+    terms: string[]
+    score: number
+    match: MatchInfo
+  }[]
+  totalRows: number
 }
 
 export type DateOptions = {
@@ -149,4 +152,5 @@ export type QueryOptions = {
   queryString: string
   accounts: Friend[]
   dateRange: DateOptions | null
+  perPage: number
 }
