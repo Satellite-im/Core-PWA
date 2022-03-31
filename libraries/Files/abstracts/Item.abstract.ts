@@ -156,7 +156,7 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Validate that the parent is of the correct instance type
+   * Validate prospective item name
    * @method validateName
    * @param {string} name
    */
