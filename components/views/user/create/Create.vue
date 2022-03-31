@@ -21,6 +21,7 @@ export default Vue.extend({
       name: '',
       error: '',
       status: '',
+      isLoading: false,
     }
   },
   computed: {
@@ -52,18 +53,27 @@ export default Vue.extend({
      * @example
      */
     async selectImage(e: Event) {
+      this.isLoading = true
+
       const target = e.target as HTMLInputElement
 
-      if (target.value === null) return
+      if (target.value === null) {
+        this.isLoading = false
+        return
+      }
 
       const files = target.files
 
-      if (!files?.length) return
+      if (!files?.length) {
+        this.isLoading = false
+        return
+      }
 
       // stop upload if picture is too large for nsfw scan.
       // Leaving this in place since nsfw profile pictures would be bad
       if (files[0].size > this.$Config.nsfwByteLimit) {
         this.error = this.$t('errors.accounts.file_too_large') as string
+        this.isLoading = false
         return
       }
       // stop upload if picture is nsfw
@@ -71,12 +81,14 @@ export default Vue.extend({
         const nsfw = await this.$Security.isNSFW(files[0])
         if (nsfw) {
           this.error = this.$t('errors.chat.contains_nsfw') as string
+          this.isLoading = false
           return
         }
       } catch (err: any) {
         this.$Logger.log('error', 'file upload error')
         this.error = this.$t('errors.sign_in.invalid_file') as string
         this.resetFileInput()
+        this.isLoading = false
         return
       }
 
@@ -88,6 +100,7 @@ export default Vue.extend({
           this.imageUrl = e.target.result.toString()
 
           this.toggleCropper()
+          this.isLoading = false
         }
       }
 
@@ -126,6 +139,7 @@ export default Vue.extend({
      */
     confirm(e: Event) {
       e.preventDefault()
+      if (this.isLoading) return false
       if (!this.accountValidLength) {
         this.error = this.$t('user.registration.username_error') as string
         return false
