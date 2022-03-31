@@ -130,6 +130,29 @@ export default Vue.extend({
       })
     },
     /**
+     * @method setReplyChatbarContent DocsTODO
+     * @description
+     * @example
+     */
+    setReplyChatbarContent() {
+      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
+      const { id, type, payload, to, from } = this.$props.message
+      let finalPayload = payload
+      if (['image', 'video', 'audio', 'file'].includes(type)) {
+        finalPayload = `*${this.$t('conversation.multimedia')}*`
+      } else if (type === 'glyph') {
+        finalPayload = `<img src=${payload} width='16px' height='16px' />`
+      }
+      this.$store.commit('ui/setReplyChatbarContent', {
+        id,
+        payload: finalPayload,
+        from: this.$props.from,
+        messageID: this.$props.message.id,
+        to: to === myTextilePublicKey ? from : to,
+      })
+      this.$store.dispatch('ui/setChatbarFocus')
+    },
+    /**
      * @method showQuickProfile DocsTODO
      * @description
      * @param e

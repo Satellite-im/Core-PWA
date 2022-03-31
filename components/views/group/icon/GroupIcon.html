@@ -1,24 +1,24 @@
 <div :class="['group-icon', group.members > 3 ? 'unread' : '']">
   <div v-if="group.members > 2" class="group-multi">
     <div
-      v-for="(address, i) in group.members.slice(0, 3)"
+      v-for="(address, i) in getSlicedMembers"
       :class="[`group-el-${i}`]"
     >
       <UiCircle
         type="random"
-        :seed="address"
+        :seed="address.toString()"
         :size="i === 2 ? 10 : i == 1 ? 20 : 30"
       />
     </div>
   </div>
-  <div v-else-if="group.members== 2" class="group-double">
+  <div v-else-if="group.members === 2" class="group-double">
     <div v-for="(address, i) in group.members" :class="[`group-el-${i}`]">
-      <UiCircle type="random" :seed="address" :size="25" />
+      <UiCircle type="random" :seed="address.toString()" :size="25" />
     </div>
   </div>
   <div v-else>
     <div v-for="(address, i) in group.members" class="group-single">
-      <UiCircle type="random" :seed="address" :size="35" />
+      <UiCircle type="random" :seed="address.toString()" :size="35" />
     </div>
   </div>
   <span v-if="group.members > 3" class="label">{{group.members}}</span>

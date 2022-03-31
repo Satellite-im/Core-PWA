@@ -55,8 +55,10 @@
           />
           <MessageActions
             v-if="replyHover == reply.id"
-            :hideReply="true"
+            :hideReply="false"
+            :setReplyChatbarContent="setReplyChatbarContent"
             :emojiReaction="(event) => emojiReaction(event, reply.id)"
+            :message="message"
           />
         </div>
       </div>

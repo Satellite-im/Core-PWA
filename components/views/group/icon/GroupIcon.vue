@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Group } from '~/types/ui/core'
+import { Group } from '~/store/groups/types'
 
 export default Vue.extend({
   props: {
@@ -12,12 +12,22 @@ export default Vue.extend({
         name: '',
         address: '',
         motd: '',
+        members: '',
+        membersInfo: [],
       }),
       required: true,
     },
   },
   data() {
     return {}
+  },
+  computed: {
+    getSlicedMembers() {
+      if (this.group.membersInfo) {
+        return this.group.membersInfo.slice(0, 3)
+      }
+      return this.group
+    },
   },
 })
 </script>
