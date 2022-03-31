@@ -97,7 +97,7 @@ export default Vue.extend({
         this.errors.push(this.$t('pages.files.errors.limit') as string)
         return
       }
-      // todo - for now, index is stored in the bucket. we could try moving it to the thread, then sat.json wouldn't be reserved
+      // todo - move validation inside of file constructor
       const invalidNameResults: File[] = originalFiles.filter(
         (file) => !this.$Config.regex.invalid.test(file.name),
       )
