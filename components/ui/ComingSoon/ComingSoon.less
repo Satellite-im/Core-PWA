@@ -1,4 +1,5 @@
 .coming-soon-container {
+
   &:before {
     z-index: @base-z-index + 200 !important;
   }
@@ -11,9 +12,11 @@
       justify-content: center;
     }
   }
-  .grayscaled {
-    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(100%);
+  &.grayscaled {
+    .circle{
+      -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
+    }
   }
 
   .coming-soon-overlay {

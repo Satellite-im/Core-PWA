@@ -2,11 +2,11 @@
   <div
     v-if="!areaCover"
     class="has-tooltip-primary tooltip-container coming-soon-container"
-    :class="`has-tooltip-${tooltipPosition} ${disabled ? 'disabled' : ''}`"
+    :class="`has-tooltip-${tooltipPosition} ${disabled ? 'disabled' : 'grayscaled'}`"
     :data-tooltip="tooltipText"
   >
     <div
-      :class="`coming-soon ${disabled ? '' : 'grayscaled'} ${horizontal ? 'horizontal' : ''}`"
+      :class="`coming-soon ${horizontal ? 'horizontal' : ''}`"
       :style="{'margin-top': marginTopOverride}"
       @click="preventClickthrough"
     >
