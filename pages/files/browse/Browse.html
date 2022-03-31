@@ -1,5 +1,4 @@
 <div id="files" class="hidden-scroll" v-scroll-lock="true">
-  <FilesView v-if="file" :file="file" @close="file = false" @share="share" />
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
     <FilesFilepath />

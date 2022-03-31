@@ -1,3 +1,4 @@
+import { Fil } from '~/libraries/Files/Fil'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
@@ -206,6 +207,7 @@ export interface UIState {
   }
   isLoadingFileIndex: boolean
   renameCurrentName?: string
+  filePreview: Fil | undefined
 }
 
 export type Position = {

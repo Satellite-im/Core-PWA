@@ -116,6 +116,14 @@ export default Vue.extend({
       this.$store.dispatch('webrtc/hangUp')
       this.$store.commit('ui/fullscreen', false)
     },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    closeFilePreview() {
+      this.$store.commit('ui/setFilePreview', undefined)
+    },
   },
 })
 </script>

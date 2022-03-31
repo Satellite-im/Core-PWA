@@ -28,6 +28,7 @@ Object {
     "route": "emotes",
     "show": false,
   },
+  "filePreview": undefined,
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
