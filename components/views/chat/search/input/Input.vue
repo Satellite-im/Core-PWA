@@ -642,7 +642,9 @@ export default Vue.extend({
       this.searchQuery.setQueryByHTML(searchInput)
       this.$emit(
         'search',
-        this.searchQuery.getQueryString(),
+        this.searchQuery
+          .getQueryString()
+          .slice(0, this.$Config.chat.searchCharLimit),
         this.searchQuery.queryItems,
       )
     },

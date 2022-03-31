@@ -101,6 +101,7 @@ export const Config = {
     typingInputThrottle: 2000,
     maxUndoStack: 100,
     batchUndoSeconds: 5,
+    searchCharLimit: 256,
   },
   account: {
     minimumAccountLength: 5,
