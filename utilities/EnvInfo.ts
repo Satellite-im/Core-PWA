@@ -20,7 +20,8 @@ export const EnvInfo = class EnvInfo {
       let gl
       try {
         gl =
-          canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+          (canvas.getContext('webgl') as WebGLRenderingContext) ||
+          (canvas.getContext('experimental-webgl') as RenderingContext)
       } catch (e) {
         console.warn('cannot create webgl canvas')
       }
