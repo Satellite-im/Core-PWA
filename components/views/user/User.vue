@@ -156,7 +156,7 @@ export default Vue.extend({
         }
 
         if (daysDif > 1 && daysDif <= 2) {
-          return `${daysDif} + ${this.$t('friends.details.days_short')}`
+          return `${daysDif} ${this.$t('friends.details.days_short')}`
         }
 
         return this.$dayjs(uLastUpdate).format('L')
