@@ -45,6 +45,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      replyActionButtons: true,
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
