@@ -1,21 +1,35 @@
 <div id="file-list">
   <table class="table" :class="{'disabled' : ui.isLoadingFileIndex}">
     <thead>
-      <th @click="sort">
+      <th @click="setSort(FileSortEnum.NAME)">
         {{ $t('pages.files.browse.name') }}
-        <filter-icon size="0.8x" />
+        <template v-if="sort.category===FileSortEnum.NAME">
+          <chevron-up-icon v-if="sort.asc" size="1x" />
+          <chevron-down-icon v-else size="1x" />
+        </template>
       </th>
-      <th v-if="!$device.isMobile" class="open-sidebar-hide" @click="sort">
-        {{ $t('pages.files.browse.modified') }}
-        <filter-icon size="0.8x" />
-      </th>
-      <th v-if="!$device.isMobile" class="open-sidebar-hide" @click="sort">
-        {{ $t('pages.files.browse.type') }}
-        <filter-icon size="0.8x" />
-      </th>
-      <th @click="sort">
+      <template v-if="!$device.isMobile">
+        <th @click="setSort(FileSortEnum.MODIFIED)">
+          {{ $t('pages.files.browse.modified') }}
+          <template v-if="sort.category===FileSortEnum.MODIFIED">
+            <chevron-up-icon v-if="sort.asc" size="1x" />
+            <chevron-down-icon v-else size="1x" />
+          </template>
+        </th>
+        <th @click="setSort(FileSortEnum.TYPE)">
+          {{ $t('pages.files.browse.type') }}
+          <template v-if="sort.category===FileSortEnum.TYPE">
+            <chevron-up-icon v-if="sort.asc" size="1x" />
+            <chevron-down-icon v-else size="1x" />
+          </template>
+        </th>
+      </template>
+      <th class="size" @click="setSort(FileSortEnum.SIZE)">
         {{ $t('pages.files.browse.size') }}
-        <filter-icon size="0.8x" />
+        <template v-if="sort.category===FileSortEnum.SIZE">
+          <chevron-up-icon v-if="sort.asc" size="1x" />
+          <chevron-down-icon v-else size="1x" />
+        </template>
       </th>
       <th></th>
     </thead>

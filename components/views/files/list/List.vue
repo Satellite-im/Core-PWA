@@ -11,9 +11,13 @@ import {
   LockIcon,
   UnlockIcon,
   MoreVerticalIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from 'satellite-lucide-icons'
 
+import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { FileSort } from '~/types/files/file'
 
 export default Vue.extend({
   components: {
@@ -25,6 +29,8 @@ export default Vue.extend({
     LockIcon,
     UnlockIcon,
     MoreVerticalIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
   },
   props: {
     /**
@@ -41,6 +47,10 @@ export default Vue.extend({
       type: Number,
       required: true,
     },
+    sort: {
+      type: Object as PropType<FileSort>,
+      required: true,
+    },
   },
   data() {
     return {
@@ -49,6 +59,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    FileSortEnum: () => FileSortEnum,
   },
   mounted() {
     this.$data.timer = setInterval(
@@ -97,8 +108,8 @@ export default Vue.extend({
     remove(item: Item) {
       this.$emit('remove', item)
     },
-    sort() {
-      this.$toast.show(this.$t('todo - sort') as string)
+    setSort(category: FileSortEnum) {
+      this.$emit('setSort', category)
     },
   },
 })
