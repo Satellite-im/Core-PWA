@@ -2,8 +2,9 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import { SmileIcon } from 'satellite-lucide-icons'
-import { Group, Reply, UIMessage } from '~/types/messaging'
+import { Group, UIReply, UIMessage } from '~/types/messaging'
 import { getUsernameFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
@@ -12,7 +13,7 @@ export default Vue.extend({
   },
   props: {
     reply: {
-      type: Object as PropType<Reply>,
+      type: Object as PropType<UIReply>,
       default: () => ({
         id: '',
         at: 1620515543000,
@@ -40,6 +41,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState(['accounts']),
     reactions() {
       return this.reply.id
         ? this.$props.reply?.reactions
@@ -53,7 +55,6 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent) {
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,
@@ -61,7 +62,7 @@ export default Vue.extend({
           ? this.$props.reply.id
           : this.$props.message.id,
         to:
-          this.$props.message.to === myTextilePublicKey
+          this.$props.message.to === this.accounts.details.textilePubkey
             ? this.$props.message.from
             : this.$props.message.to,
       })
@@ -81,12 +82,15 @@ export default Vue.extend({
      * @example
      */
     quickReaction(emoji: String) {
-      this.$store.dispatch('ui/addReaction', {
+      this.$store.dispatch('textile/sendReactionMessage', {
+        to:
+          this.$props.message.to === this.accounts.details.textilePubkey
+            ? this.$props.message.from
+            : this.$props.message.to,
         emoji,
-        reactor: this.$mock.user.name,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
-        replyID: this.$props.reply.id,
+        reactTo: this.$props.reply.id
+          ? this.$props.reply.id
+          : this.$props.message.id,
       })
     },
     /**
@@ -106,9 +110,7 @@ export default Vue.extend({
      * @example
      */
     didIReact(reaction: any) {
-      return reaction.reactors.includes(
-        this.$store.state.accounts.details.textilePubkey,
-      )
+      return reaction.reactors.includes(this.accounts.details.textilePubkey)
     },
     getReactorsList(reactors: string[], limit = 3) {
       const numberOfReactors = reactors.length
@@ -116,12 +118,12 @@ export default Vue.extend({
         .slice(0, limit)
         .reduce(
           (reactorsList, reactorPublickey, i) =>
-            (i === 0 ? '' : ',') +
-            reactorsList +
-            getUsernameFromState(reactorPublickey, this.$store.state),
+            `${reactorsList}${i === 0 ? '' : ','}${getUsernameFromState(
+              reactorPublickey,
+              this.$store.state,
+            )}`,
           '',
         )
-
       return `${list}${
         numberOfReactors > limit
           ? `and ${numberOfReactors - limit} more ...`
