@@ -8,7 +8,7 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
 
-describe('Chat Features Tests', () => {
+describe.skip('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

@@ -50,7 +50,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     })
   })
 
-  it('Import Account with store pin disabled', () => {
+  it.skip('Import Account with store pin disabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is disabled
     cy.importAccountPINscreen(randomPIN, false, false)
 
@@ -68,7 +68,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     })
   })
 
-  it('Import Account with store pin enabled', () => {
+  it.skip('Import Account with store pin enabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
     cy.importAccountPINscreen(randomPIN, true, false)
 
