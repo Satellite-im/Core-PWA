@@ -3,7 +3,9 @@
   :class="textile.messageLoading ? 'loading' : ''"
   @contextmenu="contextMenu"
 >
-  <div :class="`message-container ${message.pinned ? 'pinned-message' : ''}`">
+  <div :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
+       v-on:mouseenter='replyActionButtons = true'
+        v-on:mouseleave='replyActionButtons = false'>
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
       Archived
@@ -23,7 +25,7 @@
       <TypographyText :text="timestamp" />
     </div>
     <MessageActions
-      v-if="!hideActions"
+      v-if="replyActionButtons"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
@@ -85,6 +87,7 @@
     :group="group"
     v-if="!hideActions"
     :from="from"
+    v-on:mouseenter='replyActionButtons = false'
   />
   <MessageEdit
     v-if="messageEdit"
