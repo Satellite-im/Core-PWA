@@ -4,6 +4,7 @@ import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { mimeType } from '~/utilities/FileType'
+import { FilesError } from '~/store/files/types'
 
 /**
  * @method isNSFW
@@ -23,9 +24,10 @@ export default async function isNSFW(file: File): Promise<boolean> {
     FILE_TYPE.WEBP,
   ]
   const mime = await mimeType(file)
+
   // if unscannable/unembeddable type
   if (![...vidTypes, ...imgTypes].includes(mime as FILE_TYPE)) {
-    return false
+    throw new Error(FilesError.INVALID_FILE)
   }
 
   let predictions: nsfwjs.predictionType[]
