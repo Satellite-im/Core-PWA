@@ -1,16 +1,4 @@
 <div class="image">
-  <div class="image-mask" v-if="showfull">
-    <div class="image-container">
-      <img
-        class="is-image-in-mask"
-        :src="image.url"
-        v-click-outside="clickHandler"
-      />
-      <a class="link" :href="image.url" target="_blank">
-        {{ $t('files.view_original') }}
-      </a>
-    </div>
-  </div>
   <img
     class="is-image"
     data-cy="chat-image"

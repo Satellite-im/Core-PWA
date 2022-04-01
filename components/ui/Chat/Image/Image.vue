@@ -23,14 +23,9 @@ export default Vue.extend({
       required: true,
     },
   },
-  data() {
-    return {
-      showfull: false,
-    }
-  },
   methods: {
     clickHandler(event: MouseEvent): void {
-      this.showfull = !this.showfull
+      this.$store.commit('ui/setChatImageOverlay', this.image)
     },
   },
 })
