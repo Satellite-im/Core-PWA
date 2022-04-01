@@ -7,8 +7,6 @@ import {
   ArchiveIcon,
   FileIcon,
   ImageIcon,
-  LockIcon,
-  UnlockIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
@@ -22,8 +20,6 @@ export default Vue.extend({
     FolderIcon,
     ArchiveIcon,
     ImageIcon,
-    LockIcon,
-    UnlockIcon,
     MoreVerticalIcon,
   },
   mixins: [ContextMenu],

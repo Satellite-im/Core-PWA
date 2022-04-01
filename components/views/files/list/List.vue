@@ -2,33 +2,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import {
-  FilterIcon,
-  FolderIcon,
-  ArchiveIcon,
-  FileIcon,
-  ImageIcon,
-  LockIcon,
-  UnlockIcon,
-  MoreVerticalIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from 'satellite-lucide-icons'
-
+import { ChevronDownIcon, ChevronUpIcon } from 'satellite-lucide-icons'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { FileSort } from '~/types/files/file'
 
 export default Vue.extend({
   components: {
-    FilterIcon,
-    FileIcon,
-    FolderIcon,
-    ArchiveIcon,
-    ImageIcon,
-    LockIcon,
-    UnlockIcon,
-    MoreVerticalIcon,
     ChevronDownIcon,
     ChevronUpIcon,
   },

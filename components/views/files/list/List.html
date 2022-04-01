@@ -24,7 +24,7 @@
           </template>
         </th>
       </template>
-      <th class="size" @click="setSort(FileSortEnum.SIZE)">
+      <th @click="setSort(FileSortEnum.SIZE)">
         {{ $t('pages.files.browse.size') }}
         <template v-if="sort.category===FileSortEnum.SIZE">
           <chevron-up-icon v-if="sort.asc" size="1x" />
