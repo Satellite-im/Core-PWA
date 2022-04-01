@@ -4,7 +4,7 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 
-describe('Chat Text Validations', () => {
+describe.skip('Chat Text Validations', () => {
   it('Message with more than 2048 chars - Counter get reds', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

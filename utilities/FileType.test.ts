@@ -1,36 +1,50 @@
-import fs from 'fs'
-import { isHeic } from '~/utilities/FileType'
+import * as FileType from '~/utilities/FileType'
 
-describe('init', () => {
-  test('heic function exists', () => {
-    expect(isHeic).toMatchSnapshot()
+describe('FileType.isMimeArchive', () => {
+  test('0', () => {
+    const result: any = FileType.isMimeArchive('number')
+    expect(result).toMatchSnapshot()
   })
 
-  // test('heic function check heic image', () => {
-  //   const buffer = fs.readFileSync('utilities/assets/heic-image.heic', {
-  //     flag: 'r',
-  //   })
-  //   const result = isHeic(new Blob([buffer]))
+  test('1', () => {
+    const result: any = FileType.isMimeArchive('object')
+    expect(result).toMatchSnapshot()
+  })
 
-  //   expect(result).toBeTruthy()
-  //   expect(result).toMatchSnapshot()
-  // })
+  test('2', () => {
+    const result: any = FileType.isMimeArchive('string')
+    expect(result).toMatchSnapshot()
+  })
 
-  // test('heic function check non heic image', () => {
-  //   const buffer = fs.readFileSync('utilities/assets/non-heic-image.png', {
-  //     flag: 'r',
-  //   })
-  //   const result = isHeic(new Blob([buffer]))
+  test('3', () => {
+    const result: any = FileType.isMimeArchive('')
+    expect(result).toMatchSnapshot()
+  })
+})
 
-  //   expect(result).toBeFalsy()
-  //   expect(result).toMatchSnapshot()
-  // })
+describe('FileType.isMimeEmbeddableImage', () => {
+  test('0', () => {
+    const result: any = FileType.isMimeEmbeddableImage('number')
+    expect(result).toMatchSnapshot()
+  })
 
-  // test('heic function check a non buffer response', () => {
-  //   const buffer = Buffer.from('Hello, World', 'utf8')
-  //   const result: any = isHeic(new Blob([buffer]))
+  test('1', () => {
+    const result: any = FileType.isMimeEmbeddableImage('object')
+    expect(result).toMatchSnapshot()
+  })
 
-  //   expect(result).toBeFalsy()
-  //   expect(result).toMatchSnapshot()
-  // })
+  test('2', () => {
+    const result: any = FileType.isMimeEmbeddableImage('string')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = FileType.isMimeEmbeddableImage('array')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = FileType.isMimeEmbeddableImage('')
+    expect(result).toMatchSnapshot()
+  })
 })
