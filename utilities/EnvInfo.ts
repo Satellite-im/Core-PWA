@@ -17,19 +17,18 @@ export const EnvInfo = class EnvInfo {
 
     if (window.navigator.product === 'Gecko') {
       const canvas = document.createElement('canvas')
-      let gl
       try {
-        gl =
-          (canvas.getContext('webgl') as WebGLRenderingContext) ||
-          (canvas.getContext('experimental-webgl') as RenderingContext)
+        const gl = (canvas.getContext('webgl') ||
+          canvas.getContext('experimental-webgl')) as WebGLRenderingContext
+        if (gl) {
+          this.debugInfo = gl.getExtension('WEBGL_debug_renderer_info')
+          this.cpu = gl.getParameter(this.debugInfo.UNMASKED_VENDOR_WEBGL)
+          this.renderer = gl.getParameter(
+            this.debugInfo.UNMASKED_RENDERER_WEBGL,
+          )
+        }
       } catch (e) {
         console.warn('cannot create webgl canvas')
-      }
-
-      if (gl) {
-        this.debugInfo = gl.getExtension('WEBGL_debug_renderer_info')
-        this.cpu = gl.getParameter(this.debugInfo.UNMASKED_VENDOR_WEBGL)
-        this.renderer = gl.getParameter(this.debugInfo.UNMASKED_RENDERER_WEBGL)
       }
     }
   }
