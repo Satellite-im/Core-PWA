@@ -91,6 +91,7 @@
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
   />
+  <UiChatImageOverlay v-if="ui.chatImageOverlay"></UiChatImageOverlay>
   <FilesView
     v-if="ui.filePreview"
     :file="ui.filePreview"
