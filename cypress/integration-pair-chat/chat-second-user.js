@@ -1,11 +1,11 @@
 const faker = require('faker')
 const recoverySeed =
-  'urban clump gather december smoke upset chicken spice steel hope doll pigeon{enter}'
+  'position few settle fold sister transfer song speed million congress acoustic version{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const redirectedURL = 'http://localhost:3000/#/auth/unlock' // URL redirected from root
 
 describe('Chat features with two accounts at the same time - Second User', () => {
-  before(() => {
+  it('Load account from Chat User B', () => {
     //Delete database before starting
     new Cypress.Promise(async (resolve) => {
       const req = indexedDB.deleteDatabase('SatelliteDB')

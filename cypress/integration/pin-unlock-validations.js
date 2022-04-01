@@ -1,6 +1,6 @@
 const faker = require('faker')
 const userPassphrase =
-  'veteran intact there despair unique trouble season rebel sort file unit hard'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe('Unlock pin should be persisted when store pin is enabled', () => {

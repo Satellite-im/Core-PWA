@@ -1,7 +1,7 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
 describe('Verify passphrase does not get stored in localstorage', () => {
   before(() => {

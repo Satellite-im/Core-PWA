@@ -1,21 +1,17 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 
 describe('Chat Text Validations', () => {
-  before(() => {
+  it('Message with more than 2048 chars - Counter get reds', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     //Ensure messages are displayed before starting
     cy.contains('cypress', { timeout: 180000 }).should('be.visible')
-    cy.get('.toggle-sidebar').should('be.visible').click()
-  })
-
-  it('Message with more than 2048 chars - Counter get reds', () => {
-    cy.waitForMessagesToLoad()
+    cy.goToConversation('cypress friend')
     cy.get('[data-cy=editable-input]')
       .should('be.visible')
       .trigger('input')

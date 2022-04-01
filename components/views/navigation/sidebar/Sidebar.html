@@ -31,6 +31,7 @@
         <InteractablesButton
           :inactive="$route.path.includes('/friends/list') ? false : true"
           class="sidebar-full-btn"
+          data-cy="sidebar-friends"
           :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
           size="small"
           :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
@@ -48,6 +49,7 @@
       <InteractablesButton
         :inactive="$route.path.includes('/files') ? false : true"
         class="sidebar-full-btn"
+        data-cy="sidebar-files"
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
         :action="() => $router.push('/files/browse')"

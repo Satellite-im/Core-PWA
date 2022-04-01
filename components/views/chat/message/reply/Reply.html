@@ -1,5 +1,10 @@
 <div v-if="message.replies.length" class="replies-container">
-  <div v-if="!showReplies" class="reply-preview" @click="toggleReplies">
+  <div
+    v-if="!showReplies"
+    class="reply-preview"
+    data-cy="reply-preview"
+    @click="toggleReplies"
+  >
     <plus-square-icon size="1.1x" />
     &nbsp; {{ makeReplyText }}
   </div>
@@ -29,6 +34,7 @@
             v-if="reply.replyType === 'text'"
             :text="markdownToHtml(reply.payload)"
             class="markdown"
+            data-cy="reply-message"
           />
           <UiChatImage
             v-else-if="reply.replyType === 'image'"
@@ -57,7 +63,12 @@
     </div>
     <MessageReactions :message="message" :group="group" :reply="reply" />
   </div>
-  <div v-if="showReplies" @click="toggleReplies" class="reply-close">
+  <div
+    v-if="showReplies"
+    @click="toggleReplies"
+    class="reply-close"
+    data-cy="reply-close"
+  >
     <minus-square-icon size="1.1x" />
     &nbsp; {{$t('conversation.collapse')}}
   </div>
