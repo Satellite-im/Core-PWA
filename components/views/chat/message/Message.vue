@@ -48,7 +48,9 @@ export default Vue.extend({
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
+      // added two blobs because we need png version for clipboard API (copy image), and the original blob for save image
       blob: undefined as Blob | undefined,
+      pngBlob: undefined as Blob | undefined,
     }
   },
   computed: {
@@ -92,8 +94,7 @@ export default Vue.extend({
         return [
           ...mainList,
           { text: this.$t('context.copy_img'), func: this.copyImage },
-          // todo - add save img functionality
-          // { text: this.$t('context.save_img'), func: (this as any).testFunc },
+          { text: this.$t('context.save_img'), func: this.saveImage },
         ]
       }
       return mainList
@@ -158,14 +159,21 @@ export default Vue.extend({
      */
     async copyImage() {
       if (this.blob.type !== 'image/png') {
-        this.blob = await this.toPng()
+        this.pngBlob = await this.toPng()
       }
       await this.$envinfo.navigator.clipboard.write([
         new ClipboardItem({
-          'image/png': this.blob,
+          'image/png': this.pngBlob || this.blob,
         }),
       ])
       this.$toast.show(this.$t('ui.copied') as string)
+    },
+    saveImage() {
+      const a = document.createElement('a')
+      a.setAttribute('type', 'hidden')
+      a.setAttribute('download', 'download')
+      a.href = URL.createObjectURL(this.blob)
+      a.click()
     },
     /**
      * @method toPng
@@ -182,8 +190,8 @@ export default Vue.extend({
           canvas.width = img.naturalWidth
           canvas.height = img.naturalHeight
           ctx?.drawImage(img, 0, 0)
-          canvas.toBlob((pngBlob: Blob) => {
-            resolve(pngBlob)
+          canvas.toBlob((newBlob: Blob) => {
+            resolve(newBlob)
           })
         }
       })
