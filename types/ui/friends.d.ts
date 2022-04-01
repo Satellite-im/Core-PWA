@@ -33,6 +33,7 @@ export interface Friend extends EncryptedFriend {
   request?: IncomingRequest
   photoHash?: string
   metadata?: FriendMetadata
+  peerId?: string
 }
 
 export interface OutgoingRequest extends FriendRequest {

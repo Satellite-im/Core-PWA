@@ -1,3 +1,5 @@
+import PeerId from 'peer-id'
+import { keys } from 'libp2p-crypto'
 import { PublicKey } from '@solana/web3.js'
 
 import {
@@ -157,6 +159,7 @@ export default {
     { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount,
   ) {
+    console.log('frend details')
     // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
@@ -185,6 +188,12 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
+    const peerId = await PeerId.createFromPubKey(
+      keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
+        new PublicKey(friendKey).toBytes(),
+      ).bytes,
+    )
+
     const stored = state.all.some((friend) => friend.address === friendKey)
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
@@ -200,6 +209,7 @@ export default {
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
+      peerId: peerId.toB58String(),
     }
     const $Hounddog = Vue.prototype.$Hounddog
     const friendExists = $Hounddog.friendExists(state, friend)

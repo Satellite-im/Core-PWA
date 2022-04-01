@@ -320,10 +320,14 @@ export default {
       )
     }
 
-    if (!webrtcInitialized) {
-      dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
-        root: true,
-      })
+    if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
+      dispatch(
+        'webrtc/initialize',
+        { type: 'ed25519', privateKey: $SolanaManager.payerAccount?.secretKey },
+        {
+          root: true,
+        },
+      )
     }
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
