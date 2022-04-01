@@ -1,4 +1,4 @@
-.unread{
+.unread {
   position: relative;
   cursor: pointer;
   &-label {
@@ -18,10 +18,10 @@
     font-family: @primary-font;
     border: 2px solid @darker;
   }
-  .circle{
+  .circle {
     transition: 0.2s ease-in-out;
   }
-  &-loader{
+  &-loader {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,9 +32,9 @@
     justify-content: center;
     text-align: center;
   }
-  &--loading{
+  &--loading {
     pointer-events: none;
-    &:after{
+    &:after {
       content: '';
       position: absolute;
       top: 0;
@@ -44,17 +44,17 @@
       background-color: rgba(@darker, 0.5);
     }
   }
-  &--active{
-    .circle{
+  &--active {
+    .circle {
       border: 3px solid @purple;
     }
   }
 }
 
 @media only screen and (min-width: @mobile-breakpoint) {
-  .unread{
-    &:hover{
-      .circle{
+  .unread {
+    &:hover {
+      .circle {
         border: 3px solid @purple;
       }
     }

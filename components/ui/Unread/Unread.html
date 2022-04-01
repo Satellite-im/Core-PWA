@@ -15,7 +15,9 @@
     :source="src"
     :size="40"
   />
-  <span class="unread-label" v-if="user.unreadCount > 0">{{user.unreadCount > 99 ? "99+" : user.unreadCount}}</span>
+  <span class="unread-label" v-if="user.unreadCount > 0"
+    >{{user.unreadCount > 99 ? "99+" : user.unreadCount}}</span
+  >
   <div class="unread-loader" v-if="isLoading">
     <UiLoadersSpinner spinning />
   </div>
