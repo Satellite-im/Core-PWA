@@ -9,7 +9,7 @@ export class Directory extends Item {
 
   /**
    * @constructor
-   * @param {object} param0 directory info - name, liked, shared, type
+   * @description call Item constructor
    * @returns {Directory}
    */
   constructor({

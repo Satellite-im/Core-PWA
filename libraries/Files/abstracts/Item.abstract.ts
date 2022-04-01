@@ -18,10 +18,8 @@ export abstract class Item implements ItemInterface {
   abstract size: number
 
   /**
-   * Update the parent directory for this item
    * @constructor
-   * @param {string} name - Name of the item.
-   * @param {Parent} parent - Optional parent of the item.
+   * @description set shared properties for Fil and Directory
    */
   constructor({
     id,
@@ -43,7 +41,7 @@ export abstract class Item implements ItemInterface {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
 
-    this.validateName(name)
+    this._validateName(name)
 
     this._id = id || uuidv4()
     this._name = name
@@ -79,7 +77,7 @@ export abstract class Item implements ItemInterface {
 
   /**
    * @getter
-   * @returns a unique identifier for the item
+   * @returns a unique identifier for the item - uuid
    */
   get id(): string {
     return this._id
@@ -144,8 +142,8 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Validate that the parent is of the correct instance type
    * @method validateParent
+   * @description Validate that the parent is of the correct instance type
    * @param {Directory} parent - The new name of the associated file.
    */
   private validateParent(parent: Directory | null): boolean {
@@ -156,11 +154,11 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Validate prospective item name
    * @method validateName
+   * @description Validate prospective item name
    * @param {string} name
    */
-  private validateName(name: string) {
+  private _validateName(name: string) {
     if (Config.regex.empty.test(name)) {
       throw new Error(FileSystemErrors.NO_EMPTY_STRING)
     }
@@ -179,18 +177,18 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Set a new name for this item.
    * @setter
+   * @description Set a new name for this item.
    * @param {string} newName - The new name of the associated file.
    */
   set name(newName: string) {
-    this.validateName(newName)
+    this._validateName(newName)
     this._name = newName
   }
 
   /**
-   * Update the parent directory for this item
-   * @method
+   * @setter
+   * @description Update the parent directory for this item
    * @param {Directory} newPARENT - The new name of the associated file.
    */
   set parent(newParent: Directory | null) {

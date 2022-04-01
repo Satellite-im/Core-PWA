@@ -21,6 +21,7 @@ export class TextileFileSystem extends FilSystem {
   /**
    * @method uploadFile
    * @description Upload file to the bucket and create in the file system afterwards
+   * use uuid as bucket path so files can be renamed freely
    * @param {File} file file to be uploaded
    */
   async uploadFile(file: File) {
@@ -43,7 +44,7 @@ export class TextileFileSystem extends FilSystem {
   /**
    * @method removeFile
    * @description Remove file/folder from bucket and file system
-   * @param {string} id id and path in bucket
+   * @param {string} id uuid = path in bucket
    */
   async removeFile(id: string) {
     await this.bucket.removeFile(id)

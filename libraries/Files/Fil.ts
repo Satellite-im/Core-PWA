@@ -10,7 +10,7 @@ export class Fil extends Item {
 
   /**
    * @constructor
-   * @param param0  id, name, file, size, liked, shared, modified, description, type, thumbnail
+   * @description call Item constructor, set Fil specific properties
    * @returns {Fil}
    */
   constructor({
