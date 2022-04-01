@@ -1,9 +1,12 @@
+import Vue from 'vue'
 import Mousetrap from 'mousetrap'
 import * as actions from '~/store/ui/actions'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
-import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import SoundManager from '~/libraries/SoundManager/SoundManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
+Vue.prototype.$TextileManager = new TextileManager()
 
 const $Sounds = new SoundManager()
 
@@ -459,5 +462,91 @@ describe('init', () => {
       { value: val.content, userId: val.userId },
       { root: true },
     )
+  })
+  test('showQuickProfile with payload', async () => {
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const localInitState = { ...initialState }
+    const payload = {
+      textilePublicKey: 'public key',
+      position: {
+        x: 6,
+        y: 2,
+      },
+    }
+    await actions.default.showQuickProfile(
+      { commit, localInitState, rootState },
+      payload,
+    )
+    expect(commit).toHaveBeenCalledWith(
+      'setQuickProfilePosition',
+      payload.position,
+    )
+  })
+  test('showQuickProfile without payload', async () => {
+    const commit = jest.fn()
+    const localInitState = { ...initialState }
+    const rootState = { ...initialRootState }
+    const payload = {}
+    const result = await actions.default.showQuickProfile(
+      { commit, localInitState, rootState },
+      payload,
+    )
+    expect(commit).not.toHaveBeenCalledWith(
+      'setQuickProfilePosition',
+      payload.position,
+    )
+    expect(result).toBeUndefined()
+  })
+  test('showProfile with existing friend metadata', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.metadataManager = jest.fn()
+    TMConstructor.metadataManager.getFriendMetadata = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'friend metadata',
+      })
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const dispatch = jest.fn()
+
+    await actions.default.showProfile(
+      { commit, rootState, dispatch },
+      rootState.friends,
+    )
+    expect(commit).toHaveBeenCalledWith('toggleModal', {
+      name: 'userProfile',
+      state: true,
+    })
+  })
+  test('showProfile with no friend metadata', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const dispatch = jest.fn()
+
+    await actions.default.showProfile(
+      { commit, rootState, dispatch },
+      rootState.friends,
+    )
+    expect(commit).toHaveBeenCalledWith('toggleModal', {
+      name: 'userProfile',
+      state: true,
+    })
+  })
+  test('showProfile with no passed-in user argument', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const dispatch = jest.fn()
+
+    const result = await actions.default.showProfile(
+      { commit, rootState, dispatch },
+      null,
+    )
+    expect(result).toBeUndefined()
   })
 })
