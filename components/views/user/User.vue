@@ -134,10 +134,8 @@ export default Vue.extend({
         0
 
       if (uLastUpdate) {
-        const secondsDif = this.$dayjs().diff(
-          this.$dayjs(uLastUpdate),
-          'second',
-        )
+        const lastUpdate = this.$dayjs(uLastUpdate)
+        const secondsDif = this.$dayjs().diff(lastUpdate, 'second')
 
         if (secondsDif < 30) {
           return this.$t('friends.details.now')
@@ -146,10 +144,10 @@ export default Vue.extend({
         const sameDay = this.$dayjs().isSame(uLastUpdate, 'day')
 
         if (sameDay) {
-          return this.$dayjs(uLastUpdate).format('LT')
+          return lastUpdate.format('LT')
         }
 
-        const daysDif = this.$dayjs().diff(this.$dayjs(uLastUpdate), 'day')
+        const daysDif = this.$dayjs().diff(lastUpdate, 'day')
 
         if (daysDif <= 1) {
           return this.$t('friends.details.yesterday')
@@ -159,7 +157,7 @@ export default Vue.extend({
           return `${daysDif} ${this.$t('friends.details.days_short')}`
         }
 
-        return this.$dayjs(uLastUpdate).format('L')
+        return lastUpdate.format('L')
       }
 
       return this.$t('friends.details.no_message')
