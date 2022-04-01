@@ -9,6 +9,7 @@
   <TypographyText
     v-if="$Hounddog.getActiveFriend(friends)"
     :text="`${$Hounddog.getActiveFriend(friends).name}`"
+    data-cy="user-connected"
     :size="6"
   />
   <TypographyText

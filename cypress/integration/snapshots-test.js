@@ -1,7 +1,7 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'atom sure lecture jungle capital adjust mango increase pizza destroy entire second'
+  'skin hotel finger toe face pill rather age acid ticket demise insane'
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 

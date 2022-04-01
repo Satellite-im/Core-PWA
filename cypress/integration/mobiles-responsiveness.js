@@ -8,7 +8,7 @@ const filepathCorrect = 'images/logo.png'
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
 describe.skip('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
@@ -54,11 +54,8 @@ describe.skip('Run responsiveness tests on several devices', () => {
       //Validate profile name displayed
       cy.chatFeaturesProfileName('cypress')
 
-      // Click on hamburger menu if width < height
-      cy.get('.toggle-sidebar').should('be.visible').click()
-
       //Validate message and emojis are sent
-      cy.waitForMessagesToLoad()
+      cy.goToConversation('cypress friend')
       cy.chatFeaturesSendMessage(randomMessage)
       cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
 
