@@ -19,6 +19,9 @@
     &:not(:last-child) {
       min-width: 160px;
     }
+    &:last-child {
+      padding: 0;
+    }
 
     svg {
       font-size: 9pt;
@@ -38,8 +41,12 @@
   .table {
     min-width: @viewport-width - 20px;
     th {
+      padding: @light-spacing;
+      &:first-of-type {
+        padding-left: @light-spacing;
+      }
       &:not(:last-child) {
-        min-width: unset;
+        min-width: 75px;
       }
     }
   }
