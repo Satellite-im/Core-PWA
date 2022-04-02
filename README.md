@@ -45,6 +45,16 @@ if you want to run a specific test on terminal you can also use
 
 - `npx cypress run --spec "cypress/integration/test-name-here.js" --browser chrome`
 
+## Running Jest tests
+
+To run Jest tests you can use
+
+- `yarn test` - this will run all the tests on our test suite
+
+if you want to run a specific test you can also use
+
+- `yarn test folder-name/test-name-here.test.ts`
+
 # Contributing
 
 Please lint your code before submitting. `yarn lint`. Lints must pass before submitting a PR.
