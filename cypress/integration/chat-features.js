@@ -8,7 +8,7 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -129,7 +129,7 @@ describe.skip('Chat Features Tests', () => {
         })
       })
     //Validating that preview of image is displayed and matches with image filename copied from clipboard
-    cy.get('.file-item').should('be.visible')
+    cy.get('.file-item').should('exist')
     cy.get('.file-info > .title').should('contain', 'logo.png')
   })
 })

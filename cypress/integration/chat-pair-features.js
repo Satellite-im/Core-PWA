@@ -10,7 +10,7 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
+describe('Chat features with two accounts', () => {
   it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
@@ -21,7 +21,7 @@ describe.skip('Chat features with two accounts', () => {
   it('Send message to user B', () => {
     cy.goToConversation('Chat User B')
     cy.chatFeaturesSendMessage(randomMessage)
-    cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
+    cy.contains(randomMessage).last().scrollIntoView().should('exist')
   })
 
   it('Send emoji to user B', () => {
@@ -50,7 +50,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('[data-cy=chat-image]')
       .last()
       .scrollIntoView()
-      .should('be.visible')
+      .should('exist')
       .invoke('attr', 'src')
       .then((imgSrcValue) => {
         imageURL = imgSrcValue
@@ -66,7 +66,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
-      .should('be.visible')
+      .should('exist')
       .invoke('attr', 'href')
       .then((fileSrcValue) => {
         fileURL = fileSrcValue
@@ -85,7 +85,7 @@ describe.skip('Chat features with two accounts', () => {
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
     cy.goToConversation('Chat User A')
-    cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
+    cy.contains(randomMessage).last().scrollIntoView().should('exist')
   })
 
   it('Message not sent by same user cannot be edited', () => {
@@ -111,15 +111,15 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('@reply-preview').click()
     cy.get('[data-cy="reply-message"]').should('have.text', textReply)
     cy.get('[data-cy="reply-close"]')
-      .should('be.visible')
+      .should('exist')
       .should('contain', 'Collapse')
   })
 
   it('Reply to message is not displayed when clicking on Collapse', () => {
-    cy.get('[data-cy="reply-close"]').click()
+    cy.get('[data-cy="reply-close"]').scrollIntoView().click()
     cy.get('[data-cy="reply-message"]').should('not.exist')
     cy.getReply(randomMessage)
-    cy.get('@reply-preview').should('be.visible')
+    cy.get('@reply-preview').should('exist').scrollIntoView()
   })
 
   it('Assert emoji received from user A', () => {
@@ -141,7 +141,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('[data-cy=chat-image]')
       .last()
       .scrollIntoView()
-      .should('be.visible')
+      .should('exist')
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
         expect(imageSecondAccountSrc).to.be.eq(imageURL)
@@ -152,7 +152,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
-      .should('be.visible')
+      .should('exist')
       .invoke('attr', 'href')
       .then((fileSecondAccountSrc) => {
         expect(fileSecondAccountSrc).to.be.eq(fileURL)

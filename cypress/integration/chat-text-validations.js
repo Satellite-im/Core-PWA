@@ -4,7 +4,7 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 
-describe.skip('Chat Text Validations', () => {
+describe('Chat Text Validations', () => {
   it('Message with more than 2048 chars - Counter get reds', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -44,6 +44,7 @@ describe.skip('Chat Text Validations', () => {
     cy.get('[data-cy=editable-input]').trigger('input').clear().type(' ')
     cy.validateCharlimit('1/2048', false)
     cy.get('[data-cy=editable-input]').clear()
+    cy.validateCharlimit('0/2048', false)
   })
 
   it('Chat Text Validation - Emoji counts only for 1 char', () => {

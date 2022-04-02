@@ -33,9 +33,9 @@ describe.skip('Run responsiveness tests on several devices', () => {
       //User Image Input
       cy.createAccountAddImage(filepathCorrect)
       cy.get('[data-cy=cropper-container]', { timeout: 60000 })
-        .should('be.visible')
+        .should('exist')
         .then(() => {
-          cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
+          cy.contains('Crop', { timeout: 30000 }).should('exist').click()
         })
 
       //Finishing Account Creation
