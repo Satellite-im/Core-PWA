@@ -282,11 +282,11 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
     .should('be.visible')
     .trigger('input')
     .type(message)
-  cy.get('[data-cy=editable-input]').type('{enter}') // sending text message
+  cy.get('[data-cy=send-message]').click() //sending text message
   cy.contains(message, { timeout: 15000 })
     .last()
     .scrollIntoView()
-    .should('be.visible')
+    .should('exist')
 })
 
 Cypress.Commands.add(
@@ -294,21 +294,21 @@ Cypress.Commands.add(
   (receiver, selector, message) => {
     cy.selectContextMenuOption(selector, 'Reply')
     cy.get('.is-chatbar-reply')
-      .should('be.visible')
+      .should('exist')
       .should('include.text', 'Reply to')
       .should('include.text', receiver)
-    cy.get('[data-cy=editable-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(message)
-    cy.get('[data-cy=editable-input]').type('{enter}') // sending text message
+      .then(() => {
+        cy.get('[data-cy=editable-input]')
+          .should('be.visible')
+          .trigger('input')
+          .type(message)
+        cy.get('[data-cy=send-message]').click() // sending text message
+      })
   },
 )
 
 Cypress.Commands.add('getReply', (messageReplied) => {
   cy.contains(messageReplied)
-    .last()
-    .scrollIntoView()
     .parent()
     .parent()
     .find('[data-cy=reply-preview]')
@@ -318,14 +318,11 @@ Cypress.Commands.add('getReply', (messageReplied) => {
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
   cy.get('#emoji-toggle > .control-icon').click()
   cy.get(emojiLocator).click() // sending emoji
-  cy.get('[data-cy=editable-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type('{enter}')
+  cy.get('[data-cy=send-message]').click() //sending emoji message
   cy.contains(emojiValue)
     .last()
     .scrollIntoView({ timeout: 20000 })
-    .should('be.visible')
+    .should('exist')
 })
 
 Cypress.Commands.add(
@@ -334,15 +331,16 @@ Cypress.Commands.add(
     cy.contains(messageToEdit)
       .last()
       .scrollIntoView()
-      .should('be.visible')
+      .should('exist')
       .rightclick()
     cy.contains('Edit Message').click()
     cy.get('[data-cy=edit-message-input]')
-      .should('be.visible')
+      .scrollIntoView()
+      .should('exist')
       .trigger('input')
       .type(messageEdited) // editing message
     cy.get('[data-cy=edit-message-input]').type('{enter}')
-    cy.contains(messageEdited).last().scrollIntoView().should('be.visible')
+    cy.contains(messageEdited).last().scrollIntoView().should('exist')
   },
 )
 
@@ -350,18 +348,18 @@ Cypress.Commands.add('chatFeaturesSendGlyph', () => {
   cy.get('#glyph-toggle').click()
   cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
   cy.get('.glyph-item').first().click()
-  cy.get('[data-cy=editable-input]').trigger('input').type('{enter}')
+  cy.get('[data-cy=send-message]').click() //sending glyph message
 })
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
-  cy.get('.file-item', { timeout: 30000 }).should('be.visible')
+  cy.get('.file-item', { timeout: 30000 }).should('exist')
   cy.get('.file-info > .title').should('contain', 'logo.png')
   cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
-  cy.get('.thumbnail').should('be.visible')
-  cy.get('[data-cy=editable-input]').trigger('input').type('{enter}')
+  cy.get('.thumbnail').should('exist')
+  cy.get('[data-cy=send-message]').click() //sending image message
   cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
 })
 
@@ -369,10 +367,10 @@ Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
   })
-  cy.get('.file-item').should('be.visible')
+  cy.get('.file-item').should('exist')
   cy.get('.file-info > .title').should('contain', 'test-file.txt')
   cy.get('.preview', { timeout: 120000 }).should('exist')
-  cy.get('[data-cy=editable-input]').trigger('input').type('{enter}')
+  cy.get('[data-cy=send-message]').click() //sending file message
   cy.get('.preview', { timeout: 120000 }).should('not.exist')
 })
 
@@ -478,7 +476,7 @@ Cypress.Commands.add('closeModal', (locator) => {
 })
 
 Cypress.Commands.add('goToLastGlyphOnChat', () => {
-  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('be.visible')
+  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('exist')
 })
 
 Cypress.Commands.add('validateCharlimit', (text, assert) => {
