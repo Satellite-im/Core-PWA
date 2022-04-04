@@ -1,8 +1,8 @@
+import { TranslateResult } from 'vue-i18n'
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
-
 export enum ThemeNames {
   DEFAULT = 'default',
   MOONLESS = 'moonless_night',

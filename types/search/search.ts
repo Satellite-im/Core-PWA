@@ -132,7 +132,7 @@ export type SearchParam = {
   orderby: SearchOrderType
 }
 
-export interface SearchResult {
+export interface UISearchResult {
   data: {
     user?: User
     id: any

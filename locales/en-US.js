@@ -550,7 +550,11 @@ export default {
     result: {
       search_results: 'Search results',
       more_filters: 'More filters',
-      results: 'Results',
+      no_results: 'No Results',
+      one_result: '1 Result',
+      one_page: '({0}) Results',
+      multi_page: '{pageStart}-{pageEnd} of ({total}) Results',
+      last_page: '{resultNum} of ({total}) Results',
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',

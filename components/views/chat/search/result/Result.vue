@@ -10,7 +10,7 @@ import {
   SearchOrderType,
   SearchResultGroupType,
   QueryOptions,
-  SearchResult,
+  UISearchResult,
 } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
 
@@ -35,7 +35,7 @@ export default Vue.extend({
       orderBy: SearchOrderType.New as SearchOrderType,
       channels: [],
       date: null,
-      result: [] as SearchResult[],
+      result: [] as UISearchResult[],
       page: 1 as number,
       queryOptions: {
         queryString: '',
@@ -48,14 +48,14 @@ export default Vue.extend({
   computed: {
     ...mapState(['dataState', 'friends', 'accounts']),
     DataStateType: () => DataStateType,
-    loading: {
+    isLoading: {
       set(state: DataStateType) {
         this.$store.commit('dataState/setDataState', {
           key: 'search',
           value: state,
         })
       },
-      get() {
+      get(): DataStateType {
         return this.dataState.search
       },
     },
@@ -77,8 +77,8 @@ export default Vue.extend({
   watch: {
     date: {
       handler(newDateValue) {
-        this.$data.queryOptions = {
-          ...this.$data.queryOptions,
+        this.queryOptions = {
+          ...this.queryOptions,
           dateRange: {
             start: newDateValue,
             end: newDateValue,
@@ -120,36 +120,30 @@ export default Vue.extend({
      * @param query
      */
     async fetchResult(query: string): Promise<void> {
-      this.$data.loading = DataStateType.Loading
-      this.$data.queryOptions = {
-        ...this.$data.queryOptions,
+      this.isLoading = DataStateType.Loading
+      this.queryOptions = {
+        ...this.queryOptions,
         accounts: [...this.friends.all, this.accounts.details],
         queryString: query,
       }
-      this.$data.result = await this.$store.dispatch(
-        'textile/searchConversations',
-        {
-          query: this.$data.queryOptions,
-          page: this.$data.page,
-        },
-      )
-      this.$data.loading = DataStateType.Ready
+      this.result = await this.$store.dispatch('textile/searchConversations', {
+        query: this.queryOptions,
+        page: this.page,
+      })
+      this.isLoading = DataStateType.Ready
     },
     async handleClickPaginate(pageNum: number) {
-      this.$data.loading = DataStateType.Loading
-      this.$data.page = pageNum
-      this.$data.result = await this.$store.dispatch(
-        'textile/searchConversations',
-        {
-          query: this.$data.queryOptions,
-          page: this.$data.page,
-        },
-      )
-      this.$data.loading = DataStateType.Ready
+      this.isLoading = DataStateType.Loading
+      this.page = pageNum
+      this.result = await this.$store.dispatch('textile/searchConversations', {
+        query: this.queryOptions,
+        page: this.page,
+      })
+      this.isLoading = DataStateType.Ready
     },
     onChange(value: any) {
-      this.$data.queryOptions = {
-        ...this.$data.queryOptions,
+      this.queryOptions = {
+        ...this.queryOptions,
         accounts: value,
       }
     },
