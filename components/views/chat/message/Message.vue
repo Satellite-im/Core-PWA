@@ -10,6 +10,7 @@ import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
+import { isMimeEmbeddableImage } from '~/utilities/FileType'
 
 export default Vue.extend({
   components: {
@@ -89,7 +90,7 @@ export default Vue.extend({
       // if image message
       if (
         this.message.type === 'file' &&
-        this.$props.message.payload.type.includes('image')
+        isMimeEmbeddableImage(this.message.payload.type)
       ) {
         return [
           ...mainList,
