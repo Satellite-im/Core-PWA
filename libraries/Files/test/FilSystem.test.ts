@@ -63,6 +63,21 @@ describe('Test FilSystem', () => {
       }
     })
   }
+  // it(`Find an item`, () => {
+  //   // filesystem.createDirectory({ name: 'third dir' })
+  //   const result = filesystem.findItem('TestFile.png')
+  //   // const result = filesystem.currentDirectory['_children']
+  //   expect(result).toBe(true)
+  // })
+  it(`Navigate to a directory`, () => {
+    filesystem.createDirectory({ name: 'third dir' })
+    const result = filesystem.goBackToDirectory('third dir')
+    expect(result).toMatchSnapshot()
+  })
+  it(`Move item to a directory`, () => {
+    filesystem.moveItemTo('test_fil_two.txt', 'third dir')
+    expect(filesystem).toMatchSnapshot()
+  })
   it(`Correctly returns filesystem parent`, () =>
     expect(filesystem.parent).toBe(null))
   it(`Correctly returns filesystem content`, () =>
