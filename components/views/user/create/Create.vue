@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { UserRegistrationData } from '~/types/ui/user'
+import { isEmbeddableImage } from '~/utilities/FileType'
 
 export default Vue.extend({
   name: 'CreateUser',
@@ -65,6 +66,14 @@ export default Vue.extend({
       const files = target.files
 
       if (!files?.length) {
+        this.isLoading = false
+        return
+      }
+
+      const isEmbeddable = await isEmbeddableImage(files[0])
+
+      if (!isEmbeddable) {
+        this.error = this.$t('errors.sign_in.invalid_file') as string
         this.isLoading = false
         return
       }
