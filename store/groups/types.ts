@@ -5,10 +5,6 @@ export interface GroupMember {
   address: string
 }
 
-export type GroupMembers = {
-  [key: string]: GroupMember[]
-}
-
 export interface Group {
   id: string
   name: string

@@ -5,6 +5,5 @@ Object {
   "all": Array [],
   "groupSubscriptions": Array [],
   "inviteSubscription": null,
-  "members": Object {},
 }
 `;

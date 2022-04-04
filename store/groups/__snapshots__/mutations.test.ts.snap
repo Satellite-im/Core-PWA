@@ -49,7 +49,6 @@ Object {
   ],
   "groupSubscriptions": Array [],
   "inviteSubscription": null,
-  "members": Object {},
 }
 `;
 
@@ -90,7 +89,6 @@ Object {
   ],
   "groupSubscriptions": Array [],
   "inviteSubscription": null,
-  "members": Object {},
 }
 `;
 
@@ -131,7 +129,6 @@ Object {
   ],
   "groupSubscriptions": Array [],
   "inviteSubscription": null,
-  "members": Object {},
 }
 `;
 
@@ -179,7 +176,6 @@ Object {
   ],
   "groupSubscriptions": Array [],
   "inviteSubscription": null,
-  "members": Object {},
 }
 `;
 
