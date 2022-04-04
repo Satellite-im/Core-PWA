@@ -11,6 +11,7 @@ import { refreshTimestampInterval } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export default Vue.extend({
   components: {
@@ -92,6 +93,13 @@ export default Vue.extend({
         this.message.type === 'file' &&
         isMimeEmbeddableImage(this.message.payload.type)
       ) {
+        // remove copy from GIF because it copies a still png version
+        if (this.message.payload.type === FILE_TYPE.GIF) {
+          return [
+            ...mainList,
+            { text: this.$t('context.save_img'), func: this.saveImage },
+          ]
+        }
         return [
           ...mainList,
           { text: this.$t('context.copy_img'), func: this.copyImage },
@@ -159,7 +167,7 @@ export default Vue.extend({
      * @description clipboard API only accepts png. if not png, convert via canvas
      */
     async copyImage() {
-      if (this.blob.type !== 'image/png') {
+      if (this.blob?.type !== 'image/png') {
         this.pngBlob = await this.toPng()
       }
       await this.$envinfo.navigator.clipboard.write([
