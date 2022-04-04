@@ -98,7 +98,7 @@ export class FilSystem {
   }
 
   /**
-   * @method flat
+   * @getter flat
    * @returns {ExportItem[]} flattened list of files in order to check if file exists
    */
   get flat(): ExportItem[] {
@@ -118,7 +118,7 @@ export class FilSystem {
   }
 
   /**
-   * @method totalSize
+   * @getter totalSize
    * @returns {number} total size of all tracked files
    */
   get totalSize(): number {
@@ -132,7 +132,7 @@ export class FilSystem {
   }
 
   /**
-   * @method percentStorageUsed
+   * @getter percentStorageUsed
    * @returns {number} percentage of available storage used
    */
   get percentStorageUsed(): number {
@@ -298,7 +298,7 @@ export class FilSystem {
     type,
     modified,
   }: {
-    id: string
+    id?: string
     name: string
     liked?: boolean
     shared?: boolean
@@ -409,7 +409,7 @@ export class FilSystem {
 
   /**
    * @method goBack
-   * This will navigate the filesystem to the directory at this path
+   * @description navigate the filesystem to the directory at this path
    * @argument {string} steps number of steps to go back (will go to root if too many are provided)
    * @returns {Directory | null} returns the opened directory
    */
@@ -522,7 +522,7 @@ export class FilSystem {
 
   /**
    * @method moveItemTo
-   * move an item into a specific directory
+   * @description move an item into a specific directory
    * @argument {string} childName name of item to move
    * @argument {string} dirPath name of directory to move item into
    * @returns {Directory | null} directory the item has been moved to

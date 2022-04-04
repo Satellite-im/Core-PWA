@@ -3,7 +3,6 @@ import { Item } from './abstracts/Item.abstract'
 import { FILE_TYPE } from './types/file'
 
 export class Fil extends Item {
-  private _type = FILE_TYPE.GENERIC
   private _description: string = ''
   private _size: number = 0
   private _file: File | undefined
@@ -11,7 +10,7 @@ export class Fil extends Item {
 
   /**
    * @constructor
-   * @param param0  id, name, file, size, liked, shared, modified, description, type, thumbnail
+   * @description call Item constructor, set Fil specific properties
    * @returns {Fil}
    */
   constructor({
@@ -37,11 +36,10 @@ export class Fil extends Item {
     type?: FILE_TYPE
     thumbnail?: string
   }) {
-    super({ name: name || 'un-named file', liked, shared, modified, id })
+    super({ name: name || 'un-named file', liked, shared, modified, id, type })
     this._file = file || undefined
     this._description = description || ''
     this._size = size || 0
-    this._type = type || FILE_TYPE.GENERIC
     this._thumbnail = thumbnail || ''
   }
 
@@ -51,14 +49,6 @@ export class Fil extends Item {
    */
   get description(): string {
     return this._description
-  }
-
-  /**
-   * @getter type
-   * @returns file type in plain text
-   */
-  get type(): FILE_TYPE {
-    return this._type
   }
 
   /**
@@ -74,7 +64,7 @@ export class Fil extends Item {
       liked: this.liked,
       shared: this.shared,
       description: this.description,
-      type: this.type,
+      type: this.type as FILE_TYPE,
       thumbnail: this.thumbnail,
     })
   }

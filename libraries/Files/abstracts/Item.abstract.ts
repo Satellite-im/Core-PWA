@@ -4,6 +4,7 @@ import { FileSystemErrors } from '../errors/Errors'
 import { ItemInterface } from '../interface/Item.interface'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILE_TYPE } from '../types/file'
+import { Config } from '~/config'
 
 export abstract class Item implements ItemInterface {
   private _id: string = ''
@@ -12,15 +13,13 @@ export abstract class Item implements ItemInterface {
   private _liked: boolean = false
   private _shared: boolean = false
   private _modified: number
-  abstract type: DIRECTORY_TYPE | FILE_TYPE
+  private _type: FILE_TYPE | DIRECTORY_TYPE
   abstract modified: number
   abstract size: number
 
   /**
-   * Update the parent directory for this item
    * @constructor
-   * @param {string} name - Name of the item.
-   * @param {Parent} parent - Optional parent of the item.
+   * @description set shared properties for Fil and Directory
    */
   constructor({
     id,
@@ -29,6 +28,7 @@ export abstract class Item implements ItemInterface {
     shared,
     parent,
     modified,
+    type,
   }: {
     id?: string
     name: string
@@ -36,9 +36,12 @@ export abstract class Item implements ItemInterface {
     liked?: boolean
     parent?: Directory
     modified?: number
+    type?: FILE_TYPE | DIRECTORY_TYPE
   }) {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
+
+    this._validateName(name)
 
     this._id = id || uuidv4()
     this._name = name
@@ -46,6 +49,11 @@ export abstract class Item implements ItemInterface {
     this._liked = liked || false
     this._parent = parent || null
     this._modified = modified || Date.now()
+    this._type =
+      type ||
+      (this.constructor.name === 'Fil'
+        ? FILE_TYPE.GENERIC
+        : DIRECTORY_TYPE.DEFAULT)
   }
 
   /**
@@ -69,7 +77,7 @@ export abstract class Item implements ItemInterface {
 
   /**
    * @getter
-   * @returns a unique identifier for the item
+   * @returns a unique identifier for the item - uuid
    */
   get id(): string {
     return this._id
@@ -101,6 +109,14 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
+   * @getter type
+   * @returns file type in plain text
+   */
+  get type(): FILE_TYPE | DIRECTORY_TYPE {
+    return this._type
+  }
+
+  /**
    * @protected
    * @getter modifiedVal
    * @returns last modified timestamp
@@ -126,9 +142,9 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Validate that the parent is of the correct instance type
    * @method validateParent
-   * @param {string} newName - The new name of the associated file.
+   * @description Validate that the parent is of the correct instance type
+   * @param {Directory} parent - The new name of the associated file.
    */
   private validateParent(parent: Directory | null): boolean {
     // In the future we may want shared directory types and more
@@ -138,28 +154,41 @@ export abstract class Item implements ItemInterface {
   }
 
   /**
-   * Set a new name for this item.
+   * @method validateName
+   * @description Validate prospective item name
+   * @param {string} name
+   */
+  private _validateName(name: string) {
+    if (Config.regex.empty.test(name)) {
+      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
+    }
+
+    if (name[0] === '.') {
+      throw new Error(FileSystemErrors.LEADING_DOT)
+    }
+
+    if (Config.regex.invalid.test(name)) {
+      throw new Error(FileSystemErrors.INVALID)
+    }
+
+    if (this.validateParent(this.parent) && this.parent?.hasChild(name)) {
+      throw new Error(FileSystemErrors.DUPLICATE_NAME)
+    }
+  }
+
+  /**
    * @setter
+   * @description Set a new name for this item.
    * @param {string} newName - The new name of the associated file.
    */
   set name(newName: string) {
-    const filenameTest = /[/:"*?<>|]+/
-
-    if (!newName || typeof newName !== 'string' || !newName.trim().length)
-      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
-
-    if (filenameTest.test(newName))
-      throw new Error(FileSystemErrors.INVALID_SYMBOL)
-
-    if (this.validateParent(this.parent) && this.parent?.hasChild(newName))
-      throw new Error(FileSystemErrors.DUPLICATE_NAME)
-
+    this._validateName(newName)
     this._name = newName
   }
 
   /**
-   * Update the parent directory for this item
-   * @method
+   * @setter
+   * @description Update the parent directory for this item
    * @param {Directory} newPARENT - The new name of the associated file.
    */
   set parent(newParent: Directory | null) {

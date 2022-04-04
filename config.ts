@@ -120,6 +120,8 @@ export const Config = {
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
     // check for empty string or spaces/nbsp
     empty: /^\s*$/,
+    // invalid characters in filesystem name
+    invalid: /[/:"*?<>|~#%&+{}\\]+/,
     // Regex to check if string contains only emoji's.
     isEmoji:
       /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,

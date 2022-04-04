@@ -5,12 +5,11 @@ import { Fil } from './Fil'
 import { DIRECTORY_TYPE } from './types/directory'
 
 export class Directory extends Item {
-  private _type: DIRECTORY_TYPE.DEFAULT
   private _children = new Map()
 
   /**
    * @constructor
-   * @param {object} param0 directory info - name, liked, shared, type
+   * @description call Item constructor
    * @returns {Directory}
    */
   constructor({
@@ -28,8 +27,14 @@ export class Directory extends Item {
     modified?: number
     type?: DIRECTORY_TYPE
   }) {
-    super({ id, name: name || 'un-named directory', liked, shared, modified })
-    this._type = type || DIRECTORY_TYPE.DEFAULT
+    super({
+      id,
+      name,
+      liked,
+      shared,
+      modified,
+      type,
+    })
   }
 
   /**
@@ -38,14 +43,6 @@ export class Directory extends Item {
    */
   get content(): Array<Item> {
     return Array.from(this._children.values())
-  }
-
-  /**
-   * @getter type
-   * @returns {DIRECTORY_TYPE} returns the type of directory
-   */
-  get type(): DIRECTORY_TYPE {
-    return this._type
   }
 
   /**
@@ -78,7 +75,7 @@ export class Directory extends Item {
       name: `${this.name} copy`,
       liked: this.liked,
       shared: this.shared,
-      type: this.type,
+      type: this.type as DIRECTORY_TYPE,
     })
 
     this.content.forEach((item) => {
