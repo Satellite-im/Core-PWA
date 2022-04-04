@@ -351,16 +351,20 @@ Cypress.Commands.add('chatFeaturesSendGlyph', () => {
   cy.get('[data-cy=send-message]').click() //sending glyph message
 })
 
-Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
+Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
   cy.get('.file-item', { timeout: 30000 }).should('exist')
-  cy.get('.file-info > .title').should('contain', 'logo.png')
+  cy.get('.file-info > .title').should('contain', filename)
   cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
   cy.get('.thumbnail').should('exist')
   cy.get('[data-cy=send-message]').click() //sending image message
   cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
+})
+
+Cypress.Commands.add('goToLastImageOnChat', () => {
+  cy.get('[data-cy=chat-image]').last().scrollIntoView().should('exist')
 })
 
 Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {

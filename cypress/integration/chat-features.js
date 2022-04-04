@@ -106,16 +106,15 @@ describe('Chat Features Tests', () => {
   it.skip('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
     //Test skipped until AP-1080 bug is fixed
     //Send an image in chat
-    cy.chatFeaturesSendImage(imageLocalPath)
+    cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
 
     //Copying the latest image URL sent
-    cy.get('[data-cy=chat-image]')
-      .last()
+    cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imgSrcValue) => {
         imageURL = imgSrcValue
       })
-    cy.get('[data-cy=chat-image]').last().rightclick()
+    cy.goToLastImageOnChat().rightclick()
     cy.contains('Copy Image').realClick()
 
     //Simulating paste event through a cypress command passing the clipboard image URL data

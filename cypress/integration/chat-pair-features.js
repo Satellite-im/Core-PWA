@@ -46,11 +46,8 @@ describe('Chat features with two accounts', () => {
   })
 
   it('Send image to user B', () => {
-    cy.chatFeaturesSendImage(imageLocalPath)
-    cy.get('[data-cy=chat-image]')
-      .last()
-      .scrollIntoView()
-      .should('exist')
+    cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
+    cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imgSrcValue) => {
         imageURL = imgSrcValue
@@ -138,10 +135,7 @@ describe('Chat features with two accounts', () => {
   })
 
   it('Assert image received from user A', () => {
-    cy.get('[data-cy=chat-image]')
-      .last()
-      .scrollIntoView()
-      .should('exist')
+    cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
         expect(imageSecondAccountSrc).to.be.eq(imageURL)
