@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`init heic function check a non buffer response 1`] = `false`;
-
-exports[`init heic function check heic image 1`] = `true`;
-
-exports[`init heic function check non heic image 1`] = `false`;
-
-exports[`init heic function exists 1`] = `[Function]`;

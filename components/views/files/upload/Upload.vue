@@ -7,7 +7,7 @@ import { mapState } from 'vuex'
 import { cloneDeep } from 'lodash'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-import { isHeic } from '~/utilities/Heic'
+import { isHeic } from '~/utilities/FileType'
 import { UploadDropItemType, FileType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 const converter = require('heic-convert')
@@ -119,13 +119,10 @@ export default Vue.extend({
         this.count_error = false
 
         for (let i = 0; i < newFiles.length; i++) {
-          /* checking .heic file needs file array buffer because sometimes its file type return empty string */
-          const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
-          const isHeicType = isHeic(buffer)
-          if (isHeicType) {
-            /* convert .heic file to jpeg so that we can convert it for html5 style */
+          if (await isHeic(newFiles[i])) {
+            const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
             const oBuffer = await converter({
-              buffer, // the HEIC file buffer
+              buffer,
               format: 'PNG', // output format
               quality: 1,
             })
