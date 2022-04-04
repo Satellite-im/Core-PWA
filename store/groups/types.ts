@@ -14,7 +14,7 @@ export interface Group {
   name: string
   admin: string
   creator: string
-  members: number
+  members: GroupMember[]
   addresses: string[]
   openInvites: boolean
   encryptionKey: string
@@ -25,7 +25,6 @@ export interface GroupsState {
   all: Group[]
   inviteSubscription: number | null
   groupSubscriptions: string[]
-  members: GroupMembers
 }
 
 export enum GroupsError {

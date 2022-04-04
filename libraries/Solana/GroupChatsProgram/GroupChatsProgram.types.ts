@@ -752,7 +752,7 @@ export interface Group {
   name: string
   admin: string
   creator: string
-  members: number
+  membersCount: number
   openInvites: boolean
   encryptionKey: string
   address: string

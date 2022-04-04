@@ -327,4 +327,21 @@ export class GroupChatManager {
       collectionName: collection,
     }
   }
+
+  /**
+   * Get time of last message from group conversation
+   * @param id {string} group id
+   * @returns {number} timestamp of last group message or 0 if no message found
+   */
+  async getGroupLastUpdate(id: string): Promise<number> {
+    const { threadID, collectionName } = this.decodeGroupID(id)
+    const query = new Query().orderByDesc(PropCommonEnum.MOD).limitTo(1)
+    const [message] = await this.textile.client.find<MessageFromThread>(
+      threadID,
+      collectionName,
+      query,
+    )
+
+    return message?.created_at || 0
+  }
 }

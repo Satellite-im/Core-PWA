@@ -103,6 +103,18 @@ describe('mutations.default.addGroup', () => {
 })
 
 describe('mutations.default.setGroupMembers', () => {
+  const groupSample = {
+    id: '',
+    name: '',
+    admin: '',
+    creator: '',
+    address: '',
+    encryptionKey: '',
+    openInvites: true,
+    members: [],
+    lastUpdate: 0,
+    addresses: [],
+  }
   const m1 = {
     groupId: 'groupId_0',
     members: [
@@ -136,30 +148,46 @@ describe('mutations.default.setGroupMembers', () => {
       },
     ],
   }
+
+  const getState = () =>
+    cloneDeep({
+      ...initialState(),
+      all: [
+        {
+          ...groupSample,
+          id: 'groupId_0',
+        },
+        {
+          ...groupSample,
+          id: 'groupId_1',
+        },
+      ],
+    })
+
   test('0', () => {
-    const state = cloneDeep(initialState())
+    const state = getState()
     mutations.default.setGroupMembers(state, m1)
-    expect(state.members).toMatchSnapshot()
+    expect(state).toMatchSnapshot()
   })
 
   test('1', () => {
-    const state = cloneDeep(initialState())
+    const state = getState()
     mutations.default.setGroupMembers(state, m2)
-    expect(state.members).toMatchSnapshot()
+    expect(state).toMatchSnapshot()
   })
 
   test('2', () => {
-    const state = cloneDeep(initialState())
+    const state = getState()
     mutations.default.setGroupMembers(state, m1)
     mutations.default.setGroupMembers(state, m3)
-    expect(state.members).toMatchSnapshot()
+    expect(state).toMatchSnapshot()
   })
 
   test('3', () => {
-    const state = cloneDeep(initialState())
+    const state = getState()
     mutations.default.setGroupMembers(state, m1)
     mutations.default.setGroupMembers(state, m2)
     mutations.default.setGroupMembers(state, m3)
-    expect(state.members).toMatchSnapshot()
+    expect(state).toMatchSnapshot()
   })
 })

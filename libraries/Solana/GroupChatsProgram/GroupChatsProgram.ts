@@ -145,11 +145,12 @@ export default class GroupChatsProgram extends EventEmitter {
   }
 
   /**
-   * Computes group address by given id
+   * Helper method to get group address(group public key) by group id
    * @param id {string} group id
-   * @protected
+   * @private
+   * @returns {PublicKey}
    */
-  protected getGroupAddressById(id: string) {
+  private groupAddressFromId(id: string): PublicKey {
     const [address] = this._groupPDAPublicKey(this._getGroupHash(id))
     return address
   }
@@ -220,7 +221,7 @@ export default class GroupChatsProgram extends EventEmitter {
       name,
       admin: payer.publicKey.toBase58(),
       creator: payer.publicKey.toBase58(),
-      members: 1,
+      membersCount: 1,
       openInvites: true,
       encryptionKey,
     }
@@ -267,7 +268,7 @@ export default class GroupChatsProgram extends EventEmitter {
    * @returns Promise<Group>
    */
   async getGroupById(id: string): Promise<Group> {
-    const groupKey = this.getGroupAddressById(id)
+    const groupKey = this.groupAddressFromId(id)
 
     const rawGroup = await this.getGroup(groupKey)
     const invite = await this.getInviteByGroupId(id)
@@ -282,7 +283,7 @@ export default class GroupChatsProgram extends EventEmitter {
    */
   async getInviteByGroupId(id: string): Promise<Invitation> {
     const [invite] = await this.getInvitationAccounts({
-      groupKey: this.getGroupAddressById(id),
+      groupKey: this.groupAddressFromId(id),
       recipient: this.payer.publicKey,
     })
     if (!invite) throw new Error('Invitation account not found')
@@ -320,12 +321,14 @@ export default class GroupChatsProgram extends EventEmitter {
    */
   protected populateGroup(invite: Invitation, group: RawGroup): Group {
     return {
-      ...group,
+      id: invite.groupId,
+      name: group.name,
       admin: group.admin.toString(),
       creator: group.creator.toString(),
-      id: invite.groupId,
-      encryptionKey: invite.encryptionKey,
       address: invite.groupKey.toBase58(),
+      encryptionKey: invite.encryptionKey,
+      openInvites: group.openInvites,
+      membersCount: group.members,
     }
   }
 
@@ -336,22 +339,37 @@ export default class GroupChatsProgram extends EventEmitter {
    */
   async getGroupUsers(groupId: string): Promise<string[]> {
     const inviteAccounts = await this.getInvitationAccounts({
-      groupKey: this.getGroupAddressById(groupId),
+      groupKey: this.groupAddressFromId(groupId),
     })
     return inviteAccounts.map((it) => it.account.recipient.toBase58())
   }
 
   /**
+   * Returns user addresses who are members of given groups
+   * @param groupIds {string[]} array of group id
+   * @returns Promise<{ id: string, users: string[] }[]>
+   */
+  async getGroupsUsers(
+    groupIds: string[],
+  ): Promise<{ id: string; users: string[] }[]> {
+    const users = await Promise.all(groupIds.map(this.getGroupUsers.bind(this)))
+    return groupIds.map((id, i) => ({
+      id,
+      users: users[i],
+    }))
+  }
+
+  /**
    * @method invite
    * Invite new user into Group
-   * @param groupId Group Id
+   * @param groupId group id
    * @param recipient: recipient address
    */
   async invite(groupId: string, recipient: string) {
     const payer = this.payer
     const user = new PublicKey(recipient)
 
-    const groupKey = this.getGroupAddressById(groupId)
+    const groupKey = this.groupAddressFromId(groupId)
 
     const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
     const inviteePDA = this._invitePDAPublicKey(user, groupKey)
@@ -392,7 +410,7 @@ export default class GroupChatsProgram extends EventEmitter {
   async modifyOpenInvites(groupId: string, openInvites: boolean) {
     await this.program.rpc.modifyOpenIvites(openInvites, {
       accounts: {
-        group: this.getGroupAddressById(groupId),
+        group: this.groupAddressFromId(groupId),
         admin: this.payer.publicKey,
       },
       signers: [this.payer],
@@ -407,7 +425,7 @@ export default class GroupChatsProgram extends EventEmitter {
   async adminLeave(groupId: string, receipient: string) {
     const payer = this.payer
     const successor = new PublicKey(receipient)
-    const groupKey = this.getGroupAddressById(groupId)
+    const groupKey = this.groupAddressFromId(groupId)
 
     const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
     const successorPDA = this._invitePDAPublicKey(successor, groupKey)
@@ -431,7 +449,7 @@ export default class GroupChatsProgram extends EventEmitter {
    */
   async leave(groupId: string) {
     const payer = this.payer
-    const groupKey = this.getGroupAddressById(groupId)
+    const groupKey = this.groupAddressFromId(groupId)
 
     const group = await this.getGroup(groupKey)
 
@@ -446,17 +464,6 @@ export default class GroupChatsProgram extends EventEmitter {
       },
       signers: [payer],
     })
-  }
-
-  /**
-   * Helper method to get group address(group public key) by group id
-   * @param id {string}
-   * @private
-   * @returns {PublicKey}
-   */
-  private groupAddressFromId(id: string): PublicKey {
-    const [address] = this._groupPDAPublicKey(this._getGroupHash(id))
-    return address
   }
 
   /**

@@ -12,6 +12,16 @@
     type="primary"
     drop="top"
   />
+  <InteractablesInput
+    v-if="friends.length > 1"
+    size="small"
+    input-kind="text"
+    type="dark"
+    :placeholder="$t('pages.chat.new_group_name')"
+    class="search"
+    v-model="name"
+  />
+  <small class="error has-text-danger error" v-if="error">{{error}}</small>
   <div v-if="friends.length" class="submit-container">
     <InteractablesButton
       type="primary"
@@ -19,6 +29,7 @@
       :text="$t('pages.chat.chat_now')"
       class="create-server-btn"
       :action="confirm"
+      :loading="isLoading"
     />
   </div>
 </div>

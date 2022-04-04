@@ -14,61 +14,172 @@ exports[`mutations.default.addGroup 5 1`] = `undefined`;
 
 exports[`mutations.default.setGroupMembers 0 1`] = `
 Object {
-  "groupId_0": Array [
+  "all": Array [
     Object {
-      "address": "address_0",
-      "name": "name_0",
-      "photoHash": "photoHash_0",
-      "status": "",
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_0",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_0",
+          "name": "name_0",
+          "photoHash": "photoHash_0",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [],
+      "name": "",
+      "openInvites": true,
     },
   ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+  "members": Object {},
 }
 `;
 
 exports[`mutations.default.setGroupMembers 1 1`] = `
 Object {
-  "groupId_1": Array [
+  "all": Array [
     Object {
-      "address": "address_1",
-      "name": "name_1",
-      "photoHash": "photoHash_1",
-      "status": "",
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_0",
+      "lastUpdate": 0,
+      "members": Array [],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_1",
+          "name": "name_1",
+          "photoHash": "photoHash_1",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
     },
   ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+  "members": Object {},
 }
 `;
 
 exports[`mutations.default.setGroupMembers 2 1`] = `
 Object {
-  "groupId_0": Array [
+  "all": Array [
     Object {
-      "address": "address_2",
-      "name": "name_2",
-      "photoHash": "photoHash_2",
-      "status": "",
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_0",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_2",
+          "name": "name_2",
+          "photoHash": "photoHash_2",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [],
+      "name": "",
+      "openInvites": true,
     },
   ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+  "members": Object {},
 }
 `;
 
 exports[`mutations.default.setGroupMembers 3 1`] = `
 Object {
-  "groupId_0": Array [
+  "all": Array [
     Object {
-      "address": "address_2",
-      "name": "name_2",
-      "photoHash": "photoHash_2",
-      "status": "",
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_0",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_2",
+          "name": "name_2",
+          "photoHash": "photoHash_2",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_1",
+          "name": "name_1",
+          "photoHash": "photoHash_1",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
     },
   ],
-  "groupId_1": Array [
-    Object {
-      "address": "address_1",
-      "name": "name_1",
-      "photoHash": "photoHash_1",
-      "status": "",
-    },
-  ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+  "members": Object {},
 }
 `;
 

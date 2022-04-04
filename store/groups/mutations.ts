@@ -25,7 +25,15 @@ const mutations = {
     state: GroupsState,
     { groupId, members }: { groupId: string; members: GroupMember[] },
   ) {
-    state.members[groupId] = members
+    state.all = state.all.map((group) =>
+      group.id === groupId ? { ...group, members } : group,
+    )
+  },
+  setGroupsLastUpdate(state: GroupsState, payload: { [key: string]: number }) {
+    state.all = state.all.map((group) => ({
+      ...group,
+      lastUpdate: payload[group.id],
+    }))
   },
 }
 
