@@ -124,20 +124,6 @@ export default Vue.extend({
      */
     async share(item: Item) {
       this.$toast.show(this.$t('todo - share') as string)
-      // if (item instanceof Directory) {
-      //   this.$toast.show(this.$t('todo - share folders') as string)
-      //   return
-      // }
-      // if (!item.shared) {
-      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
-      //   item.shareItem()
-      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
-      //   this.$emit('forceRender')
-      // }
-      // navigator.clipboard.writeText(this.path).then(() => {
-      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
-      // })
     },
     /**
      * @method closeFilePreview

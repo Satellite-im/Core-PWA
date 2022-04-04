@@ -83,6 +83,14 @@ export default Vue.extend({
       this.forceRender()
     },
     /**
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
+     */
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
+    },
+    /**
      * @method forceRender
      * @description Force render of new directory items after filesystem update
      */
