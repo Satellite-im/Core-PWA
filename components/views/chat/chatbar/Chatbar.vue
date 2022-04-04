@@ -9,6 +9,7 @@ import PeerId from 'peer-id'
 
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
+import { UploadDropItemType } from '~/types/files/file'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
@@ -47,6 +48,10 @@ export default Vue.extend({
       recipientTyping: false,
       showFilePreview: false,
       nsfwUploadError: false,
+      files: [] as Array<UploadDropItemType>,
+      count_error: false,
+      uploadStatus: false,
+      alertNsfw: false,
     }
   },
   computed: {
@@ -350,6 +355,19 @@ export default Vue.extend({
     },
     handleChatTextFromOutside(text: string) {
       this.$refs.editable?.handleTextFromOutside(text)
+    },
+    /**
+     * @method cancelUpload
+     * @description Cancels file upload by setting file and url in local data to false
+     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
+     * @example @click="cancelUpload"
+     */
+    cancelUpload() {
+      this.$data.files = []
+      document.body.style.cursor = PropCommonEnum.DEFAULT
+      this.$data.uploadStatus = false
+      this.$data.count_error = false
+      this.$data.showFilePreview = false
     },
   },
 })

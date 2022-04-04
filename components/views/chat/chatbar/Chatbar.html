@@ -7,6 +7,14 @@
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply v-if="recipient" />
+  <FilesUploadFilePreview
+    :recipient="recipient"
+    :files="files"
+    :countError="count_error"
+    :uploadStatus="uploadStatus"
+    :cancelUpload="cancelUpload"
+    :alertNsfw="alertNsfw"
+  />
   <div
     class="chatbar-wrap"
     :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
@@ -19,6 +27,11 @@
         :recipient="recipient"
         type="quick"
         ref="file-upload"
+        :files="files"
+        :countError="count_error"
+        :uploadStatus="uploadStatus"
+        :cancelUpload="cancelUpload"
+        :alertNsfw="alertNsfw"
       />
     </div>
     <div

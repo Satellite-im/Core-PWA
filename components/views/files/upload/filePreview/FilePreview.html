@@ -1,0 +1,40 @@
+<div
+  id="file-preview"
+  v-if="this.$props.files.length || this.$props.countError"
+  @touchmove="handleTouchPreview"
+  @touchstart="handleTouchPreview"
+  @touchend="handleTouchPreview"
+>
+  <div v-if="this.$props.countError" class="file-error">
+    <TypographyError :text="$t('errors.chat.drop_file_count')" />
+    <x-icon
+      size="1x"
+      class="has-text-danger"
+      @click="this.$props.cancelUpload"
+    />
+  </div>
+  <div v-if="this.$props.alertNsfw" class="file-error">
+    <TypographyError :text="$t('errors.chat.contains_nsfw')" />
+    <div class="is-controls">
+      <InteractablesButton
+        type="danger"
+        size="small"
+        :text="$t('pages.files.upload.close')"
+        :action="this.$props.closeNsfwAlert"
+      />
+    </div>
+  </div>
+  <template v-else>
+    <UiScroll horizontalScroll scrollbarVisibility="scroll">
+      <div class="file-list">
+        <FilesUploadPreviewItem
+          :item="item"
+          :index="index"
+          :key="index"
+          @removeUploadItem="removeUploadItem(index)"
+          v-for="(item, index) in this.$props.files"
+        ></FilesUploadPreviewItem>
+      </div>
+    </UiScroll>
+  </template>
+</div>

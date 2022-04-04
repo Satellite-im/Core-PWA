@@ -14,11 +14,7 @@ const converter = require('heic-convert')
 
 declare module 'vue/types/vue' {
   interface Vue {
-    files: UploadDropItemType[]
-    uploadStatus: boolean
-    count_error: boolean
     loadPicture: (item: UploadDropItemType, callback: Function) => void
-    cancelUpload: () => void
     finishUploads: () => void
     dispatchFile: (file: UploadDropItemType) => void
     alertNsfwFile: () => void
@@ -45,12 +41,29 @@ export default Vue.extend({
       type: Object as PropType<Friend>,
       default: null,
     },
+    files: {
+      type: Array as PropType<UploadDropItemType[]>,
+      default: null,
+    },
+    countError: {
+      type: Boolean,
+      default: false,
+    },
+    uploadStatus: {
+      type: Boolean,
+      default: false,
+    },
+    cancelUpload: {
+      type: Function,
+      default: () => {},
+    },
+    alertNsfw: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      files: [] as Array<UploadDropItemType>,
-      uploadStatus: false,
-      count_error: false,
       progress: 0,
       ipfsHash: false,
       selectedFile: false,
@@ -60,24 +73,25 @@ export default Vue.extend({
       aiScanning: false,
       fileAmount: 0,
       containsNsfw: false,
-      alertNsfw: false,
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat', 'textile']),
+    ...mapState(['ui', 'friends', 'chat']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
   },
   watch: {
     recipient() {
-      this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
-      this.$parent.$data.showFilePreview = this.files.length > 0
+      this.$props.files =
+        cloneDeep(this.chat.files?.[this.$props.recipient?.address]) ?? []
+      this.$parent.$data.showFilePreview = this.$props.files.length > 0
     },
   },
   mounted() {
-    this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
-    this.$parent.$data.showFilePreview = this.files.length > 0
+    this.$props.files =
+      cloneDeep(this.chat.files?.[this.$props.recipient?.address]) ?? []
+    this.$parent.$data.showFilePreview = this.$props.files.length > 0
   },
   methods: {
     /**
@@ -110,22 +124,22 @@ export default Vue.extend({
       if (this.editable) {
         const newFiles: File[] = [...event.target.files]
         this.$parent.$data.showFilePreview = newFiles.length > 0
-        if (newFiles.length + this.$data.files.length > 8) {
-          this.count_error = true
+        if (newFiles.length + this.$props.files.length > 8) {
+          this.$props.countError = true
           return
         }
 
-        const address = this.recipient?.address
+        const address = this.$props.recipient?.address
 
         if (
           !address &&
           !RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            this.$props.recipient.textilePubkey.split('|')[1],
           )
         )
           return
 
-        this.count_error = false
+        this.$props.countError = false
 
         for (let i = 0; i < newFiles.length; i++) {
           if (await isHeic(newFiles[i])) {
@@ -177,12 +191,9 @@ export default Vue.extend({
           )
         }
 
-        this.files.push(...filesToUpload)
-        this.$data.uploadStatus = true
+        this.$props.files.push(...filesToUpload)
+        this.$props.uploadStatus = true
       }
-    },
-    handleTouchPreview(event: Event) {
-      event.stopPropagation()
     },
     /**
      * @method loadPicture
@@ -203,41 +214,6 @@ export default Vue.extend({
       reader.readAsDataURL(item.file)
     },
     /**
-     * @method cancelUpload
-     * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
-     * @example @click="cancelUpload"
-     */
-    cancelUpload() {
-      this.files = []
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.uploadStatus = false
-      this.count_error = false
-      this.$parent.$data.showFilePreview = false
-    },
-    removeUploadItem(index: number) {
-      this.files.splice(index, 1)
-      if (this.$data.files.length === 0) {
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.uploadStatus = false
-        this.count_error = false
-        this.$parent.$data.showFilePreview = false
-        this.$store.commit('chat/deleteFiles', this.recipient.address)
-        this.$store.dispatch('textile/clearUploadStatus')
-        if (this.textile.messageLoading)
-          this.$store.commit('textile/setMessageLoading', { loading: false })
-        return
-      }
-      this.$store.commit('chat/setFiles', {
-        files: this.files,
-        address: this.recipient.address,
-      })
-    },
-    closeNsfwAlert() {
-      this.$data.alertNsfw = false
-      this.cancelUpload()
-    },
-    /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
@@ -245,22 +221,22 @@ export default Vue.extend({
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
         if (this.$data.containsNsfw) {
-          this.$data.alertNsfw = true
+          this.$props.alertNsfw = true
           this.alertNsfwFile()
         }
         if (!this.$data.containsNsfw) {
-          this.cancelUpload()
+          this.$props.cancelUpload()
           document.body.style.cursor = PropCommonEnum.DEFAULT
           this.$store.dispatch('textile/clearUploadStatus')
         }
       }
     },
     alertNsfwFile() {
-      this.$data.alertNsfw = true
+      this.$props.alertNsfw = true
       setTimeout(() => {
-        this.$data.alertNsfw = false
+        this.$props.alertNsfw = false
         this.$data.containsNsfw = false
-        this.cancelUpload()
+        this.$props.cancelUpload()
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
       }, 5000)
@@ -272,12 +248,12 @@ export default Vue.extend({
     async dispatchFile(file: FileType) {
       if (
         RegExp(this.$Config.regex.uuidv4).test(
-          this.recipient.textilePubkey.split('|')[1],
+          this.$props.recipient.textilePubkey.split('|')[1],
         )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {
-            groupID: this.recipient?.textilePubkey,
+            groupID: this.$props.recipient?.textilePubkey,
             file,
           })
           .then(() => {
@@ -293,7 +269,7 @@ export default Vue.extend({
       } else {
         await this.$store
           .dispatch('textile/sendFileMessage', {
-            to: this.recipient?.textilePubkey,
+            to: this.$props.recipient?.textilePubkey,
             file,
           })
           .then(() => {
@@ -315,12 +291,12 @@ export default Vue.extend({
     async sendMessage() {
       const nsfwCheck: UploadDropItemType[] = []
 
-      for (const file of this.files) {
+      for (const file of this.$props.files) {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
           this.$data.containsNsfw = true
-          if (this.$data.files.length === 1) {
+          if (this.$props.files.length === 1) {
             this.alertNsfwFile()
           }
         }
@@ -332,7 +308,7 @@ export default Vue.extend({
         await this.dispatchFile(file)
       }
 
-      this.$store.commit('chat/deleteFiles', this.recipient.address)
+      this.$store.commit('chat/deleteFiles', this.$props.recipient.address)
     },
   },
 })
