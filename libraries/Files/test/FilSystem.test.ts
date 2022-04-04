@@ -63,12 +63,6 @@ describe('Test FilSystem', () => {
       }
     })
   }
-  // it(`Find an item`, () => {
-  //   // filesystem.createDirectory({ name: 'third dir' })
-  //   const result = filesystem.findItem('TestFile.png')
-  //   // const result = filesystem.currentDirectory['_children']
-  //   expect(result).toBe(true)
-  // })
   it(`Navigate to a directory`, () => {
     filesystem.createDirectory({ name: 'third dir' })
     const result = filesystem.goBackToDirectory('third dir')
