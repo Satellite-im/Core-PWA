@@ -29,7 +29,7 @@ export class Directory extends Item {
   }) {
     super({
       id,
-      name: name || 'un-named directory',
+      name,
       liked,
       shared,
       modified,
