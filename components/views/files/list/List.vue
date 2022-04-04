@@ -88,6 +88,10 @@ export default Vue.extend({
     remove(item: Item) {
       this.$emit('remove', item)
     },
+    /**
+     * @method setSort
+     * @description Emit to set sort - pages/files/browse/index.vue
+     */
     setSort(category: FileSortEnum) {
       this.$emit('setSort', category)
     },
