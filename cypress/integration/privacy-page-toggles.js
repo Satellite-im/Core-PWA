@@ -9,15 +9,13 @@ let toggleStatusProfile = []
 
 describe('Privacy Page Toggles Tests', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
-  before(() => {
+
+  it('Privacy page - Verify all non-locked toggles switches work as should', () => {
     //Adding pin to continue to toggles switches screen
     cy.createAccountPINscreen(randomPIN)
 
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
-  })
-
-  it('Privacy page - Verify all non-locked toggles switches work as should', () => {
     //Validating each toggle, checking status is correct after clicking them.
     //Finally, saving values into an array for later comparison
     cy.get('.switch-button', { timeout: 30000 }).each(($btn, index, $List) => {

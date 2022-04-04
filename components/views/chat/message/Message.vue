@@ -9,16 +9,7 @@ import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
 import { refreshTimestampInterval } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    setReplyChatbarContent: () => void
-    quickReaction: (emoji: String) => void
-    editMessage: () => void
-    emojiReaction: (e: MouseEvent) => void
-    copyMessage: () => void
-  }
-}
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -57,19 +48,22 @@ export default Vue.extend({
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
       timestamp: this.$dayjs(this.$props.message.at).fromNow(),
+      // added two blobs because we need png version for clipboard API (copy image), and the original blob for save image
+      blob: undefined as Blob | undefined,
+      pngBlob: undefined as Blob | undefined,
     }
   },
   computed: {
     ...mapState(['ui', 'textile', 'accounts']),
-    hasReactions() {
+    hasReactions(): boolean {
       return (
         this.$props.message.reactions && this.$props.message.reactions.length
       )
     },
-    messageEdit() {
+    messageEdit(): boolean {
       return this.ui.editMessage.id === this.$props.message.id
     },
-    contextMenuValues() {
+    contextMenuValues(): ContextMenuItem[] {
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
@@ -82,20 +76,14 @@ export default Vue.extend({
         if (this.accounts.details.textilePubkey === this.$props.message.from) {
           return [
             ...mainList,
-            {
-              text: this.$t('context.copy_msg'),
-              func: this.copyMessage,
-            },
+            { text: this.$t('context.copy_msg'), func: this.copyMessage },
             { text: this.$t('context.edit'), func: this.editMessage },
           ]
         }
         // another persons text message
         return [
           ...mainList,
-          {
-            text: this.$t('context.copy_msg'),
-            func: this.copyMessage,
-          },
+          { text: this.$t('context.copy_msg'), func: this.copyMessage },
         ]
       }
       // if image message
@@ -105,8 +93,8 @@ export default Vue.extend({
       ) {
         return [
           ...mainList,
-          { text: this.$t('context.copy_img'), func: (this as any).testFunc },
-          { text: this.$t('context.save_img'), func: (this as any).testFunc },
+          { text: this.$t('context.copy_img'), func: this.copyImage },
+          { text: this.$t('context.save_img'), func: this.saveImage },
         ]
       }
       return mainList
@@ -125,6 +113,10 @@ export default Vue.extend({
   },
   beforeDestroy() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
+  },
+  async mounted() {
+    const data = await fetch(this.message.payload.url)
+    this.blob = await data.blob()
   },
   methods: {
     /**
@@ -154,15 +146,55 @@ export default Vue.extend({
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) !== null
     },
-    testFunc() {
-      this.$Logger.log('Message Context', 'Test func')
-    },
     /**
      * @method copyMessage
      * @description copy contents of message. Will only be called if text message
      */
     copyMessage() {
       this.$envinfo.navigator.clipboard.writeText(this.message.payload)
+    },
+    /**
+     * @method copyImage
+     * @description clipboard API only accepts png. if not png, convert via canvas
+     */
+    async copyImage() {
+      if (this.blob.type !== 'image/png') {
+        this.pngBlob = await this.toPng()
+      }
+      await this.$envinfo.navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': this.pngBlob || this.blob,
+        }),
+      ])
+      this.$toast.show(this.$t('ui.copied') as string)
+    },
+    saveImage() {
+      const a = document.createElement('a')
+      a.setAttribute('type', 'hidden')
+      a.setAttribute('download', 'download')
+      a.href = URL.createObjectURL(this.blob)
+      a.click()
+    },
+    /**
+     * @method toPng
+     * @param {Blob} blob embeddable image blob
+     * @description helper function - convert image blob to png for Clipboard API
+     */
+    toPng() {
+      return new Promise<Blob>((resolve) => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        const img = new Image()
+        img.src = URL.createObjectURL(this.blob)
+        img.onload = () => {
+          canvas.width = img.naturalWidth
+          canvas.height = img.naturalHeight
+          ctx?.drawImage(img, 0, 0)
+          canvas.toBlob((newBlob: Blob) => {
+            resolve(newBlob)
+          })
+        }
+      })
     },
     /**
      * @method setReplyChatbarContent DocsTODO

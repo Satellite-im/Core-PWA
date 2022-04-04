@@ -12,7 +12,7 @@ export type UIReaction = {
   showReactors: boolean
 }
 
-export interface UIReply extends ReplyMessage {
+export type UIReply = ReplyMessage & {
   reactions: Array<UIReaction>
 }
 

@@ -23,12 +23,6 @@ import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    search: any
-    ui: any
-  }
-}
 export default Vue.extend({
   components: {
     PhoneCallIcon,
@@ -64,10 +58,11 @@ export default Vue.extend({
     return {
       searchRecommend,
       showAlerts: false,
+      searchQuery: '' as string,
     }
   },
   computed: {
-    ...mapState(['ui', 'search', 'audio', 'video', 'webrtc']),
+    ...mapState(['ui', 'audio', 'video', 'webrtc']),
     ...mapGetters('ui', ['showSidebar']),
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
@@ -106,14 +101,7 @@ export default Vue.extend({
       }
       return false
     },
-    searchQuery: {
-      set(state) {
-        this.$store.commit('search/setSearchQuery', state)
-      },
-      get() {
-        return this.search.query
-      },
-    },
+
     ModalWindows: () => ModalWindows,
     src(): string {
       // @ts-ignore curently reading user as type Server. Will likely be reworked with server update
@@ -144,7 +132,9 @@ export default Vue.extend({
      * @example
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleChange(value: string, item: SearchQueryItem) {},
+    handleChange(value: string, item: SearchQueryItem) {
+      this.searchQuery = ''
+    },
     /**
      * @method handleSearch DocsTODO
      * @description
@@ -154,7 +144,6 @@ export default Vue.extend({
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     handleSearch(value: string, items: SearchQueryItem[]) {
-      this.showSearchResult = true
       this.searchQuery = value
     },
     /**
@@ -163,7 +152,7 @@ export default Vue.extend({
      * @example
      */
     toggleSearchResult() {
-      this.showSearchResult = !this.showSearchResult
+      this.searchQuery = ''
     },
     /**
      * @method toggleModal

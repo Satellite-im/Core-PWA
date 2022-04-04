@@ -1,4 +1,4 @@
-import * as SearchUtil from '~/components/interactables/Search/SearchUtil'
+import * as SearchUtil from '~/components/views/chat/search/SearchUtil'
 import * as search from '~/types/search/search'
 
 describe('SearchUtil.default.getTextCommandMap', () => {

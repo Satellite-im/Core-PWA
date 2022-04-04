@@ -1,6 +1,6 @@
 <div class="search-container" v-click-outside="lostFocus">
-  <div :class="{'search-box': true, focus: isFocus}" class="disabled">
-    <div :class="{'search-placeholder': true, hide: !isEmpty}">
+  <div class="search-box" :class="{'focus' : isFocus}">
+    <div class="search-placeholder" :class="{'hide' : !isEmpty}">
       {{placeholder}}
     </div>
     <div class="search-icon">
@@ -12,13 +12,13 @@
     <div
       ref="searchInput"
       class="search-input"
-      @mousedown="/* setFocus disable temporarily until search rework */"
+      @mousedown="setFocus"
       @keydown="keydown"
       @keyup="keyup"
       @input="input"
     ></div>
   </div>
-  <div :class="{'search-options': true}" v-if="isOption">
+  <!-- <div class="search-options" v-if="isOption">
     <ul class="search-option-group">
       <li class="search-option-heading">
         {{$t('search.input.search_options')}}
@@ -42,13 +42,13 @@
         </li>
       </template>
     </ul>
-  </div>
-  <div :class="{'search-recommends': true}" v-if="isSearch">
+  </div> -->
+  <div class="search-recommends" v-if="isSearch">
     <ul class="search-recommend-group">
       <li class="search-for">
         {{$t('search.input.search_for')}} {{searchFor}}
       </li>
-      <li
+      <!-- <li
         v-for="(sch, i) in searchResult"
         :class="{active:i==search}"
         @click="clickSearchOption(i)"
@@ -56,7 +56,7 @@
         <span>{{sch.command}}:</span>
         <span>{{sch.value.value.substring(0, current.value.length)}}</span
         ><span>{{sch.value.value.substring(current.value.length)}}</span>
-      </li>
+      </li> -->
     </ul>
   </div>
   <div
@@ -64,10 +64,6 @@
     :class="{'date-selection': true}"
     v-if="isDate && isFocus"
   >
-    <v-calendar
-      is-dark
-      @dayclick="clickDateOption"
-      :max-date="new Date()"
-    ></v-calendar>
+    <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" />
   </div>
 </div>
