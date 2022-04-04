@@ -2,10 +2,13 @@
   display: flex;
   flex-direction: column;
   max-width: 600px;
-  padding: 40px @large-spacing @normal-spacing;
+  padding: @large-spacing * 2 @large-spacing @normal-spacing;
   &:extend(.modal-gradient);
   color: @secondary-text;
 
+  .close-button {
+    top: @large-spacing * 2;
+  }
   .sat-icon {
     fill: @white;
     margin: 0 auto @normal-spacing;
