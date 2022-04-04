@@ -25,6 +25,7 @@ export default Vue.extend({
     },
   },
   data() {
+    console.log('gg', this.group)
     return {
       contextMenuValues: [
         { text: this.$t('context.send'), func: this.testFunc },
