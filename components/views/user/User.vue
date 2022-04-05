@@ -11,6 +11,11 @@ import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
+import {
+  refreshTimestampInterval,
+  convertTimestampToDate,
+} from '~/utilities/Messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -54,6 +59,11 @@ export default Vue.extend({
       ],
       existConversation: false,
       isLoading: false,
+      timestamp: convertTimestampToDate(
+        this,
+        this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
+      ),
+      timestampRefreshInterval: null,
     }
   },
   computed: {
@@ -76,10 +86,28 @@ export default Vue.extend({
     'textile.conversations': {
       handler(newValue) {
         this.existMessage(newValue)
+        this.$data.timestamp = convertTimestampToDate(
+          this,
+          newValue[this.user.address]?.lastUpdate,
+        )
       },
       deep: true,
       immediate: true,
     },
+  },
+  created() {
+    const setTimestamp = (timePassed: number) => {
+      this.$data.timestamp = convertTimestampToDate(this, timePassed)
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeDestroy() {
+    clearInterval(this.$data.timestampRefreshInterval)
   },
   methods: {
     testFunc() {
@@ -116,52 +144,7 @@ export default Vue.extend({
     async handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
     },
-    getLastUpdate() {
-      const currentUserInfo =
-        this.$store.state.textile.conversations[this.user.address]
 
-      const lastMessageAt = currentUserInfo?.messages
-        ? Math.max.apply(
-            null,
-            Object.values(currentUserInfo.messages).map((msg: any) => msg.at),
-          )
-        : 0
-
-      const uLastUpdate =
-        (this.user.lastUpdate ||
-          currentUserInfo?.lastUpdate ||
-          lastMessageAt) ??
-        0
-
-      if (uLastUpdate) {
-        const lastUpdate = this.$dayjs(uLastUpdate)
-        const secondsDif = this.$dayjs().diff(lastUpdate, 'second')
-
-        if (secondsDif < 30) {
-          return this.$t('friends.details.now')
-        }
-
-        const sameDay = this.$dayjs().isSame(uLastUpdate, 'day')
-
-        if (sameDay) {
-          return lastUpdate.format('LT')
-        }
-
-        const daysDif = this.$dayjs().diff(lastUpdate, 'day')
-
-        if (daysDif <= 1) {
-          return this.$t('friends.details.yesterday')
-        }
-
-        if (daysDif > 1 && daysDif <= 2) {
-          return `${daysDif} ${this.$t('friends.details.days_short')}`
-        }
-
-        return lastUpdate.format('L')
-      }
-
-      return this.$t('friends.details.no_message')
-    },
     getFormattedUnreads(value: Number) {
       if (value < 100) {
         return value.toString()

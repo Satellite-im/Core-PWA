@@ -10,11 +10,7 @@
     <TypographySubtitle :size="6" :text="lastMessage" />
   </div>
   <div class="user-chat-details">
-    <TypographyText
-      :size="6"
-      :text="getLastUpdate()"
-      v-if="existConversation"
-    />
+    <TypographyText :size="6" :text="timestamp" v-if="existConversation" />
     <TypographyTag
       :text="getFormattedUnreads(user.unreads)"
       v-if="user.unreads > 0"

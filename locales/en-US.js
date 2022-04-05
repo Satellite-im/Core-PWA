@@ -642,7 +642,7 @@ export default {
     details: {
       now: 'now',
       yesterday: 'yesterday',
-      days_short: 'd',
+      days_short: '{days} d',
       no_message: 'no message',
     },
   },

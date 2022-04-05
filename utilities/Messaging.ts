@@ -267,15 +267,40 @@ export function getFullUserInfoFromState(
   return userInfo
 }
 
+export function convertTimestampToDate(context: any, timestamp: number) {
+  const secondsDif = context.$dayjs().diff(timestamp, 'second')
+
+  if (secondsDif < 30) {
+    return context.$t('friends.details.now')
+  }
+
+  const lastUpdate = context.$dayjs(timestamp)
+  const sameDay = context.$dayjs().isSame(lastUpdate, 'day')
+
+  if (sameDay) {
+    return lastUpdate.format('LT')
+  }
+
+  const daysDif = context.$dayjs().diff(lastUpdate, 'day')
+
+  if (daysDif <= 1) {
+    return context.$t('friends.details.yesterday')
+  }
+
+  if (daysDif > 1 && daysDif <= 2) {
+    return context.$t('friends.details.days_short', { days: daysDif })
+  }
+
+  return lastUpdate.format('L')
+}
+
 export function refreshTimestampInterval(
   timestamp: number,
-  action: (timePassed: string) => any,
+  action: (timePassed: number) => any,
   interval: number,
 ) {
   return setInterval(() => {
-    const updatedTimestamp = dayjs(timestamp).fromNow()
-
-    action(updatedTimestamp)
+    action(timestamp)
   }, interval)
 }
 
