@@ -1,3 +1,5 @@
+import { Fil } from '~/libraries/Files/Fil'
+import { ImageMessage } from '~/types/textile/mailbox'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
@@ -206,6 +208,8 @@ export interface UIState {
   }
   isLoadingFileIndex: boolean
   renameCurrentName?: string
+  filePreview: Fil | undefined
+  chatImageOverlay: ImageMessage | undefined
 }
 
 export type Position = {

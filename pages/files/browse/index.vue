@@ -12,7 +12,6 @@ export default Vue.extend({
   layout: 'files',
   data() {
     return {
-      file: false as Fil | boolean,
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
@@ -47,7 +46,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.file = item
+        this.$store.commit('ui/setFilePreview', item)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)
@@ -69,28 +68,6 @@ export default Vue.extend({
       this.forceRender()
     },
     /**
-     * @method share
-     * @description copy link to clipboard
-     * @param {Item} item
-     */
-    async share(item: Item) {
-      this.$toast.show(this.$t('todo - share') as string)
-      // if (item instanceof Directory) {
-      //   this.$toast.show(this.$t('todo - share folders') as string)
-      //   return
-      // }
-      // if (!item.shared) {
-      //   this.$store.commit('ui/setIsLoadingFileIndex', true)
-      //   item.shareItem()
-      //   await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      //   this.$store.commit('ui/setIsLoadingFileIndex', false)
-      //   this.$emit('forceRender')
-      // }
-      // navigator.clipboard.writeText(this.path).then(() => {
-      //   this.$toast.show(this.$t('pages.files.link_copied') as string)
-      // })
-    },
-    /**
      * @method remove
      * @description delete item from filesystem. If file, also remove from textile bucket
      * @param {Item} item
@@ -104,6 +81,14 @@ export default Vue.extend({
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.forceRender()
+    },
+    /**
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
+     */
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
     },
     /**
      * @method forceRender

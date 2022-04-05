@@ -1,0 +1,12 @@
+<div class="image-mask" v-if="ui.chatImageOverlay">
+  <div class="image-container">
+    <img
+      class="is-image-in-mask"
+      :src="ui.chatImageOverlay.url"
+      v-click-outside="closeChatImageOverlay"
+    />
+    <a class="link" :href="ui.chatImageOverlay.url" target="_blank">
+      {{ $t('files.view_original') }}
+    </a>
+  </div>
+</div>

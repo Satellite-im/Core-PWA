@@ -4,6 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -115,6 +116,22 @@ export default Vue.extend({
       peer?.call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
       this.$store.commit('ui/fullscreen', false)
+    },
+    /**
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
+     */
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
+    },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    closeFilePreview() {
+      this.$store.commit('ui/setFilePreview', undefined)
     },
   },
 })

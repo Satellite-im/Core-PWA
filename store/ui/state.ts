@@ -73,6 +73,8 @@ const InitialUIState = (): UIState => ({
   },
   isLoadingFileIndex: false,
   renameCurrentName: undefined,
+  filePreview: undefined,
+  chatImageOverlay: undefined,
 })
 
 export default InitialUIState

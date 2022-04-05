@@ -3,6 +3,7 @@
 exports[`init should return the initial settings state 1`] = `
 Object {
   "activeChannel": undefined,
+  "chatImageOverlay": undefined,
   "chatbarContent": "",
   "chatbarFocus": false,
   "contextMenuPosition": Object {
@@ -28,6 +29,7 @@ Object {
     "route": "emotes",
     "show": false,
   },
+  "filePreview": undefined,
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
