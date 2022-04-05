@@ -7,6 +7,7 @@ import {
   RecentGlyph,
   SettingsRoutes,
   Position,
+  FileSort,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
@@ -357,5 +358,8 @@ export default {
   },
   setRenameItem(state: UIState, name: string) {
     state.renameCurrentName = name
+  },
+  setFileSort(state: UIState, sort: FileSort) {
+    state.fileSort = sort
   },
 }

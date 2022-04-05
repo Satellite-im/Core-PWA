@@ -1,50 +1,48 @@
-<div id="file-list">
-  <table class="table" :class="{'disabled' : ui.isLoadingFileIndex}">
-    <thead>
-      <th @click="setSort(FileSortEnum.NAME)">
-        {{ $t('pages.files.browse.name') }}
-        <template v-if="sort.category===FileSortEnum.NAME">
-          <chevron-up-icon v-if="sort.asc" size="1x" />
-          <chevron-down-icon v-else size="1x" />
-        </template>
-      </th>
-      <th @click="setSort(FileSortEnum.MODIFIED)">
-        {{ $t('pages.files.browse.modified') }}
-        <template v-if="sort.category===FileSortEnum.MODIFIED">
-          <chevron-up-icon v-if="sort.asc" size="1x" />
-          <chevron-down-icon v-else size="1x" />
-        </template>
-      </th>
-      <th
-        v-if="!$device.isMobile"
-        @click="setSort(FileSortEnum.TYPE)"
-        class="open-sidebar-hide"
-      >
-        {{ $t('pages.files.browse.type') }}
-        <template v-if="sort.category===FileSortEnum.TYPE">
-          <chevron-up-icon v-if="sort.asc" size="1x" />
-          <chevron-down-icon v-else size="1x" />
-        </template>
-      </th>
-      <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
-        {{ $t('pages.files.browse.size') }}
-        <template v-if="sort.category===FileSortEnum.SIZE">
-          <chevron-up-icon v-if="sort.asc" size="1x" />
-          <chevron-down-icon v-else size="1x" />
-        </template>
-      </th>
-      <th />
-    </thead>
-    <tbody>
-      <FilesRow
-        v-for="item, i in directory"
-        :key="i + counter"
-        :item="item"
-        @like="like"
-        @share="share"
-        @remove="remove"
-        @handle="handle"
-      />
-    </tbody>
-  </table>
-</div>
+<table class="table" :class="{'disabled' : ui.isLoadingFileIndex}">
+  <thead>
+    <th @click="setSort(FileSortEnum.NAME)">
+      {{ $t('pages.files.browse.name') }}
+      <template v-if="sort.category===FileSortEnum.NAME">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th @click="setSort(FileSortEnum.MODIFIED)">
+      {{ $t('pages.files.browse.modified') }}
+      <template v-if="sort.category===FileSortEnum.MODIFIED">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th
+      v-if="!$device.isMobile"
+      @click="setSort(FileSortEnum.TYPE)"
+      class="open-sidebar-hide"
+    >
+      {{ $t('pages.files.browse.type') }}
+      <template v-if="sort.category===FileSortEnum.TYPE">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
+      {{ $t('pages.files.browse.size') }}
+      <template v-if="sort.category===FileSortEnum.SIZE">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th />
+  </thead>
+  <tbody>
+    <FilesRow
+      v-for="item, i in directory"
+      :key="i + counter"
+      :item="item"
+      @like="like"
+      @share="share"
+      @remove="remove"
+      @handle="handle"
+    />
+  </tbody>
+</table>

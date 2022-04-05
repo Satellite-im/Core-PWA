@@ -8,8 +8,3 @@ export type UploadDropItemType = {
     status: boolean
   }
 }
-
-export interface FileSort {
-  category: FileSortEnum
-  asc: boolean
-}

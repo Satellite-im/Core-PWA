@@ -2,13 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { cloneDeep } from 'lodash'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileSortEnum } from '~/libraries/Enums/enums'
-import { FileSort } from '~/types/files/file'
+import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Files',
@@ -18,17 +19,22 @@ export default Vue.extend({
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
-      sort: {
-        category: FileSortEnum.MODIFIED,
-        asc: true,
-      } as FileSort,
     }
   },
   computed: {
-    /**
-     * @returns Current directory items
-     * @description included counter to force rendering on Map updates
-     */
+    ...mapState(['ui']),
+    sort: {
+      set(value: FileSort) {
+        this.$store.commit('ui/setFileSort', value)
+      },
+      get(): FileSort {
+        return this.ui.fileSort
+      },
+      /**
+       * @returns Current directory items
+       * @description included counter to force rendering on Map updates
+       */
+    },
     directory(): Item[] {
       if (this.sort.category === FileSortEnum.SIZE) {
         const key = this.sort.category
@@ -130,7 +136,7 @@ export default Vue.extend({
      */
     setSort(category: FileSortEnum) {
       this.sort.category === category
-        ? (this.sort.asc = !this.sort.asc)
+        ? (this.sort = { category: this.sort.category, asc: !this.sort.asc })
         : (this.sort = { category, asc: true })
     },
     /**
