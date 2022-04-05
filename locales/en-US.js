@@ -154,13 +154,14 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        folder_name:
-          'Please enter a folder name of at least one non-space character',
-        no_slash: 'Folder name cannot contain /',
-        invalid_name: 'Item name cannot contain invalid symbols',
-        empty_file: 'File needs to have a size of 1 byte or greater',
-        item_name: 'Item with name already exists in this directory',
-        limit: 'This upload would exceed your storage limit',
+        no_empty: 'Item name must be a non empty string',
+        leading_dot: 'Item name cannot begin with .',
+        invalid: 'Item name cannot contain invalid symbols',
+        file_size: 'File needs to have a size of 1 byte or greater',
+        duplicate_name: 'Item with name already exists in this directory',
+        storage_limit: 'This upload would exceed your storage limit',
+        dir_paradox: 'Directory cannot contain itself',
+        dir_parent_paradox: 'Directory cannot contain one of its ancestors',
       },
     },
     unlock: {

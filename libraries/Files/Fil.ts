@@ -1,4 +1,5 @@
 import { Item } from './abstracts/Item.abstract'
+import { FileSystemErrors } from './errors/Errors'
 
 import { FILE_TYPE } from './types/file'
 
@@ -36,10 +37,13 @@ export class Fil extends Item {
     type?: FILE_TYPE
     thumbnail?: string
   }) {
-    super({ name: name || 'un-named file', liked, shared, modified, id, type })
+    if (!size) {
+      throw new Error(FileSystemErrors.FILE_SIZE)
+    }
+    super({ name, liked, shared, modified, id, type })
     this._file = file || undefined
     this._description = description || ''
-    this._size = size || 0
+    this._size = size
     this._thumbnail = thumbnail || ''
   }
 
@@ -122,6 +126,6 @@ export class Fil extends Item {
    * @param {string} content the content to set the file description to
    */
   set description(content: string) {
-    this._description = `${content || ''}`
+    this._description = content || ''
   }
 }
