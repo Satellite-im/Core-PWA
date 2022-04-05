@@ -2,6 +2,7 @@ import { FriendMetadata } from '../textile/metadata'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
 import { User } from '~/types/ui/user'
+import { Call } from '~/libraries/WebRTC/Call'
 
 export interface EncryptedFriend extends User {
   encryptedTextilePubkey: string
@@ -34,6 +35,7 @@ export interface Friend extends EncryptedFriend {
   photoHash?: string
   metadata?: FriendMetadata
   peerId?: string
+  call?: Call
 }
 
 export interface OutgoingRequest extends FriendRequest {

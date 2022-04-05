@@ -49,36 +49,28 @@ const mutations = {
     state.all.push(friend)
   },
   setActive(state: FriendsState, friend: Friend) {
-    const fList: Friend[] = []
-    state.all.forEach((f) => {
-      f.activeChat = f.account.accountId === friend.account.accountId
-      fList.push(f)
-    })
-    state.all = fList
+    state.all = state.all.map((f) => ({
+      ...f,
+      activeChat: f.address === friend.address,
+    }))
   },
   setStored(state: FriendsState, friend: Friend, isStored: boolean = true) {
-    const fList: Friend[] = []
-    state.all.forEach((f) => {
-      f.stored = f.address === friend.address ? isStored : f.stored
-      fList.push(f)
-    })
-    state.all = fList
+    state.all = state.all.map((f) => ({
+      ...f,
+      stored: f.address === friend.address ? isStored : f.stored,
+    }))
   },
   setTyping(
     state: FriendsState,
     opts: { id: string; typingState: 'TYPING' | 'NOT_TYPING' },
   ) {
-    const fList: Friend[] = []
-    state.all.forEach((f) => {
-      fList.push({
-        ...f,
-        typingState:
-          f.address === opts.id
-            ? opts.typingState
-            : f.typingState || 'NOT_TYPING',
-      })
-    })
-    state.all = fList
+    state.all = state.all.map((f) => ({
+      ...f,
+      typingState:
+        f.address === opts.id
+          ? opts.typingState
+          : f.typingState || 'NOT_TYPING',
+    }))
   },
   setNote(
     state: FriendsState,
@@ -98,7 +90,7 @@ const mutations = {
   },
   updateFriend(state: FriendsState, friend: Friend) {
     state.all = state.all.map(
-      (fr) => (fr = fr.address === friend.address ? friend : fr),
+      (fr) => (fr = fr.address === friend.address ? { ...fr, ...friend } : fr),
     )
   },
   removeFriend(state: FriendsState, accountAddress: string) {

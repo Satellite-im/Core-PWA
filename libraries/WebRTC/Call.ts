@@ -1,19 +1,20 @@
 import Peer, { SignalData } from 'simple-peer'
+import PeerId from 'peer-id'
 import Emitter from './Emitter'
 import { TracksManager } from './TracksManager'
 import { CallEventListeners, TrackKind } from './types'
-import { Wire } from './Wire'
+import { Peer2Peer } from './Libp2p'
 import { Config } from '~/config'
 import Logger from '~/utilities/Logger'
 
 /**
  * @class Call
  * @description The Call class manages a p2p connection for audio/video calls
- * It makes use of a Wire as a communication bus for signaling.
+ * It makes use of libp2p as a communication bus for signaling.
  */
 export class Call extends Emitter<CallEventListeners> {
-  communicationBus: Wire
-
+  p2p: Peer2Peer
+  peerId: string
   peer?: Peer.Instance // The Simple Peer instance for the active call
   signalingBuffer?: Peer.SignalData // A variable to store the signaling data before the answer
 
@@ -26,15 +27,14 @@ export class Call extends Emitter<CallEventListeners> {
 
   /**
    * @constructor
-   * @param communicationBus The Wire instance used for signaling (it happens through p2p connection)
+   * @param peerId The PeerID used for signaling (via libp2p)
    */
-  constructor(communicationBus: Wire) {
+  constructor(peerId: string) {
     super()
 
-    this.communicationBus = communicationBus
-
+    this.p2p = Peer2Peer.getInstance()
+    this.peerId = peerId
     this.constraints = Config.webrtc.constraints
-
     this.tracksManager = new TracksManager()
 
     this._bindBusListeners()
@@ -47,7 +47,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param constraints Media stream constraints to apply
    * @returns The created local tracks
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.createLocalTracks({audio: true, video: true})
    */
   async createLocalTracks(
@@ -93,19 +93,19 @@ export class Call extends Emitter<CallEventListeners> {
 
     if (audio) {
       this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.communicationBus.identifier,
+        peerId: this.peerId,
         track: audio,
       })
     }
 
     if (video) {
       this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.communicationBus.identifier,
+        peerId: this.peerId,
         track: video,
       })
     } else {
       this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
+        peerId: this.peerId,
         track: { kind: 'video' },
       })
     }
@@ -132,14 +132,14 @@ export class Call extends Emitter<CallEventListeners> {
 
         if (audio) {
           this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.communicationBus.identifier,
+            peerId: this.peerId,
             track: audio,
           })
         }
 
         if (video) {
           this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.communicationBus.identifier,
+            peerId: this.peerId,
             track: video,
           })
         }
@@ -206,7 +206,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description It's used for initiate a call
    * @param stream MediaStream object containing the audio/video tracks
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * await call.createLocalTracks({audio: true, video: true})
    * call.start()
    */
@@ -226,7 +226,7 @@ export class Call extends Emitter<CallEventListeners> {
     this.addTransceiver('audio')
     this.addTransceiver('video')
 
-    this.emit('OUTGOING_CALL', { peerId: this.communicationBus.identifier })
+    this.emit('OUTGOING_CALL', { peerId: this.peerId })
   }
 
   /**
@@ -235,7 +235,7 @@ export class Call extends Emitter<CallEventListeners> {
    * to call this method
    * @param stream MediaStream object containing the audio/video stream
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.answer(mediaStream)
    */
   answer() {
@@ -265,11 +265,14 @@ export class Call extends Emitter<CallEventListeners> {
    * @example call.deny()
    */
   deny() {
-    this.communicationBus.send({
-      type: 'REFUSE',
-      payload: { peerId: this.communicationBus.identifier },
-      sentAt: Date.now(),
-    })
+    this.p2p.sendMessage(
+      {
+        type: 'peer:refuse',
+        payload: { peerId: this.peerId },
+        sentAt: Date.now(),
+      },
+      this.peerId,
+    )
     this._onClose()
   }
 
@@ -318,7 +321,7 @@ export class Call extends Emitter<CallEventListeners> {
       this.removeTrack(localTracks[kind], this.stream)
 
       this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
+        peerId: this.peerId,
         track: localTracks[kind],
       })
     }
@@ -353,7 +356,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Adds a stream to the call
    * @param stream MediaStream to add
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.addStream(mediaStream)
    */
   addStream(stream: MediaStream) {
@@ -365,7 +368,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Removes a stream from the call
    * @param stream MediaStream to remove
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.removeStream(mediaStream)
    */
   removeStream(stream: MediaStream) {
@@ -378,7 +381,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param track MediaStreamTrack to add
    * @param stream Related stream
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.addTrack(newTrack, mediaStream)
    */
   addTrack(track: MediaStreamTrack, stream: MediaStream) {
@@ -393,7 +396,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param track MediaStreamTrack to remove
    * @param stream Related stream
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.removeTrack(trackToRemove, mediaStream)
    */
   removeTrack(track: MediaStreamTrack, stream: MediaStream) {
@@ -410,7 +413,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param newTrack new MediaStreamTrack to add
    * @param stream Related stream
    * @example
-   * const call = new Call(wireInstance)
+   * const call = new Call(peerId)
    * call.replaceTrack(trackToRemove, trackToAdd, mediaStream)
    */
   replaceTrack(
@@ -457,8 +460,8 @@ export class Call extends Emitter<CallEventListeners> {
    * this._bindBusListeners()
    */
   protected _bindBusListeners() {
-    this.communicationBus?.on('SIGNAL', this._onBusSignal.bind(this))
-    this.communicationBus?.on('REFUSE', this._onBusRefuse.bind(this))
+    this.p2p?.on('peer:signal', this._onBusSignal.bind(this))
+    this.p2p?.on('peer:refuse', this._onBusRefuse.bind(this))
   }
 
   /**
@@ -491,18 +494,21 @@ export class Call extends Emitter<CallEventListeners> {
    * @param data Signaling data to send
    */
   protected _sendSignal(data: Peer.SignalData) {
-    if (!this.communicationBus) {
+    if (!this.p2p) {
       throw new Error('Communication bus not found')
     }
 
-    this.communicationBus.send({
-      type: 'SIGNAL',
-      payload: {
-        peerId: this.communicationBus.identifier,
-        data,
+    this.p2p.sendMessage(
+      {
+        type: 'SIGNAL',
+        payload: {
+          peerId: this.peerId,
+          data,
+        },
+        sentAt: Date.now(),
       },
-      sentAt: Date.now(),
-    })
+      this.peerId,
+    )
   }
 
   /**
@@ -510,7 +516,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer signal event
    */
   protected _onConnect() {
-    this.emit('CONNECTED', { peerId: this.communicationBus.identifier })
+    this.emit('CONNECTED', { peerId: this.peerId })
   }
 
   /**
@@ -518,7 +524,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer error event
    */
   protected _onError(error: Error) {
-    this.emit('ERROR', { peerId: this.communicationBus.identifier, error })
+    this.emit('ERROR', { peerId: this.peerId, error })
   }
 
   /**
@@ -534,7 +540,7 @@ export class Call extends Emitter<CallEventListeners> {
       track.removeEventListener('mute', trackMuteListener)
 
       this.emit('REMOTE_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
+        peerId: this.peerId,
         track,
         stream,
       })
@@ -544,7 +550,7 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.tracksManager.addTrack(track)
     this.emit('REMOTE_TRACK_RECEIVED', {
-      peerId: this.communicationBus.identifier,
+      peerId: this.peerId,
       track,
       stream,
     })
@@ -557,7 +563,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onStream(stream: MediaStream) {
     this.remoteStream = stream
-    this.emit('STREAM', { peerId: this.communicationBus.identifier, stream })
+    this.emit('STREAM', { peerId: this.peerId, stream })
   }
 
   /**
@@ -567,26 +573,26 @@ export class Call extends Emitter<CallEventListeners> {
   protected _onClose() {
     this.destroy()
     delete this.signalingBuffer
-    this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
+    this.emit('HANG_UP', { peerId: this.peerId })
   }
 
   /**
    * @method _onBusSignal
-   * @description Callback for the Wire on signal event
-   * @param message Wire Message containing the signal data
+   * @description Callback for the on signal event
+   * @param message Message containing the signal data
    */
-  protected _onBusSignal(message: { peerId: string; data: SignalData }) {
-    if (message.data.type === 'offer' && !this.signalingBuffer) {
-      this.signalingBuffer = message.data
-      this.emit('INCOMING_CALL', { peerId: this.communicationBus.identifier })
+  protected _onBusSignal(message: { peerId: PeerId; payload: any }) {
+    if (message.payload?.data?.type === 'offer' && !this.signalingBuffer) {
+      this.signalingBuffer = message.payload.data
+      this.emit('INCOMING_CALL', { peerId: this.peerId })
     } else {
-      this.peer?.signal(message.data)
+      this.peer?.signal(message.payload.data)
     }
   }
 
   /**
    * @method _onBusRefuse
-   * @description Callback for the Wire on refuse event. Used for the hang up
+   * @description Callback for the on refuse event. Used for the hang up
    * before the call started
    */
   protected _onBusRefuse() {

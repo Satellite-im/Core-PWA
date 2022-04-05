@@ -159,7 +159,6 @@ export default {
     { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount,
   ) {
-    console.log('frend details')
     // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
@@ -298,6 +297,12 @@ export default {
     const $MetadataManager: MetadataManager = $TextileManager.metadataManager
     friend.metadata = metadata
     await $MetadataManager.updateFriendMetadata({ to, metadata })
+  },
+  setFriendState(
+    { commit }: ActionsArguments<FriendsState>,
+    { address, state }: { address: string; state: string },
+  ) {
+    commit('friends/updateFriend', { address, state }, { root: true })
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO

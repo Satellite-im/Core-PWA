@@ -93,7 +93,9 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading && users.length">
+        <div
+          v-if="dataState.friends !== DataStateType.Loading && users && users.length"
+        >
           <UiInlineNotification
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"

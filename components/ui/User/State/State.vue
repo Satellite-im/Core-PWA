@@ -11,7 +11,6 @@
       :source="src"
       @click="clickHandler"
     />
-
     <circle-icon
       v-if="user.state !== 'mobile' && !isTyping"
       :size="size > 35 ? '1.65x' : '1x'"

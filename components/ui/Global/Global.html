@@ -31,11 +31,11 @@
     />
   </UiModal>
   <UiModal
-    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+    v-if="this.$store.state.friends.all.some((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
     nopad
   >
     <MediaIncomingCall
-      :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+      :user="this.$store.state.friends.all.find((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
     />

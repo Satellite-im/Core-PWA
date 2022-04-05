@@ -8,21 +8,17 @@ import secio from 'libp2p-secio'
 import { NOISE } from 'libp2p-noise'
 // @ts-ignore
 import WStar from 'libp2p-webrtc-star'
+import { SignalData } from 'simple-peer'
 import LibP2PCrypto, { keys } from 'libp2p-crypto'
 import type Libp2p from 'libp2p/dist/src/index'
-import PeerId, { createFromPrivKey } from 'peer-id'
+import PeerId, { createFromB58String, createFromPrivKey } from 'peer-id'
 import { pipe } from 'it-pipe'
-import { isRight } from 'fp-ts/lib/Either'
 import Emitter from './Emitter'
 import { WireMessage } from './types'
-import {
-  wireDataMessage,
-  wireKeyboardState,
-  wireRefuseConnectionMessage,
-} from './encoders'
+import { Call } from './Call'
 
 enum P2PProtocols {
-  COMMUNICATION_BUS = '/satellite/chat/1.0.0',
+  COMMUNICATION_BUS = '/sattest/chat/1.0.0',
 }
 
 interface P2PListeners {
@@ -30,7 +26,17 @@ interface P2PListeners {
   'peer:connect': (data: { peerId: PeerId }) => void
   'peer:disconnect': (data: { peerId: PeerId }) => void
   'peer:onmessage': (data: { peerId: PeerId; message: WireMessage }) => void
-  'peer:typing': (data: { peerId: PeerId }) => void
+  'peer:signal': (data: { peerId: PeerId; payload: SignalData }) => void
+  'peer:refuse': (data: { peerId: PeerId; payload: unknown }) => void
+  'peer:data': (data: { peerId: PeerId; payload: unknown }) => void
+  'peer:typing': (data: { peerId: PeerId; payload: unknown }) => void
+  'peer:announce': (data: { peerId: PeerId }) => void
+}
+
+type P2PMessage = {
+  type: string
+  payload: unknown
+  sentAt: number
 }
 
 type SupportedKeyType = keyof typeof LibP2PCrypto.keys.supportedKeys
@@ -45,8 +51,9 @@ interface InitializationOptions {
 }
 
 export class Peer2Peer extends Emitter<P2PListeners> {
+  private _node?: Libp2p
+  private _peerId?: PeerId
   static instance: Peer2Peer // eslint-disable-line no-use-before-define
-  private node?: Libp2p
 
   public static getInstance(): Peer2Peer {
     if (!Peer2Peer.instance) {
@@ -55,15 +62,16 @@ export class Peer2Peer extends Emitter<P2PListeners> {
     return Peer2Peer.instance
   }
 
+  get peerId() {
+    return this._peerId
+  }
+
   async init(opts?: InitializationOptions) {
-    let peerid: PeerId | undefined
     if (opts) {
-      peerid = await this._getPeerIdByType(opts.privateKey)
+      this._peerId = await this._getPeerIdByType(opts.privateKey)
     }
 
-    console.log('My peer id', peerid?.toB58String())
-
-    this.node = await create({
+    this._node = await create({
       modules: {
         transport: [WStar],
         streamMuxer: [Mplex],
@@ -75,7 +83,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
           // '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
         ],
       },
-      peerId: peerid,
+      peerId: this.peerId,
       connectionManager: {
         autoDial: false, // Auto connect to discovered peers (limited by ConnectionManager minConnections)
         // The `tag` property will be searched when creating the instance of your Peer Discovery service.
@@ -99,65 +107,63 @@ export class Peer2Peer extends Emitter<P2PListeners> {
       }
 
       default: {
-        console.log('rsa')
         break
       }
     }
   }
 
   start() {
-    if (!this.node) return
+    if (!this._node) return
 
-    this.node.start()
+    this._node.start()
   }
 
   stop() {
-    if (!this.node) return
+    if (!this._node) return
 
-    this.node.stop()
+    this._node.stop()
   }
 
   async connect(peerId: PeerId) {
-    console.log('trying to connect with', peerId.toB58String())
     return this._dial(peerId)
   }
 
-  private _bindListeners() {
-    if (!this.node) return
+  get node() {
+    return this._node
+  }
 
-    this.node.on('peer:discovery', this._onPeerDiscovery.bind(this))
-    this.node.connectionManager.on(
+  private _bindListeners() {
+    if (!this._node) return
+
+    this._node.on('peer:discovery', this._onPeerDiscovery.bind(this))
+    this._node.connectionManager.on(
       'peer:connect',
       this._onPeerConnect.bind(this),
     )
-    this.node.connectionManager.on(
+    this._node.connectionManager.on(
       'peer:disconnect',
       this._onPeerDisconnect.bind(this),
     )
   }
 
   private _bindProtocols() {
-    if (!this.node) return
+    if (!this._node) return
 
-    this.node.handle(
+    this._node.handle(
       P2PProtocols.COMMUNICATION_BUS,
       this._messageHandler.bind(this),
     )
   }
 
   private _onPeerDiscovery(peerId: PeerId) {
-    // console.log('discovery', peerId.toB58String())
     this.emit('peer:discovery', { peerId })
   }
 
   private async _onPeerConnect(connection: Connection) {
-    console.log('Connected to', connection.remotePeer.toB58String())
-
     this.emit('peer:connect', { peerId: connection.remotePeer })
   }
 
   private _onPeerDisconnect(connection: Connection) {
-    console.log('Disconnected from', connection.remotePeer.toB58String())
     this.emit('peer:disconnect', { peerId: connection.remotePeer })
   }
 
@@ -170,84 +176,78 @@ export class Peer2Peer extends Emitter<P2PListeners> {
   }) {
     try {
       await pipe(stream, async (source) => {
-        for await (const message of source) {
-          console.log(`${connection.remotePeer.toB58String()}: ${message}`)
+        for await (const msg of source) {
+          const peerId = connection.remotePeer
+          const message = JSON.parse(msg)
 
-          const parsedData = JSON.parse(message)
-
-          const dataMessage = wireDataMessage.decode(parsedData)
-
-          if (isRight(dataMessage)) {
-            const data = dataMessage.right.payload
-
-            console.log('data message received', data)
-            // this.emit('DATA', {
-            //   peerId: this.identifier,
-            //   data,
-            // })
-
+          if (message.type === 'peer:announce') {
+            this.emit('peer:announce', { peerId })
             return
           }
 
-          const refuseMessage = wireRefuseConnectionMessage.decode(parsedData)
-
-          if (isRight(refuseMessage)) {
-            const data = refuseMessage.right.payload
-
-            console.log('refuse message received', data)
-
-            // this.emit('REFUSE', {
-            //   peerId: this.identifier,
-            // })
-
+          if (message.type === 'DATA') {
+            this.emit('peer:data', {
+              peerId,
+              payload: message.payload,
+            })
             return
           }
 
-          const keyboardState = wireKeyboardState.decode(parsedData)
+          if (message.type === 'REFUSE') {
+            this.emit('peer:refuse', {
+              peerId,
+              payload: message.payload,
+            })
+            return
+          }
 
-          if (isRight(keyboardState)) {
+          if (message.type === 'TYPING_STATE') {
             this.emit('peer:typing', {
               peerId: connection.remotePeer,
+              payload: message.payload,
             })
-
-            console.log('typing state message received')
-
             return
           }
 
-          console.log('row data message received')
-          // this.emit('RAW_DATA', {
-          //   peerId: this.identifier,
-          //   data: parsedData.payload,
-          // })
+          if (message.type === 'SIGNAL') {
+            this.emit('peer:signal', {
+              peerId,
+              payload: message.payload,
+            })
+            return
+          }
+
+          this.emit('peer:onmessage', {
+            peerId,
+            message,
+          })
         }
       })
-
-      // await pipe([])
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
   private _dial(peerId: PeerId) {
-    if (!this.node) return
+    if (!this._node) return
 
-    return this.node.dialProtocol(peerId, P2PProtocols.COMMUNICATION_BUS)
+    return this._node.dialProtocol(peerId, P2PProtocols.COMMUNICATION_BUS)
   }
 
   private async _sendMessage(message: string, stream: any) {
-    return pipe([message], stream, async function (source) {
-      for await (const message of source) {
-        console.log('Sent this message:', message)
-      }
-    })
+    return pipe([message], stream)
   }
 
-  async sendMessage(message: WireMessage, peerId: PeerId) {
-    console.log('send message to:', message, peerId.toB58String())
-    if (!this.node) return
+  getPeer(peerId: PeerId) {
+    if (!this._node) return
+    return this._node.peerStore.get(peerId)
+  }
 
-    const connection = this.node.connectionManager.get(peerId)
+  async sendMessage(message: P2PMessage, peerId: PeerId | string) {
+    const peer = peerId instanceof PeerId ? peerId : createFromB58String(peerId)
+    if (!this._node) return
+
+    const connection = this._node.connectionManager.get(peer)
 
     if (!connection) return
 

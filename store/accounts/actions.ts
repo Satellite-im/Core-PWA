@@ -323,7 +323,13 @@ export default {
     if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
       dispatch(
         'webrtc/initialize',
-        { type: 'ed25519', privateKey: $SolanaManager.payerAccount?.secretKey },
+        {
+          privateKeyInfo: {
+            type: 'ed25519',
+            privateKey: $SolanaManager.payerAccount?.secretKey,
+          },
+          originator: payerAccount.publicKey.toBase58(),
+        },
         {
           root: true,
         },
