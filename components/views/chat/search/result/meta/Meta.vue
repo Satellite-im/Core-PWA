@@ -31,7 +31,7 @@ export default Vue.extend({
     resultsText(): TranslateResult {
       // if 0 results
       if (this.result.totalRows === 0) {
-        return this.$t('search.result.no_results')
+        return this.$t('search.result.one_page', ['No'])
       }
       // if 1 result
       if (this.result.totalRows === 1) {
@@ -39,7 +39,7 @@ export default Vue.extend({
       }
       // if > 1, but less than perPage
       if (this.result.totalRows <= this.perPage) {
-        return this.$t('search.result.one_page', [this.result.totalRows])
+        return this.$t('search.result.one_page', [`(${this.result.totalRows})`])
       }
       // if last page of multipage results with only 1 result
       if (this.result.data.length === 1) {

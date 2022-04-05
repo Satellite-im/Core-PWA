@@ -550,9 +550,8 @@ export default {
     result: {
       search_results: 'Search results',
       more_filters: 'More filters',
-      no_results: 'No Results',
       one_result: '1 Result',
-      one_page: '({0}) Results',
+      one_page: '{0} Results',
       multi_page: '{pageStart}-{pageEnd} of ({total}) Results',
       one_result_last_page: '{resultNum} of ({total}) Results',
       users: 'Users',
