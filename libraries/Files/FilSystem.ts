@@ -257,7 +257,7 @@ export class FilSystem {
     modified,
     thumbnail,
   }: {
-    id: string
+    id?: string
     name: string
     file?: File
     size: number
@@ -334,7 +334,9 @@ export class FilSystem {
    * @returns {boolean} returns truthy if child by name exists in filesystem
    */
   public hasChild(childName: string): boolean {
-    return this.flat.some((item) => item.name === childName)
+    return this.flat.some(
+      (item) => item.name.toLowerCase() === childName.toLowerCase(),
+    )
   }
 
   /**

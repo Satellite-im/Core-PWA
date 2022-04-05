@@ -93,7 +93,7 @@ export class Directory extends Item {
    * @returns {boolean} returns true or false depending on if a child exists in the directory
    */
   hasChild(childName: string): boolean {
-    return this._children.has(childName)
+    return this._children.has(childName.toLowerCase())
   }
 
   /**
@@ -119,7 +119,7 @@ export class Directory extends Item {
       parent = parent!.parent
     }
 
-    this._children.set(child.name, child)
+    this._children.set(child.name.toLowerCase(), child)
     child.parent = this
 
     return this.hasChild(child.name)
@@ -131,7 +131,7 @@ export class Directory extends Item {
    * @returns {Item} returns the child if it exists, otherwise returns null
    */
   getChild(childName: string): Item {
-    return this._children.get(childName) || null
+    return this._children.get(childName.toLowerCase()) || null
   }
 
   /**
@@ -144,7 +144,7 @@ export class Directory extends Item {
     const child = this.getChild(childName)
 
     if (child) {
-      this._children.delete(childName)
+      this._children.delete(childName.toLowerCase())
       child.parent = null
     }
 

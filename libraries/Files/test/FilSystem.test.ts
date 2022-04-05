@@ -93,7 +93,6 @@ describe('Test FilSystem', () => {
     expect(
       filesystem.createFile({
         name: testFile.name,
-        hash: '0089349da',
         size: testFile.size,
       }),
     ).not.toBe(null))
@@ -104,7 +103,6 @@ describe('Test FilSystem', () => {
   it(`Correctly renames a child`, () => {
     filesystem.createFile({
       name: testFileTwo.name,
-      hash: '0089349da',
       size: testFileTwo.size,
     })
     filesystem.renameChild('test_fil_two.txt', 'test_fil_rename.txt')

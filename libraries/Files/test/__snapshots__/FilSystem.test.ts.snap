@@ -10,8 +10,8 @@ Array [
     "_name": "Test Directory",
     "_parent": Directory {
       "_children": Map {
-        "Test Directory" => [Circular],
-        "Test Directory copy" => Directory {
+        "test directory" => [Circular],
+        "test directory copy" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -23,7 +23,7 @@ Array [
         },
         "second dir" => Directory {
           "_children": Map {
-            "TestFile.png" => Fil {
+            "testfile.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -36,7 +36,7 @@ Array [
               "_thumbnail": "",
               "_type": "generic",
             },
-            "testPng2.png" => Fil {
+            "testpng2.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -114,7 +114,7 @@ Array [
     "_name": "Test Directory copy",
     "_parent": Directory {
       "_children": Map {
-        "Test Directory" => Directory {
+        "test directory" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -124,10 +124,10 @@ Array [
           "_shared": false,
           "_type": "DEFAULT",
         },
-        "Test Directory copy" => [Circular],
+        "test directory copy" => [Circular],
         "second dir" => Directory {
           "_children": Map {
-            "TestFile.png" => Fil {
+            "testfile.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -140,7 +140,7 @@ Array [
               "_thumbnail": "",
               "_type": "generic",
             },
-            "testPng2.png" => Fil {
+            "testpng2.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -212,7 +212,7 @@ Array [
   },
   Directory {
     "_children": Map {
-      "TestFile.png" => Fil {
+      "testfile.png" => Fil {
         "_description": "Test file description",
         "_file": undefined,
         "_id": "testid",
@@ -225,7 +225,7 @@ Array [
         "_thumbnail": "",
         "_type": "generic",
       },
-      "testPng2.png" => Fil {
+      "testpng2.png" => Fil {
         "_description": "Test file description",
         "_file": undefined,
         "_id": "testid",
@@ -271,7 +271,7 @@ Array [
     "_name": "second dir",
     "_parent": Directory {
       "_children": Map {
-        "Test Directory" => Directory {
+        "test directory" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -281,7 +281,7 @@ Array [
           "_shared": false,
           "_type": "DEFAULT",
         },
-        "Test Directory copy" => Directory {
+        "test directory copy" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -322,7 +322,7 @@ Array [
     "_name": "third dir",
     "_parent": Directory {
       "_children": Map {
-        "Test Directory" => Directory {
+        "test directory" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -332,7 +332,7 @@ Array [
           "_shared": false,
           "_type": "DEFAULT",
         },
-        "Test Directory copy" => Directory {
+        "test directory copy" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -344,7 +344,7 @@ Array [
         },
         "second dir" => Directory {
           "_children": Map {
-            "TestFile.png" => Fil {
+            "testfile.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -357,7 +357,7 @@ Array [
               "_thumbnail": "",
               "_type": "generic",
             },
-            "testPng2.png" => Fil {
+            "testpng2.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -425,7 +425,7 @@ exports[`Test FilSystem Move item to a directory 1`] = `
 FilSystem {
   "_currentDirectory": Directory {
     "_children": Map {
-      "Test Directory" => Directory {
+      "test directory" => Directory {
         "_children": Map {},
         "_id": "testid",
         "_liked": false,
@@ -435,7 +435,7 @@ FilSystem {
         "_shared": false,
         "_type": "DEFAULT",
       },
-      "Test Directory copy" => Directory {
+      "test directory copy" => Directory {
         "_children": Map {},
         "_id": "testid",
         "_liked": false,
@@ -447,7 +447,7 @@ FilSystem {
       },
       "second dir" => Directory {
         "_children": Map {
-          "TestFile.png" => Fil {
+          "testfile.png" => Fil {
             "_description": "Test file description",
             "_file": undefined,
             "_id": "testid",
@@ -460,7 +460,7 @@ FilSystem {
             "_thumbnail": "",
             "_type": "generic",
           },
-          "testPng2.png" => Fil {
+          "testpng2.png" => Fil {
             "_description": "Test file description",
             "_file": undefined,
             "_id": "testid",
@@ -530,7 +530,7 @@ FilSystem {
   "_currentDirectoryPath": Array [
     Directory {
       "_children": Map {
-        "Test Directory" => Directory {
+        "test directory" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -540,7 +540,7 @@ FilSystem {
           "_shared": false,
           "_type": "DEFAULT",
         },
-        "Test Directory copy" => Directory {
+        "test directory copy" => Directory {
           "_children": Map {},
           "_id": "testid",
           "_liked": false,
@@ -552,7 +552,7 @@ FilSystem {
         },
         "second dir" => Directory {
           "_children": Map {
-            "TestFile.png" => Fil {
+            "testfile.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -565,7 +565,7 @@ FilSystem {
               "_thumbnail": "",
               "_type": "generic",
             },
-            "testPng2.png" => Fil {
+            "testpng2.png" => Fil {
               "_description": "Test file description",
               "_file": undefined,
               "_id": "testid",
@@ -635,7 +635,7 @@ FilSystem {
   ],
   "_self": Directory {
     "_children": Map {
-      "Test Directory" => Directory {
+      "test directory" => Directory {
         "_children": Map {},
         "_id": "testid",
         "_liked": false,
@@ -645,7 +645,7 @@ FilSystem {
         "_shared": false,
         "_type": "DEFAULT",
       },
-      "Test Directory copy" => Directory {
+      "test directory copy" => Directory {
         "_children": Map {},
         "_id": "testid",
         "_liked": false,
@@ -657,7 +657,7 @@ FilSystem {
       },
       "second dir" => Directory {
         "_children": Map {
-          "TestFile.png" => Fil {
+          "testfile.png" => Fil {
             "_description": "Test file description",
             "_file": undefined,
             "_id": "testid",
@@ -670,7 +670,7 @@ FilSystem {
             "_thumbnail": "",
             "_type": "generic",
           },
-          "testPng2.png" => Fil {
+          "testpng2.png" => Fil {
             "_description": "Test file description",
             "_file": undefined,
             "_id": "testid",
