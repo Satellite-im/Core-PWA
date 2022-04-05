@@ -344,12 +344,21 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('chatFeaturesSendGlyph', () => {
-  cy.get('#glyph-toggle').click()
-  cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
-  cy.get('.glyph-item').first().click()
-  cy.get('[data-cy=send-message]').click() //sending glyph message
-})
+Cypress.Commands.add(
+  'chatFeaturesSendGlyph',
+  (packIndex = 0, itemIndex = 0) => {
+    cy.get('#glyph-toggle').click()
+    cy.get('#glyphs').should('be.visible')
+    cy.get('[data-cy=glyph-pack]').eq(packIndex).as('glyph-pack')
+    cy.get('@glyph-pack')
+      .scrollIntoView()
+      .find('[data-cy=pack-glyph-item]')
+      .eq(itemIndex)
+      .scrollIntoView()
+      .click()
+    cy.get('[data-cy=send-message]').click() //sending glyph message
+  },
+)
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
