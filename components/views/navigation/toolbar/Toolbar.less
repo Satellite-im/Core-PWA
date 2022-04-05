@@ -141,3 +141,12 @@
     left: @light-spacing !important;
   }
 }
+
+/* Only for Safari to fix lack resolution of svgs */
+
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) {
+  #toolbar .controls svg{
+    transform: translateZ(0);
+  }
+}}
