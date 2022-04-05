@@ -23,6 +23,7 @@ export default async function isNSFW(file: File): Promise<boolean> {
     FILE_TYPE.WEBP,
   ]
   const mime = await mimeType(file)
+
   // if unscannable/unembeddable type
   if (![...vidTypes, ...imgTypes].includes(mime as FILE_TYPE)) {
     return false

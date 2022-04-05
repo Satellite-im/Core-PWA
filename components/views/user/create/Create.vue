@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { UserRegistrationData } from '~/types/ui/user'
+import { isEmbeddableImage } from '~/utilities/FileType'
 
 export default Vue.extend({
   name: 'CreateUser',
@@ -69,6 +70,14 @@ export default Vue.extend({
         return
       }
 
+      const isEmbeddable = await isEmbeddableImage(files[0])
+
+      if (!isEmbeddable) {
+        this.error = this.$t('errors.sign_in.invalid_file') as string
+        this.isLoading = false
+        return
+      }
+
       // stop upload if picture is too large for nsfw scan.
       // Leaving this in place since nsfw profile pictures would be bad
       if (files[0].size > this.$Config.nsfwByteLimit) {
@@ -76,6 +85,7 @@ export default Vue.extend({
         this.isLoading = false
         return
       }
+
       // stop upload if picture is nsfw
       try {
         const nsfw = await this.$Security.isNSFW(files[0])
@@ -86,7 +96,7 @@ export default Vue.extend({
         }
       } catch (err: any) {
         this.$Logger.log('error', 'file upload error')
-        this.error = this.$t('errors.sign_in.invalid_file') as string
+        this.error = this.$t(err.message) as string
         this.resetFileInput()
         this.isLoading = false
         return
@@ -98,7 +108,6 @@ export default Vue.extend({
       reader.onload = (e) => {
         if (e.target?.result) {
           this.imageUrl = e.target.result.toString()
-
           this.toggleCropper()
           this.isLoading = false
         }
