@@ -554,7 +554,7 @@ export default {
       one_result: '1 Result',
       one_page: '({0}) Results',
       multi_page: '{pageStart}-{pageEnd} of ({total}) Results',
-      last_page: '{resultNum} of ({total}) Results',
+      one_result_last_page: '{resultNum} of ({total}) Results',
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',

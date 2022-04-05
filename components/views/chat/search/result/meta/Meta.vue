@@ -41,9 +41,9 @@ export default Vue.extend({
       if (this.result.totalRows <= this.perPage) {
         return this.$t('search.result.one_page', [this.result.totalRows])
       }
-      // if last page of multipage results
+      // if last page of multipage results with only 1 result
       if (this.result.data.length === 1) {
-        return this.$t('search.result.last_page', {
+        return this.$t('search.result.one_result_last_page', {
           resultNum: (this.page - 1) * this.perPage + 1,
           total: this.result.totalRows,
         })
