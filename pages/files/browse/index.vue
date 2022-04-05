@@ -36,8 +36,8 @@ export default Vue.extend({
        */
     },
     directory(): Item[] {
-      if (this.sort.category === FileSortEnum.SIZE) {
-        const key = this.sort.category
+      const key = this.sort.category
+      if (key === FileSortEnum.SIZE) {
         return (
           this.$data.counter &&
           cloneDeep(this.fileSystem.currentDirectory.content).sort(
@@ -47,8 +47,7 @@ export default Vue.extend({
           )
         )
       }
-      if (this.sort.category === FileSortEnum.MODIFIED) {
-        const key = this.sort.category
+      if (key === FileSortEnum.MODIFIED) {
         return (
           this.$data.counter &&
           cloneDeep(this.fileSystem.currentDirectory.content).sort(
@@ -58,7 +57,6 @@ export default Vue.extend({
           )
         )
       }
-      const key = this.sort.category
       return (
         this.$data.counter &&
         cloneDeep(this.fileSystem.currentDirectory.content).sort(
