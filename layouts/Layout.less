@@ -43,6 +43,7 @@
     .sidebar-container {
       width: calc(@sidebar-size + @servers-size);
       display: flex;
+
       @media only screen and (max-width: @mobile-breakpoint) {
         margin-top: @normal-spacing;
         height: calc(100% - @normal-spacing);
@@ -253,5 +254,4 @@
   }
 }
 
-@import url('~/assets/styles/platforms/iOS.less');
 @import url('~/assets/styles/themes/moonless_night.less');
