@@ -133,9 +133,10 @@ export default Vue.extend({
      * @description if current category, swap asc/desc. if different, change category
      */
     setSort(category: FileSortEnum) {
-      this.sort.category === category
-        ? (this.sort = { category: this.sort.category, asc: !this.sort.asc })
-        : (this.sort = { category, asc: true })
+      this.sort =
+        this.sort.category === category
+          ? { category: this.sort.category, asc: !this.sort.asc }
+          : { category, asc: true }
     },
     /**
      * @method forceRender
