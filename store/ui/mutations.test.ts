@@ -4,6 +4,7 @@ import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
+import { Fil } from '~/libraries/Files/Fil'
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)
@@ -2156,7 +2157,7 @@ describe('mutations.default.sendMessage', () => {
   })
 })
 
-describe('mutations.default.addReaction', () => {
+describe.skip('mutations.default.addReaction', () => {
   test('0', () => {
     const object: any = [
       [
@@ -3226,6 +3227,26 @@ describe('mutations', () => {
     mutations.default.fullscreen(localizedState, true)
     expect(localizedState.fullscreen).toBeTruthy()
   })
+  test('setFilePreview', () => {
+    const mockFileData = {
+      name: 'TestFile.png',
+      hash: '0x0aef',
+      size: 4235,
+      liked: false,
+      shared: false,
+      description: 'Test file description',
+    }
+    const file = new Fil(mockFileData)
+    const localizedState = { ...initialState }
+    mutations.default.setFilePreview(localizedState, file)
+    expect(localizedState.filePreview).toBe(file)
+  })
+  test('setChatImageOverlay', () => {
+    const passedInImageOverlay = undefined
+    const localizedState = { ...initialState }
+    mutations.default.setChatImageOverlay(localizedState, passedInImageOverlay)
+    expect(localizedState.chatImageOverlay).toBeUndefined()
+  })
   test('toggleEnhancers with non-default options', () => {
     const localizedState = { ...initialState }
     const object = {
@@ -3945,6 +3966,32 @@ describe('mutations', () => {
     const object = {
       payload: 'payload',
       id: dateNow,
+      from: dateNow,
+    }
+    mutations.default.saveEditMessage(localizedState, object)
+    expect(localizedState.messages).toContainEqual({
+      at: dateNow,
+      from: dateNow,
+      id: dateNow,
+      messages: [
+        {
+          at: dateNow,
+          id: dateNow,
+          payload: object.payload,
+          reactions: [],
+          replies: [],
+          type: 'text',
+        },
+      ],
+      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
+      type: 'group',
+    })
+  })
+  test('saveEditMessage with existing message but mistmatching id', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      payload: 'payload',
+      id: 1645622021469,
       from: dateNow,
     }
     mutations.default.saveEditMessage(localizedState, object)
