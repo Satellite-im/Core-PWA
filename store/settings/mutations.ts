@@ -39,8 +39,8 @@ const mutations = {
     // will not react to deep values
     state.embeddedLinks = value
   },
-  setConsentsScan(state: SettingsState, value: boolean) {
-    state.consentsScan = value
+  setConsentScan(state: SettingsState, value: boolean) {
+    state.consentScan = value
   },
   displayCurrentActivity(state: SettingsState, value: boolean) {
     state.displayCurrentActivity = value
