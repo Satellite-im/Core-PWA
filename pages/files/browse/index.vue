@@ -58,7 +58,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.$store.commit('ui/setFilePreview', item)
+        this.$store.commit('ui/setFilePreview', item.name)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)

@@ -1,5 +1,4 @@
 import { TranslateResult } from 'vue-i18n'
-import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
@@ -214,8 +213,8 @@ export interface UIState {
   }
   isLoadingFileIndex: boolean
   renameCurrentName?: string
-  filePreview: Fil | undefined
-  chatImageOverlay: ImageMessage | undefined
+  filePreview?: string
+  chatImageOverlay?: ImageMessage
   fileSort: FileSort
 }
 

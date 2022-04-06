@@ -37,6 +37,7 @@ const commonProperties = [
   'groups.groupSubscriptions',
   'ui.modals',
   'ui.isScrollOver',
+  'ui.filePreview',
 ]
 
 const propertiesNoStorePin = [

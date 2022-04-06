@@ -51,8 +51,8 @@ export default {
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
   },
-  setFilePreview(state: UIState, file: Fil | undefined) {
-    state.filePreview = file
+  setFilePreview(state: UIState, name: string) {
+    state.filePreview = name
   },
   setChatImageOverlay(state: UIState, image: ImageMessage | undefined) {
     state.chatImageOverlay = image

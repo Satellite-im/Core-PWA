@@ -1,7 +1,7 @@
 <div id="view-file">
   <div class="file-nav">
     <div class="file-info">
-      <TypographyTitle :text="file.name" :size="6" />
+      <TypographyTitle :text="fileName" :size="6" />
       <TypographyText :text="file.type" :size="6" />
       <TypographyText :text="$filesize(file.size)" :size="6" />
       <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
@@ -49,7 +49,7 @@
     >
       <download-icon size="1x" class="file-icon" />
     </a>
-    <TypographyTitle :size="4" :text="file.name" />
+    <TypographyTitle :size="4" :text="fileName" />
     <TypographySubtitle :size="6" :text="file.type" />
     <TypographySubtitle :text="$filesize(file.size)" :size="6" />
     <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
