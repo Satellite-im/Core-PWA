@@ -456,6 +456,9 @@ export default {
       },
     },
     chat: {
+      group_invite: 'Invite new member',
+      group_invite_description:
+        'Select one of your friends to add him to the group',
       new_message: 'messages',
       jump_to_current: 'View New Messages',
       chat_now: 'chat now',
