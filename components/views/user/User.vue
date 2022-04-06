@@ -60,7 +60,7 @@ export default Vue.extend({
       existConversation: false,
       isLoading: false,
       timestamp: convertTimestampToDate(
-        this,
+        this.$t('friends.details'),
         this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
       ),
       timestampRefreshInterval: null,
@@ -87,7 +87,7 @@ export default Vue.extend({
       handler(newValue) {
         this.existMessage(newValue)
         this.$data.timestamp = convertTimestampToDate(
-          this,
+          this.$t('friends.details'),
           newValue[this.user.address]?.lastUpdate,
         )
       },
@@ -97,7 +97,10 @@ export default Vue.extend({
   },
   created() {
     const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(this, timePassed)
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(

@@ -267,28 +267,31 @@ export function getFullUserInfoFromState(
   return userInfo
 }
 
-export function convertTimestampToDate(context: any, timestamp: number) {
-  const secondsDif = context.$dayjs().diff(timestamp, 'second')
+export function convertTimestampToDate(
+  chatTranslations: any,
+  timestamp: number,
+) {
+  const secondsDif = dayjs().diff(timestamp, 'second')
 
   if (secondsDif < 30) {
-    return context.$t('friends.details.now')
+    return chatTranslations.now
   }
 
-  const lastUpdate = context.$dayjs(timestamp)
-  const sameDay = context.$dayjs().isSame(lastUpdate, 'day')
+  const lastUpdate = dayjs(timestamp)
+  const sameDay = dayjs().isSame(lastUpdate, 'day')
 
   if (sameDay) {
     return lastUpdate.format('LT')
   }
 
-  const daysDif = context.$dayjs().diff(lastUpdate, 'day')
+  const daysDif = dayjs().diff(lastUpdate, 'day')
 
   if (daysDif <= 1) {
-    return context.$t('friends.details.yesterday')
+    return chatTranslations.yesterday
   }
 
   if (daysDif > 1 && daysDif <= 2) {
-    return context.$t('friends.details.days_short', { days: daysDif })
+    return `${daysDif} ${chatTranslations.days_short}`
   }
 
   return lastUpdate.format('L')

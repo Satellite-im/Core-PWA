@@ -52,7 +52,10 @@ export default Vue.extend({
     return {
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
-      timestamp: convertTimestampToDate(this, this.$props.message.at),
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.$props.message.at,
+      ),
       blob: undefined as Blob | undefined,
       pngBlob: undefined as Blob | undefined,
     }
@@ -113,7 +116,10 @@ export default Vue.extend({
   },
   created() {
     const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(this, timePassed)
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(

@@ -30,7 +30,10 @@ export default Vue.extend({
   data() {
     return {
       timestampRefreshInterval: null,
-      timestamp: convertTimestampToDate(this, this.group.at),
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.group.at,
+      ),
     }
   },
   computed: {
@@ -81,7 +84,10 @@ export default Vue.extend({
   },
   created() {
     const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(this, timePassed)
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
