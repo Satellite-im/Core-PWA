@@ -422,7 +422,7 @@ Cypress.Commands.add('goToConversation', (user) => {
     .find('[data-cy=friend-send-message]')
     .as('friend-message')
   cy.get('@friend-message').click()
-  cy.get('[data-cy=user-connected]', { timeout: 30000 })
+  cy.get('[data-cy=user-connected]', { timeout: 60000 })
     .should('be.visible')
     .should('have.text', user)
 })
