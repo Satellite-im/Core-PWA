@@ -10,6 +10,9 @@ const getters = {
   showSidebar: (state: UIState) => {
     return state.showSidebar
   },
+  swiperSlideIndex: (state: UIState) => {
+    return state.swiperSlideIndex
+  },
 }
 
 export default getters

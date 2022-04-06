@@ -32,6 +32,24 @@ export default Vue.extend({
         state: !this.ui.modals[ModalWindows.CALLTOACTION],
       })
     },
+    /**
+     * @method navigateToHome
+     * @description Navigate to chat "/chat/direct" without specific user
+     */
+    navigateToHome() {
+      this.$store.commit('ui/showSidebar', true)
+      this.$store.commit('ui/setSwiperSlideIndex', 0)
+      this.$router.push('/chat/direct')
+    },
+    /**
+     * @method navigateToFriend
+     * @description Navigate to chat "/friends/list" showing slide 1 ('friends list slide')
+     */
+    navigateToFriend() {
+      this.$store.commit('ui/setSwiperSlideIndex', 1)
+      this.$store.commit('ui/showSidebar', false)
+      this.$router.push('/friends/list')
+    },
   },
 })
 </script>

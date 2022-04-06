@@ -72,6 +72,7 @@ export default {
     typing: 'typing',
     many_typing: 'many users are typing',
     new_messages: 'New Messages',
+    say_hi: 'Say hi! 👋',
     pinned: {
       archived_messages: 'Archived Messages',
       new: 'New',
@@ -479,6 +480,9 @@ export default {
       new_group: 'New Group',
       new_group_name: 'Add a group name here...',
     },
+    newMessage: {
+      new_message: 'New Message',
+    },
   },
   servers: {
     new_server: 'New Community',
@@ -604,9 +608,15 @@ export default {
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
     requests: 'Friend requests',
+    incoming: 'Requests',
+    received: 'Received',
+    sent: 'Sent',
+    no_friend_request: 'You have no new friend requests.',
     outgoing: 'Outgoing requests',
     all: 'List of friends',
-    blocked: 'Blocked friends',
+    blocked_friends: 'Blocked friends',
+    blocked: 'Blocked',
+    no_blocked: 'You have no blocked users, yay!',
     search_placeholder: 'Some User...',
     add: 'Add Friend',
     add_description:

@@ -1,10 +1,8 @@
-<template src="./User.html"></template>
+<template src="./Friend.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-
-import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
@@ -12,17 +10,11 @@ import { Conversation } from '~/store/textile/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    testFunc: () => void
-    navigateToUser: () => void
-    handleShowProfile: () => void
-    removeUser: () => void
+    selectUserAddress: (address: string) => void
   }
 }
+
 export default Vue.extend({
-  components: {
-    SmartphoneIcon,
-    CircleIcon,
-  },
   mixins: [ContextMenu],
   props: {
     user: {
@@ -34,18 +26,21 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    selectUserAddress: {
+      type: Function,
+      default: (address: string) => {},
+    },
+    selectedAddress: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
-      contextMenuValues: [
-        { text: this.$t('context.send'), func: this.navigateToUser },
-        { text: this.$t('context.voice'), func: this.testFunc },
-        { text: this.$t('context.video'), func: this.testFunc },
-        { text: this.$t('context.profile'), func: this.handleShowProfile },
-        { text: this.$t('context.remove'), func: this.removeUser },
-      ],
       existConversation: false,
       isLoading: false,
+      address: '',
+      checked: false,
     }
   },
   computed: {
@@ -63,42 +58,21 @@ export default Vue.extend({
       deep: true,
       immediate: true,
     },
+    /**
+     * Watch checked state
+     * if false, set selected as ''
+     * if true, set selected user address
+     */
+    checked(newValue, oldValue) {
+      if (oldValue === newValue) return
+      if (newValue === false) {
+        this.selectUserAddress('')
+      } else {
+        this.selectUserAddress(this.user.address)
+      }
+    },
   },
   methods: {
-    testFunc() {
-      this.$Logger.log('User Context', 'Test func')
-    },
-    async removeUser() {
-      this.isLoading = true
-      try {
-        await this.$store.dispatch('friends/removeFriend', this.user)
-        this.$router.replace('/chat/direct')
-      } catch (e) {
-        this.$toast.success(
-          this.$t('errors.friends.friend_not_removed') as string,
-        )
-      } finally {
-        this.isLoading = false
-      }
-    },
-    /**
-     * @method navigateToUser
-     * @description Navigates to chat with specific user by pushing "/chat/direct/" + users ID to the router
-     * Pretty sure this is just a placeholder for what will be the actual function?
-     * @example ---
-     */
-    navigateToUser() {
-      if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
-        this.$store.commit('ui/showSidebar', false)
-      }
-
-      this.$router.push(`/chat/direct/${this.user.address}`)
-    },
-    async handleShowProfile() {
-      this.$store.dispatch('ui/showProfile', this.user)
-    },
     getLastUpdate() {
       const currentUserInfo =
         this.$store.state.textile.conversations[this.user.address]
@@ -136,8 +110,11 @@ export default Vue.extend({
         !currentUserInfo || currentUserInfo?.lastUpdate <= 0
       )
     },
+    toggleSelect() {
+      this.checked = !this.checked
+    },
   },
 })
 </script>
 
-<style scoped lang="less" src="./User.less"></style>
+<style scoped lang="less" src="./Friend.less"></style>

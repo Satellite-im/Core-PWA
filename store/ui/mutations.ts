@@ -362,4 +362,7 @@ export default {
   setFileSort(state: UIState, sort: FileSort) {
     state.fileSort = sort
   },
+  setSwiperSlideIndex(state: UIState, index: number) {
+    state.swiperSlideIndex = index
+  },
 }

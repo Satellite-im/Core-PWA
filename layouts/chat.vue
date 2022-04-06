@@ -15,7 +15,11 @@
       }`"
     >
       <UiGlobal />
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper
+        ref="swiper"
+        class="swiper"
+        :options="{ ...swiperOption, initialSlide: swiperSlideIndex }"
+      >
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -23,22 +27,32 @@
             :unreads="friends.all"
             :open-modal="toggleModal"
           />
+          <MobileSidebar
+            v-if="$device.isMobile"
+            :users="friends.all"
+            :groups="$mock.groups"
+            :sidebar="showSidebar"
+            :show-menu="toggleMenu"
+          />
           <Sidebar
+            v-if="!$device.isMobile"
             :users="friends.all"
             :groups="groups.all"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
         </swiper-slide>
+        <!-- Hide swiper slide when no friends and mobile -->
         <swiper-slide
+          v-if="!(isNoFriends && $device.isMobile)"
           :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
         >
           <DroppableWrapper @handle-drop-prop="handleDrop">
             <menu-icon
+              v-if="!showSidebar || $device.isMobile"
               class="toggle--sidebar"
               size="1.2x"
               full-width
-              :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
               @click="toggleMenu"
             />
             <Toolbar
@@ -100,14 +114,20 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
 import { hexToRGB } from '~/utilities/Colors'
+import { DataStateType } from '~/store/dataState/types'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    showSidebar: boolean
+  }
+}
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -122,7 +142,6 @@ export default Vue.extend({
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
       swiperOption: {
-        initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
@@ -130,7 +149,10 @@ export default Vue.extend({
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
-              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+              const activeIndex = this.$refs.swiper.$swiper.activeIndex
+              this.$store.commit('ui/setSwiperSlideIndex', activeIndex)
+
+              const newShowSidebar = activeIndex === 0
 
               // force virtual keyboard hide on mobile when swiper slide change
               if (newShowSidebar) {
@@ -148,8 +170,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media', 'friends', 'groups']),
-    ...mapGetters('ui', ['showSidebar']),
+    ...mapState(['audio', 'ui', 'media', 'friends', 'groups', 'dataState']),
+    ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
+    DataStateType: () => DataStateType,
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
@@ -176,6 +199,12 @@ export default Vue.extend({
     flairColorRGB() {
       return hexToRGB(this.ui.theme.flair.value)
     },
+    isNoFriends() {
+      return (
+        this.dataState.friends !== this.DataStateType.Loading &&
+        !this.friends.all.length
+      )
+    },
   },
   watch: {
     showSidebar(newValue, oldValue) {
@@ -185,8 +214,10 @@ export default Vue.extend({
           : this.$refs.swiper.$swiper.slideNext()
       }
     },
-    $route() {
-      this.showInitialSidebar()
+    swiperSlideIndex(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.$refs.swiper.$swiper.slideTo(newValue)
+      }
     },
   },
   mounted() {
@@ -197,7 +228,6 @@ export default Vue.extend({
     }
     window.addEventListener('resize', appHeight)
     appHeight()
-    this.showInitialSidebar()
     if (this.$device.isMobile) {
       this.$store.commit('ui/toggleSettings', { show: false })
     }
@@ -205,12 +235,6 @@ export default Vue.extend({
   methods: {
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
-    },
-    showInitialSidebar() {
-      if (this.$device.isMobile && this.$route.params.address) {
-        return this.$store.commit('ui/showSidebar', false)
-      }
-      this.$store.commit('ui/showSidebar', true)
     },
     /**
      * @method handleDrop

@@ -217,6 +217,7 @@ export interface UIState {
   filePreview: Fil | undefined
   chatImageOverlay: ImageMessage | undefined
   fileSort: FileSort
+  swiperSlideIndex: number
 }
 
 export type Position = {

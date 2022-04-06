@@ -1,0 +1,89 @@
+.user {
+  .tag {
+    &:extend(.background-primary);
+    height: 18px;
+    padding: 0.35rem;
+    align-self: flex-end;
+    float: right;
+    margin: 0.5rem 0 0 0;
+  }
+
+  &:hover {
+    &:extend(.background-semitransparent-light);
+  }
+
+  .circle {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .user-info {
+    .title {
+      margin: 0 0 1.25rem 0;
+      text-overflow: ellipsis;
+      min-width: 0;
+      font-size: @title-text;
+    }
+
+    .subtitle {
+      height: 30px;
+      display: inline-block;
+      min-width: 0;
+    }
+
+    .subtitle {
+      font-size: @mini-text-size;
+    }
+    flex: 1;
+    min-width: 0;
+    padding-left: @light-spacing;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-chat-details {
+    .is-text {
+      margin: 0;
+      padding: 0;
+      font-size: @micro-text-size;
+    }
+  }
+
+  .user-loader {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(@black, 0.2);
+    z-index: 1;
+  }
+
+  &.is-loading {
+    pointer-events: none;
+    .user-loader {
+      display: flex;
+    }
+  }
+
+  input {
+    align-self: center;
+  }
+
+  display: inline-flex;
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  padding: 0.4rem 0.35rem;
+  &:extend(.round-corners);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  &:extend(.full-width);
+}

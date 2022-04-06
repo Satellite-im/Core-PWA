@@ -22,7 +22,15 @@
             :unreads="friends.all"
             :open-modal="toggleModal"
           />
+          <MobileSidebar
+            v-if="$device.isMobile"
+            :users="friends.all"
+            :groups="$mock.groups"
+            :sidebar="showSidebar"
+            :show-menu="toggleMenu"
+          />
           <Sidebar
+            v-if="!$device.isMobile"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
@@ -34,7 +42,6 @@
             class="toggle--sidebar"
             size="1.2x"
             full-width
-            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
             @click="toggleMenu"
           />
           <Nuxt id="files" ref="files" />

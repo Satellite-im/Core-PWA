@@ -81,10 +81,23 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+    /**
+     * Autofocus when page loads
+     */
+    autofocus: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
       internalText: this.text ? this.text : '',
+    }
+  },
+  mounted() {
+    if (this.autofocus) {
+      this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
     }
   },
   methods: {

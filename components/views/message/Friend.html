@@ -1,7 +1,7 @@
 <div
   :class="`user ${isLoading ? 'is-loading' : ''}`"
   @contextmenu="contextMenu"
-  v-on:click="navigateToUser"
+  v-on:click="toggleSelect"
 >
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
@@ -11,7 +11,7 @@
       :size="6"
       :text="user.last_message"
     />
-    <TypographySubtitle v-else :size="6" :text="this.$t('messaging.say_hi')" />
+    <TypographySubtitle v-else :size="6" :text="user.status" />
   </div>
   <div class="user-chat-details">
     <TypographyText
@@ -24,4 +24,5 @@
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
+  <input type="checkbox" v-model="checked" />
 </div>

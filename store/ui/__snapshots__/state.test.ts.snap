@@ -95,6 +95,7 @@ Object {
   "showSettings": false,
   "showSidebar": true,
   "showSidebarUsers": true,
+  "swiperSlideIndex": 0,
   "theme": Object {
     "base": Object {
       "class": "",
