@@ -397,7 +397,6 @@ export default {
       throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
-    commit('setMessageLoading', { loading: true })
     commit(
       'ui/setReplyChatbarContent',
       {
@@ -426,7 +425,6 @@ export default {
       message: result,
     })
     await dispatch('storeMessage', { address: friend.address, message: result })
-    commit('setMessageLoading', { loading: false })
   },
 
   /**
