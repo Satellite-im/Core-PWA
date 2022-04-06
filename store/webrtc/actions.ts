@@ -10,8 +10,8 @@ import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { initialTracksState } from '~/store/webrtc/state'
 import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
 
-const announceFrequency = 30 * 1000
 let announceInterval
+const announceFrequency = 10 * 1000
 const webRTCActions = {
   /**
    * @method initialized
@@ -44,7 +44,6 @@ const webRTCActions = {
       )
 
       if (!connectedFriend || !connectedFriend.peerId) return
-
       dispatch('createPeerConnection', connectedFriend.address)
     })
 
@@ -54,6 +53,7 @@ const webRTCActions = {
       )
 
       if (!disconnectedFriend) return
+      $WebRTC.peers.delete(disconnectedFriend.address)
       commit('removeConnectedPeer', disconnectedFriend.address)
     })
 
@@ -89,7 +89,13 @@ const webRTCActions = {
       const requestFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
-      if (!requestFriend || $WebRTC.peers.has(requestFriend.address)) return
+      if (!requestFriend) return
+
+      if (
+        rootState.webrtc.connectedPeers.includes(requestFriend.address) &&
+        $WebRTC.peers.has(requestFriend.address)
+      )
+        return
 
       dispatch('createPeerConnection', requestFriend.address)
       dispatch('textile/subscribeToMailbox', {}, { root: true })
@@ -98,7 +104,11 @@ const webRTCActions = {
     announceInterval = setInterval(() => {
       // iterate friends
       rootState.friends.all.forEach((friend) => {
-        if (friend.peerId && !$WebRTC.peers.has(friend.address)) {
+        if (
+          friend.peerId &&
+          (!$WebRTC.peers.has(friend.address) ||
+            !rootState.webrtc.connectedPeers.includes(friend.address))
+        ) {
           $Peer2Peer.sendMessage(
             {
               type: 'peer:announce',
@@ -154,6 +164,7 @@ const webRTCActions = {
       return
     }
     if ($WebRTC.getPeer(activeFriend.peerId)) {
+      commit('addConnectedPeer', activeFriend.address)
       dispatch(
         'friends/setFriendState',
         {
