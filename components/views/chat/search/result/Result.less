@@ -2,15 +2,30 @@
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
   &:extend(.round-corners);
+  padding: @normal-spacing;
+  font-family: @primary-font;
+  position: fixed;
+  right: 10px;
+  min-width: 300px;
+  max-width: 800px;
+  width: 80%;
+  top: @toolbar-height - 9rem;
+  border: @light-border !important;
+  z-index: @base-z-index + 3;
+  font-size: @text-size;
+
   &-header {
     &:extend(.font-accent);
     font-size: @title-text;
-    padding: 5px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   &-filters {
+    padding: 5px 10px 0px;
+    display: flex;
+    flex-wrap: wrap;
+
     .date-input {
       &:extend(.font-secondary);
       &:extend(.background-primary-gradient);
@@ -68,31 +83,18 @@
         height: 28px;
       }
     }
-    padding: 5px 10px 0px;
-    display: flex;
-    flex-wrap: wrap;
   }
   &-content {
     height: calc(100vh - 32rem) !important;
   }
   &-inner {
-    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: @light-spacing;
   }
   .close {
     position: unset;
   }
-
-  font-family: @primary-font;
-  position: fixed;
-  right: 10px;
-  min-width: 300px;
-  max-width: 800px;
-  width: 80%;
-  top: @toolbar-height - 9rem;
-  border: @light-border !important;
-  z-index: @base-z-index + 3;
-  font-size: @text-size;
-  &:extend(.light-padding);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

@@ -1,26 +1,33 @@
 .result-item {
-  padding: 10px;
-  margin: 8px 0;
   &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
-  box-shadow: @light-blur;
+  &:extend(.full-width);
+  padding: 10px;
   border: @light-border !important;
   display: flex;
-  &:extend(.full-width);
   .avatar {
     margin-right: 10px;
   }
   .content {
     max-width: calc(@full - 48px);
-    .username {
-      font-size: @title-text;
-      font-weight: bold;
+    .name-container {
+      display: flex;
+      gap: @light-spacing;
+      .username {
+        font-size: @title-text;
+        font-weight: bold;
+      }
+      .timestamp {
+        font-size: @micro-text-size;
+        &:extend(.font-muted);
+        display: flex;
+        align-items: flex-end;
+        height: 1.2rem;
+      }
     }
-    .message {
-      font-size: @text-size;
-      background: transparent;
-      text-overflow: inherit;
-      white-space: pre-wrap;
+
+    .msg {
+      &:extend(.ellipsis);
     }
   }
 }

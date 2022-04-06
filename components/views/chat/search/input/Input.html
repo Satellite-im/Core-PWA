@@ -59,11 +59,7 @@
       </li> -->
     </ul>
   </div>
-  <div
-    refs="datePicker"
-    :class="{'date-selection': true}"
-    v-if="isDate && isFocus"
-  >
+  <div v-if="isDate && isFocus" refs="datePicker" class="date-selection">
     <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" />
   </div>
 </div>
