@@ -33,6 +33,7 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
+      progress: 100 as number,
     }
   },
   computed: {
@@ -147,7 +148,7 @@ export default Vue.extend({
 
       for (const file of files) {
         try {
-          await this.$FileSystem.uploadFile(file)
+          await this.$FileSystem.uploadFile(file, this.setProgress)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -174,6 +175,9 @@ export default Vue.extend({
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
+    },
+    setProgress(num: number, size: number) {
+      this.progress = Math.floor((num / size) * 100)
     },
   },
 })

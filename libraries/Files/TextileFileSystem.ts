@@ -23,10 +23,11 @@ export class TextileFileSystem extends FilSystem {
    * @description Upload file to the bucket and create in the file system afterwards
    * use uuid as bucket path so files can be renamed freely
    * @param {File} file file to be uploaded
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    */
-  async uploadFile(file: File) {
+  async uploadFile(file: File, progressCallback: Function) {
     const id = uuidv4()
-    await this.bucket.pushFile(file, id)
+    await this.bucket.pushFile(file, id, progressCallback)
     // read magic byte type, use metadata as backup
     const byteType = (await mimeType(file)) as FILE_TYPE
     const type = byteType || file.type

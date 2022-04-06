@@ -108,13 +108,22 @@ export class Bucket extends RFM implements RFMInterface {
    * @method pushFile
    * @description Add file to bucket
    * @param {File} file file to be uploaded
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    * @returns Promise whether it was uploaded or not
    */
-  async pushFile(file: File, id: string): Promise<PushPathResult> {
+  async pushFile(
+    file: File,
+    id: string,
+    progressCallback: Function,
+  ): Promise<PushPathResult> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
-    return await this.buckets.pushPath(this.key, id, file)
+    return await this.buckets.pushPath(this.key, id, file, {
+      progress: (num) => {
+        progressCallback(num, file.size)
+      },
+    })
   }
 
   /**
