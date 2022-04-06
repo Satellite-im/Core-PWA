@@ -1,66 +1,17 @@
 {
-  "data": {
-    "allDevices": [
-      {
-        "id": 1,
-        "description": "One Plus 10 Pro and One Plus 9",
-        "width": 412,
-        "height": 919
-      },
-      {
-        "id": 2,
-        "description": "iPhone 13 Pro Max and iPhone 12 Pro Max",
-        "width": 428,
-        "height": 926
-      },
-      {
-        "id": 3,
-        "description": "iPhone 13 Mini",
-        "width": 360,
-        "height": 780
-      },
-      {
-        "id": 4,
-        "description": "iPhone 13 Pro and iPhone 13",
-        "width": 390,
-        "height": 844
-      },
-      {
-        "id": 5,
-        "description": "One Plus Nord 2",
-        "width": 412,
-        "height": 915
-      },
-      {
-        "id": 6,
-        "description": "Samsung Galaxy S21",
-        "width": 384,
-        "height": 854
-      },
-      {
-        "id": 7,
-        "description": "Pixel 5 and Xiaomi 10",
-        "width": 393,
-        "height": 851
-      },
-      {
-        "id": 8,
-        "description": "Samsung Galaxy Z Fold2",
-        "width": 884,
-        "height": 1104
-      },
-      {
-        "id": 9,
-        "description": "iPad Air",
-        "width": 820,
-        "height": 1180
-      },
-      {
-        "id": 10,
-        "description": "iPhone SE 2020",
-        "width": 375,
-        "height": 667
-      }
-    ]
-  }
+    "data": {
+        "allDevices": [{
+                "id": 1,
+                "description": "One Plus 10 Pro and One Plus 9",
+                "width": 412,
+                "height": 919
+            },
+            {
+                "id": 2,
+                "description": "iPhone 13 Pro Max and iPhone 12 Pro Max",
+                "width": 428,
+                "height": 926
+            }
+        ]
+    }
 }
