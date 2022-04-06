@@ -16,6 +16,12 @@
     &:first-of-type {
       padding-left: @xlarge-spacing;
     }
+    &:not(:last-child) {
+      min-width: 160px;
+    }
+    &:last-child {
+      padding: 0;
+    }
 
     svg {
       font-size: 9pt;
@@ -34,5 +40,14 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   .table {
     min-width: @viewport-width - 20px;
+    th {
+      padding: @light-spacing;
+      &:first-of-type {
+        padding-left: @light-spacing;
+      }
+      &:not(:last-child) {
+        min-width: 75px;
+      }
+    }
   }
 }

@@ -30,6 +30,10 @@ Object {
     "show": false,
   },
   "filePreview": undefined,
+  "fileSort": Object {
+    "asc": true,
+    "category": "modified",
+  },
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,

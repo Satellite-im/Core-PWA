@@ -5,6 +5,7 @@ import {
   Flairs,
   SettingsRoutes,
 } from './types'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -75,6 +76,10 @@ const InitialUIState = (): UIState => ({
   renameCurrentName: undefined,
   filePreview: undefined,
   chatImageOverlay: undefined,
+  fileSort: {
+    category: FileSortEnum.MODIFIED,
+    asc: true,
+  },
 })
 
 export default InitialUIState

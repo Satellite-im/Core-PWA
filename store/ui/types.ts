@@ -1,5 +1,6 @@
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
@@ -159,6 +160,11 @@ export interface ContextMenuItem {
   func: Function
 }
 
+export interface FileSort {
+  category: FileSortEnum
+  asc: boolean
+}
+
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
@@ -210,6 +216,7 @@ export interface UIState {
   renameCurrentName?: string
   filePreview: Fil | undefined
   chatImageOverlay: ImageMessage | undefined
+  fileSort: FileSort
 }
 
 export type Position = {

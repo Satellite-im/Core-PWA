@@ -3,20 +3,22 @@
   v-on="ui.isLoadingFileIndex ? {} : { click: handle, contextmenu: contextMenu }"
 >
   <td class="filename">
-    <folder-icon v-if="item.content" class="file-type-icon" />
-    <archive-icon v-else-if="isArchive" class="file-type-icon" />
-    <image-icon
-      v-else-if="item.type.includes('image')"
-      class="file-type-icon"
-    />
-    <file-icon v-else class="file-type-icon" />
+    <template v-if="!$device.isMobile">
+      <folder-icon v-if="item.content" class="file-type-icon" />
+      <archive-icon v-else-if="isArchive" class="file-type-icon" />
+      <image-icon
+        v-else-if="item.type.includes('image')"
+        class="file-type-icon"
+      />
+      <file-icon v-else class="file-type-icon" />
+    </template>
     <span> {{ item.name }} </span>
   </td>
-  <td v-if="!$device.isMobile" class="open-sidebar-hide">
-    {{ $dayjs(item.modified).fromNow() }}
-  </td>
+  <td>{{ $dayjs(item.modified).fromNow() }}</td>
   <td v-if="!$device.isMobile" class="open-sidebar-hide">{{ item.type }}</td>
-  <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
+  <td class="open-sidebar-hide">
+    {{ item.size ? $filesize(item.size) : '-' }}
+  </td>
   <td
     @mouseover="menuHover=true"
     @mouseleave="menuHover=false"

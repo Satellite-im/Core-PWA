@@ -2,10 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { cloneDeep } from 'lodash'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
+import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Files',
@@ -18,14 +22,48 @@ export default Vue.extend({
     }
   },
   computed: {
-    /**
-     * @returns Current directory items
-     * @description included counter to force rendering on Map updates
-     */
-    directory() {
+    ...mapState(['ui']),
+    sort: {
+      set(value: FileSort) {
+        this.$store.commit('ui/setFileSort', value)
+      },
+      get(): FileSort {
+        return this.ui.fileSort
+      },
+      /**
+       * @returns Current directory items
+       * @description included counter to force rendering on Map updates
+       */
+    },
+    directory(): Item[] {
+      const key = this.sort.category
+      if (key === FileSortEnum.SIZE) {
+        return (
+          this.$data.counter &&
+          cloneDeep(this.fileSystem.currentDirectory.content).sort(
+            this.sort.asc
+              ? (a: Item, b: Item) => a[key] - b[key]
+              : (a: Item, b: Item) => b[key] - a[key],
+          )
+        )
+      }
+      if (key === FileSortEnum.MODIFIED) {
+        return (
+          this.$data.counter &&
+          cloneDeep(this.fileSystem.currentDirectory.content).sort(
+            this.sort.asc
+              ? (a: Item, b: Item) => b[key] - a[key]
+              : (a: Item, b: Item) => a[key] - b[key],
+          )
+        )
+      }
       return (
         this.$data.counter &&
-        (this.$data.fileSystem?.currentDirectory?.content ?? [])
+        cloneDeep(this.fileSystem.currentDirectory.content).sort(
+          this.sort.asc
+            ? (a: Item, b: Item) => a[key].localeCompare(b[key])
+            : (a: Item, b: Item) => b[key].localeCompare(a[key]),
+        )
       )
     },
   },
@@ -89,6 +127,16 @@ export default Vue.extend({
      */
     async share(item: Item) {
       this.$toast.show(this.$t('todo - share') as string)
+    },
+    /**
+     * @method setSort
+     * @description if current category, swap asc/desc. if different, change category
+     */
+    setSort(category: FileSortEnum) {
+      this.sort =
+        this.sort.category === category
+          ? { category: this.sort.category, asc: !this.sort.asc }
+          : { category, asc: true }
     },
     /**
      * @method forceRender
