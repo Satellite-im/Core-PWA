@@ -340,7 +340,10 @@ Cypress.Commands.add(
       .trigger('input')
       .type(messageEdited) // editing message
     cy.get('[data-cy=edit-message-input]').type('{enter}')
-    cy.contains(messageEdited).last().scrollIntoView().should('exist')
+    cy.contains(messageToEdit + messageEdited)
+      .last()
+      .scrollIntoView()
+      .should('exist')
   },
 )
 
@@ -412,7 +415,6 @@ Cypress.Commands.add('clickOutside', () => {
 
 Cypress.Commands.add('goToConversation', (user) => {
   cy.get('[data-cy=sidebar-friends]').click()
-  cy.url().should('contain', 'friends/list')
   cy.get('[data-cy=friend-name]').contains(user).as('friend')
   cy.get('@friend')
     .parent()
@@ -420,7 +422,7 @@ Cypress.Commands.add('goToConversation', (user) => {
     .find('[data-cy=friend-send-message]')
     .as('friend-message')
   cy.get('@friend-message').click()
-  cy.get('[data-cy=user-connected]')
+  cy.get('[data-cy=user-connected]', { timeout: 30000 })
     .should('be.visible')
     .should('have.text', user)
 })
