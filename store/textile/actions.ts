@@ -4,9 +4,18 @@ import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileConfig } from '~/types/textile/manager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
-import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import {
+  MessageRouteEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
+import {
+  MailboxSubscriptionType,
+  Message,
+  MessagePayloads,
+  ReplyMessage,
+} from '~/types/textile/mailbox'
 import { UploadDropItemType } from '~/types/files/file'
 import {
   db,
@@ -419,6 +428,76 @@ export default {
     await dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
+  /**
+   * @description Edit a text message to a given friend
+   * @param param0 Action Arguments
+   * @param param1 an object containing the recipient address (textile public key)
+   * and the text message to be sent
+   */
+  async editReplyMessage(
+    { commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    {
+      to,
+      text,
+      original,
+    }: { to: string; text: string; original: MessagePayloads[T] },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+
+    const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
+
+    if (!friend) {
+      throw new Error(TextileError.FRIEND_NOT_FOUND)
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+    const editingMessage = {
+      ...original,
+      payload: text,
+      editingAt: Date.now(),
+    } as Message
+
+    commit('addMessageToConversation', {
+      address: friend.address,
+      sender: MessageRouteEnum.OUTBOUND,
+      message: editingMessage,
+    })
+    // @ts-ignore
+    const result = await $MailboxManager.editMessage<'reply'>(original.id, {
+      to: friend.textilePubkey,
+      payload: text,
+      repliedTo: original.repliedTo,
+      type: 'reply',
+    })
+
+    console.log(result, 'resultsssss')
+
+    if (result) {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: result,
+      })
+      await dispatch('storeMessage', {
+        address: friend.address,
+        message: result,
+      })
+    } else {
+      commit('addMessageToConversation', {
+        address: friend.address,
+        sender: MessageRouteEnum.OUTBOUND,
+        message: original,
+      })
+      await dispatch('storeMessage', {
+        address: friend.address,
+        message: original,
+      })
+    }
+  },
 
   /**
    * @description Edit a text message to a given friend
@@ -428,7 +507,7 @@ export default {
    */
   async editTextMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, original, text }: { to: string; text: string; original: Message },
+    { to, text, original }: { to: string; text: string; original: Message },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 

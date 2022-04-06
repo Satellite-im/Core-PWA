@@ -51,8 +51,15 @@
             v-if="replyHover == reply.id"
             :hideReply="false"
             :setReplyChatbarContent="setReplyChatbarContent"
+            :editMessage="(event) => editMessage(event, reply)"
             :emojiReaction="(event) => emojiReaction(event, reply.id)"
             :message="message"
+          />
+          <MessageEdit
+            v-if="replyEdit(reply.id)"
+            :message="reply.payload"
+            @commitMessage="(event) => saveMessage(event, reply)"
+            @cancelMessage="cancelMessage"
           />
         </div>
       </div>

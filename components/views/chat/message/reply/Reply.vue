@@ -3,9 +3,10 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
-import { UIMessage, Group } from '~/types/messaging'
+import { UIMessage, Group, UIReply } from '~/types/messaging'
 import { getUsernameFromState } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
+import { ReplyMessage } from '~/types/textile/mailbox'
 
 export default Vue.extend({
   components: {
@@ -32,10 +33,10 @@ export default Vue.extend({
     },
   },
   data() {
-    return { showReplies: false, replyHover: '' }
+    return { showReplies: false, replyHover: '', chosenReply: {} }
   },
   computed: {
-    ...mapState(['chat']),
+    ...mapState(['chat', 'ui', 'accounts']),
     setChatReply: {
       set(state) {
         this.$store.commit('chat/setChatReply', state)
@@ -85,6 +86,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    replyEdit(replyID: string) {
+      return this.ui.editMessage.id === replyID
+    },
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
@@ -95,6 +99,60 @@ export default Vue.extend({
     },
     getUsernameFromReply(reply: any) {
       return getUsernameFromState(reply.from, this.$store.state)
+    },
+    /**
+     * Called when click the "Edit Message" on context menu
+     * Commit store mutation in order to notify the edit status
+     */
+    editMessage(e: MouseEvent, reply: any) {
+      const { id, payload, type, from, replyType } = reply
+      if (
+        replyType === 'text' &&
+        from === this.accounts.details.textilePubkey
+      ) {
+        this.$store.commit('ui/setEditMessage', {
+          id,
+          payload,
+          from: reply.id,
+        })
+      }
+    },
+    /**
+     * Called from MessageEdit component when complete to edit message
+     * Called from MessageEdit component with changed message When save or cancel / Enter or Escape is pressed
+     */
+    saveMessage(newMessage: string, reply: any) {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: newMessage,
+        from: reply.from,
+      })
+      this.$store.commit('ui/saveEditMessage', {
+        id: reply.id,
+        payload: newMessage,
+        from: reply.from,
+      })
+
+      if (reply.payload !== this.$props.message.payload) {
+        this.$store.dispatch('textile/editTextMessage', {
+          to: reply.to,
+          original: reply,
+          text: newMessage,
+        })
+      }
+    },
+    cancelMessage() {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: this.$props.group.id,
+      })
+
+      this.$store.commit('ui/saveEditMessage', {
+        id: this.$props.message.id,
+        payload: 'message',
+        from: this.$props.group.id,
+      })
     },
     /**
      * @method mouseOver DocsTODO

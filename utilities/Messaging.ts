@@ -177,7 +177,6 @@ export function updateMessageTracker(
   const messagesTracker: MessagesTracker = initialValues?.messages || {}
   const repliesTracker: RepliesTracker = initialValues?.replies || {}
   const reactionsTracker: ReactionsTracker = initialValues?.reactions || {}
-
   for (let i = 0; i < inputMessages.length; i++) {
     const currentMessage = inputMessages[i]
     switch (currentMessage.type) {
@@ -208,6 +207,12 @@ export function updateMessageTracker(
       }
       case MessagingTypesEnum.TEXT: {
         const textMessage: TextMessage = currentMessage
+        console.log(repliesTracker[currentMessage.id])
+        // const replyCheck = repliesTracker[i].forEach((reply) => {
+        //   if (reply.id === currentMessage.id) {
+        //     return reply
+        //   }
+        // })
 
         messagesTracker[textMessage.id] = textMessage
         break

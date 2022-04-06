@@ -247,6 +247,7 @@ export class MailboxManager {
     id: string,
     message: MessagePayloads[T],
   ) {
+    console.log(message.payload)
     const identity = this.textile.identity
     const publicKey = PublicKey.fromString(identity.public.toString())
     const encoder = new TextEncoder()

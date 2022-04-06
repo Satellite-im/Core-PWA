@@ -107,7 +107,7 @@ const mutations = {
 
     // add to search index
     db.search.conversationMessages.add({ ...message, conversation: address })
-
+    console.log(message)
     const tracked = updateMessageTracker([message], initialValues)
     state.conversations = {
       ...state.conversations,
