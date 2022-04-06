@@ -26,6 +26,15 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Cypress run pair chat testing
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./
+          install: false
+          start: yarn dev
+          command: npm run cy:chat
+          wait-on: http://localhost:3000
+          wait-on-timeout: 300
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
@@ -35,15 +44,6 @@ jobs:
           command: npx cypress run --browser chrome --headless
           wait-on: http://localhost:3000
           wait-on-timeout: 300
-      - name: Cypress run pair chat testing
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: ./
-          install: false
-          start: yarn dev
-          command: npm run cy:chat
-          wait-on: http://localhost:3000
-          wait-on-timeout: 300       
       - name: Artifacts
         uses: actions/upload-artifact@v2
         if: failure()
