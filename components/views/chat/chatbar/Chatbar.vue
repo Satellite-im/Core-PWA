@@ -3,9 +3,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { debounce, throttle } from 'lodash'
+import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-import Editable from './Editable.vue'
 
 import {
   parseCommand,
@@ -81,7 +80,9 @@ export default Vue.extend({
       const currentCommand = commands.find(
         (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
-      return currentCommand != null
+      // Hide commands for early access
+      // return currentCommand != null
+      return false
     },
     /**
      * @method hasCommandPreview DocsTODO
@@ -90,7 +91,9 @@ export default Vue.extend({
      * @example
      */
     commandPreview() {
-      return hasCommandPreview(this.ui.chatbarContent)
+      // Hide commands for early access
+      // return hasCommandPreview(this.ui.chatbarContent)
+      return false
     },
     /**
      * @method isValidCommand DocsTODO
@@ -104,7 +107,9 @@ export default Vue.extend({
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
-      return currentCommand && isArgsValid(currentCommand, currentArgs)
+      // Hide commands for early access
+      // return currentCommand && isArgsValid(currentCommand, currentArgs)
+      return false
     },
     text: {
       /**

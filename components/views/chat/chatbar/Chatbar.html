@@ -4,7 +4,8 @@
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
   <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
-  <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
+  <!-- Hide commands for early access -->
+  <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply v-if="recipient" />
   <div
     class="chatbar-wrap"
