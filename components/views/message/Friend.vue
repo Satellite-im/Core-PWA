@@ -67,9 +67,9 @@ export default Vue.extend({
       if (oldValue === newValue) return
       if (newValue === false) {
         this.selectUserAddress('')
-      } else {
-        this.selectUserAddress(this.user.address)
+        return
       }
+      this.selectUserAddress(this.user.address)
     },
   },
   methods: {

@@ -101,9 +101,9 @@ export default Vue.extend({
               // if slide active index is set as 0, set showSidebar flag true, else set as false
               if (newShowSidebar) {
                 this.$store.commit('ui/showSidebar', true)
-              } else {
-                this.$store.commit('ui/showSidebar', false)
+                return
               }
+              this.$store.commit('ui/showSidebar', false)
             }
           },
         },
