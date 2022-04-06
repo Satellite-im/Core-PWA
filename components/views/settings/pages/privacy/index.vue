@@ -76,6 +76,14 @@ export default Vue.extend({
         return this.settings.embeddedLinks
       },
     },
+    consentsScan: {
+      set(state) {
+        this.$store.commit('settings/setConsentsScan', state)
+      },
+      get() {
+        return this.settings.consentsScan
+      },
+    },
     displayCurrentActivity: {
       set(state) {
         this.$store.commit('settings/displayCurrentActivity', state)
