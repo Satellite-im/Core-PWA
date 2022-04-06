@@ -1,27 +1,25 @@
 const faker = require('faker')
 const recoverySeedAccountOne =
-  'lonely dust spring orphan pulp angry mystery bracket pottery metal bright damp{enter}'
+  'memory cherry add return that phrase suit plate ladder earth people gravity{enter}'
 const recoverySeedAccountTwo =
-  'urban clump gather december smoke upset chicken spice steel hope doll pigeon{enter}'
+  'position few settle fold sister transfer song speed million congress acoustic version{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
+const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe('Chat features with two accounts', () => {
-  before(() => {
+describe.skip('Chat features with two accounts', () => {
+  it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
-  })
-
-  it('Ensure chat window from first account is displayed', () => {
     //Validate Chat Screen is loaded
     cy.contains('Chat User A', { timeout: 240000 }).should('be.visible')
   })
 
   it('Send message to user B', () => {
-    cy.waitForMessagesToLoad()
+    cy.goToConversation('Chat User B')
     cy.chatFeaturesSendMessage(randomMessage)
     cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
   })
@@ -86,13 +84,42 @@ describe('Chat features with two accounts', () => {
 
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
-    cy.waitForMessagesToLoad()
+    cy.goToConversation('Chat User A')
     cy.contains(randomMessage).last().scrollIntoView().should('be.visible')
   })
 
   it('Message not sent by same user cannot be edited', () => {
     cy.contains(randomMessage).last().as('lastmessage')
     cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
+  })
+
+  it('User should be able to reply a message', () => {
+    cy.contains(randomMessage).last().as('lastmessage')
+    cy.chatFeaturesReplyMessage('Chat User A', '@lastmessage', textReply)
+  })
+
+  it('Reply to message shows as collapsed first', () => {
+    //reply path
+    cy.getReply(randomMessage)
+    cy.get('@reply-preview')
+      .scrollIntoView()
+      .should('contain', 'Reply from Chat User B')
+  })
+
+  it('Reply to message is displayed by clicking on it', () => {
+    cy.getReply(randomMessage)
+    cy.get('@reply-preview').click()
+    cy.get('[data-cy="reply-message"]').should('have.text', textReply)
+    cy.get('[data-cy="reply-close"]')
+      .should('be.visible')
+      .should('contain', 'Collapse')
+  })
+
+  it('Reply to message is not displayed when clicking on Collapse', () => {
+    cy.get('[data-cy="reply-close"]').click()
+    cy.get('[data-cy="reply-message"]').should('not.exist')
+    cy.getReply(randomMessage)
+    cy.get('@reply-preview').should('be.visible')
   })
 
   it('Assert emoji received from user A', () => {
@@ -139,5 +166,10 @@ describe('Chat features with two accounts', () => {
       .then(($text) => {
         expect($text).to.match(/d+[hour[s]? |minute[s]? |second[s]?]\s/)
       })
+  })
+
+  it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
+    cy.goToConversation('Chat User C')
+    cy.get('[data-cy=editable-input]').should('be.visible').type(randomMessage)
   })
 })

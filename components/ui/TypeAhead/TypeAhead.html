@@ -1,5 +1,5 @@
 <div
-  class="typehead-container"
+  class="typeahead-container"
   data-cy="add-passphrase"
   v-click-outside="lostFocus"
 >
@@ -14,12 +14,14 @@
     v-on:keydown.up="onUpBrowseItem"
     v-on:keydown.down="onDownBrowseItem"
   />
-  <div v-if="isFocus && searchList.length" class="search-options">
+  <div v-if="isFocus && searchResults.length" class="search-options">
     <ul class="search-option-group">
       <li
-        v-for="(item, i) in searchList"
+        v-for="(item, i) in searchResults"
         :class="{'active': i === browseIndex}"
-        @click="onItemClicked(item)"
+        @click="onItemClicked(item, i)"
+        @mousemove="onItemHighlighted(i)"
+        @focus="onItemHighlighted(i)"
       >
         {{ label ? item[label] : item}}
       </li>

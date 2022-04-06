@@ -9,15 +9,13 @@ let toggleStatusProfile = []
 
 describe('Privacy Page Toggles Tests', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
-  before(() => {
+
+  it('Privacy page - Verify all non-locked toggles switches work as should', () => {
     //Adding pin to continue to toggles switches screen
     cy.createAccountPINscreen(randomPIN)
 
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
-  })
-
-  it('Privacy page - Verify all non-locked toggles switches work as should', () => {
     //Validating each toggle, checking status is correct after clicking them.
     //Finally, saving values into an array for later comparison
     cy.get('.switch-button', { timeout: 30000 }).each(($btn, index, $List) => {
@@ -45,7 +43,7 @@ describe('Privacy Page Toggles Tests', () => {
     })
   })
 
-  it('Privacy page - Verify user can still proceed after adjusting switches', () => {
+  it.skip('Privacy page - Verify user can still proceed after adjusting switches', () => {
     //Click on next
     cy.get('#custom-cursor-area').click()
 
@@ -66,7 +64,7 @@ describe('Privacy Page Toggles Tests', () => {
     }).click()
   })
 
-  it('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
+  it.skip('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
     cy.contains('Privacy').click()
     //Storing the values from toggle switches status of Settings screen into an array
     cy.get('.switch-button')
@@ -85,7 +83,7 @@ describe('Privacy Page Toggles Tests', () => {
       })
   })
 
-  it('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
+  it.skip('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
     //Identify the first switch button and ensure that is locked
     cy.get('.switch-button').first().should('have.class', 'locked')
   })

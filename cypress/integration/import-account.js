@@ -24,7 +24,7 @@ describe('Import Account Validations', () => {
       .should('be.visible')
       .click()
       .type(
-        'veteran intact there despair unique trouble season rebel sort file unit hard{enter}',
+        'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}',
         { log: false },
         { force: true },
       )

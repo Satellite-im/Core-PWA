@@ -278,7 +278,6 @@ Cypress.Commands.add('chatFeaturesProfileName', (value) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
@@ -290,8 +289,33 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
     .should('be.visible')
 })
 
+Cypress.Commands.add(
+  'chatFeaturesReplyMessage',
+  (receiver, selector, message) => {
+    cy.selectContextMenuOption(selector, 'Reply')
+    cy.get('.is-chatbar-reply')
+      .should('be.visible')
+      .should('include.text', 'Reply to')
+      .should('include.text', receiver)
+    cy.get('[data-cy=editable-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(message)
+    cy.get('[data-cy=editable-input]').type('{enter}') // sending text message
+  },
+)
+
+Cypress.Commands.add('getReply', (messageReplied) => {
+  cy.contains(messageReplied)
+    .last()
+    .scrollIntoView()
+    .parent()
+    .parent()
+    .find('[data-cy=reply-preview]')
+    .as('reply-preview')
+})
+
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#emoji-toggle > .control-icon').click()
   cy.get(emojiLocator).click() // sending emoji
   cy.get('[data-cy=editable-input]')
@@ -323,7 +347,6 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('chatFeaturesSendGlyph', () => {
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#glyph-toggle').click()
   cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
   cy.get('.glyph-item').first().click()
@@ -331,7 +354,6 @@ Cypress.Commands.add('chatFeaturesSendGlyph', () => {
 })
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
@@ -344,7 +366,6 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath) => {
 })
 
 Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
   })
@@ -369,18 +390,28 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('selectContextMenuOption', (locator, optionText) => {
+  cy.get(locator).last().scrollIntoView().rightclick()
+  cy.contains(optionText).click()
+})
+
 Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
 
-Cypress.Commands.add('waitForMessagesToLoad', () => {
-  //Sometimes the friends page is displayed instead of chat, so this code will fix this and click on message icon if needed
-  cy.get('body').then(($body) => {
-    if (!($body.find('#conversation').length > 0)) {
-      cy.get('[data-tooltip="Message"]').click()
-    }
-  })
-  cy.get('[data-cy=chat-message]').last().scrollIntoView()
+Cypress.Commands.add('goToConversation', (user) => {
+  cy.get('[data-cy=sidebar-friends]').click()
+  cy.url().should('contain', 'friends/list')
+  cy.get('[data-cy=friend-name]').contains(user).as('friend')
+  cy.get('@friend')
+    .parent()
+    .parent()
+    .find('[data-cy=friend-send-message]')
+    .as('friend-message')
+  cy.get('@friend-message').click()
+  cy.get('[data-cy=user-connected]')
+    .should('be.visible')
+    .should('have.text', user)
 })
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
@@ -442,7 +473,7 @@ Cypress.Commands.add('validateGlyphsModal', () => {
 })
 
 Cypress.Commands.add('closeModal', (locator) => {
-  cy.get('.close-button').click()
+  cy.get(locator).find('.close-button').click()
   cy.get(locator).should('not.exist')
 })
 

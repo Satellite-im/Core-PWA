@@ -1,7 +1,7 @@
 <div class="friend">
   <UiUserState :user="friend" :src="src" />
   <div class="description">
-    <TypographySubtitle :size="6" :text="friend.name" />
+    <TypographySubtitle :size="6" :text="friend.name" data-cy="friend-name" />
     <TypographyText :text="friend.status" />
   </div>
   <div class="spacer"></div>
@@ -71,6 +71,7 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-cy="friend-send-message"
       :data-tooltip="$t('friends.message')"
       :action="sendMessageRequest"
     >

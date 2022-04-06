@@ -1,20 +1,16 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe('Chat Toolbar Tests', () => {
-  before(() => {
+describe.skip('Chat Toolbar Tests', () => {
+  it('Chat - Toolbar - Validate audio icon is displayed', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     //Ensure messages are displayed before starting
     cy.contains('cypress', { timeout: 180000 }).should('be.visible')
-    cy.get('.toggle-sidebar').should('be.visible').click()
-  })
-
-  it('Chat - Toolbar - Validate audio icon is displayed', () => {
-    cy.waitForMessagesToLoad()
+    cy.goToConversation('cypress friend')
     cy.hoverOnActiveIcon('[data-cy=toolbar-enable-audio]')
   })
 

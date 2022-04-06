@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn install --check-files && nuxi dev",
+    "dev:start": "nuxi dev",
     "dev:tracker": "yarn bittorrent-tracker -p 5001",
     "dev:cli": "ts-node -P cli.tsconfig.json --",
     "build": "nuxt build",

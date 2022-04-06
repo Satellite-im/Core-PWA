@@ -5,10 +5,10 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const randomTextToCopy = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'veteran intact there despair unique trouble season rebel sort file unit hard{enter}'
+  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
 
-describe('Chat Features Tests', () => {
+describe.skip('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -16,11 +16,8 @@ describe('Chat Features Tests', () => {
     //Validate profile name displayed
     cy.chatFeaturesProfileName('cypress')
 
-    // Click on hamburger menu if width < height
-    cy.get('.toggle-sidebar').should('be.visible').click()
-
     //Validate message is sent
-    cy.waitForMessagesToLoad()
+    cy.goToConversation('cypress friend')
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -32,7 +29,7 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it.skip('Chat - Message edited shows edited status', () => {
+  it('Chat - Message edited shows edited status', () => {
     cy.contains(randomNumber)
       .siblings('[data-cy=message-edited]')
       .should('contain', '(edited)')
@@ -63,7 +60,7 @@ describe('Chat Features Tests', () => {
     cy.get('#glyph-toggle').click()
   })
 
-  it.skip('Chat - Copy paste text', () => {
+  it('Chat - Copy paste text', () => {
     //Sending another random message to validate the scenario
     cy.chatFeaturesSendMessage(randomTextToCopy)
 

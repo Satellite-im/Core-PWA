@@ -153,7 +153,7 @@ export enum SettingsRoutes {
 // | 'realms'
 
 export interface ContextMenuItem {
-  text: string
+  text: string | TranslateResult
   func: Function
 }
 
