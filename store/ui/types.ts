@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
-=======
 import { FileSortEnum } from '~/libraries/Enums/enums'
->>>>>>> b6048413 (fix(files): add sort to store for persistence)
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 
