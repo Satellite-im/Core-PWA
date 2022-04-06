@@ -15,6 +15,7 @@
           </div>
           <FriendsFriend
             v-for="friend in friends.incomingRequests"
+            v-if="friend.userInfo"
             :friend="{
               name: friend.userInfo.name,
               address: friend.from,
@@ -36,6 +37,7 @@
           </div>
           <FriendsFriend
             v-for="friend in alphaSortedOutgoing"
+            v-if="friend.userInfo"
             :friend="{
               name: friend.userInfo.name,
               address: friend.to,
