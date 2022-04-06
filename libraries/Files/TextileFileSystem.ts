@@ -23,7 +23,7 @@ export class TextileFileSystem extends FilSystem {
    * @description Upload file to the bucket and create in the file system afterwards
    * use uuid as bucket path so files can be renamed freely
    * @param {File} file file to be uploaded
-   * @param {Function} progressCallback used to show progress meter in componment that calls this method
+   * @param {Function} progressCallback used to show progress meter in componment Controls.vue
    */
   async uploadFile(file: File, progressCallback: Function) {
     const id = uuidv4()

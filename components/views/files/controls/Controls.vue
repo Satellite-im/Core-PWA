@@ -176,6 +176,12 @@ export default Vue.extend({
         this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
     },
+    /**
+     * @method setProgress
+     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * @param num current progress in bytes
+     * @param size total file size in bytes
+     */
     setProgress(num: number, size: number) {
       this.progress = Math.floor((num / size) * 100)
     },

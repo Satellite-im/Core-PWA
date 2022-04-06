@@ -108,7 +108,7 @@ export class Bucket extends RFM implements RFMInterface {
    * @method pushFile
    * @description Add file to bucket
    * @param {File} file file to be uploaded
-   * @param {Function} progressCallback used to show progress meter in componment that calls this method
+   * @param {Function} progressCallback used to show progress meter in componment Controls.vue
    * @returns Promise whether it was uploaded or not
    */
   async pushFile(
