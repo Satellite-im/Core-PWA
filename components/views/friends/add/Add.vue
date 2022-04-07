@@ -58,10 +58,9 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
-
       if (
         this.$store.state.friends.all.filter(
-          (f: Friend) => f.account.accountId === accountID,
+          (f: Friend) => f?.account?.accountId === accountID,
         ).length === 1
       ) {
         this.error = this.$t('friends.already_friend') as string
