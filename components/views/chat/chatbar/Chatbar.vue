@@ -5,13 +5,9 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
+import PeerId from 'peer-id'
 
-import {
-  parseCommand,
-  commands,
-  isArgsValid,
-  hasCommandPreview,
-} from '~/libraries/ui/Commands'
+import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
   KeybindingEnum,
@@ -19,6 +15,7 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -181,8 +178,20 @@ export default Vue.extend({
       const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
         try {
-          const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-          activePeer?.send('TYPING_STATE', { state })
+          const p2p = Peer2Peer.getInstance()
+
+          if (!activeFriend.peerId) return
+
+          p2p.sendMessage(
+            {
+              type: 'TYPING_STATE',
+              payload: { state: 'TYPING' },
+              sentAt: Date.now(),
+            },
+            PeerId.createFromB58String(activeFriend.peerId),
+          )
+          // const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+          // activePeer?.send('TYPING_STATE', { state })
         } catch (error: any) {
           this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
             error,

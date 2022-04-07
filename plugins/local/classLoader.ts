@@ -16,11 +16,13 @@ import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 import Hounddog from '~/utilities/Hounddog'
 import Logger from '~/utilities/Logger'
 import BucketManager from '~/libraries/Textile/BucketManager'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 declare module 'vue/types/vue' {
   interface Vue {
     $Config: typeof Config
     $WebRTC: WebRTC
+    $Peer2Peer: Peer2Peer
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto

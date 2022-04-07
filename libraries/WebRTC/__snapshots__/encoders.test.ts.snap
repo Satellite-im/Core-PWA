@@ -412,7 +412,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"SIGNAL\\", payload: { peerId: string, data: unknown } })",
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } })",
   "types": Array [
     InterfaceType {
       "_tag": "InterfaceType",
@@ -453,21 +453,83 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ type: \\"SIGNAL\\", payload: { peerId: string, data: unknown } }",
+      "name": "{ type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } }",
       "props": Object {
         "payload": InterfaceType {
           "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ peerId: string, data: unknown }",
+          "name": "{ peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } }",
           "props": Object {
-            "data": UnknownType {
-              "_tag": "UnknownType",
+            "data": InterfaceType {
+              "_tag": "InterfaceType",
               "decode": [Function],
               "encode": [Function],
               "is": [Function],
-              "name": "unknown",
+              "name": "{ type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown }",
+              "props": Object {
+                "candidate": UnknownType {
+                  "_tag": "UnknownType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "unknown",
+                  "validate": [Function],
+                },
+                "renegotiate": BooleanType {
+                  "_tag": "BooleanType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "boolean",
+                  "validate": [Function],
+                },
+                "transceiverRequest": InterfaceType {
+                  "_tag": "InterfaceType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "{ kind: string, init: { sdp: string } }",
+                  "props": Object {
+                    "init": InterfaceType {
+                      "_tag": "InterfaceType",
+                      "decode": [Function],
+                      "encode": [Function],
+                      "is": [Function],
+                      "name": "{ sdp: string }",
+                      "props": Object {
+                        "sdp": StringType {
+                          "_tag": "StringType",
+                          "decode": [Function],
+                          "encode": [Function],
+                          "is": [Function],
+                          "name": "string",
+                          "validate": [Function],
+                        },
+                      },
+                      "validate": [Function],
+                    },
+                    "kind": StringType {
+                      "_tag": "StringType",
+                      "decode": [Function],
+                      "encode": [Function],
+                      "is": [Function],
+                      "name": "string",
+                      "validate": [Function],
+                    },
+                  },
+                  "validate": [Function],
+                },
+                "type": StringType {
+                  "_tag": "StringType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "string",
+                  "validate": [Function],
+                },
+              },
               "validate": [Function],
             },
             "peerId": StringType {

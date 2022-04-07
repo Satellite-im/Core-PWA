@@ -1,4 +1,5 @@
 import * as t from 'io-ts'
+import { SignalData } from 'simple-peer'
 
 export const wireBaseMessage = t.type({
   type: t.string,
@@ -29,7 +30,17 @@ export const wireSignalMessage = t.intersection([
     type: t.literal('SIGNAL'),
     payload: t.type({
       peerId: t.string,
-      data: t.unknown,
+      data: t.type({
+        type: t.string,
+        transceiverRequest: t.type({
+          kind: t.string,
+          init: t.type({
+            sdp: t.string,
+          }),
+        }),
+        renegotiate: t.boolean,
+        candidate: t.unknown,
+      }),
     }),
   }),
 ])

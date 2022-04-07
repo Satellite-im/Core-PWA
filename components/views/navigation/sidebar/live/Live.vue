@@ -14,12 +14,12 @@ export default Vue.extend({
     ...mapState(['ui', 'webrtc']),
     existLiveChat(): boolean {
       return this.$store.state.friends.all.some(
-        (friend) => friend.address === this.$store.state.webrtc.activeCall,
+        (friend) => friend.peerId === this.$store.state.webrtc.activeCall,
       )
     },
     selUserName(): string {
       const sUser = this.$store.state.friends.all.find(
-        (friend) => friend.address === this.$store.state.webrtc.activeCall,
+        (friend) => friend.peerId === this.$store.state.webrtc.activeCall,
       )
       return sUser?.name
     },
@@ -27,8 +27,8 @@ export default Vue.extend({
   methods: {
     hangUp() {
       if (!this.webrtc.activeCall) return
-      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      peer?.call.hangUp()
+      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      call?.hangUp()
       this.$store.dispatch('webrtc/hangUp')
       this.$store.commit('ui/fullscreen', false)
     },
@@ -46,12 +46,12 @@ export default Vue.extend({
         if (!this.webrtc.connectedPeers.includes(identifier)) return
       }
       // Trying to call the same user while call is already active
-      if (identifier === this.$store.state.webrtc.activeCall) {
+      if (activeFriend.peerId === this.$store.state.webrtc.activeCall) {
         return
       }
-      const peer = this.$WebRTC.getPeer(identifier)
-      const tracks = await peer?.call.createLocalTracks(kinds)
-      await peer?.call.start()
+      const call = this.$WebRTC.getPeer(activeFriend.peerId)
+      const tracks = await call.createLocalTracks(kinds)
+      await call.start()
     },
   },
 })

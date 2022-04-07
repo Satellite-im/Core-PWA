@@ -5,6 +5,7 @@ import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -72,15 +73,18 @@ export default Vue.extend({
       }
 
       const identifier = this.webrtc.incomingCall
+      const call = this.$WebRTC.getPeer(identifier)
 
-      const peer = this.$WebRTC.getPeer(identifier)
+      if (!call) return
 
-      try {
-        await peer?.call.createLocalTracks(kinds)
-        await peer?.call.answer()
-      } catch (error) {
-        if (error instanceof Error) {
-          this.$toast.error(this.$t(error.message) as string)
+      if (call) {
+        try {
+          await call.createLocalTracks(kinds)
+          await call.answer()
+        } catch (error) {
+          if (error instanceof Error) {
+            this.$toast.error(this.$t(error.message) as string)
+          }
         }
       }
 
@@ -99,9 +103,9 @@ export default Vue.extend({
      */
     denyCall() {
       const identifier = this.webrtc.incomingCall
-      const peer = this.$WebRTC.getPeer(identifier)
 
-      peer?.call.deny()
+      const call = this.$WebRTC.getPeer(identifier)
+      if (call) call.deny()
 
       this.$store.dispatch('webrtc/denyCall')
     },
@@ -112,8 +116,8 @@ export default Vue.extend({
      */
     hangUp() {
       if (!this.webrtc.activeCall) return
-      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      peer?.call.hangUp()
+      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      if (call) call.hangUp()
       this.$store.dispatch('webrtc/hangUp')
       this.$store.commit('ui/fullscreen', false)
     },

@@ -551,6 +551,7 @@ describe('mutate friends', () => {
         toMailboxId: 'v4.0.0-rc.4',
         to: './path/to/file',
       },
+      stored: false,
       textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=429',
     }
 

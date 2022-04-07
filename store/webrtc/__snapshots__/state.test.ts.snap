@@ -17,6 +17,7 @@ Object {
       "muted": false,
     },
   },
+  "peerCalls": Object {},
   "remoteTracks": Object {
     "audio": Object {
       "muted": false,

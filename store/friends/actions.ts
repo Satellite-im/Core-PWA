@@ -1,3 +1,5 @@
+import PeerId from 'peer-id'
+import { keys } from 'libp2p-crypto'
 import { PublicKey } from '@solana/web3.js'
 
 import {
@@ -185,6 +187,12 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
+    const peerId = await PeerId.createFromPubKey(
+      keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
+        new PublicKey(friendKey).toBytes(),
+      ).bytes,
+    )
+
     const stored = state.all.some((friend) => friend.address === friendKey)
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
@@ -200,6 +208,7 @@ export default {
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
+      peerId: peerId.toB58String(),
     }
     const $Hounddog = Vue.prototype.$Hounddog
     const friendExists = $Hounddog.friendExists(state, friend)
@@ -288,6 +297,12 @@ export default {
     const $MetadataManager: MetadataManager = $TextileManager.metadataManager
     friend.metadata = metadata
     await $MetadataManager.updateFriendMetadata({ to, metadata })
+  },
+  setFriendState(
+    { commit }: ActionsArguments<FriendsState>,
+    { address, state }: { address: string; state: string },
+  ) {
+    commit('friends/updateFriend', { address, state }, { root: true })
   },
   /**
    * @method subscribeToFriendsEvents DocsTODO

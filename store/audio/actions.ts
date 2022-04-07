@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 import WebRTC from '~/libraries/WebRTC/WebRTC'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 export default {
   /**
@@ -10,20 +11,20 @@ export default {
    * @example @click="toggleMute"
    */
   toggleMute({ dispatch, state, rootState }: any) {
-    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-
     const muted = state.muted
 
     const { activeCall } = rootState.webrtc
 
-    const peer = $WebRTC.getPeer(activeCall)
+    const call = rootState.webrtc.getPeer(activeCall)
 
-    if (muted) {
-      peer?.call.unmute(WebRTCEnum.AUDIO)
-      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
-      return
+    if (call) {
+      if (muted) {
+        call.unmute(WebRTCEnum.AUDIO)
+        dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
+        return
+      }
+      call.mute(WebRTCEnum.AUDIO)
     }
-    peer?.call.mute(WebRTCEnum.AUDIO)
     dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
   /**
