@@ -28,3 +28,16 @@ export const metadataSchema = {
     _mod: { type: 'number' },
   },
 }
+
+export const userinfoSchema = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  title: 'Userinfo',
+  type: 'object',
+  properties: {
+    _id: { type: 'string' },
+    created_at: { type: 'number' },
+    user_address: { type: 'string' },
+    consent_scan: { type: 'boolean' },
+    consent_date: { type: 'number' },
+  },
+}
