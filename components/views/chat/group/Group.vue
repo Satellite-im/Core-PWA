@@ -73,9 +73,9 @@ export default Vue.extend({
       return ''
     },
     groupMember(): GroupMember | null {
-      return this.groups.members[this.groupId]?.find(
-        (it: GroupMember) => it.address === this.group.sender,
-      )
+      return this.groups.all
+        .find((it: Group) => it.id === this.groupId)
+        ?.members?.find((it: GroupMember) => it.address === this.group.sender)
     },
   },
   created() {
