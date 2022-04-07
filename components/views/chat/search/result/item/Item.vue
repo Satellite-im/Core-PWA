@@ -16,7 +16,7 @@ export default Vue.extend({
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
-    test(): string {
+    timestamp(): string {
       return this.$dayjs(this.data.at)
         .utc()
         .local()
