@@ -17,7 +17,7 @@ jobs:
         id: regex-match
         with:
           text: ${{ github.event.pull_request.title }}
-          regex: '(?:add|update|task|chore|feat|test|fix)\([a-z-A-Z]+\):\s.+'
+          regex: '(?:add|update|task|chore|feat|test|fix)\([a-z-A-Z-0-9]+\):\s.+'
 
       - uses: actions-ecosystem/action-create-comment@v1
         if: ${{ steps.regex-match.outputs.match == '' }}
