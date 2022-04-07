@@ -128,8 +128,6 @@ const mutations = {
         end,
       },
     }
-
-    console.log('####', tracked)
   },
   setConversationLoading(
     state: TextileState,
