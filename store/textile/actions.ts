@@ -60,6 +60,7 @@ export default {
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
       await $FileSystem.import(fsExport)
     }
+    return textilePublicKey
   },
   /**
    * @description Fetches messages that comes from a specific user
