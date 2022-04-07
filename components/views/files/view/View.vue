@@ -22,12 +22,6 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  props: {
-    fileName: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       load: false as boolean,
@@ -43,7 +37,7 @@ export default Vue.extend({
   async created() {
     this.load = true
 
-    this.file = this.$FileSystem.getChild(this.fileName) as Fil
+    this.file = this.$FileSystem.getChild(this.ui.filePreview) as Fil
     this.name = this.file?.name
 
     // if no file data available, pull encrypted file from textile bucket
