@@ -93,13 +93,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends', 'groups', 'ui']),
+    ...mapState(['friends', 'groups']),
     ...mapGetters('ui', ['showSidebar']),
     flairColor() {
-      return this.ui.theme.flair.value
+      return this.$store.state.ui.theme.flair.value
     },
     flairColorRGB() {
-      return hexToRGB(this.ui.theme.flair.value)
+      return hexToRGB(this.$store.state.ui.theme.flair.value)
     },
   },
   watch: {
