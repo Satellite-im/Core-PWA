@@ -1,7 +1,11 @@
 <div class="glyphs-modal" data-cy="glyphs-modal">
   <InteractablesClose class="close" :action="closeModal" />
   <div class="heading">
-    <TypographyTitle :size="5" :text="selectedPack.name" />
+    <TypographyTitle
+      data-cy="glyphs-modal-title"
+      :size="5"
+      :text="selectedPack.name"
+    />
   </div>
   <GlyphsSample :glyphUrls="samplePackUrls" />
   <TypographyText :text="selectedPack.description" />

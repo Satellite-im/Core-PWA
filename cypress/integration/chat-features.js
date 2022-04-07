@@ -14,6 +14,7 @@ describe('Chat Features Tests', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Validate profile name displayed
+    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
     cy.chatFeaturesProfileName('cypress')
 
     //Validate message is sent
