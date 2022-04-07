@@ -1,6 +1,7 @@
 :root {
   --app-height: 100vh;
   --flair-color: @primary-color;
+  --flair-color-rgb: 39, 97, 253;
 }
 @flair-glow: 0 5px 14px -5px var(--flair-color);
 @switch-off-flair-glow: -5px 0px 20px -2px var(--flair-color);
@@ -35,6 +36,16 @@ html {
 ::selection {
   &:extend(.font-secondary);
   &:extend(.background-flair);
+}
+
+/* Only for Safari to fix selection text background */
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    ::selection {
+      background: rgba(var(--flair-color-rgb), 0.99) !important;
+    }
+  }
 }
 
 .hidden-scroll {
