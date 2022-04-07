@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import { SearchResultItem } from '~/types/search/search'
 
 export default Vue.extend({
@@ -12,15 +13,15 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapGetters('settings', ['getTimezone']),
     src(): string {
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     timestamp(): string {
       return this.$dayjs(this.data.at)
-        .utc()
         .local()
-        .tz(this.$dayjs.tz.guess())
+        .tz(this.getTimezone)
         .format('MM/DD/YY hh:mma')
     },
   },
