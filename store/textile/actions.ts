@@ -62,12 +62,13 @@ export default {
       await $FileSystem.import(fsExport)
     }
     const consentData = await $TextileManager.userInfoManager?.getConsentData()
-    /* Log CSAM Consent Data for future ticket as Hogan requested */
-    Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', consentData)
-    if (consentData)
+    if (consentData) {
+      /* Log CSAM Consent Data for future ticket as Hogan requested */
+      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', consentData)
       commit('settings/setConsentScan', consentData.consent_scan, {
         root: true,
       })
+    }
   },
   /**
    * @description Fetches messages that comes from a specific user
