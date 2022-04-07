@@ -78,7 +78,7 @@ export default Vue.extend({
     },
     consentScan: {
       set(state) {
-        this.$store.commit('settings/setConsentScan', state)
+        this.$store.dispatch('settings/setConsentScan', state)
       },
       get() {
         return this.settings.consentScan
