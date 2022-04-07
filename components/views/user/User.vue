@@ -81,33 +81,45 @@ export default Vue.extend({
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+
+    getConversation: {
+      get() {
+        return this.$store.state.textile.conversations[this.user.address]
+      },
+    },
   },
   watch: {
     'textile.conversations': {
       handler(newValue) {
+        if (this.$data.timestampRefreshInterval) {
+          clearInterval(this.$data.timestampRefreshInterval)
+        }
+
         this.existMessage(newValue)
+
         this.$data.timestamp = convertTimestampToDate(
           this.$t('friends.details'),
           newValue[this.user.address]?.lastUpdate,
+        )
+
+        const setTimestamp = (timePassed: number) => {
+          if (timePassed === this.getConversation?.lastUpdate) {
+            this.$data.timestamp = convertTimestampToDate(
+              this.$t('friends.details'),
+              timePassed,
+            )
+          }
+        }
+
+        this.$data.timestampRefreshInterval = refreshTimestampInterval(
+          newValue[this.user.address]?.lastUpdate,
+          setTimestamp,
+          Config.chat.timestampUpdateInterval,
         )
       },
       deep: true,
       immediate: true,
     },
-  },
-  created() {
-    const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(
-        this.$t('friends.details'),
-        timePassed,
-      )
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval,
-    )
   },
   beforeDestroy() {
     clearInterval(this.$data.timestampRefreshInterval)
