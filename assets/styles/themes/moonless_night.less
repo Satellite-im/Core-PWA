@@ -1,5 +1,6 @@
 :root {
   --flair-color: #b53471;
+  --flair-color-rgb: 181, 52, 113;
 }
 
 .moonless_night {
@@ -37,6 +38,16 @@
   ::selection {
     &:extend(.font-secondary);
     background: var(--flair-color) !important;
+  }
+
+  /* Only for Safari to fix selection text background */
+
+  @media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+      ::selection {
+        background: rgba(var(--flair-color-rgb), 0.99) !important;
+      }
+    }
   }
 
   &body,

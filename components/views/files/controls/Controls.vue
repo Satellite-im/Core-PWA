@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
   FilePlusIcon,
@@ -31,7 +32,7 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
-      errors: [] as Array<string>,
+      errors: [] as Array<string | TranslateResult>,
     }
   },
   computed: {
@@ -65,7 +66,7 @@ export default Vue.extend({
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
-        this.errors.push(e?.message ?? '')
+        this.errors.push(this.$t(e?.message))
         this.$store.commit('ui/setIsLoadingFileIndex', false)
         return
       }
@@ -94,7 +95,7 @@ export default Vue.extend({
         ) > this.$Config.personalFilesLimit
       ) {
         this.$store.commit('ui/setIsLoadingFileIndex', false)
-        this.errors.push(this.$t('pages.files.errors.limit') as string)
+        this.errors.push(this.$t('pages.files.errors.storage_limit'))
         return
       }
       // todo - move validation inside of file constructor
@@ -166,16 +167,16 @@ export default Vue.extend({
       this.$emit('forceRender')
 
       if (originalFiles.length !== invalidNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.invalid_name') as string)
+        this.errors.push(this.$t('pages.files.errors.invalid'))
       }
       if (invalidNameResults.length !== emptyFileResults.length) {
-        this.errors.push(this.$t('pages.files.errors.empty_file') as string)
+        this.errors.push(this.$t('pages.files.errors.file_size'))
       }
       if (emptyFileResults.length !== sameNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.item_name') as string)
+        this.errors.push(this.$t('pages.files.errors.duplicate_name'))
       }
       if (nsfwResults.length !== files.length) {
-        this.errors.push(this.$t('errors.chat.contains_nsfw') as string)
+        this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
     },
   },

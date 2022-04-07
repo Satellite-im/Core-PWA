@@ -93,7 +93,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+      :root { --flair-color: {{ flairColor }}; --flair-color-rgb:
+      {{ flairColorRGB }} }
     </v-style>
   </div>
 </template>
@@ -106,6 +107,7 @@ import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
+import { hexToRGB } from '~/utilities/Colors'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -167,6 +169,12 @@ export default Vue.extend({
             (friend) => friend.address === this.$route.params.address,
           )
       return recipient
+    },
+    flairColor() {
+      return this.ui.theme.flair.value
+    },
+    flairColorRGB() {
+      return hexToRGB(this.ui.theme.flair.value)
     },
   },
   watch: {

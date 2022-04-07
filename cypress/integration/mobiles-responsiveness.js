@@ -10,7 +10,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe.skip('Run responsiveness tests on several devices', () => {
+describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
   data.allDevices.forEach((item) => {
@@ -45,17 +45,21 @@ describe.skip('Run responsiveness tests on several devices', () => {
     it(`Import Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
+      //Validate profile name displayed
+      cy.contains('cypress', { timeout: 240000 }).should('be.visible')
     })
 
     it(`Chat Features on ${item.description}`, () => {
       //Setting viewport
       cy.viewport(item.width, item.height)
 
-      //Validate profile name displayed
-      cy.chatFeaturesProfileName('cypress')
+      //Go to conversation
+      cy.get('[data-cy=hamburger-button]').click()
+      cy.get('[data-cy=user-connected]', { timeout: 30000 })
+        .should('be.visible')
+        .should('have.text', 'cypress friend')
 
       //Validate message and emojis are sent
-      cy.goToConversation('cypress friend')
       cy.chatFeaturesSendMessage(randomMessage)
       cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
 
@@ -64,37 +68,44 @@ describe.skip('Run responsiveness tests on several devices', () => {
     })
 
     it(`Chat - Marketplace - Coming Soon modal content on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.get('[data-cy=toolbar-marketplace]').click()
       cy.validateComingSoonModal()
     })
 
     it(`Chat - Marketplace - Coming Soon modal button URL on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.validateURLComingSoonModal()
     })
 
     it(`Chat - Marketplace - Coming Soon modal can be dismissed on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.closeModal('[data-cy=modal-cta]')
     })
 
     it(`Chat - Glyph Pack screen is displayed on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.chatFeaturesSendGlyph()
       cy.goToLastGlyphOnChat().click()
       cy.validateGlyphsModal()
     })
 
     it(`Chat - Glyph Pack - Coming Soon modal on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.contains('View Glyph Pack').click()
       cy.get('[data-cy=modal-cta]').should('be.visible')
       cy.closeModal('[data-cy=modal-cta]')
     })
 
     it(`Chat - Glyph Pack screen can be dismissed on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.goToLastGlyphOnChat().click()
       cy.get('[data-cy=glyphs-modal]').should('be.visible')
       cy.closeModal('[data-cy=glyphs-modal]')
     })
 
     it(`Chat - Glyphs Selection - Coming soon modal on ${item.description}`, () => {
+      cy.viewport(item.width, item.height)
       cy.get('#glyph-toggle').click()
       cy.get('[data-cy=glyphs-marketplace]').click()
       cy.get('[data-cy=modal-cta]').should('be.visible')

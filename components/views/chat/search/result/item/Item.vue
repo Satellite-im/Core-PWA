@@ -3,10 +3,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { SearchResultItem } from '~/types/search/search'
+import { refreshTimestampInterval } from '~/utilities/Messaging'
 
-declare module 'vue/types/vue' {
-  interface Vue {}
-}
 export default Vue.extend({
   props: {
     data: {
@@ -14,11 +12,31 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      timestamp: this.$dayjs(this.data.at).fromNow() as string,
+      timestampRefreshInterval: undefined,
+    }
+  },
   computed: {
     src(): string {
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+  },
+  created() {
+    const setTimestamp = (timePassed: string) => {
+      this.timestamp = timePassed
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.data.at,
+      setTimestamp,
+      this.$Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeDestroy() {
+    clearInterval(this.timestampRefreshInterval)
   },
 })
 </script>

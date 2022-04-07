@@ -30,7 +30,7 @@ describe('Chat Features Tests', () => {
   })
 
   it('Chat - Message edited shows edited status', () => {
-    cy.contains(randomNumber)
+    cy.contains(randomMessage + randomNumber)
       .siblings('[data-cy=message-edited]')
       .should('contain', '(edited)')
   })

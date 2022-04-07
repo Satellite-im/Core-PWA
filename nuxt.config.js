@@ -4,6 +4,7 @@ import pkg from './package.json'
 export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js',
+    'merge-options': 'merge-options/index.js',
   },
   bridge: {
     nitro: false,
@@ -204,6 +205,9 @@ export default defineNuxtConfig({
       config.node = {
         fs: 'empty',
         encoding: 'empty',
+        child_process: 'empty',
+        dgram: 'empty',
+        tls: 'empty',
       }
       if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
@@ -228,7 +232,10 @@ export default defineNuxtConfig({
         }
       }
     },
-    babel: { compact: true },
+    transpile: ['libp2p'],
+    babel: {
+      compact: true,
+    },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,

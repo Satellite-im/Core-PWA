@@ -39,7 +39,7 @@ export default Vue.extend({
     isActiveCall() {
       return this.friends.all.find(
         (friend: any) =>
-          friend.activeChat && friend.address === this.webrtc.activeCall,
+          friend.activeChat && friend.peerId === this.webrtc.activeCall,
       )
     },
     localAudioMuted() {
@@ -55,7 +55,7 @@ export default Vue.extend({
     },
     activeCall() {
       return this.$store.state.friends.all.some(
-        (friend: any) => friend.address === this.webrtc.activeCall,
+        (friend: any) => friend.peerId === this.webrtc.activeCall,
       )
     },
     localVideoStream() {
@@ -66,10 +66,9 @@ export default Vue.extend({
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      const localVideoTrack = peer?.call.getTrackById(id)
-
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
+      const localVideoTrack = call.getTrackById(id)
       return localVideoTrack ? new MediaStream([localVideoTrack]) : null
     },
     remoteVideoStream() {
@@ -80,10 +79,10 @@ export default Vue.extend({
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
 
-      const remoteVideoTrack = peer?.call.getTrackById(id)
-
+      const remoteVideoTrack = call.getTrackById(id)
       return remoteVideoTrack ? new MediaStream([remoteVideoTrack]) : null
     },
     remoteAudioStream() {
@@ -94,10 +93,9 @@ export default Vue.extend({
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      const remoteAudioTrack = peer?.call.getTrackById(id)
-
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
+      const remoteAudioTrack = call.getTrackById(id)
       return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
     },
     remoteTracks() {
@@ -248,10 +246,10 @@ export default Vue.extend({
   beforeMount() {
     // TODO: Create mixin/library that will handle call rejoining and closing
     window.onbeforeunload = (e) => {
-      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
 
-      if (peer) {
-        peer?.call.hangUp()
+      if (call) {
+        call.hangUp()
         this.$store.dispatch('webrtc/hangUp')
         this.$store.commit('ui/fullscreen', false)
       }

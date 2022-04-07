@@ -242,11 +242,12 @@ export default {
     }
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
-
+    /* textilePubKey is generated first before setting account details if user is registered with avatar */
+    let preGeneratedTextilePubKey = null
     // only init textile if we need to push an image to bucket
     if (userData.image) {
       const { pin } = state
-      await dispatch(
+      preGeneratedTextilePubKey = await dispatch(
         'textile/initialize',
         {
           id: payerAccount?.publicKey.toBase58(),
@@ -273,7 +274,9 @@ export default {
       photoHash: imagePath,
       address: payerAccount.publicKey.toBase58(),
     })
-
+    /* reset textilePubKey after setting user detail if it is not set properly */
+    if (preGeneratedTextilePubKey && !state.details?.textilePubkey)
+      commit('updateTextilePubkey', preGeneratedTextilePubKey)
     dispatch('startup', payerAccount)
   },
   /**
@@ -317,10 +320,20 @@ export default {
       )
     }
 
-    if (!webrtcInitialized) {
-      dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
-        root: true,
-      })
+    if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
+      dispatch(
+        'webrtc/initialize',
+        {
+          privateKeyInfo: {
+            type: 'ed25519',
+            privateKey: $SolanaManager.payerAccount?.secretKey,
+          },
+          originator: payerAccount.publicKey.toBase58(),
+        },
+        {
+          root: true,
+        },
+      )
     }
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })

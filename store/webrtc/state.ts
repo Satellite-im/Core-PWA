@@ -10,6 +10,7 @@ const InitialWebRTCState = (): WebRTCState => ({
   incomingCall: '',
   activeCall: '',
   connectedPeers: [],
+  peerCalls: {},
   activeStream: {
     createdAt: 0,
   },

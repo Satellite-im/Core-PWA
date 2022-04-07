@@ -32,7 +32,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: npx cypress run --browser chrome --headless
+          command: npm run cy:run
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Artifacts

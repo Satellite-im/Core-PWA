@@ -20,8 +20,7 @@ import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
-import { SearchResult, QueryOptions } from '~/types/search/search'
-import { searchResult } from '~/mock/search'
+import { UISearchResult, QueryOptions } from '~/types/search/search'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -69,6 +68,7 @@ export default {
         root: true,
       })
     }
+    return textilePublicKey
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -405,7 +405,6 @@ export default {
       throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
-    commit('setMessageLoading', { loading: true })
     commit(
       'ui/setReplyChatbarContent',
       {
@@ -434,7 +433,6 @@ export default {
       message: result,
     })
     await dispatch('storeMessage', { address: friend.address, message: result })
-    commit('setMessageLoading', { loading: false })
   },
 
   /**
@@ -934,7 +932,7 @@ export default {
       query: QueryOptions
       page: number
     },
-  ): Promise<SearchResult> {
+  ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
 
     const startDate =

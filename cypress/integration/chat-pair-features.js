@@ -3,8 +3,11 @@ const recoverySeedAccountOne =
   'memory cherry add return that phrase suit plate ladder earth people gravity{enter}'
 const recoverySeedAccountTwo =
   'position few settle fold sister transfer song speed million congress acoustic version{enter}'
+const recoverySeedAccountThree =
+  'emerge cat innocent buddy install shy topic goddess legend leisure mutual bitter{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomMessage = faker.lorem.sentence() // generate random sentence
+const randomMessageTwo = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
@@ -158,12 +161,48 @@ describe('Chat features with two accounts', () => {
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.match(/d+[hour[s]? |minute[s]? |second[s]?]\s/)
+        expect($text).to.match(/d+|[hour[s]? |minute[s]? |second[s]?]\s/)
       })
   })
 
   it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
     cy.goToConversation('Chat User C')
     cy.get('[data-cy=editable-input]').should('be.visible').type(randomMessage)
+    cy.get('[data-cy=editable-input]').clear()
+  })
+
+  it('Assert timestamp immediately after sending message', () => {
+    //Send a random message
+    cy.chatFeaturesSendMessage(randomMessageTwo)
+
+    //Assert timestamp text immediately
+    cy.get('[data-cy=chat-timestamp]')
+      .last()
+      .invoke('text')
+      .then(($text) => {
+        expect($text).to.contain('a few seconds ago')
+      })
+  })
+
+  it('Assert timestamp one minute after sending message', () => {
+    //Wait for 60 seconds
+    cy.wait(60000)
+
+    //Assert timestamp text after a minute has passed
+    cy.get('[data-cy=chat-timestamp]')
+      .last()
+      .invoke('text')
+      .then(($text) => {
+        expect($text).to.contain('a minute ago')
+      })
+  })
+
+  it('Send a message from third account to second account', () => {
+    //import Chat User C account
+    cy.importAccount(randomPIN, recoverySeedAccountThree)
+    cy.contains('Chat User C', { timeout: 180000 }).should('be.visible')
+    //Send a message to Chat User B
+    cy.goToConversation('Chat User B')
+    cy.chatFeaturesSendMessage(randomMessage)
   })
 })

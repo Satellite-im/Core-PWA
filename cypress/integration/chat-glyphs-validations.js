@@ -41,7 +41,7 @@ describe('Chat - Sending Glyphs Tests', () => {
   })
 
   it('Validate glyph pack screen appears', () => {
-    cy.goToLastGlyphOnChat().click()
+    cy.goToLastGlyphOnChat().should('be.visible').click()
     cy.validateGlyphsModal()
   })
 

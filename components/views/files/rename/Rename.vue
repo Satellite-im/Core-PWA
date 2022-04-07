@@ -50,7 +50,7 @@ export default Vue.extend({
       try {
         this.$FileSystem.renameChild(this.ui.renameCurrentName, this.text)
       } catch (e: any) {
-        this.error = e.message
+        this.error = this.$t(e?.message) as string
         return
       }
       this.closeModal()
