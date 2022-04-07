@@ -84,3 +84,73 @@ describe('FileType.isHeic', () => {
     expect(result).toBeFalsy()
   })
 })
+
+describe('FileType.isEmbeddableImage', () => {
+  test('isEmbeddableImage check svg image', async () => {
+    const buffer = fs.readFileSync('utilities/assets/svg-image.svg', {
+      flag: 'r',
+    })
+    const file = new Blob([buffer], {
+      type: 'image/heic',
+    })
+    const result: any = await FileType.isEmbeddableImage(file)
+
+    expect(result).toBeTruthy()
+  })
+  test('isEmbeddableImage check non svg image', async () => {
+    const buffer = fs.readFileSync('utilities/assets/fontawesome-webfont.otf', {
+      flag: 'r',
+    })
+    const file = new Blob([buffer], {
+      type: 'font/otf',
+    })
+    const result: any = await FileType.isEmbeddableImage(file)
+
+    expect(result).toBeFalsy()
+  })
+
+  test('isEmbeddableImage check a non buffer response', async () => {
+    const buffer = Buffer.from('Hello, World', 'utf8') // buffer.length is 12
+    const file = new Blob([buffer], {
+      type: 'image/heic',
+    })
+    const result: any = await FileType.isEmbeddableImage(file)
+
+    expect(result).toBeFalsy()
+  })
+})
+
+describe('FileType.mimeType', () => {
+  test('mimeType check svg image', async () => {
+    const buffer = fs.readFileSync('utilities/assets/svg-image.svg', {
+      flag: 'r',
+    })
+    const file = new Blob([buffer], {
+      type: 'image/heic',
+    })
+    const result: any = await FileType.mimeType(file)
+
+    expect(result).toBeTruthy()
+  })
+  test('mimeType check non svg image', async () => {
+    const buffer = fs.readFileSync('utilities/assets/fontawesome-webfont.otf', {
+      flag: 'r',
+    })
+    const file = new Blob([buffer], {
+      type: 'font/otf',
+    })
+    const result: any = await FileType.mimeType(file)
+
+    expect(result).toBeFalsy()
+  })
+
+  test('mimeType check a non buffer response', async () => {
+    const buffer = Buffer.from('Hello, World', 'utf8') // buffer.length is 12
+    const file = new Blob([buffer], {
+      type: 'image/heic',
+    })
+    const result: any = await FileType.mimeType(file)
+
+    expect(result).toBeFalsy()
+  })
+})
