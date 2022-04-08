@@ -3,7 +3,7 @@
 @mobile_candybar_media_open_offset: 18rem;
 @mobile_swiper_slide_side: 24px;
 @swiper_container_background: #323242;
-@active_slide_gradient: linear-gradient(
+@slide_out_gradient: linear-gradient(
     163.91deg,
     rgba(48, 52, 71, 0.5) 0%,
     rgba(42, 54, 75, 0) 100%
@@ -43,10 +43,10 @@
     .sidebar-container {
       width: calc(@sidebar-size + @servers-size);
       display: flex;
-
       @media only screen and (max-width: @mobile-breakpoint) {
         margin-top: @normal-spacing;
         height: calc(100% - @normal-spacing);
+        background: @slide_out_gradient;
       }
     }
 
@@ -232,11 +232,6 @@
   .swiper-slide:last-child {
     margin-right: 0;
     width: 100vw !important;
-  }
-
-  .swiper-slide.swiper-slide-active {
-    background: @active_slide_gradient;
-    opacity: 0.9;
   }
 
   #friends,
