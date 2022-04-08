@@ -79,28 +79,6 @@
         horizontal
       />
 
-      <div class="tabs sidebar-selector padded no-top-pad flex">
-        <InteractablesButtonGroup
-          v-model="toggleView"
-          :full-width="true"
-          :values="[true, false]"
-        >
-          <InteractablesButton
-            :text="$t('messaging.messages')"
-            size="small"
-            type="dark"
-          >
-            <message-square-icon size="1.2x" />
-          </InteractablesButton>
-          <InteractablesButton
-            :text="$t('messaging.groups')"
-            size="small"
-            type="dark"
-          >
-            <users-icon size="1.2x" />
-          </InteractablesButton>
-        </InteractablesButtonGroup>
-      </div>
       <FriendsQuick v-click-outside="toggleModal" />
       <div
         v-if="ui.showSidebarUsers"
@@ -177,7 +155,6 @@ import {
   UserPlusIcon,
   PlusIcon,
   FolderIcon,
-  MessageSquareIcon,
   MenuIcon,
 } from 'satellite-lucide-icons'
 
@@ -198,7 +175,6 @@ export default Vue.extend({
     UserPlusIcon,
     PlusIcon,
     FolderIcon,
-    MessageSquareIcon,
     MenuIcon,
   },
   props: {
