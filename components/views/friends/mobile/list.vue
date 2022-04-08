@@ -30,6 +30,7 @@
       </div>
 
       <more-vertical-icon
+        v-if="featureReadyToShow"
         class="icon-button has-tooltip-bottom"
         size="1.2x"
         full-width
