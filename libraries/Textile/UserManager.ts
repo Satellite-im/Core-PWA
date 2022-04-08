@@ -54,17 +54,12 @@ export class UserInfoManager {
    */
   private async _findRecord(): Promise<UserdataFromThread | null> {
     const query = Query.where('user_address').eq(this.textile.wallet.address)
-    const records = await this.textile.client.find<UserdataFromThread>(
+    const [record] = await this.textile.client.find<UserdataFromThread>(
       this.threadID,
       CollectionName,
       query,
     )
-
-    if (records.length === 0) {
-      return null
-    }
-    const [record] = records
-    return record
+    return record || null
   }
 
   async getConsentData(): Promise<UserdataFromThread | null> {
