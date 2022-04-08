@@ -48,7 +48,31 @@
       multiple
     />
   </div>
-  <UiProgress v-if="progress != 100" :progress="progress" />
+
+  <span v-if="progress < 100">
+    <UiProgress :progress="progress" />
+    <TypographyText
+      :text="`${$t('pages.files.controls.status')}: % ${progress} ${$t('pages.files.controls.upload_progress')}`"
+      :size="6"
+    />
+  </span>
+  <span v-if="startingUpload">
+    <TypographyText
+      :text="`${$t('pages.files.controls.status')}: ${$t('pages.files.controls.starting_upload')}`"
+      :size="6"
+    />
+  </span>
+  <span v-if="doingSomethingElse">
+    <TypographyText
+      :text="`${$t('pages.files.controls.status')}: ${$t('pages.files.controls.rebuilding_structure')}`"
+      :size="6"
+  /></span>
+  <span v-if="updatingIndex">
+    <TypographyText
+      :text="`${$t('pages.files.controls.status')}: ${$t('pages.files.controls.updating_indexes')}`"
+      :size="6"
+  /></span>
+
   <div class="error-container" v-if="errors.length">
     <alert-triangle-icon size="1.3x" />
     <div>

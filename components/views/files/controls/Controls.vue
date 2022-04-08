@@ -34,6 +34,9 @@ export default Vue.extend({
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
       progress: 100 as number,
+      updatingIndex: false,
+      startingUpload: false,
+      doingSomethingElse: false,
     }
   },
   computed: {
@@ -84,6 +87,7 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
+      this.startingUpload = true
       this.errors = []
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       const originalFiles: File[] = [...event.target.files]
@@ -145,7 +149,6 @@ export default Vue.extend({
           files.push(el.file)
         }
       }
-
       for (const file of files) {
         try {
           await this.$FileSystem.uploadFile(file, this.setProgress)
@@ -156,11 +159,20 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
-        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+        this.doingSomethingElse = false
+        this.updatingIndex = true
+        this.$TextileManager.bucket
+          ?.updateIndex(this.$FileSystem.export)
+          .then(() => {
+            this.updatingIndex = false
+            this.$store.commit('ui/setIsLoadingFileIndex', false)
+          })
+      }
+      if (!files.length) {
+        this.$store.commit('ui/setIsLoadingFileIndex', false)
       }
 
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-
+      // re-render so new files show up
       this.$emit('forceRender')
 
       if (originalFiles.length !== invalidNameResults.length) {
@@ -183,7 +195,9 @@ export default Vue.extend({
      * @param size total file size in bytes
      */
     setProgress(num: number, size: number) {
+      if (this.startingUpload) this.startingUpload = false
       this.progress = Math.floor((num / size) * 100)
+      if (this.progress >= 100) this.doingSomethingElse = true
     },
   },
 })
