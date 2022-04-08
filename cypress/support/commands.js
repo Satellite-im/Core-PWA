@@ -368,7 +368,6 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
-  cy.get('.file-item', { timeout: 30000 }).should('exist')
   cy.get('.file-info > .title').should('contain', filename)
   cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
   cy.get('.thumbnail').should('exist')
