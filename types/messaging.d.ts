@@ -5,6 +5,7 @@ import {
   ReplyMessage,
   TextMessage,
 } from './textile/mailbox'
+import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 
 export type UIReaction = {
   emoji: string
@@ -33,6 +34,7 @@ export type Divider = {
   type: 'divider'
 }
 
+// TO DO: MAURO CHECK
 export type Group = {
   id: string
   at: number
@@ -42,4 +44,16 @@ export type Group = {
   messages: Array<UIMessage> | null
 }
 
+// TO DO: MAURO CHECK
 export type MessageGroup = Array<Group | Divider>
+
+export type MessageElement = {
+  id: string
+  at: number
+  type: MessagingTypesEnum.MESSAGEELEMENT
+  from: string
+  to: string
+  messages: Array<UIMessage> | null
+}
+
+export type ChatList = Array<MessageElement | Divider>

@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { groupMessages } from '~/utilities/Messaging'
+import { groupMessages, groupMessagesNew } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 
 export default Vue.extend({
@@ -18,7 +18,15 @@ export default Vue.extend({
       }
 
       const { messages, replies, reactions } = conversation
-      return groupMessages(messages, replies, reactions)
+
+      console.log('messages', messages, messages.length)
+      console.log('replies', replies)
+      console.log('reactions', reactions)
+      console.log(
+        'groupedMessages',
+        groupMessagesNew(messages, replies, reactions),
+      )
+      return groupMessagesNew(messages, replies, reactions)
     },
   },
   mounted() {
