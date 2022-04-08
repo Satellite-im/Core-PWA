@@ -5,5 +5,7 @@
   "pageLoadTimeout": 120000,
   "defaultCommandTimeout": 10000,
   "retries": 2,
-  "video": false
+  "video": true,
+  "watchForFileChanges": false,
+  "chromeWebSecurity": false
 }
