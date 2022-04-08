@@ -270,11 +270,12 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 //Chat Features Commands
 
 Cypress.Commands.add('chatFeaturesProfileName', (value) => {
-  cy.get('[data-cy=user-state]', {
-    timeout: 180000,
-  }).should('be.visible')
-  cy.contains(value).should('be.visible')
-  cy.contains(value).click() // clicks on user name
+  // clicks on user name
+  cy.get('[data-cy=user-name]')
+    .should('be.visible')
+    .should('have.text', value)
+    .click()
+  cy.wait(1000)
 })
 
 Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
@@ -463,6 +464,18 @@ Cypress.Commands.add('validateComingSoonModal', () => {
   cy.contains('Keep Me Posted').should('be.visible')
 })
 
+Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
+  let locatorURL = 'a[href="' + expectedURL + '"]'
+  cy.get(locatorURL)
+    .last()
+    .scrollIntoView()
+    .should('have.attr', 'href', expectedURL)
+    .should('have.attr', 'target', '_blank')
+    .then((link) => {
+      cy.request(link.prop('href')).its('status').should('eq', 200)
+    })
+})
+
 Cypress.Commands.add('validateURLComingSoonModal', () => {
   cy.window().then((win) => {
     cy.stub(win, 'open').as('open')
@@ -477,7 +490,12 @@ Cypress.Commands.add('validateURLComingSoonModal', () => {
 
 Cypress.Commands.add('validateGlyphsModal', () => {
   cy.get('[data-cy=glyphs-modal]').should('be.visible')
-  cy.contains('Astrobunny').should('be.visible')
+  cy.get('[data-cy=glyphs-modal-title]')
+    .should('be.visible')
+    .invoke('text')
+    .then(($text) => {
+      expect($text).to.be.oneOf(['Astrobunny', 'Genshin Impact 2'])
+    })
   cy.contains('Short description can go here. Lorem ipsum.').should(
     'be.visible',
   )
