@@ -55,6 +55,7 @@ const InitialUIState = (): UIState => ({
   messages: [],
   unreadMessage: 0,
   isScrollOver: false,
+  showOlderMessagesInfo: false,
   isTyping: false,
   isReacted: false,
   activeChannel: undefined,

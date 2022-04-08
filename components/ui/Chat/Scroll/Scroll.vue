@@ -24,6 +24,11 @@ export default Vue.extend({
       default: 10,
       required: false,
     },
+    olderMessagesScrollOffset: {
+      type: Number,
+      default: 300,
+      required: false,
+    },
     enableWrap: {
       type: Boolean,
       default: false,
@@ -54,6 +59,9 @@ export default Vue.extend({
         'auto-scroll': this.autoScroll,
         dark: this.theme === 'dark',
       }
+    },
+    isMediaOpen() {
+      return this.$store.state.ui.showMedia
     },
   },
   watch: {
@@ -109,10 +117,18 @@ export default Vue.extend({
     onScrolled() {
       if (!this.$el) return
 
-      if (
-        this.$el.scrollHeight - this.preventScrollOffset >
-        this.$el.scrollTop + this.$el.clientHeight
-      ) {
+      const scrollHeight = this.$el.scrollHeight - this.preventScrollOffset
+      const scrolled = this.$el.scrollTop + this.$el.clientHeight
+
+      if (scrollHeight - this.olderMessagesScrollOffset > scrolled) {
+        if (!this.ui.showOlderMessagesInfo) {
+          this.$store.commit('ui/setShowOlderMessagesInfo', true)
+        }
+      } else if (this.ui.showOlderMessagesInfo) {
+        this.$store.commit('ui/setShowOlderMessagesInfo', false)
+      }
+
+      if (scrollHeight > scrolled) {
         if (!this.ui.isScrollOver)
           this.$store.dispatch('ui/setIsScrollOver', true)
         return

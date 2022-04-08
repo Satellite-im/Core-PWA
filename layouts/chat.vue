@@ -76,7 +76,9 @@
               :fullscreen-max-viewable-users="20"
             />
             <UiChatScroll
+              ref="chatScroll"
               :prevent-scroll-offset="10"
+              :older-messages-scroll-offset="300"
               :class="
                 $store.state.friends.all.find(
                   (friend) => friend.address === $store.state.webrtc.activeCall,
@@ -90,6 +92,15 @@
               <Nuxt />
             </UiChatScroll>
             <WalletMini v-if="ui.modals.walletMini" />
+            <UiChatInfo
+              v-if="showOlderMessageInfo"
+              :caption="$t('pages.chat.older_messages')"
+              type="primary"
+              :click-handler="handleClick"
+            >
+              <chevron-down-icon size="1.5x" />
+              {{ $t('pages.chat.recent_messages') }}
+            </UiChatInfo>
             <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
         </swiper-slide>
@@ -116,7 +127,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { MenuIcon } from 'satellite-lucide-icons'
+import { MenuIcon, ChevronDownIcon } from 'satellite-lucide-icons'
 import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
@@ -133,6 +144,7 @@ export default Vue.extend({
   name: 'ChatLayout',
   components: {
     MenuIcon,
+    ChevronDownIcon,
     DroppableWrapper,
   },
   mixins: [Touch, Layout],
@@ -199,6 +211,9 @@ export default Vue.extend({
     flairColorRGB() {
       return hexToRGB(this.ui.theme.flair.value)
     },
+    showOlderMessageInfo() {
+      return this.ui.showOlderMessagesInfo
+    },
     isNoFriends() {
       return (
         this.dataState.friends !== this.DataStateType.Loading &&
@@ -246,6 +261,9 @@ export default Vue.extend({
       if (e?.dataTransfer) {
         this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
       }
+    },
+    handleClick(e: MouseEvent) {
+      this.$refs.chatScroll?.autoScrollToBottom()
     },
   },
 })

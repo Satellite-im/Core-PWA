@@ -193,6 +193,7 @@ export interface UIState {
   messages: any[]
   unreadMessage: number
   isScrollOver: boolean
+  showOlderMessagesInfo: boolean
   isTyping: object | boolean
   isReacted: boolean
   activeChannel: Channel | undefined

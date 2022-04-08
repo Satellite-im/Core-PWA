@@ -1,0 +1,6 @@
+<div class="info" :class="{[`info--${type}`] : type}" @click="clickHandler">
+  <div class="info-caption">{{caption}}</div>
+  <div class="info-main">
+    <slot />
+  </div>
+</div>

@@ -482,6 +482,8 @@ export default {
       },
       new_group: 'New Group',
       new_group_name: 'Add a group name here...',
+      older_messages: 'You are viewing older messages',
+      recent_messages: 'Go to most recent messages',
     },
     newMessage: {
       new_message: 'New Message',
