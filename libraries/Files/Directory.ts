@@ -97,21 +97,21 @@ export class Directory extends Item {
   sortedContent(sort: FileSort): Item[] {
     const key = sort.category
     if (key === FileSortEnum.SIZE) {
-      return Array.from(this._children.values()).sort(
+      return this.content.sort(
         sort.asc
           ? (a: Item, b: Item) => a[key] - b[key]
           : (a: Item, b: Item) => b[key] - a[key],
       )
     }
     if (key === FileSortEnum.MODIFIED) {
-      return Array.from(this._children.values()).sort(
+      return this.content.sort(
         sort.asc
           ? (a: Item, b: Item) => b[key] - a[key]
           : (a: Item, b: Item) => a[key] - b[key],
       )
     }
 
-    return Array.from(this._children.values()).sort(
+    return this.content.sort(
       sort.asc
         ? (a: Item, b: Item) => a[key].localeCompare(b[key])
         : (a: Item, b: Item) => b[key].localeCompare(a[key]),
