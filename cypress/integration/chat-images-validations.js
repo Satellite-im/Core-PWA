@@ -14,7 +14,7 @@ describe('Chat - Sending Images Tests', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Validate profile name displayed
-    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
+    cy.get('[data-cy=user-name]', { timeout: 180000 }).should('exist')
 
     //Validate message is sent
     cy.goToConversation('cypress friend')

@@ -14,8 +14,7 @@ describe('Chat Features Tests', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Validate profile name displayed
-    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
-    cy.chatFeaturesProfileName('cypress')
+    cy.get('[data-cy=user-name]', { timeout: 180000 }).should('exist')
 
     //Validate message is sent
     cy.goToConversation('cypress friend')
@@ -131,5 +130,10 @@ describe('Chat Features Tests', () => {
     //Validating that preview of image is displayed and matches with image filename copied from clipboard
     cy.get('.file-item').should('exist')
     cy.get('.file-info > .title').should('contain', 'logo.png')
+  })
+
+  it('Chat - Validate User ID can be copied when clicked on it', () => {
+    //Moving this at the end of execution to avoid issues on CI when running chat tests
+    cy.chatFeaturesProfileName('cypress')
   })
 })
