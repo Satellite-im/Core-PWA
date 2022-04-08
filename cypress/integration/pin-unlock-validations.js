@@ -26,7 +26,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     })
   })
 
-  it('Create Account with store pin enabled', () => {
+  it.skip('Create Account with store pin enabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
     cy.createAccountPINscreen(randomPIN, true, false)
 

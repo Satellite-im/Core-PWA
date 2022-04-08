@@ -368,6 +368,7 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
+  cy.get('.file-item', { timeout: 30000 }).should('exist')
   cy.get('.file-info > .title').should('contain', filename)
   cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
   cy.get('.thumbnail').should('exist')
@@ -422,10 +423,9 @@ Cypress.Commands.add('goToConversation', (user) => {
     .find('[data-cy=friend-send-message]')
     .as('friend-message')
   cy.get('@friend-message').click()
-  cy.get('[data-cy=user-connected]', { timeout: 90000 })
+  cy.get('[data-cy=user-connected]', { timeout: 60000 })
     .should('be.visible')
     .should('have.text', user)
-  cy.get('[data-cy=chat-message').last().should('exist')
 })
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
@@ -433,13 +433,13 @@ Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
     .realHover()
     .should('have.attr', 'data-tooltip', expectedMessage)
   cy.wait(1000)
-  cy.get('[data-cy=user-name]').trigger('mouseover')
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
   cy.get(locator).should('be.visible').realHover()
   cy.wait(1000)
-  cy.get('[data-cy=user-name]').trigger('mouseover')
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 Cypress.Commands.add('validateComingSoonModal', () => {
