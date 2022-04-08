@@ -50,6 +50,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile']),
+    lastMessage() {
+      const messages =
+        this.$store.state.textile.conversations[this.user.address]
+      const last = messages[messages.length - 1]
+      return last
+    },
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
