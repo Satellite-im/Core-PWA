@@ -81,9 +81,8 @@
               :prevent-scroll-offset="10"
               :older-messages-scroll-offset="300"
               :class="
-                $store.state.friends.all.find(
-                  (friend) => friend.address === $store.state.webrtc.activeCall,
-                )
+                $store.state.webrtc.activeCall &&
+                $store.state.webrtc.activeCall.callId
                   ? 'media-open'
                   : 'media-unopen'
               "
@@ -136,6 +135,8 @@ import useMeta from '~/components/compositions/useMeta'
 import { hexToRGB } from '~/utilities/Colors'
 import { DataStateType } from '~/store/dataState/types'
 import { SettingsRoutes } from '~/store/ui/types'
+import type { Friend } from '~/types/ui/friends'
+import type { Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -196,6 +197,7 @@ export default Vue.extend({
       'groups',
       'dataState',
       'settings',
+      'conversation',
     ]),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     DataStateType: () => DataStateType,
@@ -203,20 +205,14 @@ export default Vue.extend({
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient() {
-      // It should not happen that someone tries to write to himself, but we should check
-      // anyway
-      const isMe =
-        this.$route.params.address === this.$typedStore.state.accounts.active
-
-      const groupId = this.$route.params.id
-
-      const recipient = groupId
-        ? { textilePubkey: groupId }
-        : isMe
-        ? null
-        : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address,
-          )
+      const recipient =
+        this.conversation.type === 'group'
+          ? this.groups.all.find(
+              (group: Group) => group.id === this.conversation.id,
+            )
+          : this.friends.all.find(
+              (friend: Friend) => friend.peerId === this.conversation.id,
+            )
       return recipient
     },
     flairColor() {
@@ -236,6 +232,10 @@ export default Vue.extend({
     },
   },
   watch: {
+    conversation: {
+      handler() {},
+      deep: true,
+    },
     showSidebar(newValue, oldValue) {
       if (newValue !== oldValue) {
         newValue

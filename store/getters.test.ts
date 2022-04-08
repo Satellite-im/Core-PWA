@@ -80,7 +80,6 @@ const initialRootState: RootState = {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
-        activeChat: true,
         encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -148,6 +147,11 @@ const initialRootState: RootState = {
     },
     embeddedLinks: true,
     displayCurrentActivity: true,
+  },
+  conversation: {
+    initialized: false,
+    type: 'friend',
+    id: '',
   },
 }
 

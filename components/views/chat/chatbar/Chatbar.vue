@@ -4,7 +4,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-import PeerId from 'peer-id'
 
 import Upload from '../../files/upload/Upload.vue'
 import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
@@ -17,8 +16,8 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { UploadDropItemType } from '~/types/files/file'
+import { Group } from '~/types/messaging'
 
 export default Vue.extend({
   components: {
@@ -28,7 +27,7 @@ export default Vue.extend({
   },
   props: {
     recipient: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<Friend | Group>,
       default: () => {},
     },
   },
@@ -41,10 +40,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     ...mapGetters('chat', ['getFiles']),
-    activeFriend(): Friend | undefined {
-      return this.$Hounddog.getActiveFriend(this.friends)
+    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile', 'conversation']),
+    activeFriend() {
+      return this.conversation?.participants?.[0]
     },
     /**
      * @method charlimit DocsTODO
@@ -134,6 +133,9 @@ export default Vue.extend({
           this.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
       },
+    },
+    'conversation.participants': {
+      handler() {},
       deep: true,
     },
     'recipient.address': {
@@ -186,29 +188,7 @@ export default Vue.extend({
     typingNotifHandler(
       state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
     ) {
-      const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-      if (activeFriend) {
-        try {
-          const p2p = Peer2Peer.getInstance()
-
-          if (!activeFriend.peerId) return
-
-          p2p.sendMessage(
-            {
-              type: 'TYPING_STATE',
-              payload: { state: 'TYPING' },
-              sentAt: Date.now(),
-            },
-            PeerId.createFromB58String(activeFriend.peerId),
-          )
-          // const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-          // activePeer?.send('TYPING_STATE', { state })
-        } catch (error: any) {
-          this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
-            error,
-          })
-        }
-      }
+      // TODO use conversation participants
     },
     /**
      * @method throttleTyping
@@ -280,25 +260,25 @@ export default Vue.extend({
         }
         if (
           this.ui.replyChatbarContent.from &&
-          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+          !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
         ) {
           this.$store.dispatch('textile/sendReplyMessage', {
-            to: this.recipient.textilePubkey,
+            to: (this.recipient as Friend).textilePubkey,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
           return
         }
-        // Check if it's a group
+
         if (
           RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            (this.recipient as Group)?.id?.split('|')[1],
           )
         ) {
           if (this.ui.replyChatbarContent.from) {
             this.$store.dispatch('textile/sendGroupReplyMessage', {
-              to: this.recipient.textilePubkey,
+              to: (this.recipient as Group).id,
               text: value,
               replyTo: this.ui.replyChatbarContent.messageID,
               replyType: MessagingTypesEnum.TEXT,
@@ -307,12 +287,12 @@ export default Vue.extend({
             return
           }
           this.$store.dispatch('textile/sendGroupMessage', {
-            groupId: this.recipient.textilePubkey,
+            groupId: (this.recipient as Group).id,
             message: value,
           })
         } else {
           this.$store.dispatch('textile/sendTextMessage', {
-            to: this.recipient.textilePubkey,
+            to: (this.recipient as Friend).textilePubkey,
             text: value,
           })
         }

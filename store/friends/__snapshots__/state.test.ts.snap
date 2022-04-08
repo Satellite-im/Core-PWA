@@ -2,6 +2,7 @@
 
 exports[`init should return the initial settings state 1`] = `
 Object {
+  "activeConversation": null,
   "all": Array [],
   "incomingRequests": Array [],
   "outgoingRequests": Array [],

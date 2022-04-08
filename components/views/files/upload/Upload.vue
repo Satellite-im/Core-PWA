@@ -10,6 +10,7 @@ import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+import { Group } from '~/store/groups/types'
 const converter = require('heic-convert')
 
 export default Vue.extend({
@@ -24,7 +25,7 @@ export default Vue.extend({
       default: '',
     },
     recipient: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<Friend | Group>,
       default: null,
     },
     files: {
@@ -96,8 +97,9 @@ export default Vue.extend({
         const address = this.recipient?.address
         if (
           !address &&
+          (this.recipient as Group).id &&
           !RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            (this.recipient as Group).id.split('|')[1],
           )
         )
           return
@@ -203,13 +205,14 @@ export default Vue.extend({
      */
     async dispatchFile(file: UploadDropItemType) {
       if (
+        (this.recipient as Group).id &&
         RegExp(this.$Config.regex.uuidv4).test(
-          this.recipient.textilePubkey.split('|')[1],
+          (this.recipient as Group).id.split('|')[1],
         )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {
-            groupID: this.recipient?.textilePubkey,
+            groupID: (this.recipient as Group)?.id,
             file,
           })
           .then(() => {
@@ -225,7 +228,7 @@ export default Vue.extend({
       } else {
         await this.$store
           .dispatch('textile/sendFileMessage', {
-            to: this.recipient?.textilePubkey,
+            to: (this.recipient as Friend)?.textilePubkey,
             file,
           })
           .then(() => {

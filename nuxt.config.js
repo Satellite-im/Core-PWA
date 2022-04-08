@@ -201,6 +201,9 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
       config.node = {
         fs: 'empty',
         encoding: 'empty',
@@ -244,7 +247,7 @@ export default defineNuxtConfig({
   },
   webpack: {
     watchOptions: {
-      ignored: '/node_modules/',
+      ignored: ['/node_modules/', '/.vscode/'],
     },
     stats: 'verbose',
   },

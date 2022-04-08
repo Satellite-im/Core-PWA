@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 
 import {
   PhoneCallIcon,
+  ScreenShareIcon,
   VideoIcon,
   ArchiveIcon,
   ShoppingBagIcon,
@@ -22,11 +23,13 @@ import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   components: {
     PhoneCallIcon,
     UserPlusIcon,
+    ScreenShareIcon,
     VideoIcon,
     ArchiveIcon,
     ShoppingBagIcon,
@@ -62,7 +65,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'audio', 'video', 'webrtc']),
+    ...mapState([
+      'ui',
+      'audio',
+      'video',
+      'webrtc',
+      'conversation',
+      'groups',
+      'friends',
+    ]),
     ...mapGetters('ui', ['showSidebar']),
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
@@ -73,16 +84,21 @@ export default Vue.extend({
       const isMe =
         this.$route.params.address === this.$typedStore.state.accounts.active
 
-      const groupId = this.$route.params.id
+      if (isMe) {
+        return null
+      }
 
-      const recipient = groupId
-        ? { textilePubkey: groupId, type: 'group' }
-        : isMe
-        ? null
-        : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address,
-          )
-      return recipient
+      return this.conversation.type === 'group' ? this.group : this.friend
+    },
+    group() {
+      return this.$store.state.groups.all.find(
+        (g) => g.id === this.$route.params.id,
+      )
+    },
+    friend() {
+      return this.$store.state.friends.all.find(
+        (f) => f.address === this.$route.params.address,
+      )
     },
     showSearchResult: {
       set(state) {
@@ -93,15 +109,20 @@ export default Vue.extend({
       },
     },
     enableRTC(): boolean {
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
-      if (activeFriend) {
-        return this.webrtc.connectedPeers.includes(activeFriend.address)
+      if (this.conversation.type === 'group') {
+        const group = this.$typedStore.state.groups.all.find(
+          (group) => group.id === this.conversation.id,
+        )
+        const members = group?.members.map((m) => m.address)
+        return this.$typedStore.state.friends.all.some(
+          (friend: Friend) =>
+            members?.includes(friend.address) && friend.state === 'online',
+        )
       }
-      return false
+      return this.$typedStore.state.friends.all.some(
+        (friend) => friend.state === 'online',
+      )
     },
-
     ModalWindows: () => ModalWindows,
     src(): string {
       // @ts-ignore curently reading user as type Server. Will likely be reworked with server update
@@ -117,12 +138,7 @@ export default Vue.extend({
       })
     },
     isGroup(thing: any) {
-      return thing.type && thing.type === 'group'
-    },
-    getGroup() {
-      return this.$store.state.groups.all.find(
-        (g) => g.id === this.$route.params.id,
-      )
+      return thing?.type && thing?.type === 'group'
     },
     /**
      * @method handleChange DocsTODO
@@ -170,7 +186,12 @@ export default Vue.extend({
       this.$store.dispatch('ui/showProfile', this.user)
     },
     async call(kinds: TrackKind[]) {
-      await this.$store.dispatch('webrtc/call', kinds)
+      if (!this.enableRTC) {
+        return
+      }
+      await this.$store.dispatch('webrtc/call', {
+        kinds,
+      })
     },
   },
 })

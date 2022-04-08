@@ -1,4 +1,4 @@
-<div id="toolbar">
+<div id="toolbar" v-if="recipient">
   <div class="circle-container">
     <UiUserState
       :user="user"
@@ -12,19 +12,16 @@
       :size="35"
       :source="src"
       @click="openProfile"
-      v-if="!$device.isMobile && !isGroup(recipient)"
+      v-if="!$device.isMobile && recipient.type !== 'group'"
     />
-    <GroupIcon v-else-if="isGroup(recipient)" :group="getGroup()" />
+    <GroupIcon v-else-if="recipient.type === 'group'" :group="recipient" />
   </div>
   <div class="user-info">
-    <TypographyTitle
-      :size="6"
-      :text="isGroup(recipient) ? getGroup().name : user.name"
-    />
+    <TypographyTitle :size="6" :text="recipient.name" />
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="isGroup(recipient) ? `Members: ${getGroup().members.length}` : user.status"
+      :text="recipient.type === 'group' ? `Members: ${group && group.members && group.members.length}` : user.status || ''"
     />
   </div>
   <div class="controls">

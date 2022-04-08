@@ -54,9 +54,9 @@ export default Vue.extend({
       this.$store.commit('webrtc/updateCreatedAt', Date.now())
       if (this.webrtc?.activeCall) {
         if (!this.timer) {
-          this.elapsedTime(this.webrtc.activeStream.createdAt)
+          this.elapsedTime(this.webrtc.createdAt)
           this.timer = setInterval(() => {
-            this.elapsedTime(this.webrtc.activeStream.createdAt)
+            this.elapsedTime(this.webrtc.createdAt)
           }, 1000)
         }
       }

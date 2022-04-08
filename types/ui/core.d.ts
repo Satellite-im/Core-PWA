@@ -1,6 +1,7 @@
 export type Group = {
   name: string
   id: string
+  address: string
   motd: string
   members: Array<string>
   creator: string

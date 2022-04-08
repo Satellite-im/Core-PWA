@@ -36,6 +36,8 @@ export default {
     not_connected: 'not connected',
     online: 'online',
     offline: 'offline',
+    participant: 'participant',
+    participants: 'participants',
   },
   wallet: {
     wallet: 'Wallet',
@@ -106,6 +108,7 @@ export default {
     headphones: 'Audio',
     video: 'Video',
     call: 'Call',
+    screen: 'Share Screen',
     mute: 'Mute',
     toggle: 'Toggle',
     deafen: 'Deafen',

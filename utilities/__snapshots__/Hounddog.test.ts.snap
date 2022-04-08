@@ -14,7 +14,6 @@ Object {
     "to": "./path/to/file",
     "toMailboxId": "v4.0.0-rc.4",
   },
-  "activeChat": true,
   "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
   "badge": "community",
   "encryptedTextilePubkey": "",
@@ -35,34 +34,7 @@ Object {
 
 exports[`Retrieve WebRTC calls with success Returns true if at least one active call is retrieved 1`] = `true`;
 
-exports[`Retrieving friend's profile if any friends are active 1`] = `
-Object {
-  "account": Object {
-    "accountId": "Checking Account",
-    "from": ".",
-    "fromMailboxId": "12345",
-    "status": 429,
-    "to": "./path/to/file",
-    "toMailboxId": "v4.0.0-rc.4",
-  },
-  "activeChat": true,
-  "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
-  "badge": "community",
-  "encryptedTextilePubkey": "",
-  "item": Object {},
-  "mailboxId": "",
-  "name": "Taurus Nix",
-  "pending": true,
-  "profilePicture": "",
-  "publicKey": "NoWiFi4you",
-  "state": "idle",
-  "status": "",
-  "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
-  "typingState": "NOT_TYPING",
-  "unreadCount": 123,
-  "userAccount": "",
-}
-`;
+exports[`Retrieving friend's profile if any friends are active 1`] = `undefined`;
 
 exports[`Retrieving friend's profile if any friends exists by matching address via the findFriend function 1`] = `
 Object {
@@ -74,7 +46,6 @@ Object {
     "to": "./path/to/file",
     "toMailboxId": "v4.0.0-rc.4",
   },
-  "activeChat": true,
   "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
   "badge": "community",
   "encryptedTextilePubkey": "",
@@ -103,7 +74,6 @@ Object {
     "to": "./path/to/file",
     "toMailboxId": "v4.0.0-rc.4",
   },
-  "activeChat": true,
   "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
   "badge": "community",
   "encryptedTextilePubkey": "",
@@ -134,7 +104,6 @@ Object {
     "to": "./path/to/file",
     "toMailboxId": "v4.0.0-rc.4",
   },
-  "activeChat": true,
   "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
   "badge": "community",
   "encryptedTextilePubkey": "",
@@ -163,7 +132,6 @@ Object {
     "to": "./path/to/file",
     "toMailboxId": "v4.0.0-rc.4",
   },
-  "activeChat": true,
   "address": "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
   "badge": "community",
   "encryptedTextilePubkey": "",

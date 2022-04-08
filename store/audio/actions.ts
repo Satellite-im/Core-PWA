@@ -1,5 +1,5 @@
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 export default {
   /**
@@ -7,22 +7,19 @@ export default {
    * @description Toggles mute for outgoing audio
    * @example @click="toggleMute"
    */
-  toggleMute({ dispatch, state, rootState }: any) {
-    const muted = state.muted
-
+  toggleMute({ dispatch, muted, rootState }: any) {
     const { activeCall } = rootState.webrtc
-
-    const call = rootState.webrtc.getPeer(activeCall)
+    const call = $WebRTC.getCall(activeCall.callId)
 
     if (call) {
       if (muted) {
-        call.unmute(WebRTCEnum.AUDIO)
+        call.unmute({ kind: 'audio' })
         dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
         return
       }
-      call.mute(WebRTCEnum.AUDIO)
+      call.mute({ kind: 'audio' })
+      dispatch('sounds/playSound', Sounds.MUTE, { root: true })
     }
-    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
   /**
    * @method toggleDeafen

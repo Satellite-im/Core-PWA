@@ -3,10 +3,12 @@ export interface GroupMember {
   photoHash: string
   status: string
   address: string
+  peerId?: string
 }
 
 export interface Group {
   id: string
+  address: string
   name: string
   admin: string
   creator: string

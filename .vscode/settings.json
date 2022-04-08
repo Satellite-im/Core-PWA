@@ -4,5 +4,5 @@
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["Dexie"]
+  "cSpell.words": ["Dexie", "minisearch"]
 }

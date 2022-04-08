@@ -40,10 +40,12 @@ const getUserAccount = () => {
 }
 
 export default {
-  initialize({ dispatch }: ActionsArguments<GroupsState>) {
-    dispatch('fetchGroups')
-    dispatch('subscribeToGroupInvites')
-    dispatch('subscribeToGroupsUpdate')
+  async initialize({ dispatch }: ActionsArguments<GroupsState>) {
+    await Promise.all([
+      dispatch('fetchGroups'),
+      dispatch('subscribeToGroupInvites'),
+      dispatch('subscribeToGroupsUpdate'),
+    ])
   },
 
   /**

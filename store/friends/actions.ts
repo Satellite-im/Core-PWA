@@ -194,7 +194,6 @@ export default {
       item: {},
       pending: false,
       stored,
-      activeChat: false,
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
@@ -206,8 +205,8 @@ export default {
     if (!friendExists) {
       commit('addFriend', friend)
 
-      // Try create the webrtc connection
-      dispatch('webrtc/createPeerConnection', friend.address, { root: true })
+      // Try update the webrtc connection
+      dispatch('conversation/addParticipant', friend.address, { root: true })
 
       // Eventually delete the related friend request
       commit(

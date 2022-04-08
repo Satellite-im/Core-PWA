@@ -4,6 +4,7 @@ import mutations from '~/store/accounts/mutations'
 describe('init', () => {
   let inst: any
   const state: AccountsState = {
+    initialized: false,
     storePin: true,
     loading: true,
     locked: true,
@@ -15,9 +16,11 @@ describe('init', () => {
     error: 'error',
     encryptedPhrase: 'encryptedPhrase',
     registered: true,
+    registry: true,
     details: {
       name: '',
       address: '',
+      peerId: '',
       status: '',
       state: 'idle',
       unreadCount: 123,

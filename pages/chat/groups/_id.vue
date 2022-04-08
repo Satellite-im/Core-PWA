@@ -49,7 +49,7 @@ export default Vue.extend({
       this.$data.groupID = id
       this.$data.groupMessages = await this.$store.dispatch(
         'textile/fetchGroupMessages',
-        { groupId: id },
+        { groupId: id, setActive: true },
       )
     },
     async subscribeToGroup(id: string) {

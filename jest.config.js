@@ -16,6 +16,7 @@ module.exports = {
     '!**/startup.js',
     '!**/*.eslintrc.js',
   ],
+  modulePaths: ['<rootDir>'],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
@@ -40,9 +41,5 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest'],
   },
-  transformIgnorePatterns: [
-    '/node_modules/',
-    'node_modules/(?!@mylibrary/)',
-    '^.+\\.module\\.(css|sass|scss)$',
-  ],
+  transformIgnorePatterns: ['node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
 }

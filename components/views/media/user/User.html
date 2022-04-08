@@ -1,14 +1,23 @@
-<div class="user">
+<div v-if="call" class="user">
   <div class="indicators">
     <mic-off-icon class="indicator" v-if="audioMuted" size="1.2x" />
   </div>
 
-  <div v-if="videoStream" class="video-stream-container">
+  <div v-if="screenStream">
+    <video
+      class="video-stream screen-stream"
+      :src-object.prop="screenStream"
+      playsinline
+      :id="`${isLocal ? 'local' : 'remote'}-screen-${user.address}`"
+    ></video>
+  </div>
+
+  <div v-else-if="videoStream">
     <video
       class="video-stream"
       :src-object.prop="videoStream"
       playsinline
-      :id="`${isLocal ? 'local' : 'remote'}-video`"
+      :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"
     ></video>
   </div>
 
@@ -17,11 +26,15 @@
       type="random"
       :seed="user.address"
       :size="$device.isMobile ? 35 : 65"
-      :class="`${calling ? 'calling' : ''}`"
+      :class="`${!audioStream ? 'calling' : ''}`"
       :source="user.profilePicture"
     />
     <TypographyTag :text="user.name" inverted />
   </div>
-
-  <audio :src-object.prop="audioStream" v-if="audioStream" autoplay />
+  <div
+    v-if="!isLocal && !audio.deafened && audioStream"
+    class="audio-stream-container"
+  >
+    <audio :src-object.prop="audioStream" autoplay />
+  </div>
 </div>
