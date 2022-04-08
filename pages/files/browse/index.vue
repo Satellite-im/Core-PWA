@@ -36,34 +36,9 @@ export default Vue.extend({
        */
     },
     directory(): Item[] {
-      const key = this.sort.category
-      if (key === FileSortEnum.SIZE) {
-        return (
-          this.$data.counter &&
-          cloneDeep(this.fileSystem.currentDirectory.content).sort(
-            this.sort.asc
-              ? (a: Item, b: Item) => a[key] - b[key]
-              : (a: Item, b: Item) => b[key] - a[key],
-          )
-        )
-      }
-      if (key === FileSortEnum.MODIFIED) {
-        return (
-          this.$data.counter &&
-          cloneDeep(this.fileSystem.currentDirectory.content).sort(
-            this.sort.asc
-              ? (a: Item, b: Item) => b[key] - a[key]
-              : (a: Item, b: Item) => a[key] - b[key],
-          )
-        )
-      }
       return (
         this.$data.counter &&
-        cloneDeep(this.fileSystem.currentDirectory.content).sort(
-          this.sort.asc
-            ? (a: Item, b: Item) => a[key].localeCompare(b[key])
-            : (a: Item, b: Item) => b[key].localeCompare(a[key]),
-        )
+        this.fileSystem.currentDirectory.sortedContent(this.sort)
       )
     },
   },
