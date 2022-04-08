@@ -27,7 +27,7 @@ export default {
       const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
       if (!$TextileManager.userInfoManager) {
-        throw new Error(TextileError.METADATA_MANAGER_NOT_FOUND)
+        throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
       }
       const $UserInfoManager: UserInfoManager = $TextileManager.userInfoManager
       $UserInfoManager.setConsent({
