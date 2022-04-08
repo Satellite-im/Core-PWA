@@ -1,4 +1,4 @@
-export interface GroupMemberInfo {
+export interface GroupMember {
   name: string
   photoHash: string
   status: string
@@ -7,20 +7,20 @@ export interface GroupMemberInfo {
 
 export interface Group {
   id: string
-  name?: string
+  name: string
   admin: string
   creator: string
-  members: number
+  members: GroupMember[]
   addresses: string[]
   openInvites: boolean
   encryptionKey: string
-  membersInfo?: GroupMemberInfo[]
   lastUpdate: number
 }
 
 export interface GroupsState {
   all: Group[]
-  subscriptionId: number | null
+  inviteSubscription: number | null
+  groupSubscriptions: string[]
 }
 
 export enum GroupsError {

@@ -41,13 +41,13 @@ export default class GroupCrypto {
       invite.sender.toString(),
       invite.encryptionKey,
     )
-
     const groupId = await this.crypto.decryptWithPassword(
       invite.groupId,
       encryptionKey,
     )
-    if (!groupId) {
-      throw new Error('Unable to decrypt group id')
+
+    if (!groupId || !encryptionKey) {
+      throw new Error('Unable to decrypt group invite')
     }
 
     return {
