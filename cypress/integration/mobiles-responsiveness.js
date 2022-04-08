@@ -14,7 +14,7 @@ describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
   data.allDevices.forEach((item) => {
-    it(`Create Account on ${item.description}`, () => {
+    it.only(`Create Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.createAccountPINscreen(randomPIN)
 
@@ -42,7 +42,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.createAccountSubmit()
     })
 
-    it(`Import Account on ${item.description}`, () => {
+    it.only(`Import Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
       //Validate profile name displayed
@@ -55,7 +55,7 @@ describe('Run responsiveness tests on several devices', () => {
 
       //Go to conversation
       cy.get('[data-cy=hamburger-button]').click()
-      cy.get('[data-cy=user-connected]', { timeout: 30000 })
+      cy.get('[data-cy=user-connected]', { timeout: 90000 })
         .should('be.visible')
         .should('have.text', 'cypress friend')
 
@@ -112,7 +112,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.closeModal('[data-cy=modal-cta]')
     })
 
-    it(`Release Notes Screen on ${item.description}`, () => {
+    it.only(`Release Notes Screen on ${item.description}`, () => {
       cy.visitRootPage().then(() => {
         cy.viewport(item.width, item.height)
       })

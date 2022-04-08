@@ -434,13 +434,13 @@ Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
     .realHover()
     .should('have.attr', 'data-tooltip', expectedMessage)
   cy.wait(1000)
-  cy.get('body').realHover({ position: 'topLeft' })
+  cy.get('[data-cy=user-name]').trigger('mouseover')
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
   cy.get(locator).should('be.visible').realHover()
   cy.wait(1000)
-  cy.get('body').realHover({ position: 'topLeft' })
+  cy.get('[data-cy=user-name]').trigger('mouseover')
 })
 
 Cypress.Commands.add('validateComingSoonModal', () => {
