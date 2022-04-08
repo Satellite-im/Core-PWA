@@ -19,10 +19,22 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     timestamp(): string {
-      return this.$dayjs(this.data.at)
-        .local()
-        .tz(this.getTimezone)
-        .format('MM/DD/YY hh:mma')
+      const msgTimestamp = this.$dayjs(this.data.at)
+      // if today
+      if (this.$dayjs().isSame(msgTimestamp, 'day')) {
+        return `${this.$t('search.result.today')} ${msgTimestamp
+          .local()
+          .tz(this.getTimezone)
+          .format('LT')}`
+      }
+      // if yesterday
+      if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
+        return `${this.$t('search.result.yesterday')} ${msgTimestamp
+          .local()
+          .tz(this.getTimezone)
+          .format('LT')}`
+      }
+      return msgTimestamp.local().tz(this.getTimezone).format('L LT')
     },
   },
 })
