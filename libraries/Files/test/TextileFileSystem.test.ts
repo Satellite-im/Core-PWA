@@ -46,7 +46,7 @@ describe('', () => {
   //     },
   //   })
   //   const buffer = await fs.promises.readFile(
-  //     path.join('utilities/assets/svg-image.svg'),
+  //     path.join('utilities/test_assets/svg-image.svg'),
   //   )
   //   const file = new File([buffer], 'svg-image.svg', { type: 'image/svg' })
   //   await inst.uploadFile(file)
