@@ -134,11 +134,8 @@ export default {
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        status: 'Status',
-        upload_progress: 'Upload Progress',
-        starting_upload: 'Starting Upload',
-        rebuilding_structure: 'Rebuilding File Structure',
-        updating_indexes: 'Updating Remote Indexes',
+        upload: 'Uploading {0}',
+        index: 'Updating remote index',
       },
       browse: {
         files: 'Files',

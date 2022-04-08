@@ -33,10 +33,7 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
-      progress: 100 as number,
-      updatingIndex: false,
-      startingUpload: false,
-      doingSomethingElse: false,
+      status: '' as string | TranslateResult,
     }
   },
   computed: {
@@ -87,7 +84,6 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.startingUpload = true
       this.errors = []
       this.$store.commit('ui/setIsLoadingFileIndex', true)
       const originalFiles: File[] = [...event.target.files]
@@ -151,7 +147,8 @@ export default Vue.extend({
       }
       for (const file of files) {
         try {
-          await this.$FileSystem.uploadFile(file, this.setProgress)
+          this.status = this.$t('pages.files.controls.upload', [file.name])
+          await this.$FileSystem.uploadFile(file)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -159,18 +156,12 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
-        this.doingSomethingElse = false
-        this.updatingIndex = true
-        this.$TextileManager.bucket
-          ?.updateIndex(this.$FileSystem.export)
-          .then(() => {
-            this.updatingIndex = false
-            this.$store.commit('ui/setIsLoadingFileIndex', false)
-          })
+        this.status = this.$t('pages.files.controls.index')
+        await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
-      if (!files.length) {
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
-      }
+
+      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.status = ''
 
       // re-render so new files show up
       this.$emit('forceRender')
@@ -187,17 +178,6 @@ export default Vue.extend({
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
-    },
-    /**
-     * @method setProgress
-     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
-     * @param num current progress in bytes
-     * @param size total file size in bytes
-     */
-    setProgress(num: number, size: number) {
-      if (this.startingUpload) this.startingUpload = false
-      this.progress = Math.floor((num / size) * 100)
-      if (this.progress >= 100) this.doingSomethingElse = true
     },
   },
 })

@@ -1,4 +1,4 @@
-import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
+import { Buckets, RemovePathResponse, Root } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
@@ -108,22 +108,39 @@ export class Bucket extends RFM implements RFMInterface {
    * @method pushFile
    * @description Add file to bucket
    * @param {File} file file to be uploaded
-   * @param {Function} progressCallback used to show progress meter in componment Controls.vue
-   * @returns Promise whether it was uploaded or not
    */
-  async pushFile(
-    file: File,
-    id: string,
-    progressCallback: Function,
-  ): Promise<PushPathResult> {
+  async pushFile(file: File, id: string) {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
-    return await this.buckets.pushPath(this.key, id, file, {
-      progress: (num) => {
-        progressCallback(num, file.size)
+
+    await this.buckets.pushPath(this.key, id, this.getStream(file))
+  }
+
+  private getStream(file: File) {
+    const reader = file.stream().getReader()
+    const stream = new ReadableStream({
+      start(controller) {
+        function push() {
+          return reader
+            .read()
+            .then(({ done, value }: { done: boolean; value: Uint8Array }) => {
+              if (done) {
+                console.log('stream is done')
+                // Tell the browser that we have finished sending data
+                controller.close()
+                return
+              }
+
+              // Get the data and send it to the browser via the controller
+              controller.enqueue(value)
+              push()
+            })
+        }
+        push()
       },
     })
+    return stream
   }
 
   /**
