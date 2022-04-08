@@ -72,7 +72,7 @@
       </div>
 
       <Slimbar
-        v-if="$device.isMobile"
+        v-if="$device.isMobile && featureReadyToShow"
         :servers="$mock.servers"
         :unreads="$mock.unreads"
         :open-modal="toggleModal"
@@ -198,6 +198,11 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      featureReadyToShow: false,
+    }
   },
   computed: {
     DataStateType: () => DataStateType,
