@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'

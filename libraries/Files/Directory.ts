@@ -48,34 +48,6 @@ export class Directory extends Item {
   }
 
   /**
-   * @getter nameSortedContent
-   * @returns {Item[]} Returns an array of all content within the CURRENT directory
-   */
-  sortedContent(sort: FileSort): Item[] {
-    const key = sort.category
-    if (key === FileSortEnum.SIZE) {
-      return Array.from(this._children.values()).sort(
-        sort.asc
-          ? (a: Item, b: Item) => a[key] - b[key]
-          : (a: Item, b: Item) => b[key] - a[key],
-      )
-    }
-    if (key === FileSortEnum.MODIFIED) {
-      return Array.from(this._children.values()).sort(
-        sort.asc
-          ? (a: Item, b: Item) => b[key] - a[key]
-          : (a: Item, b: Item) => a[key] - b[key],
-      )
-    }
-
-    return Array.from(this._children.values()).sort(
-      sort.asc
-        ? (a: Item, b: Item) => a[key].localeCompare(b[key])
-        : (a: Item, b: Item) => b[key].localeCompare(a[key]),
-    )
-  }
-
-  /**
    * @getter modified
    * @returns last modified timestamp
    */
@@ -118,9 +90,38 @@ export class Directory extends Item {
   }
 
   /**
+   * @method sortedContent
+   * @param {FileSort} sort current sort key and asc/desc boolean
+   * @returns {Item[]} array of sorted content within the CURRENT directory
+   */
+  sortedContent(sort: FileSort): Item[] {
+    const key = sort.category
+    if (key === FileSortEnum.SIZE) {
+      return Array.from(this._children.values()).sort(
+        sort.asc
+          ? (a: Item, b: Item) => a[key] - b[key]
+          : (a: Item, b: Item) => b[key] - a[key],
+      )
+    }
+    if (key === FileSortEnum.MODIFIED) {
+      return Array.from(this._children.values()).sort(
+        sort.asc
+          ? (a: Item, b: Item) => b[key] - a[key]
+          : (a: Item, b: Item) => a[key] - b[key],
+      )
+    }
+
+    return Array.from(this._children.values()).sort(
+      sort.asc
+        ? (a: Item, b: Item) => a[key].localeCompare(b[key])
+        : (a: Item, b: Item) => b[key].localeCompare(a[key]),
+    )
+  }
+
+  /**
    * @method hasChild
    * @param {string} childName the name of the child to search for
-   * @returns {boolean} returns true or false depending on if a child exists in the directory
+   * @returns {boolean} true or false depending on if a child exists in the directory
    */
   hasChild(childName: string): boolean {
     return this._children.has(childName.toLowerCase())
@@ -129,7 +130,7 @@ export class Directory extends Item {
   /**
    * @method addChild
    * @param {Item} child the child to add to the parent directory
-   * @returns {boolean} returns true or false depending on if a child exists in the directory
+   * @returns {boolean} true or false depending on if a child exists in the directory
    */
   addChild(child: Item): boolean {
     if (this.hasChild(child.name)) {
@@ -158,7 +159,7 @@ export class Directory extends Item {
   /**
    * @method getChild
    * @param {string} childName the name of the child to fetch
-   * @returns {Item} returns the child if it exists, otherwise returns null
+   * @returns {Item | null} returns the child if it exists, otherwise returns null
    */
   getChild(childName: string): Item {
     return this._children.get(childName.toLowerCase()) || null
@@ -167,7 +168,7 @@ export class Directory extends Item {
   /**
    * @method removeChild
    * @param {string} childName the name of the child to remove
-   * @returns {Item} returns true if the child has been successfully removed
+   * @returns {boolean} true if the child has been successfully removed
    */
   removeChild(childName: string): boolean {
     if (this.getChild(childName) === null) return false

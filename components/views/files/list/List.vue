@@ -5,7 +5,7 @@ import { mapState } from 'vuex'
 import { ChevronDownIcon, ChevronUpIcon } from 'satellite-lucide-icons'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { FileSort } from '~/types/files/file'
+import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
