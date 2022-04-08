@@ -244,17 +244,9 @@ export default Vue.extend({
             ? this.$props.message.from
             : this.$props.message.to,
       })
-      let xVal = this.$el.getBoundingClientRect().x
-      let yVal = this.$el.getBoundingClientRect().y
-      if (e) {
-        xVal = e.clientX
-        yVal = e.clientY
-      }
       this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: !!this.$device.isMobile,
-        position: [xVal, yVal],
-        containerWidth: this.$el.clientWidth,
+        show: !this.ui.enhancers.show,
+        floating: true,
       })
     },
     quickReaction(emoji: String) {

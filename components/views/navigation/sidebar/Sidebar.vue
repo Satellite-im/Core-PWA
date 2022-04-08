@@ -83,17 +83,6 @@ export default Vue.extend({
       immediate: true,
     },
   },
-  beforeMount() {
-    this.$store.dispatch('groups/fetchGroups', {}, { root: true })
-    this.$store.dispatch('groups/subscribeToGroupInvites', {}, { root: true })
-  },
-  beforeDestroy() {
-    this.$store.dispatch(
-      'groups/unsubscribeFromGroupInvites',
-      {},
-      { root: true },
-    )
-  },
   methods: {
     toggleModal(type: 'quickchat' | 'creategroup') {
       this.$store.commit('ui/toggleModal', {

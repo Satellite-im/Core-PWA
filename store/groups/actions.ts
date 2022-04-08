@@ -1,16 +1,13 @@
 import Vue from 'vue'
+import { map, uniq } from 'lodash'
 import { DataStateType } from '../dataState/types'
-import { Group, GroupsError, GroupsState } from './types'
+import { Group, GroupMember, GroupsError, GroupsState } from './types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-import {
-  GroupEvents,
-  InvitationAccount,
-} from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram.types'
 
 const getGroupChatManager = (): GroupChatManager => {
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -43,6 +40,12 @@ const getUserAccount = () => {
 }
 
 export default {
+  initialize({ dispatch }: ActionsArguments<GroupsState>) {
+    dispatch('fetchGroups')
+    dispatch('subscribeToGroupInvites')
+    dispatch('subscribeToGroupsUpdate')
+  },
+
   /**
    * @method createGroup
    * @description create new group chat
@@ -67,7 +70,7 @@ export default {
    * @description fetch groups in which user participates
    * @example
    */
-  async fetchGroups({ commit }: ActionsArguments<GroupsState>) {
+  async fetchGroups({ commit, dispatch }: ActionsArguments<GroupsState>) {
     commit(
       'dataState/setDataState',
       { key: 'groups', value: DataStateType.Loading },
@@ -75,11 +78,27 @@ export default {
     )
 
     const { publicKey } = getUserAccount()
+    const usersProgram = getUsersProgram()
     const groupChatProgram = getGroupChatProgram()
-    getGroupChatManager()
-    const groups = await groupChatProgram.getUserGroups(publicKey)
 
-    commit('setGroups', groups)
+    const groups = await groupChatProgram.getUserGroups(publicKey)
+    const groupsUsers = await groupChatProgram.getGroupsUsers(map(groups, 'id'))
+
+    const addresses = uniq([].concat(...(<any>map(groupsUsers, 'users'))))
+    const usersInfo = await usersProgram.getUsersInfo(addresses)
+
+    const payload = groups.map((group) => {
+      const members = groupsUsers
+        .find((it) => it.id === group.id)
+        ?.users?.map((address) =>
+          usersInfo.find((user) => user.address === address),
+        )
+        .filter(Boolean) as GroupMember[]
+
+      return { ...group, members: members || [] }
+    })
+    commit('setGroups', payload)
+    await dispatch('fetchGroupsLastUpdate')
     commit(
       'dataState/setDataState',
       { key: 'groups', value: DataStateType.Ready },
@@ -95,20 +114,15 @@ export default {
    * @example
    */
   async sendGroupInvite(
-    { commit, state, rootState, dispatch }: ActionsArguments<GroupsState>,
+    {}: ActionsArguments<GroupsState>,
     { group, recipient }: { group: Group; recipient: string },
   ) {
     const groupProgram = getGroupChatProgram()
     await groupProgram.invite(group.id, recipient)
-
-    commit('updateGroup', {
-      id: group.id,
-      members: group.members + 1,
-    })
   },
 
   /**
-   * @method sendGroupInvite
+   * @method subscribeToGroupInvites
    * @description subscribe to group chat invites
    * @example
    */
@@ -117,21 +131,17 @@ export default {
     dispatch,
     commit,
   }: ActionsArguments<GroupsState>) {
-    if (state.subscriptionId !== null) {
+    if (state.inviteSubscription !== null) {
       await dispatch('unsubscribeFromGroupInvites')
     }
-    const { publicKey } = getUserAccount()
-    const groupProgram = getGroupChatProgram()
 
-    const callback = async (payload: InvitationAccount) => {
-      const invite = await groupProgram.crypto.decryptInvite(payload.account)
-      await dispatch('addGroup', invite.groupId)
-    }
-
-    const num = groupProgram.subscribe(GroupEvents.NEW_INVITATION, callback, {
-      recipient: publicKey.toBase58(),
+    const id = getGroupChatProgram().addInviteListener((payload) => {
+      commit('addGroup', { ...payload, members: [] })
+      dispatch('fetchGroupMembers', payload.id)
+      dispatch('subscribeToGroupUpdate', payload.id)
     })
-    commit('setSubscriptionId', num)
+
+    commit('setInviteSubscription', id)
   },
 
   /**
@@ -143,10 +153,66 @@ export default {
     state,
     commit,
   }: ActionsArguments<GroupsState>) {
-    if (state.subscriptionId) {
-      const groupProgram = getGroupChatProgram()
-      await groupProgram.unsubscribe(state.subscriptionId)
-      commit('setSubscriptionId', null)
+    if (state.inviteSubscription) {
+      await getGroupChatProgram().unsubscribe(state.inviteSubscription)
+      commit('setInviteSubscription', null)
+    }
+  },
+
+  /**
+   * @method subscribeToGroupsUpdate
+   * @description subscribe to multiple groups update
+   * @example
+   */
+  async subscribeToGroupsUpdate({
+    state,
+    dispatch,
+    commit,
+  }: ActionsArguments<GroupsState>) {
+    if (state.groupSubscriptions.length) {
+      await dispatch('unsubscribeFromGroupsUpdate')
+    }
+    const ids = await getGroupChatProgram().addGroupsListener((payload) => {
+      commit('updateGroup', payload)
+      dispatch('fetchGroupMembers', payload.id)
+    })
+
+    commit('setGroupSubscriptions', ids)
+  },
+
+  /**
+   * @method subscribeToGroupUpdate
+   * @description subscribe to group update
+   * @example
+   */
+  async subscribeToGroupUpdate(
+    { state, dispatch, commit }: ActionsArguments<GroupsState>,
+    groupId: string,
+  ) {
+    if (!state.groupSubscriptions.includes(groupId)) {
+      const id = await getGroupChatProgram().addGroupListener(
+        groupId,
+        (payload) => {
+          commit('updateGroup', payload)
+          dispatch('fetchGroupMembers', payload.id)
+        },
+      )
+      commit('addGroupSubscription', id)
+    }
+  },
+
+  /**
+   * @method unsubscribeFromGroupsUpdate
+   * @description remove all groups update invites listener
+   * @example
+   */
+  async unsubscribeFromGroupsUpdate({
+    state,
+    commit,
+  }: ActionsArguments<GroupsState>) {
+    if (state.groupSubscriptions.length) {
+      await getGroupChatProgram().removeGroupListeners(state.groupSubscriptions)
+      commit('setGroupSubscriptions', [])
     }
   },
 
@@ -169,22 +235,41 @@ export default {
   },
 
   /**
-   * @method fetchGroups
-   * @description fetch groups in which user participates
+   * @method fetchGroupMembers
+   * @description fetch groups members by given group id
    * @example
    */
   async fetchGroupMembers(
     { commit }: ActionsArguments<GroupsState>,
-    { groupId }: { groupId: string },
+    groupId: string,
   ) {
     const groupChatProgram = getGroupChatProgram()
     const usersProgram = getUsersProgram()
 
     const addresses = await groupChatProgram.getGroupUsers(groupId)
-    const info = await usersProgram.getUsersInfo(addresses)
+    const members = await usersProgram.getUsersInfo(addresses)
+    commit('setGroupMembers', { groupId, members })
+  },
 
-    commit('setGroupMembersInfo', { groupId, info, addresses })
+  /**
+   * @method fetchGroupsLastUpdate
+   * @description fetch groups last message time
+   * @example
+   */
+  async fetchGroupsLastUpdate({
+    commit,
+    state,
+  }: ActionsArguments<GroupsState>) {
+    const groupChatManager = getGroupChatManager()
 
-    return info
+    const ids = map(state.all, 'id')
+    const results = await Promise.all(
+      ids.map((id) => groupChatManager.getGroupLastUpdate(id)),
+    )
+    const payload = ids.reduce(
+      (prev, curr, i) => ({ ...prev, [curr]: results[i] }),
+      {},
+    )
+    commit('setGroupsLastUpdate', payload)
   },
 }
