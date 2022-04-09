@@ -5,14 +5,12 @@
     border: none;
     position: absolute;
   }
-
   .control-icon {
     justify-self: flex-start;
     align-self: flex-start;
     font-size: @larger-icon-size;
     width: unset;
   }
-
   .loading-bar {
     max-width: @half;
   }
@@ -21,13 +19,11 @@
   justify-self: flex-start;
   align-self: flex-start;
 }
-
 .button {
   position: relative;
   overflow: hidden;
   margin-left: @xlight-spacing;
 }
-
 .upload-label {
   display: inline-flex;
 }
@@ -44,13 +40,6 @@
   height: 20px;
   width: 20px;
 }
-
 .inactive {
   cursor: not-allowed !important;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .file-preview {
-    width: calc(@full - @sidebar-size-mobile - 40px - @normal-spacing);
-  }
 }

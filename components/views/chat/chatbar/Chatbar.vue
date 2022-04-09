@@ -1,5 +1,4 @@
 <template src="./Chatbar.html"></template>
-
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
@@ -9,7 +8,6 @@ import PeerId from 'peer-id'
 
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
-import { UploadDropItemType } from '~/types/files/file'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
@@ -17,6 +15,7 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { UploadDropItemType } from '~/types/files/file'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -29,9 +28,9 @@ declare module 'vue/types/vue' {
     smartTypingStart: Function
     clearChatbar: Function
     handleChatBorderRadius: Function
+    files: UploadDropItemType[]
   }
 }
-
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -46,12 +45,8 @@ export default Vue.extend({
     return {
       showEmojiPicker: false,
       recipientTyping: false,
-      showFilePreview: false,
       nsfwUploadError: false,
       files: [] as Array<UploadDropItemType>,
-      count_error: false,
-      uploadStatus: false,
-      alertNsfw: false,
     }
   },
   computed: {
@@ -147,7 +142,6 @@ export default Vue.extend({
     'friends.all': {
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-
         if (activeFriend)
           this.$data.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
@@ -175,6 +169,24 @@ export default Vue.extend({
         }
       },
     },
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (
+        mutation.type === 'chat/addFile' ||
+        mutation.type === 'chat/setFiles'
+      ) {
+        if (this.recipient) {
+          this.$data.files = state.chat.files?.[this.recipient?.address]
+        }
+      }
+
+      if (mutation.type === 'chat/deleteFiles') {
+        if (this.recipient) {
+          this.$data.files = []
+        }
+      }
+    })
   },
   methods: {
     /**
@@ -247,7 +259,6 @@ export default Vue.extend({
             }
             return
           }
-
           // If there is a command disable shift + enter
           if (this.hasCommand) {
             event.preventDefault()
@@ -291,7 +302,6 @@ export default Vue.extend({
           })
           return
         }
-
         // Check if it's a group
         if (
           RegExp(this.$Config.regex.uuidv4).test(
@@ -345,7 +355,6 @@ export default Vue.extend({
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f: any) => f.getAsFile())
-
       if (arrOfFiles.length) {
         e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
@@ -363,18 +372,17 @@ export default Vue.extend({
      * @example @click="cancelUpload"
      */
     cancelUpload() {
-      this.$data.files = []
       document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$data.uploadStatus = false
-      this.$data.count_error = false
-      this.$data.showFilePreview = false
+      this.$store.commit('chat/setCountError', false)
+      this.$store.commit('chat/setShowFilePreview', false)
+    },
+    beforeDestroy() {
+      this.unsubscribe()
     },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Chatbar.less"></style>
-
 <style lang="less">
 .messageuser {
   &.editable-container {

@@ -1,10 +1,7 @@
 <template src="./Upload.html"></template>
-
 <script lang="ts">
-import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
+import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
@@ -27,7 +24,6 @@ export default Vue.extend({
   components: {
     PlusIcon,
     FilePlusIcon,
-    XIcon,
   },
   props: {
     type: {
@@ -45,21 +41,9 @@ export default Vue.extend({
       type: Array as PropType<UploadDropItemType[]>,
       default: null,
     },
-    countError: {
-      type: Boolean,
-      default: false,
-    },
-    uploadStatus: {
-      type: Boolean,
-      default: false,
-    },
     cancelUpload: {
       type: Function,
       default: () => {},
-    },
-    alertNsfw: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {
@@ -76,22 +60,20 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
   },
   watch: {
     recipient() {
-      this.$props.files =
-        cloneDeep(this.chat.files?.[this.$props.recipient?.address]) ?? []
-      this.$parent.$data.showFilePreview = this.$props.files.length > 0
+      this.$store.commit(
+        'chat/setShowFilePreview',
+        this.$props.files.length > 0,
+      )
     },
   },
   mounted() {
-    this.$props.files =
-      cloneDeep(this.chat.files?.[this.$props.recipient?.address]) ?? []
-    this.$parent.$data.showFilePreview = this.$props.files.length > 0
+    this.$store.commit('chat/setShowFilePreview', this.$props.files.length > 0)
   },
   methods: {
     /**
@@ -120,17 +102,15 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
       this.$store.dispatch('ui/setChatbarFocus')
-
-      if (this.editable) {
+      if (this.$props.editable) {
         const newFiles: File[] = [...event.target.files]
-        this.$parent.$data.showFilePreview = newFiles.length > 0
+        this.$store.commit('chat/setShowFilePreview', newFiles.length > 0)
         if (newFiles.length + this.$props.files.length > 8) {
-          this.$props.countError = true
+          this.$store.commit('chat/setCountError', true)
+
           return
         }
-
         const address = this.$props.recipient?.address
-
         if (
           !address &&
           !RegExp(this.$Config.regex.uuidv4).test(
@@ -138,9 +118,7 @@ export default Vue.extend({
           )
         )
           return
-
-        this.$props.countError = false
-
+        this.$store.commit('chat/setCountError', false)
         for (let i = 0; i < newFiles.length; i++) {
           if (await isHeic(newFiles[i])) {
             const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
@@ -165,11 +143,9 @@ export default Vue.extend({
               nsfw: { status: false, checking: false },
               url: '',
             }
-
             return result
           }),
         )
-
         for (const uploadFile of filesToUpload) {
           if (uploadFile.file.size <= Config.nsfwPictureLimit) {
             uploadFile.nsfw.checking = true
@@ -190,9 +166,6 @@ export default Vue.extend({
             }),
           )
         }
-
-        this.$props.files.push(...filesToUpload)
-        this.$props.uploadStatus = true
       }
     },
     /**
@@ -221,7 +194,6 @@ export default Vue.extend({
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
         if (this.$data.containsNsfw) {
-          this.$props.alertNsfw = true
           this.alertNsfwFile()
         }
         if (!this.$data.containsNsfw) {
@@ -232,14 +204,15 @@ export default Vue.extend({
       }
     },
     alertNsfwFile() {
-      this.$props.alertNsfw = true
+      this.$store.commit('chat/setAlertNsfw', true)
+
       setTimeout(() => {
-        this.$props.alertNsfw = false
+        this.$store.commit('chat/setAlertNsfw', false)
         this.$data.containsNsfw = false
         this.$props.cancelUpload()
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
-      }, 5000)
+      }, 500000)
     },
     /**
      * @method dispatchFile
@@ -290,28 +263,21 @@ export default Vue.extend({
      */
     async sendMessage() {
       const nsfwCheck: UploadDropItemType[] = []
-
       for (const file of this.$props.files) {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
           this.$data.containsNsfw = true
-          if (this.$props.files.length === 1) {
-            this.alertNsfwFile()
-          }
+          this.alertNsfwFile()
         }
       }
-
       this.$data.fileAmount = nsfwCheck.length
-
       for (const file of nsfwCheck) {
         await this.dispatchFile(file)
       }
-
       this.$store.commit('chat/deleteFiles', this.$props.recipient.address)
     },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Upload.less"></style>

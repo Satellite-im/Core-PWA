@@ -1,30 +1,27 @@
 <div
-  id="file-preview"
-  v-if="this.$props.files.length || this.$props.countError"
+  :class="`${files.length > 0 ? 'bordered file-preview' : 'file-preview'}`"
   @touchmove="handleTouchPreview"
   @touchstart="handleTouchPreview"
   @touchend="handleTouchPreview"
 >
-  <div v-if="this.$props.countError" class="file-error">
+  <div v-if="countError" class="file-error">
     <TypographyError :text="$t('errors.chat.drop_file_count')" />
-    <x-icon
-      size="1x"
-      class="has-text-danger"
-      @click="this.$props.cancelUpload"
-    />
+    <div class="close-button">
+      <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
+    </div>
   </div>
-  <div v-if="this.$props.alertNsfw" class="file-error">
+  <div v-if="alertNsfw" class="file-error">
     <TypographyError :text="$t('errors.chat.contains_nsfw')" />
     <div class="is-controls">
       <InteractablesButton
         type="danger"
         size="small"
         :text="$t('pages.files.upload.close')"
-        :action="this.$props.closeNsfwAlert"
+        :action="closeNsfwAlert"
       />
     </div>
   </div>
-  <template v-else>
+  <template v-if="files.length > 0">
     <UiScroll horizontalScroll scrollbarVisibility="scroll">
       <div class="file-list">
         <FilesUploadPreviewItem
@@ -32,7 +29,7 @@
           :index="index"
           :key="index"
           @removeUploadItem="removeUploadItem(index)"
-          v-for="(item, index) in this.$props.files"
+          v-for="(item, index) in files"
         ></FilesUploadPreviewItem>
       </div>
     </UiScroll>

@@ -10,14 +10,11 @@
   <FilesUploadFilePreview
     :recipient="recipient"
     :files="files"
-    :countError="count_error"
-    :uploadStatus="uploadStatus"
     :cancelUpload="cancelUpload"
-    :alertNsfw="alertNsfw"
   />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': chat.showFilePreview || ui.replyChatbarContent.id || commandPreview}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
@@ -28,10 +25,7 @@
         type="quick"
         ref="file-upload"
         :files="files"
-        :countError="count_error"
-        :uploadStatus="uploadStatus"
         :cancelUpload="cancelUpload"
-        :alertNsfw="alertNsfw"
       />
     </div>
     <div
@@ -51,7 +45,6 @@
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-
     <ChatbarControls
       :disabled="!recipient"
       :sendMessage="sendMessage"

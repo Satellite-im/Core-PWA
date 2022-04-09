@@ -1,20 +1,19 @@
-#file-preview {
+.file-preview {
   width: calc(@full - 2rem);
   margin: 0 1rem;
   background-color: #181f2c;
-  &:extend(.bordered);
-  border-bottom: 1px solid rgba(87, 101, 116, 0.3);
+  border-bottom-color: rgba(87, 101, 116, 0.3);
   border-radius: @corner-rounding @corner-rounding 0 0;
   padding: 0 @normal-spacing;
-
-  .file-error {
-    margin: 0.5em;
-  }
 
   .file-error {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: @large-spacing 0;
+    padding: @large-spacing 0;
+
+    .close-button {
+      cursor: pointer;
+    }
   }
 }

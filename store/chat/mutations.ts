@@ -52,6 +52,15 @@ const mutations = {
   deleteFiles(state: ChatState, address: string) {
     delete state.files[address]
   },
+  setCountError(state: ChatState, countError: Boolean) {
+    state.countError = countError
+  },
+  setAlertNsfw(state: ChatState, alertNsfw: Boolean) {
+    state.alertNsfw = alertNsfw
+  },
+  setShowFilePreview(state: ChatState, showFilePreview: Boolean) {
+    state.showFilePreview = showFilePreview
+  },
 }
 
 export default mutations
