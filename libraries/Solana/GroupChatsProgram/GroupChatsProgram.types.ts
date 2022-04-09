@@ -740,7 +740,7 @@ export interface InvitationAccount {
 }
 
 export interface RawGroup {
-  name?: string
+  name: string
   admin: PublicKey
   creator: PublicKey
   members: number
@@ -749,12 +749,13 @@ export interface RawGroup {
 
 export interface Group {
   id: string
-  name?: string
+  name: string
   admin: string
   creator: string
-  members: number
+  membersCount: number
   openInvites: boolean
   encryptionKey: string
+  address: string
 }
 
 export interface InvitationAccountsFilter {
@@ -763,9 +764,18 @@ export interface InvitationAccountsFilter {
   groupId?: string
   groupKey?: string | PublicKey
 }
+export interface GroupAccountsFilter {
+  groupKey: string | PublicKey
+}
 
-export type GroupEventsFilter = InvitationAccountsFilter
+export type GroupEventsFilter = InvitationAccountsFilter | GroupAccountsFilter
 
 export enum GroupEvents {
-  NEW_INVITATION,
+  GROUP_INVITE,
+  GROUP_UPDATED,
+}
+
+export interface GroupSubscription {
+  type: GroupEvents
+  value: string | number
 }

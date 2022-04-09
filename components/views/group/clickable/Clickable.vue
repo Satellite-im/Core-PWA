@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Group } from '~/types/ui/core'
+import { Group } from '~/store/groups/types'
 import { Message } from '~/types/textile/mailbox'
 
 declare module 'vue/types/vue' {

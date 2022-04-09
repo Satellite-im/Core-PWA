@@ -1,25 +1,27 @@
-<div :class="['group-icon', group.members > 3 ? 'unread' : '']">
-  <div v-if="group.members > 2" class="group-multi">
+<div :class="['group-icon', group.members.length > 3 ? 'unread' : '']">
+  <div v-if="group.members.length > 2" class="group-multi">
     <div
-      v-for="(address, i) in group.members.slice(0, 3)"
+      v-for="(member, i) in group.members.slice(0, 3)"
       :class="[`group-el-${i}`]"
     >
       <UiCircle
-        type="random"
-        :seed="address"
+        type="image"
+        :source="getSource(member)"
         :size="i === 2 ? 10 : i == 1 ? 20 : 30"
       />
     </div>
   </div>
-  <div v-else-if="group.members== 2" class="group-double">
-    <div v-for="(address, i) in group.members" :class="[`group-el-${i}`]">
-      <UiCircle type="random" :seed="address" :size="25" />
+  <div v-else-if="group.members.length === 2" class="group-double">
+    <div v-for="(member, i) in group.members" :class="[`group-el-${i}`]">
+      <UiCircle type="image" :source="getSource(member)" :size="25" />
     </div>
   </div>
   <div v-else>
-    <div v-for="(address, i) in group.members" class="group-single">
-      <UiCircle type="random" :seed="address" :size="35" />
+    <div v-for="member in group.members" class="group-single">
+      <UiCircle type="image" :source="getSource(member)" :size="35" />
     </div>
   </div>
-  <span v-if="group.members > 3" class="label">{{group.members}}</span>
+  <span v-if="group.members.length > 3" class="label"
+    >{{group.members.length}}</span
+  >
 </div>

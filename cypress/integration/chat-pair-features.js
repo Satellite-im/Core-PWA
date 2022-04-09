@@ -61,7 +61,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
-  it('Send file to user B', () => {
+  it.skip('Send file to user B', () => {
     cy.chatFeaturesSendFile(fileLocalPath)
     cy.get('[data-cy=chat-file]')
       .last()
@@ -73,7 +73,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('File messages cannot be edited', () => {
+  it.skip('File messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
   })
 
@@ -145,7 +145,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert file received from user A', () => {
+  it.skip('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()

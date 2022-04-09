@@ -102,7 +102,7 @@
           />
           <div v-for="thing in usersAndGroups">
             <User
-              v-if="thing.address"
+              v-if="!thing.admin"
               :key="thing.address"
               :user="thing"
               :isTyping="ui.isTyping.address === thing.address"

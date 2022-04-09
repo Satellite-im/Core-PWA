@@ -15,6 +15,7 @@ import {
   InvitationAccount,
   InvitationAccountsFilter,
   RawGroup,
+  Invitation,
 } from './GroupChatsProgram.types'
 import { Config } from '~/config'
 import GroupCrypto from '~/libraries/Solana/GroupChatsProgram/GroupCrypto'
@@ -28,10 +29,17 @@ const groupSeed = Buffer.from(utils.bytes.utf8.encode('groupchat'))
 const inviteSeed = Buffer.from(utils.bytes.utf8.encode('invite'))
 
 export default class GroupChatsProgram extends EventEmitter {
-  solana?: Solana
-  program?: Program<GroupChats>
-  subscriptions?: { [eventName: string]: number }
-  _crypto?: GroupCrypto
+  /**
+   * SolanaManager instance
+   * @private
+   */
+  private _solana?: Solana
+  /**
+   * anchor program instance for group chat
+   * @private
+   */
+  private _program?: Program<GroupChats>
+  private _crypto?: GroupCrypto
 
   get crypto() {
     if (!this._crypto) {
@@ -40,11 +48,38 @@ export default class GroupChatsProgram extends EventEmitter {
     return this._crypto
   }
 
+  get program(): Program<GroupChats> {
+    if (!this._program) {
+      throw new Error('Group Chat Manager not initialized')
+    }
+    return this._program
+  }
+
+  get solana(): Solana {
+    if (!this._solana) {
+      throw new Error('Group Chat Program not initialized')
+    }
+    return this._solana
+  }
+
+  /**
+   * active account from Solana wallet
+   * @readonly
+   */
+  protected get payer() {
+    const payer = this.solana.getActiveAccount()
+
+    if (!payer) {
+      throw new Error('Missing payer')
+    }
+
+    return payer
+  }
+
   constructor(solana: Solana) {
     super()
     if (solana) {
       this.init(solana)
-      this._crypto = new GroupCrypto(this._getPayer())
     }
   }
 
@@ -54,47 +89,22 @@ export default class GroupChatsProgram extends EventEmitter {
    * @param solana SolanaManager instance
    */
   init(solana: Solana) {
-    this.solana = solana
+    this._solana = solana
+    this._crypto = new GroupCrypto(this.payer)
 
-    const payer = this._getPayer()
+    const provider = new Provider(
+      this.solana.connection,
+      new Wallet(this.payer),
+      {
+        commitment: Config.solana.defaultCommitment,
+      },
+    )
 
-    const provider = new Provider(this.solana.connection, new Wallet(payer), {
-      commitment: Config.solana.defaultCommitment,
-    })
-
-    this.program = new Program<GroupChats>(
+    this._program = new Program<GroupChats>(
       IDL,
       GROUPCHATS_PROGRAM_ID.toBase58(),
       provider,
     )
-  }
-
-  /**
-   * @method _getProgram
-   * Returns the anchor program instance for group chat
-   * @returns the anchor program instance
-   */
-  protected _getProgram() {
-    if (!this.program) {
-      throw new Error('Group Chat Manager not initialized')
-    }
-
-    return this.program
-  }
-
-  /**
-   * @method _getPayer
-   * Retrieve the active account from Solana wallet
-   * @returns the payer account
-   */
-  protected _getPayer() {
-    const payer = this.solana?.getActiveAccount()
-
-    if (!payer) {
-      throw new Error('Missing payer')
-    }
-
-    return payer
   }
 
   /**
@@ -114,10 +124,9 @@ export default class GroupChatsProgram extends EventEmitter {
    * @returns the computed PDA
    */
   protected _groupPDAPublicKey(groupHash: Buffer) {
-    const program = this._getProgram()
     return utils.publicKey.findProgramAddressSync(
       [groupHash, groupSeed],
-      program.programId,
+      this.program.programId,
     )
   }
 
@@ -129,35 +138,38 @@ export default class GroupChatsProgram extends EventEmitter {
    * @returns the computed PDA
    */
   protected _invitePDAPublicKey(user: PublicKey, group: PublicKey) {
-    const program = this._getProgram()
     return utils.publicKey.findProgramAddressSync(
       [user.toBytes(), group.toBytes(), inviteSeed],
-      program.programId,
+      this.program.programId,
     )
   }
 
   /**
-   * Computes group address by given id
-   * @param id
-   * @protected
+   * Helper method to get group address(group public key) by group id
+   * @param id {string} group id
+   * @private
+   * @returns {PublicKey}
    */
-  protected getGroupAddressById(id: string) {
+  private groupAddressFromId(id: string): PublicKey {
     const [address] = this._groupPDAPublicKey(this._getGroupHash(id))
     return address
   }
 
-  async getGroup(groupAddress: PublicKey | string) {
+  /**
+   * Get group by address
+   * @param groupAddress
+   * @returns {Promise<RawGroup>}
+   */
+  async getGroup(groupAddress: PublicKey | string): Promise<RawGroup> {
     try {
-      const program = this._getProgram()
-      return await program.account.group.fetch(groupAddress)
+      return (await this.program.account.group.fetch(groupAddress)) as RawGroup
     } catch (e: any) {
       throw new Error('Unable to fetch group: ' + e.message)
     }
   }
 
   async getInvitation(invitationAddress: PublicKey | string) {
-    const program = this._getProgram()
-    return await program.account.invitation.fetch(invitationAddress)
+    return await this.program.account.invitation.fetch(invitationAddress)
   }
 
   /**
@@ -167,11 +179,8 @@ export default class GroupChatsProgram extends EventEmitter {
    * @param name Group name
    */
   async create(groupId: string, name: string): Promise<Group> {
-    // Throws if the program is not set
-    const program = this._getProgram()
-
     // Throws if the payer is not set
-    const payer = this._getPayer()
+    const payer = this.payer
 
     const groupHash = this._getGroupHash(groupId)
 
@@ -187,7 +196,7 @@ export default class GroupChatsProgram extends EventEmitter {
       recipient: payer.publicKey,
       groupKey: groupPDA[0],
     })
-    await program.rpc.create(
+    await this.program.rpc.create(
       groupHash,
       encrypted.groupId,
       true,
@@ -208,10 +217,11 @@ export default class GroupChatsProgram extends EventEmitter {
 
     return {
       id: groupId,
+      address: groupPDA[0].toBase58(),
       name,
       admin: payer.publicKey.toBase58(),
       creator: payer.publicKey.toBase58(),
-      members: 1,
+      membersCount: 1,
       openInvites: true,
       encryptionKey,
     }
@@ -246,41 +256,39 @@ export default class GroupChatsProgram extends EventEmitter {
   async getInvitationAccounts(
     filter: InvitationAccountsFilter = {},
   ): Promise<InvitationAccount[]> {
-    const program = this._getProgram()
-
     const filters = this.buildInvitationAccountFilter(filter)
-    const accounts = await program.account.invitation.all(filters)
+    const accounts = await this.program.account.invitation.all(filters)
 
     return accounts as InvitationAccount[]
   }
 
   /**
    * Returns group by given id
-   * @param groupId {string} id of the group
+   * @param id {string} id of the group
    * @returns Promise<Group>
    */
-  async getGroupById(groupId: string): Promise<Group> {
-    const payer = this._getPayer()
-    const groupHash = this._getGroupHash(groupId)
-    const [groupPDA] = this._groupPDAPublicKey(groupHash)
+  async getGroupById(id: string): Promise<Group> {
+    const groupKey = this.groupAddressFromId(id)
 
-    const group = (await this.getGroup(groupPDA)) as RawGroup
+    const rawGroup = await this.getGroup(groupKey)
+    const invite = await this.getInviteByGroupId(id)
 
+    return this.populateGroup(invite, rawGroup)
+  }
+
+  /**
+   * Get user invite by group id
+   * @param id {string} group id
+   * @returns Promise<Invitation>
+   */
+  async getInviteByGroupId(id: string): Promise<Invitation> {
     const [invite] = await this.getInvitationAccounts({
-      groupKey: groupPDA,
-      recipient: payer.publicKey,
+      groupKey: this.groupAddressFromId(id),
+      recipient: this.payer.publicKey,
     })
+    if (!invite) throw new Error('Invitation account not found')
 
-    if (!invite) throw new Error('User is not a member of the group')
-    const decoded = await this.crypto.decryptInvite(invite.account)
-
-    return {
-      ...group,
-      id: groupId,
-      admin: group.admin.toString(),
-      creator: group.creator.toString(),
-      encryptionKey: decoded.encryptionKey,
-    }
+    return await this.crypto.decryptInvite(invite.account)
   }
 
   /**
@@ -295,23 +303,33 @@ export default class GroupChatsProgram extends EventEmitter {
     const invites = await Promise.all(
       inviteAccounts.map((it) => this.crypto.decryptInvite(it.account)),
     )
-    const program = this._getProgram()
-    const keys = inviteAccounts.map((acc) => acc.account.groupKey)
-    const rawGroups = (await program.account.group.fetchMultiple(
-      keys,
+
+    const rawGroups = (await this.program.account.group.fetchMultiple(
+      inviteAccounts.map((acc) => acc.account.groupKey),
     )) as RawGroup[]
 
-    const groups = rawGroups
-      .filter((group) => !!group)
-      .map((group: RawGroup, i) => ({
-        name: '<unnamed>',
-        ...group,
-        admin: group.admin.toString(),
-        creator: group.creator.toString(),
-        id: invites[i]?.groupId,
-        encryptionKey: invites[i]?.encryptionKey,
-      }))
-    return groups
+    return invites
+      .map((it, i) => this.populateGroup(it, rawGroups[i]))
+      .filter((group) => !!group) as Group[]
+  }
+
+  /**
+   * Helper method to create typed Group from invitation account and raw group
+   * @param invite
+   * @param group
+   * @protected
+   */
+  protected populateGroup(invite: Invitation, group: RawGroup): Group {
+    return {
+      id: invite.groupId,
+      name: group.name,
+      admin: group.admin.toString(),
+      creator: group.creator.toString(),
+      address: invite.groupKey.toBase58(),
+      encryptionKey: invite.encryptionKey,
+      openInvites: group.openInvites,
+      membersCount: group.members,
+    }
   }
 
   /**
@@ -321,110 +339,50 @@ export default class GroupChatsProgram extends EventEmitter {
    */
   async getGroupUsers(groupId: string): Promise<string[]> {
     const inviteAccounts = await this.getInvitationAccounts({
-      groupKey: this.getGroupAddressById(groupId),
+      groupKey: this.groupAddressFromId(groupId),
     })
     return inviteAccounts.map((it) => it.account.recipient.toBase58())
   }
 
-  protected buildEventFilter(
-    type: GroupEvents,
-    filter: GroupEventsFilter,
-  ): GetProgramAccountsFilter[] {
-    switch (type) {
-      case GroupEvents.NEW_INVITATION:
-        return this.buildInvitationAccountFilter(filter)
-      default:
-        throw new Error('Invalid event type')
-    }
-  }
-
-  protected decodeEventPayload(
-    type: GroupEvents,
-    info: KeyedAccountInfo,
-  ): InvitationAccount {
-    const coder = this._getProgram().coder
-    const { accountId, accountInfo } = info
-    switch (type) {
-      case GroupEvents.NEW_INVITATION:
-        return {
-          publicKey: accountId,
-          account: coder.accounts.decode('invitation', accountInfo.data),
-        }
-      default:
-        throw new Error('Invalid event type')
-    }
-  }
-
   /**
-   * Subscribe to group events
-   * @param type {GroupEvents} event type to subscribe
-   * @param filter {GroupEventsFilter} event filter
-   * @param callback {(payload: InvitationAccount) => void} event handler
-   * @returns {number} subscription id to unsubscribe
+   * Returns user addresses who are members of given groups
+   * @param groupIds {string[]} array of group id
+   * @returns Promise<{ id: string, users: string[] }[]>
    */
-  subscribe(
-    type: GroupEvents,
-    callback: (payload: InvitationAccount) => void,
-    filter: GroupEventsFilter = {},
-  ): number {
-    if (!this.solana) throw new Error('Solana not initialized')
-
-    return this.solana.connection.onProgramAccountChange(
-      GROUPCHATS_PROGRAM_ID,
-      (info) => callback(this.decodeEventPayload(type, info)),
-      Config.solana.defaultCommitment,
-      this.buildEventFilter(type, filter),
-    )
-  }
-
-  /**
-   * Unsubscribe from group events
-   * @param id {number} event subscription id
-   * @returns Promise<void>
-   */
-  async unsubscribe(id: number): Promise<void> {
-    if (!this.solana) throw new Error('Solana not initialized')
-    try {
-      return await this.solana.connection.removeProgramAccountChangeListener(id)
-    } catch (e) {}
+  async getGroupsUsers(
+    groupIds: string[],
+  ): Promise<{ id: string; users: string[] }[]> {
+    const users = await Promise.all(groupIds.map(this.getGroupUsers.bind(this)))
+    return groupIds.map((id, i) => ({
+      id,
+      users: users[i],
+    }))
   }
 
   /**
    * @method invite
    * Invite new user into Group
-   * @param groupId Group Id
+   * @param groupId group id
    * @param recipient: recipient address
    */
   async invite(groupId: string, recipient: string) {
-    // Throws if the program is not set
-    const program = this._getProgram()
-
-    const payer = this._getPayer()
-
+    const payer = this.payer
     const user = new PublicKey(recipient)
 
-    const groupHash = this._getGroupHash(groupId)
+    const groupKey = this.groupAddressFromId(groupId)
 
-    const groupPDA = this._groupPDAPublicKey(groupHash)
+    const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
+    const inviteePDA = this._invitePDAPublicKey(user, groupKey)
 
-    const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupPDA[0])
-
-    const inviteePDA = this._invitePDAPublicKey(user, groupPDA[0])
-
-    const [creatorInvite] = await this.getInvitationAccounts({
-      groupKey: groupPDA[0],
-      recipient: payer.publicKey,
-    })
+    const creatorInvite = await this.getInviteByGroupId(groupId)
     if (!creatorInvite) throw new Error('Group not found')
 
-    const decrypted = await this.crypto.decryptInvite(creatorInvite.account)
-
     const encrypted = await this.crypto.encryptInvite({
-      ...decrypted,
+      ...creatorInvite,
       recipient: user,
     })
 
-    await program.rpc.invite(
+    await this.program.rpc.invite(
       encrypted.groupId,
       user,
       encrypted.encryptionKey,
@@ -432,7 +390,7 @@ export default class GroupChatsProgram extends EventEmitter {
       {
         accounts: {
           newInvitation: inviteePDA[0],
-          group: groupPDA[0],
+          group: groupKey,
           invitation: inviterPDA[0],
           signer: payer.publicKey,
           payer: payer.publicKey,
@@ -449,25 +407,13 @@ export default class GroupChatsProgram extends EventEmitter {
    * @param groupId
    * @param openInvites
    */
-  async modify(groupId: string, openInvites: boolean, successor: string) {
-    const program = this._getProgram()
-
-    const payer = this._getPayer()
-
-    const successorKey = new PublicKey(successor)
-
-    const groupHash = this._getGroupHash(groupId)
-
-    const groupPDA = this._groupPDAPublicKey(groupHash)
-    const successorPDA = this._invitePDAPublicKey(successorKey, groupPDA[0])
-
-    await program.rpc.modify(openInvites, {
+  async modifyOpenInvites(groupId: string, openInvites: boolean) {
+    await this.program.rpc.modifyOpenIvites(openInvites, {
       accounts: {
-        group: groupPDA[0],
-        successor: successorPDA[0],
-        admin: payer.publicKey,
+        group: this.groupAddressFromId(groupId),
+        admin: this.payer.publicKey,
       },
-      signers: [payer],
+      signers: [this.payer],
     })
   }
 
@@ -477,22 +423,16 @@ export default class GroupChatsProgram extends EventEmitter {
    * @param groupId
    */
   async adminLeave(groupId: string, receipient: string) {
-    const program = this._getProgram()
-
-    const payer = this._getPayer()
-
+    const payer = this.payer
     const successor = new PublicKey(receipient)
+    const groupKey = this.groupAddressFromId(groupId)
 
-    const groupHash = this._getGroupHash(groupId)
+    const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
+    const successorPDA = this._invitePDAPublicKey(successor, groupKey)
 
-    const groupPDA = this._groupPDAPublicKey(groupHash)
-
-    const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupPDA[0])
-    const successorPDA = this._invitePDAPublicKey(successor, groupPDA[0])
-
-    await program.rpc.adminLeave({
+    await this.program.rpc.adminLeave({
       accounts: {
-        group: groupPDA[0],
+        group: groupKey,
         invitation: inviterPDA[0],
         successor: successorPDA[0],
         signer: payer.publicKey,
@@ -508,26 +448,171 @@ export default class GroupChatsProgram extends EventEmitter {
    * @param groupId
    */
   async leave(groupId: string) {
-    const program = this._getProgram()
+    const payer = this.payer
+    const groupKey = this.groupAddressFromId(groupId)
 
-    const payer = this._getPayer()
+    const group = await this.getGroup(groupKey)
 
-    const groupHash = this._getGroupHash(groupId)
+    const inviteePDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
 
-    const groupPDA = this._groupPDAPublicKey(groupHash)
-
-    const group = await this.getGroup(groupPDA[0])
-
-    const inviteePDA = this._invitePDAPublicKey(payer.publicKey, groupPDA[0])
-
-    await program.rpc.leave({
+    await this.program.rpc.leave({
       accounts: {
-        group: groupPDA[0],
+        group: groupKey,
         invitation: inviteePDA[0],
         signer: payer.publicKey,
         invitationSender: group.admin,
       },
       signers: [payer],
     })
+  }
+
+  /**
+   * Update group name
+   * @param id {string} group id
+   * @param name {string} new group name
+   * @returns Promise<void>
+   */
+  async updateGroupName(id: string, name: string): Promise<void> {
+    const address = this.groupAddressFromId(id)
+    await this.program.rpc.modifyName(name, {
+      accounts: {
+        group: address,
+        admin: this.payer.publicKey,
+      },
+    })
+  }
+
+  protected buildEventFilter(
+    type: GroupEvents,
+    filter: GroupEventsFilter,
+  ): GetProgramAccountsFilter[] {
+    switch (type) {
+      case GroupEvents.GROUP_INVITE:
+        return this.buildInvitationAccountFilter(filter)
+      default:
+        throw new Error('Invalid event type')
+    }
+  }
+
+  private decodeEventPayload(
+    type: GroupEvents,
+    info: KeyedAccountInfo,
+  ): InvitationAccount {
+    const coder = this.program.coder
+    const { accountId, accountInfo } = info
+    switch (type) {
+      case GroupEvents.GROUP_INVITE:
+        return {
+          publicKey: accountId,
+          account: coder.accounts.decode('invitation', accountInfo.data),
+        }
+      default:
+        throw new Error('Invalid event type')
+    }
+  }
+
+  /**
+   * Unsubscribe from group invite events
+   * @param id {number} event subscription id
+   * @returns Promise<void>
+   */
+  async unsubscribe(id: number): Promise<void> {
+    try {
+      return await this.solana.connection.removeProgramAccountChangeListener(id)
+    } catch (e) {}
+  }
+
+  /**
+   * Register event listener for new group invites
+   * @param cb
+   */
+  addInviteListener(cb: (group: Group) => void): string {
+    const type = GroupEvents.GROUP_INVITE
+    const filter = this.buildInvitationAccountFilter({
+      recipient: this.payer.publicKey.toBase58(),
+    })
+    const handler = async (payload: InvitationAccount) => {
+      const invite = await this.crypto.decryptInvite(payload.account)
+      const rawGroup = await this.getGroup(payload.account.groupKey)
+      const group = this.populateGroup(invite, rawGroup)
+
+      if (group) cb(group)
+    }
+
+    const id = this.solana.connection.onProgramAccountChange(
+      GROUPCHATS_PROGRAM_ID,
+      (info) => handler(this.decodeEventPayload(type, info)),
+      Config.solana.defaultCommitment,
+      filter,
+    )
+
+    return String(id)
+  }
+
+  /**
+   * Register event listener for group updates
+   * @param cb
+   * @returns {string[]} array of addresses for unsubscribe
+   */
+  async addGroupsListener(cb: (value: Group) => void): Promise<string[]> {
+    const inviteAccounts = await this.getInvitationAccounts({
+      recipient: this.payer.publicKey.toBase58(),
+    })
+    const invites = await Promise.all(
+      inviteAccounts.map((it) => this.crypto.decryptInvite(it.account)),
+    )
+
+    const handler = (payload: RawGroup, invite: Invitation) => {
+      const group = this.populateGroup(invite, payload)
+
+      if (group) cb(group)
+    }
+
+    invites.forEach((invite) => {
+      this.program.account.group
+        .subscribe(invite.groupKey)
+        .on('change', (payload) => handler(payload, invite))
+    })
+
+    return invites.map((it) => it.groupKey.toBase58())
+  }
+
+  /**
+   * Remove group updates listeners
+   * @param keys
+   */
+  async removeGroupListeners(keys: string[]): Promise<void> {
+    await Promise.all(keys.map((key) => this.removeGroupListener(key)))
+  }
+
+  /**
+   * Register update listener for single group
+   * @param id {string} group id
+   * @param cb
+   * @returns {string} address for unsubscribe
+   */
+  async addGroupListener(
+    id: string,
+    cb: (value: Group) => void,
+  ): Promise<string> {
+    const invite = await this.getInviteByGroupId(id)
+
+    const handler = (payload: RawGroup) => {
+      const group = this.populateGroup(invite, payload)
+      if (group) cb(group)
+    }
+
+    this.program.account.group.subscribe(invite.groupKey).on('change', handler)
+    return invite.groupKey.toString()
+  }
+
+  /**
+   * Remove group event listener for given address
+   * @param address {string}
+   */
+  async removeGroupListener(address: string): Promise<void> {
+    try {
+      await this.program.account.group.unsubscribe(address).catch()
+    } catch (e) {}
   }
 }

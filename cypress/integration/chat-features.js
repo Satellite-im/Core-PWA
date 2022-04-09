@@ -10,13 +10,13 @@ let imageURL
 
 describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
-    //Import account
+    // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
-    //Validate profile name displayed
-    cy.chatFeaturesProfileName('cypress')
+    // Validate profile name displayed
+    cy.get('[data-cy=user-name]', { timeout: 180000 }).should('exist')
 
-    //Validate message is sent
+    // Validate message is sent
     cy.goToConversation('cypress friend')
     cy.chatFeaturesSendMessage(randomMessage)
   })
@@ -36,7 +36,7 @@ describe('Chat Features Tests', () => {
   })
 
   it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
-    //Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
+    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
       '#chatbar-controls > span > .tooltip-container',
       'Send Money\nComing Soon',
@@ -44,7 +44,7 @@ describe('Chat Features Tests', () => {
   })
 
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
-    //Emoji picker is displayed  when clicking on its button
+    // Emoji picker is displayed  when clicking on its button
     cy.get('#emoji-toggle').click()
     cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
       'contain',
@@ -54,14 +54,14 @@ describe('Chat Features Tests', () => {
   })
 
   it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
-    //Glyphs picker is displayed when clicking on its button
+    // Glyphs picker is displayed when clicking on its button
     cy.get('#glyph-toggle').click()
     cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
     cy.get('#glyph-toggle').click()
   })
 
   it('Chat - Copy paste text', () => {
-    //Sending another random message to validate the scenario
+    // Sending another random message to validate the scenario
     cy.chatFeaturesSendMessage(randomTextToCopy)
 
     // Allowing Chrome Browser to have read and write access to clipboard
@@ -99,16 +99,14 @@ describe('Chat Features Tests', () => {
           pastePayload: clipboardText,
         })
       })
-    //Validating that editable input text matches with pasted value
+    // Validating that editable input text matches with pasted value
     cy.get('[data-cy=editable-input]').should('have.text', randomTextToCopy)
   })
 
-  it.skip('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
-    //Test skipped until AP-1080 bug is fixed
-    //Send an image in chat
+  it('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
 
-    //Copying the latest image URL sent
+    // Copying the latest image URL sent
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imgSrcValue) => {
@@ -117,7 +115,7 @@ describe('Chat Features Tests', () => {
     cy.goToLastImageOnChat().rightclick()
     cy.contains('Copy Image').realClick()
 
-    //Simulating paste event through a cypress command passing the clipboard image URL data
+    // Simulating paste event through a cypress command passing the clipboard image URL data
     cy.window()
       .its('navigator.clipboard')
       .invoke('read')
@@ -127,8 +125,13 @@ describe('Chat Features Tests', () => {
           pastePayload: clipboardImageURL,
         })
       })
-    //Validating that preview of image is displayed and matches with image filename copied from clipboard
+    // Validating that preview of image is displayed and matches with image filename copied from clipboard
     cy.get('.file-item').should('exist')
     cy.get('.file-info > .title').should('contain', 'logo.png')
+  })
+
+  it('Chat - Validate User ID can be copied when clicked on it', () => {
+    // Moving this at the end of execution to avoid issues on CI when running chat tests
+    cy.chatFeaturesProfileName('cypress')
   })
 })

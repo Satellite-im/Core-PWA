@@ -23,7 +23,7 @@
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="isGroup(recipient) ? `Members: ${getGroup().members}` : user.status"
+      :text="isGroup(recipient) ? `Members: ${getGroup().members.length}` : user.status"
     />
   </div>
   <div class="controls">
