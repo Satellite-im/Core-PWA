@@ -23,7 +23,7 @@
       <TypographyText :text="timestamp" />
     </div>
     <MessageActions
-      v-if="!hideActions"
+      v-if="!hideActions && !messageEdit"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
