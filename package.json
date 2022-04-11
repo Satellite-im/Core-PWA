@@ -87,6 +87,7 @@
     "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
     "simple-markdown": "^0.7.3",
     "simple-peer": "^9.11.1",
+    "simplebar-vue": "^1.6.8",
     "skaler": "^1.0.7",
     "swiper": "^8.0.7",
     "uuid": "^8.3.2",

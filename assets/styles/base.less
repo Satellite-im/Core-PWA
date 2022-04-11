@@ -48,6 +48,23 @@ html {
   }
 }
 
+#simple-scrollbar {
+  .simplebar-scrollbar::before {
+    &:extend(.background-flair);
+    scrollbar-color: var(--flair-color);
+  }
+
+  .simplebar-visible::before {
+    opacity: 1;
+  }
+}
+
+&.simple-scrollbar-always-visible {
+  .simplebar-scrollbar::before {
+    opacity: 1;
+  }
+}
+
 .hidden-scroll {
   overflow-y: auto;
   position: relative;

@@ -1,0 +1,7 @@
+<div
+  id="simple-scrollbar"
+  data-simplebar
+  :class="{'simple-scrollbar-always-visible': scrollShow === 'always', 'simple-scrollbar-vertical-content': $props.scrollMode === 'vertical', 'simple-scrollbar-horizontal-content': $props.scrollMode === 'horizontal'}"
+>
+  <slot />
+</div>
