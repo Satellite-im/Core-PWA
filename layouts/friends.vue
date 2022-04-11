@@ -1,19 +1,23 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
-      $store.state.ui.theme.base.class
-    }`"
+    :class="`${
+      showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed'
+    } ${$store.state.ui.theme.base.class}`"
   >
     <div
       id="app"
-      :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
-        $device.isMobile ? 'mobile-app' : 'desktop'
-      }`"
+      :class="`${
+        showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed'
+      } ${$device.isMobile ? 'mobile-app' : 'desktop'}`"
     >
       <UiGlobal />
 
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper
+        ref="swiper"
+        class="swiper"
+        :options="{ ...swiperOption, initialSlide: swiperSlideIndex }"
+      >
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -21,7 +25,15 @@
             :unreads="friends.all"
             :open-modal="toggleModal"
           />
+          <MobileSidebar
+            v-if="$device.isMobile"
+            :show-menu="toggleMenu"
+            :users="friends.all"
+            :groups="$mock.groups"
+            :sidebar="showSidebar"
+          />
           <Sidebar
+            v-if="!$device.isMobile"
             :show-menu="toggleMenu"
             :users="friends.all"
             :groups="groups.all"
@@ -30,6 +42,7 @@
         </swiper-slide>
         <swiper-slide class="dynamic-content">
           <menu-icon
+            v-if="!$device.isMobile"
             class="toggle--sidebar"
             size="1.2x"
             full-width
@@ -68,7 +81,6 @@ export default Vue.extend({
     return {
       sidebar: !this.$device.isMobile,
       swiperOption: {
-        initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
         noSwiping: !this.$device.isMobile,
@@ -76,31 +88,38 @@ export default Vue.extend({
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
-              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
+              const activeIndex = this.$refs.swiper.$swiper.activeIndex
+              this.$store.commit('ui/setSwiperSlideIndex', activeIndex)
+
+              const newShowSidebar = activeIndex === 0
 
               // force virtual keyboard hide on mobile when swiper slide change
               if (newShowSidebar) {
                 document.activeElement.blur()
               }
 
-              if (this.showSidebar !== newShowSidebar) {
-                this.$store.commit('ui/showSidebar', newShowSidebar)
+              // if slide active index is set as 0, set showSidebar flag true, else set as false
+              if (newShowSidebar) {
+                this.$store.commit('ui/showSidebar', true)
+                return
               }
+              this.$store.commit('ui/showSidebar', false)
             }
           },
         },
       },
     }
   },
+
   computed: {
-    ...mapState(['friends', 'groups']),
-    ...mapGetters('ui', ['showSidebar']),
     flairColor() {
       return this.$store.state.ui.theme.flair.value
     },
     flairColorRGB() {
       return hexToRGB(this.$store.state.ui.theme.flair.value)
     },
+    ...mapState(['friends', 'groups', 'dataState']),
+    ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
   },
   watch: {
     showSidebar(newValue, oldValue) {
@@ -110,22 +129,15 @@ export default Vue.extend({
           : this.$refs.swiper.$swiper.slideNext()
       }
     },
-    $route() {
-      this.showInitialSidebar()
+    swiperSlideIndex(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.$refs.swiper.$swiper.slideTo(newValue)
+      }
     },
-  },
-  mounted() {
-    this.showInitialSidebar()
   },
   methods: {
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
-    },
-    showInitialSidebar() {
-      if (this.$device.isMobile && !this.$route.query?.sidebar) {
-        return this.$store.commit('ui/showSidebar', false)
-      }
-      this.$store.commit('ui/showSidebar', true)
     },
   },
 })

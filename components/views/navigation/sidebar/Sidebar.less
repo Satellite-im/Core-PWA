@@ -88,6 +88,7 @@
 
   .filler {
     flex: 1;
+    position: relative;
   }
 
   .padded {
@@ -184,6 +185,8 @@
     padding-bottom: @mobile-nav-size;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      box-shadow: none;
+      background: none;
     }
     .sidebar-inner-streaming {
       max-height: calc(

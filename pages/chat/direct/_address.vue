@@ -39,7 +39,7 @@ export default Vue.extend({
       this.$router.replace(`/chat/direct/${friends.all[0].address}`)
       return
     }
-    this.$router.replace('/friends/list') // no friends then redirect user to add a friend
+    this.$router.replace('/friends/list')
   },
 })
 </script>

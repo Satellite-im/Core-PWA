@@ -1,8 +1,10 @@
 import {
   MessagesTracker,
-  RepliesTracker,
+  MessageTrackerValues,
   ReactionsTracker,
+  RepliesTracker,
 } from '~/types/textile/mailbox'
+
 export interface Conversation {
   [key: string]: {
     messages: MessagesTracker
@@ -10,6 +12,7 @@ export interface Conversation {
     reactions: ReactionsTracker
     lastInbound: number // the last time a message was received by any member of conversation, other than account owner
     lastUpdate: number // the last time a message was received by any member of conversation, including account owner
+    lastMessage: MessageTrackerValues | null
     limit: number
     skip: number
     end: boolean

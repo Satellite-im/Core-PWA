@@ -80,6 +80,7 @@ const InitialUIState = (): UIState => ({
     category: FileSortEnum.MODIFIED,
     asc: true,
   },
+  swiperSlideIndex: 0,
 })
 
 export default InitialUIState

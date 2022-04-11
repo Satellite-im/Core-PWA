@@ -20,6 +20,11 @@ html {
   &:extend(.background-gradient);
 }
 
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+}
+
 .background-flair {
   background: var(--flair-color) !important;
 }
@@ -79,7 +84,7 @@ html {
 }
 
 .toasted-container.top-center {
-  top: 0 !important;
+  top: env(safe-area-inset-top) !important;
 }
 
 .toasted-container .toasted {

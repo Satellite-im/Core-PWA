@@ -216,6 +216,7 @@ export interface UIState {
   filePreview?: string
   chatImageOverlay?: ImageMessage
   fileSort: FileSort
+  swiperSlideIndex: number
 }
 
 export type Position = {

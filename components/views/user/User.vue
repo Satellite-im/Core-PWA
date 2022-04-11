@@ -2,13 +2,15 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
+import { Message, TextMessage } from '~/types/textile/mailbox'
+import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -16,6 +18,7 @@ declare module 'vue/types/vue' {
     navigateToUser: () => void
     handleShowProfile: () => void
     removeUser: () => void
+    getDescriptionFromMessage: (message: Message) => string
   }
 }
 export default Vue.extend({
@@ -50,6 +53,15 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile']),
+    ...mapGetters('textile', ['getConversation']),
+    lastMessage() {
+      const conversation = this.getConversation(this.user.address)
+      const lastMessage = conversation?.lastMessage
+
+      return lastMessage
+        ? this.getDescriptionFromMessage(lastMessage)
+        : this.$t('messaging.say_hi')
+    },
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
@@ -88,12 +100,12 @@ export default Vue.extend({
      * @example ---
      */
     navigateToUser() {
-      if (
-        this.$route.params.address === this.user.address &&
-        this.$device.isMobile
-      ) {
+      if (this.$device.isMobile) {
+        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
+        this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
       }
+
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
     async handleShowProfile() {
@@ -135,6 +147,26 @@ export default Vue.extend({
       this.$data.existConversation = !(
         !currentUserInfo || currentUserInfo?.lastUpdate <= 0
       )
+    },
+    getDescriptionFromMessage(message: Message) {
+      switch (message.type) {
+        case MessagingTypesEnum.TEXT:
+          return (message as TextMessage).payload
+        case MessagingTypesEnum.FILE:
+          return this.$t('messaging.user_sent', {
+            msgType: 'file',
+          })
+        case MessagingTypesEnum.GLYPH:
+          return this.$t('messaging.user_sent', {
+            msgType: 'glyph',
+          })
+        case MessagingTypesEnum.IMAGE:
+          return this.$t('messaging.user_sent_image', {
+            msgType: 'image',
+          })
+        default:
+          return this.$t('messaging.user_sent_something')
+      }
     },
   },
 })

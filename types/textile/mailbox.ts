@@ -9,15 +9,15 @@ import { MailboxEvent } from '@textile/hub'
 import { TypeOf } from 'io-ts'
 import {
   decryptedMessage,
-  messageFromThread,
-  replyMessage,
   fileMessage,
-  textMessage,
   glyphMessage,
-  reactionMessage,
-  messageEncoder,
-  mediaMessage,
   imageMessage,
+  mediaMessage,
+  messageEncoder,
+  messageFromThread,
+  reactionMessage,
+  replyMessage,
+  textMessage,
 } from '~/libraries/Textile/encoders'
 
 /**
@@ -114,8 +114,14 @@ export interface ConversationQuery {
  * Messages, replies and Reactions are stored in an object structure. Messages are indexed by
  * message id, replies and reactions are indexed by the message id they are referring to.
  */
+export type MessageTrackerValues =
+  | FileMessage
+  | TextMessage
+  | GlyphMessage
+  | ImageMessage
+
 export type MessagesTracker = {
-  [key: string]: FileMessage | TextMessage | GlyphMessage | ImageMessage
+  [key: string]: MessageTrackerValues
 }
 export type RepliesTracker = { [key: string]: ReplyMessage[] }
 export type ReactionsTracker = { [key: string]: ReactionMessage[] }
