@@ -1,6 +1,6 @@
 <template src="./View.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import {
   FileIcon,
@@ -22,16 +22,11 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  props: {
-    file: {
-      type: Object as PropType<Fil>,
-      required: true,
-    },
-  },
   data() {
     return {
       load: false as boolean,
-      name: this.file.name as string,
+      file: undefined as Fil | undefined,
+      name: '' as string,
     }
   },
   computed: {
@@ -39,8 +34,12 @@ export default Vue.extend({
   },
   /**
    */
-  async mounted() {
+  async created() {
     this.load = true
+
+    this.file = this.$FileSystem.getChild(this.ui.filePreview) as Fil
+    this.name = this.file?.name
+
     // if no file data available, pull encrypted file from textile bucket
     if (!this.file.file) {
       const fsFil: Fil = this.$FileSystem.getChild(this.file.name) as Fil
