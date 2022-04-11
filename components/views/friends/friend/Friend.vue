@@ -136,7 +136,6 @@ export default Vue.extend({
         this.loading = AddFriendEnum.EMPTY
       }
     },
-    // todo - remove friend request for both users on click
     async cancelRequest() {
       this.loading = AddFriendEnum.OPTIONS
       try {
