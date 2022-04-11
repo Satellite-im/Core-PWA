@@ -2,8 +2,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import { SearchResultItem } from '~/types/search/search'
-import { refreshTimestampInterval } from '~/utilities/Messaging'
 
 export default Vue.extend({
   props: {
@@ -12,31 +12,30 @@ export default Vue.extend({
       required: true,
     },
   },
-  data() {
-    return {
-      timestamp: this.$dayjs(this.data.at).fromNow() as string,
-      timestampRefreshInterval: undefined,
-    }
-  },
   computed: {
+    ...mapGetters('settings', ['getTimezone']),
     src(): string {
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
-  },
-  created() {
-    const setTimestamp = (timePassed: string) => {
-      this.timestamp = timePassed
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.data.at,
-      setTimestamp,
-      this.$Config.chat.timestampUpdateInterval,
-    )
-  },
-  beforeDestroy() {
-    clearInterval(this.timestampRefreshInterval)
+    timestamp(): string {
+      const msgTimestamp = this.$dayjs(this.data.at)
+      // if today
+      if (this.$dayjs().isSame(msgTimestamp, 'day')) {
+        return `${this.$t('search.result.today')} ${msgTimestamp
+          .local()
+          .tz(this.getTimezone)
+          .format('LT')}`
+      }
+      // if yesterday
+      if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
+        return `${this.$t('search.result.yesterday')} ${msgTimestamp
+          .local()
+          .tz(this.getTimezone)
+          .format('LT')}`
+      }
+      return msgTimestamp.local().tz(this.getTimezone).format('L LT')
+    },
   },
 })
 </script>

@@ -561,6 +561,8 @@ export default {
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',
+      today: 'today',
+      yesterday: 'yesterday',
     },
   },
   media: {
