@@ -2,14 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MessagingTypesEnum } from '~/libraries/Enums/types/messaging-types'
+import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'DroppableWrapper',
   data() {
     return {
-      target: null,
-      dragging: false,
+      target: null as EventTarget | null,
+      dragging: false as boolean,
     }
   },
   methods: {

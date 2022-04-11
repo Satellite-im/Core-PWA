@@ -168,6 +168,7 @@ export default {
         storage_limit: 'This upload would exceed your storage limit',
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
+        in_progress: 'Upload already in progress, try again later',
       },
     },
     unlock: {

@@ -38,14 +38,16 @@
           />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
-          <menu-icon
-            v-if="!showSidebar || $device.isMobile"
-            class="toggle--sidebar"
-            size="1.2x"
-            full-width
-            @click="toggleMenu"
-          />
-          <Nuxt id="files" ref="files" />
+          <DroppableWrapper @handle-drop-prop="handleDrop">
+            <menu-icon
+              v-if="!showSidebar || $device.isMobile"
+              class="toggle--sidebar"
+              size="1.2x"
+              full-width
+              @click="toggleMenu"
+            />
+            <Nuxt id="files" ref="files" />
+          </DroppableWrapper>
         </swiper-slide>
       </swiper>
     </div>
@@ -62,6 +64,7 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
+import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
@@ -70,6 +73,7 @@ export default Vue.extend({
   name: 'FilesLayout',
   components: {
     MenuIcon,
+    DroppableWrapper,
   },
   mixins: [Touch, Layout],
   middleware: 'authenticated',
@@ -97,11 +101,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends']),
-    ...mapGetters('ui', ['showSidebar']),
-    flairColor() {
+    ...mapGetters('ui', ['showSidebar', 'getFilesIndexLoading']),
+    flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },
-    flairColorRGB() {
+    flairColorRGB(): string {
       return hexToRGB(this.$store.state.ui.theme.flair.value)
     },
   },
@@ -126,9 +130,30 @@ export default Vue.extend({
     },
     showInitialSidebar() {
       if (this.$device.isMobile && !this.$route.query?.sidebar) {
-        return this.$store.commit('ui/showSidebar', false)
+        this.$store.commit('ui/showSidebar', false)
+        return
       }
       this.$store.commit('ui/showSidebar', true)
+    },
+    /**
+     * @method handleDrop
+     * @description Allows the drag and drop of files into the filesystem
+     * @param e Drop event data object
+     */
+    async handleDrop(e: DragEvent) {
+      e.preventDefault()
+
+      // if already uploading, return to prevent bucket fast-forward crash
+      if (this.getFilesIndexLoading) {
+        this.$toast.show(this.$t('pages.files.errors.in_progress') as string)
+        return
+      }
+      if (e?.dataTransfer) {
+        const files: (File | null)[] = [...e.dataTransfer.items].map((f) =>
+          f.getAsFile(),
+        )
+        this.$refs.files.$children[0].$refs.controls.handleFile(files)
+      }
     },
   },
 })
