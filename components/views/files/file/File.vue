@@ -9,6 +9,7 @@ import {
   FileIcon,
   ArchiveIcon,
   ImageIcon,
+  FilmIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
@@ -25,6 +26,7 @@ export default Vue.extend({
     FileIcon,
     ArchiveIcon,
     ImageIcon,
+    FilmIcon,
   },
   mixins: [ContextMenu],
   props: {
@@ -59,6 +61,12 @@ export default Vue.extend({
      */
     isImage(): boolean {
       return this.item.type.includes('image')
+    },
+    /**
+     * @returns {boolean} if item has discrete MIME type of video
+     */
+    isVideo(): boolean {
+      return this.item.type.includes('video')
     },
     /**
      * @returns {boolean} if item is archive file type
