@@ -20,7 +20,12 @@ import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Group } from '~/store/groups/types'
-import { UISearchResult, QueryOptions } from '~/types/search/search'
+import {
+  UISearchResult,
+  QueryOptions,
+  SearchOrderType,
+  UISearchResultData,
+} from '~/types/search/search'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -920,9 +925,11 @@ export default {
     {
       query,
       page,
+      orderBy,
     }: {
       query: QueryOptions
       page: number
+      orderBy: SearchOrderType
     },
   ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
@@ -937,7 +944,7 @@ export default {
       await db.initializeSearchIndexes()
     }
 
-    const result = db.search.conversationMessages.search(
+    const result: UISearchResultData[] = db.search.conversationMessages.search(
       `${queryString}${
         startDate && endDate
           ? ` AND at >= ${startDate} AND at <= ${endDate}`
@@ -953,6 +960,17 @@ export default {
       ...match,
       user: accounts.find((acct) => acct?.textilePubkey === match.from),
     }))
+    if (orderBy === SearchOrderType.NEW) {
+      data.sort((a: UISearchResultData, b: UISearchResultData) => b.at - a.at)
+    }
+    if (orderBy === SearchOrderType.OLD) {
+      data.sort((a: UISearchResultData, b: UISearchResultData) => a.at - b.at)
+    }
+    if (orderBy === SearchOrderType.RELEVANT) {
+      data.sort(
+        (a: UISearchResultData, b: UISearchResultData) => b.score - a.score,
+      )
+    }
     return { data: data.slice(skip, perPage * page), totalRows: result?.length }
   },
 }

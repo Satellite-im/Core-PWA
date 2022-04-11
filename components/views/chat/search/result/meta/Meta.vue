@@ -6,10 +6,6 @@ import { SearchOrderType, UISearchResult } from '~/types/search/search'
 
 export default Vue.extend({
   props: {
-    items: {
-      type: Array,
-      required: true,
-    },
     result: {
       type: Object as PropType<UISearchResult>,
       required: true,
@@ -28,6 +24,7 @@ export default Vue.extend({
     },
   },
   computed: {
+    SearchOrderType: () => SearchOrderType,
     resultsText(): TranslateResult {
       // if 0 results
       if (this.result.totalRows === 0) {

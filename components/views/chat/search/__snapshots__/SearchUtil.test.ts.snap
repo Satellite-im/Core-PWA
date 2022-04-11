@@ -173,15 +173,15 @@ exports[`SearchUtil.default.getSearchOrderTypeList 0 1`] = `
 Array [
   Object {
     "title": "New",
-    "type": "new",
+    "type": undefined,
   },
   Object {
     "title": "Old",
-    "type": "old",
+    "type": undefined,
   },
   Object {
     "title": "Relevant",
-    "type": "relevant",
+    "type": undefined,
   },
 ]
 `;

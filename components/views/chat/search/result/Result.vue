@@ -29,10 +29,9 @@ export default Vue.extend({
   data() {
     return {
       groupList: SearchUtil.getSearchResultGroupList(),
-      orderTypeList: SearchUtil.getSearchOrderTypeList(),
       query: '' as string,
       groupBy: SearchResultGroupType.Messages as SearchResultGroupType,
-      orderBy: SearchOrderType.New as SearchOrderType,
+      orderBy: SearchOrderType.NEW as SearchOrderType,
       channels: [],
       date: null,
       result: [] as UISearchResult[],
@@ -76,19 +75,19 @@ export default Vue.extend({
   },
   watch: {
     date: {
-      handler(newDateValue) {
+      handler(newValue) {
         this.queryOptions = {
           ...this.queryOptions,
           dateRange: {
-            start: newDateValue,
-            end: newDateValue,
+            start: newValue,
+            end: newValue,
           },
         }
       },
     },
   },
   mounted() {
-    this.fetchResult(this.searchQuery)
+    this.fetchResult()
   },
   methods: {
     /**
@@ -113,33 +112,30 @@ export default Vue.extend({
      */
     toggleOrderBy(state: SearchOrderType) {
       this.orderBy = state
+      this.fetchResult()
     },
     /**
      * @method fetchResult DocsTODO
      * @description
      * @param query
      */
-    async fetchResult(query: string): Promise<void> {
+    async fetchResult(): Promise<void> {
       this.isLoading = DataStateType.Loading
       this.queryOptions = {
         ...this.queryOptions,
         accounts: [...this.friends.all, this.accounts.details],
-        queryString: query,
+        queryString: this.searchQuery,
       }
       this.result = await this.$store.dispatch('textile/searchConversations', {
         query: this.queryOptions,
         page: this.page,
+        orderBy: this.orderBy,
       })
       this.isLoading = DataStateType.Ready
     },
-    async handleClickPaginate(pageNum: number) {
-      this.isLoading = DataStateType.Loading
+    handleClickPaginate(pageNum: number) {
       this.page = pageNum
-      this.result = await this.$store.dispatch('textile/searchConversations', {
-        query: this.queryOptions,
-        page: this.page,
-      })
-      this.isLoading = DataStateType.Ready
+      this.fetchResult()
     },
     onChange(value: any) {
       this.queryOptions = {

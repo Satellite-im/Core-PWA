@@ -1,12 +1,13 @@
 <div class="meta">
   <div class="result-count">{{ resultsText }}</div>
-  <!-- <div class="result-orderby">
+  <div class="result-orderby">
     <div
-      v-for="item in items"
-      :class="{'orderby-item': true, 'active': item.type === orderBy}"
-      @click="$emit('toggleOrder',item.type)"
+      v-for="item in Object.keys(SearchOrderType)"
+      class="orderby-item"
+      :class="{ 'active': SearchOrderType[item] === orderBy }"
+      @click="$emit('toggleOrder', SearchOrderType[item])"
     >
-      {{item.title}}
+      {{item}}
     </div>
-  </div> -->
+  </div>
 </div>
