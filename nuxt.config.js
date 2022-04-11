@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   },
   bridge: {
     nitro: false,
+    meta: true,
   },
   server: {
     host: '0.0.0.0',
