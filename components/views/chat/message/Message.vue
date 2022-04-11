@@ -122,6 +122,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     clearInterval(this.$data.refreshTimestampEveryMinute)
+    this.cancelMessage()
   },
   async mounted() {
     const data = await fetch(this.message.payload.url)
