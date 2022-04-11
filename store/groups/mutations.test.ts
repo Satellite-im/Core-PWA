@@ -569,8 +569,7 @@ describe('misc', () => {
     const localState = { ...GroupsInitialState }
     const argument = {
       id: '372d9ee6-4888-4280-90cd-a67d4c02a1c3',
-      // name: 'Sam Goldner', THE OLD ONE
-      name: 'Sam Gold', // Updated
+      name: 'Sam Gold', // Group that we are mutating
     }
     mutations.default.updateGroup(localState, argument)
     expect(localState.all[3].name).toContain(argument.name)
@@ -578,7 +577,7 @@ describe('misc', () => {
   test('mutations.default.setGroupsLastUpdate', () => {
     const localState = { ...GroupsInitialState }
     const argument = {
-      '372d9ee6-4888-4280-90cd-a67d4c02a1c3': 1234, // Updated
+      '372d9ee6-4888-4280-90cd-a67d4c02a1c3': 1234, // Group that we are mutating, wrapped in this payload object
     }
     mutations.default.setGroupsLastUpdate(localState, argument)
     expect(localState.all[3].lastUpdate).toBe(1234)
