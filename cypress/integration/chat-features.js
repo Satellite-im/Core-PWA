@@ -103,7 +103,7 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=editable-input]').should('have.text', randomTextToCopy)
   })
 
-  it.skip('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
+  it.skip('Chat - Copy paste images', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
 
     // Copying the latest image URL sent
