@@ -8,11 +8,12 @@
   }
   .result-orderby {
     display: flex;
+    gap: @normal-spacing;
     .orderby-item {
+      &:extend(.font-muted);
       cursor: pointer;
-      padding: 2px 8px;
       &.active {
-        font-weight: bold;
+        &:extend(.font-secondary);
       }
     }
   }

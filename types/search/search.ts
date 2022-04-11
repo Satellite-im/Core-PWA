@@ -121,9 +121,9 @@ export type SearchFilter = {
 }
 
 export enum SearchOrderType {
-  NEW = 'new',
-  OLD = 'old',
-  RELEVANT = 'relevant',
+  New = 'new',
+  Old = 'old',
+  Relevant = 'relevant',
 }
 
 export type SearchParam = {

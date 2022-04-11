@@ -31,7 +31,7 @@ export default Vue.extend({
       groupList: SearchUtil.getSearchResultGroupList(),
       query: '' as string,
       groupBy: SearchResultGroupType.Messages as SearchResultGroupType,
-      orderBy: SearchOrderType.NEW as SearchOrderType,
+      orderBy: SearchOrderType.New as SearchOrderType,
       channels: [],
       date: null,
       result: [] as UISearchResult[],

@@ -960,13 +960,13 @@ export default {
       ...match,
       user: accounts.find((acct) => acct?.textilePubkey === match.from),
     }))
-    if (orderBy === SearchOrderType.NEW) {
+    if (orderBy === SearchOrderType.New) {
       data.sort((a: UISearchResultData, b: UISearchResultData) => b.at - a.at)
     }
-    if (orderBy === SearchOrderType.OLD) {
+    if (orderBy === SearchOrderType.Old) {
       data.sort((a: UISearchResultData, b: UISearchResultData) => a.at - b.at)
     }
-    if (orderBy === SearchOrderType.RELEVANT) {
+    if (orderBy === SearchOrderType.Relevant) {
       data.sort(
         (a: UISearchResultData, b: UISearchResultData) => b.score - a.score,
       )
