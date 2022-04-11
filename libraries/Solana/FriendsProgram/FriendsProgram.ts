@@ -249,21 +249,13 @@ export default class FriendsProgram extends EventEmitter {
    */
   public computeAccountKeys(from: PublicKey, to: PublicKey) {
     const program = this._getProgram()
-    let first = from
-    let second = to
-    const fromOrder = parseInt(
-      Buffer.from(utils.bytes.bs58.decode(from.toBase58())).toString('hex'),
-      16,
-    )
-    const toOrder = parseInt(
-      Buffer.from(utils.bytes.bs58.decode(to.toBase58())).toString('hex'),
-      16,
-    )
 
-    if (fromOrder < toOrder) {
-      first = to
-      second = from
-    }
+    const [first, second] = [from, to].sort((a: PublicKey, b: PublicKey) => {
+      const aValue = parseInt(a.toBuffer().toString('hex'), 16)
+      const bValue = parseInt(b.toBuffer().toString('hex'), 16)
+      return bValue - aValue
+    })
+
     const request = utils.publicKey.findProgramAddressSync(
       [first.toBuffer(), second.toBuffer()],
       program.programId,

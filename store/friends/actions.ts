@@ -469,10 +469,8 @@ export default {
 
     const friendAccountKey = new PublicKey(friendRequest.requestId)
 
-    const friendCheck = await friendsProgram.getParsedFriend(
-      computedFriendAccountKey,
-    )
-    if (friendCheck?.status === 2) {
+    const friendCheck = await friendsProgram.getAccount(friendAccountKey)
+    if (friendCheck?.status === FriendStatus.ACCEPTED) {
       return
     }
     // Initialize current recipient for encryption
@@ -557,8 +555,6 @@ export default {
     const tx = await friendsProgram.removeRequest(friendAccountKey)
 
     if (tx) {
-      // Close friend
-      // // dispatch('closeFriendRequest', friendRequest)
       commit(
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(account, null).requestId,
@@ -624,95 +620,6 @@ export default {
     const friendAccountKey = new PublicKey(friendRequest.requestId)
 
     await friendsProgram.closeRequest(friendAccountKey)
-  },
-
-  /**
-   * @method subscribeToFriendsEvents DocsTODO
-   * @description
-   * @param
-   * @example
-   */
-  subscribeToFriendsEvents({
-    dispatch,
-    commit,
-    rootState,
-  }: ActionsArguments<FriendsState>) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-
-    const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
-
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    friendsProgram.subscribeToEvents()
-
-    friendsProgram.addEventListener(
-      FriendsEvents.NEW_REQUEST,
-      async (account) => {
-        if (account) {
-          const userInfo = await usersProgram.getUserInfo(account.from)
-          commit(
-            'addIncomingRequest',
-            friendAccountToIncomingRequest(account, userInfo),
-          )
-        }
-      },
-    )
-
-    friendsProgram.addEventListener(FriendsEvents.NEW_FRIEND, (account) => {
-      if (account) {
-        dispatch('fetchFriendDetails', account)
-      }
-    })
-
-    friendsProgram.addEventListener(
-      FriendsEvents.REQUEST_DENIED,
-      async (account) => {
-        if (account) {
-          // Close friend
-          // // dispatch(
-          // //   'closeFriendRequest',
-          // //   friendAccountToOutgoingRequest(account, null),
-          // // )
-          commit(
-            'removeOutgoingRequest',
-            friendAccountToOutgoingRequest(account, null).requestId,
-          )
-        }
-      },
-    )
-
-    friendsProgram.addEventListener(
-      FriendsEvents.REQUEST_REMOVED,
-      (account) => {
-        if (account) {
-          commit(
-            'removeIncomingRequest',
-            friendAccountToIncomingRequest(account, null).requestId,
-          )
-        }
-      },
-    )
-
-    friendsProgram.addEventListener(
-      FriendsEvents.FRIEND_REMOVED,
-      async (account) => {
-        if (account) {
-          const address =
-            rootState.accounts.active === account.from
-              ? account.to
-              : account.from
-
-          // Close friend
-          // // if (rootState.accounts.active === account.from) {
-          // //   dispatch(
-          // //     'closeFriendRequest',
-          // //     friendAccountToOutgoingRequest(account, null),
-          // //   )
-          // // }
-          commit('removeFriend', address)
-        }
-      },
-    )
   },
 }
 
