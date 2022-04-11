@@ -8,13 +8,13 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     // Validate profile name displayed
-    cy.get('[data-cy=user-name]', { timeout: 180000 }).should('exist')
+    cy.validateChatPageIsLoaded()
 
     // Validate message is sent
     cy.goToConversation('cypress friend')
@@ -103,7 +103,7 @@ describe.skip('Chat Features Tests', () => {
     cy.get('[data-cy=editable-input]').should('have.text', randomTextToCopy)
   })
 
-  it('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
+  it.skip('Chat - Copy paste images - Test skipped until AP-1080 bug is fixed', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
 
     // Copying the latest image URL sent

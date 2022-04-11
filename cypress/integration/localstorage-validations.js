@@ -20,9 +20,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
     cy.createAccount(randomPIN)
 
     //Wait until main page is loaded after creating account
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to main URL and validate that previous passphrase is not stored in localstorage
     cy.visit('/').then(() => {
@@ -44,7 +42,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Wait until main page is loaded after importing account
-    cy.contains('cypress', { timeout: 60000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to URL and validate that previous passphrase is not stored in localstorage
     cy.visit('/').then(() => {

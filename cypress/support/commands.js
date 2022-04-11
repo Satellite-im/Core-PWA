@@ -414,8 +414,15 @@ Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
 
-Cypress.Commands.add('goToConversation', (user) => {
+Cypress.Commands.add('validateChatPageIsLoaded', (customTimeout = 180000) => {
+  cy.get('[data-cy=user-name]', { timeout: customTimeout }).should('exist')
+})
+
+Cypress.Commands.add('goToConversation', (user, mobile = false) => {
   cy.get('[data-cy=sidebar-friends]').click()
+  if (mobile === true) {
+    cy.get('[data-cy=hamburger-button]').click()
+  }
   cy.get('[data-cy=friend-name]').contains(user).as('friend')
   cy.get('@friend')
     .parent()
@@ -423,6 +430,10 @@ Cypress.Commands.add('goToConversation', (user) => {
     .find('[data-cy=friend-send-message]')
     .as('friend-message')
   cy.get('@friend-message').click()
+
+  if (mobile === true) {
+    cy.get('[data-cy=hamburger-button]').click()
+  }
   cy.get('[data-cy=user-connected]', { timeout: 60000 })
     .should('be.visible')
     .should('have.text', user)

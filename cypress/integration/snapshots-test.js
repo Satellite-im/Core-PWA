@@ -43,7 +43,7 @@ describe.skip('Snapshots Testing', () => {
   })
 
   it('Import account - Main Screen Loaded', () => {
-    cy.contains('Snap QA', { timeout: 60000 })
+    cy.contains('Snap QA', { timeout: 180000 })
     cy.get('body').realClick({ position: 'topLeft' })
     cy.snapshotTestContains('Snap QA')
   })

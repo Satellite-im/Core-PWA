@@ -9,7 +9,7 @@ describe('Chat Toolbar Tests', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Ensure messages are displayed before starting
-    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
     cy.goToConversation('cypress friend')
     cy.hoverOnActiveIcon('[data-cy=toolbar-enable-audio]')
   })
