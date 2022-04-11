@@ -6,8 +6,7 @@
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
     <TypographyTitle :size="6" :text="user.name" />
-    <TypographySubtitle v-if="lastMessage" :size="6" :text="lastMessage" />
-    <TypographySubtitle v-else :size="6" :text="this.$t('messaging.say_hi')" />
+    <TypographySubtitle :size="6" :text="lastMessage" />
   </div>
   <div class="user-chat-details">
     <TypographyText
