@@ -2,8 +2,11 @@
 
 exports[`state.default 0 1`] = `
 Object {
+  "alertNsfw": false,
   "chatTexts": Array [],
+  "countError": false,
   "files": Object {},
   "replies": Array [],
+  "showFilePreview": false,
 }
 `;
