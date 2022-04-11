@@ -14,14 +14,17 @@
             : 'sidebar-search'
         "
       >
-        <InteractablesInput
-          :placeholder="`${$t('ui.search')}...`"
-          size="small"
-          input-kind="text"
-          :delete-icon="true"
-          type="dark"
-          full-width
-        />
+        <UiComingSoon area-cover>
+          <InteractablesInput
+            :placeholder="`${$t('ui.search')}...`"
+            size="small"
+            input-kind="text"
+            :delete-icon="true"
+            type="dark"
+            full-width
+            disabled
+          />
+        </UiComingSoon>
         <menu-icon
           v-if="!(isNoFriends && isChatPage)"
           class="toggle-sidebar"
