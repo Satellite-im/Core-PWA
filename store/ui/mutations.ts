@@ -115,6 +115,9 @@ export default {
     state.isScrollOver = status
     if (!status) state.unreadMessage = 0
   },
+  setShowOlderMessagesInfo(state: UIState, flag: boolean) {
+    state.showOlderMessagesInfo = flag
+  },
   setIsReacted(state: UIState, status: boolean) {
     state.isReacted = status
   },

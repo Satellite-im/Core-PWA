@@ -10,6 +10,8 @@ exports[`Crypto.default.getSecret 2 1`] = `undefined`;
 
 exports[`Crypto.default.init 0 1`] = `undefined`;
 
+exports[`Crypto.default.isInitialized 0 1`] = `false`;
+
 exports[`Crypto.default.joinIvAndData 0 1`] = `Uint8Array []`;
 
 exports[`Crypto.default.signMessage 0 1`] = `null`;

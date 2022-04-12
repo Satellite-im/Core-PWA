@@ -2,9 +2,6 @@
   position: relative;
   margin-top: @light-spacing;
   &:extend(.full-width);
-  &.has-reply {
-    margin-top: 0;
-  }
   .chat-label {
     &:extend(.background-primary);
     font-size: @mini-text-size;
@@ -40,10 +37,8 @@
   }
 
   .file-upload-wrap {
-    padding-top: 8px;
     margin-right: @light-spacing;
     order: 1;
-    align-self: flex-start;
     font-size: @icon-size;
   }
 
@@ -112,8 +107,6 @@
     #chatbar-controls {
       width: 150px;
       order: 3;
-      align-self: flex-start;
-      padding-top: 11px;
     }
 
     .control-icon {
