@@ -75,7 +75,7 @@ export class UserInfoManager {
     consentDate,
   }: {
     consentScan: boolean
-    consentDate: Number
+    consentDate: number
   }): Promise<void> {
     const record = await this._findRecord()
     if (record) {
