@@ -113,6 +113,7 @@ const mutations = {
 
     const tracked = updateMessageTracker([message], initialValues)
     const msgValues = Object.values(tracked.messages)
+
     state.conversations = {
       ...state.conversations,
       [address]: {
@@ -121,7 +122,7 @@ const mutations = {
         reactions: tracked.reactions,
         lastInbound:
           sender !== MessageRouteEnum.OUTBOUND ? message.at : lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
-        lastUpdate: message.at, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastUpdate: msgValues[msgValues.length - 1]?.at, // the last time a message was received by any member of conversation, INCLUDING account owner
         lastMessage: msgValues[msgValues.length - 1],
         limit,
         skip,
