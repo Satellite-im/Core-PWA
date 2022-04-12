@@ -5,6 +5,7 @@
     :style="`width:${size}px; height:${size}px`"
   >
     <UiCircle
+      data-cy="satellite-circle-profile"
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="size"
