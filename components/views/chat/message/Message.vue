@@ -7,7 +7,10 @@ import { ArchiveIcon } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
-import { refreshTimestampInterval } from '~/utilities/Messaging'
+import {
+  refreshTimestampInterval,
+  convertTimestampToDate,
+} from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
@@ -49,8 +52,10 @@ export default Vue.extend({
     return {
       disData: 'DataFromTheProperty',
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.$props.message.at).fromNow(),
-      // added two blobs because we need png version for clipboard API (copy image), and the original blob for save image
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.$props.message.at,
+      ),
       blob: undefined as Blob | undefined,
       pngBlob: undefined as Blob | undefined,
     }
@@ -110,8 +115,11 @@ export default Vue.extend({
     },
   },
   created() {
-    const setTimestamp = (timePassed: string) => {
-      this.$data.timestamp = timePassed
+    const setTimestamp = (timePassed: number) => {
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
@@ -121,7 +129,7 @@ export default Vue.extend({
     )
   },
   beforeDestroy() {
-    clearInterval(this.$data.refreshTimestampEveryMinute)
+    clearInterval(this.$data.timestampRefreshInterval)
     this.cancelMessage()
   },
   async mounted() {

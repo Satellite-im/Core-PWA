@@ -27,7 +27,7 @@
             <!-- TODO: update badges //AP-397 -->
             <UiUserName :username="getUsernameFromReply(reply)" :badge="''" />
           </span>
-          <TypographyText :text="$dayjs(reply.at).fromNow()" />
+          <TypographyText :text="getTimestampFromReply(reply.at)" />
         </div>
         <div class="reply-content">
           <MessageMarkdown

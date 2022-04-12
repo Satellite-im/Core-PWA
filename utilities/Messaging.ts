@@ -267,15 +267,47 @@ export function getFullUserInfoFromState(
   return userInfo
 }
 
+export function convertTimestampToDate(
+  chatTranslations: any,
+  timestamp: number,
+) {
+  if (timestamp > 0) {
+    const secondsDif = dayjs().diff(timestamp, 'second')
+
+    if (secondsDif < 30) {
+      return chatTranslations.now
+    }
+
+    const lastUpdate = dayjs(timestamp)
+    const sameDay = dayjs().isSame(lastUpdate, 'day')
+
+    if (sameDay) {
+      return lastUpdate.format('LT')
+    }
+
+    const daysDif = dayjs().diff(lastUpdate, 'day')
+
+    if (daysDif <= 1) {
+      return chatTranslations.yesterday
+    }
+
+    if (daysDif > 1 && daysDif <= 2) {
+      return `${daysDif} ${chatTranslations.days_short}`
+    }
+
+    return lastUpdate.format('L')
+  }
+
+  return ''
+}
+
 export function refreshTimestampInterval(
   timestamp: number,
-  action: (timePassed: string) => any,
+  action: (timePassed: number) => any,
   interval: number,
 ) {
   return setInterval(() => {
-    const updatedTimestamp = dayjs(timestamp).fromNow()
-
-    action(updatedTimestamp)
+    action(timestamp)
   }, interval)
 }
 

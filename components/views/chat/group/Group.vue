@@ -8,6 +8,7 @@ import {
   getUsernameFromState,
   getAddressFromState,
   refreshTimestampInterval,
+  convertTimestampToDate,
 } from '~/utilities/Messaging'
 import { GroupMember } from '~/store/groups/types'
 
@@ -29,7 +30,10 @@ export default Vue.extend({
   data() {
     return {
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.group.at).fromNow(),
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.group.at,
+      ),
     }
   },
   computed: {
@@ -79,8 +83,11 @@ export default Vue.extend({
     },
   },
   created() {
-    const setTimestamp = (timePassed: string) => {
-      this.$data.timestamp = timePassed
+    const setTimestamp = (timePassed: number) => {
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
     }
 
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
@@ -90,7 +97,7 @@ export default Vue.extend({
     )
   },
   beforeDestroy() {
-    clearInterval(this.$data.refreshTimestampEveryMinute)
+    clearInterval(this.$data.timestampRefreshInterval)
   },
   methods: {
     /**

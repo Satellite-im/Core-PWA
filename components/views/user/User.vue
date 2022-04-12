@@ -8,9 +8,14 @@ import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
-import { Conversation } from '~/store/textile/types'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
+import {
+  refreshTimestampInterval,
+  convertTimestampToDate,
+} from '~/utilities/Messaging'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -21,6 +26,7 @@ declare module 'vue/types/vue' {
     getDescriptionFromMessage: (message: Message) => string
   }
 }
+
 export default Vue.extend({
   components: {
     SmartphoneIcon,
@@ -31,6 +37,11 @@ export default Vue.extend({
     user: {
       type: Object as PropType<User>,
       required: true,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
     isTyping: {
       type: Boolean,
@@ -49,10 +60,23 @@ export default Vue.extend({
       ],
       existConversation: false,
       isLoading: false,
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
+      ),
+      timestampRefreshInterval: null,
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      userConversationLastUpdate(state) {
+        return (
+          (state as RootState).textile.conversations[this.user.address]
+            ?.lastUpdate ?? 0
+        )
+      },
+    }),
     ...mapGetters('textile', ['getConversation']),
     lastMessage() {
       const conversation = this.getConversation(this.user.address)
@@ -68,13 +92,40 @@ export default Vue.extend({
     },
   },
   watch: {
-    'textile.conversations': {
-      handler(newValue) {
-        this.existMessage(newValue)
+    userConversationLastUpdate: {
+      handler(lastUpdate) {
+        if (this.$data.timestampRefreshInterval) {
+          clearInterval(this.$data.timestampRefreshInterval)
+        }
+
+        this.$data.existConversation = lastUpdate > 0
+        this.$data.timestamp = convertTimestampToDate(
+          this.$t('friends.details'),
+          lastUpdate,
+        )
+
+        const setTimestamp = (timePassed: number) => {
+          if (
+            timePassed === this.getConversation(this.user.address)?.lastUpdate
+          ) {
+            this.$data.timestamp = convertTimestampToDate(
+              this.$t('friends.details'),
+              timePassed,
+            )
+          }
+        }
+
+        this.$data.timestampRefreshInterval = refreshTimestampInterval(
+          lastUpdate,
+          setTimestamp,
+          Config.chat.timestampUpdateInterval,
+        )
       },
-      deep: true,
       immediate: true,
     },
+  },
+  beforeDestroy() {
+    clearInterval(this.$data.timestampRefreshInterval)
   },
   methods: {
     testFunc() {
@@ -111,42 +162,14 @@ export default Vue.extend({
     async handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
     },
-    getLastUpdate() {
-      const currentUserInfo =
-        this.$store.state.textile.conversations[this.user.address]
 
-      const lastMessageAt = currentUserInfo?.messages
-        ? Math.max.apply(
-            null,
-            Object.values(currentUserInfo.messages).map((msg: any) => msg.at),
-          )
-        : 0
-
-      const uLastUpdate =
-        (this.user.lastUpdate ||
-          currentUserInfo?.lastUpdate ||
-          lastMessageAt) ??
-        0
-
-      const today = new Date().setHours(0, 0, 0, 0)
-
-      if (uLastUpdate) {
-        const uDay = new Date(uLastUpdate).setHours(0, 0, 0, 0)
-
-        if (today === uDay) {
-          return this.$dayjs(uLastUpdate).format('HH:mm')
-        }
-        return this.$dayjs(uLastUpdate).format('YYYY-MM-DD')
+    getFormattedUnreads(value: Number) {
+      if (value < 100) {
+        return value.toString()
       }
-
-      return 'No message'
-    },
-    existMessage(textileObj: Conversation) {
-      const currentUserInfo = textileObj[this.user.address]
-
-      this.$data.existConversation = !(
-        !currentUserInfo || currentUserInfo?.lastUpdate <= 0
-      )
+      if (value >= 100) {
+        return '99+'
+      }
     },
     getDescriptionFromMessage(message: Message) {
       switch (message.type) {

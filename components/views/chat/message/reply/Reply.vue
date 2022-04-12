@@ -4,7 +4,10 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 import { UIMessage, Group } from '~/types/messaging'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import {
+  getUsernameFromState,
+  convertTimestampToDate,
+} from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 
 export default Vue.extend({
@@ -32,7 +35,10 @@ export default Vue.extend({
     },
   },
   data() {
-    return { showReplies: false, replyHover: '' }
+    return {
+      showReplies: false,
+      replyHover: '',
+    }
   },
   computed: {
     ...mapState(['chat']),
@@ -153,6 +159,9 @@ export default Vue.extend({
         replyId: this.$props.message.id,
         value: this.$data.showReplies,
       }
+    },
+    getTimestampFromReply(timestamp: number) {
+      return convertTimestampToDate(this.$t('friends.details'), timestamp)
     },
   },
 })
