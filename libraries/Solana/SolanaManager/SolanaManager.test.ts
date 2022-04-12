@@ -292,3 +292,159 @@ describe('SolanaManager.default.requestAirdrop', () => {
     await inst2.requestAirdrop()
   })
 })
+
+describe('SolanaManager.default.generateDerivedPublicKey', () => {
+  let inst10: any
+  let inst9: any
+  let inst8: any
+  let inst7: any
+  let inst6: any
+  let inst4: any
+  let inst3: any
+  let inst: any
+  let inst2: any
+
+  beforeEach(() => {
+    inst10 = new SolanaManager.default()
+    inst9 = new SolanaManager.default()
+    inst8 = new SolanaManager.default()
+    inst7 = new SolanaManager.default()
+    inst6 = new SolanaManager.default()
+    inst4 = new SolanaManager.default()
+    inst3 = new SolanaManager.default()
+    inst = new SolanaManager.default()
+    inst2 = new SolanaManager.default()
+  })
+
+  test('0', async () => {
+    const param2: any = new web3.PublicKey(1000)
+    const param4: any = new web3.PublicKey(1)
+    await inst3.generateDerivedPublicKey(
+      'Jean-Philippe',
+      param2,
+      'foo bar',
+      param4,
+    )
+  })
+
+  test('1', async () => {
+    const param2: any = new web3.PublicKey(1000)
+    const param4: any = new web3.PublicKey(1000)
+    await inst4.generateDerivedPublicKey(
+      'Pierre Edouard',
+      param2,
+      'Foo bar',
+      param4,
+    )
+  })
+
+  describe('SolanaManager.default.generateNewAccount', () => {
+    let inst2: any
+
+    beforeEach(() => {
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', async () => {
+      await inst2.generateNewAccount()
+    })
+  })
+
+  describe('SolanaManager.default.initializeFromKeypair', () => {
+    let inst2: any
+
+    beforeEach(() => {
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', async () => {
+      await inst2.initializeFromKeypair(web3.Keypair.generate())
+    })
+  })
+
+  describe('SolanaManager.default.isInitialized', () => {
+    let inst2: any
+
+    beforeEach(() => {
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', () => {
+      const result: any = inst2.isInitialized()
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('SolanaManager.default.initializeFromSolanaWallet', () => {
+    let inst9: any
+    let inst8: any
+    let inst7: any
+    let inst6: any
+    let inst5: any
+    let inst4: any
+    let inst3: any
+    let inst: any
+    let inst2: any
+
+    beforeEach(() => {
+      inst9 = new SolanaManager.default()
+      inst8 = new SolanaManager.default()
+      inst7 = new SolanaManager.default()
+      inst6 = new SolanaManager.default()
+      inst5 = new SolanaManager.default()
+      inst4 = new SolanaManager.default()
+      inst3 = new SolanaManager.default()
+      inst = new SolanaManager.default()
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', async () => {
+      await inst9.initializeFromSolanaWallet({
+        mnemonic: undefined,
+        keypair: web3.Keypair.generate(),
+        path: undefined,
+        address: '',
+      })
+    })
+  })
+
+  describe('SolanaManager.default.getAllAccounts', () => {
+    let inst2: any
+
+    beforeEach(() => {
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', () => {
+      const result: any = inst2.getAllAccounts()
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('SolanaManager.default.getAccount', () => {
+    let inst3: any
+    let inst: any
+    let inst2: any
+
+    beforeEach(() => {
+      inst3 = new SolanaManager.default()
+      inst = new SolanaManager.default()
+      inst2 = new SolanaManager.default()
+    })
+
+    test('0', () => {
+      const result: any = inst2.getAccount('0.0.0.0')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('1', () => {
+      const result: any = inst.getAccount('192.168.1.5')
+      expect(result).toMatchSnapshot()
+    })
+
+    test('2', () => {
+      const result: any = inst3.getAccount('')
+      expect(result).toMatchSnapshot()
+    })
+  })
+})
