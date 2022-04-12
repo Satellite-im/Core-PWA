@@ -52,3 +52,42 @@ describe('index.exportForTesting.formatDevices', () => {
     expect(result).toMatchSnapshot()
   })
 })
+
+describe('index.UserPermissions.created', () => {
+  test('0', () => {
+    const result: any = index.UserPermissions.created()
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('index.UserPermissions.methods.requestUserPermissions', () => {
+  test('0', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('user_name')
+  })
+
+  test('1', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('user name')
+  })
+
+  test('2', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('123')
+  })
+
+  test('3', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('username')
+  })
+
+  test('4', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('user-name')
+  })
+
+  test('5', async () => {
+    await index.UserPermissions.methods.requestUserPermissions('')
+  })
+})
+
+describe('index.UserPermissions.methods.getUserPermissions', () => {
+  test('0', async () => {
+    await index.UserPermissions.methods.getUserPermissions()
+  })
+})
