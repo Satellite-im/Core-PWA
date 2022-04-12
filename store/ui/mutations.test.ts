@@ -4041,4 +4041,19 @@ describe('mutations', () => {
       type: 'group',
     })
   })
+  test('setSwiperSlideIndex', () => {
+    const localizedState = { ...initialState }
+    const argument = 10
+    mutations.default.setSwiperSlideIndex(localizedState, argument)
+    expect(localizedState.swiperSlideIndex).toBe(argument)
+  })
+  test('setFileSort', () => {
+    const localizedState = { ...initialState }
+    const argument = {
+      category: 'modified',
+      asc: true,
+    }
+    mutations.default.setFileSort(localizedState, argument)
+    expect(localizedState.fileSort).toBe(argument)
+  })
 })
