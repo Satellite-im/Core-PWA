@@ -159,19 +159,26 @@ export class Bucket extends RFM implements RFMInterface {
    * @description fetch encrypted file from bucket
    * @param {string} id file path in bucket
    * @param {string} type file mime type
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    * @returns Promise of File
    */
   async pullFile(
     id: string,
     name: string,
     type: string,
-  ): Promise<File | undefined> {
+    size: number,
+    progressCallback: Function,
+  ): Promise<File> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
 
     const data = []
-    for await (const bytes of this.buckets.pullPath(this.key, id)) {
+    for await (const bytes of this.buckets.pullPath(this.key, id, {
+      progress: (num) => {
+        progressCallback(num, size)
+      },
+    })) {
       data.push(bytes)
     }
     // if type is unknown(generic), then don't use in File constructor
