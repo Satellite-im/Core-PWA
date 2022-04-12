@@ -178,3 +178,16 @@ describe('Crypto.getRandomString', () => {
     expect(result.length).toBe(length)
   })
 })
+
+describe('Crypto.default.isInitialized', () => {
+  let inst: any
+
+  beforeEach(() => {
+    inst = new Crypto.default()
+  })
+
+  test('0', () => {
+    const result: any = inst.isInitialized()
+    expect(result).toMatchSnapshot()
+  })
+})
