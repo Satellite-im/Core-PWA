@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import Vue from 'vue'
 import { TextileFileSystem } from '../TextileFileSystem'
 import TextileManager from '~/libraries/Textile/TextileManager'
