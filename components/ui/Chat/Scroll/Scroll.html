@@ -1,7 +1,7 @@
 <div
   :class="classObject"
   ref="scrollRef"
-  v-on:scroll="onScrolled"
+  v-on:scroll="onScrolled(); hideKeyboard();"
   v-scroll-lock="true"
 >
   <div ref="scrollContent" class="chat-scroll-content">
