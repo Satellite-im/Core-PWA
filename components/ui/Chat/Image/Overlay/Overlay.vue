@@ -14,7 +14,9 @@ export default Vue.extend({
      * @example
      */
     closeChatImageOverlay() {
-      this.$store.commit('ui/setChatImageOverlay', undefined)
+      setTimeout(() => {
+        this.$store.commit('ui/setChatImageOverlay', undefined)
+      }, 200)
     },
   },
 })
