@@ -33,6 +33,10 @@ export default async function isNSFW(file: File): Promise<boolean> {
 
   // if embeddable video
   if (vidTypes.some((type) => file.type.includes(type))) {
+    // if too big to scan, allow upload
+    if (file.size > Config.nsfwVideoLimit) {
+      return false
+    }
     const vid = document.createElement('video')
     vid.src = URL.createObjectURL(file)
     await (async () => {
@@ -72,7 +76,7 @@ export default async function isNSFW(file: File): Promise<boolean> {
     }
     // if image is somewhat large, scale down so we don't approach RAM limits
     img.src = URL.createObjectURL(
-      file.size > Config.nsfwByteLimit
+      file.size > Config.nsfwPictureLimit
         ? await skaler(file, { width: 400 })
         : file,
     )

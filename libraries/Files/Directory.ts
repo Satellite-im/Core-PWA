@@ -142,7 +142,6 @@ export class Directory extends Item {
     }
 
     let parent = this.parent
-
     while (!isEqual(parent, null)) {
       if (isEqual(parent, child)) {
         throw new Error(FileSystemErrors.DIR_PARENT_PARADOX)

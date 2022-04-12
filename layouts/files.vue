@@ -39,6 +39,7 @@
         </swiper-slide>
         <swiper-slide class="dynamic-content">
           <menu-icon
+            v-if="!showSidebar || $device.isMobile"
             class="toggle--sidebar"
             size="1.2x"
             full-width

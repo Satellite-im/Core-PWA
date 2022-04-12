@@ -112,9 +112,9 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  nsfwByteLimit: 1048576 * 8, // 8MB - arbitrary image limit for nsfw scan - binary
-  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit - decimal because stoarge systems typically are
-  arrayBufferLimit: 1073741824 * 2, // 2GB - array buffers larger than this crash - binary
+  nsfwPictureLimit: 1048576 * 8, // 8MB - images will be scaled down to this value if possible to prevent memory issues - binary
+  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit - decimal
+  nsfwVideoLimit: 1073741824 * 2, // 2GB - videos larger than this crash - binary
   regex: {
     // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',

@@ -33,6 +33,8 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
+      status: '' as string | TranslateResult,
+      progress: 100 as number,
     }
   },
   computed: {
@@ -114,10 +116,6 @@ export default Vue.extend({
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
-            // prevent crash in case of larger than 2GB heic files. could possibly be broken up into multiple buffers
-            if (file.size >= this.$Config.arrayBufferLimit) {
-              return { file, nsfw: false }
-            }
             const buffer = new Uint8Array(await file.arrayBuffer())
             const outputBuffer = await convert({
               buffer,
@@ -148,10 +146,10 @@ export default Vue.extend({
           files.push(el.file)
         }
       }
-
       for (const file of files) {
         try {
-          await this.$FileSystem.uploadFile(file)
+          this.status = this.$t('pages.files.controls.upload', [file.name])
+          await this.$FileSystem.uploadFile(file, this.setProgress)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -159,11 +157,14 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
+        this.status = this.$t('pages.files.controls.index')
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
       this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.status = ''
 
+      // re-render so new files show up
       this.$emit('forceRender')
 
       if (originalFiles.length !== invalidNameResults.length) {
@@ -178,6 +179,15 @@ export default Vue.extend({
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
+    },
+    /**
+     * @method setProgress
+     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * @param num current progress in bytes
+     * @param size total file size in bytes
+     */
+    setProgress(num: number, size: number) {
+      this.progress = Math.floor((num / size) * 100)
     },
   },
 })

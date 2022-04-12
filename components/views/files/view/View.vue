@@ -24,19 +24,20 @@ export default Vue.extend({
   },
   data() {
     return {
-      load: false as boolean,
       file: undefined as Fil | undefined,
       name: '' as string,
+      progress: 0 as number,
     }
   },
   computed: {
     ...mapState(['ui']),
+    isLoading(): boolean {
+      return this.progress >= 0 && this.progress < 100
+    },
   },
   /**
    */
   async created() {
-    this.load = true
-
     this.file = this.$FileSystem.getChild(this.ui.filePreview) as Fil
     this.name = this.file?.name
 
@@ -47,6 +48,8 @@ export default Vue.extend({
         this.file.id,
         this.file.name,
         this.file.type,
+        this.file.size,
+        this.setProgress,
       )
     }
     // file extension according to file name
@@ -67,14 +70,12 @@ export default Vue.extend({
       if (fileExt !== 'svg') {
         this.name += '.svg'
       }
-      this.load = false
       return
     }
 
     // if corrupted txt file
     if (!dataExt && fileExt !== 'txt') {
       this.name += '.txt'
-      this.load = false
       return
     }
 
@@ -82,9 +83,17 @@ export default Vue.extend({
     if (fileExt !== dataExt && dataExt) {
       this.name += `.${dataExt}`
     }
-    this.load = false
   },
   methods: {
+    /**
+     * @method setProgress
+     * @description set progress (% out of 100) while file is being pulled from textile bucket. passed as a callback
+     * @param num current progress in bytes
+     * @param size total file size in bytes
+     */
+    setProgress(num: number, size: number) {
+      this.progress = Math.floor((num / size) * 100)
+    },
     /**
      * @method share
      * @description Emit to share item - pages/files/browse/index.vue

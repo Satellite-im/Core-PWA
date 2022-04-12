@@ -1,4 +1,4 @@
-import { Buckets, PushPathResult, RemovePathResponse, Root } from '@textile/hub'
+import { Buckets, RemovePathResponse, Root } from '@textile/hub'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
@@ -107,14 +107,51 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method pushFile
    * @description Add file to bucket
+   * stream upload syntax - https://textileio.github.io/js-textile/docs/hub.buckets.pushpath#example-2
    * @param {File} file file to be uploaded
-   * @returns Promise whether it was uploaded or not
+   * @param {string} path uuid to maintain unique bucket paths
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    */
-  async pushFile(file: File, id: string): Promise<PushPathResult> {
+  async pushFile(file: File, path: string, progressCallback: Function) {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
-    return await this.buckets.pushPath(this.key, id, file)
+
+    await this.buckets.pushPath(
+      this.key,
+      path,
+      {
+        path,
+        content: this._getStream(file),
+      },
+      {
+        progress: (num) => {
+          progressCallback(num, file.size)
+        },
+      },
+    )
+  }
+
+  private _getStream(file: File) {
+    const reader = file.stream().getReader()
+    const stream = new ReadableStream({
+      start(controller) {
+        function push() {
+          return reader
+            .read()
+            .then(({ done, value }: { done: boolean; value: Uint8Array }) => {
+              if (done) {
+                controller.close()
+                return
+              }
+              controller.enqueue(value)
+              push()
+            })
+        }
+        push()
+      },
+    })
+    return stream
   }
 
   /**
@@ -122,19 +159,26 @@ export class Bucket extends RFM implements RFMInterface {
    * @description fetch encrypted file from bucket
    * @param {string} id file path in bucket
    * @param {string} type file mime type
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    * @returns Promise of File
    */
   async pullFile(
     id: string,
     name: string,
     type: string,
-  ): Promise<File | undefined> {
+    size: number,
+    progressCallback: Function,
+  ): Promise<File> {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
 
     const data = []
-    for await (const bytes of this.buckets.pullPath(this.key, id)) {
+    for await (const bytes of this.buckets.pullPath(this.key, id, {
+      progress: (num) => {
+        progressCallback(num, size)
+      },
+    })) {
       data.push(bytes)
     }
     // if type is unknown(generic), then don't use in File constructor

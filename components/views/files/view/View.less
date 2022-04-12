@@ -4,6 +4,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
   z-index: @base-z-index + 35;
+  padding: @normal-spacing;
 
   .file-image {
     display: flex;
@@ -28,20 +29,22 @@
       margin-bottom: 0;
     }
   }
+  .progress {
+    display: flex;
+    margin: auto;
+    max-width: 1000px;
+  }
 
   .file-nav {
-    width: @full;
+    width: calc(@full - @xlarge-spacing); //to account for margin
     display: flex;
     position: absolute;
-    margin: @normal-spacing;
 
     .file-info {
       max-width: 50vw;
       .title {
         &:extend(.font-secondary);
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        &:extend(.ellipsis);
       }
     }
 
@@ -49,7 +52,6 @@
       display: flex;
       height: fit-content;
       margin-left: auto;
-      margin-right: @large-spacing;
       gap: @normal-spacing;
 
       .control {

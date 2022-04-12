@@ -134,6 +134,8 @@ export default {
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
+        upload: 'Uploading {0}',
+        index: 'Updating remote index',
       },
       browse: {
         files: 'Files',
