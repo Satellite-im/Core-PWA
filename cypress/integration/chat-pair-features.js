@@ -13,12 +13,12 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
+describe('Chat features with two accounts', () => {
   it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
     //Validate Chat Screen is loaded
-    cy.contains('Chat User A', { timeout: 240000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
   })
 
   it('Send message to user B', () => {
@@ -61,7 +61,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
-  it.skip('Send file to user B', () => {
+  it('Send file to user B', () => {
     cy.chatFeaturesSendFile(fileLocalPath)
     cy.get('[data-cy=chat-file]')
       .last()
@@ -73,13 +73,13 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('File messages cannot be edited', () => {
+  it('File messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
   })
 
   it('Ensure chat window from second account is displayed', () => {
     cy.importAccount(randomPIN, recoverySeedAccountTwo)
-    cy.contains('Chat User B', { timeout: 180000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
   })
 
   it('Assert message received from user A', () => {
@@ -145,7 +145,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert file received from user A', () => {
+  it('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
@@ -200,7 +200,7 @@ describe.skip('Chat features with two accounts', () => {
   it('Send a message from third account to second account', () => {
     //import Chat User C account
     cy.importAccount(randomPIN, recoverySeedAccountThree)
-    cy.contains('Chat User C', { timeout: 180000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
     //Send a message to Chat User B
     cy.goToConversation('Chat User B')
     cy.chatFeaturesSendMessage(randomMessage)

@@ -13,7 +13,7 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.importAccount(randomPIN, recoverySeed)
 
     //Ensure messages are displayed before starting
-    cy.contains('cypress', { timeout: 180000 }).should('be.visible')
+    cy.validateChatPageIsLoaded()
     cy.goToConversation('cypress friend')
     cy.get('[data-cy=editable-input]')
       .should('be.visible')

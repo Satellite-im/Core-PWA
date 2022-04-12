@@ -16,9 +16,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     cy.createAccountSubmit()
 
     //Wait until main page is loaded after creating account
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to main URL again and validate that user is prompt to enter pin again
     cy.visit('/').then(() => {
@@ -26,7 +24,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     })
   })
 
-  it.skip('Create Account with store pin enabled', () => {
+  it('Create Account with store pin enabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
     cy.createAccountPINscreen(randomPIN, true, false)
 
@@ -38,15 +36,11 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     cy.createAccountSubmit()
 
     //Wait until main page is loaded after creating account
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to main URL again and validate that user is redirected to chat screen and pin was saved
     cy.visit('/').then(() => {
-      cy.get('#status > .user-state > .is-rounded > .satellite-circle', {
-        timeout: 120000,
-      }).should('be.visible')
+      cy.validateChatPageIsLoaded()
     })
   })
 
@@ -58,9 +52,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     cy.importAccountEnterPassphrase(userPassphrase)
 
     //Wait until main page is loaded after importing account
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to main URL again and validate that user is prompt to enter pin again
     cy.visit('/').then(() => {
@@ -76,15 +68,11 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
     cy.importAccountEnterPassphrase(userPassphrase)
 
     //Wait until main page is loaded after importing account
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
 
     // Go to main URL again and validate that user is redirected to chat screen and pin was saved
     cy.visit('/').then(() => {
-      cy.get('#status > .user-state > .is-rounded > .satellite-circle', {
-        timeout: 120000,
-      }).should('be.visible')
+      cy.validateChatPageIsLoaded()
     })
   })
 })

@@ -106,8 +106,6 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
 
     //Validating profile picture is null and default satellite circle is displayed
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('exist')
+    cy.validateChatPageIsLoaded()
   })
 })

@@ -8,13 +8,13 @@ const jpgImagePath = 'cypress/fixtures/images/jpeg-test.jpg'
 const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 
-describe.skip('Chat - Sending Images Tests', () => {
+describe('Chat - Sending Images Tests', () => {
   it('PNG image is sent succesfully on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     //Validate profile name displayed
-    cy.get('[data-cy=user-name]', { timeout: 180000 }).should('exist')
+    cy.validateChatPageIsLoaded()
 
     //Validate message is sent
     cy.goToConversation('cypress friend')

@@ -43,7 +43,7 @@ describe('Privacy Page Toggles Tests', () => {
     })
   })
 
-  it.skip('Privacy page - Verify user can still proceed after adjusting switches', () => {
+  it('Privacy page - Verify user can still proceed after adjusting switches', () => {
     //Click on next
     cy.get('#custom-cursor-area').click()
 
@@ -55,16 +55,14 @@ describe('Privacy Page Toggles Tests', () => {
 
     //Click on button, validate buffering screen and that user is redirected to friends/list
     cy.createAccountSubmit()
-    cy.get('[data-cy=user-state]', {
-      timeout: 120000,
-    }).should('be.visible')
+    cy.validateChatPageIsLoaded()
     //Going to Settings and Privacy screen
     cy.get('[data-tooltip="Settings"] > .is-rounded > svg', {
       timeout: 30000,
     }).click()
   })
 
-  it.skip('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
+  it('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
     cy.contains('Privacy').click()
     //Storing the values from toggle switches status of Settings screen into an array
     cy.get('.switch-button')
@@ -83,7 +81,7 @@ describe('Privacy Page Toggles Tests', () => {
       })
   })
 
-  it.skip('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
+  it('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
     //Identify the first switch button and ensure that is locked
     cy.get('.switch-button').first().should('have.class', 'locked')
   })
