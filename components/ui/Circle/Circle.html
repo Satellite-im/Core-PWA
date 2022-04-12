@@ -8,11 +8,13 @@
     v-if="type === 'image' && source"
     alt="Circle Image"
     :class="`${square ? 'is-square' : 'is-rounded'} image`"
+    data-cy="circle-has-picture"
   />
   <UiSatelliteCircle
     v-else-if="type === 'random'"
     :address="seed"
     :name="name"
+    data-cy="circle-without-picture"
   />
   <UiDynamicIcon size="1x" :icon="icon" v-else-if="icon" />
   <slot></slot>

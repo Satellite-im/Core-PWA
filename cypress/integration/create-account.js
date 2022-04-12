@@ -1,6 +1,7 @@
 const faker = require('faker')
 const filepathCorrect = 'images/logo.png'
 const filepathNsfw = 'images/negative-create-account-test.png'
+const invalidImagePath = 'images/incorrect-image.png'
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
@@ -107,5 +108,84 @@ describe('Create Account Validations', () => {
 
     //Validating profile picture is null and default satellite circle is displayed
     cy.validateChatPageIsLoaded()
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-without-picture]',
+    ).should('be.visible')
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-has-picture]',
+    ).should('not.exist')
+  })
+
+  it('Create account without image after attempting to add an invalid image file', () => {
+    //Creating pin
+    cy.createAccountPINscreen(randomPIN)
+
+    //Clicking on buttons to continue to user data screen
+    cy.createAccountSecondScreen()
+    cy.createAccountPrivacyTogglesGoNext()
+    cy.createAccountRecoverySeed()
+
+    //Adding random data in user input fields
+    cy.createAccountUserInput(randomName, randomStatus)
+
+    //Attempting to add an invalid image and validating error message is displayed
+    cy.createAccountAddImage(invalidImagePath)
+    cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
+      'have.text',
+      'Unable to upload, invalid file.',
+    )
+
+    //User is still able to sign in and invalid image will not be loaded
+    cy.createAccountSubmit()
+
+    //Validating profile picture is null
+    cy.validateChatPageIsLoaded()
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-without-picture]',
+    ).should('be.visible')
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-has-picture]',
+    ).should('not.exist')
+  })
+
+  it('Create account with valid image after attempting to add an invalid image file', () => {
+    //Creating pin
+    cy.createAccountPINscreen(randomPIN)
+
+    //Clicking on buttons to continue to user data screen
+    cy.createAccountSecondScreen()
+    cy.createAccountPrivacyTogglesGoNext()
+    cy.createAccountRecoverySeed()
+
+    //Adding random data in user input fields
+    cy.createAccountUserInput(randomName, randomStatus)
+
+    //Attempting to add an invalid image and validating error message is displayed
+    cy.createAccountAddImage(invalidImagePath)
+    cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
+      'have.text',
+      'Unable to upload, invalid file.',
+    )
+
+    //Now adding a valid image and validating user can pass to next step
+    cy.createAccountAddImage(filepathCorrect)
+    cy.get('[data-cy=cropper-container]', { timeout: 60000 })
+      .should('be.visible')
+      .then(() => {
+        cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
+      })
+    cy.get('[data-cy=error-message]').should('not.exist')
+
+    //User is able to sign in after adding a correct image
+    cy.createAccountSubmit()
+
+    //Validating profile picture is Not null
+    cy.validateChatPageIsLoaded()
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-has-picture]',
+    ).should('be.visible')
+    cy.get(
+      '[data-cy=satellite-circle-profile] > [data-cy=circle-without-picture]',
+    ).should('not.exist')
   })
 })
