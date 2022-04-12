@@ -8,7 +8,6 @@ import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
-import { Conversation } from '~/store/textile/types'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -16,6 +15,7 @@ import {
   refreshTimestampInterval,
   convertTimestampToDate,
 } from '~/utilities/Messaging'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -26,6 +26,7 @@ declare module 'vue/types/vue' {
     getDescriptionFromMessage: (message: Message) => string
   }
 }
+
 export default Vue.extend({
   components: {
     SmartphoneIcon,
@@ -67,7 +68,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'textile']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      userConversationLastUpdate(state) {
+        return (
+          (state as RootState).textile.conversations[this.user.address]
+            ?.lastUpdate ?? 0
+        )
+      },
+    }),
     ...mapGetters('textile', ['getConversation']),
     lastMessage() {
       const conversation = this.getConversation(this.user.address)
@@ -81,29 +90,24 @@ export default Vue.extend({
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
-
-    getConversation: {
-      get() {
-        return this.$store.state.textile.conversations[this.user.address]
-      },
-    },
   },
   watch: {
-    'textile.conversations': {
-      handler(newValue) {
+    userConversationLastUpdate: {
+      handler(lastUpdate) {
         if (this.$data.timestampRefreshInterval) {
           clearInterval(this.$data.timestampRefreshInterval)
         }
 
-        this.existMessage(newValue)
-
+        this.$data.existConversation = lastUpdate > 0
         this.$data.timestamp = convertTimestampToDate(
           this.$t('friends.details'),
-          newValue[this.user.address]?.lastUpdate,
+          lastUpdate,
         )
 
         const setTimestamp = (timePassed: number) => {
-          if (timePassed === this.getConversation?.lastUpdate) {
+          if (
+            timePassed === this.getConversation(this.user.address)?.lastUpdate
+          ) {
             this.$data.timestamp = convertTimestampToDate(
               this.$t('friends.details'),
               timePassed,
@@ -112,12 +116,11 @@ export default Vue.extend({
         }
 
         this.$data.timestampRefreshInterval = refreshTimestampInterval(
-          newValue[this.user.address]?.lastUpdate,
+          lastUpdate,
           setTimestamp,
           Config.chat.timestampUpdateInterval,
         )
       },
-      deep: true,
       immediate: true,
     },
   },
@@ -167,13 +170,6 @@ export default Vue.extend({
       if (value >= 100) {
         return '99+'
       }
-    },
-    existMessage(textileObj: Conversation) {
-      const currentUserInfo = textileObj[this.user.address]
-
-      this.$data.existConversation = !(
-        !currentUserInfo || currentUserInfo?.lastUpdate <= 0
-      )
     },
     getDescriptionFromMessage(message: Message) {
       switch (message.type) {
