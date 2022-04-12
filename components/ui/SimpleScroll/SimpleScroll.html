@@ -1,0 +1,7 @@
+<div
+  id="simple-scrollbar"
+  v-on:scroll="onScroll"
+  :class="{'scrollbar-visible': scrollShow === 'always' || scrolling, 'scrollbar-vertical-content': $props.scrollMode === 'vertical', 'scrollbar-horizontal-content': $props.scrollMode === 'horizontal'}"
+>
+  <slot />
+</div>

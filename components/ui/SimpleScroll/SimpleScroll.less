@@ -1,0 +1,68 @@
+#simple-scrollbar {
+  // Scrollbar with Hover Transition Effect
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-clip: content-box;
+    border: 4px solid transparent;
+    border-radius: 7px;
+    box-shadow: inset 0 0 0 10px;
+  }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  overflow: auto;
+  color: #00000000;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #666666ff;
+  }
+
+  /* 
+  height: @full;
+  width: @full;
+  overflow: auto;
+  box-sizing: border-box;
+  transition: color 250ms ease-in-out;
+
+  &.scrollbar-vertical-content {
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+  }
+
+  &.scrollbar-horizontal-content {
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+      height: 7px;
+    }
+  }
+
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &.scrollbar-visible {
+     &::-webkit-scrollbar-thumb {
+      background-color: red;
+      scrollbar-color: red;
+    } 
+  }
+ */
+}
