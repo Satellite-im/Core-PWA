@@ -3,7 +3,8 @@
     class="is-image"
     data-cy="chat-image"
     :class="full ? 'is-full-image' : 'is-normal-image'"
-    :src="image.url"
+    :src="imageSrc"
     @click="clickHandler"
+    @error="onImageError"
   />
 </div>

@@ -133,8 +133,14 @@ export default Vue.extend({
     this.cancelMessage()
   },
   async mounted() {
-    const data = await fetch(this.message.payload.url)
-    this.blob = await data.blob()
+    if (!this.message.payload?.url) {
+      return
+    }
+    try {
+      this.blob = await this.getImageBlob(this.message.payload?.url)
+    } catch (error: any) {
+      this.$Logger.log('error', error.message)
+    }
   },
   methods: {
     /**
@@ -319,6 +325,19 @@ export default Vue.extend({
         payload: 'message',
         from: this.$props.group.id,
       })
+    },
+    async getImageBlob(imageSrc: string) {
+      if (!imageSrc) {
+        return
+      }
+
+      const response = await fetch(imageSrc)
+
+      if (!response.ok) {
+        throw new Error('Could not load image')
+      }
+
+      return await response.blob()
     },
   },
 })
