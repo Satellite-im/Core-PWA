@@ -48,6 +48,7 @@
       multiple
     />
   </div>
+  <UiProgress v-if="progress != 100" :progress="progress" />
   <TypographyText v-if="status" class="status" :text="status" :size="6" />
   <div class="error-container" v-if="errors.length">
     <alert-triangle-icon size="1.3x" />

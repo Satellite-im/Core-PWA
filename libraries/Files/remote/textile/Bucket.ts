@@ -107,17 +107,32 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method pushFile
    * @description Add file to bucket
+   * stream upload syntax - https://textileio.github.io/js-textile/docs/hub.buckets.pushpath#example-2
    * @param {File} file file to be uploaded
+   * @param {string} path uuid to maintain unique bucket paths
+   * @param {Function} progressCallback used to show progress meter in componment that calls this method
    */
-  async pushFile(file: File, id: string) {
+  async pushFile(file: File, path: string, progressCallback: Function) {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
 
-    await this.buckets.pushPath(this.key, id, this.getStream(file))
+    await this.buckets.pushPath(
+      this.key,
+      path,
+      {
+        path,
+        content: this._getStream(file),
+      },
+      {
+        progress: (num) => {
+          progressCallback(num, file.size)
+        },
+      },
+    )
   }
 
-  private getStream(file: File) {
+  private _getStream(file: File) {
     const reader = file.stream().getReader()
     const stream = new ReadableStream({
       start(controller) {
@@ -126,13 +141,9 @@ export class Bucket extends RFM implements RFMInterface {
             .read()
             .then(({ done, value }: { done: boolean; value: Uint8Array }) => {
               if (done) {
-                console.log('stream is done')
-                // Tell the browser that we have finished sending data
                 controller.close()
                 return
               }
-
-              // Get the data and send it to the browser via the controller
               controller.enqueue(value)
               push()
             })

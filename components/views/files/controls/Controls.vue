@@ -34,6 +34,7 @@ export default Vue.extend({
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
       status: '' as string | TranslateResult,
+      progress: 100 as number,
     }
   },
   computed: {
@@ -148,7 +149,7 @@ export default Vue.extend({
       for (const file of files) {
         try {
           this.status = this.$t('pages.files.controls.upload', [file.name])
-          await this.$FileSystem.uploadFile(file)
+          await this.$FileSystem.uploadFile(file, this.setProgress)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -178,6 +179,15 @@ export default Vue.extend({
       if (nsfwResults.length !== files.length) {
         this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
+    },
+    /**
+     * @method setProgress
+     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * @param num current progress in bytes
+     * @param size total file size in bytes
+     */
+    setProgress(num: number, size: number) {
+      this.progress = Math.floor((num / size) * 100)
     },
   },
 })
