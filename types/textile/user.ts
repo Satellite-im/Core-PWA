@@ -1,7 +1,7 @@
 export interface UserdataFromThread {
   _id: string
-  created_at: Number
+  created_at: number
   user_address: string
   consent_scan: boolean
-  consent_date: Number
+  consent_date: number
 }
