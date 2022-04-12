@@ -2,6 +2,8 @@
 
 exports[`init should return the showSidebar property of the initial state 1`] = `true`;
 
+exports[`init should return the swiperSlideIndex property of the initial state 1`] = `0`;
+
 exports[`init sort most recent glyphs 1`] = `
 Array [
   Object {

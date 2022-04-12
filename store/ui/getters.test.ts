@@ -21,6 +21,19 @@ describe('init', () => {
     expect(result).not.toBeTruthy()
   })
 
+  it('should return the swiperSlideIndex property of the initial state', () => {
+    const result: any = inst.swiperSlideIndex(InitialUIState())
+    expect(result).toBe(0)
+    expect(result).toMatchSnapshot()
+  })
+
+  it('should not return the swiperSlideIndex property of the initial state', () => {
+    //  An error will be thrown because the arguments passed into the constructor is not proper
+    const result: any = inst.swiperSlideIndex({})
+    expect(result).toBeUndefined()
+    expect(result).not.toBeTruthy()
+  })
+
   test('sort most recent glyphs', () => {
     const localState = {
       contextMenuStatus: false,
