@@ -96,7 +96,7 @@
               v-if="showOlderMessageInfo"
               :caption="$t('pages.chat.older_messages')"
               type="primary"
-              :click-handler="handleClick"
+              @click="handleClick()"
             >
               <chevron-down-icon size="1.5x" />
               {{ $t('pages.chat.recent_messages') }}
@@ -262,7 +262,7 @@ export default Vue.extend({
         this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
       }
     },
-    handleClick(e: MouseEvent) {
+    handleClick() {
       this.$refs.chatScroll?.autoScrollToBottom()
     },
   },

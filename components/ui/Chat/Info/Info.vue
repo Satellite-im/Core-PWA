@@ -13,10 +13,6 @@ export default Vue.extend({
       type: String as PropType<InfoType>,
       default: 'primary',
     },
-    clickHandler: {
-      type: Function,
-      default: () => {},
-    },
   },
 })
 </script>
