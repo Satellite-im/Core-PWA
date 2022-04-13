@@ -23,6 +23,7 @@ export interface IncomingRequest extends FriendRequest {
 export interface Friend extends EncryptedFriend {
   publicKey: string
   typingState: 'TYPING' | 'NOT_TYPING'
+  typingGroupId: boolean | string
   textilePubkey: string
   item: any // TODO remove unnecessary properties AP-393
   pending: Boolean

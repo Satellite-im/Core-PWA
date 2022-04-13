@@ -48,7 +48,8 @@
   <ChatbarFooter
     :text="text"
     :charlimit="charlimit"
+    :isGroup="isGroup"
     :typing="recipientTyping"
-    :usersTyping="activeFriend ? [ activeFriend ] : []"
+    :usersTyping="typingUsers"
   />
 </div>

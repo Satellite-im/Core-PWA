@@ -16,6 +16,10 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    isGroup: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapState(['ui', 'webrtc', 'friends']),

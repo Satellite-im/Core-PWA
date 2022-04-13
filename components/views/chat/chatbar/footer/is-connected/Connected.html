@@ -1,5 +1,5 @@
 <div
-  v-if="!typing && $Hounddog.getActiveFriend(friends) && !this.$store.state.textile.conversationLoading"
+  v-if="!isGroup && (!typing && $Hounddog.getActiveFriend(friends) && !this.$store.state.textile.conversationLoading)"
   class="is-connected"
 >
   <circle-icon

@@ -25,6 +25,7 @@ Array [
     "status": "",
     "stored": undefined,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingGroupId": false,
     "typingState": "NOT_TYPING",
     "unreadCount": 123,
     "userAccount": "",
@@ -43,6 +44,7 @@ Array [
     "name": "Yusuf Mangunwijaya",
     "stored": false,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingGroupId": false,
     "typingState": "NOT_TYPING",
   },
 ]
@@ -73,6 +75,7 @@ Array [
     "status": "",
     "stored": undefined,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingGroupId": false,
     "typingState": "NOT_TYPING",
     "unreadCount": 123,
     "userAccount": "",
@@ -91,6 +94,7 @@ Array [
     "name": "Yusuf Mangunwijaya",
     "stored": true,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingGroupId": false,
     "typingState": "NOT_TYPING",
   },
 ]
@@ -121,6 +125,7 @@ Array [
     "status": "",
     "stored": undefined,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+    "typingGroupId": false,
     "typingState": "NOT_TYPING",
     "unreadCount": 123,
     "userAccount": "",
@@ -139,6 +144,7 @@ Array [
     "name": "Yusuf Mangunwijaya",
     "stored": false,
     "textilePubkey": "https://accounts.google.com/o/oauth2/revoke?token=429",
+    "typingGroupId": false,
     "typingState": "TYPING",
   },
 ]

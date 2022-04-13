@@ -62,7 +62,11 @@ const mutations = {
   },
   setTyping(
     state: FriendsState,
-    opts: { id: string; typingState: 'TYPING' | 'NOT_TYPING' },
+    opts: {
+      id: string
+      typingState: 'TYPING' | 'NOT_TYPING'
+      typingGroupId: boolean | string
+    },
   ) {
     state.all = state.all.map((f) => ({
       ...f,
@@ -70,6 +74,8 @@ const mutations = {
         f.address === opts.id
           ? opts.typingState
           : f.typingState || 'NOT_TYPING',
+      typingGroupId:
+        f.address === opts.id ? opts.typingGroupId : f.typingGroupId,
     }))
   },
   setNote(

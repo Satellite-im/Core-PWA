@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { PeerId } from 'libp2p/src/metrics'
 import { WebRTCState } from './types'
 
 import { ActionsArguments } from '~/types/store/store'
@@ -58,32 +59,43 @@ const webRTCActions = {
     })
 
     const timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
-    $Peer2Peer.on('peer:typing', ({ peerId }) => {
-      const typingFriend = rootState.friends.all.find(
-        (friend) => friend.peerId === peerId.toB58String(),
-      )
+    $Peer2Peer.on(
+      'peer:typing',
+      ({ peerId, payload }: { peerId: PeerId; payload: any }) => {
+        const typingFriend = rootState.friends.all.find(
+          (friend) => friend.peerId === peerId.toB58String(),
+        )
 
-      if (!typingFriend) return
+        if (!typingFriend) return
 
-      commit(
-        'friends/setTyping',
-        { id: typingFriend.address, typingState: PropCommonEnum.TYPING },
-        { root: true },
-      )
-
-      clearTimeout(timeoutMap[peerId.toB58String()])
-      delete timeoutMap[peerId.toB58String()]
-
-      timeoutMap[peerId.toB58String()] = setTimeout(() => {
         commit(
           'friends/setTyping',
-          { id: typingFriend.address, typingState: PropCommonEnum.NOT_TYPING },
+          {
+            id: typingFriend.address,
+            typingState: PropCommonEnum.TYPING,
+            typingGroupId: payload.groupId,
+          },
           { root: true },
         )
-      }, Config.chat.typingInputThrottle * 3)
 
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
-    })
+        clearTimeout(timeoutMap[peerId.toB58String()])
+        delete timeoutMap[peerId.toB58String()]
+
+        timeoutMap[peerId.toB58String()] = setTimeout(() => {
+          commit(
+            'friends/setTyping',
+            {
+              id: typingFriend.address,
+              typingState: PropCommonEnum.NOT_TYPING,
+              typingGroupId: payload.groupId,
+            },
+            { root: true },
+          )
+        }, Config.chat.typingInputThrottle * 3)
+
+        dispatch('textile/subscribeToMailbox', {}, { root: true })
+      },
+    )
 
     $Peer2Peer.on('peer:announce', ({ peerId }) => {
       const requestFriend = rootState.friends.all.find(

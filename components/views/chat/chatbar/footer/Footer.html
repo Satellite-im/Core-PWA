@@ -1,5 +1,5 @@
 <div id="bottom-bar-container">
-  <ChatbarFooterIsConnected :typing="typing" />
+  <ChatbarFooterIsConnected :typing="!!typing" :isGroup="isGroup" />
   <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
   <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
     {{ lengthCount }}

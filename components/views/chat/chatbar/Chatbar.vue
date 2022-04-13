@@ -1,30 +1,35 @@
 <template src="./Chatbar.html"></template>
 
 <script lang="ts">
+import { throttle } from 'lodash'
+import PeerId from 'peer-id'
+import { TerminalIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { throttle } from 'lodash'
-import { TerminalIcon } from 'satellite-lucide-icons'
-import PeerId from 'peer-id'
-
-import { parseCommand, commands } from '~/libraries/ui/Commands'
-import { Friend } from '~/types/ui/friends'
+import { Config } from '~/config'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { Config } from '~/config'
+import { commands, parseCommand } from '~/libraries/ui/Commands'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { Group, GroupMember } from '~/store/groups/types'
+import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
   interface Vue {
     sendMessage: Function
     text: string
+    activeGroup: Group
+    activeGroupMembers: Friend[]
+    isGroup: boolean
     updateText: Function
     handleUpload: Function
     throttleTyping: Function
     typingNotifHandler: Function
+    friendTypingNotifyHandler: Function
+    groupTypingNotifyHandler: Function
     smartTypingStart: Function
     clearChatbar: Function
     handleChatBorderRadius: Function
@@ -45,6 +50,7 @@ export default Vue.extend({
     return {
       showEmojiPicker: false,
       recipientTyping: false,
+      typingUsers: [] as Friend[],
       showFilePreview: false,
       nsfwUploadError: false,
     }
@@ -53,6 +59,32 @@ export default Vue.extend({
     ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
+    },
+    activeGroup() {
+      const selectedGroup = this.$store.state.groups.all.find(
+        (group: Group) => group.id === this.$props.recipient.textilePubkey,
+      )
+      return selectedGroup
+    },
+    activeGroupMembers() {
+      const filterFriends = (friends: Friend[], members: GroupMember[]) => {
+        return friends.filter(
+          (friend: Friend) =>
+            members.findIndex(
+              (member) =>
+                friend.address === member.address && friend.state === 'online',
+            ) >= 0,
+        )
+      }
+      return filterFriends(
+        this.$store.state.friends.all,
+        this.activeGroup.members,
+      )
+    },
+    isGroup() {
+      return RegExp(this.$Config.regex.uuidv4).test(
+        this.$props.recipient.textilePubkey.split('|')[1],
+      )
     },
     /**
      * Computes the amount of characters left
@@ -141,11 +173,31 @@ export default Vue.extend({
   watch: {
     'friends.all': {
       handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        if (this.isGroup) {
+          const { activeGroupMembers, activeGroup } = this
+          const typingUsers = activeGroupMembers.filter(
+            (user) =>
+              user.typingState === PropCommonEnum.TYPING &&
+              activeGroup.id === user.typingGroupId,
+          )
+          this.$data.recipientTyping = typingUsers.length > 0
+          this.$data.typingUsers = typingUsers
+          return
+        }
 
-        if (activeFriend)
+        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        if (activeFriend) {
           this.$data.recipientTyping =
-            activeFriend.typingState === PropCommonEnum.TYPING
+            activeFriend.typingState === PropCommonEnum.TYPING &&
+            !activeFriend.typingGroupId
+          this.$data.typingUsers = !activeFriend.typingGroupId
+            ? [activeFriend]
+            : []
+          return
+        }
+
+        this.$data.recipientTyping = false
+        this.$data.typingUsers = []
       },
       deep: true,
     },
@@ -181,6 +233,15 @@ export default Vue.extend({
     typingNotifHandler(
       state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
     ) {
+      if (this.isGroup) {
+        this.groupTypingNotifyHandler(state)
+        return
+      }
+      this.friendTypingNotifyHandler(state)
+    },
+    friendTypingNotifyHandler(
+      state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
+    ) {
       const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
         try {
@@ -191,7 +252,7 @@ export default Vue.extend({
           p2p.sendMessage(
             {
               type: 'TYPING_STATE',
-              payload: { state: 'TYPING' },
+              payload: { state: 'TYPING', groupId: false },
               sentAt: Date.now(),
             },
             PeerId.createFromB58String(activeFriend.peerId),
@@ -203,6 +264,31 @@ export default Vue.extend({
             error,
           })
         }
+      }
+    },
+    groupTypingNotifyHandler(
+      state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
+    ) {
+      const { activeGroup, activeGroupMembers } = this
+      try {
+        const p2p = Peer2Peer.getInstance()
+        activeGroupMembers.forEach((friend: Friend) => {
+          if (!friend.peerId) return
+          p2p.sendMessage(
+            {
+              type: 'TYPING_STATE',
+              payload: { state: 'TYPING', groupId: activeGroup.id },
+              sentAt: Date.now(),
+            },
+            PeerId.createFromB58String(friend.peerId),
+          )
+        })
+        // const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+        // activePeer?.send('TYPING_STATE', { state })
+      } catch (error: any) {
+        this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
+          error,
+        })
       }
     },
     /**

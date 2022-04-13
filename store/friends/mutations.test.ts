@@ -42,6 +42,7 @@ describe('mutate incoming requests', () => {
       {
         publicKey: 'NoWiFi4you',
         typingState: 'NOT_TYPING',
+        typingGroupId: false,
         item: {},
         pending: true,
         activeChat: true,
@@ -220,6 +221,7 @@ describe('mutate outgoing requests', () => {
       {
         publicKey: 'NoWiFi4you',
         typingState: 'NOT_TYPING',
+        typingGroupId: false,
         item: {},
         pending: true,
         activeChat: true,
@@ -398,6 +400,7 @@ describe('mutate friends', () => {
       {
         publicKey: 'NoWiFi4you',
         typingState: 'NOT_TYPING',
+        typingGroupId: false,
         item: {},
         pending: true,
         activeChat: true,
@@ -434,6 +437,7 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: false,
       account: {
         accountId: 'Checking Account',
@@ -455,6 +459,7 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
@@ -476,6 +481,7 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
@@ -497,6 +503,7 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
@@ -518,6 +525,7 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1', // We will just use this
       typingState: 'TYPING', // Change the value here so we can detect it in the the expect() below
+      typingGroupId: false,
       activeChat: true,
       account: {
         accountId: 'Checking Account',
@@ -533,6 +541,7 @@ describe('mutate friends', () => {
     inst.setTyping(InitialFriendsState, {
       id: payload.address,
       typingState: 'TYPING',
+      typingGroupId: false,
     })
     expect(InitialFriendsState.all).toMatchSnapshot()
   })
@@ -542,6 +551,7 @@ describe('mutate friends', () => {
       name: 'Y. Mangunwijaya', //  Abbreviate the name from Yusuf to Y.
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: false,
       account: {
         accountId: 'Checking Account',
@@ -564,6 +574,7 @@ describe('mutate friends', () => {
       name: 'Y. Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
+      typingGroupId: false,
       activeChat: false,
       account: {
         accountId: 'Checking Account',
