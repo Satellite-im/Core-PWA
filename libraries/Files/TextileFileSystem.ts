@@ -36,7 +36,6 @@ export class TextileFileSystem extends FilSystem {
     this.createFile({
       id,
       name: file.name,
-      file,
       size: file.size,
       type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
       thumbnail: await this._createThumbnail(file, byteType),

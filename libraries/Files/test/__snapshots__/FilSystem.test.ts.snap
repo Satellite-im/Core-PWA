@@ -171,7 +171,7 @@ Array [
           "_children": Map {
             "testfile.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -184,7 +184,7 @@ Array [
             },
             "testpng2.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -197,7 +197,7 @@ Array [
             },
             "abc.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -210,7 +210,7 @@ Array [
             },
             "cc123.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -275,7 +275,7 @@ Array [
           "_children": Map {
             "testfile.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -288,7 +288,7 @@ Array [
             },
             "testpng2.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -301,7 +301,7 @@ Array [
             },
             "abc.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -314,7 +314,7 @@ Array [
             },
             "cc123.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -360,7 +360,7 @@ Array [
     "_children": Map {
       "testfile.png" => Fil {
         "_description": "Test file description",
-        "_file": undefined,
+        "_extension": "png",
         "_id": "testid",
         "_liked": false,
         "_modified": 1645617999076,
@@ -373,7 +373,7 @@ Array [
       },
       "testpng2.png" => Fil {
         "_description": "Test file description",
-        "_file": undefined,
+        "_extension": "png",
         "_id": "testid",
         "_liked": false,
         "_modified": 1645617999076,
@@ -386,7 +386,7 @@ Array [
       },
       "abc.png" => Fil {
         "_description": "Test file description",
-        "_file": undefined,
+        "_extension": "png",
         "_id": "testid",
         "_liked": false,
         "_modified": 1645617999076,
@@ -399,7 +399,7 @@ Array [
       },
       "cc123.png" => Fil {
         "_description": "Test file description",
-        "_file": undefined,
+        "_extension": "png",
         "_id": "testid",
         "_liked": false,
         "_modified": 1645617999076,
@@ -492,7 +492,7 @@ Array [
           "_children": Map {
             "testfile.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -505,7 +505,7 @@ Array [
             },
             "testpng2.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -518,7 +518,7 @@ Array [
             },
             "abc.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -531,7 +531,7 @@ Array [
             },
             "cc123.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -595,7 +595,7 @@ FilSystem {
         "_children": Map {
           "testfile.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -608,7 +608,7 @@ FilSystem {
           },
           "testpng2.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -621,7 +621,7 @@ FilSystem {
           },
           "abc.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -634,7 +634,7 @@ FilSystem {
           },
           "cc123.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -700,7 +700,7 @@ FilSystem {
           "_children": Map {
             "testfile.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -713,7 +713,7 @@ FilSystem {
             },
             "testpng2.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -726,7 +726,7 @@ FilSystem {
             },
             "abc.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -739,7 +739,7 @@ FilSystem {
             },
             "cc123.png" => Fil {
               "_description": "Test file description",
-              "_file": undefined,
+              "_extension": "png",
               "_id": "testid",
               "_liked": false,
               "_modified": 1645617999076,
@@ -805,7 +805,7 @@ FilSystem {
         "_children": Map {
           "testfile.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -818,7 +818,7 @@ FilSystem {
           },
           "testpng2.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -831,7 +831,7 @@ FilSystem {
           },
           "abc.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,
@@ -844,7 +844,7 @@ FilSystem {
           },
           "cc123.png" => Fil {
             "_description": "Test file description",
-            "_file": undefined,
+            "_extension": "png",
             "_id": "testid",
             "_liked": false,
             "_modified": 1645617999076,

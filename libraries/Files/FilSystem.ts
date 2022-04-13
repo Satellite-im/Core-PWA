@@ -157,6 +157,7 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
       } = item
       return {
         id,
@@ -168,6 +169,7 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
       }
     }
     const { id, name, liked, shared, type, modified } = item
@@ -213,6 +215,7 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
       } = item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({
@@ -225,6 +228,7 @@ export class FilSystem {
         type,
         modified,
         thumbnail,
+        extension,
       })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
@@ -248,7 +252,6 @@ export class FilSystem {
   public createFile({
     id,
     name,
-    file,
     size,
     liked,
     shared,
@@ -256,10 +259,10 @@ export class FilSystem {
     type,
     modified,
     thumbnail,
+    extension,
   }: {
     id?: string
     name: string
-    file?: File
     size: number
     liked?: boolean
     shared?: boolean
@@ -267,11 +270,11 @@ export class FilSystem {
     type?: FILE_TYPE
     modified?: number
     thumbnail?: string
+    extension?: string
   }): Fil | null {
     const newFile = new Fil({
       id,
       name,
-      file,
       size,
       liked,
       shared,
@@ -279,6 +282,7 @@ export class FilSystem {
       type,
       modified,
       thumbnail,
+      extension,
     })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null

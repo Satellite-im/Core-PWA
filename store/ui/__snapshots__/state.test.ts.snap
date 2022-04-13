@@ -29,6 +29,7 @@ Object {
     "route": "emotes",
     "show": false,
   },
+  "fileDownloadList": Array [],
   "filePreview": undefined,
   "fileSort": Object {
     "asc": true,

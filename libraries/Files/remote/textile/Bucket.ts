@@ -1,4 +1,5 @@
 import { Buckets, RemovePathResponse, Root } from '@textile/hub'
+import { createWriteStream } from 'streamsaver'
 import { RFM } from '../abstracts/RFM.abstract'
 import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
@@ -7,7 +8,6 @@ import {
   FileSystemExport,
   FILESYSTEM_TYPE,
 } from '~/libraries/Files/types/filesystem'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export class Bucket extends RFM implements RFMInterface {
   private _textile: TextileInitializationData
@@ -158,33 +158,24 @@ export class Bucket extends RFM implements RFMInterface {
    * @method pullFile
    * @description fetch encrypted file from bucket
    * @param {string} id file path in bucket
-   * @param {string} type file mime type
-   * @param {Function} progressCallback used to show progress meter in componment that calls this method
+   * @param {string} name file name
+   * @param {number} size file size to show progress in browser
    * @returns Promise of File
    */
-  async pullFile(
-    id: string,
-    name: string,
-    type: string,
-    size: number,
-    progressCallback: Function,
-  ): Promise<File> {
+  async pullFileStream(id: string, name: string, size: number) {
     if (!this.buckets || !this.key) {
       throw new Error('Bucket or bucket key not found')
     }
+    const fileStream = createWriteStream(name, { size })
+    const writer = fileStream.getWriter()
 
-    const data = []
-    for await (const bytes of this.buckets.pullPath(this.key, id, {
-      progress: (num) => {
-        progressCallback(num, size)
-      },
-    })) {
-      data.push(bytes)
+    window.onunload = () => writer.abort()
+
+    for await (const bytes of this.buckets.pullPath(this.key, id)) {
+      console.log(bytes)
+      writer.write(bytes)
     }
-    // if type is unknown(generic), then don't use in File constructor
-    return new File(data, name, {
-      type: type === FILE_TYPE.GENERIC ? '' : type,
-    })
+    writer.close()
   }
 
   /**

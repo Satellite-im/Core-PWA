@@ -6,8 +6,8 @@ import { FILE_TYPE } from './types/file'
 export class Fil extends Item {
   private _description: string = ''
   private _size: number = 0
-  private _file: File | undefined
   private _thumbnail: string
+  private _extension: string
 
   /**
    * @constructor
@@ -17,7 +17,6 @@ export class Fil extends Item {
   constructor({
     id,
     name,
-    file,
     size,
     liked,
     shared,
@@ -25,10 +24,10 @@ export class Fil extends Item {
     description,
     type,
     thumbnail,
+    extension,
   }: {
     id?: string
     name: string
-    file?: File
     size: number
     liked?: boolean
     shared?: boolean
@@ -36,15 +35,19 @@ export class Fil extends Item {
     description?: string
     type?: FILE_TYPE
     thumbnail?: string
+    extension?: string
   }) {
     if (!size) {
       throw new Error(FileSystemErrors.FILE_SIZE)
     }
     super({ name, liked, shared, modified, id, type })
-    this._file = file || undefined
     this._description = description || ''
     this._size = size
     this._thumbnail = thumbnail || ''
+    // set original extension in case user changes it during rename
+    this._extension =
+      extension ||
+      name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2).toLowerCase()
   }
 
   /**
@@ -62,7 +65,6 @@ export class Fil extends Item {
   get copy(): Fil {
     return new Fil({
       name: `${this.name} copy`,
-      file: this._file,
       size: this.size,
       modified: this.modified,
       liked: this.liked,
@@ -70,12 +72,13 @@ export class Fil extends Item {
       description: this.description,
       type: this.type as FILE_TYPE,
       thumbnail: this.thumbnail,
+      extension: this.extension,
     })
   }
 
   /**
    * @getter size
-   * @returns file size
+   * @returns {number} file size
    */
   get size(): number {
     return this._size
@@ -83,42 +86,26 @@ export class Fil extends Item {
 
   /**
    * @getter modified
-   * @returns last modified timestamp
+   * @returns {number} last modified timestamp
    */
   get modified(): number {
     return this.modifiedVal
   }
 
   /**
-   * @getter file
-   * @returns file object fetched from textile bucket
-   */
-  get file(): File | undefined {
-    return this._file
-  }
-
-  /**
-   * @setter file
-   * @param {File} file file object
-   */
-  set file(file: File | undefined) {
-    this._file = file
-  }
-
-  /**
    * @getter url
-   * @returns link of locally stored File for image preview and downloads
-   */
-  get url(): string {
-    return this.file ? URL.createObjectURL(this.file) : ''
-  }
-
-  /**
-   * @getter url
-   * @returns link of localally stored File for image preview and downloads
+   * @returns {string} link of localally stored File for image preview and downloads
    */
   get thumbnail(): string {
     return this._thumbnail
+  }
+
+  /**
+   * @getter extension
+   * @returns {string} content the content to set the file description to
+   */
+  get extension(): string {
+    return this._extension
   }
 
   /**

@@ -371,4 +371,13 @@ export default {
   setFilesUploadStatus(state: UIState, value: string) {
     state.filesUploadStatus = value
   },
+  addFileDownload(state: UIState, name: string) {
+    state.fileDownloadList.push(name)
+  },
+  removeFileDownload(state: UIState, name: string) {
+    const index = state.fileDownloadList.indexOf(name)
+    if (index > -1) {
+      state.fileDownloadList.splice(index, 1)
+    }
+  },
 }

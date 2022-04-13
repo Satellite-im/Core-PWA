@@ -39,6 +39,7 @@ const commonProperties = [
   'ui.isScrollOver',
   'ui.filePreview',
   'ui.filesUploadStatus',
+  'ui.fileDownloadList',
 ]
 
 const propertiesNoStorePin = [
