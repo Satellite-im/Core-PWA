@@ -78,16 +78,19 @@ export default Vue.extend({
       this.$emit('forceRender')
     },
 
+    handleInput(event: any) {
+      this.handleFile([...event.target.files])
+    },
+
     /**
      * @method handleFile
      * @description remove nsfw files then upload to filesystem
-     * @param event Input event object
+     * @param {File[]} originalFiles files to upload
      * @example <input @change="handleFile" />
      */
-    async handleFile(event: any) {
+    async handleFile(originalFiles: File[]) {
       this.errors = []
       this.$store.commit('ui/setIsLoadingFileIndex', true)
-      const originalFiles: File[] = [...event.target.files]
 
       // if these files go over the storage limit, prevent upload
       if (
