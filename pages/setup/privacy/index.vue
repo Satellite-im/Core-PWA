@@ -8,7 +8,7 @@ import { validURL } from '~/libraries/ui/Common'
 export default Vue.extend({
   name: 'PrivacyScreen',
   computed: {
-    ...mapState(['settings', 'meta']),
+    ...mapState(['settings']),
   },
   methods: {
     async generateWallet() {
