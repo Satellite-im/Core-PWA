@@ -29,13 +29,6 @@ describe('SearchUtil.default.getSearchResultGroupList', () => {
   })
 })
 
-describe('SearchUtil.default.getSearchOrderTypeList', () => {
-  test('0', () => {
-    const result: any = SearchUtil.default.getSearchOrderTypeList()
-    expect(result).toMatchSnapshot()
-  })
-})
-
 describe('SearchUtil.default.getCommandMeta', () => {
   test('0', () => {
     const result: any = SearchUtil.default.getCommandMeta(

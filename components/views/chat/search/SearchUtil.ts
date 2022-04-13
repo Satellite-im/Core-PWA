@@ -4,7 +4,6 @@ import {
   SearchCommandType,
   SearchCommandTypeParam,
   SearchOption,
-  SearchOrderType,
   SearchQueryItem,
   SearchRecommend,
   SearchRecommendResultItem,
@@ -98,22 +97,6 @@ export const searchCommandMetaList = [
   },
 ] as SearchCommandMeta[]
 
-const searchOrderTypeList = [
-  {
-    type: SearchOrderType.New,
-    title: 'New',
-  },
-
-  {
-    type: SearchOrderType.Old,
-    title: 'Old',
-  },
-  {
-    type: SearchOrderType.Relevant,
-    title: 'Relevant',
-  },
-]
-
 const searchResultGroupList = [
   {
     type: SearchResultGroupType.Messages,
@@ -142,7 +125,6 @@ const SearchUtil = {
   getCommandTypeParams: () => searchCommandTypeParams,
   getCommandMetaList: () => searchCommandMetaList,
   getSearchResultGroupList: () => searchResultGroupList,
-  getSearchOrderTypeList: () => searchOrderTypeList,
   /**
    * @method getCommandMeta DocsTODO
    * @description

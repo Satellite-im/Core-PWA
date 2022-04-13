@@ -1,5 +1,6 @@
 import MiniSearch, { Options } from 'minisearch'
 import type { SearchOptions } from 'minisearch'
+import { UISearchResultData } from '~/types/search/search'
 
 export type SearchIndexOptions = {
   schema: Options<any>
@@ -74,7 +75,10 @@ export default class SearchIndex {
     this.addAll(records)
   }
 
-  search(query: string, options?: SearchOptions | undefined) {
+  search(
+    query: string,
+    options?: SearchOptions | undefined,
+  ): UISearchResultData[] {
     return this.index
       .search(query, options)
       .map((doc) => ({ ...doc, ...this.getById(doc[this.idField]) }))

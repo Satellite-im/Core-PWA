@@ -169,23 +169,6 @@ Object {
 }
 `;
 
-exports[`SearchUtil.default.getSearchOrderTypeList 0 1`] = `
-Array [
-  Object {
-    "title": "New",
-    "type": "new",
-  },
-  Object {
-    "title": "Old",
-    "type": "old",
-  },
-  Object {
-    "title": "Relevant",
-    "type": "relevant",
-  },
-]
-`;
-
 exports[`SearchUtil.default.getSearchResultGroupList 0 1`] = `
 Array [
   Object {

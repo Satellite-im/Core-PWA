@@ -1,4 +1,5 @@
 import { MatchInfo } from 'minisearch'
+import { MessageTypes } from '../textile/mailbox'
 import { Friend } from '../ui/friends'
 import { User } from '../ui/user'
 
@@ -132,14 +133,23 @@ export type SearchParam = {
   orderby: SearchOrderType
 }
 
+export interface UISearchResultData {
+  at: number
+  conversation: string
+  from: string
+  id: string
+  match: MatchInfo
+  payload: 'ay'
+  readAt: number
+  score: number
+  terms: string[]
+  to: string
+  type: MessageTypes
+  user?: User
+}
+
 export interface UISearchResult {
-  data: {
-    user?: User
-    id: any
-    terms: string[]
-    score: number
-    match: MatchInfo
-  }[]
+  data: UISearchResultData[]
   totalRows: number
 }
 
