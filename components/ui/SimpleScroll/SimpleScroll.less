@@ -1,68 +1,38 @@
 #simple-scrollbar {
-  // Scrollbar with Hover Transition Effect
-  &::-webkit-scrollbar {
-    width: 14px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-clip: content-box;
-    border: 4px solid transparent;
-    border-radius: 7px;
-    box-shadow: inset 0 0 0 10px;
-  }
-  &::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-  &::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-  overflow: auto;
-  color: #00000000;
-  transition: color 0.3s;
+  @scrollBarSize: 5px;
 
-  &:hover {
-    color: #666666ff;
-  }
-
-  /* 
-  height: @full;
   width: @full;
-  overflow: auto;
-  box-sizing: border-box;
-  transition: color 250ms ease-in-out;
+  height: @full;
+  padding: @scrollBarSize*2;
 
-  &.scrollbar-vertical-content {
+  &.scrollbar-vertical {
     overflow-x: hidden;
 
     &::-webkit-scrollbar {
-      width: 7px;
+      width: @scrollBarSize;
     }
   }
 
-  &.scrollbar-horizontal-content {
+  &.scrollbar-horizontal {
     overflow-y: hidden;
 
     &::-webkit-scrollbar {
-      height: 7px;
+      height: @scrollBarSize;
     }
   }
 
   scrollbar-width: thin;
+  scrollbar-color: var(--flair-color) transparent;
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      border-radius: @scrollBarSize*2;
+      background-color: var(--flair-color);
+    }
   }
 
-  &::-webkit-scrollbar-track {
-    display: none;
+  &.scrollbar-always-visible::-webkit-scrollbar-thumb {
+    border-radius: @scrollBarSize*2;
+    background-color: var(--flair-color);
   }
-
-  &.scrollbar-visible {
-     &::-webkit-scrollbar-thumb {
-      background-color: red;
-      scrollbar-color: red;
-    } 
-  }
- */
 }

@@ -21,26 +21,6 @@ export default Vue.extend({
       required: false,
     },
   },
-  data() {
-    return { scrolling: false, timeout: null }
-  },
-  methods: {
-    onScroll: throttle(function () {
-      if (this.$props.scrollShow !== 'always') {
-        if (this.scrolling) {
-          if (this.timeout) {
-            clearTimeout(this.timeout)
-          }
-
-          this.timeout = setTimeout(() => {
-            this.scrolling = false
-          }, 1000)
-        }
-
-        this.scrolling = true
-      }
-    }, 500),
-  },
 })
 </script>
 
