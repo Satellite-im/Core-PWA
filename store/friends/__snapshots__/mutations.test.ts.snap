@@ -143,3 +143,157 @@ Array [
   },
 ]
 `;
+
+exports[`mutations.addFriend 0 1`] = `undefined`;
+
+exports[`mutations.addFriend 1 1`] = `undefined`;
+
+exports[`mutations.addFriend 2 1`] = `undefined`;
+
+exports[`mutations.addFriend 3 1`] = `undefined`;
+
+exports[`mutations.addFriend 4 1`] = `undefined`;
+
+exports[`mutations.addFriend 5 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 0 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 1 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 2 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 3 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 4 1`] = `undefined`;
+
+exports[`mutations.addIncomingRequest 5 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 0 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 1 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 2 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 3 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 4 1`] = `undefined`;
+
+exports[`mutations.addOutgoingRequest 5 1`] = `undefined`;
+
+exports[`mutations.removeFriend 0 1`] = `undefined`;
+
+exports[`mutations.removeFriend 1 1`] = `undefined`;
+
+exports[`mutations.removeFriend 2 1`] = `undefined`;
+
+exports[`mutations.removeFriend 3 1`] = `undefined`;
+
+exports[`mutations.removeFriend 4 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 0 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 1 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 2 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 3 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 4 1`] = `undefined`;
+
+exports[`mutations.removeIncomingRequest 5 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 0 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 1 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 2 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 3 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 4 1`] = `undefined`;
+
+exports[`mutations.removeOutgoingRequest 5 1`] = `undefined`;
+
+exports[`mutations.setActive 0 1`] = `undefined`;
+
+exports[`mutations.setActive 1 1`] = `undefined`;
+
+exports[`mutations.setActive 2 1`] = `undefined`;
+
+exports[`mutations.setActive 3 1`] = `undefined`;
+
+exports[`mutations.setActive 4 1`] = `undefined`;
+
+exports[`mutations.setActive 5 1`] = `undefined`;
+
+exports[`mutations.setNote 0 1`] = `undefined`;
+
+exports[`mutations.setNote 1 1`] = `undefined`;
+
+exports[`mutations.setNote 2 1`] = `undefined`;
+
+exports[`mutations.setNote 3 1`] = `undefined`;
+
+exports[`mutations.setNote 4 1`] = `undefined`;
+
+exports[`mutations.setNote 5 1`] = `undefined`;
+
+exports[`mutations.setStored 0 1`] = `undefined`;
+
+exports[`mutations.setStored 1 1`] = `undefined`;
+
+exports[`mutations.setStored 2 1`] = `undefined`;
+
+exports[`mutations.setStored 3 1`] = `undefined`;
+
+exports[`mutations.setStored 4 1`] = `undefined`;
+
+exports[`mutations.setStored 5 1`] = `undefined`;
+
+exports[`mutations.sortFriends 0 1`] = `undefined`;
+
+exports[`mutations.sortFriends 1 1`] = `undefined`;
+
+exports[`mutations.sortFriends 2 1`] = `undefined`;
+
+exports[`mutations.sortFriends 3 1`] = `undefined`;
+
+exports[`mutations.sortFriends 4 1`] = `undefined`;
+
+exports[`mutations.sortFriends 5 1`] = `undefined`;
+
+exports[`mutations.updateFriend 0 1`] = `undefined`;
+
+exports[`mutations.updateFriend 1 1`] = `undefined`;
+
+exports[`mutations.updateFriend 2 1`] = `undefined`;
+
+exports[`mutations.updateFriend 3 1`] = `undefined`;
+
+exports[`mutations.updateFriend 4 1`] = `undefined`;
+
+exports[`mutations.updateFriend 5 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 0 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 1 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 2 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 3 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 4 1`] = `undefined`;
+
+exports[`mutations.updateIncomingRequest 5 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 0 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 1 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 2 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 3 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 4 1`] = `undefined`;
+
+exports[`mutations.updateOutgoingRequest 5 1`] = `undefined`;
