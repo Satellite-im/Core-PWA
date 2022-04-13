@@ -2,16 +2,6 @@ import PeerId from 'peer-id'
 import { keys } from 'libp2p-crypto'
 import { PublicKey } from '@solana/web3.js'
 
-import {
-  PublicKey as TextilePublicKey,
-  PrivateKey as TextilePrivateKey,
-  Identity,
-  ThreadID,
-  UserMessage,
-  Users,
-  Query,
-} from '@textile/hub'
-
 import Vue from 'vue'
 import { DataStateType } from '../dataState/types'
 import { TextileError } from '../textile/types'
