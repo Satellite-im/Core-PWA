@@ -548,6 +548,7 @@ export default {
       contains_nsfw: 'Unable to upload file/s due to NSFW status',
       empty_message_error:
         'Message must contain at least one non-space character',
+      failed_upload: 'Image Failed to Upload',
     },
     textile: {
       friend_not_found: 'Friend not found',

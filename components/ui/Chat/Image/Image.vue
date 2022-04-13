@@ -3,7 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
 import { FileMessage, ImageMessage } from '~/types/textile/mailbox'
-import placeholderImage from '~/assets/img/icon.png'
+import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
   components: {
@@ -26,7 +26,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      imageSrc: this.image?.url,
+      placeholderSrc: placeholderImage,
+      placeholderText: this.$t('errors.chat.failed_upload'),
+      usePlaceholder: false,
     }
   },
   methods: {
@@ -34,7 +36,7 @@ export default Vue.extend({
       this.$store.commit('ui/setChatImageOverlay', this.image)
     },
     onImageError() {
-      this.imageSrc = placeholderImage
+      this.usePlaceholder = true
     },
   },
 })

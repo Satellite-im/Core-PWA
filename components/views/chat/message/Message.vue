@@ -15,6 +15,7 @@ import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
+import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
   components: {
@@ -139,6 +140,7 @@ export default Vue.extend({
     try {
       this.blob = await this.getImageBlob(this.message.payload?.url)
     } catch (error: any) {
+      this.blob = await this.getImageBlob(placeholderImage)
       this.$Logger.log('error', error.message)
     }
   },
@@ -334,10 +336,10 @@ export default Vue.extend({
       const response = await fetch(imageSrc)
 
       if (!response.ok) {
-        throw new Error('Could not load image')
+        throw new Error(this.$t('errors.chat.failed_upload') as string)
       }
 
-      return await response.blob()
+      return response.blob()
     },
   },
 })
