@@ -1,5 +1,4 @@
 import { Group } from '~/types/ui/core'
-import { Config } from '~/config'
 
 export const Groups: Group[] = [
   {

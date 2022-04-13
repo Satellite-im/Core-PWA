@@ -1,8 +1,5 @@
-import Vue from 'vue'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
-import WebRTC from '~/libraries/WebRTC/WebRTC'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 export default {
   /**
