@@ -41,10 +41,6 @@ export default Vue.extend({
       type: Array as PropType<UploadDropItemType[]>,
       default: null,
     },
-    cancelUpload: {
-      type: Function,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -63,17 +59,6 @@ export default Vue.extend({
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
-  },
-  watch: {
-    recipient() {
-      this.$store.commit(
-        'chat/setShowFilePreview',
-        this.$props.files.length > 0,
-      )
-    },
-  },
-  mounted() {
-    this.$store.commit('chat/setShowFilePreview', this.$props.files.length > 0)
   },
   methods: {
     /**
@@ -104,7 +89,7 @@ export default Vue.extend({
       this.$store.dispatch('ui/setChatbarFocus')
       if (this.$props.editable) {
         const newFiles: File[] = [...event.target.files]
-        this.$store.commit('chat/setShowFilePreview', newFiles.length > 0)
+
         if (newFiles.length + this.$props.files.length > 8) {
           this.$store.commit('chat/setCountError', true)
 
@@ -197,7 +182,7 @@ export default Vue.extend({
           this.alertNsfwFile()
         }
         if (!this.$data.containsNsfw) {
-          this.$props.cancelUpload()
+          this.$emit('cancelUpload')
           document.body.style.cursor = PropCommonEnum.DEFAULT
           this.$store.dispatch('textile/clearUploadStatus')
         }
@@ -209,7 +194,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.$store.commit('chat/setAlertNsfw', false)
         this.$data.containsNsfw = false
-        this.$props.cancelUpload()
+        this.$emit('cancelUpload')
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
       }, 500000)

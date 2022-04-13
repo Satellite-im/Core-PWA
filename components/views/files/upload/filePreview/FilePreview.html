@@ -7,7 +7,11 @@
   <div v-if="countError" class="file-error">
     <TypographyError :text="$t('errors.chat.drop_file_count')" />
     <div class="close-button">
-      <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
+      <x-icon
+        size="1x"
+        class="has-text-danger"
+        @click="this.$emit('cancelUpload')"
+      />
     </div>
   </div>
   <div v-if="alertNsfw" class="file-error">

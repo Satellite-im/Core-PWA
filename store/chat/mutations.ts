@@ -58,9 +58,6 @@ const mutations = {
   setAlertNsfw(state: ChatState, alertNsfw: Boolean) {
     state.alertNsfw = alertNsfw
   },
-  setShowFilePreview(state: ChatState, showFilePreview: Boolean) {
-    state.showFilePreview = showFilePreview
-  },
 }
 
 export default mutations

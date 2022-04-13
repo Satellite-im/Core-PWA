@@ -1,10 +1,13 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import PeerId from 'peer-id'
+
+import Upload from '../../files/upload/Upload.vue'
+import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
 
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
@@ -34,6 +37,8 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   components: {
     TerminalIcon,
+    Upload,
+    FilePreview,
   },
   props: {
     recipient: {
@@ -51,6 +56,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
+    ...mapGetters('chat', ['getFiles']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -154,7 +160,6 @@ export default Vue.extend({
           (item: any) => item.userId === this.$props.recipient?.address,
         )
         const message = findItem ? findItem.value : ''
-
         this.$refs.editable?.resetHistory()
         this.$store.commit('ui/setReplyChatbarContent', {
           id: '',
@@ -162,7 +167,6 @@ export default Vue.extend({
           from: '',
         })
         this.$store.dispatch('ui/setChatbarContent', { content: message })
-
         // in desktop, stay chatbar focused when switching recipient
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
@@ -177,7 +181,7 @@ export default Vue.extend({
         mutation.type === 'chat/setFiles'
       ) {
         if (this.recipient) {
-          this.$data.files = state.chat.files?.[this.recipient?.address]
+          this.$data.files = this.getFiles(this.recipient?.address)
         }
       }
 
@@ -371,10 +375,9 @@ export default Vue.extend({
      * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
      * @example @click="cancelUpload"
      */
-    cancelUpload() {
+    onCancelUpload() {
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$store.commit('chat/setCountError', false)
-      this.$store.commit('chat/setShowFilePreview', false)
     },
     beforeDestroy() {
       this.unsubscribe()

@@ -10,11 +10,11 @@
   <FilesUploadFilePreview
     :recipient="recipient"
     :files="files"
-    :cancelUpload="cancelUpload"
+    @cancelUpload="onCancelUpload"
   />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': chat.showFilePreview || ui.replyChatbarContent.id || commandPreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
@@ -25,7 +25,7 @@
         type="quick"
         ref="file-upload"
         :files="files"
-        :cancelUpload="cancelUpload"
+        @cancelUpload="onCancelUpload"
       />
     </div>
     <div

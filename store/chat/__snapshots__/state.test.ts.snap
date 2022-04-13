@@ -7,6 +7,5 @@ Object {
   "countError": false,
   "files": Object {},
   "replies": Array [],
-  "showFilePreview": false,
 }
 `;
