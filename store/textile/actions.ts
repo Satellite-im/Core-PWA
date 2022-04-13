@@ -65,6 +65,14 @@ export default {
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
       await $FileSystem.import(fsExport)
     }
+    const consentData = await $TextileManager.userInfoManager?.getConsentData()
+    if (consentData) {
+      /* Log CSAM Consent Data for future ticket as Hogan requested */
+      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', consentData)
+      commit('settings/setConsentScan', consentData.consent_scan, {
+        root: true,
+      })
+    }
     return textilePublicKey
   },
   /**

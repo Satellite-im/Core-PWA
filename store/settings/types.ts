@@ -28,6 +28,7 @@ export interface SettingsState {
   userDeniedAudioAccess: boolean
   keybinds: object
   embeddedLinks: boolean
+  consentScan: boolean
   displayCurrentActivity: boolean
   timezone: string
   removeState: boolean

@@ -33,7 +33,14 @@
       <InteractablesSwitch v-model="displayCurrentActivity" />
     </SettingsUnit>
   </div>
-
+  <div class="columns is-desktop">
+    <SettingsUnit
+      :title="$t('pages.privacy.consentScan.title')"
+      :text="$t('pages.privacy.consentScan.subtitle')"
+    >
+      <InteractablesSwitch v-model="consentScan" />
+    </SettingsUnit>
+  </div>
   <div class="columns is-desktop">
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
