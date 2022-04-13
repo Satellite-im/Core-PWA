@@ -140,7 +140,7 @@ export default Vue.extend({
      * @description Allows the drag and drop of files into the filesystem
      * @param e Drop event data object
      */
-    async handleDrop(e: DragEvent) {
+    handleDrop(e: DragEvent) {
       e.preventDefault()
 
       // if already uploading, return to prevent bucket fast-forward crash
