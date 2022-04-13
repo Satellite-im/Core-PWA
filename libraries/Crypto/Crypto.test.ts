@@ -183,7 +183,7 @@ describe('Crypto.default.isInitialized', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Crypto.default()
+    inst = new CryptoDefault()
   })
 
   test('0', () => {
