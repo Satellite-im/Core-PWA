@@ -32,7 +32,7 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Username must be at least 5 characters.')
   })
 
-  it('Try to create account with NSFW image', () => {
+  it.skip('Try to create account with NSFW image', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
