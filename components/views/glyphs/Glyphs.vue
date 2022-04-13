@@ -34,7 +34,6 @@ export default Vue.extend({
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.CALLTOACTION,
         state: !this.ui.modals[ModalWindows.CALLTOACTION],
-        featureReadyToShow: false,
       })
       /* refactor - AP-1104
        const marketInfo = find(marketGlyphs, ({ glyph }) => {
