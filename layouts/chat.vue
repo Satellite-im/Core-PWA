@@ -131,7 +131,7 @@ import { MenuIcon, ChevronDownIcon } from 'satellite-lucide-icons'
 import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-import WithMeta from '~/components/mixins/Meta/WithMeta'
+import useMeta from '~/components/compositions/useMeta'
 import { hexToRGB } from '~/utilities/Colors'
 import { DataStateType } from '~/store/dataState/types'
 
@@ -148,8 +148,11 @@ export default Vue.extend({
     ChevronDownIcon,
     DroppableWrapper,
   },
-  mixins: [Touch, Layout, WithMeta],
+  mixins: [Touch, Layout],
   middleware: ['authenticated'],
+  setup() {
+    const meta = useMeta()
+  },
   data() {
     return {
       sidebar: !this.$device.isMobile,

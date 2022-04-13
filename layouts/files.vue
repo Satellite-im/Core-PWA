@@ -68,7 +68,7 @@ import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
-import WithMeta from '~/components/mixins/Meta/WithMeta'
+import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -76,8 +76,11 @@ export default Vue.extend({
     MenuIcon,
     DroppableWrapper,
   },
-  mixins: [Touch, Layout, WithMeta],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
+  setup() {
+    const meta = useMeta()
+  },
   data() {
     return {
       sidebar: !this.$device.isMobile,

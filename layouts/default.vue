@@ -9,10 +9,12 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import WithMeta from '~/components/mixins/Meta/WithMeta'
+import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
-  mixins: [WithMeta],
+  setup() {
+    const meta = useMeta()
+  },
 })
 </script>
 <style lang="less">

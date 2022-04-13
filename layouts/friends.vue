@@ -69,15 +69,18 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
-import WithMeta from '~/components/mixins/Meta/WithMeta'
+import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   name: 'ChatLayout',
   components: {
     MenuIcon,
   },
-  mixins: [Touch, Layout, WithMeta],
+  mixins: [Touch, Layout],
   middleware: 'authenticated',
+  setup() {
+    const meta = useMeta()
+  },
   data() {
     return {
       sidebar: !this.$device.isMobile,
