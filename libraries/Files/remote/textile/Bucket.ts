@@ -172,7 +172,6 @@ export class Bucket extends RFM implements RFMInterface {
     window.onunload = () => writer.abort()
 
     for await (const bytes of this.buckets.pullPath(this.key, id)) {
-      console.log(bytes)
       writer.write(bytes)
     }
     writer.close()
