@@ -1,12 +1,12 @@
 #simple-scrollbar {
   @scrollBarSize: 5px;
-
   width: @full;
   height: @full;
-  padding: @scrollBarSize*2;
 
   &.scrollbar-vertical {
     overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: @scrollBarSize*2;
 
     &::-webkit-scrollbar {
       width: @scrollBarSize;
@@ -15,6 +15,8 @@
 
   &.scrollbar-horizontal {
     overflow-y: hidden;
+    overflow-x: scroll;
+    padding-bottom: @scrollBarSize*2;
 
     &::-webkit-scrollbar {
       height: @scrollBarSize;
