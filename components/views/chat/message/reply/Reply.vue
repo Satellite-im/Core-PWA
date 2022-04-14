@@ -4,10 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 import { UIMessage, Group } from '~/types/messaging'
-import {
-  getUsernameFromState,
-  convertTimestampToDate,
-} from '~/utilities/Messaging'
+import { getUsernameFromState } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 
 export default Vue.extend({
@@ -37,11 +34,10 @@ export default Vue.extend({
   data() {
     return {
       showReplies: false,
-      replyHover: '',
     }
   },
   computed: {
-    ...mapState(['chat']),
+    ...mapState(['ui', 'chat']),
     setChatReply: {
       set(state) {
         this.$store.commit('chat/setChatReply', state)
@@ -107,18 +103,6 @@ export default Vue.extend({
     markdownToHtml(text: string) {
       return toHTML(text, { liveTyping: false })
     },
-    getUsernameFromReply(reply: any) {
-      return getUsernameFromState(reply.from, this.$store.state)
-    },
-    /**
-     * @method mouseOver DocsTODO
-     * @description
-     * @param replyId
-     * @example
-     */
-    mouseOver(replyId: string) {
-      this.$data.replyHover = replyId
-    },
     /**
      * @method emojiReaction DocsTODO
      * @description
@@ -137,10 +121,8 @@ export default Vue.extend({
             : this.$props.message.to,
       })
       this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: !!this.$device.isMobile,
-        position: [e.clientX, e.clientY],
-        containerWidth: this.$el.clientWidth,
+        show: !this.ui.enhancers.show,
+        floating: true,
       })
     },
     /**
@@ -167,9 +149,6 @@ export default Vue.extend({
         replyId: this.$props.message.id,
         value: this.$data.showReplies,
       }
-    },
-    getTimestampFromReply(timestamp: number) {
-      return convertTimestampToDate(this.$t('friends.details'), timestamp)
     },
   },
 })
