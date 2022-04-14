@@ -114,7 +114,9 @@ export default Vue.extend({
      * @description hide virtual keyboard on mobile
      */
     hideKeyboard() {
-      document.activeElement.blur()
+      if (this.$device.isMobile) {
+        document.activeElement.blur()
+      }
     },
     /**
      * @method onScrolled DocsTODO
