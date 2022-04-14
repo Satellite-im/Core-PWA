@@ -4,7 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { findKey, shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
-import { marketGlyphs } from '~/mock/marketplace'
+// import { marketGlyphs } from '~/mock/marketplace'
 import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
@@ -36,14 +36,14 @@ export default Vue.extend({
         name: ModalWindows.CALLTOACTION,
         state: !this.ui.modals[ModalWindows.CALLTOACTION],
       })
-      // refactor - AP-1104
-      // const marketInfo = find(marketGlyphs, ({ glyph }) => {
-      //   return glyph.name === this.selectedPack.name
-      // })
-      // this.$store.commit('ui/setGlyphMarketplaceView', {
-      //   view: GlyphMarketViewStatus.SHOP_DETAIL,
-      //   shopId: marketInfo?.id,
-      // })
+      /* refactor - AP-1104
+       const marketInfo = find(marketGlyphs, ({ glyph }) => {
+         return glyph.name === this.selectedPack.name
+       })
+       this.$store.commit('ui/setGlyphMarketplaceView', {
+         view: GlyphMarketViewStatus.SHOP_DETAIL,
+         shopId: marketInfo?.id,
+       }) */
     },
   },
 })
