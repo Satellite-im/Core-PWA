@@ -282,7 +282,10 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
-    .type(message)
+    .paste({
+      pasteType: 'text',
+      pastePayload: message,
+    })
   cy.get('[data-cy=send-message]').click() //sending text message
   cy.contains(message, { timeout: 15000 })
     .last()
@@ -414,15 +417,26 @@ Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
 
-Cypress.Commands.add('validateChatPageIsLoaded', (customTimeout = 180000) => {
+Cypress.Commands.add('validateChatPageIsLoaded', (customTimeout = 300000) => {
   cy.get('[data-cy=user-name]', { timeout: customTimeout }).should('exist')
 })
 
 Cypress.Commands.add('goToConversation', (user, mobile = false) => {
-  cy.get('[data-cy=sidebar-friends]').click()
+  //If chat conversation is displayed, click on hamburger button
+  //Click on sidebar friends button to show friends list
+  cy.get('[data-cy=sidebar-friends]').then(($button) => {
+    if (!$button.is(':visible')) {
+      cy.get('[data-cy=hamburger-button]').click()
+    }
+    cy.wrap($button).click()
+  })
+
+  //On mobile viewports, we need to click on hamburger button to see the friends list
   if (mobile === true) {
     cy.get('[data-cy=hamburger-button]').click()
   }
+
+  //Find the friend and click on the message button associated
   cy.get('[data-cy=friend-name]').contains(user).as('friend')
   cy.get('@friend')
     .parent()
@@ -431,10 +445,13 @@ Cypress.Commands.add('goToConversation', (user, mobile = false) => {
     .as('friend-message')
   cy.get('@friend-message').click()
 
+  //On mobile viewports, we need to click on hamburger button to see the chat conversation
   if (mobile === true) {
     cy.get('[data-cy=hamburger-button]').click()
   }
-  cy.get('[data-cy=user-connected]', { timeout: 60000 })
+
+  //Wait until conversation is fully loaded
+  cy.get('[data-cy=user-connected]', { timeout: 90000 })
     .should('be.visible')
     .should('have.text', user)
 })
@@ -535,6 +552,22 @@ Cypress.Commands.add('validateCharlimit', (text, assert) => {
       }
     })
 })
+
+Cypress.Commands.add('reactToChatElement', (elementLocator, emojiLocator) => {
+  cy.selectContextMenuOption(elementLocator, 'Add Reaction')
+  cy.get(emojiLocator).click()
+})
+
+Cypress.Commands.add(
+  'validateChatReaction',
+  (elementLocator, emojiValue, timeout = 30000) => {
+    cy.get(elementLocator)
+      .scrollIntoView()
+      .parents('[data-cy=message-container]')
+      .find('[data-cy=emoji-reaction-value]', { timeout: timeout })
+      .should('contain', emojiValue)
+  },
+)
 
 //Version Release Notes Commands
 

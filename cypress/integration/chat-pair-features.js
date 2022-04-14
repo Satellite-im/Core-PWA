@@ -156,7 +156,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert timestamp is displayed when user A sends a message', () => {
+  it.skip('Assert timestamp is displayed when user A sends a message', () => {
     cy.get('[data-cy=chat-timestamp]')
       .last()
       .invoke('text')
@@ -165,13 +165,37 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
+  it('Add reactions to text message in chat', () => {
+    cy.contains(randomMessage).last().as('messageToReact')
+    cy.reactToChatElement('@messageToReact', '[title="smile"]')
+    cy.validateChatReaction('@messageToReact', '😄')
+  })
+
+  it('Add reactions to image in chat', () => {
+    cy.get('[data-cy=chat-image]').last().as('imageToReact')
+    cy.reactToChatElement('@imageToReact', '[title="smile"]')
+    cy.validateChatReaction('@imageToReact', '😄')
+  })
+
+  it('Add reactions to file in chat', () => {
+    cy.get('[data-cy=chat-file]').last().as('fileToReact')
+    cy.reactToChatElement('@fileToReact', '[title="smile"]')
+    cy.validateChatReaction('@fileToReact', '😄')
+  })
+
+  it('Add reactions to glyph in chat', () => {
+    cy.get('[data-cy=chat-glyph]').last().as('glyphToReact')
+    cy.reactToChatElement('@glyphToReact', '[title="smile"]')
+    cy.validateChatReaction('@glyphToReact', '😄')
+  })
+
   it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
     cy.goToConversation('Chat User C')
     cy.get('[data-cy=editable-input]').should('be.visible').type(randomMessage)
     cy.get('[data-cy=editable-input]').clear()
   })
 
-  it('Assert timestamp immediately after sending message', () => {
+  it.skip('Assert timestamp immediately after sending message', () => {
     //Send a random message
     cy.chatFeaturesSendMessage(randomMessageTwo)
 
@@ -184,7 +208,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert timestamp one minute after sending message', () => {
+  it.skip('Assert timestamp one minute after sending message', () => {
     //Wait for 60 seconds
     cy.wait(60000)
 
