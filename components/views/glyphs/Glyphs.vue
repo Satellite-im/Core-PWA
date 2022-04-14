@@ -4,7 +4,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { findKey, shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
-import { ModalWindows } from '~/store/ui/types'
+// import { marketGlyphs } from '~/mock/marketplace'
+import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
