@@ -162,7 +162,11 @@ export default Vue.extend({
         from: '',
       })
       this.$store.dispatch('ui/setChatbarContent', { content: message })
-      this.$store.dispatch('ui/setChatbarFocus')
+
+      // in desktop, stay chatbar focused when switching recipient
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
     },
   },
   methods: {
