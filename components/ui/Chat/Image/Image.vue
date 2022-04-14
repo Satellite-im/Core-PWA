@@ -3,6 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
 import { FileMessage, ImageMessage } from '~/types/textile/mailbox'
+import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
   components: {
@@ -23,9 +24,19 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      placeholderSrc: placeholderImage,
+      placeholderText: this.$t('errors.chat.failed_load'),
+      usePlaceholder: false,
+    }
+  },
   methods: {
     clickHandler(event: MouseEvent): void {
       this.$store.commit('ui/setChatImageOverlay', this.image)
+    },
+    onImageError() {
+      this.usePlaceholder = true
     },
   },
 })

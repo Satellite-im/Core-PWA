@@ -5,6 +5,21 @@
   .is-image {
     cursor: pointer;
   }
+
+  &-placeholder {
+    text-align: center;
+    max-width: 200px;
+    user-select: none;
+    pointer-events: none;
+    &-img {
+      padding: @normal-spacing;
+    }
+    &-caption {
+      color: @secondary-text;
+      font-family: @primary-font;
+      font-size: @mini-text-size;
+    }
+  }
 }
 
 .text {

@@ -38,7 +38,7 @@
           />
           <UiChatImage
             v-else-if="reply.replyType === 'image'"
-            :source="reply.payload.url"
+            :image="reply.payload.url"
             alt=""
           />
           <UiChatEmbedsVideoPlayer

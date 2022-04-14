@@ -1,9 +1,21 @@
 <div class="image">
+  <figure class="image-placeholder" v-if="usePlaceholder">
+    <img
+      class="image-placeholder-img"
+      :src="placeholderSrc"
+      :alt="placeholderText"
+    />
+    <figcaption class="image-placeholder-caption">
+      {{placeholderText}}
+    </figcaption>
+  </figure>
   <img
+    v-else
     class="is-image"
     data-cy="chat-image"
     :class="full ? 'is-full-image' : 'is-normal-image'"
     :src="image.url"
     @click="clickHandler"
+    @error="onImageError"
   />
 </div>

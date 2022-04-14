@@ -15,6 +15,7 @@ import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
+import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
   components: {
@@ -133,8 +134,15 @@ export default Vue.extend({
     this.cancelMessage()
   },
   async mounted() {
-    const data = await fetch(this.message.payload.url)
-    this.blob = await data.blob()
+    if (!this.message.payload?.url) {
+      return
+    }
+    try {
+      this.blob = await this.getImageBlob(this.message.payload?.url)
+    } catch (error: any) {
+      this.blob = await this.getImageBlob(placeholderImage)
+      this.$Logger.log('error', error.message)
+    }
   },
   methods: {
     /**
@@ -319,6 +327,19 @@ export default Vue.extend({
         payload: 'message',
         from: this.$props.group.id,
       })
+    },
+    async getImageBlob(imageSrc: string) {
+      if (!imageSrc) {
+        return
+      }
+
+      const response = await fetch(imageSrc)
+
+      if (!response.ok) {
+        throw new Error(this.$t('errors.chat.failed_load') as string)
+      }
+
+      return response.blob()
     },
   },
 })
