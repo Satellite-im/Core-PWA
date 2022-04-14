@@ -3,7 +3,10 @@
   :class="textile.messageLoading ? 'loading' : ''"
   @contextmenu="contextMenu"
 >
-  <div :class="`message-container ${message.pinned ? 'pinned-message' : ''}`">
+  <div
+    :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
+    data-cy="message-container"
+  >
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
       Archived

@@ -12,7 +12,7 @@
       @mouseenter="toggleReactors(reaction.emoji)"
       @mouseleave="toggleReactors(null)"
     >
-      <span>{{reaction.emoji}}</span>
+      <span data-cy="emoji-reaction-value">{{reaction.emoji}}</span>
       <span>{{reaction.reactors.length}}</span>
       <div></div>
     </div>
