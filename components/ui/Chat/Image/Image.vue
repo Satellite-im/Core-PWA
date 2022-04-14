@@ -27,7 +27,7 @@ export default Vue.extend({
   data() {
     return {
       placeholderSrc: placeholderImage,
-      placeholderText: this.$t('errors.chat.failed_upload'),
+      placeholderText: this.$t('errors.chat.failed_load'),
       usePlaceholder: false,
     }
   },

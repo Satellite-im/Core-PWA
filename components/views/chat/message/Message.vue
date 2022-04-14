@@ -336,7 +336,7 @@ export default Vue.extend({
       const response = await fetch(imageSrc)
 
       if (!response.ok) {
-        throw new Error(this.$t('errors.chat.failed_upload') as string)
+        throw new Error(this.$t('errors.chat.failed_load') as string)
       }
 
       return response.blob()
