@@ -392,7 +392,7 @@ export default {
       accounts: {
         title: 'Accounts & Devices',
         subtitle:
-          "Select with account you'd prefer to default transactions from.",
+          "Select which account you'd prefer to default transactions from.",
         active: 'Active Account',
         gas_price: 'Transaction Fee Limit',
         devices: 'Connected Devices',
