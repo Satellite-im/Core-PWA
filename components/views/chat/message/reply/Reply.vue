@@ -55,30 +55,26 @@ export default Vue.extend({
      * depending on the number of users in the reply thread, it will generate a different replyText
      */
     makeReplyText() {
-      const replyLength = Object.keys(this.$props.message.replies).length
-      const baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
+      const LIMIT = 2
+      const SEPARATOR = ' and '
 
-      const getNamesList = (
-        replies: any[],
-        limit = 2,
-        initialText = '',
-        separator = ' and ',
-      ) =>
-        replies
-          .slice(0, limit)
-          .reduce(
-            (text, reply, i) =>
-              text +
-              (i > 0 && i < limit ? separator : '') +
-              getUsernameFromState(reply.from, this.$store.state),
-            initialText,
-          )
+      const replies = this.$props.message.replies
+      const baseReply = replies.length > 1 ? 'Replies from ' : 'Reply from '
 
-      const names = getNamesList(this.$props.message.replies, 2, baseReply)
+      const uniqueRepliers = [
+        ...new Set(replies.map((reply: any) => reply.from)),
+      ]
 
-      return replyLength > 2
-        ? `${names} and ${replyLength - 2} more ...`
-        : names
+      const names = uniqueRepliers
+        .slice(0, LIMIT)
+        .map((replier) =>
+          getUsernameFromState(replier as string, this.$store.state),
+        )
+        .join(SEPARATOR)
+
+      return uniqueRepliers.length > LIMIT
+        ? `${baseReply} ${names} and ${uniqueRepliers.length - LIMIT} more ...`
+        : `${baseReply} ${names}`
     },
   },
   mounted() {
