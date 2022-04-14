@@ -1,25 +1,24 @@
 #simple-scrollbar {
-  @scrollBarSize: 5px;
   width: @full;
   height: @full;
 
   &.scrollbar-vertical {
     overflow-x: hidden;
     overflow-y: scroll;
-    padding-right: @scrollBarSize*2;
+    padding-right: @scroll-bar-size*2;
 
     &::-webkit-scrollbar {
-      width: @scrollBarSize;
+      width: @scroll-bar-size;
     }
   }
 
   &.scrollbar-horizontal {
     overflow-y: hidden;
     overflow-x: scroll;
-    padding-bottom: @scrollBarSize*2;
+    padding-bottom: @scroll-bar-size*2;
 
     &::-webkit-scrollbar {
-      height: @scrollBarSize;
+      height: @scroll-bar-size;
     }
   }
 
@@ -28,13 +27,13 @@
 
   &:hover {
     &::-webkit-scrollbar-thumb {
-      border-radius: @scrollBarSize*2;
+      border-radius: @scroll-bar-size*2;
       background-color: var(--flair-color);
     }
   }
 
   &.scrollbar-always-visible::-webkit-scrollbar-thumb {
-    border-radius: @scrollBarSize*2;
+    border-radius: @scroll-bar-size*2;
     background-color: var(--flair-color);
   }
 }
