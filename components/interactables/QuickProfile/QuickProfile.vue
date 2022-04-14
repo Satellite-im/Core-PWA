@@ -46,6 +46,9 @@ export default Vue.extend({
       if (this.isEmptyMessage && !this.$Config.regex.empty.test(this.text))
         this.isEmptyMessage = false
     },
+    isEmptyMessage() {
+      this.$nextTick(this.handleOverflow)
+    },
   },
   mounted() {
     this.handleOverflow()
