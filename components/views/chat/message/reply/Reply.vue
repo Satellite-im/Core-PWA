@@ -55,30 +55,38 @@ export default Vue.extend({
      * depending on the number of users in the reply thread, it will generate a different replyText
      */
     makeReplyText() {
-      const replyLength = Object.keys(this.$props.message.replies).length
-      const baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
+      const LIMIT = 2
+      const SEPARATOR = this.$t('conversation.replies_separator')
 
-      const getNamesList = (
-        replies: any[],
-        limit = 2,
-        initialText = '',
-        separator = ' and ',
-      ) =>
-        replies
-          .slice(0, limit)
-          .reduce(
-            (text, reply, i) =>
-              text +
-              (i > 0 && i < limit ? separator : '') +
-              getUsernameFromState(reply.from, this.$store.state),
-            initialText,
-          )
+      const replies = this.$props.message.replies
 
-      const names = getNamesList(this.$props.message.replies, 2, baseReply)
+      const uniqueRepliers = [
+        ...new Set(replies.map((reply: any) => reply.from)),
+      ]
 
-      return replyLength > 2
-        ? `${names} and ${replyLength - 2} more ...`
-        : names
+      const names = uniqueRepliers
+        .slice(0, LIMIT)
+        .map((replier) =>
+          getUsernameFromState(replier as string, this.$store.state),
+        )
+        .join(SEPARATOR as string)
+
+      if (replies.length === 1) {
+        return this.$t('conversation.reply_single', {
+          name: names,
+        })
+      }
+
+      if (uniqueRepliers.length <= LIMIT) {
+        return this.$t('conversation.repliers_less_than_limit', {
+          names,
+        })
+      }
+
+      return this.$t('conversation.repliers_more_than_limit', {
+        names,
+        leftCount: uniqueRepliers.length - LIMIT,
+      })
     },
   },
   mounted() {
