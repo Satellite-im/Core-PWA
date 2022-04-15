@@ -92,7 +92,7 @@ export default Vue.extend({
   mixins: [Touch, Layout],
   middleware: 'authenticated',
   setup() {
-    const meta = useMeta()
+    useMeta()
   },
   data() {
     return {

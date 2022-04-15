@@ -1,7 +1,7 @@
 import { MetaState } from './types'
 
 const InitialMetaState = (): MetaState => ({
-  title: 'Satellite-Absolute',
+  title: 'Satellite.im',
 })
 
 export default InitialMetaState

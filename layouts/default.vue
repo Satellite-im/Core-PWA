@@ -13,7 +13,7 @@ import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   setup() {
-    const meta = useMeta()
+    useMeta()
   },
 })
 </script>
