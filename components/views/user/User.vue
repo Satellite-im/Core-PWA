@@ -76,6 +76,7 @@ export default Vue.extend({
             ?.lastUpdate ?? 0
         )
       },
+      accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('textile', ['getConversation']),
     lastMessage() {
@@ -172,23 +173,26 @@ export default Vue.extend({
       }
     },
     getDescriptionFromMessage(message: Message) {
+      const sender =
+        message.from === this.accounts?.details?.textilePubkey ? 'me' : 'user'
+
       switch (message.type) {
         case MessagingTypesEnum.TEXT:
           return (message as TextMessage).payload
         case MessagingTypesEnum.FILE:
-          return this.$t('messaging.user_sent', {
+          return this.$t(`messaging.user_sent.${sender}`, {
             msgType: 'file',
           })
         case MessagingTypesEnum.GLYPH:
-          return this.$t('messaging.user_sent', {
+          return this.$t(`messaging.user_sent.${sender}`, {
             msgType: 'glyph',
           })
         case MessagingTypesEnum.IMAGE:
-          return this.$t('messaging.user_sent_image', {
+          return this.$t(`messaging.user_sent_image.${sender}`, {
             msgType: 'image',
           })
         default:
-          return this.$t('messaging.user_sent_something')
+          return this.$t(`messaging.user_sent_something.${sender}`)
       }
     },
   },
