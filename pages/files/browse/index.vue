@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -21,13 +20,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
     sort: {
       set(value: FileSort) {
         this.$store.commit('ui/setFileSort', value)
       },
       get(): FileSort {
-        return this.ui.fileSort
+        return this.$store.state.ui.fileSort
       },
       /**
        * @returns Current directory items

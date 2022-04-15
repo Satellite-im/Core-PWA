@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   },
   bridge: {
     nitro: false,
+    meta: true,
   },
   server: {
     host: '0.0.0.0',
@@ -32,7 +33,6 @@ export default defineNuxtConfig({
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Satellite-Absolute',
     htmlAttrs: {
       lang: 'en',
     },

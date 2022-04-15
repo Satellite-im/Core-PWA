@@ -82,6 +82,7 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
+import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   name: 'ServerLayout',
@@ -90,6 +91,9 @@ export default Vue.extend({
   },
   mixins: [Touch, Layout],
   middleware: 'authenticated',
+  setup() {
+    useMeta()
+  },
   data() {
     return {
       sidebar: !this.$device.isMobile,
