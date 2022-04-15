@@ -3,7 +3,6 @@ import { web3 } from '@project-serum/anchor'
 import { MetadataManager } from './MetadataManager'
 
 jest.mock('@textile/hub')
-ThreadID.fromString.mockImplementation(() => new Uint8Array([]))
 PublicKey.fromString.mockImplementation(() => {
   function encrypt(param) {
     return Buffer.from('Hello, World', 'utf8')
@@ -41,11 +40,28 @@ describe('', () => {
     },
     'Becky Bednar',
   )
+  test('updateMetadata with no threadID', async () => {
+    try {
+      const result = await konstruktor.updateMetadata({
+        to: `0xrecipientkey`,
+        from: `0xsenderkey`,
+        metadata: { note: 'note' },
+      })
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        'Metadata manager is not initialized.',
+      )
+    }
+  })
   test('', async () => {
+    ThreadID.fromString.mockImplementationOnce(() => new Uint8Array([]))
     const result = await konstruktor.init()
     expect(result).toBeUndefined() // Dummy assertion, we'll replace it with what the result returns
   })
-  test('updateMetadata', async () => {
+  test('updateMetadata with threadID', async () => {
+    ThreadID.fromString.mockImplementationOnce(() => new Uint8Array([]))
     const result = await konstruktor.updateMetadata({
       to: `0xrecipientkey`,
       from: `0xsenderkey`,
@@ -54,6 +70,7 @@ describe('', () => {
     expect(result).toBe({}) // Dummy assertion, we'll replace it with what the result returns
   })
   test('getMetadata', async () => {
+    ThreadID.fromString.mockImplementationOnce(() => new Uint8Array([]))
     const result = await konstruktor.getMetadata({
       to: `0xrecipientkey`,
       from: `0xsenderkey`,
