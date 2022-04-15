@@ -34,6 +34,7 @@ Object {
     "asc": true,
     "category": "modified",
   },
+  "filesUploadStatus": "",
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,

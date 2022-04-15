@@ -126,7 +126,7 @@ export class Bucket extends RFM implements RFMInterface {
       },
       {
         progress: (num) => {
-          progressCallback(num, file.size)
+          progressCallback(num, file.size, file.name)
         },
       },
     )
