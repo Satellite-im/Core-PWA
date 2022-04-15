@@ -56,10 +56,9 @@ export default Vue.extend({
      */
     makeReplyText() {
       const LIMIT = 2
-      const SEPARATOR = ' and '
+      const SEPARATOR = this.$t('conversation.replies_separator')
 
       const replies = this.$props.message.replies
-      const baseReply = replies.length > 1 ? 'Replies from ' : 'Reply from '
 
       const uniqueRepliers = [
         ...new Set(replies.map((reply: any) => reply.from)),
@@ -70,11 +69,24 @@ export default Vue.extend({
         .map((replier) =>
           getUsernameFromState(replier as string, this.$store.state),
         )
-        .join(SEPARATOR)
+        .join(SEPARATOR as string)
 
-      return uniqueRepliers.length > LIMIT
-        ? `${baseReply} ${names} and ${uniqueRepliers.length - LIMIT} more ...`
-        : `${baseReply} ${names}`
+      if (replies.length === 1) {
+        return this.$t('conversation.reply_single', {
+          name: names,
+        })
+      }
+
+      if (uniqueRepliers.length <= LIMIT) {
+        return this.$t('conversation.repliers_less_than_limit', {
+          names,
+        })
+      }
+
+      return this.$t('conversation.repliers_more_than_limit', {
+        names,
+        leftCount: uniqueRepliers.length - LIMIT,
+      })
     },
   },
   mounted() {
