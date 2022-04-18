@@ -398,6 +398,8 @@ export default {
         devices: 'Connected Devices',
         no_devices: 'No connected devices found.',
         no_status: 'No status set.',
+        reveal_phrase: 'Reveal Phrase',
+        hide_phrase: 'Hide Phrase',
       },
       personalize: {
         flair: 'Flair',
