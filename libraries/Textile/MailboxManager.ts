@@ -226,7 +226,6 @@ export class MailboxManager {
     const result = await this.textile.users.sendMessage(
       this.textile.identity,
       recipient,
-      recipient,
       body,
     )
 
