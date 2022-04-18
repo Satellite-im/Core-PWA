@@ -13,7 +13,6 @@ import { Friend } from '~/types/ui/friends'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
-  NotificationTypes,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -204,13 +203,6 @@ export default Vue.extend({
      */
     smartTypingStart() {
       this.throttleTyping(this)
-    },
-    sendNotification() {
-      this.$store.dispatch(
-        'ui/sendNotification',
-        'Whiting herer is mersser',
-        this.$props.recipient?.address,
-      )
     },
     /**
      * @method handleInputKeydown DocsTODO
