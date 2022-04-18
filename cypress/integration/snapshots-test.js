@@ -15,7 +15,7 @@ describe.skip('Snapshots Testing', () => {
 
   it('Import account - Create or Import Account Selection screen', () => {
     cy.snapshotTestContains('Import Account')
-    cy.contains('Import Account', { timeout: 30000 }).click()
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
   })
 
   it('Import account - Enter passphrase screen', () => {
@@ -155,6 +155,7 @@ describe.skip('Snapshots Testing', () => {
   it('Create Account - User Input Screen', () => {
     //Recovery Seed Screen then User Input Snapshot
     cy.createAccountRecoverySeed().then(() => {
+      cy.validateUserInputIsDisplayed()
       cy.snapshotTestContains(
         'Customize how the world sees you, choose something memorable.',
         30000,
