@@ -42,3 +42,20 @@ export const userinfoSchema = {
     block_nsfw: { type: 'boolean' },
   },
 }
+
+export const notificationSchema = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  title: 'Notification',
+  type: 'object',
+  properties: {
+    _id: { type: 'string' },
+    created_at: { type: 'number' },
+    key: { type: 'string' },
+    userId: { type: 'string' },
+    from: { type: 'string' },
+    to: { type: 'string' },
+    body: { type: 'string' },
+    _mod: { type: 'number' },
+    read_at: { type: 'number' },
+  },
+}

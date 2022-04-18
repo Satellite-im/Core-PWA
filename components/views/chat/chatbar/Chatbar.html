@@ -3,6 +3,7 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <button v-on:click='sendNotification'>notification</button>
   <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->

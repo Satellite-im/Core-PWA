@@ -3,6 +3,7 @@ import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
+import { Notifications } from '~/types/ui/notifications'
 import { Fil } from '~/libraries/Files/Fil'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 export enum ThemeNames {
@@ -160,6 +161,7 @@ export interface UIState {
   contextMenuValues: ContextMenuItem[]
   quickProfile: object | boolean
   userProfile: object
+  notifications: Notifications
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean

@@ -15,6 +15,7 @@ import {
   FileIconsEnum,
   FileAsideRouteEnum,
 } from '~/libraries/Enums/types/files'
+import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
 export {
   KeybindingEnum,
@@ -29,6 +30,7 @@ export {
   AddFriendEnum,
   SocialAccountTypesEnum,
   PlatformTypeEnum,
+  NotificationTypes,
   FileSortEnum,
   FileIconsEnum,
   FileAsideRouteEnum,

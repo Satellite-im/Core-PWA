@@ -13,6 +13,10 @@ import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
+import {
+  AppNotification,
+  Notifications,
+} from '~/types/ui/notifications'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default {
@@ -337,6 +341,25 @@ export default {
       pack: glyph.pack,
       url: glyph.url,
       count: 1,
+    })
+  },
+  sendNotification(state: UIState, notification: AppNotification) {
+    state.notifications.allNotifications.push(notification)
+  },
+  setNotifications(state: UIState, notifications: Array<AppNotification>) {
+    state.notifications.allNotifications = notifications
+  },
+  clearAllNotifications(state: UIState) {
+    state.notifications.allNotifications.forEach((notification) => {
+      notification.seen = true
+    })
+  },
+  notificationSeen(state: UIState, notificationId: String) {
+    state.notifications.allNotifications.map((item) => {
+      if (item.id === notificationId) {
+        item.seen = true
+      }
+      return item
     })
   },
   updateTheme(state: UIState, theme: Theme) {

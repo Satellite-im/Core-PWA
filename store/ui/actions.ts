@@ -8,6 +8,9 @@ import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
+import { Notification, Notifications } from '~/types/ui/notifications'
+import { TextileError } from '~/store/textile/types'
+import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
 const $Sounds = new SoundManager()
 
@@ -67,6 +70,48 @@ export default {
         dispatch('webrtc/call', { kinds: ['audio'] }, { root: true })
       },
     )
+  },
+  /**
+   * @method setNotifications
+   * @description Collects all existing notifications for a user
+   */
+  setNotifications({ commit }: ActionsArguments<UIState>) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const notifications =
+      $TextileManager.notificationManager?.getnotifications()
+    commit('setNotifications', notifications)
+  },
+  async sendNotification(
+    { commit, rootState }: ActionsArguments<UIState>,
+    notificationMessage: String,
+    to: String,
+    type: NotificationTypes,
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const notificationResponse =
+      await $TextileManager.notificationManager?.sendNotification(
+        to,
+        notificationMessage,
+        type,
+      )
+    commit('sendNotification', notificationResponse)
+  },
+  clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {
+    commit('clearAllNotifications')
+  },
+  removeSeenNotification(
+    { commit, rootState }: ActionsArguments<UIState>,
+    notificationId: String,
+  ) {
+    commit('notificationSeen', notificationId)
   },
   /**
    * @method clearKeybinds
