@@ -149,24 +149,26 @@ export default Vue.extend({
       },
       deep: true,
     },
-    recipient() {
-      const findItem = this.chat.chatTexts.find(
-        (item: any) => item.userId === this.$props.recipient?.address,
-      )
-      const message = findItem ? findItem.value : ''
+    'recipient.address': {
+      handler() {
+        const findItem = this.chat.chatTexts.find(
+          (item: any) => item.userId === this.$props.recipient?.address,
+        )
+        const message = findItem ? findItem.value : ''
 
-      this.$refs.editable?.resetHistory()
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id: '',
-        payload: '',
-        from: '',
-      })
-      this.$store.dispatch('ui/setChatbarContent', { content: message })
+        this.$refs.editable?.resetHistory()
+        this.$store.commit('ui/setReplyChatbarContent', {
+          id: '',
+          payload: '',
+          from: '',
+        })
+        this.$store.dispatch('ui/setChatbarContent', { content: message })
 
-      // in desktop, stay chatbar focused when switching recipient
-      if (this.$device.isDesktop) {
-        this.$store.dispatch('ui/setChatbarFocus')
-      }
+        // in desktop, stay chatbar focused when switching recipient
+        if (this.$device.isDesktop) {
+          this.$store.dispatch('ui/setChatbarFocus')
+        }
+      },
     },
   },
   methods: {
