@@ -93,8 +93,8 @@ export class Fil extends Item {
   }
 
   /**
-   * @getter url
-   * @returns {string} link of localally stored File for image preview and downloads
+   * @getter thumbnail
+   * @returns {string} base64 string of scaled down image, or '' if non-embeddable image
    */
   get thumbnail(): string {
     return this._thumbnail
@@ -102,7 +102,7 @@ export class Fil extends Item {
 
   /**
    * @getter extension
-   * @returns {string} content the content to set the file description to
+   * @returns {string} original extension on user upload
    */
   get extension(): string {
     return this._extension
