@@ -3024,6 +3024,7 @@ describe('mutations', () => {
     ],
     unreadMessage: 0,
     isScrollOver: false,
+    showOlderMessagesInfo: false,
     isTyping: {
       address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
       last_message:
@@ -3824,6 +3825,16 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setIsScrollOver(localizedState, true)
     expect(localizedState.isScrollOver).toBeTruthy()
+  })
+  test('setShowOlderMessagesInfo false status', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setShowOlderMessagesInfo(localizedState, false)
+    expect(localizedState.showOlderMessagesInfo).toBeFalsy()
+  })
+  test('setShowOlderMessagesInfo true status', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setShowOlderMessagesInfo(localizedState, true)
+    expect(localizedState.showOlderMessagesInfo).toBeTruthy()
   })
   test('setIsScrollOver false status', () => {
     const localizedState = { ...initialState }
