@@ -105,6 +105,13 @@ export default Vue.extend({
       }
     },
     /**
+     * @method emojiClickHandler
+     * @description Without this handler user can click out of emoji component and it will disappear
+     */
+    outBoundClickHandler() {
+      this.openEmoji()
+    },
+    /**
      * Adds emoji to current text input
      * (emoji: any) Comes from <picker/> select event
      */

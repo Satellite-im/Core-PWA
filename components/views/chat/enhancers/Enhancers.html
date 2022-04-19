@@ -35,7 +35,11 @@
       scrollbarVisibility="scroll"
       v-if="ui.enhancers.route === 'emotes'"
     >
-      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
+      <emoji-picker
+        v-click-outside="outBoundClickHandler"
+        @emoji="addEmoji"
+        :search="search.toLowerCase()"
+      >
         <div
           ref="emojiInvoker"
           slot="emoji-invoker"
