@@ -127,7 +127,6 @@
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/eslint-config-typescript": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
-    "@nuxtjs/vuetify": "^1.12.3",
     "@types/ed2curve": "^0.2.2",
     "@types/elliptic": "^6.4.14",
     "@types/howler": "^2.2.5",
