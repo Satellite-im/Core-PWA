@@ -373,6 +373,12 @@ export default {
       },
     )
   },
+  setFriendState(
+    { commit }: ActionsArguments<FriendsState>,
+    { address, state }: { address: string; state: string },
+  ) {
+    commit('friends/updateFriend', { address, state }, { root: true })
+  },
   /**
    * @method createFriendRequest DocsTODO
    * @description
