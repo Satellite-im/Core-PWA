@@ -28,6 +28,7 @@ describe('Create Account - Negative Tests', () => {
     cy.createAccountRecoverySeed()
 
     //Clicking without adding a username will throw an error message
+    cy.validateUserInputIsDisplayed()
     cy.get('[data-cy=sign-in-button]').click()
     cy.contains('Username must be at least 5 characters.')
   })
@@ -46,6 +47,7 @@ describe('Create Account - Negative Tests', () => {
     cy.createAccountRecoverySeed()
 
     //Username and Status Input
+    cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput(randomName, randomStatus)
 
     //Attempting to add NSFW image and validating error message is displayed

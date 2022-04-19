@@ -4,7 +4,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 describe('Import Account Validations', () => {
   it('Import account - verify suggestions', () => {
     cy.importAccountPINscreen(randomPIN)
-    cy.contains('Import Account', { timeout: 60000 })
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 })
       .should('be.visible')
       .click()
     cy.get('[data-cy=add-passphrase]').should('be.visible').click().type('b')
@@ -14,7 +14,7 @@ describe('Import Account Validations', () => {
 
   it('Import account', () => {
     cy.importAccountPINscreen(randomPIN, false, false)
-    cy.contains('Import Account', { timeout: 60000 })
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 })
       .should('be.visible')
       .click()
     cy.contains(

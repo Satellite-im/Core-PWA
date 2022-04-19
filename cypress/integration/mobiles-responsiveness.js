@@ -28,6 +28,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.createAccountRecoverySeed()
 
       //Username and Status Input
+      cy.validateUserInputIsDisplayed()
       cy.createAccountUserInput(randomName, randomStatus)
 
       //User Image Input
@@ -45,6 +46,8 @@ describe('Run responsiveness tests on several devices', () => {
     it(`Import Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
+      //Validate profile name displayed
+      cy.validateChatPageIsLoaded()
     })
 
     it.skip(`Chat Features on ${item.description}`, () => {

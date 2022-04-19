@@ -12,6 +12,7 @@ describe.skip('Unlock pin should be persisted when store pin is enabled', () => 
     cy.createAccountSecondScreen()
     cy.createAccountPrivacyTogglesGoNext()
     cy.createAccountRecoverySeed()
+    cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput()
     cy.createAccountSubmit()
 
@@ -32,6 +33,7 @@ describe.skip('Unlock pin should be persisted when store pin is enabled', () => 
     cy.createAccountSecondScreen()
     cy.createAccountPrivacyTogglesGoNext()
     cy.createAccountRecoverySeed()
+    cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput()
     cy.createAccountSubmit()
 
