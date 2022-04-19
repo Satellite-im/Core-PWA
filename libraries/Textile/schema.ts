@@ -39,5 +39,6 @@ export const userinfoSchema = {
     user_address: { type: 'string' },
     consent_scan: { type: 'boolean' },
     consent_date: { type: 'number' },
+    block_nsfw: { type: 'boolean' },
   },
 }

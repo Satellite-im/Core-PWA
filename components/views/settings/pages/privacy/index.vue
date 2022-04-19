@@ -84,6 +84,14 @@ export default Vue.extend({
         return this.settings.consentScan
       },
     },
+    blockNsfw: {
+      set(state) {
+        this.$store.dispatch('settings/setBlockNsfw', state)
+      },
+      get() {
+        return this.settings.blockNsfw
+      },
+    },
     displayCurrentActivity: {
       set(state) {
         this.$store.commit('settings/displayCurrentActivity', state)

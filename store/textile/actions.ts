@@ -65,11 +65,14 @@ export default {
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
       await $FileSystem.import(fsExport)
     }
-    const consentData = await $TextileManager.userInfoManager?.getConsentData()
-    if (consentData) {
+    const record = await $TextileManager.userInfoManager?.getUserRecord()
+    if (record) {
       /* Log CSAM Consent Data for future ticket as Hogan requested */
-      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', consentData)
-      commit('settings/setConsentScan', consentData.consent_scan, {
+      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
+      commit('settings/setConsentScan', record.consent_scan, {
+        root: true,
+      })
+      commit('settings/setBlockNsfw', record.block_nsfw, {
         root: true,
       })
     }

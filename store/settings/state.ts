@@ -15,6 +15,7 @@ const InitialSettingsState = (): SettingsState => ({
   keybinds: KeybindTypes,
   embeddedLinks: true,
   consentScan: false,
+  blockNsfw: true,
   displayCurrentActivity: true,
   removeState: false,
   serverType: 'satellite',

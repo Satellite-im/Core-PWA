@@ -42,6 +42,9 @@ const mutations = {
   setConsentScan(state: SettingsState, value: boolean) {
     state.consentScan = value
   },
+  setBlockNsfw(state: SettingsState, value: boolean) {
+    state.blockNsfw = value
+  },
   displayCurrentActivity(state: SettingsState, value: boolean) {
     state.displayCurrentActivity = value
   },
