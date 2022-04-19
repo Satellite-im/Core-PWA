@@ -76,7 +76,8 @@ export default Vue.extend({
             ?.lastUpdate ?? 0
         )
       },
-      accounts: (state) => (state as RootState).accounts,
+      textilePubkey: (state) =>
+        (state as RootState).accounts?.details?.textilePubkey || '',
     }),
     ...mapGetters('textile', ['getConversation']),
     lastMessage() {
@@ -173,8 +174,7 @@ export default Vue.extend({
       }
     },
     getDescriptionFromMessage(message: Message) {
-      const sender =
-        message.from === this.accounts?.details?.textilePubkey ? 'me' : 'user'
+      const sender = message.from === this.textilePubkey ? 'me' : 'user'
 
       switch (message.type) {
         case MessagingTypesEnum.TEXT:
