@@ -21,18 +21,22 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateChatPageIsLoaded()
   })
 
-  it('Send message to user B', () => {
-    cy.goToConversation('Chat User B')
-    cy.chatFeaturesSendMessage(randomMessage)
-    cy.contains(randomMessage).last().scrollIntoView().should('exist')
-  })
-
   it('Send emoji to user B', () => {
+    cy.goToConversation('Chat User B')
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
     cy.get('[data-cy=chat-message] > span')
       .last()
       .scrollIntoView()
       .should('have.text', '😄')
+  })
+
+  it('Send message to user B', () => {
+    cy.chatFeaturesSendMessage(randomMessage)
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .scrollIntoView()
+      .should('exist')
   })
 
   it('Send glyph to user B', () => {
@@ -45,10 +49,11 @@ describe.skip('Chat features with two accounts', () => {
   })
 
   it('Glyphs messages cannot be edited', () => {
+    cy.get('[data-cy=chat-glyph]').last().scrollIntoView()
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it('Send image to user B', () => {
+  it.skip('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -57,7 +62,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Image messages cannot be edited', () => {
+  it.skip('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
@@ -85,16 +90,16 @@ describe.skip('Chat features with two accounts', () => {
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
     cy.goToConversation('Chat User A')
-    cy.contains(randomMessage).last().scrollIntoView().should('exist')
+    cy.get('[data-cy=chat-message]').last().scrollIntoView().should('exist')
   })
 
   it('Message not sent by same user cannot be edited', () => {
-    cy.contains(randomMessage).last().as('lastmessage')
+    cy.get('[data-cy=chat-message]').last().as('lastmessage')
     cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
   })
 
   it('User should be able to reply a message', () => {
-    cy.contains(randomMessage).last().as('lastmessage')
+    cy.get('[data-cy=chat-message]').last().as('lastmessage')
     cy.chatFeaturesReplyMessage('Chat User A', '@lastmessage', textReply)
   })
 
@@ -137,7 +142,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert image received from user A', () => {
+  it.skip('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -161,17 +166,17 @@ describe.skip('Chat features with two accounts', () => {
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.match(/d+|[hour[s]? |minute[s]? |second[s]?]\s/)
+        expect($text).to.contain('now')
       })
   })
 
   it('Add reactions to text message in chat', () => {
-    cy.contains(randomMessage).last().as('messageToReact')
+    cy.get('[data-cy=chat-message]').last().as('messageToReact')
     cy.reactToChatElement('@messageToReact', '[title="smile"]')
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it('Add reactions to image in chat', () => {
+  it.skip('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
@@ -191,11 +196,14 @@ describe.skip('Chat features with two accounts', () => {
 
   it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
     cy.goToConversation('Chat User C')
-    cy.get('[data-cy=editable-input]').should('be.visible').type(randomMessage)
+    cy.get('[data-cy=editable-input]').should('be.visible').paste({
+      pasteType: 'text',
+      pastePayload: randomMessage,
+    })
     cy.get('[data-cy=editable-input]').clear()
   })
 
-  it.skip('Assert timestamp immediately after sending message', () => {
+  it('Assert timestamp immediately after sending message', () => {
     //Send a random message
     cy.chatFeaturesSendMessage(randomMessageTwo)
 
@@ -204,7 +212,7 @@ describe.skip('Chat features with two accounts', () => {
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.contain('a few seconds ago')
+        expect($text).to.contain('now')
       })
   })
 
@@ -217,7 +225,8 @@ describe.skip('Chat features with two accounts', () => {
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.contain('a minute ago')
+        let regexTimestamp = '((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))'
+        expect($text).to.match(regexTimestamp)
       })
   })
 
@@ -228,5 +237,42 @@ describe.skip('Chat features with two accounts', () => {
     //Send a message to Chat User B
     cy.goToConversation('Chat User B')
     cy.chatFeaturesSendMessage(randomMessage)
+  })
+
+  it('React to other users reaction', () => {
+    //import Chat User A account the one that receive reactions previously
+    cy.importAccount(randomPIN, recoverySeedAccountOne)
+    cy.validateChatPageIsLoaded()
+
+    //Go to conversation with Chat User B
+    cy.goToConversation('Chat User B')
+
+    //Find the last reaction message
+    cy.get('[data-cy=chat-message]').last().as('messageReacted')
+    //Message reaction should not have blue background image initially. Click on it
+    cy.get('@messageReacted')
+      .scrollIntoView()
+      .parents('[data-cy=message-container]')
+      .find('[data-cy=reaction-to-message]')
+      .as('reactionToMessage')
+    cy.get('@reactionToMessage')
+      .should(
+        'have.css',
+        'background-image',
+        'linear-gradient(0deg, rgba(34, 44, 63, 0.5) 0%, rgba(36, 40, 57, 0.5) 100%)',
+      )
+      .click()
+
+    //Validate count of reactors is two
+    cy.get('@reactionToMessage')
+      .find('[data-cy=emoji-reaction-count]')
+      .should('contain', '2')
+
+    //Validate reaction background image is now blue
+    cy.get('@reactionToMessage').should(
+      'have.css',
+      'background-image',
+      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(40, 109, 254) 100%)',
+    )
   })
 })

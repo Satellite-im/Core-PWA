@@ -14,7 +14,7 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Pin must be at least 5 characters.')
   })
 
-  it('Try to create account without username', () => {
+  it.skip('Try to create account without username', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
