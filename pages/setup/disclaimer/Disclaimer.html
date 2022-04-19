@@ -6,12 +6,14 @@
   <div class="buttons">
     <InteractablesButton
       full-width
+      data-cy="create-account-button"
       :text="$t('pages.disclaimer.create')"
       :action="() => { goToPrivacySettings() }"
       :loading="isLoading"
     />
     <InteractablesButton
       full-width
+      data-cy="import-account-button"
       type="dark"
       :action="() => { importAccount() }"
       :text="$t('pages.disclaimer.import')"

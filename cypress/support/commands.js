@@ -76,7 +76,7 @@ Cypress.Commands.add('createAccount', (pin) => {
     .trigger('input')
     .type(pin, { log: false }, { force: true })
   cy.get('[data-cy=submit-input]').click()
-  cy.get('.is-primary > #custom-cursor-area').click()
+  cy.get('[data-cy=create-account-button]').click()
   cy.get('.switch-button').each(($btn, index, $List) => {
     // Ignore locked switch toggle
     if (!$btn.hasClass('locked')) {
@@ -87,12 +87,13 @@ Cypress.Commands.add('createAccount', (pin) => {
       }
     }
   })
-  cy.get('#custom-cursor-area').click()
+  cy.get('[data-cy=privacy-continue-button]').click()
   cy.get('.title').should('contain', 'Recovery Seed')
   cy.contains('Continue').click()
   cy.contains('I Saved It').click()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
-  cy.get('[data-cy=username-input]', { timeout: 30000 })
+  cy.validateUserInputIsDisplayed()
+  cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
     .type(randomName)
@@ -136,46 +137,12 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('createAccountSecondScreen', () => {
   cy.contains('Account Creation').should('be.visible')
-  cy.get('.is-primary > #custom-cursor-area').click()
-})
-
-Cypress.Commands.add('createAccountPrivacyToggles', () => {
-  cy.contains('Privacy Settings').should('be.visible')
-  cy.contains(
-    'Choose which features to enable to best suit your privacy preferences.',
-  ).should('be.visible')
-  cy.contains('Register Username Publicly').should('be.visible')
-  cy.contains(
-    'Publicly associate your account ID with a human readable username. Anyone can see this association.',
-  ).should('be.visible')
-  cy.contains(
-    "Store your account pin locally so you don't have to enter it manually every time. This is not recommended.",
-  ).should('be.visible')
-  cy.contains('Display Current Activity').should('be.visible')
-  cy.contains(
-    "Allow Satellite to see what games you're playing and show them off on your profile so friends can jump in.",
-  ).should('be.visible')
-  cy.contains('Enable External Embeds').should('be.visible')
-  cy.contains(
-    'Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more.',
-  ).should('be.visible')
-  cy.get('.switch-button')
-    .should('be.visible')
-    .each(($btn, index, $List) => {
-      if (!$btn.hasClass('locked')) {
-        if ($btn.hasClass('enabled')) {
-          cy.wrap($btn).click().should('not.have.class', 'enabled')
-        } else {
-          cy.wrap($btn).click().should('have.class', 'enabled')
-        }
-      }
-    })
-  cy.get('#custom-cursor-area').should('be.visible').click()
+  cy.get('[data-cy=create-account-button]').click()
 })
 
 Cypress.Commands.add('createAccountPrivacyTogglesGoNext', () => {
   cy.contains('Privacy Settings').should('be.visible')
-  cy.get('#custom-cursor-area').click()
+  cy.get('[data-cy=privacy-continue-button]').click()
 })
 
 Cypress.Commands.add('createAccountRecoverySeed', () => {
@@ -184,8 +151,12 @@ Cypress.Commands.add('createAccountRecoverySeed', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
+Cypress.Commands.add('validateUserInputIsDisplayed', () => {
+  cy.get('[data-cy=username-input]', { timeout: 60000 }).should('be.visible')
+})
+
 Cypress.Commands.add('createAccountUserInput', (username, status) => {
-  cy.get('[data-cy=username-input]', { timeout: 60000 })
+  cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
     .type(randomName)
@@ -205,6 +176,55 @@ Cypress.Commands.add('createAccountSubmit', () => {
   cy.contains('Linking Satellites...').should('be.visible')
 })
 
+Cypress.Commands.add(
+  'privacyToggleClick',
+  (switchText, expectedValue = true) => {
+    cy.contains(switchText)
+      .scrollIntoView()
+      .parent()
+      .find('[data-cy=switch-button]')
+      .then(($btn) => {
+        if (expectedValue === true) {
+          if (!$btn.hasClass('enabled')) {
+            cy.wrap($btn).click().should('have.class', 'enabled')
+          } else {
+            cy.wrap($btn).should('have.class', 'enabled')
+          }
+        } else {
+          if (!$btn.hasClass('locked')) {
+            if ($btn.hasClass('enabled')) {
+              cy.wrap($btn).click().should('not.have.class', 'enabled')
+            } else {
+              cy.wrap($btn).should('not.have.class', 'enabled')
+            }
+          }
+        }
+      })
+  },
+)
+
+Cypress.Commands.add(
+  'privacyToggleValidateValue',
+  (switchText, expectedValue = true) => {
+    cy.contains(switchText)
+      .scrollIntoView()
+      .parent()
+      .find('[data-cy=switch-button]')
+      .then(($btn) => {
+        if (expectedValue === true) {
+          cy.wrap($btn).should('have.class', 'enabled')
+        } else {
+          cy.wrap($btn).should('not.have.class', 'enabled')
+        }
+      })
+  },
+)
+
+Cypress.Commands.add('validateSignalingServersValue', (expectedValue) => {
+  cy.get('[data-cy=custom-select]').should('be.visible')
+  cy.get('[data-cy=custom-select-value]').should('contain', expectedValue)
+})
+
 //Import Account Commands
 
 Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
@@ -216,7 +236,7 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .trigger('input')
     .type(pin, { log: false }, { force: true })
   cy.get('[data-cy=submit-input]').click()
-  cy.contains('Import Account', { timeout: 60000 }).click()
+  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
   cy.get('[data-cy=add-passphrase]')
     .should('be.visible')
     .trigger('input')
@@ -256,7 +276,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
-  cy.contains('Import Account', { timeout: 60000 }).click()
+  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
   cy.get('[data-cy=add-passphrase]')
     .should('be.visible')
     .trigger('input')
@@ -417,8 +437,8 @@ Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
 
-Cypress.Commands.add('validateChatPageIsLoaded', (customTimeout = 300000) => {
-  cy.get('[data-cy=user-name]', { timeout: customTimeout }).should('exist')
+Cypress.Commands.add('validateChatPageIsLoaded', () => {
+  cy.get('[data-cy=user-name]', { timeout: 360000 }).should('exist')
 })
 
 Cypress.Commands.add('goToConversation', (user, mobile = false) => {

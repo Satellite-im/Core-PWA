@@ -2,6 +2,7 @@
   <div :class="`switch-button-control ${small ? 'is-small' : ''}`">
     <div
       class="switch-button"
+      data-cy="switch-button"
       :class="{ enabled: isEnabled, locked: isLocked }"
       @click="toggle"
     >

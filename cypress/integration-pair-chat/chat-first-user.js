@@ -32,7 +32,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .clear()
       .type(randomPIN, { log: false }, { force: true })
     cy.get('[data-cy=submit-input]').click()
-    cy.contains('Import Account', { timeout: 60000 }).click()
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
     cy.get('[data-cy=add-passphrase]')
       .should('be.visible')
       .click()
