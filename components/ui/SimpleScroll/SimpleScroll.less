@@ -9,20 +9,13 @@
     flex-direction: row;
 
     .wrapper {
-      width: calc(@full + @scroll-bar-size);
+      width: @full;
       height: @full;
+      padding-right: @scroll-bar-size;
+      box-sizing: border-box;
 
       @media only screen and (max-width: 1024px) {
-        width: calc(@full + @scroll-bar-size*2);
-      }
-    }
-
-    .mask {
-      pointer-events: none;
-      width: @scroll-bar-size;
-
-      @media only screen and (max-width: 1024px) {
-        width: @scroll-bar-size*2;
+        padding-right: @scroll-bar-size*2;
       }
     }
 
@@ -38,19 +31,12 @@
 
     .wrapper {
       width: @full;
-      height: calc(@full - @scroll-bar-size);
+      height: @full;
+      padding-bottom: @scroll-bar-size;
+      box-sizing: border-box;
 
       @media only screen and (max-width: 1024px) {
-        height: calc(@full - @scroll-bar-size*2);
-      }
-    }
-
-    .mask {
-      pointer-events: none;
-      height: @scroll-bar-size;
-
-      @media only screen and (max-width: 1024px) {
-        height: @scroll-bar-size*2;
+        padding-bottom: @scroll-bar-size*2;
       }
     }
 
