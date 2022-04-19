@@ -2157,7 +2157,7 @@ describe('mutations.default.sendMessage', () => {
   })
 })
 
-describe.skip('mutations.default.addReaction', () => {
+describe('mutations.default.addReaction', () => {
   test('0', () => {
     const object: any = [
       [
