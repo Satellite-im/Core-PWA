@@ -108,13 +108,23 @@ export default Vue.extend({
       // if invalid file type, prevent upload. this needs to be added since safari mobile doesn't fully support <input> accept
       if (!(await isEmbeddableImage(file))) {
         this.error = this.$t('errors.accounts.invalid_file') as string
+        this.resetFileInput()
         this.isLoading = false
         return
       }
 
       // if nsfw, prevent upload
-      if (await this.$Security.isNSFW(file)) {
-        this.error = this.$t('errors.chat.contains_nsfw') as string
+      try {
+        if (await this.$Security.isNSFW(file)) {
+          this.error = this.$t('errors.chat.contains_nsfw') as string
+          this.resetFileInput()
+          this.isLoading = false
+          return
+        }
+      } catch (e: any) {
+        this.$Logger.log('error', 'file upload error', e)
+        this.error = this.$t('errors.accounts.invalid_file') as string
+        this.resetFileInput()
         this.isLoading = false
         return
       }
@@ -145,7 +155,6 @@ export default Vue.extend({
      */
     setCroppedImage(image: string) {
       this.croppedImage = image
-
       this.resetFileInput()
     },
     /**
