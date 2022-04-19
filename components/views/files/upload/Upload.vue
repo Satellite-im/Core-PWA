@@ -22,6 +22,7 @@ declare module 'vue/types/vue' {
     finishUploads: () => void
     dispatchFile: (file: UploadDropItemType) => void
     alertNsfwFile: () => void
+    resetFileUpload: () => void
   }
 }
 
@@ -87,6 +88,14 @@ export default Vue.extend({
     async resetFileUpload() {
       if (this.$refs.quickUpload)
         (this.$refs.quickUpload as HTMLFormElement).value = ''
+    },
+    handleFileClick() {
+      this.resetFileUpload()
+
+      setTimeout(() => {
+        if (this.$refs.quickUpload)
+          (this.$refs.quickUpload as HTMLFormElement).click()
+      }, 200)
     },
     /**
      * @method handleFile

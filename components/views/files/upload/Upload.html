@@ -39,13 +39,12 @@
     :type="editable ? `file` : `hidden`"
     id="quick-upload"
     ref="quickUpload"
-    @click="resetFileUpload"
     @change="handleFile"
     multiple
   />
   <label
     v-if="type == 'quick'"
-    for="quick-upload"
+    @click="handleFileClick"
     :data-tooltip="$t('global.upload')"
     :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
   >
@@ -53,7 +52,7 @@
   </label>
   <div v-if="type =='button'">
     <label
-      for="quick-upload"
+      @click="handleFileClick"
       class="button is-button is-small is-primary is-normal-width"
     >
       <UiGlowingCursorArea>
