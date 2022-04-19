@@ -286,8 +286,12 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
       pasteType: 'text',
       pastePayload: message,
     })
-  cy.get('[data-cy=send-message]').click() //sending text message
-  cy.contains(message, { timeout: 15000 })
+  cy.get('[data-cy=editable-input]')
+    .should('have.text', message)
+    .then(() => {
+      cy.get('[data-cy=send-message]').click() //sending text message
+    })
+  cy.contains(message, { timeout: 30000 })
     .last()
     .scrollIntoView()
     .should('exist')
@@ -312,7 +316,8 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('getReply', (messageReplied) => {
-  cy.contains(messageReplied)
+  cy.get('[data-cy=chat-message]')
+    .contains(messageReplied)
     .parent()
     .parent()
     .find('[data-cy=reply-preview]')
@@ -332,7 +337,8 @@ Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
 Cypress.Commands.add(
   'chatFeaturesEditMessage',
   (messageToEdit, messageEdited) => {
-    cy.contains(messageToEdit)
+    cy.get('[data-cy=chat-message]')
+      .contains(messageToEdit)
       .last()
       .scrollIntoView()
       .should('exist')
@@ -344,7 +350,7 @@ Cypress.Commands.add(
       .trigger('input')
       .type(messageEdited) // editing message
     cy.get('[data-cy=edit-message-input]').type('{enter}')
-    cy.contains(messageToEdit + messageEdited)
+    cy.contains(messageToEdit + messageEdited, { timeout: 30000 })
       .last()
       .scrollIntoView()
       .should('exist')
@@ -409,7 +415,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('selectContextMenuOption', (locator, optionText) => {
-  cy.get(locator).last().scrollIntoView().rightclick()
+  cy.get(locator).scrollIntoView().rightclick()
   cy.contains(optionText).click()
 })
 
@@ -451,7 +457,7 @@ Cypress.Commands.add('goToConversation', (user, mobile = false) => {
   }
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 90000 })
+  cy.get('[data-cy=user-connected]', { timeout: 120000 })
     .should('be.visible')
     .should('have.text', user)
 })
@@ -524,9 +530,9 @@ Cypress.Commands.add('validateGlyphsModal', () => {
     .then(($text) => {
       expect($text).to.be.oneOf(['Astrobunny', 'Genshin Impact 2'])
     })
-  cy.contains('Short description can go here. Lorem ipsum.').should(
-    'be.visible',
-  )
+  cy.contains(
+    "We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.",
+  ).should('be.visible')
   cy.get('.img-container').children().should('have.length', 3)
   cy.contains('View Glyph Pack').should('be.visible')
 })

@@ -31,7 +31,8 @@ describe.skip('Chat Features Tests', () => {
 
   it('Chat - Message edited shows edited status', () => {
     cy.contains(randomMessage + randomNumber)
-      .siblings('[data-cy=message-edited]')
+      .parents('[data-cy=message-container]')
+      .find('[data-cy=message-edited]')
       .should('contain', '(edited)')
   })
 
@@ -61,8 +62,7 @@ describe.skip('Chat Features Tests', () => {
   })
 
   it('Chat - Copy paste text', () => {
-    // Sending another random message to validate the scenario
-    cy.chatFeaturesSendMessage(randomTextToCopy)
+    let randomTextToCopy = randomMessage + randomNumber
 
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
@@ -84,7 +84,7 @@ describe.skip('Chat Features Tests', () => {
       .should('equal', 'granted')
 
     //Copying the latest text message sent
-    cy.get('[data-cy=chat-message]').last().rightclick()
+    cy.contains(randomTextToCopy).last().scrollIntoView().rightclick()
     cy.contains('Copy Message').realClick()
 
     //Validating that text messsage copied matches with actual clipboard value

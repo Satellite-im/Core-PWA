@@ -6,7 +6,7 @@ const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Create Account Validations', () => {
+describe.skip('Create Account Validations', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Create Account', () => {
     //Enter PIN screen
@@ -83,7 +83,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it.skip('Create account successfully without image after attempting to add a NSFW picture', () => {
+  it('Create account successfully without image after attempting to add a NSFW picture', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
@@ -148,7 +148,7 @@ describe('Create Account Validations', () => {
     ).should('not.exist')
   })
 
-  it.skip('Create account with valid image after attempting to add an invalid image file', () => {
+  it('Create account with valid image after attempting to add an invalid image file', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
