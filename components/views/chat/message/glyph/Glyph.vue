@@ -18,6 +18,12 @@ export default Vue.extend({
     ...mapState(['ui']),
   },
   methods: {
+    getSource() {
+      if (this.source.includes('/$1/')) {
+        return this.source.replace('$1', 'small')
+      }
+      return this.source
+    },
     openModal() {
       this.$store.commit('ui/toggleModal', {
         name: 'glyph',
