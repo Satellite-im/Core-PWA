@@ -6,8 +6,9 @@
     left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px',
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
+  @click.stop
 >
-  <div class="navbar" @click="navbarClickHandler">
+  <div class="navbar"">
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"
