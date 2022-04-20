@@ -24,6 +24,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['accounts', 'ui']),
+    src(): string {
+      const hash = this.accounts.details.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   methods: {
     toggleModal() {
