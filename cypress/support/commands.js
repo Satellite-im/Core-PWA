@@ -152,7 +152,7 @@ Cypress.Commands.add('createAccountRecoverySeed', () => {
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
-  cy.get('[data-cy=username-input]', { timeout: 60000 }).should('be.visible')
+  cy.get('[data-cy=username-input]', { timeout: 90000 }).should('be.visible')
 })
 
 Cypress.Commands.add('createAccountUserInput', (username, status) => {
@@ -444,34 +444,22 @@ Cypress.Commands.add('clickOutside', () => {
 })
 
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
-  cy.get('[data-cy=user-name]', { timeout: 360000 }).should('exist')
+  cy.get('[data-cy=user-name]', { timeout: 390000 }).should('exist')
 })
 
 Cypress.Commands.add('goToConversation', (user, mobile = false) => {
   //If chat conversation is displayed, click on hamburger button
   //Click on sidebar friends button to show friends list
-  cy.get('[data-cy=sidebar-friends]').then(($button) => {
-    if (!$button.is(':visible')) {
-      cy.get('[data-cy=hamburger-button]').click()
-    }
-    cy.wrap($button).click()
-  })
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+    .contains(user)
+    .then(($user) => {
+      if (!$user.is(':visible')) {
+        cy.get('[data-cy=hamburger-button]').click()
+      }
+      cy.wrap($user).click()
+    })
 
-  //On mobile viewports, we need to click on hamburger button to see the friends list
-  if (mobile === true) {
-    cy.get('[data-cy=hamburger-button]').click()
-  }
-
-  //Find the friend and click on the message button associated
-  cy.get('[data-cy=friend-name]').contains(user).as('friend')
-  cy.get('@friend')
-    .parent()
-    .parent()
-    .find('[data-cy=friend-send-message]')
-    .as('friend-message')
-  cy.get('@friend-message').click()
-
-  //On mobile viewports, we need to click on hamburger button to see the chat conversation
+  //On mobile viewports, we need to click on hamburger button to see the chat selected
   if (mobile === true) {
     cy.get('[data-cy=hamburger-button]').click()
   }
@@ -550,9 +538,6 @@ Cypress.Commands.add('validateGlyphsModal', () => {
     .then(($text) => {
       expect($text).to.be.oneOf(['Astrobunny', 'Genshin Impact 2'])
     })
-  cy.contains(
-    "We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.",
-  ).should('be.visible')
   cy.get('.img-container').children().should('have.length', 3)
   cy.contains('View Glyph Pack').should('be.visible')
 })

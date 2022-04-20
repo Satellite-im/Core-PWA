@@ -47,7 +47,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     )
   })
 
-  it.skip('Privacy page - Verify user can still proceed after adjusting switches', () => {
+  it('Privacy page - Verify user can still proceed after adjusting switches', () => {
     //Click on next
     cy.get('[data-cy=privacy-continue-button]').click()
 
@@ -65,7 +65,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.get('[data-cy=settings]', { timeout: 30000 }).click()
   })
 
-  it.skip('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
+  it('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
     cy.contains('Privacy').click()
     //Storing the values from toggle switches status of Settings screen into an array
     cy.get('[data-cy=switch-button]')
@@ -84,7 +84,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
       })
   })
 
-  it.skip('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
+  it('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
     //Identify the first switch button and ensure that is locked
     cy.get('[data-cy=switch-button]').first().should('have.class', 'locked')
   })
@@ -132,7 +132,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
   })
 
-  it.skip('Settings - Consents to having files scanned toggle should be deactivated', () => {
+  it('Settings - Consents to having files scanned toggle should be deactivated', () => {
     //Click on next
     cy.get('[data-cy=privacy-continue-button]').click()
 
@@ -156,7 +156,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.privacyToggleValidateValue('Consents to having files scanned', false)
   })
 
-  it.skip('Settings - Satellite and Public Signaling Servers should be selected', () => {
+  it('Settings - Satellite and Public Signaling Servers should be selected', () => {
     cy.viewport(1200, 1200)
     //Validate value selected is Satellite and Public Signaling Servers
     cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
@@ -182,7 +182,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.validateSignalingServersValue('Only Public Signaling Servers')
   })
 
-  it.skip('Settings - Consents to having files scanned toggle should be enabled', () => {
+  it('Settings - Consents to having files scanned toggle should be enabled', () => {
     //Click on next
     cy.get('[data-cy=privacy-continue-button]').scrollIntoView().click()
 
@@ -206,7 +206,7 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.privacyToggleValidateValue('Consents to having files scanned', true)
   })
 
-  it.skip('Settings - Only Public Signaling Servers should be selected', () => {
+  it('Settings - Only Public Signaling Servers should be selected', () => {
     cy.viewport(1200, 1200)
     //Validate value selected is Only Public Signaling Servers
     cy.validateSignalingServersValue('Only Public Signaling Servers')
