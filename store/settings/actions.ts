@@ -56,22 +56,4 @@ export default {
       console.log(e)
     }
   },
-
-  async setBlockNsfw(
-    { commit }: ActionsArguments<SettingsState>,
-    blockNsfw: boolean,
-  ) {
-    try {
-      const $UserInfoManager: UserInfoManager =
-        Vue.prototype.$TextileManager.userInfoManager
-
-      if (!$UserInfoManager) {
-        throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
-      }
-
-      $UserInfoManager.setBlockNsfw(blockNsfw)
-
-      commit('setBlockNsfw', blockNsfw)
-    } catch (e) {}
-  },
 }
