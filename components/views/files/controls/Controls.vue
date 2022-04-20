@@ -33,8 +33,6 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
-      status: '' as string | TranslateResult,
-      progress: 100 as number,
     }
   },
   computed: {
@@ -151,7 +149,10 @@ export default Vue.extend({
       }
       for (const file of files) {
         try {
-          this.status = this.$t('pages.files.controls.upload', [file.name])
+          this.$store.commit(
+            'ui/setFilesUploadStatus',
+            this.$t('pages.files.controls.upload', [file.name]),
+          )
           await this.$FileSystem.uploadFile(file, this.setProgress)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
@@ -160,12 +161,15 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
-        this.status = this.$t('pages.files.controls.index')
+        this.$store.commit(
+          'ui/setFilesUploadStatus',
+          this.$t('pages.files.controls.index'),
+        )
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
       this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.status = ''
+      this.$store.commit('ui/setFilesUploadStatus', '')
 
       // re-render so new files show up
       this.$emit('forceRender')
@@ -186,11 +190,17 @@ export default Vue.extend({
     /**
      * @method setProgress
      * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * we encountered a bug where % was getting set to 105, math.min fixes that
      * @param num current progress in bytes
      * @param size total file size in bytes
      */
-    setProgress(num: number, size: number) {
-      this.progress = Math.floor((num / size) * 100)
+    setProgress(num: number, size: number, name: string) {
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.controls.upload', [
+          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
+        ]),
+      )
     },
   },
 })

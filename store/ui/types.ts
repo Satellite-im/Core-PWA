@@ -213,6 +213,7 @@ export interface UIState {
     flair: Flair
   }
   isLoadingFileIndex: boolean
+  filesUploadStatus: string
   renameCurrentName?: string
   filePreview?: string
   chatImageOverlay?: ImageMessage

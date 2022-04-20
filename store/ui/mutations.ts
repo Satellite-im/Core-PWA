@@ -368,4 +368,7 @@ export default {
   setSwiperSlideIndex(state: UIState, index: number) {
     state.swiperSlideIndex = index
   },
+  setFilesUploadStatus(state: UIState, value: string) {
+    state.filesUploadStatus = value
+  },
 }
