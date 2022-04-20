@@ -279,6 +279,32 @@ export default {
       commit('updateTextilePubkey', preGeneratedTextilePubKey)
     dispatch('startup', payerAccount)
   },
+
+  /**
+   * @method updateProfilePhoto
+   * @description update profile photo of the user on the Solana blockchain
+   * @param image
+   * @example
+   * ```typescript
+   * this.$store.dispatch(
+   *  'accounts/updateProfilePhoto', image
+   * );
+   * ```
+   */
+  async updateProfilePhoto(
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
+    image: string,
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    const imagePath = await uploadPicture(image)
+
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
+    await usersProgram.setPhotoHash(imagePath)
+
+    commit('setProfilePicture', imagePath)
+  },
+
   /**
    * @method initializeEncryptionEngine
    * @description Initializes the Crypto class with the current user keypair

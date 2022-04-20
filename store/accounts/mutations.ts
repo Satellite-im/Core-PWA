@@ -31,6 +31,11 @@ const mutations = {
     state.active = activeAccountPubkey
     state.initialized = true
   },
+  setProfilePicture(state: AccountsState, image: string) {
+    if (state.details) {
+      state.details.profilePicture = image
+    }
+  },
   setUserDetails(state: AccountsState, details: UserRegistrationData) {
     state.details = {
       name: details.username,
