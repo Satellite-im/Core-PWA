@@ -1,13 +1,13 @@
-import { Buckets, RemovePathResponse, Root } from '@textile/hub'
+import { Buckets, RemovePathResponse, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
-import { RFM } from '../abstracts/RFM.abstract'
-import { RFMInterface } from '../interface/RFM.interface'
 import { Config } from '~/config'
-import { TextileInitializationData } from '~/types/textile/manager'
 import {
   FileSystemExport,
   FILESYSTEM_TYPE,
 } from '~/libraries/Files/types/filesystem'
+import { TextileInitializationData } from '~/types/textile/manager'
+import { RFM } from '../abstracts/RFM.abstract'
+import { RFMInterface } from '../interface/RFM.interface'
 
 export class Bucket extends RFM implements RFMInterface {
   private _textile: TextileInitializationData

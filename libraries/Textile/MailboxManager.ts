@@ -1,30 +1,25 @@
-import {
-  PublicKey,
-  PrivateKey,
-  Identity,
-  ThreadID,
-  UserMessage,
-  Users,
-} from '@textile/hub'
+import { Identity, PrivateKey, PublicKey } from '@textile/crypto'
 import { Query } from '@textile/threads-client'
+import { ThreadID } from '@textile/threads-id'
+import { UserMessage, Users } from '@textile/users'
 import { isRight } from 'fp-ts/lib/Either'
 import { messageEncoder } from './encoders'
 import {
+  EncodingTypesEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
+import {
   ConversationQuery,
   MailboxCallback,
-  MessageFromThread,
   MailboxSubscriptionType,
-  MessageCallback,
-  MessageTypes,
-  MessagePayloads,
   Message,
+  MessageCallback,
+  MessageFromThread,
+  MessagePayloads,
+  MessageTypes,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import {
-  PropCommonEnum,
-  MessagingTypesEnum,
-  EncodingTypesEnum,
-} from '~/libraries/Enums/enums'
 
 export class MailboxManager {
   senderAddress: string

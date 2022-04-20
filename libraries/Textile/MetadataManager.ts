@@ -1,4 +1,6 @@
-import { Identity, PrivateKey, PublicKey, Query, ThreadID } from '@textile/hub'
+import { Identity, PrivateKey, PublicKey } from '@textile/crypto'
+import { Query } from '@textile/threads-client'
+import { ThreadID } from '@textile/threads-id'
 import { EncodingTypesEnum } from '../Enums/enums'
 import { metadataSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
