@@ -88,7 +88,7 @@ export default {
   async sendNotification(
     { commit, rootState }: ActionsArguments<UIState>,
     notificationMessage: String,
-    to: String,
+    from: String,
     type: NotificationTypes,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -98,7 +98,7 @@ export default {
     }
     const notificationResponse =
       await $TextileManager.notificationManager?.sendNotification(
-        to,
+        from,
         notificationMessage,
         type,
       )

@@ -79,14 +79,13 @@ export class NotificationManager {
    * @returns returns the textile response
    */
   async sendNotification(
-    to: String,
+    from: String,
     message: String,
     type: NotificationTypes,
   ): Promise<Object | null> {
     const buildNotification: AppNotification = {
       id: '',
       message,
-      to,
       seen: false,
       from: this.textile.wallet.address,
       type,

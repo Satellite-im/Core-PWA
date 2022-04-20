@@ -5,7 +5,6 @@ export type AppNotification = {
   message: String
   seen: Boolean
   from: String
-  to: String
   type: NotificationTypes
   date: Number
 }

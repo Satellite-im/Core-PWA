@@ -1,5 +1,14 @@
 import Vue from 'vue'
-import { TextileError, TextileState } from './types'
+import { TextileState, TextileError } from './types'
+import { ActionsArguments, RootState } from '~/types/store/store'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { TextileConfig } from '~/types/textile/manager'
+import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import {
+  MessageRouteEnum,
+  NotificationTypes,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { FilSystem } from '~/libraries/Files/FilSystem'
@@ -218,7 +227,6 @@ export default {
       if (!message) {
         return
       }
-
       const sender = rootState.friends.all.find(
         (friend) => friend.textilePubkey === message.from,
       )
@@ -231,6 +239,12 @@ export default {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
+      })
+
+      dispatch('ui/sendNotification', {
+        message: `new message from ${message.from}`,
+        from: message.from,
+        type: NotificationTypes.DIRECT_MESSAGE,
       })
 
       dispatch('storeInMessage', { address: sender.address, message })
