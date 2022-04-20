@@ -190,6 +190,7 @@ export default Vue.extend({
     /**
      * @method setProgress
      * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * we encountered a bug where % was getting set to 105, math.min fixes that
      * @param num current progress in bytes
      * @param size total file size in bytes
      */
@@ -197,7 +198,7 @@ export default Vue.extend({
       this.$store.commit(
         'ui/setFilesUploadStatus',
         this.$t('pages.files.controls.upload', [
-          `${name} - ${Math.floor((num / size) * 100)}%`,
+          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
         ]),
       )
     },
