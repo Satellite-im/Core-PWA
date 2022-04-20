@@ -102,6 +102,7 @@ export default {
         notificationMessage,
         type,
       )
+    console.log(notificationResponse)
     commit('sendNotification', notificationResponse)
   },
   clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {

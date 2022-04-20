@@ -32,6 +32,8 @@ import {
   UISearchResultData,
   MatchTypesEnum,
 } from '~/types/search/search'
+import { UIState } from '~/store/ui/types'
+import InitialUIState from '~/store/ui/state'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
@@ -234,18 +236,21 @@ export default {
       if (!sender) {
         return
       }
-
       commit('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
 
-      dispatch('ui/sendNotification', {
-        message: `new message from ${message.from}`,
-        from: message.from,
-        type: NotificationTypes.DIRECT_MESSAGE,
-      })
+      dispatch(
+        'ui/sendNotification',
+        {
+          message: `New message from ${sender.name}`,
+          from: message.from,
+          type: NotificationTypes.DIRECT_MESSAGE,
+        },
+        { root: true },
+      )
 
       dispatch('storeInMessage', { address: sender.address, message })
     })

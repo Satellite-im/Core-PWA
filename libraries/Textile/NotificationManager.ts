@@ -87,7 +87,7 @@ export class NotificationManager {
       id: '',
       message,
       seen: false,
-      from: this.textile.wallet.address,
+      from,
       type,
       date: Date.now(),
     }
@@ -104,6 +104,7 @@ export class NotificationManager {
       CollectionName,
       Query.where('_id').eq(notificationId[0]),
     )
+    console.log(notification, 'noti')
     return notification[0]
   }
 
