@@ -141,18 +141,6 @@ export enum SettingsRoutes {
   NETWORK = 'network',
   REALMS = 'realms',
 }
-// | 'personalize'
-// | 'profile'
-// | 'audio'
-// | 'keybinds'
-// | 'accounts'
-// | 'privacy'
-// | 'developer'
-// | 'info'
-// | 'notifications'
-// | 'storage'
-// | 'network'
-// | 'realms'
 
 export interface ContextMenuItem {
   text: string | TranslateResult
