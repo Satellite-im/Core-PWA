@@ -21,7 +21,14 @@
       @mouseleave="heartHover=false"
     />
   </div>
-  <img v-if="item.thumbnail" class="image-preview" :src="item.thumbnail" />
+  <!-- add container so blur effect doesn't go outside the dimensions of the image -->
+  <div v-if="item.thumbnail" class="image-container">
+    <img
+      class="image-preview"
+      :class="{'blur-image' : item.nsfw && settings.blockNsfw}"
+      :src="item.thumbnail"
+    />
+  </div>
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
     <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />

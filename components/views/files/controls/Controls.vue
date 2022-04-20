@@ -113,7 +113,7 @@ export default Vue.extend({
       const sameNameResults: File[] = emptyFileResults.filter((file) => {
         return !this.$FileSystem.currentDirectory.hasChild(file.name)
       })
-      const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
+      const files: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
@@ -140,20 +140,17 @@ export default Vue.extend({
           return { file, nsfw }
         })
 
-      const files: File[] = []
-
-      for await (const el of nsfwResults) {
-        if (!el.nsfw) {
-          files.push(el.file)
-        }
-      }
-      for (const file of files) {
+      for await (const file of files) {
         try {
           this.$store.commit(
             'ui/setFilesUploadStatus',
-            this.$t('pages.files.controls.upload', [file.name]),
+            this.$t('pages.files.controls.upload', [file.file.name]),
           )
-          await this.$FileSystem.uploadFile(file, this.setProgress)
+          await this.$FileSystem.uploadFile(
+            file.file,
+            file.nsfw,
+            this.setProgress,
+          )
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -182,9 +179,6 @@ export default Vue.extend({
       }
       if (emptyFileResults.length !== sameNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.duplicate_name'))
-      }
-      if (nsfwResults.length !== files.length) {
-        this.errors.push(this.$t('errors.chat.contains_nsfw'))
       }
     },
     /**

@@ -47,7 +47,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'settings']),
     /**
      * @returns {string} if directory, child count. if file, size
      */

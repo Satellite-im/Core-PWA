@@ -8,6 +8,7 @@ export class Fil extends Item {
   private _size: number = 0
   private _thumbnail: string
   private _extension: string
+  private _nsfw: boolean
 
   /**
    * @constructor
@@ -25,6 +26,7 @@ export class Fil extends Item {
     type,
     thumbnail,
     extension,
+    nsfw,
   }: {
     id?: string
     name: string
@@ -36,6 +38,7 @@ export class Fil extends Item {
     type?: FILE_TYPE
     thumbnail?: string
     extension?: string
+    nsfw: boolean
   }) {
     if (!size) {
       throw new Error(FileSystemErrors.FILE_SIZE)
@@ -48,6 +51,7 @@ export class Fil extends Item {
     this._extension =
       extension ||
       name.slice(((name.lastIndexOf('.') - 1) >>> 0) + 2).toLowerCase()
+    this._nsfw = nsfw
   }
 
   /**
@@ -73,6 +77,7 @@ export class Fil extends Item {
       type: this.type as FILE_TYPE,
       thumbnail: this.thumbnail,
       extension: this.extension,
+      nsfw: this._nsfw,
     })
   }
 
@@ -106,6 +111,14 @@ export class Fil extends Item {
    */
   get extension(): string {
     return this._extension
+  }
+
+  /**
+   * @getter nsfw
+   * @returns nsfw status of file
+   */
+  get nsfw(): boolean {
+    return this._nsfw
   }
 
   /**
