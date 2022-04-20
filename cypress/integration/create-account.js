@@ -184,7 +184,7 @@ describe('Create Account Validations', () => {
     cy.createAccountAddImage(invalidImagePath)
     cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
       'have.text',
-      'Unable to upload, invalid file.',
+      'Please upload a valid image type (jpg, png, svg, etc..)',
     )
 
     //User is still able to sign in and invalid image will not be loaded
@@ -217,7 +217,7 @@ describe('Create Account Validations', () => {
     cy.createAccountAddImage(invalidImagePath)
     cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
       'have.text',
-      'Unable to upload, invalid file.',
+      'Please upload a valid image type (jpg, png, svg, etc..)',
     )
 
     //Now adding a valid image and validating user can pass to next step
