@@ -7,6 +7,7 @@ import { Bucket } from './remote/textile/Bucket'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { mimeType, isHeic, isMimeEmbeddableImage } from '~/utilities/FileType'
+import blobToBase64 from '~/utilities/BlobToBase64'
 const convert = require('heic-convert')
 
 export class TextileFileSystem extends FilSystem {
@@ -74,7 +75,7 @@ export class TextileFileSystem extends FilSystem {
       if (await this._tooLarge(fileJpg)) {
         return
       }
-      return this._fileToData(await skaler(fileJpg, { width: 400 }))
+      return blobToBase64(await skaler(fileJpg, { width: 400 }))
     }
 
     // to catch non-embeddable image files, set blank thumbnail
@@ -83,27 +84,12 @@ export class TextileFileSystem extends FilSystem {
     }
     // svg cannot be used with skaler, set thumbnail based on full size
     if (type === FILE_TYPE.SVG) {
-      return this._fileToData(file)
+      return blobToBase64(file)
     }
     if (await this._tooLarge(file)) {
       return
     }
-    return this._fileToData(await skaler(file, { width: 400 }))
-  }
-
-  /**
-   * @method _fileToData
-   * @description convert File to base64 string
-   * @param {File} file
-   * @returns {Promise<string>} base64 thumbnail
-   */
-  private _fileToData(file: File): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result?.toString() || '')
-      reader.onerror = (error) => reject(error)
-    })
+    return blobToBase64(await skaler(file, { width: 400 }))
   }
 
   /**
