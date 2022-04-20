@@ -69,12 +69,16 @@ export default {
     if (record) {
       /* Log CSAM Consent Data for future ticket as Hogan requested */
       Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
-      commit('settings/setConsentScan', record.consent_scan, {
-        root: true,
-      })
-      commit('settings/setBlockNsfw', record.block_nsfw, {
-        root: true,
-      })
+      if (record.consent_scan !== undefined) {
+        commit('settings/setConsentScan', record.consent_scan, {
+          root: true,
+        })
+      }
+      if (record.block_nsfw !== undefined) {
+        commit('settings/setBlockNsfw', record.block_nsfw, {
+          root: true,
+        })
+      }
     }
     return textilePublicKey
   },
