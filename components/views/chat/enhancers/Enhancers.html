@@ -6,8 +6,9 @@
     left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px',
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
+  @click.stop
 >
-  <div class="navbar" @click="navbarClickHandler">
+  <div class="navbar"">
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"
@@ -35,11 +36,7 @@
       scrollbarVisibility="scroll"
       v-if="ui.enhancers.route === 'emotes'"
     >
-      <emoji-picker
-        v-click-outside="outBoundClickHandler"
-        @emoji="addEmoji"
-        :search="search.toLowerCase()"
-      >
+      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
         <div
           ref="emojiInvoker"
           slot="emoji-invoker"

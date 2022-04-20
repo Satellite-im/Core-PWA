@@ -94,28 +94,6 @@ export default Vue.extend({
       })
     },
     /**
-     * @method navbarClickHandler
-     * @description Without this handler user can click on the navbar padding and emojis will disappear
-     */
-    navbarClickHandler(event: Event) {
-      const target = event.target as Element
-      const button = target.closest('button')
-      if (!button) {
-        this.openEmoji()
-      }
-    },
-    /**
-     * @method emojiClickHandler
-     * @description Without this handler user can click out of emoji component and it will disappear
-     */
-    outBoundClickHandler() {
-      this.openEmoji()
-    },
-    /**
-     * Adds emoji to current text input
-     * (emoji: any) Comes from <picker/> select event
-     */
-    /**
      * @method addEmoji
      * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
      * TODO: Change reactor in dispatch addReaction to current users name instead of 'Jpanay' //AP-390
