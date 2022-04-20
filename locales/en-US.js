@@ -73,9 +73,18 @@ export default {
     many_typing: 'many users are typing',
     new_messages: 'New Messages',
     say_hi: 'Say hi! 👋',
-    user_sent: 'user sent you a {msgType}',
-    user_sent_image: 'user sent you an {msgType}',
-    user_sent_something: 'user sent you something',
+    user_sent: {
+      me: 'you sent a {msgType}',
+      user: 'user sent you a {msgType}',
+    },
+    user_sent_image: {
+      me: 'you sent an {msgType}',
+      user: 'user sent you an {msgType}',
+    },
+    user_sent_something: {
+      me: 'you sent something',
+      user: 'user sent you something',
+    },
     pinned: {
       archived_messages: 'Archived Messages',
       new: 'New',
