@@ -217,12 +217,12 @@ export default {
       serverType: {
         title: 'Signaling Servers',
         subtitle:
-          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
       },
       consentScan: {
         title: 'Consents to having files scanned',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to having my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+          'In order to share files/use the encrypted file storage I consent to have my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
       },
       ownInfo: {
         title: 'Set my own Signaling Server',
@@ -257,7 +257,7 @@ export default {
       embeds: {
         title: 'Enable External Embeds',
         subtitle:
-          'Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more.',
+          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
       },
     },
     settings: {
@@ -430,7 +430,7 @@ export default {
         network: 'Network',
         allow_embeds: 'Allow Embeds',
         allow_embeds_description:
-          'Have Satellite try to load videos and link previews. This sends a request to the URL someone shares with you to get more information/embed the content from the source and may allow the site to track you.',
+          'Have Satellite try to load videos and link previews. This sends a request to the URL someone shares with you to get more information/to embed the content from the source and may allow the site to track you.',
       },
       storage: {
         title: 'Storage',
