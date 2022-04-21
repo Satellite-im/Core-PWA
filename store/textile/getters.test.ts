@@ -1,4 +1,16 @@
 import * as getters from '~/store/textile/getters'
+import {
+  decryptedMessage,
+  fileMessage,
+  glyphMessage,
+  imageMessage,
+  mediaMessage,
+  messageEncoder,
+  messageFromThread,
+  reactionMessage,
+  replyMessage,
+  textMessage,
+} from '~/libraries/Textile/encoders'
 
 describe('init', () => {
   let inst: any
@@ -43,58 +55,100 @@ describe('getters.default.getInitialized', () => {
   })
 })
 
-describe('getters.default.getConversationMessages', () => {
+describe('getters.default.getConversation', () => {
   test('0', () => {
-    const result: any = getters.default.getConversationMessages({
+    let localState = {
       initialized: true,
-      activeConversation: '',
-      conversations: {},
-      conversationLoading: false,
-      messageLoading: false,
-      uploadProgress: {
-        key0: { progress: NaN, finished: false, name: '' },
-        key1: { progress: NaN, finished: false, name: '' },
-        key2: { progress: NaN, finished: true, name: '' },
+      activeConversation: '9876',
+      conversations: {
+        key0: {
+          messages: [
+            {
+              '01g12df0ey85k9905f85yj4c9c': {
+                from: 'bbaareibupvl76qkt2n3y7hlj7qmjmogtaw7eaaroj2bdlaao6dxet46bge',
+                to: 'bbaareidn44vnowdx6y4xfm7ypjh4zjm45qdrdb42uqg25jxtkv3ru2wqdq',
+                at: 1650422415838,
+                type: 'text',
+                payload: 'hey',
+                id: '01g12df0ey85k9905f85yj4c9c',
+                readAt: 0,
+                conversation: 'DA1kvHx1wXX3xLGwkX8in3DKoDcXqWJ9TtdvJJRuz41W',
+              },
+            },
+          ],
+          replies: [],
+          reactions: [],
+          lastInbound: 1650422415838,
+          lastUpdate: 1650504356737,
+          lastMessage: {
+            conversation: 'DA1kvHx1wXX3xLGwkX8in3DKoDcXqWJ9TtdvJJRuz41W',
+            from: 'bbaareidn44vnowdx6y4xfm7ypjh4zjm45qdrdb42uqg25jxtkv3ru2wqdq',
+            to: 'bbaareibupvl76qkt2n3y7hlj7qmjmogtaw7eaaroj2bdlaao6dxet46bge',
+            at: 1650504356737,
+            type: 'glyph',
+            payload:
+              'https://satellite.mypinata.cloud/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
+            pack: 'Astrobunny',
+            id: '01g14vkmw10bj09n45630t6m6a',
+          },
+          limit: 50,
+          skip: 0,
+        },
       },
-    })
-    expect(result).toMatchSnapshot()
+      conversationLoading: false,
+      messageLoading: true,
+      uploadProgress: {},
+    }
+    const result: any = getters.default.getConversation(localState)
+    expect(result()).toBeNull()
   })
 })
 
-describe('getters.default.getConversation', () => {
+describe('getters.default.getConversationMessages', () => {
   test('0', () => {
-    const result: any = getters.default.getConversation({
+    let localState = {
       initialized: true,
       activeConversation: '9876',
-      conversations: {},
+      conversations: {
+        key0: {
+          messages: [
+            {
+              '01g12df0ey85k9905f85yj4c9c': {
+                from: 'bbaareibupvl76qkt2n3y7hlj7qmjmogtaw7eaaroj2bdlaao6dxet46bge',
+                to: 'bbaareidn44vnowdx6y4xfm7ypjh4zjm45qdrdb42uqg25jxtkv3ru2wqdq',
+                at: 1650422415838,
+                type: 'text',
+                payload: 'hey',
+                id: '01g12df0ey85k9905f85yj4c9c',
+                readAt: 0,
+                conversation: 'DA1kvHx1wXX3xLGwkX8in3DKoDcXqWJ9TtdvJJRuz41W',
+              },
+            },
+          ],
+          replies: [],
+          reactions: [],
+          lastInbound: 1650422415838,
+          lastUpdate: 1650504356737,
+          lastMessage: {
+            conversation: 'DA1kvHx1wXX3xLGwkX8in3DKoDcXqWJ9TtdvJJRuz41W',
+            from: 'bbaareidn44vnowdx6y4xfm7ypjh4zjm45qdrdb42uqg25jxtkv3ru2wqdq',
+            to: 'bbaareibupvl76qkt2n3y7hlj7qmjmogtaw7eaaroj2bdlaao6dxet46bge',
+            at: 1650504356737,
+            type: 'glyph',
+            payload:
+              'https://satellite.mypinata.cloud/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
+            pack: 'Astrobunny',
+            id: '01g14vkmw10bj09n45630t6m6a',
+          },
+          limit: 50,
+          skip: 0,
+        },
+      },
       conversationLoading: false,
       messageLoading: true,
       uploadProgress: {},
-    })
-    expect(result).toMatchSnapshot()
-  })
-
-  test('1', () => {
-    const result: any = getters.default.getConversation({
-      initialized: false,
-      activeConversation: 'bc23a9d531064583ace8f67dad60f6bb',
-      conversations: {},
-      conversationLoading: true,
-      messageLoading: false,
-      uploadProgress: {},
-    })
-    expect(result).toMatchSnapshot()
-  })
-
-  test('2', () => {
-    const result: any = getters.default.getConversation({
-      initialized: false,
-      activeConversation: '',
-      conversations: {},
-      conversationLoading: true,
-      messageLoading: true,
-      uploadProgress: {},
-    })
-    expect(result).toMatchSnapshot()
+    }
+    const result: any = getters.default.getConversationMessages(localState)
+    expect(result()).toEqual([])
   })
 })
