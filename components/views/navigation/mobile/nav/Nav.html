@@ -15,6 +15,7 @@
     <div v-on:click="$store.commit('ui/toggleSettings',  { show: true })">
       <UiUserState
         :user="{address: accounts.active, state: accounts.details.state}"
+        :src="src"
       />
     </div>
   </div>
