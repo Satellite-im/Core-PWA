@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
 import { FileSystemErrors } from '../errors/Errors'
 import { Fil } from '../Fil'
-import { FilSystem } from '../FilSystem'
+import { FileSystem } from '../FileSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILESYSTEM_TYPE } from '../types/filesystem'
 
@@ -26,8 +26,8 @@ const mockFileSystemData = {
   name: 'root',
 }
 
-describe('Test FilSystem', () => {
-  const filesystem = new FilSystem()
+describe('Test FileSystem', () => {
+  const filesystem = new FileSystem()
   const file = new Fil(mockFileData)
   const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
   const file3 = new Fil({ ...mockFileData, name: 'abc.png' })

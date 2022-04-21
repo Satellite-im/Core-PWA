@@ -1,5 +1,5 @@
 import { Fil } from '../Fil'
-import { FilSystem } from '../FilSystem'
+import { FileSystem } from '../FileSystem'
 import { Bucket } from '../remote/textile/Bucket'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemExport } from '../types/filesystem'
@@ -23,7 +23,7 @@ const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
   it('export file system and update version number', () => {
-    const fs = new FilSystem()
+    const fs = new FileSystem()
 
     fs.addChild(file)
     fs.createDirectory(mockDirectoryData)

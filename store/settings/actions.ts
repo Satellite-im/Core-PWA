@@ -1,11 +1,13 @@
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { SettingsError, SettingsState } from '~/store/settings/types'
 import { ActionsArguments } from '~/types/store/store'
 
 export default {
-  async clearLocalStorage({ commit }: ActionsArguments<SettingsState>) {
+  async clearLocalStorage({
+    commit,
+    dispatch,
+  }: ActionsArguments<SettingsState>) {
     try {
-      await db.delete()
+      dispatch('worker/postMessage', { type: 'db/clear' }, { root: true })
       localStorage.clear()
       commit('removeAppState', true)
       location.reload()

@@ -204,6 +204,14 @@ export default defineNuxtConfig({
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
+      // Web Worker support
+      if (ctx.isClient) {
+        config.module.rules.push({
+          test: /\.worker\.ts$/,
+          use: { loader: 'worker-loader' },
+          exclude: /(node_modules)/,
+        })
+      }
       config.node = {
         fs: 'empty',
         encoding: 'empty',

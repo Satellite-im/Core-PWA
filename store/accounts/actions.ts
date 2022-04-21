@@ -10,9 +10,8 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
-import { ActionsArguments, RootState } from '~/types/store/store'
+import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
   /**
@@ -247,7 +246,7 @@ export default {
     if (userData.image) {
       const { pin } = state
       await dispatch(
-        'textile/initialize',
+        'worker/initialize',
         {
           id: payerAccount?.publicKey.toBase58(),
           pass: pin,
@@ -297,25 +296,17 @@ export default {
     { dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-
-    const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
-    await db.initializeSearchIndexes()
-
     const { pin } = state
-    if (!textileInitialized && pin) {
-      dispatch(
-        'textile/initialize',
-        {
-          id: payerAccount?.publicKey.toBase58(),
-          pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
-        },
-        { root: true },
-      )
-    }
+    dispatch(
+      'worker/initialize',
+      {
+        id: payerAccount?.publicKey.toBase58(),
+        pass: pin,
+      },
+      { root: true },
+    )
 
     if (!webrtcInitialized) {
       dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {

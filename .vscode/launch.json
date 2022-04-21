@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "client: firefox",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "pathMappings": [
+        {
+          "url": "webpack:///",
+          "path": "${webRoot}/"
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "server: nuxi",
+      "args": ["dev"],
+      "osx": {
+        "program": "${workspaceFolder}/node_modules/.bin/nuxi"
+      },
+      "linux": {
+        "program": "${workspaceFolder}/node_modules/.bin/nuxi"
+      },
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/nuxt/bin/nuxi.mjs"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "fullstack: nuxi",
+      "configurations": ["server: nuxi", "client: firefox"]
+    }
+  ]
+}

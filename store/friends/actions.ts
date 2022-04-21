@@ -1,24 +1,14 @@
 import { PublicKey } from '@solana/web3.js'
 
-import {
-  PublicKey as TextilePublicKey,
-  PrivateKey as TextilePrivateKey,
-  Identity,
-  ThreadID,
-  UserMessage,
-  Users,
-  Query,
-} from '@textile/hub'
-
 import Vue from 'vue'
 import { DataStateType } from '../dataState/types'
-import { TextileError } from '../textile/types'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
   FriendsError,
   FriendsState,
 } from './types'
+import { TextileError } from '~/worker/types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
@@ -41,7 +31,6 @@ import UsersProgram, {
 } from '~/libraries/Solana/UsersProgram/UsersProgram'
 import { MetadataManager } from '~/libraries/Textile/MetadataManager'
 import { FriendMetadata } from '~/types/textile/metadata'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
   async initialize({
@@ -49,25 +38,11 @@ export default {
     commit,
     state,
   }: ActionsArguments<FriendsState>) {
-    const $Hounddog = Vue.prototype.$Hounddog
-
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
-
-    const friends = await db.friends.toArray()
-    db.search.friends.update(friends)
-    friends.forEach((friend) => {
-      const friendExists = $Hounddog.friendExists(state, friend)
-
-      if (!friendExists) {
-        commit('addFriend', { ...friend, stored: true })
-        return
-      }
-      commit('updateFriend', { ...friend, stored: true })
-    })
 
     commit(
       'dataState/setDataState',
@@ -157,7 +132,6 @@ export default {
     { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
     friendAccount: FriendAccount,
   ) {
-    // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
@@ -219,7 +193,7 @@ export default {
         'removeOutgoingRequest',
         friendAccountToOutgoingRequest(friendAccount, null).requestId,
       )
-      dispatch('syncFriendIDB', friend)
+      dispatch('upsertFriend', friend)
       return
     }
     commit('updateFriend', friend)
@@ -232,8 +206,8 @@ export default {
    * @param friend Friend
    * @returns void
    */
-  async syncFriendIDB(
-    { commit }: ActionsArguments<FriendsState>,
+  async upsertFriend(
+    { dispatch }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
     const record = {
@@ -243,16 +217,14 @@ export default {
       textilePubkey: friend.textilePubkey,
       lastUpdate: friend.lastUpdate,
     }
-    db.search.friends.add(record)
-    if (
-      (await db.friends.where('address').equals(friend.address).count()) === 0
-    ) {
-      await db.friends.add(record)
-    }
-    await db.friends.update(record.address, record)
-
-    // update stored state
-    commit('friends/setStored', friend, { root: true })
+    dispatch(
+      'worker/postMessage',
+      {
+        type: 'friends/upsert',
+        payload: record,
+      },
+      { root: true },
+    )
   },
 
   /**

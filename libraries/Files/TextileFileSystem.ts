@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import { PushPathResult } from '@textile/hub'
 import skaler from 'skaler'
-import { FilSystem } from './FilSystem'
+import { FileSystem } from './FileSystem'
 import { FILE_TYPE } from './types/file'
 import { Bucket } from './remote/textile/Bucket'
 import { isHeic } from '~/utilities/Heic'
 import { Config } from '~/config'
 const convert = require('heic-convert')
 
-export class TextileFileSystem extends FilSystem {
+export class TextileFileSystem extends FileSystem {
   /**
    * @getter bucket
    * @returns {Bucket} bucket global to upload files to textile

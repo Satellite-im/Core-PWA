@@ -158,6 +158,3 @@ export class SatelliteDB extends Dexie {
     }
   }
 }
-
-export const db = new SatelliteDB()
-export default db

@@ -5,7 +5,7 @@ import Vue from 'vue'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
-import { FilSystem } from '~/libraries/Files/FilSystem'
+import { FileSystem } from '~/libraries/Files/FileSystem'
 
 export default Vue.extend({
   name: 'Files',
@@ -15,7 +15,7 @@ export default Vue.extend({
       file: false as Fil | boolean,
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
-      fileSystem: this.$FileSystem as FilSystem,
+      fileSystem: this.$FileSystem as FileSystem,
     }
   },
   computed: {

@@ -1,5 +1,5 @@
-import { Conversation } from '../textile/types'
 import { FriendsState } from './types'
+import { Conversation } from '~/worker/types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 
 const mutations = {

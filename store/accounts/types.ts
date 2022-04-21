@@ -27,6 +27,10 @@ export interface AccountsState {
   lastVisited: string
 }
 
+export interface WorkersState {
+  initialized: boolean
+}
+
 export enum AccountsError {
   INVALID_PIN = 'errors.accounts.invalid_pin',
   INVALID_GROUPID = 'errors.accounts.invalid_group_id',

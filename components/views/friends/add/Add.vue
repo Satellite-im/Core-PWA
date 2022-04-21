@@ -11,9 +11,6 @@ import { mapState } from 'vuex'
 
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 export default Vue.extend({
   components: {
@@ -31,7 +28,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'worker']),
     friendInviteUrl(): string {
       return `${location.origin}/#/friends/list/${this.accounts.active}`
     },
@@ -68,10 +65,16 @@ export default Vue.extend({
         return
       }
       this.error = ''
-      try {
-        const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-        const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
+      this.$store.dispatch('worker/postMessage', {
+        type: 'solana/getAccountInfo',
+        data: {
+          accountID,
+        },
+      })
+
+      // TODO: Was mid-refactor here, ^ use the above dispatch and follow the worker/postMessage pattern
+      try {
         const friend = await usersProgram.getUserInfo(accountID)
         if (!friend) {
           this.error = this.$t('friends.not_found') as string

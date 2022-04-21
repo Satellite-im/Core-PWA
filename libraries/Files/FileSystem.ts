@@ -13,7 +13,7 @@ import {
 import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
 
-export class FilSystem {
+export class FileSystem {
   private _self = new Directory({ name: 'root' })
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
@@ -61,10 +61,10 @@ export class FilSystem {
 
   /**
    * @getter copy
-   * @returns {FilSystem} Returns a copy of the entire filesystem
+   * @returns {FileSystem} Returns a copy of the entire filesystem
    */
-  get copy(): FilSystem {
-    const fsCopy = new FilSystem()
+  get copy(): FileSystem {
+    const fsCopy = new FileSystem()
 
     this.root.content.forEach((item) => {
       const itemCopy = (item as Directory | Fil).copy
@@ -106,12 +106,12 @@ export class FilSystem {
       data: Array<ExportItem | ExportFile>,
       key: keyof ExportDirectory | keyof ExportFile,
     ) => {
-      return data.reduce((prev, el) => {
-        prev.push(el)
-        if (el[key]) {
-          prev.push(...flatDeepByKey(el[key], key))
+      return data.reduce((acc, item) => {
+        acc.push(item)
+        if (item[key]) {
+          acc.push(...flatDeepByKey(item[key], key))
         }
-        return prev
+        return acc
       }, [])
     }
     return flatDeepByKey(this.export.content, 'children')
