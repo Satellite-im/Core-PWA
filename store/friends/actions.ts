@@ -334,10 +334,12 @@ export default {
 
     friendsProgram.addEventListener(FriendsEvents.REQUEST_DENIED, (account) => {
       if (account) {
-        commit(
-          'removeOutgoingRequest',
-          friendAccountToOutgoingRequest(account, null).requestId,
-        )
+        const requestId = friendAccountToOutgoingRequest(
+          account,
+          null,
+        ).requestId
+        commit('removeOutgoingRequest', requestId)
+        commit('removeIncomingRequest', requestId)
       }
     })
 

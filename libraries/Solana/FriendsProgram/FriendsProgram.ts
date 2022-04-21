@@ -403,6 +403,11 @@ export default class FriendsProgram extends EventEmitter {
         toPaddedBuffer,
       ),
     )
+    console.log('acceptFriendRequest')
+    console.log('connection', connection)
+    console.log('transaction', transaction)
+    console.log('payerAccount', payerAccount)
+    console.log('userToAccount', userToAccount)
 
     return sendAndConfirmTransaction(
       connection,
@@ -494,6 +499,12 @@ export default class FriendsProgram extends EventEmitter {
       ),
     )
 
+    console.log('removeFriendRequest')
+    console.log('connection', connection)
+    console.log('transaction', transaction)
+    console.log('payerAccount', payerAccount)
+    console.log('userFromAccount', userFromAccount)
+
     return sendAndConfirmTransaction(
       connection,
       transaction,
@@ -542,6 +553,12 @@ export default class FriendsProgram extends EventEmitter {
         isInitiator,
       ),
     )
+
+    console.log('removeFriend')
+    console.log('connection', connection)
+    console.log('transaction', transaction)
+    console.log('payerAccount', payerAccount)
+    console.log('signer', signer)
 
     return sendAndConfirmTransaction(
       connection,
@@ -717,6 +734,21 @@ export default class FriendsProgram extends EventEmitter {
       [incomingRequestsFilter],
     )
 
+    const incomingRequestMirroredBytes = base58(
+      Buffer.from([FriendStatus.PENDING, ...payerAccount.publicKey.toBytes()]),
+    )
+
+    const incomingRequestMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32, bytes: incomingRequestMirroredBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.NEW_REQUEST),
+      Config.solana.defaultCommitment,
+      [incomingRequestMirroredFilter],
+    )
+
     // Filter for new friends checks only if an outgoing request has been accepted
     // because we suppose the incoming request acceptance to be catch directly after the
     // success of the acceptRequest action
@@ -737,6 +769,21 @@ export default class FriendsProgram extends EventEmitter {
       [newFriendFromOutgoingFilter],
     )
 
+    const friendRequestNewMirroredBytes = base58(
+      Buffer.from([FriendStatus.ACCEPTED, ...payerAccount.publicKey.toBytes()]),
+    )
+
+    const friendRequestNewMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32, bytes: friendRequestNewMirroredBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.NEW_FRIEND),
+      Config.solana.defaultCommitment,
+      [friendRequestNewMirroredFilter],
+    )
+
     // Filter for new friends checks only if an outgoing request has been denied
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
@@ -753,6 +800,21 @@ export default class FriendsProgram extends EventEmitter {
       this.buildEventHandler(FriendsEvents.REQUEST_DENIED),
       Config.solana.defaultCommitment,
       [friendRequestDeniedFilter],
+    )
+
+    const friendRequestDeniedMirroredBytes = base58(
+      Buffer.from([FriendStatus.REFUSED, ...payerAccount.publicKey.toBytes()]),
+    )
+
+    const friendRequestDeniedMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32, bytes: friendRequestDeniedMirroredBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.REQUEST_DENIED),
+      Config.solana.defaultCommitment,
+      [friendRequestDeniedMirroredFilter],
     )
 
     // To listen for friend removal we need to filter from both directions
