@@ -7,7 +7,7 @@ const randomStatus = faker.lorem.word() // generate random status
 let toggleStatusSaved = []
 let toggleStatusProfile = []
 
-describe('Privacy Page Toggles Tests', () => {
+describe.skip('Privacy Page Toggles Tests', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
 
   it('Privacy page - Verify all non-locked toggles switches work as should', () => {
