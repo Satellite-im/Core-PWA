@@ -242,7 +242,6 @@ export default {
         publicServer: 'Only Public Signaling Servers',
         userDefinedServer: 'Set my own',
       },
-      continue: 'Continue',
       register: {
         title: 'Register Username Publicly',
         subtitle:

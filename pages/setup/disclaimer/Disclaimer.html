@@ -8,7 +8,7 @@
       full-width
       data-cy="create-account-button"
       :text="$t('pages.disclaimer.create')"
-      :action="() => { goToPrivacySettings() }"
+      :action="generateWallet"
       :loading="isLoading"
     />
     <InteractablesButton

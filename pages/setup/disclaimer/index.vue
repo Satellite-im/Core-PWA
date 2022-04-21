@@ -11,8 +11,9 @@ export default Vue.extend({
     },
   },
   methods: {
-    goToPrivacySettings() {
-      this.$router.push('privacy')
+    async generateWallet() {
+      await this.$store.dispatch('accounts/generateWallet')
+      this.$router.push('phrase')
     },
     importAccount() {
       this.$router.push('importAccount')
