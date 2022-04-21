@@ -52,7 +52,6 @@ export default Vue.extend({
       error: false,
       aiScanning: false,
       fileAmount: 0,
-      containsNsfw: false,
     }
   },
   computed: {
@@ -178,10 +177,10 @@ export default Vue.extend({
     finishUploads() {
       this.$data.fileAmount--
       if (this.$data.fileAmount === 0) {
-        if (this.$data.containsNsfw) {
+        if (this.$store.state.chat.containsNsfw) {
           this.alertNsfwFile()
         }
-        if (!this.$data.containsNsfw) {
+        if (!this.$store.state.chat.containsNsfw) {
           this.$emit('cancelUpload')
           document.body.style.cursor = PropCommonEnum.DEFAULT
           this.$store.dispatch('textile/clearUploadStatus')
@@ -193,7 +192,7 @@ export default Vue.extend({
 
       setTimeout(() => {
         this.$store.commit('chat/setAlertNsfw', false)
-        this.$data.containsNsfw = false
+        this.$store.commit('chat/setContainsNsfw', false)
         this.$emit('cancelUpload')
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
@@ -252,7 +251,7 @@ export default Vue.extend({
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
-          this.$data.containsNsfw = true
+          this.$store.commit('chat/setContainsNsfw', true)
           this.alertNsfwFile()
         }
       }

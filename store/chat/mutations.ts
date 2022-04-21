@@ -58,6 +58,9 @@ const mutations = {
   setAlertNsfw(state: ChatState, alertNsfw: Boolean) {
     state.alertNsfw = alertNsfw
   },
+  setContainsNsfw(state: ChatState, containsNsfw: Boolean) {
+    state.containsNsfw = containsNsfw
+  },
 }
 
 export default mutations

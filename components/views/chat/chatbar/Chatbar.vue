@@ -377,6 +377,7 @@ export default Vue.extend({
      */
     onCancelUpload() {
       document.body.style.cursor = PropCommonEnum.DEFAULT
+      this.$store.commit('chat/setContainsNsfw', false)
       this.$store.commit('chat/setCountError', false)
     },
     beforeDestroy() {

@@ -14,7 +14,7 @@
   />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview || $store.state.chat.alertNsfw}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">

@@ -6,6 +6,7 @@ const InitialChatState = (): ChatState => ({
   files: {},
   countError: false,
   alertNsfw: false,
+  containsNsfw: false,
 })
 
 export default InitialChatState

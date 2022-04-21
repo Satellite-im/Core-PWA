@@ -7,4 +7,5 @@ export interface ChatState {
   files: { [key: string]: UploadDropItemType[] }
   countError: Boolean
   alertNsfw: Boolean
+  containsNsfw: Boolean
 }
