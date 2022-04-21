@@ -227,6 +227,15 @@ Cypress.Commands.add('validateSignalingServersValue', (expectedValue) => {
 
 //Import Account Commands
 
+//Adding a temporary command to avoid the 503 error presented on Recovery Seed screen
+Cypress.Commands.add('skipErrorOnRecoverySeed', () => {
+  cy.get('body').then(($body) => {
+    if ($body.find('.red').length > 0) {
+      cy.contains('Recover Account').click()
+    }
+  })
+})
+
 Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
   cy.clearDatabase()
   cy.visitRootPage()
@@ -242,6 +251,8 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .trigger('input')
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
+  //Adding a temporary command to avoid the 503 error presented on Recovery Seed screen
+  cy.skipErrorOnRecoverySeed()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
@@ -284,6 +295,8 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
   cy.get('[data-cy=add-passphrase]').type('{enter}')
 
   cy.contains('Recover Account').click()
+  //Adding a temporary command to avoid the 503 error presented on Recovery Seed screen
+  cy.skipErrorOnRecoverySeed()
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
@@ -448,21 +461,27 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
 })
 
 Cypress.Commands.add('goToConversation', (user, mobile = false) => {
-  //If chat conversation is displayed, click on hamburger button
-  //Click on sidebar friends button to show friends list
-  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
-    .contains(user)
-    .then(($user) => {
-      if (!$user.is(':visible')) {
-        cy.get('[data-cy=hamburger-button]').click()
-      }
-      cy.wrap($user).click()
-    })
+  //If sidebar menu is collapsed, click on hamburger button to display it
+  cy.get('#app-wrap').then(($appWrap) => {
+    if (!$appWrap.hasClass('is-open')) {
+      cy.get('[data-cy=hamburger-button]').click()
+    }
+  })
+
+  //Click on Friends button
+  cy.get('[data-cy=sidebar-friends]').click()
 
   //On mobile viewports, we need to click on hamburger button to see the chat selected
   if (mobile === true) {
     cy.get('[data-cy=hamburger-button]').click()
   }
+
+  //Look for friend name in friends list and click on it
+  cy.get('[data-cy=friend-name]', { timeout: 30000 })
+    .contains(user)
+    .parents('[data-cy=friend]')
+    .find('[data-cy=friend-send-message]')
+    .click()
 
   //Wait until conversation is fully loaded
   cy.get('[data-cy=user-connected]', { timeout: 120000 })
