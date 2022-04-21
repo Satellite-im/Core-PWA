@@ -62,7 +62,7 @@ export class UserInfoManager {
     return record || null
   }
 
-  async getConsentData(): Promise<UserdataFromThread | null> {
+  async getUserRecord(): Promise<UserdataFromThread | null> {
     return await this._findRecord()
   }
 
@@ -90,6 +90,27 @@ export class UserInfoManager {
         created_at: Date.now(),
         consent_scan: consentScan,
         consent_date: consentDate,
+      },
+    ])
+  }
+
+  /**
+   * @method setBlockNsfw
+   * @description set whether nsfw content should be blocked
+   * @param {boolean} blockNsfw true to block, false for show
+   */
+  async setBlockNsfw(blockNsfw: boolean): Promise<void> {
+    const record = await this._findRecord()
+    if (record) {
+      record.block_nsfw = blockNsfw
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return
+    }
+    await this.textile.client.create(this.threadID, CollectionName, [
+      {
+        user_address: this.textile.wallet.address,
+        created_at: Date.now(),
+        block_nsfw: blockNsfw,
       },
     ])
   }

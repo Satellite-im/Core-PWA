@@ -40,6 +40,12 @@
     >
       <InteractablesSwitch v-model="consentScan" />
     </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.nsfw.title')"
+      :text="$t('pages.privacy.nsfw.subtitle')"
+    >
+      <InteractablesSwitch v-model="blockNsfw" />
+    </SettingsUnit>
   </div>
   <div class="columns is-desktop">
     <SettingsUnit

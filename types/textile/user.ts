@@ -4,4 +4,5 @@ export interface UserdataFromThread {
   user_address: string
   consent_scan: boolean
   consent_date: number
+  block_nsfw: boolean
 }

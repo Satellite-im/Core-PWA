@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { TextileError } from '../textile/types'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
-import TextileManager from '~/libraries/Textile/TextileManager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { SettingsError, SettingsState } from '~/store/settings/types'
 import { ActionsArguments } from '~/types/store/store'
@@ -22,18 +21,39 @@ export default {
     consentScan: boolean,
   ) {
     try {
-      commit('setConsentScan', consentScan)
+      const $UserInfoManager: UserInfoManager =
+        Vue.prototype.$TextileManager.userInfoManager
 
-      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-      if (!$TextileManager.userInfoManager) {
+      if (!$UserInfoManager) {
         throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
       }
-      const $UserInfoManager: UserInfoManager = $TextileManager.userInfoManager
+
       $UserInfoManager.setConsent({
         consentScan,
         consentDate: Date.now(),
       })
-    } catch (e) {}
+      commit('setConsentScan', consentScan)
+    } catch (e) {
+      console.log(e)
+    }
+  },
+
+  async setBlockNsfw(
+    { commit }: ActionsArguments<SettingsState>,
+    blockNsfw: boolean,
+  ) {
+    try {
+      const $UserInfoManager: UserInfoManager =
+        Vue.prototype.$TextileManager.userInfoManager
+
+      if (!$UserInfoManager) {
+        throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
+      }
+
+      $UserInfoManager.setBlockNsfw(blockNsfw)
+      commit('setBlockNsfw', blockNsfw)
+    } catch (e) {
+      console.log(e)
+    }
   },
 }
