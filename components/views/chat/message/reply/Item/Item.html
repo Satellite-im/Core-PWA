@@ -1,0 +1,50 @@
+<div class="reply-container">
+  <div class="is-reply">
+    <span @click="(event) => $emit('click', event)">
+      <UiCircle
+        :type="src ? 'image' :'random'"
+        :seed="address"
+        :size="35"
+        :source="src"
+      />
+    </span>
+    <div class="reply-body">
+      <div class="reply-heading">
+        <span @click="(event) => $emit('click', event)">
+          <!-- TODO: update badges //AP-397 -->
+          <UiUserName :username="username" :badge="''" />
+        </span>
+        <TypographyText :text="timestamp" />
+      </div>
+      <div class="reply-content">
+        <MessageMarkdown
+          v-if="reply.replyType === 'text'"
+          :text="markdownToHtml(reply.payload)"
+          class="markdown"
+          data-cy="reply-message"
+        />
+        <UiChatImage
+          v-else-if="reply.replyType === 'image'"
+          :source="reply.payload.url"
+          alt=""
+        />
+        <UiChatEmbedsVideoPlayer
+          v-else-if="reply.replyType === 'video'"
+          :data="reply.payload"
+        />
+        <UiChatEmbedsAudioPlayer
+          v-else-if="reply.replyType === 'audio'"
+          :data="reply.payload"
+        />
+        <UiChatEmbedsFile
+          v-else-if="reply.replyType === 'file'"
+          :data="reply.payload"
+        />
+        <MessageActions
+          :emojiReaction="(event) => $emit('emoji-reaction', event,  reply.id)"
+        />
+      </div>
+    </div>
+  </div>
+  <MessageReactions :message="message" :group="group" :reply="reply" />
+</div>
