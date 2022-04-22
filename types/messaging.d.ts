@@ -36,6 +36,7 @@ export type Divider = {
 
 // TO DO: MAURO CHECK
 export type Group = {
+  avatar: boolean
   id: string
   at: number
   type: 'group'
@@ -53,7 +54,7 @@ export type MessageElement = {
   type: MessagingTypesEnum.MESSAGEELEMENT
   from: string
   to: string
-  messages: Array<UIMessage> | null
+  message: UIMessage | null
 }
 
 export type ChatList = Array<MessageElement | Divider>
