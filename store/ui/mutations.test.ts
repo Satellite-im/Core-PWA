@@ -3269,13 +3269,18 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.toggleEnhancers(localizedState, {})
     expect(localizedState.enhancers).toBe(localizedState.enhancers)
-    // As paradoxical as it may seem here, this is very much normal. Consider the following ternary operation:
-    //
-    // typeof options.floating !== 'undefined'
-    // ? options.floating
-    // : state.enhancers.floating,
-    //
-    // If we do not pass an object (options) containing the floating property (options.floating), it will fall back to the existing value it has: which is what `state.enhancers.floating` has. Hence, what we're doing is checking if the state we are checking (state.enhancers) would be mutated if there were no options being passed into it.
+    /*
+     As paradoxical as it may seem here, this is very much normal. Consider the following ternary operation:
+    
+     typeof options.floating !== 'undefined'
+     ? options.floating
+     : state.enhancers.floating,
+    
+     If we do not pass an object (options) containing the floating property (options.floating),
+     it will fall back to the existing value it has: which is what `state.enhancers.floating` has.
+     Hence, what we're doing is checking if the state we are checking (state.enhancers) would be mutated
+     if there were no options being passed into it.
+     */
   })
   test('sendMessage with the same lastMessageSender', () => {
     const localizedState = { ...initialState }
