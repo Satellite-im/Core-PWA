@@ -19,7 +19,8 @@ describe('convert blob to base 64 successfully', () => {
 })
 
 describe('convert blob to base 64 failing', () => {
-  test('file is jpeg', async () => {
+  const original = global.FileReader
+  beforeAll(() => {
     Object.defineProperty(global, 'FileReader', {
       writable: true,
       value: jest.fn().mockImplementation(() => ({
@@ -29,6 +30,14 @@ describe('convert blob to base 64 failing', () => {
         onload: jest.fn(),
       })),
     })
+  })
+  afterAll(() => {
+    Object.defineProperty(global, 'FileReader', {
+      writable: true,
+      value: original,
+    })
+  })
+  test('file is jpeg', async () => {
     const jpegBlob = new Blob(['testing'], { type: 'image/jpeg' })
 
     try {
