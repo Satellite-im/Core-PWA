@@ -1,12 +1,10 @@
 #simple-scrollbar {
   width: @full;
   height: @full;
-  display: flex;
 
   &.scrollbar-vertical {
     overflow-x: hidden;
     overflow-y: scroll;
-    flex-direction: row;
 
     .wrapper {
       width: @full;
@@ -27,7 +25,6 @@
   &.scrollbar-horizontal {
     overflow-y: hidden;
     overflow-x: scroll;
-    flex-direction: column;
 
     .wrapper {
       width: @full;
@@ -46,24 +43,21 @@
   }
 
   scrollbar-width: thin;
-  scrollbar-color: var(--flair-color) transparent;
+  scrollbar-color: @primary-color transparent;
 
   &:hover {
     &::-webkit-scrollbar-thumb {
-      border-radius: @scroll-bar-size*2;
-      background-color: var(--flair-color);
+      background-color: @primary-color;
     }
   }
 
   &.scrollbar-always-visible::-webkit-scrollbar-thumb {
-    border-radius: @scroll-bar-size*2;
-    background-color: var(--flair-color);
+    background-color: @primary-color;
   }
 
   @media only screen and (max-width: 1024px) {
     &::-webkit-scrollbar-thumb {
-      border-radius: @scroll-bar-size*2;
-      background-color: var(--flair-color);
+      background-color: @primary-color;
     }
 
     &.scrollbar-vertical {
@@ -77,7 +71,9 @@
         height: @scroll-bar-size*2;
       }
     }
+  }
 
-    scrollbar-width: auto;
+  &::-webkit-scrollbar-thumb {
+    &:extend(.round-corners);
   }
 }
