@@ -174,10 +174,13 @@ export function groupMessagesNew(
   replies: RepliesTracker,
   reactions: ReactionsTracker,
 ): MessageGroup {
-  const chatList: ChatList = []
+  const chatList: MessageGroup = []
+
+  console.log('messages', messages)
 
   // Get the sorted array of messages (not replies or reactions)
   const messagesArray = Object.values(messages).sort((a, b) => a.at - b.at)
+  console.log('messagesArray', messagesArray)
 
   for (let i = 0; i < messagesArray.length; i++) {
     const prevMessage = i > 0 ? messagesArray[i - 1] : null
@@ -186,22 +189,18 @@ export function groupMessagesNew(
     // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
-    const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(
-          prevMessage.at,
-          MeasurementUnitsEnum.DAY,
-        )
-      : false
 
+    let isSameDay = false
     let isSameChatElement = false
+
     if (prevMessage) {
       const currentAt = dayjs(currentMessage.at)
       const prevAt = dayjs(prevMessage.at)
-      // Why should we want this behavior?
-      if (!dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)) {
-        isSameChatElement = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
-      } else {
-        const prevAt = dayjs(prevMessage.at)
+      const isToday = dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)
+
+      isSameDay = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
+
+      if (isToday) {
         isSameChatElement =
           currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
       }
@@ -219,12 +218,12 @@ export function groupMessagesNew(
 
     // Extract the last item from the array that can be either a Group or a Divider
     // at this point
-    const messageOrDivider = chatList[chatList.length - 1]
+    // const messageOrDivider = chatList[chatList.length - 1]
 
     // Checks if the message must be included in a new group
     // TO DO: check chatList.length === 0 is needed
     const isNewChatElement =
-      !isSameSender || (prevMessage && !isSameChatElement)
+      !isSameDay || !isSameSender || (prevMessage && !isSameChatElement)
 
     // if (isNewGroup) {
     chatList.push({
@@ -235,16 +234,14 @@ export function groupMessagesNew(
       from: currentMessage.from,
       sender: currentMessage.sender, // TODO add types - AP-1128
       to: currentMessage.to,
-      messages: [
-        {
-          ...currentMessage,
-          replies: messageRepliesToUIReplies(currentMessageReplies, reactions),
-          reactions: getMessageUIReactions(
-            currentMessage,
-            currentMessageReactions,
-          ),
-        },
-      ],
+      message: {
+        ...currentMessage,
+        replies: messageRepliesToUIReplies(currentMessageReplies, reactions),
+        reactions: getMessageUIReactions(
+          currentMessage,
+          currentMessageReactions,
+        ),
+      },
     })
     // } else {
     // // Since we already checked that it's not a divider we can
@@ -275,6 +272,8 @@ export function groupMessagesNew(
     // }
     // }
   }
+
+  console.log('chatList', chatList)
 
   return chatList
 }
