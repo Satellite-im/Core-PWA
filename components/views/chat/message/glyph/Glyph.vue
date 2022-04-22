@@ -16,6 +16,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    getSource(): string {
+      if (this.source.includes('/$1/')) {
+        return this.source.replace('$1', 'small')
+      }
+      return this.source
+    },
   },
   methods: {
     openModal() {

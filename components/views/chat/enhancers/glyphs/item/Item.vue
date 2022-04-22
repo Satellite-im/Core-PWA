@@ -34,7 +34,7 @@ export default Vue.extend({
   },
   computed: {
     getSrc(): string {
-      return this.isLoaded ? this.src : loadImg
+      return this.isLoaded ? this.src.replace('$1', 'small') : loadImg
     },
   },
   methods: {
