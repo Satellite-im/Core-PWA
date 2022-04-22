@@ -13,6 +13,7 @@
       <InteractablesClickToEdit
         ref="noteRef"
         v-model="note"
+        data-cy="profile-add-note"
         :placeholder="$t('modal.profile.about.click_note')"
       />
     </div>

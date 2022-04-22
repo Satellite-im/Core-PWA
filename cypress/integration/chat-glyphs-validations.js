@@ -3,7 +3,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe('Chat - Sending Glyphs Tests', () => {
+describe.skip('Chat - Sending Glyphs Tests', () => {
   it('Send a glyph on chat', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
