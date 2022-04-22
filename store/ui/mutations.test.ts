@@ -3899,16 +3899,16 @@ describe('mutations', () => {
   //       artist: 'Dina Brodsky',
   //       id: '0903',
   //       stickerURLs: [
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/hawk.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/ducklings.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/owl.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/penguins.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/robin.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/stork.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/yellow_bird.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
+  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
   //       ],
   //     },
-  //     url: 'https://satellite.mypinata.cloud/ipfs/QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn/$1/ducklings.webp',
+  //     url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
   //     count: 2, // Since this glyph has been used before, it will be incremented from 1 to 2.
   //   }
   //   mutations.default.updateRecentGlyphs(localizedState, object)

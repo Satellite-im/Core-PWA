@@ -1,15 +1,15 @@
 import { Config } from '~/config'
 
-const astrobunnyHash = 'QmWAgCFJym2Q8488ycR2ZNrxPfbtEQw7GoWadzybJb7oNK'
-const grimReaperHash = 'QmUrYq2EPvaJmDSNoJkrboM6sdbCQ1QPMtVoPNgG581cqQ'
-const marshmelloHash = 'QmYZRFuue56urUG38CVRYDHvhWMyqghvEisPQe25NKtYJY'
-const lyaHash = 'QmR78J8n226iTMJ6FbgZkzSzcqBWCNk27cRSLAeiTsxz7H'
-const blackCatHash = 'QmepNTQASQaMNStYfyBhxEyXjmeBtnKG1rVghTyxNXno7v'
-const genshin1Hash = 'QmQXxt7m8DHxiMgEBcbBYwbKcrdgVp7Ew6Dzf79TwR127A'
-const genshin2Hash = 'Qmbi2PyCfpU8mMPz2fHmRH3x8QUwEXcF9XX483ZNtbVYQj'
-const lamHash = 'QmV3GPYUPu1u246yNcbLKKDXQjbuiFv7E4E2QDKG21s1NU'
-const starWarsHash = 'Qme2FmNgiL1vnf8QNVYRQTkZsWnGJ26FBJ54en5yJN2Mq6'
-const birdsHash = 'QmTCn8ta9HAUP7Wf9fK8n32PV2cRxrF9URgtXDBmqBBDFn'
+const astrobunnyHash = 'QmXmpYrNUankzCCWR1U5ASDHcwhSJynQayMy1gT7RTU4ck'
+const grimReaperHash = 'Qmez4hasV92nR2hMyeF923YC1sSvUz71bSGTBCdFg5ZHfL'
+const marshmelloHash = 'QmeZ8aDrXciL8SnZNJq7pdL7VYQWmsJV3FQ7QNf3pGWDvG'
+const lyaHash = 'QmWnULErEMX5A846qXNQEmMuY118o3vsMreq9MSwZ7eYxX'
+const blackCatHash = 'Qmd7yMmCEVazY8ZJ1cPeXAwLn1hhXturmH2WsNbvyQhunG'
+const genshin1Hash = 'QmTMX5LosUQLX7WH1XMXgpU9iXt6egqdFUNjHSptV3UVqZ'
+const genshin2Hash = 'QmQ9u1V1USCWMMueX8AjFz4oLBf4pZR6maaiBAzsG5b4Kv'
+const lamHash = 'QmRLBcV3qHUJHVUbPA78V28mg4AUFxGxEXdQZkAhXVpz1K'
+const starWarsHash = 'QmSa7NTv4g6KfN5meg7cQ4bnJyKxsJB5L9rFuRXSWw1gXM'
+const birdsHash = 'QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz'
 
 export const Glyphs = {
   astrobunny: {
