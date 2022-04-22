@@ -77,17 +77,6 @@ Cypress.Commands.add('createAccount', (pin) => {
     .type(pin, { log: false }, { force: true })
   cy.get('[data-cy=submit-input]').click()
   cy.get('[data-cy=create-account-button]').click()
-  cy.get('.switch-button').each(($btn, index, $List) => {
-    // Ignore locked switch toggle
-    if (!$btn.hasClass('locked')) {
-      if ($btn.hasClass('enabled')) {
-        cy.wrap($btn).click().should('not.have.class', 'enabled')
-      } else {
-        cy.wrap($btn).click().should('have.class', 'enabled')
-      }
-    }
-  })
-  cy.get('[data-cy=privacy-continue-button]').click()
   cy.get('.title').should('contain', 'Recovery Seed')
   cy.contains('Continue').click()
   cy.contains('I Saved It').click()
@@ -140,11 +129,6 @@ Cypress.Commands.add('createAccountSecondScreen', () => {
   cy.get('[data-cy=create-account-button]').click()
 })
 
-Cypress.Commands.add('createAccountPrivacyTogglesGoNext', () => {
-  cy.contains('Privacy Settings').should('be.visible')
-  cy.get('[data-cy=privacy-continue-button]').click()
-})
-
 Cypress.Commands.add('createAccountRecoverySeed', () => {
   cy.contains('Recovery Seed', { timeout: 15000 }).should('be.visible')
   cy.get('#custom-cursor-area').click()
@@ -152,7 +136,7 @@ Cypress.Commands.add('createAccountRecoverySeed', () => {
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
-  cy.get('[data-cy=username-input]', { timeout: 60000 }).should('be.visible')
+  cy.get('[data-cy=username-input]', { timeout: 120000 }).should('be.visible')
 })
 
 Cypress.Commands.add('createAccountUserInput', (username, status) => {
@@ -448,33 +432,35 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
 })
 
 Cypress.Commands.add('goToConversation', (user, mobile = false) => {
-  //If chat conversation is displayed, click on hamburger button
-  //Click on sidebar friends button to show friends list
-  cy.get('[data-cy=sidebar-friends]').then(($button) => {
-    if (!$button.is(':visible')) {
+  //If sidebar menu is collapsed, click on hamburger button to display it
+  cy.get('#app-wrap').then(($appWrap) => {
+    if (!$appWrap.hasClass('is-open')) {
       cy.get('[data-cy=hamburger-button]').click()
     }
-    cy.wrap($button).click()
   })
 
-  //On mobile viewports, we need to click on hamburger button to see the friends list
+  //Click on Friends button only if its not already selected
+  cy.get('[data-cy=sidebar-friends]').then(($btn) => {
+    if ($btn.hasClass('is-dark')) {
+      cy.wrap($btn).click()
+    }
+  })
+
+  //On mobile viewports, we need to click on hamburger button to see the chat selected
   if (mobile === true) {
     cy.get('[data-cy=hamburger-button]').click()
   }
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=friend-name]').contains(user).as('friend')
+  cy.get('[data-cy=friend-name]', { timeout: 30000 })
+    .contains(user)
+    .as('friend')
   cy.get('@friend')
     .parent()
     .parent()
     .find('[data-cy=friend-send-message]')
     .as('friend-message')
   cy.get('@friend-message').click()
-
-  //On mobile viewports, we need to click on hamburger button to see the chat conversation
-  if (mobile === true) {
-    cy.get('[data-cy=hamburger-button]').click()
-  }
 
   //Wait until conversation is fully loaded
   cy.get('[data-cy=user-connected]', { timeout: 120000 })
@@ -550,9 +536,6 @@ Cypress.Commands.add('validateGlyphsModal', () => {
     .then(($text) => {
       expect($text).to.be.oneOf(['Astrobunny', 'Genshin Impact 2'])
     })
-  cy.contains(
-    "We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.",
-  ).should('be.visible')
   cy.get('.img-container').children().should('have.length', 3)
   cy.contains('View Glyph Pack').should('be.visible')
 })

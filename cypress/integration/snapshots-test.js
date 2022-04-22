@@ -147,11 +147,6 @@ describe.skip('Snapshots Testing', () => {
     cy.createAccountSecondScreen()
   })
 
-  it('Create Account - Privacy Settings screen', () => {
-    cy.snapshotTestContains('Privacy Settings')
-    cy.createAccountPrivacyTogglesGoNext()
-  })
-
   it('Create Account - User Input Screen', () => {
     //Recovery Seed Screen then User Input Snapshot
     cy.createAccountRecoverySeed().then(() => {

@@ -21,9 +21,6 @@ describe('Create Account - Negative Tests', () => {
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
 
-    //Privacy Settings screen
-    cy.createAccountPrivacyTogglesGoNext()
-
     //Recovery Seed Screen
     cy.createAccountRecoverySeed()
 
@@ -39,9 +36,6 @@ describe('Create Account - Negative Tests', () => {
 
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
-
-    //Privacy Settings screen
-    cy.createAccountPrivacyTogglesGoNext()
 
     //Recovery Seed Screen
     cy.createAccountRecoverySeed()

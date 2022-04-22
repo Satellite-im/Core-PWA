@@ -1,12 +1,13 @@
 <div
   class="user"
+  data-cy="sidebar-user"
   v-bind:class="{'is-loading' : isLoading , 'is-selected' : isSelected}"
   @contextmenu="contextMenu"
   v-on:click="navigateToUser"
 >
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
-    <TypographyTitle :size="6" :text="user.name" />
+    <TypographyTitle :size="6" data-cy="sidebar-user-name" :text="user.name" />
     <TypographySubtitle :size="6" :text="lastMessage" />
   </div>
   <div class="user-chat-details">

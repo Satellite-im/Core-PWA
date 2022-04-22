@@ -13,7 +13,7 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
+describe('Chat features with two accounts', () => {
   it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
@@ -53,7 +53,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it.skip('Send image to user B', () => {
+  it('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -62,7 +62,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Image messages cannot be edited', () => {
+  it('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
@@ -142,7 +142,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert image received from user A', () => {
+  it('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -176,7 +176,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it.skip('Add reactions to image in chat', () => {
+  it('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
@@ -205,6 +205,7 @@ describe.skip('Chat features with two accounts', () => {
 
   it('Assert timestamp immediately after sending message', () => {
     //Send a random message
+    cy.get('[data-cy=editable-input]').clear()
     cy.chatFeaturesSendMessage(randomMessageTwo)
 
     //Assert timestamp text immediately

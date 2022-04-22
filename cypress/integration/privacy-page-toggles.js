@@ -7,49 +7,18 @@ const randomStatus = faker.lorem.word() // generate random status
 let toggleStatusSaved = []
 let toggleStatusProfile = []
 
-describe.skip('Privacy Page Toggles Tests', () => {
+describe.skip('Privacy Settings Page - Toggles Tests', () => {
   Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
 
-  it('Privacy page - Verify all non-locked toggles switches work as should', () => {
+  it('Privacy Page - Validate existing toggles', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
+
     //Adding pin to continue to toggles switches screen
     cy.createAccountPINscreen(randomPIN)
 
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
-    //Validating each toggle, checking status is correct after clicking them.
-    //Finally, saving values into an array for later comparison
-    cy.get('[data-cy=switch-button]', { timeout: 30000 }).each(
-      ($btn, index, $List) => {
-        if (!$btn.hasClass('locked')) {
-          if ($btn.hasClass('enabled')) {
-            cy.wrap($btn).click().should('not.have.class', 'enabled')
-            toggleStatusSaved.push(false)
-          } else {
-            cy.wrap($btn).click().should('have.class', 'enabled')
-            toggleStatusSaved.push(true)
-          }
-        }
-      },
-    )
-  })
-
-  it('Privacy page - Verify register publicly toggle is locked and disabled', () => {
-    cy.get('[data-cy=switch-button]', { timeout: 30000 }).each(
-      ($btn, index, $List) => {
-        if ($btn.hasClass('locked')) {
-          expect($btn).to.not.have.class('enabled')
-          expect($btn).to.have.class('locked')
-          cy.wrap($btn).realHover()
-          // Move back cursor to top left again
-          cy.get('body').realHover({ position: 'topLeft' })
-        }
-      },
-    )
-  })
-
-  it.skip('Privacy page - Verify user can still proceed after adjusting switches', () => {
-    //Click on next
-    cy.get('[data-cy=privacy-continue-button]').click()
 
     //Recovery Seed Screen
     cy.createAccountRecoverySeed()
@@ -63,38 +32,84 @@ describe.skip('Privacy Page Toggles Tests', () => {
     cy.validateChatPageIsLoaded()
     //Going to Settings and Privacy screen
     cy.get('[data-cy=settings]', { timeout: 30000 }).click()
-  })
 
-  it.skip('Profile - Verify the toggles user added when signing up are on the same status when user goes to settings', () => {
+    //Click on 'Privacy'
     cy.contains('Privacy').click()
-    //Storing the values from toggle switches status of Settings screen into an array
-    cy.get('[data-cy=switch-button]')
-      .each(($btn, index, $List) => {
-        if (!$btn.hasClass('locked')) {
-          if ($btn.hasClass('enabled')) {
-            toggleStatusProfile.push(true)
-          } else {
-            toggleStatusProfile.push(false)
-          }
-        }
-      })
-      .then(() => {
-        //Comparison of both arrays to ensure that are deep equal
-        expect(toggleStatusProfile).to.deep.equal(toggleStatusSaved)
-      })
+
+    //Validate contents on screen
+    cy.contains('Privacy Settings').should('be.visible')
+    cy.contains(
+      'Choose which features to enable to best suit your privacy preferences.',
+    ).should('be.visible')
+
+    cy.contains('Register Username Publicly').should('be.visible')
+    cy.contains(
+      'Publicly associate your account ID with a human readable username. Anyone can see this association.',
+    ).should('be.visible')
+
+    cy.contains('Store Account Pin').should('be.visible')
+    cy.contains(
+      "Store your account pin locally so you don't have to enter it manually every time. This is not recommended.",
+    ).should('be.visible')
+
+    cy.contains('Enable External Embeds').should('be.visible')
+    cy.contains(
+      'Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more.',
+    ).should('be.visible')
+
+    cy.contains('Display Current Activity').should('be.visible')
+    cy.contains(
+      "Allow Satellite to see what games you're playing and show them off on your profile so friends can jump in.",
+    ).should('be.visible')
+
+    cy.contains('Consent to File Scanning').should('be.visible')
+    cy.contains(
+      'In order to share files/use the encrypted file storage I consent to having my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+    ).should('be.visible')
+
+    cy.contains('Block NSFW content').should('be.visible')
+    cy.contains('If selected, NSFW content will be obscured.').should(
+      'be.visible',
+    )
+
+    cy.contains('Signaling Servers').should('be.visible')
+    cy.contains(
+      "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+    ).should('be.visible')
   })
 
-  it.skip('Profile - Verify user can’t update the register name publicly toggle on settings', () => {
-    //Identify the first switch button and ensure that is locked
-    cy.get('[data-cy=switch-button]').first().should('have.class', 'locked')
+  it('Privacy Page - Default values after account creation', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
+
+    //Validate default values for toggles are selected after creating an account
+    cy.privacyToggleValidateValue('Register Username Publicly', false)
+    cy.privacyToggleValidateValue('Store Account Pin', false)
+    cy.privacyToggleValidateValue('Enable External Embeds', true)
+    cy.privacyToggleValidateValue('Display Current Activity', true)
+    cy.privacyToggleValidateValue('Consent to File Scanning', false)
+    cy.privacyToggleValidateValue('Block NSFW content', true)
+    cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
+  })
+
+  it('Privacy Page - Verify register publicly toggle is locked and disabled', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
+
+    cy.get('[data-cy=switch-button]').each(($btn, index, $List) => {
+      if ($btn.hasClass('locked')) {
+        expect($btn).to.not.have.class('enabled')
+        expect($btn).to.have.class('locked')
+        cy.wrap($btn).realHover()
+        // Move back cursor to top left again
+        cy.get('body').realHover({ position: 'topLeft' })
+      }
+    })
   })
 
   it('Privacy page - Verify all non-locked toggles can be switched to enable', () => {
-    //Adding pin to continue to toggles switches screen
-    cy.createAccountPINscreen(randomPIN)
-
-    //Create or Import account selection screen
-    cy.createAccountSecondScreen()
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
 
     //Switch all non-locked switched to enabled
     cy.get('[data-cy=switch-button]').each(($btn, index, $List) => {
@@ -109,6 +124,9 @@ describe.skip('Privacy Page Toggles Tests', () => {
   })
 
   it('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
+
     //Switch all non-locked switched to disabled
     cy.get('[data-cy=switch-button]').each(($btn, index, $List) => {
       if (!$btn.hasClass('locked')) {
@@ -121,94 +139,36 @@ describe.skip('Privacy Page Toggles Tests', () => {
     })
   })
 
-  it('Privacy page - Signup with Consents to having files scanned deactivated toggle', () => {
-    //Switch toggle to disabled
-    cy.privacyToggleClick('Consents to having files scanned', false)
-  })
-
-  it('Privacy page - Signup with Satellite and Public Signaling Servers', () => {
-    //Keep default option of using Satellite and Public Signaling Servers selected
-    cy.get('[data-cy=custom-select]').should('be.visible')
-    cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
-  })
-
-  it.skip('Settings - Consents to having files scanned toggle should be deactivated', () => {
-    //Click on next
-    cy.get('[data-cy=privacy-continue-button]').click()
-
-    //Recovery Seed Screen
-    cy.createAccountRecoverySeed()
-
-    //Username and Status Input
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput(randomName, randomStatus)
-
-    //Click on button, validate buffering screen and that user is redirected to friends/list
-    cy.createAccountSubmit()
-    cy.validateChatPageIsLoaded()
-    //Going to Settings and Privacy screen
-    cy.get('[data-cy=settings]', { timeout: 30000 }).click()
-
-    //Click on 'Privacy'
-    cy.contains('Privacy').click()
-
-    //Validate value from toggle is deactivated
-    cy.privacyToggleValidateValue('Consents to having files scanned', false)
-  })
-
-  it.skip('Settings - Satellite and Public Signaling Servers should be selected', () => {
+  it('Privacy page - Change to only Public Signaling Servers', () => {
+    //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
-    //Validate value selected is Satellite and Public Signaling Servers
-    cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
-  })
 
-  it('Privacy page - Signup with Consents to having files scanned activated toggle', () => {
-    //Adding pin to continue to toggles switches screen
-    cy.createAccountPINscreen(randomPIN)
-
-    //Create or Import account selection screen
-    cy.createAccountSecondScreen()
-
-    //Switch toggle to enabled
-    cy.privacyToggleClick('Consents to having files scanned', true)
-  })
-
-  it('Privacy page - Signup with only Public Signaling Servers', () => {
-    //Change option of to use only Public Signaling Servers
+    //Change option to use only Public Signaling Servers
     cy.get('[data-cy=custom-select]').should('be.visible').click()
     cy.get('[data-cy=custom-select-option-text]')
       .contains('Only Public Signaling Servers')
       .click()
     cy.validateSignalingServersValue('Only Public Signaling Servers')
+    cy.get('.close-button').click()
   })
 
-  it.skip('Settings - Consents to having files scanned toggle should be enabled', () => {
-    //Click on next
-    cy.get('[data-cy=privacy-continue-button]').scrollIntoView().click()
+  it('Privacy page - Validate that last values selected were saved correcty', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
 
-    //Recovery Seed Screen
-    cy.createAccountRecoverySeed()
-
-    //Username and Status Input
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput(randomName, randomStatus)
-
-    //Click on button, validate buffering screen and that user is redirected to friends/list
-    cy.createAccountSubmit()
-    cy.validateChatPageIsLoaded()
     //Going to Settings and Privacy screen
     cy.get('[data-cy=settings]', { timeout: 30000 }).click()
 
     //Click on 'Privacy'
     cy.contains('Privacy').click()
 
-    //Validate value from toggle is deactivated
-    cy.privacyToggleValidateValue('Consents to having files scanned', true)
-  })
-
-  it.skip('Settings - Only Public Signaling Servers should be selected', () => {
-    cy.viewport(1200, 1200)
-    //Validate value selected is Only Public Signaling Servers
+    //Validate default values for toggles are selected after creating an account
+    cy.privacyToggleValidateValue('Register Username Publicly', false)
+    cy.privacyToggleValidateValue('Store Account Pin', false)
+    cy.privacyToggleValidateValue('Enable External Embeds', false)
+    cy.privacyToggleValidateValue('Display Current Activity', false)
+    cy.privacyToggleValidateValue('Consent to File Scanning', false)
+    cy.privacyToggleValidateValue('Block NSFW content', false)
     cy.validateSignalingServersValue('Only Public Signaling Servers')
   })
 })
