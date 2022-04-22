@@ -9,6 +9,12 @@ describe('init', () => {
     inst = getters.default
   })
 
+  it('should return the isLoadingFileIndex property of the initial state', () => {
+    const result: any = inst.getFilesIndexLoading(InitialUIState())
+    expect(result).toBeFalsy()
+    expect(result).toMatchSnapshot()
+  })
+
   it('should return the showSidebar property of the initial state', () => {
     const result: any = inst.showSidebar(InitialUIState())
     expect(result).toBeTruthy()
