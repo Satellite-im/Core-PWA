@@ -439,12 +439,9 @@ Cypress.Commands.add('goToConversation', (user, mobile = false) => {
     }
   })
 
-  //Click on Friends button only if its not already selected
-  cy.get('[data-cy=sidebar-friends]').then(($btn) => {
-    if ($btn.hasClass('is-dark')) {
-      cy.wrap($btn).click()
-    }
-  })
+  //Click first on Files and then on Friends button
+  cy.get('[data-cy=sidebar-files]').click()
+  cy.get('[data-cy=sidebar-friends]').click()
 
   //On mobile viewports, we need to click on hamburger button to see the chat selected
   if (mobile === true) {
