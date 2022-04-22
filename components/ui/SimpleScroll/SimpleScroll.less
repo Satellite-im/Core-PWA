@@ -2,19 +2,18 @@
   width: @full;
   height: @full;
 
+  .wrapper {
+    width: @full;
+    height: @full;
+    box-sizing: border-box;
+  }
+
   &.scrollbar-vertical {
     overflow-x: hidden;
     overflow-y: scroll;
 
     .wrapper {
-      width: @full;
-      height: @full;
       padding-right: @scroll-bar-size;
-      box-sizing: border-box;
-
-      @media only screen and (max-width: 1024px) {
-        padding-right: @scroll-bar-size*2;
-      }
     }
 
     &::-webkit-scrollbar {
@@ -27,14 +26,7 @@
     overflow-x: scroll;
 
     .wrapper {
-      width: @full;
-      height: @full;
       padding-bottom: @scroll-bar-size;
-      box-sizing: border-box;
-
-      @media only screen and (max-width: 1024px) {
-        padding-bottom: @scroll-bar-size*2;
-      }
     }
 
     &::-webkit-scrollbar {
@@ -55,25 +47,13 @@
     background-color: @primary-color;
   }
 
+  &::-webkit-scrollbar-thumb {
+    &:extend(.round-corners);
+  }
+
   @media only screen and (max-width: 1024px) {
     &::-webkit-scrollbar-thumb {
       background-color: @primary-color;
     }
-
-    &.scrollbar-vertical {
-      &::-webkit-scrollbar {
-        width: @scroll-bar-size*2;
-      }
-    }
-
-    &.scrollbar-horizontal {
-      &::-webkit-scrollbar {
-        height: @scroll-bar-size*2;
-      }
-    }
-  }
-
-  &::-webkit-scrollbar-thumb {
-    &:extend(.round-corners);
   }
 }
