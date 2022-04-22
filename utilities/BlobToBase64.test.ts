@@ -19,17 +19,6 @@ describe('convert blob to base 64 successfully', () => {
 })
 
 describe('convert blob to base 64 failing', () => {
-  async function readFileAsDataURL(file) {
-    return new Promise((resolve) => {
-      const reader = new window.FileReader()
-      reader.addEventListener('load', (evt) => {
-        if (reader.result) {
-          resolve(reader.result)
-        }
-      })
-      reader.readAsDataURL(file)
-    })
-  }
   test('file is jpeg', async () => {
     Object.defineProperty(global, 'FileReader', {
       writable: true,
