@@ -3,7 +3,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe.skip('Chat Toolbar Tests', () => {
+describe('Chat Toolbar Tests', () => {
   it('Chat - Toolbar - Validate audio icon is displayed', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

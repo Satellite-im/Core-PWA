@@ -7,7 +7,7 @@ let urlToValidate = 'https://www.satellite.im'
 let urlToValidateTwo = 'http://www.satellite.im'
 let urlToValidateThree = 'www.satellite.im'
 
-describe.skip('Chat Text and Sending Links Validations', () => {
+describe('Chat Text and Sending Links Validations', () => {
   it('Message with more than 2048 chars - Counter get reds', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

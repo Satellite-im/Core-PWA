@@ -21,9 +21,6 @@ describe('Run responsiveness tests on several devices', () => {
       //Create or Import account selection screen
       cy.createAccountSecondScreen()
 
-      //Privacy Settings screen
-      cy.createAccountPrivacyTogglesGoNext()
-
       //Recovery Seed Screen
       cy.createAccountRecoverySeed()
 
@@ -48,17 +45,14 @@ describe('Run responsiveness tests on several devices', () => {
       cy.importAccount(randomPIN, recoverySeed)
       //Validate profile name displayed
       cy.validateChatPageIsLoaded()
-    })
-
-    it.skip(`Chat Features on ${item.description}`, () => {
-      //Setting viewport
-      cy.viewport(item.width, item.height)
-
-      //Validate profile name displayed
-      cy.validateChatPageIsLoaded()
 
       //Go to conversation
       cy.goToConversation('cypress friend', true)
+    })
+
+    it(`Chat Features on ${item.description}`, () => {
+      //Setting viewport
+      cy.viewport(item.width, item.height)
 
       //Validate message and emojis are sent
       cy.chatFeaturesSendMessage(randomMessage)
@@ -66,47 +60,48 @@ describe('Run responsiveness tests on several devices', () => {
 
       //Validate message can be edited
       cy.chatFeaturesEditMessage(randomMessage, randomNumber)
-    })
 
-    it.skip(`Chat - Marketplace - Coming Soon modal content on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Marketplace - Coming Soon modal content
+      cy.log(
+        `Chat - Marketplace - Coming Soon modal content on ${item.description}`,
+      )
       cy.get('[data-cy=toolbar-marketplace]').click()
       cy.validateComingSoonModal()
-    })
 
-    it.skip(`Chat - Marketplace - Coming Soon modal button URL on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Marketplace - Coming Soon modal button URL
+      cy.log(
+        `Chat - Marketplace - Coming Soon modal button URL on ${item.description}`,
+      )
       cy.validateURLComingSoonModal()
-    })
 
-    it.skip(`Chat - Marketplace - Coming Soon modal can be dismissed on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Marketplace - Coming Soon modal can be dismissed
+      cy.log(
+        `Chat - Marketplace - Coming Soon modal can be dismissed on ${item.description}`,
+      )
       cy.closeModal('[data-cy=modal-cta]')
-    })
 
-    it.skip(`Chat - Glyph Pack screen is displayed on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Glyph Pack screen is displayed
+      cy.log(`Chat - Glyph Pack screen is displayed on ${item.description}`)
       cy.chatFeaturesSendGlyph()
       cy.goToLastGlyphOnChat().click()
       cy.validateGlyphsModal()
-    })
 
-    it.skip(`Chat - Glyph Pack - Coming Soon modal on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Glyph Pack - Coming Soon modal
+      cy.log(`Chat - Glyph Pack - Coming Soon modal on ${item.description}`)
       cy.contains('View Glyph Pack').click()
       cy.get('[data-cy=modal-cta]').should('be.visible')
       cy.closeModal('[data-cy=modal-cta]')
-    })
 
-    it.skip(`Chat - Glyph Pack screen can be dismissed on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Glyph Pack screen can be dismissed
+      cy.log(`Chat - Glyph Pack screen can be dismissed on ${item.description}`)
       cy.goToLastGlyphOnChat().click()
       cy.get('[data-cy=glyphs-modal]').should('be.visible')
       cy.closeModal('[data-cy=glyphs-modal]')
-    })
 
-    it.skip(`Chat - Glyphs Selection - Coming soon modal on ${item.description}`, () => {
-      cy.viewport(item.width, item.height)
+      //Chat - Glyphs Selection - Coming soon modal
+      cy.log(
+        `Chat - Glyphs Selection - Coming soon modal on ${item.description}`,
+      )
       cy.get('#glyph-toggle').click()
       cy.get('[data-cy=glyphs-marketplace]').click()
       cy.get('[data-cy=modal-cta]').should('be.visible')

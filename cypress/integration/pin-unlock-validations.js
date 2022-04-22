@@ -4,13 +4,12 @@ const userPassphrase =
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe.skip('Unlock pin should be persisted when store pin is enabled', () => {
-  it.skip('Create Account with store pin disabled', () => {
+  it('Create Account with store pin disabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is disabled
     cy.createAccountPINscreen(randomPIN, false, false)
 
     //Follow the next steps to create an account
     cy.createAccountSecondScreen()
-    cy.createAccountPrivacyTogglesGoNext()
     cy.createAccountRecoverySeed()
     cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput()
@@ -25,13 +24,12 @@ describe.skip('Unlock pin should be persisted when store pin is enabled', () => 
     })
   })
 
-  it.skip('Create Account with store pin enabled', () => {
+  it('Create Account with store pin enabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
     cy.createAccountPINscreen(randomPIN, true, false)
 
     //Follow the next steps to create an account
     cy.createAccountSecondScreen()
-    cy.createAccountPrivacyTogglesGoNext()
     cy.createAccountRecoverySeed()
     cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput()
