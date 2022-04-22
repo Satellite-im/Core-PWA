@@ -76,22 +76,7 @@
               :max-viewable-users="10"
               :fullscreen-max-viewable-users="20"
             />
-            <UiChatScroll
-              ref="chatScroll"
-              :prevent-scroll-offset="10"
-              :older-messages-scroll-offset="300"
-              :class="
-                $store.state.friends.all.find(
-                  (friend) => friend.address === $store.state.webrtc.activeCall,
-                )
-                  ? 'media-open'
-                  : 'media-unopen'
-              "
-              enable-wrap
-              :user="recipient"
-            >
-              <Nuxt />
-            </UiChatScroll>
+            <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
             <UiChatInfo
               v-if="showOlderMessageInfo"
@@ -268,7 +253,8 @@ export default Vue.extend({
       }
     },
     handleClick() {
-      this.$refs.chatScroll?.autoScrollToBottom()
+      // this.$refs.chatScroll?.autoScrollToBottom()
+      this.$nuxt.$emit('scrollToBottom')
     },
   },
 })
