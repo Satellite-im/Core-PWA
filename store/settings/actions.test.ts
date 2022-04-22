@@ -54,7 +54,6 @@ describe('actions.default', () => {
     try {
       await actions.default.setConsentScan({ commit }, true)
     } catch (error) {
-      console.log(2)
       expect(commit).toHaveBeenCalledWith('setConsentScan', true)
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
@@ -80,7 +79,7 @@ describe('actions.default', () => {
   })
 })
 
-describe('actions.default.setConsentScan', () => {
+describe.skip('actions.default.setConsentScan', () => {
   test('0', async () => {
     const param2: any = [
       ['C:\\\\path\\to\\folder\\', 'C:\\\\path\\to\\folder\\', '.', '.'],
