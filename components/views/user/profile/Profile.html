@@ -1,4 +1,4 @@
-<div id="profile" v-click-outside="closeProfileModal">
+<div id="profile" data-cy="profile" v-click-outside="closeProfileModal">
   <InteractablesClose :action="closeProfileModal" />
   <img :src="sample.imageUrl" alt="" class="banner" />
   <div class="profile-body">

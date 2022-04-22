@@ -8,7 +8,7 @@ const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
 
-describe('Chat Features Tests', () => {
+describe.skip('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -133,5 +133,27 @@ describe('Chat Features Tests', () => {
   it('Chat - Validate User ID can be copied when clicked on it', () => {
     // Moving this at the end of execution to avoid issues on CI when running chat tests
     cy.chatFeaturesProfileName('cypress')
+  })
+
+  it('Chat - Add a note to user profile', () => {
+    cy.get('[data-cy=friend-chat-circle]').click()
+    cy.get('[data-cy=profile]').should('be.visible')
+    cy.contains('Add Note').should('be.visible')
+    cy.get('[data-cy=profile-add-note] > .cte-input')
+      .should('contain', 'Click to add note')
+      .click()
+      .type('This is a test note{enter}')
+    cy.get('[data-cy=profile]').find('.close-button').click()
+  })
+
+  it('Chat - Assert note from user profile', () => {
+    cy.get('[data-cy=friend-chat-circle]').click()
+    cy.get('[data-cy=profile]').should('be.visible')
+    cy.get('[data-cy=profile-add-note] > .cte-input')
+      .should('contain', 'This is a test note')
+      .click()
+      .clear()
+      .type('{enter}') // removing note added before
+    cy.get('[data-cy=profile]').find('.close-button').click()
   })
 })

@@ -4,7 +4,7 @@ const recoverySeed =
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const redirectedURL = 'http://localhost:3000/#/auth/unlock' // URL redirected from root
 
-describe('Chat features with two accounts at the same time - Second User', () => {
+describe.skip('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat User B', () => {
     //Delete database before starting
     new Cypress.Promise(async (resolve) => {
