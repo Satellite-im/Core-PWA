@@ -222,7 +222,7 @@ export default {
       consentScan: {
         title: 'Consents to having files scanned',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
       },
       ownInfo: {
         title: 'Set my own Signaling Server',
