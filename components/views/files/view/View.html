@@ -7,14 +7,16 @@
       <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
     </div>
     <div class="controls">
-      <UiLoadersSpinner v-if="isLoading" class="control disabled" spinning />
+      <UiLoadersSpinner
+        v-if="isDownloading"
+        class="control disabled"
+        spinning
+      />
       <a
         v-else
+        @click="download"
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="file.url"
-        target="_blank"
-        :download="name"
       >
         <download-icon size="1x" />
       </a>
@@ -35,16 +37,14 @@
       </div>
     </div>
   </div>
-  <UiProgress v-if="isLoading" :progress="progress" />
-  <img v-else-if="file.thumbnail" class="file-image" :src="file.thumbnail" />
+  <img v-if="file.thumbnail" class="file-image" :src="file.thumbnail" />
   <div v-else class="no-preview">
+    <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
     <a
+      v-else
+      @click="download"
       :data-tooltip="$t('controls.download')"
       class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :class="{'disabled' : isLoading}"
-      :href="file.url"
-      target="_blank"
-      :download="name"
     >
       <download-icon size="1x" class="file-icon" />
     </a>

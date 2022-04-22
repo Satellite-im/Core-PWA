@@ -77,6 +77,7 @@ const InitialUIState = (): UIState => ({
   filesUploadStatus: '',
   renameCurrentName: undefined,
   filePreview: undefined,
+  fileDownloadList: [],
   chatImageOverlay: undefined,
   fileSort: {
     category: FileSortEnum.MODIFIED,

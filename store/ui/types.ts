@@ -204,6 +204,7 @@ export interface UIState {
   filesUploadStatus: string
   renameCurrentName?: string
   filePreview?: string
+  fileDownloadList: string[]
   chatImageOverlay?: ImageMessage
   fileSort: FileSort
   swiperSlideIndex: number
