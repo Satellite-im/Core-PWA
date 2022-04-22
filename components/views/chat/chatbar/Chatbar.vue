@@ -1,11 +1,13 @@
 <template src="./Chatbar.html"></template>
-
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import PeerId from 'peer-id'
+
+import Upload from '../../files/upload/Upload.vue'
+import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
 
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
@@ -16,6 +18,7 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { UploadDropItemType } from '~/types/files/file'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -28,12 +31,14 @@ declare module 'vue/types/vue' {
     smartTypingStart: Function
     clearChatbar: Function
     handleChatBorderRadius: Function
+    files: UploadDropItemType[]
   }
 }
-
 export default Vue.extend({
   components: {
     TerminalIcon,
+    Upload,
+    FilePreview,
   },
   props: {
     recipient: {
@@ -45,12 +50,13 @@ export default Vue.extend({
     return {
       showEmojiPicker: false,
       recipientTyping: false,
-      showFilePreview: false,
       nsfwUploadError: false,
+      files: [] as Array<UploadDropItemType>,
     }
   },
   computed: {
     ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
+    ...mapGetters('chat', ['getFiles']),
     activeFriend() {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
@@ -142,7 +148,6 @@ export default Vue.extend({
     'friends.all': {
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-
         if (activeFriend)
           this.$data.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
@@ -155,7 +160,6 @@ export default Vue.extend({
           (item: any) => item.userId === this.$props.recipient?.address,
         )
         const message = findItem ? findItem.value : ''
-
         this.$refs.editable?.resetHistory()
         this.$store.commit('ui/setReplyChatbarContent', {
           id: '',
@@ -163,13 +167,30 @@ export default Vue.extend({
           from: '',
         })
         this.$store.dispatch('ui/setChatbarContent', { content: message })
-
         // in desktop, stay chatbar focused when switching recipient
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
         }
       },
     },
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (
+        mutation.type === 'chat/addFile' ||
+        mutation.type === 'chat/setFiles'
+      ) {
+        if (this.recipient) {
+          this.$data.files = this.getFiles(this.recipient?.address)
+        }
+      }
+
+      if (mutation.type === 'chat/deleteFiles') {
+        if (this.recipient) {
+          this.$data.files = []
+        }
+      }
+    })
   },
   methods: {
     /**
@@ -242,7 +263,6 @@ export default Vue.extend({
             }
             return
           }
-
           // If there is a command disable shift + enter
           if (this.hasCommand) {
             event.preventDefault()
@@ -286,7 +306,6 @@ export default Vue.extend({
           })
           return
         }
-
         // Check if it's a group
         if (
           RegExp(this.$Config.regex.uuidv4).test(
@@ -340,7 +359,6 @@ export default Vue.extend({
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f: any) => f.getAsFile())
-
       if (arrOfFiles.length) {
         e.preventDefault()
         const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
@@ -351,12 +369,24 @@ export default Vue.extend({
     handleChatTextFromOutside(text: string) {
       this.$refs.editable?.handleTextFromOutside(text)
     },
+    /**
+     * @method cancelUpload
+     * @description Cancels file upload by setting file and url in local data to false
+     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
+     * @example @click="cancelUpload"
+     */
+    onCancelUpload() {
+      document.body.style.cursor = PropCommonEnum.DEFAULT
+      this.$store.commit('chat/setContainsNsfw', false)
+      this.$store.commit('chat/setCountError', false)
+    },
+    beforeDestroy() {
+      this.unsubscribe()
+    },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Chatbar.less"></style>
-
 <style lang="less">
 .messageuser {
   &.editable-container {
