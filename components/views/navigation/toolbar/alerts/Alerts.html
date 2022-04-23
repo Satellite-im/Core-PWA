@@ -6,8 +6,14 @@
     :key="alert.id"
     @sync="syncAlerts"
   />
+  <ToolbarAlertsAlert
+    v-if="notifications.length !== 0"
+    v-for="notification in notifications"
+    :notification="notification"
+    :key="notification.id"
+  />
   <TypographySubtitle
-    v-if="!alerts.length"
+    v-if="!alerts.length && !notifications.length "
     :size="6"
     :text="$t('alerts.caught_up')"
   />

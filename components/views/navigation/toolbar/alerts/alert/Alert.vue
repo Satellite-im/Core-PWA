@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { AppNotification } from '~/types/ui/notifications'
 
 export default Vue.extend({
   props: {
@@ -11,6 +12,11 @@ export default Vue.extend({
       type: Object as PropType<Alert>,
       required: true,
       default: {},
+    },
+    notification: {
+      type: Object as PropType<AppNotification>,
+      default: {},
+      required: false,
     },
   },
   data() {

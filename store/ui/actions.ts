@@ -8,7 +8,6 @@ import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
-import { Notification, Notifications } from '~/types/ui/notifications'
 import { TextileError } from '~/store/textile/types'
 import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 

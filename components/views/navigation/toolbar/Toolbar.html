@@ -64,7 +64,9 @@
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
-      <ToolbarAlerts />
+      <ToolbarAlerts
+        :notifications='notifications'
+      />
     </UiFloatingContainer>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
