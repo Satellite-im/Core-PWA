@@ -4072,4 +4072,9 @@ describe('mutations', () => {
     mutations.default.setFileSort(localizedState, argument)
     expect(localizedState.fileSort).toBe(argument)
   })
+  test('setFilesUploadStatus', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setFilesUploadStatus(localizedState, 'process')
+    expect(localizedState.filesUploadStatus).toBe('process')
+  })
 })
