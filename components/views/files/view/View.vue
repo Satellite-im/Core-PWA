@@ -1,7 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -32,6 +32,7 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       blockNsfw: (state) => (state as RootState).settings.blockNsfw,
     }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     isDownloading(): boolean {
       return this.ui.fileDownloadList.includes(this.file?.name)
     },

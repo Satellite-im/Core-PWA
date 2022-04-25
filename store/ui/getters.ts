@@ -13,8 +13,8 @@ const getters = {
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
   },
-  getFilesIndexLoading: (state: UIState) => {
-    return state.isLoadingFileIndex
+  isFilesIndexLoading: (state: UIState): boolean => {
+    return Boolean(state.filesUploadStatus)
   },
 }
 

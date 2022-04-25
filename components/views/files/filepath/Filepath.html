@@ -2,8 +2,8 @@
   <ul>
     <li>
       <a
-        @click="!ui.isLoadingFileIndex && goBackToDirectory('root')"
-        :class="{'disabled' : ui.isLoadingFileIndex }"
+        @click="!isFilesIndexLoading && goBackToDirectory('root')"
+        :class="{'disabled' : isFilesIndexLoading }"
         style="display: flex"
       >
         <home-icon size="1.5x" />
@@ -11,8 +11,8 @@
     </li>
     <li
       v-for="name,i in path"
-      @click="!ui.isLoadingFileIndex && goBackToDirectory(name)"
-      :class="{'is-active' : i === path.length - 1, 'disabled' : ui.isLoadingFileIndex}"
+      @click="!isFilesIndexLoading && goBackToDirectory(name)"
+      :class="{'is-active' : i === path.length - 1, 'disabled' : isFilesIndexLoading}"
     >
       <a> {{ name }} </a>
     </li>

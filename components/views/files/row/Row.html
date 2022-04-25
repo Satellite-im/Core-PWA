@@ -1,6 +1,6 @@
 <tr
   ref="row"
-  v-on="ui.isLoadingFileIndex ? {} : { click: handle, contextmenu: contextMenu }"
+  v-on="isFilesIndexLoading ? {} : { click: handle, contextmenu: contextMenu }"
 >
   <td class="filename">
     <template v-if="!$device.isMobile">
@@ -20,7 +20,7 @@
   <td
     @mouseover="menuHover=true"
     @mouseleave="menuHover=false"
-    v-on="ui.isLoadingFileIndex ? {} : { click: contextMenu }"
+    v-on="isFilesIndexLoading ? {} : { click: contextMenu }"
   >
     <more-vertical-icon size="1x" />
   </td>

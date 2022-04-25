@@ -201,7 +201,6 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
-  isLoadingFileIndex: boolean
   filesUploadStatus: string
   renameCurrentName?: string
   filePreview?: string

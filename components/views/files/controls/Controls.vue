@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -38,6 +38,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'settings']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   methods: {
     /**
@@ -76,17 +77,21 @@ export default Vue.extend({
      */
     async addFolder() {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
       this.$emit('forceRender')
     },
 
@@ -102,7 +107,10 @@ export default Vue.extend({
      */
     async handleFile(originalFiles: File[]) {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.prepare'),
+      )
 
       // if these files go over the storage limit, prevent upload
       if (
@@ -111,7 +119,7 @@ export default Vue.extend({
           this.$FileSystem.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         this.errors.push(this.$t('pages.files.errors.storage_limit'))
         return
       }
@@ -158,7 +166,7 @@ export default Vue.extend({
         try {
           this.$store.commit(
             'ui/setFilesUploadStatus',
-            this.$t('pages.files.controls.upload', [file.file.name]),
+            this.$t('pages.files.status.upload', [file.file.name]),
           )
           await this.$FileSystem.uploadFile(
             file.file,
@@ -174,12 +182,11 @@ export default Vue.extend({
       if (files.length) {
         this.$store.commit(
           'ui/setFilesUploadStatus',
-          this.$t('pages.files.controls.index'),
+          this.$t('pages.files.status.index'),
         )
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       // re-render so new files show up
@@ -205,7 +212,7 @@ export default Vue.extend({
     setProgress(num: number, size: number, name: string) {
       this.$store.commit(
         'ui/setFilesUploadStatus',
-        this.$t('pages.files.controls.upload', [
+        this.$t('pages.files.status.upload', [
           `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
         ]),
       )

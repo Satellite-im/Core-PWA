@@ -23,8 +23,8 @@
       <a
         :data-tooltip="$t('controls.share_link')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :class="{'disabled' : ui.isLoadingFileIndex}"
-        v-on="ui.isLoadingFileIndex ? {} : {click: share}"
+        :class="{'disabled' : isFilesIndexLoading}"
+        v-on="isFilesIndexLoading ? {} : {click: share}"
       >
         <link-icon size="1x" />
       </a>

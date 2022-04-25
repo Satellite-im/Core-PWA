@@ -72,7 +72,6 @@ const InitialUIState = (): UIState => ({
     base: Themes[0],
     flair: Flairs[0],
   },
-  isLoadingFileIndex: false,
   filesUploadStatus: '',
   renameCurrentName: undefined,
   filePreview: undefined,

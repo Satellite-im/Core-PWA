@@ -9,8 +9,8 @@ describe('init', () => {
     inst = getters.default
   })
 
-  it('should return the isLoadingFileIndex property of the initial state', () => {
-    const result: any = inst.getFilesIndexLoading(InitialUIState())
+  it('should return the isFilesIndexLoading property of the initial state', () => {
+    const result: any = inst.isFilesIndexLoading(InitialUIState())
     expect(result).toBeFalsy()
     expect(result).toMatchSnapshot()
   })

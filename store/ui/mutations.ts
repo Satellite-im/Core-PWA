@@ -347,9 +347,6 @@ export default {
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setIsLoadingFileIndex(state: UIState, status: boolean) {
-    state.isLoadingFileIndex = status
-  },
   setRenameItem(state: UIState, name: string) {
     state.renameCurrentName = name
   },

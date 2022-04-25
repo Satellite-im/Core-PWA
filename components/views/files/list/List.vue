@@ -1,7 +1,7 @@
 <template src="./List.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { ChevronDownIcon, ChevronUpIcon } from 'satellite-lucide-icons'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
@@ -38,7 +38,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     FileSortEnum: () => FileSortEnum,
   },
   mounted() {

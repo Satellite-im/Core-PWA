@@ -1,7 +1,7 @@
 <div
   class="file"
-  :class="{'disabled' : ui.isLoadingFileIndex}"
-  v-on="ui.isLoadingFileIndex ? {} : {click: click, contextmenu: contextMenu}"
+  :class="{'disabled' : isFilesIndexLoading}"
+  v-on="isFilesIndexLoading ? {} : {click: click, contextmenu: contextMenu}"
   @mouseover="fileHover=true"
   @mouseleave="fileHover=false"
 >

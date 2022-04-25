@@ -106,7 +106,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends', 'settings']),
-    ...mapGetters('ui', ['showSidebar', 'getFilesIndexLoading']),
+    ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
     flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },
@@ -163,7 +163,7 @@ export default Vue.extend({
       }
 
       // if already uploading, return to prevent bucket fast-forward crash
-      if (this.getFilesIndexLoading) {
+      if (this.isFilesIndexLoading) {
         this.$toast.show(this.$t('pages.files.errors.in_progress') as string)
         return
       }
