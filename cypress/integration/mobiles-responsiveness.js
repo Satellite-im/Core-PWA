@@ -47,7 +47,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.validateChatPageIsLoaded()
 
       //Go to conversation
-      cy.goToConversation('cypress friend', true)
+      cy.goToConversation('cypress friend')
     })
 
     it.skip(`Chat Features on ${item.description}`, () => {

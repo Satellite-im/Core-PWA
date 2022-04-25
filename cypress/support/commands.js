@@ -322,6 +322,7 @@ Cypress.Commands.add(
 Cypress.Commands.add('getReply', (messageReplied) => {
   cy.get('[data-cy=chat-message]')
     .contains(messageReplied)
+    .last()
     .parent()
     .parent()
     .find('[data-cy=reply-preview]')
@@ -423,6 +424,21 @@ Cypress.Commands.add('selectContextMenuOption', (locator, optionText) => {
   cy.contains(optionText).click()
 })
 
+Cypress.Commands.add(
+  'validateAllOptionsInContextMenu',
+  (locator, expectedOptions) => {
+    cy.get(locator).scrollIntoView().rightclick()
+    cy.get('[data-cy=context-menu]').should('be.visible')
+    cy.get('[data-cy=context-menu-option]').each(($option, $index, $list) => {
+      expect($option.text().trim()).to.be.eq(expectedOptions[$index])
+    })
+    cy.wait(1000)
+    cy.clickOutside().then(() => {
+      cy.get('[data-cy=context-menu]').should('not.exist')
+    })
+  },
+)
+
 Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
@@ -431,33 +447,32 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
   cy.get('[data-cy=user-name]', { timeout: 360000 }).should('exist')
 })
 
-Cypress.Commands.add('goToConversation', (user, mobile = false) => {
+Cypress.Commands.add('goToConversation', (user) => {
+  //If URL is chat/direct, then go to friends page
+  cy.url().then(($url) => {
+    if ($url.includes('chat/direct')) {
+      cy.get('#app-wrap').then(($appWrap) => {
+        if ($appWrap.hasClass('is-collapsed')) {
+          cy.get('[data-cy=toggle-sidebar]').click()
+        }
+      })
+      cy.get('[data-cy=sidebar-friends]').click()
+    }
+  })
+
   //If sidebar menu is collapsed, click on hamburger button to display it
   cy.get('#app-wrap').then(($appWrap) => {
-    if (!$appWrap.hasClass('is-open')) {
+    if (!$appWrap.hasClass('is-collapsed')) {
       cy.get('[data-cy=hamburger-button]').click()
     }
   })
 
-  //Click first on Files and then on Friends button
-  cy.get('[data-cy=sidebar-files]').click()
-  cy.get('[data-cy=sidebar-friends]').click()
-
-  //On mobile viewports, we need to click on hamburger button to see the chat selected
-  if (mobile === true) {
-    cy.get('[data-cy=hamburger-button]').click()
-  }
-
   //Find the friend and click on the message button associated
   cy.get('[data-cy=friend-name]', { timeout: 30000 })
     .contains(user)
-    .as('friend')
-  cy.get('@friend')
-    .parent()
-    .parent()
+    .parents('[data-cy=friend]')
     .find('[data-cy=friend-send-message]')
-    .as('friend-message')
-  cy.get('@friend-message').click()
+    .click()
 
   //Wait until conversation is fully loaded
   cy.get('[data-cy=user-connected]', { timeout: 120000 })
