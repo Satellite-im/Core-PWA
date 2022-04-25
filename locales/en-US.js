@@ -179,7 +179,7 @@ export default {
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
-          'Please enable consent to have files scanned on Privacy Settings',
+          'Please consent to file scanning in your privacy settings',
       },
     },
     unlock: {
