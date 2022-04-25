@@ -2,22 +2,14 @@
 <script lang="ts">
 import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
-import { UploadDropItemType, FileType } from '~/types/files/file'
+import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
+import { SettingsRoutes } from '~/store/ui/types'
 const converter = require('heic-convert')
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    loadPicture: (item: UploadDropItemType, callback: Function) => void
-    finishUploads: () => void
-    dispatchFile: (file: UploadDropItemType) => void
-    alertNsfwFile: () => void
-    resetFileUpload: () => void
-  }
-}
 
 export default Vue.extend({
   name: 'Upload',
@@ -49,13 +41,13 @@ export default Vue.extend({
       selectedFile: false,
       imageURL: '',
       fileClass: false,
-      error: false,
       aiScanning: false,
       fileAmount: 0,
     }
   },
   computed: {
-    activeFriend() {
+    ...mapState(['settings']),
+    activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
   },
@@ -71,6 +63,19 @@ export default Vue.extend({
     },
     handleFileClick() {
       this.resetFileUpload()
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
 
       setTimeout(() => {
         if (this.$refs.quickUpload)
@@ -86,19 +91,19 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
       this.$store.dispatch('ui/setChatbarFocus')
-      if (this.$props.editable) {
+      if (this.editable) {
         const newFiles: File[] = [...event.target.files]
 
-        if (newFiles.length + this.$props.files.length > 8) {
+        if (newFiles.length + this.files.length > 8) {
           this.$store.commit('chat/setCountError', true)
 
           return
         }
-        const address = this.$props.recipient?.address
+        const address = this.recipient?.address
         if (
           !address &&
           !RegExp(this.$Config.regex.uuidv4).test(
-            this.$props.recipient.textilePubkey.split('|')[1],
+            this.recipient.textilePubkey.split('|')[1],
           )
         )
           return
@@ -154,10 +159,10 @@ export default Vue.extend({
     },
     /**
      * @method loadPicture
-     * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
+     * @description Creates data URL from file and pushes it to url in the components data object (this.url = the new created data URL)
      * @param file File to load
      * @param callback Function to be called after the data URL is created
-     * @example this.loadPicture(this.$data.file)
+     * @example this.loadPicture(this.file)
      */
     loadPicture(item: UploadDropItemType, callback: Function) {
       if (!item.file) return
@@ -175,8 +180,8 @@ export default Vue.extend({
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.$data.fileAmount--
-      if (this.$data.fileAmount === 0) {
+      this.fileAmount--
+      if (this.fileAmount === 0) {
         if (this.$store.state.chat.containsNsfw) {
           this.alertNsfwFile()
         }
@@ -202,15 +207,15 @@ export default Vue.extend({
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    async dispatchFile(file: FileType) {
+    async dispatchFile(file: UploadDropItemType) {
       if (
         RegExp(this.$Config.regex.uuidv4).test(
-          this.$props.recipient.textilePubkey.split('|')[1],
+          this.recipient.textilePubkey.split('|')[1],
         )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {
-            groupID: this.$props.recipient?.textilePubkey,
+            groupID: this.recipient?.textilePubkey,
             file,
           })
           .then(() => {
@@ -226,7 +231,7 @@ export default Vue.extend({
       } else {
         await this.$store
           .dispatch('textile/sendFileMessage', {
-            to: this.$props.recipient?.textilePubkey,
+            to: this.recipient?.textilePubkey,
             file,
           })
           .then(() => {
@@ -247,7 +252,7 @@ export default Vue.extend({
      */
     async sendMessage() {
       const nsfwCheck: UploadDropItemType[] = []
-      for (const file of this.$props.files) {
+      for (const file of this.files) {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
@@ -255,11 +260,11 @@ export default Vue.extend({
           this.alertNsfwFile()
         }
       }
-      this.$data.fileAmount = nsfwCheck.length
+      this.fileAmount = nsfwCheck.length
       for (const file of nsfwCheck) {
         await this.dispatchFile(file)
       }
-      this.$store.commit('chat/deleteFiles', this.$props.recipient.address)
+      this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
   },
 })
