@@ -403,11 +403,6 @@ export default class FriendsProgram extends EventEmitter {
         toPaddedBuffer,
       ),
     )
-    console.log('acceptFriendRequest')
-    console.log('connection', connection)
-    console.log('transaction', transaction)
-    console.log('payerAccount', payerAccount)
-    console.log('userToAccount', userToAccount)
 
     return sendAndConfirmTransaction(
       connection,
@@ -499,12 +494,6 @@ export default class FriendsProgram extends EventEmitter {
       ),
     )
 
-    console.log('removeFriendRequest')
-    console.log('connection', connection)
-    console.log('transaction', transaction)
-    console.log('payerAccount', payerAccount)
-    console.log('userFromAccount', userFromAccount)
-
     return sendAndConfirmTransaction(
       connection,
       transaction,
@@ -553,12 +542,6 @@ export default class FriendsProgram extends EventEmitter {
         isInitiator,
       ),
     )
-
-    console.log('removeFriend')
-    console.log('connection', connection)
-    console.log('transaction', transaction)
-    console.log('payerAccount', payerAccount)
-    console.log('signer', signer)
 
     return sendAndConfirmTransaction(
       connection,
