@@ -3895,30 +3895,30 @@ describe('mutations', () => {
       count: 1, // This emoji has been not been used in the past, by sending this message (via this unit): we've incremented this to 1 from 0.
     })
   })
-  // test('updateMostUsedGlyph with existing emoji', () => {
-  //   const localizedState = { ...initialState }
-  //   const object = {
-  //     pack: {
-  //       name: 'Birds',
-  //       description: 'Short description can go here. Lorem ipsum.',
-  //       artist: 'Dina Brodsky',
-  //       id: '0903',
-  //       stickerURLs: [
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
-  //         'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
-  //       ],
-  //     },
-  //     url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-  //     count: 2, // Since this glyph has been used before, it will be incremented from 1 to 2.
-  //   }
-  //   mutations.default.updateRecentGlyphs(localizedState, object)
-  //   expect(localizedState.recentGlyphs).toContainEqual(object)
-  // })
+  test('updateMostUsedGlyph with existing emoji', () => {
+    const localizedState = { ...initialState }
+    const object = {
+      pack: {
+        name: 'Birds',
+        description: 'Short description can go here. Lorem ipsum.',
+        artist: 'Dina Brodsky',
+        id: '0903',
+        stickerURLs: [
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
+        ],
+      },
+      url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
+      count: 2, // Since this glyph has been used before, it will be incremented from 1 to 2.
+    }
+    mutations.default.updateRecentGlyphs(localizedState, object)
+    expect(localizedState.recentGlyphs).toMatchSnapshot()
+  })
   test('updateMostUsedGlyph with new emoji', () => {
     const localizedState = { ...initialState }
     const object = {
