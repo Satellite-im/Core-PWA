@@ -27,7 +27,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'settings']),
     isDownloading(): boolean {
       return this.ui.fileDownloadList.includes(this.file?.name)
     },
