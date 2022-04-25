@@ -10,6 +10,7 @@
   <template v-for="item of ui.contextMenuValues">
     <p
       v-if="item.text !== 'quickReaction'"
+      data-cy="context-menu-option"
       :class="{'red' : isRedText(item)}"
       @click="handle(item.func)"
     >
@@ -18,6 +19,7 @@
     <div v-else-if="getSortedMostUsedEmojis.length" class="quickReactions">
       <p
         v-for="reaction of mostUsedEmojis"
+        data-cy="quick-reaction"
         @click="handle(() => {item.func(reaction)})"
       >
         {{ reaction.content }}

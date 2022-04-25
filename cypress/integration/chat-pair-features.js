@@ -39,6 +39,20 @@ describe.skip('Chat features with two accounts', () => {
       .should('exist')
   })
 
+  it('Context Menu Options - Text Message', () => {
+    let optionsMessage = [
+      'Add Reaction',
+      'Reply',
+      'Copy Message',
+      'Edit Message',
+    ]
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .as('lastMessage')
+    cy.validateAllOptionsInContextMenu('@lastMessage', optionsMessage)
+  })
+
   it('Send glyph to user B', () => {
     cy.chatFeaturesSendGlyph()
     cy.goToLastGlyphOnChat()
@@ -48,12 +62,18 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
+  it('Context Menu Options - Glyph Message', () => {
+    let optionsGlyph = ['Add Reaction', 'Reply']
+    cy.get('[data-cy=chat-glyph]').last().as('lastGlyph')
+    cy.validateAllOptionsInContextMenu('@lastGlyph', optionsGlyph)
+  })
+
   it('Glyphs messages cannot be edited', () => {
     cy.get('[data-cy=chat-glyph]').last().scrollIntoView()
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it('Send image to user B', () => {
+  it.skip('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -62,7 +82,13 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Image messages cannot be edited', () => {
+  it.skip('Context Menu Options - Image Message', () => {
+    let optionsImage = ['Add Reaction', 'Reply', 'Copy Image', 'Save Image']
+    cy.get('[data-cy=chat-image]').last().as('lastImage')
+    cy.validateAllOptionsInContextMenu('@lastImage', optionsImage)
+  })
+
+  it.skip('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
@@ -78,6 +104,12 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
+  it('Context Menu Options - File Message', () => {
+    let optionsFile = ['Add Reaction', 'Reply']
+    cy.get('[data-cy=chat-file]').last().as('lastFile')
+    cy.validateAllOptionsInContextMenu('@lastFile', optionsFile)
+  })
+
   it('File messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
   })
@@ -90,16 +122,26 @@ describe.skip('Chat features with two accounts', () => {
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
     cy.goToConversation('Chat User A')
-    cy.get('[data-cy=chat-message]').last().scrollIntoView().should('exist')
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .scrollIntoView()
+      .should('exist')
   })
 
   it('Message not sent by same user cannot be edited', () => {
-    cy.get('[data-cy=chat-message]').last().as('lastmessage')
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .as('lastmessage')
     cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
   })
 
   it('User should be able to reply a message', () => {
-    cy.get('[data-cy=chat-message]').last().as('lastmessage')
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .as('lastmessage')
     cy.chatFeaturesReplyMessage('Chat User A', '@lastmessage', textReply)
   })
 
@@ -114,15 +156,15 @@ describe.skip('Chat features with two accounts', () => {
   it('Reply to message is displayed by clicking on it', () => {
     cy.getReply(randomMessage)
     cy.get('@reply-preview').click()
-    cy.get('[data-cy="reply-message"]').should('have.text', textReply)
-    cy.get('[data-cy="reply-close"]')
+    cy.get('[data-cy=reply-message]').should('have.text', textReply)
+    cy.get('[data-cy=reply-close]')
       .should('exist')
       .should('contain', 'Collapse')
   })
 
   it('Reply to message is not displayed when clicking on Collapse', () => {
-    cy.get('[data-cy="reply-close"]').scrollIntoView().click()
-    cy.get('[data-cy="reply-message"]').should('not.exist')
+    cy.get('[data-cy=reply-close]').scrollIntoView().click()
+    cy.get('[data-cy=reply-message]').should('not.exist')
     cy.getReply(randomMessage)
     cy.get('@reply-preview').should('exist').scrollIntoView()
   })
@@ -142,7 +184,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert image received from user A', () => {
+  it.skip('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -171,12 +213,15 @@ describe.skip('Chat features with two accounts', () => {
   })
 
   it('Add reactions to text message in chat', () => {
-    cy.get('[data-cy=chat-message]').last().as('messageToReact')
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .as('messageToReact')
     cy.reactToChatElement('@messageToReact', '[title="smile"]')
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it('Add reactions to image in chat', () => {
+  it.skip('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
@@ -249,7 +294,10 @@ describe.skip('Chat features with two accounts', () => {
     cy.goToConversation('Chat User B')
 
     //Find the last reaction message
-    cy.get('[data-cy=chat-message]').last().as('messageReacted')
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .as('messageReacted')
     //Message reaction should not have blue background image initially. Click on it
     cy.get('@messageReacted')
       .scrollIntoView()

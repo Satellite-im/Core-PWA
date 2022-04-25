@@ -51,6 +51,7 @@
             <menu-icon
               v-if="!showSidebar || $device.isMobile"
               class="toggle--sidebar"
+              data-cy="toggle-sidebar"
               size="1.2x"
               full-width
               @click="toggleMenu"
