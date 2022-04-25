@@ -48,21 +48,6 @@ describe('actions.default', () => {
     }
   })
 
-  test('setConsentScan with consentScan but error occured', async () => {
-    const commit = jest.fn()
-
-    try {
-      await actions.default.setConsentScan({ commit }, true)
-    } catch (error) {
-      expect(commit).toHaveBeenCalledWith('setConsentScan', true)
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        TextileError.USERINFO_MANAGER_NOT_FOUND,
-      )
-    }
-  })
-
   test('setConsentScan with consentScan', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     const TMConstructor = Vue.prototype.$TextileManager
@@ -76,5 +61,38 @@ describe('actions.default', () => {
     await actions.default.setConsentScan({ commit }, true)
     expect(commit).toHaveBeenCalledWith('setConsentScan', true)
     expect(TMConstructor.userInfoManager.setConsent).toHaveBeenCalled()
+  })
+
+  test('setConsentScan with consentScan but error occured', async () => {
+    Vue.prototype.$TextileManager = new TextileManager()
+    const commit = jest.fn()
+
+    jest.spyOn(console, 'log').mockImplementation()
+    await actions.default.setConsentScan({ commit }, true)
+    expect(console.log).toHaveBeenCalled()
+  })
+
+  test('setBlockNsfw with blockNsfw', async () => {
+    Vue.prototype.$TextileManager = new TextileManager()
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.userInfoManager = jest.fn()
+    TMConstructor.userInfoManager.setBlockNsfw = jest
+      .fn()
+      .mockReturnValueOnce(Promise.resolve())
+
+    const commit = jest.fn()
+
+    await actions.default.setBlockNsfw({ commit }, true)
+    expect(TMConstructor.userInfoManager.setBlockNsfw).toHaveBeenCalled()
+    expect(commit).toHaveBeenCalledWith('setBlockNsfw', true)
+  })
+
+  test('setBlockNsfw with blockNsfw but error occured', async () => {
+    Vue.prototype.$TextileManager = new TextileManager()
+    const commit = jest.fn()
+
+    jest.spyOn(console, 'log').mockImplementation()
+    await actions.default.setBlockNsfw({ commit }, true)
+    expect(console.log).toHaveBeenCalled()
   })
 })
