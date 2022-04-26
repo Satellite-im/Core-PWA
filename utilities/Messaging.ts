@@ -170,11 +170,8 @@ export function groupMessagesNew(
 ): MessageGroup {
   const chatList: MessageGroup = []
 
-  console.log('messages', messages)
-
   // Get the sorted array of messages (not replies or reactions)
   const messagesArray = Object.values(messages).sort((a, b) => a.at - b.at)
-  console.log('messagesArray', messagesArray)
 
   for (let i = 0; i < messagesArray.length; i++) {
     const prevMessage = i > 0 ? messagesArray[i - 1] : null
@@ -208,12 +205,7 @@ export function groupMessagesNew(
     }
     const isSameSender = currentMessage.from === prevMessage?.from
 
-    // Extract the last item from the array that can be either a Group or a Divider
-    // at this point
-    // const messageOrDivider = chatList[chatList.length - 1]
-
     // Checks if the message must be included in a new group
-    // TO DO: check chatList.length === 0 is needed
     const isNewChatElement =
       !isSameDay || !isSameSender || (prevMessage && !isSameChatElement)
 
@@ -235,37 +227,7 @@ export function groupMessagesNew(
         ),
       },
     })
-    // } else {
-    // // Since we already checked that it's not a divider we can
-    // // enforce the group type (not really needed since is handled under the hood
-    // // by typescript. We reassign it in a new variable only for readability reasons)
-    // const group: Group = groupOrDivider
-
-    // const newMessages = group.messages
-    //   ? [
-    //       ...group.messages,
-    //       {
-    //         ...currentMessage,
-    //         replies: messageRepliesToUIReplies(
-    //           currentMessageReplies,
-    //           reactions,
-    //         ),
-    //         reactions: getMessageUIReactions(
-    //           currentMessage,
-    //           currentMessageReactions,
-    //         ),
-    //       },
-    //     ]
-    //   : [{ ...currentMessage, replies: [], reactions: [] }]
-
-    // groupedMessages[groupedMessages.length - 1] = {
-    //   ...group,
-    //   messages: newMessages,
-    // }
-    // }
   }
-
-  console.log('chatList', chatList)
 
   return chatList
 }

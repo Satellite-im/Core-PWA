@@ -93,8 +93,6 @@ export default Vue.extend({
       )
     }
 
-    console.log('group', this.group)
-
     this.$data.timestampRefreshInterval = refreshTimestampInterval(
       this.group.at,
       setTimestamp,
