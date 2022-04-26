@@ -134,6 +134,7 @@ import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { hexToRGB } from '~/utilities/Colors'
 import { DataStateType } from '~/store/dataState/types'
+import { SettingsRoutes } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -186,7 +187,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media', 'friends', 'groups', 'dataState']),
+    ...mapState([
+      'audio',
+      'ui',
+      'media',
+      'friends',
+      'groups',
+      'dataState',
+      'settings',
+    ]),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     DataStateType: () => DataStateType,
     selectedGroup() {
@@ -262,6 +271,21 @@ export default Vue.extend({
      * @example v-on:drop="handleDrop"
      */
     handleDrop(e: DragEvent) {
+      e.preventDefault()
+
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
       if (e?.dataTransfer) {
         this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
       }
