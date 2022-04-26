@@ -224,7 +224,7 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
       },
       nsfw: {
         title: 'Block NSFW content',
