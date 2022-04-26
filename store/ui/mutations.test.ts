@@ -3152,6 +3152,7 @@ describe('mutations', () => {
       },
     },
     isLoadingFileIndex: true,
+    fileDownloadList: ['string'],
   }
 
   test('togglePinned', () => {
@@ -3913,7 +3914,7 @@ describe('mutations', () => {
           'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
         ],
       },
-      url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
+      url: 'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/ducklings.webp',
       count: 2, // Since this glyph has been used before, it will be incremented from 1 to 2.
     }
     mutations.default.updateRecentGlyphs(localizedState, object)
@@ -4076,5 +4077,26 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setFilesUploadStatus(localizedState, 'process')
     expect(localizedState.filesUploadStatus).toBe('process')
+  })
+  test('addFileDownload', () => {
+    const localizedState = { ...initialState }
+    mutations.default.addFileDownload(localizedState, 'process')
+    expect(localizedState.fileDownloadList).toEqual(
+      expect.arrayContaining(['process']),
+    )
+  })
+  test('removeFileDownload with query found', () => {
+    const localizedState = { ...initialState }
+    mutations.default.removeFileDownload(localizedState, 'process')
+    expect(localizedState.fileDownloadList).not.toEqual(
+      expect.arrayContaining(['process']),
+    )
+  })
+  test('removeFileDownload with query not found', () => {
+    const localizedState = { ...initialState }
+    mutations.default.removeFileDownload(localizedState, 'not-in-array')
+    expect(localizedState.fileDownloadList).not.toEqual(
+      expect.arrayContaining(['not-in-array']),
+    )
   })
 })
