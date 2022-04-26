@@ -272,16 +272,6 @@ export default Vue.extend({
         emoji: emoji.content,
         reactTo: this.message.id,
       })
-      // const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      // this.$store.commit('ui/settingReaction', {
-      //   status: true,
-      //   groupID: this.$props.group.id,
-      //   messageID: this.$props.message.id,
-      //   to:
-      //     this.$props.message.to === myTextilePublicKey
-      //       ? this.$props.message.from
-      //       : this.$props.message.to,
-      // })
     },
     /**
      * Called when click the "Edit Message" on context menu
