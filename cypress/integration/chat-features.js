@@ -1,4 +1,5 @@
 const faker = require('faker')
+const { utimes } = require('fs')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
@@ -7,8 +8,9 @@ const randomTextToCopy = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let imageURL
+let randomTextEdited = randomMessage + randomNumber
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -62,8 +64,6 @@ describe.skip('Chat Features Tests', () => {
   })
 
   it('Chat - Copy paste text', () => {
-    let randomTextToCopy = randomMessage + randomNumber
-
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
       Cypress.automation('remote:debugger:protocol', {
@@ -84,14 +84,14 @@ describe.skip('Chat Features Tests', () => {
       .should('equal', 'granted')
 
     //Copying the latest text message sent
-    cy.contains(randomTextToCopy).last().scrollIntoView().rightclick()
+    cy.contains(randomTextEdited).last().scrollIntoView().rightclick()
     cy.contains('Copy Message').realClick()
 
     //Validating that text messsage copied matches with actual clipboard value
     cy.window()
       .its('navigator.clipboard')
       .invoke('readText')
-      .should('equal', randomTextToCopy)
+      .should('equal', randomTextEdited)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
         cy.get('[data-cy=editable-input]').realClick().paste({
@@ -100,7 +100,7 @@ describe.skip('Chat Features Tests', () => {
         })
       })
     // Validating that editable input text matches with pasted value
-    cy.get('[data-cy=editable-input]').should('have.text', randomTextToCopy)
+    cy.get('[data-cy=editable-input]').should('have.text', randomTextEdited)
   })
 
   it.skip('Chat - Copy paste images', () => {
@@ -132,6 +132,7 @@ describe.skip('Chat Features Tests', () => {
 
   it('Chat - Validate User ID can be copied when clicked on it', () => {
     // Moving this at the end of execution to avoid issues on CI when running chat tests
+    cy.get('[data-cy=toggle-sidebar]').click()
     cy.chatFeaturesProfileName('cypress')
   })
 
@@ -155,5 +156,75 @@ describe.skip('Chat Features Tests', () => {
       .clear()
       .type('{enter}') // removing note added before
     cy.get('[data-cy=profile]').find('.close-button').click()
+  })
+
+  it('Chat - Search - Text message - Exact match', () => {
+    //Get text from last chat-message and look for it in search bar
+    cy.get('[data-cy=chat-message]')
+      .contains(randomTextEdited)
+      .last()
+      .invoke('text')
+      .then(($message) => {
+        cy.searchFromTextInChat($message)
+      })
+
+    //Assert results and close search modal
+    cy.assertFirstMatchOnSearch(randomTextEdited)
+    cy.get('[data-cy=chat-search-result]').find('.close-button').click()
+  })
+
+  it('Chat - Search - Emoji - Exact match', () => {
+    //Get text from last emoji-message and look for it in search bar
+    cy.get('[data-cy=chat-message]')
+      .contains('😄')
+      .last()
+      .invoke('text')
+      .then(($message) => {
+        cy.searchFromTextInChat($message)
+      })
+
+    //Assert results and close search modal
+    cy.assertFirstMatchOnSearch('😄')
+    cy.get('[data-cy=chat-search-result]').find('.close-button').click()
+  })
+
+  it('Chat - Search Results - Pagination is displayed when more than 10 matches are found', () => {
+    //Look for a word showing more than 10 results in chat and ensure pagination is displayed
+    cy.searchFromTextInChat('omnis')
+    cy.get('[data-cy=chat-search-result-pagination]').should('exist')
+  })
+
+  it('Chat - Search Results - Navigate through results ordered by New', () => {
+    //Navigate through results sorted by New, which is the default view
+    cy.navigateThroughSearchResults()
+  })
+
+  it('Chat - Search Results - Navigate through results ordered by Old', () => {
+    //Click on Sort By Old
+    cy.get('.orderby-item').contains('Old').click()
+
+    //Navigate through all results sorted by Old
+    cy.navigateThroughSearchResults()
+  })
+
+  it('Chat - Search Results - Navigate through results oredered by Relevant', () => {
+    //Click on Sort By Relevant
+    cy.get('.orderby-item').contains('Relevant').click()
+
+    //Navigate through all results sorted by Relevant
+    cy.navigateThroughSearchResults()
+
+    //Finally close search results modal
+    cy.get('[data-cy=chat-search-result]').find('.close-button').click()
+  })
+
+  it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
+    //Search for a random number and assert results
+    cy.searchFromTextInChat(randomNumber)
+    cy.assertFirstMatchOnSearch(randomNumber)
+
+    //Validate that pagination is not displayed and close search modal
+    cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')
+    cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 })

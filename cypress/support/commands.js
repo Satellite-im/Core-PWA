@@ -590,6 +590,46 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('searchFromTextInChat', (text) => {
+  cy.get('[data-cy=chat-search-input]')
+    .click()
+    .clear()
+    .type(text + '{enter}')
+  cy.get('[data-cy=chat-search-result]').should('be.visible')
+})
+
+Cypress.Commands.add('assertFirstMatchOnSearch', (text) => {
+  cy.get('[data-cy=chat-search-result-text]')
+    .contains(text)
+    .first()
+    .should('exist')
+})
+
+Cypress.Commands.add('navigateThroughSearchResults', () => {
+  //Get locators for first and last button in search pagination
+  cy.get('[data-cy=chat-search-result-pagination]')
+    .children()
+    .last()
+    .as('lastButton')
+  cy.get('[data-cy=chat-search-result-pagination]')
+    .children()
+    .first()
+    .as('firstButton')
+
+  //Navigate through all results sorted by New - Default View
+  cy.get('@lastButton')
+    .prev()
+    .invoke('text')
+    .then(($max) => {
+      for (let i = 1; i < $max; i++) {
+        cy.get('@lastButton').click()
+      }
+      for (let i = 1; i < $max; i++) {
+        cy.get('@firstButton').click()
+      }
+    })
+})
+
 //Version Release Notes Commands
 
 Cypress.Commands.add('releaseNotesScreenValidation', () => {

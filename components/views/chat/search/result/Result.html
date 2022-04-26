@@ -1,5 +1,9 @@
 <div v-click-outside="toggle">
-  <div class="search-result" v-if="result && result.data">
+  <div
+    class="search-result"
+    data-cy="chat-search-result"
+    v-if="result && result.data"
+  >
     <div class="search-result-header">
       {{$t('search.result.search_results')}}
       <InteractablesClose class="close" :action="toggle" />
@@ -90,6 +94,7 @@
       v-model="page"
       prev-text="«"
       next-text="»"
+      data-cy="chat-search-result-pagination"
       container-class="search-result-pagination"
       :click-handler="handleClickPaginate"
     />
