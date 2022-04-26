@@ -106,13 +106,15 @@
 
   .label {
     position: absolute;
+    text-align: center;
     top: 0.25rem;
     right: 0.25rem;
-    font-size: @micro-text-size;
+    font-size: @mini-text-size;
     background-color: var(--flair-color);
     border-radius: 2px;
-    line-height: 1.2;
-    padding: 0.15rem 0.25rem;
+    line-height: 1;
+    padding: 0.25rem;
+    min-width: 18px;
     &:extend(.font-primary);
     font-family: @primary-font;
   }
