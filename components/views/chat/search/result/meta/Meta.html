@@ -1,5 +1,7 @@
 <div class="meta">
-  <div class="result-count">{{ resultsText }}</div>
+  <div class="result-count" data-cy="chat-search-result-count">
+    {{ resultsText }}
+  </div>
   <div class="result-orderby">
     <div
       v-if="result.totalRows"
