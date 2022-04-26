@@ -4,13 +4,7 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import {
-  ChatList,
-  Group,
-  MessageGroup,
-  UIReaction,
-  UIReply,
-} from '~/types/messaging'
+import { Group, MessageGroup, UIReaction, UIReply } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
 import {
   FileMessage,
@@ -199,11 +193,9 @@ export function groupMessagesNew(
       const isToday = dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)
 
       isSameDay = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
-
-      if (isToday) {
-        isSameChatElement =
-          currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
-      }
+      isSameChatElement = !isToday
+        ? isSameDay
+        : currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
     }
 
     // Eventually place a divider if the day changes
