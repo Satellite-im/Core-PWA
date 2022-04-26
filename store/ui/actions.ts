@@ -30,10 +30,6 @@ export default {
   setActiveChannel({ commit }: ActionsArguments<UIState>, channel: Channel) {
     commit('setActiveChannel', channel)
   },
-  addReaction({ commit }: ActionsArguments<UIState>, reaction: any) {
-    commit('addReaction', reaction)
-    commit('updateRecentReactions', reaction.emoji)
-  },
   /**
    * @method openSettings
    * @description Opens setting page

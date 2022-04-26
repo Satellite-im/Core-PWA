@@ -363,45 +363,6 @@ describe('init', () => {
       name: 'name',
     })
   })
-  test('addReaction', () => {
-    const commit = jest.fn()
-    actions.default.addReaction(
-      { commit },
-      {
-        id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
-        groupID: '9876',
-        replyID: 'bc23a9d531064583ace8f67dad60f6bb',
-        messageID: '9876',
-        emoji: '😌',
-        reactor: {
-          reactions: [
-            'c466a48309794261b64a4f02cfcc3d64',
-            'bc23a9d531064583ace8f67dad60f6bb',
-            'da7588892',
-            '9876',
-          ],
-          reactors: [true, true, true, true],
-        },
-      },
-    )
-    expect(commit).toHaveBeenCalledWith('addReaction', {
-      id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
-      groupID: '9876',
-      replyID: 'bc23a9d531064583ace8f67dad60f6bb',
-      messageID: '9876',
-      emoji: '😌',
-      reactor: {
-        reactions: [
-          'c466a48309794261b64a4f02cfcc3d64',
-          'bc23a9d531064583ace8f67dad60f6bb',
-          'da7588892',
-          '9876',
-        ],
-        reactors: [true, true, true, true],
-      },
-    })
-    expect(commit).toHaveBeenCalledWith('updateRecentReactions', '😌')
-  })
   test('openSettings', () => {
     const commit = jest.fn()
     const state = { ...initialState }
