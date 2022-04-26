@@ -48,6 +48,21 @@ describe('actions.default', () => {
     }
   })
 
+  test('setConsentScan with consentScan but error occured', async () => {
+    const commit = jest.fn()
+
+    try {
+      await actions.default.setConsentScan({ commit }, true)
+    } catch (error) {
+      expect(commit).toHaveBeenCalledWith('setConsentScan', true)
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        TextileError.USERINFO_MANAGER_NOT_FOUND,
+      )
+    }
+  })
+
   test('setConsentScan with consentScan', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     const TMConstructor = Vue.prototype.$TextileManager

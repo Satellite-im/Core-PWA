@@ -19,13 +19,6 @@ export default Vue.extend({
 
       const { messages, replies, reactions } = conversation
 
-      console.log('messages', messages, messages.length)
-      console.log('replies', replies)
-      console.log('reactions', reactions)
-      console.log(
-        'groupedMessages',
-        groupMessagesNew(messages, replies, reactions),
-      )
       return groupMessagesNew(messages, replies, reactions)
     },
   },
