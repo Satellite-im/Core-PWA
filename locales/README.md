@@ -1,3 +1,3 @@
 # Satellite-Translations
 
-Translation files for Satellite
+Translation files for Satellitee
