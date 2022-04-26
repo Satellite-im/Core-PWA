@@ -7,6 +7,7 @@ import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { DataStateType } from '~/store/dataState/types'
 import { RootState } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   name: 'DirectMessages',
@@ -15,32 +16,45 @@ export default Vue.extend({
     DataStateType: () => DataStateType,
     ...mapState({
       friendsDS: (state) => (state as RootState).dataState.friends,
-      friendsExist: (state) => {
-        const friends = (state as RootState).friends
-        return friends && friends.all && friends.all.length > 0
-      },
+      friendsExist: (state) => (state as RootState).friends?.all?.length > 0,
     }),
     ...mapGetters('textile', ['getInitialized']),
     groupedMessages() {
       const { address } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[address]
 
-      if (!conversation) {
-        return []
-      }
+      if (!conversation) return []
 
       const { messages, replies, reactions } = conversation
 
       return groupMessages(messages, replies, reactions)
     },
+    // Get the active friend
+    friend() {
+      const { address } = this.$route.params
+      const { friends } = this.$store.state
+
+      return this.$Hounddog?.findFriendByAddress(address, friends)
+    },
   },
   watch: {
+    friend(friend: Friend | undefined) {
+      const { address } = this.$route.params
+
+      // If the friend is not found, redirect to the friends screen
+      if (address && !friend) {
+        this.$router.replace('/friends/list')
+      }
+    },
     getInitialized: {
       handler(nextValue) {
         if (nextValue) {
           const { address } = this.$route.params
           const { friends } = this.$store.state
-          if (address) {
+
+          const friend = this.$Hounddog?.findFriendByAddress(address, friends)
+
+          if (address && friend) {
             this.$store.dispatch('textile/fetchMessages', {
               address,
               setActive: true,
@@ -53,22 +67,22 @@ export default Vue.extend({
     friendsDS: {
       handler(nextValue) {
         if (nextValue === DataStateType.Ready) {
+          ConsoleWarning(this.$config.clientVersion, this.$store.state)
           const { address } = this.$route.params
           const { friends } = this.$store.state
 
-          if (address) {
-            if (
-              this.$Hounddog &&
-              this.$Hounddog.findFriendByAddress(address, friends)
-            ) {
-              return
-            }
-          }
+          const friend = this.$Hounddog?.findFriendByAddress(address, friends)
 
-          if (this.friendsExist) {
+          if (address && friend) return
+
+          // If no address is specified, but we have at least one friend, we can redirect to
+          // a chat with the first friend in the list
+          if (!address && friends?.all?.length > 0) {
             this.$router.replace(`/chat/direct/${friends.all[0].address}`)
             return
           }
+
+          // Defaults to friends list
           this.$router.replace('/friends/list')
         }
       },

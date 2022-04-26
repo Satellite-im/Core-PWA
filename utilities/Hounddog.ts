@@ -56,8 +56,7 @@ export default class Hounddog {
     address: string,
     state: FriendsState,
   ): Friend | undefined {
-    const search = state.all.find((fr: Friend) => fr.address === address)
-    return search
+    return state.all.find((fr: Friend) => fr.address === address)
   }
 
   /** @function
@@ -67,9 +66,7 @@ export default class Hounddog {
    * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
    */
   getActiveFriend(state: FriendsState): Friend | undefined {
-    return state.all.find((f) => {
-      return f.state === 'online'
-    })
+    return state.all.find((f) => f.state === 'online')
   }
 
   /** @function
@@ -80,8 +77,7 @@ export default class Hounddog {
    * @returns True if friend is found (exists), False if friend is not found (does not exist)
    */
   friendExists(state: FriendsState, friend: Friend): Boolean {
-    const search = state.all.find((fr: Friend) => fr.address === friend.address)
-    return Boolean(search)
+    return state.all.some((fr: Friend) => fr.address === friend.address)
   }
 
   /** @function

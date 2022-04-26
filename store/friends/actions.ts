@@ -83,8 +83,9 @@ export default {
 
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const { incoming, outgoing } =
-      await friendsProgram.getFriendAccountsByStatus(FriendStatus.PENDING)
+    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
+      FriendStatus.PENDING,
+    )
 
     const incomingRequests = await Promise.all(
       incoming.map(async (account) => {
@@ -119,8 +120,9 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { incoming, outgoing } =
-      await friendsProgram.getFriendAccountsByStatus(FriendStatus.ACCEPTED)
+    const { incoming, outgoing } = await friendsProgram.getAccountsByStatus(
+      FriendStatus.ACCEPTED,
+    )
 
     const allFriendsData = [...incoming, ...outgoing]
 
@@ -352,10 +354,9 @@ export default {
       FriendsEvents.REQUEST_DENIED,
       async (account) => {
         if (account) {
-          const userInfo = await usersProgram.getUserInfo(account.from)
-          dispatch(
-            'removeFriendRequest',
-            friendAccountToOutgoingRequest(account, userInfo),
+          commit(
+            'removeOutgoingRequest',
+            friendAccountToOutgoingRequest(account, null).requestId,
           )
         }
       },
@@ -369,6 +370,19 @@ export default {
             'removeIncomingRequest',
             friendAccountToIncomingRequest(account, null).requestId,
           )
+        }
+      },
+    )
+
+    friendsProgram.addEventListener(
+      FriendsEvents.FRIEND_REMOVED,
+      async (account) => {
+        if (account) {
+          const address =
+            rootState.accounts.active === account.from
+              ? account.to
+              : account.from
+          commit('removeFriend', address)
         }
       },
     )
@@ -410,13 +424,13 @@ export default {
     )
 
     let friendAccountInfo = await friendsProgram.getAccount(accountKeys.request)
-    if (friendAccountInfo) {
-      if (friendAccountInfo.status === FriendStatus.PENDING) {
-        throw new Error(FriendsError.REQUEST_ALREADY_SENT)
-      }
-      if (friendAccountInfo.status === FriendStatus.ACCEPTED) {
-        throw new Error(FriendsError.REQUEST_ALREADY_ACCEPTED)
-      }
+
+    if (friendAccountInfo?.status === FriendStatus.PENDING) {
+      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
+    }
+
+    if (friendAccountInfo?.status === FriendStatus.ACCEPTED) {
+      throw new Error(FriendsError.REQUEST_ALREADY_ACCEPTED)
     }
 
     // Initialize current recipient for encryption
