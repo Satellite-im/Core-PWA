@@ -32,6 +32,8 @@ describe('mutations.default.echoCancellation', () => {
           propertyIsEnumerable: () => false,
         },
         embeddedLinks: false,
+        consentScan: false,
+        blockNsfw: false,
         displayCurrentActivity: true,
       },
       true,
@@ -2443,5 +2445,63 @@ describe('mutations misc', () => {
 
     mutations.default.setOwnInfo(localState, passedInValue)
     expect(localState.ownInfo).toBe(passedInValue)
+  })
+
+  test('mutations.default.setOwnInfo', () => {
+    const localState = {
+      audioInput:
+        'Reiciendis libero maiores quia commodi vitae magnam minima ut. Eos sed suscipit consectetur doloribus aut esse soluta qui ipsum. Culpa quos et sint. Id alias iste ad qui omnis numquam qui sint. Aliquam magni sit sed. Aperiam est sed distinctio sint voluptas eum consequatur minus aliquam.',
+      audioOutput: 'Nostrum neque nam sit.',
+      videoInput: 'vero aut sit',
+      captureMouse: 'culpa',
+      noiseSuppression: false,
+      echoCancellation: true,
+      bitrate: 17771,
+      sampleSize: 67365,
+      userHasGivenAudioAccess: true,
+      userDeniedAudioAccess: false,
+      keybinds: {},
+      embeddedLinks: false,
+      displayCurrentActivity: true,
+      timezone: 'quis quisquam sunt',
+      removeState: true,
+      serverType: 'et',
+      ownInfo: 'maxime',
+      consentScan: false,
+      blockNsfw: false,
+    }
+    const passedInValue = true
+
+    mutations.default.setConsentScan(localState, passedInValue)
+    expect(localState.consentScan).toBe(passedInValue)
+  })
+
+  test('mutations.default.setOwnInfo', () => {
+    const localState = {
+      audioInput:
+        'Reiciendis libero maiores quia commodi vitae magnam minima ut. Eos sed suscipit consectetur doloribus aut esse soluta qui ipsum. Culpa quos et sint. Id alias iste ad qui omnis numquam qui sint. Aliquam magni sit sed. Aperiam est sed distinctio sint voluptas eum consequatur minus aliquam.',
+      audioOutput: 'Nostrum neque nam sit.',
+      videoInput: 'vero aut sit',
+      captureMouse: 'culpa',
+      noiseSuppression: false,
+      echoCancellation: true,
+      bitrate: 17771,
+      sampleSize: 67365,
+      userHasGivenAudioAccess: true,
+      userDeniedAudioAccess: false,
+      keybinds: {},
+      embeddedLinks: false,
+      displayCurrentActivity: true,
+      timezone: 'quis quisquam sunt',
+      removeState: true,
+      serverType: 'et',
+      ownInfo: 'maxime',
+      consentScan: false,
+      blockNsfw: false,
+    }
+    const passedInValue = true
+
+    mutations.default.setBlockNsfw(localState, passedInValue)
+    expect(localState.blockNsfw).toBe(passedInValue)
   })
 })
