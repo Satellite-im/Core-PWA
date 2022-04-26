@@ -10,6 +10,7 @@ import {
   XIcon,
 } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
+import { SettingsRoutes } from '~/store/ui/types'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -36,7 +37,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'settings']),
   },
   methods: {
     /**
@@ -44,6 +45,19 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
