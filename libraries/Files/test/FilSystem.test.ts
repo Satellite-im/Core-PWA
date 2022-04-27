@@ -82,7 +82,7 @@ describe('Test FilSystem', () => {
     expect(filesystem.percentStorageUsed).toBe(0.4337487))
   it(`Correctly exports filesystem`, () =>
     expect(filesystem.export).toMatchObject({
-      version: 3,
+      version: 1,
       type: FILESYSTEM_TYPE.DEFAULT,
     }))
   it(`Correctly copies entire filesystem`, () =>

@@ -1,8 +1,16 @@
 <template src="./Aside.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import { SimpleItem } from '~/types/ui/sidebar'
+import { FileAsideRouteEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
+  props: {
+    active: {
+      type: String as PropType<FileAsideRouteEnum>,
+      required: true,
+    },
+  },
   data() {
     return {
       progress: this.$FileSystem.percentStorageUsed as number,
@@ -17,6 +25,44 @@ export default Vue.extend({
     },
     sizeColor(): string {
       return this.progress > 90 ? 'red' : 'green'
+    },
+    quickAccessOptions(): SimpleItem[] {
+      return [
+        {
+          text: this.$t('pages.files.aside.default'),
+          route: FileAsideRouteEnum.DEFAULT,
+          icon: 'folder',
+        },
+        {
+          text: this.$t('pages.files.aside.recent'),
+          route: FileAsideRouteEnum.RECENT,
+          icon: 'clock',
+        },
+        {
+          text: this.$t('pages.files.aside.deleted'),
+          route: FileAsideRouteEnum.DELETED,
+          icon: 'trash',
+        },
+        {
+          text: this.$t('pages.files.aside.favorited'),
+          route: FileAsideRouteEnum.FAVORITED,
+          icon: 'heart',
+        },
+      ]
+    },
+    sharedItemsOptions(): SimpleItem[] {
+      return [
+        {
+          text: this.$t('pages.files.aside.shared_folders'),
+          route: FileAsideRouteEnum.SHARED,
+          icon: 'folder',
+        },
+        {
+          text: this.$t('pages.files.aside.links'),
+          route: FileAsideRouteEnum.LINKS,
+          icon: 'link',
+        },
+      ]
     },
   },
   watch: {

@@ -163,7 +163,13 @@ export default {
         free_tier: 'Free Tier',
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
+        default: 'Default',
+        recent: 'Recent',
+        deleted: 'Deleted',
+        favorited: 'Favorited',
         shared_items: 'Shared Items',
+        shared_folders: 'Shared Folders',
+        links: 'Links',
         coming_soon: 'Coming soon',
       },
       upload: {

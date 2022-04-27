@@ -98,23 +98,39 @@ export class FilSystem {
   }
 
   /**
-   * @getter flat
-   * @returns {ExportItem[]} flattened list of files in order to check if file exists
+   * @getter flatFiles
+   * @returns {Fil[]} flattened list of files
    */
-  get flat(): ExportItem[] {
-    const flatDeepByKey = (
-      data: Array<ExportItem | ExportFile>,
-      key: keyof ExportDirectory | keyof ExportFile,
-    ) => {
-      return data.reduce((prev, el) => {
-        prev.push(el)
-        if (el[key]) {
-          prev.push(...flatDeepByKey(el[key], key))
-        }
-        return prev
-      }, [])
-    }
-    return flatDeepByKey(this.export.content, 'children')
+  get flat(): Fil[] {
+    return this._flatDeepByKey(this._self.content, 'content').filter(
+      (item: Item) => item instanceof Fil,
+    )
+  }
+
+  /**
+   * @getter flatFiles
+   * @returns {Fil[]} flattened list of most recent 15 files
+   */
+  get recentFiles(): Fil[] {
+    return this.flat
+      .sort((a: Fil, b: Fil) => b.modified - a.modified)
+      .slice(0, 14)
+  }
+
+  /**
+   * @method _flatDeepByKey
+   * @description recursively converts item to the proper format for export
+   * @param {}
+   * @returns {Item[]} flattened list of files and directories
+   */
+  private _flatDeepByKey(data: Item[], key: keyof Directory) {
+    return data.reduce((prev, el) => {
+      prev.push(el)
+      if (el[key]) {
+        prev.push(...this._flatDeepByKey(el[key], key))
+      }
+      return prev
+    }, [])
   }
 
   /**
@@ -122,13 +138,7 @@ export class FilSystem {
    * @returns {number} total size of all tracked files
    */
   get totalSize(): number {
-    return this.flat.reduce(
-      (total, curr) =>
-        (Object.values(FILE_TYPE) as string[]).includes(curr.type)
-          ? total + (curr as ExportFile).size
-          : total,
-      0,
-    )
+    return this.flat.reduce((total, curr) => total + curr.size, 0)
   }
 
   /**

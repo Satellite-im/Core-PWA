@@ -10,7 +10,11 @@ import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 import { SocialAccountTypesEnum } from '~/libraries/Enums/types/social'
 import { AddFriendEnum } from '~/libraries/Enums/types/addFriend'
 import { PlatformTypeEnum } from '~/libraries/Enums/types/platformType'
-import { FileSortEnum } from '~/libraries/Enums/types/fileSort'
+import {
+  FileSortEnum,
+  FileIconsEnum,
+  FileAsideRouteEnum,
+} from '~/libraries/Enums/types/files'
 
 export {
   KeybindingEnum,
@@ -26,4 +30,6 @@ export {
   SocialAccountTypesEnum,
   PlatformTypeEnum,
   FileSortEnum,
+  FileIconsEnum,
+  FileAsideRouteEnum,
 }

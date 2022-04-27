@@ -41,6 +41,10 @@
         @handle="handle"
       />
     </div>
-    <FilesAside v-if="!$device.isMobile" class="files-right" />
+    <FilesAside
+      v-if="!$device.isMobile"
+      class="files-right"
+      :active="activeRoute"
+    />
   </div>
 </div>

@@ -1,10 +1,10 @@
-<div class="simple-menu">
-  <ul class="menu-list">
-    <li
-      v-for="item in menuContent"
-      :class="`${item.active ? 'is-active' : ''}`"
-    >
-      <UiDynamicIcon size="1x" :icon="item.icon" /> {{item.text}}
-    </li>
-  </ul>
-</div>
+<ul class="menu-list">
+  <li
+    v-for="item in items"
+    :class="[{'is-active' : isActiveRoute(item.route)}, {'no-icon' : !item.icon}]"
+    @click="setActive(item.route)"
+  >
+    <component v-if="item.icon" :is="icons[item.icon]" size="1x" />
+    {{item.text}}
+  </li>
+</ul>

@@ -6,7 +6,7 @@ import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
@@ -17,6 +17,7 @@ export default Vue.extend({
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
+      activeRoute: FileAsideRouteEnum.DEFAULT as FileAsideRouteEnum,
     }
   },
   computed: {
@@ -33,10 +34,21 @@ export default Vue.extend({
        */
     },
     directory(): Item[] {
+      if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
+        return this.$data.counter && this.fileSystem.recentFiles
+      }
       return (
         this.$data.counter &&
         this.fileSystem.currentDirectory.sortedContent(this.sort)
       )
+    },
+  },
+  watch: {
+    '$route.params.route': {
+      handler() {
+        this.fileSystem.goBackToDirectory('root')
+      },
+      deep: true,
     },
   },
   methods: {
