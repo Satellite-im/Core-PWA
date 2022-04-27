@@ -166,7 +166,9 @@ export interface UIState {
   showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean
-  modals: object
+  modals: {
+    [key: string]: boolean
+  }
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
