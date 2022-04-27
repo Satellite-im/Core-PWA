@@ -66,7 +66,6 @@ const InitialUIState = (): UIState => ({
     shopId: null,
   },
   editMessage: { id: '', from: '', payload: '' },
-  recentReactions: ['👍', '😂', '♥️'],
   mostEmojiUsed: [],
   recentGlyphs: [],
   theme: {

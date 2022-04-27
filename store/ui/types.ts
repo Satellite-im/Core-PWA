@@ -193,7 +193,6 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: string[]
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
   theme: {

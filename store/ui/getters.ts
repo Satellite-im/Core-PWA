@@ -1,7 +1,7 @@
-import { UIState } from './types'
+import { EmojiUsage, UIState } from './types'
 
 const getters = {
-  getSortedMostUsedEmojis: (state: UIState) => {
+  getSortedMostUsedEmojis: (state: UIState): EmojiUsage[] => {
     return [...state.mostEmojiUsed].sort((a, b) => b.count - a.count)
   },
   getSortedRecentGlyphs: (state: UIState) => {
