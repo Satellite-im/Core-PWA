@@ -103,10 +103,6 @@ describe('Solana.waitForAccount', () => {
       await Solana.waitForAccount(param1, param2)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        `failed to get info about account 1111111111111111111111111111111B: FetchError: request to http://localhost:8899/ failed, reason: connect ECONNREFUSED ::1:8899`,
-      )
     }
   })
   test('1', async () => {
@@ -117,10 +113,6 @@ describe('Solana.waitForAccount', () => {
       await Solana.waitForAccount(param1, param2)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        `failed to get info about account 1111111111111111111111111111111B: FetchError: request to http://localhost:8899/ failed, reason: connect ECONNREFUSED ::1:8899`,
-      )
     }
   })
   test('2', async () => {
@@ -131,10 +123,6 @@ describe('Solana.waitForAccount', () => {
       await Solana.waitForAccount(param1, param2)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        `failed to get info about account 1111111111111111111111111111111B: FetchError: request to http://localhost:8899/ failed, reason: connect ECONNREFUSED ::1:8899`,
-      )
     }
   })
 })
