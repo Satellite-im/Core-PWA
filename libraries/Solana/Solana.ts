@@ -100,7 +100,6 @@ export async function waitForAccount(
 ) {
   while (true) {
     const accountInfo = await connection.getAccountInfo(accountKey)
-    console.log(accountInfo)
     if (accountInfo === null) {
       continue
     } else {
