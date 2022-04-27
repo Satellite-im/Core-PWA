@@ -77,13 +77,13 @@ export class NotificationManager {
    */
   async sendNotification(payload: {
     from: String
+    id: string
     message: string
     imageHash: string
     type: AlertType
     title: string
   }): Promise<Object | null> {
     const buildNotification: Alert = {
-      id: '',
       content: {
         title: payload.title,
         image: payload.imageHash,
@@ -92,6 +92,7 @@ export class NotificationManager {
       state: AlertState.UNREAD,
       type: payload.type,
       at: Date.now(),
+      id: payload.id,
     }
     if (!this.threadId) {
       throw new Error('GroupChatManager not initialized')

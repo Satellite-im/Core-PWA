@@ -67,12 +67,7 @@ Object {
     "walletMini": false,
   },
   "mostEmojiUsed": Array [],
-  "notifications": Object {
-    "allNotifications": Array [],
-    "seenAll": false,
-    "unseenCount": 0,
-    "userId": "",
-  },
+  "notifications": Array [],
   "quickProfile": false,
   "quickProfilePosition": Object {
     "x": 0,

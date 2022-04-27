@@ -1,5 +1,6 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 import { Position, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -102,6 +103,7 @@ export default {
     const notificationResponse =
       await $TextileManager.notificationManager?.sendNotification({
         from: payload.from,
+        id: uuidv4(),
         title: payload.title,
         imageHash: payload.imageHash,
         message: payload.message,
@@ -109,14 +111,14 @@ export default {
       })
     commit('sendNotification', notificationResponse)
   },
-  clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {
-    commit('clearAllNotifications')
-  },
   removeSeenNotification(
     { commit, rootState }: ActionsArguments<UIState>,
-    notificationId: String,
+    notificationId: string,
   ) {
     commit('notificationSeen', notificationId)
+  },
+  clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {
+    commit('clearAllNotifications')
   },
   /**
    * @method clearKeybinds

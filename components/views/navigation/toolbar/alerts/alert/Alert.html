@@ -4,6 +4,7 @@
     <img v-if="localAlert.content.image" :src="localAlert.content.image" />
     <UiCircle
       v-if="!localAlert.content.image"
+      type='random'
       data-cy="circle-without-picture"
     />
   </div>

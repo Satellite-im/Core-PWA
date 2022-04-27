@@ -7,8 +7,8 @@
     @sync="syncAlerts"
   />
   <ToolbarAlertsAlert
-    v-if="notifications.length"
     v-for="notification in notifications"
+    v-if="notifications.length && notification.state !== 'READ'"
     :alert="notification"
     :key="notification.id"
   />

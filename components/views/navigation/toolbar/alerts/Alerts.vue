@@ -20,7 +20,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    syncAlerts(alerts) {
+    syncAlerts(alerts: PropType<Array<Alert>>) {
       this.$data.alerts = alerts
     },
   },

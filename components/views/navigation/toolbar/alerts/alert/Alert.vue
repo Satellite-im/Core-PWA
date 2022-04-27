@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
+import { mapState } from 'vuex'
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
 import { AppNotification } from '~/types/ui/notifications'
 
@@ -26,12 +27,14 @@ export default Vue.extend({
       hidden: false,
     }
   },
-  mounted() {
-    console.log(this.$props.alert)
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     dismiss() {
-      this.$Alerts.delete(this.$props.alert.id)
+      console.log(this.$props.alert.id)
+      // this.$Alerts.delete(this.$props.alert.id)
+      this.$store.dispatch('ui/removeSeenNotification', this.$props.alert.id)
       this.$data.hidden = true
       setTimeout(() => {
         this.$emit('sync', this.$Alerts.all)
