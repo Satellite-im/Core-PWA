@@ -103,6 +103,7 @@ export enum ModalWindows {
   USERPROFILE = 'userProfile',
   CALLTOACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CROP = 'crop',
 }
 
 export interface EnhancerInfo {

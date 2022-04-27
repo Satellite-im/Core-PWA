@@ -64,6 +64,11 @@ export default Vue.extend({
       }
     },
   },
+  watch: {
+    verticalScroll(val) {
+      this.settings.suppressScrollY = !val
+    },
+  },
 })
 </script>
 

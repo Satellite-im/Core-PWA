@@ -52,6 +52,7 @@ Object {
     "changelog": false,
     "createServer": false,
     "creategroup": false,
+    "crop": false,
     "error": false,
     "glyph": false,
     "groupInvite": Object {

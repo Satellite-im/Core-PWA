@@ -7,6 +7,7 @@ import { mapState } from 'vuex'
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { AccountsState } from '~/store/accounts/types'
+import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -51,6 +52,10 @@ export default Vue.extend({
      */
     toggleCropper() {
       this.showCropper = !this.showCropper
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.CROP,
+        state: !this.ui.modals[ModalWindows.CROP],
+      })
     },
     /**
      * @method openFileDialog DocsTODO
