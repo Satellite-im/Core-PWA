@@ -40,7 +40,7 @@
   <div v-if="file.thumbnail" class="image-container">
     <img
       :src="file.thumbnail"
-      :class="{'blur-image' : file.nsfw && settings.blockNsfw}"
+      :class="{'blur-image' : file.nsfw && blockNsfw}"
     />
   </div>
   <div v-else class="no-preview">
