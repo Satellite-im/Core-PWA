@@ -247,6 +247,8 @@ export default {
         {
           message: `New message from ${sender.name}`,
           from: message.from,
+          title: `New message`,
+          image: sender.photoHash,
           type: NotificationTypes.DIRECT_MESSAGE,
         },
         { root: true },

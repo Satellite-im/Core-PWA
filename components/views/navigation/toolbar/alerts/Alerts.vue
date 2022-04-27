@@ -2,13 +2,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { AppNotification } from '~/types/ui/notifications'
+import { Alert } from '~/libraries/ui/Alerts'
 
 export default Vue.extend({
   props: {
     notifications: {
-      type: Array as PropType<Array<AppNotification>>,
-      default: () => {},
+      type: Array as PropType<Array<Alert>>,
+      default: () => [],
       required: false,
     },
   },
@@ -17,11 +17,6 @@ export default Vue.extend({
       allNotifications: [],
       alerts: this.$Alerts.all,
       allSeen: true,
-    }
-  },
-  mounted() {
-    if (this.$props.notifications?.includes(false, ['seen'])) {
-      this.allSeen = false
     }
   },
   methods: {

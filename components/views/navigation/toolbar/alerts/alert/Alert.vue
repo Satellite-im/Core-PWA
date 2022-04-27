@@ -10,26 +10,24 @@ export default Vue.extend({
   props: {
     alert: {
       type: Object as PropType<Alert>,
-      required: true,
-      default: {},
+      required: false,
+      default: () => {},
     },
     notification: {
-      type: Object as PropType<AppNotification>,
-      default: {},
+      type: Object as PropType<Alert>,
+      default: () => {},
       required: false,
     },
   },
   data() {
     return {
       localAlert: this.$props.alert,
+      notificationInfo: this.$props.notification,
       hidden: false,
     }
   },
   mounted() {
-    if (this.$props.alert.state !== AlertState.READ) {
-      const updated = this.$Alerts.mark(AlertState.READ, this.$props.alert.id)
-      this.$data.localAlert = updated
-    }
+    console.log(this.$props.alert)
   },
   methods: {
     dismiss() {

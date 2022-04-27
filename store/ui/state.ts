@@ -11,12 +11,7 @@ const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebarUsers: true,
   showSidebar: true,
-  notifications: {
-    userId: '',
-    seenAll: false,
-    unseenCount: 0,
-    allNotifications: [],
-  },
+  notifications: [],
   showSearchResult: false,
   showSettings: false,
   showMedia: false,

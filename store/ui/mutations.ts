@@ -13,10 +13,7 @@ import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
-import {
-  AppNotification,
-  Notifications,
-} from '~/types/ui/notifications'
+import { Alert, AlertState } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default {
@@ -343,21 +340,21 @@ export default {
       count: 1,
     })
   },
-  sendNotification(state: UIState, notification: AppNotification) {
-    state.notifications.allNotifications.push(notification)
+  sendNotification(state: UIState, notification: Alert) {
+    state.notifications.push(notification)
   },
-  setNotifications(state: UIState, notifications: Array<AppNotification>) {
-    state.notifications.allNotifications = notifications
+  setNotifications(state: UIState, notifications: Array<Alert>) {
+    state.notifications = notifications
   },
   clearAllNotifications(state: UIState) {
-    state.notifications.allNotifications.forEach((notification) => {
-      notification.seen = true
+    state.notifications.forEach((notification) => {
+      notification.state = AlertState.READ
     })
   },
-  notificationSeen(state: UIState, notificationId: String) {
-    state.notifications.allNotifications.map((item) => {
+  notificationSeen(state: UIState, notificationId: string) {
+    state.notifications.find((item) => {
       if (item.id === notificationId) {
-        item.seen = true
+        item.state = AlertState.READ
       }
       return item
     })

@@ -1,10 +1,7 @@
 import { Identity, PrivateKey, Query, ThreadID, Update } from '@textile/hub'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { EncodingTypesEnum } from '~/libraries/Enums/types/encoding-types'
-import { AppNotification, Notifications } from '~/types/ui/notifications'
-import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
-import { MailboxSubscriptionType } from '~/types/textile/mailbox'
+import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 
 const CollectionName = 'notification'
 
@@ -66,7 +63,7 @@ export class NotificationManager {
    */
   async getnotifications(): Promise<Object | null> {
     const query = Query.where('from').eq(this.textile.wallet.address)
-    return await this.textile.client.find<Notifications>(
+    return await this.textile.client.find<Alert>(
       this.threadID,
       CollectionName,
       query,
@@ -78,18 +75,23 @@ export class NotificationManager {
    * @method sendNotification
    * @returns returns the textile response
    */
-  async sendNotification(
-    from: String,
-    message: String,
-    type: NotificationTypes,
-  ): Promise<Object | null> {
-    const buildNotification: AppNotification = {
+  async sendNotification(payload: {
+    from: String
+    message: string
+    imageHash: string
+    type: AlertType
+    title: string
+  }): Promise<Object | null> {
+    const buildNotification: Alert = {
       id: '',
-      message,
-      seen: false,
-      from,
-      type,
-      date: Date.now(),
+      content: {
+        title: payload.title,
+        image: payload.imageHash,
+        description: payload.message,
+      },
+      state: AlertState.UNREAD,
+      type: payload.type,
+      at: Date.now(),
     }
     if (!this.threadId) {
       throw new Error('GroupChatManager not initialized')
@@ -99,7 +101,7 @@ export class NotificationManager {
       CollectionName,
       [buildNotification],
     )
-    const notification = await this.textile.client.find<AppNotification>(
+    const notification = await this.textile.client.find<Alert>(
       this.threadId,
       CollectionName,
       Query.where('_id').eq(notificationId[0]),

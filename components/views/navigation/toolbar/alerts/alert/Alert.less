@@ -17,6 +17,7 @@
 .alert {
   transition: all @animation-speed ease;
   opacity: 1;
+  width: 100%;
   display: inline-flex;
   flex-direction: row;
   &:extend(.blur);
@@ -41,6 +42,11 @@
     &:extend(.round-corners);
     margin: 0 @light-spacing 0 0;
     vertical-align: top;
+  }
+
+  .info-holder {
+    width: 100%;
+    padding-left: 10px;
   }
 
   .a-heading {

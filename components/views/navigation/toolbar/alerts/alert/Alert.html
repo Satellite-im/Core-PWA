@@ -1,9 +1,13 @@
-<div :class="`alert ${localAlert.state} ${hidden ? 'hidden' : 'shown'}`">
+<div :class="`alert  ${hidden ? 'hidden' : 'shown'}`">
   <div>
     <!--Optional alert image -->
     <img v-if="localAlert.content.image" :src="localAlert.content.image" />
+    <UiCircle
+      v-if="!localAlert.content.image"
+      data-cy="circle-without-picture"
+    />
   </div>
-  <div>
+  <div class='info-holder'>
     <div class="a-heading">
       <!--Alert title-->
       <TypographySubtitle :size="6" :text="localAlert.content.title" />

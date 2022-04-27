@@ -9,7 +9,7 @@ import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
-import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
+import { AlertType } from '~/libraries/ui/Alerts'
 
 const $Sounds = new SoundManager()
 
@@ -86,9 +86,13 @@ export default {
   },
   async sendNotification(
     { commit, rootState }: ActionsArguments<UIState>,
-    notificationMessage: String,
-    from: String,
-    type: NotificationTypes,
+    payload: {
+      message: string
+      from: string
+      imageHash: string
+      title: string
+      type: AlertType
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -96,12 +100,13 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
     const notificationResponse =
-      await $TextileManager.notificationManager?.sendNotification(
-        from,
-        notificationMessage,
-        type,
-      )
-    console.log(notificationResponse)
+      await $TextileManager.notificationManager?.sendNotification({
+        from: payload.from,
+        title: payload.title,
+        imageHash: payload.imageHash,
+        message: payload.message,
+        type: payload.type,
+      })
     commit('sendNotification', notificationResponse)
   },
   clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {

@@ -7,6 +7,12 @@ export enum AlertType {
   FILE_UPLOADED = 'FILE_UPLOADED',
   FILE_NSFW = 'FILE_NSFW',
   DEV = 'DEV',
+  DIRECT_MESSAGE = 'directMessage',
+  GROUP_MESSAGE = 'groupMessage',
+  MENTIONS_NOTIFICATION = 'mentionNotification',
+  ACCOUNT_NOTIFICATION = 'accountNotification',
+  APPLICATION_NOTIFICATION = 'applicationNotification',
+  MISCELLANEOUS = 'miscellaneous',
 }
 
 export enum AlertState {
