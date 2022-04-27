@@ -141,6 +141,9 @@ export default Vue.extend({
         state: { isOpen: true, group },
       })
     },
+    getNotifications() {
+      this.$data.notifications = this.ui.notifications
+    },
     toggleAlerts() {
       this.showAlerts = !this.showAlerts
     },
