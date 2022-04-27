@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`1 1`] = `"testnet"`;
-
-exports[`2 1`] = `"devnet"`;
-
-exports[`3 1`] = `"devnet"`;
-
-exports[`4 1`] = `"devnet"`;
-
 exports[`Solana.getClusterFromNetworkConfig 0 1`] = `"mainnet-beta"`;
+
+exports[`Solana.getClusterFromNetworkConfig 1 1`] = `"testnet"`;
+
+exports[`Solana.getClusterFromNetworkConfig 2 1`] = `"devnet"`;
+
+exports[`Solana.getClusterFromNetworkConfig 3 1`] = `"devnet"`;
+
+exports[`Solana.getClusterFromNetworkConfig 4 1`] = `"devnet"`;
 
 exports[`Solana.sleep 0 1`] = `Promise {}`;
 
@@ -17,3 +17,25 @@ exports[`Solana.sleep 1 1`] = `Promise {}`;
 exports[`Solana.sleep 2 1`] = `Promise {}`;
 
 exports[`Solana.sleep 3 1`] = `Promise {}`;
+
+exports[`Solana.stringFromBuffer 0 1`] = `"Hello, World"`;
+
+exports[`Solana.stringToBuffer 0 1`] = `
+Object {
+  "data": Array [
+    72,
+    101,
+    108,
+    108,
+    111,
+    44,
+    32,
+    87,
+    111,
+    114,
+    108,
+    100,
+  ],
+  "type": "Buffer",
+}
+`;
