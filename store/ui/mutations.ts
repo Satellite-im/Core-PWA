@@ -309,15 +309,6 @@ export default {
   setHoveredGlyphInfo(state: UIState, values: Object | undefined) {
     state.hoveredGlyphInfo = values
   },
-  updateRecentReactions(state: UIState, emoji: string) {
-    const newRecentReactions = state.recentReactions
-    if (!state.recentReactions.includes(emoji)) {
-      newRecentReactions.unshift(emoji)
-      newRecentReactions.pop()
-    }
-
-    state.recentReactions = newRecentReactions
-  },
   setGlyphMarketplaceView(state: UIState, values: Object) {
     state.glyphMarketplaceView = values
   },
