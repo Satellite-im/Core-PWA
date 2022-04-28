@@ -44,11 +44,13 @@ export default Vue.extend({
     },
   },
   watch: {
-    '$route.params.route': {
-      handler() {
+    '$route.query.route': {
+      handler(value) {
         this.fileSystem.goBackToDirectory('root')
+        if (!Object.values(FileAsideRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+        }
       },
-      deep: true,
     },
   },
   methods: {

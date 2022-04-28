@@ -1,4 +1,4 @@
-<template src="./SimpleList.html"></template>
+<template src="./List.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -46,13 +46,7 @@ export default Vue.extend({
       this.$router.push({ query: { route } })
     },
     isActiveRoute(route: FileAsideRouteEnum) {
-      if (!this.$route.query.route && route === FileAsideRouteEnum.DEFAULT) {
-        return true
-      }
-      if (
-        !Object.values(FileAsideRouteEnum).includes(this.$route.query.route) &&
-        route === FileAsideRouteEnum.DEFAULT
-      ) {
+      if (!this.$route.query.route && !route) {
         return true
       }
       return route === this.$route.query.route
@@ -61,4 +55,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./SimpleList.less"></style>
+<style scoped lang="less" src="./List.less"></style>

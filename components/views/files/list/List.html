@@ -6,14 +6,16 @@
   <thead>
     <th @click="setSort(FileSortEnum.NAME)">
       {{ $t('pages.files.browse.name') }}
-      <template v-if="sort.category===FileSortEnum.NAME">
+      <template v-if="sort.category===FileSortEnum.NAME && !$route.query.route">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
     <th @click="setSort(FileSortEnum.MODIFIED)">
       {{ $t('pages.files.browse.modified') }}
-      <template v-if="sort.category===FileSortEnum.MODIFIED">
+      <template
+        v-if="sort.category===FileSortEnum.MODIFIED && !$route.query.route"
+      >
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
@@ -24,14 +26,14 @@
       class="open-sidebar-hide"
     >
       {{ $t('pages.files.browse.type') }}
-      <template v-if="sort.category===FileSortEnum.TYPE">
+      <template v-if="sort.category===FileSortEnum.TYPE && !$route.query.route">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
     <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
       {{ $t('pages.files.browse.size') }}
-      <template v-if="sort.category===FileSortEnum.SIZE">
+      <template v-if="sort.category===FileSortEnum.SIZE && !$route.query.route">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
