@@ -26,7 +26,7 @@ export class TextileFileSystem extends FilSystem {
    * @param {File} file file to be uploaded
    * @param {Function} progressCallback used to show progress meter in componment that calls this method
    */
-  async uploadFile(file: File, progressCallback: Function) {
+  async uploadFile(file: File, nsfw: boolean, progressCallback: Function) {
     const id = uuidv4()
     await this.bucket.pushFile(file, id, progressCallback)
     // read magic byte type, use metadata as backup
@@ -39,6 +39,7 @@ export class TextileFileSystem extends FilSystem {
       size: file.size,
       type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
       thumbnail: await this._createThumbnail(file, byteType),
+      nsfw,
     })
   }
 

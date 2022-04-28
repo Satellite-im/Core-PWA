@@ -1,7 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -11,6 +11,7 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { Fil } from '~/libraries/Files/Fil'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -27,7 +28,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     isDownloading(): boolean {
       return this.ui.fileDownloadList.includes(this.file?.name)
     },

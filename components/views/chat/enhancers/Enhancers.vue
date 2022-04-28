@@ -5,6 +5,7 @@ import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 import { Friend } from '~/types/ui/friends'
+import { EmojiUsage } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -39,11 +40,11 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
-    mostUsedEmojis() {
+    mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 10)
     },
     route: {
-      get() {
+      get(): string {
         return this.ui.enhancers.route
       },
       set(newRoute: string) {
@@ -166,7 +167,7 @@ export default Vue.extend({
       ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
-          floating: !!this.$device.isMobile,
+          floating: this.$device.isMobile,
         })
       }
       if (this.ui.settingReaction.status) {

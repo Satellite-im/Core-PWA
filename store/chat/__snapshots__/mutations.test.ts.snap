@@ -1,73 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`mutations.default.addFile 0 1`] = `undefined`;
+exports[`module.default.addFile 0 1`] = `undefined`;
 
-exports[`mutations.default.addFile 1 1`] = `undefined`;
+exports[`module.default.addFile 1 1`] = `undefined`;
 
-exports[`mutations.default.addFile 2 1`] = `undefined`;
+exports[`module.default.addFile 2 1`] = `undefined`;
 
-exports[`mutations.default.addFile 3 1`] = `undefined`;
+exports[`module.default.addFile 3 1`] = `undefined`;
 
-exports[`mutations.default.addFile 4 1`] = `undefined`;
+exports[`module.default.addFile 4 1`] = `undefined`;
 
-exports[`mutations.default.addFile 5 1`] = `undefined`;
+exports[`module.default.addFile 5 1`] = `undefined`;
 
-exports[`mutations.default.chatText 0 1`] = `undefined`;
+exports[`module.default.chatText 0 1`] = `undefined`;
 
-exports[`mutations.default.chatText 0 2`] = `undefined`;
+exports[`module.default.chatText 0 2`] = `undefined`;
 
-exports[`mutations.default.chatText 1 1`] = `undefined`;
+exports[`module.default.chatText 1 1`] = `undefined`;
 
-exports[`mutations.default.chatText 1 2`] = `undefined`;
+exports[`module.default.chatText 1 2`] = `undefined`;
 
-exports[`mutations.default.chatText 2 1`] = `undefined`;
+exports[`module.default.chatText 2 1`] = `undefined`;
 
-exports[`mutations.default.chatText 2 2`] = `undefined`;
+exports[`module.default.chatText 2 2`] = `undefined`;
 
-exports[`mutations.default.chatText 3 1`] = `undefined`;
+exports[`module.default.chatText 3 1`] = `undefined`;
 
-exports[`mutations.default.chatText 3 2`] = `undefined`;
+exports[`module.default.chatText 3 2`] = `undefined`;
 
-exports[`mutations.default.chatText 4 1`] = `undefined`;
+exports[`module.default.chatText 4 1`] = `undefined`;
 
-exports[`mutations.default.chatText 4 2`] = `undefined`;
+exports[`module.default.chatText 4 2`] = `undefined`;
 
-exports[`mutations.default.chatText 5 1`] = `undefined`;
+exports[`module.default.chatText 5 1`] = `undefined`;
 
-exports[`mutations.default.chatText 5 2`] = `undefined`;
+exports[`module.default.chatText 5 2`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 0 1`] = `undefined`;
+exports[`module.default.deleteFiles 0 1`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 1 1`] = `undefined`;
+exports[`module.default.deleteFiles 1 1`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 2 1`] = `undefined`;
+exports[`module.default.deleteFiles 2 1`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 3 1`] = `undefined`;
+exports[`module.default.deleteFiles 3 1`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 4 1`] = `undefined`;
+exports[`module.default.deleteFiles 4 1`] = `undefined`;
 
-exports[`mutations.default.deleteFiles 5 1`] = `undefined`;
+exports[`module.default.deleteFiles 5 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 0 1`] = `undefined`;
+exports[`module.default.setChatReply 0 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 0 2`] = `undefined`;
+exports[`module.default.setChatReply 0 2`] = `undefined`;
 
-exports[`mutations.default.setChatReply 1 1`] = `undefined`;
+exports[`module.default.setChatReply 1 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 1 2`] = `undefined`;
+exports[`module.default.setChatReply 1 2`] = `undefined`;
 
-exports[`mutations.default.setChatReply 2 1`] = `undefined`;
+exports[`module.default.setChatReply 2 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 2 2`] = `undefined`;
+exports[`module.default.setChatReply 2 2`] = `undefined`;
 
-exports[`mutations.default.setChatReply 3 1`] = `undefined`;
+exports[`module.default.setChatReply 3 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 3 2`] = `undefined`;
+exports[`module.default.setChatReply 3 2`] = `undefined`;
 
-exports[`mutations.default.setChatReply 4 1`] = `undefined`;
+exports[`module.default.setChatReply 4 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 4 2`] = `undefined`;
+exports[`module.default.setChatReply 4 2`] = `undefined`;
 
-exports[`mutations.default.setChatReply 5 1`] = `undefined`;
+exports[`module.default.setChatReply 5 1`] = `undefined`;
 
-exports[`mutations.default.setChatReply 5 2`] = `undefined`;
+exports[`module.default.setChatReply 5 2`] = `undefined`;

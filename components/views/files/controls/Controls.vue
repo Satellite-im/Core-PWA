@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -38,6 +38,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'settings']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   methods: {
     /**
@@ -76,17 +77,21 @@ export default Vue.extend({
      */
     async addFolder() {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
       this.$emit('forceRender')
     },
 
@@ -102,7 +107,10 @@ export default Vue.extend({
      */
     async handleFile(originalFiles: File[]) {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.prepare'),
+      )
 
       // if these files go over the storage limit, prevent upload
       if (
@@ -111,7 +119,7 @@ export default Vue.extend({
           this.$FileSystem.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         this.errors.push(this.$t('pages.files.errors.storage_limit'))
         return
       }
@@ -127,7 +135,7 @@ export default Vue.extend({
       const sameNameResults: File[] = emptyFileResults.filter((file) => {
         return !this.$FileSystem.currentDirectory.hasChild(file.name)
       })
-      const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
+      const files: Promise<{ file: File; nsfw: boolean }>[] =
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
@@ -154,20 +162,17 @@ export default Vue.extend({
           return { file, nsfw }
         })
 
-      const files: File[] = []
-
-      for await (const el of nsfwResults) {
-        if (!el.nsfw) {
-          files.push(el.file)
-        }
-      }
-      for (const file of files) {
+      for await (const file of files) {
         try {
           this.$store.commit(
             'ui/setFilesUploadStatus',
-            this.$t('pages.files.controls.upload', [file.name]),
+            this.$t('pages.files.status.upload', [file.file.name]),
           )
-          await this.$FileSystem.uploadFile(file, this.setProgress)
+          await this.$FileSystem.uploadFile(
+            file.file,
+            file.nsfw,
+            this.setProgress,
+          )
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -177,12 +182,11 @@ export default Vue.extend({
       if (files.length) {
         this.$store.commit(
           'ui/setFilesUploadStatus',
-          this.$t('pages.files.controls.index'),
+          this.$t('pages.files.status.index'),
         )
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       // re-render so new files show up
@@ -197,9 +201,6 @@ export default Vue.extend({
       if (emptyFileResults.length !== sameNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.duplicate_name'))
       }
-      if (nsfwResults.length !== files.length) {
-        this.errors.push(this.$t('errors.chat.contains_nsfw'))
-      }
     },
     /**
      * @method setProgress
@@ -211,7 +212,7 @@ export default Vue.extend({
     setProgress(num: number, size: number, name: string) {
       this.$store.commit(
         'ui/setFilesUploadStatus',
-        this.$t('pages.files.controls.upload', [
+        this.$t('pages.files.status.upload', [
           `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
         ]),
       )

@@ -1,7 +1,7 @@
-import { UIState } from './types'
+import { EmojiUsage, UIState } from './types'
 
 const getters = {
-  getSortedMostUsedEmojis: (state: UIState) => {
+  getSortedMostUsedEmojis: (state: UIState): EmojiUsage[] => {
     return [...state.mostEmojiUsed].sort((a, b) => b.count - a.count)
   },
   getSortedRecentGlyphs: (state: UIState) => {
@@ -13,8 +13,8 @@ const getters = {
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
   },
-  getFilesIndexLoading: (state: UIState) => {
-    return state.isLoadingFileIndex
+  isFilesIndexLoading: (state: UIState): boolean => {
+    return Boolean(state.filesUploadStatus)
   },
 }
 

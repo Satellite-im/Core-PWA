@@ -1,7 +1,7 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
@@ -17,6 +17,7 @@ import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -47,7 +48,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns {string} if directory, child count. if file, size
      */

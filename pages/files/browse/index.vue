@@ -68,13 +68,16 @@ export default Vue.extend({
      * @param {Item} item
      */
     async like(item: Item) {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
       item.toggleLiked()
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
       this.forceRender()
     },
     /**
@@ -83,13 +86,21 @@ export default Vue.extend({
      * @param {Item} item
      */
     async remove(item: Item) {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
       if (item instanceof Fil) {
+        this.$store.commit(
+          'ui/setFilesUploadStatus',
+          this.$t('pages.files.status.delete', [item.name]),
+        )
         await this.$FileSystem.removeFile(item.id)
       }
       this.$FileSystem.removeChild(item.name)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
       this.forceRender()
     },
     /**

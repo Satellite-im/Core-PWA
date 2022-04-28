@@ -7,6 +7,7 @@ import { TextileState } from '~/store/textile/types'
 import { UIState } from '~/store/ui/types'
 import { WebRTCState } from '~/store/webrtc/types'
 import { GroupsState } from '~/store/groups/types'
+import { SettingsState } from '~/store/settings/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -16,6 +17,7 @@ export interface RootState {
   webrtc: WebRTCState
   groups: GroupsState
   ui: UIState
+  settings: SettingsState
 }
 
 export type RootStore = Store<RootState>

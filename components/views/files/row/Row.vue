@@ -1,7 +1,7 @@
 <template src="./Row.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   FolderIcon,
   ArchiveIcon,
@@ -41,6 +41,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns {boolean} if item has discrete MIME type of image
      */

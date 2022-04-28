@@ -1,7 +1,7 @@
 <div
   class="file"
-  :class="{'disabled' : ui.isLoadingFileIndex}"
-  v-on="ui.isLoadingFileIndex ? {} : {click: click, contextmenu: contextMenu}"
+  :class="{'disabled' : isFilesIndexLoading}"
+  v-on="isFilesIndexLoading ? {} : {click: click, contextmenu: contextMenu}"
   @mouseover="fileHover=true"
   @mouseleave="fileHover=false"
 >
@@ -21,7 +21,15 @@
       @mouseleave="heartHover=false"
     />
   </div>
-  <img v-if="item.thumbnail" class="image-preview" :src="item.thumbnail" />
+  <!-- add container so blur effect doesn't go outside the dimensions of the image -->
+  <div v-if="item.thumbnail" class="image-container">
+    <img
+      class="image-preview"
+      :class="{'blur-image' : item.nsfw && blockNsfw}"
+      :src="item.thumbnail"
+      draggable="false"
+    />
+  </div>
   <div v-else class="icon-container">
     <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
     <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />

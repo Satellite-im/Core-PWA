@@ -8,7 +8,7 @@
   } : {}"
   @click.stop
 >
-  <div class="navbar"">
+  <div class="navbar">
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"
@@ -43,7 +43,7 @@
           slot-scope="{ events: { click: clickEvent }, display, emojis }"
           v-bind:events.click="clickEvent"
           @click.stop="clickEvent"
-        ></div>
+        />
         <div
           slot="emoji-picker"
           ref="emojiPicker"
@@ -70,8 +70,9 @@
                       :key="index"
                       @click="addEmoji(emoji.content, emoji.code)"
                       :title="index"
-                      >{{ emoji.content }}</span
                     >
+                      {{ emoji.content }}
+                    </span>
                   </div>
                   <div v-else>
                     <span

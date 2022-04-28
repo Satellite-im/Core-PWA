@@ -5,8 +5,8 @@
     type="primary"
     v-model="text"
     :action="rename"
-    :loading="ui.isLoadingFileIndex"
-    :disabled="ui.isLoadingFileIndex"
+    :loading="isFilesIndexLoading"
+    :disabled="isFilesIndexLoading"
     ref="inputGroup"
     data-cy="files-rename-input"
   >

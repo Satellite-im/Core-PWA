@@ -139,12 +139,15 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
-      rename: 'Rename is complete',
+      status: {
+        prepare: 'Preparing files for upload',
+        upload: 'Uploading {0}',
+        delete: 'Deleting {0}',
+        index: 'Updating remote index',
+      },
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        upload: 'Uploading {0}',
-        index: 'Updating remote index',
       },
       browse: {
         files: 'Files',
@@ -224,7 +227,7 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
       },
       nsfw: {
         title: 'Block NSFW content',

@@ -166,7 +166,9 @@ export interface UIState {
   showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean
-  modals: object
+  modals: {
+    [key: string]: boolean
+  }
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
@@ -193,14 +195,12 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: string[]
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
   theme: {
     base: Theme
     flair: Flair
   }
-  isLoadingFileIndex: boolean
   filesUploadStatus: string
   renameCurrentName?: string
   filePreview?: string
