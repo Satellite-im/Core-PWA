@@ -1,4 +1,4 @@
-<table class="table" :class="{'disabled' : isFilesIndexLoading}">
+<table class="table" data-cy="files-table" :class="{'disabled' : isFilesIndexLoading}">
   <thead>
     <th @click="setSort(FileSortEnum.NAME)">
       {{ $t('pages.files.browse.name') }}
@@ -39,6 +39,7 @@
       v-for="item, i in directory"
       :key="i + counter"
       :item="item"
+      data-cy="files-item"
       @like="like"
       @share="share"
       @remove="remove"

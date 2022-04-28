@@ -1,5 +1,4 @@
 const faker = require('faker')
-const { utimes } = require('fs')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
@@ -134,28 +133,15 @@ describe('Chat Features Tests', () => {
     // Moving this at the end of execution to avoid issues on CI when running chat tests
     cy.get('[data-cy=toggle-sidebar]').click()
     cy.chatFeaturesProfileName('cypress')
+    cy.get('[data-cy=hamburger-button]').click()
   })
 
   it('Chat - Add a note to user profile', () => {
-    cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
-    cy.contains('Add Note').should('be.visible')
-    cy.get('[data-cy=profile-add-note] > .cte-input')
-      .should('contain', 'Click to add note')
-      .click()
-      .type('This is a test note{enter}')
-    cy.get('[data-cy=profile]').find('.close-button').click()
+    cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'add')
   })
 
   it('Chat - Assert note from user profile', () => {
-    cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
-    cy.get('[data-cy=profile-add-note] > .cte-input')
-      .should('contain', 'This is a test note')
-      .click()
-      .clear()
-      .type('{enter}') // removing note added before
-    cy.get('[data-cy=profile]').find('.close-button').click()
+    cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
   })
 
   it('Chat - Search - Text message - Exact match', () => {
@@ -226,5 +212,20 @@ describe('Chat Features Tests', () => {
     //Validate that pagination is not displayed and close search modal
     cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
+  })
+
+  it('Chat - Files - Rename Folder', () => {
+    //Click on toggle button and then on files
+    cy.get('[data-cy=toggle-sidebar]').click()
+
+    //Open files screen and rename existing folder
+    cy.openFilesScreen()
+    cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
+  })
+
+  it('Chat - Files - Rename Files', () => {
+    //Open files screen and rename existing file
+    cy.openFilesScreen()
+    cy.renameFileOrFolder('test-file-' + randomNumber, 'file')
   })
 })
