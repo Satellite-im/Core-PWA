@@ -2,7 +2,7 @@
  * This plugin enables persistent storage to the state.
  */
 
-import { omit, remove } from 'lodash'
+import { omit } from 'lodash'
 import { VuexPersistence } from 'vuex-persist'
 
 // Add mutations here to blacklist saving to store
@@ -14,36 +14,53 @@ const mutationsBlacklist = [
   'toggleMediaIncomingCall',
   'ui/setMessages',
   'ui/sendMessage',
-  'ui/setReplyChatbarContent',
+  'chat/addFile',
+  'textile/setMessageLoading',
+  'groups/setSubscriptionId',
 ]
 
 // State properties path to blacklist saving to store
-const propertiesBlacklist = [
+const commonProperties = [
+  'webrtc.initialized',
+  'textile.initialized',
+  'textile.messageLoading',
+  'accounts.initialized',
+  'friends.all',
+  'webrtc.activeStream',
+  'webrtc.connectedPeers',
+  'webrtc.incomingCall',
+  'ui.replyChatbarContent',
+  'ui.editMessage',
+  'chat.files',
+  'groups.inviteSubscription',
+  'groups.groupSubscriptions',
+  'ui.modals',
+  'ui.isScrollOver',
+  'ui.filePreview',
+  'ui.filesUploadStatus',
+  'ui.fileDownloadList',
+]
+
+const propertiesNoStorePin = [
   'accounts.pin',
   'accounts.mnemonic',
   'accounts.locked',
   'accounts.error',
   'accounts.loading',
   'accounts.registrationStatus',
-  'friends.all',
-  'prerequisites',
-  'webrtc.activeStream',
-  'webrtc.connectedPeer',
+  ...commonProperties,
 ]
 
-const propertiesBlacklistWhenStorePin = [
-  'friends.all',
-  'prerequisites',
-  'webrtc.activeStream',
-  'webrtc.connectedPeer',
-]
 export default ({ store }: { store: any }) => {
   new VuexPersistence({
     key: 'Satellite-Store',
     reducer: (state: any) => {
-      let blackList = propertiesBlacklist
+      if (state.settings.removeState) {
+        return {}
+      }
+      let blackList = propertiesNoStorePin
       if (state.accounts.storePin && !state.accounts.locked) {
-        blackList = propertiesBlacklistWhenStorePin
+        blackList = commonProperties
       }
       // Lodash omit is not so performant, but it's actually fine
       // for blacklisting the state to be persisted

@@ -1,6 +1,17 @@
-<div class="cropper-container">
-    <vue-croppie ref="croppieRef" :enableExif="true" :enableResize="false" :enableOrientation="true"
-        :boundary="{ width: 200, height: 200 }" :viewport="{ width: 200, height: 200, type: 'circle' }" />
-    <InteractablesButton :action="crop" type="primary" size="normal" :text="$t('controls.crop')"
-        class="button is-primary create-server-btn" />
+<div class="cropper-container" data-cy="cropper-container">
+  <vue-croppie
+    ref="croppieRef"
+    :enableExif="true"
+    :enableResize="false"
+    :enableOrientation="true"
+    :boundary="{ width: 200, height: 200 }"
+    :viewport="{ width: 200, height: 200, type: 'circle' }"
+  />
+  <InteractablesButton
+    :action="crop"
+    type="primary"
+    size="normal"
+    :text="$t('controls.crop')"
+    class="button is-primary create-server-btn"
+  />
 </div>

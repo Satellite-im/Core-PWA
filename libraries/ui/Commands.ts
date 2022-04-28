@@ -11,6 +11,7 @@ export const commandPrefix = '/'
  */
 export function containsCommand(text: string) {
   const cmd = text.split(' ')[0].replace(commandPrefix, '')
+
   return (
     text.charAt(0) === commandPrefix &&
     (cmd.match(/^[a-z0-9]+$/i) || text.length === 1) // the || part is needed for showing all the available commands after writing the commandPrefix
@@ -41,7 +42,7 @@ export function parseCommand(text: string): CurrentCommand {
  */
 export function isArgsValid(
   command: Command,
-  currentArgs: Array<String> = []
+  currentArgs: Array<String> = [],
 ): boolean {
   return command.args.every((a, i) => {
     if (a.name === currentArgs[i]) {
@@ -53,6 +54,15 @@ export function isArgsValid(
       possibleValues.includes(currentArgs[i]?.toLowerCase())
     )
   })
+}
+
+export function hasCommandPreview(text: string): boolean {
+  return (
+    containsCommand(text) &&
+    commands.some((cmd) =>
+      cmd.name.startsWith(parseCommand(text).name.toLowerCase()),
+    )
+  )
 }
 
 export const commands: Command[] = [

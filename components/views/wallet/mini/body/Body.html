@@ -5,13 +5,15 @@
   </div>
   <UiSpacer :height="45" />
   <div class="flex-row">
-    <InteractablesInputGroup class="input-container"
+    <InteractablesInputGroup
+      class="input-container"
       type="primary"
       size="small"
       :placeholder="$t('friends.search_placeholder')"
       :action="searchFriend"
       v-model="accountID"
-      :loading="searching">
+      :loading="searching"
+    >
       <check-circle-2-icon size="1x" />
     </InteractablesInputGroup>
     <InteractablesSelect
@@ -26,24 +28,44 @@
       type="primary"
       size="small"
       :text="$t('wallet.mini_wallet.send_money')"
-      :action="updateMethod('send')">
+      :action="updateMethod('send')"
+    >
       <send-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       type="primary"
       size="small"
       :text="$t('wallet.mini_wallet.request_money')"
-      :action="updateMethod('request')">
+      :action="updateMethod('request')"
+    >
       <redo-icon size="1x" />
     </InteractablesButton>
   </div>
-  <TypographyHorizontalRuleText plaintext :value="$t('wallet.mini_wallet.details')" />
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('wallet.mini_wallet.details')"
+  />
   <div class="details">
-    <TypographyText :size="6" :text="$t('wallet.mini_wallet.to') + '0x0000000...'" />
-    <TypographyText :size="6" :text="$t('wallet.mini_wallet.from') + '0x0000000...'" />
-    <TypographyText :size="6" :text="$t('wallet.mini_wallet.amount') + '0.00'" />
-    <TypographyText :size="6" :text="$t('wallet.mini_wallet.currency') + 'USDC'" />
-    <br>
-    <TypographyText :size="6" :text="$t('wallet.mini_wallet.txid') + 'AU28CC012ECX0Z'" />
+    <TypographyText
+      :size="6"
+      :text="$t('wallet.mini_wallet.to') + '0x0000000...'"
+    />
+    <TypographyText
+      :size="6"
+      :text="$t('wallet.mini_wallet.from') + '0x0000000...'"
+    />
+    <TypographyText
+      :size="6"
+      :text="$t('wallet.mini_wallet.amount') + '0.00'"
+    />
+    <TypographyText
+      :size="6"
+      :text="$t('wallet.mini_wallet.currency') + 'USDC'"
+    />
+    <br />
+    <TypographyText
+      :size="6"
+      :text="$t('wallet.mini_wallet.txid') + 'AU28CC012ECX0Z'"
+    />
   </div>
 </div>

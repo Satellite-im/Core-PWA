@@ -1,16 +1,26 @@
-<div id="friends-list" v-scroll-lock="true" class="hidden-scroll">
-  <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+<div
+  id="friends-list"
+  :v-scroll-lock="$device.isDesktop ? true : false"
+  :class="$device.isDesktop ? 'hidden-scroll' : '' "
+>
+  <FriendsMobileList v-if="$device.isMobile" />
+  <UiScroll v-else verticalScroll enableWrap scrollbarVisibility="scroll">
     <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
     <div class="columns">
       <div class="column is-half-desktop">
         <!-- Friends Add -->
         <FriendsAdd />
         <!-- Friend Requests -->
-        <div v-if="friends.incomingRequests.length" class="padded_divider">
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.requests')" />
-        </div>
-        <FriendsFriend
+        <template v-if="friends.incomingRequests.length">
+          <div class="padded_divider">
+            <TypographyHorizontalRuleText
+              plaintext
+              :value="$t('friends.requests')"
+            />
+          </div>
+          <FriendsFriend
             v-for="friend in friends.incomingRequests"
+            v-if="friend.userInfo"
             :friend="{
               name: friend.userInfo.name,
               address: friend.from,
@@ -21,16 +31,46 @@
             :key="friend.from"
             request
           />
+        </template>
+        <!-- Outgoing Requests -->
+        <template v-if="friends.outgoingRequests.length">
+          <div class="padded_divider">
+            <TypographyHorizontalRuleText
+              plaintext
+              :value="$t('friends.outgoing')"
+            />
+          </div>
+          <FriendsFriend
+            v-for="friend in alphaSortedOutgoing"
+            v-if="friend.userInfo"
+            :friend="{
+              name: friend.userInfo.name,
+              address: friend.to,
+              state: 'offline',
+              status: friend.userInfo.status,
+              request: friend
+            }"
+            :key="friend.to"
+            outgoing
+          />
+        </template>
       </div>
       <div class="column is-half-desktop">
         <!-- Friends List -->
-        <div v-if="Object.entries(alphaSortedFriends).length && $device.isMobile" class="padded_divider">
+        <div
+          v-if="Object.entries(alphaSortedFriends).length && $device.isMobile"
+          class="padded_divider"
+        >
           <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
         </div>
         <div v-if="dataState.friends !== DataStateType.Loading">
           <div v-for="entry in Object.entries(alphaSortedFriends)">
             <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
-            <FriendsFriend v-for="friend in entry[1]" :friend="friend" :key="friend.address" />
+            <FriendsFriend
+              v-for="friend in entry[1]"
+              :friend="friend"
+              :key="friend.address"
+            />
           </div>
           <div
             class="loading-container"
@@ -42,11 +82,18 @@
         <div v-else>
           <UiLoadersFriend :count="5" />
         </div>
-        <div v-if="Object.entries($mock.blocked).length" class="padded_divider">
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.blocked')" />
+        <div
+          v-if="Object.entries($mock.blocked).length && featureReadyToShow"
+          class="padded_divider"
+        >
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.blocked_friends')"
+          />
         </div>
         <FriendsFriend
           v-for="friend in $mock.blocked"
+          v-if="featureReadyToShow"
           :friend="friend"
           :key="friend.address"
           blocked

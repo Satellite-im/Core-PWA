@@ -1,12 +1,23 @@
-<div class="user" @contextmenu="contextMenu" v-on:click="navigateToUser">
-  <UiUserState :user="user" :isTyping="isTyping" />
+<div
+  class="user"
+  data-cy="sidebar-user"
+  v-bind:class="{'is-loading' : isLoading , 'is-selected' : isSelected}"
+  @contextmenu="contextMenu"
+  v-on:click="navigateToUser"
+>
+  <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
-    <TypographyTitle :size="6" :text="user.name" />
-    <TypographySubtitle v-if="user.last_message && user.last_message.length > 0" :size="6" :text="user.last_message" />
-    <TypographySubtitle v-else :size="6" :text="user.status" />
+    <TypographyTitle :size="6" data-cy="sidebar-user-name" :text="user.name" />
+    <TypographySubtitle :size="6" :text="lastMessage" />
   </div>
   <div class="user-chat-details">
-    <TypographyText :size="6" text="12:03" />
-    <TypographyTag :text="user.unreads.toString()" v-if="user.unreads > 0" />
+    <TypographyText :size="6" :text="timestamp" v-if="existConversation" />
+    <TypographyTag
+      :text="getFormattedUnreads(user.unreads)"
+      v-if="user.unreads > 0"
+    />
+  </div>
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
   </div>
 </div>

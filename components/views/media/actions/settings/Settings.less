@@ -65,3 +65,11 @@
   cursor: pointer;
   z-index: @base-z-index;
 }
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #media-settings {
+    &:before {
+      left: @normal-spacing * 3;
+    }
+  }
+}

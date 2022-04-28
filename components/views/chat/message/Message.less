@@ -1,3 +1,13 @@
+@keyframes emoji-appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .is-message {
   color: @text;
   .pinned-message {
@@ -25,7 +35,7 @@
   }
   .inline-meta {
     margin-bottom: @light-spacing;
-    display: inline-flex;
+    display: flex;
     .is-text {
       opacity: 0.8;
       margin-top: 0.3rem;
@@ -41,6 +51,8 @@
     }
   }
   .markdown {
+    white-space: break-spaces;
+    word-wrap: break-word;
     display: inline;
     align-items: center;
     strong {
@@ -56,9 +68,11 @@
     position: relative;
     word-break: break-word;
   }
-
-  .message-hover {
+  &:hover {
     &:extend(.background-semitransparent-light);
+    .message-container > .message-actions {
+      display: flex;
+    }
   }
   .glyph {
     width: 192px;
@@ -66,11 +80,12 @@
   }
   .emoji {
     font-size: 15pt;
+    font-style: initial;
   }
   .bigmoji {
     .emoji {
       font-size: 36pt;
-      animation-name: bounce;
+      animation-name: emoji-appear;
       animation-duration: 500ms;
     }
   }
@@ -79,6 +94,36 @@
     &.editing {
       vertical-align: bottom;
       margin-top: 0;
+    }
+  }
+
+  .spoiler-container {
+    cursor: pointer;
+    background-color: @gray;
+    border-radius: @corner-rounding-smaller;
+    .spoiler {
+      opacity: 0;
+    }
+
+    .spoiler-open {
+      cursor: text;
+      background-color: @darker-transparent;
+      opacity: 1;
+    }
+  }
+}
+
+// non-Retina-specific stuff here
+@media not screen and (-webkit-min-device-pixel-ratio: 2),
+  not screen and (min--moz-device-pixel-ratio: 2),
+  not screen and (-o-min-device-pixel-ratio: 2/1),
+  not screen and (min-device-pixel-ratio: 2),
+  not screen and (min-resolution: 192dpi),
+  not screen and (min-resolution: 2dppx) {
+  .is-message {
+    // Chrome bug for emoji spacing on non-retina screens
+    .emoji {
+      letter-spacing: 4px;
     }
   }
 }

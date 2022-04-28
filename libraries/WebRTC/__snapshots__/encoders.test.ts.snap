@@ -1,0 +1,561 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check all constants KeyboardStates to return correctly 1`] = `
+UnionType {
+  "_tag": "UnionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "(\\"TYPING\\" | \\"NOT_TYPING\\")",
+  "types": Array [
+    LiteralType {
+      "_tag": "LiteralType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "\\"TYPING\\"",
+      "validate": [Function],
+      "value": "TYPING",
+    },
+    LiteralType {
+      "_tag": "LiteralType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "\\"NOT_TYPING\\"",
+      "validate": [Function],
+      "value": "NOT_TYPING",
+    },
+  ],
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireBaseMessage to return correctly 1`] = `
+InterfaceType {
+  "_tag": "InterfaceType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "{ type: string, payload: unknown, sentAt: number }",
+  "props": Object {
+    "payload": UnknownType {
+      "_tag": "UnknownType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "unknown",
+      "validate": [Function],
+    },
+    "sentAt": NumberType {
+      "_tag": "NumberType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "number",
+      "validate": [Function],
+    },
+    "type": StringType {
+      "_tag": "StringType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "string",
+      "validate": [Function],
+    },
+  },
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireDataMessage to return correctly 1`] = `
+IntersectionType {
+  "_tag": "IntersectionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"DATA\\" })",
+  "types": Array [
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: string, payload: unknown, sentAt: number }",
+      "props": Object {
+        "payload": UnknownType {
+          "_tag": "UnknownType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "unknown",
+          "validate": [Function],
+        },
+        "sentAt": NumberType {
+          "_tag": "NumberType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "number",
+          "validate": [Function],
+        },
+        "type": StringType {
+          "_tag": "StringType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "string",
+          "validate": [Function],
+        },
+      },
+      "validate": [Function],
+    },
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: \\"DATA\\" }",
+      "props": Object {
+        "type": LiteralType {
+          "_tag": "LiteralType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "\\"DATA\\"",
+          "validate": [Function],
+          "value": "DATA",
+        },
+      },
+      "validate": [Function],
+    },
+  ],
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireIdentificationMessage to return correctly 1`] = `
+IntersectionType {
+  "_tag": "IntersectionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"IDENTIFICATION\\", payload: { peerId: string } })",
+  "types": Array [
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: string, payload: unknown, sentAt: number }",
+      "props": Object {
+        "payload": UnknownType {
+          "_tag": "UnknownType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "unknown",
+          "validate": [Function],
+        },
+        "sentAt": NumberType {
+          "_tag": "NumberType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "number",
+          "validate": [Function],
+        },
+        "type": StringType {
+          "_tag": "StringType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "string",
+          "validate": [Function],
+        },
+      },
+      "validate": [Function],
+    },
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: \\"IDENTIFICATION\\", payload: { peerId: string } }",
+      "props": Object {
+        "payload": InterfaceType {
+          "_tag": "InterfaceType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "{ peerId: string }",
+          "props": Object {
+            "peerId": StringType {
+              "_tag": "StringType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "string",
+              "validate": [Function],
+            },
+          },
+          "validate": [Function],
+        },
+        "type": LiteralType {
+          "_tag": "LiteralType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "\\"IDENTIFICATION\\"",
+          "validate": [Function],
+          "value": "IDENTIFICATION",
+        },
+      },
+      "validate": [Function],
+    },
+  ],
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireKeyboardState to return correctly 1`] = `
+IntersectionType {
+  "_tag": "IntersectionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"TYPING_STATE\\", payload: { state: (\\"TYPING\\" | \\"NOT_TYPING\\") } })",
+  "types": Array [
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: string, payload: unknown, sentAt: number }",
+      "props": Object {
+        "payload": UnknownType {
+          "_tag": "UnknownType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "unknown",
+          "validate": [Function],
+        },
+        "sentAt": NumberType {
+          "_tag": "NumberType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "number",
+          "validate": [Function],
+        },
+        "type": StringType {
+          "_tag": "StringType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "string",
+          "validate": [Function],
+        },
+      },
+      "validate": [Function],
+    },
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: \\"TYPING_STATE\\", payload: { state: (\\"TYPING\\" | \\"NOT_TYPING\\") } }",
+      "props": Object {
+        "payload": InterfaceType {
+          "_tag": "InterfaceType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "{ state: (\\"TYPING\\" | \\"NOT_TYPING\\") }",
+          "props": Object {
+            "state": UnionType {
+              "_tag": "UnionType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "(\\"TYPING\\" | \\"NOT_TYPING\\")",
+              "types": Array [
+                LiteralType {
+                  "_tag": "LiteralType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "\\"TYPING\\"",
+                  "validate": [Function],
+                  "value": "TYPING",
+                },
+                LiteralType {
+                  "_tag": "LiteralType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "\\"NOT_TYPING\\"",
+                  "validate": [Function],
+                  "value": "NOT_TYPING",
+                },
+              ],
+              "validate": [Function],
+            },
+          },
+          "validate": [Function],
+        },
+        "type": LiteralType {
+          "_tag": "LiteralType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "\\"TYPING_STATE\\"",
+          "validate": [Function],
+          "value": "TYPING_STATE",
+        },
+      },
+      "validate": [Function],
+    },
+  ],
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireRefuseConnectionMessage to return correctly 1`] = `
+IntersectionType {
+  "_tag": "IntersectionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"REFUSE\\", payload: { peerId: string } })",
+  "types": Array [
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: string, payload: unknown, sentAt: number }",
+      "props": Object {
+        "payload": UnknownType {
+          "_tag": "UnknownType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "unknown",
+          "validate": [Function],
+        },
+        "sentAt": NumberType {
+          "_tag": "NumberType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "number",
+          "validate": [Function],
+        },
+        "type": StringType {
+          "_tag": "StringType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "string",
+          "validate": [Function],
+        },
+      },
+      "validate": [Function],
+    },
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: \\"REFUSE\\", payload: { peerId: string } }",
+      "props": Object {
+        "payload": InterfaceType {
+          "_tag": "InterfaceType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "{ peerId: string }",
+          "props": Object {
+            "peerId": StringType {
+              "_tag": "StringType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "string",
+              "validate": [Function],
+            },
+          },
+          "validate": [Function],
+        },
+        "type": LiteralType {
+          "_tag": "LiteralType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "\\"REFUSE\\"",
+          "validate": [Function],
+          "value": "REFUSE",
+        },
+      },
+      "validate": [Function],
+    },
+  ],
+  "validate": [Function],
+}
+`;
+
+exports[`check all constants wireSignalMessage to return correctly 1`] = `
+IntersectionType {
+  "_tag": "IntersectionType",
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } })",
+  "types": Array [
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: string, payload: unknown, sentAt: number }",
+      "props": Object {
+        "payload": UnknownType {
+          "_tag": "UnknownType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "unknown",
+          "validate": [Function],
+        },
+        "sentAt": NumberType {
+          "_tag": "NumberType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "number",
+          "validate": [Function],
+        },
+        "type": StringType {
+          "_tag": "StringType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "string",
+          "validate": [Function],
+        },
+      },
+      "validate": [Function],
+    },
+    InterfaceType {
+      "_tag": "InterfaceType",
+      "decode": [Function],
+      "encode": [Function],
+      "is": [Function],
+      "name": "{ type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } }",
+      "props": Object {
+        "payload": InterfaceType {
+          "_tag": "InterfaceType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "{ peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } }",
+          "props": Object {
+            "data": InterfaceType {
+              "_tag": "InterfaceType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "{ type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown }",
+              "props": Object {
+                "candidate": UnknownType {
+                  "_tag": "UnknownType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "unknown",
+                  "validate": [Function],
+                },
+                "renegotiate": BooleanType {
+                  "_tag": "BooleanType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "boolean",
+                  "validate": [Function],
+                },
+                "transceiverRequest": InterfaceType {
+                  "_tag": "InterfaceType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "{ kind: string, init: { sdp: string } }",
+                  "props": Object {
+                    "init": InterfaceType {
+                      "_tag": "InterfaceType",
+                      "decode": [Function],
+                      "encode": [Function],
+                      "is": [Function],
+                      "name": "{ sdp: string }",
+                      "props": Object {
+                        "sdp": StringType {
+                          "_tag": "StringType",
+                          "decode": [Function],
+                          "encode": [Function],
+                          "is": [Function],
+                          "name": "string",
+                          "validate": [Function],
+                        },
+                      },
+                      "validate": [Function],
+                    },
+                    "kind": StringType {
+                      "_tag": "StringType",
+                      "decode": [Function],
+                      "encode": [Function],
+                      "is": [Function],
+                      "name": "string",
+                      "validate": [Function],
+                    },
+                  },
+                  "validate": [Function],
+                },
+                "type": StringType {
+                  "_tag": "StringType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "string",
+                  "validate": [Function],
+                },
+              },
+              "validate": [Function],
+            },
+            "peerId": StringType {
+              "_tag": "StringType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "string",
+              "validate": [Function],
+            },
+          },
+          "validate": [Function],
+        },
+        "type": LiteralType {
+          "_tag": "LiteralType",
+          "decode": [Function],
+          "encode": [Function],
+          "is": [Function],
+          "name": "\\"SIGNAL\\"",
+          "validate": [Function],
+          "value": "SIGNAL",
+        },
+      },
+      "validate": [Function],
+    },
+  ],
+  "validate": [Function],
+}
+`;

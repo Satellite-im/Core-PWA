@@ -13,6 +13,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 
 export default Vue.extend({
   components: {
@@ -22,8 +23,19 @@ export default Vue.extend({
     VideoIcon,
     VideoOffIcon,
   },
+  data() {
+    return {
+      isLoading: false,
+    }
+  },
   computed: {
-    ...mapState(['audio', 'video']),
+    ...mapState(['audio', 'video', 'webrtc']),
+    audioMuted(): boolean {
+      return this.webrtc.localTracks.audio.muted
+    },
+    videoMuted(): boolean {
+      return this.webrtc.localTracks.video.muted
+    },
   },
   methods: {
     /**
@@ -31,12 +43,24 @@ export default Vue.extend({
      * @description
      * @example
      */
-    toggleMute() {
-      const muted = this.audio.muted
-      if (!muted) this.$Sounds.playSound(Sounds.MUTE)
-      else this.$Sounds.playSound(Sounds.UNMUTE)
+    async toggleMute() {
+      this.isLoading = true
+      const muted = this.audioMuted
 
-      this.$store.commit('audio/mute')
+      const { activeCall } = this.webrtc
+
+      const call = this.$WebRTC.getPeer(activeCall)
+
+      if (call) {
+        if (muted) {
+          await call.unmute(WebRTCEnum.AUDIO)
+          this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
+        } else {
+          await call.mute(WebRTCEnum.AUDIO)
+          this.$store.dispatch('sounds/playSound', Sounds.MUTE)
+        }
+      }
+      this.isLoading = false
     },
     /**
      * @method toggleDeafen DocsTODO
@@ -44,23 +68,31 @@ export default Vue.extend({
      * @example
      */
     toggleDeafen() {
-      const deafened = this.audio.deafened
-      if (!deafened) this.$Sounds.playSound(Sounds.DEAFEN)
-      else this.$Sounds.playSound(Sounds.UNDEAFEN)
-
-      this.$store.commit('audio/deafen')
+      this.$store.dispatch('audio/toggleDeafen')
     },
     /**
      * @method toggleVideo DocsTODO
      * @description
      * @example
      */
-    toggleVideo() {
-      const videoDisabled = this.video.disabled
-      if (!videoDisabled) this.$Sounds.playSound(Sounds.DEAFEN)
-      else this.$Sounds.playSound(Sounds.UNDEAFEN)
+    async toggleVideo() {
+      this.isLoading = true
+      const muted = this.videoMuted
 
-      this.$store.commit('video/toggleCamera')
+      const { activeCall } = this.webrtc
+
+      const call = this.$WebRTC.getPeer(activeCall)
+
+      if (call) {
+        if (muted) {
+          await call.unmute(WebRTCEnum.VIDEO)
+          this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
+        } else {
+          await call.mute(WebRTCEnum.VIDEO)
+          this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
+        }
+      }
+      this.isLoading = false
     },
   },
 })

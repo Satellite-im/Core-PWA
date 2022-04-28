@@ -5,13 +5,12 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
-
-
 import { sampleProfileInfo } from '~/mock/profile'
+import { AccountsState } from '~/store/accounts/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    accounts: any
+    accounts: AccountsState
   }
 }
 export default Vue.extend({
@@ -24,31 +23,27 @@ export default Vue.extend({
     return {
       profileInfo: sampleProfileInfo,
       croppedImage: '',
-      showPhrase: false,
       showCropper: false,
+      featureReadyToShow: false,
     }
   },
   computed: {
     ...mapState(['accounts', 'ui']),
-    splitPhrase(): Array<String> {
-      return this.accounts.phrase.split(' ')
-    },
     isSmallScreen(): Boolean {
       // @ts-ignore
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
         return true
       return false
     },
+    src(): string {
+      if (this.croppedImage) {
+        return this.croppedImage
+      }
+      const hash = this.accounts.details.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   methods: {
-    /**
-     * @method togglePhrase DocsTODO
-     * @description
-     * @example
-     */
-    togglePhrase() {
-      this.$data.showPhrase = !this.$data.showPhrase
-    },
     /**
      * @method toggleCropper DocsTODO
      * @description
@@ -76,6 +71,8 @@ export default Vue.extend({
       const fileInput = this.$refs.file as HTMLInputElement
       this.croppedImage = image
       fileInput.value = ''
+
+      this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO

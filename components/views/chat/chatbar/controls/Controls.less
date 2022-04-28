@@ -1,7 +1,6 @@
 .chatbar-controls {
   display: inline-flex;
   align-items: center;
-  margin-top: (@light-spacing / 4);
 
   .control-tooltip-wrap {
     font-size: @larger-icon-size;
@@ -9,9 +8,13 @@
     display: inline-flex;
     align-items: center;
     height: @full;
+    background-color: transparent;
+    color: @white;
+    &:before {
+      z-index: @base-z-index + 200 !important;
+    }
+    &[disabled] {
+      cursor: not-allowed !important;
+    }
   }
-}
-
-.inactive {
-  cursor: not-allowed !important;
 }

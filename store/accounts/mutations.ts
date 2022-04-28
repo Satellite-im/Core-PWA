@@ -8,6 +8,9 @@ const mutations = {
   setStorePin(state: AccountsState, storePin: boolean) {
     state.storePin = storePin
   },
+  setRegistry(state: AccountsState, registry: boolean) {
+    state.registry = registry
+  },
   setPinHash(state: AccountsState, pinHash: string) {
     state.pinHash = pinHash
   },
@@ -26,14 +29,21 @@ const mutations = {
   },
   setActiveAccount(state: AccountsState, activeAccountPubkey: string) {
     state.active = activeAccountPubkey
+    state.initialized = true
+  },
+  setProfilePicture(state: AccountsState, image: string) {
+    if (state.details) {
+      state.details.profilePicture = image
+    }
   },
   setUserDetails(state: AccountsState, details: UserRegistrationData) {
     state.details = {
       name: details.username,
       status: details.status,
-      profilePicture: details.imageURI,
+      profilePicture: details.photoHash,
       address: state.active,
       state: 'online',
+      lastUpdate: Date.now(),
     }
   },
   updateMailboxId(state: AccountsState, mailboxId: string) {
@@ -54,13 +64,13 @@ const mutations = {
   },
   setRegistrationStatus(
     state: AccountsState,
-    registrationStates: RegistrationStatus
+    registrationStates: RegistrationStatus,
   ) {
     state.registrationStatus = registrationStates
   },
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
-  }
+  },
 }
 
 export default mutations

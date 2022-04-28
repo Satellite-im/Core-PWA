@@ -1,19 +1,21 @@
-<div>
-  <div
-    class="image-mask"
-    v-if="showfull">
-    <div class="image-container">
-      <img
-        :class="`is-image-in-mask`"
-        :src="image.url"
-        v-click-outside="() => $data.showfull = !$data.showfull" />
-      <a class="link" :href="image.url" target="_blank">
-        {{ $t('files.view_original') }}
-      </a>
-    </div>
-  </div>
+<div class="image">
+  <figure class="image-placeholder" v-if="usePlaceholder">
+    <img
+      class="image-placeholder-img"
+      :src="placeholderSrc"
+      :alt="placeholderText"
+    />
+    <figcaption class="image-placeholder-caption">
+      {{placeholderText}}
+    </figcaption>
+  </figure>
   <img
-    :class="`is-image ${full ? 'is-full-image' : 'is-normal-image'}`"
+    v-else
+    class="is-image"
+    data-cy="chat-image"
+    :class="full ? 'is-full-image' : 'is-normal-image'"
     :src="image.url"
-    v-on:click="() => $data.showfull = !$data.showfull" />
+    @click="clickHandler"
+    @error="onImageError"
+  />
 </div>

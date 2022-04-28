@@ -38,6 +38,14 @@ export default Vue.extend({
       default: false,
     },
     /**
+     * Used for set disabled status
+     */
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    /**
      * Abstraction of native "type"
      */
     inputKind: {
@@ -73,10 +81,23 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+    /**
+     * Autofocus when page loads
+     */
+    autofocus: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
       internalText: this.text ? this.text : '',
+    }
+  },
+  mounted() {
+    if (this.autofocus) {
+      this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
     }
   },
   methods: {
@@ -93,6 +114,7 @@ export default Vue.extend({
      */
     clearSearch() {
       this.internalText = ''
+      this.update()
     },
   },
 })

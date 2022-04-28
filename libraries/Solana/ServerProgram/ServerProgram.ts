@@ -1,5 +1,4 @@
 import {
-  // eslint-disable-next-line import/named
   ConfirmOptions,
   Connection,
   Keypair,
@@ -11,6 +10,12 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js'
 import base58 from 'micro-base58'
+import {
+  dwellerAccountLayout,
+  encodeInstructionData,
+} from './ServerProgram.layout'
+import { CreateDerivedAccountParams } from './ServerProgram.types'
+import { RawUser } from '~/types/ui/user'
 import { Config } from '~/config'
 import {
   Seeds,
@@ -18,12 +23,6 @@ import {
   stringToBuffer,
 } from '~/libraries/Solana/Solana'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
-import { RawUser } from '~/types/ui/user'
-import {
-  dwellerAccountLayout,
-  encodeInstructionData,
-} from './ServerProgram.layout'
-import { CreateDerivedAccountParams } from './ServerProgram.types'
 
 const SERVER_PROGRAM_ID = new PublicKey(Config.solana.serverProgramId)
 

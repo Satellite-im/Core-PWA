@@ -2,25 +2,71 @@
   <div class="columns is-desktop">
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.storage.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.storage.subtitle')" />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.storage.subtitle')"
+      />
+    </div>
+  </div>
+
+  <div class="columns is-desktop" v-if="featureReadyToShow">
+    <div class="column">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.storage.export.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.storage.export.subtitle')"
+      />
+      <br />
+      <InteractablesButton
+        type="primary"
+        size="small"
+        :text="$t('pages.settings.storage.export.button')"
+      />
     </div>
   </div>
 
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.storage.export.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.storage.export.subtitle')" />
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.storage.clear.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.storage.clear.subtitle')"
+      />
       <br />
-      <InteractablesButton type="primary" size="small" :text="$t('pages.settings.storage.export.button')" />
-    </div>
-  </div>
-
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.storage.clear.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.storage.clear.subtitle')" />
-      <br />
-      <InteractablesButton type="danger" size="small" :text="$t('pages.settings.storage.clear.button')" />
+      <InteractablesButton
+        v-if="!deleteVerify"
+        type="danger"
+        size="small"
+        :loading="isLoading"
+        :text="$t('pages.settings.storage.clear.button')"
+        :action="() => deleteVerify = true"
+      />
+      <span v-if="deleteVerify">
+        <TypographyText
+          :text="$t('pages.settings.storage.clear.subtitle_warning1')"
+          class="detail color-danger no-bottom-pad"
+          :size="6"
+        />
+        <TypographyText
+          :text="$t('pages.settings.storage.clear.subtitle_warning2')"
+          class="detail color-danger"
+          :size="6"
+        />
+        <br />
+        <InteractablesButton
+          type="danger"
+          size="small"
+          :loading="isLoading"
+          :text="$t('pages.settings.storage.clear.confirm_button')"
+          :action="clearLocalStorage"
+        />
+      </span>
     </div>
   </div>
 </div>

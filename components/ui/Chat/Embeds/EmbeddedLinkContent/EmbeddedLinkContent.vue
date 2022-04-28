@@ -46,12 +46,12 @@ export default Vue.extend({
             link.match(this.$Config.regex.youtubeShort)
           ) {
             let youtubeOutSource: string = ''
-            if (link.includes('youtube')) {
+            if (link.includes('youtube.com/')) {
               youtubeOutSource = `https://www.youtube.com/embed/${
                 link.split('v=')[1].split('&')[0]
               }?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1`
             }
-            if (link.includes('youtu.be')) {
+            if (link.includes('youtu.be/')) {
               youtubeOutSource = `https://www.youtube.com/embed/${
                 link.split('.be/')[1].split('/')[0]
               }?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1`
@@ -140,9 +140,8 @@ export default Vue.extend({
               ),
               aspectRatioClass: 'iframe-container-16-9',
             }
-          } else {
-            return {}
           }
+          return {}
         })
       }
     },

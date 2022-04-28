@@ -1,9 +1,11 @@
 <template src="./Enhancers.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
+import { Friend } from '~/types/ui/friends'
+import { EmojiUsage } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -11,6 +13,7 @@ declare module 'vue/types/vue' {
     toggleEnhancers: () => void
     openEmoji: () => void
     clickEvent: () => void
+    resetSearch: () => void
   }
 }
 
@@ -21,42 +24,54 @@ export default Vue.extend({
     ImageIcon,
     EmojiPicker,
   },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend>,
+      default: null,
+    },
+  },
   data() {
     return {
       search: '',
       clickEvent: () => {},
-    }
-  },
-  props: {
-    sidebar: {
-      type: Boolean,
-      default: false
+      featureReadyToShow: false,
     }
   },
   computed: {
     ...mapState(['ui']),
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
-    mostUsedEmojis() {
+    mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 10)
     },
     route: {
-      get() {
+      get(): string {
         return this.ui.enhancers.route
       },
-      set(data: string) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: true,
-          route: data,
-        })
+      set(newRoute: string) {
+        const prevRoute = this.ui.enhancers.route
+        if (newRoute !== prevRoute) {
+          this.$store.commit('ui/toggleEnhancers', {
+            show: true,
+            route: newRoute,
+          })
+        } else if (newRoute === 'emotes') {
+          this.openEmoji()
+        }
+        this.resetSearch()
       },
     },
   },
   watch: {
     route() {
       this.openEmoji()
+      this.resetSearch()
     },
     'ui.enhancers.show'(value) {
-      if (value) this.openEmoji()
+      if (value) {
+        this.openEmoji()
+        return
+      }
+      this.resetSearch()
     },
   },
   mounted() {
@@ -73,15 +88,12 @@ export default Vue.extend({
       if (this.route !== 'emotes') return
       this.$nextTick(() => {
         setTimeout(() => {
+          /* For avoid double toggle of emoji Invoker */
           // @ts-ignore
-          this.$refs.emojiInvoker?.click()
+          if (!this.$refs.emojiPicker) this.$refs.emojiInvoker?.click()
         }, 0)
       })
     },
-    /**
-     * Adds emoji to current text input
-     * (emoji: any) Comes from <picker/> select event
-     */
     /**
      * @method addEmoji
      * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
@@ -90,17 +102,37 @@ export default Vue.extend({
      * @example v-on:select="addEmoji"
      */
     addEmoji(emoji: any, emojiName: string) {
-      if (this.ui.settingReaction.status) {
-        this.$store.dispatch('textile/sendReactionMessage', {
-          to: this.ui.settingReaction.to,
-          emoji,
-          reactTo: this.ui.settingReaction.messageID,
-        })
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+      ) {
+        if (this.ui.settingReaction.status) {
+          this.$store.dispatch('textile/sendGroupReactionMessage', {
+            to: this.ui.settingReaction.to,
+            emoji,
+            reactTo: this.ui.settingReaction.messageID,
+          })
+        } else {
+          this.$store.dispatch('ui/setChatbarContent', {
+            content: this.ui.chatbarContent + emoji,
+            userId: this.$props.recipient?.address,
+          })
+          this.$store.dispatch('ui/setChatbarFocus')
+        }
+        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
         this.toggleEnhancers()
       } else {
-        this.$store.commit('ui/chatbarContent', this.ui.chatbarContent + emoji)
+        if (this.ui.settingReaction.status) {
+          this.$store.dispatch('textile/sendReactionMessage', {
+            to: this.ui.settingReaction.to,
+            emoji,
+            reactTo: this.ui.settingReaction.messageID,
+          })
+        } else {
+          this.$emit('click', emoji)
+        }
+        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
+        this.toggleEnhancers()
       }
-      this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
     },
     /**
      * @method setRoute DocsTODO
@@ -111,7 +143,7 @@ export default Vue.extend({
     setRoute(route: string) {
       this.$store.commit('ui/toggleEnhancers', {
         show: true,
-        floating: this.$device.isMobile ? true : false,
+        floating: !!this.$device.isMobile,
         route,
       })
     },
@@ -135,7 +167,7 @@ export default Vue.extend({
       ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
-          floating: this.$device.isMobile ? true : false,
+          floating: this.$device.isMobile,
         })
       }
       if (this.ui.settingReaction.status) {
@@ -164,6 +196,7 @@ export default Vue.extend({
      * @method convertRem
      * @description This converts an rem value into a pixel value
      * @example convertRem('24rem') => if the document font size is 16px, this returns the value of 24*16, or 384.
+     * @todo TODO: Move this function into an utility folder
      */
     convertRem(value: string): number {
       const fontSize = parseFloat(
@@ -171,6 +204,9 @@ export default Vue.extend({
       )
       const remNumber = Number(value.replace('rem', ''))
       return remNumber * fontSize
+    },
+    resetSearch(): void {
+      this.search = ''
     },
   },
 })

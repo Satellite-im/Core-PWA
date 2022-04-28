@@ -2,14 +2,27 @@
   <div class="columns is-desktop">
     <div class="column">
       <TypographyTitle :size="6" :text="$t('pages.settings.keybinds.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.keybinds.subtitle')" />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.keybinds.subtitle')"
+      />
     </div>
   </div>
 
   <div class="columns is-desktop" v-if="editingKeybind.status">
     <div class="column">
-      <InteractablesInput readonly type="primary" :placeholder="editingKeybind.newString" />
-      <TypographySubtitle :size="6" :text="editingKeybind.errorMessage" v-if="editingKeybind.error"/>
+      <InteractablesInput
+        readonly
+        type="primary"
+        :placeholder="editingKeybind.newString"
+      />
+      <TypographySubtitle
+        class="keybind-error color-danger"
+        type="danger"
+        :size="6"
+        :text="editingKeybind.errorMessage"
+        v-if="editingKeybind.error"
+      />
     </div>
     <div class="column">
       <InteractablesButton
@@ -34,24 +47,40 @@
   </div>
 
   <div class="columns is-desktop">
-    <div class="column" @click="editKeybind('toggleMute')" >
+    <div class="column" @click="editKeybind('toggleMute')">
       <TypographyLabel :text="$t('pages.settings.keybinds.mute')" />
-      <InteractablesInput readonly type="primary" :placeholder="settings.keybinds.toggleMute" />
+      <InteractablesInput
+        readonly
+        type="primary"
+        :placeholder="settings.keybinds.toggleMute"
+      />
     </div>
     <div class="column" @click="editKeybind('openSettings')">
       <TypographyLabel :text="$t('pages.settings.keybinds.settings')" />
-      <InteractablesInput readonly type="primary" :placeholder="settings.keybinds.openSettings" />
+      <InteractablesInput
+        readonly
+        type="primary"
+        :placeholder="settings.keybinds.openSettings"
+      />
     </div>
   </div>
 
   <div class="columns is-desktop">
     <div class="column" @click="editKeybind('toggleDeafen')">
       <TypographyLabel :text="$t('pages.settings.keybinds.deafen')" />
-      <InteractablesInput readonly type="primary" :placeholder="settings.keybinds.toggleDeafen" />
+      <InteractablesInput
+        readonly
+        type="primary"
+        :placeholder="settings.keybinds.toggleDeafen"
+      />
     </div>
     <div class="column" @click="editKeybind('callActiveChat')">
       <TypographyLabel :text="$t('pages.settings.keybinds.call')" />
-      <InteractablesInput readonly type="primary" :placeholder="settings.keybinds.callActiveChat" />
+      <InteractablesInput
+        readonly
+        type="primary"
+        :placeholder="settings.keybinds.callActiveChat"
+      />
     </div>
   </div>
 

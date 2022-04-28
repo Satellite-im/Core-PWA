@@ -88,7 +88,7 @@ const getRTC = async () => {
         responseObject.permissions.webcam =
           DetectRTC.isWebsiteHasWebcamPermissions
         responseObject.devices.videoIn = formatDevices(
-          DetectRTC.videoInputDevices
+          DetectRTC.videoInputDevices,
         )
       }
       if (DetectRTC.isWebsiteHasMicrophonePermissions) {
@@ -132,7 +132,7 @@ export const UserPermissions = {
      * @example
      */
     async requestUserPermissions(
-      permission: PermissionRequestOptions
+      permission: PermissionRequestOptions,
     ): Promise<any> {
       return await navigator.mediaDevices.getUserMedia(permission)
     },
@@ -140,3 +140,7 @@ export const UserPermissions = {
 }
 
 export default UserPermissions
+
+export const exportForTesting = {
+  formatDevices,
+}

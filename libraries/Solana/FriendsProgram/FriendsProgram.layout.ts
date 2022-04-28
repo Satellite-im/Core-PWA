@@ -13,7 +13,7 @@ const ADDRESS_TYPE_INPUT = BufferLayout.union(BufferLayout.u8('addressType'))
 ADDRESS_TYPE_INPUT.addVariant(
   0,
   BufferLayout.struct([BufferLayout.seq(BufferLayout.u8(), 32, 'friendKey')]),
-  'friend'
+  'friend',
 )
 
 const LAYOUT = BufferLayout.union(BufferLayout.u8('instruction'))
@@ -23,7 +23,7 @@ LAYOUT.addVariant(
   BufferLayout.struct([
     BufferLayout.seq(BufferLayout.seq(BufferLayout.u8(), 32), 4, 'tex'),
   ]),
-  'makeRequest'
+  'makeRequest',
 )
 
 LAYOUT.addVariant(
@@ -31,7 +31,7 @@ LAYOUT.addVariant(
   BufferLayout.struct([
     BufferLayout.seq(BufferLayout.seq(BufferLayout.u8(), 32), 4, 'tex'),
   ]),
-  'acceptRequest'
+  'acceptRequest',
 )
 
 LAYOUT.addVariant(2, undefined, 'denyRequest')
@@ -58,7 +58,7 @@ const friendLayout = BufferLayout.struct([
 
 const instructionMaxSpan = Math.max(
   // @ts-ignore
-  ...Object.values(LAYOUT.registry).map((r) => r.span)
+  ...Object.values(LAYOUT.registry).map((r) => r.span),
 )
 
 function encodeInstructionData(instruction: FriendsInstructionType) {
@@ -87,10 +87,10 @@ function parseMailboxId(
   part1: Uint8Array,
   part2: Uint8Array,
   part3: Uint8Array,
-  part4: Uint8Array
+  part4: Uint8Array,
 ) {
   return removeLeadingZerosFromString(
-    Buffer.from([...part1, ...part2, ...part3, ...part4]).toString('utf-8')
+    Buffer.from([...part1, ...part2, ...part3, ...part4]).toString('utf-8'),
   )
 }
 
@@ -111,13 +111,13 @@ function parseFriendAccount(account: ProgramAccountInfo) {
       decoded.textileFrom1,
       decoded.textileFrom2,
       decoded.textileFrom3,
-      decoded.textileFrom4
+      decoded.textileFrom4,
     ),
     toMailboxId: parseMailboxId(
       decoded.textileTo1,
       decoded.textileTo2,
       decoded.textileTo3,
-      decoded.textileTo4
+      decoded.textileTo4,
     ),
     to: new PublicKey(decoded.to).toBase58(),
   }

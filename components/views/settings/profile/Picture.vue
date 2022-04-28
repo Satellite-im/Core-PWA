@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div
-class="profile-image" :style="`background-image: url(${image})`" />
+    <div class="profile-image" :style="`background-image: url(${image})`" />
   </div>
 </template>
 

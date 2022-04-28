@@ -1,10 +1,11 @@
+import { Conversation } from '../textile/types'
 import { FriendsState } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 
 const mutations = {
   setIncomingRequests(
     state: FriendsState,
-    incomingRequests: IncomingRequest[]
+    incomingRequests: IncomingRequest[],
   ) {
     state.incomingRequests = incomingRequests
   },
@@ -15,17 +16,17 @@ const mutations = {
     state.incomingRequests = state.incomingRequests.map((request) =>
       request.requestId !== incomingRequest.requestId
         ? request
-        : incomingRequest
+        : incomingRequest,
     )
   },
   removeIncomingRequest(state: FriendsState, requestId: string) {
     state.incomingRequests = state.incomingRequests.filter(
-      (request) => request.requestId !== requestId
+      (request) => request.requestId !== requestId,
     )
   },
   setOutgoingRequests(
     state: FriendsState,
-    outgoingRequests: OutgoingRequest[]
+    outgoingRequests: OutgoingRequest[],
   ) {
     state.outgoingRequests = outgoingRequests
   },
@@ -36,44 +37,73 @@ const mutations = {
     state.outgoingRequests = state.outgoingRequests.map((request) =>
       request.requestId !== outgoingRequest.requestId
         ? request
-        : outgoingRequest
+        : outgoingRequest,
     )
   },
   removeOutgoingRequest(state: FriendsState, requestId: string) {
     state.outgoingRequests = state.outgoingRequests.filter(
-      (request) => request.requestId !== requestId
+      (request) => request.requestId !== requestId,
     )
   },
   addFriend(state: FriendsState, friend: Friend) {
-    state.all.push(friend);
+    state.all.push(friend)
   },
   setActive(state: FriendsState, friend: Friend) {
-    const fList: Friend[] = []
-    state.all.forEach(f => {
-      f.activeChat = (f.account.accountId === friend.account.accountId) ?
-        true : false
-      fList.push(f)
-    })
-    state.all = fList
+    state.all = state.all.map((f) => ({
+      ...f,
+      activeChat: f.address === friend.address,
+    }))
   },
-  setTyping(state: FriendsState, opts: { id: string, typingState: 'TYPING' | 'NOT_TYPING' }) {
-    const fList: Friend[] = []
-    state.all.forEach(f => {
-      fList.push({
-        ...f,
-        typingState: (f.address === opts.id) ?
-          opts.typingState : f.typingState || 'NOT_TYPING'
-      })
-    })
-    state.all = fList
+  setStored(state: FriendsState, friend: Friend, isStored: boolean = true) {
+    state.all = state.all.map((f) => ({
+      ...f,
+      stored: f.address === friend.address ? isStored : f.stored,
+    }))
   },
-  updateFriend(state: FriendsState, friend: Friend) {
+  setTyping(
+    state: FriendsState,
+    opts: { id: string; typingState: 'TYPING' | 'NOT_TYPING' },
+  ) {
+    state.all = state.all.map((f) => ({
+      ...f,
+      typingState:
+        f.address === opts.id
+          ? opts.typingState
+          : f.typingState || 'NOT_TYPING',
+    }))
+  },
+  setNote(
+    state: FriendsState,
+    opts: {
+      id: string
+      note: string
+    },
+  ) {
     state.all = state.all.map((fr) =>
-      fr = fr.address === friend.address ? friend : fr
+      fr.address === opts.id
+        ? {
+            ...fr,
+            note: opts.note,
+          }
+        : fr,
     )
   },
-  removeFriend(state: FriendsState, friendPublicKey: string) {
-    state.all = state.all.filter((fr) => fr.publicKey !== friendPublicKey)
+  updateFriend(state: FriendsState, friend: Friend) {
+    state.all = state.all.map(
+      (fr) => (fr = fr.address === friend.address ? { ...fr, ...friend } : fr),
+    )
+  },
+  removeFriend(state: FriendsState, accountAddress: string) {
+    state.all = state.all.filter((fr) => fr.address !== accountAddress)
+  },
+  sortFriends(state: FriendsState, rConversations: Conversation) {
+    state.all = state.all
+      .map((user) => {
+        const conversation = rConversations[user.address]
+        user.lastUpdate = conversation?.lastUpdate || 0
+        return user
+      })
+      .sort((user1, user2) => user2.lastUpdate - user1.lastUpdate)
   },
 }
 

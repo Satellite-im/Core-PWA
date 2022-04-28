@@ -18,11 +18,8 @@
     top: @xlight-spacing;
     right: @xlight-spacing;
     background-color: transparent;
-    color: @primary-color;
+    color: var(--flair-color);
     cursor: pointer;
-    &:hover {
-      color: @primary-color-alt;
-    }
   }
 
   .file-info {
@@ -34,6 +31,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       margin-bottom: 0;
+      line-height: 1.25;
     }
 
     .subtitle {

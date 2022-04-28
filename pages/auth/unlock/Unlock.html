@@ -4,13 +4,16 @@
       <info-icon size="0.8x" />
       <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
       <TypographyText text="Create a pin to protect your account." />
-      <TypographyText text="The pin can be anything you want, just don't forget it." />
+      <TypographyText
+        text="The pin can be anything you want, just don't forget it."
+      />
     </div>
     <InteractablesInputGroup
       v-model="pin"
       size="small"
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
+      :data-cy="`pin-label`"
       :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'}`"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
@@ -25,14 +28,13 @@
       small
       :label="$t('pages.unlock.store_pin')"
     />
-    <br>
+    <br />
     <div class="realm-container">
       <InteractablesRealm />
     </div>
   </div>
   <span @click="toggleChangelogVisibility">
-    <UiVersion name version/>
+    <UiVersion name version />
   </span>
-  <UiUpdateModal v-if="ui.modals.changelog"/>
-  
+  <UiUpdateModal v-if="ui.modals.changelog" />
 </div>

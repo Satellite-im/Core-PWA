@@ -68,7 +68,7 @@ export default class FriendsProgram extends EventEmitter {
     seedKey: PublicKey,
     seedString: string,
     params: CreateFriendParams,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -81,7 +81,7 @@ export default class FriendsProgram extends EventEmitter {
     const { base, key } = await publicKeyFromSeeds(
       [seedKey.toBytes(), params.createAccount.friend.friendKey],
       seedString,
-      FRIENDS_PROGRAM_ID
+      FRIENDS_PROGRAM_ID,
     )
 
     const instruction = new TransactionInstruction({
@@ -120,7 +120,7 @@ export default class FriendsProgram extends EventEmitter {
   async createFriend(
     userFromKey: PublicKey,
     userToKey: PublicKey,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -139,7 +139,7 @@ export default class FriendsProgram extends EventEmitter {
       userFromKey,
       Seeds.Friend,
       params,
-      confirmOptionsOverride
+      confirmOptionsOverride,
     )
 
     if (!friendKey) throw new Error('Derived account error')
@@ -165,7 +165,7 @@ export default class FriendsProgram extends EventEmitter {
     friend2Key: PublicKey,
     userFromKey: PublicKey,
     userToKey: PublicKey,
-    fromPaddedBuffer: Uint8Array
+    fromPaddedBuffer: Uint8Array,
   ) {
     return new TransactionInstruction({
       keys: [
@@ -204,7 +204,7 @@ export default class FriendsProgram extends EventEmitter {
     friendKey: PublicKey,
     userFromKey: PublicKey,
     userToKey: PublicKey,
-    toPaddedBuffer: Uint8Array
+    toPaddedBuffer: Uint8Array,
   ) {
     return new TransactionInstruction({
       keys: [
@@ -239,7 +239,7 @@ export default class FriendsProgram extends EventEmitter {
   initDenyFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
-    userToKey: PublicKey
+    userToKey: PublicKey,
   ) {
     return new TransactionInstruction({
       keys: [
@@ -267,7 +267,7 @@ export default class FriendsProgram extends EventEmitter {
   initRemoveFriendRequest(
     friendKey: PublicKey,
     userFromKey: PublicKey,
-    userToKey: PublicKey
+    userToKey: PublicKey,
   ) {
     return new TransactionInstruction({
       keys: [
@@ -296,7 +296,7 @@ export default class FriendsProgram extends EventEmitter {
     friendKey: PublicKey,
     userFromKey: PublicKey,
     userToKey: PublicKey,
-    initiator: boolean
+    initiator: boolean,
   ) {
     return new TransactionInstruction({
       keys: [
@@ -334,7 +334,7 @@ export default class FriendsProgram extends EventEmitter {
     userFromAccount: Keypair,
     userToKey: PublicKey,
     fromPaddedBuffer: Uint8Array,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -350,8 +350,8 @@ export default class FriendsProgram extends EventEmitter {
         friend2Key,
         userFromAccount.publicKey,
         userToKey,
-        fromPaddedBuffer
-      )
+        fromPaddedBuffer,
+      ),
     )
 
     return sendAndConfirmTransaction(
@@ -362,7 +362,7 @@ export default class FriendsProgram extends EventEmitter {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
   }
 
@@ -385,7 +385,7 @@ export default class FriendsProgram extends EventEmitter {
     userFromKey: PublicKey,
     userToAccount: Keypair,
     toPaddedBuffer: Uint8Array,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -400,8 +400,8 @@ export default class FriendsProgram extends EventEmitter {
         friendKey,
         userFromKey,
         userToAccount.publicKey,
-        toPaddedBuffer
-      )
+        toPaddedBuffer,
+      ),
     )
 
     return sendAndConfirmTransaction(
@@ -412,7 +412,7 @@ export default class FriendsProgram extends EventEmitter {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
   }
 
@@ -431,7 +431,7 @@ export default class FriendsProgram extends EventEmitter {
     friendKey: PublicKey,
     userFromKey: PublicKey,
     userToAccount: Keypair,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -445,8 +445,8 @@ export default class FriendsProgram extends EventEmitter {
       this.initDenyFriendRequest(
         friendKey,
         userFromKey,
-        userToAccount.publicKey
-      )
+        userToAccount.publicKey,
+      ),
     )
 
     return sendAndConfirmTransaction(
@@ -457,7 +457,7 @@ export default class FriendsProgram extends EventEmitter {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
   }
 
@@ -476,7 +476,7 @@ export default class FriendsProgram extends EventEmitter {
     friendKey: PublicKey,
     userFromAccount: Keypair,
     userToKey: PublicKey,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -490,8 +490,8 @@ export default class FriendsProgram extends EventEmitter {
       this.initRemoveFriendRequest(
         friendKey,
         userFromAccount.publicKey,
-        userToKey
-      )
+        userToKey,
+      ),
     )
 
     return sendAndConfirmTransaction(
@@ -502,7 +502,7 @@ export default class FriendsProgram extends EventEmitter {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
   }
 
@@ -518,7 +518,7 @@ export default class FriendsProgram extends EventEmitter {
   removeFriend(
     friendAccount: FriendAccount,
     signer: Keypair,
-    confirmOptionsOverride?: ConfirmOptions
+    confirmOptionsOverride?: ConfirmOptions,
   ) {
     if (!this.solana) {
       throw new Error('Friends program not initialized')
@@ -539,8 +539,8 @@ export default class FriendsProgram extends EventEmitter {
         friendAccountKey,
         userFromKey,
         userToKey,
-        isInitiator
-      )
+        isInitiator,
+      ),
     )
 
     return sendAndConfirmTransaction(
@@ -551,7 +551,7 @@ export default class FriendsProgram extends EventEmitter {
         commitment: Config.solana.defaultCommitment,
         preflightCommitment: Config.solana.defaultPreflightCommitment,
         ...confirmOptionsOverride,
-      }
+      },
     )
   }
 
@@ -569,7 +569,7 @@ export default class FriendsProgram extends EventEmitter {
     const { connection } = this.solana
     const accountInfo = await connection.getAccountInfo(
       friendKey,
-      Config.solana.defaultCommitment
+      Config.solana.defaultCommitment,
     )
 
     if (accountInfo === null) {
@@ -593,7 +593,7 @@ export default class FriendsProgram extends EventEmitter {
     const { connection } = this.solana
     const accountInfo = await connection.getAccountInfo(
       friendKey,
-      Config.solana.defaultCommitment
+      Config.solana.defaultCommitment,
     )
 
     if (accountInfo === null) {
@@ -616,7 +616,7 @@ export default class FriendsProgram extends EventEmitter {
     const { key } = await publicKeyFromSeeds(
       [userFromKey.toBytes(), userToKey.toBytes()],
       Seeds.Friend,
-      FRIENDS_PROGRAM_ID
+      FRIENDS_PROGRAM_ID,
     )
 
     return key
@@ -637,17 +637,17 @@ export default class FriendsProgram extends EventEmitter {
 
     const { connection } = this.solana
 
-    const userAccount = this.solana.getUserAccount()
-    if (!userAccount) {
+    const payerAccount = this.solana.getActiveAccount()
+    if (!payerAccount) {
       throw new Error('User account not found')
     }
 
     const fromKeyAndStatus = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), status])
+      Buffer.from([...payerAccount.publicKey.toBytes(), status]),
     )
 
     const statusAndToKey = base58(
-      Buffer.from([status, ...userAccount.publicKey.toBytes()])
+      Buffer.from([status, ...payerAccount.publicKey.toBytes()]),
     )
 
     const outgoing = await connection.getProgramAccounts(FRIENDS_PROGRAM_ID, {
@@ -693,8 +693,8 @@ export default class FriendsProgram extends EventEmitter {
     }
 
     const { connection } = this.solana
-    const userAccount = this.solana.getUserAccount()
-    if (!userAccount) {
+    const payerAccount = this.solana.getActiveAccount()
+    if (!payerAccount) {
       throw new Error('User account not found')
     }
 
@@ -703,7 +703,7 @@ export default class FriendsProgram extends EventEmitter {
     // formatted that way
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const incomingRequestBytes = base58(
-      Buffer.from([FriendStatus.PENDING, ...userAccount.publicKey.toBytes()])
+      Buffer.from([FriendStatus.PENDING, ...payerAccount.publicKey.toBytes()]),
     )
 
     const incomingRequestsFilter: GetProgramAccountsFilter = {
@@ -714,7 +714,7 @@ export default class FriendsProgram extends EventEmitter {
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.NEW_REQUEST),
       Config.solana.defaultCommitment,
-      [incomingRequestsFilter]
+      [incomingRequestsFilter],
     )
 
     // Filter for new friends checks only if an outgoing request has been accepted
@@ -723,7 +723,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const newFriendFromOutgoingBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.ACCEPTED])
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.ACCEPTED]),
     )
 
     const newFriendFromOutgoingFilter: GetProgramAccountsFilter = {
@@ -734,14 +734,14 @@ export default class FriendsProgram extends EventEmitter {
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.NEW_FRIEND),
       Config.solana.defaultCommitment,
-      [newFriendFromOutgoingFilter]
+      [newFriendFromOutgoingFilter],
     )
 
     // Filter for new friends checks only if an outgoing request has been denied
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestDeniedBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.REFUSED])
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REFUSED]),
     )
 
     const friendRequestDeniedFilter: GetProgramAccountsFilter = {
@@ -752,7 +752,7 @@ export default class FriendsProgram extends EventEmitter {
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.REQUEST_DENIED),
       Config.solana.defaultCommitment,
-      [friendRequestDeniedFilter]
+      [friendRequestDeniedFilter],
     )
 
     // To listen for friend removal we need to filter from both directions
@@ -761,7 +761,7 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestRemovedBytes = base58(
-      Buffer.from([...userAccount.publicKey.toBytes(), FriendStatus.REMOVED])
+      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REMOVED]),
     )
 
     const friendRequestRemovedFilter: GetProgramAccountsFilter = {
@@ -772,11 +772,11 @@ export default class FriendsProgram extends EventEmitter {
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
       Config.solana.defaultCommitment,
-      [friendRequestRemovedFilter]
+      [friendRequestRemovedFilter],
     )
 
     const friendRequestRemovedMirroredBytes = base58(
-      Buffer.from([FriendStatus.REMOVED, ...userAccount.publicKey.toBytes()])
+      Buffer.from([FriendStatus.REMOVED, ...payerAccount.publicKey.toBytes()]),
     )
 
     const friendRequestRemovedMirroredFilter: GetProgramAccountsFilter = {
@@ -787,7 +787,7 @@ export default class FriendsProgram extends EventEmitter {
       FRIENDS_PROGRAM_ID,
       this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
       Config.solana.defaultCommitment,
-      [friendRequestRemovedMirroredFilter]
+      [friendRequestRemovedMirroredFilter],
     )
   }
 
@@ -801,7 +801,7 @@ export default class FriendsProgram extends EventEmitter {
    */
   addEventListener(
     type: FriendsEvents,
-    callback: (friendAccount?: FriendAccount) => void
+    callback: (friendAccount?: FriendAccount) => void,
   ) {
     this.addListener(type, callback)
   }
@@ -815,7 +815,7 @@ export default class FriendsProgram extends EventEmitter {
    */
   removeEventListener(
     type: FriendsEvents,
-    listener: (friendAccount?: FriendAccount) => void
+    listener: (friendAccount?: FriendAccount) => void,
   ) {
     this.removeListener(type, listener)
   }

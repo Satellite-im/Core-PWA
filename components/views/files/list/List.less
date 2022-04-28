@@ -1,64 +1,56 @@
-
 .table {
-  thead {
-    th {
-      &:extend(.font-secondary);
-      border-bottom-width: 1px;
-      border-bottom-color: @text-muted;
-    }
-  }
-
-  tr {
-    td {
-      &:extend(.font-primary);
-      border-bottom-color: @foreground;
-    }
-  }
-
-  .centered {
-    text-align: center;
-  }
-
-  .icon {
-    width: 30px;
-  }
-
-  .filename {
-    font-family: @primary-font;
-    cursor: pointer;
-  }
-  .sort {
-    font-size: 9pt;
-    cursor: pointer;
-  }
-  
-  .options {
-    cursor: pointer;
-  }
-
-  .feather-folder {
-    &:extend(.font-orange);
-  }
-
-  .feather-image {
-    color: @jade;
-  }
-
-  .feather-archive {
-    &:extend(.color-danger);
-  }
-
-  .feather-file {
-    &:extend(.font-pink);
-  }
+  cursor: pointer;
   &:extend(.full-width);
   font-size: @text-size;
   background: transparent;
-  margin: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  th {
+    &:extend(.font-secondary);
+    border-bottom-width: 1px;
+    border-bottom-color: @text-muted;
+
+    &:first-of-type {
+      padding-left: @xlarge-spacing;
+    }
+    &:not(:last-child) {
+      min-width: 160px;
+    }
+    &:last-child {
+      padding: 0;
+    }
+
+    svg {
+      font-size: 9pt;
+    }
+  }
+}
+
+@media only screen and (max-width: @medium-breakpoint) {
+  .swiper-slide-next {
+    .open-sidebar-hide {
+      display: none;
+    }
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .table {
     min-width: @viewport-width - 20px;
+    th {
+      padding: @light-spacing;
+      &:first-of-type {
+        padding-left: @light-spacing;
+      }
+      &:not(:last-child) {
+        min-width: 75px;
+      }
+    }
   }
 }

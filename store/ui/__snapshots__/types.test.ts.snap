@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check flair constants should return the flair constants 1`] = `
+Array [
+  Object {
+    "text": "Satellite",
+    "value": "#2761fd",
+  },
+  Object {
+    "text": "Peach",
+    "value": "#ED4C67",
+  },
+  Object {
+    "text": "Pink",
+    "value": "#FDA7DF",
+  },
+  Object {
+    "text": "Lime",
+    "value": "#A3CB38",
+  },
+  Object {
+    "text": "Purple",
+    "value": "#6F1E51",
+  },
+  Object {
+    "text": "Lavender",
+    "value": "#9980FA",
+  },
+  Object {
+    "text": "Sunflower",
+    "value": "#FFC312",
+  },
+  Object {
+    "text": "Deep",
+    "value": "#30336b",
+  },
+  Object {
+    "text": "Void",
+    "value": "#2C3A47",
+  },
+]
+`;
+
+exports[`check theme constants should return the theme constants 1`] = `
+Array [
+  Object {
+    "class": "",
+    "name": "default",
+    "text": "Default",
+    "value": "default",
+  },
+  Object {
+    "class": "moonless_night",
+    "name": "moonless_night",
+    "text": "Moonless Night",
+    "value": "moonless_night",
+  },
+]
+`;

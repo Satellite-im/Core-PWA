@@ -1,0 +1,57 @@
+.social-account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(@gray, 0.5);
+  border-radius: @corner-rounding;
+  background: @semitransparent-lighter-gradient, @foreground-alt;
+  padding: 10.5px 12px;
+  box-shadow: -2px 2px 30px 0px rgba(@darker, 30%);
+  line-height: 1;
+  color: @secondary-text;
+
+  .account-info {
+    display: flex;
+    align-items: center;
+    .badge-verified {
+      margin-left: @light-spacing;
+      color: #55efc4;
+    }
+    .logo {
+      border-radius: 16px;
+      width: 24px;
+      height: 24px;
+      padding: 4px;
+      display: block;
+      &.facebook {
+        border-radius: 4px;
+        background-color: #3b5998;
+        color: #fff;
+      }
+      &.github {
+        color: #fff;
+      }
+      &.linkedin {
+        border-radius: 4px;
+        background-color: #0072b1;
+        color: #fff;
+      }
+      &.twitter {
+        background-color: #00acee;
+        svg {
+          color: #fff;
+          fill: #fff;
+        }
+      }
+      &.youtube {
+        color: #ff0000;
+      }
+    }
+    .username {
+      margin-left: @normal-spacing;
+    }
+  }
+  .account-link {
+    color: @secondary-text;
+  }
+}

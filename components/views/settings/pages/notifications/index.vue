@@ -2,8 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
 import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'NotificationsSettings',
@@ -15,7 +15,7 @@ export default Vue.extend({
     return {
       NotificationsEnabled: false,
       NotificationStatus: '',
-      Platform: 'android',
+      Platform: PlatformTypeEnum.ANDROID,
       NotificationText: '',
     }
   },
@@ -32,16 +32,13 @@ export default Vue.extend({
         return this.$data.NotificationsEnabled
       },
     },
-    // notificationResponse: () => {
-    //   // @ts-ignore
-    //   return this.$notifications.registerNotificationWatch()
-    // }
+    PlatformTypeEnum: () => PlatformTypeEnum,
   },
   mounted() {
     // Check for new input sources
 
     // @ts-ignore
-    this.$data.Platform = this.$notifications.currentPlatform
+    this.$data.Platform = this.$envinfo.currentPlatform
     // @ts-ignore
     this.$data.NotificationStatus = this.$notifications.notificationPermission
 
@@ -78,7 +75,7 @@ export default Vue.extend({
         .sendNotifications(
           'Satellite',
           'Satellite',
-          this.$data.NotificationText
+          this.$data.NotificationText,
         )
     },
   },

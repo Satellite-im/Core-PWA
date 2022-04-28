@@ -1,6 +1,6 @@
 <template>
   <div class="horizontal-rule">
-    <hr >
+    <hr />
   </div>
 </template>
 <script lang="ts">

@@ -1,34 +1,50 @@
-<div id="aside" class="collapsed">
-    <div id="aside-box">
-        <info-icon size="1x" class="info-toggle" v-on:click="toggle" />
-        <div id="top-info">
-            <TypographyTitle :size="6" :text="selectedGroup.name" />
-            <InteractablesClose :action="toggle" />
-        </div>
-        <div id="actions">
-            <UiCircle :size="35" type="icon" icon="user" />
-            <UiCircle :size="35" type="icon" icon="message-square" 
-              alt="$t('pages.chat.add_member')" 
-              :data-tooltip="$t('pages.chat.add_member')" 
-              class="has-tooltip-primary"/>
-            <UiCircle :size="35" type="icon" icon="layout" 
-              alt="$t('pages.chat.switch_chat')"
-              :data-tooltip="$t('pages.chat.switch_chat')" 
-              class="has-tooltip-primary" />
-            <UiCircle :size="35" type="icon" icon="more-vertical" 
-              alt="$t('pages.chat.start_watch_party')"
-              :data-tooltip="$t('pages.chat.start_watch_party')" 
-              class="has-tooltip-primary" />
-        </div>
-        <UiHorizontalRule />
-        <div id="members">
-            <div id="members-number">
-                <TypographyText :size="6" :text="`Members - ${members.length.toString()}`"  />
-            </div>
-            <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-                <UiUser v-for="member in members" :user="member" :key="member.address"
-                    :creatorBadge="member.address == selectedGroup.creator" />
-            </UiScroll>
-        </div>
+<div id="aside-box">
+  <info-icon size="1x" class="info-toggle" v-on:click="toggle" />
+  <div id="top-info">
+    <TypographyTitle :size="6" :text="selectedGroup.name" />
+    <InteractablesClose :action="toggle" />
+  </div>
+  <div id="actions">
+    <UiCircle
+      :size="35"
+      type="icon"
+      icon="user"
+      alt="$t('pages.chat.add_member')"
+      :data-tooltip="$t('pages.chat.add_member')"
+      class="has-tooltip-primary"
+      v-on:click="groupInvite(selectedGroup)"
+    />
+    <UiCircle
+      :size="35"
+      type="icon"
+      icon="message-square"
+      alt="$t('pages.chat.switch_chat')"
+      :data-tooltip="$t('pages.chat.switch_chat')"
+      class="has-tooltip-primary"
+      v-on:click="navigateToGroup(selectedGroup.id)"
+    />
+    <UiCircle
+      :size="35"
+      type="icon"
+      icon="layout"
+      alt="$t('pages.chat.start_watch_party')"
+      :data-tooltip="$t('pages.chat.start_watch_party')"
+      class="has-tooltip-primary"
+    />
+    <UiCircle :size="35" type="icon" icon="more-vertical" />
+  </div>
+  <UiHorizontalRule />
+  <div id="members">
+    <div id="members-number">
+      <TypographyText :size="6" :text="`Members - ${selectedGroup.members}`" />
     </div>
+    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiUser
+        v-for="member in filterMembers"
+        :key="member.address"
+        :user="member"
+        :creatorBadge="member == selectedGroup.creator"
+      />
+    </UiScroll>
+  </div>
 </div>

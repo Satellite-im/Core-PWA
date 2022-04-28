@@ -1,0 +1,20 @@
+<div
+  :class="`user ${isLoading ? 'is-loading' : ''}`"
+  @contextmenu="contextMenu"
+  v-on:click="toggleSelect"
+>
+  <UiUserState :user="user" :isTyping="isTyping" :src="src" />
+  <div class="user-info">
+    <TypographyTitle :size="6" :text="user.name" />
+    <TypographySubtitle
+      v-if="user.last_message && user.last_message.length > 0"
+      :size="6"
+      :text="user.last_message"
+    />
+    <TypographySubtitle v-else :size="6" :text="user.status" />
+  </div>
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
+  </div>
+  <input type="checkbox" v-model="checked" />
+</div>

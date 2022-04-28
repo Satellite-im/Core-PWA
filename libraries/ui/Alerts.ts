@@ -1,37 +1,38 @@
 import { v4 as uuidv4 } from 'uuid'
 
 export enum AlertType {
-  FREIND_REQUEST = 'FRIEND_REQUEST',
+  FRIEND_REQUEST = 'FRIEND_REQUEST',
   MISSED_CALL = 'MISSED_CALL',
   FILES_FULL = 'FILES_FULL',
   FILE_UPLOADED = 'FILE_UPLOADED',
+  FILE_NSFW = 'FILE_NSFW',
   DEV = 'DEV',
 }
 
 export enum AlertState {
   READ = 'READ',
-  UNREAD = 'UNREAD'
+  UNREAD = 'UNREAD',
 }
 
 export type Alert = {
-  at?: number,
-  id?: string,
-  state?: AlertState,
-  type: AlertType,
+  at?: number
+  id?: string
+  state?: AlertState
+  type: AlertType
   content: {
-    title: string,
-    description: string,
+    title: string
+    description: string
     image?: string
-  },
+  }
 }
 
 export type AlertTemplate = {
-  type: AlertType,
+  type: AlertType
   content: {
-    title: string,
-    description: string,
+    title: string
+    description: string
     image?: string
-  },
+  }
 }
 
 export class Alerts {
@@ -43,9 +44,11 @@ export class Alerts {
       type: AlertType.DEV,
       content: {
         title: 'ATTN:// Cortana',
-        description: "This is a test message to use for building alerts, it's meaningless and just for demo purposes.",
-        image: 'http://forums.windowscentral.com/attachments/cortana/61269d1396509365t-cortana.jpg'
-      }
+        description:
+          "This is a test message to use for building alerts, it's meaningless and just for demo purposes.",
+        image:
+          'http://forums.windowscentral.com/attachments/cortana/61269d1396509365t-cortana.jpg',
+      },
     },
     {
       at: Date.now(),
@@ -54,13 +57,13 @@ export class Alerts {
       type: AlertType.DEV,
       content: {
         title: 'TX:// Guilty Spark',
-        description: "This is a another meaningless test alert message. Ignore me please.",
-        image: 'https://www.giantbomb.com/a/uploads/square_small/0/5150/340231-46172909_343gs.jpg'
-      }
-    }
+        description:
+          'This is a another meaningless test alert message. Ignore me please.',
+        image:
+          'https://www.giantbomb.com/a/uploads/square_small/0/5150/340231-46172909_343gs.jpg',
+      },
+    },
   ]
-
-  constructor() {}
 
   /**
    * @getter all
@@ -107,12 +110,12 @@ export class Alerts {
    * @param id Alert id to mutate
    */
   mark(state: AlertState, id: string): Alert | undefined {
-    const idx = this.all.findIndex((a => a.id === id))
+    const idx = this.all.findIndex((a) => a.id === id)
     this._alerts[idx] = {
       ...this._alerts[idx],
-      state
+      state,
     }
-    return this.all.find(a => a.id === id)
+    return this.all.find((a) => a.id === id)
   }
 
   /**
@@ -121,7 +124,7 @@ export class Alerts {
    * @param id Alert id to delete
    */
   delete(id: string): Alert[] {
-    this._alerts = this._alerts.filter(a => a.id !== id)
+    this._alerts = this._alerts.filter((a) => a.id !== id)
     return this.all
   }
 }

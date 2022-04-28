@@ -83,6 +83,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.25;
     &:extend(.full-width);
   }
 }
@@ -105,32 +106,17 @@
     position: relative;
     width: 500px;
     .cropper-mask {
+      &:extend(.blur-less);
       position: fixed;
-      background: @foreground !important;
-      opacity: 0.6;
       z-index: 9;
-      height: @full;
-      &:extend(.full-width);
       top: 0;
       left: 0;
+      right: 0;
+      bottom: 0;
     }
   }
 }
 
 .input-file {
   display: none;
-}
-
-.tag-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  .tag-container {
-    display: inline-block;
-    margin: 0.25rem;
-    flex: 1;
-
-    .tag {
-      &:extend(.full-width);
-    }
-  }
 }

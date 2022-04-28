@@ -1,6 +1,5 @@
 .profile-card {
   &:extend(.full-width);
-  overflow: hidden;
   &:extend(.bordered);
   &:extend(.round-corners);
   box-shadow: 0px -5px 15px 0 rgba(19, 24, 31, 0.4);
@@ -20,14 +19,40 @@
     .profile-preferences {
       margin-top: @normal-spacing;
 
-      &-location {
+      &-timezone {
         margin-top: @normal-spacing;
         margin-bottom: @normal-spacing;
+        .timezone-list {
+          .items {
+            width: 25rem !important;
+            max-width: 25rem !important;
+            .ps-container {
+              height: 20rem;
+            }
+          }
+        }
       }
 
       &-language {
         margin-top: @normal-spacing;
         margin-bottom: @normal-spacing;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .profile-card {
+    &-body {
+      .profile-preferences {
+        &-timezone {
+          .timezone-list {
+            .items {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+          }
+        }
       }
     }
   }

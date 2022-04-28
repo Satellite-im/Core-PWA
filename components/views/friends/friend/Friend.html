@@ -1,7 +1,7 @@
-<div class="friend">
-  <UiUserState :user="friend" />
+<div class="friend" data-cy="friend">
+  <UiUserState :user="friend" :src="src" />
   <div class="description">
-    <TypographySubtitle :size="6" :text="friend.name" />
+    <TypographySubtitle :size="6" :text="friend.name" data-cy="friend-name" />
     <TypographyText :text="friend.status" />
   </div>
   <div class="spacer"></div>
@@ -13,8 +13,9 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.accept')"
       :loading="loading === 'accept'"
+      :disabled="loadCheck"
       :action="acceptFriendRequest"
-      >
+    >
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
@@ -24,8 +25,9 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.decline')"
       :loading="loading === 'decline'"
-      :action="declineFriendRequest">
-      <x-icon size="1x"/>
+      :action="declineFriendRequest"
+    >
+      <x-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
@@ -34,7 +36,8 @@
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.unblock')"
-      :action="() => {}">
+      :action="() => {}"
+    >
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
@@ -45,8 +48,21 @@
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       :data-tooltip="$t('friends.send')"
       :loading="loading === 'sending'"
-      :action="createFriendRequest">
+      :action="createFriendRequest"
+    >
       <check-icon size="1x" />
+    </InteractablesButton>
+  </div>
+  <div class="controls" v-else-if="outgoing">
+    <InteractablesButton
+      type="danger"
+      size="small"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      :data-tooltip="$t('friends.cancel')"
+      :loading="loading === 'options'"
+      :action="cancelRequest"
+    >
+      <x-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else>
@@ -55,17 +71,20 @@
       type="primary"
       size="small"
       class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      data-cy="friend-send-message"
       :data-tooltip="$t('friends.message')"
-      :action="sendMessageRequest">
+      :action="sendMessageRequest"
+    >
       <message-square-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       type="primary"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
+      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-hidden-touch"
       :data-tooltip="$t('friends.options')"
       :loading="loading === 'options'"
-      :action="contextMenu">
+      :action="contextMenu"
+    >
       <more-vertical-icon size="1x" />
     </InteractablesButton>
   </div>

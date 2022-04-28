@@ -1,73 +1,72 @@
 #view-file {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: @base-z-index + 35;
+  padding: @normal-spacing;
+
+  .file-nav {
+    width: calc(@full - @xlarge-spacing); //to account for margin
+    display: flex;
+    position: absolute;
+
+    .file-info {
+      max-width: 50vw;
+      .title {
+        &:extend(.font-secondary);
+        &:extend(.ellipsis);
+        line-height: 1.25;
+      }
+    }
+
+    .controls {
+      display: flex;
+      height: fit-content;
+      margin-left: auto;
+      gap: @normal-spacing;
+
+      .control {
+        display: flex;
+        font-size: @icon-size;
+        &:extend(.font-secondary);
+        &.disabled {
+          cursor: not-allowed;
+        }
+        &--close {
+          &:before {
+            left: auto;
+            right: 0;
+            transform: translate(0, 100%);
+          }
+        }
+      }
+    }
+  }
+
   .image-container {
-    width: 100vw;
-    display: inline-flex;
-    justify-content: center;
-  }
-  .file-image {
+    display: flex;
+    margin: auto;
     max-width: 80vw;
-    justify-self: center;
-    align-self: center;
-    max-height: 80vh;
+    max-height: 60vh;
     &:extend(.round-corners);
+    overflow: hidden;
   }
-  .file-icon {
-    font-size: 50pt;
-    align-self: center;
-    justify-self: center;
-    margin: 0 auto;
-    margin-bottom: @normal-spacing;
-  }
+
   .no-preview {
     display: flex;
     flex-direction: column;
     text-align: center;
-    align-items: center;
-    justify-content: center;
-    height: 50vh;
+    margin: auto;
     .subtitle {
       display: block;
       text-align: center;
       margin-bottom: 0;
     }
-  }
-
-  .file-nav {
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-
-    .file-info {
-      margin: @normal-spacing;
-      .title {
-        &:extend(.font-secondary);
-      }
-    }
-
-    .controls {
-      .control {
-        display: inline-flex;
-        font-size: @icon-size;
-        margin: @normal-spacing @light-spacing;
-        &:extend(.font-secondary);
-  
-        &:nth-child(4) {
-          margin-right: @normal-spacing;
-        }
-      }
-      justify-items: flex-end;
-      align-items: flex-end;
-      flex: 1;
-      text-align: right;
-      
+    .file-icon {
+      font-size: 50pt;
+      margin: auto;
+      margin-bottom: @normal-spacing;
     }
   }
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: @base-z-index + 100;
-  align-content: center;
 }

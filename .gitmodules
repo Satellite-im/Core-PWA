@@ -8,13 +8,3 @@
 	url = https://github.com/Satellite-im/electron.git
 	ignore = all
 	branch = master
-[submodule "locales"]
-	path = locales
-	url = git@github.com:Satellite-im/Translations.git
-	ignore = all
-	branch = main
-[submodule "cypress"]
-	path = cypress
-	url = https://github.com/Satellite-im/cypress
-	ignore = all
-	branch = main

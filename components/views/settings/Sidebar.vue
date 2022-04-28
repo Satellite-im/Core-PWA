@@ -4,15 +4,16 @@
     :title="title"
     :toggleable="toggleable"
     :toggle="toggle"
-    :active="route"
+    :active="ui.settingsRoute"
     custom
     :custom-action="customAction"
   />
 </template>
 <script lang="ts">
 import Vue from 'vue'
-
+import { mapState } from 'vuex'
 import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
+import { SettingsRoutes } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
@@ -32,30 +33,33 @@ export default Vue.extend({
   },
   data() {
     return {
-      route: 'personalize',
       sidebarLayout: [
         {
           title: 'General',
           links: [
             {
-              to: 'personalize',
+              to: SettingsRoutes.PERSONALIZE,
               text: 'Personalize',
             },
             {
-              to: 'profile',
+              to: SettingsRoutes.PROFILE,
               text: 'Profile',
             },
             {
-              to: 'audio',
+              to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',
             },
             {
-              to: 'keybinds',
+              to: SettingsRoutes.KEY_BINDS,
               text: 'Keybinds',
             },
             {
-              to: 'accounts',
+              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
               text: 'Accounts & Devices',
+            },
+            {
+              to: SettingsRoutes.PRIVACY,
+              text: 'Privacy',
             },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
@@ -63,15 +67,15 @@ export default Vue.extend({
           title: 'Realms & Security',
           links: [
             {
-              to: 'realms',
+              to: SettingsRoutes.REALMS,
               text: 'Realms',
             },
             {
-              to: 'storage',
+              to: SettingsRoutes.STORAGE,
               text: 'Storage',
             },
             {
-              to: 'network',
+              to: SettingsRoutes.NETWORK,
               text: 'Network',
             },
           ] as Array<SidebarLink>,
@@ -79,22 +83,25 @@ export default Vue.extend({
         {
           title: 'Developer',
           links: [
-            {
+            /* {
               to: 'developer',
               text: 'Mock & Tweak',
             },
             {
               to: 'notifications',
               text: 'Notifications',
-            },
+            }, */
             {
-              to: 'info',
+              to: SettingsRoutes.INFO,
               text: 'App Info',
             },
           ] as Array<SidebarLink>,
         } as SidebarGrouping,
       ],
     }
+  },
+  computed: {
+    ...mapState(['ui']),
   },
   methods: {
     /**
@@ -104,7 +111,6 @@ export default Vue.extend({
      * @example
      */
     customAction(link: string) {
-      this.$data.route = link
       this.$props.handleRouteChange(link)
     },
   },

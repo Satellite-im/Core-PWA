@@ -1,11 +1,15 @@
 <template src="./Chatbar.html"></template>
-
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { debounce } from 'lodash'
+import { mapState, mapGetters } from 'vuex'
+import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-import { parseCommand, commands, isArgsValid } from '~/libraries/ui/Commands'
+import PeerId from 'peer-id'
+
+import Upload from '../../files/upload/Upload.vue'
+import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
+
+import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
   KeybindingEnum,
@@ -13,68 +17,48 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { UploadDropItemType } from '~/types/files/file'
 
 declare module 'vue/types/vue' {
   interface Vue {
     sendMessage: Function
-    handleInputChange: Function
-    value: string
+    text: string
     updateText: Function
     handleUpload: Function
-    debounceTypingStop: Function
+    throttleTyping: Function
     typingNotifHandler: Function
     smartTypingStart: Function
+    clearChatbar: Function
     handleChatBorderRadius: Function
+    files: UploadDropItemType[]
   }
 }
 export default Vue.extend({
   components: {
     TerminalIcon,
-  },
-  data() {
-    return {
-      text: '',
-      showEmojiPicker: false,
-      maxChars: Config.chat.messageMaxChars,
-      recipientTyping: false,
-      showFilePreview: false,
-    }
+    Upload,
+    FilePreview,
   },
   props: {
     recipient: {
       type: Object as PropType<Friend>,
+      default: () => {},
     },
   },
-  directives: {
-    focus: {
-      update(el, { value, oldValue }) {
-        if (value.id !== oldValue.id) {
-          el.focus()
-        }
-      },
-    },
-  },
-  mounted() {
-    let findItem = this.setChatText.find(
-      (item: any) => item.userId === this.$props.recipient.address,
-    )
-    let message = findItem ? findItem.value : ''
-
-    const messageBox = this.$refs.messageuser as HTMLElement
-    messageBox.innerText = message
+  data() {
+    return {
+      showEmojiPicker: false,
+      recipientTyping: false,
+      nsfwUploadError: false,
+      files: [] as Array<UploadDropItemType>,
+    }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat']),
-    setChatText: {
-      set(state) {
-        this.$store.commit('chat/setChatText', state)
-      },
-      get() {
-        return this.chat.chatTexts
-      },
-    },
+    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
+    ...mapGetters('chat', ['getFiles']),
     activeFriend() {
-      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+      return this.$Hounddog.getActiveFriend(this.friends)
     },
     /**
      * Computes the amount of characters left
@@ -86,7 +70,7 @@ export default Vue.extend({
      * @example
      */
     charlimit() {
-      return this.$data.text.length > this.$Config.chat.maxChars
+      return this.text.length > this.$Config.chat.maxChars
     },
     /**
      * @method hasCommand DocsTODO
@@ -99,7 +83,20 @@ export default Vue.extend({
       const currentCommand = commands.find(
         (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
       )
-      return currentCommand != null
+      // Hide commands for early access
+      // return currentCommand != null
+      return false
+    },
+    /**
+     * @method hasCommandPreview DocsTODO
+     * @description
+     * @returns
+     * @example
+     */
+    commandPreview() {
+      // Hide commands for early access
+      // return hasCommandPreview(this.ui.chatbarContent)
+      return false
     },
     /**
      * @method isValidCommand DocsTODO
@@ -113,9 +110,11 @@ export default Vue.extend({
       ).name.toLowerCase()
       const currentArgs = parseCommand(this.ui.chatbarContent).args
       const currentCommand = commands.find((c) => c.name === currentText)
-      return currentCommand && isArgsValid(currentCommand, currentArgs)
+      // Hide commands for early access
+      // return currentCommand && isArgsValid(currentCommand, currentArgs)
+      return false
     },
-    value: {
+    text: {
       /**
        * @method get
        * @description Gets chatbars current text
@@ -131,18 +130,67 @@ export default Vue.extend({
        * @param val Value to set the chatbar content to
        * @example set('This is the new chatbar content')
        */
-      set(val: string) {
-        this.$store.commit('ui/chatbarContent', val)
-        this.$data.text = val
+      set(value: string) {
+        this.$store.dispatch('ui/setChatbarContent', {
+          content: value,
+          userId: this.$props.recipient?.address,
+        })
       },
     },
     placeholder() {
       if (!this.hasCommand && this.$data.text === '') {
         return this.$t('ui.talk')
-      } else {
-        return ''
       }
+      return ''
     },
+  },
+  watch: {
+    'friends.all': {
+      handler() {
+        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        if (activeFriend)
+          this.$data.recipientTyping =
+            activeFriend.typingState === PropCommonEnum.TYPING
+      },
+      deep: true,
+    },
+    'recipient.address': {
+      handler() {
+        const findItem = this.chat.chatTexts.find(
+          (item: any) => item.userId === this.$props.recipient?.address,
+        )
+        const message = findItem ? findItem.value : ''
+        this.$refs.editable?.resetHistory()
+        this.$store.commit('ui/setReplyChatbarContent', {
+          id: '',
+          payload: '',
+          from: '',
+        })
+        this.$store.dispatch('ui/setChatbarContent', { content: message })
+        // in desktop, stay chatbar focused when switching recipient
+        if (this.$device.isDesktop) {
+          this.$store.dispatch('ui/setChatbarFocus')
+        }
+      },
+    },
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (
+        mutation.type === 'chat/addFile' ||
+        mutation.type === 'chat/setFiles'
+      ) {
+        if (this.recipient) {
+          this.$data.files = this.getFiles(this.recipient?.address)
+        }
+      }
+
+      if (mutation.type === 'chat/deleteFiles') {
+        if (this.recipient) {
+          this.$data.files = []
+        }
+      }
+    })
   },
   methods: {
     /**
@@ -154,50 +202,43 @@ export default Vue.extend({
     typingNotifHandler(
       state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
     ) {
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
+      const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
       if (activeFriend) {
-        const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-        activePeer?.send('TYPING_STATE', { state })
+        try {
+          const p2p = Peer2Peer.getInstance()
+
+          if (!activeFriend.peerId) return
+
+          p2p.sendMessage(
+            {
+              type: 'TYPING_STATE',
+              payload: { state: 'TYPING' },
+              sentAt: Date.now(),
+            },
+            PeerId.createFromB58String(activeFriend.peerId),
+          )
+          // const activePeer = this.$WebRTC.getPeer(activeFriend.address)
+          // activePeer?.send('TYPING_STATE', { state })
+        } catch (error: any) {
+          this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
+            error,
+          })
+        }
       }
     },
     /**
-     * @method debounceTypingStop
-     * @description Debounces the typing event so that we only send the typing stopped after it's been
-     * the configured amount of time since they last triggered a keyup event.
+     * @method throttleTyping
+     * @description Throttles the typing event so that we only send the typing once every two seconds
      */
-    debounceTypingStop: debounce(function (ctx) {
-      ctx.$data.typing = false
-      ctx.typingNotifHandler(PropCommonEnum)
-    }, 500),
+    throttleTyping: throttle(function (ctx) {
+      ctx.typingNotifHandler(PropCommonEnum.TYPING)
+    }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
      */
     smartTypingStart() {
-      if (this.$data.typing) return
-      this.$data.typing = true
-      this.typingNotifHandler(PropCommonEnum.TYPING)
-    },
-    /**
-     * @method handleInputChange DocsTODO
-     * @description Called from handleInputKeydown function when normal key events are fired for typing in chatbar.
-     * Decodes current HTML content of chatbar to plain text and Encodes plain text to Markdown HTML expression.
-     * Once replaced current HTML content, move the caret to proper position.
-     * @example
-     */
-    handleInputChange() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      // Delete extra character when it exceeds the charlimit
-      if (
-        messageBox.innerText &&
-        messageBox.innerText.length > this.$Config.chat.maxChars + 1
-      ) {
-        messageBox.innerText = messageBox.innerText.slice(0, -1)
-        this.updateText()
-      }
-      this.value = messageBox.innerText
+      this.throttleTyping(this)
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -214,43 +255,23 @@ export default Vue.extend({
           if (!event.shiftKey) {
             event.preventDefault()
             if (!this.hasCommand) {
-              this.sendMessage()
-              break
+              return this.sendMessage()
             }
             if (this.hasCommand && !this.isValidCommand) {
               this.$Logger.log('Commands', 'dispatch command')
-              break
+              return
             }
+            return
+          }
+          // If there is a command disable shift + enter
+          if (this.hasCommand) {
+            event.preventDefault()
           }
           break
         default:
           break
       }
       this.smartTypingStart()
-      this.handleInputChange()
-    },
-    handleInputKeyup() {
-      this.debounceTypingStop(this)
-      this.$nextTick(() => {
-        this.handleInputChange()
-      })
-    },
-    /**
-     * @method updateText
-     * @description Helper function to update the text inside the chatbox and send the cursor to the end.
-     */
-    updateText() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = this.value
-      let sel = window.getSelection()
-      sel?.selectAllChildren(messageBox)
-      sel?.collapseToEnd()
-
-      // if (messageBox.)
-      this.setChatText = {
-        userId: this.$props.recipient.address,
-        value: messageBox.innerHTML,
-      }
     },
     /**
      * @method sendMessage
@@ -261,41 +282,57 @@ export default Vue.extend({
     async sendMessage() {
       // @ts-ignore
       await this.$refs['file-upload']?.sendMessage()
-
       if (this.recipient) {
-        const isEmpty = RegExp(this.$Config.regex.blankSpace, 'g').test(
-          this.value,
-        )
+        /* enforce limit as max chars when sending */
+        const value =
+          this.text.length > this.$Config.chat.maxChars
+            ? this.text.slice(0, this.$Config.chat.maxChars)
+            : this.text
+        this.text = ''
+        const isEmpty = value.trim().length === 0
+        if (isEmpty) return
         if (!this.recipient || isEmpty) {
           return
         }
-        if (this.ui.replyChatbarContent.from) {
+        if (
+          this.ui.replyChatbarContent.from &&
+          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+        ) {
           this.$store.dispatch('textile/sendReplyMessage', {
             to: this.recipient.textilePubkey,
-            text: this.value,
+            text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
-          this.clearChatbar()
           return
         }
-        this.$store.dispatch('textile/sendTextMessage', {
-          to: this.recipient.textilePubkey,
-          text: this.value,
-        })
-        const messageBox = this.$refs.messageuser as HTMLElement
-        this.clearChatbar()
-      }
-    },
-    /**
-     * @method handleDrop
-     * @description Allows the drag and drop of files into the chatbar
-     * @param e Drop event data object
-     * @example v-on:drop="handleDrop"
-     */
-    handleDrop(e: DragEvent) {
-      if (e.dataTransfer) {
-        this.handleUpload(e?.dataTransfer?.items, e)
+        // Check if it's a group
+        if (
+          RegExp(this.$Config.regex.uuidv4).test(
+            this.recipient.textilePubkey.split('|')[1],
+          )
+        ) {
+          if (this.ui.replyChatbarContent.from) {
+            this.$store.dispatch('textile/sendGroupReplyMessage', {
+              to: this.recipient.textilePubkey,
+              text: value,
+              replyTo: this.ui.replyChatbarContent.messageID,
+              replyType: MessagingTypesEnum.TEXT,
+            })
+            this.text = ''
+            return
+          }
+          this.$store.dispatch('textile/sendGroupMessage', {
+            groupId: this.recipient.textilePubkey,
+            message: value,
+          })
+        } else {
+          this.$store.dispatch('textile/sendTextMessage', {
+            to: this.recipient.textilePubkey,
+            text: value,
+          })
+        }
+        this.$data.nsfwUploadError = false
       }
     },
     /**
@@ -318,7 +355,9 @@ export default Vue.extend({
      */
     handleUpload(items: Array<object>, e: Event) {
       const arrOfFiles: File[] = [...items]
-        .filter((f: any) => f.type.includes(MessagingTypesEnum.IMAGE))
+        .filter((f: any) => {
+          return f.kind !== MessagingTypesEnum.STRING
+        })
         .map((f: any) => f.getAsFile())
       if (arrOfFiles.length) {
         e.preventDefault()
@@ -327,48 +366,34 @@ export default Vue.extend({
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
     },
-    clearChatbar() {
-      const messageBox = this.$refs.messageuser as HTMLElement
-      messageBox.innerHTML = ''
-      this.value = ''
+    handleChatTextFromOutside(text: string) {
+      this.$refs.editable?.handleTextFromOutside(text)
     },
-  },
-  watch: {
-    'ui.chatbarContent': function () {
-      this.updateText()
+    /**
+     * @method cancelUpload
+     * @description Cancels file upload by setting file and url in local data to false
+     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
+     * @example @click="cancelUpload"
+     */
+    onCancelUpload() {
+      document.body.style.cursor = PropCommonEnum.DEFAULT
+      this.$store.commit('chat/setContainsNsfw', false)
+      this.$store.commit('chat/setCountError', false)
     },
-    'friends.all': {
-      handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(
-          this.$store.state.friends,
-        )
-        if (activeFriend)
-          this.$data.recipientTyping =
-            activeFriend.typingState === PropCommonEnum.TYPING
-      },
-      deep: true,
-    },
-    recipient: function () {
-      let findItem = this.setChatText.find(
-        (item: any) => item.userId === this.$props.recipient.address,
-      )
-      let message = findItem ? findItem.value : ''
-
-      this.$store.commit('ui/chatbarContent', message)
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id: '',
-        payload: '',
-        from: '',
-      })
+    beforeDestroy() {
+      this.unsubscribe()
     },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Chatbar.less"></style>
-
 <style lang="less">
 .messageuser {
+  &.editable-container {
+    > div {
+      padding: 14px 0;
+    }
+  }
   blockquote {
     border-left: 4px solid @text-muted;
     padding-left: @light-spacing;

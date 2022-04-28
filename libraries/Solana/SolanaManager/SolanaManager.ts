@@ -1,12 +1,13 @@
 import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
-import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
+import * as ed25519 from 'ed25519-hd-key'
 import {
   getClusterFromNetworkConfig,
   publicKeyFromSeed,
   sleep,
 } from '../Solana'
+import { Config } from '~/config'
+import { SolanaWallet } from '~/types/solana/solana'
 
 export default class SolanaManager {
   accounts: Array<SolanaWallet>
@@ -22,9 +23,12 @@ export default class SolanaManager {
     this.accounts = []
     this.networkIdentifier = Config.solana.network
     this.clusterApiUrl = clusterApiUrl(
-      getClusterFromNetworkConfig(Config.solana.network)
+      getClusterFromNetworkConfig(Config.solana.network),
     )
-    this.connection = new Connection(this.clusterApiUrl)
+    this.connection = new Connection(
+      this.clusterApiUrl,
+      Config.solana.defaultCommitment,
+    )
     this.publicKeys = {}
   }
 
@@ -34,7 +38,18 @@ export default class SolanaManager {
    * @returns the ethereum like path for generating a new deterministic account
    */
   getPath(index: number): string {
-    return `m/44'/60'/0'/0/${index}`
+    return `m/44'/501'/${index}'/0'`
+  }
+
+  /**
+   * @method deriveSeed
+   * @param seed seed of mnemonic
+   * @param index index of the account to genenerate
+   * @returns the ethereum like path for generating a new deterministic account
+   */
+  deriveSeed(seed: Buffer, path: string): Buffer {
+    // const path = this.getPath(walletIndex)
+    return ed25519.derivePath(path, seed.toString('hex')).key
   }
 
   /**
@@ -45,20 +60,10 @@ export default class SolanaManager {
    */
   async createRandomKeypair(): Promise<SolanaWallet> {
     const mnemonic = bip39.generateMnemonic()
-
     const seed = await bip39.mnemonicToSeed(mnemonic)
-
     const path = this.getPath(0)
-
-    const seedWithPath = `${seed.toString('utf-8')}${path}`
-
-    const hashBuffer = await crypto.subtle.digest(
-      'SHA-256',
-      Buffer.from(seedWithPath, 'utf-8')
-    )
-
-    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
-
+    const seedWithPath = this.deriveSeed(seed, path)
+    const keypair = Keypair.fromSeed(seedWithPath)
     const address = keypair.publicKey.toBase58()
 
     return { keypair, mnemonic, path, address }
@@ -71,23 +76,16 @@ export default class SolanaManager {
    */
   async restoreKeypairFromMnemonic(
     mnemonic: string,
-    accountIndex: number
+    accountIndex: number,
   ): Promise<SolanaWallet | null> {
     if (!bip39.validateMnemonic(mnemonic)) {
       return null
     }
 
-    const path = this.getPath(accountIndex)
-
     const seed = await bip39.mnemonicToSeed(mnemonic)
-    const seedWithPath = `${seed.toString('utf-8')}${path}`
-
-    const hashBuffer = await crypto.subtle.digest(
-      'SHA-256',
-      Buffer.from(seedWithPath)
-    )
-    const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
-
+    const path = this.getPath(accountIndex)
+    const seedWithPath = this.deriveSeed(seed, path)
+    const keypair = Keypair.fromSeed(seedWithPath)
     const address = keypair.publicKey.toBase58()
 
     return { keypair, mnemonic, path, address }
@@ -111,7 +109,7 @@ export default class SolanaManager {
 
     const hashBuffer = await crypto.subtle.digest(
       'SHA-256',
-      Buffer.from(seedWithPath)
+      Buffer.from(seedWithPath),
     )
     const keypair = Keypair.fromSeed(new Uint8Array(hashBuffer))
 
@@ -132,7 +130,7 @@ export default class SolanaManager {
     identifier: string,
     userPublicKey: PublicKey,
     seed: string,
-    programId: PublicKey
+    programId: PublicKey,
   ): Promise<PublicKey | null> {
     const { key } = await publicKeyFromSeed(userPublicKey, seed, programId)
 
@@ -162,7 +160,7 @@ export default class SolanaManager {
 
     const account = await this.restoreKeypairFromMnemonic(
       this.mnemonic,
-      this.accounts.length
+      this.accounts.length,
     )
 
     if (!account) {
@@ -288,7 +286,7 @@ export default class SolanaManager {
     if (this.payerAccount) {
       return this.connection.getBalance(
         this.payerAccount.publicKey,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
     }
 
@@ -325,13 +323,13 @@ export default class SolanaManager {
       } else {
         signature = await this.connection.requestAirdrop(
           this.payerAccount?.publicKey,
-          1000000000
+          1000000000,
         )
       }
 
       return this.connection.confirmTransaction(
         signature,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
     }
 
@@ -348,7 +346,7 @@ export default class SolanaManager {
     while (true) {
       const accountInfo = await this.connection.getAccountInfo(
         accountKey,
-        Config.solana.defaultCommitment
+        Config.solana.defaultCommitment,
       )
       if (accountInfo === null) {
         await sleep(3000)

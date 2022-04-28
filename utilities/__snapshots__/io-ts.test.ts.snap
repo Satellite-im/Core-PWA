@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IoTS.fromEnum 0 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "Anas",
+  "validate": [Function],
+}
+`;
+
+exports[`IoTS.fromEnum 1 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "George",
+  "validate": [Function],
+}
+`;
+
+exports[`IoTS.fromEnum 2 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "Anas",
+  "validate": [Function],
+}
+`;
+
+exports[`IoTS.fromEnum 3 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "Michael",
+  "validate": [Function],
+}
+`;
+
+exports[`IoTS.fromEnum 4 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "Edmond",
+  "validate": [Function],
+}
+`;
+
+exports[`IoTS.fromEnum 5 1`] = `
+Type {
+  "decode": [Function],
+  "encode": [Function],
+  "is": [Function],
+  "name": "",
+  "validate": [Function],
+}
+`;

@@ -8,8 +8,6 @@
 .is-primary {
   .custom-select {
     .selected {
-      &:extend(.background-primary-gradient);
-      &:extend(.glow-primary);
       &::after,
       &::before {
         border-color: @secondary-text;
@@ -21,9 +19,7 @@
 }
 
 .custom-select {
-  &:extend(.font-primary);
   .selected {
-    &:extend(.font-primary);
     height: @select-height;
     line-height: @select-height;
     border-radius: 4rem;
@@ -90,4 +86,13 @@
   height: @select-height;
   text-align: left;
   outline: none;
+}
+
+.disabled {
+  .custom-select {
+    .selected {
+      box-shadow: 0 5px 14px -5px @gray !important;
+      background: @gray !important;
+    }
+  }
 }

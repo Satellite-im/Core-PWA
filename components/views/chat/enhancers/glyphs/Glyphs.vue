@@ -21,9 +21,8 @@ export default Vue.extend({
   },
   methods: {
     filter(filterValue: any) {
-      this.filteredGlyphs = Object.values(this.$mock.glyphs).filter(
-        (pack) =>
-          pack.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1,
+      this.filteredGlyphs = Object.values(this.$mock.glyphs).filter((pack) =>
+        pack.name.toLowerCase().includes(filterValue.toLowerCase()),
       )
     },
   },

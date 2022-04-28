@@ -1,21 +1,21 @@
 .inline-notification {
-    &:extend(.glow-danger);
-    &:extend(.blur);
-    &:extend(.font-secondary);
-    &:extend(.inline-flex-align-center);
-    &:extend(.inline-flex-justify-center);
-    &:extend(.round-corners);
-    .fill {
-        flex: 1;
-    }
-    .feather-x {
-        cursor: pointer;
-        justify-self: flex-end;
-    }
-    position: fixed;
-    z-index: @base-z-index + 101;
-    background: @red;
-    padding: (@light-spacing / 2) @normal-spacing;
-    font-size: @text-size;
-    margin: 0 auto;
+  &:extend(.glow-danger);
+  &:extend(.blur);
+  &:extend(.font-secondary);
+  &:extend(.inline-flex-align-center);
+  &:extend(.inline-flex-justify-center);
+  &:extend(.round-corners);
+  .fill {
+    flex: 1;
+  }
+  .feather-x {
+    cursor: pointer;
+    justify-self: flex-end;
+  }
+  position: fixed;
+  z-index: @base-z-index + 101;
+  background: @red;
+  padding: (@light-spacing / 2) @normal-spacing;
+  font-size: @text-size;
+  margin: 0 auto;
 }

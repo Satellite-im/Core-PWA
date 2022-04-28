@@ -1,0 +1,14 @@
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: @light-spacing;
+  .tag-container {
+    display: inline-block;
+    margin: 0.25rem;
+    flex: 1;
+
+    .tag {
+      &:extend(.full-width);
+    }
+  }
+}

@@ -1,23 +1,20 @@
 <template src="./Reply.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import VueMarkdown from 'vue-markdown'
-
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
-
-import { Message, Group } from '~/types/messaging'
-import { getUsernameFromState, getFullUserInfoFromState } from '~/utilities/Messaging'
+import { UIMessage, Group } from '~/types/messaging'
+import { getUsernameFromState } from '~/utilities/Messaging'
+import { toHTML } from '~/libraries/ui/Markdown'
 
 export default Vue.extend({
   components: {
-    VueMarkdown,
     PlusSquareIcon,
     MinusSquareIcon,
   },
   props: {
     message: {
-      type: Object as PropType<Message>,
+      type: Object as PropType<UIMessage>,
       default: () => ({
         id: '0',
         at: 1620515543000,
@@ -35,68 +32,76 @@ export default Vue.extend({
     },
   },
   data() {
-    return { showReplies: false, replyHover: '' }
-  },
-  mounted() {
-    let findItem = this.setChatReply.find((item: any) => item.replyId === this.$props.message.id)
-
-    if (findItem) {
-      this.$data.showReplies = findItem.value
+    return {
+      showReplies: false,
     }
   },
   computed: {
-    ...mapState(['chat']),
+    ...mapState(['ui', 'chat']),
     setChatReply: {
       set(state) {
         this.$store.commit('chat/setChatReply', state)
       },
       get() {
         return this.chat.replies
-      }
+      },
     },
     /**
      * makeReplyText: generates the "Replies from _____" text in a chat
      * depending on the number of users in the reply thread, it will generate a different replyText
      */
     makeReplyText() {
-      const replyLength = Object.keys(this.$props.message.replies).length
-      let baseReply = replyLength > 1 ? 'Replies from ' : 'Reply from '
+      const LIMIT = 2
+      const SEPARATOR = this.$t('conversation.replies_separator')
 
-      const getNamesList = (
-        replies: any[],
-        limit = 2,
-        initialText = '',
-        separator = ' and '
-      ) =>
-        replies
-          .slice(0, limit)
-          .reduce(
-            (text, reply, i) =>
-              text +
-              (i > 0 && i < limit ? separator : '') +
-              getUsernameFromState(reply.from, this.$store.state),
-            initialText
-          )
+      const replies = this.$props.message.replies
 
-      const names = getNamesList(this.$props.message.replies, 2, baseReply)
+      const uniqueRepliers = [
+        ...new Set(replies.map((reply: any) => reply.from)),
+      ]
 
-      return replyLength > 2
-        ? `${names} and ${replyLength - 2} more ...`
-        : names
+      const names = uniqueRepliers
+        .slice(0, LIMIT)
+        .map((replier) =>
+          getUsernameFromState(replier as string, this.$store.state),
+        )
+        .join(SEPARATOR as string)
+
+      if (replies.length === 1) {
+        return this.$t('conversation.reply_single', {
+          name: names,
+        })
+      }
+
+      if (uniqueRepliers.length <= LIMIT) {
+        return this.$t('conversation.repliers_less_than_limit', {
+          names,
+        })
+      }
+
+      return this.$t('conversation.repliers_more_than_limit', {
+        names,
+        leftCount: uniqueRepliers.length - LIMIT,
+      })
     },
   },
+  mounted() {
+    const findItem = this.setChatReply.find(
+      (item: any) => item.replyId === this.$props.message.id,
+    )
+
+    if (findItem) {
+      this.$data.showReplies = findItem.value
+    }
+  },
   methods: {
-    getUsernameFromReply(reply: any) {
-      return getUsernameFromState(reply.from, this.$store.state)
-    },
     /**
-     * @method mouseOver DocsTODO
-     * @description
-     * @param replyId
-     * @example
+     * @method markdownToHtml
+     * @description convert text markdown to html
+     * @param str String to convert
      */
-    mouseOver(replyId: string) {
-      this.$data.replyHover = replyId
+    markdownToHtml(text: string) {
+      return toHTML(text, { liveTyping: false })
     },
     /**
      * @method emojiReaction DocsTODO
@@ -116,10 +121,8 @@ export default Vue.extend({
             : this.$props.message.to,
       })
       this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: this.$device.isMobile ? true : false,
-        position: [e.clientX, e.clientY],
-        containerWidth: this.$el.clientWidth,
+        show: !this.ui.enhancers.show,
+        floating: true,
       })
     },
     /**
@@ -128,10 +131,11 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(this.$props.message.from, this.$store.state)
-      this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', selectedUser)
+    showQuickProfile(e: MouseEvent) {
+      this.$store.dispatch('ui/showQuickProfile', {
+        textilePublicKey: this.$props.message.from,
+        position: { x: e.x, y: e.y },
+      })
     },
     /**
      * @method toggleReplies DocsTODO
@@ -143,7 +147,7 @@ export default Vue.extend({
 
       this.setChatReply = {
         replyId: this.$props.message.id,
-        value: this.$data.showReplies
+        value: this.$data.showReplies,
       }
     },
   },

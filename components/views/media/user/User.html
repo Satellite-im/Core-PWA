@@ -1,4 +1,27 @@
 <div class="user">
-  <UiCircle type="random" :seed="user.publicKey" :size="$device.isMobile ? 35 : 65" :class="`${talking ? 'talking' : ''}`" :source="user.profilePicture" />
-  <TypographyTag :text="user.name" inverted />
+  <div class="indicators">
+    <mic-off-icon class="indicator" v-if="audioMuted" size="1.2x" />
+  </div>
+
+  <div v-if="videoStream" class="video-stream-container">
+    <video
+      class="video-stream"
+      :src-object.prop="videoStream"
+      playsinline
+      :id="`${isLocal ? 'local' : 'remote'}-video`"
+    ></video>
+  </div>
+
+  <div class="media-user" v-else-if="user">
+    <UiCircle
+      type="random"
+      :seed="user.address"
+      :size="$device.isMobile ? 35 : 65"
+      :class="`${calling ? 'calling' : ''}`"
+      :source="user.profilePicture"
+    />
+    <TypographyTag :text="user.name" inverted />
+  </div>
+
+  <audio :src-object.prop="audioStream" v-if="audioStream" autoplay />
 </div>

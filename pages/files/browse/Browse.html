@@ -1,40 +1,41 @@
-<div id="files"  class="hidden-scroll" v-scroll-lock="true">
-  <div :class="$device.isMobile ? 'mobile-file-aside' : 'hidden-file-aside'">
-    <FilesAside />
-  </div>
-  
+<div id="files" class="hidden-scroll" v-scroll-lock="true">
+  <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
-    <FilesFilepath :path="path" :pull="pull" :setPath="setPath" />
+    <FilesFilepath />
   </div>
   <div class="files-container">
     <div class="files-left">
-      <InteractablesInput
-        size="small"
-        input-kind="text"
-        type="dark"
-        :placeholder="$t('pages.files.browse.search')"
+      <FilesControls
+        ref="controls"
+        :changeView="changeView"
+        @forceRender="forceRender"
       />
-      <UiSpacer :height="10" />
-      <FilesControls :changeView="changeView" />
-      <FilesTopbar />
-      <UiSpacer :height="10" />
-      <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
-      <div v-if="view === 'list'">
-        <FilesList 
-          :path="getPath().children"
-          v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push" />
-        <UiLoadersFileTable v-else :rows="5" />
-      </div>
-      <div v-else>
-        <FilesGrid
-          :path="getPath().children"
-          v-if="$store.state.dataState.files !== DataStateType.Loading"
-          :push="push" />
-      </div>
+      <TypographyText
+        v-if="!directory.length"
+        :text="$t('pages.files.empty')"
+      />
+      <FilesList
+        v-else-if="view === 'list'"
+        :directory="directory"
+        :counter="counter"
+        :sort="sort"
+        @like="like"
+        @share="share"
+        @remove="remove"
+        @handle="handle"
+        @setSort="setSort"
+        @forceRender="forceRender"
+      />
+      <FilesGrid
+        v-else
+        :directory="directory"
+        :counter="counter"
+        @like="like"
+        @share="share"
+        @remove="remove"
+        @handle="handle"
+      />
     </div>
-    <div :class="$device.isMobile ? 'hidden-file-aside' : 'files-right'">
-      <FilesAside v-if="!$device.isMobile"/>
-    </div>
+    <FilesAside v-if="!$device.isMobile" class="files-right" />
   </div>
 </div>

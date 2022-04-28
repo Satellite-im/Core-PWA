@@ -3,7 +3,6 @@ on:
   pull_request:
     types:
       - opened
-
 jobs:
   add-label:
     name: Add Label

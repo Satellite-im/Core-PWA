@@ -28,7 +28,7 @@
           <div class="column profile-photo-column">
             <div class="profile-photo">
               <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
-              <UiCircle :type="croppedImage? 'image' : 'random' " :source="croppedImage" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
+              <UiCircle :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' " :source="src" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
               <UiCircle 
                 type="icon" 
                 @click="openFileDialog"
@@ -56,42 +56,13 @@
       </div>
       
       <UiSpacer :height="isSmallScreen ? 10 : 24" />
-      <div class="columns is-desktop">
+      <div class="columns is-desktop" v-if="featureReadyToShow">
         <div class="column">
           <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
           <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
-          <InteractablesInputGroup
-            :copy-content="accounts.active"
-            readonly
-            type="primary"
-            size="small"
-            :label-text="$t('pages.settings.profile.info.accountID')"
-            :action="() => $toast.show($t('ui.copied'))"
-            :text="accounts.active">
-            <clipboard-icon size="1x" />
-          </InteractablesInputGroup>
         </div>
       </div>
-      <UiSpacer :height="isSmallScreen ? 10 : 24" />
-      <div class="columns is-desktop">
-        <div class="column">
-          <TypographyTitle :size="6" :text="$t('pages.settings.profile.phrase.title')" />
-          <TypographySubtitle :size="6" :text="$t('pages.settings.profile.phrase.subtitle')" />
-          <div v-if="showPhrase" class="tag-wrap">
-            <div v-for="word, i in splitPhrase" class="tag-container">
-              <TypographyNumberedWord :word="word" :number="i + 1" />
-            </div>
-          </div>
-          <div v-else>
-            <InteractablesButton
-              text="Reveal Phrase"
-              size="normal"
-              type="primary"
-              :action="togglePhrase"
-            />
-          </div>
-        </div>
-      </div>
+      
     </div>
   </div>
 </div>

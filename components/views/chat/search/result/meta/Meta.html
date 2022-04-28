@@ -1,0 +1,16 @@
+<div class="meta">
+  <div class="result-count" data-cy="chat-search-result-count">
+    {{ resultsText }}
+  </div>
+  <div class="result-orderby">
+    <div
+      v-if="result.totalRows"
+      v-for="item in Object.keys(SearchOrderType)"
+      class="orderby-item"
+      :class="{ 'active': SearchOrderType[item] === orderBy }"
+      @click="$emit('toggleOrder', SearchOrderType[item])"
+    >
+      {{item}}
+    </div>
+  </div>
+</div>

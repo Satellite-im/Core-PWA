@@ -4,8 +4,12 @@
     :style="`background-image:url(${featuredGlyph.image})`"
   >
     <div class="badges">
-      <div v-if="featuredGlyph.isNew" class="badge-new">{{ $t('glyphs.new') }}</div>
-      <div v-if="featuredGlyph.isSale" class="badge-sale">{{ $t('glyphs.sale') }}</div>
+      <div v-if="featuredGlyph.isNew" class="badge-new">
+        {{ $t('glyphs.new') }}
+      </div>
+      <div v-if="featuredGlyph.isSale" class="badge-sale">
+        {{ $t('glyphs.sale') }}
+      </div>
       <TypographyText
         :text="`${featuredGlyph.glyph.stickerURLs.length} glyphs`"
         :size="6"
@@ -34,7 +38,7 @@
       <InteractablesButton
         type="primary"
         size="small"
-        :text="$t('glyphs.shop_all')" 
+        :text="$t('glyphs.shop_all')"
         :action="shopAllGlyphs"
       >
       </InteractablesButton>

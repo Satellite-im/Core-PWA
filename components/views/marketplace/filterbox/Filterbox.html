@@ -5,7 +5,7 @@
   </div>
   <ul :class="{'filter-options':true, 'active':showDrop}">
     <li v-for="(item, i) in marketFilters" :key="i">
-      <input type="checkbox" :id="`filter-${i}`">
+      <input type="checkbox" :id="`filter-${i}`" />
       <label :for="`filter-${i}`">{{item.text}}</label>
     </li>
   </ul>

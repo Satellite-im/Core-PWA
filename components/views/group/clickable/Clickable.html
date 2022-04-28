@@ -1,0 +1,11 @@
+<div
+  class="group"
+  @contextmenu="contextMenu"
+  v-on:click="navigateToGroup(group.id)"
+>
+  <GroupIcon :group="group" />
+  <div class="group-info">
+    <TypographyTitle :size="6" :text="group.name" />
+    <TypographySubtitle :size="6" :text="`Members: ${group.members.length}`" />
+  </div>
+</div>

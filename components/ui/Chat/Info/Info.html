@@ -1,0 +1,10 @@
+<div
+  class="info"
+  :class="{[`info--${type}`] : type}"
+  @click="() => $emit('click')"
+>
+  <div class="info-caption">{{caption}}</div>
+  <div class="info-main">
+    <slot />
+  </div>
+</div>

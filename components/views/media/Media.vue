@@ -3,7 +3,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 export default Vue.extend({
   props: {
@@ -33,8 +35,18 @@ export default Vue.extend({
     }
   },
   computed: {
-    propsToWatch() {
-      return { users: this.users, fullscreen: this.fullscreen }
+    ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
+    isActiveCall() {
+      return this.friends.all.find(
+        (friend: any) =>
+          friend.activeChat && friend.peerId === this.webrtc.activeCall,
+      )
+    },
+    localAudioMuted() {
+      return this.webrtc.localTracks.audio.muted
+    },
+    remoteAudioMuted() {
+      return this.webrtc.remoteTracks.audio.muted
     },
     computedUsers() {
       return this.fullscreen
@@ -43,63 +55,78 @@ export default Vue.extend({
     },
     activeCall() {
       return this.$store.state.friends.all.some(
-        (friend: any) => friend.address === this.$store.state.webrtc.activeCall,
+        (friend: any) => friend.peerId === this.webrtc.activeCall,
       )
     },
     localVideoStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.localTracks.video
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.localTracks.video
 
       if (muted) {
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      const localVideoTrack = peer?.call.getTrackById(id)
-
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
+      const localVideoTrack = call.getTrackById(id)
       return localVideoTrack ? new MediaStream([localVideoTrack]) : null
     },
     remoteVideoStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.remoteTracks.video
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.remoteTracks.video
 
       if (muted) {
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
 
-      const remoteVideoTrack = peer?.call.getTrackById(id)
-
+      const remoteVideoTrack = call.getTrackById(id)
       return remoteVideoTrack ? new MediaStream([remoteVideoTrack]) : null
     },
     remoteAudioStream() {
-      const { activeCall } = this.$store.state.webrtc
-      const { id, muted } = this.$store.state.webrtc.remoteTracks.audio
+      const { activeCall } = this.webrtc
+      const { id, muted } = this.webrtc.remoteTracks.audio
 
       if (muted) {
         return null
       }
 
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      const remoteAudioTrack = peer?.call.getTrackById(id)
-
+      const call = this.$WebRTC.getPeer(activeCall)
+      if (!call) return null
+      const remoteAudioTrack = call.getTrackById(id)
       return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
+    },
+    remoteTracks() {
+      const { id, muted } = this.webrtc.remoteTracks.audio
+
+      return Boolean(id || muted)
+    },
+    recipient() {
+      const isMe = this.$route.params.address === this.accounts.active
+      const recipient = isMe
+        ? null
+        : this.friends.all.find(
+            (friend: Friend) => friend.address === this.$route.params.address,
+          )
+      return recipient
     },
     ...mapState(['audio']),
   },
   watch: {
-    propsToWatch({ fullscreen }) {
+    fullscreen(value) {
       const media: HTMLElement = this.$refs.media as HTMLElement
-      if (!fullscreen) {
+      if (!value) {
         const blocks = media.querySelectorAll('.user, .more-user')
         if (!media) return
         for (let j = 0; j < blocks.length; j++) {
           const block = blocks[j] as HTMLElement
-          block.style.width = this.$device.isMobile ? '160px' : '16rem'
-          block.style.height = this.$device.isMobile ? '90px' : '9rem'
+          /* set media user width to 16rem if 1:1 call on mobile, otherwise set smaller  */
+          block.style.width =
+            this.$device.isMobile && blocks.length > 2 ? '160px' : '16rem'
+          block.style.height =
+            this.$device.isMobile && blocks.length > 2 ? '90px' : '9rem'
         }
         media.style.paddingTop = ''
         media.style.paddingBottom = ''
@@ -216,6 +243,19 @@ export default Vue.extend({
       }
     },
   },
+  beforeMount() {
+    // TODO: Create mixin/library that will handle call rejoining and closing
+    window.onbeforeunload = (e) => {
+      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
+
+      if (call) {
+        call.hangUp()
+        this.$store.dispatch('webrtc/hangUp')
+        this.$store.commit('ui/fullscreen', false)
+      }
+      return undefined
+    }
+  },
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO
@@ -226,6 +266,18 @@ export default Vue.extend({
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('audio/setVolume', volume)
+    },
+    handleDoubleClick(id: string) {
+      if (!this.ui.fullscreen) {
+        this.$store.commit('ui/fullscreen', true)
+      }
+      const media: HTMLElement = this.$refs.media as HTMLElement
+      const element = media.querySelector(`#${id}`)
+      if (element?.classList.contains('full-video')) {
+        element?.classList.remove('full-video')
+      } else {
+        element?.classList.add('full-video')
+      }
     },
   },
 })

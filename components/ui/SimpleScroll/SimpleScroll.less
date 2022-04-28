@@ -1,0 +1,39 @@
+#simple-scrollbar {
+  width: @full;
+  height: @full;
+
+  &.scrollbar-vertical {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-right: @scroll-bar-size*2;
+
+    &::-webkit-scrollbar {
+      width: @scroll-bar-size;
+    }
+  }
+
+  &.scrollbar-horizontal {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding-bottom: @scroll-bar-size*2;
+
+    &::-webkit-scrollbar {
+      height: @scroll-bar-size;
+    }
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--flair-color) transparent;
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      border-radius: @scroll-bar-size*2;
+      background-color: var(--flair-color);
+    }
+  }
+
+  &.scrollbar-always-visible::-webkit-scrollbar-thumb {
+    border-radius: @scroll-bar-size*2;
+    background-color: var(--flair-color);
+  }
+}

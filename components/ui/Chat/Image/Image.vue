@@ -1,58 +1,42 @@
 <template src="./Image.html" />
 <script lang="ts">
-import Vue, {PropType} from 'vue'
-import {FileMessage, ImageMessage} from "~/types/textile/mailbox";
+import Vue, { PropType } from 'vue'
+import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
+import { FileMessage, ImageMessage } from '~/types/textile/mailbox'
+import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
+  components: {
+    ImageIcon,
+    DownloadIcon,
+  },
   props: {
     alt: {
       type: String,
       default: 'Image',
-    },
-    url: {
-      type: String,
-      default: 'url',
     },
     full: {
       type: Boolean,
       default: false,
     },
     image: {
-      type: Object as PropType<ImageMessage>
+      type: Object as PropType<ImageMessage>,
+      required: true,
     },
   },
   data() {
     return {
-      showfull: false,
-      fileSize: '',
+      placeholderSrc: placeholderImage,
+      placeholderText: this.$t('errors.chat.failed_load'),
+      usePlaceholder: false,
     }
   },
-  computed: {
-    getFileSize() {
-      return this.bytesToSize(this.image.payload.size)
-    },
-  },
   methods: {
-    /**
-     * @method bytesToSize
-     * @description converts bytes to display easily readable file size
-     * @param bytes bytes of current file
-     * @example bytesToSize(this.file.size)
-     */
-    bytesToSize (bytes: number) {
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes === 0) return '0 Bytes'
-      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
-      return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
+    clickHandler(event: MouseEvent): void {
+      this.$store.commit('ui/setChatImageOverlay', this.image)
     },
-    /**
-     * @method openImage DocsTODO
-     * @description
-     * @example
-     */
-    openImage() {
-      // @ts-ignore
-      window?.open(this.$props.image.url, '_blank').focus()
+    onImageError() {
+      this.usePlaceholder = true
     },
   },
 })

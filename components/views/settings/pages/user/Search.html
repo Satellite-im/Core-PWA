@@ -1,23 +1,36 @@
 <div class="user-search" v-click-outside="hideDropDown">
-    <span class="chip user-selected" v-for="(user, i) in selected">
-      <UiCircle type="random" :seed="user.address" :size="15"/>
-      <span class="text">{{user.name}}</span>
-      <span class="action">
-        <x-icon size="1x" @click="removeSelected(i)" />
-      </span>
+  <span class="chip user-selected" v-for="(user, i) in selected">
+    <UiCircle type="random" :seed="user.address" :size="15" />
+    <span class="text">{{user.name}}</span>
+    <span class="action">
+      <x-icon size="1x" @click="removeSelected(i)" />
     </span>
+  </span>
   <div ref="searchSlot" :class="`user-search-slot input is-${size} is-${type}`">
-    <input type="text" ref="searchInput" v-model="search" class="user-search-input" :placeholder="placeholder"
-      @input="searchResult" @focus="showDropDown" @keydown="handleKeydown">
+    <input
+      type="text"
+      ref="searchInput"
+      v-model="search"
+      class="user-search-input"
+      :placeholder="placeholder"
+      @input="searchResult"
+      @focus="showDropDown"
+      @keydown="handleKeydown"
+    />
   </div>
-  <div ref="searchResult" :class="`user-search-list ${drop} ${dropDown && filteredResult.length ? 'active' : ''}`">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
-    >
+  <div
+    ref="searchResult"
+    :class="`user-search-list ${drop} ${dropDown && filteredResult.length ? 'active' : ''}`"
+  >
+    <UiScroll verticalScroll scrollbarVisibility="scroll">
       <ul class="user-search-result">
-        <li :class="{'active':i==selection}" v-for="(user, i) in filteredResult" :key="i" @click="selectUser(user, $event)">
-          <UiCircle type="random" :seed="user.address" :size="25"/>
+        <li
+          :class="{'active':i==selection}"
+          v-for="(user, i) in filteredResult"
+          :key="i"
+          @click="selectUser(user, $event)"
+        >
+          <UiCircle type="random" :seed="user.address" :size="25" />
           <span class="text">{{user.name}}</span>
           <span class="action">
             <plus-icon size="1x" @click="selectUser(user, $event)" />

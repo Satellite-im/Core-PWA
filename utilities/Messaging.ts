@@ -12,26 +12,34 @@ import {
   RepliesTracker,
   GlyphMessage,
 } from '~/types/textile/mailbox'
+import {
+  MessagingTypesEnum,
+  MeasurementUnitsEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
-  reactions: ReactionMessage[],
+  reactions: ReactionsTracker,
 ) {
-  return replies.map((reply) => replyMessageToUIReply(reply, reactions))
+  return replies.map((reply) =>
+    replyMessageToUIReply(reply, reactions[reply.id]),
+  )
 }
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
-  let groupedReactions: { [key: string]: UIReaction } = {}
-  reactions.forEach((reactionMessage) => {
-    let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-    if (!reactors.includes(reactionMessage.from))
-      reactors = [...reactors, reactionMessage.from]
-    groupedReactions[reactionMessage.payload] = {
-      emoji: reactionMessage.payload,
-      reactors,
-      showReactors: true,
-    }
-  })
+  const groupedReactions: { [key: string]: UIReaction } = {}
+  if (reactions)
+    reactions.forEach((reactionMessage) => {
+      let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
+      if (!reactors.includes(reactionMessage.from))
+        reactors = [...reactors, reactionMessage.from]
+      groupedReactions[reactionMessage.payload] = {
+        emoji: reactionMessage.payload,
+        reactors,
+        showReactors: true,
+      }
+    })
 
   return Object.values(groupedReactions)
 }
@@ -48,7 +56,7 @@ export function groupMessages(
   replies: RepliesTracker,
   reactions: ReactionsTracker,
 ): MessageGroup {
-  let groupedMessages: MessageGroup = []
+  const groupedMessages: MessageGroup = []
 
   // Get the sorted array of messages (not replies or reactions)
   const messageArray = Object.values(messages).sort((a, b) => a.at - b.at)
@@ -60,9 +68,11 @@ export function groupMessages(
     // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
-
     const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(prevMessage.at, 'day')
+      ? dayjs(currentMessage.at).isSame(
+          prevMessage.at,
+          MeasurementUnitsEnum.DAY,
+        )
       : false
 
     let isSameGroup
@@ -71,11 +81,11 @@ export function groupMessages(
     } else {
       const currentAt = dayjs(currentMessage.at)
       const prevAt = dayjs(prevMessage.at)
-      if (!dayjs().isSame(currentAt, 'day')) {
-        isSameGroup = currentAt.isSame(prevAt, 'day')
+      if (!dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)) {
+        isSameGroup = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
       } else {
         const prevAt = dayjs(prevMessage.at)
-        isSameGroup = currentAt.diff(prevAt, 'minutes') < 15 ? true : false
+        isSameGroup = currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
       }
     }
 
@@ -84,7 +94,7 @@ export function groupMessages(
       groupedMessages.push({
         id: `${currentMessage.id}-divider`,
         at: currentMessage.at,
-        type: 'divider',
+        type: MessagingTypesEnum.DIVIDER,
       })
     }
     const isSameSender = currentMessage.from === prevMessage?.from
@@ -96,23 +106,23 @@ export function groupMessages(
     // Checks if the message must be included in a new group
     const isNewGroup =
       groupedMessages.length === 0 ||
-      groupOrDivider?.type === 'divider' ||
+      groupOrDivider?.type === MessagingTypesEnum.DIVIDER ||
       !isSameSender ||
       (prevMessage && !isSameGroup)
-
     if (isNewGroup) {
       groupedMessages.push({
         id: currentMessage.id,
-        type: 'group',
+        type: MessagingTypesEnum.GROUP,
         at: currentMessage.at,
         from: currentMessage.from,
+        sender: currentMessage.sender, // TODO add types - AP-1128
         to: currentMessage.to,
         messages: [
           {
             ...currentMessage,
             replies: messageRepliesToUIReplies(
               currentMessageReplies,
-              currentMessageReactions,
+              reactions,
             ),
             reactions: getMessageUIReactions(
               currentMessage,
@@ -128,7 +138,20 @@ export function groupMessages(
       const group: Group = groupOrDivider
 
       const newMessages = group.messages
-        ? [...group.messages, { ...currentMessage, replies: [], reactions: [] }]
+        ? [
+            ...group.messages,
+            {
+              ...currentMessage,
+              replies: messageRepliesToUIReplies(
+                currentMessageReplies,
+                reactions,
+              ),
+              reactions: getMessageUIReactions(
+                currentMessage,
+                currentMessageReactions,
+              ),
+            },
+          ]
         : [{ ...currentMessage, replies: [], reactions: [] }]
 
       groupedMessages[groupedMessages.length - 1] = {
@@ -151,21 +174,21 @@ export function updateMessageTracker(
   inputMessages: Message[],
   initialValues?: TrackingValues,
 ): TrackingValues {
-  let messagesTracker: MessagesTracker = initialValues?.messages || {}
-  let repliesTracker: RepliesTracker = initialValues?.replies || {}
-  let reactionsTracker: ReactionsTracker = initialValues?.reactions || {}
+  const messagesTracker: MessagesTracker = initialValues?.messages || {}
+  const repliesTracker: RepliesTracker = initialValues?.replies || {}
+  const reactionsTracker: ReactionsTracker = initialValues?.reactions || {}
 
   for (let i = 0; i < inputMessages.length; i++) {
     const currentMessage = inputMessages[i]
-
     switch (currentMessage.type) {
-      case 'reply':
+      case MessagingTypesEnum.REPLY: {
         const reply: ReplyMessage = currentMessage
         repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
         if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
           repliesTracker[reply.repliedTo].push(reply)
         break
-      case 'reaction':
+      }
+      case MessagingTypesEnum.REACTION: {
         const reaction: ReactionMessage = currentMessage
         reactionsTracker[reaction.reactedTo] =
           reactionsTracker[reaction.reactedTo] || []
@@ -176,20 +199,25 @@ export function updateMessageTracker(
         )
           reactionsTracker[reaction.reactedTo].push(reaction)
         break
-      case 'file':
+      }
+      case MessagingTypesEnum.FILE: {
         const fileMessage: FileMessage = currentMessage
 
         messagesTracker[fileMessage.id] = fileMessage
         break
-      case 'text':
+      }
+      case MessagingTypesEnum.TEXT: {
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
         break
-      case 'glyph':
+      }
+      case MessagingTypesEnum.GLYPH: {
         const glyphMessage: GlyphMessage = currentMessage
 
         messagesTracker[glyphMessage.id] = glyphMessage
+        break
+      }
       default:
         break
     }
@@ -206,19 +234,20 @@ export function getUsernameFromState(
   textilePublicKey: string,
   state: RootState,
 ) {
-  return getFullUserInfoFromState(textilePublicKey, state)?.name || 'unknown'
+  return (
+    getFullUserInfoFromState(textilePublicKey, state)?.name ||
+    PropCommonEnum.UNKNOWN
+  )
 }
 
 export function getAddressFromState(
   textilePublicKey: string,
   state: RootState,
 ) {
-  const address =
-    state.friends.all.find(
-      (friend) => friend.textilePubkey === textilePublicKey,
-    )?.address || 'unknown'
-
-  return address
+  return (
+    getFullUserInfoFromState(textilePublicKey, state)?.address ||
+    PropCommonEnum.UNKNOWN
+  )
 }
 
 export function getFullUserInfoFromState(
@@ -238,14 +267,52 @@ export function getFullUserInfoFromState(
   return userInfo
 }
 
+export function convertTimestampToDate(
+  chatTranslations: any,
+  timestamp: number,
+) {
+  if (timestamp > 0) {
+    const secondsDif = dayjs().diff(timestamp, 'second')
+
+    if (secondsDif < 30) {
+      return chatTranslations.now
+    }
+
+    const lastUpdate = dayjs(timestamp)
+    const sameDay = dayjs().isSame(lastUpdate, 'day')
+
+    if (sameDay) {
+      return lastUpdate.format('LT')
+    }
+
+    const daysDif = dayjs().diff(lastUpdate, 'day')
+
+    if (daysDif <= 1) {
+      return chatTranslations.yesterday
+    }
+
+    if (daysDif > 1 && daysDif <= 2) {
+      return `${daysDif} ${chatTranslations.days_short}`
+    }
+
+    return lastUpdate.format('L')
+  }
+
+  return ''
+}
+
 export function refreshTimestampInterval(
   timestamp: number,
-  action: (timePassed: string) => any,
+  action: (timePassed: number) => any,
   interval: number,
 ) {
   return setInterval(() => {
-    const updatedTimestamp = dayjs(timestamp).fromNow()
-
-    action(updatedTimestamp)
+    action(timestamp)
   }, interval)
+}
+
+export const exportedForTesting = {
+  messageRepliesToUIReplies,
+  getMessageUIReactions,
+  replyMessageToUIReply,
 }

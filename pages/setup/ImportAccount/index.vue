@@ -50,15 +50,15 @@ export default Vue.extend({
       this.error = ''
     },
     onSelected(item: string) {
-      if (this.phrases.indexOf(item) === -1 && this.phrases.length < 12)
+      if (!this.phrases.includes(item) && this.phrases.length < 12)
         this.phrases.push(item)
     },
     onMultipleSelected(items: string[]) {
       const filteredItems = items.filter((item) => {
-        return this.bipList.indexOf(item) >= 0
+        return this.bipList.includes(item)
       })
       filteredItems.every((item) => {
-        if (this.phrases.indexOf(item) === -1 && this.phrases.length < 12) {
+        if (!this.phrases.includes(item) && this.phrases.length < 12) {
           this.phrases.push(item)
           return true
         }

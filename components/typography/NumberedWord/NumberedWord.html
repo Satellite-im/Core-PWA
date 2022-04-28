@@ -1,7 +1,10 @@
 <p class="tag is-dark">
   <span class="tag-number">{{ number }}</span>
   {{ word }}
-  <span v-if="isRemoval" class="remove-word" v-on:click="() => {$emit('remove')}"
+  <span
+    v-if="isRemoval"
+    class="remove-word"
+    v-on:click="() => {$emit('remove')}"
     ><x-icon size="0.8x"></x-icon
   ></span>
 </p>

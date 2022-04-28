@@ -1,0 +1,18 @@
+{
+  "data": {
+    "allDevices": [
+      {
+        "id": 1,
+        "description": "One Plus 10 Pro and One Plus 9",
+        "width": 412,
+        "height": 919
+      },
+      {
+        "id": 2,
+        "description": "iPhone 13 Pro Max and iPhone 12 Pro Max",
+        "width": 428,
+        "height": 926
+      }
+    ]
+  }
+}

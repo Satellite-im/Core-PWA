@@ -1,11 +1,15 @@
 import { TextileState } from './types'
+import { MessageRouteEnum } from '~/libraries/Enums/enums'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
-import { MessageRouteEnum } from '~/libraries/Enums/enums'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
     state.initialized = status
+  },
+  setActiveConversation(state: TextileState, address: string) {
+    state.activeConversation = address
   },
   setConversation(
     state: TextileState,
@@ -15,23 +19,33 @@ const mutations = {
       limit,
       skip,
       end,
+      active = true,
     }: {
       address: string
       messages: Message[]
       limit: number
       skip: number
       end: boolean
+      active: boolean
     },
   ) {
+    const lastMessageUpdate = messages.length
+      ? messages[messages.length - 1].at
+      : 0
+
     const initialValues = {
       messages: state.conversations[address]?.messages || [],
       replies: state.conversations[address]?.replies || [],
       reactions: state.conversations[address]?.reactions || [],
       lastInbound: state.conversations[address]?.lastInbound || 0, // the last time a message was received by any member of conversation, EXCEPT account owner
-      lastUpdate: state.conversations[address]?.lastUpdate || 0, // the last time a message was received by any member of conversation, INCLUDING account owner
+      lastUpdate: state.conversations[address]?.lastUpdate || lastMessageUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
+      lastMessage: state.conversations[address]?.lastMessage || null, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
 
     const tracked = updateMessageTracker(messages, initialValues)
+
+    if (active) state.activeConversation = address
+    const msgValues = Object.values(tracked.messages)
 
     state.conversations = {
       ...state.conversations,
@@ -41,6 +55,7 @@ const mutations = {
         reactions: tracked.reactions,
         lastInbound: initialValues.lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
         lastUpdate: initialValues.lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastMessage: msgValues[msgValues.length - 1],
         limit,
         skip,
         end,
@@ -56,11 +71,14 @@ const mutations = {
         reactions: {},
         lastInbound: 0, // the last time a message was received by any member of conversation, EXCEPT account owner
         lastUpdate: 0, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastMessage: null,
         limit: 0,
         skip: 0,
         end: false,
       },
     }
+
+    db.search.conversationMessages.removeAll()
   },
   addMessageToConversation(
     state: TextileState,
@@ -70,8 +88,7 @@ const mutations = {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
-    // No need to copy since we are going to
-    // update the whole conversation object
+    // No need to copy since we are going to update the whole conversation object
     const {
       messages,
       replies,
@@ -91,7 +108,12 @@ const mutations = {
       lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
     }
 
+    // add to search index
+    db.search.conversationMessages.upsert({ ...message, conversation: address })
+
     const tracked = updateMessageTracker([message], initialValues)
+    const msgValues = Object.values(tracked.messages)
+
     state.conversations = {
       ...state.conversations,
       [address]: {
@@ -100,7 +122,8 @@ const mutations = {
         reactions: tracked.reactions,
         lastInbound:
           sender !== MessageRouteEnum.OUTBOUND ? message.at : lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
-        lastUpdate: message.at, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastUpdate: msgValues[msgValues.length - 1]?.at, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastMessage: msgValues[msgValues.length - 1],
         limit,
         skip,
         end,
@@ -116,38 +139,38 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
-  clearUploadProgress(
-    state: TextileState,
-    ) {
+  clearUploadProgress(state: TextileState) {
     state.uploadProgress = {}
   },
   setUploadingFileProgress(
     state: TextileState,
-    {progress, name} : {
-      progress: number,
-      name: string,
+    {
+      progress,
+      name,
+    }: {
+      progress: number
+      name: string
     },
   ) {
     if (progress !== 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: false,
-          name: name
-        }
+          name,
+        },
       }
     }
     if (progress === 100) {
       state.uploadProgress = {
         ...state.uploadProgress,
         [name]: {
-          progress: progress,
+          progress,
           finished: true,
-          name: name
-        }
-    }
-
+          name,
+        },
+      }
     }
   },
 }

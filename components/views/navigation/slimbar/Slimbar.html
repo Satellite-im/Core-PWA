@@ -1,7 +1,16 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
   <div class="servers">
-    <div data-tooltip="Home" v-on:click="$router.push('/chat/direct')"
-      class="circle-group has-tooltip-right has-tooltip-primary">
+    <div
+      v-if="horizontal"
+      class="circle-group"
+      @click="toggleModal(ModalWindows.CALLTOACTION)"
+    >
+      <UiCircle type="icon" :size="40">
+        <plus-icon size="0.75x" />
+      </UiCircle>
+    </div>
+
+    <div v-on:click="$router.push('/chat/direct')" class="circle-group">
       <UiCircle type="icon" :size="40">
         <satellite-icon size="0.75x" />
       </UiCircle>
@@ -9,40 +18,76 @@
     <UiScroll verticalScroll v-if="!horizontal">
       <div id="list-container">
         <UiHorizontalRule v-if="unreads.length > 0" />
-
-        <div class="unread has-tooltip-right has-tooltip-primary" v-for="user in unreads"
-          v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">
-          <UiCircle type="random" :size="40" :seed="user.address" />
-          <span class="label">{{user.count}}</span>
+        <div class="unreads" v-for="user in unreads">
+          <Unread
+            :key="user.address"
+            :user="user"
+            :active="$route.params.address === user.address"
+          />
         </div>
-
-        <UiHorizontalRule v-if="unreads.length > 0" />
-        <div class="server has-tooltip-right has-tooltip-primary" v-for="server in servers"
-          v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
-          <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
-        </div>
-
+        <UiHorizontalRule v-if="servers.length > 0" />
+        <UiComingSoon :tooltipText="$t('coming_soon.communities')">
+          <div
+            class="server"
+            v-for="server in servers"
+            v-on:click="$router.push('/server/chat')"
+          >
+            <UiCircle
+              type="random"
+              :size="40"
+              :seed="server.address"
+              :name="server.name"
+            />
+          </div>
+        </UiComingSoon>
       </div>
     </UiScroll>
     <div id="list-container" v-else>
-      <div class="unread has-tooltip-bottom has-tooltip-primary" v-for="user in unreads"
-        v-on:click="$router.push('/chat/direct')" :data-tooltip="user.name">
-        <UiCircle type="random" :size="40" :seed="user.address" />
-        <span class="label">{{user.count}}</span>
+      <div class="unreads" v-for="user in unreads">
+        <Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        />
       </div>
-      <div class="server has-tooltip-bottom has-tooltip-primary" v-for="server in servers"
-        v-on:click="$router.push('/server/chat')" :data-tooltip="server.name">
-        <UiCircle type="random" :size="40" :seed="server.address" :name="server.name" />
-      </div>
+
+      <UiVerticalRule v-if="servers.length > 0" />
+
+      <UiComingSoon
+        :tooltipText="$t('coming_soon.communities')"
+        :horizontal="horizontal"
+        :tooltipPosition="'bottom'"
+      >
+        <div
+          class="server"
+          v-for="server in servers"
+          v-on:click="$router.push('/server/chat')"
+        >
+          <UiCircle
+            type="random"
+            :size="40"
+            :seed="server.address"
+            :name="server.name"
+          />
+        </div>
+      </UiComingSoon>
     </div>
-    <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('servers.new_server')"
-      v-on:click="openModal">
+    <div
+      v-if="!horizontal"
+      class="circle-group has-tooltip-right has-tooltip-primary"
+      :data-tooltip="$t('servers.new_server')"
+      @click="toggleModal(ModalWindows.CALLTOACTION)"
+    >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
       </UiCircle>
     </div>
-    <div class="circle-group has-tooltip-right has-tooltip-primary" :data-tooltip="$t('pages.settings.settings')"
-      v-on:click="$store.commit('ui/toggleSettings', true)">
+    <div
+      class="circle-group has-tooltip-right has-tooltip-primary"
+      data-cy="settings"
+      :data-tooltip="$t('pages.settings.settings')"
+      v-on:click="$store.commit('ui/toggleSettings', { show: true })"
+    >
       <UiCircle type="icon" :size="40">
         <settings-icon size="0.75x" />
       </UiCircle>

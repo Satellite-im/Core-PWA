@@ -2,7 +2,6 @@
 <script lang="ts">
 // eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-
 import { SelectSize, SelectStyle } from './types.d'
 import { SelectOption } from '~/types/ui/inputs'
 
@@ -19,6 +18,10 @@ export default Vue.extend({
     placeholder: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     /**
      * If provided the select will cover 100% of the parent
@@ -78,7 +81,7 @@ export default Vue.extend({
      * @example
      */
     selected(newValue, oldValue) {
-      if (!oldValue) {
+      if (oldValue !== newValue) {
         this.$data.selectedValue = newValue
       }
     },
@@ -103,9 +106,13 @@ export default Vue.extend({
      * @example
      */
     toggleOpen() {
-      let bodyRect = document.body.getBoundingClientRect()
-      let elementRect = this.$el.getBoundingClientRect()
-      this.up = (elementRect.top > bodyRect.bottom / 2) ? true : false
+      if (this.disabled) {
+        this.open = false
+        return
+      }
+      const bodyRect = document.body.getBoundingClientRect()
+      const elementRect = this.$el.getBoundingClientRect()
+      this.up = elementRect.top > bodyRect.bottom / 2
       this.open = !this.open
     },
     /**
@@ -118,7 +125,7 @@ export default Vue.extend({
     getSelectLabel() {
       if (this.selectedValue) {
         const item: any = (this.options as Array<SelectOption>).find(
-          (opt: SelectOption) => opt.value === this.selectedValue
+          (opt: SelectOption) => opt.value === this.selectedValue,
         )
         if (item) return item.text
       }

@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
-import * as loadImg from '~/assets/img/glyphLoader.png'
+import loadImg from '~/assets/img/glyphLoader.webp'
 
 export default Vue.extend({
   props: {
@@ -27,15 +27,15 @@ export default Vue.extend({
     },
     sendOnClick: { type: Boolean, default: false, required: false },
   },
-  computed: {
-    getSrc(): string {
-      return this.isLoaded ? this.src : loadImg
-    },
-  },
   data() {
     return {
       isLoaded: false,
     }
+  },
+  computed: {
+    getSrc(): string {
+      return this.isLoaded ? this.src.replace('$1', 'small') : loadImg
+    },
   },
   methods: {
     mouseOver() {
@@ -56,18 +56,40 @@ export default Vue.extend({
       const activeFriend = this.$Hounddog.getActiveFriend(
         this.$store.state.friends,
       )
-      if (!this.src || !activeFriend) {
-        return
+      const { id } = this.$route.params
+
+      if (!this.src) return
+      if (!activeFriend && !id) return
+
+      if (id) {
+        this.$store.dispatch('textile/sendGroupGlyphMessage', {
+          groupID: id,
+          src: this.src,
+          pack: this.pack.name,
+        })
+        this.$store.commit('ui/updateRecentGlyphs', {
+          pack: this.pack,
+          url: this.src,
+        })
+        this.$store.commit('ui/toggleEnhancers', {
+          show: false,
+          floating: !!this.$device.isMobile,
+        })
+      } else {
+        this.$store.dispatch('textile/sendGlyphMessage', {
+          to: activeFriend?.textilePubkey,
+          src: this.src,
+          pack: this.pack.name,
+        })
+        this.$store.commit('ui/updateRecentGlyphs', {
+          pack: this.pack,
+          url: this.src,
+        })
+        this.$store.commit('ui/toggleEnhancers', {
+          show: false,
+          floating: !!this.$device.isMobile,
+        })
       }
-      this.$store.dispatch('textile/sendGlyphMessage', {
-        to: activeFriend?.textilePubkey,
-        src: this.src,
-        pack: this.pack.name,
-      })
-      this.$store.commit('ui/updateRecentGlyphs', {
-        pack: this.pack,
-        url: this.src,
-      })
     },
     setLoaded() {
       this.isLoaded = true

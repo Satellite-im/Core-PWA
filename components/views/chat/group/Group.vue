@@ -1,42 +1,103 @@
 <template src="./Group.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
+import { mapState } from 'vuex'
 import { Config } from '~/config'
-
 import { Group } from '~/types/messaging'
-import { User } from '~/types/ui/user'
 import {
   getUsernameFromState,
   getAddressFromState,
-  getFullUserInfoFromState,
   refreshTimestampInterval,
+  convertTimestampToDate,
 } from '~/utilities/Messaging'
+import { GroupMember } from '~/store/groups/types'
 
 export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      // default: () => {},
+      default: () => ({
+        at: 0,
+        from: '',
+        to: '',
+      }),
+    },
+    groupId: {
+      type: String as PropType<string>,
+      default: () => '',
     },
   },
   data() {
     return {
       timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.group.at).from(),
+      timestamp: convertTimestampToDate(
+        this.$t('friends.details'),
+        this.group.at,
+      ),
     }
   },
   computed: {
+    ...mapState(['ui', 'friends', 'accounts', 'groups']),
     address() {
-      return getAddressFromState(this.group.from, this.$store.state)
+      return (
+        this.groupMember?.name ||
+        getAddressFromState(this.group.from, this.$store.state)
+      )
     },
     username() {
-      return getUsernameFromState(this.group.from, this.$store.state)
+      return (
+        this.groupMember?.name ||
+        getUsernameFromState(this.group.from, this.$store.state)
+      )
     },
     badge() {
-      // $mock.users.filter(u => u.address === group.from)[0].badge
       return ''
     },
+    src(): string {
+      // To check if the sender is you we just compare the from field
+      // with your textile public key
+      if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {
+        const myHash = this.accounts.details?.profilePicture
+        return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
+      }
+
+      // Try to find the group chat member
+      const photoHash = this.groupMember?.photoHash
+      if (photoHash) {
+        return `${this.$Config.textile.browser}/ipfs/${photoHash}`
+      }
+
+      // Try to find the friend you are talking to
+      const friend = this.$Hounddog.findFriend(this.group.from, this.friends)
+
+      if (friend?.profilePicture) {
+        return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
+      }
+
+      return ''
+    },
+    groupMember(): GroupMember | null {
+      return this.groups.all
+        .find((it: Group) => it.id === this.groupId)
+        ?.members?.find((it: GroupMember) => it.address === this.group.sender)
+    },
+  },
+  created() {
+    const setTimestamp = (timePassed: number) => {
+      this.$data.timestamp = convertTimestampToDate(
+        this.$t('friends.details'),
+        timePassed,
+      )
+    }
+
+    this.$data.timestampRefreshInterval = refreshTimestampInterval(
+      this.group.at,
+      setTimestamp,
+      Config.chat.timestampUpdateInterval,
+    )
+  },
+  beforeDestroy() {
+    clearInterval(this.$data.timestampRefreshInterval)
   },
   methods: {
     /**
@@ -46,25 +107,24 @@ export default Vue.extend({
      * @param e Event object from group component click
      * @example v-on:click="showQuickProfile"
      */
-    showQuickProfile(e: Event) {
-      const selectedUser = getFullUserInfoFromState(this.group.from, this.$store.state)
-      this.$store.commit('ui/setQuickProfilePosition', e)
-      this.$store.commit('ui/quickProfile', selectedUser)
-    },
-  },
-  created() {
-    const setTimestamp = (timePassed: string) => {
-      this.$data.timestamp = timePassed
-    }
+    showQuickProfile(e: MouseEvent) {
+      const openQuickProfile = () => {
+        this.$store.dispatch('ui/showQuickProfile', {
+          textilePublicKey: this.$props.group.from,
+          position: { x: e.x, y: e.y },
+        })
+      }
 
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.group.at,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval
-    )
-  },
-  beforeDestroy() {
-    clearInterval(this.$data.refreshTimestampEveryMinute)
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 0)
+    },
   },
 })
 </script>

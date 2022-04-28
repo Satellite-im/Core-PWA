@@ -1,11 +1,11 @@
-<template src="./Glyphs.html" />
+<template src="./Glyphs.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { marketGlyphs } from '~/mock/marketplace'
-import { GlyphMarketViewStatus } from '~/store/ui/types'
-import { find, findKey, shuffle } from 'lodash'
+import { findKey, shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
+// import { marketGlyphs } from '~/mock/marketplace'
+import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -33,16 +33,17 @@ export default Vue.extend({
     openMarketplace() {
       this.closeModal()
       this.$store.commit('ui/toggleModal', {
-        name: 'marketplace',
-        state: !this.ui.modals.marketPlace,
+        name: ModalWindows.CALLTOACTION,
+        state: !this.ui.modals[ModalWindows.CALLTOACTION],
       })
-      const marketInfo = find(marketGlyphs, ({ glyph }) => {
-        return glyph.name === this.selectedPack.name
-      })
-      this.$store.commit('ui/setGlyphMarketplaceView', {
-        view: GlyphMarketViewStatus.SHOP_DETAIL,
-        shopId: marketInfo.id,
-      })
+      /* refactor - AP-1104
+       const marketInfo = find(marketGlyphs, ({ glyph }) => {
+         return glyph.name === this.selectedPack.name
+       })
+       this.$store.commit('ui/setGlyphMarketplaceView', {
+         view: GlyphMarketViewStatus.SHOP_DETAIL,
+         shopId: marketInfo?.id,
+       }) */
     },
   },
 })

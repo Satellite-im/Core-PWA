@@ -1,20 +1,25 @@
 <template src="./Preview.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { CurrentCommand } from '~/types/utils/commands'
 import {
   commands,
-  containsCommand,
+  hasCommandPreview,
   parseCommand,
 } from '~/libraries/ui/Commands'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
     message: {
       type: String,
       default: '',
+    },
+    recipient: {
+      type: Object as PropType<Friend>,
+      default: null,
     },
   },
   computed: {
@@ -26,14 +31,7 @@ export default Vue.extend({
      * @example
      */
     hasCommand() {
-      return (
-        containsCommand(this.ui.chatbarContent) &&
-        commands.some((cmd) =>
-          cmd.name.startsWith(
-            parseCommand(this.ui.chatbarContent).name.toLowerCase()
-          )
-        )
-      )
+      return hasCommandPreview(this.ui.chatbarContent)
     },
     /**
      * @method command DocsTODO
@@ -53,8 +51,8 @@ export default Vue.extend({
     commands() {
       return commands.filter((cmd) =>
         cmd.name.startsWith(
-          parseCommand(this.ui.chatbarContent).name.toLowerCase()
-        )
+          parseCommand(this.ui.chatbarContent).name.toLowerCase(),
+        ),
       )
     },
   },
@@ -66,7 +64,11 @@ export default Vue.extend({
      * @example
      */
     completeCommand(command: CurrentCommand) {
-      this.$store.commit('ui/chatbarContent', `/${command.name}`)
+      this.$store.dispatch('ui/setChatbarContent', {
+        content: `/${command.name}`,
+        userId: this.$props.recipient?.address,
+      })
+      this.$store.dispatch('ui/setChatbarFocus')
     },
   },
 })

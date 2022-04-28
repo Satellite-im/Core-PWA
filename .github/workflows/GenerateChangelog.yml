@@ -7,64 +7,64 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-      with:
-        persist-credentials: false
-        submodules: true ## Installs the android, electron, and locales directory
-        fetch-depth: 400 ## This fetches entire history, we need this so we can get all the tags
-    - name: Reconfigure git to use HTTP authentication
-      run: >
-        git config --global url."https://github.com/".insteadOf
-        ssh://git@github.com/
-    - name: Get Tags/Checkout bug override
-      run: git fetch --tags --force ## take this out later if https://github.com/actions/checkout/issues/290 is fixed
-    - name: Set env
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV ## Later this is used to update the output files so they have the tag number in the name
-    - name: Find and Replace Version Numer in Package File ## bumps package version to match ref for the build, will commit to repo at the end when the files are created
-      run: |
-        sed -i '' -e 's/\"version\":.*/\"version\": "${{ env.RELEASE_VERSION }}",/g' package.json
-    - name: Get Current Release Version
-      run: |
-        echo $RELEASE_VERSION
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          submodules: true ## Installs the android, electron, and locales directory
+          fetch-depth: 400 ## This fetches entire history, we need this so we can get all the tags
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
+      - name: Get Tags/Checkout bug override
+        run: git fetch --tags --force ## take this out later if https://github.com/actions/checkout/issues/290 is fixed
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV ## Later this is used to update the output files so they have the tag number in the name
+      - name: Find and Replace Version Numer in Package File ## bumps package version to match ref for the build, will commit to repo at the end when the files are created
+        run: |
+          sed -i '' -e 's/\"version\":.*/\"version\": "${{ env.RELEASE_VERSION }}",/g' package.json
+      - name: Get Current Release Version
+        run: |
+          echo $RELEASE_VERSION
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: '16'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
 
-    # - name: Install dependencies
-    #   run: yarn
+      # - name: Install dependencies
+      #   run: yarn
 
-    - name: Getting Tag Names
-      run: |
-        echo "ELDERLY=$(git tag --sort version:refname | tail -n 3 | head -n 1)" >> $GITHUB_ENV
-        echo "START=$(git tag --sort version:refname | tail -n 2 | head -n 1)" >> $GITHUB_ENV
-        echo "END=$(git tag --sort version:refname | tail -n 1 | head -n 1)" >> $GITHUB_ENV
-        echo $(git tag)
+      - name: Getting Tag Names
+        run: |
+          echo "ELDERLY=$(git tag --sort version:refname | tail -n 3 | head -n 1)" >> $GITHUB_ENV
+          echo "START=$(git tag --sort version:refname | tail -n 2 | head -n 1)" >> $GITHUB_ENV
+          echo "END=$(git tag --sort version:refname | tail -n 1 | head -n 1)" >> $GITHUB_ENV
+          echo $(git tag)
 
-    - name: Build Changelog
-      id: github_release
-      uses: mikepenz/release-changelog-builder-action@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        commitMode: true
-        configuration: ".github/config/changelog_config.json"
-        fromTag: "${{ env.ELDERLY }}"
-        toTag: "${{ env.END }}"
-        outputFile: ./changelog.txt
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commitMode: true
+          configuration: '.github/config/changelog_config.json'
+          fromTag: '${{ env.ELDERLY }}'
+          toTag: '${{ env.END }}'
+          outputFile: ./changelog.txt
 
-    - name: Combine Changelog and Checksums
-      run: |
-        sed -i '' '/Merge pull request/d' changelog.txt
-        sed -i '' '/Merge branch/d' changelog.txt
-        awk '!visited[$0]++' changelog.txt > deduplicated_changelog.txt
+      - name: Combine Changelog and Checksums
+        run: |
+          sed -i '' '/Merge pull request/d' changelog.txt
+          sed -i '' '/Merge branch/d' changelog.txt
+          awk '!visited[$0]++' changelog.txt > deduplicated_changelog.txt
 
-    - name: Copy file to release
-      uses: softprops/action-gh-release@v1
-      with:
-        body_path: ./deduplicated_changelog.txt
+      - name: Copy file to release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ./deduplicated_changelog.txt
 
   commit:
     needs: build

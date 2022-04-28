@@ -1,29 +1,21 @@
 <template src="./Upload.html"></template>
-
 <script lang="ts">
-import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
+import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
+import { isHeic } from '~/utilities/FileType'
 import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    loadPicture: (item: UploadDropItemType) => void
-    cancelUpload: () => void
-    finishUploads: () => void
-    dispatchFile: (file: UploadDropItemType) => void
-  }
-}
+import { SettingsRoutes } from '~/store/ui/types'
+const converter = require('heic-convert')
 
 export default Vue.extend({
   name: 'Upload',
   components: {
     PlusIcon,
     FilePlusIcon,
-    XIcon,
   },
   props: {
     type: {
@@ -35,31 +27,61 @@ export default Vue.extend({
     },
     recipient: {
       type: Object as PropType<Friend>,
+      default: null,
+    },
+    files: {
+      type: Array as PropType<UploadDropItemType[]>,
+      default: null,
     },
   },
   data() {
     return {
-      files: [] as Array<UploadDropItemType>,
-      uploadStatus: false,
-      count_error: false,
       progress: 0,
       ipfsHash: false,
       selectedFile: false,
       imageURL: '',
       fileClass: false,
-      error: false,
       aiScanning: false,
-      disabledButton: false,
       fileAmount: 0,
     }
   },
   computed: {
-    ...mapState(['ui', 'friends']),
-    activeFriend() {
+    ...mapState(['settings']),
+    activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
   },
   methods: {
+    /**
+     * @method resetFileUpload
+     * @description Clear the value of file input so trigger the handleFile for the same file.
+     * @example <input @onclick="resetFileUpload" />
+     */
+    async resetFileUpload() {
+      if (this.$refs.quickUpload)
+        (this.$refs.quickUpload as HTMLFormElement).value = ''
+    },
+    handleFileClick() {
+      this.resetFileUpload()
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
+
+      setTimeout(() => {
+        if (this.$refs.quickUpload)
+          (this.$refs.quickUpload as HTMLFormElement).click()
+      }, 200)
+    },
     /**
      * @method handleFile
      * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
@@ -67,28 +89,54 @@ export default Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: any) {
-      this.$data.disabledButton = false
       this.$store.dispatch('textile/clearUploadStatus')
+      this.$store.dispatch('ui/setChatbarFocus')
       if (this.editable) {
-        const files: File[] = event.target.files
-        this.$parent.$data.showFilePreview = files.length > 0
-        if (files.length > 8) {
-          this.$data.count_error = true
+        const newFiles: File[] = [...event.target.files]
+
+        if (newFiles.length + this.files.length > 8) {
+          this.$store.commit('chat/setCountError', true)
+
           return
         }
-        this.$data.count_error = false
-        this.$data.files = await Promise.all(
-          [...files].map(async (file: File) => {
-            const uploadFile = {
+        const address = this.recipient?.address
+        if (
+          !address &&
+          !RegExp(this.$Config.regex.uuidv4).test(
+            this.recipient.textilePubkey.split('|')[1],
+          )
+        )
+          return
+        this.$store.commit('chat/setCountError', false)
+        for (let i = 0; i < newFiles.length; i++) {
+          if (await isHeic(newFiles[i])) {
+            const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
+            const oBuffer = await converter({
+              buffer,
+              format: 'PNG', // output format
+              quality: 1,
+            })
+            newFiles[i] = new File(
+              [oBuffer.buffer],
+              `${newFiles[i].name.split('.')[0] || 'newImage'}.png`,
+              {
+                type: 'image/png',
+              },
+            )
+          }
+        }
+        const filesToUpload = await Promise.all(
+          newFiles.map(async (file: File) => {
+            const result: UploadDropItemType = {
               file,
               nsfw: { status: false, checking: false },
               url: '',
-            } as UploadDropItemType
-            return uploadFile
+            }
+            return result
           }),
         )
-        this.$data.files.every(async (uploadFile: UploadDropItemType) => {
-          if (uploadFile.file.size <= Config.uploadByteLimit) {
+        for (const uploadFile of filesToUpload) {
+          if (uploadFile.file.size <= Config.nsfwPictureLimit) {
             uploadFile.nsfw.checking = true
             try {
               uploadFile.nsfw.status = await this.$Security.isNSFW(
@@ -100,90 +148,125 @@ export default Vue.extend({
             }
             uploadFile.nsfw.checking = false
           }
-
-          this.loadPicture(uploadFile)
-        })
-        this.$data.uploadStatus = true
+          this.loadPicture(uploadFile, () =>
+            this.$store.commit('chat/addFile', {
+              file: uploadFile,
+              address,
+            }),
+          )
+        }
       }
-    },
-    handleTouchPreview(event: Event) {
-      event.stopPropagation()
     },
     /**
      * @method loadPicture
-     * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
+     * @description Creates data URL from file and pushes it to url in the components data object (this.url = the new created data URL)
      * @param file File to load
-     * @example this.loadPicture(this.$data.file)
+     * @param callback Function to be called after the data URL is created
+     * @example this.loadPicture(this.file)
      */
-    loadPicture(item: UploadDropItemType) {
+    loadPicture(item: UploadDropItemType, callback: Function) {
       if (!item.file) return
       const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
-        if (e.target) item.url = e.target.result
+      reader.onload = (e: Event | any) => {
+        if (e.target) {
+          item.url = e.target.result
+          if (callback) callback()
+        }
       }
       reader.readAsDataURL(item.file)
-    },
-    /**
-     * @method cancelUpload
-     * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
-     * @example @click="cancelUpload"
-     */
-    cancelUpload() {
-      this.$data.files = []
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$data.uploadStatus = false
-      this.$data.count_error = false
-      this.$parent.$data.showFilePreview = false
-    },
-    removeUploadItem(index: number) {
-      this.$data.files.splice(index, 1)
-      this.$data.files = [...this.$data.files]
-      if (this.$data.files.length === 0) {
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.$data.uploadStatus = false
-        this.$data.count_error = false
-        this.$parent.$data.showFilePreview = false
-      }
     },
     /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.$data.fileAmount--
-      if (this.$data.fileAmount === 0) {
-        this.cancelUpload()
+      this.fileAmount--
+      if (this.fileAmount === 0) {
+        if (this.$store.state.chat.containsNsfw) {
+          this.alertNsfwFile()
+        }
+        if (!this.$store.state.chat.containsNsfw) {
+          this.$emit('cancelUpload')
+          document.body.style.cursor = PropCommonEnum.DEFAULT
+          this.$store.dispatch('textile/clearUploadStatus')
+        }
+      }
+    },
+    alertNsfwFile() {
+      this.$store.commit('chat/setAlertNsfw', true)
+
+      setTimeout(() => {
+        this.$store.commit('chat/setAlertNsfw', false)
+        this.$store.commit('chat/setContainsNsfw', false)
+        this.$emit('cancelUpload')
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
-        this.$data.disabledButton = false
-      }
+      }, 500000)
     },
     /**
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    dispatchFile(file: UploadDropItemType) {
-      this.$store
-        .dispatch('textile/sendFileMessage', {
-          to: this.recipient.textilePubkey,
-          file: file,
-        })
-        .then(() => this.finishUploads())
+    async dispatchFile(file: UploadDropItemType) {
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(
+          this.recipient.textilePubkey.split('|')[1],
+        )
+      ) {
+        await this.$store
+          .dispatch('textile/sendGroupFileMessage', {
+            groupID: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      } else {
+        await this.$store
+          .dispatch('textile/sendFileMessage', {
+            to: this.recipient?.textilePubkey,
+            file,
+          })
+          .then(() => {
+            this.finishUploads()
+          })
+          .catch((error) => {
+            if (error) {
+              this.$Logger.log('file send error', error)
+              document.body.style.cursor = PropCommonEnum.DEFAULT
+              this.$store.dispatch('textile/clearUploadStatus')
+            }
+          })
+      }
     },
     /**
      * @method sendMessage
      * @description Sends action to Upload the file to textile.
      */
     async sendMessage() {
-      this.$data.disabledButton = true
-      this.$data.fileAmount = this.$data.files.length
-      this.$data.files.forEach((file: UploadDropItemType) => {
-        this.dispatchFile(file)
-      })
+      const nsfwCheck: UploadDropItemType[] = []
+      for (const file of this.files) {
+        if (!file.nsfw.status) {
+          nsfwCheck.push(file)
+        } else {
+          this.$store.commit('chat/setContainsNsfw', true)
+          this.alertNsfwFile()
+        }
+      }
+      this.fileAmount = nsfwCheck.length
+      for (const file of nsfwCheck) {
+        await this.dispatchFile(file)
+      }
+      this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Upload.less"></style>

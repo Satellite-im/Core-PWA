@@ -1,0 +1,66 @@
+<div class="search-container" v-click-outside="lostFocus">
+  <div class="search-box" :class="{'focus' : isFocus}">
+    <div class="search-placeholder" :class="{'hide' : !isEmpty}">
+      {{placeholder}}
+    </div>
+    <div class="search-icon">
+      <search-icon size="1.1x" />
+    </div>
+    <button v-if="!isEmpty" class="search-clear" @click="clearSearch">
+      <delete-icon size="1.1x" />
+    </button>
+    <div
+      ref="searchInput"
+      class="search-input"
+      data-cy="chat-search-input"
+      @mousedown="setFocus"
+      @keydown="keydown"
+      @keyup="keyup"
+      @input="input"
+    ></div>
+  </div>
+  <!-- <div class="search-options" v-if="isOption">
+    <ul class="search-option-group">
+      <li class="search-option-heading">
+        {{$t('search.input.search_options')}}
+      </li>
+      <template v-if="isHas">
+        <li
+          v-for="(opt, i) in hasOptions"
+          :class="{active:i==option}"
+          @click="clickHasOption(i)"
+        >
+          <span>{{opt.value}}</span>
+        </li>
+      </template>
+      <template v-if="isEmpty || isEmptyCommand">
+        <li
+          v-for="(opt, i) in searchOptions"
+          :class="{active:i==option}"
+          @click="clickOption(i)"
+        >
+          <span>{{opt.name}}:</span> <span>{{opt.description}}</span>
+        </li>
+      </template>
+    </ul>
+  </div> -->
+  <div class="search-recommends" v-if="isSearch">
+    <ul class="search-recommend-group">
+      <li class="search-for">
+        {{$t('search.input.search_for')}} {{searchFor}}
+      </li>
+      <!-- <li
+        v-for="(sch, i) in searchResult"
+        :class="{active:i==search}"
+        @click="clickSearchOption(i)"
+      >
+        <span>{{sch.command}}:</span>
+        <span>{{sch.value.value.substring(0, current.value.length)}}</span
+        ><span>{{sch.value.value.substring(current.value.length)}}</span>
+      </li> -->
+    </ul>
+  </div>
+  <div v-if="isDate && isFocus" refs="datePicker" class="date-selection">
+    <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" />
+  </div>
+</div>

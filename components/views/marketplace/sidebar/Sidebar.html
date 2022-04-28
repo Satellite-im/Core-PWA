@@ -11,14 +11,9 @@
         v-on:click="clickCategory(item)"
       >
         <span class="category">
-          <span class="category-text">
-            {{item.self.name}}
-          </span>
+          <span class="category-text"> {{item.self.name}} </span>
           <span class="category-action">
-            <chevron-down-icon
-              size="1x"
-              v-if="item.children.length>0"
-            />
+            <chevron-down-icon size="1x" v-if="item.children.length>0" />
             <circle-icon
               size="1x"
               v-if="item.selected"

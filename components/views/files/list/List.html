@@ -1,77 +1,48 @@
-<div id="file-list" :class="{'hidden-scroll': !$device.isMobile}" v-scroll-lock="true">
-  <FilesView
-    v-if="file"
-    :file="file"
-    :close="() => this.file = false"
-  />
-  <component :is="!$device.isMobile? 'UiScroll' : 'div'" verticalScroll scrollbarVisibility="scroll">
-    <table class="table">
-      <thead>
-        <th>
-          {{ $t('pages.files.browse.name') }}
-          <filter-icon size="0.8x" class="sort" />
-        </th>
-        <th v-if="!$device.isMobile">
-          {{ $t('pages.files.browse.modified') }}
-          <filter-icon size="0.8x" class="sort" />
-        </th>
-        <th v-if="!$device.isMobile">
-          {{ $t('pages.files.browse.type') }}
-          <filter-icon size="0.8x" class="sort" />
-        </th>
-        <th v-if="!$device.isMobile">
-          {{ $t('pages.files.browse.encrypted') }}
-          <filter-icon size="0.8x" class="sort" />
-        </th>
-        <th>
-          {{ $t('pages.files.browse.size') }}
-          <filter-icon size="0.8x" class="sort" />
-        </th>
-        <th></th>
-      </thead>
-      <tbody>
-        <tr class="item" v-for="item in path">
-          <td class="filename" v-on:click="() => handle(item)">
-            <span class="icon">
-              <folder-icon
-                size="1x"
-                v-if="item.children"
-              />
-              <archive-icon
-                size="1x"
-                v-else-if="item.type && item.type.includes('archive')"
-              />
-              <image-icon
-                size="1x"
-                v-else-if="item.type && item.type.includes('image')"
-              />
-              <file-icon size="1x" v-else />
-            </span>
-            {{ item.name }}
-          </td>
-          <td v-if="!$device.isMobile">{{ $dayjs(item.modified).from() }}</td>
-          <td v-if="!$device.isMobile">
-            {{ item.type ? item.type : item.children ? 'Folder' : '-' }}
-          </td>
-          <td
-            class="has-tooltip has-tooltip-primary has-tooltip-top"
-            :data-tooltip="(item.encrypted) ? $t('global.encrypted') : $t('global.unencrypted')"
-            v-if="!$device.isMobile"
-          >
-            <lock-icon
-              size="1x"
-              v-if="item.encrypted" />
-            <unlock-icon
-              size="1x"
-              v-else
-            />
-          </td>
-          <td>{{ item.size ? $filesize(item.size) : '-' }}</td>
-          <td class="options">
-            <more-vertical-icon size="1x" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </component>
-</div>
+<table class="table" :class="{'disabled' : isFilesIndexLoading}">
+  <thead>
+    <th @click="setSort(FileSortEnum.NAME)">
+      {{ $t('pages.files.browse.name') }}
+      <template v-if="sort.category===FileSortEnum.NAME">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th @click="setSort(FileSortEnum.MODIFIED)">
+      {{ $t('pages.files.browse.modified') }}
+      <template v-if="sort.category===FileSortEnum.MODIFIED">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th
+      v-if="!$device.isMobile"
+      @click="setSort(FileSortEnum.TYPE)"
+      class="open-sidebar-hide"
+    >
+      {{ $t('pages.files.browse.type') }}
+      <template v-if="sort.category===FileSortEnum.TYPE">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
+      {{ $t('pages.files.browse.size') }}
+      <template v-if="sort.category===FileSortEnum.SIZE">
+        <chevron-up-icon v-if="sort.asc" size="1x" />
+        <chevron-down-icon v-else size="1x" />
+      </template>
+    </th>
+    <th />
+  </thead>
+  <tbody>
+    <FilesRow
+      v-for="item, i in directory"
+      :key="i + counter"
+      :item="item"
+      @like="like"
+      @share="share"
+      @remove="remove"
+      @handle="handle"
+    />
+  </tbody>
+</table>

@@ -20,13 +20,14 @@
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('messaging.pin')"
+    v-if="featureReadyToShow"
   >
     <archive-icon size="1x" :class="'control-icon'" />
   </div>
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('controls.edit')"
-    v-if="message.from === accounts.details.textilePubkey"
+    v-if="isEditable"
     @click="editMessage"
   >
     <edit-icon size="1x" :class="'control-icon'" />
@@ -34,6 +35,7 @@
   <div
     class="reply-command has-tooltip has-tooltip-primary"
     :data-tooltip="$t('ui.more')"
+    v-if="hasMoreSettings"
   >
     <more-vertical-icon size="1x" :class="'control-icon'" />
   </div>

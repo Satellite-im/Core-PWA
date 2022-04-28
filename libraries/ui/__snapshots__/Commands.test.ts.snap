@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Commands.containsCommand 0 1`] = `false`;
+
+exports[`Commands.containsCommand 1 1`] = `false`;
+
+exports[`Commands.containsCommand 2 1`] = `false`;
+
+exports[`Commands.containsCommand 3 1`] = `false`;
+
+exports[`Commands.containsCommand 4 1`] = `false`;
+
+exports[`Commands.containsCommand 5 1`] = `false`;
+
+exports[`Commands.isArgsValid 0 1`] = `false`;
+
+exports[`Commands.isArgsValid 1 1`] = `false`;
+
+exports[`Commands.isArgsValid 2 1`] = `false`;
+
+exports[`Commands.isArgsValid 3 1`] = `false`;
+
+exports[`Commands.isArgsValid 4 1`] = `false`;
+
+exports[`Commands.isArgsValid 5 1`] = `true`;
+
+exports[`Commands.isArgsValid 6 1`] = `true`;
+
+exports[`Commands.parseCommand 0 1`] = `
+Object {
+  "args": Array [
+    "bar",
+  ],
+  "name": "foo",
+}
+`;
+
+exports[`Commands.parseCommand 1 1`] = `
+Object {
+  "args": Array [
+    "world!",
+  ],
+  "name": "Hello,",
+}
+`;
+
+exports[`Commands.parseCommand 2 1`] = `
+Object {
+  "args": Array [
+    "bar",
+  ],
+  "name": "Foo",
+}
+`;
+
+exports[`Commands.parseCommand 3 1`] = `
+Object {
+  "args": Array [
+    "is",
+    "a",
+    "Text",
+  ],
+  "name": "This",
+}
+`;
+
+exports[`Commands.parseCommand 4 1`] = `
+Object {
+  "args": Array [],
+  "name": "",
+}
+`;

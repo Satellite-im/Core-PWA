@@ -2,12 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-dayjs.extend(duration)
 export default Vue.extend({
   components: {
     MaximizeIcon,
@@ -15,7 +12,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      elapsedTimeLabel: ''
+      elapsedTimeLabel: '',
     }
   },
   computed: {
@@ -37,19 +34,28 @@ export default Vue.extend({
      */
     toggleFullscreen() {
       this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
+      const elements = document.querySelectorAll('.full-video')
+      if (elements && elements.length > 0 && !this.ui.fullscreen) {
+        for (let i = 0; i < elements.length; i++) {
+          const element = elements[i]
+          element?.classList.remove('full-video')
+        }
+      }
     },
     elapsedTime(start: number): void {
-      const duration = dayjs.duration(Date.now() - start)
+      if (!start) return
+      const duration = this.$dayjs.duration(Date.now() - start)
       const hours = duration.hours()
       this.elapsedTimeLabel = `${this.$t('ui.live')} ${
         hours > 0 ? `${hours}:` : ''
       }${duration.format('mm:ss')}`
     },
     setTimer() {
-      if (this.webrtc && this.webrtc.activeStream) {
-        if (!this.timerId) {
+      this.$store.commit('webrtc/updateCreatedAt', Date.now())
+      if (this.webrtc?.activeCall) {
+        if (!this.timer) {
           this.elapsedTime(this.webrtc.activeStream.createdAt)
-          this.timerId = setInterval(() => {
+          this.timer = setInterval(() => {
             this.elapsedTime(this.webrtc.activeStream.createdAt)
           }, 1000)
         }

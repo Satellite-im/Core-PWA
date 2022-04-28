@@ -14,28 +14,30 @@
     >
       <UiGlobal />
 
-      <swiper class="swiper" :options="swiperOption" ref="swiper">
+      <swiper ref="swiper" class="swiper" :options="swiperOption">
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
             :servers="$mock.servers"
-            :unreads="$mock.unreads"
+            :unreads="friends.all"
             :open-modal="toggleModal"
           />
           <ServerSidebar
             :toggle="() => ($data.sidebar = !$data.sidebar)"
-            :showMenu="toggleMenu"
+            :show-menu="toggleMenu"
             :sidebar="sidebar"
           />
           <Enhancers />
         </swiper-slide>
-        <swiper-slide :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`">
+        <swiper-slide
+          :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
+        >
           <menu-icon
             class="toggle--sidebar"
-            v-on:click="toggleMenu"
             size="1.2x"
             full-width
             :style="`${!sidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
           />
           <Toolbar
             id="toolbar"
@@ -54,7 +56,7 @@
           />
           <UiChatScroll
             :contents="ui.messages"
-            :prevent-scroll-offset="500"
+            :prevent-scroll-offset="10"
             :class="media.activeCall ? 'media-open' : ''"
             enable-wrap
           >
@@ -67,7 +69,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+      :root { --flair-color: {{ flairColor }}; --flair-color-rgb:
+      {{ flairColorRGB }} }
     </v-style>
   </div>
 </template>
@@ -75,34 +78,38 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-
-import {
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { hexToRGB } from '~/utilities/Colors'
+import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   name: 'ServerLayout',
-  mixins: [Touch, Layout],
-  middleware: 'authenticated',
   components: {
     MenuIcon,
   },
+  mixins: [Touch, Layout],
+  middleware: 'authenticated',
+  setup() {
+    useMeta()
+  },
   data() {
     return {
-      sidebar: true,
+      sidebar: !this.$device.isMobile,
       swiperOption: {
-        initialSlide: 0,
+        initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove:  this.$device.isMobile ? true : false,
+        noSwiping: !this.$device.isMobile,
+        allowTouchMove: this.$device.isMobile,
         on: {
           slideChange: () => {
-            this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
-          }
-        }
+            if (this.$refs.swiper && this.$refs.swiper.$swiper) {
+              this.$data.sidebar = this.$refs.swiper.$swiper.activeIndex === 0
+            }
+          },
+        },
       },
     }
   },
@@ -110,6 +117,12 @@ export default Vue.extend({
     ...mapState(['ui', 'media']),
     swiper() {
       return this.$refs.swiper.$swiper
+    },
+    flairColor() {
+      return this.ui.theme.flair.value
+    },
+    flairColorRGB() {
+      return hexToRGB(this.ui.theme.flair.value)
     },
   },
   methods: {
@@ -119,7 +132,7 @@ export default Vue.extend({
           ? this.$refs.swiper.$swiper.slideNext()
           : this.$refs.swiper.$swiper.slidePrev()
       }
-    }
+    },
   },
 })
 </script>

@@ -34,4 +34,14 @@
   &.is-normal {
     height: 2.3rem;
   }
+  &:disabled {
+    &::placeholder {
+      /* without !important it does not work */
+      color: grey !important;
+    }
+  }
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

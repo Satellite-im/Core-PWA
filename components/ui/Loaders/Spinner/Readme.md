@@ -5,7 +5,7 @@ Generic loading spinner
 ## Usage
 
 ```vue
-  <UiLoadersSpinner spinning />
+<UiLoadersSpinner spinning />
 ```
 
 ## Props

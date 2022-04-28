@@ -1,0 +1,584 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServerProgram.default.getUserPublicKey 0 1`] = `Promise {}`;
+
+exports[`ServerProgram.default.isInitialized 0 1`] = `false`;
+
+exports[`ServerProgram.default.parseUserInfo 0 1`] = `
+Object {
+  "name": "Michael",
+  "photoHash": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+  "servers": Array [
+    Array [
+      Array [
+        "https://api.telegram.org/bot",
+        "https://croplands.org/app/a/reset?token=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://api.telegram.org/",
+      ],
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://croplands.org/app/a/reset?token=",
+        "https://twitter.com/path?abc",
+        "https://api.telegram.org/bot",
+      ],
+      Array [
+        "https://croplands.org/app/a/reset?token=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "Www.GooGle.com",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://twitter.com/path?abc",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "Www.GooGle.com",
+      ],
+    ],
+    Array [
+      Array [
+        "http://base.com",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "http://www.example.com/route/123?foo=bar",
+        "http://www.example.com/route/123?foo=bar",
+      ],
+      Array [
+        "https://croplands.org/app/a/reset?token=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "www.google.com",
+        "google.com",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "https://croplands.org/app/a/reset?token=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "http://base.com",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "http://www.example.com/route/123?foo=bar",
+        "https://api.telegram.org/",
+      ],
+    ],
+    Array [
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://twitter.com/path?abc",
+        "http://base.com",
+        "https://twitter.com/path?abc",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "www.google.com",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+      Array [
+        "google.com",
+        "https://croplands.org/app/a/confirm?t=",
+        "https://api.telegram.org/",
+        "https://",
+      ],
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://twitter.com/path?abc",
+        "http://www.croplands.org/account/confirm?t=",
+      ],
+    ],
+    Array [
+      Array [
+        "Www.GooGle.com",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "Www.GooGle.com",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://api.telegram.org/",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "https://twitter.com/path?abc",
+        "https://croplands.org/app/a/confirm?t=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "Www.GooGle.com",
+      ],
+      Array [
+        "http://base.com",
+        "https://",
+        "https://croplands.org/app/a/confirm?t=",
+        "http://base.com",
+      ],
+    ],
+  ],
+  "status": "canceled",
+}
+`;
+
+exports[`ServerProgram.default.parseUserInfo 1 1`] = `
+Object {
+  "name": "Michael",
+  "photoHash": "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+  "servers": Array [
+    Array [
+      Array [
+        "google.com",
+        "http://www.example.com/route/123?foo=bar",
+        "http://www.example.com/route/123?foo=bar",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "https://croplands.org/app/a/reset?token=",
+        "https://croplands.org/app/a/reset?token=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://",
+        "http://www.example.com/route/123?foo=bar",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "http://www.croplands.org/account/confirm?t=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://twitter.com/path?abc",
+      ],
+    ],
+    Array [
+      Array [
+        "http://base.com",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://api.telegram.org/",
+        "www.google.com",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://",
+        "http://www.croplands.org/account/confirm?t=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "www.google.com",
+        "https://api.telegram.org/",
+        "https://twitter.com/path?abc",
+        "https://api.telegram.org/",
+      ],
+      Array [
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+    ],
+    Array [
+      Array [
+        "Www.GooGle.com",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://api.telegram.org/bot",
+        "https://api.telegram.org/bot",
+      ],
+      Array [
+        "google.com",
+        "www.google.com",
+        "http://base.com",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+      Array [
+        "http://base.com",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://twitter.com/path?abc",
+      ],
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "Www.GooGle.com",
+        "www.google.com",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+    ],
+    Array [
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "https://",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://twitter.com/path?abc",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "http://www.croplands.org/account/confirm?t=",
+        "www.google.com",
+        "https://twitter.com/path?abc",
+      ],
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://croplands.org/app/a/reset?token=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://api.telegram.org/bot",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "https://",
+        "https://api.telegram.org/",
+        "https://api.telegram.org/bot",
+      ],
+    ],
+  ],
+  "status": "draft",
+}
+`;
+
+exports[`ServerProgram.default.parseUserInfo 2 1`] = `
+Object {
+  "name": "Jean-Philippe",
+  "photoHash": "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+  "servers": Array [
+    Array [
+      Array [
+        "https://",
+        "www.google.com",
+        "Www.GooGle.com",
+        "www.google.com",
+      ],
+      Array [
+        "www.google.com",
+        "http://www.example.com/route/123?foo=bar",
+        "https://twitter.com/path?abc",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "http://www.example.com/route/123?foo=bar",
+        "https://twitter.com/path?abc",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "http://base.com",
+        "https://twitter.com/path?abc",
+        "https://api.telegram.org/",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+    ],
+    Array [
+      Array [
+        "www.google.com",
+        "https://",
+        "https://croplands.org/app/a/reset?token=",
+        "https://",
+      ],
+      Array [
+        "https://api.telegram.org/bot",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://api.telegram.org/",
+      ],
+      Array [
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://croplands.org/app/a/confirm?t=",
+        "https://croplands.org/app/a/confirm?t=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://croplands.org/app/a/reset?token=",
+        "http://base.com",
+        "www.google.com",
+      ],
+    ],
+    Array [
+      Array [
+        "https://",
+        "https://api.telegram.org/",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://twitter.com/path?abc",
+        "http://base.com",
+        "google.com",
+      ],
+      Array [
+        "https://twitter.com/path?abc",
+        "https://twitter.com/path?abc",
+        "http://www.example.com/route/123?foo=bar",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://croplands.org/app/a/reset?token=",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://twitter.com/path?abc",
+      ],
+    ],
+    Array [
+      Array [
+        "https://croplands.org/app/a/confirm?t=",
+        "www.google.com",
+        "Www.GooGle.com",
+        "https://api.telegram.org/bot",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://",
+        "https://croplands.org/app/a/confirm?t=",
+        "http://www.croplands.org/account/confirm?t=",
+      ],
+      Array [
+        "https://croplands.org/app/a/confirm?t=",
+        "google.com",
+        "google.com",
+        "https://",
+      ],
+      Array [
+        "https://",
+        "https://croplands.org/app/a/reset?token=",
+        "http://base.com",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+    ],
+  ],
+  "status": "done",
+}
+`;
+
+exports[`ServerProgram.default.parseUserInfo 3 1`] = `
+Object {
+  "name": "Michael",
+  "photoHash": "https://accounts.google.com/o/oauth2/revoke?token=%s",
+  "servers": Array [
+    Array [
+      Array [
+        "https://",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "http://www.croplands.org/account/confirm?t=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "google.com",
+        "https://twitter.com/path?abc",
+        "http://www.croplands.org/account/confirm?t=",
+      ],
+      Array [
+        "www.google.com",
+        "https://api.telegram.org/bot",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://api.telegram.org/bot",
+        "https://croplands.org/app/a/confirm?t=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+    ],
+    Array [
+      Array [
+        "google.com",
+        "http://base.com",
+        "https://api.telegram.org/",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "http://www.example.com/route/123?foo=bar",
+        "http://base.com",
+        "http://base.com",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://croplands.org/app/a/confirm?t=",
+        "http://www.croplands.org/account/confirm?t=",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "google.com",
+      ],
+    ],
+    Array [
+      Array [
+        "https://twitter.com/path?abc",
+        "www.google.com",
+        "https://api.telegram.org/bot",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+      ],
+      Array [
+        "https://api.telegram.org/",
+        "https://",
+        "https://croplands.org/app/a/reset?token=",
+        "www.google.com",
+      ],
+      Array [
+        "google.com",
+        "https://croplands.org/app/a/confirm?t=",
+        "Www.GooGle.com",
+        "google.com",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "google.com",
+        "https://api.telegram.org/",
+        "google.com",
+      ],
+    ],
+    Array [
+      Array [
+        "https://croplands.org/app/a/reset?token=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "http://www.croplands.org/account/confirm?t=",
+      ],
+      Array [
+        "https://api.telegram.org/",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://twitter.com/path?abc",
+        "google.com",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "www.google.com",
+        "http://www.example.com/route/123?foo=bar",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+      Array [
+        "https://twitter.com/path?abc",
+        "https://croplands.org/app/a/confirm?t=",
+        "https://",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+    ],
+  ],
+  "status": "processing",
+}
+`;
+
+exports[`ServerProgram.default.parseUserInfo 4 1`] = `
+Object {
+  "name": "Anas",
+  "photoHash": "https://croplands.org/app/a/confirm?t=",
+  "servers": Array [
+    Array [
+      Array [
+        "https://",
+        "http://www.example.com/route/123?foo=bar",
+        "google.com",
+        "http://base.com",
+      ],
+      Array [
+        "Www.GooGle.com",
+        "https://twitter.com/path?abc",
+        "https://croplands.org/app/a/reset?token=",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "www.google.com",
+        "google.com",
+        "http://base.com",
+        "google.com",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "https://",
+        "https://api.telegram.org/",
+        "https://",
+      ],
+    ],
+    Array [
+      Array [
+        "https://api.telegram.org/bot",
+        "google.com",
+        "https://api.telegram.org/",
+        "https://api.telegram.org/bot",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "google.com",
+        "https://api.telegram.org/bot",
+        "http://www.example.com/route/123?foo=bar",
+      ],
+      Array [
+        "www.google.com",
+        "https://croplands.org/app/a/confirm?t=",
+        "google.com",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+      ],
+      Array [
+        "http://www.example.com/route/123?foo=bar",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://api.telegram.org/bot",
+        "www.google.com",
+      ],
+    ],
+    Array [
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://api.telegram.org/bot",
+        "https://api.telegram.org/",
+        "google.com",
+      ],
+      Array [
+        "http://base.com",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://",
+        "https://",
+      ],
+      Array [
+        "https://croplands.org/app/a/reset?token=",
+        "https://api.telegram.org/",
+        "https://accounts.google.com/o/oauth2/revoke?token=%s",
+        "https://croplands.org/app/a/reset?token=",
+      ],
+      Array [
+        "http://www.croplands.org/account/confirm?t=",
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "https://",
+        "https://api.telegram.org/",
+      ],
+    ],
+    Array [
+      Array [
+        "http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg",
+        "http://www.croplands.org/account/confirm?t=",
+        "Www.GooGle.com",
+        "http://www.example.com/route/123?foo=bar",
+      ],
+      Array [
+        "https://",
+        "https://api.telegram.org/",
+        "http://base.com",
+        "http://www.example.com/route/123?foo=bar",
+      ],
+      Array [
+        "https://api.telegram.org/",
+        "http://www.example.com/route/123?foo=bar",
+        "https://",
+        "https://api.telegram.org/",
+      ],
+      Array [
+        "https://twitter.com/path?abc",
+        "https://",
+        "www.google.com",
+        "https://croplands.org/app/a/confirm?t=",
+      ],
+    ],
+  ],
+  "status": "pending",
+}
+`;
+
+exports[`ServerProgram.default.parseUserInfo 5 1`] = `
+Object {
+  "name": "",
+  "photoHash": "",
+  "servers": Array [],
+  "status": "",
+}
+`;

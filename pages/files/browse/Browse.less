@@ -2,45 +2,28 @@
   padding: @normal-spacing;
 
   .files-container {
-    &:extend(.full-width);
     display: flex;
-    flex-direction: row;
-  }
-  .two-thirds {
-    width: 66%;
-    float: left;
-  }
-  .one-third {
-    width: 33%;
-    float: left;
-    text-align: right;
-    &:extend(.font-muted);
+    gap: @normal-spacing;
+
+    .files-left {
+      flex-grow: 1;
+    }
   }
 
-  .files-left {
-    &:extend(.full-width);
-  }
   .files-right {
     width: 350px;
-    padding: @normal-spacing;
-    padding-top: 0;
-    padding-right: 0;
+    min-width: 350px;
+    height: fit-content;
+    position: sticky;
+    top: 0;
   }
   .files-top {
-    &:extend(.full-width);
-    display: inline-flex;
-    margin-bottom: @normal-spacing;
-  }
-  .input {
-    margin-bottom: @normal-spacing;
+    display: flex;
+    margin: @normal-spacing 0;
   }
 
-  .mobile-file-aside{
-    padding-bottom: 10px;
-  }
-
-  .hidden-file-aside{
-    display: none;
+  .mobile-file-aside {
+    padding-bottom: 8px;
   }
 
   .scroll-area {
@@ -50,7 +33,6 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #files {
-    min-width: 100vw;
-    margin-top: 2.5rem;
+    margin-top: 3.5rem;
   }
 }

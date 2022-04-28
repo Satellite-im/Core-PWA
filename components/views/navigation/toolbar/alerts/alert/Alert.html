@@ -8,7 +8,10 @@
       <!--Alert title-->
       <TypographySubtitle :size="6" :text="localAlert.content.title" />
       <!--Alert timestamp-->
-      <TypographyText :text="$dayjs(localAlert.at).from()" class="timestamp" />
+      <TypographyText
+        :text="$dayjs(localAlert.at).fromNow()"
+        class="timestamp"
+      />
     </div>
     <!--Alert description-->
     <div class="description">

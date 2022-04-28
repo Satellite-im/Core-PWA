@@ -44,11 +44,11 @@ export default class Crypto {
     }
 
     const convertedPublicKey = ed2curve.convertPublicKey(
-      recipientPublicKey.toBytes()
+      recipientPublicKey.toBytes(),
     )
 
     return Buffer.from(
-      sharedKey(this.signingKey.secretKey, convertedPublicKey)
+      sharedKey(this.signingKey.secretKey, convertedPublicKey),
     ).toString('hex')
   }
 
@@ -68,7 +68,7 @@ export default class Crypto {
       buffered,
       { name: 'AES-CBC' },
       true,
-      ['encrypt', 'decrypt']
+      ['encrypt', 'decrypt'],
     )
   }
 
@@ -81,7 +81,7 @@ export default class Crypto {
   async hash(data: HashableData) {
     const digest = await crypto.subtle.digest(
       'SHA-256',
-      typeof data === 'string' ? Buffer.from(data) : data
+      typeof data === 'string' ? Buffer.from(data) : data,
     )
 
     return Buffer.from(digest).toString('hex')
@@ -183,7 +183,7 @@ export default class Crypto {
         iv,
       },
       key,
-      encodedText
+      encodedText,
     )
 
     const uintArray = this.joinIvAndData(iv, new Uint8Array(encryptedData))
@@ -210,7 +210,7 @@ export default class Crypto {
         iv,
       },
       key,
-      data
+      data,
     )
 
     return new TextDecoder().decode(decryptedData)
@@ -232,7 +232,7 @@ export default class Crypto {
 
     if (!aesKey)
       throw new Error(
-        'Encryption engine for this recipient has not yet been initialized'
+        'Encryption engine for this recipient has not yet been initialized',
       )
 
     return this.encrypt(data, aesKey)
@@ -254,7 +254,7 @@ export default class Crypto {
 
     if (!aesKey)
       throw new Error(
-        'Encryption engine for this sender has not yet been initialized'
+        'Encryption engine for this sender has not yet been initialized',
       )
 
     return this.decrypt(data, aesKey)
@@ -293,7 +293,7 @@ export default class Crypto {
    */
   async decryptWithPassword(
     encryptedString: string,
-    password: string
+    password: string,
   ): Promise<string | null> {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
     const pwHash = await this.hash(pwUtf8) // hash the password
@@ -315,7 +315,7 @@ export default class Crypto {
    */
   async encryptWithPassword(
     plaintext: string,
-    password: string
+    password: string,
   ): Promise<string> {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
     const pwHash = await this.hash(pwUtf8)
@@ -339,5 +339,10 @@ export default class Crypto {
     }
 
     return this.signMessageWithKey(this.signingKey.secretKey, message)
+  }
+
+  getRandomString(length: number): string {
+    const decoder = new TextDecoder('ascii')
+    return decoder.decode(window.crypto.getRandomValues(new Uint8Array(length)))
   }
 }

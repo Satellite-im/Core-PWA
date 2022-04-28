@@ -2,11 +2,8 @@
   flex: 1;
   display: flex;
   height: @toolbar-height;
-  z-index: @base-z-index + 100;
   padding: 0 @normal-spacing;
   min-width: 500px;
-  user-select: none;
-  pointer-events: none;
 
   .vertical-divider {
     height: 30px;
@@ -28,6 +25,7 @@
     &:extend(.light-padding);
     box-shadow: @ui-shadow;
     pointer-events: all;
+    margin-left: auto;
 
     .input-wrap {
       margin-left: @normal-spacing !important;
@@ -57,6 +55,7 @@
   .circle {
     align-self: center;
     justify-self: center;
+    cursor: pointer;
   }
 
   .circle-container {
@@ -73,6 +72,8 @@
     max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
+    user-select: none;
+    pointer-events: none;
 
     .title {
       margin: 0;
@@ -92,23 +93,61 @@
       white-space: nowrap;
     }
   }
+
+  .alerts-floating-container {
+    &.side-open {
+      margin-right: 1.2rem;
+    }
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #toolbar {
     min-width: @viewport-width;
-    padding-right: @light-spacing;
+    padding-right: @normal-spacing;
     min-height: @toolbar-height;
-  }
-  .controls {
-    margin-right: 0;
-  }
-  .toolbar-spacer {
-    flex: 1;
+    padding-top: @light-spacing;
+
+    .circle-container {
+      order: 1;
+      margin-left: 24px;
+      height: auto;
+    }
+
+    .controls {
+      background: none;
+      box-shadow: unset;
+      .control-button {
+        padding: 2px;
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        margin-left: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .control-icon {
+        display: block;
+        margin: 0;
+        width: 18px;
+        height: 18px;
+      }
+    }
   }
   .alerts-floating-container {
     top: calc(@toolbar-height - @light-spacing);
     right: @light-spacing !important;
     left: @light-spacing !important;
+  }
+}
+
+/* Only for Safari to fix lack resolution of svgs */
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    #toolbar .controls svg {
+      transform: translateZ(0);
+    }
   }
 }

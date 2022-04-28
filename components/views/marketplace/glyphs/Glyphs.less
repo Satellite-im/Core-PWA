@@ -28,7 +28,7 @@
       }
     }
     .btns {
-      .navigator button{
+      .navigator button {
         font-size: 0.6rem;
         &:extend(.round-corners);
       }
@@ -58,6 +58,25 @@
     }
     .badge-sale {
       background: @red;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .marketplace-glyphs {
+    .home-content {
+      display: block;
+      .left-content-block {
+        margin-right: 0;
+      }
+    }
+    .glyph-shop-section {
+      .shop-list {
+        display: block;
+        & > div {
+          margin-bottom: 1rem;
+        }
+      }
     }
   }
 }

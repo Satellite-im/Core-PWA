@@ -1,4 +1,14 @@
 <div id="alerts">
-  <ToolbarAlertsAlert v-if="alerts.length !== 0" v-for="alert in alerts" :alert="alert" :key="alert.id" @sync="syncAlerts" />
-  <TypographySubtitle v-if="!alerts.length" :size="6" :text="$t('alerts.caught_up')" />
+  <ToolbarAlertsAlert
+    v-if="alerts.length !== 0"
+    v-for="alert in alerts"
+    :alert="alert"
+    :key="alert.id"
+    @sync="syncAlerts"
+  />
+  <TypographySubtitle
+    v-if="!alerts.length"
+    :size="6"
+    :text="$t('alerts.caught_up')"
+  />
 </div>

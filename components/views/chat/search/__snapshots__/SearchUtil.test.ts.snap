@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchUtil.default.filterSearchRecommendResult 0 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 1 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 2 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 3 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 4 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 5 1`] = `Array []`;
+
+exports[`SearchUtil.default.getCommandMeta 0 1`] = `
+Object {
+  "description": "specific date",
+  "name": "before",
+  "title": "",
+  "type": "date",
+}
+`;
+
+exports[`SearchUtil.default.getCommandMeta 1 1`] = `null`;
+
+exports[`SearchUtil.default.getCommandMetaList 0 1`] = `
+Array [
+  Object {
+    "description": "user",
+    "name": "from",
+    "title": "From User",
+    "type": "user",
+  },
+  Object {
+    "description": "user",
+    "name": "mentions",
+    "title": "Mentions User",
+    "type": "user",
+  },
+  Object {
+    "description": "link, embed or file",
+    "name": "has",
+    "title": "Message contains",
+    "type": "has",
+  },
+  Object {
+    "description": "specific date",
+    "name": "before",
+    "title": "",
+    "type": "date",
+  },
+  Object {
+    "description": "specific date",
+    "name": "after",
+    "title": "",
+    "type": "date",
+  },
+  Object {
+    "description": "specific date",
+    "name": "during",
+    "title": "",
+    "type": "date",
+  },
+  Object {
+    "description": "channel",
+    "name": "in",
+    "title": "In Channel",
+    "type": "channel",
+  },
+]
+`;
+
+exports[`SearchUtil.default.getCommandTypeParam 0 1`] = `false`;
+
+exports[`SearchUtil.default.getCommandTypeParam 1 1`] = `
+Object {
+  "key": "date",
+}
+`;
+
+exports[`SearchUtil.default.getCommandTypeParam 2 1`] = `
+Object {
+  "key": "has",
+  "options": Array [
+    Object {
+      "key": "link",
+      "value": "link",
+    },
+    Object {
+      "key": "embed",
+      "value": "embed",
+    },
+    Object {
+      "key": "file",
+      "value": "file",
+    },
+    Object {
+      "key": "video",
+      "value": "video",
+    },
+    Object {
+      "key": "image",
+      "value": "image",
+    },
+    Object {
+      "key": "sound",
+      "value": "sound",
+    },
+  ],
+  "values": Array [
+    "link",
+    "embed",
+    "file",
+    "video",
+    "image",
+    "sound",
+  ],
+}
+`;
+
+exports[`SearchUtil.default.getCommandTypeParams 0 1`] = `
+Object {
+  "channel": Object {
+    "key": "channels",
+  },
+  "date": Object {
+    "key": "date",
+  },
+  "has": Object {
+    "key": "has",
+    "options": Array [
+      Object {
+        "key": "link",
+        "value": "link",
+      },
+      Object {
+        "key": "embed",
+        "value": "embed",
+      },
+      Object {
+        "key": "file",
+        "value": "file",
+      },
+      Object {
+        "key": "video",
+        "value": "video",
+      },
+      Object {
+        "key": "image",
+        "value": "image",
+      },
+      Object {
+        "key": "sound",
+        "value": "sound",
+      },
+    ],
+    "values": Array [
+      "link",
+      "embed",
+      "file",
+      "video",
+      "image",
+      "sound",
+    ],
+  },
+  "user": Object {
+    "key": "users",
+  },
+}
+`;
+
+exports[`SearchUtil.default.getSearchResultGroupList 0 1`] = `
+Array [
+  Object {
+    "count": 5,
+    "title": "Messages",
+    "type": "messages",
+  },
+  Object {
+    "count": 3,
+    "title": "Files",
+    "type": "files",
+  },
+  Object {
+    "count": 0,
+    "title": "Channels",
+    "type": "channels",
+  },
+  Object {
+    "count": 0,
+    "title": "People",
+    "type": "people",
+  },
+]
+`;
+
+exports[`SearchUtil.default.getTextCommandMap 0 1`] = `
+Object {
+  "after": "after",
+  "before": "before",
+  "during": "during",
+  "from": "from",
+  "has": "has",
+  "in": "in",
+  "mentions": "mentions",
+}
+`;

@@ -4,6 +4,7 @@
 import { MenuIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { SettingsRoutes } from '~/store/ui/types'
 
 type Swiper = {
   $swiper: {
@@ -18,18 +19,31 @@ export default Vue.extend({
   },
   data() {
     return {
-      page: 'personalize',
       settingSwiperOption: {
         initialSlide: 0,
         resistanceRatio: 0,
         slidesPerView: 'auto',
-        noSwiping: this.$device.isMobile ? false : true,
-        allowTouchMove: this.$device.isMobile ? true : false,
+        noSwiping: !this.$device.isMobile,
+        allowTouchMove: this.$device.isMobile,
       },
+      SettingsRoutes,
     }
   },
   computed: {
     ...mapState(['ui']),
+  },
+  watch: {
+    'ui.showSettings': {
+      handler(newSValue) {
+        if (newSValue && this.$device.isMobile) {
+          setTimeout(() => {
+            this.changeRoute('profile')
+          }, 100)
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   mounted() {
     this.showSidebar(false)
@@ -55,7 +69,13 @@ export default Vue.extend({
      */
     showSidebar(show: Boolean) {
       const $swiper = (this.$refs.settingSwiper as Vue & Swiper)?.$swiper
-      show ? $swiper.slideNext() : $swiper.slidePrev()
+      if ($swiper) {
+        if (show) {
+          $swiper.slideNext()
+          return
+        }
+        $swiper.slidePrev()
+      }
       this.$store.commit('ui/toggleSettingsSidebar', show)
     },
     /**
@@ -65,7 +85,7 @@ export default Vue.extend({
      * @example
      */
     changeRoute(route: string) {
-      this.$data.page = route
+      this.$store.commit('ui/setSettingsRoute', route)
       if (this.$device.isMobile) {
         this.showSidebar(true)
       }
@@ -76,7 +96,7 @@ export default Vue.extend({
      * @example
      */
     closeModal() {
-      this.$store.commit('ui/toggleSettings', false)
+      this.$store.commit('ui/toggleSettings', { show: false })
     },
   },
 })

@@ -1,43 +1,61 @@
-<div class="market-place">
-  <div class="side-bar">
-    <MarketplaceSidebar :categories="marketCategories" />
-  </div>
-  <div class="body-panel">
-    <div class="top-bar">
-      <div class="search">
-        <MarketplaceSearchbox />
+<div class="marketplace-wrapper">
+  <swiper
+    class="marketplace-swiper"
+    :options="swiperOption"
+    ref="marketplaceSwiper"
+  >
+    <swiper-slide class="side-bar">
+      <MarketplaceSidebar :categories="marketCategories" />
+    </swiper-slide>
+    <swiper-slide class="body-panel">
+      <div class="top-bar">
+        <div class="search">
+          <MarketplaceSearchbox />
+        </div>
+        <div class="filter">
+          <MarketplaceFilterbox />
+        </div>
+        <div class="action">
+          <InteractablesClose :action="closeModal" />
+        </div>
       </div>
-      <div class="filter">
-        <MarketplaceFilterbox />
+      <div class="buttons-bar">
+        <InteractablesButtonGroup v-model="subject" :action="changeSubject">
+          <InteractablesButton
+            :text="$t('market_place.glyphs')"
+            size="small"
+            type="dark"
+          >
+            <smile-icon size="1x" />
+          </InteractablesButton>
+          <InteractablesButton
+            :text="$t('market_place.themes')"
+            size="small"
+            type="dark"
+          >
+            <layers-icon size="1x" />
+          </InteractablesButton>
+          <InteractablesButton
+            :text="$t('market_place.nfts')"
+            size="small"
+            type="dark"
+          >
+            <box-icon size="1x" />
+          </InteractablesButton>
+        </InteractablesButtonGroup>
       </div>
-      <div class="action">
-        <InteractablesClose :action="closeModal" />
+      <div class="listing-panel">
+        <UiScroll
+          verticalScroll
+          scrollbarVisibility="scroll"
+          enableWrap
+          noPadding
+        >
+          <MarketplaceListing v-if="subject==='Themes'" />
+          <MarketplaceGlyphs v-if="subject==='Glyphs'" />
+          <MarketplaceNfts v-if="subject==='NFTs'" />
+        </UiScroll>
       </div>
-    </div>
-    <div class="buttons-bar">
-      <InteractablesButtonGroup v-model="subject" :action="changeSubject">
-        <InteractablesButton :text="$t('market_place.glyphs')"  size="small" type="dark">
-          <smile-icon size="1x" />
-        </InteractablesButton>
-        <InteractablesButton :text="$t('market_place.themes')"  size="small" type="dark">
-          <layers-icon size="1x" />
-        </InteractablesButton>
-        <InteractablesButton :text="$t('market_place.nfts')"  size="small" type="dark">
-          <box-icon size="1x" />
-        </InteractablesButton>
-      </InteractablesButtonGroup>
-    </div>
-    <div class="listing-panel">
-      <UiScroll
-        verticalScroll
-        scrollbarVisibility="scroll"
-        enableWrap
-        noPadding
-      >
-        <MarketplaceListing v-if="subject==='Themes'" />
-        <MarketplaceGlyphs v-if="subject==='Glyphs'" />
-        <MarketplaceNfts v-if="subject==='NFTs'" />
-      </UiScroll>
-    </div>
-  </div>
+    </swiper-slide>
+  </swiper>
 </div>

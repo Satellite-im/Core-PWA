@@ -1,37 +1,39 @@
 <div class="profile-card">
   <SettingsProfilePicture :image="info.imageUrl" />
   <div class="profile-card-body">
-    <div class="profile-badges">
-      <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.badges')" />
+    <div class="profile-badges" v-if="info.badges && info.badges.length">
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.profile.info.badges')"
+      />
       <span class="profile-badge" v-for="(badge, i) in info.badges" :key="i">
-        <UiDynamicIcon size="1x" icon="badge.badge.icon"/>
+        <UiDynamicIcon size="1x" icon="badge.badge.icon" />
       </span>
     </div>
     <div class="profile-preferences">
-      <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.preferences')" />
-      <div class="profile-preferences-location">
-        <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.location')" />
-        <multiselect
-          :options="recommendLocations"
-          :multiple="true"
-          :close-on-select="false"
-          :clear-on-select="false"
-          :preserve-search="true"
-          :placeholder="$t('pages.settings.profile.info.selectLocation')"
-          label="location"
-          track-by="location"
-          v-model="locations"
-          selectLabel=""
-          deselectLabel=""
-          selectedLabel=""
-        >
-        </multiselect>
-        <div class="mg-half">
-          <InteractablesChip v-for="(loc, i) in info.locations" :key="i" :text="loc" />
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.profile.info.preferences')"
+      />
+      <div class="profile-preferences-timezone">
+        <TypographySubtitle
+          :size="6"
+          :text="$t('pages.settings.profile.info.timezone')"
+        />
+        <div class="timezone-list">
+          <InteractablesSelect
+            :options="timezones"
+            v-model="timezone"
+            size="small"
+            class="form-control"
+          />
         </div>
       </div>
-      <div class="profile-preferences-language">
-        <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.language')" />
+      <div class="profile-preferences-language" v-if="featureReadyToShow">
+        <TypographySubtitle
+          :size="6"
+          :text="$t('pages.settings.profile.info.language')"
+        />
         <multiselect
           :options="[]"
           :multiple="true"
@@ -46,9 +48,16 @@
           deselectLabel=""
           selectedLabel=""
         >
+          <span slot="noResult"
+            >{{ $t('pages.settings.profile.info.noResult') }}</span
+          >
         </multiselect>
         <div class="mg-half">
-          <InteractablesChip v-for="(lng, i) in info.languages" :key="i" :text="lng" />
+          <InteractablesChip
+            v-for="(lng, i) in info.languages"
+            :key="i"
+            :text="lng"
+          />
         </div>
       </div>
     </div>

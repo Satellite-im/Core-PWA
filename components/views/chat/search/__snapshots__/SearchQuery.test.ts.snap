@@ -1,0 +1,496 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchQuery.default._parseQuery 0 1`] = `
+Object {
+  "queryIndex": 0,
+  "queryItems": Array [
+    Object {
+      "command": "",
+      "cursorEnd": 12,
+      "cursorStart": 0,
+      "index": 0,
+      "value": "\\\\u0020\\\\u0020",
+    },
+  ],
+}
+`;
+
+exports[`SearchQuery.default._parseQuery 1 1`] = `
+Object {
+  "queryIndex": 1,
+  "queryItems": Array [
+    Object {
+      "command": "",
+      "cursorEnd": 6,
+      "cursorStart": 0,
+      "index": 0,
+      "value": "DELETE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 11,
+      "cursorStart": 7,
+      "index": 1,
+      "value": "FROM",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 20,
+      "cursorStart": 12,
+      "index": 2,
+      "value": "Projects",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 26,
+      "cursorStart": 21,
+      "index": 3,
+      "value": "WHERE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 30,
+      "cursorStart": 27,
+      "index": 4,
+      "value": "pid",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 32,
+      "cursorStart": 31,
+      "index": 5,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 47,
+      "cursorStart": 33,
+      "index": 6,
+      "value": "%s\\\\u0020UPDATE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 56,
+      "cursorStart": 48,
+      "index": 7,
+      "value": "Projects",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 60,
+      "cursorStart": 57,
+      "index": 8,
+      "value": "SET",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 66,
+      "cursorStart": 61,
+      "index": 9,
+      "value": "pname",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 68,
+      "cursorStart": 67,
+      "index": 10,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 71,
+      "cursorStart": 69,
+      "index": 11,
+      "value": "%s",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 77,
+      "cursorStart": 72,
+      "index": 12,
+      "value": "WHERE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 81,
+      "cursorStart": 78,
+      "index": 13,
+      "value": "pid",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 83,
+      "cursorStart": 82,
+      "index": 14,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 86,
+      "cursorStart": 84,
+      "index": 15,
+      "value": "%s",
+    },
+  ],
+}
+`;
+
+exports[`SearchQuery.default._parseQuery 2 1`] = `
+Object {
+  "queryIndex": 0,
+  "queryItems": Array [
+    Object {
+      "command": "",
+      "cursorEnd": 6,
+      "cursorStart": 0,
+      "index": 0,
+      "value": "DELETE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 11,
+      "cursorStart": 7,
+      "index": 1,
+      "value": "FROM",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 20,
+      "cursorStart": 12,
+      "index": 2,
+      "value": "Projects",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 26,
+      "cursorStart": 21,
+      "index": 3,
+      "value": "WHERE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 30,
+      "cursorStart": 27,
+      "index": 4,
+      "value": "pid",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 32,
+      "cursorStart": 31,
+      "index": 5,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 53,
+      "cursorStart": 33,
+      "index": 6,
+      "value": "%s\\\\u0020\\\\u0020UPDATE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 62,
+      "cursorStart": 54,
+      "index": 7,
+      "value": "Projects",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 66,
+      "cursorStart": 63,
+      "index": 8,
+      "value": "SET",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 72,
+      "cursorStart": 67,
+      "index": 9,
+      "value": "pname",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 74,
+      "cursorStart": 73,
+      "index": 10,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 77,
+      "cursorStart": 75,
+      "index": 11,
+      "value": "%s",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 83,
+      "cursorStart": 78,
+      "index": 12,
+      "value": "WHERE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 87,
+      "cursorStart": 84,
+      "index": 13,
+      "value": "pid",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 89,
+      "cursorStart": 88,
+      "index": 14,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 92,
+      "cursorStart": 90,
+      "index": 15,
+      "value": "%s",
+    },
+  ],
+}
+`;
+
+exports[`SearchQuery.default._parseQuery 3 1`] = `
+Object {
+  "queryIndex": 0,
+  "queryItems": Array [
+    Object {
+      "command": "",
+      "cursorEnd": 6,
+      "cursorStart": 0,
+      "index": 0,
+      "value": "UPDATE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 15,
+      "cursorStart": 7,
+      "index": 1,
+      "value": "Projects",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 19,
+      "cursorStart": 16,
+      "index": 2,
+      "value": "SET",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 25,
+      "cursorStart": 20,
+      "index": 3,
+      "value": "pname",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 27,
+      "cursorStart": 26,
+      "index": 4,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 30,
+      "cursorStart": 28,
+      "index": 5,
+      "value": "%s",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 36,
+      "cursorStart": 31,
+      "index": 6,
+      "value": "WHERE",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 40,
+      "cursorStart": 37,
+      "index": 7,
+      "value": "pid",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 42,
+      "cursorStart": 41,
+      "index": 8,
+      "value": "=",
+    },
+    Object {
+      "command": "",
+      "cursorEnd": 51,
+      "cursorStart": 43,
+      "index": 9,
+      "value": "%s\\\\u0020",
+    },
+  ],
+}
+`;
+
+exports[`SearchQuery.default._parseQuery 4 1`] = `
+Object {
+  "queryIndex": 0,
+  "queryItems": Array [
+    Object {
+      "command": "",
+      "cursorEnd": 12,
+      "cursorStart": 0,
+      "index": 0,
+      "value": "\\\\u0020\\\\u0020",
+    },
+  ],
+}
+`;
+
+exports[`SearchQuery.default._parseQuery 5 1`] = `
+Object {
+  "queryIndex": 0,
+  "queryItems": Array [],
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 0 1`] = `
+Object {
+  "command": "during",
+  "cursorEnd": 17,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "Dillenberg",
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 1 1`] = `
+Object {
+  "command": "in",
+  "cursorEnd": 19,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "elio@example.com",
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 2 1`] = `
+Object {
+  "command": "has",
+  "cursorEnd": 8,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "Elio",
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 3 1`] = `
+Object {
+  "command": "during",
+  "cursorEnd": 23,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "elio@example.com",
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 4 1`] = `
+Object {
+  "command": "during",
+  "cursorEnd": 11,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "Elio",
+}
+`;
+
+exports[`SearchQuery.default.appendCommand 5 1`] = `
+Object {
+  "command": "during",
+  "cursorEnd": 7,
+  "cursorStart": 0,
+  "index": 0,
+  "value": "",
+}
+`;
+
+exports[`SearchQuery.default.caretPosition 0 1`] = `0`;
+
+exports[`SearchQuery.default.clear 0 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 0 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 1 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 2 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 3 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 4 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemAt 5 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 0 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 1 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 2 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 3 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 4 1`] = `undefined`;
+
+exports[`SearchQuery.default.deleteItemFrom 5 1`] = `undefined`;
+
+exports[`SearchQuery.default.getQueryString 0 1`] = `""`;
+
+exports[`SearchQuery.default.insertCommand 0 1`] = `null`;
+
+exports[`SearchQuery.default.insertCommand 1 1`] = `null`;
+
+exports[`SearchQuery.default.insertCommand 2 1`] = `null`;
+
+exports[`SearchQuery.default.insertCommand 3 1`] = `null`;
+
+exports[`SearchQuery.default.insertCommand 4 1`] = `null`;
+
+exports[`SearchQuery.default.insertCommand 5 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 0 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 1 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 2 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 3 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 4 1`] = `null`;
+
+exports[`SearchQuery.default.queryItemFrom 5 1`] = `null`;
+
+exports[`SearchQuery.default.setCommandValue 0 1`] = `undefined`;
+
+exports[`SearchQuery.default.setCommandValue 1 1`] = `undefined`;
+
+exports[`SearchQuery.default.setCommandValue 2 1`] = `undefined`;
+
+exports[`SearchQuery.default.setCommandValue 3 1`] = `undefined`;
+
+exports[`SearchQuery.default.setCommandValue 4 1`] = `undefined`;
+
+exports[`SearchQuery.default.setCommandValue 5 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 0 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 1 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 2 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 3 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 4 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQuery 5 1`] = `undefined`;
+
+exports[`SearchQuery.default.setQueryByHTML found element 1`] = `undefined`;

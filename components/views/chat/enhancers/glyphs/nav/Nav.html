@@ -9,6 +9,7 @@
         :key="glyph.url"
         :src="glyph.url"
         :pack="glyph.pack"
+        data-cy="recent-glyph-item"
         :height="32"
         :width="32"
         :sendOnClick="true"
@@ -16,6 +17,10 @@
     </template>
   </div>
   <div class="market-place" @click="toggleMarketPlace">
-    <shopping-bag-icon class="control-icon" size="1x" />
+    <shopping-bag-icon
+      class="control-icon"
+      data-cy="glyphs-marketplace"
+      size="1x"
+    />
   </div>
 </div>

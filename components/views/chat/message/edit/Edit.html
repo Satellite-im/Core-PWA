@@ -1,19 +1,22 @@
 <div class="edit-message">
-  <div class="edit-message-body">
-    <div
-      ref="messageBox"
+  <div class="edit-message-body" :class="{'is-error': charlimit}">
+    <Editable
+      v-model="content"
       class="edit-message-body-input"
+      data-cy="edit-message-input"
       @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
-      contenteditable
-    ></div>
-    <SmileIcon class="edit-message-body-emoj" size="1.5x" />
+    />
+    <div class="emoji-toggle">
+      <smile-icon class="edit-message-body-emoj" size="1.5x" />
+    </div>
   </div>
   <div class="edit-message-bottom">
-    {{$t('messaging.edit.escape_to')}}
-    <a @click="cancelMessage">{{$t('messaging.edit.cancel')}}</a>
-    {{$t('messaging.edit.enter_to')}}
-    <a @click="saveMessage">{{$t('messaging.edit.save')}}</a>
+    <div>
+      {{$t('messaging.edit.escape_to')}}
+      <a @click="cancelMessage">{{$t('messaging.edit.cancel')}}</a>
+      {{$t('messaging.edit.enter_to')}}
+      <a @click="saveMessage">{{$t('messaging.edit.save')}}</a>
+    </div>
     <div>{{lengthCount}}/{{maxChars}}</div>
   </div>
 </div>

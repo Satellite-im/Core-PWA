@@ -1,0 +1,31 @@
+#tabs {
+  display: flex;
+  gap: @xlarge-spacing;
+
+  .tab {
+    cursor: pointer;
+    color: @text;
+    background: transparent;
+    padding-bottom: @normal-spacing;
+    margin-bottom: -1px;
+
+    &.active {
+      color: @secondary-text;
+      border-bottom: 2px solid @primary-color!important;
+      padding-bottom: calc(@normal-spacing - 2px;);
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #tabs {
+    gap: @normal-spacing;
+  }
+}
+
+@media only screen and (max-width: @mobile-small-breakpoint) {
+  #tabs {
+    gap: initial;
+    justify-content: space-between;
+  }
+}

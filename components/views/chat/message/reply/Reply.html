@@ -1,64 +1,27 @@
 <div v-if="message.replies.length" class="replies-container">
-  <div v-if="!showReplies" class="reply-preview" @click="toggleReplies">
+  <div
+    v-if="!showReplies"
+    class="reply-preview"
+    data-cy="reply-preview"
+    @click="toggleReplies"
+  >
     <plus-square-icon size="1.1x" />
     &nbsp; {{ makeReplyText }}
   </div>
-  <div
-    class="reply-container"
-    v-if="showReplies"
-    v-for="reply in message.replies"
-  >
-    <div
-      class="is-reply"
-      @mouseenter="mouseOver(reply.id)"
-      @mouseleave="mouseOver('')"
-    >
-      <span v-on:click="showQuickProfile">
-        <UiCircle type="random" :seed="reply.from" :size="35" />
-      </span>
-      <div class="reply-body">
-        <div class="reply-heading">
-          <span v-on:click="showQuickProfile">
-            <!-- TODO: update badges --> //AP-397
-            <UiUserName :username="getUsernameFromReply(reply)" :badge="''" />
-          </span>
-          <TypographyText :text="$dayjs(reply.at).from()" />
-        </div>
-        <div class="reply-content">
-          <VueMarkdown
-            v-if="reply.replyType === 'text'"
-            :source="reply.payload"
-            class="markdown"
-          />
-          <UiChatImage
-            v-else-if="reply.replyType === 'image'"
-            :source="reply.payload.url"
-            alt=""
-          />
-          <UiChatEmbedsVideoPlayer
-            v-else-if="reply.replyType === 'video'"
-            :data="reply.payload"
-          />
-          <UiChatEmbedsAudioPlayer
-            v-else-if="reply.replyType === 'audio'"
-            :data="reply.payload"
-          />
-          <UiChatEmbedsFile
-            v-else-if="reply.replyType === 'file'"
-            :data="reply.payload"
-          />
-          <MessageActions
-            v-if="replyHover == reply.id"
-            :hideReply="true"
-            :emojiReaction="() => emojiReaction($event, reply.id)"
-          />
-        </div>
-      </div>
+  <template v-else>
+    <MessageReplyItem
+      v-for="reply in message.replies"
+      :key="reply.id"
+      :reply="reply"
+      :message="message"
+      :group="group"
+      :markdownToHtml="markdownToHtml"
+      @emoji-reaction="emojiReaction"
+      @click="showQuickProfile"
+    />
+    <div @click="toggleReplies" class="reply-close" data-cy="reply-close">
+      <minus-square-icon size="1.1x" />
+      &nbsp; {{$t('conversation.collapse')}}
     </div>
-    <MessageReactions :message="message" :group="group" :reply="reply" />
-  </div>
-  <div v-if="showReplies" @click="toggleReplies" class="reply-close">
-    <minus-square-icon size="1.1x" />
-    &nbsp; {{$t('conversation.collapse')}}
-  </div>
+  </template>
 </div>

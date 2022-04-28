@@ -1,41 +1,78 @@
 <div class="create-server-container">
-    <InteractablesImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
-        :imageUrl="imageUrl" />
-    <div v-if="showCropper" class="cropper-mask" />
-    <div class='modal-body'>
-        <div class="custom-modal-content">
-            <div class="columns">
-                <div class="column image">
-                    <UiCircle type="image" :source="croppedImage" :size="120" />
-                </div>
-                <div class="column align">
-                    <TypographyText class="set-photo-title" :text="$t('user.registration.photo_text')" />
-                    <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
-                    <InteractablesButton :action="() => $refs.file.click()" type="primary" size="small"
-                        :text="$t('servers.create.photo_button')" outlined />
-                </div>
-            </div>
-            <div style="clear: both;"></div>
+  <InteractablesImageCropper
+    v-if="showCropper"
+    :setCroppedImage="setCroppedImage"
+    :toggleCropper="toggleCropper"
+    :imageUrl="imageUrl"
+  />
+  <div v-if="showCropper" class="cropper-mask" />
+  <div class="modal-body">
+    <form @submit="confirm">
+      <div class="custom-modal-content">
+        <div class="columns">
+          <div class="column image">
+            <UiCircle type="image" :source="croppedImage" :size="120" />
+          </div>
+          <div class="column align">
+            <TypographyText
+              class="set-photo-title"
+              :text="$t('user.registration.photo_text')"
+            />
+            <input
+              ref="file"
+              class="input-file"
+              type="file"
+              @change="selectImage"
+              :accept="acceptableImageFormats"
+            />
+            <InteractablesButton
+              :action="() => $refs.file.click()"
+              type="primary"
+              size="small"
+              :text="$t('servers.create.photo_button')"
+              outlined
+            />
+          </div>
+        </div>
+        <div style="clear: both"></div>
 
-            <div class="input-container" data-cy="username-input">
-                <span class="label">{{$t('user.registration.username')}}</span>
-                <InteractablesInput :placeholder="$t('user.registration.username_placeholder')" size="small" v-model="name"
-                    input-kind="text" type="primary" />
-            </div>
-
-            <div class="input-container" data-cy="status-input">
-                <span class="label">{{$t('user.registration.status')}}</span>
-                <InteractablesInput :placeholder="$t('user.registration.status_placeholder')" size="small" v-model="status"
-                    input-kind="text" type="primary" />
-            </div>
-
-            <p class="red" v-if="error">{{error}}</p>
+        <div class="input-container" data-cy="username-input">
+          <span class="label">{{$t('user.registration.username')}}</span>
+          <InteractablesInput
+            :placeholder="$t('user.registration.username_placeholder')"
+            size="small"
+            v-model="name"
+            input-kind="text"
+            type="primary"
+          />
         </div>
 
-        <!-- <hr class="divider"> -->
-        <div class="submit-container">
-            <InteractablesButton type="primary" size="small" :text="$t('user.registration.sign_in')"
-                class="create-server-btn" data-cy="sign-in-button" :action="confirm" />
+        <div class="input-container" data-cy="status-input">
+          <span class="label">{{$t('user.registration.status')}}</span>
+          <InteractablesInput
+            :placeholder="$t('user.registration.status_placeholder')"
+            size="small"
+            v-model="status"
+            input-kind="text"
+            type="primary"
+          />
         </div>
-    </div>
+
+        <p class="red" data-cy="error-message" v-if="error">{{error}}</p>
+      </div>
+
+      <!-- <hr class="divider"> -->
+      <div class="submit-container">
+        <InteractablesButton
+          type="primary"
+          size="small"
+          :text="$t('user.registration.sign_in')"
+          :loading="isLoading"
+          class="create-server-btn"
+          data-cy="sign-in-button"
+          htmlType="submit"
+        />
+      </div>
+    </form>
+  </div>
 </div>

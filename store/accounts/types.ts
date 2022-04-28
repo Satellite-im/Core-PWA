@@ -9,7 +9,9 @@ export enum RegistrationStatus {
 }
 
 export interface AccountsState {
+  initialized: boolean
   storePin: boolean
+  registry: boolean
   loading?: boolean
   locked: boolean
   pin?: string
@@ -27,6 +29,8 @@ export interface AccountsState {
 
 export enum AccountsError {
   INVALID_PIN = 'errors.accounts.invalid_pin',
+  INVALID_GROUPID = 'errors.accounts.invalid_group_id',
+  CANNOT_FIND_GROUP = 'errors.accounts.cannot_find_group',
   PIN_TOO_SHORT = 'errors.accounts.pin_too_short',
   UNABLE_TO_CREATE_MNEMONIC = 'errors.accounts.unable_to_create_mnemonic',
   MNEMONIC_NOT_PRESENT = 'errors.accounts.mnemonic_not_present',
@@ -38,6 +42,6 @@ export enum AccountsError {
 
 export interface UserRegistrationPayload {
   name: string
-  photoHash: string
+  image: string
   status: string
 }

@@ -1,11 +1,10 @@
+// @ts-ignore
+import * as url from '~/assets/img/profile.webp'
 import {
-  ProfileBadgeType,
   ProfileBadge,
+  ProfileBadgeType,
   ProfileInfo,
 } from '~/types/profile/profile'
-
-// @ts-ignore
-import * as url from '~/assets/img/profile.png'
 
 export const profileBadges = [
   {
@@ -32,9 +31,8 @@ export const profileBadges = [
 
 export const sampleProfileInfo = {
   imageUrl: url,
-  badges: profileBadges,
-  locations: [
-  ] as string[],
+  badges: [],
+  locations: [] as string[],
   languages: ['English', 'Spanish', 'German'] as string[],
   username: 'username01234#0001',
   status: 'Some super interesting status message.',

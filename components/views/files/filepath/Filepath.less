@@ -1,20 +1,32 @@
 .breadcrumb {
+  ul {
+    align-items: center;
+  }
   a {
-    text-transform: capitalize;
+    display: block; // ellipsis only works on block elements
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
     &:extend(.font-accent);
     &:hover {
       &:extend(.font-accent);
     }
   }
-  li + li::before {
-    &:extend(.font-primary);
-  }
+  li {
+    font-family: @primary-font;
+    font-size: @text-size;
 
-  li.is-active a {
-    &:extend(.font-muted);
+    + li::before {
+      &:extend(.font-primary);
+    }
+    &.is-active a {
+      &:extend(.font-muted);
+    }
+    &.disabled a {
+      cursor: not-allowed;
+    }
   }
-  font-family: @primary-font;
-  font-size: @text-size;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

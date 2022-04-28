@@ -13,7 +13,10 @@ export default Vue.extend({
   },
   layout: 'settings',
   data() {
-    return {}
+    return {
+      showPhrase: false,
+      featureReadyToShow: false,
+    }
   },
   computed: {
     ...mapState(['accounts']),
@@ -25,6 +28,21 @@ export default Vue.extend({
         return this.accounts.storePin
       },
     },
+    splitPhrase(): Array<String> {
+      return this.accounts.phrase.split(' ')
+    },
+  },
+  methods: {
+    /**
+     * @method togglePhrase DocsTODO
+     * @description
+     * @example
+     */
+    togglePhrase() {
+      this.$data.showPhrase = !this.$data.showPhrase
+    },
   },
 })
 </script>
+
+<style scoped lang="less" src="./Accounts.less"></style>

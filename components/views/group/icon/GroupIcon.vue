@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Group } from '~/types/ui/core'
+import { Group, GroupMember } from '~/store/groups/types'
 
 export default Vue.extend({
   props: {
@@ -18,6 +18,13 @@ export default Vue.extend({
   },
   data() {
     return {}
+  },
+  methods: {
+    getSource(member: GroupMember) {
+      return member?.photoHash
+        ? `${this.$Config.textile.browser}/ipfs/${member.photoHash}`
+        : ''
+    },
   },
 })
 </script>

@@ -3,10 +3,11 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-
+import { sortBy } from 'lodash'
 import {
   UsersIcon,
   UserPlusIcon,
+  PlusIcon,
   PlusCircleIcon,
   FolderIcon,
   MessageSquareIcon,
@@ -14,17 +15,27 @@ import {
 } from 'satellite-lucide-icons'
 
 import { DataStateType } from '~/store/dataState/types'
-import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
+import { Conversation } from '~/store/textile/types'
+import GroupInvite from '~/components/views/group/invite/Invite.vue'
+import { Group } from '~/store/groups/types'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    sortUserList: Function
+  }
+}
 
 export default Vue.extend({
   components: {
     UsersIcon,
     UserPlusIcon,
+    PlusIcon,
     PlusCircleIcon,
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
+    GroupInvite,
   },
   props: {
     toggle: {
@@ -35,22 +46,18 @@ export default Vue.extend({
       type: Array as PropType<Array<User>>,
       default: () => [],
     },
-    groups: {
-      type: Array as PropType<Array<Group>>,
-      default: () => [],
-    },
     showMenu: {
       type: Function,
       default: () => {},
     },
     sidebar: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends']),
+    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile', 'groups']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -59,30 +66,47 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebarUsers', value)
       },
     },
+    usersAndGroups() {
+      const combined = [...this.$props.users, ...this.groups.all]
+      return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)
+    },
+    sortedGroups() {
+      return sortBy(this.groups.all, 'name')
+    },
   },
-  mounted() {
-    /**
-     * Opens and closes the left hand sidebar upon clicking on 'direct-chat', 'friends-list', and 'files-browse'
-     * when user is on a mobile device
-     */
-    if (this.$route.name?.includes('chat-direct') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
-
-    if (this.$route.name?.includes('friends-list') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
-
-    if (this.$route.name?.includes('files-browse') && this.$device.isMobile) {
-      this.$props.showMenu()
-    }
+  watch: {
+    'textile.conversations': {
+      handler(newValue) {
+        this.sortUserList(newValue)
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
-    toggleModal() {
+    toggleModal(type: 'quickchat' | 'creategroup') {
       this.$store.commit('ui/toggleModal', {
-        name: 'quickchat',
-        state: !this.ui.modals.quickchat,
+        name: type,
+        state: !this.ui.modals[type],
       })
+    },
+    closeGroupInviteModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: false },
+      })
+    },
+    gotoAddFriends() {
+      if (this.$route.name?.includes('friends-list')) {
+        if (this.$device.isMobile) {
+          this.$store.commit('ui/showSidebar', false)
+        }
+      } else {
+        this.$router.push({ path: '/friends/list' })
+      }
+    },
+    sortUserList(conversations: Conversation) {
+      this.$store.commit('friends/sortFriends', conversations)
     },
   },
 })

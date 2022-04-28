@@ -1,34 +1,29 @@
 .files-aside {
-  .flex {
-    .is-text {
-      &:extend(.full-width);
-    }
-    .upgrade-text {
-      align-self: flex-end;
-      text-align: right;
-      &:extend(.color-success);
-      text-transform: uppercase;
-    }
-    .button {
-      height: 1.4rem;
-      min-width: 4rem;
-      padding: @xlight-spacing @light-spacing;
-      line-height: 1!important;
-    }
-    display: inline-flex;
-    flex-direction: row;
-    &:extend(.full-width);
-    margin-bottom: @light-spacing;
-  }
-  .usage-text {
-    font-size: @text-size;
-    
-    .red {
-      &:extend(.color-danger);
-    }
-  }
-  &:extend(.full-width);
   &:extend(.background-semitransparent-light);
   &:extend(.round-corners);
-  &:extend(.more-pad-sides);
+  display: flex;
+  flex-direction: column;
+  padding: @normal-spacing;
+  gap: @normal-spacing;
+
+  .upper {
+    display: flex;
+    flex-direction: column;
+    gap: @light-spacing;
+    .flex {
+      display: flex;
+      justify-content: space-between;
+      .button {
+        height: 1.4rem;
+        min-width: 4rem;
+        padding: @xlight-spacing @light-spacing;
+        line-height: 1 !important;
+        background-color: @gray!important;
+        box-shadow: none !important;
+      }
+    }
+    .usage-text {
+      font-size: @text-size;
+    }
+  }
 }

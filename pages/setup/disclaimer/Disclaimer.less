@@ -1,6 +1,7 @@
 .container {
   .disclaimer-body {
     min-width: 250px;
+    max-width: 416px;
     align-self: center;
     margin-bottom: 25vh;
 
@@ -8,7 +9,6 @@
       margin: @normal-spacing;
     }
     padding: 0 @normal-spacing;
-    max-width: 416px;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -18,18 +18,23 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .buttons {
+    button {
+      margin-top: @light-spacing;
+    }
+  }
+  padding: 0 @normal-spacing;
 }
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
+    .disclaimer-body {
+      margin-top: 10vh;
+      margin-bottom: 0;
+    }
     .buttons {
-      button {
-        margin-top: @light-spacing;
-        width: @full !important;
-      }
       display: inline-block;
       margin-top: auto;
-      justify-self: flex-end;
+      margin-bottom: @normal-spacing;
     }
-    padding: 0 @normal-spacing;
   }
 }

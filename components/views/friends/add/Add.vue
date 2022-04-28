@@ -1,6 +1,5 @@
 <template src="./Add.html"></template>
 <script lang="ts">
-// @ts-ignore
 import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
@@ -8,11 +7,13 @@ import QrcodeVue from 'qrcode.vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
-import { Friend } from '~/types/ui/friends'
+import { mapState } from 'vuex'
 
+import { debounce } from 'lodash'
+import { Friend } from '~/types/ui/friends'
+import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import _, { debounce } from 'lodash'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 export default Vue.extend({
   components: {
@@ -21,16 +22,28 @@ export default Vue.extend({
   },
   data() {
     return {
-      value: 'https://example.com',
       size: 150,
+      featureReadyToShow: false,
       error: '',
       accountID: '',
       searching: false,
       friend: null as Friend | null,
     }
   },
+  computed: {
+    ...mapState(['accounts']),
+    friendInviteUrl(): string {
+      return `${location.origin}/#/friends/list/${this.accounts.active}`
+    },
+  },
+  mounted() {
+    if (this.$route.params && this.$route.params.id) {
+      this.$data.accountID = this.$route.params.id
+      this._searchFriend()
+    }
+  },
   methods: {
-    _searchFriend: _.debounce(async function(this:any) {
+    _searchFriend: debounce(async function (this: any) {
       if (this.accountID.length >= 40) {
         return await this.searchFriend()
       }
@@ -45,10 +58,9 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
-      
       if (
         this.$store.state.friends.all.filter(
-          (f: Friend) => f.account.accountId === accountID
+          (f: Friend) => f?.account?.accountId === accountID,
         ).length === 1
       ) {
         this.error = this.$t('friends.already_friend') as string
@@ -57,9 +69,9 @@ export default Vue.extend({
       this.error = ''
       try {
         const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-        const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+        const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-        const friend = await serverProgram.getUser(new PublicKey(accountID))
+        const friend = await usersProgram.getUserInfo(accountID)
         if (!friend) {
           this.error = this.$t('friends.not_found') as string
           return
@@ -84,8 +96,7 @@ export default Vue.extend({
       this.friend = null
       this.accountID = ''
       if (!error) {
-        // @ts-ignore
-        this.$toast.show(this.$t('friends.request_sent'))
+        this.$toast.show(this.$t('friends.request_sent') as string)
       } else {
         this.error = error
       }

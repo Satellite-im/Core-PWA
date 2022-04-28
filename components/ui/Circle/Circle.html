@@ -1,21 +1,21 @@
-<div 
+<div
   :class="`${square ? 'is-square' : 'is-rounded'} ${type === 'icon' ? 'circle-flex' : 'circle'}`"
-  :style="`font-size: ${size * 0.55}px; height: ${size}px; width: ${size}px; background: ${color};`"
+  :style="`font-size: ${size * 16 / 30}px; height: ${size}px; width: ${size}px; background: ${color};`"
   @click="() => {$emit('click')}"
-  >
+>
   <img
     :src="source"
     v-if="type === 'image' && source"
-    alt="Cirlce Image"
-    :class="`${square ? 'is-square' : 'is-rounded'} image`">
-  <UiSatelliteCircle 
+    alt="Circle Image"
+    :class="`${square ? 'is-square' : 'is-rounded'} image`"
+    data-cy="circle-has-picture"
+  />
+  <UiSatelliteCircle
     v-else-if="type === 'random'"
     :address="seed"
     :name="name"
+    data-cy="circle-without-picture"
   />
-  <UiDynamicIcon
-    size="1x"
-    :icon="icon"
-    v-else-if="icon" />
+  <UiDynamicIcon size="1x" :icon="icon" v-else-if="icon" />
   <slot></slot>
 </div>

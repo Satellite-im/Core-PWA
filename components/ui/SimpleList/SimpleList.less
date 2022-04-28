@@ -1,30 +1,33 @@
-.menu-icon {
-  width: 15px;
-  margin-right: @light-spacing;
-}
-
-.active {
-  &:extend(.background-primary);
-  &:extend(.font-secondary);
-  border-radius: @corner-rounding-smaller;
-
-  &:hover {
-    &:extend(.background-primary);
-  }
-}
-
-li {
-  cursor: pointer;
-  padding: (@light-spacing / 2) @light-spacing;
-  margin: 0.2rem -@light-spacing;
-  display: inline-flex;
-  align-items: center;
-  &:extend(.full-width);
-
-  .dynamic-icon {
+.simple-menu {
+  .menu-icon {
+    width: 15px;
     margin-right: @light-spacing;
   }
-  &:hover {
-    background: @foreground;
+
+  .active {
+    &:extend(.background-primary);
+    &:extend(.font-secondary);
+    border-radius: @corner-rounding-smaller;
+
+    &:hover {
+      &:extend(.background-primary);
+    }
+  }
+
+  li {
+    cursor: pointer;
+    padding: (@light-spacing / 2) @light-spacing;
+    margin: 0.2rem -@light-spacing;
+    display: inline-flex;
+    align-items: center;
+    border-radius: @corner-rounding-smaller;
+    &:extend(.full-width);
+
+    .dynamic-icon {
+      margin-right: @light-spacing;
+    }
+    &:hover {
+      background: @foreground;
+    }
   }
 }

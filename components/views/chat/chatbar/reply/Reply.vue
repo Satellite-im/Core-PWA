@@ -2,13 +2,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import VueMarkdown from 'vue-markdown'
-
 import { XIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
   components: {
-    VueMarkdown,
     XIcon,
   },
   computed: {

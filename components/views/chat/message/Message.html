@@ -4,9 +4,8 @@
   @contextmenu="contextMenu"
 >
   <div
-    @mouseenter="mouseOver"
-    @mouseleave="mouseOver"
-    :class="`message-container ${messageHover ? 'message-hover' : '' } ${message.pinned ? 'pinned-message' : ''}`"
+    :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
+    data-cy="message-container"
   >
     <div v-if="message.pinned" class="pinned-badge">
       <archive-icon size="0.85x" />
@@ -27,28 +26,32 @@
       <TypographyText :text="timestamp" />
     </div>
     <MessageActions
-      v-if="messageHover && !hideActions"
+      v-if="!hideActions && !messageEdit"
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
       :message="message"
     />
     <template v-if="!messageEdit && message.type === 'text'">
-      <VueMarkdown
-        :source="wrapEmoji(message.payload)"
+      <MessageMarkdown
+        :text="wrapEmoji(markdownToHtml(message.payload))"
         :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
+        :data-cy="`chat-message`"
       />
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
       </span>
-      <span class="status edited" v-else-if="message.editedAt">
+      <span
+        class="status edited"
+        data-cy="message-edited"
+        v-else-if="message.editedAt"
+      >
         ({{$t('ui.edited')}})
       </span>
     </template>
     <UiChatImage
       v-if="message.type === 'image'"
       :image="message.payload"
-      :url="message.payload.url"
       alt=""
     />
     <MessageGlyph

@@ -1,0 +1,108 @@
+<div id="privacy-settings">
+  <div class="columns is-desktop">
+    <div class="column">
+      <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
+      <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
+    </div>
+  </div>
+  <div class="columns is-desktop">
+    <SettingsUnit
+      :title="$t('pages.privacy.register.title')"
+      :text="$t('pages.privacy.register.subtitle')"
+    >
+      <InteractablesSwitch isLocked v-model="registry" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.pin.title')"
+      :text="$t('pages.privacy.pin.subtitle')"
+    >
+      <InteractablesSwitch v-model="storePin" />
+    </SettingsUnit>
+  </div>
+  <div class="columns is-desktop">
+    <SettingsUnit
+      :title="$t('pages.privacy.embeds.title')"
+      :text="$t('pages.privacy.embeds.subtitle')"
+    >
+      <InteractablesSwitch v-model="embeddedLinks" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.activity.title')"
+      :text="$t('pages.privacy.activity.subtitle')"
+    >
+      <InteractablesSwitch v-model="displayCurrentActivity" />
+    </SettingsUnit>
+  </div>
+  <div class="columns is-desktop">
+    <SettingsUnit
+      :title="$t('pages.privacy.consentScan.title')"
+      :text="$t('pages.privacy.consentScan.subtitle')"
+    >
+      <InteractablesSwitch v-model="consentScan" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.nsfw.title')"
+      :text="$t('pages.privacy.nsfw.subtitle')"
+    >
+      <InteractablesSwitch v-model="blockNsfw" />
+    </SettingsUnit>
+  </div>
+  <!-- <div class="columns is-desktop">
+    <SettingsUnit
+      :title="$t('pages.privacy.serverType.title')"
+      :text="$t('pages.privacy.serverType.subtitle')"
+    >
+      <InteractablesSelect
+        :options="serverTypes"
+        v-model="serverType"
+        size="small"
+        class="form-control"
+      />
+    </SettingsUnit>
+  </div> -->
+
+  <div
+    v-if="serverType === 'own'"
+    class="columns is-desktop ownInfo-input-part"
+  >
+    <SettingsUnit
+      :title="$t('pages.privacy.ownInfo.title')"
+      :text="$t('pages.privacy.ownInfo.subtitle')"
+    >
+      <InteractablesInput
+        v-model="ownInfo"
+        type="dark"
+        size="small"
+        :placeholder="$t('pages.privacy.ownInfo.placeholder')"
+        class="ownInfo-input"
+      />
+      <TypographyText
+        class="color-danger"
+        type="danger"
+        :size="6"
+        :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
+        v-if="lengthError"
+      />
+      <span v-if="formatError">
+        <TypographyText
+          class="color-danger"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
+        />
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
+        />
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
+        />
+      </span>
+    </SettingsUnit>
+  </div>
+</div>

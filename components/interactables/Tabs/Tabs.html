@@ -1,0 +1,12 @@
+<div id="tabs">
+  <button
+    class="tab"
+    v-for="tab in tabs"
+    @click="setRoute(tab.route)"
+    :class="route===tab.route ? 'active' : ''"
+  >
+    {{tab.text}}
+  </button>
+
+  <slot v-if="$slots.default"></slot>
+</div>

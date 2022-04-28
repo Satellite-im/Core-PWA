@@ -1,0 +1,24 @@
+<div
+  class="unread"
+  :class="{
+   'has-tooltip-right has-tooltip-primary': !$device.isMobile,
+   'unread--loading' : isLoading,
+   'unread--active': active
+  }"
+  :data-tooltip="user.name"
+  @contextmenu="contextMenu"
+  v-on:click="navigateToUser"
+>
+  <UiCircle
+    :type="src ? 'image' : 'random'"
+    :seed="user.address"
+    :source="src"
+    :size="40"
+  />
+  <span class="unread-label" v-if="user.unreadCount > 0"
+    >{{user.unreadCount > 99 ? "99+" : user.unreadCount}}</span
+  >
+  <div class="unread-loader" v-if="isLoading">
+    <UiLoadersSpinner spinning />
+  </div>
+</div>

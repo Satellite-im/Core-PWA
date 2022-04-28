@@ -56,7 +56,7 @@ export default Vue.extend({
     classObject() {
       return {
         'scrollbar-visible': ['always', 'scroll'].includes(
-          this.scrollbarVisibility
+          this.scrollbarVisibility,
         ),
         'enable-wrap': this.enableWrap,
         always: this.scrollbarVisibility === 'always',

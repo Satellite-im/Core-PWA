@@ -3,17 +3,29 @@
   ref="chatbar"
   :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
 >
+  <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
+  <!-- Hide commands for early access -->
+  <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
+  <ChatbarReply v-if="recipient" />
+  <FilesUploadFilePreview
+    :recipient="recipient"
+    :files="files"
+    @cancelUpload="onCancelUpload"
+  />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'show-file-preview': showFilePreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview || $store.state.chat.alertNsfw}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
+        v-if="recipient"
         :editable="recipient ? true : false"
         :recipient="recipient"
         type="quick"
         ref="file-upload"
+        :files="files"
+        @cancelUpload="onCancelUpload"
       />
     </div>
     <div
@@ -23,21 +35,18 @@
     >
       <terminal-icon size="1x" />
     </div>
-    <div
-      v-focus="ui.replyChatbarContent"
-      :contenteditable="recipient ? true : false"
-      autocapitalize="off"
-      :class="`messageuser hidden-scroll ${hasCommand ? 'has-command' : ''}`"
-      ref="messageuser"
+    <ChatbarEditable
+      ref="editable"
+      v-model="text"
       :placeholder="$t('ui.talk')"
+      :enabled="Boolean(recipient) && !textile.messageLoading"
+      :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
+      :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
-      @drop="handleDrop"
       @paste="handlePaste"
-    ></div>
-
+    />
     <ChatbarControls
-      :editable="recipient ? true : false"
+      :disabled="!recipient"
       :sendMessage="sendMessage"
       id="chatbar-controls"
     />

@@ -1,19 +1,20 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
-    <li v-on:click="() => pull(path.length)">
-      <a>
-        <home-icon size="1x" /> &nbsp;
+    <li>
+      <a
+        @click="!isFilesIndexLoading && goBackToDirectory('root')"
+        :class="{'disabled' : isFilesIndexLoading }"
+        style="display: flex"
+      >
+        <home-icon size="1.5x" />
       </a>
     </li>
     <li
-      v-for="link, i in path"
-      :data-self-path="JSON.stringify(path.slice(0, i + 1))"
-      v-on:click="jumpTo"
-      :class="i === path.length - 1 ? 'is-active' : ''"
-      >
-      <a>
-        {{ link }}
-      </a>
+      v-for="name,i in path"
+      @click="!isFilesIndexLoading && goBackToDirectory(name)"
+      :class="{'is-active' : i === path.length - 1, 'disabled' : isFilesIndexLoading}"
+    >
+      <a> {{ name }} </a>
     </li>
   </ul>
 </nav>

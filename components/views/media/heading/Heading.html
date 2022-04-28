@@ -1,5 +1,5 @@
 <div id="media-heading">
-  <TypographyTag :text="elapsedTimeLabel" />
+  <TypographyTag v-if="elapsedTimeLabel" :text="elapsedTimeLabel" />
   <div class="spacer"></div>
   <transition name="media-fullscreen" mode="out-in">
     <div

@@ -7,6 +7,10 @@ export const Config = {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
     browser: 'https://hub.textile.io',
+    groupChatThreadID:
+      'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
+    fsTable: 'sat.json',
+    bucketName: 'personal-files',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
@@ -29,24 +33,27 @@ export const Config = {
     user_lifespan: 90000,
   },
   webtorrent: {
-    announceURLs: [
-      'wss://tracker.openwebtorrent.com',
-      'wss://tracker.sloppyta.co:443/announce',
-      'wss://tracker.novage.com.ua:443/announce',
-      'udp://opentracker.i2p.rocks:6969/announce',
-      'http://opentracker.i2p.rocks:6969/announce',
-      'udp://tracker.opentrackr.org:1337/announce',
-      'http://tracker.opentrackr.org:1337/announce',
-      // 'ws://localhost:5001', // FOR DEVELOPMENT
-    ],
+    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
+      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
+      : [
+          'wss://tracker.openwebtorrent.com',
+          'wss://tracker.sloppyta.co:443/announce',
+          'wss://tracker.novage.com.ua:443/announce',
+          'udp://opentracker.i2p.rocks:6969/announce',
+          'http://opentracker.i2p.rocks:6969/announce',
+          'udp://tracker.opentrackr.org:1337/announce',
+          'http://tracker.opentrackr.org:1337/announce',
+        ],
   },
   solana: {
     customFaucet: 'https://faucet.satellite.one',
     network: 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
+    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
+    usersProgramId: '7MaC2xrAmmFsuRBEkD6BEL3eJpXCmaikYhLM3eKBPhAH',
   },
   // Realms are just different chains we support
   realms: [
@@ -87,25 +94,40 @@ export const Config = {
   },
   chat: {
     defaultMessageLimit: 50,
-    defalutLoadMoreLimit: 20,
-    messageMaxChars: 256,
-    timestampUpdateInterval: 60 * 1000,
-    maxChars: 256,
+    defaultLoadMoreLimit: 20,
+    messageMaxChars: 2048,
+    timestampUpdateInterval: 60 * 1000, // 60 seconds
+    maxChars: 2048,
+    typingInputThrottle: 2000,
+    maxUndoStack: 100,
+    batchUndoSeconds: 5,
+    searchCharLimit: 256,
+  },
+  account: {
+    minimumAccountLength: 5,
+  },
+  profile: {
+    noteMaxChars: 256,
   },
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1048576 * 8, // 8mb
+  nsfwPictureLimit: 1048576 * 8, // 8MB - images will be scaled down to this value if possible to prevent memory issues - binary
+  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit - decimal
+  nsfwVideoLimit: 1073741824 * 2, // 2GB - videos larger than this crash - binary
   regex: {
-    // regex to identify if a filetype is an image we support
+    // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
-    // Regex to check if string is only blank space
-    blankSpace: '^[\\s|&nbsp;]*$',
-    // Regex to check if string contains only emoji's. Note: doesn't yet support emoji modifiers
-    isEmoji: /\w*[{Emoji_Presentation}\u200d]+/gu,
+    // check for empty string or spaces/nbsp
+    empty: /^\s*$/,
+    // invalid characters in filesystem name
+    invalid: /[/:"*?<>|~#%&+{}\\]+/,
+    // Regex to check if string contains only emoji's.
+    isEmoji:
+      /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
-    emojiWrapper: /[\p{Emoji_Presentation}\u200d]+/gu,
-    // check for link
+    emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
+    // Check for link
     link: /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi,
     youtube: /^https?:\/\/([a-z0-9-]+[.])*youtube.com?/g,
     youtubeShort: /^https?:\/\/([a-z0-9-]+[.])*youtu.be?/g,
@@ -113,6 +135,8 @@ export const Config = {
     facebook: /^https?:\/\/([a-z0-9-]+[.])*facebook.com?/g,
     twitch: /^https?:\/\/([a-z0-9-]+[.])twitch[.]tv\/?/g,
     spotify: /^https?:\/\/([a-z0-9-]+[.])spotify[.]com\/(playlist|embed)?/g,
+    uuidv4:
+      /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
   },
   webrtc: {
     constraints: {
@@ -123,5 +147,22 @@ export const Config = {
         height: { min: 576, ideal: 720, max: 1080 },
       },
     },
+  },
+  cropperOptions: {
+    type: 'base64',
+    circle: false,
+    size: { width: 600, height: 600 },
+    format: 'jpeg',
+  },
+  locale:
+    navigator.languages && navigator.languages.length
+      ? navigator.languages[0]
+      : navigator.language,
+  // https://github.com/jhildenbiddle/canvas-size#test-results
+  canvasLimits: {
+    web: 11180, // to cater to firefox. chrome goes up to 16384
+    ios: 4096,
+    android: 10836, // lowest android value, some phones can handle more
+    electron: 11180, // including for completeness sake
   },
 }

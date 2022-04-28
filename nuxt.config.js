@@ -2,8 +2,13 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
+  alias: {
+    tslib: 'tslib/tslib.es6.js',
+    'merge-options': 'merge-options/index.js',
+  },
   bridge: {
     nitro: false,
+    meta: true,
   },
   server: {
     host: '0.0.0.0',
@@ -16,11 +21,18 @@ export default defineNuxtConfig({
   router: {
     mode: 'hash',
     middleware: ['authenticated'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/friends/list/:id',
+        components: {
+          default: resolve(__dirname, 'pages/friends/list'),
+        },
+      })
+    },
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Satellite-Absolute',
     htmlAttrs: {
       lang: 'en',
     },
@@ -77,7 +89,6 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
-    { src: '~/plugins/thirdparty/vuetify.ts' },
     { src: '~/plugins/thirdparty/swiper.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
@@ -86,6 +97,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/dayjs.ts' },
     { src: '~/plugins/local/mock.ts' },
     { src: '~/plugins/local/style.ts' },
+    { src: '~/plugins/local/envinfo.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -192,6 +204,9 @@ export default defineNuxtConfig({
       config.node = {
         fs: 'empty',
         encoding: 'empty',
+        child_process: 'empty',
+        dgram: 'empty',
+        tls: 'empty',
       }
       if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
@@ -216,7 +231,11 @@ export default defineNuxtConfig({
         }
       }
     },
-    babel: { compact: true },
+    transpile: ['libp2p'],
+    babel: {
+      plugins: ['lodash'],
+      compact: true,
+    },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,
@@ -231,5 +250,5 @@ export default defineNuxtConfig({
   },
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
-  ignore: 'store/*/types.ts',
+  ignore: ['**/*.test.*', 'store/*/types.ts'],
 })

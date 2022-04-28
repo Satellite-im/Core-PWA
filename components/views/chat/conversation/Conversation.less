@@ -1,11 +1,6 @@
 #conversation {
   padding: @normal-spacing;
-  // position: absolute;
-  // top: 0;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  
+
   .separator {
     margin: @normal-spacing 3rem;
   }
@@ -14,14 +9,10 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #conversation {
     overflow-x: hidden;
-    &:extend(.light-padding);  }
+    &:extend(.light-padding);
+  }
 }
 
-.zoop {
-  height: 20px;
-  overflow: auto;
-
-}
 .loading-bar {
   margin-top: -10px !important;
 }

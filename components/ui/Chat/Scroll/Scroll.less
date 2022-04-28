@@ -15,9 +15,10 @@
 
 .auto-scroll {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
 
   /* Custom Scroll for Firefox */
   scrollbar-color: @primary-color transparent;
@@ -41,6 +42,13 @@
     &:extend(.background-primary);
     &:extend(.round-corners);
   }
+
+  .chat-scroll-content {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
 }
 
 .new-message-alert {
@@ -51,8 +59,8 @@
   width: calc(@full - @normal-spacing * 1.8);
   margin-left: @normal-spacing;
   border-radius: 0 0 @corner-rounding @corner-rounding;
-  z-index: @base-z-index + 3;
-  padding: (@light-spacing / 2 ) @light-spacing;
+  z-index: @base-z-index + 11;
+  padding: (@light-spacing / 2) @light-spacing;
   span {
     float: right;
   }

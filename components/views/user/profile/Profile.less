@@ -1,0 +1,133 @@
+#profile {
+  display: flex;
+  flex-direction: column;
+  width: 964px;
+  height: @full;
+  min-height: 600px;
+
+  .banner {
+    height: 120px;
+    object-fit: cover;
+  }
+  .photo {
+    margin-left: @xlarge-spacing;
+    max-height: 424px;
+    margin-top: -88px;
+  }
+  .photo-sm {
+    display: none;
+  }
+  .profile-body {
+    display: flex;
+    .details {
+      width: @full;
+      display: flex;
+      flex-direction: column;
+    }
+    .details-info {
+      display: flex;
+      flex-direction: row;
+      padding: @large-spacing;
+      .intro {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: @normal-spacing;
+        .badges {
+          display: flex;
+          gap: 0.4rem;
+        }
+      }
+    }
+    .tabs {
+      padding: 0 @large-spacing;
+      border-bottom: 1px solid rgba(@gray, 0.5);
+    }
+    .buttons {
+      padding-bottom: @normal-spacing;
+      margin-left: auto;
+
+      &.mobile {
+        display: none;
+      }
+    }
+    .scroll-area {
+      padding: 0 @large-spacing 0 @large-spacing;
+      margin: auto;
+      max-height: 250px;
+      @media only screen and (max-width: @mobile-breakpoint) {
+        max-height: calc(var(--app-height) - 468px);
+      }
+    }
+    .about {
+      display: flex;
+      flex-direction: column;
+      gap: @normal-spacing;
+
+      // temp font fixes until we refactor headings
+      .title.is-6 {
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @medium-breakpoint) {
+  #profile {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 546px;
+
+    .photo {
+      display: none;
+    }
+    .photo-sm {
+      display: block;
+      max-height: 212px;
+      margin: -88px @large-spacing 0 0;
+    }
+    .profile-body {
+      padding-top: 0;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #profile {
+    width: @full;
+    height: @full;
+    .photo-sm {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: @mobile-small-breakpoint) {
+  #profile {
+    .profile-body {
+      .buttons {
+        margin-left: initial;
+        padding: 0 @large-spacing;
+        &.desktop {
+          display: none;
+        }
+        &.mobile {
+          display: flex;
+        }
+      }
+    }
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  #profile {
+    .close-button {
+      top: 2.5rem;
+    }
+  }
+}

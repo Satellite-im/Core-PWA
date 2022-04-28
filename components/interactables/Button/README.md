@@ -1,15 +1,17 @@
 # Description
+
 Generic button component.
 
 # Usage
+
 ```vue
-  <InteractablesButton
-    text="Test Button"
-    size="normal"
-    type="primary"
-    :outlined="false"
-    :action="testAction"
-  />
+<InteractablesButton
+  text="Test Button"
+  size="normal"
+  type="primary"
+  :outlined="false"
+  :action="testAction"
+/>
 ```
 
 # Props

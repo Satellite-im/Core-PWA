@@ -1,38 +1,14 @@
 <div id="file-upload">
-  <div
-    class="file-preview"
-    v-if="files.length || count_error"
-    @touchmove="handleTouchPreview"
-    @touchstart="handleTouchPreview"
-    @touchend="handleTouchPreview"
-  >
-    <div v-if="count_error" class="file-error">
-      <TypographyError :text="$t('errors.chat.drop_file_count')" />
-      <x-icon size="1x" class="has-text-danger" @click="cancelUpload" />
-    </div>
-    <template v-else>
-      <UiScroll horizontalScroll scrollbarVisibility="scroll">
-        <div class="file-list">
-          <FilesUploadPreviewItem
-            :item="item"
-            :index="index"
-            :key="index"
-            @removeUploadItem="removeUploadItem(index)"
-            v-for="(item, index) in files"
-          ></FilesUploadPreviewItem>
-        </div>
-      </UiScroll>
-    </template>
-  </div>
   <input
     :type="editable ? `file` : `hidden`"
     id="quick-upload"
+    ref="quickUpload"
     @change="handleFile"
     multiple
   />
   <label
     v-if="type == 'quick'"
-    for="quick-upload"
+    @click="handleFileClick"
     :data-tooltip="$t('global.upload')"
     :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
   >
@@ -40,7 +16,7 @@
   </label>
   <div v-if="type =='button'">
     <label
-      for="quick-upload"
+      @click="handleFileClick"
       class="button is-button is-small is-primary is-normal-width"
     >
       <UiGlowingCursorArea>

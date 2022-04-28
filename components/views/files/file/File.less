@@ -1,10 +1,16 @@
 .file {
+  display: flex;
+  flex-direction: column;
+  min-height: 234px;
+  border-radius: @corner-rounding-smaller;
+  &:extend(.background-semitransparent-light);
+  cursor: pointer;
+
   .quick-actions {
+    width: @full;
+    padding: @normal-spacing;
     position: absolute;
-    top: 0;
-    &:extend(.full-width);
-    display: inline-block;
-    &:extend(.more-pad-sides);
+    z-index: @base-z-index + 1;
 
     .like {
       float: right;
@@ -12,55 +18,47 @@
 
     svg:hover {
       &:extend(.font-secondary);
-      cursor: pointer;
     }
   }
 
-  .file-icon {
-    font-size: 80px;
-    align-self: center;
-    justify-self: center;
-    margin-left: 45px;
-    &:extend(.font-accent);
+  &.disabled {
+    .quick-actions {
+      display: none;
+    }
+  }
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding-top: 36px; // half of the text area height, centers icon
+
+    .file-type-icon {
+      &:extend(.font-accent);
+    }
   }
 
-  .image-preview {
-    margin-top: -(@normal-spacing * 2);
-    height: 112px;
-    background-size: cover;
+  .image-container {
+    overflow: hidden;
+    height: 162px;
+    filter: brightness(0.75);
+    .image-preview {
+      height: 162px;
+      width: @full;
+      object-fit: cover;
+    }
   }
-    
-  .file-display {
-    margin-left: 55px;
-  }
-  
+
   .text-container {
     padding: @normal-spacing;
 
+    .maintext {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: pre;
+    }
     .subtext {
       &:extend(.font-muted);
-    }
-  }
-  width: 20%;
-  min-width: 160px;
-  margin-right: @light-spacing;
-  margin-bottom: @light-spacing;
-  border-radius: @corner-rounding-smaller;
-  &:extend(.background-semitransparent-light);
-  float: left;
-  display: inline-flex;
-  flex-direction: column;
-  align-content: center;
-  padding-top: @normal-spacing * 2;
-  overflow: hidden;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .mobile-file {
-    width: 47%;
-    min-width: 100px;
-    .file-icon {
-      margin-left: 10vw;
     }
   }
 }

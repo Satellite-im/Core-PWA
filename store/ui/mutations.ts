@@ -1,8 +1,18 @@
 import { without } from 'lodash'
-import { EnhancerInfo, Flair, Theme, UIState } from './types'
+import {
+  EnhancerInfo,
+  Flair,
+  Theme,
+  UIState,
+  RecentGlyph,
+  SettingsRoutes,
+  Position,
+  FileSort,
+} from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { RecentGlyph } from '~/store/ui/types'
+import { Fil } from '~/libraries/Files/Fil'
+import { ImageMessage } from '~/types/textile/mailbox'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -14,23 +24,38 @@ export default {
   showSidebarUsers(state: UIState, enabled: boolean) {
     state.showSidebarUsers = enabled
   },
+  showSidebar(state: UIState, enabled: boolean) {
+    state.showSidebar = enabled
+  },
+  showMedia(state: UIState, show: boolean) {
+    state.showMedia = show
+  },
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values
   },
   setContextMenuPosition(state: UIState, e: any) {
     state.contextMenuPosition = { x: e.x, y: e.y }
   },
-  setQuickProfilePosition(state: UIState, e: any) {
-    state.quickProfilePosition = { x: e.x, y: e.y }
+  setQuickProfilePosition(state: UIState, position: Position) {
+    state.quickProfilePosition = position
   },
   quickProfile(state: UIState, profile: Object | boolean) {
     state.quickProfile = profile
+  },
+  setUserProfile(state: UIState, userProfile: Object) {
+    state.userProfile = userProfile
   },
   chatbarContent(state: UIState, content: string) {
     state.chatbarContent = content
   },
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
+  },
+  setFilePreview(state: UIState, name: string) {
+    state.filePreview = name
+  },
+  setChatImageOverlay(state: UIState, image: ImageMessage | undefined) {
+    state.chatImageOverlay = image
   },
   toggleEnhancers(state: UIState, options: EnhancerInfo) {
     state.enhancers = {
@@ -58,8 +83,17 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(state: UIState, show: boolean) {
+  toggleSettings(
+    state: UIState,
+    options: { show: boolean; defaultRoute?: SettingsRoutes },
+  ) {
+    const { show, defaultRoute } = options
+
     state.showSettings = show
+    state.settingsRoute = defaultRoute || SettingsRoutes.PERSONALIZE
+  },
+  setSettingsRoute(state: UIState, route: SettingsRoutes) {
+    state.settingsRoute = route
   },
   toggleSettingsSidebar(state: UIState, show: boolean) {
     state.settingsSideBar = show
@@ -80,6 +114,9 @@ export default {
   setIsScrollOver(state: UIState, status: boolean) {
     state.isScrollOver = status
     if (!status) state.unreadMessage = 0
+  },
+  setShowOlderMessagesInfo(state: UIState, flag: boolean) {
+    state.showOlderMessagesInfo = flag
   },
   setIsReacted(state: UIState, status: boolean) {
     state.isReacted = status
@@ -134,15 +171,15 @@ export default {
   setReplyChatbarContent(
     state: UIState,
     message: {
-      id: String
-      from: String
-      payload: String
+      id: string
+      from: string
+      payload: string
     },
   ) {
     state.replyChatbarContent = message
   },
   settingReaction(state: UIState, status: boolean) {
-    state.settingReaction = status
+    state.settingReaction = status // TODO: check this mutation, probably a bug
   },
   /**
    * Called when user click the Edit Message on Context Menu or Edit action in message listings
@@ -167,9 +204,9 @@ export default {
   saveEditMessage(
     state: UIState,
     message: {
-      id: String
-      from: String
-      payload: String
+      id: string
+      from: string
+      payload: string
     },
   ) {
     const messages: any[] = [...state.messages]
@@ -205,7 +242,6 @@ export default {
     const currGroup = messageGroups?.find(
       (group) => group.id === reaction.groupID,
     )
-
     if (currGroup?.messages) {
       // Find message in message group or reply in message meant for reaction
       let currMessage
@@ -273,15 +309,6 @@ export default {
   setHoveredGlyphInfo(state: UIState, values: Object | undefined) {
     state.hoveredGlyphInfo = values
   },
-  updateRecentReactions(state: UIState, emoji: String) {
-    const newRecentReactions = state.recentReactions
-    if (!state.recentReactions.includes(emoji)) {
-      newRecentReactions.unshift(emoji)
-      newRecentReactions.pop()
-    }
-
-    state.recentReactions = newRecentReactions
-  },
   setGlyphMarketplaceView(state: UIState, values: Object) {
     state.glyphMarketplaceView = values
   },
@@ -316,5 +343,29 @@ export default {
   },
   updateFlair(state: UIState, flair: Flair) {
     state.theme.flair = flair
+  },
+  setChatbarFocus(state: UIState, status: boolean) {
+    state.chatbarFocus = status
+  },
+  setRenameItem(state: UIState, name: string) {
+    state.renameCurrentName = name
+  },
+  setFileSort(state: UIState, sort: FileSort) {
+    state.fileSort = sort
+  },
+  setSwiperSlideIndex(state: UIState, index: number) {
+    state.swiperSlideIndex = index
+  },
+  setFilesUploadStatus(state: UIState, value: string) {
+    state.filesUploadStatus = value
+  },
+  addFileDownload(state: UIState, name: string) {
+    state.fileDownloadList.push(name)
+  },
+  removeFileDownload(state: UIState, name: string) {
+    const index = state.fileDownloadList.indexOf(name)
+    if (index > -1) {
+      state.fileDownloadList.splice(index, 1)
+    }
   },
 }

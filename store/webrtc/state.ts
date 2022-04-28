@@ -1,16 +1,22 @@
 import { WebRTCState } from './types'
 
+export const initialTracksState = {
+  audio: { muted: false },
+  video: { muted: false },
+}
+
 const InitialWebRTCState = (): WebRTCState => ({
   initialized: false,
   incomingCall: '',
   activeCall: '',
-  connectedPeer: '',
+  connectedPeers: [],
+  peerCalls: {},
   activeStream: {
-    createdAt: Date.now(),
+    createdAt: 0,
   },
   streaming: true,
-  localTracks: { audio: {}, video: {} },
-  remoteTracks: { audio: {}, video: {} },
+  localTracks: initialTracksState,
+  remoteTracks: initialTracksState,
 })
 
 export default InitialWebRTCState

@@ -1,30 +1,38 @@
-<div
-  id="sidebar"
-  class="collapsed"
->
-  <div :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'">
+<div id="sidebar" class="collapsed">
+  <div
+    :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'"
+  >
     <div class="sidebar-search">
       <menu-icon
         class="toggle-sidebar"
+        data-cy="hamburger-button"
         v-on:click="showMenu"
         size="1.2x"
         full-width
         :style="`${sidebar ? 'display: block' : 'display: none'}`"
       />
-      <InteractablesInput
-        :placeholder="`${$t('ui.search')}...`"
-        size="small"
-        input-kind="text"
-        :delete-icon="true"
-        type="dark"
-        full-width
-      />
+      <UiComingSoon
+        :tooltipText="$t('coming_soon.sidebar_search')"
+        :tooltipPosition="'bottom'"
+        disabled
+      >
+        <InteractablesInput
+          :placeholder="`${$t('ui.search')}...`"
+          size="small"
+          input-kind="text"
+          :delete-icon="true"
+          type="dark"
+          disabled
+          full-width
+        />
+      </UiComingSoon>
     </div>
     <div class="sidebar-nav" v-if="!$device.isMobile">
-      <div style="position: relative;">
+      <div style="position: relative">
         <InteractablesButton
           :inactive="$route.path.includes('/friends/list') ? false : true"
           class="sidebar-full-btn"
+          data-cy="sidebar-friends"
           :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
           size="small"
           :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
@@ -32,13 +40,17 @@
         >
           <users-icon size="1.2x" />
         </InteractablesButton>
-        <span v-if="friends.incomingRequests.length" :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'">
+        <span
+          v-if="friends.incomingRequests.length"
+          :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
+        >
           {{friends.incomingRequests.length}}
         </span>
       </div>
       <InteractablesButton
         :inactive="$route.path.includes('/files') ? false : true"
         class="sidebar-full-btn"
+        data-cy="sidebar-files"
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
         :action="() => $router.push('/files/browse')"
@@ -51,62 +63,66 @@
     <Slimbar
       v-if="$device.isMobile"
       :servers="$mock.servers"
-      :unreads="$mock.unreads"
+      :unreads="users"
       :open-modal="toggleModal"
       horizontal
     />
 
     <div class="tabs sidebar-selector padded no-top-pad flexy">
-      <InteractablesButtonGroup v-model="toggleView" :fullWidth="true" :values="[true,false]">
-        <InteractablesButton
-          :text="$t('messaging.messages')"
-          size="small"
-          type="dark"
-        >
-          <message-square-icon size="1.2x" />
-        </InteractablesButton>
-        <InteractablesButton
-          :text="$t('messaging.groups')"
-          size="small"
-          type="dark"
-        >
-          <users-icon size="1.2x" />
-        </InteractablesButton>
-      </InteractablesButtonGroup>
-      
-      <div 
-        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary" 
+      <div
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
         data-tooltip="New Chat"
-        @click="toggleModal">
+        @click="()=>toggleModal('quickchat')"
+        v-if="!$device.isMobile && toggleView"
+      >
+        <plus-circle-icon size="1x" />
+      </div>
+      <div
+        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
+        data-tooltip="New Group"
+        @click="()=>toggleModal('creategroup')"
+        v-if="!$device.isMobile && !toggleView"
+      >
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <FriendsQuick v-click-outside="toggleModal" />
+    <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
     <div
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading && users.length">
-          <UiInlineNotification :text="$t('messaging.new_messages')" v-if="ui.unreadMessage.length" />
-          <User
-            v-for="(user, i) in users"
-            :key="i"
-            :user="user"
-            :isTyping="ui.isTyping.address === user.address"
+        <div
+          v-if="dataState.friends !== DataStateType.Loading && users && users.length"
+        >
+          <UiInlineNotification
+            :text="$t('messaging.new_messages')"
+            v-if="ui.unreadMessage.length"
           />
-
+          <div v-for="(thing,i) in usersAndGroups">
+            <User
+              v-if="!thing.admin"
+              :key="thing.address"
+              :user="thing"
+              :isTyping="ui.isTyping.address === thing.address"
+              :isSelected="thing.address === $route.params.address"
+            />
+            <GroupClickable v-else :group="thing" :key="thing.id" />
+          </div>
         </div>
-        <div v-else-if="dataState.friends !== DataStateType.Loading && !users.length" class="mascot-container">
-          <TypographyTitle  :text="$t('pages.chat.no_friends_yet')"  :size="6" />
-          <TypographyText  :text="$t('pages.chat.no_friends_yet_text')"  />
+        <div
+          v-else-if="dataState.friends !== DataStateType.Loading && !users.length"
+          class="mascot-container"
+        >
+          <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
+          <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
           <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
           <InteractablesButton
             :text="$t('friends.add') + 's'"
             size="small"
             type="primary"
-            :action="() => $router.push('/friends/list?tab=add')"
+            :action="gotoAddFriends"
           >
             <user-plus-icon size="1.2x" />
           </InteractablesButton>
@@ -114,22 +130,9 @@
         <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>
     </div>
-    <div class="scrolling hidden-scroll" v-scroll-lock="true" v-else>
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div v-if="dataState.friends !== DataStateType.Loading">
-          <Group
-            v-for="group in groups"
-            :group="group"
-            :key="group.address"
-          />
-        </div>
-        <UiLoadersAddress v-else :count="4" inverted />
-      </UiScroll>
-    </div>
   </div>
 
   <div class="filler"></div>
-
   <div class="controls">
     <SidebarLive />
     <SidebarControls />

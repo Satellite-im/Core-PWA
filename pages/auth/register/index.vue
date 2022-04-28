@@ -18,6 +18,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('accounts', ['getRegistrationStatus']),
+    ...mapGetters(['allPrerequisitesReady']),
     hasToRegister() {
       return this.getRegistrationStatus === RegistrationStatus.UNKNOWN
     },
@@ -29,27 +30,29 @@ export default Vue.extend({
           return this.$i18n.t('user.registration.reg_status.funding_account')
         case RegistrationStatus.SENDING_TRANSACTION:
           return this.$i18n.t(
-            'user.registration.reg_status.sending_transaction'
+            'user.registration.reg_status.sending_transaction',
           )
         default:
-          return this.$i18n.t('user.registration.reg_status.registered')
+          return this.$i18n.t('user.loading.loading_account')
       }
     },
     isRegistered() {
       return this.getRegistrationStatus === RegistrationStatus.REGISTERED
     },
   },
-  mounted() {},
+  watch: {
+    allPrerequisitesReady(nextValue) {
+      if (!nextValue) return
+      this.$router.replace('/chat/direct')
+    },
+  },
   methods: {
     async confirm(userData: UserRegistrationData) {
-      // TODO: upload picture to pinata first - AP-395
-      await this.$store.dispatch('accounts/registerUser', {
+      this.$store.dispatch('accounts/registerUser', {
         name: userData.username,
-        photoHash: '',
+        image: userData.photoHash,
         status: userData.status,
       })
-
-      this.$router.replace('/chat/direct')
     },
   },
 })

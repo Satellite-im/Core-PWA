@@ -2,9 +2,9 @@
   <div :class="`switch-button-control ${small ? 'is-small' : ''}`">
     <div
       class="switch-button"
-      :class="{ enabled: isEnabled }"
+      data-cy="switch-button"
+      :class="{ enabled: isEnabled, locked: isLocked }"
       @click="toggle"
-      :style="{ '--color': color }"
     >
       <div class="sw-button"></div>
     </div>
@@ -12,5 +12,10 @@
       <slot></slot>
     </div>
   </div>
-  <p :class="`switch-label ${small ? 'is-small-label' : ''}`" v-if="label.length"> {{ label }}</p>
+  <p
+    :class="`switch-label ${small ? 'is-small-label' : ''}`"
+    v-if="label.length"
+  >
+    {{ label }}
+  </p>
 </div>

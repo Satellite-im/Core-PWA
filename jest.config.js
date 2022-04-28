@@ -1,5 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
+  setupFiles: ['jest-canvas-mock', 'dotenv/config', './jest-setup.js'],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
@@ -16,6 +17,7 @@ module.exports = {
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
     '^[@|~]/(.*)$': '<rootDir>/$1',
+    skaler: '<rootDir>/store/textile/__mocks__/skaler.js',
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   coveragePathIgnorePatterns: [
@@ -23,6 +25,11 @@ module.exports = {
     '<rootDir>/cypress',
     '<rootDir>/coverage',
     '<rootDir>/plugins',
+    '<rootDir>/electron',
+    '<rootDir>/libraries/Enums',
+    '<rootDir>/libraries/Files/errors',
+    '<rootDir>/libraries/Files/types',
+    '<rootDir>/types',
   ],
   testEnvironment: 'jsdom',
   transform: {

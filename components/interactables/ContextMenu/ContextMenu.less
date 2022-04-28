@@ -3,6 +3,13 @@
   &:extend(.blur);
   &:extend(.font-secondary);
   &:extend(.round-corners);
+  position: fixed;
+  z-index: 999;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  max-width: 200px;
+  min-width: 150px;
   .subtitle {
     margin: 0 0 @light-spacing @light-spacing;
     font-size: @mini-text-size;
@@ -11,43 +18,42 @@
     padding: 4px 8px;
     border-radius: 2px;
     font-size: 14px;
-  }
-  p:hover {
-    &:extend(.background-primary);
-    &:extend(.font-secondary);
+
+    &:hover {
+      &:extend(.background-primary);
+      &.red {
+        &:extend(.font-secondary);
+        background: @red !important;
+      }
+    }
   }
   .quickReactions {
-    .reaction {
-      &:extend(.background-semitransparent-light);
-    }
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: @light-spacing;
+    justify-content: center;
+
     p {
+      &:extend(.background-semitransparent-light);
       display: flex;
       flex-grow: 1;
       font-size: 1.25rem;
       justify-content: center;
       align-items: center;
       border-radius: unset;
+
+      &:hover {
+        &:extend(.background-semitransparent-lighter);
+        text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color,
+          1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
+      }
+
+      &:first-of-type {
+        border-radius: @corner-rounding 0 0 @corner-rounding;
+      }
+      &:last-of-type {
+        border-radius: 0 @corner-rounding @corner-rounding 0;
+      }
     }
-    p:first-of-type {
-      border-radius: @corner-rounding 0 0 @corner-rounding;
-    }
-    p:last-of-type {
-      border-radius: 0 @corner-rounding @corner-rounding 0;
-    }
-    p:hover {
-      &:extend(.background-semitransparent-lighter);
-      text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color, 1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
-    }
-    display: flex;
-    flex-flow: row nowrap;
-    margin-bottom: @light-spacing;
-    justify-content: center;
   }
-  position: fixed;
-  z-index: 999;
-  outline: none;
-  cursor: pointer;
-  padding: 8px;
-  max-width: 200px;
-  min-width: 150px;
 }

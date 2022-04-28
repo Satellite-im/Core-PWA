@@ -1,19 +1,16 @@
-<template>
-  <div id="bottom-bar-container">
-    <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
-    <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
-      {{ lengthCount }}
-    </span>
-  </div>
-</template>
+<template src="./Footer.html" />
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { toArray } from 'lodash'
+import { CircleIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 
 export default Vue.extend({
+  components: {
+    CircleIcon,
+  },
   props: {
     charlimit: {
       type: Boolean,
@@ -41,32 +38,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less">
-#bottom-bar-container {
-  display: flex;
-  justify-content: space-between;
-  // height: 1.5rem;
-  align-items: center;
-  padding: 5px 0px 5px 20px;
-
-  .charlimit {
-    float: right;
-    margin-right: 2rem;
-    font-size: @mini-text-size;
-    &:extend(.font-muted);
-    margin-left: auto;
-    &.is-error {
-      &:extend(.color-danger);
-    }
-  }
-  &.is-error {
-    border: 1px solid @red;
-
-    .control-icon {
-      &:nth-child(4) {
-        &:extend(.color-danger);
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="less" src="./Footer.less"></style>

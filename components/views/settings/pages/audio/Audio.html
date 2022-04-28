@@ -1,5 +1,8 @@
 <div id="audio-settings">
-  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.audio.title')" />
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.settings.audio.title')"
+  />
   <!--Audio Sources-->
   <!-- Requires user permissions to see in most browsers -->
   <div class="columns is-desktop">
@@ -53,11 +56,11 @@
       />
     </SettingsUnit>
   </div>
-  
+
   <!--Audio Bitrate & Sample-->
   <div class="columns is-desktop">
     <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
-      <br>
+      <br />
       <div class="meter-container">
         <UiMeter :value="0" :height="5" solid />
       </div>
@@ -69,7 +72,7 @@
       />
     </SettingsUnit>
     <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
-      <br>
+      <br />
       <div class="meter-container">
         <UiMeter :value="micLevel" :height="5" solid />
       </div>
@@ -83,53 +86,57 @@
   </div>
 
   <!--Audio Bitrate & Sample-->
-  <div class="columns is-desktop">
-    <SettingsUnit
-      :title="$t('pages.settings.audio.bitrate.title')"
-      :text="$t('pages.settings.audio.bitrate.subtitle')"
-    >
-      <InteractablesSelect
-        :options="Bitrates"
-        size="small"
-        v-model="isBitrate"
-      />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.settings.audio.sampleSize.title')"
-      :text="$t('pages.settings.audio.sampleSize.subtitle')"
-    >
-      <InteractablesSelect
-        :options="SampleSizes"
-        size="small"
-        v-model="isSampleSize"
-      />
-    </SettingsUnit>
-  </div>
+  <UiComingSoon :areaCover="true" :hide="true">
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.settings.audio.bitrate.title')"
+        :text="$t('pages.settings.audio.bitrate.subtitle')"
+      >
+        <InteractablesSelect
+          :options="Bitrates"
+          size="small"
+          v-model="isBitrate"
+        />
+      </SettingsUnit>
+      <SettingsUnit
+        :title="$t('pages.settings.audio.sampleSize.title')"
+        :text="$t('pages.settings.audio.sampleSize.subtitle')"
+      >
+        <InteractablesSelect
+          :options="SampleSizes"
+          size="small"
+          v-model="isSampleSize"
+        />
+      </SettingsUnit>
+    </div>
 
-  <!--Echo Cancellation & Noise Suppression-->
-  <div class="columns is-desktop">
-    <SettingsUnit
-      :title="$t('pages.settings.audio.echo.title')"
-      :text="$t('pages.settings.audio.echo.subtitle')"
-    >
-      <InteractablesSwitch
-        v-model="isEchoCancellation"
-        :isEnabled="settings.echoCancellation"
-      />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.settings.audio.noise.title')"
-      :text="$t('pages.settings.audio.noise.subtitle')"
-    >
-      <InteractablesSwitch
-        v-model="isNoiseSuppression"
-        :isEnabled="settings.noiseSuppression"
-      />
-    </SettingsUnit>
-  </div>
-
+    <!--Echo Cancellation & Noise Suppression-->
+    <div class="columns is-desktop">
+      <SettingsUnit
+        :title="$t('pages.settings.audio.echo.title')"
+        :text="$t('pages.settings.audio.echo.subtitle')"
+      >
+        <InteractablesSwitch
+          v-model="isEchoCancellation"
+          :isEnabled="settings.echoCancellation"
+        />
+      </SettingsUnit>
+      <SettingsUnit
+        :title="$t('pages.settings.audio.noise.title')"
+        :text="$t('pages.settings.audio.noise.subtitle')"
+      >
+        <InteractablesSwitch
+          v-model="isNoiseSuppression"
+          :isEnabled="settings.noiseSuppression"
+        />
+      </SettingsUnit>
+    </div>
+  </UiComingSoon>
   <!-- Video -->
-  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.video.title')" />
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.settings.video.title')"
+  />
 
   <!--Video Input Source -->
   <div class="columns is-desktop">
@@ -165,11 +172,14 @@
   </div>
 
   <!-- Screen Share -->
-  <TypographyHorizontalRuleText plaintext :value="$t('pages.settings.screen.title')" />
-
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.settings.screen.title')"
+    v-if="featureReadyToShow"
+  />
 
   <!-- Capture Mouse -->
-  <div class="columns is-desktop">
+  <div class="columns is-desktop" v-if="featureReadyToShow">
     <SettingsUnit
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
@@ -181,4 +191,11 @@
       />
     </SettingsUnit>
   </div>
+
+  <!-- Notification Sounds -->
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.settings.notifications.title')"
+  />
+  <SettingsPagesAudioSounds />
 </div>

@@ -1,25 +1,34 @@
 <div
-  :class="`select is-${size} is-${type} is-${fullWidth ? 'full-width' : 'normal-width'}`"
+  :class="{'select': true, [`is-${type}`]: true, [`is-${size}`]: true, 'is-full-width': fullWidth, 'disabled': disabled}"
   v-click-outside="() => open = false"
 >
-  <div :class="{'custom-select': true, open, up, down: !up}">
-    <div class="selected" @click="toggleOpen()">{{ getSelectLabel() }}</div>
+  <div
+    :class="{'custom-select': true, open, up, down: !up}"
+    data-cy="custom-select"
+  >
+    <div class="selected" data-cy="custom-select-value" @click="toggleOpen()">
+      {{ getSelectLabel() }}
+    </div>
     <div class="items">
-      <div
-        v-for="(option, i) of options"
-        :key="i"
-        :disabled="option.disabled"
-        @click="change(option)"
-      >
+      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <div
-          class="color"
-          v-if="colorSupport"
-          :style="{ background: option.value }"
+          v-for="(option, i) of options"
+          :key="i"
+          :disabled="option.disabled"
+          @click="change(option)"
         >
-          {{ option.text }}
+          <div
+            class="color"
+            v-if="colorSupport"
+            :style="{ background: option.value }"
+          >
+            {{ option.text }}
+          </div>
+          <span data-cy="custom-select-option-text" v-else
+            >{{ option.text }}</span
+          >
         </div>
-        <span v-else>{{ option.text }}</span>
-      </div>
+      </UiScroll>
     </div>
   </div>
 </div>

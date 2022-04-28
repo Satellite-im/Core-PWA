@@ -4,16 +4,25 @@
     <TypographyText :text="$t('wallet.accounts.linked_accounts')" />
   </div>
   <div class="account-list">
-    <WalletAccountsAccount v-for="account in $mock.wallet.LinkedAccounts" :account="account" :key="account.name" />
+    <WalletAccountsAccount
+      v-for="account in $mock.wallet.LinkedAccounts"
+      :account="account"
+      :key="account.name"
+    />
     <UiHorizontalRule />
     <div class="accounts-footer">
       <plus-circle-icon size="1x" class="green" />
-      <TypographyText :text="$t('wallet.accounts.link_new_account_or_device')" />
+      <TypographyText
+        :text="$t('wallet.accounts.link_new_account_or_device')"
+      />
     </div>
   </div>
   <div class="accounts-subtext">
     <InteractablesSwitch size="small" />
     <TypographyText :text="$t('wallet.accounts.require_pin_auth')" />
   </div>
-  <TypographyText :text="$t('wallet.accounts.security_suggestion')" class="yellow" />
+  <TypographyText
+    :text="$t('wallet.accounts.security_suggestion')"
+    class="yellow"
+  />
 </div>

@@ -1,9 +1,7 @@
 #chatbar {
+  position: relative;
   margin-top: @light-spacing;
   &:extend(.full-width);
-  &.has-reply {
-    margin-top: 0;
-  }
   .chat-label {
     &:extend(.background-primary);
     font-size: @mini-text-size;
@@ -12,10 +10,11 @@
     height: 1.25rem;
     padding: 0.15rem;
     text-align: center;
-    align-self: center;
     align-content: center;
     border-radius: @corner-rounding-smaller;
     cursor: pointer;
+    align-self: flex-start;
+    margin-top: 11px;
   }
   textarea.has-command {
     font-family: @primary-font;
@@ -38,9 +37,8 @@
   }
 
   .file-upload-wrap {
-    margin: 0 @light-spacing;
+    margin-right: @light-spacing;
     order: 1;
-    align-self: flex-start;
     font-size: @icon-size;
   }
 
@@ -49,12 +47,9 @@
     &:extend(.background-semitransparent-light);
     margin: 0 @normal-spacing;
     border-radius: 20px;
-    padding: (@light-spacing / 1.5) 0.75rem;
-    display: flex;
+    padding: 0 16px;
     flex-direction: row;
-    flex-wrap: wrap;
     align-self: stretch;
-    border: 1px solid transparent;
     width: calc(@full - (@normal-spacing * 2));
     display: inline-flex;
     align-content: center;
@@ -85,7 +80,8 @@
         }
       }
     }
-    &.show-file-preview {
+
+    &.top-corners-sharp {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
@@ -93,8 +89,7 @@
     .messageuser {
       flex: 1;
       order: 2;
-      padding: 0.25rem @light-spacing;
-      background: transparent;
+      background-color: transparent;
       border: none;
       font-family: 'Poppins';
       &:extend(.font-primary);
@@ -102,15 +97,16 @@
       resize: none;
       font-size: @text-size;
       word-break: break-all;
+    }
 
-      &[placeholder]:empty:before {
-        content: attr(placeholder);
-      }
+    .editable-container {
+      min-height: 48px;
+      max-height: 50vh;
     }
 
     #chatbar-controls {
+      width: 150px;
       order: 3;
-      align-self: flex-start;
     }
 
     .control-icon {

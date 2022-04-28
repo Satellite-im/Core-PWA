@@ -4,8 +4,16 @@
   v-click-outside="close"
   :style="$device.isDesktop ? `top: ${ui.quickProfilePosition.y}px; left: ${ui.quickProfilePosition.x}px;` : ''"
 >
-  <div class="header">
-    <UiCircle type="random" :seed="user.address" :size="45" />
+  <div class="header avatar-wrapper">
+    <InteractablesClose id="closeIcon" :action="close" />
+    <UiCircle
+      id="userIcon"
+      :type="src ? 'image' : 'random'"
+      :seed="user.address"
+      :size="45"
+      :source="src"
+      @click="openProfile"
+    />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
   <TypographyText
@@ -14,7 +22,7 @@
     class="address"
   />
   <TypographyText :text="user.status" :size="6" />
-  <template v-if="!isMe()">
+  <template v-if="!isMe">
     <UiHorizontalRule />
     <InteractablesInputGroup
       type="primary"
@@ -26,5 +34,9 @@
     >
       <arrow-right-icon size="1x" />
     </InteractablesInputGroup>
+    <TypographyError
+      v-if="isEmptyMessage"
+      :text="$t('errors.chat.empty_message_error')"
+    />
   </template>
 </div>

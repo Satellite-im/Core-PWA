@@ -1,4 +1,4 @@
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 import { Config } from '~/config'
 
 // Keep this type in sync with Config.sounds
@@ -20,6 +20,7 @@ export enum Sounds {
  */
 export default class SoundManager {
   sounds: Record<Sounds, Howl>
+
   /**
    * @constructs SoundManager
    */
@@ -27,7 +28,7 @@ export default class SoundManager {
     this.sounds = {} as Record<Sounds, Howl>
     for (const [key, value] of Object.entries(Config.sounds) as [
       Sounds,
-      string
+      string,
     ][]) {
       this.sounds[key] = new Howl({
         src: [`${Config.ipfs.gateway}${value}`],
@@ -39,6 +40,12 @@ export default class SoundManager {
     }
   }
 
+  /**
+   * @function
+   * init 'sounds' property
+   * @param volume
+   */
+  private initSounds(volume: number = 1.0) {}
   /** @function
    * Check if a specific sound exists
    * @param sound Name of the sound to check
@@ -71,6 +78,10 @@ export default class SoundManager {
     this.existsSound(sound)
 
     this.sounds[sound].stop()
+  }
+
+  setMuteSounds(flag: boolean) {
+    Howler.mute(flag)
   }
 
   /** @function

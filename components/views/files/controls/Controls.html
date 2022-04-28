@@ -1,5 +1,12 @@
 <div id="file-controls">
-  <div class="file-type">
+  <div class="search-container">
+    <InteractablesInput
+      size="small"
+      input-kind="text"
+      type="dark"
+      :placeholder="$t('pages.files.browse.search')"
+      class="search"
+    />
     <InteractablesSelect
       :placeholder="$t('pages.files.file_type')"
       :options="[
@@ -10,18 +17,52 @@
       size="small"
     />
   </div>
-  <div class="file-flex">
+  <div class="add-container">
     <InteractablesButton
       type="primary"
-      :text="$t('pages.files.new_folder')"
+      :text="$t('pages.files.controls.new_file')"
       size="small"
-      :action="()=>{show('newfolder')}"
+      :action="addFile"
+      :loading="isFilesIndexLoading"
     >
-    <folder-plus-icon size="1x" />
-  </InteractablesButton>
-    <FilesUpload editable="true" type="button" />
+      <file-plus-icon size="1.3x" />
+    </InteractablesButton>
+    <InteractablesInputGroup
+      v-model="text"
+      class="name"
+      size="small"
+      type="primary"
+      :action="addFolder"
+      :placeholder="$t('pages.files.controls.name_folder')"
+      :loading="isFilesIndexLoading"
+      :disabled="isFilesIndexLoading"
+    >
+      <folder-plus-icon size="1.3x" />
+    </InteractablesInputGroup>
+    <input
+      ref="upload"
+      type="file"
+      @click="resetFileUpload"
+      @change="handleInput"
+      style="width: 0; height: 0"
+      multiple
+    />
   </div>
-  <div>
+  <TypographyText
+    v-if="ui.filesUploadStatus"
+    class="status"
+    :text="ui.filesUploadStatus"
+    :size="6"
+  />
+  <div class="error-container" v-if="errors.length">
+    <alert-triangle-icon size="1.3x" />
+    <div>
+      <TypographyError v-for="error in errors" :key="error" :text="error" />
+    </div>
+    <x-icon size="1.3x" class="close" @click="errors=[]" />
+  </div>
+  <div class="switcher-container">
+    <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />
   </div>
 </div>

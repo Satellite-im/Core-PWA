@@ -1,4 +1,3 @@
-
 p {
   font-family: @secondary-font;
   font-size: 16px;
@@ -24,14 +23,15 @@ p {
     box-sizing: border-box;
   }
 
-  .sidebar {      
+  .sidebar {
     width: @sidebar-size;
     box-sizing: border-box;
   }
-  
+
   .not-sidebar {
     width: 100%;
     box-sizing: border-box;
+    &:extend(.background-semitransparent-dark);
   }
 }
 
@@ -57,16 +57,18 @@ p {
   height: @full;
   font-size: @text-size;
   transition: margin-left @animation-speed;
-  
-  .title, .subtitle {
+
+  .title,
+  .subtitle {
     font-size: @text-size;
   }
   .ps {
-    width:100%;
+    width: 100%;
     padding: @normal-spacing * 2;
     margin: 0;
   }
-  .is-primary.input, .is-dark.input {
+  .is-primary.input,
+  .is-dark.input {
     background: @semitransparent-lightest-gradient !important;
   }
 }
@@ -80,10 +82,13 @@ p {
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-
   .settings-modal #settings {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
+
+    .sidebar {
+      flex-basis: 100%;
+    }
   }
 
   .sidebar {
@@ -96,7 +101,7 @@ p {
   }
 
   .not-sidebar {
-    height: 100vh;
+    height: 100%;
     .close-button {
       top: @normal-spacing * 3;
       right: @normal-spacing * 2;
@@ -104,25 +109,16 @@ p {
 
     .ps {
       padding-top: @normal-spacing * 3;
+      padding-bottom: @normal-spacing * 5;
       width: 100%;
     }
+    .menu-toggle {
+      margin-top: @light-spacing * 3;
+    }
   }
-}
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #settings {
-    width: 100vw;
-    height: 100vh;
-    .sidebar {
-      flex-basis: 100%;
-    }
-  }
   .is-collapsed {
-    .sidebar {
-      transform: translateX(calc(-@full + 2rem));
-    }
     .not-sidebar {
-      margin-left: calc(-@full + 2rem);
       .ps {
         padding: @normal-spacing;
       }

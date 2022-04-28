@@ -7,6 +7,8 @@ export class TracksManager {
 
   addTrack(track: MediaStreamTrack) {
     if (this.tracks[track.id]) {
+      //  Allow console in lint
+      /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
       console.warn(
         `Track already exists ${track.id} ${track.kind}`,
         this.tracks,

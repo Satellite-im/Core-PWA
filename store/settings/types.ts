@@ -10,18 +10,29 @@ export enum CaptureMouseTypes {
   motion = 'motion',
   never = 'never',
 }
+
+export enum SettingsError {
+  DATABASE_NOT_CLEARED = 'errors.storage.database_not_cleared',
+}
+
 export interface SettingsState {
   audioInput: string
   audioOutput: string
   videoInput: string
   captureMouse: string
-  noiseSuppression: Boolean
-  echoCancellation: Boolean
-  bitrate: Number
-  sampleSize: Number
-  userHasGivenAudioAccess: Boolean
-  userDeniedAudioAccess: Boolean
-  keybinds: Object
-  embeddedLinks: Boolean
-  displayCurrentActivity: Boolean
+  noiseSuppression: boolean
+  echoCancellation: boolean
+  bitrate: number
+  sampleSize: number
+  userHasGivenAudioAccess: boolean
+  userDeniedAudioAccess: boolean
+  keybinds: object
+  embeddedLinks: boolean
+  consentScan: boolean
+  blockNsfw: boolean
+  displayCurrentActivity: boolean
+  timezone: string
+  removeState: boolean
+  serverType: string
+  ownInfo: string
 }

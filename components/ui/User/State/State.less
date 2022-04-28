@@ -1,69 +1,67 @@
 .user-state {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 35px;
-    width: 35px;
-    .status {
-        position: absolute;
-        bottom: -1.5px;
-        right: -2.5px;
-        font-size: @text-size;
-        text-shadow: 0 0 3px #000;
-        display: inline-flex;
-        align-content: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  .status {
+    position: absolute;
+    bottom: -1.5px;
+    right: -2.5px;
+    font-size: @text-size;
+    text-shadow: 0 0 3px #000;
+    display: inline-flex;
+    align-content: center;
 
-        circle {
-            stroke: @midground;
-            stroke-width: 5;
-            paint-order: stroke;
-        }
-        &.is-online {
-            &:extend(.color-success);
-            fill: @green;
-        }
-        &.is-offline {
-            &:extend(.font-gray);
-            fill: @gray;
-        }
-        &.is-idle {
-            &:extend(.color-warning);
-            fill: @yellow;
-        }
+    circle {
+      stroke: @midground;
+      stroke-width: 5;
+      paint-order: stroke;
     }
-
-    .mobile-status {
-        position: absolute;
-        bottom: -1.5px;
-        right: -2.5px;
-        font-size: @small-icon-size;
-        text-shadow: 0 0 3px #000;
-
-        rect {
-            stroke: @midground;
-            stroke-width: 4;
-            paint-order: stroke;
-            fill: @green;
-        }
-        line {
-            fill: #000;
-            stroke: @midground;
-            stroke-width: 4;
-        }
-        &.is-mobile {
-            &:extend(.color-success);
-        }
+    &.is-online {
+      &:extend(.color-success);
+      fill: @green;
     }
-
-    #typing-badge-container {
-        &:extend(.background-primary);
-        width: 40px;
-        height: 18px;
-        position: absolute;
-        bottom: -1.5px;
-        left: 18px;
-        padding: 5px;
-        border-radius: 10px;
-        border: 3px solid @midground;
+    &.is-offline {
+      &:extend(.font-gray);
+      fill: @gray;
     }
+    &.is-idle {
+      &:extend(.color-warning);
+      fill: @yellow;
+    }
+  }
+
+  .mobile-status {
+    position: absolute;
+    bottom: -1.5px;
+    right: -2.5px;
+    font-size: @small-icon-size;
+    text-shadow: 0 0 3px #000;
+
+    rect {
+      stroke: @midground;
+      stroke-width: 4;
+      paint-order: stroke;
+      fill: @green;
+    }
+    line {
+      fill: #000;
+      stroke: @midground;
+      stroke-width: 4;
+    }
+    &.is-mobile {
+      &:extend(.color-success);
+    }
+  }
+
+  #typing-badge-container {
+    &:extend(.background-primary);
+    width: 40px;
+    height: 18px;
+    position: absolute;
+    bottom: -1.5px;
+    left: 18px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 3px solid @midground;
+  }
 }

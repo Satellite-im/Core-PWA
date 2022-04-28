@@ -5,7 +5,7 @@ const InitialTextileState = (): TextileState => ({
   conversations: {},
   conversationLoading: false,
   messageLoading: false,
-  uploadProgress: {}
+  uploadProgress: {},
 })
 
 export default InitialTextileState

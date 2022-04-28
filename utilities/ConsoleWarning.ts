@@ -6,7 +6,11 @@
  * @example
  */
 
+import { EnvInfo } from './EnvInfo'
+
 export const ConsoleWarning = (clientVersion: string, currentState: object) => {
+  const envinfo = new EnvInfo()
+
   console.log(
     '%c⚠️ Do not share anything from console with others. Do not run commands sent by others online.',
     'font-family: Space Mono; color:white; background: #e67e22; border-radius: 2px; padding: 0.5rem;border-right: none;',
@@ -27,21 +31,21 @@ export const ConsoleWarning = (clientVersion: string, currentState: object) => {
     'color:white; background: #9b59b6;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
   )
   console.log(
-    `%cBrowser %c${navigator.vendor}, ${navigator.product}`,
+    `%cBrowser %c${envinfo.navigator.vendor}, ${envinfo.navigator.product}`,
     'font-family: Space Mono; color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem;border-right: none;',
     'color:white; background: #9b59b6;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
   )
   console.log(
-    `%cLanguage%c${navigator.language}`,
+    `%cLanguage%c${envinfo.navigator.language}`,
     'font-family: Space Mono; color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem;border-right: none;',
     'color:white; background: #9b59b6;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
   )
   console.log(
-    `%cPlatform%c${navigator.platform}`,
+    `%cPlatform%c${envinfo.currentPlatform}`,
     'font-family: Space Mono; color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem;border-right: none;',
     'color:white; background: #9b59b6;border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
   )
-  if (navigator.onLine) {
+  if (envinfo.navigator.onLine) {
     console.log(
       `%cNetwork %cConnected`,
       'font-family: Space Mono; color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem;border-right: none;',

@@ -9,15 +9,15 @@ import { MailboxEvent } from '@textile/hub'
 import { TypeOf } from 'io-ts'
 import {
   decryptedMessage,
-  messageFromThread,
-  replyMessage,
   fileMessage,
-  textMessage,
   glyphMessage,
-  reactionMessage,
-  messageEncoder,
-  mediaMessage,
   imageMessage,
+  mediaMessage,
+  messageEncoder,
+  messageFromThread,
+  reactionMessage,
+  replyMessage,
+  textMessage,
 } from '~/libraries/Textile/encoders'
 
 /**
@@ -114,59 +114,14 @@ export interface ConversationQuery {
  * Messages, replies and Reactions are stored in an object structure. Messages are indexed by
  * message id, replies and reactions are indexed by the message id they are referring to.
  */
+export type MessageTrackerValues =
+  | FileMessage
+  | TextMessage
+  | GlyphMessage
+  | ImageMessage
+
 export type MessagesTracker = {
-  [key: string]: FileMessage | TextMessage | GlyphMessage | ImageMessage
+  [key: string]: MessageTrackerValues
 }
 export type RepliesTracker = { [key: string]: ReplyMessage[] }
 export type ReactionsTracker = { [key: string]: ReactionMessage[] }
-
-// Old and @deprecated
-// export interface IMessage extends UserMessage {
-//   sender: string
-//   to: ''
-//   at: number
-//   type: string
-//   payload: any
-//   encrypted: boolean
-//   secure: boolean
-//   metadata: object
-// }
-
-// interface BaseMessage<T extends MessageTypes> {
-//   id: string
-//   at: number
-//   from: string
-//   to: string
-//   type: T
-// }
-
-// export interface ReplyMessage extends BaseMessage<'reply'> {
-//   payload: string
-//   repliedTo: string
-// }
-// export interface ReactionMessage extends BaseMessage<'reaction'> {
-//   payload: string
-//   reactedTo: string
-// }
-// export interface FileMessage extends BaseMessage<'file'> {
-//   payload: string
-// }
-// export interface TextMessage extends BaseMessage<'text'> {
-//   payload: string
-// }
-
-// export interface MessageGroup extends BaseMessage<'group'> {
-//   messages: Message[]
-// }
-
-// The user message when is read using thread db client
-// export interface MessageFromThread {
-//   _id: string
-//   created_at: number // eslint-disable-line camelcase
-//   read_at?: number // eslint-disable-line camelcase
-//   from: string
-//   body: string
-//   signature: string
-//   to: string
-//   _mod: number
-// }

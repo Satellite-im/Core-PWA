@@ -1,0 +1,73 @@
+<div id="profile" data-cy="profile" v-click-outside="closeProfileModal">
+  <InteractablesClose :action="closeProfileModal" />
+  <img :src="sample.imageUrl" alt="" class="banner" />
+  <div class="profile-body">
+    <img :src="sample.imageUrl" alt="" class="photo" />
+    <div class="details">
+      <div class="details-info">
+        <img :src="sample.imageUrl" alt="" class="photo-sm" />
+        <UiUserState
+          :user="{address: ui.userProfile.address, state: ui.userProfile.state}"
+          :size="80"
+          :src="profilePictureSrc"
+        />
+        <div class="intro">
+          <div>
+            <TypographyTitle :text="ui.userProfile.name" :size="6" />
+            <TypographyText :text="ui.userProfile.status" :size="6" />
+          </div>
+          <!-- todo: add real badges and conditional -->
+          <div class="badges">
+            <award-icon
+              v-for="n in 3"
+              :key="n"
+              size="1.2x"
+              :style="`color:${badgeColors[n]}`"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="buttons mobile">
+        <InteractablesButton
+          type="primary"
+          v-if="!isFriend"
+          :action="createFriendRequest"
+          :loading="Boolean(loading)"
+        >
+          <user-plus-icon size="1.25x" />
+        </InteractablesButton>
+        <InteractablesButton type="primary">
+          <more-vertical-icon size="1.25x" />
+        </InteractablesButton>
+      </div>
+      <InteractablesTabs
+        :tabs="tabs"
+        @setRoute="setRoute"
+        :route="route"
+        class="tabs"
+      >
+        <div class="buttons desktop">
+          <InteractablesButton
+            type="primary"
+            size="small"
+            v-if="!isFriend"
+            :action="createFriendRequest"
+            :loading="Boolean(loading)"
+          >
+            <user-plus-icon size="1.25x" />
+          </InteractablesButton>
+          <InteractablesButton type="primary" size="small">
+            <more-vertical-icon size="1.25x" />
+          </InteractablesButton>
+        </div>
+      </InteractablesTabs>
+
+      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+        <UserProfileAbout v-if="route === 'about'" />
+        <UserProfileAccounts v-if="route==='accounts'" />
+        <div v-if="route==='activity'">activity</div>
+        <div v-if="route==='mutual'">mutual</div>
+      </UiScroll>
+    </div>
+  </div>
+</div>

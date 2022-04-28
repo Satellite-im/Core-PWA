@@ -1,45 +1,51 @@
 <div class="chatbar-controls">
-  <div
-    id="send-money-toggle"
-    :data-tooltip="$t('wallet.send_money')"
-    v-on:click="toggleMiniWallet"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
-    :class="editable ? 'active' : 'inactive'"
+  <UiComingSoon
+    :tooltipText="$t('coming_soon.send_money')"
+    :tooltipPosition="'top'"
+    :marginTopOverride="'4px'"
   >
-    <banknote-icon size="1x"
-      :class="`control-icon `"
-    />
-  </div>
-  <div
+    <!-- to add disable color to icon, had to add color="grey" to the icon -->
+    <button
+      id="send-money-toggle"
+      :data-tooltip="$t('wallet.send_money')"
+      @click="toggleMiniWallet"
+      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+      :disabled="disabled"
+    >
+      <banknote-icon size="1x" :class="`control-icon `" color="grey" />
+    </button>
+  </UiComingSoon>
+  <button
     id="glyph-toggle"
     :data-tooltip="$t('ui.glyphs')"
-    v-on:click="toggleEnhancers('glyphs')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
-    :class="editable ? 'active' : 'inactive'"
+    @click="toggleEnhancers('glyphs')"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+    :disabled="disabled"
   >
-    <box-select-icon size="1x"
+    <box-select-icon
+      size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'glyphs' ? 'primary' : ''}`"
     />
-  </div>
-  <div
+  </button>
+  <button
     id="emoji-toggle"
     :data-tooltip="$t('ui.emotes')"
-    v-on:click="toggleEnhancers('emotes')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
-    :class="editable ? 'active' : 'inactive'"
+    @click="toggleEnhancers('emotes')"
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+    :disabled="disabled"
   >
-    <smile-icon size="1x"
+    <smile-icon
+      size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
     />
-  </div>
-  <div
+  </button>
+  <button
     :data-tooltip="$t('ui.send')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary"
-    :class="editable ? 'active' : 'inactive'"
-    >
-    <arrow-right-icon size="1x"
-      class="control-icon"
-      @click="sendMessage"
-    />
-  </div>
+    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch send-message-btn"
+    data-cy="send-message"
+    :disabled="disabled"
+    @click="sendMessage"
+  >
+    <arrow-right-icon size="1x" class="control-icon" />
+  </button>
 </div>

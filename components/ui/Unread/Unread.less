@@ -1,0 +1,62 @@
+.unread {
+  position: relative;
+  cursor: pointer;
+  &-label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: @micro-text-size;
+    &:extend(.background-primary);
+    border-radius: 20px;
+    line-height: 1;
+    padding: 0.16rem 0.33rem;
+    &:extend(.font-primary);
+    font-family: @primary-font;
+    border: 2px solid @darker;
+  }
+  .circle {
+    transition: 0.2s ease-in-out;
+  }
+  &-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  &--loading {
+    pointer-events: none;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(@darker, 0.5);
+    }
+  }
+  &--active {
+    .circle {
+      border: 3px solid @purple;
+    }
+  }
+}
+
+@media only screen and (min-width: @mobile-breakpoint) {
+  .unread {
+    &:hover {
+      .circle {
+        border: 3px solid @purple;
+      }
+    }
+  }
+}

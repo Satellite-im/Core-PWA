@@ -1,0 +1,42 @@
+.create-group {
+  .subtitle {
+    margin: 0;
+    margin-bottom: @light-spacing;
+    font-size: @text-size;
+  }
+
+  .search,
+  .user-search {
+    margin-top: @normal-spacing;
+  }
+
+  .submit-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1em;
+    &:extend(.full-width);
+  }
+  &:extend(.background-semitransparent-dark);
+  &:extend(.blur);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  position: fixed;
+  width: 18rem;
+  top: @toolbar-height;
+  padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
+  right: calc(18rem + 7rem);
+  z-index: @base-z-index + 10;
+  display: flex;
+  flex-direction: column;
+  max-height: 24rem;
+
+  &--compact {
+    right: @servers-size + 2rem;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .create-group {
+    right: 0;
+  }
+}

@@ -14,7 +14,7 @@ export default Vue.extend({
     if (!this.channel) {
       this.$store.commit(
         'ui/setActiveChannel',
-        this.$mock.server.info.channels['0']
+        this.$mock.server.info.channels['0'],
       )
     }
   },

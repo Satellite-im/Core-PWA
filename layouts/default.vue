@@ -7,6 +7,16 @@
     </v-style>
   </div>
 </template>
+<script lang="ts">
+import Vue from 'vue'
+import useMeta from '~/components/compositions/useMeta'
+
+export default Vue.extend({
+  setup() {
+    useMeta()
+  },
+})
+</script>
 <style lang="less">
 @import 'bulma/css/bulma.css';
 

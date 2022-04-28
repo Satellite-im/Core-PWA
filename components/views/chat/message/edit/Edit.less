@@ -1,6 +1,7 @@
 .edit-message {
   &-body {
     &-input {
+      height: 100%;
       flex-grow: 1;
       font-size: @text-size;
       word-break: break-all;
@@ -13,22 +14,37 @@
         font-size: @text-size !important;
       }
     }
-    &-emoj {
-      flex-shrink: 0;
-    }
     display: flex;
-    align-items: center;
     &:extend(.round-corners);
     &:extend(.background-semitransparent-lighter);
     &:extend(.more-pad-sides);
+
+    &.is-error {
+      border: 1px solid @red;
+    }
+
+    .emoji-toggle {
+      cursor: pointer;
+      height: 24px;
+      padding-left: 5px;
+      position: sticky;
+      top: 0;
+    }
+
+    .editable-container {
+      max-height: 50vh;
+    }
   }
   &-bottom {
     font-size: @text-size;
     display: flex;
-    margin: 0 -@light-spacing;
+    margin: 0 -@light-spacing 0 0;
     justify-content: space-between;
     & > div {
       padding: 0 @light-spacing;
+      a {
+        margin-right: @light-spacing;
+      }
     }
   }
   margin: @light-spacing 0px;

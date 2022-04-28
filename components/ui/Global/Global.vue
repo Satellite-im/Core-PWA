@@ -4,6 +4,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -14,7 +16,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Global',
   computed: {
-    ...mapState(['ui', 'media']),
+    ...mapState(['ui', 'media', 'webrtc']),
     ModalWindows: () => ModalWindows,
   },
   mounted() {
@@ -32,13 +34,13 @@ export default Vue.extend({
     const [lsMajorVersion, lsMinorVersion, lsPatchVersion] =
       lsVersion.split('.')
 
-    // // A update which requires resetting of the app has occurred.
+    // A update which requires resetting of the app has occurred.
     if (lsMinorVersion !== minorVersion) {
       this.$data.requiresUpdate = true
       this.$data.hasMinorUpdate = true
     }
 
-    // // A version which brings new features without major changes exists
+    // A version which brings new features without major changes exists
     if (lsPatchVersion !== patchVersion) {
       this.$data.hasMinorUpdate = true
     }
@@ -66,13 +68,33 @@ export default Vue.extend({
      * @example
      */
     async acceptCall(kinds: TrackKind[]) {
-      const identifier = this.$store.state.webrtc.incomingCall
+      if (this.webrtc.activeCall) {
+        this.hangUp()
+      }
 
-      const peer = this.$WebRTC.getPeer(identifier)
+      const identifier = this.webrtc.incomingCall
+      const call = this.$WebRTC.getPeer(identifier)
 
-      await peer?.call.createLocalTracks(kinds)
+      if (!call) return
 
-      await peer?.call.answer()
+      if (call) {
+        try {
+          await call.createLocalTracks(kinds)
+          await call.answer()
+        } catch (error) {
+          if (error instanceof Error) {
+            this.$toast.error(this.$t(error.message) as string)
+          }
+        }
+      }
+
+      const callingPath = `/chat/direct/${identifier}`
+      if (this.$route.path !== callingPath) {
+        this.$router.push(callingPath)
+      }
+      if (this.ui.showSettings) {
+        this.$store.commit('ui/toggleSettings', { show: false })
+      }
     },
     /**
      * @method denyCall DocsTODO
@@ -80,13 +102,40 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      const identifier = this.$store.state.webrtc.incomingCall
-      const peer = this.$WebRTC.getPeer(identifier)
+      const identifier = this.webrtc.incomingCall
 
-      peer?.call.deny()
+      const call = this.$WebRTC.getPeer(identifier)
+      if (call) call.deny()
 
-      // peer?.send('SIGNAL', { type: 'CALL_DENIED' })
-      // this.$store.dispatch('webrtc/denyCall')
+      this.$store.dispatch('webrtc/denyCall')
+    },
+    /**
+     * @method hangUp
+     * @description Hangs up active call
+     * @example
+     */
+    hangUp() {
+      if (!this.webrtc.activeCall) return
+      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
+      if (call) call.hangUp()
+      this.$store.dispatch('webrtc/hangUp')
+      this.$store.commit('ui/fullscreen', false)
+    },
+    /**
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
+     */
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
+    },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    closeFilePreview() {
+      this.$store.commit('ui/setFilePreview', undefined)
     },
   },
 })

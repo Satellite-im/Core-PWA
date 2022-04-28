@@ -2,14 +2,14 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { Config } from '~/config'
-import { UploadDropItemType } from '~/types/files/file'
 import {
   FileIcon,
   FilePlusIcon,
   SlashIcon,
   XIcon,
 } from 'satellite-lucide-icons'
+import { Config } from '~/config'
+import { UploadDropItemType } from '~/types/files/file'
 
 export default Vue.extend({
   components: {

@@ -1,16 +1,23 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
+import { mapState, mapGetters } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
   FolderIcon,
   FileIcon,
+  ArchiveIcon,
+  ImageIcon,
+  FilmIcon,
 } from 'satellite-lucide-icons'
-
-import { FileType, Folder } from '~/types/files/file'
-import {TextileImage} from "~/types/textile/manager";
+import ContextMenu from '~/components/mixins/UI/ContextMenu'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
+import { Fil } from '~/libraries/Files/Fil'
+import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
+import { isMimeArchive } from '~/utilities/FileType'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -18,55 +25,127 @@ export default Vue.extend({
     HeartIcon,
     FolderIcon,
     FileIcon,
+    ArchiveIcon,
+    ImageIcon,
+    FilmIcon,
   },
+  mixins: [ContextMenu],
   props: {
+    /**
+     * File or Directory to be displayed in detail
+     */
     item: {
-      type: Object as PropType<FileType | Folder>,
-      default: () => {},
-    },
-    file: {
-      type: Object as PropType<TextileImage>
-    },
-    handler: {
-      type: Function,
-      default: () => () => {},
+      type: Object as PropType<Item>,
+      required: true,
     },
   },
   data() {
     return {
-      fileUrl: String,
-      fileSize: '',
+      fileSize: '' as string,
+      fileHover: false as boolean,
+      linkHover: false as boolean,
+      heartHover: false as boolean,
     }
   },
   computed: {
-    getFileSize() {
-      return this.bytesToSize(this.file.size)
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
+    /**
+     * @returns {string} if directory, child count. if file, size
+     */
+    getSubtext(): string {
+      return this.item instanceof Directory
+        ? this.item.content.length + ' items'
+        : this.$filesize((this.item as Fil).size)
+    },
+    /**
+     * @returns {boolean} if item has discrete MIME type of image
+     */
+    isImage(): boolean {
+      return this.item.type.includes('image')
+    },
+    /**
+     * @returns {boolean} if item has discrete MIME type of video
+     */
+    isVideo(): boolean {
+      return this.item.type.includes('video')
+    },
+    /**
+     * @returns {boolean} if item is archive file type
+     */
+    isArchive(): boolean {
+      return isMimeArchive(this.item.type)
+    },
+    contextMenuValues(): ContextMenuItem[] {
+      return [
+        {
+          text: this.item.liked
+            ? this.$t('context.unfav')
+            : this.$t('context.fav'),
+          func: this.like,
+        },
+        {
+          text: this.item.shared
+            ? this.$t('context.unshare')
+            : this.$t('context.share'),
+          func: this.share,
+        },
+        { text: this.$t('context.rename'), func: this.rename },
+        { text: this.$t('context.delete'), func: this.remove },
+      ]
     },
   },
   methods: {
     /**
-     * @method isImage
-     * @description Checks if files filetype complies with Satellites accepted image types
-     * @param fileType Files MIME type (a.k.a filetype)
-     * @returns Boolean based on if the current image complies with Satellites accepted image types
-     * @example
+     * @method click
+     * @description handle file click depending on various hover statuses
      */
-    isImage(filetype: string) {
-      const acceptableImages = ['image/png', 'image/jpg']
-      return acceptableImages.includes(filetype)
+    click() {
+      if (this.linkHover) {
+        this.share()
+        return
+      }
+      if (this.heartHover) {
+        this.like()
+        return
+      }
+      this.$emit('handle', this.item)
     },
     /**
-     * @method bytesToSize
-     * @description converts bytes to display easily readable file size
-     * @param bytes bytes of current file
-     * @example bytesToSize(this.file.size)
+     * @method rename
+     * @description Open rename modal
      */
-    bytesToSize (bytes: number) {
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-      if (bytes === 0) return '0 Bytes'
-      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
-      return `${Math.round(bytes / Math.pow(1024, i), 2)} ${sizes[i]}`
-    }
+    rename() {
+      this.$store.commit('ui/setRenameItem', this.item.name)
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.RENAME_FILE,
+        state: !this.ui.modals[ModalWindows.RENAME_FILE],
+      })
+    },
+    /**
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
+     */
+    like() {
+      this.$emit('like', this.item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share() {
+      this.$emit('share', this.item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove() {
+      this.$emit('remove', this.item)
+    },
   },
 })
 </script>

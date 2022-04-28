@@ -39,6 +39,22 @@ export default Vue.extend({
       time: null,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
+  mounted() {
+    this.timeout()
+    window.onerror = (message, source, lineno, colno, error) => {
+      this.error = {
+        message,
+        source,
+        lineno,
+        colno,
+        error,
+        userAgent: this.$envinfo.navigator.userAgent,
+      }
+    }
+  },
   methods: {
     confirm() {
       this.error = false
@@ -57,22 +73,6 @@ export default Vue.extend({
         setTimeout(this.close, 5000)
       }
     },
-  },
-  computed: {
-    ...mapState(['ui']),
-  },
-  mounted() {
-    this.timeout()
-    window.onerror = (message, source, lineno, colno, error) => {
-      this.error = {
-        message,
-        source,
-        lineno,
-        colno,
-        error,
-        userAgent: navigator.userAgent,
-      }
-    }
   },
 })
 </script>

@@ -1,27 +1,22 @@
 <div id="mobile-nav">
   <div>
-    <home-icon
-      size="1x"
-      v-on:click="() => $router.push('/chat/direct')" />
-  </div>
-  <div :class="`${$route.path.includes('/chat') ? 'active' : ''}`">
-    <message-square-icon
-      size="1x"
-      v-on:click="() => $router.push('/chat/direct')" />
+    <home-icon size="1x" v-on:click="navigateToHome" />
   </div>
   <div :class="`${$route.path.includes('/files') ? 'active' : ''}`">
-    <folder-icon
-      size="1x"
-      v-on:click="() => $router.push('/files/browse')" />
+    <folder-icon size="1x" v-on:click="() => $router.push('/files/browse')" />
+  </div>
+  <div>
+    <shopping-bag-icon size="1x" @click="toggleModal" />
   </div>
   <div :class="`${$route.path.includes('/friends') ? 'active' : ''}`">
-    <users-icon
-      size="1x"
-      v-on:click="() => $router.push('/friends/list')" />
+    <users-icon size="1x" v-on:click="navigateToFriend" />
   </div>
   <div :class="`${$route.path.includes('/settings') ? 'active' : ''}`">
-    <settings-icon
-      size="1x"
-      v-on:click="$store.commit('ui/toggleSettings', true)" />
+    <div v-on:click="$store.commit('ui/toggleSettings',  { show: true })">
+      <UiUserState
+        :user="{address: accounts.active, state: accounts.details.state}"
+        :src="src"
+      />
+    </div>
   </div>
 </div>

@@ -1,3 +1,6 @@
+import { Bucket } from '../Files/remote/textile/Bucket'
+import { MetadataManager } from './MetadataManager'
+import { UserInfoManager } from './UserManager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import {
@@ -5,13 +8,19 @@ import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
-import BucketManager from "~/libraries/Textile/BucketManager";
+import BucketManager from '~/libraries/Textile/BucketManager'
+import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { Config } from '~/config'
 
 export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
   bucketManager?: BucketManager
+  bucket?: Bucket
+  groupChatManager?: GroupChatManager
+  metadataManager?: MetadataManager
+  userInfoManager?: UserInfoManager
 
   constructor() {
     this.identityManager = new IdentityManager()
@@ -33,22 +42,13 @@ export default class TextileManager {
 
     const { client, users } = await this.identityManager.authorize(identity)
 
-    this.creds = {
-      id,
-      pass,
-    }
-
     const textile: TextileInitializationData = {
       identity,
       client,
       wallet,
       users,
     }
-
-    this.mailboxManager = new MailboxManager(textile, wallet.address)
-    this.bucketManager = new BucketManager(textile, identity, textile.wallet.address)
-    await this.bucketManager.init().catch((e) => console.log(e))
-    return this.mailboxManager.init()
+    return this.authenticate(id, pass, textile)
   }
 
   /**
@@ -60,7 +60,7 @@ export default class TextileManager {
   async authenticate(
     id: string,
     pass: string,
-    textile: TextileInitializationData
+    textile: TextileInitializationData,
   ) {
     this.creds = {
       id,
@@ -69,8 +69,32 @@ export default class TextileManager {
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
     await this.mailboxManager.init()
-    this.bucketManager = new BucketManager(textile, textile.identity,textile.wallet.address)
+
+    this.bucketManager = new BucketManager(
+      textile,
+      textile.identity,
+      textile.wallet.address,
+    )
     await this.bucketManager.init().catch((e) => console.log(e))
+
+    // Initialize bucket
+    this.bucket = new Bucket(textile)
+    await this.bucket.init(Config.textile.bucketName)
+
+    // GroupChatManager initializes itself during the creation
+    this.groupChatManager = new GroupChatManager(
+      textile,
+      textile.wallet.address,
+      textile.identity,
+    )
+    await this.groupChatManager.init()
+    // MetadataManager initializes itself during the creation
+    this.metadataManager = new MetadataManager(textile)
+    await this.metadataManager.init()
+
+    // UserInfoManager initializes itself during the creation
+    this.userInfoManager = new UserInfoManager(textile)
+    await this.userInfoManager.init()
   }
 
   /**

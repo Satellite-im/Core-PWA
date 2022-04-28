@@ -1,6 +1,6 @@
 .user-search {
   position: relative;
-  
+
   &-slot {
     align-items: center;
     display: flex;
@@ -9,8 +9,6 @@
     min-width: 0;
     height: auto;
     margin-top: @xlight-spacing;
-    
-    
   }
 
   .chip {
@@ -41,7 +39,6 @@
     font-size: smaller !important;
     outline: none;
     min-width: 50px;
-
   }
 
   &-input {
@@ -90,11 +87,12 @@
     background: @darker;
     border: 1px solid @background;
     position: absolute;
-    
+
     li {
       display: flex;
       align-items: center;
-      &:extend(.light-padding);      .text {
+      &:extend(.light-padding);
+      .text {
         margin-left: @light-spacing;
         flex: 1 1;
       }
@@ -105,7 +103,8 @@
         }
       }
 
-      &:hover, &.active {
+      &:hover,
+      &.active {
         background: @foreground;
       }
     }

@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <div class="loader-container">
-      <UiLoadersLoadingBar />
-      <TypographyTitle :size="5" :text="$t('pages.loading.loading')" />
-      <TypographySubtitle :size="6" :text="loadingStep" />
-    </div>
+    <UiLoadersPageLoader
+      :is-loading="true"
+      :title="$t('pages.loading.loading')"
+      :subtitle="loadingStep"
+    />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
-    ...mapGetters('prerequisites', ['allPrerequisitesReady']),
+    ...mapGetters(['allPrerequisitesReady']),
     ...mapState(['accounts']),
     // Helper method for prettier loading messages
     loadingStep(): string {
@@ -28,6 +28,12 @@ export default Vue.extend({
         default:
           return this.$i18n.t('user.loading.loading_account').toString()
       }
+    },
+  },
+  watch: {
+    allPrerequisitesReady(nextValue) {
+      if (!nextValue) return
+      this.eventuallyRedirect()
     },
   },
   mounted() {
@@ -38,20 +44,21 @@ export default Vue.extend({
     }
 
     this.loadAccount()
-  },
-  watch: {
-    // this.$router.replace('/chat/direct')
-    allPrerequisitesReady(nextValue) {
-      if (nextValue) {
-        if (this.accounts.lastVisited && this.accounts.lastVisited !== this.$route.path) {
-          this.$router.replace(this.accounts.lastVisited)
-          return
-        }
-        this.$router.replace('/chat/direct')
-      }
-    },
+
+    this.$store.dispatch('ui/activateKeybinds')
   },
   methods: {
+    eventuallyRedirect() {
+      if (this.accounts.lastVisited === this.$route.path) {
+        this.$router.replace('/chat/direct')
+        return
+      }
+
+      const matcher = this.$router.match(this.accounts.lastVisited)
+      if (matcher.matched.length > 0) {
+        this.$router.replace(this.accounts.lastVisited)
+      }
+    },
     /**
      * @method loadAccount
      * @description Load user account by dispatching the loadAccount action in store/accounts/actions.ts,
@@ -80,13 +87,6 @@ export default Vue.extend({
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  text-align: center;
-
-  .loader-container {
-    min-width: 250px;
-    align-self: center;
-    margin-bottom: 25vh;
-  }
+  text-align: left;
 }
-
 </style>

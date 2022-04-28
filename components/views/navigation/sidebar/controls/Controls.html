@@ -1,32 +1,38 @@
 <div id="controls">
   <InteractablesButton
-    :type="audio.muted ? 'danger' : 'dark'"
+    :type="audioMuted ? 'danger' : 'dark'"
     size="small"
-    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.mute')"
     :action="toggleMute"
-    :text="$t('controls.mic')">
-    <mic-off-icon v-if="audio.muted" size="1x"></mic-off-icon>
+    :text="$t('controls.mic')"
+    :loading="isLoading"
+    loadingText=""
+  >
+    <mic-off-icon v-if="audioMuted" size="1x"></mic-off-icon>
     <mic-icon v-else size="1x"></mic-icon>
   </InteractablesButton>
   <InteractablesButton
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
-    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.deafen')"
     :action="toggleDeafen"
-    :text="$t('controls.headphones')">
+    :text="$t('controls.headphones')"
+  >
     <headphones-icon size="1x"></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
-    :type="video.disabled ? 'danger' : 'dark'"
+    :type="videoMuted ? 'danger' : 'dark'"
     size="small"
-    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only"
+    class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only hast-tooltip-hidden-touch"
     :data-tooltip="$t('controls.toggle')"
     :text="$t('controls.video')"
     :action="toggleVideo"
-    >
-    <video-off-icon v-if="video.disabled" size="1x"></video-off-icon>
+    :loading="isLoading"
+    loadingText=""
+  >
+    <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>
     <video-icon v-else size="1x"></video-icon>
   </InteractablesButton>
 </div>

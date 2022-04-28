@@ -1,76 +1,77 @@
 .side-bar-inner {
-    font-family: @primary-font !important;
-    .header {
-        margin-top: @normal-spacing;
-        display: flex;
-        align-items: center;
-        padding: @normal-spacing (@normal-spacing * 2) 0 (@normal-spacing * 2);
-    }
-    .body {
-        padding: @normal-spacing (@normal-spacing * 2);
-        .category-tree {
-            font-size: 12px;
-            .category-item {
-                &.hidden {
-                    display: none;
-                }
-                &.active, :hover {
-                    cursor: pointer;
-                    &:extend(.font-accent);
-                    .fa-circle {
-                        &:extend(.color-success);
-                        width: 0.5rem;
-                    }
-                }
-                display: flex;
-                align-items: baseline;
-                margin: 0px;
-                padding: 4px 0px;
-                &.parent {
-                    margin-bottom: 8px;
-                }
-                &.depth-0 {
-                    .category {
-                        font-size: 14px;
-                        padding-left: 0px;
-                    }
-                    .category::before {
-                        content: '' !important;
-                        width: 0px;
-                        height: 0px;
-                        border: none;
-                        margin-right: 0px;
-                    }
-                }
-                &.depth-1 {
-                    padding-left: 4px;
-                }
-                &.depth-2 {
-                    padding-left: 36px;
-                }
-                .category {
-                    position: relative;
-                    display: inline-block;
-                    &:extend(.full-width);
-                    padding-left: 24px;
-                    &::before {
-                        position: absolute;
-                        top: -12px;
-                        left: 0px;
-                        display: inline-block;
-                        content: ' ';
-                        width: 8px;
-                        height: 24px;
-                        border-left: 2px solid @text;
-                        border-bottom: 2px solid @text;
-                    }
-                    .category-action {
-                        position: absolute;
-                        top: 0px;
-                        right: 0px;
-                    }
-                }
-            }
+  font-family: @primary-font !important;
+  .header {
+    margin-top: @normal-spacing;
+    display: flex;
+    align-items: center;
+    padding: @normal-spacing (@normal-spacing * 2) 0 (@normal-spacing * 2);
+  }
+  .body {
+    padding: @normal-spacing (@normal-spacing * 2);
+    .category-tree {
+      font-size: 12px;
+      .category-item {
+        &.hidden {
+          display: none;
         }
+        &.active,
+        :hover {
+          cursor: pointer;
+          &:extend(.font-accent);
+          .fa-circle {
+            &:extend(.color-success);
+            width: 0.5rem;
+          }
+        }
+        display: flex;
+        align-items: baseline;
+        margin: 0px;
+        padding: 4px 0px;
+        &.parent {
+          margin-bottom: 8px;
+        }
+        &.depth-0 {
+          .category {
+            font-size: 14px;
+            padding-left: 0px;
+          }
+          .category::before {
+            content: '' !important;
+            width: 0px;
+            height: 0px;
+            border: none;
+            margin-right: 0px;
+          }
+        }
+        &.depth-1 {
+          padding-left: 4px;
+        }
+        &.depth-2 {
+          padding-left: 36px;
+        }
+        .category {
+          position: relative;
+          display: inline-block;
+          &:extend(.full-width);
+          padding-left: 24px;
+          &::before {
+            position: absolute;
+            top: -12px;
+            left: 0px;
+            display: inline-block;
+            content: ' ';
+            width: 8px;
+            height: 24px;
+            border-left: 2px solid @text;
+            border-bottom: 2px solid @text;
+          }
+          .category-action {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+          }
+        }
+      }
     }
+  }
 }

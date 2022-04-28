@@ -1,11 +1,11 @@
 <template>
   <div id="mini-wallet" v-click-outside="toggleWalletMini">
-    <WalletMiniBody :updateMethod="updateMethod" />
+    <WalletMiniBody :update-method="updateMethod" />
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default Vue.extend({
   computed: {

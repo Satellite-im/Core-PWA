@@ -1,7 +1,13 @@
 .meter {
   &:extend(.full-width);
   display: inline-block;
-  background: linear-gradient(90deg, rgba(0,184,148,1) 0%, rgba(0,184,148,1) 40%, rgba(251,192,45,1) 80%, rgba(223,112,112,1) 95%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 184, 148, 1) 0%,
+    rgba(0, 184, 148, 1) 40%,
+    rgba(251, 192, 45, 1) 80%,
+    rgba(223, 112, 112, 1) 95%
+  );
   border-radius: @corner-rounding;
   overflow: hidden;
   transition: clip-path 0.1s ease-out;

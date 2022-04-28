@@ -190,3 +190,8 @@ export const messageEncoder = t.union([
   mediaMessage,
   glyphMessage,
 ])
+
+export const exportedForTesting = {
+  isBase64,
+  base64,
+}

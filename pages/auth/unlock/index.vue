@@ -3,8 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
+import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
@@ -47,7 +47,6 @@ export default Vue.extend({
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
 
     this.$store.commit('accounts/lock')
-    this.$store.commit('prerequisites/resetState')
   },
   methods: {
     /**
@@ -59,7 +58,7 @@ export default Vue.extend({
     toggleChangelogVisibility(): void {
       this.$store.commit('ui/toggleModal', {
         name: 'changelog',
-        state: !this.ui.modals['changelog'],
+        state: !this.ui.modals.changelog,
       })
     },
     /**
@@ -71,9 +70,8 @@ export default Vue.extend({
     getIcon(): String {
       if (this.getPinHash) {
         return 'unlocked'
-      } else {
-        return 'locked'
       }
+      return 'locked'
     },
     // Decrypt stored encrypted data into memory
     /**

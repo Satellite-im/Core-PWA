@@ -31,11 +31,11 @@
     />
   </UiModal>
   <UiModal
-    v-if="this.$store.state.friends.all.some((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+    v-if="this.$store.state.friends.all.some((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
     nopad
   >
     <MediaIncomingCall
-      :user="this.$store.state.friends.all.find((friend) => friend.address === this.$store.state.webrtc.incomingCall)"
+      :user="this.$store.state.friends.all.find((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
       :accept-call="acceptCall"
       :deny-call="denyCall"
     />
@@ -55,17 +55,44 @@
     :close-modal="() => toggleModal(ModalWindows.GLYPH)"
     nopad
     v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
-    :small="true"
+    small
   >
     <Glyphs
       v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
       :close-modal="() => toggleModal(ModalWindows.GLYPH)"
     />
   </UiModal>
+  <UiModal
+    v-if="ui.modals.userProfile"
+    :close-modal="() => toggleModal(ModalWindows.USERPROFILE)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.USERPROFILE)"
+  >
+    <UserProfile :close-modal="() => toggleModal(ModalWindows.USERPROFILE)" />
+  </UiModal>
+  <UiModal
+    v-if="ui.modals.callToAction"
+    :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)"
+    nopad
+    v-click-outside="() => toggleModal(ModalWindows.CALLTOACTION)"
+  >
+    <CallToAction :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)" />
+  </UiModal>
+  <UiModal
+    v-if="ui.modals.renameFile"
+    :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)"
+    v-click-outside="() => toggleModal(ModalWindows.RENAME_FILE)"
+    small
+    nopad
+  >
+    <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
+  </UiModal>
   <UiUpdateModal
     v-if="ui.modals.changelog"
     v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
   />
+  <UiChatImageOverlay v-if="ui.chatImageOverlay" />
+  <FilesView v-if="ui.filePreview" @close="closeFilePreview()" @share="share" />
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>

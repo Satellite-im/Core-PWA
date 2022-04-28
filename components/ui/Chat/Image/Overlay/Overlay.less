@@ -1,0 +1,26 @@
+.image-mask {
+  &:extend(.flex-justify-content-centered);
+  &:extend(.absolute-coverage);
+
+  .is-image-in-mask {
+    &:extend(.round-corners);
+    max-height: 80vh;
+    height: auto;
+    max-width: 80vw;
+    justify-content: center;
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  .image-container {
+    display: inline-flex;
+    flex-direction: column;
+    max-width: fit-content;
+    align-self: center;
+  }
+
+  position: fixed;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: @base-z-index + 102;
+  flex-direction: column;
+}

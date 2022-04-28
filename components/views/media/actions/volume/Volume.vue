@@ -67,10 +67,8 @@ export default Vue.extend({
      * @example
      */
     hideSlider(event: Event) {
-      if (
-        (this.$refs.volumegroup as Element).contains(event.target as Node) ===
-        false
-      ) {
+      const vgroup = this.$refs.volumegroup as Element
+      if (vgroup && vgroup.contains(event.target as Node) === false) {
         this.$data.showSlider = false
       }
     },

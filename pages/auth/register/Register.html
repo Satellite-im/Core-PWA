@@ -1,10 +1,10 @@
 <div class="container">
   <div class="registration-body">
-    <UserCreate :onConfirm="confirm" v-if="hasToRegister"/>
-    <div v-if="!hasToRegister && !isRegistered">
-      <UiLoadersLoadingBar />
-      <TypographyTitle :size="5" :text="$t('pages.loading.loading')" />
-      <TypographySubtitle :size="6" :text="registrationStep" />
-    </div>
+    <UserCreate v-if="hasToRegister" @confirm="confirm" />
+    <UiLoadersPageLoader
+      :is-loading="!hasToRegister && !allPrerequisitesReady"
+      :title="$t('pages.loading.loading')"
+      :subtitle="registrationStep"
+    />
   </div>
 </div>

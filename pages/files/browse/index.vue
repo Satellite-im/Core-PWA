@@ -2,29 +2,42 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
-import { mapState } from 'vuex'
-import { DataStateType } from '~/store/dataState/types'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Directory } from '~/libraries/Files/Directory'
+import { Fil } from '~/libraries/Files/Fil'
+import { FilSystem } from '~/libraries/Files/FilSystem'
+import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
   data() {
     return {
-      root: 'root',
-      path: [],
-      file: false as File | Boolean,
-      url: '' as String,
-      nsfw: { status: false, checking: false } as Object,
       view: 'grid',
+      counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
+      fileSystem: this.$FileSystem as FilSystem,
     }
   },
   computed: {
-    ...mapState(['files', 'dataState']),
-    DataStateType: () => DataStateType,
-  },
-  mounted(): void {
-    this.$store.dispatch('files/fetchFiles')
+    sort: {
+      set(value: FileSort) {
+        this.$store.commit('ui/setFileSort', value)
+      },
+      get(): FileSort {
+        return this.$store.state.ui.fileSort
+      },
+      /**
+       * @returns Current directory items
+       * @description included counter to force rendering on Map updates
+       */
+    },
+    directory(): Item[] {
+      return (
+        this.$data.counter &&
+        this.fileSystem.currentDirectory.sortedContent(this.sort)
+      )
+    },
   },
   methods: {
     /**
@@ -34,116 +47,86 @@ export default Vue.extend({
      * @example
      */
     changeView(type: 'grid' | 'list') {
-      this.$data.view = type
+      this.view = type
     },
     /**
-     * Allows you to get the current path file object
+     * @method handle
+     * @description emitted from child components. Either open file view or directory
+     * @param {Item} item
      */
-    /**
-     * @method getPath DocsTODO
-     * @description
-     * @returns
-     * @example
-     */
-    getPath(): any {
-      if (this.$data.path.length === 0) {
-        return this.files.tree
+    handle(item: Item) {
+      if (item instanceof Fil) {
+        this.$store.commit('ui/setFilePreview', item.name)
       }
-      let files = this.files.tree
-      for (let i = 0; i < this.$data.path.length; i++) {
-        files = files.children.filter(
-          (item: any) => item.name === this.$data.path[i]
-        )[0]
-      }
-      return files
-    },
-    /**
-     * Push a new child name to the path array
-     */
-    /**
-     * @method push DocsTODO
-     * @description
-     * @param item
-     * @example
-     */
-    push(item: any) {
-      if (item.children) {
-        this.$data.path.push(item.name)
+      if (item instanceof Directory) {
+        this.fileSystem.openDirectory(item.name)
       }
     },
     /**
-     * Pull n items from the file path array
+     * @method like
+     * @description toggle like boolean, update bucket index
+     * @param {Item} item
      */
+    async like(item: Item) {
+      item.toggleLiked()
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      item.liked
+        ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
+        : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+      this.forceRender()
+    },
     /**
-     * @method pull DocsTODO
-     * @description
-     * @param count
-     * @example
+     * @method remove
+     * @description delete item from filesystem. If file, also remove from textile bucket
+     * @param {Item} item
      */
-    pull(count: number = 1) {
-      for (let i = 0; i < count; i++) {
-        this.$data.path.pop()
+    async remove(item: Item) {
+      if (item instanceof Fil) {
+        this.$store.commit(
+          'ui/setFilesUploadStatus',
+          this.$t('pages.files.status.delete', [item.name]),
+        )
+        await this.$FileSystem.removeFile(item.id)
       }
+      this.$FileSystem.removeChild(item.name)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
+      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
+      this.forceRender()
     },
     /**
-     * Manually override the path array from a child component
+     * @method share
+     * @description copy link to clipboard
+     * @param {Item} item
      */
-    /**
-     * @method setPath DocsTODO
-     * @description
-     * @param pth
-     * @example
-     */
-    setPath(pth: Array<String>) {
-      this.$data.path = pth
+    async share(item: Item) {
+      this.$toast.show(this.$t('todo - share') as string)
     },
     /**
-     * Triggered when a file is changed on the input
+     * @method setSort
+     * @description if current category, swap asc/desc. if different, change category
      */
-    /**
-     * @method handleFile DocsTODO
-     * @description
-     * @param event
-     * @example
-     */
-    async handleFile(event: any) {
-      this.$data.file = event.target.files[0]
-      this.$data.nsfw.checking = true
-      this.$data.nsfw.status = await this.$Security.isNSFW(this.$data.file)
-      this.$data.nsfw.checking = false
-      this.loadPicture(this.$data.file)
+    setSort(category: FileSortEnum) {
+      this.sort =
+        this.sort.category === category
+          ? { category: this.sort.category, asc: !this.sort.asc }
+          : { category, asc: true }
     },
     /**
-     * Load a picture into a data URL push to data
+     * @method forceRender
+     * @description Force render of new directory items after filesystem update
      */
-    /**
-     * @method loadPicture DocsTODO
-     * @description
-     * @param file
-     * @example
-     */
-    loadPicture(file: File) {
-      if (!file) return
-      const self = this
-      const reader = new FileReader()
-      reader.onload = function (e: Event | any) {
-        if (e.target) self.$data.url = e.target.result
-      }
-      reader.readAsDataURL(file)
-    },
-    /**
-     * Clear local data
-     * TODO: Clear input field, this currently breaks
-     * when you upload the same file after cancelling
-     */
-    /**
-     * @method cancelUpload DocsTODO
-     * @description
-     * @example
-     */
-    cancelUpload() {
-      this.$data.file = false
-      this.$data.url = ''
+    forceRender() {
+      this.counter++
     },
   },
 })

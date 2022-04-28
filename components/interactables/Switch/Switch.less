@@ -1,50 +1,88 @@
 .switch-container {
+  display: inline-flex;
+  align-content: flex-end;
+  margin: @light-spacing 0;
+  align-items: center;
+
   .is-small {
     transform: scale(0.75);
     transform-origin: 0;
   }
+
   .switch-label {
     display: inline-block;
     margin-left: 10px;
     padding-top: 3px;
   }
+
   .is-small-label {
     padding-top: 4.5px;
     margin-left: -5px;
     font-size: 12px;
   }
+
   .switch-button-control {
+    display: inline-block;
+
     .switch-button {
-      .sw-button {
-        height: calc(1.6em - (2 * 2px));
-        width: calc(1.6em - (2 * 2px));
-        border: 2px solid var(--color);
-        border-radius: calc(1.6em - (2 * 2px));
-        background: var(--color);
-        transition: all @animation-speed-micro ease-in-out;
-      }
-      height: 1.6em;
-      width: calc(1.6em * 2);
-      border: 2px solid var(--color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-      border-radius: 1.6em;
+      position: relative;
+      height: 1.6rem;
+      width: calc(1.6rem * 2);
+      border-radius: 1.6rem;
       transition: all @animation-speed-micro ease-in-out;
       cursor: pointer;
-    }
-    .switch-button.enabled {
+
       .sw-button {
-        background: white;
-        transform: translateX(calc(calc(1.6em - (2 * 2px)) + (2 * 2px)));
+        position: absolute;
+        top: 50%;
+        height: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        width: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        border-radius: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+        transition: transform @animation-speed-micro ease-in-out;
+        transform: translateY(-50%) translateX(1px);
       }
-      background: var(--color);
-      box-shadow: none;
+
+      &.enabled {
+        box-shadow: none;
+
+        .sw-button {
+          height: calc(1.6rem - (2 * 0.125rem));
+          width: calc(1.6rem - (2 * 0.125rem));
+          border-radius: calc(1.6rem - (2 * 0.125rem));
+          transform: translateY(-50%)
+            translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
+        }
+      }
+
+      &.locked {
+        border-color: @gray;
+        .sw-button {
+          border-color: @gray;
+          background: @gray !important;
+          box-shadow: -5px 0px 20px -2px @gray !important;
+        }
+      }
+
+      &.locked.enabled {
+        box-shadow: unset !important;
+        background: @gray !important;
+        .sw-button {
+          background: @white !important;
+        }
+      }
+    }
+    .switch-button.locked {
+      .sw-button {
+        border-color: @gray;
+        .sw-button {
+          border-color: @gray;
+          background: @gray !important;
+          box-shadow: -5px 0px 20px -2px @gray !important;
+        }
+      }
     }
     .switch-button-label {
       margin-left: 10px;
     }
-    display: inline-block;
   }
-  display: inline-flex;
-  align-content: flex-end;
-  margin: @light-spacing 0;
 }

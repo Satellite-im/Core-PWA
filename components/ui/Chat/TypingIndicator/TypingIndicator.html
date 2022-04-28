@@ -1,14 +1,19 @@
 <div id="typing-badge-container">
-    <div id="typing-loader" v-if="checkUsersTyping() !== 0"></div>
-    <div id="text-container" v-if="checkUsersTyping() === 1">
-        <div v-for= "user, i in users">
-            <TypographyText :text="`${i === users.length - 1 ? user.name : user.name + ','}`"  :size="6" />
-        </div>
-        <TypographyText :text="`${(users.length === 1) ? $t('ui.is') : $t('ui.are')} ${$t('messaging.typing')}...`" :size="6" />
+  <div id="typing-loader" v-if="checkUsersTyping() !== 0"></div>
+  <div id="text-container" v-if="checkUsersTyping() === 1">
+    <div v-for="user, i in users">
+      <TypographyText
+        :text="`${i === users.length - 1 ? user.name : user.name + ','}`"
+        :size="6"
+      />
     </div>
-    <div id="text-container" v-if="checkUsersTyping() === 2">
-        <TypographyText :text="`${$t('messaging.many_typing')} ...`" :size="6" />
-    </div>
-    <div id="text-container" v-if="checkUsersTyping() === 0">
-    </div>
+    <TypographyText
+      :text="`${(users.length === 1) ? $t('ui.is') : $t('ui.are')} ${$t('messaging.typing')}...`"
+      :size="6"
+    />
+  </div>
+  <div id="text-container" v-if="checkUsersTyping() === 2">
+    <TypographyText :text="`${$t('messaging.many_typing')} ...`" :size="6" />
+  </div>
+  <div id="text-container" v-if="checkUsersTyping() === 0"></div>
 </div>

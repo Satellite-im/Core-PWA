@@ -1,6 +1,8 @@
+import { TranslateResult } from 'vue-i18n'
+import { ImageMessage } from '~/types/textile/mailbox'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
-
 export enum ThemeNames {
   DEFAULT = 'default',
   MOONLESS = 'moonless_night',
@@ -8,26 +10,31 @@ export enum ThemeNames {
 
 export type Theme = {
   name: ThemeNames
-  class: String
+  class: string
 }
 
 export enum FlairColors {
+  SATELLITE = '#2761fd',
   PEACH = '#ED4C67',
   PINK = '#FDA7DF',
   LIME = '#A3CB38',
   PURPLE = '#6F1E51',
-  PURPLER = '#9980FA',
+  LAVENDER = '#9980FA',
   SUNFLOWER = '#FFC312',
   DEEP_BLUE = '#30336b',
   VOID = '#2C3A47',
 }
 
 export type Flair = {
-  text: String,
-  value: FlairColors,
+  text: string
+  value: FlairColors
 }
 
 export const Flairs = [
+  {
+    text: 'Satellite',
+    value: FlairColors.SATELLITE,
+  },
   {
     text: 'Peach',
     value: FlairColors.PEACH,
@@ -45,8 +52,8 @@ export const Flairs = [
     value: FlairColors.PURPLE,
   },
   {
-    text: 'Purpler',
-    value: FlairColors.PURPLER,
+    text: 'Lavender',
+    value: FlairColors.LAVENDER,
   },
   {
     text: 'Sunflower',
@@ -93,16 +100,19 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
+  USERPROFILE = 'userProfile',
+  CALLTOACTION = 'callToAction',
+  RENAME_FILE = 'renameFile',
 }
 
 export interface EnhancerInfo {
-  show: Boolean
-  floating?: Boolean
-  position?: Number[]
-  defaultWidth?: String
-  defaultHeight?: String
-  containerWidth?: Number
-  route: String
+  show: boolean
+  floating?: boolean
+  position?: number[]
+  defaultWidth?: string
+  defaultHeight?: string
+  containerWidth?: number
+  route: string
 }
 
 export interface EmojiUsage {
@@ -117,46 +127,90 @@ export interface RecentGlyph {
   count: number
 }
 
+export enum SettingsRoutes {
+  PERSONALIZE = 'personalize',
+  PROFILE = 'profile',
+  AUDIO_AND_VIDEO = 'audio & Video',
+  KEY_BINDS = 'keybinds',
+  ACCOUNTS_AND_DEVICES = 'accounts & Devices',
+  PRIVACY = 'privacy',
+  DEVELOPER = 'developer',
+  INFO = 'info',
+  NOTIFICATIONS = 'notifications',
+  STORAGE = 'storage',
+  NETWORK = 'network',
+  REALMS = 'realms',
+}
+
+export interface ContextMenuItem {
+  text: string | TranslateResult
+  func: Function
+}
+
+export interface FileSort {
+  category: FileSortEnum
+  asc: boolean
+}
+
 export interface UIState {
-  contextMenuStatus: Boolean
-  contextMenuValues: Array<Object>
-  quickProfile: Object | Boolean
-  contextMenuPosition: Object
-  quickProfilePosition: Object
-  showSettings: Boolean
-  settingsSideBar: Boolean
-  showSidebarUsers: Boolean
-  showSearchResult: Boolean
-  modals: Object
-  glyphModalPack: String
-  chatbarContent: String
-  replyChatbarContent: {
-    id: String
-    from: String
-    payload: String
+  contextMenuStatus: boolean
+  contextMenuValues: ContextMenuItem[]
+  quickProfile: object | boolean
+  userProfile: object
+  contextMenuPosition: object
+  quickProfilePosition: object
+  showSettings: boolean
+  showMedia: boolean
+  settingsSideBar: boolean
+  settingsRoute: SettingsRoutes
+  showSidebarUsers: boolean
+  showSearchResult: boolean
+  showSidebar: boolean
+  modals: {
+    [key: string]: boolean
   }
-  showPinned: Boolean
-  fullscreen: Boolean
+  glyphModalPack: string
+  chatbarContent: string
+  chatbarFocus: boolean
+  replyChatbarContent: {
+    id: string
+    from: string
+    payload: string
+  }
+  showPinned: boolean
+  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: Boolean
-  isTyping: Object | Boolean
-  isReacted: Boolean
+  isScrollOver: boolean
+  showOlderMessagesInfo: boolean
+  isTyping: object | boolean
+  isReacted: boolean
   activeChannel: Channel | undefined
-  settingReaction: Object
-  hoveredGlyphInfo: Object | undefined
-  glyphMarketplaceView: Object
+  settingReaction: object
+  hoveredGlyphInfo: object | undefined
+  glyphMarketplaceView: object
   editMessage: {
     id: string
     from: string
     payload: string
   }
-  recentReactions: Array<String>
-  mostEmojiUsed: Array<EmojiUsage>
-  recentGlyphs: Array<RecentGlyph>
+  mostEmojiUsed: EmojiUsage[]
+  recentGlyphs: RecentGlyph[]
   theme: {
     base: Theme
     flair: Flair
   }
+  filesUploadStatus: string
+  renameCurrentName?: string
+  filePreview?: string
+  fileDownloadList: string[]
+  chatImageOverlay?: ImageMessage
+  fileSort: FileSort
+  swiperSlideIndex: number
+}
+
+export type Position = {
+  x: number
+  y: number
 }

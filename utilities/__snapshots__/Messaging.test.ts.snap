@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` messageRepliesToUIReplies 1`] = `
+Array [
+  Object {
+    "fileMessage": "",
+    "glyphMessage": "",
+    "imageMessage": "",
+    "mediaMessage": "",
+    "reactionMessage": "",
+    "reactions": Array [],
+    "replyMessage": "text1",
+    "textMessage": "",
+    "type": "text",
+  },
+  Object {
+    "fileMessage": "",
+    "glyphMessage": "",
+    "imageMessage": "",
+    "mediaMessage": "",
+    "reactionMessage": "",
+    "reactions": Array [],
+    "replyMessage": "text2",
+    "textMessage": "",
+    "type": "text",
+  },
+]
+`;
+
+exports[` replyMessageToUIReply 1`] = `
+Object {
+  "0": Object {
+    "fileMessage": "",
+    "glyphMessage": "",
+    "imageMessage": "",
+    "mediaMessage": "",
+    "reactionMessage": "",
+    "replyMessage": "text1",
+    "textMessage": "",
+    "type": "text",
+  },
+  "reactions": Array [
+    Object {
+      "emoji": "payload1",
+      "reactors": Array [
+        undefined,
+      ],
+      "showReactors": true,
+    },
+    Object {
+      "emoji": "payload2",
+      "reactors": Array [
+        undefined,
+      ],
+      "showReactors": true,
+    },
+  ],
+}
+`;
+
+exports[`update message tracker updateMessageTracker file 1`] = `
+Object {
+  "messages": Object {
+    "undefined": Object {
+      "fileMessage": "",
+      "glyphMessage": "",
+      "imageMessage": "",
+      "mediaMessage": "",
+      "reactionMessage": "",
+      "replyMessage": "text1",
+      "textMessage": "",
+      "type": "file",
+    },
+  },
+  "reactions": Object {},
+  "replies": Object {},
+}
+`;
+
+exports[`update message tracker updateMessageTracker glyph 1`] = `
+Object {
+  "messages": Object {
+    "undefined": Object {
+      "fileMessage": "",
+      "glyphMessage": "",
+      "imageMessage": "",
+      "mediaMessage": "",
+      "reactionMessage": "",
+      "replyMessage": "text1",
+      "textMessage": "",
+      "type": "glyph",
+    },
+  },
+  "reactions": Object {},
+  "replies": Object {},
+}
+`;
+
+exports[`update message tracker updateMessageTracker reaction 1`] = `
+Object {
+  "messages": Object {},
+  "reactions": Object {
+    "undefined": Array [
+      Object {
+        "fileMessage": "",
+        "glyphMessage": "",
+        "imageMessage": "",
+        "mediaMessage": "",
+        "reactionMessage": "",
+        "replyMessage": "text1",
+        "textMessage": "",
+        "type": "reaction",
+      },
+    ],
+  },
+  "replies": Object {},
+}
+`;
+
+exports[`update message tracker updateMessageTracker reply 1`] = `
+Object {
+  "messages": Object {},
+  "reactions": Object {},
+  "replies": Object {
+    "undefined": Array [
+      Object {
+        "fileMessage": "",
+        "glyphMessage": "",
+        "imageMessage": "",
+        "mediaMessage": "",
+        "reactionMessage": "",
+        "replyMessage": "text1",
+        "textMessage": "",
+        "type": "reply",
+      },
+    ],
+  },
+}
+`;
+
+exports[`update message tracker updateMessageTracker text 1`] = `
+Object {
+  "messages": Object {
+    "undefined": Object {
+      "fileMessage": "",
+      "glyphMessage": "",
+      "imageMessage": "",
+      "mediaMessage": "",
+      "reactionMessage": "",
+      "replyMessage": "text1",
+      "textMessage": "",
+      "type": "text",
+    },
+  },
+  "reactions": Object {},
+  "replies": Object {},
+}
+`;

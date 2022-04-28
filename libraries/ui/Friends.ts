@@ -23,9 +23,8 @@ export function getAlphaSorted(friends: Array<Friend>) {
   const grouped = groupBy(sorted, (f: Friend) => {
     if (f.name && f.name.length) {
       return f.name.toUpperCase()[0]
-    } else {
-      return '-'
     }
+    return '-'
   })
 
   return grouped
@@ -48,7 +47,6 @@ export function getFilteredFriends(friends: Array<Friend>, keyword: string) {
     const fuse = new Fuse(friends, options)
     const result = fuse.search(keyword)
     return result.map((i: any) => i.item)
-  } else {
-    return friends
   }
+  return friends
 }

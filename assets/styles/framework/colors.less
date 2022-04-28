@@ -17,7 +17,7 @@
 @scrollbar-color: @primary-color;
 
 @secondary-text: #dae0ff;
-@text: #c6cefa;
+@text: #ffffff;
 @text-muted: #a0a9cf;
 
 // ---------- Generic ----------
@@ -40,49 +40,49 @@
   color: @text;
 }
 .font-muted {
- color: @text-muted;
+  color: @text-muted;
 }
 .font-secondary {
   color: @secondary-text;
 }
-.font-red, 
-.red, 
+.font-red,
+.red,
 .color-danger {
   color: @red;
 }
-.font-yellow, 
-.yellow, 
+.font-yellow,
+.yellow,
 .color-warning {
   color: @yellow;
 }
-.font-orange, 
-.orange, 
+.font-orange,
+.orange,
 .color-orange {
   color: @orange;
 }
-.font-purple, 
+.font-purple,
 .purple {
   color: @purple;
 }
-.font-pink, 
+.font-pink,
 .pink {
   color: @pink;
 }
-.font-gray, 
+.font-gray,
 .gray {
   color: @gray;
 }
-.font-blue, 
-.blue, 
+.font-blue,
+.blue,
 .color-info {
   color: @blue;
 }
-.font-green, 
-.green, 
+.font-green,
+.green,
 .color-success {
   color: @green;
 }
-.font-white, 
+.font-white,
 .white {
   color: @white;
 }
@@ -140,7 +140,11 @@
   background: @input-gradient;
 }
 
-@splash-radial: radial-gradient(circle, rgba(44,51,65,0.8127844887955182) 0%, rgba(34,44,63,0) 100%);
+@splash-radial: radial-gradient(
+  circle,
+  rgba(44, 51, 65, 0.8127844887955182) 0%,
+  rgba(34, 44, 63, 0) 100%
+);
 
 @midground-gradient: -webkit-radial-gradient(
     top left,
@@ -159,13 +163,31 @@
   rgba(231, 76, 60, 1) 0%,
   rgba(231, 60, 89, 1) 100%
 );
-@background-gradient: linear-gradient(328deg, #16171d 0%, #16171d 75%, #161f2e 100%);
+@background-gradient: linear-gradient(
+  328deg,
+  #16171d 0%,
+  #16171d 75%,
+  #161f2e 100%
+);
 @background-gradient-alt: linear-gradient(
   -328deg,
   #131217 0%,
   #131217 32%,
   #121b28 100%
 );
+
+@modal-gradient: linear-gradient(
+    163.91deg,
+    rgba(48, 52, 71, 0.5) 0%,
+    rgba(42, 54, 75, 0) 100%
+  ),
+  linear-gradient(163.91deg, rgba(28, 39, 58, 0.9) 0%, rgba(0, 0, 0, 0.09) 100%),
+  linear-gradient(
+    359.95deg,
+    rgba(36, 40, 57, 0.9) 0.04%,
+    rgba(34, 44, 63, 0) 99.95%
+  ),
+  linear-gradient(0deg, #121216, #121216);
 
 .background-primary {
   background: @primary-color;
@@ -184,4 +206,8 @@
 }
 .background-gradient-alt {
   background: @background-gradient-alt;
+}
+
+.modal-gradient {
+  background: @modal-gradient;
 }

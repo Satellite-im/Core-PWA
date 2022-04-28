@@ -1,45 +1,53 @@
 <div id="actions">
-  <div 
-    class="has-tooltip has-tooltip-primary"
-    data-tooltip="Video">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    data-tooltip="Video"
+  >
     <InteractablesButton
       class="left"
-      :type="video.disabled ? 'danger' : 'dark'"
+      :type="videoMuted ? 'danger' : 'dark'"
       size="small"
-      :action="toggleVideo">
-      <video-off-icon v-if="video.disabled" size="1.2x" />
-      <video-icon v-else size="1.2x" />
+      :action="toggleVideo"
+      :loading="isLoading"
+      loadingText=""
+    >
+      <video-icon v-if="!videoMuted" size="1.2x" />
+      <video-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div 
-    class="has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('controls.mute')">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    :data-tooltip="$t('controls.mute')"
+  >
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
-      :action="toggleMute">
+      :action="toggleMute"
+      :loading="isLoading"
+      loadingText=""
+    >
       <mic-icon v-if="!audioMuted" size="1.2x" />
       <mic-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div 
-    class="has-tooltip has-tooltip-primary"
-    data-tooltip="Screenshare">
-    <InteractablesButton
-      type="dark"
-      size="small"
-      :action="() => {}">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    :data-tooltip="$t('controls.not_available')"
+  >
+    <InteractablesButton type="dark" disabled size="small" :action="() => {}">
       <screen-share-icon size="1.2x" />
     </InteractablesButton>
   </div>
-  <div 
-    class="has-tooltip has-tooltip-primary"
-    data-tooltip="Hangup">
+  <div
+    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    data-tooltip="Hangup"
+  >
     <InteractablesButton
       class="right"
       type="danger"
       size="small"
-      :action="() => hangUp()">
+      :action="() => hangUp()"
+    >
       <phone-off-icon size="1.2x" />
     </InteractablesButton>
   </div>

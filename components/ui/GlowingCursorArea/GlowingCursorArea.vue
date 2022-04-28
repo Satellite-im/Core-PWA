@@ -29,7 +29,7 @@ export default Vue.extend({
      * @example
      */
     moveCursor(e: Event | any) {
-      let bounds = e.target.getBoundingClientRect()
+      const bounds = e.target.getBoundingClientRect()
 
       this.xChild = e.clientX - bounds.left
       this.yChild = e.clientY - bounds.top

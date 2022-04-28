@@ -80,6 +80,10 @@ export default Vue.extend({
      */
     fullWidth: Boolean,
     inactive: Boolean,
+    htmlType: {
+      type: String,
+      default: 'button',
+    },
   },
 })
 </script>

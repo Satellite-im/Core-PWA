@@ -1,11 +1,11 @@
 #command-preview {
   width: calc(@full - 2rem);
   position: absolute;
-  bottom: @chatbar-size + 1px;
-  margin: @light-spacing @normal-spacing;
+  bottom: calc(100% + @xlight-spacing);
+  margin: 0 @normal-spacing;
   padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
-  &:extend(.round-corners);
   min-height: 5rem;
+  &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
   z-index: @base-z-index;
@@ -19,7 +19,6 @@
   }
 
   .tag {
-    background: @black;
     &:extend(.font-secondary);
     &:extend(.round-corners);
     &:extend(.bordered);
@@ -27,7 +26,7 @@
     font-family: @primary-font;
     text-transform: lowercase;
     padding: 0 @light-spacing;
-    background: @semitransparent-dark-gradient
+    background: @semitransparent-dark-gradient;
   }
 
   .red {
@@ -38,7 +37,8 @@
     background: @green;
   }
 
-  .red, .green {
+  .red,
+  .green {
     &:extend(.font-white);
     font-weight: bold;
   }
@@ -52,9 +52,5 @@
 
   .command-desc {
     font-size: @mini-text-size;
-  }
-
-  &.has-reply {
-    margin-bottom: 30px;
   }
 }

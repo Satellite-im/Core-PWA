@@ -1,7 +1,7 @@
 <div id="wallet-balance">
   <div class="balance-heading">
     <coins-icon size="1.2x" />
-    <TypographyText :text="$t('wallet.balance.balance')"  />
+    <TypographyText :text="$t('wallet.balance.balance')" />
   </div>
   <div class="wallet-body">
     <div class="wallet-body-left">
@@ -15,30 +15,31 @@
         >
           <send-icon size="1x" />
         </InteractablesInputGroup>
-        <InteractablesSelect
-          size="small"
-          class="form-control"
-        />
+        <InteractablesSelect size="small" class="form-control" />
       </div>
       <div class="inline">
         <InteractablesButton
           class="left"
           type="primary"
           size="small"
-          :text="$t('wallet.balance.add_funds')">
+          :text="$t('wallet.balance.add_funds')"
+        >
           <plus-circle-icon size="1.2x" />
         </InteractablesButton>
         <InteractablesButton
           class="left"
           type="dark"
           size="small"
-          :text="$t('wallet.balance.cash_out')">
+          :text="$t('wallet.balance.cash_out')"
+        >
           <trending-down-icon size="1.2x" />
         </InteractablesButton>
       </div>
     </div>
     <div class="wallet-body-right">
-      <TypographyText :text="`Account: *******${accounts.active.slice(accounts.active.length - 7, accounts.active.length)}`" />
+      <TypographyText
+        :text="`Account: *******${accounts.active.slice(accounts.active.length - 7, accounts.active.length)}`"
+      />
     </div>
   </div>
 </div>

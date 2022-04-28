@@ -1,12 +1,18 @@
-<div id="grid-view" :class="$device.isMobile? 'mobile-grid-view': 'hidden-scroll'" v-scroll-lock="true">
-  <FilesView v-if="file" :file="file" :close="() => this.file = false"/>
-  <component :is="!$device.isMobile? 'UiScroll' : 'div'" verticalScroll scrollbarVisibility="scroll" enableWrap>
-    <div class="files-container">
-      <FilesFile 
-        v-for="item in path" 
-        :item="item" 
-        :key="`${item.name}.${item.modified}`"
-        :handler="handle" />
-    </div>
-  </component>
+<div
+  id="grid-view"
+  :class="{'hidden-scroll' : $device.isMobile} "
+  v-scroll-lock="true"
+>
+  <div class="files-container">
+    <!-- included counter inside of key to force reactivity (Map Vue 2 issues) -->
+    <FilesFile
+      v-for="item, i in directory"
+      :item="item"
+      :key="i + counter"
+      @like="like"
+      @share="share"
+      @remove="remove"
+      @handle="handle"
+    />
+  </div>
 </div>

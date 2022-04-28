@@ -1,45 +1,53 @@
 <template src="./Grid.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { FileType, Folder } from '~/types/files/file'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default Vue.extend({
   props: {
     /**
-     * The array of children to path through
+     * Directory items to be displayed
      */
-    path: {
-      type: Array as PropType<Array<FileType | Folder>>,
-      default: () => [],
+    directory: {
+      type: Array as PropType<Array<Item>>,
+      required: true,
     },
     /**
-     * Push a new child to the path
+     * counter to force reactivity for Map
      */
-    push: {
-      type: Function,
-      default: () => () => {},
+    counter: {
+      type: Number,
+      required: true,
     },
-  },
-  data() {
-    return {
-      file: false,
-    }
   },
   methods: {
     /**
-     * @method handle DocsTODO
-     * @description
-     * @param item
-     * @returns
-     * @example
+     * @method handle
+     * @description Emit item to be handled in pages/files/browse/index.vue
      */
-    handle(item: FileType | Folder): void {
-      const hasChildren = ((<Folder>item).children)
-      if (hasChildren) {
-        this.push(item)
-      } else {
-        this.$data.file = item
-      }
+    handle(item: Item) {
+      this.$emit('handle', item)
+    },
+    /**
+     * @method like
+     * @description Emit to like item - pages/files/browse/index.vue
+     */
+    like(item: Item) {
+      this.$emit('like', item)
+    },
+    /**
+     * @method share
+     * @description Emit to share item - pages/files/browse/index.vue
+     */
+    share(item: Item) {
+      this.$emit('share', item)
+    },
+    /**
+     * @method remove
+     * @description Emit to delete item - pages/files/browse/index.vue
+     */
+    remove(item: Item) {
+      this.$emit('remove', item)
     },
   },
 })

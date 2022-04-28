@@ -2,8 +2,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/types/ui/user'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { User } from '~/types/ui/user'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    text: string
+    maxChars: number
+    close: () => void
+    handleOverflow: () => void
+  }
+}
 
 export default Vue.extend({
   components: {
@@ -17,12 +26,29 @@ export default Vue.extend({
   },
   data() {
     return {
+      isEmptyMessage: false,
       text: '',
       maxChars: this.$Config.chat.maxChars,
     }
   },
   computed: {
     ...mapState(['ui', 'accounts']),
+    isMe(): boolean {
+      return this.accounts.details.textilePubkey === this.user?.textilePubkey
+    },
+    src(): string {
+      const hash = this.user?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+  },
+  watch: {
+    text() {
+      if (this.isEmptyMessage && !this.$Config.regex.empty.test(this.text))
+        this.isEmptyMessage = false
+    },
+    isEmptyMessage() {
+      this.$nextTick(this.handleOverflow)
+    },
   },
   mounted() {
     this.handleOverflow()
@@ -37,8 +63,8 @@ export default Vue.extend({
     },
     /**
      * @method close
-     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and respositioning as needed.
-     * Corrects position by commiting an adjusted position to setQuickProfilePosition in state
+     * @description Ensures quickProfile is positioned correctly by calculating if the div overflows the page and repositioning as needed.
+     * Corrects position by committing an adjusted position to setQuickProfilePosition in state
      */
     handleOverflow() {
       if (this.$device.isDesktop) {
@@ -69,17 +95,31 @@ export default Vue.extend({
       }
     },
     sendMessage() {
+      if (this.$Config.regex.empty.test(this.text)) {
+        this.isEmptyMessage = true
+        return
+      }
       this.$store.dispatch('textile/sendTextMessage', {
         to: this.user?.textilePubkey,
         text: this.text,
       })
       this.close()
     },
-    isMe() {
-      return (
-        this.accounts.details &&
-        this.accounts.details.textilePubkey === this.user?.textilePubkey
-      )
+    openProfile() {
+      this.close()
+      if (this.user) {
+        const isMe = this.user.address === this.accounts.active
+
+        if (isMe) {
+          this.$store.commit('ui/toggleSettings', {
+            show: true,
+            defaultRoute: 'profile',
+          })
+          return
+        }
+
+        this.$store.dispatch('ui/showProfile', this.user)
+      }
     },
   },
 })

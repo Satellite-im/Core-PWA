@@ -1,49 +1,76 @@
-.market-place {
-    display: flex;
-    height: @full;
-    max-height: @full;
-    overflow: hidden;
+.marketplace-wrapper {
+  display: flex;
+  height: @full;
+  max-height: @full;
+  overflow: hidden;
 
-    .listing-panel {
-        max-height: 480px;
-        height: 480px;
-        margin-bottom: -@normal-spacing;
-        margin-left: -@normal-spacing;
-        margin-right: -@normal-spacing;
-        .scroll-area {
-            padding-left: @normal-spacing;
-            padding-right: @normal-spacing;
-        }
+  .listing-panel {
+    max-width: 100%;
+    max-height: 480px;
+    height: 480px;
+    margin-bottom: -@normal-spacing;
+    margin-left: -@normal-spacing;
+    margin-right: -@normal-spacing;
+    .scroll-area {
+      padding-left: @normal-spacing;
+      padding-right: @normal-spacing;
     }
-    
-    .side-bar {
-        width: 312px;
-        &:extend(.background-semitransparent-dark);
+  }
+
+  .side-bar {
+    width: 312px;
+    &:extend(.background-semitransparent-dark);
+  }
+  .body-panel {
+    width: 784px;
+    padding: 32px;
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      .search {
+        flex-grow: 1;
+        margin-right: 32px;
+      }
+      .filter {
+        flex-shrink: 0;
+        margin-right: 32px;
+      }
+      .action {
+        flex-shrink: 0;
+      }
+    }
+
+    .buttons-bar {
+      margin: 24px 0px;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .marketplace-wrapper {
+    .listing-panel {
+      max-width: calc(100% - 2rem);
+      max-height: calc(100vh - 200px);
+      height: calc(100vh - 200px);
+      .listing {
+        display: block;
+        .item {
+          margin-bottom: 1rem;
+        }
+      }
     }
     .body-panel {
-        width: 784px;
-        padding: 32px;
-
-        .top-bar {
-            display: flex;
-            align-items: center;
-            .search {
-                flex-grow: 1;
-                margin-right: 32px;
-            }
-            .filter {
-                flex-shrink: 0;
-                margin-right: 32px;
-            }
-            .action {
-                flex-shrink: 0;
-            }
+      max-width: 100%;
+      padding: 1.5rem 1rem;
+      .top-bar {
+        margin-top: 2rem;
+        .close-button {
+          right: 3rem;
         }
-
-        .buttons-bar {
-            margin: 24px 0px;
-            display: flex;
-            justify-content: center;
-        }
+      }
     }
+  }
 }

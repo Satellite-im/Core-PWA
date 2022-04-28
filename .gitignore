@@ -91,3 +91,7 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Scratchpad files for testing stuff
+scratchpad.ts
+scratchpad.js

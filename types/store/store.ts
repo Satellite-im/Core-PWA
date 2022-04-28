@@ -3,15 +3,21 @@ import { Store, Commit, Dispatch } from 'vuex'
 import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
 import { FriendsState } from '~/store/friends/types'
-import { PrerequisiteState } from '~/store/prerequisites/types'
 import { TextileState } from '~/store/textile/types'
+import { UIState } from '~/store/ui/types'
+import { WebRTCState } from '~/store/webrtc/types'
+import { GroupsState } from '~/store/groups/types'
+import { SettingsState } from '~/store/settings/types'
 
 export interface RootState {
   accounts: AccountsState
   dataState: DataState
   friends: FriendsState
   textile: TextileState
-  prerequisites: PrerequisiteState
+  webrtc: WebRTCState
+  groups: GroupsState
+  ui: UIState
+  settings: SettingsState
 }
 
 export type RootStore = Store<RootState>

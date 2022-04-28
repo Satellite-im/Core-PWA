@@ -5,8 +5,12 @@
       :style="`background-image:url(${popularGlyph.image})`"
     >
       <div class="badges">
-        <div v-if="popularGlyph.isNew" class="badge-new">{{ $t('glyphs.new') }}</div>
-        <div v-if="popularGlyph.isSale" class="badge-sale">{{ $t('glyphs.sale') }}</div>
+        <div v-if="popularGlyph.isNew" class="badge-new">
+          {{ $t('glyphs.new') }}
+        </div>
+        <div v-if="popularGlyph.isSale" class="badge-sale">
+          {{ $t('glyphs.sale') }}
+        </div>
         <TypographyText
           :text="`${popularGlyph.glyph.stickerURLs.length} glyphs`"
           :size="6"

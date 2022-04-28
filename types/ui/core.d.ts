@@ -1,9 +1,10 @@
 export type Group = {
   name: string
-  address: string
+  id: string
   motd: string
   members: Array<string>
   creator: string
+  encryptionKey: string
 }
 
 export type Server = {

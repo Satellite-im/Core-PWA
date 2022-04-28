@@ -1,22 +1,44 @@
-<div :class="`${$device.isMobile ? 'file mobile-file' : 'file'}`">
+<div
+  class="file"
+  :class="{'disabled' : isFilesIndexLoading}"
+  v-on="isFilesIndexLoading ? {} : {click: click, contextmenu: contextMenu}"
+  @mouseover="fileHover=true"
+  @mouseleave="fileHover=false"
+>
   <div class="quick-actions">
-    <link-icon size="1x" class="share" v-if="item.meta && item.meta.shared" />
-    <heart-icon size="1x" class="like" v-if="item.meta && item.meta.liked" />
+    <link-icon
+      v-if="item.shared"
+      size="1.25x"
+      class="link"
+      @mouseover="linkHover=true"
+      @mouseleave="linkHover=false"
+    />
+    <heart-icon
+      v-if="item.liked || fileHover"
+      size="1.25x"
+      class="like"
+      @mouseover="heartHover=true"
+      @mouseleave="heartHover=false"
+    />
   </div>
-  <div v-if="item.children" v-on:click="handler(item)">
-    <folder-icon size="1x" class="file-icon folder" />
-    <div class="text-container">
-      <TypographyText :size="6" :text="item.name" />
-      <TypographyText :size="6" :text="`${item.children.length} items`" class="subtext" />
-    </div>
+  <!-- add container so blur effect doesn't go outside the dimensions of the image -->
+  <div v-if="item.thumbnail" class="image-container">
+    <img
+      class="image-preview"
+      :class="{'blur-image' : item.nsfw && blockNsfw}"
+      :src="item.thumbnail"
+      draggable="false"
+    />
   </div>
-  <div v-else v-on:click="handler(item)">
-    <file-icon v-if="!isImage(item.type)" size="1x" class="file-icon file-display" />
-    <div v-else class="image-preview" :style="`background-image: url('${item.location}')`">
-    </div>
-    <div class="text-container">
-      <TypographyText :size="6" :text="item.name" />
-      <TypographyText :size="6" :text="`${item.size}`" class="subtext" />
-    </div>
+  <div v-else class="icon-container">
+    <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
+    <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
+    <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
+    <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />
+    <file-icon v-else size="4x" class="file-type-icon" />
+  </div>
+  <div class="text-container">
+    <TypographyText :size="6" :text="item.name" class="maintext" />
+    <TypographyText :size="6" :text="getSubtext" class="subtext" />
   </div>
 </div>

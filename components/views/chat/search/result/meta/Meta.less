@@ -1,0 +1,20 @@
+.meta {
+  padding: @normal-spacing 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .result-count {
+    &:extend(.font-secondary);
+  }
+  .result-orderby {
+    display: flex;
+    gap: @normal-spacing;
+    .orderby-item {
+      &:extend(.font-muted);
+      cursor: pointer;
+      &.active {
+        &:extend(.font-secondary);
+      }
+    }
+  }
+}

@@ -7,17 +7,23 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 import { ActionsArguments, RootState } from '~/types/store/store'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 export default {
   /**
-   * @method setPin DocsTODO
-   * @description
-   * @param pin
+   * @method setPin
+   * @description sets the user pin password and stores its
+   * hash inside the Vuex state
+   * @param pin the chosen pin password
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/setPin', 'myPassword123')
+   * ```
    */
   async setPin({ commit }: ActionsArguments<AccountsState>, pin: string) {
     if (pin.length < 5) {
@@ -28,16 +34,19 @@ export default {
 
     const pinHash = await $Crypto.hash(pin)
 
-    // The cleartext version of the pin will not be
-    // persisted
+    // The cleartext version of the pin will not be persisted
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
   /**
-   * @method unlock DocsTODO
-   * @description
-   * @param pin
+   * @method unlock
+   * @description performs all the actions to unlock the app by
+   * decrypting the wallet information
+   * @param pin pin password in use
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/unlock', 'myPassword123')
+   * ```
    */
   async unlock(
     { commit, state }: ActionsArguments<AccountsState>,
@@ -69,10 +78,12 @@ export default {
     commit('unlock', pin)
   },
   /**
-   * @method generateWallet DocsTODO
-   * @description
-   * @param
+   * @method generateWallet
+   * @description Generates a new Solana hierarchical wallet
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/generateWallet')
+   * ```
    */
   async generateWallet({ commit, state }: ActionsArguments<AccountsState>) {
     const { pin } = state
@@ -100,10 +111,14 @@ export default {
     commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method setRecoverMnemonic DocsTODO
-   * @description
-   * @param mnemonic
+   * @method setRecoverMnemonic
+   * @description Encrypts the wallet mnemonic phrase using the user pin
+   * password and stores it inside Vuex store
+   * @param mnemonic the mnemonic phrase to store
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/setRecoverMnemonic','my seed phrase')
+   * ```
    */
   async setRecoverMnemonic(
     { commit, state }: ActionsArguments<AccountsState>,
@@ -121,10 +136,13 @@ export default {
     await commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
-   * @method loadAccount DocsTODO
-   * @description
-   * @param
+   * @method loadAccount
+   * @description Performs all the action needed to retrieve the user account
+   * from Solana
    * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/loadAccount')
+   * ```
    */
   async loadAccount({
     commit,
@@ -141,66 +159,62 @@ export default {
 
     await $SolanaManager.initializeFromMnemonic(mnemonic)
 
-    const userAccount = await $SolanaManager.getUserAccount()
+    const payerAccount = $SolanaManager.getActiveAccount()
 
-    if (!userAccount) {
+    if (!payerAccount) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    commit('setActiveAccount', userAccount?.publicKey.toBase58())
+    commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+    const userInfo = await usersProgram.getCurrentUserInfo()
 
     if (userInfo === null) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
-    // Initialize Encryption Engine
-    dispatch('initializeEncryptionEngine', userAccount)
+    dispatch('initializeEncryptionEngine', payerAccount)
 
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
     })
 
-    commit('prerequisites/setAccountsReady', true, { root: true })
-
-    // TODO: move this logic into a startup action
-    // Initialize textile
-    const { pin } = state
-    dispatch(
-      'textile/initialize',
-      {
-        id: userAccount?.publicKey.toBase58(),
-        pass: pin,
-        wallet: $SolanaManager.getMainSolanaWalletInstance(),
-      },
-      { root: true },
-    )
-
-    // Initialize WebRTC with our ID
-    dispatch('webrtc/initialize', userAccount.publicKey.toBase58(), {
-      root: true,
-    })
-
-    // Dispatch an action to fetch friends and friends requests
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
+    dispatch('startup', payerAccount)
   },
   /**
-   * @method registerUser DocsTODO
-   * @description
-   * @param userData
+   * @method registerUser
+   * @description Registers a new user on the Solana blockchain
+   * @param userData User information to register
    * @example
+   * ```typescript
+   * this.$store.dispatch(
+   *  'accounts/registerUser',
+   *  {
+   *    name: 'My Name',
+   *    image: 'linkToMyImage',
+   *    status: 'My amazing status message 🚀'
+   *  }
+   * );
+   * ```
    */
   async registerUser(
-    { commit, dispatch }: ActionsArguments<AccountsState>,
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    if (!state.initialized) {
+      const mnemonic = state.phrase
+
+      if (mnemonic === '') {
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
+
+      await $SolanaManager.initializeFromMnemonic(mnemonic)
+    }
 
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
@@ -218,16 +232,9 @@ export default {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userAccount = await $SolanaManager.getUserAccount()
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
-    if (!userAccount) {
-      commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
-    const serverProgram: ServerProgram = new ServerProgram($SolanaManager)
-
-    const userInfo = await serverProgram.getUser(userAccount.publicKey)
+    const userInfo = await usersProgram.getCurrentUserInfo()
 
     if (userInfo) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
@@ -235,31 +242,160 @@ export default {
     }
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
+    /* textilePubKey is generated first before setting account details if user is registered with avatar */
+    let preGeneratedTextilePubKey = null
+    // only init textile if we need to push an image to bucket
+    if (userData.image) {
+      const { pin } = state
+      preGeneratedTextilePubKey = await dispatch(
+        'textile/initialize',
+        {
+          id: payerAccount?.publicKey.toBase58(),
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
 
-    await serverProgram.createUser(userData.name, '', userData.status)
+    const imagePath = await uploadPicture(userData.image)
+
+    await usersProgram.create(userData.name, imagePath, userData.status)
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
-    commit('setActiveAccount', userAccount.publicKey.toBase58())
+    commit('setActiveAccount', payerAccount.publicKey.toBase58())
 
-    // Initialize Encryption Engine
-    dispatch('initializeEncryptionEngine', userAccount)
+    dispatch('initializeEncryptionEngine', payerAccount)
+
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
-      photoHash: userData.photoHash,
-      address: userAccount.publicKey.toBase58(),
+      photoHash: imagePath,
+      address: payerAccount.publicKey.toBase58(),
     })
+    /* reset textilePubKey after setting user detail if it is not set properly */
+    if (preGeneratedTextilePubKey && !state.details?.textilePubkey)
+      commit('updateTextilePubkey', preGeneratedTextilePubKey)
+    dispatch('startup', payerAccount)
   },
+
   /**
-   * @method initializeEncryptionEngine DocsTODO
-   * @description
-   * @param userAccount
+   * @method updateProfilePhoto
+   * @description update profile photo of the user on the Solana blockchain
+   * @param image
    * @example
+   * ```typescript
+   * this.$store.dispatch(
+   *  'accounts/updateProfilePhoto', image
+   * );
+   * ```
    */
-  async initializeEncryptionEngine(_: RootState, userAccount: Keypair) {
+  async updateProfilePhoto(
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
+    image: string,
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    const imagePath = await uploadPicture(image)
+
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
+    await usersProgram.setPhotoHash(imagePath)
+
+    commit('setProfilePicture', imagePath)
+  },
+
+  /**
+   * @method initializeEncryptionEngine
+   * @description Initializes the Crypto class with the current user keypair
+   * @param userAccount keypair of the current user
+   * @example
+   * ```typescript
+   * this.$store.dispatch('accounts/initializeEncriptionEngin', currentUserAccount)
+   * ```
+   */
+  async initializeEncryptionEngine(
+    _: ActionsArguments<AccountsState>,
+    userAccount: Keypair,
+  ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
     await $Crypto.init(userAccount)
   },
+  async startup(
+    { dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    payerAccount: Keypair,
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    const { initialized: textileInitialized } = rootState.textile
+    const { initialized: webrtcInitialized } = rootState.webrtc
+
+    await db.initializeSearchIndexes()
+
+    const { pin } = state
+    if (!textileInitialized && pin) {
+      await dispatch(
+        'textile/initialize',
+        {
+          id: payerAccount?.publicKey.toBase58(),
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
+
+    if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
+      dispatch(
+        'webrtc/initialize',
+        {
+          privateKeyInfo: {
+            type: 'ed25519',
+            privateKey: $SolanaManager.payerAccount?.secretKey,
+          },
+          originator: payerAccount.publicKey.toBase58(),
+        },
+        {
+          root: true,
+        },
+      )
+    }
+
+    dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
+    dispatch('friends/initialize', {}, { root: true })
+    dispatch('groups/initialize', {}, { root: true })
+  },
+}
+
+/**
+ * @method uploadPicture
+ * @description helper function to upload image to textile if needed
+ * @param image data string of uploaded image
+ * @returns textile hash of image, or '' if no image is present
+ */
+async function uploadPicture(image: string) {
+  if (!image) {
+    return ''
+  }
+
+  // convert data string image to File
+  const imageFile: File = await fetch(image)
+    .then((res) => res.blob())
+    .then((blob) => {
+      return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
+    })
+
+  const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+  $TextileManager.bucketManager?.getBucket()
+  const result = await $TextileManager.bucketManager?.pushFile(
+    imageFile,
+    imageFile.name,
+  )
+
+  return result?.path.root.toString() ?? ''
+}
+
+export const exportForTesting = {
+  uploadPicture,
 }

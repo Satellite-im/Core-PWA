@@ -30,11 +30,11 @@ export const getClusterFromNetworkConfig = (network: string): Cluster => {
 export const publicKeyFromSeed = async (
   seedKey: PublicKey,
   seed: string,
-  programId: PublicKey
+  programId: PublicKey,
 ) => {
   const base = await PublicKey.findProgramAddress(
     [seedKey.toBytes()],
-    programId
+    programId,
   )
 
   const key = await PublicKey.createWithSeed(base[0], seed, programId)
@@ -53,7 +53,7 @@ export const publicKeyFromSeed = async (
 export const publicKeyFromSeeds = async (
   seeds: (Buffer | Uint8Array)[],
   seed: string,
-  programId: PublicKey
+  programId: PublicKey,
 ) => {
   const base = await PublicKey.findProgramAddress(seeds, programId)
 
@@ -96,10 +96,9 @@ export function stringFromBuffer(bufferToConvert: Buffer) {
  */
 export async function waitForAccount(
   connection: Connection,
-  accountKey: PublicKey
+  accountKey: PublicKey,
 ) {
   while (true) {
-    await sleep(3000)
     const accountInfo = await connection.getAccountInfo(accountKey)
     if (accountInfo === null) {
       continue

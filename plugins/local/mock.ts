@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { Files } from '~/mock/files'
 import { Blocked, Friend, Friends, Requests } from '~/mock/friends'
 import { Glyphs } from '~/mock/glyphs'
 import { ExampleGroup, Groups } from '~/mock/groups'
@@ -40,7 +39,6 @@ const mock = {
     marketGlyphs,
     marketGlyphShopFilter,
   },
-  files: Files,
   friends: Friends,
   friend: Friend,
   requests: Requests,

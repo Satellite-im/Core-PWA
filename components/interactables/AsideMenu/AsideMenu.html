@@ -1,6 +1,6 @@
 <div class="aside-menu hidden-scroll" v-scroll-lock="true">
   <menu-icon
-    size="1x"
+    size="1.5x"
     v-if="toggleable"
     v-on:click="toggle"
     class="menu-toggle"
@@ -16,7 +16,7 @@
             :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"
             >{{ link.text }}</NuxtLink
           >
-          <a 
+          <a
             v-else
             v-on:click="customAction(link.to)"
             :class="`${active === link.to ? 'is-active' : 'is-inactive'}`"

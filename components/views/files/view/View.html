@@ -4,50 +4,58 @@
       <TypographyTitle :text="file.name" :size="6" />
       <TypographyText :text="file.type" :size="6" />
       <TypographyText :text="$filesize(file.size)" :size="6" />
-      <TypographyText :text="$dayjs(file.modified).from()" :size="6" />
+      <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
     </div>
     <div class="controls">
-      <div
-        :data-tooltip="$t('ui.unpin')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
-        <archive-icon size="1x" />
-      </div>
+      <UiLoadersSpinner
+        v-if="isDownloading"
+        class="control disabled"
+        spinning
+      />
       <a
+        v-else
+        @click="download"
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="file.location"
-        target="_blank"
-        :download="file.name">
+      >
         <download-icon size="1x" />
       </a>
-      <div
+      <a
         :data-tooltip="$t('controls.share_link')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+        :class="{'disabled' : isFilesIndexLoading}"
+        v-on="isFilesIndexLoading ? {} : {click: share}"
+      >
         <link-icon size="1x" />
-      </div>
+      </a>
       <div
         :data-tooltip="$t('ui.close')"
-        v-on:click="close"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control">
+        @click="$emit('close')"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control control--close"
+      >
         <x-icon size="1x" />
       </div>
     </div>
   </div>
-  <div class="image-container" v-if="file.type.includes('image')">
-    <img class="file-image" :src="file.location" />
+  <div v-if="file.thumbnail" class="image-container">
+    <img
+      :src="file.thumbnail"
+      :class="{'blur-image' : file.nsfw && blockNsfw}"
+    />
   </div>
   <div v-else class="no-preview">
+    <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
     <a
-        :data-tooltip="$t('controls.download')"
-        class="has-tooltip has-tooltip-primary has-tooltip-top"
-        :href="file.location"
-        target="_blank"
-        :download="file.name">
+      v-else
+      @click="download"
+      :data-tooltip="$t('controls.download')"
+      class="has-tooltip has-tooltip-primary has-tooltip-top"
+    >
       <download-icon size="1x" class="file-icon" />
     </a>
     <TypographyTitle :size="4" :text="file.name" />
     <TypographySubtitle :size="6" :text="file.type" />
     <TypographySubtitle :text="$filesize(file.size)" :size="6" />
-    <TypographySubtitle :text="$dayjs(file.modified).from()" :size="6" />
+    <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
   </div>
 </div>

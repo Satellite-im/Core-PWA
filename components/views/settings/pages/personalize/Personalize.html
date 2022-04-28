@@ -1,8 +1,14 @@
 <div id="personalize-settings">
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.personalize.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.settings.personalize.subtitle')" />
+      <TypographyTitle
+        :size="6"
+        :text="$t('pages.settings.personalize.title')"
+      />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.settings.personalize.subtitle')"
+      />
     </div>
   </div>
 
@@ -10,12 +16,7 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.theme')" />
       <br />
-      <InteractablesSelect 
-        v-model="theme"
-        size="small"
-        :options="themes"
-        :selected="ui.theme.base.value"
-      />
+      <InteractablesSelect v-model="theme" size="small" :options="themes" />
     </div>
   </div>
 
@@ -23,12 +24,12 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
       <br />
-      <InteractablesSelect 
+      <InteractablesSelect
+        :disabled="theme === ThemeNames.DEFAULT"
         v-model="flair"
         size="small"
         :options="flairs"
         colorSupport
-        :selected="ui.theme.flair.value"
       />
     </div>
   </div>
@@ -37,7 +38,11 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.personalize.language')" />
       <br />
-      <InteractablesSelect size="small" :options="[{ text: 'English (USA)', value: 'en_US' }]" selected="en_US" />
+      <InteractablesSelect
+        size="small"
+        :options="[{ text: 'English (USA)', value: 'en_US' }]"
+        selected="en_US"
+      />
     </div>
   </div>
 </div>

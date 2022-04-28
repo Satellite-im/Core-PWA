@@ -18,7 +18,7 @@ export default Vue.extend({
     color: {
       type: String,
       required: false,
-      default: '#0984e3',
+      default: 'null',
     },
     /**
      * Size of the switch
@@ -34,6 +34,15 @@ export default Vue.extend({
       required: false,
       default: '',
     },
+
+    /**
+     * If provided the button would appear as disabled and non interactable
+     */
+    isLocked: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   methods: {
     /**
@@ -42,7 +51,9 @@ export default Vue.extend({
      * @example
      */
     toggle() {
-      this.$emit('toggle', !this.isEnabled)
+      if (!this.isLocked) {
+        this.$emit('toggle', !this.isEnabled)
+      }
     },
   },
 })

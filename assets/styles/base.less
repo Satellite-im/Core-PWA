@@ -1,6 +1,10 @@
 :root {
   --app-height: 100vh;
+  --flair-color: @primary-color;
+  --flair-color-rgb: 39, 97, 253;
 }
+@flair-glow: 0 5px 14px -5px var(--flair-color);
+@switch-off-flair-glow: -5px 0px 20px -2px var(--flair-color);
 
 html,
 body {
@@ -8,17 +12,45 @@ body {
   overflow: hidden;
   height: @full;
   &:extend(.full-width);
-  overscroll-behavior: none;
-  caret-color: @primary-color;
+  overscroll-behavior: contain;
+  caret-color: var(--flair-color) !important;
 }
 
 html {
   &:extend(.background-gradient);
 }
 
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+}
+
+.background-flair {
+  background: var(--flair-color) !important;
+}
+.glow-flair {
+  box-shadow: @flair-glow !important;
+}
+.color-flair {
+  color: var(--flair-color) !important;
+}
+.switch-off-glow-flair {
+  box-shadow: @switch-off-flair-glow !important;
+}
+
 ::selection {
-  &:extend(.background-primary);
   &:extend(.font-secondary);
+  &:extend(.background-flair);
+}
+
+/* Only for Safari to fix selection text background */
+
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    ::selection {
+      background: rgba(var(--flair-color-rgb), 0.99) !important;
+    }
+  }
 }
 
 .hidden-scroll {
@@ -52,11 +84,11 @@ html {
 }
 
 .toasted-container.top-center {
-  top: 0 !important;
+  top: env(safe-area-inset-top) !important;
 }
 
 .toasted-container .toasted {
-  background: @primary-color !important;
+  &:extend(.background-flair);
   color: @secondary-text !important;
   font-family: @primary-font;
 }
@@ -74,25 +106,39 @@ html {
   font-size: 11pt;
 }
 
+//Menu
 .menu-list {
-  li {
-    margin: 0.25rem;
+  a {
+    &:extend(.font-primary);
 
-    a {
+    &.is-active {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+    }
+
+    &:hover:not(.is-active) {
+      &:extend(.background-semitransparent-light);
       &:extend(.font-primary);
-  
-      &.is-active {
-        &:extend(.background-primary);
-        &:extend(.glow-primary);
-      }
-      
-      &:hover:not(.is-active) {
-        &:extend(.background-semitransparent-light);
-        &:extend(.font-primary);
-      }
+    }
+  }
+
+  li {
+    &.is-active {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+    }
+
+    a.is-active {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+    }
+
+    &:not(.is-active)&:hover {
+      &:extend(.background-semitransparent-light);
     }
   }
 }
+
 .menu-label {
   &:extend(.font-muted);
 }
@@ -101,38 +147,35 @@ html {
   &:extend(.font-muted);
 }
 
+// Server labels
+#list-container {
+  .unread {
+    .label {
+      &:extend(.background-flair);
+    }
+  }
+}
+
 // Buttons
 .button {
-  
-  &.is-primary, .is-primary{
-    &:extend(.background-primary-gradient);
-    &:extend(.glow-primary);
-    border: none !important;
-    outline: none;
-    color: @secondary-text !important;
-
-    &:hover, &:focus, &:active {
-      &:extend(.background-primary-gradient);
-      &:extend(.font-secondary);
-      border: none;
-      &:extend(.glow-primary);
-    }
+  &.is-primary {
+    &:extend(.background-flair);
+    &:extend(.glow-flair);
   }
 
   &.is-primary.is-outlined {
     &:extend(.font-accent);
-    &:extend(.glow-primary);
-  
-    &:hover, &:focus {
-      &:extend(.font-secondary);
-      &:extend(.glow-primary);
-    }
   }
 
-  &.is-danger, .is-danger {
+  #custom-cursor-area {
+    &:extend(.font-primary);
+  }
+
+  &.is-danger,
+  .is-danger {
     background: @danger-gradient !important;
     box-shadow: @danger-glow !important;
-    
+
     &:hover {
       &:extend(.glow-danger);
       background: @danger-gradient;
@@ -143,10 +186,23 @@ html {
     &:extend(.color-danger);
     &:extend(.glow-danger);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: @danger-gradient;
-      &:extend(.font-secondary);
       &:extend(.glow-danger);
+    }
+  }
+}
+
+.button-group {
+  .button {
+    &.active {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+      &:extend(.font-primary);
+    }
+    &:hover {
+      border: none;
     }
   }
 }
@@ -156,22 +212,19 @@ button {
   border: none !important;
 }
 
-.tabs {
-  overflow: unset !important;
-}
-
 .button.is-dark.is-outlined {
   &:extend(.font-primary);
   border-color: @foreground;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: @foreground;
     border-color: @foreground;
     &:extend(.font-secondary);
   }
 
   &.active {
-    &:extend(.background-primary);
+    &:extend(.background-flair);
     border-color: @foreground;
     &:extend(.font-secondary);
   }
@@ -180,21 +233,232 @@ button {
 .button.is-dark {
   &:extend(.background-semitransparent-lighter);
   &:extend(.font-secondary);
+
+  &:hover {
+    background: @foreground-alt;
+    &:extend(.font-secondary);
+  }
 }
-.button.is-dark:hover {
-  background: @foreground-alt;
-  &:extend(.font-secondary);
+
+.tabs {
+  overflow: unset !important;
+}
+
+//Switch
+.switch-container {
+  .switch-button-control {
+    .switch-button {
+      border: 0.125rem solid var(--flair-color);
+      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
+
+      .sw-button {
+        &:extend(.background-flair);
+        &:extend(.switch-off-glow-flair);
+      }
+
+      &.enabled {
+        &:extend(.background-flair);
+        &:extend(.glow-flair);
+
+        .sw-button {
+          border: 0.2rem solid var(--flair-color);
+          background: @white !important;
+        }
+      }
+    }
+  }
+}
+
+//Volume Slider
+.volume-slider .vue-slider-process,
+.vue-slider-dot-tooltip-inner {
+  &::after {
+    border-top-color: var(--flair-color) !important;
+  }
+  &:extend(.background-flair);
+}
+
+//Breadcrumb
+.breadcrumb li:not(.is-active) a {
+  &:extend(.color-flair);
+}
+
+//Multiselect & chip items
+.multiselect {
+  .multiselect__input {
+    &:extend(.background-flair);
+    color: @text;
+  }
+
+  .multiselect__content-wrapper {
+    border: 1px solid var(--flair-color);
+    &:extend(.glow-flair);
+  }
+
+  .multiselect__tags {
+    &:extend(.background-flair);
+    border: 1px solid var(--flair-color);
+  }
+}
+
+.chip-item {
+  &:extend(.background-flair);
+  border: 1px solid var(--flair-color);
+}
+
+//Toggle sidebar
+.toggle-sidebar,
+.toggle--sidebar,
+.menu-toggle {
+  &:extend(.color-flair);
+}
+
+//Select
+.is-primary {
+  .custom-select {
+    color: @text;
+    .selected {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+
+      &:hover {
+        &:extend(.glow-primary);
+      }
+    }
+  }
+}
+
+// Progress
+progress.progress {
+  border: var(--flair-color);
+
+  &.is-primary {
+    border-color: var(--flair-color) !important;
+    &::-webkit-progress-value {
+      &:extend(.background-flair);
+    }
+  }
+
+  border: 1px solid var(--flair-color);
+}
+
+//Sidebar
+#sidebar {
+  .sidebar-nav {
+    .button,
+    div {
+      &.is-primary {
+        &:extend(.background-flair);
+        &:extend(.glow-flair);
+      }
+      .tag-inverted {
+        background: @midground !important;
+      }
+    }
+  }
+  background: @background !important;
+}
+
+//Scrollbar
+.ps__thumb-x,
+.ps__thumb-y,
+.ps__rail-x:hover > .ps__thumb-x,
+.ps__rail-x:focus > .ps__thumb-x,
+.ps__rail-x.ps--clicking .ps__thumb-x,
+.ps__rail-y:hover > .ps__thumb-y,
+.ps__rail-y:focus > .ps__thumb-y,
+.ps__rail-y.ps--clicking .ps__thumb-y {
+  &:extend(.background-flair);
+}
+
+.auto-scroll {
+  /* Scroll Handle */
+  &::-webkit-scrollbar-thumb {
+    &:extend(.background-flair);
+  }
+  /* Custom Scroll for Firefox */
+  scrollbar-color: var(--flair-color) transparent !important;
+}
+
+.new-message-alert {
+  &:extend(.background-flair);
+}
+
+//Search Input
+.search-query-highlight {
+  &:extend(.background-flair);
+  &:extend(.glow-flair);
+}
+
+.search-option-group {
+  li {
+    &:hover:not(:first-child),
+    &.active {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+    }
+  }
+}
+
+//------------- Navigation -------------
+
+a.link {
+  &:extend(.color-flair);
+
+  &:hover {
+    &:extend(.color-flair);
+    &:extend(.glow-flair);
+  }
+}
+
+.alpha-divider,
+.search-option-heading,
+.vc-weekday,
+.search-result-header,
+.add-more-filters {
+  &:extend(.color-flair);
+}
+
+.add-more-filters {
+  &:hover {
+    &:extend(.background-flair);
+    color: @white !important;
+  }
+  &:extend(.color-flair);
+}
+
+li .is-active,
+li.active,
+input.date-input {
+  &:extend(.background-flair);
+  &:extend(.glow-flair);
+  border: none !important;
+}
+
+// ------------- Ui Elements-------------
+
+* {
+  border-color: var(--flair-color);
+}
+
+// Chatbar
+#chatbar {
+  .chatbar-controls {
+    div[data-tooltip='Send'] {
+      &:extend(.color-flair);
+    }
+    .send-message-btn {
+      &:extend(.color-flair);
+    }
+  }
+}
+
+.is-chatbar-reply {
+  &:extend(.background-flair);
 }
 
 // Inputs
 
-#sidebar {
-  .search-box {
-    input.input.is-small.is-dark {
-      background: @input-gradient !important;
-    }
-  }
-}
 .has-tooltip-primary {
   &:before {
     background: transparent;
@@ -202,18 +466,19 @@ button {
     &:extend(.blur-less);
     font-family: @primary-font !important;
     color: @secondary-text !important;
-    z-index: 100000;
+    z-index: 100000 !important;
   }
 }
 .input {
   &:extend(.input-bg);
   &:extend(.font-primary);
   box-shadow: none !important;
-  &:active, &:focus {
+  &:active,
+  &:focus {
     background: @semitransparent-lightest-gradient !important;
   }
 }
-.select select{
+.select select {
   background: @midground;
   &:extend(.font-primary);
 }
@@ -226,7 +491,8 @@ button {
   &:extend(.font-primary);
   border: none;
 
-  &:active, &:focus {
+  &:active,
+  &:focus {
     border: none;
     outline: none;
   }
@@ -236,23 +502,30 @@ button {
   border: none;
   outline: none;
   &:extend(.glow-primary);
-  &::after, &::before {
+  &::after,
+  &::before {
     border-color: @secondary-text;
   }
 }
 
 .select.is-primary:not(:hover)::after,
-.select:not(.is-multiple):not(.is-loading):hover::after  {
+.select:not(.is-multiple):not(.is-loading):hover::after {
   border-color: @secondary-text;
   z-index: @base-z-index;
 }
 
 .select.is-primary:hover::after,
 .select.is-primary:active::after,
-.select.is-primary select:hover  {
+.select.is-primary selec:hover {
   border-color: @secondary-text;
 }
 
+//Icon
+.icon,
+.file-icon,
+.file-type-icon {
+  &:extend(.color-flair);
+}
 
 // Typography
 .title {
@@ -298,6 +571,12 @@ strong {
   &:extend(.font-secondary);
 }
 
+.locked,
+.disabled,
+.disabled * {
+  cursor: not-allowed !important;
+}
+
 @media only screen and (max-width: @mobile-breakpoint) {
   .dynamic-content {
     min-width: 100vw;
@@ -309,11 +588,16 @@ strong {
   animation-name: spin;
   animation-duration: 2000ms;
   animation-iteration-count: infinite;
-  animation-timing-function: linear; 
+  animation-timing-function: linear;
 }
 
 .bounce {
   animation-name: bounce;
   animation-duration: 2000ms;
   animation-iteration-count: infinite;
+}
+
+// Swiper
+.sidebar-container.swiper-slide.swiper-slide-active {
+  transform: none;
 }

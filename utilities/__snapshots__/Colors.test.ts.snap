@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Colors.hexToRGB 0 1`] = `"0, 0, 3"`;
+
+exports[`Colors.hexToRGB 1 1`] = `"0, 0, 10"`;
+
+exports[`Colors.hexToRGB 2 1`] = `"0, 0, 3"`;
+
+exports[`Colors.hexToRGB 3 1`] = `"0, 0, 0"`;
+
+exports[`Colors.hexToRGB 4 1`] = `"0, 0, 48"`;
+
+exports[`Colors.hexToRGB 5 1`] = `"0, 0, 0"`;

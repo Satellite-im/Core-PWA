@@ -1,6 +1,5 @@
 <template>
-  <loader-icon :class="spinning ? 'spin' : ''"
-size="1x" />
+  <loader-icon :class="spinning ? 'spin' : ''" size="1x" />
 </template>
 <script lang="ts">
 import Vue from 'vue'

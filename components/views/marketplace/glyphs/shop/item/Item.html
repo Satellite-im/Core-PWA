@@ -4,7 +4,10 @@
       <div class="badges">
         <div v-if="item.isNew" class="badge-new">New</div>
         <div v-if="item.isSale" class="badge-sale">Sale</div>
-        <TypographyText :size="6" :text="`${item.glyph.stickerURLs.length} glyphs`" />
+        <TypographyText
+          :size="6"
+          :text="`${item.glyph.stickerURLs.length} glyphs`"
+        />
       </div>
       <div class="favorite">
         <heart-icon size="1x" />

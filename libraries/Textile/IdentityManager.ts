@@ -1,11 +1,12 @@
 // import { Context } from '@textile/context'
-import { Client, PrivateKey, Identity, Users } from '@textile/hub'
-
-// @ts-ignore
+import { Identity, PrivateKey } from '@textile/crypto'
+import { Client } from '@textile/hub-threads-client'
+import { Users } from '@textile/users'
 import { AuthData } from '../Interfaces'
 import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { SolanaWallet } from '~/types/solana/solana'
+// @ts-ignore
 
 export default class IdentityManager {
   client?: Client
@@ -64,34 +65,28 @@ export default class IdentityManager {
    * @param wallet a Solana Wallet instance
    * @returns the identity
    */
-  async initFromWallet(wallet: SolanaWallet) {
+  async initFromWallet(wallet: SolanaWallet): Promise<Identity> {
     const cryptoInstance = new Crypto()
 
     const secret = await cryptoInstance.hash('Satellite.im')
     const message = this.generateMessageForEntropy(wallet.address, secret)
     const signedText = await cryptoInstance.signMessageWithKey(
       wallet.keypair.secretKey,
-      message
+      message,
     )
     const hash = await cryptoInstance.hash(signedText)
 
     if (hash === null) {
       throw new Error(
-        'No account is provided. Please provide an account to this application.'
+        'No account is provided. Please provide an account to this application.',
       )
     }
-    // The following line converts the hash in hex to an array of 32 integers.
-    // // @ts-ignore
-    // const array = hash
-    //   .replace('0x', '')
-    //   .match(/.{2}/g)
-    //   .map((hexNoPrefix) => parseInt('0x' + hexNoPrefix))
 
     const array = Buffer.from(hash, 'hex')
 
     if (array.length !== 32) {
       throw new Error(
-        'Hash of signature is not the correct size! Something went wrong!'
+        'Hash of signature is not the correct size! Something went wrong!',
       )
     }
 
@@ -119,7 +114,7 @@ export default class IdentityManager {
    * @param privateKey string representation of a private key
    * @returns the identity
    */
-  initFromPrivateKey(privateKey: string) {
+  initFromPrivateKey(privateKey: string): Identity {
     this.identity = PrivateKey.fromString(privateKey)
     return this.identity
   }
@@ -132,7 +127,7 @@ export default class IdentityManager {
     this.client = await Client.withKeyInfo({ key: Config.textile.key })
 
     this.users = await Users.withKeyInfo({
-      key: Config.textile.key
+      key: Config.textile.key,
     })
 
     await this.users.getToken(identity)
@@ -142,11 +137,11 @@ export default class IdentityManager {
     return {
       client: this.client,
       token,
-      users: this.users
+      users: this.users,
     }
   }
 
-  isInitialized() {
+  isInitialized(): boolean {
     return Boolean(this.identity)
   }
 }

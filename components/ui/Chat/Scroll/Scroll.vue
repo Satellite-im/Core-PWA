@@ -1,9 +1,12 @@
 <template src="./Scroll.html" />
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
+
+import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'Scroll',
@@ -18,7 +21,12 @@ export default Vue.extend({
     },
     preventScrollOffset: {
       type: Number,
-      default: 500,
+      default: 10,
+      required: false,
+    },
+    olderMessagesScrollOffset: {
+      type: Number,
+      default: 300,
       required: false,
     },
     enableWrap: {
@@ -26,20 +34,25 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    contents: {
-      /* Content Type could be any value in below array */
-      type: [Array, Object, String, Number],
-      default: '',
-      required: false,
+    user: {
+      type: Object as PropType<User>,
+      default: () => ({
+        name: '',
+        address: '',
+        status: '',
+      }),
+      required: true,
     },
   },
   data() {
     return {
-      loaded: false,
       newMessageAlert: false,
+      scrollContainerObserver: null,
+      scrollContentObserver: null,
     }
   },
   computed: {
+    ...mapState(['ui', 'textile']),
     classObject() {
       return {
         'enable-wrap': this.enableWrap,
@@ -47,32 +60,40 @@ export default Vue.extend({
         dark: this.theme === 'dark',
       }
     },
+    isMediaOpen() {
+      return this.$store.state.ui.showMedia
+    },
   },
   watch: {
-    contents: {
-      deep: true,
-      handler() {
-        const lastMsg = this.contents[this.contents.length - 1]
-        if (
-          (lastMsg.from === this.$mock.user.address ||
-            !this.$store.state.ui.unreadMessage) &&
-          !this.$store.state.ui.isReacted
-        ) {
-          this.autoScrollToBottom()
-          return
-        }
-        this.newMessageAlert = true
-        this.$store.dispatch('ui/setIsReacted', false)
-      },
+    // Once a new message is sent
+    'textile.messageLoading'(value) {
+      if (value === true) {
+        this.autoScrollToBottom()
+      }
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.autoScrollToBottom()
+    const scrollContainerObserver = new ResizeObserver(() => {
+      // Autoscroll to the bottom only if the user is at the bottom of the chat
+      !this.ui.isScrollOver && this.autoScrollToBottom()
     })
+
+    this.scrollContainerObserver = scrollContainerObserver.observe(
+      this.$refs.scrollRef,
+    )
+
+    const scrollContentObserver = new ResizeObserver(() => {
+      // Autoscroll to the bottom only if the user is at the bottom of the chat
+      !this.ui.isScrollOver && this.autoScrollToBottom()
+    })
+
+    this.scrollContentObserver = scrollContentObserver.observe(
+      this.$refs.scrollContent,
+    )
   },
-  beforeUnmount() {
-    this.loaded = false
+  beforeDestroy() {
+    if (this.scrollContainerObserver) this.scrollContainerObserver.disconnect()
+    if (this.scrollContentObserver) this.scrollContentObserver.disconnect()
   },
   methods: {
     /**
@@ -81,15 +102,20 @@ export default Vue.extend({
      * @example
      */
     autoScrollToBottom() {
-      const interval = this.loaded ? 100 : 1000
       if (this.$el && this.autoScroll) {
-        setTimeout(() => {
-          this.$nextTick(() => {
-            this.$el.scrollTop = 0
-            this.loaded = true
-            this.$store.dispatch('ui/setIsScrollOver', false)
-          })
-        }, interval)
+        this.$nextTick(() => {
+          this.$el.scrollTop = this.$el.scrollHeight
+          this.$store.dispatch('ui/setIsScrollOver', false)
+        })
+      }
+    },
+    /**
+     * @method hideKeyboard
+     * @description hide virtual keyboard on mobile
+     */
+    hideKeyboard() {
+      if (this.$device.isMobile) {
+        document.activeElement.blur()
       }
     },
     /**
@@ -100,15 +126,24 @@ export default Vue.extend({
     onScrolled() {
       if (!this.$el) return
 
-      if (
-        Math.abs(this.$el.scrollTop) > this.preventScrollOffset &&
-        !this.$store.state.ui.isScrollOver
-      ) {
-        this.$store.dispatch('ui/setIsScrollOver', true)
+      const scrollHeight = this.$el.scrollHeight - this.preventScrollOffset
+      const scrolled = this.$el.scrollTop + this.$el.clientHeight
+
+      if (scrollHeight - this.olderMessagesScrollOffset > scrolled) {
+        if (!this.ui.showOlderMessagesInfo) {
+          this.$store.commit('ui/setShowOlderMessagesInfo', true)
+        }
+      } else if (this.ui.showOlderMessagesInfo) {
+        this.$store.commit('ui/setShowOlderMessagesInfo', false)
+      }
+
+      if (scrollHeight > scrolled) {
+        if (!this.ui.isScrollOver)
+          this.$store.dispatch('ui/setIsScrollOver', true)
         return
       }
 
-      if (this.$store.state.ui.isScrollOver) {
+      if (this.ui.isScrollOver) {
         this.$store.dispatch('ui/setIsScrollOver', false)
       }
     },

@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getters.default.getInitialized 0 1`] = `true`;
+
+exports[`init should return the initialized variable of the state 1`] = `false`;

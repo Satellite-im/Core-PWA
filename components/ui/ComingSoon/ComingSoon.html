@@ -1,0 +1,19 @@
+<span v-if="!hide">
+  <div
+    v-if="!areaCover"
+    class="has-tooltip-primary tooltip-container coming-soon-container"
+    :class="`has-tooltip-${tooltipPosition} ${disabled ? 'disabled' : 'grayscaled'}`"
+    :data-tooltip="tooltipText"
+  >
+    <div
+      :class="`coming-soon ${horizontal ? 'horizontal' : ''}`"
+      :style="{'margin-top': marginTopOverride}"
+      @click="preventClickthrough"
+    >
+      <slot></slot>
+    </div>
+  </div>
+  <div v-if="areaCover" class="coming-soon-overlay">
+    <slot></slot>
+  </div>
+</span>

@@ -2,13 +2,19 @@
   <div v-for="reaction in reactions">
     <div v-if="hovering === reaction.emoji" class="reactors">
       <div class="reactors-emoji">{{reaction.emoji}}</div>
-      <div class="reactors-list" >
+      <div class="reactors-list">
         <span class="reactor">{{getReactorsList(reaction.reactors)}}</span>
       </div>
     </div>
-    <div :class="didIReact(reaction) ? 'emoji-reaction emoji-reacted' : 'emoji-reaction'" @click="quickReaction(reaction.emoji)" @mouseenter="toggleReactors(reaction.emoji)" @mouseleave="toggleReactors(null)">
-      <span>{{reaction.emoji}}</span>
-      <span>{{reaction.reactors.length}}</span>
+    <div
+      :class="didIReact(reaction) ? 'emoji-reaction emoji-reacted' : 'emoji-reaction'"
+      @click="quickReaction(reaction.emoji)"
+      data-cy="reaction-to-message"
+      @mouseenter="toggleReactors(reaction.emoji)"
+      @mouseleave="toggleReactors(null)"
+    >
+      <span data-cy="emoji-reaction-value">{{reaction.emoji}}</span>
+      <span data-cy="emoji-reaction-count">{{reaction.reactors.length}}</span>
       <div></div>
     </div>
   </div>
@@ -17,6 +23,7 @@
       size="1x"
       v-if="reactions.length"
       class="emoji-icon"
-      @click="emojiReaction" />
+      @click="emojiReaction"
+    />
   </div>
 </div>

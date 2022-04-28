@@ -18,7 +18,14 @@ export default Vue.extend({
   data() {
     return {
       paymentOption: 'usd',
+      accountID: '',
+      searching: '',
     }
+  },
+  methods: {
+    searchFriend() {
+      /* Search Friend */
+    },
   },
 })
 </script>

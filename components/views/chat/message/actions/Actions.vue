@@ -1,6 +1,6 @@
 <template src="./Actions.html" />
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 
 import {
   SmileIcon,
@@ -10,6 +10,7 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
+import { UIMessage } from '~/types/messaging'
 
 export default Vue.extend({
   components: {
@@ -18,6 +19,12 @@ export default Vue.extend({
     ArchiveIcon,
     EditIcon,
     MoreVerticalIcon,
+  },
+  data() {
+    return {
+      hasMoreSettings: false,
+      featureReadyToShow: false,
+    }
   },
   props: {
     setReplyChatbarContent: {
@@ -50,6 +57,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'accounts']),
+    isEditable(): boolean {
+      return (
+        this.message.from === this.accounts.details.textilePubkey &&
+        !(this.message.type === 'glyph' || this.message.type === 'file')
+      )
+    },
   },
 })
 </script>

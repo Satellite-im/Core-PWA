@@ -8,7 +8,6 @@
   width: @sidebar-size;
   min-width: @sidebar-size;
   position: relative;
-  display: inline-flex;
   height: @full;
   display: flex;
   flex-direction: column;
@@ -64,6 +63,7 @@
     }
 
     .toggle-sidebar {
+      cursor: pointer;
       position: absolute;
       z-index: @base-z-index + 10;
       top: @normal-spacing * 2.5;
@@ -73,9 +73,10 @@
     }
   }
 
-
   .sidebar-inner-streaming {
-    max-height: calc(var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad);
+    max-height: calc(
+      var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad
+    );
   }
 
   .controls {
@@ -84,10 +85,10 @@
     padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
     box-shadow: @ui-shadow;
   }
-  
 
   .filler {
     flex: 1;
+    position: relative;
   }
 
   .padded {
@@ -108,7 +109,7 @@
     top: 0.25rem;
     right: 0.25rem;
     font-size: @micro-text-size;
-    &:extend(.background-primary);
+    background-color: var(--flair-color);
     border-radius: 2px;
     line-height: 1.2;
     padding: 0.15rem 0.25rem;
@@ -144,14 +145,18 @@
   }
 }
 
+.sidebar-selector {
+  align-self: flex-end;
+}
+
 .flexy {
   display: inline-flex;
-
   .quick-chat {
     padding-left: @light-spacing;
     display: inline-flex;
-    justify-items: center;
-    align-items: center;
+    justify-items: flex-end;
+    align-self: flex-end;
+    float: right;
     cursor: pointer;
     width: auto;
     z-index: @base-z-index + 4;
@@ -175,15 +180,36 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
     z-index: 3;
-    width: @sidebar-size-mobile !important;
-    min-width: @sidebar-size-mobile !important;
+    width: @sidebar-size-mobile;
+    min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      box-shadow: none;
+      background: none;
     }
     .sidebar-inner-streaming {
-      max-height: calc(var(--app-height) - @sidebar-inner-offset - @mobile-sidebar-inner-streaming-pad);
+      max-height: calc(
+        var(--app-height) - @sidebar-inner-offset -
+          @mobile-sidebar-inner-streaming-pad
+      );
     }
+  }
+
+  .desktop #sidebar {
+    width: calc(@sidebar-size-mobile - @slimbar-size);
+    min-width: calc(@sidebar-size-mobile - @slimbar-size);
+  }
+
+  .quick-mobile-chat {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    bottom: 88px;
+    right: 16px;
+    box-shadow: 0px 1px 2px rgba(26, 26, 36, 0.65),
+      -2px 0px 20px rgba(39, 97, 253, 0.35),
+      -2px 5px 14px rgba(39, 97, 253, 0.4);
   }
 }
 
