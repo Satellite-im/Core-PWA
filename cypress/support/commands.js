@@ -65,6 +65,15 @@ Cypress.Commands.add(
     }),
 )
 
+// Temporary until Error 503 for Network Request Error on Recovery Seed Screen Is Present
+Cypress.Commands.add('retryOnNetworkRequestError', () => {
+  cy.get('body').then(($body) => {
+    if ($body.find('.red').length > 0) {
+      cy.contains('Recover Account').click()
+    }
+  })
+})
+
 //Create Account Commands
 
 Cypress.Commands.add('createAccount', (pin) => {
@@ -136,7 +145,7 @@ Cypress.Commands.add('createAccountRecoverySeed', () => {
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
-  cy.get('[data-cy=username-input]', { timeout: 120000 }).should('be.visible')
+  cy.get('[data-cy=username-input]', { timeout: 150000 }).should('be.visible')
 })
 
 Cypress.Commands.add('createAccountUserInput', (username, status) => {
@@ -226,6 +235,7 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .trigger('input')
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
+  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
@@ -268,10 +278,11 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
   cy.get('[data-cy=add-passphrase]').type('{enter}')
 
   cy.contains('Recover Account').click()
+  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
   Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
-//Chat Features Commands
+//Chat - Basic Commands for Text and Emojis
 
 Cypress.Commands.add('chatFeaturesProfileName', (value) => {
   // clicks on user name
@@ -299,34 +310,6 @@ Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
     .last()
     .scrollIntoView()
     .should('exist')
-})
-
-Cypress.Commands.add(
-  'chatFeaturesReplyMessage',
-  (receiver, selector, message) => {
-    cy.selectContextMenuOption(selector, 'Reply')
-    cy.get('.is-chatbar-reply')
-      .should('exist')
-      .should('include.text', 'Reply to')
-      .should('include.text', receiver)
-      .then(() => {
-        cy.get('[data-cy=editable-input]')
-          .should('be.visible')
-          .trigger('input')
-          .type(message)
-        cy.get('[data-cy=send-message]').click() // sending text message
-      })
-  },
-)
-
-Cypress.Commands.add('getReply', (messageReplied) => {
-  cy.get('[data-cy=chat-message]')
-    .contains(messageReplied)
-    .last()
-    .parent()
-    .parent()
-    .find('[data-cy=reply-preview]')
-    .as('reply-preview')
 })
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
@@ -361,6 +344,50 @@ Cypress.Commands.add(
       .should('exist')
   },
 )
+Cypress.Commands.add('validateCharlimit', (text, assert) => {
+  cy.get('.charlimit')
+    .should('be.visible')
+    .should('contain', text)
+    .then(($selector) => {
+      if (assert === true) {
+        cy.wrap($selector).should('have.class', 'is-error')
+      } else {
+        cy.wrap($selector).should('not.have.class', 'is-error')
+      }
+    })
+})
+
+// Chat - Replies Commands
+
+Cypress.Commands.add(
+  'chatFeaturesReplyMessage',
+  (receiver, selector, message) => {
+    cy.selectContextMenuOption(selector, 'Reply')
+    cy.get('.is-chatbar-reply')
+      .should('exist')
+      .should('include.text', 'Reply to')
+      .should('include.text', receiver)
+      .then(() => {
+        cy.get('[data-cy=editable-input]')
+          .should('be.visible')
+          .trigger('input')
+          .type(message)
+        cy.get('[data-cy=send-message]').click() // sending text message
+      })
+  },
+)
+
+Cypress.Commands.add('getReply', (messageReplied) => {
+  cy.get('[data-cy=chat-message]')
+    .contains(messageReplied)
+    .last()
+    .parent()
+    .parent()
+    .find('[data-cy=reply-preview]')
+    .as('reply-preview')
+})
+
+// Chat - Glyphs Commands
 
 Cypress.Commands.add(
   'chatFeaturesSendGlyph',
@@ -378,6 +405,12 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('goToLastGlyphOnChat', () => {
+  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('exist')
+})
+
+// Chat - Images Commands
+
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
@@ -394,6 +427,8 @@ Cypress.Commands.add('goToLastImageOnChat', () => {
   cy.get('[data-cy=chat-image]').last().scrollIntoView().should('exist')
 })
 
+// Chat - Send Files Commands
+
 Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
@@ -404,6 +439,8 @@ Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
   cy.get('[data-cy=send-message]').click() //sending file message
   cy.get('.preview', { timeout: 120000 }).should('not.exist')
 })
+
+// Chat - Context Menu Commands
 
 Cypress.Commands.add(
   'validateOptionNotInContextMenu',
@@ -443,6 +480,8 @@ Cypress.Commands.add('clickOutside', () => {
   cy.get('body').click(0, 0) //0,0 here are the x and y coordinates
 })
 
+// Chat - Page Load Commands
+
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
   cy.get('[data-cy=user-name]', { timeout: 360000 }).should('exist')
 })
@@ -468,7 +507,7 @@ Cypress.Commands.add('goToConversation', (user) => {
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=friend-name]', { timeout: 30000 })
+  cy.get('[data-cy=friend-name]', { timeout: 60000 })
     .contains(user)
     .parents('[data-cy=friend]')
     .find('[data-cy=friend-send-message]')
@@ -479,6 +518,8 @@ Cypress.Commands.add('goToConversation', (user) => {
     .should('be.visible')
     .should('have.text', user)
 })
+
+// Chat - Hover on Icon Commands
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator)
@@ -493,6 +534,22 @@ Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
   cy.wait(1000)
   cy.get('body').realHover({ position: 'topLeft' })
 })
+
+// Chat - URL Commands
+
+Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
+  let locatorURL = 'a[href="' + expectedURL + '"]'
+  cy.get(locatorURL)
+    .last()
+    .scrollIntoView()
+    .should('have.attr', 'href', expectedURL)
+    .should('have.attr', 'target', '_blank')
+    .then((link) => {
+      cy.request(link.prop('href')).its('status').should('eq', 200)
+    })
+})
+
+// Chat - Modals Commands
 
 Cypress.Commands.add('validateComingSoonModal', () => {
   cy.get('[data-cy=modal-cta]').should('be.visible')
@@ -514,18 +571,6 @@ Cypress.Commands.add('validateComingSoonModal', () => {
     "We're currently in our Alpha stage and working hard on building more features. Follow us on social media for updates on our launch.",
   ).should('be.visible')
   cy.contains('Keep Me Posted').should('be.visible')
-})
-
-Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
-  let locatorURL = 'a[href="' + expectedURL + '"]'
-  cy.get(locatorURL)
-    .last()
-    .scrollIntoView()
-    .should('have.attr', 'href', expectedURL)
-    .should('have.attr', 'target', '_blank')
-    .then((link) => {
-      cy.request(link.prop('href')).its('status').should('eq', 200)
-    })
 })
 
 Cypress.Commands.add('validateURLComingSoonModal', () => {
@@ -557,22 +602,7 @@ Cypress.Commands.add('closeModal', (locator) => {
   cy.get(locator).should('not.exist')
 })
 
-Cypress.Commands.add('goToLastGlyphOnChat', () => {
-  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('exist')
-})
-
-Cypress.Commands.add('validateCharlimit', (text, assert) => {
-  cy.get('.charlimit')
-    .should('be.visible')
-    .should('contain', text)
-    .then(($selector) => {
-      if (assert === true) {
-        cy.wrap($selector).should('have.class', 'is-error')
-      } else {
-        cy.wrap($selector).should('not.have.class', 'is-error')
-      }
-    })
-})
+// Chat - Reaction Commands
 
 Cypress.Commands.add('reactToChatElement', (elementLocator, emojiLocator) => {
   cy.selectContextMenuOption(elementLocator, 'Add Reaction')
@@ -589,6 +619,33 @@ Cypress.Commands.add(
       .should('contain', emojiValue)
   },
 )
+
+// Chat - Profile Notes Commands
+
+Cypress.Commands.add(
+  'addOrAssertProfileNote',
+  (noteText, action = 'assert') => {
+    cy.get('[data-cy=friend-chat-circle]').click()
+    cy.get('[data-cy=profile]').should('be.visible')
+    cy.contains('Add Note').should('be.visible')
+    cy.get('[data-cy=profile-add-note] > .cte-input').as('noteInput')
+    if (action === 'add') {
+      cy.get('@noteInput')
+        .click()
+        .clear()
+        .type(noteText + '{enter}')
+    } else {
+      cy.get('@noteInput')
+        .should('contain', noteText)
+        .click()
+        .clear()
+        .type('{enter}')
+    }
+    cy.get('[data-cy=profile]').find('.close-button').click()
+  },
+)
+
+// Chat - Search Commands
 
 Cypress.Commands.add('searchFromTextInChat', (text) => {
   cy.get('[data-cy=chat-search-input]')
@@ -628,6 +685,44 @@ Cypress.Commands.add('navigateThroughSearchResults', () => {
         cy.get('@firstButton').click()
       }
     })
+})
+
+// Chat - Files Commands
+
+Cypress.Commands.add('openFilesScreen', () => {
+  cy.get('[data-cy=sidebar-files]').click()
+  cy.get('[data-cy=files-screen]', { timeout: 30000 }).should('exist')
+})
+
+Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
+  //Click on list view
+  cy.get('[data-cy=files-view-list]').click()
+  cy.get('[data-cy=files-table]').should('be.visible')
+  //Assert on file or folder icon depending on parameters
+  if (type === 'file') {
+    cy.get('[data-cy=file-icon]').as('itemLocator')
+  } else {
+    cy.get('[data-cy=folder-icon]').as('itemLocator')
+  }
+  //Get the file/folder with same name from parameters and click on options
+  cy.get('@itemLocator')
+    .parents('[data-cy=files-item]')
+    .find('[data-cy=file-item-options]')
+    .click()
+
+  //Click on Rename from Context menu
+  cy.get('[data-cy=context-menu]').children().contains('Rename').click()
+
+  //Change name from file or folder and submit
+  cy.get('[data-cy=files-rename]')
+    .should('exist')
+    .find('[data-cy=input-group]')
+    .type(newName)
+  cy.get('[data-cy=files-rename]').find('[data-cy=submit-input]').click()
+
+  //Assert that file or folder name was changed
+  cy.contains('Rename is complete', { timeout: 30000 }).should('be.visible')
+  cy.get('[data-cy=file-item-name]').contains(newName)
 })
 
 //Version Release Notes Commands

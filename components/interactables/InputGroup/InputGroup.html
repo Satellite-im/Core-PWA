@@ -11,6 +11,7 @@
         :class="`input is-${size} is-${type}`"
         :readonly="readonly"
         :type="inputKind"
+        data-cy="input-group"
         :placeholder="placeholder"
         :maxLength="textLimit? limitCount : $Config.chat.maxChars"
         :disabled="disabled"
