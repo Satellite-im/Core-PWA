@@ -1,4 +1,5 @@
 import { matchSorter } from 'match-sorter'
+import { FileSortEnum } from '../Enums/enums'
 import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
@@ -12,6 +13,7 @@ import {
 } from './types/filesystem'
 import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
+import { FileSort } from '~/store/ui/types'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })
@@ -112,9 +114,7 @@ export class FilSystem {
    * @returns {Fil[]} most recent 15 files, sorted by modified date
    */
   get recentFiles(): Fil[] {
-    return this.flat
-      .sort((a: Fil, b: Fil) => b.modified - a.modified)
-      .slice(0, 14)
+    return this.flat.slice(0, 14)
   }
 
   /**
@@ -148,6 +148,36 @@ export class FilSystem {
    */
   get percentStorageUsed(): number {
     return (this.totalSize / Config.personalFilesLimit) * 100
+  }
+
+  /**
+   * @method sortContent
+   * @param {FileSort} sort current sort key and asc/desc boolean
+   * @param {Item[]} items to be sorted, will either be current directory or special list (recent)
+   * @returns {Item[]} array of sorted content
+   */
+  sortContent(sort: FileSort, items: Item[]): Item[] {
+    const key = sort.category
+    if (key === FileSortEnum.SIZE) {
+      return items.sort(
+        sort.asc
+          ? (a: Item, b: Item) => a[key] - b[key]
+          : (a: Item, b: Item) => b[key] - a[key],
+      )
+    }
+    if (key === FileSortEnum.MODIFIED) {
+      return items.sort(
+        sort.asc
+          ? (a: Item, b: Item) => b[key] - a[key]
+          : (a: Item, b: Item) => a[key] - b[key],
+      )
+    }
+
+    return items.sort(
+      sort.asc
+        ? (a: Item, b: Item) => a[key].localeCompare(b[key])
+        : (a: Item, b: Item) => b[key].localeCompare(a[key]),
+    )
   }
 
   /**

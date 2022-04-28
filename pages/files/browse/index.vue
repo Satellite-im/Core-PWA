@@ -35,11 +35,14 @@ export default Vue.extend({
     },
     directory(): Item[] {
       if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
-        return this.$data.counter && this.fileSystem.recentFiles
+        return (
+          this.$data.counter &&
+          this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
+        )
       }
       return (
         this.$data.counter &&
-        this.fileSystem.currentDirectory.sortedContent(this.sort)
+        this.fileSystem.sortContent(this.sort, this.fileSystem.content)
       )
     },
   },

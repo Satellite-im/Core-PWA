@@ -1,10 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
+import { Item } from '../abstracts/Item.abstract'
 import { Directory } from '../Directory'
 import { FileSystemErrors } from '../errors/Errors'
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILESYSTEM_TYPE } from '../types/filesystem'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 
 Date.now = jest.fn(() => 1645617999076)
 jest.mock('uuid')
@@ -779,6 +781,191 @@ describe('FilSystem.findItem', () => {
           expect(result).toMatchSnapshot()
         })
       })
+    })
+  })
+  describe('Filsystem sort', () => {
+    const filesystem = new FilSystem()
+    const directory = filesystem.createDirectory(mockDirectoryData)
+    it('Correctly sorts directory by size and ascending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'TestFile.png',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'TestFile2.png',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.SIZE,
+          asc: true,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
+    })
+    it('Correctly sorts directory by modified and ascending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'file1.jpg',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'file2.heic',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.MODIFIED,
+          asc: true,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
+    })
+    it('Correctly sorts directory by type and ascending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'file1.png',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'file2.png',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.TYPE,
+          asc: true,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
+    })
+    it('Correctly sorts directory by size and descending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'TestFile3.png',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'TestFile4.png',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.SIZE,
+          asc: false,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
+    })
+    it('Correctly sorts directory by modified and ascending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'file3.jpg',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'file4.heic',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.MODIFIED,
+          asc: false,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
+    })
+    it('Correctly sorts directory by type and ascending', () => {
+      directory?.addChild(
+        new Fil({
+          name: 'file3.png',
+          size: 4234,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      directory?.addChild(
+        new Fil({
+          name: 'file4.png',
+          size: 4235,
+          liked: false,
+          shared: false,
+          description: 'Test file description',
+          nsfw: false,
+        }),
+      )
+      const result: Item[] = filesystem.sortContent(
+        {
+          category: FileSortEnum.TYPE,
+          asc: false,
+        },
+        directory?.content,
+      )
+      expect(result).toMatchSnapshot()
     })
   })
 })
