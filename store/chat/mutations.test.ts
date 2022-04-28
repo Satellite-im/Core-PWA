@@ -1,7 +1,8 @@
-import * as mutations from '~/store/chat/mutations'
+import { ChatState } from './types'
+import * as module from '~/store/chat/mutations'
 import { UploadDropItemType } from '~/types/files/file'
 
-describe('mutations.default.setChatReply', () => {
+describe('module.default.setChatReply', () => {
   test('0', () => {
     const object2: any = [
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'elio@example.com' },
@@ -17,7 +18,7 @@ describe('mutations.default.setChatReply', () => {
       { replyId: 'da7588892', value: true },
       { replyId: 'da7588892', value: true },
     ]
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: object, chatTexts: object2 },
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
     )
@@ -31,7 +32,7 @@ describe('mutations.default.setChatReply', () => {
       { userId: 'da7588892', value: 'Dillenberg' },
     ]
     const object: any = [{ replyId: 'da7588892', value: true }]
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: object, chatTexts: object2 },
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     )
@@ -49,7 +50,7 @@ describe('mutations.default.setChatReply', () => {
       { replyId: '12345', value: false },
       { replyId: 'da7588892', value: true },
     ]
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: object, chatTexts: object2 },
       { replyId: '12345', value: false },
     )
@@ -66,7 +67,7 @@ describe('mutations.default.setChatReply', () => {
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
       { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
     ]
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: object, chatTexts: object2 },
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
     )
@@ -88,7 +89,7 @@ describe('mutations.default.setChatReply', () => {
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
       { replyId: '12345', value: true },
     ]
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: object, chatTexts: object2 },
       { replyId: 'da7588892', value: false },
     )
@@ -96,7 +97,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: [], chatTexts: [] },
       { replyId: '', value: false },
     )
@@ -104,7 +105,7 @@ describe('mutations.default.setChatReply', () => {
   })
 })
 
-describe('mutations.default.chatText', () => {
+describe('module.default.chatText', () => {
   test('0', () => {
     const object2: any = [
       { userId: '12345', value: 'elio@example.com' },
@@ -114,7 +115,7 @@ describe('mutations.default.chatText', () => {
       { replyId: '9876', value: false },
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     ]
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '12345', value: 'Elio' },
     )
@@ -134,7 +135,7 @@ describe('mutations.default.chatText', () => {
       { replyId: 'da7588892', value: true },
       { replyId: '12345', value: false },
     ]
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '9876', value: 'elio@example.com' },
     )
@@ -150,7 +151,7 @@ describe('mutations.default.chatText', () => {
     const object: any = [
       { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
     ]
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: '12345', value: 'elio@example.com' },
     )
@@ -170,7 +171,7 @@ describe('mutations.default.chatText', () => {
       { replyId: '9876', value: true },
       { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
     ]
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
     )
@@ -188,7 +189,7 @@ describe('mutations.default.chatText', () => {
       { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
       { replyId: '12345', value: false },
     ]
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: object, chatTexts: object2 },
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
     )
@@ -196,7 +197,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { replies: [], chatTexts: [] },
       { userId: '', value: '' },
     )
@@ -218,7 +219,7 @@ describe('misc', () => {
   const object3: UploadDropItemType[] = []
   const state = { replies: object, chatTexts: object2, files: object3 }
 
-  test('mutations.default.addFile with empty files array', () => {
+  test('module.default.addFile with empty files array', () => {
     const obj = {
       file: {
         file: 'path',
@@ -230,10 +231,10 @@ describe('misc', () => {
       },
       address: 'address1',
     }
-    mutations.default.addFile(state, obj)
+    module.default.addFile(state, obj)
     expect(state.files[obj.address]).toEqual([obj.file])
   })
-  test.skip('draft mutations.default.addFile with non-empty files array', () => {
+  test.skip('draft module.default.addFile with non-empty files array', () => {
     const state = {
       replies: object,
       chatTexts: object2,
@@ -256,10 +257,10 @@ describe('misc', () => {
       },
       address: 'address1',
     }
-    mutations.default.addFile(state, obj)
+    module.default.addFile(state, obj)
     expect(state.files[obj.address]).toEqual([obj.file])
   })
-  test('mutations.default.setFiles', () => {
+  test('module.default.setFiles', () => {
     const state = { replies: object, chatTexts: object2, files: object3 }
     const obj = {
       files: {
@@ -274,10 +275,10 @@ describe('misc', () => {
       address: 'address1',
     }
 
-    mutations.default.setFiles(state, obj)
+    module.default.setFiles(state, obj)
     expect(state.files[obj.address]).toEqual(obj.files)
   })
-  test('mutations.default.deleteFiles', () => {
+  test('module.default.deleteFiles', () => {
     const state = { replies: object, chatTexts: object2, files: object3 }
     const obj = {
       files: {
@@ -292,16 +293,16 @@ describe('misc', () => {
       address: 'address1',
     }
 
-    mutations.default.setFiles(state, obj)
+    module.default.setFiles(state, obj)
     expect(state.files[obj.address]).toEqual(obj.files)
-    mutations.default.deleteFiles(state, obj.address)
+    module.default.deleteFiles(state, obj.address)
     expect(state.files).not.toEqual(obj.files)
   })
 })
 
-describe('mutations.default.chatText', () => {
+describe('module.default.chatText', () => {
   test('0', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       {
         chatTexts: {
           some: () => false,
@@ -315,7 +316,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('1', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       {
         chatTexts: { some: () => true, map: () => 'George', concat: () => 32 },
       },
@@ -325,7 +326,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('2', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       {
         chatTexts: { some: () => false, map: () => 'George', concat: () => 0 },
       },
@@ -335,7 +336,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('3', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { chatTexts: { some: () => true, map: () => 'Anas', concat: () => 32 } },
       { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Elio' },
     )
@@ -343,7 +344,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('4', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { chatTexts: { some: () => false, map: () => 'Anas', concat: () => 64 } },
       { userId: 'da7588892', value: 'Dillenberg' },
     )
@@ -351,7 +352,7 @@ describe('mutations.default.chatText', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.chatText(
+    const result: any = module.default.chatText(
       { chatTexts: { some: () => false, map: () => '', concat: () => NaN } },
       { userId: '', value: '' },
     )
@@ -359,9 +360,9 @@ describe('mutations.default.chatText', () => {
   })
 })
 
-describe('mutations.default.setChatReply', () => {
+describe('module.default.setChatReply', () => {
   test('0', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       {
         replies: {
           some: () => false,
@@ -375,7 +376,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('1', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: { some: () => false, map: () => 'Anas', concat: () => 16 } },
       { replyId: '9876', value: 'elio@example.com' },
     )
@@ -383,7 +384,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('2', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: { some: () => false, map: () => 'Edmond', concat: () => 0 } },
       {
         replyId: 'c466a48309794261b64a4f02cfcc3d64',
@@ -394,7 +395,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('3', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       {
         replies: { some: () => false, map: () => 'Michael', concat: () => 64 },
       },
@@ -404,7 +405,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('4', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       {
         replies: {
           some: () => false,
@@ -421,7 +422,7 @@ describe('mutations.default.setChatReply', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.setChatReply(
+    const result: any = module.default.setChatReply(
       { replies: { some: () => false, map: () => '', concat: () => Infinity } },
       { replyId: '', value: '' },
     )
@@ -429,7 +430,7 @@ describe('mutations.default.setChatReply', () => {
   })
 })
 
-describe('mutations.default.addFile', () => {
+describe('module.default.addFile', () => {
   test('0', () => {
     const object: any = [
       ['index.js', 'index.js', 'image.png', 'program.exe'],
@@ -437,10 +438,7 @@ describe('mutations.default.addFile', () => {
       ['program.exe', 'image.png', 'image.png', 'install.deb'],
       ['script.py', 'install.deb', 'note.txt', 'image.png'],
     ]
-    const result: any = mutations.default.addFile(
-      { files: object },
-      'program.exe',
-    )
+    const result: any = module.default.addFile({ files: object }, 'program.exe')
     expect(result).toMatchSnapshot()
   })
 
@@ -451,10 +449,7 @@ describe('mutations.default.addFile', () => {
       ['script.py', 'image.png', 'install.deb', 'index.js'],
       ['note.txt', 'note.txt', 'program.exe', 'script.py'],
     ]
-    const result: any = mutations.default.addFile(
-      { files: object },
-      'script.py',
-    )
+    const result: any = module.default.addFile({ files: object }, 'script.py')
     expect(result).toMatchSnapshot()
   })
 
@@ -465,7 +460,7 @@ describe('mutations.default.addFile', () => {
       ['image.png', 'image.png', 'script.py', 'note.txt'],
       ['program.exe', 'script.py', 'note.txt', 'image.png'],
     ]
-    const result: any = mutations.default.addFile({ files: object }, 'index.js')
+    const result: any = module.default.addFile({ files: object }, 'index.js')
     expect(result).toMatchSnapshot()
   })
 
@@ -476,10 +471,7 @@ describe('mutations.default.addFile', () => {
       ['image.png', 'index.js', 'image.png', 'program.exe'],
       ['image.png', 'note.txt', 'index.js', 'script.py'],
     ]
-    const result: any = mutations.default.addFile(
-      { files: object },
-      'image.png',
-    )
+    const result: any = module.default.addFile({ files: object }, 'image.png')
     expect(result).toMatchSnapshot()
   })
 
@@ -490,20 +482,17 @@ describe('mutations.default.addFile', () => {
       ['script.py', 'program.exe', 'image.png', 'image.png'],
       ['install.deb', 'note.txt', 'index.js', 'program.exe'],
     ]
-    const result: any = mutations.default.addFile(
-      { files: object },
-      'install.deb',
-    )
+    const result: any = module.default.addFile({ files: object }, 'install.deb')
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    const result: any = mutations.default.addFile({ files: [] }, '')
+    const result: any = module.default.addFile({ files: [] }, '')
     expect(result).toMatchSnapshot()
   })
 })
 
-describe('mutations.default.deleteFiles', () => {
+describe('module.default.deleteFiles', () => {
   test('0', () => {
     const object: any = [
       ['image.png', 'install.deb', 'image.png', 'program.exe'],
@@ -606,7 +595,7 @@ describe('mutations.default.deleteFiles', () => {
     ]
     const object20: any = [object16, object17, object18, object19]
     const object21: any = [object5, object10, object15, object20]
-    const result: any = mutations.default.deleteFiles(
+    const result: any = module.default.deleteFiles(
       { files: object21 },
       '0.0.0.0',
     )
@@ -715,7 +704,7 @@ describe('mutations.default.deleteFiles', () => {
     ]
     const object20: any = [object16, object17, object18, object19]
     const object21: any = [object5, object10, object15, object20]
-    const result: any = mutations.default.deleteFiles(
+    const result: any = module.default.deleteFiles(
       { files: object21 },
       '0.0.0.0',
     )
@@ -824,7 +813,7 @@ describe('mutations.default.deleteFiles', () => {
     ]
     const object20: any = [object16, object17, object18, object19]
     const object21: any = [object5, object10, object15, object20]
-    const result: any = mutations.default.deleteFiles(
+    const result: any = module.default.deleteFiles(
       { files: object21 },
       '0.0.0.0',
     )
@@ -933,7 +922,7 @@ describe('mutations.default.deleteFiles', () => {
     ]
     const object20: any = [object16, object17, object18, object19]
     const object21: any = [object5, object10, object15, object20]
-    const result: any = mutations.default.deleteFiles(
+    const result: any = module.default.deleteFiles(
       { files: object21 },
       '0.0.0.0',
     )
@@ -1042,7 +1031,7 @@ describe('mutations.default.deleteFiles', () => {
     ]
     const object20: any = [object16, object17, object18, object19]
     const object21: any = [object5, object10, object15, object20]
-    const result: any = mutations.default.deleteFiles(
+    const result: any = module.default.deleteFiles(
       { files: object21 },
       '0.0.0.0',
     )
@@ -1050,7 +1039,45 @@ describe('mutations.default.deleteFiles', () => {
   })
 
   test('5', () => {
-    const result: any = mutations.default.deleteFiles({ files: [] }, '')
+    const result: any = module.default.deleteFiles({ files: [] }, '')
     expect(result).toMatchSnapshot()
+  })
+})
+
+describe('misc', () => {
+  const InitialChatState = (): ChatState => ({
+    replies: [],
+    chatTexts: [],
+    files: {},
+    countError: false,
+    alertNsfw: false,
+    containsNsfw: false,
+  })
+
+  test('module.setCountError', () => {
+    const argument = true
+    const localState = { ...InitialChatState }
+
+    module.default.setCountError(localState, argument)
+
+    expect(localState.countError).toEqual(argument)
+  })
+
+  test('module.setAlertNsfw', () => {
+    const argument = true
+    const localState = { ...InitialChatState }
+
+    module.default.setAlertNsfw(localState, argument)
+
+    expect(localState.alertNsfw).toEqual(argument)
+  })
+
+  test('module.setContainsNsfw', () => {
+    const argument = true
+    const localState = { ...InitialChatState }
+
+    module.default.setContainsNsfw(localState, argument)
+
+    expect(localState.containsNsfw).toEqual(argument)
   })
 })
