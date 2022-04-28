@@ -24,19 +24,19 @@ describe.skip('Chat - Sending Images Tests', () => {
     cy.goToLastImageOnChat()
   })
 
-  it('JPG image is sent succesfully on chat', () => {
+  it('JPG image is sent successfully on chat', () => {
     //Send JPG Image
     cy.chatFeaturesSendImage(jpgImagePath, 'jpeg-test.jpg')
     cy.goToLastImageOnChat()
   })
 
-  it('GIF image is sent succesfully on chat', () => {
+  it('GIF image is sent successfully on chat', () => {
     //Send GIF Image
     cy.chatFeaturesSendImage(gifImagePath, 'gif-test.gif')
     cy.goToLastImageOnChat()
   })
 
-  it.skip('Invalid image is not sent succesfully on chat', () => {
+  it.skip('Invalid image is not sent successfully on chat', () => {
     //Send Invalid Image
     cy.chatFeaturesSendImage(invalidImagePath, 'incorrect-image.png')
     cy.goToLastImageOnChat()
