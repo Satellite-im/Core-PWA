@@ -1,4 +1,5 @@
-import { Buckets, Identity, PushPathResult, Root, Links } from '@textile/hub'
+import { Buckets, Links, PushPathResult, Root } from '@textile/buckets'
+import { Identity } from '@textile/crypto'
 import { Config } from '~/config'
 import { TextileInitializationData } from '~/types/textile/manager'
 

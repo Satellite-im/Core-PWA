@@ -1,8 +1,10 @@
-import { encrypt, PublicKey, ThreadID } from '@textile/hub'
 import { web3 } from '@project-serum/anchor'
+import { PublicKey } from '@textile/crypto'
+import { ThreadID } from '@textile/threads-id'
 import { MetadataManager } from './MetadataManager'
 
-jest.mock('@textile/hub')
+jest.mock('@textile/crypto')
+jest.mock('@textile/threads-id')
 PublicKey.fromString.mockImplementation(() => {
   function encrypt(param) {
     return Buffer.from('Hello, World', 'utf8')

@@ -1,7 +1,8 @@
-import { Query, ThreadID } from '@textile/hub'
+import { Query } from '@textile/threads-client'
+import { ThreadID } from '@textile/threads-id'
 import { userinfoSchema } from './schema'
-import { TextileInitializationData } from '~/types/textile/manager'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { TextileInitializationData } from '~/types/textile/manager'
 import { UserdataFromThread } from '~/types/textile/user'
 
 const CollectionName = 'userInfo'

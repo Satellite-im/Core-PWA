@@ -1,7 +1,7 @@
 <template src="./Sample.html" />
 <script lang="ts">
 import Vue from 'vue'
-import * as loadImg from '~/assets/img/glyphLoader.png'
+import * as loadImg from '~/assets/img/glyphLoader.webp'
 
 export default Vue.extend({
   props: {

@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
-import loadImg from '~/assets/img/glyphLoader.png'
+import loadImg from '~/assets/img/glyphLoader.webp'
 
 export default Vue.extend({
   props: {

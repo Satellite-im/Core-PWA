@@ -233,6 +233,7 @@ export default defineNuxtConfig({
     },
     transpile: ['libp2p'],
     babel: {
+      plugins: ['lodash'],
       compact: true,
     },
   },

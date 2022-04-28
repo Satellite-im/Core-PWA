@@ -1,9 +1,18 @@
-import { Identity, PublicKey, ThreadID, Update } from '@textile/hub'
-import { Query } from '@textile/threads-client'
+import { Identity, PublicKey } from '@textile/crypto'
+import { Query, Update } from '@textile/threads-client'
+import { ThreadID } from '@textile/threads-id'
 import { isRight } from 'fp-ts/lib/Either'
 import { v4 as uuid } from 'uuid'
 import Vue from 'vue'
 import { messageEncoder } from './encoders'
+import Crypto from '~/libraries/Crypto/Crypto'
+import {
+  EncodingTypesEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
+import { groupChatSchema } from '~/libraries/Textile/schema'
+import { AccountsError } from '~/store/accounts/types'
 import {
   ConversationQuery,
   Message,
@@ -13,14 +22,6 @@ import {
   MessageTypes,
 } from '~/types/textile/mailbox'
 import { TextileInitializationData } from '~/types/textile/manager'
-import {
-  EncodingTypesEnum,
-  MessagingTypesEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
-import { groupChatSchema } from '~/libraries/Textile/schema'
-import Crypto from '~/libraries/Crypto/Crypto'
-import { AccountsError } from '~/store/accounts/types'
 
 export class GroupChatManager {
   private _threadID?: ThreadID
