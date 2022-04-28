@@ -721,8 +721,7 @@ Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
   cy.get('[data-cy=files-rename]').find('[data-cy=submit-input]').click()
 
   //Assert that file or folder name was changed
-  cy.contains('Rename is complete', { timeout: 30000 }).should('be.visible')
-  cy.get('[data-cy=file-item-name]').contains(newName)
+  cy.contains(newName, { timeout: 30000 }).should('be.visible')
 })
 
 //Version Release Notes Commands
