@@ -1,16 +1,10 @@
 <template src="./Aside.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { SimpleItem } from '~/types/ui/sidebar'
 import { FileAsideRouteEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
-  props: {
-    active: {
-      type: String as PropType<FileAsideRouteEnum>,
-      required: true,
-    },
-  },
   data() {
     return {
       progress: this.$FileSystem.percentStorageUsed as number,
