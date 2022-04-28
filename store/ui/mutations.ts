@@ -1,17 +1,16 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
+  FileSort,
   Flair,
-  Theme,
-  UIState,
+  Position,
   RecentGlyph,
   SettingsRoutes,
-  Position,
-  FileSort,
+  Theme,
+  UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
@@ -341,10 +340,19 @@ export default {
     })
   },
   sendNotification(state: UIState, notification: Alert) {
+    state.unseenNotifications++
     state.notifications.push(notification)
   },
   setNotifications(state: UIState, notifications: Array<Alert>) {
     state.notifications = notifications
+  },
+  seenNotificationCount(state: UIState) {
+    state.unseenNotifications = 0
+    state.notifications.forEach((noti) => {
+      if (noti.state === AlertState.UNREAD) {
+        state.unseenNotifications++
+      }
+    })
   },
   clearAllNotifications(state: UIState) {
     state.notifications.forEach((notification) => {
@@ -355,6 +363,7 @@ export default {
     state.notifications.filter((item) => {
       if (item.id === notificationId) {
         item.state = AlertState.READ
+        state.unseenNotifications--
       }
       return state.notifications
     })

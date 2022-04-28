@@ -32,8 +32,6 @@ export default Vue.extend({
   },
   methods: {
     dismiss() {
-      console.log(this.$props.alert.id)
-      // this.$Alerts.delete(this.$props.alert.id)
       this.$store.dispatch('ui/removeSeenNotification', this.$props.alert.id)
       this.$data.hidden = true
       setTimeout(() => {
