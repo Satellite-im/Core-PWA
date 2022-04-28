@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { sortBy } from 'lodash'
 import {
   UsersIcon,
@@ -58,6 +58,7 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['ui', 'dataState', 'media', 'friends', 'textile', 'groups']),
+    ...mapGetters(['allPrerequisitesReady']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers

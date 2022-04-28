@@ -9,11 +9,22 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
   setup() {
     useMeta()
+  },
+  computed: {
+    ...mapState(['textile']),
+    // Helper method for prettier loading messages
+    loadingStep(): string {
+      switch (this.getActiveAccount) {
+        default:
+          return this.$i18n.t('user.loading.loading_account').toString()
+      }
+    },
   },
 })
 </script>

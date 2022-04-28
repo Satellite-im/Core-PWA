@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { cloneDeep } from 'lodash'
 import { DataStateType } from '~/store/dataState/types'
 
@@ -28,6 +28,7 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['friends', 'dataState']),
+    ...mapGetters(['allPrerequisitesReady']),
     alphaSortedFriends() {
       return getAlphaSorted(this.friends.all)
     },

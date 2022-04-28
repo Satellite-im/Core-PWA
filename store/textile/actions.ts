@@ -50,6 +50,7 @@ export default {
     { commit }: ActionsArguments<TextileState>,
     config: TextileConfig,
   ) {
+    console.log('initialize')
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     await $TextileManager.init(config)
@@ -57,6 +58,8 @@ export default {
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
     commit('textileInitialized', true)
+
+    console.log('initialized')
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
     const fsExport = $TextileManager.bucket?.index

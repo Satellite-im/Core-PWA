@@ -22,6 +22,8 @@ export default function ({ store, route, redirect }: Arguments) {
   const { locked, phrase } = store.state.accounts
   const { allPrerequisitesReady } = store.getters
 
+  console.log('authenticated.ts')
+
   const eventuallyRedirect = memoize(
     (path: string) => {
       if (route.path === path) return
@@ -46,7 +48,7 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!allPrerequisitesReady) return eventuallyRedirect('/')
+  // if (!allPrerequisitesReady) return eventuallyRedirect('/')
 
   store.commit('accounts/setLastVisited', route.path)
 }

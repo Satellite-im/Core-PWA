@@ -63,7 +63,12 @@
         >
           <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
         </div>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div
+          v-if="dataState.friends === DataStateType.Loading || !allPrerequisitesReady"
+        >
+          <UiLoadersFriend :count="5" />
+        </div>
+        <div v-else>
           <div v-for="entry in Object.entries(alphaSortedFriends)">
             <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
             <FriendsFriend
@@ -78,9 +83,6 @@
           >
             <UiLoadersUpdating />
           </div>
-        </div>
-        <div v-else>
-          <UiLoadersFriend :count="5" />
         </div>
         <div
           v-if="Object.entries($mock.blocked).length && featureReadyToShow"

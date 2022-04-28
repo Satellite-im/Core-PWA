@@ -21,19 +21,13 @@ export default Vue.extend({
   computed: {
     ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
     ...mapGetters(['allPrerequisitesReady']),
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'textile']),
     // Helper method for prettier loading messages
     loadingStep(): string {
       switch (this.getActiveAccount) {
         default:
           return this.$i18n.t('user.loading.loading_account').toString()
       }
-    },
-  },
-  watch: {
-    allPrerequisitesReady(nextValue) {
-      if (!nextValue) return
-      this.eventuallyRedirect()
     },
   },
   mounted() {
@@ -69,11 +63,15 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
+        console.log('loadAccount')
+        this.eventuallyRedirect()
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
+          console.log('USER_NOT_REGISTERED')
           this.$router.replace('/auth/register')
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
+          console.log('USER_DERIVATION_FAILED')
           this.$router.replace('/setup/disclaimer')
         }
       }
