@@ -27,6 +27,7 @@
       class="image-preview"
       :class="{'blur-image' : item.nsfw && blockNsfw}"
       :src="item.thumbnail"
+      draggable="false"
     />
   </div>
   <div v-else class="icon-container">
