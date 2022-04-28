@@ -17,9 +17,15 @@ export default Vue.extend({
     }
   },
   computed: {
+    /**
+     * @description total size of all uploaded files
+     */
     totalSize(): string {
       return this.$filesize(this.$FileSystem.totalSize)
     },
+    /**
+     * @description storage space (free tier is 4GB)
+     */
     sizeLimit(): string {
       return this.$filesize(this.$Config.personalFilesLimit)
     },

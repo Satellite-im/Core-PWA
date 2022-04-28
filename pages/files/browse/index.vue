@@ -47,6 +47,7 @@ export default Vue.extend({
     '$route.query.route': {
       handler(value) {
         this.fileSystem.goBackToDirectory('root')
+        // if invalid route, reset to default
         if (!Object.values(FileAsideRouteEnum).includes(value)) {
           this.$router.push({ query: {} })
         }

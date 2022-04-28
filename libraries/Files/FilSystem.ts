@@ -98,18 +98,18 @@ export class FilSystem {
   }
 
   /**
-   * @getter flatFiles
+   * @getter flat
    * @returns {Fil[]} flattened list of files
    */
   get flat(): Fil[] {
-    return this._flatDeepByKey(this._self.content, 'content').filter(
+    return this._flatDeepByKey(this.root.content, 'content').filter(
       (item: Item) => item instanceof Fil,
     )
   }
 
   /**
-   * @getter flatFiles
-   * @returns {Fil[]} flattened list of most recent 15 files
+   * @getter recentFiles
+   * @returns {Fil[]} most recent 15 files, sorted by modified date
    */
   get recentFiles(): Fil[] {
     return this.flat
@@ -119,8 +119,9 @@ export class FilSystem {
 
   /**
    * @method _flatDeepByKey
-   * @description recursively converts item to the proper format for export
-   * @param {}
+   * @description recursively flattens all directories
+   * @param {Item[]} data current directory items (starting with root, then calls itself when a child dir is found)
+   * @param {keyof Directory} key in this case, 'content' getter
    * @returns {Item[]} flattened list of files and directories
    */
   private _flatDeepByKey(data: Item[], key: keyof Directory) {

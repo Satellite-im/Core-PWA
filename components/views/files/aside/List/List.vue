@@ -38,6 +38,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    /**
+     * @method setActive
+     * @description set files page route (default, recent, deleted, etc...)
+     * @param {FileAsideRouteEnum} route clicked route string value
+     */
     setActive(route: FileAsideRouteEnum) {
       if (!route) {
         this.$router.push({ query: {} })
@@ -45,7 +50,13 @@ export default Vue.extend({
       }
       this.$router.push({ query: { route } })
     },
+    /**
+     * @method isActiveRoute
+     * @description used to set active css class on list
+     * @param {FileAsideRouteEnum} route clicked route string value
+     */
     isActiveRoute(route: FileAsideRouteEnum) {
+      // if default route
       if (!this.$route.query.route && !route) {
         return true
       }
