@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
 import { ModalWindows } from '~/store/ui/types'
 import { User } from '~/types/ui/user'
@@ -46,6 +46,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters(['allPrerequisitesReady']),
     ModalWindows: () => ModalWindows,
   },
   created() {

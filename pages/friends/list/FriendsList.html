@@ -11,7 +11,8 @@
         <!-- Friends Add -->
         <FriendsAdd />
         <!-- Friend Requests -->
-        <template v-if="friends.incomingRequests.length">
+        <UiLoadersFriend :count="1" v-if="!allPrerequisitesReady" />
+        <template v-else-if="friends.incomingRequests.length">
           <div class="padded_divider">
             <TypographyHorizontalRuleText
               plaintext
@@ -33,7 +34,8 @@
           />
         </template>
         <!-- Outgoing Requests -->
-        <template v-if="friends.outgoingRequests.length">
+        <UiLoadersFriend :count="1" v-if="!allPrerequisitesReady" />
+        <template v-else-if="friends.outgoingRequests.length">
           <div class="padded_divider">
             <TypographyHorizontalRuleText
               plaintext
@@ -63,7 +65,12 @@
         >
           <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
         </div>
-        <div v-if="dataState.friends !== DataStateType.Loading">
+        <div
+          v-if="dataState.friends === DataStateType.Loading || !allPrerequisitesReady"
+        >
+          <UiLoadersFriend :count="5" />
+        </div>
+        <div v-else>
           <div v-for="entry in Object.entries(alphaSortedFriends)">
             <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
             <FriendsFriend
@@ -78,9 +85,6 @@
           >
             <UiLoadersUpdating />
           </div>
-        </div>
-        <div v-else>
-          <UiLoadersFriend :count="5" />
         </div>
         <div
           v-if="Object.entries($mock.blocked).length && featureReadyToShow"

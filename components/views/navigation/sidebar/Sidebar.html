@@ -41,7 +41,7 @@
           <users-icon size="1.2x" />
         </InteractablesButton>
         <span
-          v-if="friends.incomingRequests.length"
+          v-if="friends.incomingRequests.length && allPrerequisitesReady"
           :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
         >
           {{friends.incomingRequests.length}}
@@ -93,9 +93,12 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div
-          v-if="dataState.friends !== DataStateType.Loading && users && users.length"
-        >
+        <UiLoadersAddress
+          v-if="dataState.friends === DataStateType.Loading || !allPrerequisitesReady"
+          :count="4"
+          inverted
+        />
+        <div v-else-if="users && users.length">
           <UiInlineNotification
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
@@ -111,10 +114,7 @@
             <GroupClickable v-else :group="thing" :key="thing.id" />
           </div>
         </div>
-        <div
-          v-else-if="dataState.friends !== DataStateType.Loading && !users.length"
-          class="mascot-container"
-        >
+        <div v-else class="mascot-container">
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
           <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
           <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
@@ -127,7 +127,6 @@
             <user-plus-icon size="1.2x" />
           </InteractablesButton>
         </div>
-        <UiLoadersAddress v-else :count="4" inverted />
       </UiScroll>
     </div>
   </div>

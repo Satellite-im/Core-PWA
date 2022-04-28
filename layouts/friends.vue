@@ -125,6 +125,7 @@ export default Vue.extend({
     },
     ...mapState(['friends', 'groups', 'dataState']),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
+    ...mapGetters(['allPrerequisitesReady']),
   },
   watch: {
     showSidebar(newValue, oldValue) {
@@ -138,6 +139,14 @@ export default Vue.extend({
       if (newValue !== oldValue) {
         this.$refs.swiper.$swiper.slideTo(newValue)
       }
+    },
+    allPrerequisitesReady(val) {
+      if (!val) {
+        return
+      }
+      console.log('allPrerequisitesReady', val)
+      this.$store.dispatch('friends/initialize', {}, { root: true })
+      this.$store.dispatch('groups/initialize', {}, { root: true })
     },
   },
   methods: {
