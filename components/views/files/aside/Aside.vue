@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { SimpleItem } from '~/types/ui/sidebar'
-import { FileAsideRouteEnum } from '~/libraries/Enums/enums'
+import { FileAsideRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   data() {
@@ -31,22 +31,22 @@ export default Vue.extend({
         {
           text: this.$t('pages.files.aside.default'),
           route: FileAsideRouteEnum.DEFAULT,
-          icon: 'folder',
+          icon: FileIconsEnum.FOLDER,
         },
         {
           text: this.$t('pages.files.aside.recent'),
           route: FileAsideRouteEnum.RECENT,
-          icon: 'clock',
+          icon: FileIconsEnum.CLOCK,
         },
         {
           text: this.$t('pages.files.aside.deleted'),
           route: FileAsideRouteEnum.DELETED,
-          icon: 'trash',
+          icon: FileIconsEnum.TRASH,
         },
         {
           text: this.$t('pages.files.aside.favorited'),
           route: FileAsideRouteEnum.FAVORITED,
-          icon: 'heart',
+          icon: FileIconsEnum.HEART,
         },
       ]
     },
@@ -55,12 +55,12 @@ export default Vue.extend({
         {
           text: this.$t('pages.files.aside.shared_folders'),
           route: FileAsideRouteEnum.SHARED,
-          icon: 'folder',
+          icon: FileIconsEnum.FOLDER,
         },
         {
           text: this.$t('pages.files.aside.links'),
           route: FileAsideRouteEnum.LINKS,
-          icon: 'link',
+          icon: FileIconsEnum.LINK,
         },
       ]
     },
