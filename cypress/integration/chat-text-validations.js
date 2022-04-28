@@ -3,6 +3,8 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
+const randomMessage = faker.lorem.sentence() // generate random sentence
+const randomURL = faker.internet.url() // generate random url
 let urlToValidate = 'https://www.satellite.im'
 let urlToValidateTwo = 'http://www.satellite.im'
 let urlToValidateThree = 'www.satellite.im'
@@ -100,5 +102,59 @@ describe('Chat Text and Sending Links Validations', () => {
       .last()
       .scrollIntoView()
       .should('not.have.attr', 'href', urlToValidateThree)
+  })
+
+  it('User should be able to use markdown "*" to make a word italic in chat', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '*')
+  })
+
+  it('User should be able to use markdown "_" to make a word italic in chat', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '_')
+  })
+
+  it('User should be able to use markdown "**" to make a word bold in chat', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '**')
+  })
+
+  it('User should be able to use markdown "__" to put an underscore on a word in chat', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '__')
+  })
+
+  it('User should be able to use "" to escape in chat', () => {
+    cy.sendMessageWithEscapeOrAutolink('*To Do')
+    cy.get('[data-cy=chat-message]')
+      .last()
+      .scrollIntoView()
+      .should('have.text', '*To Do')
+  })
+
+  it('User should be able to use "\\" to write a single "" in chat', () => {
+    cy.sendMessageWithEscapeOrAutolink('\\*To Do')
+    cy.get('[data-cy=chat-message]')
+      .last()
+      .scrollIntoView()
+      .should('have.text', '*To Do')
+  })
+
+  it('User should be able to use markdown ` to code with single', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '`')
+  })
+
+  it('User should be able to use markdown "***" to use combined bold/italics', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '***')
+  })
+
+  it('User should be able to use markdown "~~" to put a strikethrough a word in chat', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '~~')
+  })
+
+  it('User should use markdown "<>" to insert an autolink', () => {
+    let locatorURL = 'a[href="' + randomURL + '"]'
+    cy.sendMessageWithEscapeOrAutolink('<' + randomURL + '>')
+    cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
+  })
+
+  it('User should use markdown "||" to insert an spoiler', () => {
+    cy.sendMessageWithMarkdown(randomMessage, '||')
   })
 })
