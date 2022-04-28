@@ -19,6 +19,7 @@
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "test": "jest",
+    "summary": "jest test --coverage --coverageReporters=text-summary",
     "cy:run": "cypress run --browser chrome headless",
     "cy:first": "cypress run --config-file cypress-first-user.json",
     "cy:second": "cypress run --config-file cypress-second-user.json",
