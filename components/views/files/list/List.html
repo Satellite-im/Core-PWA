@@ -4,14 +4,20 @@
   :class="{'disabled' : isFilesIndexLoading}"
 >
   <thead>
-    <th @click="setSort(FileSortEnum.NAME)">
+    <th
+      @click="!$route.query.route && setSort(FileSortEnum.NAME)"
+      :class="{'disabled' : $route.query.route}"
+    >
       {{ $t('pages.files.browse.name') }}
       <template v-if="sort.category===FileSortEnum.NAME && !$route.query.route">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
-    <th @click="setSort(FileSortEnum.MODIFIED)">
+    <th
+      @click="!$route.query.route && setSort(FileSortEnum.MODIFIED)"
+      :class="{'disabled' : $route.query.route}"
+    >
       {{ $t('pages.files.browse.modified') }}
       <template
         v-if="sort.category===FileSortEnum.MODIFIED && !$route.query.route"
@@ -22,8 +28,9 @@
     </th>
     <th
       v-if="!$device.isMobile"
-      @click="setSort(FileSortEnum.TYPE)"
+      @click="!$route.query.route && setSort(FileSortEnum.TYPE)"
       class="open-sidebar-hide"
+      :class="{'disabled' : $route.query.route}"
     >
       {{ $t('pages.files.browse.type') }}
       <template v-if="sort.category===FileSortEnum.TYPE && !$route.query.route">
@@ -31,7 +38,11 @@
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
-    <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
+    <th
+      @click="!$route.query.route && setSort(FileSortEnum.SIZE)"
+      class="open-sidebar-hide"
+      :class="{'disabled' : $route.query.route}"
+    >
       {{ $t('pages.files.browse.size') }}
       <template v-if="sort.category===FileSortEnum.SIZE && !$route.query.route">
         <chevron-up-icon v-if="sort.asc" size="1x" />
@@ -41,7 +52,7 @@
     <th />
   </thead>
   <tbody>
-    <FilesRow
+    <FilesListRow
       v-for="item, i in directory"
       :key="i + counter"
       :item="item"
