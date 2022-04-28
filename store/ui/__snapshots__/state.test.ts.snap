@@ -43,7 +43,6 @@ Object {
   },
   "glyphModalPack": "",
   "hoveredGlyphInfo": undefined,
-  "isLoadingFileIndex": false,
   "isReacted": false,
   "isScrollOver": false,
   "isTyping": false,

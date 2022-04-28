@@ -139,12 +139,15 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
-      rename: 'Rename is complete',
+      status: {
+        prepare: 'Preparing files for upload',
+        upload: 'Uploading {0}',
+        delete: 'Deleting {0}',
+        index: 'Updating remote index',
+      },
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        upload: 'Uploading {0}',
-        index: 'Updating remote index',
       },
       browse: {
         files: 'Files',

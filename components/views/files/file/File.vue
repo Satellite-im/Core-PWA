@@ -1,7 +1,7 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
@@ -52,6 +52,7 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       blockNsfw: (state) => (state as RootState).settings.blockNsfw,
     }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns {string} if directory, child count. if file, size
      */

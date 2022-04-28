@@ -5,8 +5,8 @@
     type="primary"
     v-model="text"
     :action="rename"
-    :loading="ui.isLoadingFileIndex"
-    :disabled="ui.isLoadingFileIndex"
+    :loading="isFilesIndexLoading"
+    :disabled="isFilesIndexLoading"
     ref="inputGroup"
   >
     <save-icon size="1.3x" />

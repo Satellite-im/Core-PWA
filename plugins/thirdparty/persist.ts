@@ -31,7 +31,6 @@ const commonProperties = [
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',
-  'ui.isLoadingFileIndex',
   'chat.files',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',

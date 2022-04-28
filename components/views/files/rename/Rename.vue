@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
@@ -23,6 +23,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   mounted() {
     this.text = this.ui.renameCurrentName
@@ -54,10 +55,12 @@ export default Vue.extend({
         return
       }
       this.closeModal()
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.$toast.show(this.$t('pages.files.rename') as string)
+      this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },
 })

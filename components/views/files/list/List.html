@@ -1,4 +1,4 @@
-<table class="table" :class="{'disabled' : ui.isLoadingFileIndex}">
+<table class="table" :class="{'disabled' : isFilesIndexLoading}">
   <thead>
     <th @click="setSort(FileSortEnum.NAME)">
       {{ $t('pages.files.browse.name') }}

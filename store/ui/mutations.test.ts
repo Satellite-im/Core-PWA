@@ -3098,11 +3098,6 @@ describe('mutations', () => {
     mutations.default.setChatbarFocus(localizedState, true)
     expect(localizedState.chatbarFocus).toBeTruthy()
   })
-  test('setIsLoadingFileIndex', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setIsLoadingFileIndex(localizedState, false)
-    expect(localizedState.isLoadingFileIndex).toBeFalsy()
-  })
   test('setRenameItem', () => {
     const localizedState = { ...initialState }
     mutations.default.setRenameItem(localizedState, 'new name')

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`init should return the isLoadingFileIndex property of the initial state 1`] = `false`;
+exports[`init should return the isFilesIndexLoading property of the initial state 1`] = `false`;
 
 exports[`init should return the showSidebar property of the initial state 1`] = `true`;
 
