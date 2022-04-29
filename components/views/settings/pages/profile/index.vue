@@ -24,7 +24,6 @@ export default Vue.extend({
     return {
       profileInfo: sampleProfileInfo,
       croppedImage: '',
-      showCropper: false,
       featureReadyToShow: false,
     }
   },
@@ -43,6 +42,9 @@ export default Vue.extend({
       const hash = this.accounts.details.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    showCropper(): boolean {
+      return this.ui.modals[ModalWindows.CROP]
+    },
   },
   methods: {
     /**
@@ -51,7 +53,6 @@ export default Vue.extend({
      * @example
      */
     toggleCropper() {
-      this.showCropper = !this.showCropper
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.CROP,
         state: !this.ui.modals[ModalWindows.CROP],
