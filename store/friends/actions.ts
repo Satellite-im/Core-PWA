@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
-import PeerId from 'peer-id'
+import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
@@ -11,25 +11,21 @@ import {
   FriendStatus,
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import UsersProgram, {
-  UserInfo,
-} from '~/libraries/Solana/UsersProgram/UsersProgram'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import { MetadataManager } from '~/libraries/Textile/MetadataManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
-import {
-  Friend,
-  FriendRequest,
-  IncomingRequest,
-  OutgoingRequest,
-} from '~/types/ui/friends'
+import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
+import Hounddog from '~/utilities/Hounddog'
 import { DataStateType } from '../dataState/types'
 import { TextileError } from '../textile/types'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
+  friendAccountToIncomingRequest,
+  friendAccountToOutgoingRequest,
   FriendsError,
   FriendsState,
 } from './types'
@@ -40,25 +36,11 @@ export default {
     commit,
     state,
   }: ActionsArguments<FriendsState>) {
-    const $Hounddog = Vue.prototype.$Hounddog
-
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
-
-    const friends = await db.friends.toArray()
-    db.search.friends.update(friends)
-    friends.forEach((friend) => {
-      const friendExists = $Hounddog.friendExists(state, friend)
-
-      if (!friendExists) {
-        commit('addFriend', { ...friend, stored: true })
-        return
-      }
-      commit('updateFriend', { ...friend, stored: true })
-    })
 
     commit(
       'dataState/setDataState',
@@ -124,18 +106,11 @@ export default {
       FriendStatus.ACCEPTED,
     )
 
-    const allFriendsData = [...incoming, ...outgoing]
-
-    await Promise.all(
-      allFriendsData.map(async (friendData) => {
-        dispatch('fetchFriendDetails', friendData)
-      }),
-    )
-
-    // // Attempt RTC Connection to all friends
-    // // TODO: We should probably only try to connect to friends we're actually chatting with
-    // // If they call us we'll accept their connection
-    // dispatch('webrtc/startup', allFriendsData, { root: true })
+    // Concat incoming and outgoing friends into a single array
+    // and fetch user info for each friend
+    incoming
+      .concat(outgoing)
+      .forEach((friendData) => dispatch('fetchFriendDetails', friendData))
 
     commit(
       'dataState/setDataState',
@@ -158,6 +133,7 @@ export default {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
+    const $Hounddog: Hounddog = Vue.prototype.$Hounddog
 
     // Check if the request was originally sent by the current user (outgoing)
     // and then accepted, or the other way round
@@ -182,13 +158,14 @@ export default {
       throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
     }
 
-    const peerId = await PeerId.createFromPubKey(
+    const peerId = await createFromPubKey(
       keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
         new PublicKey(friendKey).toBytes(),
       ).bytes,
     )
 
-    const stored = state.all.some((friend) => friend.address === friendKey)
+    const friendExists = $Hounddog.friendExists(state, friendKey)
+
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
       name: userInfo.name,
@@ -198,27 +175,19 @@ export default {
       textilePubkey,
       item: {},
       pending: false,
-      stored,
+      stored: friendExists,
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
       peerId: peerId.toB58String(),
     }
-    const $Hounddog = Vue.prototype.$Hounddog
-    const friendExists = $Hounddog.friendExists(state, friend)
 
     if (!friendExists) {
       commit('addFriend', friend)
 
       // Eventually delete the related friend request
-      commit(
-        'removeIncomingRequest',
-        friendAccountToIncomingRequest(friendAccount, null).requestId,
-      )
-      commit(
-        'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(friendAccount, null).requestId,
-      )
+      commit('removeIncomingRequest', friendAccount.accountId)
+      commit('removeOutgoingRequest', friendAccount.accountId)
       dispatch('syncFriendIDB', friend)
       return
     }
@@ -284,7 +253,7 @@ export default {
    * @param param1 an object containing the recipient address and metadata
    */
   async updateFriendMetadata(
-    { commit, rootState, dispatch }: ActionsArguments<FriendsState>,
+    { commit, rootState }: ActionsArguments<FriendsState>,
     { to, metadata }: { to: string; metadata: FriendMetadata },
   ) {
     const friend = rootState.friends.all.find((fr) => fr.address === to)
@@ -334,58 +303,47 @@ export default {
     friendsProgram.addEventListener(
       FriendsEvents.NEW_REQUEST,
       async (account) => {
-        if (account) {
-          const userInfo = await usersProgram.getUserInfo(account.from)
-          commit(
-            'addIncomingRequest',
-            friendAccountToIncomingRequest(account, userInfo),
-          )
-        }
+        if (!account) return
+        const userInfo = await usersProgram.getUserInfo(account.from)
+        commit(
+          'addIncomingRequest',
+          friendAccountToIncomingRequest(account, userInfo),
+        )
       },
     )
 
     friendsProgram.addEventListener(FriendsEvents.NEW_FRIEND, (account) => {
-      if (account) {
-        dispatch('fetchFriendDetails', account)
-      }
+      if (!account) return
+      dispatch('fetchFriendDetails', account)
     })
 
-    friendsProgram.addEventListener(
-      FriendsEvents.REQUEST_DENIED,
-      async (account) => {
-        if (account) {
-          commit(
-            'removeOutgoingRequest',
-            friendAccountToOutgoingRequest(account, null).requestId,
-          )
-        }
-      },
-    )
+    friendsProgram.addEventListener(FriendsEvents.REQUEST_DENIED, (account) => {
+      if (!account) return
+      commit('removeOutgoingRequest', account.accountId)
+      dispatch('closeAccount', account.accountId).catch((e) => console.error(e))
+    })
 
     friendsProgram.addEventListener(
       FriendsEvents.REQUEST_REMOVED,
       (account) => {
-        if (account) {
-          commit(
-            'removeIncomingRequest',
-            friendAccountToIncomingRequest(account, null).requestId,
-          )
-        }
+        if (!account) return
+        commit('removeIncomingRequest', account.accountId)
       },
     )
 
-    friendsProgram.addEventListener(
-      FriendsEvents.FRIEND_REMOVED,
-      async (account) => {
-        if (account) {
-          const address =
-            rootState.accounts.active === account.from
-              ? account.to
-              : account.from
-          commit('removeFriend', address)
-        }
-      },
-    )
+    friendsProgram.addEventListener(FriendsEvents.FRIEND_REMOVED, (account) => {
+      if (!account) return
+
+      const sentByMe = rootState.accounts.active === account.from
+      const address = sentByMe ? account.to : account.from
+      commit('removeFriend', address)
+
+      if (sentByMe) {
+        dispatch('closeAccount', account.accountId).catch((e) =>
+          console.error(e),
+        )
+      }
+    })
   },
   setFriendState(
     { commit }: ActionsArguments<FriendsState>,
@@ -423,13 +381,15 @@ export default {
       friendToKey,
     )
 
-    let friendAccountInfo = await friendsProgram.getAccount(accountKeys.request)
+    const accountStatus = await friendsProgram.getAccountStatus(
+      accountKeys.request,
+    )
 
-    if (friendAccountInfo?.status === FriendStatus.PENDING) {
+    if (accountStatus === FriendStatus.PENDING) {
       throw new Error(FriendsError.REQUEST_ALREADY_SENT)
     }
 
-    if (friendAccountInfo?.status === FriendStatus.ACCEPTED) {
+    if (accountStatus === FriendStatus.ACCEPTED) {
       throw new Error(FriendsError.REQUEST_ALREADY_ACCEPTED)
     }
 
@@ -442,30 +402,31 @@ export default {
       textilePublicKey,
     )
 
-    const tx = await friendsProgram.makeRequest(
+    await friendsProgram.makeRequest(
       accountKeys.request,
       accountKeys.first,
       accountKeys.second,
       encryptedTextilePublicKey,
     )
 
-    if (tx) {
-      friendAccountInfo = await friendsProgram.getAccount(accountKeys.request)
-      if (friendAccountInfo) {
-        const userInfo = await usersProgram.getUserInfo(friendAccountInfo.to)
-        commit(
-          'addOutgoingRequest',
-          friendAccountToOutgoingRequest(friendAccountInfo, userInfo),
-        )
-      }
+    const friendAccountInfo = await friendsProgram.getAccount(
+      accountKeys.request,
+    )
+
+    if (friendAccountInfo) {
+      const userInfo = await usersProgram.getUserInfo(friendAccountInfo.to)
+      commit(
+        'addOutgoingRequest',
+        friendAccountToOutgoingRequest(friendAccountInfo, userInfo),
+      )
     }
   },
 
   /**
-   * @method acceptFriendRequest DocsTODO
-   * @description
-   * @param friendRequest
-   * @param textileMailboxId
+   * @method acceptFriendRequest
+   * @description Accept a friend request
+   * @param friendRequest The friend request to accept
+   * @param textileMailboxId  The textile mailbox id of the user accepting the request
    * @example
    */
   async acceptFriendRequest(
@@ -485,36 +446,52 @@ export default {
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
-    const { account } = friendRequest
+    const { account, requestId } = friendRequest
 
-    const friendAccountKey = new PublicKey(friendRequest.requestId)
+    const friendAccountKey = new PublicKey(requestId)
 
-    const friendCheck = await friendsProgram.getAccount(friendAccountKey)
-    if (friendCheck?.status === FriendStatus.ACCEPTED) {
-      return
-    }
-    // Initialize current recipient for encryption
-    await $Crypto.initializeRecipient(new PublicKey(account.from))
-
-    // Encrypt textile mailbox id for the recipient
-    const encryptedTextilePublicKey = await $Crypto.encryptFor(
-      account.from,
-      textilePublicKey,
-    )
-
-    const tx = await friendsProgram.acceptRequest(
+    const accountStatus = await friendsProgram.getAccountStatus(
       friendAccountKey,
-      encryptedTextilePublicKey,
     )
 
-    if (tx) {
-      dispatch('fetchFriendDetails', account)
+    switch (accountStatus) {
+      case FriendStatus.PENDING: {
+        // Initialize current recipient for encryption
+        await $Crypto.initializeRecipient(new PublicKey(account.from))
+
+        // Encrypt textile mailbox id for the recipient
+        const encryptedTextilePublicKey = await $Crypto.encryptFor(
+          account.from,
+          textilePublicKey,
+        )
+
+        await friendsProgram.acceptRequest(
+          friendAccountKey,
+          encryptedTextilePublicKey,
+        )
+
+        // Request has been successfully accepted
+        // fetch the friend details
+        dispatch('fetchFriendDetails', account)
+
+        break
+      }
+      case FriendStatus.ACCEPTED: {
+        // Request was already accepted
+        // fetch the friend details
+        dispatch('fetchFriendDetails', account)
+
+        break
+      }
+      default: {
+        break
+      }
     }
   },
   /**
-   * @method denyFriendRequest DocsTODO
-   * @description
-   * @param friendRequest
+   * @method denyFriendRequest
+   * @description Deny a friend request
+   * @param friendRequest The friend request to deny
    * @example
    */
   async denyFriendRequest(
@@ -533,24 +510,19 @@ export default {
 
     commit('updateIncomingRequest', { ...friendRequest, pending: true })
 
-    const { account } = friendRequest
+    const { requestId } = friendRequest
 
-    const friendAccountKey = new PublicKey(friendRequest.requestId)
+    const friendAccountKey = new PublicKey(requestId)
 
-    const tx = await friendsProgram.denyRequest(friendAccountKey)
+    await friendsProgram.denyRequest(friendAccountKey)
 
-    if (tx) {
-      commit(
-        'removeIncomingRequest',
-        friendAccountToIncomingRequest(account, null).requestId,
-      )
-    }
+    commit('removeIncomingRequest', requestId)
   },
 
   /**
-   * @method removeFriendRequest DocsTODO
-   * @description
-   * @param friendRequest
+   * @method removeFriendRequest
+   * @description Remove a friend request
+   * @param friendRequest The friend request to remove
    * @example
    */
   async removeFriendRequest(
@@ -569,23 +541,18 @@ export default {
 
     commit('updateOutgoingRequest', { ...friendRequest, pending: true })
 
-    const { account } = friendRequest
-    const friendAccountKey = new PublicKey(friendRequest.requestId)
+    const { requestId } = friendRequest
+    const friendAccountKey = new PublicKey(requestId)
 
-    const tx = await friendsProgram.removeRequest(friendAccountKey)
+    await friendsProgram.removeRequest(friendAccountKey)
 
-    if (tx) {
-      commit(
-        'removeOutgoingRequest',
-        friendAccountToOutgoingRequest(account, null).requestId,
-      )
-    }
+    commit('removeOutgoingRequest', requestId)
   },
 
   /**
-   * @method removeFriend DocsTODO
-   * @description
-   * @param friend
+   * @method removeFriend
+   * @description Remove a friend
+   * @param friend  The friend to remove
    * @example
    */
   async removeFriend(
@@ -604,31 +571,23 @@ export default {
 
     const { account, address } = friend
 
-    const tx = await friendsProgram.removeFriend(
-      new PublicKey(account.accountId),
-    )
+    await friendsProgram.removeFriend(new PublicKey(account.accountId))
 
-    if (tx) {
-      commit('removeFriend', address)
-      if (this.app.router.currentRoute?.params?.address === address) {
-        this.app.router.replace('/chat/direct')
-      }
-      await db.friends.where('address').equals(address).delete()
+    commit('removeFriend', friend.address)
+    if (this.app.router.currentRoute?.params?.address === address) {
+      this.app.router.replace('/chat/direct')
     }
+    await db.friends.where('address').equals(address).delete()
   },
 
   /**
-   * @method closeFriendRequest DocsTODO
-   * @description
-   * @param friendRequest
+   * @method closeAccount
+   * @description Close a friend request
+   * @param accountId The account id of the friend to close
    * @example
    */
-  async closeFriendRequest(
-    {}: ActionsArguments<FriendsState>,
-    friendRequest: OutgoingRequest,
-  ) {
+  async closeAccount({}: ActionsArguments<FriendsState>, accountId: string) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-
     const payerAccount = await $SolanaManager.getActiveAccount()
 
     if (!payerAccount) {
@@ -637,51 +596,8 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const friendAccountKey = new PublicKey(friendRequest.requestId)
+    const friendAccountKey = new PublicKey(accountId)
 
     await friendsProgram.closeRequest(friendAccountKey)
   },
-}
-
-/**
- * Utility function that converts a FriendAccount
- * into an strongly typed IncomingRequest
- * @param friendAccount the FriendAccount data
- * @returns IncomingRequest object
- */
-function friendAccountToIncomingRequest(
-  friendAccount: FriendAccount,
-  userInfo: UserInfo | null,
-): IncomingRequest {
-  return {
-    requestId: friendAccount.accountId,
-    from: friendAccount.from,
-    account: friendAccount,
-    pending: false,
-    userInfo,
-  }
-}
-
-/**
- * Utility function that converts a FriendAccount
- * into an strongly typed OutgoingRequest
- * @param friendAccount the FriendAccount data
- * @returns OutgoingRequest object
- */
-function friendAccountToOutgoingRequest(
-  friendAccount: FriendAccount,
-  userInfo: UserInfo | null,
-): OutgoingRequest {
-  return {
-    requestId: friendAccount.accountId,
-    to: friendAccount.to,
-    account: friendAccount,
-    pending: false,
-    userInfo,
-  }
-}
-
-export const exportForTesting = {
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
 }

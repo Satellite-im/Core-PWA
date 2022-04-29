@@ -73,11 +73,11 @@ export default class Hounddog {
    * Determine the existence of a friend
    * @name friendExists
    * @argument state Object that contains an array that will be searched for an active chat
-   * @argument friend Friend profile that will be used as the identifier in the search query
+   * @argument address Address of the friend you are looking for
    * @returns True if friend is found (exists), False if friend is not found (does not exist)
    */
-  friendExists(state: FriendsState, friend: Friend): Boolean {
-    return state.all.some((fr: Friend) => fr.address === friend.address)
+  friendExists(state: FriendsState, address: string): Boolean {
+    return state.all.some((fr: Friend) => fr.address === address)
   }
 
   /** @function

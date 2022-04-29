@@ -12,6 +12,7 @@ import {
   KeyedAccountInfo,
   PublicKey,
   SystemProgram,
+  Transaction,
 } from '@solana/web3.js'
 import base58 from 'micro-base58'
 import { Friends, IDL } from './FriendsProgram.idl'
@@ -241,6 +242,48 @@ export default class FriendsProgram extends EventEmitter {
   }
 
   /**
+   * @method removeFriendAndCloseAccount
+   * Remove friend and close friend request account
+   * @param request friend request account public key
+   * @param closeAccountAndRefund original sender public key to refund after closing the account
+   */
+  async removeFriendAndCloseAccount(
+    request: PublicKey,
+    closeAccountAndRefund?: PublicKey,
+  ) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const removeFriendInstruction = program.instruction.removeFriend({
+      accounts: {
+        request,
+        user: payer.publicKey,
+      },
+      signers: [payer],
+    })
+
+    const atomicTransaction = new Transaction()
+
+    atomicTransaction.add(removeFriendInstruction)
+
+    if (closeAccountAndRefund) {
+      const closeRequestInstruction = program.instruction.closeRequest({
+        accounts: {
+          request,
+          user: payer.publicKey,
+          payer: closeAccountAndRefund,
+        },
+        signers: [payer],
+      })
+
+      atomicTransaction.add(closeRequestInstruction)
+    }
+
+    return program.provider.send(atomicTransaction)
+  }
+
+  /**
    * @method computeAccountKeys
    * Computes the friend account public key from 2 given public keys
    * @param from the public key to be used at position 0
@@ -352,6 +395,22 @@ export default class FriendsProgram extends EventEmitter {
       return this._parseAccount({ publicKey: accountKey, account })
     } catch (error) {
       return null
+    }
+  }
+
+  /**
+   * @method getAccountStatus
+   * Retrieves a friend account from a given public key
+   * @param accountKey the public key of the friend account
+   * @returns the account status code
+   */
+  async getAccountStatus(accountKey: PublicKey) {
+    const program = this._getProgram()
+    try {
+      const account = await program.account.friendRequest.fetch(accountKey)
+      return this._parseAccount({ publicKey: accountKey, account }).status
+    } catch (error) {
+      return FriendStatus.UNINITALIZED
     }
   }
 
