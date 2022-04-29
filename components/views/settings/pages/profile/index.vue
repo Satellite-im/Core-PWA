@@ -7,6 +7,7 @@ import { mapState } from 'vuex'
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { AccountsState } from '~/store/accounts/types'
+import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -23,7 +24,6 @@ export default Vue.extend({
     return {
       profileInfo: sampleProfileInfo,
       croppedImage: '',
-      showCropper: false,
       featureReadyToShow: false,
     }
   },
@@ -42,6 +42,9 @@ export default Vue.extend({
       const hash = this.accounts.details.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    showCropper(): boolean {
+      return this.ui.modals[ModalWindows.CROP]
+    },
   },
   methods: {
     /**
@@ -50,7 +53,10 @@ export default Vue.extend({
      * @example
      */
     toggleCropper() {
-      this.showCropper = !this.showCropper
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.CROP,
+        state: !this.ui.modals[ModalWindows.CROP],
+      })
     },
     /**
      * @method openFileDialog DocsTODO

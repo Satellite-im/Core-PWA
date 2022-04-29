@@ -36,6 +36,7 @@ const InitialUIState = (): UIState => ({
     groupInvite: { isOpen: false },
     callToAction: false,
     renameFile: false,
+    crop: false,
   },
   glyphModalPack: '',
   chatbarContent: '',
