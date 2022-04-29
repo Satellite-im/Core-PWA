@@ -12,6 +12,23 @@ exports[`SearchUtil.default.filterSearchRecommendResult 4 1`] = `Array []`;
 
 exports[`SearchUtil.default.filterSearchRecommendResult 5 1`] = `Array []`;
 
+exports[`SearchUtil.default.filterSearchRecommendResult 6 1`] = `Array []`;
+
+exports[`SearchUtil.default.filterSearchRecommendResult 7 1`] = `
+Array [
+  Object {
+    "command": "has",
+    "value": Object {
+      "address": "address",
+      "avatar": "avatar",
+      "key": "key",
+      "name": "name",
+      "value": "value",
+    },
+  },
+]
+`;
+
 exports[`SearchUtil.default.getCommandMeta 0 1`] = `
 Object {
   "description": "specific date",
