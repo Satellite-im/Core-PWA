@@ -17,7 +17,6 @@ export default Vue.extend({
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
-      activeRoute: FileAsideRouteEnum.DEFAULT as FileAsideRouteEnum,
     }
   },
   computed: {
