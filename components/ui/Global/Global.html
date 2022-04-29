@@ -64,19 +64,21 @@
   </UiModal>
   <UiModal
     v-if="ui.modals.userProfile"
-    :close-modal="() => toggleModal(ModalWindows.USERPROFILE)"
+    :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
     nopad
-    v-click-outside="() => toggleModal(ModalWindows.USERPROFILE)"
+    v-click-outside="() => toggleModal(ModalWindows.USER_PROFILE)"
   >
-    <UserProfile :close-modal="() => toggleModal(ModalWindows.USERPROFILE)" />
+    <UserProfile :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)" />
   </UiModal>
   <UiModal
     v-if="ui.modals.callToAction"
-    :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)"
+    :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     nopad
-    v-click-outside="() => toggleModal(ModalWindows.CALLTOACTION)"
+    v-click-outside="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
   >
-    <CallToAction :close-modal="() => toggleModal(ModalWindows.CALLTOACTION)" />
+    <CallToAction
+      :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+    />
   </UiModal>
   <UiModal
     v-if="ui.modals.renameFile"

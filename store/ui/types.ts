@@ -100,8 +100,8 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USERPROFILE = 'userProfile',
-  CALLTOACTION = 'callToAction',
+  USER_PROFILE = 'userProfile',
+  CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
   CROP = 'crop',
 }
