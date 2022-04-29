@@ -187,7 +187,6 @@ const SearchUtil = {
       if (searchCommandTypeParam !== false) {
         const recommendItem =
           recommends[(searchCommandTypeParam as SearchCommandTypeParam).key]
-        console.log(1, recommends, searchCommandTypeParam)
         if (recommendItem) {
           recommendItem.every((value) => {
             if (
