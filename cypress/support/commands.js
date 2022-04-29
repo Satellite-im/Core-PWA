@@ -724,6 +724,72 @@ Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
   cy.contains(newName, { timeout: 30000 }).should('be.visible')
 })
 
+// Chat - Markdown Commands
+
+Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
+  let pastePayload = markdown + text + markdown
+  // Write the text message
+  cy.get('[data-cy=editable-input]')
+    .should('be.visible')
+    .trigger('input')
+    .paste({
+      pasteType: 'text',
+      pastePayload: pastePayload,
+    })
+  // Assert the text message is displayed before sending
+  cy.get('[data-cy=editable-input]')
+    .should('have.text', pastePayload)
+    .then(() => {
+      cy.get('[data-cy=send-message]').click() //sending text message
+    })
+  // Wait until loading indicator disappears
+  cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should('not.exist')
+  // Depending on the markdown passed, assert the text from the corresponding HTML tag
+  if (markdown === '*' || markdown === '_') {
+    cy.get('em').last().should('have.text', text)
+  } else if (markdown === '**') {
+    cy.get('strong').last().should('have.text', text)
+  } else if (markdown === '__') {
+    cy.get('u').last().should('have.text', text)
+  } else if (markdown === '`') {
+    cy.get('code').last().should('have.text', text)
+  } else if (markdown === '***') {
+    cy.get('strong')
+      .last()
+      .should('have.text', text)
+      .parent('em') // Assert that text have a parent EM HTML tag
+      .should('exist')
+  } else if (markdown === '~~') {
+    cy.get('del').last().should('have.text', text)
+  } else if (markdown === '||') {
+    cy.get('.spoiler')
+      .last()
+      .should('not.have.class', 'spoiler-open')
+      .click() // Assert that after clicking the spoiler, text is displayed
+      .should('have.class', 'spoiler-open')
+      .and('have.text', text)
+  }
+})
+
+Cypress.Commands.add('sendMessageWithEscapeOrAutolink', (textWithMarkdown) => {
+  // Write the text message
+  cy.get('[data-cy=editable-input]')
+    .should('be.visible')
+    .trigger('input')
+    .paste({
+      pasteType: 'text',
+      pastePayload: textWithMarkdown,
+    })
+  // Assert the text message is displayed before sending
+  cy.get('[data-cy=editable-input]')
+    .should('have.text', textWithMarkdown)
+    .then(() => {
+      cy.get('[data-cy=send-message]').click() //sending text message
+    })
+  // Wait until loading indicator disappears
+  cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should('not.exist')
+})
+
 //Version Release Notes Commands
 
 Cypress.Commands.add('releaseNotesScreenValidation', () => {
