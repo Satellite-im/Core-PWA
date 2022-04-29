@@ -223,7 +223,7 @@ describe('Chat Features Tests', () => {
     cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
   })
 
-  it('Chat - Files - Rename Files', () => {
+  it.skip('Chat - Files - Rename Files', () => {
     //Open files screen and rename existing file
     cy.openFilesScreen()
     cy.renameFileOrFolder('test-file-' + randomNumber, 'file')
