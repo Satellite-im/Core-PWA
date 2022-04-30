@@ -13,7 +13,7 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
+describe('Chat features with two accounts', () => {
   it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
