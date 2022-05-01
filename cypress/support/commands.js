@@ -698,7 +698,7 @@ Cypress.Commands.add('navigateThroughSearchResults', () => {
 
 Cypress.Commands.add('openFilesScreen', () => {
   cy.get('[data-cy=sidebar-files]').click()
-  cy.get('[data-cy=files-screen]', { timeout: 30000 }).should('exist')
+  cy.get('[data-cy=files-screen]', { timeout: 60000 }).should('exist')
 })
 
 Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {

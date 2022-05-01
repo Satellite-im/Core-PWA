@@ -40,7 +40,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.createAccountSubmit()
     })
 
-    it(`Import Account on ${item.description}`, () => {
+    it.skip(`Import Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
       //Validate profile name displayed
@@ -50,7 +50,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.goToConversation('cypress friend')
     })
 
-    it(`Chat Features on ${item.description}`, () => {
+    it.skip(`Chat Features on ${item.description}`, () => {
       //Setting viewport
       cy.viewport(item.width, item.height)
 

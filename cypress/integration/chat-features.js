@@ -210,7 +210,7 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 
-  it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
+  it.skip('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
     //Search for a random number and assert results
     cy.searchFromTextInChat(randomNumber)
     cy.assertFirstMatchOnSearch(randomNumber)
