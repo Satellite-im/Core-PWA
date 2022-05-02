@@ -121,6 +121,20 @@ describe('init', () => {
     })
   })
 
+  it('should setProfilePicture', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: {
+        profilePicture: 'https://satellite.im/images/logo.webp',
+      },
+    })
+  })
+
   it('should setUserDetails', () => {
     const localStateForUnitTest = { ...state }
     const newDetails = {
