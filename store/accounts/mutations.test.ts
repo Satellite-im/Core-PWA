@@ -30,6 +30,8 @@ describe('init', () => {
     },
     registrationStatus: RegistrationStatus.UNKNOWN,
     lastVisited: 'lastVisited',
+    initialized: false,
+    registry: false,
   }
 
   beforeEach(() => {
@@ -116,6 +118,20 @@ describe('init', () => {
 
     expect(localStateForUnitTest).toMatchObject({
       active: 'aktif',
+    })
+  })
+
+  it('should setProfilePicture', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: {
+        profilePicture: 'https://satellite.im/images/logo.webp',
+      },
     })
   })
 
