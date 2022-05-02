@@ -32,8 +32,8 @@ export default Vue.extend({
   methods: {
     toggleModal() {
       this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALLTOACTION,
-        state: !this.ui.modals[ModalWindows.CALLTOACTION],
+        name: ModalWindows.CALL_TO_ACTION,
+        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
     },
     /**

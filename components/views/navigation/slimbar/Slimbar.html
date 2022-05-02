@@ -3,7 +3,7 @@
     <div
       v-if="horizontal"
       class="circle-group"
-      @click="toggleModal(ModalWindows.CALLTOACTION)"
+      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
@@ -76,7 +76,7 @@
       v-if="!horizontal"
       class="circle-group has-tooltip-right has-tooltip-primary"
       :data-tooltip="$t('servers.new_server')"
-      @click="toggleModal(ModalWindows.CALLTOACTION)"
+      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
