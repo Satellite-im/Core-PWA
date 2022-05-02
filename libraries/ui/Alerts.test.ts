@@ -30,7 +30,6 @@ describe('test alert methods', () => {
     const alertToBeMarked = state.find(
       (e) => e.state === Alerts.AlertState.UNREAD,
     ) // Select a message that has not been read
-
     const result: any = inst.mark(Alerts.AlertState.READ, alertToBeMarked!.id!)
     const updatedPublicStore = inst.all
     const markedAlert = updatedPublicStore.find((alert) => {

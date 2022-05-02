@@ -76,7 +76,7 @@ export class NotificationManager {
    * @returns returns the textile response
    */
   async sendNotification(payload: {
-    from: String
+    from: string
     id: string
     message: string
     imageHash: string
