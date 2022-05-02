@@ -22,7 +22,6 @@ export default Vue.extend({
   data() {
     return {
       localAlert: this.$props.alert,
-      notificationInfo: this.$props.notification,
       hidden: false,
       AlertType,
     }

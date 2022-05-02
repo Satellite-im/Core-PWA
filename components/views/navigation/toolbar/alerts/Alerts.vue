@@ -15,7 +15,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      allNotifications: [],
       alerts: this.$Alerts.all,
       allSeen: true,
     }

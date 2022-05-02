@@ -30,14 +30,14 @@
       >
 
         <UiCircle
-          v-if='ui.unseenNotifications'
+          v-if='allUnseenNotifications.length'
           v-on:click='toggleAlerts'
           class='notification-alert'
           :size='15'
           color='red'
           :type='"icon"'
-          :data='ui.unseenNotifications'>
-          {{ui.unseenNotifications}}
+          :data='allUnseenNotifications.length'>
+          {{allUnseenNotifications.length}}
         </UiCircle>
         <bell-icon
           v-on:click='toggleAlerts'
