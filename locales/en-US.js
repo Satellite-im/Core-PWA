@@ -139,6 +139,7 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
+      item_count: '0 items | 1 item | {count} items',
       status: {
         prepare: 'Preparing files for upload',
         upload: 'Uploading {0}',
