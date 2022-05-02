@@ -7,8 +7,8 @@ export enum AlertType {
   FILE_UPLOADED = 'FILE_UPLOADED',
   FILE_NSFW = 'FILE_NSFW',
   DEV = 'DEV',
-  DIRECT_MESSAGE = 'directMessage',
-  GROUP_MESSAGE = 'groupMessage',
+  DIRECT_MESSAGE = 'Direct Message',
+  GROUP_MESSAGE = 'Group Message',
   MENTIONS_NOTIFICATION = 'mentionNotification',
   ACCOUNT_NOTIFICATION = 'accountNotification',
   APPLICATION_NOTIFICATION = 'applicationNotification',
@@ -25,6 +25,7 @@ export type Alert = {
   id?: string
   state?: AlertState
   type: AlertType
+  from: string
   content: {
     title: string
     description: string
@@ -42,34 +43,7 @@ export type AlertTemplate = {
 }
 
 export class Alerts {
-  private _alerts: Alert[] = [
-    {
-      at: Date.now(),
-      id: uuidv4(),
-      state: AlertState.UNREAD,
-      type: AlertType.DEV,
-      content: {
-        title: 'ATTN:// Cortana',
-        description:
-          "This is a test message to use for building alerts, it's meaningless and just for demo purposes.",
-        image:
-          'http://forums.windowscentral.com/attachments/cortana/61269d1396509365t-cortana.jpg',
-      },
-    },
-    {
-      at: Date.now(),
-      id: uuidv4(),
-      state: AlertState.READ,
-      type: AlertType.DEV,
-      content: {
-        title: 'TX:// Guilty Spark',
-        description:
-          'This is a another meaningless test alert message. Ignore me please.',
-        image:
-          'https://www.giantbomb.com/a/uploads/square_small/0/5150/340231-46172909_343gs.jpg',
-      },
-    },
-  ]
+  private _alerts: Alert[] = []
 
   /**
    * @getter all

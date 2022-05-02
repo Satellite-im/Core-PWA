@@ -4,8 +4,7 @@
 import Vue, { PropType } from 'vue'
 
 import { mapState } from 'vuex'
-import { Alert, AlertState } from '~/libraries/ui/Alerts'
-import { AppNotification } from '~/types/ui/notifications'
+import { Alert, AlertType } from '~/libraries/ui/Alerts'
 
 export default Vue.extend({
   props: {
@@ -25,6 +24,7 @@ export default Vue.extend({
       localAlert: this.$props.alert,
       notificationInfo: this.$props.notification,
       hidden: false,
+      AlertType,
     }
   },
   computed: {

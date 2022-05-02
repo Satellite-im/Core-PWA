@@ -20,7 +20,7 @@
     </div>
     <!--Alert description-->
     <div class="description">
-      <TypographyText :text="localAlert.content.description" />
+      <TypographyText v-if="localAlert.type === AlertType.DIRECT_MESSAGE" :text="localAlert.from + $t('messaging.user_sent.user', {msgType: localAlert.type})" />
     </div>
   </div>
   <InteractablesClose :action="dismiss" />

@@ -1,4 +1,4 @@
-import { Identity, PrivateKey, Query, ThreadID, Update } from '@textile/hub'
+import { Identity, Query, ThreadID, Update } from '@textile/hub'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
@@ -90,6 +90,7 @@ export class NotificationManager {
         description: payload.message,
       },
       state: AlertState.UNREAD,
+      from: payload.from,
       type: payload.type,
       at: Date.now(),
       id: payload.id,

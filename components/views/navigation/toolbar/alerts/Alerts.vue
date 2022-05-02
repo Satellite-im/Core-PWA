@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import { Alert } from '~/libraries/ui/Alerts'
 
 export default Vue.extend({
@@ -19,9 +20,15 @@ export default Vue.extend({
       allSeen: true,
     }
   },
+  computed: {
+    ...mapState(['ui']),
+  },
   methods: {
     syncAlerts(alerts: PropType<Array<Alert>>) {
       this.$data.alerts = alerts
+    },
+    clearNotifications() {
+      this.$store.dispatch('ui/clearAllNotifications')
     },
   },
 })

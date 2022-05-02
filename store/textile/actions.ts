@@ -34,6 +34,7 @@ import {
 } from '~/types/search/search'
 import { UIState } from '~/store/ui/types'
 import InitialUIState from '~/store/ui/state'
+import { AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
@@ -245,11 +246,11 @@ export default {
       dispatch(
         'ui/sendNotification',
         {
-          message: `New message from ${sender.name}`,
-          from: message.from,
-          title: `New message`,
+          message: 'New DM',
+          from: sender.name,
+          title: `Notification`,
           image: sender.photoHash,
-          type: NotificationTypes.DIRECT_MESSAGE,
+          type: AlertType.DIRECT_MESSAGE,
         },
         { root: true },
       )

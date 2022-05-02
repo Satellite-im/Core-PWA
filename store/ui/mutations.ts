@@ -358,6 +358,7 @@ export default {
     state.notifications.forEach((notification) => {
       notification.state = AlertState.READ
     })
+    state.unseenNotifications = 0
   },
   notificationSeen(state: UIState, notificationId: string) {
     state.notifications.filter((item) => {
