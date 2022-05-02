@@ -32,6 +32,7 @@ declare module 'vue/types/vue' {
     clearChatbar: Function
     handleChatBorderRadius: Function
     files: UploadDropItemType[]
+    onRecipientChangeResetUploadState: Function
   }
 }
 export default Vue.extend({
@@ -155,9 +156,9 @@ export default Vue.extend({
       deep: true,
     },
     'recipient.address': {
-      handler() {
+      handler(value) {
         const findItem = this.chat.chatTexts.find(
-          (item: any) => item.userId === this.$props.recipient?.address,
+          (item: any) => item.userId === value,
         )
         const message = findItem ? findItem.value : ''
         this.$refs.editable?.resetHistory()
@@ -171,6 +172,8 @@ export default Vue.extend({
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
         }
+
+        this.onRecipientChangeResetUploadState(value)
       },
     },
   },
@@ -379,6 +382,12 @@ export default Vue.extend({
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$store.commit('chat/setContainsNsfw', false)
       this.$store.commit('chat/setCountError', false)
+    },
+    onRecipientChangeResetUploadState(recipient: string) {
+      this.$data.files = this.getFiles(recipient)
+      this.$store.commit('chat/setContainsNsfw', false)
+      this.$store.commit('chat/setCountError', false)
+      this.$store.commit('chat/setAlertNsfw', false)
     },
     beforeDestroy() {
       this.unsubscribe()
