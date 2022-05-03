@@ -38,16 +38,9 @@
     >
       <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
         <div
-          ref="emojiInvoker"
-          slot="emoji-invoker"
-          slot-scope="{ events: { click: clickEvent }, display, emojis }"
-          v-bind:events.click="clickEvent"
-          @click.stop="clickEvent"
-        />
-        <div
           slot="emoji-picker"
           ref="emojiPicker"
-          slot-scope="{ emojis, insert, display }"
+          slot-scope="{ emojis, insert }"
         >
           <div class="emoji-picker">
             <div class="emoji-picker__search">

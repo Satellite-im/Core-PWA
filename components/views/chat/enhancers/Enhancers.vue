@@ -11,7 +11,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     convertRem: (value: string) => number
     toggleEnhancers: () => void
-    openEmoji: () => void
     clickEvent: () => void
     resetSearch: () => void
   }
@@ -54,8 +53,6 @@ export default Vue.extend({
             show: true,
             route: newRoute,
           })
-        } else if (newRoute === 'emotes') {
-          this.openEmoji()
         }
         this.resetSearch()
       },
@@ -63,37 +60,13 @@ export default Vue.extend({
   },
   watch: {
     route() {
-      this.openEmoji()
       this.resetSearch()
     },
-    'ui.enhancers.show'(value) {
-      if (value) {
-        this.openEmoji()
-        return
-      }
+    'ui.enhancers.show'() {
       this.resetSearch()
     },
-  },
-  mounted() {
-    this.openEmoji()
   },
   methods: {
-    /**
-     * @method openEmoji DocsTODO
-     * @description
-     * @param
-     * @example
-     */
-    openEmoji() {
-      if (this.route !== 'emotes') return
-      this.$nextTick(() => {
-        setTimeout(() => {
-          /* For avoid double toggle of emoji Invoker */
-          // @ts-ignore
-          if (!this.$refs.emojiPicker) this.$refs.emojiInvoker?.click()
-        }, 0)
-      })
-    },
     /**
      * @method addEmoji
      * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
