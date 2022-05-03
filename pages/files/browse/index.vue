@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
@@ -20,6 +21,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters(['allPrerequisitesReady']),
     sort: {
       set(value: FileSort) {
         this.$store.commit('ui/setFileSort', value)

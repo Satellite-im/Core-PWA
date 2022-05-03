@@ -333,8 +333,6 @@ export default {
 
     await db.initializeSearchIndexes()
 
-    console.log('startup')
-
     const { pin } = state
     if (!textileInitialized && pin) {
       dispatch(
@@ -347,8 +345,6 @@ export default {
         { root: true },
       )
     }
-
-    console.log('textile/initialize end')
 
     if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
       dispatch(
@@ -366,11 +362,7 @@ export default {
       )
     }
 
-    console.log('webrtc/initialize end')
-
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
-    // dispatch('friends/initialize', {}, { root: true })
-    // dispatch('groups/initialize', {}, { root: true })
   },
 }
 

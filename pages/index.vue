@@ -63,15 +63,12 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
-        console.log('loadAccount')
         this.eventuallyRedirect()
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          console.log('USER_NOT_REGISTERED')
           this.$router.replace('/auth/register')
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          console.log('USER_DERIVATION_FAILED')
           this.$router.replace('/setup/disclaimer')
         }
       }
