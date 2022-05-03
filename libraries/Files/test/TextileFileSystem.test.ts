@@ -1,5 +1,6 @@
 import 'url-polyfill'
 import 'jsdom-worker'
+import fs from 'fs'
 import Vue from 'vue'
 import { TextileFileSystem } from '../TextileFileSystem'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -7,6 +8,7 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 Vue.prototype.$TextileManager = new TextileManager()
 
 describe('', () => {
+  Vue.prototype.$TextileManager = new TextileManager()
   const TMConstructor = Vue.prototype.$TextileManager
   TMConstructor.bucket = jest.fn()
   TMConstructor.bucket.removeFile = jest.fn()
@@ -39,6 +41,38 @@ describe('', () => {
     }
 
     await inst.uploadFile(testFile, nsfw, cbFunction)
+    expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
+  })
+
+  test.skip('TextileFileSystem.uploadFile for heic file', async () => {
+    const buffer = fs.readFileSync('utilities/test_assets/heic-image.heic', {
+      flag: 'r',
+    })
+    const testBlobFile = new Blob([buffer], {
+      type: 'image/heic',
+    })
+    const nsfw = false
+    const cbFunction = (callback: any, ...params: any[]) => {
+      callback(params)
+    }
+
+    await inst.uploadFile(testBlobFile, nsfw, cbFunction)
+    expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
+  })
+
+  test.skip('TextileFileSystem.uploadFile for png file', async () => {
+    const buffer = fs.readFileSync('utilities/test_assets/non-heic-image.png', {
+      flag: 'r',
+    })
+    const testBlobFile = new Blob([buffer], {
+      type: 'image/png',
+    })
+    const nsfw = false
+    const cbFunction = (callback: any, ...params: any[]) => {
+      callback(params)
+    }
+
+    await inst.uploadFile(testBlobFile, nsfw, cbFunction)
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
 })
