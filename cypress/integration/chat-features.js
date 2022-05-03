@@ -37,31 +37,6 @@ describe('Chat Features Tests', () => {
       .should('contain', '(edited)')
   })
 
-  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
-    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
-    cy.hoverOnComingSoonIcon(
-      '#chatbar-controls > span > .tooltip-container',
-      'Send Money\nComing Soon',
-    )
-  })
-
-  it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
-    // Emoji picker is displayed  when clicking on its button
-    cy.get('#emoji-toggle').click()
-    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
-      'contain',
-      'Emoji',
-    )
-    cy.get('#emoji-toggle').click()
-  })
-
-  it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
-    // Glyphs picker is displayed when clicking on its button
-    cy.get('#glyph-toggle').click()
-    cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
-    cy.get('#glyph-toggle').click()
-  })
-
   it('Chat - Copy paste text', () => {
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
@@ -129,9 +104,40 @@ describe('Chat Features Tests', () => {
     cy.get('.file-info > .title').should('contain', 'logo.png')
   })
 
+  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
+    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
+    cy.hoverOnComingSoonIcon(
+      '#chatbar-controls > span > .tooltip-container',
+      'Send Money\nComing Soon',
+    )
+  })
+
+  it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
+    // Emoji picker is displayed  when clicking on its button
+    cy.get('#emoji-toggle').click()
+    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
+      'contain',
+      'Emoji',
+    )
+    cy.get('#emoji-toggle').click()
+  })
+
+  it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
+    // Glyphs picker is displayed when clicking on its button
+    cy.get('#glyph-toggle').click()
+    cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
+    cy.get('#glyph-toggle').click()
+  })
+
   it('Chat - Validate User ID can be copied when clicked on it', () => {
-    // Moving this at the end of execution to avoid issues on CI when running chat tests
-    cy.get('[data-cy=toggle-sidebar]').click()
+    //Click on toggle-sidebar only if app is collapsed
+    cy.get('#app-wrap').then(($appWrap) => {
+      if ($appWrap.hasClass('is-collapsed')) {
+        cy.get('[data-cy=toggle-sidebar]').click()
+      }
+    })
+
+    //Start validation
     cy.chatFeaturesProfileName('cypress')
     cy.get('[data-cy=hamburger-button]').click()
   })
@@ -204,7 +210,7 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 
-  it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
+  it.skip('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
     //Search for a random number and assert results
     cy.searchFromTextInChat(randomNumber)
     cy.assertFirstMatchOnSearch(randomNumber)
@@ -212,20 +218,5 @@ describe('Chat Features Tests', () => {
     //Validate that pagination is not displayed and close search modal
     cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
-  })
-
-  it('Chat - Files - Rename Folder', () => {
-    //Click on toggle button and then on files
-    cy.get('[data-cy=toggle-sidebar]').click()
-
-    //Open files screen and rename existing folder
-    cy.openFilesScreen()
-    cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
-  })
-
-  it.skip('Chat - Files - Rename Files', () => {
-    //Open files screen and rename existing file
-    cy.openFilesScreen()
-    cy.renameFileOrFolder('test-file-' + randomNumber, 'file')
   })
 })

@@ -9,7 +9,7 @@ let urlToValidate = 'https://www.satellite.im'
 let urlToValidateTwo = 'http://www.satellite.im'
 let urlToValidateThree = 'www.satellite.im'
 
-describe('Chat Text and Sending Links Validations', () => {
+describe.skip('Chat Text and Sending Links Validations', () => {
   it('Message with more than 2048 chars - Counter get reds', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -24,6 +24,7 @@ describe('Chat Text and Sending Links Validations', () => {
         pasteType: 'text',
         pastePayload: longMessage,
       })
+      .should('have.text', longMessage)
     let expectedMessage = longMessage.length.toString() + '/2048'
     cy.validateCharlimit(expectedMessage, true)
   })
@@ -35,7 +36,11 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Attempt to send empty message with a space', () => {
-    cy.get('[data-cy=editable-input]').trigger('input').clear().type(' ')
+    cy.get('[data-cy=editable-input]')
+      .trigger('input')
+      .clear()
+      .type(' ')
+      .should('have.text', ' ')
     cy.validateCharlimit('1/2048', false)
     cy.get('[data-cy=send-message]').click()
     cy.get('[data-cy=editable-input]').should('have.text', '')
@@ -49,7 +54,11 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Chat Text Validation - Space counts only for 1 char', () => {
-    cy.get('[data-cy=editable-input]').trigger('input').clear().type(' ')
+    cy.get('[data-cy=editable-input]')
+      .trigger('input')
+      .clear()
+      .type(' ')
+      .should('have.text', ' ')
     cy.validateCharlimit('1/2048', false)
     cy.get('[data-cy=editable-input]').clear()
     cy.validateCharlimit('0/2048', false)
@@ -62,10 +71,13 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Sending a link with format https://wwww', () => {
-    cy.get('[data-cy=editable-input]').trigger('input').paste({
-      pasteType: 'text',
-      pastePayload: urlToValidate,
-    })
+    cy.get('[data-cy=editable-input]')
+      .trigger('input')
+      .paste({
+        pasteType: 'text',
+        pastePayload: urlToValidate,
+      })
+      .should('have.text', urlToValidate)
     cy.validateCharlimit('24/2048', false)
     cy.get('[data-cy=send-message]').click()
     let locatorURL = 'a[href="' + urlToValidate + '"]'
@@ -77,10 +89,13 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Sending a link with format http://wwww', () => {
-    cy.get('[data-cy=editable-input]').trigger('input').paste({
-      pasteType: 'text',
-      pastePayload: urlToValidateTwo,
-    })
+    cy.get('[data-cy=editable-input]')
+      .trigger('input')
+      .paste({
+        pasteType: 'text',
+        pastePayload: urlToValidateTwo,
+      })
+      .should('have.text', urlToValidateTwo)
     cy.validateCharlimit('23/2048', false)
     cy.get('[data-cy=send-message]').click()
     let locatorURL = 'a[href="' + urlToValidateTwo + '"]'
@@ -92,10 +107,13 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Sending a text with format wwww. will not send it as link', () => {
-    cy.get('[data-cy=editable-input]').trigger('input').paste({
-      pasteType: 'text',
-      pastePayload: urlToValidateThree,
-    })
+    cy.get('[data-cy=editable-input]')
+      .trigger('input')
+      .paste({
+        pasteType: 'text',
+        pastePayload: urlToValidateThree,
+      })
+      .should('have.text', urlToValidateThree)
     cy.validateCharlimit('16/2048', false)
     cy.get('[data-cy=send-message]').click()
     cy.contains(urlToValidateThree)
@@ -121,7 +139,7 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('User should be able to use "" to escape in chat', () => {
-    cy.sendMessageWithEscapeOrAutolink('*To Do')
+    cy.chatFeaturesSendMessage('*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
       .scrollIntoView()
@@ -129,7 +147,7 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('User should be able to use "\\" to write a single "" in chat', () => {
-    cy.sendMessageWithEscapeOrAutolink('\\*To Do')
+    cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
       .scrollIntoView()
@@ -150,7 +168,8 @@ describe('Chat Text and Sending Links Validations', () => {
 
   it('User should use markdown "<>" to insert an autolink', () => {
     let locatorURL = 'a[href="' + randomURL + '"]'
-    cy.sendMessageWithEscapeOrAutolink('<' + randomURL + '>')
+    let autolink = '<' + randomURL + '>'
+    cy.chatFeaturesSendMessage(autolink, false)
     cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
   })
 

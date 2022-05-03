@@ -213,11 +213,6 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('validateSignalingServersValue', (expectedValue) => {
-  cy.get('[data-cy=custom-select]').should('be.visible')
-  cy.get('[data-cy=custom-select-value]').should('contain', expectedValue)
-})
-
 //Import Account Commands
 
 Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
@@ -293,24 +288,34 @@ Cypress.Commands.add('chatFeaturesProfileName', (value) => {
   cy.wait(1000)
 })
 
-Cypress.Commands.add('chatFeaturesSendMessage', (message) => {
-  cy.get('[data-cy=editable-input]')
-    .should('be.visible')
-    .trigger('input')
-    .paste({
-      pasteType: 'text',
-      pastePayload: message,
-    })
-  cy.get('[data-cy=editable-input]')
-    .should('have.text', message)
-    .then(() => {
-      cy.get('[data-cy=send-message]').click() //sending text message
-    })
-  cy.contains(message, { timeout: 30000 })
-    .last()
-    .scrollIntoView()
-    .should('exist')
-})
+Cypress.Commands.add(
+  'chatFeaturesSendMessage',
+  (message, assertMessage = true) => {
+    cy.get('[data-cy=editable-input]')
+      .should('be.visible')
+      .trigger('input')
+      .paste({
+        pasteType: 'text',
+        pastePayload: message,
+      })
+    cy.get('[data-cy=editable-input]')
+      .should('have.text', message)
+      .then(() => {
+        cy.get('[data-cy=send-message]').click() //sending text message
+      })
+    // Wait until loading indicator disappears
+    cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should(
+      'not.exist',
+    )
+    // Assert message
+    if ((assertMessage = true)) {
+      cy.contains(message, { timeout: 30000 })
+        .last()
+        .scrollIntoView()
+        .should('exist')
+    }
+  },
+)
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
   cy.get('#emoji-toggle > .control-icon').click()
@@ -435,7 +440,7 @@ Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
   })
   cy.get('.file-item').should('exist')
   cy.get('.file-info > .title').should('contain', 'test-file.txt')
-  cy.get('.preview', { timeout: 120000 }).should('exist')
+  cy.get('.preview', { timeout: 180000 }).should('exist')
   cy.get('[data-cy=send-message]').click() //sending file message
   cy.get('.preview', { timeout: 120000 }).should('not.exist')
 })
@@ -483,7 +488,7 @@ Cypress.Commands.add('clickOutside', () => {
 // Chat - Page Load Commands
 
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
-  cy.get('[data-cy=user-name]', { timeout: 360000 }).should('exist')
+  cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
 })
 
 Cypress.Commands.add('goToConversation', (user) => {
@@ -507,11 +512,13 @@ Cypress.Commands.add('goToConversation', (user) => {
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=friend-name]', { timeout: 60000 })
+  cy.get('[data-cy=toggle-sidebar]').click()
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
-    .parents('[data-cy=friend]')
-    .find('[data-cy=friend-send-message]')
     .click()
+
+  // Hide sidebar
+  cy.get('[data-cy=hamburger-button]').click()
 
   //Wait until conversation is fully loaded
   cy.get('[data-cy=user-connected]', { timeout: 120000 })
@@ -525,13 +532,12 @@ Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator)
     .realHover()
     .should('have.attr', 'data-tooltip', expectedMessage)
-  cy.wait(1000)
+  cy.get('.tooltip-container').should('be.visible')
   cy.get('body').realHover({ position: 'topLeft' })
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
   cy.get(locator).should('be.visible').realHover()
-  cy.wait(1000)
   cy.get('body').realHover({ position: 'topLeft' })
 })
 
@@ -691,7 +697,7 @@ Cypress.Commands.add('navigateThroughSearchResults', () => {
 
 Cypress.Commands.add('openFilesScreen', () => {
   cy.get('[data-cy=sidebar-files]').click()
-  cy.get('[data-cy=files-screen]', { timeout: 30000 }).should('exist')
+  cy.get('[data-cy=files-screen]', { timeout: 60000 }).should('exist')
 })
 
 Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
@@ -769,25 +775,6 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
       .should('have.class', 'spoiler-open')
       .and('have.text', text)
   }
-})
-
-Cypress.Commands.add('sendMessageWithEscapeOrAutolink', (textWithMarkdown) => {
-  // Write the text message
-  cy.get('[data-cy=editable-input]')
-    .should('be.visible')
-    .trigger('input')
-    .paste({
-      pasteType: 'text',
-      pastePayload: textWithMarkdown,
-    })
-  // Assert the text message is displayed before sending
-  cy.get('[data-cy=editable-input]')
-    .should('have.text', textWithMarkdown)
-    .then(() => {
-      cy.get('[data-cy=send-message]').click() //sending text message
-    })
-  // Wait until loading indicator disappears
-  cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should('not.exist')
 })
 
 //Version Release Notes Commands

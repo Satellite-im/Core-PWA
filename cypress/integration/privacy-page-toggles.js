@@ -54,7 +54,7 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
 
     cy.contains('Enable External Embeds').should('be.visible')
     cy.contains(
-      'Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more.',
+      'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
     ).should('be.visible')
 
     cy.contains('Display Current Activity').should('be.visible')
@@ -64,18 +64,13 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
 
     cy.contains('Consent to File Scanning').should('be.visible')
     cy.contains(
-      'In order to share files/use the encrypted file storage I consent to having my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+      'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
     ).should('be.visible')
 
     cy.contains('Block NSFW content').should('be.visible')
     cy.contains('If selected, NSFW content will be obscured.').should(
       'be.visible',
     )
-
-    cy.contains('Signaling Servers').should('be.visible')
-    cy.contains(
-      "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
-    ).should('be.visible')
   })
 
   it('Privacy Page - Default values after account creation', () => {
@@ -89,7 +84,6 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
     cy.privacyToggleValidateValue('Display Current Activity', true)
     cy.privacyToggleValidateValue('Consent to File Scanning', false)
     cy.privacyToggleValidateValue('Block NSFW content', true)
-    cy.validateSignalingServersValue('Satellite + Public Signaling Servers')
   })
 
   it('Privacy Page - Verify register publicly toggle is locked and disabled', () => {
@@ -137,18 +131,8 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
         }
       }
     })
-  })
 
-  it('Privacy page - Change to only Public Signaling Servers', () => {
-    //Setting a viewport visible for all toggles
-    cy.viewport(1200, 1200)
-
-    //Change option to use only Public Signaling Servers
-    cy.get('[data-cy=custom-select]').should('be.visible').click()
-    cy.get('[data-cy=custom-select-option-text]')
-      .contains('Only Public Signaling Servers')
-      .click()
-    cy.validateSignalingServersValue('Only Public Signaling Servers')
+    //Close modal
     cy.get('.close-button').click()
   })
 
@@ -169,6 +153,5 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
     cy.privacyToggleValidateValue('Display Current Activity', false)
     cy.privacyToggleValidateValue('Consent to File Scanning', false)
     cy.privacyToggleValidateValue('Block NSFW content', false)
-    cy.validateSignalingServersValue('Only Public Signaling Servers')
   })
 })
