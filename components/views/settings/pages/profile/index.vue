@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { ClipboardIcon } from 'satellite-lucide-icons'
+import { EditIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { AccountsState } from '~/store/accounts/types'
 import { ModalWindows } from '~/store/ui/types'
@@ -17,7 +17,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'ProfileSettings',
   components: {
-    ClipboardIcon,
+    EditIcon,
   },
   layout: 'settings',
   data() {
