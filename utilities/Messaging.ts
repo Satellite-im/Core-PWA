@@ -56,118 +56,6 @@ export function groupMessages(
   replies: RepliesTracker,
   reactions: ReactionsTracker,
 ): MessageGroup {
-  const groupedMessages: MessageGroup = []
-
-  // Get the sorted array of messages (not replies or reactions)
-  const messageArray = Object.values(messages).sort((a, b) => a.at - b.at)
-
-  for (let i = 0; i < messageArray.length; i++) {
-    const prevMessage = i > 0 ? messageArray[i - 1] : null
-    const currentMessage = messageArray[i]
-
-    // TODO: Update the typings and embed this data in grouped messages - AP-403
-    const currentMessageReplies = replies[currentMessage.id] || []
-    const currentMessageReactions = reactions[currentMessage.id] || []
-    const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(
-          prevMessage.at,
-          MeasurementUnitsEnum.DAY,
-        )
-      : false
-
-    let isSameGroup
-    if (!prevMessage) {
-      isSameGroup = false
-    } else {
-      const currentAt = dayjs(currentMessage.at)
-      const prevAt = dayjs(prevMessage.at)
-      if (!dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)) {
-        isSameGroup = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
-      } else {
-        const prevAt = dayjs(prevMessage.at)
-        isSameGroup = currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
-      }
-    }
-
-    // Eventually place a divider if the day changes
-    if (!isSameDay) {
-      groupedMessages.push({
-        id: `${currentMessage.id}-divider`,
-        at: currentMessage.at,
-        type: MessagingTypesEnum.DIVIDER,
-      })
-    }
-    const isSameSender = currentMessage.from === prevMessage?.from
-
-    // Extract the last item from the array that can be either a Group or a Divider
-    // at this point
-    const groupOrDivider = groupedMessages[groupedMessages.length - 1]
-
-    // Checks if the message must be included in a new group
-    const isNewGroup =
-      groupedMessages.length === 0 ||
-      groupOrDivider?.type === MessagingTypesEnum.DIVIDER ||
-      !isSameSender ||
-      (prevMessage && !isSameGroup)
-    if (isNewGroup) {
-      groupedMessages.push({
-        id: currentMessage.id,
-        type: MessagingTypesEnum.GROUP,
-        at: currentMessage.at,
-        from: currentMessage.from,
-        sender: currentMessage.sender, // TODO add types - AP-1128
-        to: currentMessage.to,
-        messages: [
-          {
-            ...currentMessage,
-            replies: messageRepliesToUIReplies(
-              currentMessageReplies,
-              reactions,
-            ),
-            reactions: getMessageUIReactions(
-              currentMessage,
-              currentMessageReactions,
-            ),
-          },
-        ],
-      })
-    } else {
-      // Since we already checked that it's not a divider we can
-      // enforce the group type (not really needed since is handled under the hood
-      // by typescript. We reassign it in a new variable only for readability reasons)
-      const group: Group = groupOrDivider
-
-      const newMessages = group.messages
-        ? [
-            ...group.messages,
-            {
-              ...currentMessage,
-              replies: messageRepliesToUIReplies(
-                currentMessageReplies,
-                reactions,
-              ),
-              reactions: getMessageUIReactions(
-                currentMessage,
-                currentMessageReactions,
-              ),
-            },
-          ]
-        : [{ ...currentMessage, replies: [], reactions: [] }]
-
-      groupedMessages[groupedMessages.length - 1] = {
-        ...group,
-        messages: newMessages,
-      }
-    }
-  }
-
-  return groupedMessages
-}
-export function groupMessagesNew(
-  messages: MessagesTracker,
-  replies: RepliesTracker,
-  reactions: ReactionsTracker,
-): MessageGroup {
   const chatList: MessageGroup = []
 
   // Get the sorted array of messages (not replies or reactions)
@@ -209,7 +97,6 @@ export function groupMessagesNew(
     const isNewChatElement =
       !isSameDay || !isSameSender || (prevMessage && !isSameChatElement)
 
-    // if (isNewGroup) {
     chatList.push({
       avatar: isNewChatElement,
       id: currentMessage.id,
