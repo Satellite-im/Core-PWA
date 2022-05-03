@@ -35,16 +35,16 @@
   }
 
   scrollbar-width: thin;
-  scrollbar-color: @primary-color transparent;
+  scrollbar-color: @scrollbar-color transparent;
 
   &:hover {
     &::-webkit-scrollbar-thumb {
-      background-color: @primary-color;
+      background-color: @scrollbar-color;
     }
   }
 
   &.scrollbar-always-visible::-webkit-scrollbar-thumb {
-    background-color: @primary-color;
+    background-color: @scrollbar-color;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -53,7 +53,7 @@
 
   @media only screen and (max-width: 1024px) {
     &::-webkit-scrollbar-thumb {
-      background-color: @primary-color;
+      background-color: @scrollbar-color;
     }
   }
 }
