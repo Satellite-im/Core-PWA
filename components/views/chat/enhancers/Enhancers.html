@@ -33,8 +33,9 @@
     <UiSimpleScroll
       scrollMode="vertical"
       scrollShow="scroll"
+      v-if="ui.enhancers.route === 'emotes'"
     >
-      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()" v-if="ui.enhancers.route === 'emotes'">
+      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
         <div
           slot="emoji-picker"
           ref="emojiPicker"
