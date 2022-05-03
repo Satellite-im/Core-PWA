@@ -26,8 +26,8 @@ describe('test alert methods', () => {
     expect(result.content.title).toBe(dummyData.content.title)
     expect(result.content.description).toBe(dummyData.content.description)
   })
-  test.skip('mark alert', () => {
-    const alertToBeMarked = state.find(
+  test('mark alert', () => {
+    const alertToBeMarked = inst.all.find(
       (e) => e.state === Alerts.AlertState.UNREAD,
     ) // Select a message that has not been read
     const result: any = inst.mark(Alerts.AlertState.READ, alertToBeMarked!.id!)
