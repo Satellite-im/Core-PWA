@@ -58,7 +58,7 @@ export default Vue.extend({
      */
     getSubtext(): string {
       return this.item instanceof Directory
-        ? this.item.content.length + ' items'
+        ? this.$tc('pages.files.item_count', this.item.content.length)
         : this.$filesize((this.item as Fil).size)
     },
     /**
