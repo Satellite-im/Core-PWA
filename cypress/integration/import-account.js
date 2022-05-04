@@ -29,6 +29,5 @@ describe('Import Account Validations', () => {
         { force: true },
       )
     cy.contains('Recover Account').should('be.visible').click()
-    Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   })
 })

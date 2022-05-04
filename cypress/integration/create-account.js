@@ -7,7 +7,6 @@ const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe('Create Account Validations', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Create Account', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN, false, false)

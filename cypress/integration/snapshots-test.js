@@ -7,8 +7,6 @@ const randomStatus = faker.lorem.word() // generate random status
 
 describe.skip('Snapshots Testing', () => {
   //Import account and snapshot on each screen
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
-
   it('Import account - PIN screen', () => {
     cy.importAccountPINscreen(randomPIN, false, true)
   })
