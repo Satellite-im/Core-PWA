@@ -30,9 +30,9 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
+    <UiSimpleScroll
+      scrollMode="vertical"
+      scrollShow="scroll"
       v-if="ui.enhancers.route === 'emotes'"
     >
       <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
@@ -81,7 +81,7 @@
           </div>
         </div>
       </emoji-picker>
-    </UiScroll>
+    </UiSimpleScroll>
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'" />
   </div>
 </div>
