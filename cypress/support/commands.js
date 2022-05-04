@@ -492,27 +492,13 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
 })
 
 Cypress.Commands.add('goToConversation', (user) => {
-  //If URL is chat/direct, then go to friends page
-  cy.url().then(($url) => {
-    if ($url.includes('chat/direct')) {
-      cy.get('#app-wrap').then(($appWrap) => {
-        if ($appWrap.hasClass('is-collapsed')) {
-          cy.get('[data-cy=toggle-sidebar]').click()
-        }
-      })
-      cy.get('[data-cy=sidebar-friends]').click()
-    }
-  })
-
-  //If sidebar menu is collapsed, click on hamburger button to display it
   cy.get('#app-wrap').then(($appWrap) => {
-    if (!$appWrap.hasClass('is-collapsed')) {
-      cy.get('[data-cy=hamburger-button]').click()
+    if (!$appWrap.hasClass('is-open')) {
+      cy.get('[data-cy=toggle-sidebar]').click()
     }
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=toggle-sidebar]').click()
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
     .click()
