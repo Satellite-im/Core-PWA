@@ -1,22 +1,22 @@
 import dayjs from 'dayjs'
+import {
+  MeasurementUnitsEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Group, MessageGroup, UIReaction, UIReply } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
 import {
   FileMessage,
+  GlyphMessage,
   Message,
-  ReactionMessage,
-  ReplyMessage,
-  TextMessage,
   MessagesTracker,
+  ReactionMessage,
   ReactionsTracker,
   RepliesTracker,
-  GlyphMessage,
+  ReplyMessage,
+  TextMessage,
 } from '~/types/textile/mailbox'
-import {
-  MessagingTypesEnum,
-  MeasurementUnitsEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
 
 function messageRepliesToUIReplies(
   replies: ReplyMessage[],
@@ -56,42 +56,36 @@ export function groupMessages(
   replies: RepliesTracker,
   reactions: ReactionsTracker,
 ): MessageGroup {
-  const groupedMessages: MessageGroup = []
+  const chatList: MessageGroup = []
 
   // Get the sorted array of messages (not replies or reactions)
-  const messageArray = Object.values(messages).sort((a, b) => a.at - b.at)
+  const messagesArray = Object.values(messages).sort((a, b) => a.at - b.at)
 
-  for (let i = 0; i < messageArray.length; i++) {
-    const prevMessage = i > 0 ? messageArray[i - 1] : null
-    const currentMessage = messageArray[i]
+  for (let i = 0; i < messagesArray.length; i++) {
+    const prevMessage = i > 0 ? messagesArray[i - 1] : null
+    const currentMessage = messagesArray[i]
 
     // TODO: Update the typings and embed this data in grouped messages - AP-403
     const currentMessageReplies = replies[currentMessage.id] || []
     const currentMessageReactions = reactions[currentMessage.id] || []
-    const isSameDay = prevMessage
-      ? dayjs(currentMessage.at).isSame(
-          prevMessage.at,
-          MeasurementUnitsEnum.DAY,
-        )
-      : false
 
-    let isSameGroup
-    if (!prevMessage) {
-      isSameGroup = false
-    } else {
+    let isSameDay = false
+    let isSameChatElement = false
+
+    if (prevMessage) {
       const currentAt = dayjs(currentMessage.at)
       const prevAt = dayjs(prevMessage.at)
-      if (!dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)) {
-        isSameGroup = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
-      } else {
-        const prevAt = dayjs(prevMessage.at)
-        isSameGroup = currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
-      }
+      const isToday = dayjs().isSame(currentAt, MeasurementUnitsEnum.DAY)
+
+      isSameDay = currentAt.isSame(prevAt, MeasurementUnitsEnum.DAY)
+      isSameChatElement = !isToday
+        ? isSameDay
+        : currentAt.diff(prevAt, MeasurementUnitsEnum.MINUTES) < 15
     }
 
     // Eventually place a divider if the day changes
     if (!isSameDay) {
-      groupedMessages.push({
+      chatList.push({
         id: `${currentMessage.id}-divider`,
         at: currentMessage.at,
         type: MessagingTypesEnum.DIVIDER,
@@ -99,69 +93,30 @@ export function groupMessages(
     }
     const isSameSender = currentMessage.from === prevMessage?.from
 
-    // Extract the last item from the array that can be either a Group or a Divider
-    // at this point
-    const groupOrDivider = groupedMessages[groupedMessages.length - 1]
-
     // Checks if the message must be included in a new group
-    const isNewGroup =
-      groupedMessages.length === 0 ||
-      groupOrDivider?.type === MessagingTypesEnum.DIVIDER ||
-      !isSameSender ||
-      (prevMessage && !isSameGroup)
-    if (isNewGroup) {
-      groupedMessages.push({
-        id: currentMessage.id,
-        type: MessagingTypesEnum.GROUP,
-        at: currentMessage.at,
-        from: currentMessage.from,
-        sender: currentMessage.sender, // TODO add types - AP-1128
-        to: currentMessage.to,
-        messages: [
-          {
-            ...currentMessage,
-            replies: messageRepliesToUIReplies(
-              currentMessageReplies,
-              reactions,
-            ),
-            reactions: getMessageUIReactions(
-              currentMessage,
-              currentMessageReactions,
-            ),
-          },
-        ],
-      })
-    } else {
-      // Since we already checked that it's not a divider we can
-      // enforce the group type (not really needed since is handled under the hood
-      // by typescript. We reassign it in a new variable only for readability reasons)
-      const group: Group = groupOrDivider
+    const isNewChatElement =
+      !isSameDay || !isSameSender || (prevMessage && !isSameChatElement)
 
-      const newMessages = group.messages
-        ? [
-            ...group.messages,
-            {
-              ...currentMessage,
-              replies: messageRepliesToUIReplies(
-                currentMessageReplies,
-                reactions,
-              ),
-              reactions: getMessageUIReactions(
-                currentMessage,
-                currentMessageReactions,
-              ),
-            },
-          ]
-        : [{ ...currentMessage, replies: [], reactions: [] }]
-
-      groupedMessages[groupedMessages.length - 1] = {
-        ...group,
-        messages: newMessages,
-      }
-    }
+    chatList.push({
+      avatar: isNewChatElement,
+      id: currentMessage.id,
+      type: MessagingTypesEnum.GROUP,
+      at: currentMessage.at,
+      from: currentMessage.from,
+      sender: currentMessage.sender, // TODO add types - AP-1128
+      to: currentMessage.to,
+      message: {
+        ...currentMessage,
+        replies: messageRepliesToUIReplies(currentMessageReplies, reactions),
+        reactions: getMessageUIReactions(
+          currentMessage,
+          currentMessageReactions,
+        ),
+      },
+    })
   }
 
-  return groupedMessages
+  return chatList
 }
 
 type TrackingValues = {
