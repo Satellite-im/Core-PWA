@@ -21,7 +21,7 @@ export enum AlertState {
 }
 
 export type Alert = {
-  at?: number
+  at: number
   id?: string
   state?: AlertState
   type: AlertType

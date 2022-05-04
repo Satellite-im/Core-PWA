@@ -75,14 +75,14 @@ export default {
    * @method setNotifications
    * @description Collects all existing notifications for a user
    */
-  setNotifications({ commit }: ActionsArguments<UIState>) {
+  async setNotifications({ commit }: ActionsArguments<UIState>) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
     const notifications =
-      $TextileManager.notificationManager?.getnotifications()
+      await $TextileManager.notificationManager?.getnotifications()
     commit('setNotifications', notifications)
   },
   async sendNotification(
