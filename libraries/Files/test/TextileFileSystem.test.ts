@@ -44,6 +44,8 @@ describe('', () => {
     expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
   })
 
+  // This test is skipped due to it exceeding the timeout (5000 ms).
+  // See https://github.com/Satellite-im/Core-PWA/pull/3044 for more info.
   test.skip('TextileFileSystem.uploadFile for heic file', async () => {
     const buffer = fs.readFileSync('utilities/test_assets/heic-image.heic', {
       flag: 'r',
