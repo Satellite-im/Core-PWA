@@ -8,8 +8,6 @@ let toggleStatusSaved = []
 let toggleStatusProfile = []
 
 describe.skip('Privacy Settings Page - Toggles Tests', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => false) // to bypass Module build failed: Error: ENOENT: No such file or directory issue randomly presented
-
   it('Privacy Page - Validate existing toggles', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)

@@ -89,7 +89,6 @@ Cypress.Commands.add('createAccount', (pin) => {
   cy.get('.title').should('contain', 'Recovery Seed')
   cy.contains('Continue').click()
   cy.contains('I Saved It').click()
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   cy.validateUserInputIsDisplayed()
   cy.get('[data-cy=username-input]')
     .should('be.visible')
@@ -141,7 +140,6 @@ Cypress.Commands.add('createAccountSecondScreen', () => {
 Cypress.Commands.add('createAccountRecoverySeed', () => {
   cy.contains('Recovery Seed', { timeout: 15000 }).should('be.visible')
   cy.get('#custom-cursor-area').click()
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
@@ -231,7 +229,6 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
   cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 Cypress.Commands.add(
@@ -274,7 +271,6 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 
   cy.contains('Recover Account').click()
   cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 //Chat - Basic Commands for Text and Emojis
@@ -516,15 +512,20 @@ Cypress.Commands.add('goToConversation', (user) => {
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator)
-    .realHover()
+    .should('be.visible')
     .should('have.attr', 'data-tooltip', expectedMessage)
+    .should('have.class', 'grayscaled')
+    .realHover()
   cy.get('.tooltip-container').should('be.visible')
-  cy.get('body').realHover({ position: 'topLeft' })
 })
 
-Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
-  cy.get(locator).should('be.visible').realHover()
-  cy.get('body').realHover({ position: 'topLeft' })
+Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
+  cy.get(locator)
+    .should('be.visible')
+    .should('have.attr', 'data-tooltip', expectedMessage)
+    .should('not.have.class', 'grayscaled')
+    .realHover()
+  cy.get('.tooltip-container').should('be.visible')
 })
 
 // Chat - URL Commands
