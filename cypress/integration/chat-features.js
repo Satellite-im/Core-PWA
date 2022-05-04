@@ -182,7 +182,7 @@ describe('Chat Features Tests', () => {
 
   it('Chat - Search Results - Pagination is displayed when more than 10 matches are found', () => {
     //Look for a word showing more than 10 results in chat and ensure pagination is displayed
-    cy.searchFromTextInChat('omnis')
+    cy.searchFromTextInChat('9876543210')
     cy.get('[data-cy=chat-search-result-pagination]').should('exist')
   })
 
@@ -210,10 +210,10 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 
-  it.skip('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
+  it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
     //Search for a random number and assert results
-    cy.searchFromTextInChat(randomNumber)
-    cy.assertFirstMatchOnSearch(randomNumber)
+    cy.searchFromTextInChat('1234567890')
+    cy.assertFirstMatchOnSearch('1234567890')
 
     //Validate that pagination is not displayed and close search modal
     cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')
