@@ -13,7 +13,8 @@
 @black: #000;
 
 @primary-color: #2761fd;
-@scrollbar-color: var(--flair-color);
+@flair-color: var(--flair-color);
+@scrollbar-color: @flair-color;
 
 @secondary-text: #dae0ff;
 @text: #ffffff;
@@ -174,7 +175,7 @@
   #131217 32%,
   #121b28 100%
 );
-
+@flair-gradient: linear-gradient(40deg, @flair-color 0%, @flair-color 100%);
 @modal-gradient: linear-gradient(
     163.91deg,
     rgba(48, 52, 71, 0.5) 0%,
@@ -188,6 +189,9 @@
   ),
   linear-gradient(0deg, #121216, #121216);
 
+.background-flair {
+  background: @flair-color;
+}
 .background-primary {
   background: @primary-color;
 }
@@ -199,6 +203,9 @@
 }
 .background-dark-gradient {
   background: @background-gradient;
+}
+.background-flair-gradient {
+  background: @flair-gradient;
 }
 .background-gradient {
   background: @midground-gradient;
