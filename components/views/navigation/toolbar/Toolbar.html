@@ -98,6 +98,7 @@
     <div
       v-if="!isGroup(recipient)"
       class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
+      data-cy="toolbar-new-group"
       :data-tooltip="$t('pages.chat.new_group')"
       @click="toggleModal('creategroup')"
     >

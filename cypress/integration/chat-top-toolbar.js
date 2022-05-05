@@ -3,7 +3,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe('Chat Toolbar Tests', () => {
+describe.skip('Chat Toolbar Tests', () => {
   it('Chat - Toolbar - Validate audio icon is displayed', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -11,11 +11,17 @@ describe('Chat Toolbar Tests', () => {
     //Ensure messages are displayed before starting
     cy.validateChatPageIsLoaded()
     cy.goToConversation('cypress friend')
-    cy.hoverOnActiveIcon('[data-cy=toolbar-enable-audio]')
+    cy.hoverOnActiveIcon(
+      '[data-cy=toolbar-enable-audio]',
+      'Call' || 'Offline calling unavailable',
+    )
   })
 
   it('Chat - Toolbar - Validate video icon is displayed', () => {
-    cy.hoverOnActiveIcon('[data-cy=toolbar-enable-video]')
+    cy.hoverOnActiveIcon(
+      '[data-cy=toolbar-enable-video]',
+      'Video' || 'Offline calling unavailable',
+    )
   })
 
   it('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
@@ -34,9 +40,12 @@ describe('Chat Toolbar Tests', () => {
     )
   })
 
+  it('Chat - Toolbar - Validate new group icon is displayed', () => {
+    cy.hoverOnActiveIcon('[data-cy=toolbar-new-group]', 'New Group')
+  })
+
   it('Chat - Toolbar - Marketplace icon is displayed', () => {
-    cy.get('[data-cy=toolbar-marketplace]').should('be.visible')
-    cy.hoverOnComingSoonIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
+    cy.hoverOnActiveIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
   })
 
   it('Chat - Toolbar - Wallet icon shows Coming Soon', () => {

@@ -89,7 +89,6 @@ Cypress.Commands.add('createAccount', (pin) => {
   cy.get('.title').should('contain', 'Recovery Seed')
   cy.contains('Continue').click()
   cy.contains('I Saved It').click()
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   cy.validateUserInputIsDisplayed()
   cy.get('[data-cy=username-input]')
     .should('be.visible')
@@ -141,7 +140,6 @@ Cypress.Commands.add('createAccountSecondScreen', () => {
 Cypress.Commands.add('createAccountRecoverySeed', () => {
   cy.contains('Recovery Seed', { timeout: 15000 }).should('be.visible')
   cy.get('#custom-cursor-area').click()
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
@@ -231,7 +229,6 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
   cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 Cypress.Commands.add(
@@ -274,7 +271,6 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 
   cy.contains('Recover Account').click()
   cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
 })
 
 //Chat - Basic Commands for Text and Emojis
@@ -492,27 +488,13 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
 })
 
 Cypress.Commands.add('goToConversation', (user) => {
-  //If URL is chat/direct, then go to friends page
-  cy.url().then(($url) => {
-    if ($url.includes('chat/direct')) {
-      cy.get('#app-wrap').then(($appWrap) => {
-        if ($appWrap.hasClass('is-collapsed')) {
-          cy.get('[data-cy=toggle-sidebar]').click()
-        }
-      })
-      cy.get('[data-cy=sidebar-friends]').click()
-    }
-  })
-
-  //If sidebar menu is collapsed, click on hamburger button to display it
   cy.get('#app-wrap').then(($appWrap) => {
-    if (!$appWrap.hasClass('is-collapsed')) {
-      cy.get('[data-cy=hamburger-button]').click()
+    if (!$appWrap.hasClass('is-open')) {
+      cy.get('[data-cy=toggle-sidebar]').click()
     }
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=toggle-sidebar]').click()
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
     .click()
@@ -530,15 +512,20 @@ Cypress.Commands.add('goToConversation', (user) => {
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator)
-    .realHover()
+    .should('be.visible')
     .should('have.attr', 'data-tooltip', expectedMessage)
+    .should('have.class', 'grayscaled')
+    .realHover()
   cy.get('.tooltip-container').should('be.visible')
-  cy.get('body').realHover({ position: 'topLeft' })
 })
 
-Cypress.Commands.add('hoverOnActiveIcon', (locator) => {
-  cy.get(locator).should('be.visible').realHover()
-  cy.get('body').realHover({ position: 'topLeft' })
+Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
+  cy.get(locator)
+    .should('be.visible')
+    .should('have.attr', 'data-tooltip', expectedMessage)
+    .should('not.have.class', 'grayscaled')
+    .realHover()
+  cy.get('.tooltip-container').should('be.visible')
 })
 
 // Chat - URL Commands
@@ -632,7 +619,7 @@ Cypress.Commands.add(
   'addOrAssertProfileNote',
   (noteText, action = 'assert') => {
     cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
+    cy.get('[data-cy=profile]', { timeout: 30000 }).should('be.visible')
     cy.contains('Add Note').should('be.visible')
     cy.get('[data-cy=profile-add-note] > .cte-input').as('noteInput')
     if (action === 'add') {

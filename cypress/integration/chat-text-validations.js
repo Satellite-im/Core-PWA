@@ -24,7 +24,10 @@ describe.skip('Chat Text and Sending Links Validations', () => {
         pasteType: 'text',
         pastePayload: longMessage,
       })
-      .should('have.text', longMessage)
+    cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(
+      'have.text',
+      longMessage,
+    )
     let expectedMessage = longMessage.length.toString() + '/2048'
     cy.validateCharlimit(expectedMessage, true)
   })
