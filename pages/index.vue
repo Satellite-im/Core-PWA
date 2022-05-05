@@ -1,5 +1,15 @@
 <template>
   <div class="container">
+    <UiModal
+      v-if="$store.state.ui.modals.errorNetwork"
+      v-click-outside="() => toggleNetworkErrorPopup()"
+      nopad
+    >
+      <UiPopupsErrorNetwork
+        :close-modal="() => toggleNetworkErrorPopup()"
+        :action="tryAgain"
+      />
+    </UiModal>
     <UiLoadersPageLoader
       :is-loading="true"
       :title="$t('pages.loading.loading')"
@@ -72,11 +82,42 @@ export default Vue.extend({
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
+          return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
           this.$router.replace('/setup/disclaimer')
+          return
         }
+
+        console.log('error', error)
+
+        this.$store.commit('ui/toggleModal', {
+          name: 'errorNetwork',
+          state: true,
+        })
       }
+    },
+    /**
+     * @method toggleNetworkErrorPopup
+     * @description
+     * @example
+     */
+    toggleNetworkErrorPopup() {
+      const modalName = 'errorNetwork'
+
+      this.$store.commit('ui/toggleModal', {
+        name: modalName,
+        state: !this.$store.state.ui.modals[modalName],
+      })
+    },
+    /**
+     * @method tryAgain
+     * @description
+     * @example
+     */
+    tryAgain() {
+      this.toggleNetworkErrorPopup()
+      this.loadAccount()
     },
   },
 })

@@ -37,6 +37,7 @@ const InitialUIState = (): UIState => ({
     callToAction: false,
     renameFile: false,
     crop: false,
+    errorNetwork: false,
   },
   glyphModalPack: '',
   chatbarContent: '',
