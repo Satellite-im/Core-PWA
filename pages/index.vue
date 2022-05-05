@@ -5,10 +5,7 @@
       v-click-outside="() => toggleNetworkErrorPopup()"
       nopad
     >
-      <UiPopupsErrorNetwork
-        :close-modal="() => toggleNetworkErrorPopup()"
-        :action="tryAgain"
-      />
+      <UiPopupsErrorNetwork :action="tryAgain" />
     </UiModal>
     <UiLoadersPageLoader
       :is-loading="true"
@@ -88,8 +85,6 @@ export default Vue.extend({
           this.$router.replace('/setup/disclaimer')
           return
         }
-
-        console.log('error', error)
 
         this.$store.commit('ui/toggleModal', {
           name: 'errorNetwork',
