@@ -619,7 +619,7 @@ Cypress.Commands.add(
   'addOrAssertProfileNote',
   (noteText, action = 'assert') => {
     cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
+    cy.get('[data-cy=profile]', { timeout: 30000 }).should('be.visible')
     cy.contains('Add Note').should('be.visible')
     cy.get('[data-cy=profile-add-note] > .cte-input').as('noteInput')
     if (action === 'add') {

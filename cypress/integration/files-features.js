@@ -4,7 +4,7 @@ const randomNumber = faker.datatype.number() // generate random number
 const recoverySeed =
   'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
 
-describe('Files Features Tests', () => {
+describe.skip('Files Features Tests', () => {
   it('Chat - Files - Rename Folder', () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)

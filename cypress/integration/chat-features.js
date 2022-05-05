@@ -31,9 +31,11 @@ describe('Chat Features Tests', () => {
   })
 
   it('Chat - Message edited shows edited status', () => {
+    cy.get('[data-cy=message-edited]').last().parents()
+
     cy.contains(randomMessage + randomNumber)
       .parents('[data-cy=message-container]')
-      .find('[data-cy=message-edited]')
+      .find('[data-cy=message-edited]', { timeout: 30000 })
       .should('contain', '(edited)')
   })
 
