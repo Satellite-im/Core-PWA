@@ -2,18 +2,25 @@
   position: relative;
   display: flex;
   align-items: center;
+
+  .circle {
+    mask: radial-gradient(circle 8px at 85.35% 85.35%, #0000 98%, #000) 100%
+      100%/100% 100% no-repeat;
+    overflow: hidden;
+  }
+
   .status {
     position: absolute;
-    bottom: -1.5px;
-    right: -2.5px;
+    left: 85.35%;
+    top: 85.35%;
     font-size: @text-size;
     text-shadow: 0 0 3px #000;
+    transform: translate(-50%, -50%);
     display: inline-flex;
     align-content: center;
 
     circle {
-      stroke: @midground;
-      stroke-width: 4;
+      stroke: transparent;
       paint-order: stroke;
     }
     &.is-online {
