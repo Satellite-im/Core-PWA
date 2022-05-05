@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { XIcon, RefreshCwIcon } from 'satellite-lucide-icons'
+import { RefreshCwIcon } from 'satellite-lucide-icons'
 
 /**
  * @component Error
@@ -15,15 +15,9 @@ import { XIcon, RefreshCwIcon } from 'satellite-lucide-icons'
 export default Vue.extend({
   name: 'ErrorNetwork',
   components: {
-    XIcon,
     RefreshCwIcon,
   },
   props: {
-    closeModal: {
-      type: Function,
-      default: () => {},
-      required: true,
-    },
     action: {
       type: Function,
       default: () => {},
