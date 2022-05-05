@@ -114,7 +114,9 @@ export class FilSystem {
    * @returns {Fil[]} most recent 15 files, sorted by modified date
    */
   get recentFiles(): Fil[] {
-    return this.flat.slice(0, 14)
+    return this.flat
+      .sort((a: Item, b: Item) => b.modified - a.modified)
+      .slice(0, 14)
   }
 
   /**
