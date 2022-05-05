@@ -503,7 +503,7 @@ Cypress.Commands.add('goToConversation', (user) => {
   cy.get('[data-cy=hamburger-button]').click()
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 120000 })
+  cy.get('[data-cy=user-connected]', { timeout: 150000 })
     .should('be.visible')
     .should('have.text', user)
 })
