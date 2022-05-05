@@ -145,6 +145,7 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^27.5.1",
     "babel-plugin-lodash": "^3.3.4",
+    "blob-polyfill": "^7.0.20220408",
     "concurrently": "^7.0.0",
     "cypress": "9.5.0",
     "cypress-file-upload": "^5.0.8",
@@ -170,6 +171,7 @@
     "jest-config": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
     "jest-webgl-canvas-mock": "^0.2.3",
+    "jsdom-worker": "^0.2.1",
     "less": "^4.1.2",
     "less-loader": "^7.1.1",
     "lint-staged": ">=10",
@@ -177,6 +179,7 @@
     "simple-peer": "^9.11.1",
     "ts-jest": "^27.1.3",
     "typescript": "^4.5.5",
+    "url-polyfill": "^1.1.12",
     "vue-jest": "^3.0.7"
   },
   "capacitor": {
