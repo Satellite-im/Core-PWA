@@ -10,7 +10,6 @@
             full-width
             @click="goBack"
           />
-
           <TypographyTitle :text="$t('friends.add')" :size="5" />
         </div>
         <div class="column is-half-desktop">
