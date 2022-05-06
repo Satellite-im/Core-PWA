@@ -273,3 +273,10 @@ export default {
     commit('setGroupsLastUpdate', payload)
   },
 }
+
+export const exportForTesting = {
+  getGroupChatManager,
+  getGroupChatProgram,
+  getUsersProgram,
+  getUserAccount,
+}
