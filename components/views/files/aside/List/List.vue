@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import {
   ClockIcon,
   TrashIcon,
@@ -27,6 +28,7 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     icons() {
       return {
         [FileIconsEnum.CLOCK]: ClockIcon,

@@ -1,8 +1,8 @@
 <ul class="menu-list">
   <li
     v-for="item in items"
-    :class="{'is-active' : isActiveRoute(item.route)}"
-    @click="setActive(item.route)"
+    :class="[{'is-active' : isActiveRoute(item.route)}, {'disabled' : isFilesIndexLoading}]"
+    @click="!isFilesIndexLoading &&  setActive(item.route)"
   >
     <component v-if="item.icon" :is="icons[item.icon]" size="1x" />
     {{item.text}}
