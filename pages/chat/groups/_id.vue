@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { groupMessages } from '~/utilities/Messaging'
 
 export default Vue.extend({
@@ -17,6 +17,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['media']),
+    ...mapGetters('textile', ['getInitialized']),
     groupedMessages() {
       const { id } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[id]
@@ -30,11 +31,18 @@ export default Vue.extend({
       return groupMessages(messages, replies, reactions)
     },
   },
-  mounted() {
-    const { id } = this.$route.params
-    this.getMessages(id)
-    this.subscribeToGroup(id)
-    this.fetchGroupMembers(id)
+  watch: {
+    getInitialized: {
+      handler(nextValue) {
+        if (nextValue) {
+          const { id } = this.$route.params
+          this.getMessages(id)
+          this.subscribeToGroup(id)
+          this.fetchGroupMembers(id)
+        }
+      },
+      immediate: true,
+    },
   },
   methods: {
     async getMessages(id: string) {

@@ -8,6 +8,7 @@ import { ModalWindows } from '~/store/ui/types'
 import { User } from '~/types/ui/user'
 import Unread from '~/components/ui/Unread/Unread.vue'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { DataStateType } from '~/store/dataState/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -45,7 +46,11 @@ export default Vue.extend({
     },
   },
   computed: {
+    DataStateType: () => DataStateType,
     ...mapState(['ui']),
+    ...mapState({
+      friendsDS: (state) => state.dataState.friends,
+    }),
     ModalWindows: () => ModalWindows,
   },
   created() {

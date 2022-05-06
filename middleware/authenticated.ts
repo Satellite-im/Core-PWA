@@ -1,8 +1,8 @@
 import { NuxtRouteConfig } from '@nuxt/types/config/router'
+import memoize from 'lodash/memoize'
 // TODO: verify why we got the import/named error for RawLocation import AP-394
 // eslint-disable-next-line import/named
 import { RawLocation } from 'vue-router'
-import memoize from 'lodash/memoize'
 import { Config } from '~/config'
 import { RootStore } from '~/types/store/store'
 interface Arguments {

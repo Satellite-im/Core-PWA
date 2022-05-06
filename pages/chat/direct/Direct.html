@@ -2,6 +2,6 @@
   <UiChatEncrypted v-if="$route.params.address" />
   <Conversation
     :messages="groupedMessages"
-    :loading="$store.state.textile.conversationLoading"
+    :loading="$store.state.textile.conversationLoading || !getInitialized"
   />
 </div>
