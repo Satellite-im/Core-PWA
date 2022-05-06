@@ -689,3 +689,8 @@ function friendAccountToOutgoingRequest(
     userInfo,
   }
 }
+
+export const exportForTesting = {
+  friendAccountToIncomingRequest,
+  friendAccountToOutgoingRequest,
+}
