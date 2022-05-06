@@ -367,18 +367,26 @@ export class FilSystem {
   /**
    * @method addChild
    * @argument {Item} child item to add to the filesystem
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {boolean} returns truthy if the child was added
    */
-  public addChild(child: Item): boolean {
+  public addChild(child: Item, parentDir?: Directory): boolean {
+    if (parentDir) {
+      return parentDir.addChild(child)
+    }
     return this.currentDirectory.addChild(child)
   }
 
   /**
    * @method getChild
    * @argument {string} childName name of the child to fetch
-   * @returns {Directory | Item} returns directory or Fil
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
+   * @returns {Item} Directory or Fil in question
    */
-  public getChild(childName: string): Item {
+  public getChild(childName: string, parentDir?: Directory | null): Item {
+    if (parentDir) {
+      return parentDir.getChild(childName)
+    }
     return this.currentDirectory.getChild(childName)
   }
 
@@ -396,9 +404,13 @@ export class FilSystem {
   /**
    * @method removeChild
    * @argument {string} childName name of the child to remove
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {boolean} returns truthy if child was removed
    */
-  public removeChild(childName: string): boolean {
+  public removeChild(childName: string, parentDir?: Directory | null): boolean {
+    if (parentDir) {
+      return parentDir.removeChild(childName)
+    }
     return this.currentDirectory.removeChild(childName)
   }
 
@@ -406,17 +418,22 @@ export class FilSystem {
    * @method removeChild
    * @argument {string} currentName name of the child to remove
    * @argument {string} newName
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {Item | null} returns new item or null if no item exists
    */
-  public renameChild(currentName: string, newName: string): Item | null {
-    const item = this.getChild(currentName)
+  public renameChild(
+    currentName: string,
+    newName: string,
+    parentDir?: Directory | null,
+  ): Item | null {
+    const item = this.getChild(currentName, parentDir)
     if (!item) {
       return null
     }
 
     item.name = newName
-    this.removeChild(currentName)
-    this.addChild(item)
+    this.removeChild(currentName, parentDir)
+    this.addChild(item, parentDir)
     return item
   }
 

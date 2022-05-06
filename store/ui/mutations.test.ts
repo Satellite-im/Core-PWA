@@ -5,6 +5,7 @@ import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
 import { Fil } from '~/libraries/Files/Fil'
+import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)
@@ -2511,6 +2512,7 @@ describe('mutations', () => {
     },
     isLoadingFileIndex: true,
     fileDownloadList: ['string'],
+    renameItem: {},
   }
 
   test('togglePinned', () => {
@@ -3100,8 +3102,14 @@ describe('mutations', () => {
   })
   test('setRenameItem', () => {
     const localizedState = { ...initialState }
-    mutations.default.setRenameItem(localizedState, 'new name')
-    expect(localizedState.renameCurrentName).toBe('new name')
+    const mockDirectoryData = {
+      name: 'Test Directory',
+      liked: false,
+      shared: false,
+      type: DIRECTORY_TYPE.DEFAULT,
+    }
+    mutations.default.setRenameItem(localizedState, mockDirectoryData)
+    expect(localizedState.renameItem).toBe(mockDirectoryData)
   })
   test('setSettingsRoute', () => {
     const localizedState = { ...initialState }

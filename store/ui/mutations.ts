@@ -13,6 +13,7 @@ import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -51,8 +52,8 @@ export default {
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
   },
-  setFilePreview(state: UIState, name: string) {
-    state.filePreview = name
+  setFilePreview(state: UIState, file: Fil) {
+    state.filePreview = file
   },
   setChatImageOverlay(state: UIState, image: ImageMessage | undefined) {
     state.chatImageOverlay = image
@@ -347,8 +348,8 @@ export default {
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setRenameItem(state: UIState, name: string) {
-    state.renameCurrentName = name
+  setRenameItem(state: UIState, name: Item) {
+    state.renameItem = name
   },
   setFileSort(state: UIState, sort: FileSort) {
     state.fileSort = sort

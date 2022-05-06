@@ -73,7 +73,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.$store.commit('ui/setFilePreview', item.name)
+        this.$store.commit('ui/setFilePreview', item)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)
@@ -110,7 +110,7 @@ export default Vue.extend({
         )
         await this.$FileSystem.removeFile(item.id)
       }
-      this.$FileSystem.removeChild(item.name)
+      this.$FileSystem.removeChild(item.name, item.parent)
       this.$store.commit(
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),

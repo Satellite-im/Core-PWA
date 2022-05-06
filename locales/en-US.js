@@ -190,6 +190,7 @@ export default {
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
           'Please consent to file scanning in your privacy settings',
+        lost: 'Cannot find file, please try again later',
       },
     },
     unlock: {

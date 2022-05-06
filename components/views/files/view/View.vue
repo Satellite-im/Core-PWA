@@ -10,7 +10,6 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { Fil } from '~/libraries/Files/Fil'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -22,23 +21,18 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  data() {
-    return {
-      file: undefined as Fil | undefined,
-    }
-  },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      file: (state) => (state as RootState).ui.filePreview,
+      fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
       blockNsfw: (state) => (state as RootState).settings.blockNsfw,
     }),
     ...mapGetters('ui', ['isFilesIndexLoading']),
     isDownloading(): boolean {
-      return this.ui.fileDownloadList.includes(this.file?.name)
+      return this.file?.name
+        ? this.fileDownloadList.includes(this.file.name)
+        : false
     },
-  },
-  created() {
-    this.file = this.$FileSystem.getChild(this.ui.filePreview) as Fil
   },
   methods: {
     /**
