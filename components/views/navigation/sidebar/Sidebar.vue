@@ -19,6 +19,7 @@ import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { Group } from '~/store/groups/types'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -57,7 +58,11 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile', 'groups']),
+    ...mapState(['ui', 'dataState', 'media', 'friends', 'groups']),
+    ...mapState({
+      conversations: (state) =>
+        (state as RootState).textile.conversations || [],
+    }),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -75,7 +80,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    'textile.conversations': {
+    conversations: {
       handler(newValue) {
         this.sortUserList(newValue)
       },
