@@ -639,7 +639,7 @@ export default {
 
     const friendsProgram: FriendsProgram = new FriendsProgram($SolanaManager)
 
-    const { account } = friend
+    const { account, address } = friend
 
     const transactionId = await friendsProgram.removeFriend(
       account,
@@ -648,6 +648,7 @@ export default {
 
     if (transactionId) {
       commit('removeFriend', friend.address)
+      await db.friends.where('address').equals(address).delete()
     }
   },
 }
