@@ -1,4 +1,4 @@
-import MiniSearch, { Options } from 'minisearch'
+import MiniSearch, { Options, Suggestion } from 'minisearch'
 import type { SearchOptions } from 'minisearch'
 import { UISearchResultData } from '~/types/search/search'
 
@@ -84,7 +84,10 @@ export default class SearchIndex {
       .map((doc) => ({ ...doc, ...this.getById(doc[this.idField]) }))
   }
 
-  autoSuggest(query: string, options?: SearchOptions | undefined) {
+  autoSuggest(
+    query: string,
+    options?: SearchOptions | undefined,
+  ): Suggestion[] {
     return this.index.autoSuggest(query, options)
   }
 

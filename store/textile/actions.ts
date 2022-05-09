@@ -21,6 +21,7 @@ import {
   SearchOrderType,
   UISearchResult,
   UISearchResultData,
+  MatchTypesEnum,
 } from '~/types/search/search'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
@@ -938,10 +939,12 @@ export default {
       query,
       page,
       orderBy,
+      fields,
     }: {
       query: QueryOptions
       page: number
       orderBy: SearchOrderType
+      fields: MatchTypesEnum[]
     },
   ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
@@ -964,6 +967,7 @@ export default {
       }`,
       {
         fuzzy: 0.3,
+        fields,
       },
     )
 
