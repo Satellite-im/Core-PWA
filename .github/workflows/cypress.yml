@@ -32,7 +32,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: xvfb-run -a npx cypress run --browser Chrome
+          command: xvfb-run npx cypress run --browser Chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Cypress run
