@@ -42,7 +42,10 @@ export class Bucket extends RFM implements RFMInterface {
       throw new Error('Textile key not found')
     }
 
-    this._buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
+    this._buckets = await Buckets.withKeyInfo(
+      { key: Config.textile.key },
+      { host: Config.textile.apiUrl },
+    )
     await this._buckets.getToken(this._textile.identity)
 
     const result = await this._buckets.getOrCreate(name, { encrypted: true })
