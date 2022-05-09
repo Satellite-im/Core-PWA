@@ -164,3 +164,14 @@ export type QueryOptions = {
   dateRange: DateOptions | null
   perPage: number
 }
+
+export enum MatchTypesEnum {
+  ID = 'id',
+  CONVERSATION = 'conversation',
+  FROM = 'from',
+  TO = 'to',
+  AT = 'at',
+  READAT = 'readAt',
+  TYPE = 'type',
+  PAYLOAD = 'payload',
+}
