@@ -13,7 +13,7 @@ const recoverySeed =
 describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   data.allDevices.forEach((item) => {
-    it(`Create Account on ${item.description}`, () => {
+    it.skip(`Create Account on ${item.description}`, () => {
       cy.viewport(item.width, item.height)
       cy.createAccountPINscreen(randomPIN)
 
