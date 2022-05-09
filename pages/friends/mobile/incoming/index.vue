@@ -201,7 +201,6 @@ export default Vue.extend({
   display: inline-block;
   padding-left: @normal-spacing;
   font-size: @mini-text-size;
-  &:extend(.font-accent);
   font-family: @primary-font;
 }
 
@@ -230,10 +229,6 @@ export default Vue.extend({
       position: relative;
       display: flex;
       margin-right: @light-spacing;
-    }
-
-    .toggle-sidebar {
-      color: @satellite-color;
     }
 
     .icon-button {

@@ -137,10 +137,6 @@ export default Vue.extend({
       margin-right: @light-spacing;
     }
 
-    .toggle-sidebar {
-      color: @satellite-color;
-    }
-
     .icon-button {
       margin-right: @large-spacing;
     }

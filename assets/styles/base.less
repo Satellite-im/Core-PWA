@@ -339,13 +339,18 @@ button {
 }
 
 //Volume Slider
-.volume-slider .vue-slider-process,
-.vue-slider-dot-tooltip-inner {
-  &:extend(.background-flair);
-  &::after {
-    border-top-color: @flair-color !important;
+.volume-slider {
+  .vue-slider-process {
+    &:extend(.background-flair);
   }
-  &:extend(.background-flair);
+  .vue-slider-dot-tooltip {
+    .vue-slider-dot-tooltip-inner {
+      &:extend(.background-flair);
+      &::after {
+        border-top-color: @flair-color !important;
+      }
+    }
+  }
 }
 
 // Progress
@@ -665,6 +670,11 @@ video {
     &:extend(.fourth-layer);
   }
 }
+input[type='checkbox'] {
+  accent-color: @flair-color;
+  &:extend(.font-primary);
+}
+
 .input {
   &:extend(.input-bg);
   &:extend(.font-primary);
