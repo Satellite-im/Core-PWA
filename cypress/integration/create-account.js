@@ -112,7 +112,7 @@ describe('Create Account Validations', () => {
     ).should('not.exist')
   })
 
-  it('Create account without image after attempting to add an invalid image file', () => {
+  it.skip('Create account without image after attempting to add an invalid image file', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
