@@ -32,8 +32,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          run: pkill Xvfb
-          command: npm run cy:chat
+          command: xvfb-run -a npx cypress run --browser Chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Cypress run
