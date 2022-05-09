@@ -353,13 +353,22 @@ export default {
       },
     )
 
-    friendsProgram.addEventListener(FriendsEvents.FRIEND_REMOVED, (account) => {
-      if (account) {
-        const address =
-          rootState.accounts.active === account.from ? account.to : account.from
-        commit('removeFriend', address)
-      }
-    })
+    friendsProgram.addEventListener(
+      FriendsEvents.FRIEND_REMOVED,
+      async (account) => {
+        if (account) {
+          const address =
+            rootState.accounts.active === account.from
+              ? account.to
+              : account.from
+          commit('removeFriend', address)
+          if (this.app.router.currentRoute?.params?.address === address) {
+            this.app.router.replace('/chat/direct')
+          }
+          await db.friends.where('address').equals(address).delete()
+        }
+      },
+    )
   },
   /**
    * @method createFriendRequest DocsTODO
@@ -626,7 +635,7 @@ export default {
    * @example
    */
   async removeFriend(
-    { commit }: ActionsArguments<FriendsState>,
+    { commit, rootState }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -648,6 +657,9 @@ export default {
 
     if (transactionId) {
       commit('removeFriend', friend.address)
+      if (this.app.router.currentRoute?.params?.address === friend.address) {
+        this.app.router.replace('/chat/direct')
+      }
       await db.friends.where('address').equals(address).delete()
     }
   },
