@@ -27,11 +27,11 @@
   <div class="controls">
       <div
         class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+        @click='toggleAlerts'
       >
 
         <UiCircle
           v-if='allUnseenNotifications.length'
-          v-on:click='toggleAlerts'
           class='notification-alert'
           :size='15'
           color='red'
@@ -40,7 +40,6 @@
           {{allUnseenNotifications.length}}
         </UiCircle>
         <bell-icon
-          v-on:click='toggleAlerts'
           size="1x"
           :class="`control-icon ${showAlerts ? 'primary' : ''}`"
           color="primary"

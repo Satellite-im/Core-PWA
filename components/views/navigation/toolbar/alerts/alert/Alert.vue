@@ -13,25 +13,32 @@ export default Vue.extend({
       required: false,
       default: () => {},
     },
-    notification: {
-      type: Object as PropType<Alert>,
-      default: () => {},
-      required: false,
-    },
   },
   data() {
     return {
-      localAlert: this.$props.alert,
       hidden: false,
       AlertType,
+      translateText: '',
+      translateParameter: {},
     }
   },
   computed: {
     ...mapState(['ui']),
   },
+  mounted() {
+    switch (this.alert?.type) {
+      case AlertType.DIRECT_MESSAGE: {
+        this.translateText = 'messaging.user_sent.user'
+        this.translateParameter = {
+          user: this.alert.from,
+          msgType: this.alert.type,
+        }
+      }
+    }
+  },
   methods: {
     dismiss() {
-      this.$store.dispatch('ui/removeSeenNotification', this.$props.alert.id)
+      this.$store.dispatch('ui/removeSeenNotification', this.alert.id)
       this.$data.hidden = true
       setTimeout(() => {
         this.$emit('sync', this.$Alerts.all)

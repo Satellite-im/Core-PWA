@@ -20,6 +20,9 @@ const getters = {
         return noti.state === AlertState.UNREAD
       })
   },
+  checkUnseenNotifications: (state: UIState): boolean => {
+    return !state.notifications.find((noti) => noti.state === AlertState.UNREAD)
+  },
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
   },

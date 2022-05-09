@@ -78,7 +78,11 @@ export default Vue.extend({
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
-    recipient() {
+    recipient():
+      | Friend
+      | { textilePubkey: string; type: string }
+      | null
+      | undefined {
       // It should not happen that someone tries to write to himself, but we should check
       // anyway
       const isMe =
@@ -101,10 +105,10 @@ export default Vue.extend({
       )
     },
     showSearchResult: {
-      set(state) {
+      set(state): void {
         this.$store.commit('ui/showSearchResult', state)
       },
-      get() {
+      get(): unknown {
         return this.ui.showSearchResult
       },
     },
@@ -136,6 +140,9 @@ export default Vue.extend({
         name: 'groupInvite',
         state: { isOpen: true, group },
       })
+    },
+    toggleAlerts() {
+      this.showAlerts = !this.showAlerts
     },
     isGroup(thing: any) {
       return thing?.type && thing?.type === 'group'
@@ -176,7 +183,7 @@ export default Vue.extend({
      * @description This updates the state to show/hide the specific modal you pass in
      * @example toggleModal(ModalWindows.WALLET)
      */
-    toggleModal(modalName: keyof ModalWindows): void {
+    toggleModal(modalName: keyof ModalWindows) {
       this.$store.commit('ui/toggleModal', {
         name: modalName,
         state: !this.ui.modals[modalName],

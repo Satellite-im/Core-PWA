@@ -108,7 +108,6 @@ Object {
     },
   },
   "unreadMessage": 0,
-  "unseenNotifications": 0,
   "userProfile": Object {},
 }
 `;

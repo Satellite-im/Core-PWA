@@ -55,7 +55,6 @@ const InitialUIState = (): UIState => ({
     route: 'emotes',
   },
   messages: [],
-  unseenNotifications: 0,
   unreadMessage: 0,
   isScrollOver: false,
   showOlderMessagesInfo: false,

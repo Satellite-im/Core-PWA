@@ -162,7 +162,6 @@ export interface UIState {
   quickProfile: object | boolean
   userProfile: object
   notifications: Alert[]
-  unseenNotifications: number
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean

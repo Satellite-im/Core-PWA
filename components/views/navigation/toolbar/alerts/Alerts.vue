@@ -2,8 +2,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { Alert } from '~/libraries/ui/Alerts'
+import { mapGetters, mapState } from 'vuex'
+import { Alert, AlertState } from '~/libraries/ui/Alerts'
 
 export default Vue.extend({
   props: {
@@ -16,15 +16,16 @@ export default Vue.extend({
   data() {
     return {
       alerts: this.$Alerts.all,
-      allSeen: true,
+      AlertState,
     }
   },
   computed: {
     ...mapState(['ui']),
+    ...mapGetters('ui', ['checkUnseenNotifications']),
   },
   methods: {
     syncAlerts(alerts: PropType<Array<Alert>>) {
-      this.$data.alerts = alerts
+      this.alerts = alerts
     },
     clearNotifications() {
       this.$store.dispatch('ui/clearAllNotifications')

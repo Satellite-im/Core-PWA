@@ -28,6 +28,7 @@ export class NotificationManager {
    */
   async init() {
     this.threadId = await this.getThreadID()
+    await this.getnotifications()
   }
 
   /**

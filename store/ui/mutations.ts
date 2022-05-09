@@ -340,31 +340,20 @@ export default {
     })
   },
   sendNotification(state: UIState, notification: Alert) {
-    state.unseenNotifications++
     state.notifications.push(notification)
   },
   setNotifications(state: UIState, notifications: Array<Alert>) {
     state.notifications = notifications
   },
-  seenNotificationCount(state: UIState) {
-    state.unseenNotifications = 0
-    state.notifications.forEach((noti) => {
-      if (noti.state === AlertState.UNREAD) {
-        state.unseenNotifications++
-      }
-    })
-  },
   clearAllNotifications(state: UIState) {
     state.notifications.forEach((notification) => {
       notification.state = AlertState.READ
     })
-    state.unseenNotifications = 0
   },
   notificationSeen(state: UIState, notificationId: string) {
     state.notifications.filter((item) => {
       if (item.id === notificationId) {
         item.state = AlertState.READ
-        state.unseenNotifications--
       }
       return state.notifications
     })

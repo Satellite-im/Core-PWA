@@ -78,7 +78,7 @@ export default {
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
-      user: 'sent you a {msgType}',
+      user: '{user} sent you a {msgType}',
     },
     user_sent_image: {
       me: 'you sent an {msgType}',
