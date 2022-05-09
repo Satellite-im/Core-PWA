@@ -171,7 +171,7 @@ export enum MatchTypesEnum {
   FROM = 'from',
   TO = 'to',
   AT = 'at',
-  READAT = 'readAt',
+  READ_AT = 'readAt',
   TYPE = 'type',
   PAYLOAD = 'payload',
 }
