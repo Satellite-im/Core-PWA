@@ -1,61 +1,58 @@
-.modal-card-head {
-  &:extend(.full-width);
-  .title {
-    font-size: @title-text;
-  }
-  background: transparent;
-  border-bottom: none;
-  font-size: @text-size;
-}
-
-.modal-background {
-  &:extend(.blur-less);
-  background: transparent !important;
-}
-
-.modal-card-body {
-  &:extend(.bordered);
-  &:extend(.round-corners);
-  font-weight: normal !important;
-  font-size: @text-size;
-  width: fit-content;
-  text-align: left;
-  padding: @normal-spacing;
-  background: transparent;
-  overflow: hidden;
-}
-
-.nopad {
-  padding: 0;
-}
-
-.modal-card {
-  width: fit-content;
-}
-
 .modal {
   z-index: @base-z-index + 103;
   position: absolute;
-}
-.close {
-  position: absolute;
-  right: @large-spacing;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  height: 30px;
-  font-size: 14pt;
-  cursor: pointer;
-  z-index: @base-z-index + 5;
-}
-.label {
-  padding: 0 !important;
+
+  .modal-background {
+    &:extend(.blur-less);
+    background: transparent !important;
+  }
+
+  .modal-card {
+    &:extend(.round-corners);
+    &:extend(.blur-more);
+    &:extend(.background-semitransparent-dark);
+    width: fit-content;
+
+    .modal-card-head {
+      &:extend(.full-width);
+      .title {
+        font-size: @title-text;
+      }
+      background: transparent;
+      border-bottom: none;
+      font-size: @text-size;
+    }
+
+    .modal-card-body {
+      &:extend(.bordered);
+      &:extend(.round-corners);
+      font-weight: normal !important;
+      font-size: @text-size;
+      width: fit-content;
+      text-align: left;
+      padding: @normal-spacing;
+      background: transparent;
+      overflow: hidden;
+      &.nopad {
+        padding: 0;
+      }
+    }
+    .close {
+      position: absolute;
+      right: @large-spacing;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      height: 30px;
+      font-size: 14pt;
+      cursor: pointer;
+      z-index: @base-z-index + 5;
+    }
+  }
 }
 
-.modal-card {
-  &:extend(.round-corners);
-  &:extend(.blur-more);
-  &:extend(.background-semitransparent-dark);
+.label {
+  padding: 0 !important;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -65,19 +62,19 @@
       height: auto;
       top: inherit;
     }
-  }
-  .modal-card {
-    height: @full;
-    &:extend(.full-width);
-    margin: 0px;
-    max-height: @full;
-  }
 
-  .modal-card-body {
-    &:extend(.full-width);
-    width: 100vw;
-    & > div {
+    .modal-card {
       height: @full;
+      &:extend(.full-width);
+      margin: 0px;
+      max-height: @full;
+      .modal-card-body {
+        &:extend(.full-width);
+        width: 100vw;
+        & > div {
+          height: @full;
+        }
+      }
     }
   }
 

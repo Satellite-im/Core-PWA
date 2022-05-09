@@ -1,6 +1,6 @@
-<template src="./Overlay.html" />
+<template src="./Overlay.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
