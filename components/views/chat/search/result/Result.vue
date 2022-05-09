@@ -132,7 +132,7 @@ export default Vue.extend({
         query: this.queryOptions,
         page: this.page,
         orderBy: this.orderBy,
-        matchType: [MatchTypesEnum.PAYLOAD],
+        fields: [MatchTypesEnum.PAYLOAD],
       })
       this.isLoading = DataStateType.Ready
     },

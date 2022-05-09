@@ -939,12 +939,12 @@ export default {
       query,
       page,
       orderBy,
-      matchType,
+      fields,
     }: {
       query: QueryOptions
       page: number
       orderBy: SearchOrderType
-      matchType: MatchTypesEnum[]
+      fields: MatchTypesEnum[]
     },
   ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
@@ -967,7 +967,7 @@ export default {
       }`,
       {
         fuzzy: 0.3,
-        fields: matchType,
+        fields,
       },
     )
 
