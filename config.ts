@@ -6,8 +6,11 @@ export const Config = {
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.textile.io',
-    apiUrl: process.env.NUXT_ENV_TEXTILE_API_URL,
+    browser:
+      process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.edge.satellite.one',
+    apiUrl:
+      process.env.NUXT_ENV_TEXTILE_API_URL ||
+      'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
