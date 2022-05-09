@@ -163,7 +163,13 @@ export default {
         free_tier: 'Free Tier',
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
+        default: 'Default',
+        recent: 'Recent',
+        deleted: 'Deleted',
+        favorited: 'Favorited',
         shared_items: 'Shared Items',
+        shared_folders: 'Shared Folders',
+        links: 'Links',
         coming_soon: 'Coming soon',
       },
       upload: {
@@ -184,6 +190,7 @@ export default {
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
           'Please consent to file scanning in your privacy settings',
+        lost: 'Cannot find file, please try again later',
       },
     },
     unlock: {

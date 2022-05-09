@@ -1,3 +1,6 @@
+import { TranslateResult } from 'vue-i18n'
+import { FileAsideRouteEnum } from '~/libraries/Enums/enums'
+
 export type SidebarLink = {
   to: String
   text: String
@@ -8,10 +11,8 @@ export type SidebarGrouping = {
   links: Array<SidebarLink>
 }
 
-export type SimpleItem = {
-  icon: String
-  text: String
-  active: Boolean
+export interface SimpleItem {
+  text: string | TranslateResult
+  route: FileAsideRouteEnum
+  icon: string
 }
-
-export type SimpleList = Array<SimpleItem>

@@ -6,7 +6,7 @@ import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
@@ -33,10 +33,27 @@ export default Vue.extend({
        */
     },
     directory(): Item[] {
+      if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
+        return (
+          this.$data.counter &&
+          this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
+        )
+      }
       return (
         this.$data.counter &&
-        this.fileSystem.currentDirectory.sortedContent(this.sort)
+        this.fileSystem.sortContent(this.sort, this.fileSystem.content)
       )
+    },
+  },
+  watch: {
+    '$route.query.route': {
+      handler(value) {
+        this.fileSystem.goBackToDirectory('root')
+        // if invalid route, reset to default
+        if (!Object.values(FileAsideRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+        }
+      },
     },
   },
   methods: {
@@ -56,7 +73,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.$store.commit('ui/setFilePreview', item.name)
+        this.$store.commit('ui/setFilePreview', item)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)
@@ -93,7 +110,7 @@ export default Vue.extend({
         )
         await this.$FileSystem.removeFile(item.id)
       }
-      this.$FileSystem.removeChild(item.name)
+      this.$FileSystem.removeChild(item.name, item.parent)
       this.$store.commit(
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
