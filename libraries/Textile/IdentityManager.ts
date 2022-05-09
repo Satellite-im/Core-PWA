@@ -124,11 +124,15 @@ export default class IdentityManager {
       throw new Error('Textile key not found')
     }
 
-    this.client = await Client.withKeyInfo({ key: Config.textile.key })
+    this.client = await Client.withKeyInfo(
+      { key: Config.textile.key },
+      Config.textile.apiUrl,
+    )
 
-    this.users = await Users.withKeyInfo({
-      key: Config.textile.key,
-    })
+    this.users = await Users.withKeyInfo(
+      { key: Config.textile.key },
+      { host: Config.textile.apiUrl },
+    )
 
     await this.users.getToken(identity)
 

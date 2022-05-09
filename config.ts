@@ -6,7 +6,8 @@ export const Config = {
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: 'https://hub.textile.io',
+    browser: process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.textile.io',
+    apiUrl: process.env.NUXT_ENV_TEXTILE_API_URL,
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
