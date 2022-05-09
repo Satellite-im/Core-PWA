@@ -7,12 +7,11 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
-import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
+import { ActionsArguments } from '~/types/store/store'
 
 export default {
   /**
@@ -334,17 +333,11 @@ export default {
     await db.initializeSearchIndexes()
 
     const { pin } = state
-    if (!textileInitialized && pin) {
-      await dispatch(
-        'textile/initialize',
-        {
-          id: payerAccount?.publicKey.toBase58(),
-          pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
-        },
-        { root: true },
-      )
-    }
+    dispatch('loadTextileAndRelated', {
+      initTextile: !textileInitialized && pin,
+      payerPublicKey: payerAccount?.publicKey.toBase58(),
+    })
+    await dispatch('friends/initialize', {}, { root: true })
 
     if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
       dispatch(
@@ -363,8 +356,30 @@ export default {
     }
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
-    dispatch('friends/initialize', {}, { root: true })
+  },
+  async loadTextileAndRelated(
+    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    {
+      initTextile,
+      payerPublicKey,
+    }: { initTextile?: boolean; payerPublicKey?: string },
+  ) {
+    if (initTextile) {
+      const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+      const { pin } = state
+      await dispatch(
+        'textile/initialize',
+        {
+          id: payerPublicKey,
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
+
     dispatch('groups/initialize', {}, { root: true })
+    commit('textile/textileInitialized', true, { root: true })
   },
 }
 

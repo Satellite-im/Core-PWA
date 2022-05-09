@@ -31,7 +31,11 @@
                 :text="$t('friends.received')"
               />
             </div>
-            <template v-if="searchIncomingFriends.length">
+            <UiLoadersFriend
+              v-if="dataState.friends === DataStateType.Loading"
+              :count="1"
+            />
+            <template v-else-if="searchIncomingFriends.length">
               <FriendsFriend
                 v-for="friend in searchIncomingFriends"
                 :key="friend.from"
@@ -45,7 +49,7 @@
                 request
               />
             </template>
-            <div v-if="friends.incomingRequests.length === 0">
+            <div v-else>
               <TypographyText
                 size="6"
                 plaintext
@@ -53,7 +57,11 @@
               />
             </div>
             <!-- Outgoing Requests -->
-            <template v-if="searchOutgoingFriends.length">
+            <UiLoadersFriend
+              v-if="dataState.friends === DataStateType.Loading"
+              :count="1"
+            />
+            <template v-else-if="searchOutgoingFriends.length">
               <div class="typography-container">
                 <TypographyText size="6" plaintext :text="$t('friends.sent')" />
               </div>
@@ -80,12 +88,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
 import { ArrowLeftIcon } from 'satellite-lucide-icons'
 
 import { DataStateType } from '~/store/dataState/types'
 
-import { OutgoingRequest, FriendRequest } from '~/types/ui/friends'
+import { FriendRequest } from '~/types/ui/friends'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {

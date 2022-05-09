@@ -26,13 +26,13 @@
         
         <div class="columns is-mobile">
           <div class="column profile-photo-column">
-            <div class="profile-photo">
+            <div :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']">
               <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
               <UiCircle :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' " :source="src" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
               <UiCircle 
                 type="icon" 
                 @click="openFileDialog"
-                icon="plus" 
+                icon="plus"
                 color="#000" 
                 :size="18"
                 class="plus-button" />
