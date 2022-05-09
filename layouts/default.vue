@@ -1,5 +1,8 @@
 <template>
   <div id="app" :class="$store.state.ui.theme.base.class">
+    <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen" nopad>
+      <UiPopupsErrorNetwork />
+    </UiModal>
     <Nuxt />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>

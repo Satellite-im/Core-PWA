@@ -102,6 +102,13 @@ export default {
     // @ts-ignore
     state.modals[modal.name] = modal.state
   },
+  toggleErrorNetworkModal(
+    state: UIState,
+    modal: { state: boolean; action: Function | null },
+  ) {
+    // @ts-ignore
+    state.modals.errorNetwork = { isOpen: modal.state, action: modal.action }
+  },
   setGlyphModalPack(state: UIState, pack: string) {
     state.glyphModalPack = pack
   },

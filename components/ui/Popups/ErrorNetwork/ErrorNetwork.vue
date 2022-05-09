@@ -17,11 +17,26 @@ export default Vue.extend({
   components: {
     RefreshCwIcon,
   },
-  props: {
-    action: {
-      type: Function,
-      default: () => {},
-      required: true,
+  methods: {
+    /**
+     * @method toggleNetworkErrorPopup
+     * @description
+     * @example
+     */
+    closeNetworkErrorPopup() {
+      this.$store.commit('ui/toggleErrorNetworkModal', {
+        state: false,
+        action: null,
+      })
+    },
+    /**
+     * @method tryAgain
+     * @description
+     * @example
+     */
+    tryAgain() {
+      this.$store.state.ui.modals.errorNetwork.action()
+      this.closeNetworkErrorPopup()
     },
   },
 })

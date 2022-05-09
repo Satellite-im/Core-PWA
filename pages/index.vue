@@ -1,12 +1,5 @@
 <template>
   <div class="container">
-    <UiModal
-      v-if="$store.state.ui.modals.errorNetwork"
-      v-click-outside="() => toggleNetworkErrorPopup()"
-      nopad
-    >
-      <UiPopupsErrorNetwork :action="tryAgain" />
-    </UiModal>
     <UiLoadersPageLoader
       :is-loading="true"
       :title="$t('pages.loading.loading')"
@@ -86,33 +79,11 @@ export default Vue.extend({
           return
         }
 
-        this.$store.commit('ui/toggleModal', {
-          name: 'errorNetwork',
+        this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,
+          action: this.loadAccount,
         })
       }
-    },
-    /**
-     * @method toggleNetworkErrorPopup
-     * @description
-     * @example
-     */
-    toggleNetworkErrorPopup() {
-      const modalName = 'errorNetwork'
-
-      this.$store.commit('ui/toggleModal', {
-        name: modalName,
-        state: !this.$store.state.ui.modals[modalName],
-      })
-    },
-    /**
-     * @method tryAgain
-     * @description
-     * @example
-     */
-    tryAgain() {
-      this.toggleNetworkErrorPopup()
-      this.loadAccount()
     },
   },
 })
