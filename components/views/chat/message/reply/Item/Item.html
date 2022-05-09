@@ -1,6 +1,6 @@
 <div class="reply-container">
   <div class="is-reply">
-    <span @click="(event) => $emit('click', event)">
+    <span @click="(event) => $emit('click', event, reply.from)">
       <UiCircle
         :type="src ? 'image' :'random'"
         :seed="address"
