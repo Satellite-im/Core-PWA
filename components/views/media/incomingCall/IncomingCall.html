@@ -1,6 +1,6 @@
 <div>
   <div class="content">
-    <div class="gradient-cover"></div>
+    <div class="gradient-cover" data-cy="incoming-call"></div>
     <div
       class="user-profile-picture"
       v-bind:style="`background:url(${user.profilePicture})`"
@@ -16,6 +16,7 @@
     </button>
     <button
       class="button is-success"
+      data-cy="incoming-call-accept-video"
       v-on:click="() => acceptCall(['audio', 'video'])"
     >
       <video-icon size="1x" class="button-icon" />

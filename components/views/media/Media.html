@@ -1,4 +1,9 @@
-<div id="mediastream" ref="mediastream" v-if="isActiveCall">
+<div
+  id="mediastream"
+  data-cy="mediastream"
+  ref="mediastream"
+  v-if="isActiveCall"
+>
   <MediaHeading />
   <div id="media" ref="media">
     <MediaUser
