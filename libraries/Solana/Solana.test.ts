@@ -95,7 +95,7 @@ describe('Solana.publicKeyFromSeeds', () => {
   })
 })
 
-describe('Solana.waitForAccount', () => {
+describe.skip('Solana.waitForAccount', () => {
   test('0', async () => {
     const param1: any = new web3.Connection('http://localhost:8899')
     const param2: any = new web3.PublicKey(10)
