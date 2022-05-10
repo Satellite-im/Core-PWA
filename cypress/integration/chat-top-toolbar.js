@@ -1,9 +1,13 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Chat Toolbar Tests', () => {
+describe('Chat Toolbar Tests', () => {
   it('Chat - Toolbar - Validate audio icon is displayed', () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

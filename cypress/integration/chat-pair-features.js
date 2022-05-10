@@ -1,10 +1,18 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const recoverySeedAccountOne =
-  'memory cherry add return that phrase suit plate ladder earth people gravity{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User A')
+    .map((item) => item.recoverySeed) + '{enter}'
 const recoverySeedAccountTwo =
-  'position few settle fold sister transfer song speed million congress acoustic version{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User B')
+    .map((item) => item.recoverySeed) + '{enter}'
 const recoverySeedAccountThree =
-  'emerge cat innocent buddy install shy topic goddess legend leisure mutual bitter{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User C')
+    .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const randomMessageTwo = faker.lorem.sentence() // generate random sentence
@@ -13,7 +21,7 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
+describe('Chat features with two accounts', () => {
   it('Ensure chat window from first account is displayed', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeedAccountOne)
@@ -73,7 +81,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it.skip('Send image to user B', () => {
+  it('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -82,13 +90,13 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Context Menu Options - Image Message', () => {
+  it('Context Menu Options - Image Message', () => {
     let optionsImage = ['Add Reaction', 'Reply', 'Copy Image', 'Save Image']
     cy.get('[data-cy=chat-image]').last().as('lastImage')
     cy.validateAllOptionsInContextMenu('@lastImage', optionsImage)
   })
 
-  it.skip('Image messages cannot be edited', () => {
+  it('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
@@ -184,7 +192,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert image received from user A', () => {
+  it('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -221,7 +229,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it.skip('Add reactions to image in chat', () => {
+  it('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
@@ -321,7 +329,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('@reactionToMessage').should(
       'have.css',
       'background-image',
-      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(40, 109, 254) 100%)',
+      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(39, 97, 253) 100%)',
     )
   })
 })

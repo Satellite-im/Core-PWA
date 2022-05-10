@@ -79,7 +79,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it.skip('Create account successfully without image after attempting to add a NSFW picture', () => {
+  it('Create account successfully without image after attempting to add a NSFW picture', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
@@ -112,7 +112,7 @@ describe('Create Account Validations', () => {
     ).should('not.exist')
   })
 
-  it.skip('Create account without image after attempting to add an invalid image file', () => {
+  it('Create account without image after attempting to add an invalid image file', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
@@ -144,7 +144,7 @@ describe('Create Account Validations', () => {
     ).should('not.exist')
   })
 
-  it.skip('Create account with valid image after attempting to add an invalid image file', () => {
+  it('Create account with valid image after attempting to add an invalid image file', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
