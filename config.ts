@@ -52,7 +52,7 @@ export const Config = {
   },
   solana: {
     customFaucet: 'https://faucet.satellite.one',
-    network: 'devnet',
+    network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
     friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',

@@ -25,6 +25,11 @@ describe('Solana.getClusterFromNetworkConfig', () => {
     const result: any = Solana.getClusterFromNetworkConfig('')
     expect(result).toMatchSnapshot()
   })
+
+  test('5', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('local')
+    expect(result).toMatchSnapshot()
+  })
 })
 
 describe('Solana.sleep', () => {

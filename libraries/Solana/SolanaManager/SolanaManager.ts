@@ -22,9 +22,7 @@ export default class SolanaManager {
   constructor() {
     this.accounts = []
     this.networkIdentifier = Config.solana.network
-    this.clusterApiUrl = clusterApiUrl(
-      getClusterFromNetworkConfig(Config.solana.network),
-    )
+    this.clusterApiUrl = getClusterFromNetworkConfig(Config.solana.network)
     this.connection = new Connection(
       this.clusterApiUrl,
       Config.solana.defaultCommitment,
@@ -300,40 +298,41 @@ export default class SolanaManager {
    * @returns
    */
   async requestAirdrop() {
-    if (this.payerAccount) {
-      let signature
+    if (!this.payerAccount) return null
 
-      if (Config.solana.customFaucet !== '') {
-        const result = await fetch(Config.solana.customFaucet, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            address: this.payerAccount?.publicKey.toBase58(),
-          }),
-        })
+    let signature
 
-        const jsonResult = await result.json()
-        if (jsonResult.status === 'success') {
-          signature = jsonResult.transactionSignature
-        } else {
-          return null
-        }
+    if (
+      Config.solana.network !== 'local' &&
+      Config.solana.customFaucet !== ''
+    ) {
+      const result = await fetch(Config.solana.customFaucet, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: this.payerAccount?.publicKey.toBase58(),
+        }),
+      })
+
+      const jsonResult = await result.json()
+      if (jsonResult.status === 'success') {
+        signature = jsonResult.transactionSignature
       } else {
-        signature = await this.connection.requestAirdrop(
-          this.payerAccount?.publicKey,
-          1000000000,
-        )
+        return null
       }
-
-      return this.connection.confirmTransaction(
-        signature,
-        Config.solana.defaultCommitment,
+    } else {
+      signature = await this.connection.requestAirdrop(
+        this.payerAccount?.publicKey,
+        1000000000,
       )
     }
 
-    return null
+    return this.connection.confirmTransaction(
+      signature,
+      Config.solana.defaultCommitment,
+    )
   }
 
   /**
