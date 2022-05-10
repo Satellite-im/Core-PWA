@@ -87,6 +87,14 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/unlock', this.$data.pin)
 
         if (this.getPhrase === '') {
+          // if user deleted local storage manually via dev console, clear indexeddb as well
+          if (
+            (await indexedDB.databases())
+              .map((db) => db.name)
+              .includes(this.$Config.indexedDbName)
+          ) {
+            indexedDB.deleteDatabase(this.$Config.indexedDbName)
+          }
           this.$router.replace('/setup/disclaimer')
         } else {
           this.$router.replace('/')
