@@ -1,6 +1,6 @@
 <div id="file-upload">
   <input
-    :type="editable ? `file` : `hidden`"
+    :type="recipient ? `file` : `hidden`"
     id="quick-upload"
     ref="quickUpload"
     @change="handleFile"
@@ -10,7 +10,7 @@
     v-if="type == 'quick'"
     @click="handleFileClick"
     :data-tooltip="$t('global.upload')"
-    :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${editable ? 'active' : 'inactive'}`"
+    :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${recipient ? 'active' : 'inactive'}`"
   >
     <plus-icon size="1.2x" class="control-icon" />
   </label>
