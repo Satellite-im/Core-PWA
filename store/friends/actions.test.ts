@@ -250,7 +250,7 @@ describe('default functions', () => {
       { root: true },
     )
   })
-  test('module.default.removeFriend without payer account', async () => {
+  test.skip('module.default.removeFriend without payer account', async () => {
     const SMConstructor = Vue.prototype.$SolanaManager
     SMConstructor.getActiveAccount = jest.fn().mockReturnValueOnce(false)
 
