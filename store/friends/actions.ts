@@ -2,6 +2,16 @@ import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
 import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
+import {
+  AcceptFriendRequestArguments,
+  CreateFriendRequestArguments,
+  friendAccountToIncomingRequest,
+  friendAccountToOutgoingRequest,
+  FriendsError,
+  FriendsState,
+} from './types'
+import { DataStateType } from '~/store/dataState/types'
+import { TextileError } from '~/store/textile/types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
@@ -19,16 +29,6 @@ import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 import Hounddog from '~/utilities/Hounddog'
-import { DataStateType } from '../dataState/types'
-import { TextileError } from '../textile/types'
-import {
-  AcceptFriendRequestArguments,
-  CreateFriendRequestArguments,
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
-  FriendsError,
-  FriendsState,
-} from './types'
 
 export default {
   async initialize({
@@ -573,10 +573,8 @@ export default {
 
     await friendsProgram.removeFriend(new PublicKey(account.accountId))
 
-    commit('removeFriend', friend.address)
-    if (this.app.router.currentRoute?.params?.address === address) {
-      this.app.router.replace('/chat/direct')
-    }
+    commit('removeFriend', address)
+
     await db.friends.where('address').equals(address).delete()
   },
 
