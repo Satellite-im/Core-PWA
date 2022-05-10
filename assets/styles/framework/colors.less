@@ -13,10 +13,10 @@
 @black: #000;
 
 @satellite-color: var(--satellite-color);
-@satellite-color-rgb: var(--satellite-color-rgb);
+@satellite-secondary: var(--satellite-color-secondary);
 
 @flair-color: var(--flair-color);
-@flair-color-secondary: rgba(var(--flair-color-rgb), 0.75);
+@flair-color-secondary: var(--flair-color-secondary);
 
 @scrollbar-color: @flair-color;
 
@@ -162,8 +162,8 @@
   -webkit-radial-gradient(top right, #1b2638, rgba(0, 0, 0, 0) 68%), #16171d;
 @satellite-gradient: linear-gradient(
   40deg,
-  @satellite-color-rgb 0%,
-  rgba(var(--satellite-color-rgb), 0.8) 100%
+  @satellite-color 0%,
+  @satellite-secondary 100%
 );
 @danger-gradient: linear-gradient(40deg, rgba(231, 76, 60, 1) 0%, @red 100%);
 @background-gradient: linear-gradient(

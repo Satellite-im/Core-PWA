@@ -1,9 +1,3 @@
-:root {
-  --app-height: 100vh;
-  --flair-color: #b53471;
-  --flair-color-rgb: 181, 52, 113;
-}
-
 .moonless_night {
   //------------- Colors -------------
   @white: #fff;
@@ -24,7 +18,6 @@
 
   //------------- Ui Colors -------------
   @border-color: @gray;
-  @flair-glow: 0 5px 14px -5px @flair-color;
 
   //------------- Ui Flair -------------
   @border: 1px solid @border-color;
@@ -34,16 +27,6 @@
   }
   .background-alt {
     background: @graydient !important;
-  }
-
-  /* Only for Safari to fix selection text background */
-
-  @media not all and (min-resolution: 0.001dpcm) {
-    @supports (-webkit-appearance: none) {
-      ::selection {
-        background: rgba(var(--flair-color-rgb), 0.99) !important;
-      }
-    }
   }
 
   &body,
@@ -65,9 +48,6 @@
       }
       &.active {
         border-radius: @half;
-        svg {
-          &:extend(.font-flair);
-        }
       }
       &:extend(.inline-flex-centered);
       margin: auto;

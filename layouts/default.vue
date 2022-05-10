@@ -4,9 +4,9 @@
       <UiPopupsErrorNetwork />
     </UiModal>
     <Nuxt />
-    <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+      :root { --flair-color: {{ $store.state.ui.theme.flair.value[0] }};
+      --flair-color-secondary: {{ $store.state.ui.theme.flair.value[1] }};}
     </v-style>
   </div>
 </template>

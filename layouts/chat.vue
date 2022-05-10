@@ -118,8 +118,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor }}; --flair-color-rgb:
-      {{ flairColorRGB }} }
+      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
+      {{ flairColor[1] }};}
     </v-style>
   </div>
 </template>
@@ -132,7 +132,6 @@ import DroppableWrapper from '../components/ui/DroppableWrapper/DroppableWrapper
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
-import { hexToRGB } from '~/utilities/Colors'
 import { DataStateType } from '~/store/dataState/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import type { Friend } from '~/types/ui/friends'
@@ -217,9 +216,6 @@ export default Vue.extend({
     },
     flairColor() {
       return this.ui.theme.flair.value
-    },
-    flairColorRGB() {
-      return hexToRGB(this.ui.theme.flair.value)
     },
     showOlderMessageInfo() {
       return this.ui.showOlderMessagesInfo

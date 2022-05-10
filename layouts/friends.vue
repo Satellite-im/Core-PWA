@@ -57,8 +57,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor }}; --flair-color-rgb:
-      {{ flairColorRGB }} }
+      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
+      {{ flairColor[1] }};}
     </v-style>
   </div>
 </template>
@@ -69,7 +69,6 @@ import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
-import { hexToRGB } from '~/utilities/Colors'
 import useMeta from '~/components/compositions/useMeta'
 
 export default Vue.extend({
@@ -119,9 +118,6 @@ export default Vue.extend({
   computed: {
     flairColor() {
       return this.$store.state.ui.theme.flair.value
-    },
-    flairColorRGB() {
-      return hexToRGB(this.$store.state.ui.theme.flair.value)
     },
     ...mapState(['friends', 'groups', 'dataState']),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),

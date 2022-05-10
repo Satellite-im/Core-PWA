@@ -1,9 +1,9 @@
 :root {
   --app-height: 100vh;
   --flair-color: #2761fd;
-  --flair-color-rgb: rgb(39, 97, 253);
+  --flair-color-secondary: #286cfe;
   --satellite-color: #2761fd;
-  --satellite-color-rgb: rgb(39, 97, 253);
+  --flair-color-secondary: #286cfe;
 }
 
 * {
@@ -299,7 +299,7 @@ button {
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     ::selection {
-      background: rgba(var(--flair-color-rgb), 0.99) !important;
+      background: rgba(var(--flair-color), 0.99) !important;
     }
   }
 }

@@ -1,4 +1,5 @@
 import { TranslateResult } from 'vue-i18n'
+import { string } from 'io-ts'
 import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
@@ -16,21 +17,23 @@ export type Theme = {
   class: string
 }
 
-export enum FlairColors {
-  SATELLITE = '#2761fd',
-  PEACH = '#ED4C67',
-  PINK = '#FDA7DF',
-  LIME = '#A3CB38',
-  PURPLE = '#6F1E51',
-  LAVENDER = '#9980FA',
-  SUNFLOWER = '#FFC312',
-  DEEP_BLUE = '#30336b',
-  VOID = '#2C3A47',
+export const FlairColors: any = {
+  SATELLITE: ['#2761fd', '#286CFE'],
+  PEACH: ['#ED4C67', '#ED5672'],
+  PINK: ['#FDA7DF', '#FDB1E9'],
+  LIME: ['#A3CB38', '#AED542'],
+  PURPLE: ['#6F1E51', '#80215D'],
+  LAVENDER: ['#9980FA', '#A891FF'],
+  SUNFLOWER: ['#FFC312', '#FACA3E'],
+  DEEP_BLUE: ['#30336b', '#2D328A'],
+  VOID: ['#2C3A47', '#36434F'],
 }
+
+export type FlairColor = { primary: string; secondary: string }
 
 export type Flair = {
   text: string
-  value: FlairColors
+  value: FlairColor
 }
 
 export const Flairs = [
