@@ -8,7 +8,7 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Chat - Sending Glyphs Tests', () => {
-  it('Send a glyph on chat', () => {
+  it('Send a glyph on chat', { retries: 1 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 

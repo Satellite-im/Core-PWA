@@ -13,7 +13,7 @@ let imageURL
 let randomTextEdited = randomMessage + randomNumber
 
 describe('Chat Features Tests', () => {
-  it('Chat - Send message on chat', () => {
+  it('Chat - Send message on chat', { retries: 1 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 

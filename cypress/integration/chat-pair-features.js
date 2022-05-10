@@ -22,15 +22,21 @@ const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
 describe('Chat features with two accounts', () => {
-  it('Ensure chat window from first account is displayed', () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeedAccountOne)
-    //Validate Chat Screen is loaded
-    cy.validateChatPageIsLoaded()
-  })
+  it(
+    'Ensure chat window from first account is displayed',
+    { retries: 1 },
+    () => {
+      //Import first account
+      cy.importAccount(randomPIN, recoverySeedAccountOne)
+      //Validate Chat Screen is loaded
+      cy.validateChatPageIsLoaded()
+
+      //Go to Conversation
+      cy.goToConversation('Chat User B')
+    },
+  )
 
   it('Send emoji to user B', () => {
-    cy.goToConversation('Chat User B')
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
     cy.get('[data-cy=chat-message] > span')
       .last()
@@ -122,14 +128,18 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
   })
 
-  it('Ensure chat window from second account is displayed', () => {
-    cy.importAccount(randomPIN, recoverySeedAccountTwo)
-    cy.validateChatPageIsLoaded()
-  })
+  it(
+    'Ensure chat window from second account is displayed',
+    { retries: 1 },
+    () => {
+      cy.importAccount(randomPIN, recoverySeedAccountTwo)
+      cy.validateChatPageIsLoaded()
+      cy.goToConversation('Chat User A')
+    },
+  )
 
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
-    cy.goToConversation('Chat User A')
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -247,14 +257,18 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
-    cy.goToConversation('Chat User C')
-    cy.get('[data-cy=editable-input]').should('be.visible').paste({
-      pasteType: 'text',
-      pastePayload: randomMessage,
-    })
-    cy.get('[data-cy=editable-input]').clear()
-  })
+  it(
+    'User should be able to reply without first clicking into the chat bar - Chat User C',
+    { retries: 1 },
+    () => {
+      cy.goToConversation('Chat User C')
+      cy.get('[data-cy=editable-input]').should('be.visible').paste({
+        pasteType: 'text',
+        pastePayload: randomMessage,
+      })
+      cy.get('[data-cy=editable-input]').clear()
+    },
+  )
 
   it('Assert timestamp immediately after sending message', () => {
     //Send a random message
@@ -284,23 +298,33 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Send a message from third account to second account', () => {
-    //import Chat User C account
-    cy.importAccount(randomPIN, recoverySeedAccountThree)
-    cy.validateChatPageIsLoaded()
-    //Send a message to Chat User B
-    cy.goToConversation('Chat User B')
-    cy.chatFeaturesSendMessage(randomMessage)
-  })
+  it(
+    'Send a message from third account to second account',
+    { retries: 1 },
+    () => {
+      //import Chat User C account
+      cy.importAccount(randomPIN, recoverySeedAccountThree)
+      cy.validateChatPageIsLoaded()
+      //Send a message to Chat User B
+      cy.goToConversation('Chat User B')
+      cy.chatFeaturesSendMessage(randomMessage)
+    },
+  )
 
-  it('React to other users reaction', () => {
-    //import Chat User A account the one that receive reactions previously
-    cy.importAccount(randomPIN, recoverySeedAccountOne)
-    cy.validateChatPageIsLoaded()
+  it(
+    'React to other users reaction - Load Account User A',
+    { retries: 1 },
+    () => {
+      //import Chat User A account the one that receive reactions previously
+      cy.importAccount(randomPIN, recoverySeedAccountOne)
+      cy.validateChatPageIsLoaded()
 
-    //Go to conversation with Chat User B
-    cy.goToConversation('Chat User B')
+      //Go to conversation with Chat User B
+      cy.goToConversation('Chat User B')
+    },
+  )
 
+  it('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)

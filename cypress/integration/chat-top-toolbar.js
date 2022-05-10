@@ -8,18 +8,22 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Chat Toolbar Tests', () => {
-  it('Chat - Toolbar - Validate audio icon is displayed', () => {
-    //Import account
-    cy.importAccount(randomPIN, recoverySeed)
+  it(
+    'Chat - Toolbar - Validate audio icon is displayed',
+    { retries: 1 },
+    () => {
+      //Import account
+      cy.importAccount(randomPIN, recoverySeed)
 
-    //Ensure messages are displayed before starting
-    cy.validateChatPageIsLoaded()
-    cy.goToConversation('cypress friend')
-    cy.hoverOnActiveIcon(
-      '[data-cy=toolbar-enable-audio]',
-      'Call' || 'Offline calling unavailable',
-    )
-  })
+      //Ensure messages are displayed before starting
+      cy.validateChatPageIsLoaded()
+      cy.goToConversation('cypress friend')
+      cy.hoverOnActiveIcon(
+        '[data-cy=toolbar-enable-audio]',
+        'Call' || 'Offline calling unavailable',
+      )
+    },
+  )
 
   it('Chat - Toolbar - Validate video icon is displayed', () => {
     cy.hoverOnActiveIcon(

@@ -144,44 +144,48 @@ describe('Create Account Validations', () => {
     ).should('not.exist')
   })
 
-  it('Create account with valid image after attempting to add an invalid image file', () => {
-    //Creating pin
-    cy.createAccountPINscreen(randomPIN)
+  it(
+    'Create account with valid image after attempting to add an invalid image file',
+    { retries: 1 },
+    () => {
+      //Creating pin
+      cy.createAccountPINscreen(randomPIN)
 
-    //Clicking on buttons to continue to user data screen
-    cy.createAccountSecondScreen()
-    cy.createAccountRecoverySeed()
+      //Clicking on buttons to continue to user data screen
+      cy.createAccountSecondScreen()
+      cy.createAccountRecoverySeed()
 
-    //Adding random data in user input fields
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput(randomName, randomStatus)
+      //Adding random data in user input fields
+      cy.validateUserInputIsDisplayed()
+      cy.createAccountUserInput(randomName, randomStatus)
 
-    //Attempting to add an invalid image and validating error message is displayed
-    cy.createAccountAddImage(invalidImagePath)
-    cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
-      'have.text',
-      'Please upload a valid image type such as JPG, PNG or SVG',
-    )
+      //Attempting to add an invalid image and validating error message is displayed
+      cy.createAccountAddImage(invalidImagePath)
+      cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
+        'have.text',
+        'Please upload a valid image type such as JPG, PNG or SVG',
+      )
 
-    //Now adding a valid image and validating user can pass to next step
-    cy.createAccountAddImage(filepathCorrect)
-    cy.get('[data-cy=cropper-container]', { timeout: 60000 })
-      .should('be.visible')
-      .then(() => {
-        cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
-      })
-    cy.get('[data-cy=error-message]').should('not.exist')
+      //Now adding a valid image and validating user can pass to next step
+      cy.createAccountAddImage(filepathCorrect)
+      cy.get('[data-cy=cropper-container]', { timeout: 60000 })
+        .should('be.visible')
+        .then(() => {
+          cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
+        })
+      cy.get('[data-cy=error-message]').should('not.exist')
 
-    //User is able to sign in after adding a correct image
-    cy.createAccountSubmit()
+      //User is able to sign in after adding a correct image
+      cy.createAccountSubmit()
 
-    //Validating profile picture is Not null
-    cy.validateChatPageIsLoaded()
-    cy.get(
-      '[data-cy=satellite-circle-profile] > [data-cy=circle-has-picture]',
-    ).should('be.visible')
-    cy.get(
-      '[data-cy=satellite-circle-profile] > [data-cy=circle-without-picture]',
-    ).should('not.exist')
-  })
+      //Validating profile picture is Not null
+      cy.validateChatPageIsLoaded()
+      cy.get(
+        '[data-cy=satellite-circle-profile] > [data-cy=circle-has-picture]',
+      ).should('be.visible')
+      cy.get(
+        '[data-cy=satellite-circle-profile] > [data-cy=circle-without-picture]',
+      ).should('not.exist')
+    },
+  )
 })

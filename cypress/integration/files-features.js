@@ -9,7 +9,7 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Files Features Tests', () => {
-  it('Chat - Files - Rename Folder', { retries: 2 }, () => {
+  it('Chat - Files - Rename Folder', { retries: 1 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
