@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import { TextileState, TextileError } from './types'
-import { ActionsArguments, RootState } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileConfig } from '~/types/textile/manager'
-import { MailboxManager } from '~/libraries/Textile/MailboxManager'
-import {
-  MessageRouteEnum,
-  NotificationTypes,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
-import { Config } from '~/config'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
   db,
@@ -32,8 +23,6 @@ import {
   UISearchResultData,
   MatchTypesEnum,
 } from '~/types/search/search'
-import { UIState } from '~/store/ui/types'
-import InitialUIState from '~/store/ui/state'
 import { AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'

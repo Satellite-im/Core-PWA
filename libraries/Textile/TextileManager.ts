@@ -11,9 +11,6 @@ import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
-import BucketManager from '~/libraries/Textile/BucketManager'
-import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { Config } from '~/config'
 import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 
 export default class TextileManager {
