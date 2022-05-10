@@ -8,6 +8,7 @@ import {
 import { TextileInitializationData } from '~/types/textile/manager'
 import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
 import { RFMInterface } from '~/libraries/Files/remote/interface/RFM.interface'
+import { TextileError } from '~/store/textile/types'
 
 export class Bucket extends RFM implements RFMInterface {
   private _textile: TextileInitializationData
@@ -88,7 +89,7 @@ export class Bucket extends RFM implements RFMInterface {
    */
   async updateIndex(index: FileSystemExport) {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     this._index = index
     const res = await this._buckets.pushPath(
@@ -106,7 +107,7 @@ export class Bucket extends RFM implements RFMInterface {
    */
   async ipnsLink(): Promise<string> {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     return (await this._buckets.links(this._key)).ipns
   }
@@ -121,7 +122,7 @@ export class Bucket extends RFM implements RFMInterface {
    */
   async pushFile(file: File, path: string, progressCallback: Function) {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
 
     const res = await this._buckets.pushPath(
@@ -142,6 +143,7 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   private _getStream(file: File) {
+    // @ts-ignore
     const reader = file.stream().getReader()
     const stream = new ReadableStream({
       start(controller) {
@@ -172,7 +174,7 @@ export class Bucket extends RFM implements RFMInterface {
    */
   async pullFileStream(id: string, name: string, size: number) {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     const fileStream = createWriteStream(name, { size })
     const writer = fileStream.getWriter()
@@ -192,7 +194,7 @@ export class Bucket extends RFM implements RFMInterface {
    */
   async removeFile(name: string) {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     const res = await this._buckets.removePath(this._key, name, {
       root: this._root,

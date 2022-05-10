@@ -27,6 +27,7 @@ import { AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
+import { UserInfoManager } from '~/libraries/Textile/UserManager'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -1029,5 +1030,24 @@ export default {
       )
     }
     return { data: data.slice(skip, perPage * page), totalRows: result?.length }
+  },
+
+  /**
+   * @description export filesystem index to textile bucket and update threaddb version
+   */
+  async exportFileSystem() {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+
+    if (!$TextileManager.bucket) {
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
+    }
+
+    if (!$TextileManager.userInfoManager) {
+      throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
+    }
+
+    await $TextileManager.bucket.updateIndex($FileSystem.export)
+    await $TextileManager.userInfoManager.setFilesVersion($FileSystem.version)
   },
 }

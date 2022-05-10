@@ -40,6 +40,7 @@ export const userinfoSchema = {
     consent_scan: { type: 'boolean' },
     consent_date: { type: 'number' },
     block_nsfw: { type: 'boolean' },
+    files_version: { type: 'number' },
   },
 }
 

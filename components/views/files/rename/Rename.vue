@@ -73,7 +73,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },

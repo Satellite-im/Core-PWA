@@ -92,7 +92,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      await this.$store.dispatch('textile/exportFileSystem')
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
@@ -117,7 +117,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
+      await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.forceRender()

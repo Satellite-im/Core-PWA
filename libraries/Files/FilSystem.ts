@@ -22,6 +22,14 @@ export class FilSystem {
   private _version: number = 1
 
   /**
+   * @getter version
+   * @returns {number} current version
+   */
+  get version(): number {
+    return this._version
+  }
+
+  /**
    * @getter currentDirectory
    * @returns {Directory} containing the current active directory
    */

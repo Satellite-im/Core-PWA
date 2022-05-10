@@ -116,6 +116,27 @@ export class UserInfoManager {
     ])
   }
 
+  /**
+   * @method setFilesVersion
+   * @description increment thread after update to keep all instances up to date
+   * @param {number} version current version number after export
+   */
+  async setFilesVersion(version: number): Promise<void> {
+    const record = await this._findRecord()
+    if (record) {
+      record.files_version = version
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return
+    }
+    await this.textile.client.create(this.threadID, CollectionName, [
+      {
+        user_address: this.textile.wallet.address,
+        created_at: Date.now(),
+        files_version: version,
+      },
+    ])
+  }
+
   async getThreadName(): Promise<string> {
     const crypto = new Crypto()
     const name = crypto.signMessageWithKey(

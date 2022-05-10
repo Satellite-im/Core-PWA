@@ -5,4 +5,5 @@ export interface UserdataFromThread {
   consent_scan: boolean
   consent_date: number
   block_nsfw: boolean
+  files_version: number
 }
