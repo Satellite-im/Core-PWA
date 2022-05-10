@@ -20,21 +20,6 @@ import { Config } from '~/config'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { UploadDropItemType } from '~/types/files/file'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    sendMessage: Function
-    text: string
-    updateText: Function
-    handleUpload: Function
-    throttleTyping: Function
-    typingNotifHandler: Function
-    smartTypingStart: Function
-    clearChatbar: Function
-    handleChatBorderRadius: Function
-    files: UploadDropItemType[]
-    onRecipientChangeResetUploadState: Function
-  }
-}
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -58,19 +43,16 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     ...mapGetters('chat', ['getFiles']),
-    activeFriend() {
+    activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.friends)
     },
-    /**
-     * Computes the amount of characters left
-     */
     /**
      * @method charlimit DocsTODO
      * @description Checks if current text is longer than the max character limit
      * @returns Boolean based on if the current text length is longer than the max character limit
      * @example
      */
-    charlimit() {
+    charlimit(): boolean {
       return this.text.length > this.$Config.chat.maxChars
     },
     /**
@@ -79,7 +61,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    hasCommand() {
+    hasCommand(): boolean {
       const parsedCommand = parseCommand(this.ui.chatbarContent)
       const currentCommand = commands.find(
         (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
@@ -94,7 +76,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    commandPreview() {
+    commandPreview(): boolean {
       // Hide commands for early access
       // return hasCommandPreview(this.ui.chatbarContent)
       return false
@@ -105,7 +87,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    isValidCommand() {
+    isValidCommand(): boolean {
       const currentText = parseCommand(
         this.ui.chatbarContent,
       ).name.toLowerCase()
@@ -122,7 +104,7 @@ export default Vue.extend({
        * @returns String of chatbars current text
        * @example const currText = this.get()
        */
-      get() {
+      get(): string {
         return this.ui.chatbarContent
       },
       /**
@@ -134,15 +116,14 @@ export default Vue.extend({
       set(value: string) {
         this.$store.dispatch('ui/setChatbarContent', {
           content: value,
-          userId: this.$props.recipient?.address,
+          userId: this.recipient?.address,
         })
       },
     },
-    placeholder() {
-      if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('ui.talk')
-      }
-      return ''
+    placeholder(): string {
+      return !this.hasCommand && this.text === ''
+        ? (this.$t('ui.talk') as string)
+        : ''
     },
   },
   watch: {
@@ -150,7 +131,7 @@ export default Vue.extend({
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
         if (activeFriend)
-          this.$data.recipientTyping =
+          this.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
       },
       deep: true,
@@ -184,13 +165,13 @@ export default Vue.extend({
         mutation.type === 'chat/setFiles'
       ) {
         if (this.recipient) {
-          this.$data.files = this.getFiles(this.recipient?.address)
+          this.files = this.getFiles(this.recipient?.address)
         }
       }
 
       if (mutation.type === 'chat/deleteFiles') {
         if (this.recipient) {
-          this.$data.files = []
+          this.files = []
         }
       }
     })
@@ -335,7 +316,7 @@ export default Vue.extend({
             text: value,
           })
         }
-        this.$data.nsfwUploadError = false
+        this.nsfwUploadError = false
       }
     },
     /**
@@ -384,7 +365,7 @@ export default Vue.extend({
       this.$store.commit('chat/setCountError', false)
     },
     onRecipientChangeResetUploadState(recipient: string) {
-      this.$data.files = this.getFiles(recipient)
+      this.files = this.getFiles(recipient)
       this.$store.commit('chat/setContainsNsfw', false)
       this.$store.commit('chat/setCountError', false)
       this.$store.commit('chat/setAlertNsfw', false)
