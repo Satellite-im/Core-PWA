@@ -501,10 +501,6 @@ Cypress.Commands.add('goToConversation', (user) => {
       cy.getAttached($el).click()
     })
 
-  /*cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
-    .contains(user)
-    .click()*/
-
   // Hide sidebar
   cy.get('[data-cy=hamburger-button]').click()
 
