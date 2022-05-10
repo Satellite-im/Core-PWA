@@ -60,7 +60,6 @@ describe('actions.default.initialize', () => {
         pass: 'pass',
       })
       expect(JestTextileManager.getIdentityPublicKey).toHaveBeenCalled()
-      expect(commit).toHaveBeenCalledWith('textileInitialized', true)
       expect(commit).toHaveBeenCalledWith(
         'accounts/updateTextilePubkey',
         'public key',
