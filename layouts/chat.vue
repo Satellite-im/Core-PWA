@@ -248,6 +248,14 @@ export default Vue.extend({
         this.$refs.swiper.$swiper.slideTo(newValue)
       }
     },
+    $route() {
+      this.$store.commit('ui/setShowOlderMessagesInfo', false)
+    },
+  },
+  beforeDestroy() {
+    this.$store.commit('ui/setShowOlderMessagesInfo', false)
+    // reset active conversation on chat leave
+    this.$store.commit('textile/setActiveConversation', '')
   },
   beforeDestroy() {
     // reset active conversation on chat leave

@@ -71,6 +71,9 @@ export default Vue.extend({
         this.autoScrollToBottom()
       }
     },
+    'textile.activeConversation'() {
+      this.autoScrollToBottom()
+    },
   },
   mounted() {
     const scrollContainerObserver = new ResizeObserver(() => {
