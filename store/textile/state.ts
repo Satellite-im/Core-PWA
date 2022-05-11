@@ -7,6 +7,10 @@ const InitialTextileState = (): TextileState => ({
   messageLoading: false,
   activeConversation: '',
   uploadProgress: {},
+  threadData: {
+    consentToScan: false,
+    blockNsfw: true,
+  },
 })
 
 export default InitialTextileState

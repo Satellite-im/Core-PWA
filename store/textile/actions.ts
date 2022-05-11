@@ -49,7 +49,7 @@ export default {
    * @param config Textile configuration (id, pass, wallet)
    */
   async initialize(
-    { commit }: ActionsArguments<TextileState>,
+    { commit, dispatch }: ActionsArguments<TextileState>,
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -67,20 +67,17 @@ export default {
       await $FileSystem.import(fsExport)
     }
     const record = await $TextileManager.userInfoManager?.getUserRecord()
-    if (record) {
-      /* Log CSAM Consent Data for future ticket as Hogan requested */
-      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
-      if (record.consent_scan !== undefined) {
-        commit('settings/setConsentScan', record.consent_scan, {
-          root: true,
-        })
-      }
-      if (record.block_nsfw !== undefined) {
-        commit('settings/setBlockNsfw', record.block_nsfw, {
-          root: true,
-        })
-      }
+    // if no threaddb record, create
+    if (!record) {
+      await dispatch('updateUserThreadData', {
+        consentToScan: false,
+        blockNsfw: true,
+      })
+      return textilePublicKey
     }
+    /* Log CSAM Consent Data for future ticket as Hogan requested */
+    Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
+    commit('setUserThreadData', record)
     return textilePublicKey
   },
   /**
@@ -1035,7 +1032,7 @@ export default {
   /**
    * @description export filesystem index to textile bucket and update threaddb version
    */
-  async exportFileSystem() {
+  async exportFileSystem({ dispatch }: ActionsArguments<TextileState>) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
@@ -1043,11 +1040,59 @@ export default {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
 
-    if (!$TextileManager.userInfoManager) {
+    await $TextileManager.bucket.updateIndex($FileSystem.export)
+    dispatch('updateUserThreadData', {
+      filesVersion: $FileSystem.version,
+    })
+  },
+
+  /**
+   * @description update threaddb record, then reflect the update in store.
+   * do not await threaddb work so the toggle switch is smooth
+   */
+  async updateUserThreadData(
+    { commit, rootState }: ActionsArguments<TextileState>,
+    {
+      consentToScan,
+      blockNsfw,
+      filesVersion,
+    }: {
+      consentToScan?: boolean
+      blockNsfw?: boolean
+      filesVersion?: number
+    },
+  ) {
+    const $UserInfoManager: UserInfoManager =
+      Vue.prototype.$TextileManager.userInfoManager
+
+    if (!$UserInfoManager) {
       throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
     }
 
-    await $TextileManager.bucket.updateIndex($FileSystem.export)
-    await $TextileManager.userInfoManager.setFilesVersion($FileSystem.version)
+    $UserInfoManager.updateRecord({
+      consentToScan,
+      blockNsfw,
+      filesVersion,
+    })
+
+    if (typeof consentToScan === 'boolean') {
+      commit('setUserThreadData', {
+        ...rootState.textile.threadData,
+        consentToScan,
+        consentUpdated: Date.now(),
+      })
+    }
+    if (typeof blockNsfw === 'boolean') {
+      commit('setUserThreadData', {
+        ...rootState.textile.threadData,
+        blockNsfw,
+      })
+    }
+    if (filesVersion) {
+      commit('setUserThreadData', {
+        ...rootState.textile.threadData,
+        filesVersion,
+      })
+    }
   },
 }

@@ -4,7 +4,7 @@ import {
   ReactionsTracker,
   RepliesTracker,
 } from '~/types/textile/mailbox'
-import { UserdataFromThread } from '~/types/textile/user'
+import { UserThreadData } from '~/types/textile/user'
 
 export interface Conversation {
   [key: string]: {
@@ -33,7 +33,7 @@ export interface TextileState {
       name: string
     }
   }
-  threadData?: UserdataFromThread
+  threadData: UserThreadData
 }
 
 export enum TextileError {

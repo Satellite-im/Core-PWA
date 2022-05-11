@@ -35,12 +35,11 @@ export const userinfoSchema = {
   type: 'object',
   properties: {
     _id: { type: 'string' },
-    created_at: { type: 'number' },
-    user_address: { type: 'string' },
-    consent_scan: { type: 'boolean' },
-    consent_date: { type: 'number' },
-    block_nsfw: { type: 'boolean' },
-    files_version: { type: 'number' },
+    userAddress: { type: 'string' },
+    consentToScan: { type: 'boolean' },
+    consentDate: { type: 'number' },
+    blockNsfw: { type: 'boolean' },
+    filesVersion: { type: 'number' },
   },
 }
 

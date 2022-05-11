@@ -11,6 +11,7 @@ import {
 } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -37,7 +38,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'settings']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      consentToScan: (state) =>
+        (state as RootState).textile.threadData.consentToScan,
+    }),
     ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   methods: {
@@ -46,7 +51,7 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      if (!this.settings.consentScan) {
+      if (!this.consentToScan) {
         this.$toast.error(
           this.$t('pages.files.errors.enable_consent') as string,
           {

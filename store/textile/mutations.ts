@@ -3,6 +3,7 @@ import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { Message } from '~/types/textile/mailbox'
 import { updateMessageTracker } from '~/utilities/Messaging'
+import { UserThreadData } from '~/types/textile/user'
 
 const mutations = {
   textileInitialized(state: TextileState, status: boolean) {
@@ -178,6 +179,9 @@ const mutations = {
         },
       }
     }
+  },
+  setUserThreadData(state: TextileState, data: UserThreadData) {
+    state.threadData = data
   },
 }
 

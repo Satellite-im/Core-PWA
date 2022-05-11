@@ -1,19 +1,18 @@
-<template src="./Privacy.html" />
+<template src="./Privacy.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
+import { mapState, mapGetters } from 'vuex'
 import { validURL } from '~/libraries/ui/Common'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'PrivacySettings',
   layout: 'settings',
   data() {
     return {
-      maxChars: this.$Config.chat.maxChars,
-      formatError: false,
-      lengthError: false,
+      formatError: false as boolean,
+      lengthError: false as boolean,
       serverTypes: [
         {
           text: this.$t('pages.privacy.ownInfo.satelliteServer'),
@@ -27,76 +26,82 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'settings']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+      settings: (state) => (state as RootState).settings,
+      threadData: (state) => (state as RootState).textile.threadData,
+    }),
+    ...mapGetters('textile', ['getInitialized']),
     serverType: {
       set(state) {
         this.$store.commit('settings/setServerType', state)
       },
-      get() {
+      get(): string {
         return this.settings.serverType
       },
     },
     ownInfo: {
-      set(state) {
-        if (validURL(state) && state.length < this.maxChars + 1) {
+      set(state: string) {
+        if (validURL(state) && state.length < this.$Config.chat.maxChars + 1) {
           this.formatError = false
           this.lengthError = false
           this.$store.commit('settings/setOwnInfo', state)
           return
         }
-        if (state.length > this.maxChars) {
+        if (state.length > this.$Config.chat.maxChars) {
           this.lengthError = true
         }
         if (!validURL(state)) {
           this.formatError = true
         }
       },
-      get() {
+      get(): string {
         return this.settings.ownInfo
       },
     },
     registry: {
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.registry
       },
     },
     storePin: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.storePin
       },
     },
     embeddedLinks: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/embeddedLinks', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.embeddedLinks
       },
     },
     consentScan: {
-      set(state) {
-        this.$store.dispatch('settings/setConsentScan', state)
+      set(consentToScan: boolean) {
+        this.$store.dispatch('textile/updateUserThreadData', { consentToScan })
       },
-      get() {
-        return this.settings.consentScan
+      get(): boolean {
+        return this.threadData.consentToScan
       },
     },
     blockNsfw: {
-      set(state) {
-        this.$store.dispatch('settings/setBlockNsfw', state)
+      set(blockNsfw: boolean) {
+        this.$store.dispatch('textile/updateUserThreadData', { blockNsfw })
       },
-      get() {
-        return this.settings.blockNsfw
+      get(): boolean {
+        return this.threadData.blockNsfw
       },
     },
     displayCurrentActivity: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/displayCurrentActivity', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.displayCurrentActivity
       },
     },

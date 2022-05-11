@@ -100,7 +100,7 @@ export class FilSystem {
   get export(): FileSystemExport {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
-      version: this._version++,
+      version: ++this._version,
       content: this.root.content.map((item) => {
         return this.exportChildren(item)
       }),

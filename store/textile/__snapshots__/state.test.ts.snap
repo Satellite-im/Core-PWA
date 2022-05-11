@@ -7,6 +7,10 @@ Object {
   "conversations": Object {},
   "initialized": false,
   "messageLoading": false,
+  "threadData": Object {
+    "blockNsfw": true,
+    "consentToScan": false,
+  },
   "uploadProgress": Object {},
 }
 `;
