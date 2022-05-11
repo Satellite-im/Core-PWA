@@ -12,10 +12,17 @@
     background: @splash-radial;
     margin: 0 @light-spacing;
   }
+
   .notification-alert {
     position: fixed;
     z-index: 1;
   }
+
+  .toggle-alerts {
+    cursor: pointer;
+    user-select: none;
+  }
+
   .controls {
     &:extend(.background-semitransparent-light);
     &:extend(.round-corners);
