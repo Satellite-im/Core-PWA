@@ -1,10 +1,18 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const recoverySeedAccountOne =
-  'memory cherry add return that phrase suit plate ladder earth people gravity{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User A')
+    .map((item) => item.recoverySeed) + '{enter}'
 const recoverySeedAccountTwo =
-  'position few settle fold sister transfer song speed million congress acoustic version{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User B')
+    .map((item) => item.recoverySeed) + '{enter}'
 const recoverySeedAccountThree =
-  'emerge cat innocent buddy install shy topic goddess legend leisure mutual bitter{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat User C')
+    .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const randomMessageTwo = faker.lorem.sentence() // generate random sentence
@@ -13,16 +21,22 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe.skip('Chat features with two accounts', () => {
-  it('Ensure chat window from first account is displayed', () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeedAccountOne)
-    //Validate Chat Screen is loaded
-    cy.validateChatPageIsLoaded()
-  })
+describe('Chat features with two accounts', () => {
+  it(
+    'Ensure chat window from first account is displayed',
+    { retries: 2 },
+    () => {
+      //Import first account
+      cy.importAccount(randomPIN, recoverySeedAccountOne)
+      //Validate Chat Screen is loaded
+      cy.validateChatPageIsLoaded()
+
+      //Go to Conversation
+      cy.goToConversation('Chat User B')
+    },
+  )
 
   it('Send emoji to user B', () => {
-    cy.goToConversation('Chat User B')
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
     cy.get('[data-cy=chat-message] > span')
       .last()
@@ -73,7 +87,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it.skip('Send image to user B', () => {
+  it('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -82,13 +96,13 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Context Menu Options - Image Message', () => {
+  it('Context Menu Options - Image Message', () => {
     let optionsImage = ['Add Reaction', 'Reply', 'Copy Image', 'Save Image']
     cy.get('[data-cy=chat-image]').last().as('lastImage')
     cy.validateAllOptionsInContextMenu('@lastImage', optionsImage)
   })
 
-  it.skip('Image messages cannot be edited', () => {
+  it('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
@@ -114,14 +128,18 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
   })
 
-  it('Ensure chat window from second account is displayed', () => {
-    cy.importAccount(randomPIN, recoverySeedAccountTwo)
-    cy.validateChatPageIsLoaded()
-  })
+  it(
+    'Ensure chat window from second account is displayed',
+    { retries: 2 },
+    () => {
+      cy.importAccount(randomPIN, recoverySeedAccountTwo)
+      cy.validateChatPageIsLoaded()
+      cy.goToConversation('Chat User A')
+    },
+  )
 
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
-    cy.goToConversation('Chat User A')
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -184,7 +202,7 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert image received from user A', () => {
+  it('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -221,7 +239,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it.skip('Add reactions to image in chat', () => {
+  it('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
@@ -239,14 +257,18 @@ describe.skip('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it('User should be able to reply without first clicking into the chat bar - Chat User C', () => {
-    cy.goToConversation('Chat User C')
-    cy.get('[data-cy=editable-input]').should('be.visible').paste({
-      pasteType: 'text',
-      pastePayload: randomMessage,
-    })
-    cy.get('[data-cy=editable-input]').clear()
-  })
+  it(
+    'User should be able to reply without first clicking into the chat bar - Chat User C',
+    { retries: 2 },
+    () => {
+      cy.goToConversation('Chat User C')
+      cy.get('[data-cy=editable-input]').should('be.visible').paste({
+        pasteType: 'text',
+        pastePayload: randomMessage,
+      })
+      cy.get('[data-cy=editable-input]').clear()
+    },
+  )
 
   it('Assert timestamp immediately after sending message', () => {
     //Send a random message
@@ -276,23 +298,33 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it('Send a message from third account to second account', () => {
-    //import Chat User C account
-    cy.importAccount(randomPIN, recoverySeedAccountThree)
-    cy.validateChatPageIsLoaded()
-    //Send a message to Chat User B
-    cy.goToConversation('Chat User B')
-    cy.chatFeaturesSendMessage(randomMessage)
-  })
+  it(
+    'Send a message from third account to second account',
+    { retries: 2 },
+    () => {
+      //import Chat User C account
+      cy.importAccount(randomPIN, recoverySeedAccountThree)
+      cy.validateChatPageIsLoaded()
+      //Send a message to Chat User B
+      cy.goToConversation('Chat User B')
+      cy.chatFeaturesSendMessage(randomMessage)
+    },
+  )
 
-  it('React to other users reaction', () => {
-    //import Chat User A account the one that receive reactions previously
-    cy.importAccount(randomPIN, recoverySeedAccountOne)
-    cy.validateChatPageIsLoaded()
+  it(
+    'React to other users reaction - Load Account User A',
+    { retries: 2 },
+    () => {
+      //import Chat User A account the one that receive reactions previously
+      cy.importAccount(randomPIN, recoverySeedAccountOne)
+      cy.validateChatPageIsLoaded()
 
-    //Go to conversation with Chat User B
-    cy.goToConversation('Chat User B')
+      //Go to conversation with Chat User B
+      cy.goToConversation('Chat User B')
+    },
+  )
 
+  it('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -321,7 +353,7 @@ describe.skip('Chat features with two accounts', () => {
     cy.get('@reactionToMessage').should(
       'have.css',
       'background-image',
-      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(40, 109, 254) 100%)',
+      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(39, 97, 253) 100%)',
     )
   })
 })

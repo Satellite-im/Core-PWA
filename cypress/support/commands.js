@@ -495,9 +495,11 @@ Cypress.Commands.add('goToConversation', (user) => {
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
-    .click()
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
 
   // Hide sidebar
   cy.get('[data-cy=hamburger-button]').click()
@@ -833,3 +835,18 @@ Cypress.Commands.add(
     return subject
   },
 )
+
+// Get element attached to DOM
+
+Cypress.Commands.add('getAttached', (selector) => {
+  const getElement =
+    typeof selector === 'function' ? selector : ($d) => $d.find(selector)
+  let $el = null
+  return cy
+    .document()
+    .should(($d) => {
+      $el = getElement(Cypress.$($d))
+      expect(Cypress.dom.isDetached($el)).to.be.false
+    })
+    .then(() => cy.wrap($el))
+})

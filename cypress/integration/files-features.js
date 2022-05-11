@@ -1,11 +1,15 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Files Features Tests', () => {
-  it('Chat - Files - Rename Folder', () => {
+describe('Files Features Tests', () => {
+  it('Chat - Files - Rename Folder', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 

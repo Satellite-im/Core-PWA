@@ -1,9 +1,13 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
-const userPassphrase =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower'
+const userPassphrase = dataRecovery.accounts
+  .filter((item) => item.description === 'cypress')
+  .map((item) => item.recoverySeed)
+  .toString()
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe.skip('Unlock pin should be persisted when store pin is enabled', () => {
+describe('Unlock pin should be persisted when store pin is enabled', () => {
   it('Create Account with store pin disabled', () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is disabled
     cy.createAccountPINscreen(randomPIN, false, false)

@@ -1,6 +1,10 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const recoverySeed =
-  'sword dad network author move fault web mimic develop drill cancel warfare{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat Pair B')
+    .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const longMessage = faker.lorem.words(250) // generate random sentence
 

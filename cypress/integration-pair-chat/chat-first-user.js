@@ -1,6 +1,10 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const recoverySeed =
-  'actress wave guitar resist pretty rifle agree hand assault guess vocal speed{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Chat Pair A')
+    .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe('Chat features with two accounts at the same time - First User', () => {

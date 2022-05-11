@@ -1,15 +1,18 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
-
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 const pngImagePath = 'cypress/fixtures/images/logo.png'
 const jpgImagePath = 'cypress/fixtures/images/jpeg-test.jpg'
 const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 
-describe.skip('Chat - Sending Images Tests', () => {
-  it('PNG image is sent successfully on chat', () => {
+describe('Chat - Sending Images Tests', () => {
+  it('PNG image is sent successfully on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
