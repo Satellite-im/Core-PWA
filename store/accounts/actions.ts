@@ -16,6 +16,7 @@ import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { UserThreadData } from '~/types/textile/user'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
 export default {
   /**
@@ -385,20 +386,8 @@ export default {
     }
 
     await dispatch('groups/initialize', {}, { root: true })
+    await dispatch('textile/listenToThread', {}, { root: true })
     commit('textile/textileInitialized', true, { root: true })
-
-    // listen for user data thread changes and update store accordingly
-    const $UserInfoManager: UserInfoManager =
-      Vue.prototype.$TextileManager.userInfoManager
-    const callback = (update?: Update<UserThreadData>) => {
-      if (!update || !update.instance) return
-      commit('textile/setUserThreadData', update.instance, { root: true })
-    }
-    $UserInfoManager.textile.client.listen(
-      $UserInfoManager.threadID,
-      [],
-      callback,
-    )
   },
 }
 

@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { TextileState, TextileError } from './types'
+import { Update } from '@textile/hub-threads-client'
+import { TextileError, TextileState } from './types'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
@@ -28,6 +29,7 @@ import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
+import { UserThreadData } from '~/types/textile/user'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -1098,5 +1100,29 @@ export default {
         filesVersion,
       })
     }
+  },
+
+  /**
+   * @description listen for user data thread changes and update store accordingly
+   */
+  async listenToThread({ commit, rootState }: ActionsArguments<TextileState>) {
+    const $UserInfoManager: UserInfoManager =
+      Vue.prototype.$TextileManager?.userInfoManager
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+    const callback = (update?: Update<UserThreadData>) => {
+      if (!update || !update.instance) return
+      commit('textile/setUserThreadData', update.instance, { root: true })
+      if (
+        rootState.textile.threadData?.filesVersion &&
+        rootState.textile.threadData.filesVersion !== $FileSystem.version
+      ) {
+        console.log('todo - update file system based on bucket index')
+      }
+    }
+    $UserInfoManager.textile.client.listen(
+      $UserInfoManager.threadID,
+      [],
+      callback,
+    )
   },
 }
