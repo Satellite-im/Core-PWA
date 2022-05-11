@@ -1,6 +1,7 @@
 import { Dexie, IndexableType } from 'dexie'
 import SearchIndex from './SearchIndex'
 import { Message } from '~/types/textile/mailbox'
+import { Config } from '~/config'
 
 export type DexieConversation = {
   key: string
@@ -37,7 +38,7 @@ export class SatelliteDB extends Dexie {
   } = {}
 
   public constructor() {
-    super('SatelliteDB')
+    super(Config.indexedDbName)
     this.initializeSchema()
 
     this.conversations = this.table('conversations')

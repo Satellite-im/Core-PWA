@@ -19,6 +19,7 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
+  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
