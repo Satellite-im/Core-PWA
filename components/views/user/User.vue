@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import VueMarkdown from 'vue-markdown'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
@@ -29,6 +30,7 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   components: {
+    VueMarkdown,
     SmartphoneIcon,
     CircleIcon,
   },

@@ -8,7 +8,7 @@
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
     <TypographyTitle :size="6" data-cy="sidebar-user-name" :text="user.name" />
-    <TypographySubtitle :size="6" :text="lastMessage" />
+    <VueMarkdown :source="lastMessage" class="subtitle" />
   </div>
   <div class="user-chat-details">
     <TypographyText :size="6" :text="timestamp" v-if="existConversation" />
