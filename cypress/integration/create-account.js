@@ -146,7 +146,7 @@ describe('Create Account Validations', () => {
 
   it(
     'Create account with valid image after attempting to add an invalid image file',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       //Creating pin
       cy.createAccountPINscreen(randomPIN)

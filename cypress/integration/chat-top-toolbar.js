@@ -10,7 +10,7 @@ const recoverySeed =
 describe('Chat Toolbar Tests', () => {
   it(
     'Chat - Toolbar - Validate audio icon is displayed',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       //Import account
       cy.importAccount(randomPIN, recoverySeed)

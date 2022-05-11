@@ -42,7 +42,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.createAccountSubmit()
     })
 
-    it(`Import Account on ${item.description}`, { retries: 1 }, () => {
+    it(`Import Account on ${item.description}`, { retries: 2 }, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
       //Validate profile name displayed

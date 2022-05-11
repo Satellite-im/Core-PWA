@@ -24,7 +24,7 @@ let glyphURL, imageURL, fileURL
 describe('Chat features with two accounts', () => {
   it(
     'Ensure chat window from first account is displayed',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       //Import first account
       cy.importAccount(randomPIN, recoverySeedAccountOne)
@@ -130,7 +130,7 @@ describe('Chat features with two accounts', () => {
 
   it(
     'Ensure chat window from second account is displayed',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       cy.importAccount(randomPIN, recoverySeedAccountTwo)
       cy.validateChatPageIsLoaded()
@@ -259,7 +259,7 @@ describe('Chat features with two accounts', () => {
 
   it(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       cy.goToConversation('Chat User C')
       cy.get('[data-cy=editable-input]').should('be.visible').paste({
@@ -300,7 +300,7 @@ describe('Chat features with two accounts', () => {
 
   it(
     'Send a message from third account to second account',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       //import Chat User C account
       cy.importAccount(randomPIN, recoverySeedAccountThree)
@@ -313,7 +313,7 @@ describe('Chat features with two accounts', () => {
 
   it(
     'React to other users reaction - Load Account User A',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       //import Chat User A account the one that receive reactions previously
       cy.importAccount(randomPIN, recoverySeedAccountOne)
