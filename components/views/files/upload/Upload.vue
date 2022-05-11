@@ -20,10 +20,6 @@ export default Vue.extend({
     FilePlusIcon,
   },
   props: {
-    type: {
-      type: String,
-      default: '',
-    },
     recipient: {
       type: Object as PropType<Friend | Group>,
       default: null,
@@ -43,6 +39,10 @@ export default Vue.extend({
       consentToScan: (state) =>
         (state as RootState).textile.threadData.consentToScan,
     }),
+    ...mapGetters('textile', ['getInitialized']),
+    activeFriend(): Friend | undefined {
+      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
+    },
   },
   methods: {
     /**
@@ -70,10 +70,8 @@ export default Vue.extend({
         return
       }
 
-      setTimeout(() => {
-        if (this.$refs.quickUpload)
-          (this.$refs.quickUpload as HTMLFormElement).click()
-      }, 200)
+      if (this.$refs.quickUpload)
+        (this.$refs.quickUpload as HTMLFormElement).click()
     },
     /**
      * @method handleFile

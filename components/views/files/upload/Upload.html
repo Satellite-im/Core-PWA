@@ -6,23 +6,12 @@
     @change="handleFile"
     multiple
   />
-  <label
-    v-if="type == 'quick'"
-    @click="handleFileClick"
+  <a
+    v-on="getInitialized ? { click: handleFileClick } : {}"
     v-tooltip.top="$t('global.upload')"
-    :class="`upload-label ${recipient ? 'active' : 'inactive'}`"
+    class="has-tooltip has-tooltip-top has-tooltip-primary upload-button"
+    :class="{disabled : !recipient || !getInitialized}"
   >
     <plus-icon size="1.2x" class="control-icon" />
-  </label>
-  <div v-if="type =='button'">
-    <label
-      @click="handleFileClick"
-      class="button is-button is-small is-primary is-normal-width"
-    >
-      <UiGlowingCursorArea>
-        <file-plus-icon size="1.2x" class="control-icon" />
-        &nbsp; {{ $t('global.upload_files') }}
-      </UiGlowingCursorArea>
-    </label>
-  </div>
+  </a>
 </div>
