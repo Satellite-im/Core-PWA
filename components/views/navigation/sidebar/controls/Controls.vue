@@ -7,6 +7,7 @@ import {
   MicIcon,
   MicOffIcon,
   HeadphonesIcon,
+  HeadphonesOffIcon,
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
@@ -20,6 +21,7 @@ export default Vue.extend({
     MicIcon,
     MicOffIcon,
     HeadphonesIcon,
+    HeadphonesOffIcon,
     VideoIcon,
     VideoOffIcon,
   },
