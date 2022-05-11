@@ -1069,8 +1069,12 @@ export default {
       throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
     }
 
+    // pull this out as a variable so the threaddb record and store have the same value
+    const consentUpdated = Date.now()
+
     $UserInfoManager.updateRecord({
       consentToScan,
+      consentUpdated,
       blockNsfw,
       filesVersion,
     })
@@ -1079,7 +1083,7 @@ export default {
       commit('setUserThreadData', {
         ...rootState.textile.threadData,
         consentToScan,
-        consentUpdated: Date.now(),
+        consentUpdated,
       })
     }
     if (typeof blockNsfw === 'boolean') {

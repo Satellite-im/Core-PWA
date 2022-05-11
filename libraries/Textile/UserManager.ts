@@ -74,17 +74,19 @@ export class UserInfoManager {
    */
   async updateRecord({
     consentToScan,
+    consentUpdated,
     blockNsfw,
     filesVersion,
   }: {
     consentToScan?: boolean
+    consentUpdated?: number
     blockNsfw?: boolean
     filesVersion?: number
   }) {
     const record = await this._findRecord()
     if (record && typeof consentToScan === 'boolean') {
       record.consentToScan = consentToScan
-      record.consentUpdated = Date.now()
+      record.consentUpdated = consentUpdated
       await this.textile.client.save(this.threadID, CollectionName, [record])
       return
     }
