@@ -351,12 +351,8 @@ export default {
     })
   },
   notificationSeen(state: UIState, notificationId: string) {
-    state.notifications.filter((item) => {
-      if (item.id === notificationId) {
-        item.state = AlertState.READ
-      }
-      return state.notifications
-    })
+    state.notifications.find((item) => item.id === notificationId).state =
+      AlertState.READ
   },
   updateTheme(state: UIState, theme: Theme) {
     state.theme.base = theme

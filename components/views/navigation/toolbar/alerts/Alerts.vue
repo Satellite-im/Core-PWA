@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -13,22 +14,14 @@ export default Vue.extend({
       required: false,
     },
   },
-  data() {
-    return {
-      alerts: this.$Alerts.all,
-      AlertState,
-    }
-  },
   computed: {
-    ...mapState(['ui']),
-    ...mapGetters('ui', ['checkUnseenNotifications']),
+    ...mapState({ ui: (state) => (state as RootState).ui }),
+    ...mapGetters('ui', ['allUnseenNotifications']),
+    AlertState: () => AlertState,
   },
   methods: {
-    syncAlerts(alerts: PropType<Array<Alert>>) {
-      this.alerts = alerts
-    },
     clearNotifications() {
-      this.$store.dispatch('ui/clearAllNotifications')
+      this.$store.commit('ui/clearAllNotifications')
     },
   },
 })

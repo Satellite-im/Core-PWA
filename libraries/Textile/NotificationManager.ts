@@ -1,4 +1,4 @@
-import { Identity, Query, ThreadID, Update } from '@textile/hub'
+import { Query, ThreadID, Update } from '@textile/hub'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
@@ -8,7 +8,6 @@ const CollectionName = 'notification'
 export class NotificationManager {
   private threadId?: ThreadID
   textile: TextileInitializationData
-  identity: Identity
   listeners: {
     notifications?: (
       notification?: Update<any> | undefined,
@@ -16,8 +15,7 @@ export class NotificationManager {
     ) => void
   }
 
-  constructor(textile: TextileInitializationData, identity: Identity) {
-    this.identity = identity
+  constructor(textile: TextileInitializationData) {
     this.textile = textile
     this.listeners = {}
   }

@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 
 import { mapState } from 'vuex'
 import { Alert, AlertType } from '~/libraries/ui/Alerts'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -23,7 +24,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({ ui: (state) => (state as RootState).ui }),
   },
   mounted() {
     switch (this.alert?.type) {
@@ -40,9 +41,6 @@ export default Vue.extend({
     dismiss() {
       this.$store.dispatch('ui/removeSeenNotification', this.alert.id)
       this.$data.hidden = true
-      setTimeout(() => {
-        this.$emit('sync', this.$Alerts.all)
-      }, 250)
     },
   },
 })

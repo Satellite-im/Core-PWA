@@ -10,6 +10,7 @@ import { GroupsState } from '~/store/groups/types'
 import { SettingsState } from '~/store/settings/types'
 import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
+import { VideoState } from '~/store/video/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -19,6 +20,7 @@ export interface RootState {
   textile: TextileState
   webrtc: WebRTCState
   groups: GroupsState
+  video: VideoState
   ui: UIState
   settings: SettingsState
   conversation: ConversationState

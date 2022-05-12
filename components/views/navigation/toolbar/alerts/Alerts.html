@@ -1,18 +1,11 @@
 <div id="alerts">
   <InteractablesButton
-  v-if='!checkUnseenNotifications'
+  v-if='allUnseenNotifications.length'
   size='small'
   :action='clearNotifications'
   style='margin-bottom:5px'
   type='primary'
   :text="$t('ui.clear_all')"/>
-  <ToolbarAlertsAlert
-    v-if="alerts.length"
-    v-for="alert in alerts"
-    :alert="alert"
-    :key="alert.id"
-    @sync="syncAlerts"
-  />
   <ToolbarAlertsAlert
     v-for="notification in notifications"
     v-if="notifications.length && notification.state !== AlertState.READ"
@@ -20,7 +13,7 @@
     :key="notification.id"
   />
   <TypographySubtitle
-    v-if="!alerts.length && !notifications.length "
+    v-if="!notifications.length "
     :size="6"
     :text="$t('alerts.caught_up')"
   />

@@ -24,6 +24,7 @@ import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Friend } from '~/types/ui/friends'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -65,17 +66,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState([
-      'ui',
-      'audio',
-      'video',
-      'webrtc',
-      'conversation',
-      'groups',
-      'friends',
-    ]),
-    ...mapGetters('ui', ['showSidebar']),
-    selectedGroup() {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+      conversation: (state) => (state as RootState).conversation,
+      groups: (state) => (state as RootState).groups,
+      friends: (state) => (state as RootState).friends,
+    }),
+    ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
+    selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient():
@@ -108,7 +109,7 @@ export default Vue.extend({
       set(state): void {
         this.$store.commit('ui/showSearchResult', state)
       },
-      get(): unknown {
+      get(): boolean {
         return this.ui.showSearchResult
       },
     },

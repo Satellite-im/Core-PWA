@@ -117,12 +117,6 @@ export default {
   ) {
     commit('notificationSeen', notificationId)
   },
-  clearAllNotifications({ commit, rootState }: ActionsArguments<UIState>) {
-    commit('clearAllNotifications')
-  },
-  checkUnseen({ commit, rootState }: ActionsArguments<UIState>) {
-    commit('seenNotificationCount')
-  },
   /**
    * @method clearKeybinds
    * @description Unbinds all current keybindings with Mousetrap

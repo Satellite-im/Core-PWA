@@ -98,10 +98,7 @@ export default class TextileManager {
     this.userInfoManager = new UserInfoManager(textile)
     await this.userInfoManager.init()
 
-    this.notificationManager = new NotificationManager(
-      textile,
-      textile.identity,
-    )
+    this.notificationManager = new NotificationManager(textile)
     await this.notificationManager.init()
   }
 
