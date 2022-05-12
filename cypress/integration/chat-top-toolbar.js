@@ -32,7 +32,7 @@ describe('Chat Toolbar Tests', () => {
     )
   })
 
-  it('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
+  it.skip('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
     cy.get('[data-cy=toolbar-alerts]').should('be.visible')
     cy.hoverOnComingSoonIcon(
       '[data-cy=toolbar-alerts] > .tooltip-container',
