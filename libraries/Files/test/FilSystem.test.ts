@@ -967,5 +967,9 @@ describe('FilSystem.findItem', () => {
       )
       expect(result).toMatchSnapshot()
     })
+    it('Correctly sorts files by recent', () => {
+      const result: Fil[] = filesystem.recentFiles
+      expect(result).toMatchSnapshot()
+    })
   })
 })
