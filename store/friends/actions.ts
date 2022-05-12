@@ -234,7 +234,7 @@ export default {
         },
         { root: true },
       )
-      commit('conversation/addParticipant', friend.address, { root: true })
+      dispatch('conversation/addParticipant', friend.address, { root: true })
       return
     }
     commit(

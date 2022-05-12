@@ -232,7 +232,7 @@ const webRTCActions = {
     setInterval(() => {
       if (rootState.conversation) {
         rootState.conversation.participants
-          .filter((p) => p.peerId !== $Peer2Peer.id)
+          .filter((p) => p.peerId && p.peerId !== $Peer2Peer.id)
           .forEach((p) => {
             $Peer2Peer.sendMessage(
               {
@@ -279,8 +279,8 @@ const webRTCActions = {
     { state }: ActionsArguments<WebRTCState>,
     { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
   ) {
-    if (!state.activeCall) {
-      throw new Error('mute: no active call')
+    if (!state.activeCall || !peerId) {
+      return
     }
     const call = $WebRTC.getCall(state.activeCall.callId)
     if (!call) {

@@ -228,6 +228,9 @@ export class Call extends Emitter<CallEventListeners> {
    * await call.sendPeerCallRequest(peerId)
    */
   async sendPeerCallRequest(peerId: string, force = false) {
+    if (!peerId) {
+      return
+    }
     if (
       !force &&
       (this.peerConnected[peerId] || this.peerDialingDisabled[peerId])

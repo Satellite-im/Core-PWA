@@ -54,6 +54,7 @@ export default Vue.extend({
     'conversation.participants': {
       handler() {},
       deep: true,
+      immediate: true,
     },
   },
   methods: {
