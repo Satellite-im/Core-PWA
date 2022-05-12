@@ -65,15 +65,6 @@ Cypress.Commands.add(
     }),
 )
 
-// Temporary until Error 503 for Network Request Error on Recovery Seed Screen Is Present
-Cypress.Commands.add('retryOnNetworkRequestError', () => {
-  cy.get('body').then(($body) => {
-    if ($body.find('.red').length > 0) {
-      cy.contains('Recover Account').click()
-    }
-  })
-})
-
 //Create Account Commands
 
 Cypress.Commands.add('createAccount', (pin) => {
@@ -228,7 +219,6 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .trigger('input')
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
-  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
 })
 
 Cypress.Commands.add(
@@ -270,7 +260,6 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
   cy.get('[data-cy=add-passphrase]').type('{enter}')
 
   cy.contains('Recover Account').click()
-  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
 })
 
 //Chat - Basic Commands for Text and Emojis
@@ -505,7 +494,7 @@ Cypress.Commands.add('goToConversation', (user) => {
   cy.get('[data-cy=hamburger-button]').click()
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 150000 })
+  cy.get('[data-cy=user-connected]', { timeout: 180000 })
     .should('be.visible')
     .should('have.text', user)
 })
