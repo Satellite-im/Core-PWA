@@ -124,9 +124,11 @@ export default {
 
     const allFriendsData = [...incoming, ...outgoing]
 
-    allFriendsData.forEach((friendData) => {
-      dispatch('fetchFriendDetails', friendData)
-    })
+    await Promise.all(
+      allFriendsData.map(async (friendData) => {
+        dispatch('fetchFriendDetails', friendData)
+      }),
+    )
 
     // // Attempt RTC Connection to all friends
     // // TODO: We should probably only try to connect to friends we're actually chatting with
@@ -194,7 +196,6 @@ export default {
       item: {},
       pending: false,
       stored,
-      activeChat: false,
       address: friendKey,
       state: 'offline',
       unreadCount: 0,
@@ -205,9 +206,6 @@ export default {
 
     if (!friendExists) {
       commit('addFriend', friend)
-
-      // Try create the webrtc connection
-      dispatch('webrtc/createPeerConnection', friend.address, { root: true })
 
       // Eventually delete the related friend request
       commit(
@@ -221,9 +219,32 @@ export default {
       dispatch('syncFriendIDB', friend)
       return
     }
-    commit('updateFriend', friend)
 
+    commit('updateFriend', friend)
     dispatch('syncFriendIDB', friend)
+
+    // Try update the webrtc connection
+    if (rootState.textile.activeConversation === friendKey) {
+      dispatch(
+        'conversation/setConversation',
+        {
+          id: friend.peerId,
+          type: 'friend',
+          participants: [],
+        },
+        { root: true },
+      )
+      dispatch('conversation/addParticipant', friend.address, { root: true })
+      return
+    }
+    commit(
+      'conversation/updateParticipant',
+      {
+        address: friend.address,
+        peerId: friend.peerId,
+      },
+      { root: true },
+    )
   },
   /**
    * @method syncFriendIDB sync a friend with the local indexedDB

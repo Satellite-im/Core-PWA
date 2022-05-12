@@ -12,6 +12,7 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 export default {
   /**
@@ -322,25 +323,28 @@ export default {
     await $Crypto.init(userAccount)
   },
   async startup(
-    { dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
+    commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
+
     await db.initializeSearchIndexes()
 
     const { pin } = state
-    dispatch('loadTextileAndRelated', {
+    await dispatch('loadTextileAndRelated', {
       initTextile: !textileInitialized && pin,
       payerPublicKey: payerAccount?.publicKey.toBase58(),
     })
     await dispatch('friends/initialize', {}, { root: true })
 
-    if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
-      dispatch(
+    if ($SolanaManager.payerAccount?.secretKey) {
+      await dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {
@@ -378,7 +382,7 @@ export default {
       )
     }
 
-    dispatch('groups/initialize', {}, { root: true })
+    await dispatch('groups/initialize', {}, { root: true })
     commit('textile/textileInitialized', true, { root: true })
   },
 }

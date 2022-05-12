@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import {
   VideoIcon,
   VideoOffIcon,
@@ -9,6 +10,25 @@ import {
   MicOffIcon,
 } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
+import { PeerMutedState } from '~/store/webrtc/types'
+
+async function loadVideos() {
+  const videos = document.querySelectorAll(
+    `.video-stream:not(.loaded)`,
+  ) as NodeListOf<HTMLVideoElement>
+
+  await Promise.all(
+    Array.from(videos).map(async (video: HTMLVideoElement) => {
+      await video?.load()
+      await video?.play().catch(() => {
+        // video muted/unloaded
+      })
+      video.classList.add('loaded')
+    }),
+  )
+}
 
 export default Vue.extend({
   components: {
@@ -26,14 +46,6 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    videoStream: {
-      type: MediaStream,
-      default: undefined,
-    },
-    audioStream: {
-      type: MediaStream,
-      default: undefined,
-    },
     audioMuted: {
       type: Boolean,
       default: false,
@@ -43,28 +55,88 @@ export default Vue.extend({
       default: false,
     },
   },
+  computed: {
+    ...mapState(['audio', 'video', 'webrtc']),
+    call() {
+      return (
+        this.user?.peerId &&
+        this.webrtc.activeCall?.callId &&
+        $WebRTC.getCall(this.webrtc.activeCall.callId)
+      )
+    },
+    muted() {
+      return (
+        (this.user?.peerId && this.webrtc.streamMuted[this.user.peerId]) || {
+          audio: true,
+          video: true,
+          screen: true,
+        }
+      )
+    },
+    streams() {
+      return (
+        this.call &&
+        this.user?.peerId &&
+        (this.call as Call).streams[(this.user as User).peerId as string]
+      )
+    },
+    videoStream() {
+      return (
+        this.call &&
+        !(this.muted as PeerMutedState).video &&
+        (this.streams as CallPeerStreams)?.video
+      )
+    },
+    audioStream() {
+      return (
+        this.call &&
+        !(this.muted as PeerMutedState).audio &&
+        (this.streams as CallPeerStreams)?.audio
+      )
+    },
+    screenStream() {
+      return (
+        this.call &&
+        !(this.muted as PeerMutedState).screen &&
+        (this.streams as CallPeerStreams)?.screen
+      )
+    },
+  },
   watch: {
+    muted() {},
+    streams() {
+      document.querySelectorAll('.video-stream.loaded').forEach((video) => {
+        video.classList.remove('loaded')
+      })
+      this.$nextTick(() => {
+        loadVideos()
+      })
+    },
     videoStream(value) {
-      if (value) {
-        this.$nextTick(() => {
-          this.playVideo()
-        })
-      }
+      document.querySelectorAll('.video-stream.loaded').forEach((video) => {
+        video.classList.remove('loaded')
+      })
+      this.$nextTick(() => {
+        loadVideos()
+      })
+    },
+    screenStream() {
+      document.querySelectorAll('.video-stream.loaded').forEach((video) => {
+        video.classList.remove('loaded')
+      })
+      this.$nextTick(() => {
+        loadVideos()
+      })
     },
   },
   mounted() {
-    if (this.videoStream) {
-      this.playVideo()
-    }
-  },
-  methods: {
-    playVideo() {
-      const video = document.querySelector(
-        `#${this.isLocal ? 'local' : 'remote'}-video`,
-      ) as HTMLVideoElement
+    document.querySelectorAll('.video-stream.loaded').forEach((video) => {
+      video.classList.remove('loaded')
+    })
 
-      video?.play()
-    },
+    this.$nextTick(() => {
+      loadVideos()
+    })
   },
 })
 </script>

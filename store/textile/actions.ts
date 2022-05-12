@@ -89,7 +89,7 @@ export default {
    */
   async fetchMessages(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { address, setActive = true }: { address: string; setActive: boolean },
+    { address, setActive = false }: { address: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -160,7 +160,25 @@ export default {
     // add the messages to the search index
     db.search.conversationMessages.upsertAll(messages)
 
+    if (setActive) {
+      commit('setActiveConversation', friend.address)
+      if (friend.peerId) {
+        commit(
+          'conversation/setConversation',
+          {
+            id: friend.peerId,
+            type: 'friend',
+            calling: false,
+            participants: [],
+          },
+          { root: true },
+        )
+        dispatch('conversation/addParticipant', friend.address, { root: true })
+      }
+    }
+
     commit('setConversation', {
+      type: 'friend',
       address: friend.address,
       messages: conversation,
       limit: query.limit,
@@ -169,7 +187,6 @@ export default {
     })
 
     commit('friends/setActive', friend, { root: true })
-
     commit('setConversationLoading', { loading: false })
     commit('setMessageLoading', { loading: false })
 
@@ -608,9 +625,6 @@ export default {
       })
 
     const msg = { conversation: address, ...message }
-    db.search.conversationMessages.upsert(msg)
-
-    // replace old message with new edited version
     if (message.editedAt) {
       db.conversationMessages
         .get(message.id)
@@ -638,25 +652,39 @@ export default {
     { groupId, setActive = true }: { groupId: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
-
     commit('setConversationLoading', { loading: true })
-
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
-
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
-
     const group = getGroup(rootState, groupId)
-
     const conversation = await $GroupChatManager.getConversation({
       group,
       query,
     })
 
+    if (setActive) {
+      dispatch(
+        'conversation/setConversation',
+        {
+          id: groupId,
+          type: 'group',
+          calling: false,
+          participants: [],
+        },
+        { root: true },
+      )
+      dispatch(
+        'conversation/addParticipants',
+        group.members.map((m) => m.address),
+        { root: true },
+      )
+      commit('setActiveConversation', groupId)
+    }
+
     commit('setConversation', {
+      type: 'group',
       address: groupId,
       messages: conversation,
       limit: query.limit,
@@ -734,7 +762,9 @@ export default {
           payload: message,
           type: 'text',
         })
-        .catch((e) => console.log('error', e))
+        .catch((e) => {
+          Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
+        })
 
       commit('addMessageToConversation', {
         address: groupId,
@@ -744,7 +774,7 @@ export default {
 
       dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
-      console.log(e)
+      Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
       commit('setMessageLoading', { loading: false })
     }

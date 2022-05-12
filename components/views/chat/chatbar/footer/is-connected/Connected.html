@@ -1,19 +1,12 @@
-<div
-  v-if="!typing && $Hounddog.getActiveFriend(friends) && !this.$store.state.textile.conversationLoading"
-  class="is-connected"
->
+<div v-if="!typing && onlineParticipants.length > 0" class="is-connected">
   <circle-icon
-    :class="`status is-${ friendConnected($Hounddog.getActiveFriend(friends).address) ? $t('ui.online') : $t('ui.offline') }`"
+    :class="`status is-${ onlineParticipants.length > 0 ? $t('ui.online') : $t('ui.offline') }`"
     size="1x"
   />
   <TypographyText
-    v-if="$Hounddog.getActiveFriend(friends)"
-    :text="`${$Hounddog.getActiveFriend(friends).name}`"
+    v-if="onlineParticipants.length > 0"
+    :text="onlineParticipantsText"
     data-cy="user-connected"
-    :size="6"
-  />
-  <TypographyText
-    :text="`is ${ friendConnected($Hounddog.getActiveFriend(friends).address) ? $t('ui.connected') : $t('ui.not_connected') }`"
     :size="6"
   />
 </div>

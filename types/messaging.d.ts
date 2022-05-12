@@ -36,6 +36,7 @@ export type Divider = {
 export type Group = {
   avatar: boolean
   id: string
+  address: string
   at: number
   type: 'group'
   from: string

@@ -18,7 +18,44 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'webrtc', 'friends']),
+    ...mapState(['ui', 'webrtc', 'friends', 'conversation']),
+    onlineParticipants() {
+      return this.conversation.participants
+        .filter((participant) => participant.state === 'CONNECTED')
+        .map((participant) => participant.name)
+    },
+    onlineParticipantsText() {
+      if (this.onlineParticipants.length === 1) {
+        return `${this.onlineParticipants[0]} ${this.$t('ui.is')} ${this.$t(
+          'ui.online',
+        )}`
+      }
+      if (this.onlineParticipants.length > 4) {
+        return `${this.onlineParticipants.length} ${this.$t(
+          'ui.participants',
+        )} ${this.$t('ui.are')} ${this.$t('ui.online')}`
+      }
+      if (this.onlineParticipants.length) {
+        return `${this.onlineParticipants.join(', ')} ${this.$t(
+          'ui.are',
+        )} ${this.$t('ui.online')}`
+      }
+      if (this.conversation.participants.length === 1) {
+        return `${this.conversation.participants[0]} ${this.$t(
+          'ui.is',
+        )} ${this.$t('ui.offline')}`
+      }
+      return `${this.conversation.participants.join(', ')} ${this.$t(
+        'ui.are',
+      )} ${this.$t('ui.offline')}`
+    },
+  },
+  watch: {
+    'conversation.participants': {
+      handler() {},
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
     /**
@@ -29,10 +66,10 @@ export default Vue.extend({
      * friendConnected('user1') // true
      */
     friendConnected(friendId: string): boolean {
-      if (this.webrtc) {
-        return this.webrtc.connectedPeers.includes(friendId)
-      }
-      return false
+      return (
+        this.friends.all.find((friend) => friend.address === friendId).state ===
+        'online'
+      )
     },
   },
 })

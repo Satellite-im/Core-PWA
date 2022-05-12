@@ -1,13 +1,25 @@
 <div>
   <div class="content">
     <div class="gradient-cover" data-cy="incoming-call"></div>
-    <div
-      class="user-profile-picture"
-      v-bind:style="`background:url(${user.profilePicture})`"
-    />
-    <div class="user-info">
-      <p class="user-name">{{user.name}}</p>
-      <p class="user-status">{{user.status}}</p>
+    <div v-if="callType === 'friend' && friend" class="caller--user">
+      <div
+        class="user-profile-picture"
+        v-bind:style="`background:url(${friend.profilePicture})`"
+      />
+      <div class="user-info">
+        <p class="user-name">{{friend.name}}</p>
+        <p class="user-status">{{friend.status}}</p>
+      </div>
+    </div>
+    <div v-else-if="callType === 'group' && group" class="caller--group">
+      <div class="user-info">
+        <p class="user-name">{{group.name}}</p>
+        <p class="user-status">{{group.status}}</p>
+      </div>
+      <div
+        class="user-profile-picture"
+        v-bind:style="`background:url(${group.profilePicture})`"
+      />
     </div>
   </div>
   <footer class="modal-card-foot">

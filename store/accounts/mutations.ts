@@ -46,6 +46,14 @@ const mutations = {
       lastUpdate: Date.now(),
     }
   },
+  setUserPeerId(state: AccountsState, peerId: string) {
+    if (state.details) {
+      state.details = {
+        ...state.details,
+        peerId,
+      }
+    }
+  },
   updateMailboxId(state: AccountsState, mailboxId: string) {
     if (state.details) {
       state.details = {

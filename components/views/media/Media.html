@@ -9,22 +9,19 @@
     <MediaUser
       id="local_video"
       @dblclick="handleDoubleClick('local_video')"
-      :user="accounts.details"
-      :videoStream="localVideoStream"
-      :audioMuted="localAudioMuted"
+      :user="localParticipant"
       :isLocal="true"
     />
 
-    <MediaUser
-      id="remote_video"
-      @dblclick="handleDoubleClick('remote_video')"
-      :user="recipient"
-      :videoStream="remoteVideoStream"
-      :audioStream="remoteAudioStream"
-      :audioMuted="remoteAudioMuted"
-      :calling="!remoteTracks"
-      :isLocal="false"
-    />
+    <div v-for="participant in remoteParticipants" v-if="participant">
+      <MediaUser
+        :id="`remote_video_${ participant.peerId }`"
+        @dblclick="handleDoubleClick('remote_video')"
+        :user="participant"
+        :calling="!participant"
+        :isLocal="false"
+      />
+    </div>
 
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
@@ -39,7 +36,6 @@
     isPopup
     @volumeControlValueChange="volumeControlValueChange"
   />
-  <!-- {{fullscreen}} -->
   <MediaActionsSettings />
   <MediaActions />
 </div>

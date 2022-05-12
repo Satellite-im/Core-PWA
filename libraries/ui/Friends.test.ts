@@ -9,7 +9,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '["a", "b", "043", "holasenior"]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: 'C:\\\\path\\to\\file.ext',
@@ -35,7 +34,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: '.',
@@ -61,7 +59,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: false,
-        activeChat: false,
         account: {
           accountId: 'Investment Account',
           from: './path/to/file',
@@ -87,7 +84,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://api.telegram.org/',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: '.',
@@ -120,7 +116,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Checking Account',
           from: './path/to/file',
@@ -146,7 +141,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'http://base.com',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: 'path/to/file.ext',
@@ -179,7 +173,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'google.com',
         item: '[10, -45.9, 103.5, 0.955674]',
         pending: false,
-        activeChat: false,
         account: {
           accountId: 'Home Loan Account',
           from: 'path/to/folder/',
@@ -205,7 +198,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: false,
-        activeChat: false,
         account: {
           accountId: 'Credit Card Account',
           from: 'path/to/file.ext',
@@ -231,7 +223,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://api.telegram.org/bot',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: false,
-        activeChat: false,
         account: {
           accountId: 'Checking Account',
           from: '.',
@@ -257,7 +248,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '["a", "b", "043", "holasenior"]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: '/path/to/file',
@@ -290,7 +280,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '[10, -45.9, 103.5, 0.955674]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: 'C:\\\\path\\to\\file.ext',
@@ -316,7 +305,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Home Loan Account',
           from: 'C:\\\\path\\to\\folder\\',
@@ -342,7 +330,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Credit Card Account',
           from: '.',
@@ -375,7 +362,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: '/path/to/file',
@@ -401,7 +387,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://api.telegram.org/bot',
         item: '["a", "b", "043", "holasenior"]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: 'path/to/folder/',
@@ -427,7 +412,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'http://www.example.com/route/123?foo=bar',
         item: '["a", "b", "043", "holasenior"]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: './path/to/file',
@@ -453,7 +437,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/confirm?t=',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Investment Account',
           from: '/path/to/file',
@@ -491,7 +474,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: '/path/to/file',
@@ -517,7 +499,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://api.telegram.org/bot',
         item: '["a", "b", "043", "holasenior"]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: 'path/to/folder/',
@@ -543,7 +524,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'http://www.example.com/route/123?foo=bar',
         item: '["a", "b", "043", "holasenior"]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: './path/to/file',
@@ -569,7 +549,6 @@ describe('Friends.getAlphaSorted', () => {
         textilePubkey: 'https://croplands.org/app/a/confirm?t=',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Investment Account',
           from: '/path/to/file',
@@ -604,7 +583,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Investment Account',
           from: './path/to/file',
@@ -630,7 +608,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'https://api.telegram.org/',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Credit Card Account',
           from: 'C:\\\\path\\to\\folder\\',
@@ -656,7 +633,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'https://api.telegram.org/',
         item: '["foo bar",  -0.353, "**text**", 4653]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Credit Card Account',
           from: 'path/to/file.ext',
@@ -689,7 +665,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'Www.GooGle.com',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: '.',
@@ -715,7 +690,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'http://base.com',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Investment Account',
           from: 'path/to/file.ext',
@@ -748,7 +722,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'http://base.com',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Home Loan Account',
           from: '/path/to/file',
@@ -781,7 +754,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'https://api.telegram.org/bot',
         item: '["a", "b", "043", "holasenior"]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Investment Account',
           from: 'C:\\\\path\\to\\file.ext',
@@ -807,7 +779,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'https://croplands.org/app/a/reset?token=',
         item: '[-1, 0.5, 1, 2, 3, 4, 5]',
         pending: false,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: '/path/to/file',
@@ -840,7 +811,6 @@ describe('Friends.getFilteredFriends', () => {
         textilePubkey: 'http://www.croplands.org/account/confirm?t=',
         item: '[10, -45.9, 103.5, 0.955674]',
         pending: true,
-        activeChat: false,
         account: {
           accountId: 'Home Loan Account',
           from: './path/to/file',
@@ -867,7 +837,6 @@ describe('Friends.getFilteredFriends', () => {
           'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
         item: '[10, -45.9, 103.5, 0.955674]',
         pending: true,
-        activeChat: true,
         account: {
           accountId: 'Checking Account',
           from: './path/to/file',

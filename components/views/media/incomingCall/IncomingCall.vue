@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 
 import {
   PhoneIcon,
@@ -11,7 +12,6 @@ import {
 } from 'satellite-lucide-icons'
 
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -22,11 +22,6 @@ export default Vue.extend({
     VideoOffIcon,
   },
   props: {
-    user: {
-      type: Object as PropType<User>,
-      default: () => {},
-      required: true,
-    },
     acceptCall: {
       type: Function,
       default: () => {},
@@ -36,6 +31,40 @@ export default Vue.extend({
       type: Function,
       default: () => {},
       required: false,
+    },
+  },
+  computed: {
+    ...mapState(['conversation', 'groups', 'friends']),
+    group() {
+      return (
+        this.callType === 'group' &&
+        this.$store.state.groups.all.find(
+          (g: any) => g.id === this.$store.state.webrtc.incomingCall?.callId,
+        )
+      )
+    },
+    friend() {
+      return (
+        this.callType === 'friend' &&
+        this.$store.state.friends.all.find(
+          (f: any) =>
+            f.peerId === this.$store.state.webrtc.incomingCall?.callId,
+        )
+      )
+    },
+    callType() {
+      return this.$store.state.webrtc.incomingCall?.callId &&
+        RegExp(this.$Config.regex.uuidv4).test(
+          this.$store.state.webrtc.incomingCall?.callId?.split('|')?.[1],
+        )
+        ? 'group'
+        : 'friend'
+    },
+  },
+  watch: {
+    '$store.state.webrtc.incomingCall': {
+      handler() {},
+      deep: true,
     },
   },
   mounted() {

@@ -95,3 +95,8 @@ sw.*
 # Scratchpad files for testing stuff
 scratchpad.ts
 scratchpad.js
+
+# Browser profiles for debugging
+.vscode/firefox/
+.vscode/pwa-msedge/
+.vscode/chrome/

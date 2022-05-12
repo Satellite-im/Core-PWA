@@ -30,15 +30,8 @@
       :set-close-timeout="5000"
     />
   </UiModal>
-  <UiModal
-    v-if="this.$store.state.friends.all.some((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
-    nopad
-  >
-    <MediaIncomingCall
-      :user="this.$store.state.friends.all.find((friend) => friend.peerId === this.$store.state.webrtc.incomingCall)"
-      :accept-call="acceptCall"
-      :deny-call="denyCall"
-    />
+  <UiModal v-if="webrtc.incomingCall" nopad>
+    <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
   </UiModal>
   <UiModal
     v-if="ui.modals.marketplace"

@@ -27,7 +27,6 @@ const commonProperties = [
   'accounts.initialized',
   'friends.all',
   'webrtc.activeStream',
-  'webrtc.connectedPeers',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',

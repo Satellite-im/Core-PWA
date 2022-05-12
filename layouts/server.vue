@@ -57,7 +57,9 @@
           <UiChatScroll
             :contents="ui.messages"
             :prevent-scroll-offset="10"
-            :class="media.activeCall ? 'media-open' : ''"
+            :class="
+              media.activeCall && media.activeCall.callId ? 'media-open' : ''
+            "
             enable-wrap
           >
             <Nuxt />

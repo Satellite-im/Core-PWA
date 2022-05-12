@@ -1,0 +1,74 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-msedge",
+      "name": "edge: profile-1",
+      "request": "launch",
+      "url": "http://localhost:3000/?p1",
+      "userDataDir": "${workspaceFolder}/.vscode/pwa-msedge/profile-1"
+    },
+    {
+      "type": "pwa-msedge",
+      "name": "edge: profile-2",
+      "request": "launch",
+      "url": "http://localhost:3000/?p2",
+      "userDataDir": "${workspaceFolder}/.vscode/pwa-msedge/profile-2"
+    },
+    {
+      "type": "pwa-msedge",
+      "name": "edge: profile-3",
+      "request": "launch",
+      "url": "http://localhost:3000/?p3",
+      "userDataDir": "${workspaceFolder}/.vscode/pwa-msedge/profile-3"
+    },
+    {
+      "type": "vscode-edge-devtools.debug",
+      "name": "edge: devtools",
+      "request": "attach",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "name": "browser: firefox",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "reAttach": true,
+      "profile": "debug",
+      "keepProfileChanges": true,
+      "profileDir": "${workspaceRoot}/.vscode/firefox",
+      "webRoot": "${workspaceFolder}",
+      "pathMappings": [
+        {
+          "url": "webpack:///",
+          "path": "${webRoot}/"
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "server: nuxi",
+      "args": ["dev"],
+      "osx": {
+        "program": "${workspaceFolder}/node_modules/.bin/nuxi"
+      },
+      "linux": {
+        "program": "${workspaceFolder}/node_modules/.bin/nuxi"
+      },
+      "windows": {
+        "program": "${workspaceFolder}/node_modules/nuxt/bin/nuxi.mjs"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "fullstack: nuxi",
+      "configurations": ["server: nuxi", "browser: firefox"]
+    },
+    {
+      "name": "edge: profile-1 w/ devtools",
+      "configurations": ["edge: profile-1", "edge: devtools"]
+    }
+  ]
+}

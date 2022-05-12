@@ -27,7 +27,6 @@ export interface Friend extends EncryptedFriend {
   item: any // TODO remove unnecessary properties AP-393
   pending: Boolean
   stored: Boolean
-  activeChat: Boolean
   account: FriendAccount
   address: string
   // possibly break these out into different types. These optional fields come up in the friends list, add, request area
