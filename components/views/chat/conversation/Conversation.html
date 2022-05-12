@@ -1,6 +1,15 @@
 <div id="conversation">
-  <UiLoadersMessage :count="3" v-if="loading" />
-  <div class="group" v-for="group in messages" v-else>
+  <infinite-loading
+    direction="top"
+    @infinite="infiniteHandler"
+    ref="infiniteLoading"
+  ></infinite-loading>
+  <div
+    class="group"
+    v-for="(group, $index) in list"
+    :key="$index"
+    :data-num="list.length - $index"
+  >
     <div v-if="group.type === 'group'">
       <Group :group="group" :key="group.id" :groupId="groupId" />
     </div>

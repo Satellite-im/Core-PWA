@@ -1,7 +1,8 @@
 <div id="direct">
   <UiChatEncrypted v-if="$route.params.address" />
-  <Conversation
-    :messages="groupedMessages"
-    :loading="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
+  <UiLoadersMessage
+    :count="3"
+    v-if="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
   />
+  <Conversation :groups="groupedMessages" v-else />
 </div>
