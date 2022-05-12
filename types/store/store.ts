@@ -11,12 +11,14 @@ import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
+import { MediaState } from '~/store/media/types'
 
 export interface RootState {
   accounts: AccountsState
   audio: AudioState
   dataState: DataState
   friends: FriendsState
+  media: MediaState
   textile: TextileState
   webrtc: WebRTCState
   groups: GroupsState
