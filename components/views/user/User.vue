@@ -17,6 +17,7 @@ import {
   convertTimestampToDate,
 } from '~/utilities/Messaging'
 import { RootState } from '~/types/store/store'
+import { toHTML } from '~/libraries/ui/Markdown'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -68,6 +69,17 @@ export default Vue.extend({
       ),
       timestampRefreshInterval: null,
     }
+  },
+  mounted() {
+    Array.from(
+      (this.$refs.subtitle as HTMLElement).getElementsByClassName('spoiler'),
+    ).forEach((spoiler) => {
+      spoiler.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        spoiler.classList.add('spoiler-open')
+      })
+    })
   },
   computed: {
     ...mapState({
@@ -196,6 +208,33 @@ export default Vue.extend({
         default:
           return this.$t(`messaging.user_sent_something.${sender}`)
       }
+    },
+    /**
+     * @method markdownToHtml
+     * @description convert text markdown to html
+     * @param str String to convert
+     */
+    markdownToHtml(text: string) {
+      return toHTML(text, { liveTyping: false })
+    },
+    /**
+     * @method wrapEmoji
+     * @description Wraps emojis in spans with the emoji class
+     * @param str String to wrap emojis within
+     */
+    wrapEmoji(str: string): string {
+      return str.replace(
+        this.$Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
+      )
+    },
+    /**
+     * @method containsOnlyEmoji
+     * @description Check wether or not a string only contains an emoji
+     * @param str String to check against
+     */
+    containsOnlyEmoji(str: string): boolean {
+      return str.match(this.$Config.regex.isEmoji) !== null
     },
   },
 })
