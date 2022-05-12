@@ -78,6 +78,11 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.get('[data-cy=editable-input]').trigger('input').type('😄')
     cy.validateCharlimit('1/2048', false)
     cy.get('[data-cy=send-message]').click()
+    // Wait until loading indicator disappears
+    cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should(
+      'not.exist',
+    )
+    cy.get('[data-cy=chat-message]').last().scrollIntoView()
   })
 
   it('Sending a link with format https://wwww', () => {
@@ -85,7 +90,7 @@ describe('Chat Text and Sending Links Validations', () => {
       pasteType: 'text',
       pastePayload: urlToValidate,
     })
-    cy.get('[data-cy=editable-input]', { timeout: 20000 }).should(
+    cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(
       'have.text',
       urlToValidate,
     )
@@ -104,7 +109,7 @@ describe('Chat Text and Sending Links Validations', () => {
       pasteType: 'text',
       pastePayload: urlToValidateTwo,
     })
-    cy.get('[data-cy=editable-input]', { timeout: 20000 }).should(
+    cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(
       'have.text',
       urlToValidateTwo,
     )
@@ -123,16 +128,19 @@ describe('Chat Text and Sending Links Validations', () => {
       pasteType: 'text',
       pastePayload: urlToValidateThree,
     })
-    cy.get('[data-cy=editable-input]', { timeout: 20000 }).should(
+    cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(
       'have.text',
       urlToValidateThree,
     )
     cy.validateCharlimit('16/2048', false)
     cy.get('[data-cy=send-message]').click()
-    cy.contains(urlToValidateThree)
+    cy.get('[data-cy=chat-message]')
       .last()
-      .scrollIntoView()
-      .should('not.have.attr', 'href', urlToValidateThree)
+      .then(($message) => {
+        cy.getAttached($message)
+          .scrollIntoView()
+          .should('not.have.attr', 'href', urlToValidateThree)
+      })
   })
 
   it('User should be able to use markdown "*" to make a word italic in chat', () => {
@@ -163,8 +171,9 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
-      .scrollIntoView()
-      .should('have.text', '*To Do')
+      .then(($message) => {
+        cy.getAttached($message).scrollIntoView().should('have.text', '*To Do')
+      })
   })
 
   it('User should be able to use markdown ` to code with single', () => {
@@ -183,7 +192,14 @@ describe('Chat Text and Sending Links Validations', () => {
     let locatorURL = 'a[href="' + randomURL + '"]'
     let autolink = '<' + randomURL + '>'
     cy.chatFeaturesSendMessage(autolink, false)
-    cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
+    cy.get(locatorURL)
+      .last()
+      .then(($message) => {
+        cy.getAttached($message)
+          .scrollIntoView()
+          .should('have.attr', 'href', randomURL)
+          .and('have.text', randomURL)
+      })
   })
 
   it('User should use markdown "||" to insert an spoiler', () => {

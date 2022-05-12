@@ -36,14 +36,6 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it('Send emoji to user B', () => {
-    cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
-    cy.get('[data-cy=chat-message] > span')
-      .last()
-      .scrollIntoView()
-      .should('have.text', '😄')
-  })
-
   it('Send message to user B', () => {
     cy.chatFeaturesSendMessage(randomMessage)
     cy.get('[data-cy=chat-message]')
@@ -51,6 +43,14 @@ describe('Chat features with two accounts', () => {
       .last()
       .scrollIntoView()
       .should('exist')
+  })
+
+  it('Send emoji to user B', () => {
+    cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
+    cy.get('[data-cy=chat-message] > span')
+      .last()
+      .scrollIntoView()
+      .should('have.text', '😄')
   })
 
   it('Context Menu Options - Text Message', () => {
@@ -257,6 +257,44 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
+  it('Assert timestamp immediately after sending message', () => {
+    cy.chatFeaturesSendMessage(randomMessage)
+    cy.get('[data-cy=chat-message]')
+      .contains(randomMessage)
+      .last()
+      .scrollIntoView()
+      .should('exist')
+
+    //Assert timestamp text immediately
+    cy.get('[data-cy=chat-timestamp]')
+      .last()
+      .then(($timestamp) => {
+        cy.getAttached($timestamp)
+          .invoke('text')
+          .then(($text) => {
+            expect($text).to.contain('now')
+          })
+      })
+  })
+
+  it.skip('Assert timestamp one minute after sending message', () => {
+    //Wait for 60 seconds
+    cy.wait(60000)
+
+    //Assert timestamp text after a minute has passed
+    //Assert timestamp text immediately
+    cy.get('[data-cy=chat-timestamp]')
+      .last()
+      .then(($timestamp) => {
+        cy.getAttached($timestamp)
+          .invoke('text')
+          .then(($text) => {
+            let regexTimestamp = '((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))'
+            expect($text).to.match(regexTimestamp)
+          })
+      })
+  })
+
   it(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
     { retries: 2 },
@@ -269,34 +307,6 @@ describe('Chat features with two accounts', () => {
       cy.get('[data-cy=editable-input]').clear()
     },
   )
-
-  it('Assert timestamp immediately after sending message', () => {
-    //Send a random message
-    cy.get('[data-cy=editable-input]').clear()
-    cy.chatFeaturesSendMessage(randomMessageTwo)
-
-    //Assert timestamp text immediately
-    cy.get('[data-cy=chat-timestamp]')
-      .last()
-      .invoke('text')
-      .then(($text) => {
-        expect($text).to.contain('now')
-      })
-  })
-
-  it.skip('Assert timestamp one minute after sending message', () => {
-    //Wait for 60 seconds
-    cy.wait(60000)
-
-    //Assert timestamp text after a minute has passed
-    cy.get('[data-cy=chat-timestamp]')
-      .last()
-      .invoke('text')
-      .then(($text) => {
-        let regexTimestamp = '((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))'
-        expect($text).to.match(regexTimestamp)
-      })
-  })
 
   it(
     'Send a message from third account to second account',
