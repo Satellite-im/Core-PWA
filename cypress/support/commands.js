@@ -300,7 +300,7 @@ Cypress.Commands.add(
         cy.get('[data-cy=send-message]').click() //sending text message
       })
     // Wait until loading indicator disappears
-    cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should(
+    cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should(
       'not.exist',
     )
     // Assert message
@@ -738,7 +738,7 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
       cy.get('[data-cy=send-message]').click() //sending text message
     })
   // Wait until loading indicator disappears
-  cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should('not.exist')
+  cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should('not.exist')
   // Depending on the markdown passed, assert the text from the corresponding HTML tag
   if (markdown === '*' || markdown === '_') {
     cy.get('em').last().should('have.text', text)
