@@ -41,12 +41,10 @@ export default Vue.extend({
           const { address } = this.$route.params
           const { friends } = this.$store.state
           if (address) {
-            if (
-              this.$Hounddog &&
-              this.$Hounddog.findFriendByAddress(address, friends)
-            ) {
-              this.$store.dispatch('textile/fetchMessages', { address })
-            }
+            this.$store.dispatch('textile/fetchMessages', {
+              address,
+              setActive: true,
+            })
           }
         }
       },
@@ -82,22 +80,16 @@ export default Vue.extend({
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
     const { address } = this.$route.params
     const { friends } = this.$store.state
+
     if (address) {
-      if (
-        this.$Hounddog &&
-        this.$Hounddog.findFriendByAddress(address, friends)
-      ) {
-        this.$store.dispatch('textile/fetchMessages', {
-          address,
-          setActive: true,
-        })
-        return
-      }
+      return
     }
+
     if (friends && friends.all && friends.all.length > 0) {
       this.$router.replace(`/chat/direct/${friends.all[0].address}`)
       return
     }
+
     this.$router.replace('/friends/list')
   },
 })

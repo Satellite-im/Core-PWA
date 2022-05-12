@@ -332,7 +332,6 @@ export default {
     const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
-    dispatch('conversation/initialize', {}, { root: true })
     commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
 
     await db.initializeSearchIndexes()

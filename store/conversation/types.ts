@@ -17,10 +17,9 @@ export type ConversationParticipant = {
   peerId?: string
   address: string
   name: string
-  textilePubkey?: string
+  profilePicture?: string
   state?: ConversationConnection
   activity?: ConversationActivity
-  profilePicture?: string
   updatedAt?: number
 }
 

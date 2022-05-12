@@ -232,9 +232,9 @@ export default Vue.extend({
     },
   },
   watch: {
-    conversation: {
+    recipient: {
       handler() {},
-      deep: true,
+      immediate: true,
     },
     showSidebar(newValue, oldValue) {
       if (newValue !== oldValue) {

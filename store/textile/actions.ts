@@ -161,18 +161,20 @@ export default {
     db.search.conversationMessages.upsertAll(messages)
 
     if (setActive) {
-      commit('setActiveConversation', address)
-      commit(
-        'conversation/setConversation',
-        {
-          id: friend.peerId,
-          type: 'friend',
-          calling: false,
-          participants: [],
-        },
-        { root: true },
-      )
-      dispatch('conversation/addParticipant', friend.address, { root: true })
+      commit('setActiveConversation', friend.address)
+      if (friend.peerId) {
+        commit(
+          'conversation/setConversation',
+          {
+            id: friend.peerId,
+            type: 'friend',
+            calling: false,
+            participants: [],
+          },
+          { root: true },
+        )
+        dispatch('conversation/addParticipant', friend.address, { root: true })
+      }
     }
 
     commit('setConversation', {
@@ -185,7 +187,6 @@ export default {
     })
 
     commit('friends/setActive', friend, { root: true })
-
     commit('setConversationLoading', { loading: false })
     commit('setMessageLoading', { loading: false })
 
@@ -761,7 +762,9 @@ export default {
           payload: message,
           type: 'text',
         })
-        .catch((e) => console.log('error', e))
+        .catch((e) => {
+          Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
+        })
 
       commit('addMessageToConversation', {
         address: groupId,
@@ -771,7 +774,7 @@ export default {
 
       dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
-      console.error(e)
+      Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
       commit('setMessageLoading', { loading: false })
     }
