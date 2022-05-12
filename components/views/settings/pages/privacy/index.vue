@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import { validURL } from '~/libraries/ui/Common'
 import { RootState } from '~/types/store/store'
 
@@ -13,16 +14,7 @@ export default Vue.extend({
     return {
       formatError: false as boolean,
       lengthError: false as boolean,
-      serverTypes: [
-        {
-          text: this.$t('pages.privacy.ownInfo.satelliteServer'),
-          value: 'satellite',
-        },
-        {
-          text: this.$t('pages.privacy.ownInfo.publicServer'),
-          value: 'public',
-        },
-      ],
+      loading: '' as string,
     }
   },
   computed: {
@@ -33,6 +25,18 @@ export default Vue.extend({
       threadData: (state) => (state as RootState).textile.threadData,
     }),
     ...mapGetters('textile', ['getInitialized']),
+    serverTypes(): { text: TranslateResult; value: string }[] {
+      return [
+        {
+          text: this.$t('pages.privacy.ownInfo.satelliteServer'),
+          value: 'satellite',
+        },
+        {
+          text: this.$t('pages.privacy.ownInfo.publicServer'),
+          value: 'public',
+        },
+      ]
+    },
     serverType: {
       set(state) {
         this.$store.commit('settings/setServerType', state)
@@ -82,16 +86,24 @@ export default Vue.extend({
       },
     },
     consentScan: {
-      set(consentToScan: boolean) {
-        this.$store.dispatch('textile/updateUserThreadData', { consentToScan })
+      async set(consentToScan: boolean) {
+        this.loading = 'consentScan'
+        await this.$store.dispatch('textile/updateUserThreadData', {
+          consentToScan,
+        })
+        this.loading = ''
       },
       get(): boolean {
         return this.threadData.consentToScan
       },
     },
     blockNsfw: {
-      set(blockNsfw: boolean) {
-        this.$store.dispatch('textile/updateUserThreadData', { blockNsfw })
+      async set(blockNsfw: boolean) {
+        this.loading = 'blockNsfw'
+        await this.$store.dispatch('textile/updateUserThreadData', {
+          blockNsfw,
+        })
+        this.loading = ''
       },
       get(): boolean {
         return this.threadData.blockNsfw

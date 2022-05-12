@@ -69,7 +69,6 @@ export default {
       await $FileSystem.import(fsExport)
     }
     const record = await $TextileManager.userInfoManager?.getUserRecord()
-    // if no threaddb record, create
     if (!record) {
       await dispatch('updateUserThreadData', {
         consentToScan: false,
@@ -1053,7 +1052,7 @@ export default {
    * do not await threaddb work so the toggle switch is smooth
    */
   async updateUserThreadData(
-    { commit, rootState }: ActionsArguments<TextileState>,
+    { commit }: ActionsArguments<TextileState>,
     {
       consentToScan,
       blockNsfw,
@@ -1071,35 +1070,14 @@ export default {
       throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
     }
 
-    // pull this out as a variable so the threaddb record and store have the same value
-    const consentUpdated = Date.now()
-
-    $UserInfoManager.updateRecord({
-      consentToScan,
-      consentUpdated,
-      blockNsfw,
-      filesVersion,
-    })
-
-    if (typeof consentToScan === 'boolean') {
-      commit('setUserThreadData', {
-        ...rootState.textile.threadData,
+    commit(
+      'setUserThreadData',
+      await $UserInfoManager.updateRecord({
         consentToScan,
-        consentUpdated,
-      })
-    }
-    if (typeof blockNsfw === 'boolean') {
-      commit('setUserThreadData', {
-        ...rootState.textile.threadData,
         blockNsfw,
-      })
-    }
-    if (filesVersion) {
-      commit('setUserThreadData', {
-        ...rootState.textile.threadData,
         filesVersion,
-      })
-    }
+      }),
+    )
   },
 
   /**
@@ -1111,6 +1089,7 @@ export default {
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
     const callback = (update?: Update<UserThreadData>) => {
       if (!update || !update.instance) return
+      console.log('update', update.instance)
       commit('textile/setUserThreadData', update.instance, { root: true })
       if (
         rootState.textile.threadData?.filesVersion &&

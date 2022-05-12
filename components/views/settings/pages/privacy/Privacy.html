@@ -40,15 +40,22 @@
         :title="$t('pages.privacy.consentScan.title')"
         :text="$t('pages.privacy.consentScan.subtitle')"
       >
-        <InteractablesSwitch v-model="consentScan" />
+        <InteractablesSwitch
+          v-model="consentScan"
+          :isLocked="loading === 'consentScan'"
+        />
       </SettingsUnit>
       <SettingsUnit
         :title="$t('pages.privacy.nsfw.title')"
         :text="$t('pages.privacy.nsfw.subtitle')"
       >
-        <InteractablesSwitch v-model="blockNsfw" />
+        <InteractablesSwitch
+          v-model="blockNsfw"
+          :isLocked="loading === 'blockNsfw'"
+        />
       </SettingsUnit>
     </div>
+    <TypographyText v-if="loading" :text="$t('pages.privacy.updating')" />
     <!-- <div class="columns is-desktop">
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"

@@ -69,46 +69,47 @@ export class UserInfoManager {
 
   /**
    * @method updateRecord
-   * @description update any of the optional params on threaddb
+   * @description update any of the optional params on threaddb. creates record if it doesn't exist
    * @returns updated record
    */
   async updateRecord({
     consentToScan,
-    consentUpdated,
     blockNsfw,
     filesVersion,
   }: {
     consentToScan?: boolean
-    consentUpdated?: number
     blockNsfw?: boolean
     filesVersion?: number
-  }) {
+  }): Promise<UserThreadData | undefined> {
     const record = await this._findRecord()
-    if (record && typeof consentToScan === 'boolean') {
-      record.consentToScan = consentToScan
-      record.consentUpdated = consentUpdated
-      await this.textile.client.save(this.threadID, CollectionName, [record])
+    if (!record) {
+      await this.textile.client.create(this.threadID, CollectionName, [
+        {
+          userAddress: this.textile.wallet.address,
+          consentToScan,
+          consentUpdated: consentToScan ? Date.now() : undefined,
+          blockNsfw,
+          filesVersion,
+        },
+      ])
       return
     }
-    if (record && typeof blockNsfw === 'boolean') {
+    if (typeof consentToScan === 'boolean') {
+      record.consentToScan = consentToScan
+      record.consentUpdated = Date.now()
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return record
+    }
+    if (typeof blockNsfw === 'boolean') {
       record.blockNsfw = blockNsfw
       await this.textile.client.save(this.threadID, CollectionName, [record])
-      return
+      return record
     }
-    if (record && filesVersion) {
+    if (filesVersion) {
       record.filesVersion = filesVersion
       await this.textile.client.save(this.threadID, CollectionName, [record])
-      return
+      return record
     }
-    await this.textile.client.create(this.threadID, CollectionName, [
-      {
-        userAddress: this.textile.wallet.address,
-        consentToScan,
-        consentUpdated: consentToScan ? Date.now() : undefined,
-        blockNsfw,
-        filesVersion,
-      },
-    ])
   }
 
   async getThreadName(): Promise<string> {

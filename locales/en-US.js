@@ -284,6 +284,7 @@ export default {
         subtitle:
           'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
       },
+      updating: 'Updating remote settings',
     },
     settings: {
       settings: 'Settings',
