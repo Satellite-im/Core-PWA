@@ -2,8 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { RegistrationStatus } from '~/store/accounts/types'
+import { RootState } from '~/types/store/store'
 import { UserRegistrationData } from '~/types/ui/user'
 
 export default Vue.extend({
@@ -17,13 +18,16 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('accounts', ['getRegistrationStatus']),
+    ...mapState({
+      registrationStatus: (state) =>
+        (state as RootState).accounts.registrationStatus,
+    }),
     ...mapGetters(['allPrerequisitesReady']),
     hasToRegister() {
-      return this.getRegistrationStatus === RegistrationStatus.UNKNOWN
+      return this.registrationStatus === RegistrationStatus.UNKNOWN
     },
     registrationStep() {
-      switch (this.getRegistrationStatus) {
+      switch (this.registrationStatus) {
         case RegistrationStatus.IN_PROGRESS:
           return this.$i18n.t('user.registration.reg_status.in_progress')
         case RegistrationStatus.FUNDING_ACCOUNT:
@@ -37,7 +41,7 @@ export default Vue.extend({
       }
     },
     isRegistered() {
-      return this.getRegistrationStatus === RegistrationStatus.REGISTERED
+      return this.registrationStatus === RegistrationStatus.REGISTERED
     },
   },
   watch: {
