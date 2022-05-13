@@ -23,10 +23,10 @@ export default class SolanaManager {
     this.accounts = []
     this.networkIdentifier = Config.solana.network
     this.clusterApiUrl = getClusterFromNetworkConfig(Config.solana.network)
-    this.connection = new Connection(
-      this.clusterApiUrl,
-      Config.solana.defaultCommitment,
-    )
+    this.connection = new Connection(this.clusterApiUrl, {
+      commitment: Config.solana.defaultCommitment,
+      httpHeaders: Config.solana.httpHeaders,
+    })
     this.publicKeys = {}
   }
 
@@ -333,26 +333,5 @@ export default class SolanaManager {
       signature,
       Config.solana.defaultCommitment,
     )
-  }
-
-  /**
-   * @method waitForAccount
-   * @description continuously check the given account
-   * until it becomes available
-   * @param accountKey public key of the account to wait for
-   */
-  async waitForAccount(accountKey: PublicKey) {
-    while (true) {
-      const accountInfo = await this.connection.getAccountInfo(
-        accountKey,
-        Config.solana.defaultCommitment,
-      )
-      if (accountInfo === null) {
-        await sleep(3000)
-        continue
-      } else {
-        break
-      }
-    }
   }
 }

@@ -10,15 +10,22 @@ import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
 export const getClusterFromNetworkConfig = (network: string): string => {
   switch (network) {
     case 'mainnet-beta':
-      return clusterApiUrl(network)
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_MAINNET_RPC ||
+        clusterApiUrl(network)
+      )
     case 'testnet':
-      return clusterApiUrl(network)
-    case 'devnet':
-      return clusterApiUrl(network)
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_TESTNET_RPC ||
+        clusterApiUrl(network)
+      )
     case 'local':
       return 'http://localhost:8899'
     default:
-      return clusterApiUrl('devnet')
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_DEVNET_RPC ||
+        clusterApiUrl('devnet')
+      )
   }
 }
 
@@ -91,25 +98,6 @@ export function stringToBuffer(stringToConvert: string, length: number) {
  */
 export function stringFromBuffer(bufferToConvert: Buffer) {
   return Buffer.from(bufferToConvert).toString('utf-8').replace(/\0.*$/g, '')
-}
-
-/**
- * Waits until a given Solana account exists on the network
- * @param connection Solana connection instance
- * @param accountKey Account public key to wait for
- */
-export async function waitForAccount(
-  connection: Connection,
-  accountKey: PublicKey,
-) {
-  while (true) {
-    const accountInfo = await connection.getAccountInfo(accountKey)
-    if (accountInfo === null) {
-      continue
-    } else {
-      break
-    }
-  }
 }
 
 /**

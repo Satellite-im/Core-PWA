@@ -320,7 +320,6 @@ export default {
     friendsProgram.addEventListener(FriendsEvents.REQUEST_DENIED, (account) => {
       if (!account) return
       commit('removeOutgoingRequest', account.accountId)
-      dispatch('closeAccount', account.accountId).catch((e) => console.error(e))
     })
 
     friendsProgram.addEventListener(
@@ -337,12 +336,6 @@ export default {
       const sentByMe = rootState.accounts.active === account.from
       const address = sentByMe ? account.to : account.from
       commit('removeFriend', address)
-
-      if (sentByMe) {
-        dispatch('closeAccount', account.accountId).catch((e) =>
-          console.error(e),
-        )
-      }
     })
   },
   setFriendState(
@@ -598,4 +591,9 @@ export default {
 
     await friendsProgram.closeRequest(friendAccountKey)
   },
+}
+
+export const exportForTesting = {
+  friendAccountToIncomingRequest,
+  friendAccountToOutgoingRequest,
 }
