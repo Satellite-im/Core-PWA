@@ -181,7 +181,7 @@ const mutations = {
     }
   },
   setUserThreadData(state: TextileState, data: UserThreadData) {
-    state.threadData = data
+    state.userThread = data
   },
 }
 

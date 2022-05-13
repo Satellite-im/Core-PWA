@@ -37,7 +37,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       consentToScan: (state) =>
-        (state as RootState).textile.threadData.consentToScan,
+        (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('textile', ['getInitialized']),
     activeFriend(): Friend | undefined {

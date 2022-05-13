@@ -198,7 +198,7 @@ export default Vue.extend({
       dataState: (state) => (state as RootState).dataState,
       conversation: (state) => (state as RootState).conversation,
       consentToScan: (state) =>
-        (state as RootState).textile.threadData.consentToScan,
+        (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     DataStateType: () => DataStateType,

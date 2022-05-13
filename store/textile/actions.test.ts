@@ -186,9 +186,13 @@ describe('actions.default.initialize', () => {
         'public key',
         { root: true },
       )
-      expect(commit).toHaveBeenCalledWith('settings/setBlockNsfw', true, {
-        root: true,
-      })
+      expect(commit).toHaveBeenCalledWith(
+        'textile/updateUserThreadData',
+        true,
+        {
+          root: true,
+        },
+      )
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)

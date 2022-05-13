@@ -108,7 +108,7 @@ export default Vue.extend({
     ...mapState({
       friends: (state) => (state as RootState).friends,
       consentToScan: (state) =>
-        (state as RootState).textile.threadData.consentToScan,
+        (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
     flairColor(): string {

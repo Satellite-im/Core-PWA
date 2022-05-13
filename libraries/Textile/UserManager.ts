@@ -87,12 +87,11 @@ export class UserInfoManager {
         {
           userAddress: this.textile.wallet.address,
           consentToScan,
-          consentUpdated: consentToScan ? Date.now() : undefined,
           blockNsfw,
           filesVersion,
         },
       ])
-      return
+      return await this._findRecord()
     }
     if (typeof consentToScan === 'boolean') {
       record.consentToScan = consentToScan

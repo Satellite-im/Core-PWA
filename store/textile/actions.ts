@@ -1090,13 +1090,13 @@ export default {
     const callback = (update?: Update<UserThreadData>) => {
       if (!update || !update.instance) return
       console.log('update', update.instance)
-      commit('textile/setUserThreadData', update.instance, { root: true })
       if (
-        rootState.textile.threadData?.filesVersion &&
-        rootState.textile.threadData.filesVersion !== $FileSystem.version
+        update.instance.filesVersion &&
+        rootState.textile.userThread.filesVersion !== $FileSystem.version
       ) {
         console.log('todo - update file system based on bucket index')
       }
+      commit('textile/setUserThreadData', update.instance, { root: true })
     }
     $UserInfoManager.textile.client.listen(
       $UserInfoManager.threadID,

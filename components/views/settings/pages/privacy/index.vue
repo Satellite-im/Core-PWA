@@ -22,7 +22,7 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       accounts: (state) => (state as RootState).accounts,
       settings: (state) => (state as RootState).settings,
-      threadData: (state) => (state as RootState).textile.threadData,
+      userThread: (state) => (state as RootState).textile.userThread,
     }),
     ...mapGetters('textile', ['getInitialized']),
     serverTypes(): { text: TranslateResult; value: string }[] {
@@ -94,7 +94,7 @@ export default Vue.extend({
         this.loading = ''
       },
       get(): boolean {
-        return this.threadData.consentToScan
+        return this.userThread.consentToScan
       },
     },
     blockNsfw: {
@@ -106,7 +106,7 @@ export default Vue.extend({
         this.loading = ''
       },
       get(): boolean {
-        return this.threadData.blockNsfw
+        return this.userThread.blockNsfw
       },
     },
     displayCurrentActivity: {

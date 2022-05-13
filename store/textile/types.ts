@@ -33,7 +33,7 @@ export interface TextileState {
       name: string
     }
   }
-  threadData: UserThreadData
+  userThread: UserThreadData
 }
 
 export enum TextileError {

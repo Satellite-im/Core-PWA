@@ -41,7 +41,7 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
       consentToScan: (state) =>
-        (state as RootState).textile.threadData.consentToScan,
+        (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('ui', ['isFilesIndexLoading']),
   },
