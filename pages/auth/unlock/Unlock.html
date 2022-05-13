@@ -16,7 +16,7 @@
       :data-cy="`pin-label`"
       :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'}`"
       :placeholder="$t('pages.unlock.placeholder')"
-      :isLoading="decrypting"
+      :loading"decrypting"
       :action="getPinHash ? decrypt : create"
     >
       <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />

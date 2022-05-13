@@ -20,7 +20,6 @@ import { Config } from '~/config'
 declare module 'vue/types/vue' {
   interface Vue {
     removeFriend: () => void
-    loading: AddFriendEnum
   }
 }
 

@@ -9,13 +9,13 @@
       <input
         v-model="internalText"
         class="input"
-        :class="[`is-${size} is-${type}`, {'disabled' : disabled || isLoading}]"
+        :class="[`is-${size} is-${type}`, {'disabled' : disabled || loading}]"
         :readonly="readonly"
         :type="inputKind"
         data-cy="input-group"
         :placeholder="placeholder"
         :maxLength="compMaxLength"
-        :disabled="disabled || isLoading"
+        :disabled="disabled || loading"
         v-on:keyup.enter="action"
         @input="update"
         ref="input"
@@ -24,10 +24,10 @@
     <div class="control" data-cy="submit-input">
       <a
         class="button"
-        :class="[`is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`, {'disabled' : disabled || isLoading}]"
-        @click="() => !disabled && !isLoading ? action() : null"
+        :class="[`is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`, {'disabled' : disabled || loading}]"
+        @click="() => !disabled && !loading ? action() : null"
       >
-        <UiLoadersSpinner v-if="isLoading" spinning />
+        <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
           <slot></slot>
           {{ buttonText }}

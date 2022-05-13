@@ -91,7 +91,7 @@ export default Vue.extend({
     /**
      * Should the button be in the loading state
      */
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false,
     },
