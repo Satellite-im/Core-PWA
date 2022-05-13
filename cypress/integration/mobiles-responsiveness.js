@@ -13,7 +13,7 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Run responsiveness tests on several devices', () => {
+describe.skip('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   data.allDevices.forEach((item) => {
     beforeEach(() => {
@@ -54,7 +54,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.goToConversation('cypress friend', true)
     })
 
-    it.skip(`Chat Features - Messages on ${item.description}`, () => {
+    it(`Chat Features - Messages on ${item.description}`, () => {
       //Validate message and emojis are sent
       cy.chatFeaturesSendMessage(randomMessage)
       cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
