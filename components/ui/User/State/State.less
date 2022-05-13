@@ -4,36 +4,40 @@
   align-items: center;
 
   .circle {
-    mask: radial-gradient(circle 8px at 85.35% 85.35%, #0000 98%, #000) 100%
-      100%/100% 100% no-repeat;
+    mask: radial-gradient(circle 8px at 86% 86%, #0000 98%, #000) 100% 100%/100%
+      100% no-repeat;
     overflow: hidden;
+    &.is-large {
+      mask: radial-gradient(circle 12px at 86% 86%, #0000 98%, #000) 100% 100%/100%
+        100% no-repeat;
+    }
   }
 
   .status {
     position: absolute;
-    left: 85.35%;
-    top: 85.35%;
-    font-size: @text-size;
-    text-shadow: 0 0 3px #000;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    align-content: center;
+    left: 86%;
+    top: 86%;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    margin-left: -6px;
 
-    circle {
-      stroke: transparent;
-      paint-order: stroke;
+    &.is-large {
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
     }
+
     &.is-online {
-      &:extend(.color-success);
-      fill: @green;
+      background-color: @green;
     }
     &.is-offline {
-      &:extend(.font-gray);
-      fill: @gray;
+      background-color: @gray;
     }
     &.is-idle {
-      &:extend(.color-warning);
-      fill: @yellow;
+      background-color: @yellow;
     }
   }
 

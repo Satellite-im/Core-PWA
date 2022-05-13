@@ -6,16 +6,17 @@
   >
     <UiCircle
       data-cy="satellite-circle-profile"
+      :class="{ 'is-large': size > 36 }"
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="size"
       :source="src"
       @click="clickHandler"
     />
-    <circle-icon
+    <div
       v-if="user.state !== 'mobile' && !isTyping"
-      :size="size > 35 ? '1.65x' : '1x'"
-      :class="`status is-${user.state}`"
+      class="status"
+      :class="{ [`is-${user.state}`]: user.state, 'is-large': size > 36 }"
     />
     <smartphone-icon
       v-else-if="user.state === 'mobile'"
@@ -28,13 +29,12 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
+import { SmartphoneIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
 
 export default Vue.extend({
   components: {
     SmartphoneIcon,
-    CircleIcon,
   },
   props: {
     user: {
@@ -49,7 +49,7 @@ export default Vue.extend({
     src: { type: String, default: '', required: false },
     size: {
       type: Number,
-      default: 35,
+      default: 36,
       required: false,
     },
     clickHandler: {
