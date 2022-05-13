@@ -109,7 +109,7 @@ export default Vue.extend({
     },
     maxLength: {
       type: Number,
-      default: 0,
+      default: 256,
     },
   },
   data() {
@@ -120,10 +120,7 @@ export default Vue.extend({
   computed: {
     textLength(): string {
       /* toArray(): https://lodash.com/docs/4.17.15#toArray */
-      return `${toArray(this.internalText).length}/${this.compMaxLength}`
-    },
-    compMaxLength(): number {
-      return this.maxLength || this.$Config.chat.maxChars
+      return `${toArray(this.internalText).length}/${this.maxLength}`
     },
   },
   watch: {

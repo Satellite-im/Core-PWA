@@ -29,6 +29,7 @@
       v-model="text"
       :placeholder="`${$t('friends.message')} ${user.name}...`"
       :action="sendMessage"
+      :maxLength="$Config.chat.maxChars"
       showLimit
     >
       <arrow-right-icon size="1x" />

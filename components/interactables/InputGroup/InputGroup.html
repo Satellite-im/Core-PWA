@@ -14,7 +14,7 @@
         :type="inputKind"
         data-cy="input-group"
         :placeholder="placeholder"
-        :maxLength="compMaxLength"
+        :maxLength="maxLength"
         :disabled="disabled || loading"
         v-on:keyup.enter="action"
         @input="update"
