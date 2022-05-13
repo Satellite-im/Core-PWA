@@ -5,15 +5,6 @@ import { mapState } from 'vuex'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    text: string
-    maxChars: number
-    close: () => void
-    handleOverflow: () => void
-  }
-}
-
 export default Vue.extend({
   components: {
     ArrowRightIcon,
@@ -28,7 +19,6 @@ export default Vue.extend({
     return {
       isEmptyMessage: false,
       text: '',
-      maxChars: this.$Config.chat.maxChars,
     }
   },
   computed: {

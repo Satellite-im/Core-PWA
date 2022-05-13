@@ -5,12 +5,6 @@ import { toArray } from 'lodash'
 import { InputTypes, InputStyle, InputSize } from './types.d'
 import { Icon } from '~/types/ui/icons'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    internalText: string
-  }
-}
-
 export default Vue.extend({
   model: {
     prop: 'text',
@@ -97,7 +91,7 @@ export default Vue.extend({
     /**
      * Should the button be in the loading state
      */
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -109,22 +103,12 @@ export default Vue.extend({
       required: false,
       default: '',
     },
-    /**
-     * Content to be copied when the input group button is clicked
-     */
-    copyContent: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    textLimit: {
+    showLimit: {
       type: Boolean,
-      required: false,
       default: false,
     },
-    limitCount: {
+    maxLength: {
       type: Number,
-      required: false,
       default: 0,
     },
   },
@@ -134,9 +118,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    textLength() {
+    textLength(): string {
       /* toArray(): https://lodash.com/docs/4.17.15#toArray */
-      return `${toArray(this.internalText).length}/${this.limitCount}`
+      return `${toArray(this.internalText).length}/${this.compMaxLength}`
+    },
+    compMaxLength(): number {
+      return this.maxLength || this.$Config.chat.maxChars
     },
   },
   watch: {
