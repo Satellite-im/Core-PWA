@@ -337,11 +337,8 @@ export default Vue.extend({
     overflow: hidden;
     left: 0;
     right: 0;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     &:extend(.background-layer);
+    &:extend(.no-select);
   }
 
   .editable-input {

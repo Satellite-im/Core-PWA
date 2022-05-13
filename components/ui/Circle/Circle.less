@@ -1,11 +1,12 @@
 .circle {
   &:extend(.font-secondary);
+  &:extend(.no-select);
+  display: inline-block;
+  vertical-align: top;
   .image {
     &:extend(.full-width);
     height: @full;
   }
-  display: inline-block;
-  vertical-align: top;
 }
 
 .circle-flex {

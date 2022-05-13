@@ -9,7 +9,7 @@
   &-placeholder {
     text-align: center;
     max-width: 200px;
-    user-select: none;
+    &:extend(.no-select);
     pointer-events: none;
     &-img {
       padding: @normal-spacing;
@@ -29,7 +29,7 @@
 .is-normal-image {
   &:extend(.round-corners);
   max-width: 300px;
-  user-select: none;
+  &:extend(.no-select);
 }
 
 .file-info {

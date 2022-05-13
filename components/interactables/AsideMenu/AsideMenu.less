@@ -2,7 +2,7 @@
   .menu-list {
     a {
       -webkit-user-drag: none;
-      user-select: none;
+      &:extend(.no-select);
     }
     margin-bottom: @normal-spacing;
   }
@@ -16,5 +16,5 @@
   padding: @xlarge-spacing;
   position: relative;
   -webkit-user-drag: none;
-  user-select: none;
+  &:extend(.no-select);
 }
