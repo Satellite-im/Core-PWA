@@ -160,9 +160,6 @@ export const Config = {
       {
         urls: 'stun:stun.services.mozilla.com',
       },
-      {
-        urls: 'stun:stun.services.mozilla.com',
-      },
     ],
     constraints: {
       audio: true,
