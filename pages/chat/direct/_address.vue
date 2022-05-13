@@ -89,23 +89,6 @@ export default Vue.extend({
       immediate: true,
     },
   },
-  mounted() {
-    // This information can be useful for users to help us find and report bugs.
-    ConsoleWarning(this.$config.clientVersion, this.$store.state)
-    const { address } = this.$route.params
-    const { friends } = this.$store.state
-
-    if (address) {
-      return
-    }
-
-    if (friends && friends.all && friends.all.length > 0) {
-      this.$router.replace(`/chat/direct/${friends.all[0].address}`)
-      return
-    }
-
-    this.$router.replace('/friends/list')
-  },
 })
 </script>
 
