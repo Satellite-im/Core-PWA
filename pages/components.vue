@@ -196,7 +196,7 @@
               input-kind="number"
               type="primary"
               :label-text="input2Text.toString()"
-              :is-loading="inputGroupLoading"
+              :loading="inputGroupLoading"
               :action="
                 () => {
                   inputGroupLoading = !inputGroupLoading
