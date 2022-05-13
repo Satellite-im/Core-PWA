@@ -52,7 +52,10 @@
             <users-icon size="1.2x" />
           </InteractablesButton>
           <span
-            v-if="friends.incomingRequests.length"
+            v-if="
+              friends.incomingRequests.length &&
+              dataState.friends === DataStateType.Ready
+            "
             :class="
               $route.path.includes('/friends/list')
                 ? 'label tag-inverted'
@@ -89,9 +92,12 @@
         class="scrolling hidden-scroll users"
       >
         <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
-          <div
-            v-if="dataState.friends !== DataStateType.Loading && users.length"
-          >
+          <UiLoadersAddress
+            v-if="dataState.friends === DataStateType.Loading"
+            :count="4"
+            inverted
+          />
+          <div v-else-if="users && users.length">
             <UiInlineNotification
               v-if="ui.unreadMessage.length"
               :text="$t('messaging.new_messages')"
@@ -119,19 +125,22 @@
               <user-plus-icon size="1.2x" />
             </InteractablesButton>
           </div>
-          <UiLoadersAddress v-else :count="4" inverted />
         </UiScroll>
       </div>
       <div v-else v-scroll-lock="true" class="scrolling hidden-scroll">
         <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
-          <div v-if="dataState.friends !== DataStateType.Loading">
+          <UiLoadersAddress
+            v-if="dataState.friends === DataStateType.Loading"
+            :count="4"
+            inverted
+          />
+          <div v-else-if="groups && groups.length">
             <GroupAside
               v-for="group in groups"
               :key="group.address"
               :selected-group="group"
             />
           </div>
-          <UiLoadersAddress v-else :count="4" inverted />
         </UiScroll>
       </div>
       <div class="new-chat-container">

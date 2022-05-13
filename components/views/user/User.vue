@@ -128,6 +128,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     clearInterval(this.$data.timestampRefreshInterval)
+    this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
     testFunc() {
@@ -137,7 +138,6 @@ export default Vue.extend({
       this.isLoading = true
       try {
         await this.$store.dispatch('friends/removeFriend', this.user)
-        this.$router.replace('/chat/direct')
       } catch (e) {
         this.$toast.success(
           this.$t('errors.friends.friend_not_removed') as string,

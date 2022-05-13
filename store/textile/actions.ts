@@ -1,31 +1,31 @@
-import { resourceLimits } from 'worker_threads'
 import Vue from 'vue'
-import { TextileState, TextileError } from './types'
-import { ActionsArguments, RootState } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileConfig } from '~/types/textile/manager'
-import { MailboxManager } from '~/libraries/Textile/MailboxManager'
-import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import { TextileError, TextileState } from './types'
 import { Config } from '~/config'
-import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
-import { UploadDropItemType } from '~/types/files/file'
+import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
   db,
   DexieConversation,
   DexieMessage,
 } from '~/libraries/SatelliteDB/SatelliteDB'
-import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { FilSystem } from '~/libraries/Files/FilSystem'
-import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { AccountsError } from '~/store/accounts/types'
 import { Group } from '~/store/groups/types'
+import { UploadDropItemType } from '~/types/files/file'
 import {
-  UISearchResult,
   QueryOptions,
   SearchOrderType,
+  UISearchResult,
   UISearchResultData,
+  MatchTypesEnum,
 } from '~/types/search/search'
+import { ActionsArguments, RootState } from '~/types/store/store'
+import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
+import { TextileConfig } from '~/types/textile/manager'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -56,7 +56,6 @@ export default {
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
-    commit('textileInitialized', true)
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
     const fsExport = $TextileManager.bucket?.index
@@ -95,7 +94,7 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.address === address)
@@ -685,7 +684,6 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.sentbox)) {
       return
     }
-
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
@@ -941,10 +939,12 @@ export default {
       query,
       page,
       orderBy,
+      fields,
     }: {
       query: QueryOptions
       page: number
       orderBy: SearchOrderType
+      fields: MatchTypesEnum[]
     },
   ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
@@ -967,6 +967,7 @@ export default {
       }`,
       {
         fuzzy: 0.3,
+        fields,
       },
     )
 

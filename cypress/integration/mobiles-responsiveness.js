@@ -1,3 +1,4 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
 import { data } from '../fixtures/mobile-devices.json'
 
 const faker = require('faker')
@@ -8,7 +9,9 @@ const filepathCorrect = 'images/logo.png'
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
@@ -39,7 +42,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.createAccountSubmit()
     })
 
-    it.skip(`Import Account on ${item.description}`, () => {
+    it(`Import Account on ${item.description}`, { retries: 2 }, () => {
       cy.viewport(item.width, item.height)
       cy.importAccount(randomPIN, recoverySeed)
       //Validate profile name displayed
@@ -49,7 +52,7 @@ describe('Run responsiveness tests on several devices', () => {
       cy.goToConversation('cypress friend')
     })
 
-    it.skip(`Chat Features on ${item.description}`, () => {
+    it(`Chat Features on ${item.description}`, () => {
       //Setting viewport
       cy.viewport(item.width, item.height)
 

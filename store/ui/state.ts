@@ -75,7 +75,7 @@ const InitialUIState = (): UIState => ({
     flair: Flairs[0],
   },
   filesUploadStatus: '',
-  renameCurrentName: undefined,
+  renameItem: undefined,
   filePreview: undefined,
   fileDownloadList: [],
   chatImageOverlay: undefined,

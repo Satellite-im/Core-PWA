@@ -6,7 +6,11 @@ export const Config = {
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: 'https://hub.textile.io',
+    browser:
+      process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.edge.satellite.one',
+    apiUrl:
+      process.env.NUXT_ENV_TEXTILE_API_URL ||
+      'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
@@ -15,6 +19,7 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
+  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],

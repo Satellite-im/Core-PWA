@@ -77,7 +77,7 @@ Object {
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "renameCurrentName": undefined,
+  "renameItem": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",

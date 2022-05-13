@@ -1,6 +1,6 @@
 {
   "fixturesFolder": false,
-  "supportFile": false,
+  "supportFile": "cypress/support/second-user/index.js",
   "pluginsFile": false,
   "baseUrl": "http://localhost:3000",
   "integrationFolder": "cypress/integration-pair-chat",

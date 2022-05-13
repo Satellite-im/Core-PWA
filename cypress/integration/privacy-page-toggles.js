@@ -3,11 +3,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
-//Creating two arrays to compare values displayed in toggle switches on both screens
-let toggleStatusSaved = []
-let toggleStatusProfile = []
-
-describe.skip('Privacy Settings Page - Toggles Tests', () => {
+describe('Privacy Settings Page - Toggles Tests', () => {
   it('Privacy Page - Validate existing toggles', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)

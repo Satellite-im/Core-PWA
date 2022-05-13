@@ -1,0 +1,51 @@
+{
+  "dataRecovery": {
+    "accounts": [
+      {
+        "id": 1,
+        "description": "Chat User A",
+        "recoverySeed": "entry soccer evoke oak bomb joke ugly safe spend arrest bacon remove"
+      },
+      {
+        "id": 2,
+        "description": "Chat User B",
+        "recoverySeed": "youth expand artefact absent clown tattoo skill resist interest pill unit rude"
+      },
+      {
+        "id": 3,
+        "description": "Chat User C",
+        "recoverySeed": "short loop typical worth force tragic huge rigid despair tree roast hurdle"
+      },
+      {
+        "id": 4,
+        "description": "cypress",
+        "recoverySeed": "slice manual beyond few there among solar melody lizard phone rent steel"
+      },
+      {
+        "id": 5,
+        "description": "cypress friend",
+        "recoverySeed": "scrub harsh trip extend retreat denial seed ritual win whale clown employ"
+      },
+      {
+        "id": 6,
+        "description": "Snap QA",
+        "recoverySeed": "crane hand goat scorpion crime service cloud traffic kid culture left cover"
+      },
+      {
+        "id": 7,
+        "description": "Snap Friend",
+        "recoverySeed": "tired because mansion fabric found opera fantasy disease solve sure neglect job"
+      },
+      {
+        "id": 8,
+        "description": "Chat Pair A",
+        "recoverySeed": "opera sphere measure dice ripple female vessel proof topic music actual metal"
+      },
+      {
+        "id": 9,
+        "description": "Chat Pair B",
+        "recoverySeed": "metal humor they buyer fan year north habit abuse regret hunt luggage"
+      }
+    ]
+  }
+}

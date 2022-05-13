@@ -3,6 +3,8 @@ import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
+import { Fil } from '~/libraries/Files/Fil'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 export enum ThemeNames {
   DEFAULT = 'default',
   MOONLESS = 'moonless_night',
@@ -203,8 +205,8 @@ export interface UIState {
     flair: Flair
   }
   filesUploadStatus: string
-  renameCurrentName?: string
-  filePreview?: string
+  renameItem?: Item
+  filePreview?: Fil
   fileDownloadList: string[]
   chatImageOverlay?: ImageMessage
   fileSort: FileSort

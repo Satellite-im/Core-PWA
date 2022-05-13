@@ -41,7 +41,7 @@
           <users-icon size="1.2x" />
         </InteractablesButton>
         <span
-          v-if="friends.incomingRequests.length"
+          v-if="friends.incomingRequests.length && dataState.friends === DataStateType.Ready"
           :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
         >
           {{friends.incomingRequests.length}}
@@ -93,9 +93,12 @@
       v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div
-          v-if="dataState.friends !== DataStateType.Loading && users && users.length"
-        >
+        <UiLoadersAddress
+          v-if="dataState.friends === DataStateType.Loading"
+          :count="4"
+          inverted
+        />
+        <div v-else-if="users && users.length">
           <UiInlineNotification
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"

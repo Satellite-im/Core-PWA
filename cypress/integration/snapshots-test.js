@@ -1,7 +1,11 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const recoverySeed =
-  'skin hotel finger toe face pill rather age acid ticket demise insane'
+const recoverySeed = dataRecovery.accounts
+  .filter((item) => item.description === 'Snap QA')
+  .map((item) => item.recoverySeed)
+  .toString()
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 

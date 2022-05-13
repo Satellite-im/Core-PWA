@@ -290,7 +290,7 @@ describe('default functions', () => {
       expect(error).toHaveProperty('message', AccountsError.PAYER_NOT_PRESENT)
     }
   })
-  test('module.default.removeFriend with payer account', async () => {
+  test.skip('module.default.removeFriend with payer account', async () => {
     const SMConstructor = Vue.prototype.$SolanaManager
     SMConstructor.getActiveAccount = jest.fn().mockReturnValueOnce(true) // this is the payer account
 

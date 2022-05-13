@@ -118,7 +118,7 @@ describe('Solana.waitForAccount', () => {
       expect(error).toBeInstanceOf(Error)
     }
   })
-  test.skip('2', async () => {
+  test('2', async () => {
     const param1: any = {
       getAccountInfo: () => {
         return undefined

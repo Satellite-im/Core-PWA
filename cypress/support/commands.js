@@ -65,15 +65,6 @@ Cypress.Commands.add(
     }),
 )
 
-// Temporary until Error 503 for Network Request Error on Recovery Seed Screen Is Present
-Cypress.Commands.add('retryOnNetworkRequestError', () => {
-  cy.get('body').then(($body) => {
-    if ($body.find('.red').length > 0) {
-      cy.contains('Recover Account').click()
-    }
-  })
-})
-
 //Create Account Commands
 
 Cypress.Commands.add('createAccount', (pin) => {
@@ -228,7 +219,6 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .trigger('input')
     .type(recoverySeed, { log: false }, { force: true })
   cy.contains('Recover Account').click()
-  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
 })
 
 Cypress.Commands.add(
@@ -270,7 +260,6 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
   cy.get('[data-cy=add-passphrase]').type('{enter}')
 
   cy.contains('Recover Account').click()
-  cy.retryOnNetworkRequestError() // temporary until 503 network request errors are not presented
 })
 
 //Chat - Basic Commands for Text and Emojis
@@ -300,7 +289,7 @@ Cypress.Commands.add(
         cy.get('[data-cy=send-message]').click() //sending text message
       })
     // Wait until loading indicator disappears
-    cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should(
+    cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should(
       'not.exist',
     )
     // Assert message
@@ -495,15 +484,17 @@ Cypress.Commands.add('goToConversation', (user) => {
   })
 
   //Find the friend and click on the message button associated
-  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
-    .click()
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
 
   // Hide sidebar
   cy.get('[data-cy=hamburger-button]').click()
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 150000 })
+  cy.get('[data-cy=user-connected]', { timeout: 180000 })
     .should('be.visible')
     .should('have.text', user)
 })
@@ -736,7 +727,7 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
       cy.get('[data-cy=send-message]').click() //sending text message
     })
   // Wait until loading indicator disappears
-  cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should('not.exist')
+  cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should('not.exist')
   // Depending on the markdown passed, assert the text from the corresponding HTML tag
   if (markdown === '*' || markdown === '_') {
     cy.get('em').last().should('have.text', text)
@@ -833,3 +824,18 @@ Cypress.Commands.add(
     return subject
   },
 )
+
+// Get element attached to DOM
+
+Cypress.Commands.add('getAttached', (selector) => {
+  const getElement =
+    typeof selector === 'function' ? selector : ($d) => $d.find(selector)
+  let $el = null
+  return cy
+    .document()
+    .should(($d) => {
+      $el = getElement(Cypress.$($d))
+      expect(Cypress.dom.isDetached($el)).to.be.false
+    })
+    .then(() => cy.wrap($el))
+})

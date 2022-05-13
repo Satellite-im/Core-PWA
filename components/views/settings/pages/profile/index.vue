@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import { EditIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
@@ -29,6 +29,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['accounts', 'ui']),
+    ...mapGetters('textile', ['getInitialized']),
     isSmallScreen(): Boolean {
       // @ts-ignore
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
@@ -64,6 +65,8 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
+      if (!this.getInitialized) return
+
       const fileInput = this.$refs.file as HTMLElement
       fileInput.click()
     },
