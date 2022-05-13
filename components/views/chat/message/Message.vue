@@ -307,6 +307,15 @@ export default Vue.extend({
         const recipient = this.$Hounddog.getActiveFriend(
           this.$store.state.friends,
         )
+        if (recipient === undefined) {
+          const activeRecipient =
+            this.$store.state.friends.activeConversation.target.textilePubkey
+          this.$store.dispatch('textile/editTextMessage', {
+            to: activeRecipient,
+            original: this.$props.message,
+            text: message,
+          })
+        }
         this.$store.dispatch('textile/editTextMessage', {
           to: recipient?.textilePubkey,
           original: this.$props.message,
