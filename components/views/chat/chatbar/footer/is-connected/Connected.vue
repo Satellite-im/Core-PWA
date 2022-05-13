@@ -22,17 +22,20 @@ export default Vue.extend({
     ...mapState(['friends', 'conversation']),
     /**
      * @method participantStatus
-     * @description Get an object that has all participants, connected, and disconnected
+     * @description Get an object that has all participants, connected, and disconnected. The filtering !== null filters out your own username
      */
     participantStatus(): object {
       return {
-        PARTICIPANTS: this.conversation.participants.map((participant) => {
-          return participant.name
-        }),
+        PARTICIPANTS: this.conversation.participants
+          .filter((participant) => participant.name != null)
+          .map((participant) => {
+            return participant.name
+          }),
         CONNECTED: this.conversation.participants
           .filter(
             (participant) =>
-              participant.state === ConversationConnection.CONNECTED,
+              participant.state === ConversationConnection.CONNECTED &&
+              participant.name != null,
           )
           .map((participant) => {
             return participant.name
@@ -40,7 +43,8 @@ export default Vue.extend({
         DISCONNECTED: this.conversation.participants
           .filter(
             (participant) =>
-              participant.state === ConversationConnection.DISCONNECTED,
+              participant.state === ConversationConnection.DISCONNECTED &&
+              participant.name != null,
           )
           .map((participant) => {
             return participant.name
@@ -51,23 +55,32 @@ export default Vue.extend({
      * @method participantsText
      * @description three possible strings returned, one for single user, one for multiple users, or no participants (used only for groups)
      */
-    participantsText(): string {
-      if (this.participantStatus.PARTICIPANTS.length === 1) {
-        return `${this.participantStatus.PARTICIPANTS[0]} ${this.$t('ui.is')} ${
-          this.participantStatus.CONNECTED.length
-            ? this.$t('ui.online')
-            : this.$t('ui.offline')
-        }`
+    participantsText(): object {
+      // if there is only one participant (DM) OR there is only one connected user (1 of group chat), use singular
+      if (
+        this.participantStatus.PARTICIPANTS.length === 1 ||
+        this.participantStatus.CONNECTED.length === 1
+      ) {
+        return {
+          names: this.participantStatus.PARTICIPANTS[0],
+          description: `${this.$t('ui.is')} ${
+            this.participantStatus.CONNECTED.length
+              ? this.$t('ui.online')
+              : this.$t('ui.offline')
+          }`,
+        }
       }
+      // if there are multiple connected (2+ group) user plural
       if (
         this.participantStatus.PARTICIPANTS.length > 1 &&
-        this.participantStatus.CONNECTED.length > 0
+        this.participantStatus.CONNECTED.length > 1
       ) {
-        return `${this.participantStatus.CONNECTED.join(', ')} ${this.$t(
-          'ui.are',
-        )} ${this.$t('ui.online')}`
+        return {
+          names: this.participantStatus.CONNECTED.join(', '),
+          description: `${this.$t('ui.are')} ${this.$t('ui.online')}`,
+        }
       }
-      return this.$t('ui.all_offline')
+      return { names: null, description: this.$t('ui.all_offline') }
     },
   },
   watch: {
