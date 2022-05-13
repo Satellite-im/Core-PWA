@@ -20,7 +20,8 @@
     :action="() => toggleDeafen()"
     :text="$t('controls.headphones')"
   >
-    <headphones-icon size="1x"></headphones-icon>
+    <headphones-off-icon v-if="audio.deafened" size="1x"></headphones-off-icon>
+    <headphones-icon v-else size="1x"></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
     :type="videoMuted ? 'danger' : 'dark'"

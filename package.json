@@ -86,7 +86,7 @@
     "qrcode.vue": "^1.7.0",
     "remarkable": "^2.0.1",
     "rxjs": "^7.5.5",
-    "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
+    "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue#0485f5e414bd006c79154a8ebae6503e4107c73b",
     "simple-markdown": "^0.7.3",
     "simple-peer": "^9.11.1",
     "skaler": "^1.0.7",
