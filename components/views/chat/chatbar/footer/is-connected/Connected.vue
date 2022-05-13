@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
+import { ConversationConnection } from '~/store/conversation/types.ts'
 
 export default Vue.extend({
   components: {
@@ -18,36 +19,55 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'webrtc', 'friends', 'conversation']),
-    onlineParticipants() {
-      return this.conversation.participants
-        .filter((participant) => participant.state === 'CONNECTED')
-        .map((participant) => participant.name)
+    ...mapState(['friends', 'conversation']),
+    /**
+     * @method participantStatus
+     * @description Get an object that has all participants, connected, and disconnected
+     */
+    participantStatus(): object {
+      return {
+        PARTICIPANTS: this.conversation.participants.map((participant) => {
+          return participant.name
+        }),
+        CONNECTED: this.conversation.participants
+          .filter(
+            (participant) =>
+              participant.state === ConversationConnection.CONNECTED,
+          )
+          .map((participant) => {
+            return participant.name
+          }),
+        DISCONNECTED: this.conversation.participants
+          .filter(
+            (participant) =>
+              participant.state === ConversationConnection.DISCONNECTED,
+          )
+          .map((participant) => {
+            return participant.name
+          }),
+      }
     },
-    onlineParticipantsText() {
-      if (this.onlineParticipants.length === 1) {
-        return `${this.onlineParticipants[0]} ${this.$t('ui.is')} ${this.$t(
-          'ui.online',
-        )}`
+    /**
+     * @method participantsText
+     * @description three possible strings returned, one for single user, one for multiple users, or no participants (used only for groups)
+     */
+    participantsText(): string {
+      if (this.participantStatus.PARTICIPANTS.length === 1) {
+        return `${this.participantStatus.PARTICIPANTS[0]} ${this.$t('ui.is')} ${
+          this.participantStatus.CONNECTED.length
+            ? this.$t('ui.online')
+            : this.$t('ui.offline')
+        }`
       }
-      if (this.onlineParticipants.length > 4) {
-        return `${this.onlineParticipants.length} ${this.$t(
-          'ui.participants',
-        )} ${this.$t('ui.are')} ${this.$t('ui.online')}`
-      }
-      if (this.onlineParticipants.length) {
-        return `${this.onlineParticipants.join(', ')} ${this.$t(
+      if (
+        this.participantStatus.PARTICIPANTS.length > 1 &&
+        this.participantStatus.CONNECTED.length > 0
+      ) {
+        return `${this.participantStatus.CONNECTED.join(', ')} ${this.$t(
           'ui.are',
         )} ${this.$t('ui.online')}`
       }
-      if (this.conversation.participants.length === 1) {
-        return `${this.conversation.participants[0]} ${this.$t(
-          'ui.is',
-        )} ${this.$t('ui.offline')}`
-      }
-      return `${this.conversation.participants.join(', ')} ${this.$t(
-        'ui.are',
-      )} ${this.$t('ui.offline')}`
+      return this.$t('ui.all_offline')
     },
   },
   watch: {

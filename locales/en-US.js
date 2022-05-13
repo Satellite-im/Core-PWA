@@ -37,6 +37,7 @@ export default {
     not_connected: 'not connected',
     online: 'online',
     offline: 'offline',
+    all_offline: 'All Users are Offline',
     participant: 'participant',
     participants: 'participants',
   },

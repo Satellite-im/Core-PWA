@@ -1,11 +1,11 @@
-<div v-if="!typing && onlineParticipants.length > 0" class="is-connected">
+<div v-if="!typing" class="is-connected">
   <circle-icon
-    :class="`status is-${ onlineParticipants.length > 0 ? $t('ui.online') : $t('ui.offline') }`"
+    :class="`status is-${ participantStatus.CONNECTED.length > 0 ? $t('ui.online') : $t('ui.offline') }`"
     size="1x"
   />
   <TypographyText
-    v-if="onlineParticipants.length > 0"
-    :text="onlineParticipantsText"
+    v-if="participantStatus.PARTICIPANTS.length > 0"
+    :text="participantsText"
     data-cy="user-connected"
     :size="6"
   />
