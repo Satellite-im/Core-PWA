@@ -25,7 +25,7 @@
       <a
         class="button"
         :class="[`is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`, {'disabled' : disabled || loading}]"
-        @click="() => !disabled && !loading ? action() : null"
+        @click="() => disabled || loading ? null : action()"
       >
         <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>

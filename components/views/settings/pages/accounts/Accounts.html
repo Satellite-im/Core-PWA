@@ -13,10 +13,9 @@
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.accounts.active')" />
       <InteractablesInputGroup
-        :copy-content="accounts.active"
         readonly
         type="primary"
-        :action="() => $toast.show($t('ui.copied'))"
+        :action="copyPhrase"
         :text="accounts.active"
       >
         <clipboard-icon size="1x" />
