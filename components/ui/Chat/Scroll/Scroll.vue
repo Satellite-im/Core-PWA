@@ -47,8 +47,7 @@ export default Vue.extend({
   data() {
     return {
       newMessageAlert: false,
-      scrollContainerObserver: null,
-      scrollContentObserver: null,
+      scrollObserver: null,
     }
   },
   computed: {
@@ -76,27 +75,18 @@ export default Vue.extend({
     },
   },
   mounted() {
-    const scrollContainerObserver = new ResizeObserver(() => {
+    const scrollObserver = new ResizeObserver((entities) => {
       // Autoscroll to the bottom only if the user is at the bottom of the chat
       !this.ui.isScrollOver && this.autoScrollToBottom()
     })
 
-    this.scrollContainerObserver = scrollContainerObserver.observe(
+    this.scrollObserver = scrollObserver.observe(
       this.$refs.scrollRef,
-    )
-
-    const scrollContentObserver = new ResizeObserver(() => {
-      // Autoscroll to the bottom only if the user is at the bottom of the chat
-      !this.ui.isScrollOver && this.autoScrollToBottom()
-    })
-
-    this.scrollContentObserver = scrollContentObserver.observe(
       this.$refs.scrollContent,
     )
   },
   beforeDestroy() {
-    if (this.scrollContainerObserver) this.scrollContainerObserver.disconnect()
-    if (this.scrollContentObserver) this.scrollContentObserver.disconnect()
+    if (this.scrollObserver) this.scrollObserver.disconnect()
   },
   methods: {
     /**
@@ -108,7 +98,6 @@ export default Vue.extend({
       if (this.$el && this.autoScroll) {
         this.$nextTick(() => {
           this.$el.scrollTop = this.$el.scrollHeight
-          this.$store.dispatch('ui/setIsScrollOver', false)
         })
       }
     },
