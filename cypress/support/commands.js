@@ -34,14 +34,27 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add('visitRootPage', () => {
+Cypress.Commands.add('visitRootPage', (isMobile = false) => {
   cy.deleteStorage()
   cy.wait(1000)
-  cy.visit('/')
+  // Pass arguments depending if the test is on mobile or desktop browser
+  if (isMobile === false) {
+    cy.visit('/')
+  } else if (isMobile === true) {
+    // Pass user agent with data for a mobile device
+    cy.on('window:before:load', (win) => {
+      Object.defineProperty(win.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+      })
+    })
+    // Use visit Mobile command instead of visit for mobile devices
+    cy.visitMobile('/')
+  }
   cy.wait(1000)
   cy.get('body').then(($body) => {
     if (!($body.find('.create_pin_section').length > 0)) {
-      cy.visitRootPage()
+      cy.visitRootPage(isMobile)
     }
   })
 })
@@ -67,9 +80,9 @@ Cypress.Commands.add(
 
 //Create Account Commands
 
-Cypress.Commands.add('createAccount', (pin) => {
+Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
   cy.clearDatabase()
-  cy.visitRootPage()
+  cy.visitRootPage(isMobile)
   cy.url().should('contain', '#/auth/unlock')
   cy.get('[data-cy=add-input]')
     .should('be.visible')
@@ -94,9 +107,9 @@ Cypress.Commands.add('createAccount', (pin) => {
 
 Cypress.Commands.add(
   'createAccountPINscreen',
-  (pin, savePin = false, snapshot = false) => {
+  (pin, savePin = false, snapshot = false, isMobile = false) => {
     cy.clearDatabase()
-    cy.visitRootPage()
+    cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet('.subtitle', 'Create Account Pin')
@@ -204,9 +217,9 @@ Cypress.Commands.add(
 
 //Import Account Commands
 
-Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
+Cypress.Commands.add('importAccount', (pin, recoverySeed, isMobile = false) => {
   cy.clearDatabase()
-  cy.visitRootPage()
+  cy.visitRootPage(isMobile)
   cy.url().should('contain', '#/auth/unlock')
   cy.get('[data-cy=add-input]')
     .should('be.visible')
@@ -223,9 +236,9 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
 
 Cypress.Commands.add(
   'importAccountPINscreen',
-  (pin, savePin = false, snapshot = false) => {
+  (pin, savePin = false, snapshot = false, isMobile = false) => {
     cy.clearDatabase()
-    cy.visitRootPage()
+    cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet('.subtitle', 'Create Account Pin')
@@ -396,7 +409,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('goToLastGlyphOnChat', () => {
-  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('exist')
+  cy.get('[data-cy=chat-glyph]').last().scrollIntoView().should('be.visible')
 })
 
 // Chat - Images Commands
@@ -472,11 +485,15 @@ Cypress.Commands.add('clickOutside', () => {
 
 // Chat - Page Load Commands
 
-Cypress.Commands.add('validateChatPageIsLoaded', () => {
-  cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+Cypress.Commands.add('validateChatPageIsLoaded', (isMobile = false) => {
+  if (isMobile === false) {
+    cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+  } else if (isMobile === true) {
+    cy.get('#mobile-nav', { timeout: 420000 }).should('exist')
+  }
 })
 
-Cypress.Commands.add('goToConversation', (user) => {
+Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   cy.get('#app-wrap').then(($appWrap) => {
     if (!$appWrap.hasClass('is-open')) {
       cy.get('[data-cy=toggle-sidebar]').click()
@@ -490,13 +507,13 @@ Cypress.Commands.add('goToConversation', (user) => {
       cy.getAttached($el).click()
     })
 
-  // Hide sidebar
-  cy.get('[data-cy=hamburger-button]').click()
+  // Hide sidebar if not on mobile browser
+  if (isMobile === false) {
+    cy.get('[data-cy=hamburger-button]').click()
+  }
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 180000 })
-    .should('be.visible')
-    .should('have.text', user)
+  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
 })
 
 // Chat - Hover on Icon Commands

@@ -12,7 +12,7 @@ const randomStatus = faker.lorem.word() // generate random status
 describe.skip('Snapshots Testing', () => {
   //Import account and snapshot on each screen
   it('Import account - PIN screen', () => {
-    cy.importAccountPINscreen(randomPIN, false, true)
+    cy.importAccountPINscreen(randomPIN, false, true, false)
   })
 
   it('Import account - Create or Import Account Selection screen', () => {
@@ -141,7 +141,7 @@ describe.skip('Snapshots Testing', () => {
 
   it('Create Account - PIN screen', () => {
     //Open URL and snapshot
-    cy.createAccountPINscreen(randomPIN, false, true)
+    cy.createAccountPINscreen(randomPIN, false, true, false)
   })
 
   it('Create Account - Create or Import Account Selection screen', () => {

@@ -7,7 +7,7 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Chat features with two accounts at the same time - First User', () => {
+describe.skip('Chat features with two accounts at the same time - First User', () => {
   it('Load account from Chat Pair A (first account)', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeed)

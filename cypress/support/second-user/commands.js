@@ -80,7 +80,7 @@ Cypress.Commands.add('validateChatPageIsLoaded', () => {
   cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
 })
 
-Cypress.Commands.add('goToConversation', (user) => {
+Cypress.Commands.add('goToConversation', () => {
   cy.get('#app-wrap').then(($appWrap) => {
     if (!$appWrap.hasClass('is-open')) {
       cy.get('[data-cy=toggle-sidebar]').click()
@@ -95,9 +95,7 @@ Cypress.Commands.add('goToConversation', (user) => {
   cy.get('[data-cy=hamburger-button]').click()
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=user-connected]', { timeout: 150000 })
-    .should('be.visible')
-    .should('have.text', user)
+  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
 })
 
 // Get element attached to DOM
