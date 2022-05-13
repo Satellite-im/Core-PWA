@@ -209,9 +209,15 @@ export default {
     unlock: {
       decrypt: 'Decrypt Account',
       create: 'Create Account Pin',
+      choose: 'Choose Your Pin',
+      create_pin: 'Create a pin to protect your account.',
+      dont_forget: "The pin can be anything you want, just don't forget it.",
       placeholder: 'Enter Pin...',
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
+      enter_code: 'Enter access code...',
+      bad_code: 'Please enter a valid code',
+      good_code: 'Access code verified',
     },
     loading: {
       loading: 'Linking Satellites...',

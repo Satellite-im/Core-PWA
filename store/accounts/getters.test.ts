@@ -23,19 +23,9 @@ describe('init', () => {
     inst = getters.default
   })
 
-  it('should retrieve pin hash', () => {
-    const result: any = inst.getPinHash(state)
-    expect(result).toEqual(state.pinHash)
-  })
-
   it('should retrieve encrypted phrase', () => {
     const result: any = inst.getEncryptedPhrase(state)
     expect(result).toEqual(state.encryptedPhrase)
-  })
-
-  it('should retrieve phrase', () => {
-    const result: any = inst.getPhrase(state)
-    expect(result).toEqual(state.phrase)
   })
 
   it('should retrieve registration status', () => {

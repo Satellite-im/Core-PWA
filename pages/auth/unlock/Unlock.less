@@ -5,25 +5,6 @@
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
-  .realm-container {
-    &:extend(.full-width);
-    display: inline-flex;
-    justify-content: center;
-    margin-top: @normal-spacing;
-  }
-
-  .create_pin_section {
-    margin-bottom: @normal-spacing;
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.more-pad-sides);
-
-    .subtitle {
-      margin: 0;
-      &:extend(.font-secondary);
-    }
-  }
 
   .decryption-body {
     align-self: center;
@@ -40,11 +21,34 @@
     }
   }
 
-  .version {
-    position: absolute;
-    bottom: @normal-spacing;
-    justify-content: center;
+  .early-access {
+    margin-bottom: @normal-spacing;
+    .code-input {
+      margin-bottom: @light-spacing;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+
+  .create_pin_section {
+    margin-bottom: @normal-spacing;
+    &:extend(.background-semitransparent-dark);
+    &:extend(.round-corners);
+    &:extend(.bordered);
+    &:extend(.more-pad-sides);
+
+    .subtitle {
+      margin: 0;
+      &:extend(.font-secondary);
+    }
+  }
+
+  .realm-container {
     &:extend(.full-width);
+    display: inline-flex;
+    justify-content: center;
+    margin-top: @normal-spacing;
   }
 }
 

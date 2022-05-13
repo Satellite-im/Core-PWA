@@ -6,14 +6,7 @@ import { mapGetters, mapState } from 'vuex'
 import { Dexie } from 'dexie'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
-
-declare module 'vue/types/vue' {
-  // 3. Declare augmentation for Vue
-  interface Vue {
-    error: string
-    decrypt: () => Promise<any>
-  }
-}
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'UnlockScreen',
@@ -27,20 +20,37 @@ export default Vue.extend({
       pin: '',
       error: '',
       decrypting: false,
-      peer: null,
-      showChangeLog: false,
+      accessCode: '' as string,
+      isValidCode: false as boolean,
+      codeMessage: '' as string,
     }
   },
   computed: {
-    ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
-    ...mapState(['ui', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+    }),
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.storePin
       },
+    },
+  },
+  watch: {
+    accessCode(val: string) {
+      if (val.length !== 10) {
+        this.codeMessage = ''
+        return
+      }
+      this.isValidCode = Math.random() < 0.5
+      this.codeMessage = (
+        this.isValidCode
+          ? this.$t('pages.unlock.good_code')
+          : this.$t('pages.unlock.bad_code')
+      ) as string
     },
   },
   mounted() {
@@ -63,47 +73,34 @@ export default Vue.extend({
       })
     },
     /**
-     * @method getIcon DocsTODO
-     * @description
-     * @returns
-     * @example
-     */
-    getIcon(): String {
-      if (this.getPinHash) {
-        return 'unlocked'
-      }
-      return 'locked'
-    },
-    // Decrypt stored encrypted data into memory
-    /**
      * @method decrypt DocsTODO
-     * @description
+     * @description Decrypt stored encrypted data into memory
      * @example
      */
     async decrypt() {
-      this.$data.decrypting = true
+      this.decrypting = true
       this.error = ''
 
       try {
-        await this.$store.dispatch('accounts/unlock', this.$data.pin)
+        await this.$store.dispatch('accounts/unlock', this.pin)
 
-        if (this.getPhrase === '') {
+        if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
           try {
             await this.$store.dispatch('settings/clearLocalStorage')
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
+            this.$router.replace('/setup/disclaimer')
           }
-          this.$router.replace('/setup/disclaimer')
         } else {
           this.$router.replace('/')
         }
       } catch (error: any) {
         this.error = error.message
-        this.$data.pin = ''
+        this.pin = ''
       }
 
-      this.$data.decrypting = false
+      this.decrypting = false
     },
     // Create & store a new pin, then decrypt.
     /**
@@ -112,8 +109,12 @@ export default Vue.extend({
      * @example
      */
     async create() {
+      if (!this.isValidCode) {
+        this.codeMessage = this.$t('pages.unlock.bad_code') as string
+        return
+      }
       try {
-        await this.$store.dispatch('accounts/setPin', this.$data.pin)
+        await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
       } catch (error: any) {
         this.error = error.message

@@ -1,25 +1,40 @@
 <div class="container">
   <div class="decryption-body">
-    <div v-if="!getPinHash" class="create_pin_section">
+    <div class="early-access">
+      <!-- fix rendering with env -->
+      <InteractablesInput
+        v-if="true"
+        v-model="accessCode"
+        class="code-input"
+        size="small"
+        :type="!isValidCode && codeMessage ? 'danger' : 'primary'"
+        :placeholder="$t('pages.unlock.enter_code')"
+        :maxLength="10"
+      />
+      <TypographyText
+        v-if="codeMessage"
+        :class="isValidCode ? 'green' : 'red'"
+        :text="codeMessage"
+      />
+    </div>
+    <div v-if="!accounts.pinHash" class="create_pin_section">
       <info-icon size="0.8x" />
       <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
-      <TypographyText text="Create a pin to protect your account." />
-      <TypographyText
-        text="The pin can be anything you want, just don't forget it."
-      />
+      <TypographyText :text="$t('pages.unlock.create_pin')" />
+      <TypographyText :text="$t('pages.unlock.dont_forget')" />
     </div>
     <InteractablesInputGroup
       v-model="pin"
       size="small"
       input-kind="password"
-      :type="`${error ? 'danger' : 'primary'}`"
-      :data-cy="`pin-label`"
-      :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'}`"
+      :type="error ? 'danger' : 'primary'"
+      data-cy="pin-label"
+      :label-text="accounts.pinHash ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose')"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
-      :action="getPinHash ? decrypt : create"
+      :action="accounts.pinHash ? decrypt : create"
     >
-      <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
+      <unlock-icon size="1x" v-if="accounts.pinHash" />
       <chevron-right-icon size="1x" v-else />
     </InteractablesInputGroup>
     <TypographyError v-if="error" :text="$t(error)" />

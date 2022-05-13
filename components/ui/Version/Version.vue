@@ -22,5 +22,9 @@ export default Vue.extend({
 <style scoped lang="less">
 .version {
   display: inline-flex;
+  position: absolute;
+  bottom: @normal-spacing;
+  justify-content: center;
+  &:extend(.full-width);
 }
 </style>
