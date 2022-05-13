@@ -295,7 +295,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding-bottom: @normal-spacing;
-  z-index: @base-z-index + 12;
+
+  &:extend(.first-layer);
   background: transparent;
 
   .sidebar-inner {
@@ -310,7 +311,7 @@ export default Vue.extend({
     .toggle-sidebar {
       cursor: pointer;
       position: absolute;
-      z-index: 11;
+      &:extend(.first-layer);
       top: 2.5rem;
       right: 1rem;
     }
@@ -357,7 +358,8 @@ export default Vue.extend({
     .toggle-sidebar {
       cursor: pointer;
       position: absolute;
-      z-index: @base-z-index + 10;
+
+      &:extend(.first-layer);
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
       &:extend(.font-accent);
@@ -442,9 +444,10 @@ export default Vue.extend({
     align-items: center;
     cursor: pointer;
     width: auto;
-    z-index: @base-z-index + 4;
+
+    &:extend(.first-layer);
     &::before {
-      z-index: @base-z-index + 8;
+      &:extend(.first-layer);
     }
   }
 }
@@ -462,7 +465,7 @@ export default Vue.extend({
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
-    z-index: 3;
+    &:extend(.first-layer);
     width: @sidebar-size-mobile;
     min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;

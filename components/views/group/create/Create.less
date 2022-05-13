@@ -25,10 +25,10 @@
   top: @toolbar-height;
   padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
   right: calc(18rem + 7rem);
-  z-index: @base-z-index + 10;
   display: flex;
   flex-direction: column;
   max-height: 24rem;
+  &:extend(.fourth-layer);
 
   &--compact {
     right: @servers-size + 2rem;

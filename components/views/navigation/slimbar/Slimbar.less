@@ -7,7 +7,8 @@
   pointer-events: none;
   padding-left: 0.6rem;
   padding-top: @normal-spacing;
-  z-index: @base-z-index + 30;
+
+  &:extend(.first-layer);
 
   .circle-group {
     margin: @normal-spacing 0;
@@ -15,7 +16,8 @@
     bottom: 0rem;
     // position: absolute;
     margin-bottom: 0.7rem;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
     width: 50px;
     pointer-events: auto;
   }
@@ -41,7 +43,8 @@
   .server,
   .unreads {
     // width: 50px;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
   }
 
   .scroll-area {
@@ -74,7 +77,8 @@
     margin: 0 @normal-spacing;
     &:extend(.font-primary);
     bottom: 0rem;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
     width: 50px;
     pointer-events: auto;
   }
@@ -114,7 +118,8 @@
   .server,
   .unreads {
     // width: 50px;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
   }
   display: inline-flex;
   height: 50px;

@@ -3,7 +3,8 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
-  z-index: @base-z-index + 35;
+
+  &:extend(.first-layer);
   padding: @normal-spacing;
 
   .file-nav {

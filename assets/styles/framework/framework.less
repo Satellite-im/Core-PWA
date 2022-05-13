@@ -7,7 +7,12 @@
 @import url('~/assets/styles/framework/ui.less');
 @import url('~/assets/styles/framework/animations.less');
 
-@base-z-index: 1;
+@background-layer-zindex: -1;
+@base-layer-zindex: 0;
+@first-layer-zindex: 10;
+@second-layer-zindex: 20;
+@third-layer-zindex: 30;
+@fourth-layer-zindex: 40;
 @viewport-width: 100vw;
 
 @import url('@creativebulma/bulma-tooltip/dist/bulma-tooltip.min.css');
@@ -18,4 +23,23 @@
 #app-wrap,
 #app {
   height: 100%;
+}
+
+.background-layer {
+  z-index: @background-layer-zindex;
+}
+.base-layer {
+  z-index: @base-layer-zindex;
+}
+.first-layer {
+  z-index: @first-layer-zindex;
+}
+.second-layer {
+  z-index: @second-layer-zindex;
+}
+.third-layer {
+  z-index: @third-layer-zindex;
+}
+.fourth-layer {
+  z-index: @fourth-layer-zindex;
 }

@@ -330,7 +330,6 @@ export default Vue.extend({
   width: 100%;
 
   .placeholder {
-    z-index: -1;
     color: @text-muted;
     position: absolute;
     white-space: nowrap;
@@ -342,6 +341,7 @@ export default Vue.extend({
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    &:extend(.background-layer);
   }
 
   .editable-input {
