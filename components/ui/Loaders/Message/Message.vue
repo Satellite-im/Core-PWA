@@ -1,5 +1,5 @@
 <template>
-  <div class="message-loader">
+  <div class="message-loader" data-cy="message-loading">
     <div v-for="i in count" :key="i" class="message-loader-item">
       <div class="left">
         <div class="placeholder-profile" />

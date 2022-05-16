@@ -18,7 +18,7 @@ describe('Import Account Validations', () => {
   })
 
   it('Import account', () => {
-    cy.importAccountPINscreen(randomPIN, false, false)
+    cy.importAccountPINscreen(randomPIN)
     cy.get('[data-cy=import-account-button]', { timeout: 60000 })
       .should('be.visible')
       .click()

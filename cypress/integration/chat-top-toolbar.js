@@ -20,15 +20,15 @@ describe('Chat Toolbar Tests', () => {
       cy.goToConversation('cypress friend')
       cy.hoverOnActiveIcon(
         '[data-cy=toolbar-enable-audio]',
-        'Call' || 'Offline calling unavailable',
+        'Offline calling unavailable',
       )
     },
   )
 
   it('Chat - Toolbar - Validate video icon is displayed', () => {
     cy.hoverOnActiveIcon(
-      '[data-cy=toolbar-enable-video]',
-      'Video' || 'Offline calling unavailable',
+      '[data-cy=toolbar-enable-audio]',
+      'Offline calling unavailable',
     )
   })
 

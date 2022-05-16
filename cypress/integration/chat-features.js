@@ -29,11 +29,11 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  it('Chat - Edit message on chat', () => {
+  it.skip('Chat - Edit message on chat', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it('Chat - Message edited shows edited status', () => {
+  it.skip('Chat - Message edited shows edited status', () => {
     cy.get('[data-cy=message-edited]').last().parents()
 
     cy.contains(randomMessage + randomNumber)
@@ -63,14 +63,14 @@ describe('Chat Features Tests', () => {
       .should('equal', 'granted')
 
     //Copying the latest text message sent
-    cy.contains(randomTextEdited).last().scrollIntoView().rightclick()
+    cy.contains(randomMessage).last().scrollIntoView().rightclick()
     cy.contains('Copy Message').realClick()
 
     //Validating that text messsage copied matches with actual clipboard value
     cy.window()
       .its('navigator.clipboard')
       .invoke('readText')
-      .should('equal', randomTextEdited)
+      .should('equal', randomMessage)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
         cy.get('[data-cy=editable-input]').realClick().paste({
@@ -79,7 +79,7 @@ describe('Chat Features Tests', () => {
         })
       })
     // Validating that editable input text matches with pasted value
-    cy.get('[data-cy=editable-input]').should('have.text', randomTextEdited)
+    cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
   })
 
   it.skip('Chat - Copy paste images', () => {
@@ -158,7 +158,7 @@ describe('Chat Features Tests', () => {
   it('Chat - Search - Text message - Exact match', () => {
     //Get text from last chat-message and look for it in search bar
     cy.get('[data-cy=chat-message]')
-      .contains(randomTextEdited)
+      .contains(randomMessage)
       .last()
       .invoke('text')
       .then(($message) => {
@@ -166,7 +166,7 @@ describe('Chat Features Tests', () => {
       })
 
     //Assert results and close search modal
-    cy.assertFirstMatchOnSearch(randomTextEdited)
+    cy.assertFirstMatchOnSearch(randomMessage)
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 

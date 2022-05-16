@@ -9,7 +9,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 describe('Create Account Validations', () => {
   it('Create Account', () => {
     //Enter PIN screen
-    cy.createAccountPINscreen(randomPIN, false, false)
+    cy.createAccountPINscreen(randomPIN)
 
     //Create or Import account selection screen
     cy.contains(
