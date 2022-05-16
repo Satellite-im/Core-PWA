@@ -3,8 +3,11 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { throttle } from 'lodash'
 
 import { RefreshCwIcon } from 'satellite-lucide-icons'
+
+import { Config } from '~/config'
 
 /**
  * @component Error
@@ -17,18 +20,25 @@ export default Vue.extend({
   components: {
     RefreshCwIcon,
   },
+  watch: {
+    $route(to, from) {
+      if (to !== from) {
+        this.closeNetworkErrorPopup()
+      }
+    },
+  },
   methods: {
     /**
      * @method toggleNetworkErrorPopup
      * @description
      * @example
      */
-    closeNetworkErrorPopup() {
+    closeNetworkErrorPopup: throttle(function () {
       this.$store.commit('ui/toggleErrorNetworkModal', {
         state: false,
         action: null,
       })
-    },
+    }, Config.modal.errorNetworkActionThrottle),
     /**
      * @method tryAgain
      * @description

@@ -42,9 +42,15 @@ export default Vue.extend({
   },
   watch: {
     allPrerequisitesReady(nextValue) {
+      console.log(nextValue)
       if (!nextValue) return
       this.$router.replace('/chat/direct')
     },
+  },
+  mounted() {
+    if (this.allPrerequisitesReady) {
+      this.$router.replace('/chat/direct')
+    }
   },
   methods: {
     async confirm(userData: UserRegistrationData) {

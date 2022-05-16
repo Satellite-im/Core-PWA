@@ -170,4 +170,7 @@ export const Config = {
     android: 10836, // lowest android value, some phones can handle more
     electron: 11180, // including for completeness sake
   },
+  modal: {
+    errorNetworkActionThrottle: 1000,
+  },
 }
