@@ -17,7 +17,7 @@ export default Vue.extend({
   components: {
     PlusCircleIcon,
   },
-  data() {
+  data(): { error: string; phrases: string[]; bipList: string[] } {
     return {
       error: '',
       phrases: [],
@@ -50,20 +50,14 @@ export default Vue.extend({
       this.error = ''
     },
     onSelected(item: string) {
-      if (!this.phrases.includes(item) && this.phrases.length < 12)
-        this.phrases.push(item)
+      if (this.phrases.length < 12) this.phrases.push(item)
     },
     onMultipleSelected(items: string[]) {
-      const filteredItems = items.filter((item) => {
-        return this.bipList.includes(item)
-      })
-      filteredItems.every((item) => {
-        if (!this.phrases.includes(item) && this.phrases.length < 12) {
-          this.phrases.push(item)
-          return true
-        }
-        return false
-      })
+      const filteredItems = items.filter((item) => this.bipList.includes(item))
+
+      if (filteredItems.length !== 12) return false
+
+      this.phrases = filteredItems
     },
   },
 })

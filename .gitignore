@@ -100,3 +100,5 @@ scratchpad.js
 .vscode/firefox/
 .vscode/pwa-msedge/
 .vscode/chrome/
+
+solana-localnet

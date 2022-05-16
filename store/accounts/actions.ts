@@ -330,14 +330,13 @@ export default {
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
-    const { initialized: webrtcInitialized } = rootState.webrtc
 
     commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
 
     await db.initializeSearchIndexes()
 
     const { pin } = state
-    await dispatch('loadTextileAndRelated', {
+    dispatch('loadTextileAndRelated', {
       initTextile: !textileInitialized && pin,
       payerPublicKey: payerAccount?.publicKey.toBase58(),
     })

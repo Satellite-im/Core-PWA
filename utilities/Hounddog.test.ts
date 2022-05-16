@@ -218,7 +218,7 @@ describe("Retrieving friend's profile", () => {
         'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
     }
 
-    const result: any = inst.friendExists(state.friends, payload)
+    const result: any = inst.friendExists(state.friends, payload.address)
     expect(result).toMatchSnapshot()
   })
 })

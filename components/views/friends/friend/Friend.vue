@@ -136,8 +136,17 @@ export default Vue.extend({
         this.loading = AddFriendEnum.EMPTY
       }
     },
-    // todo - remove friend request for both users on click
-    async cancelRequest() {},
+    async cancelRequest() {
+      this.loading = AddFriendEnum.OPTIONS
+      try {
+        await this.$store.dispatch(
+          'friends/removeFriendRequest',
+          this.$props.friend.request,
+        )
+      } finally {
+        this.loading = AddFriendEnum.EMPTY
+      }
+    },
     sendMessageRequest() {
       this.$router.push(`/chat/direct/${this.$props.friend.address}`)
     },

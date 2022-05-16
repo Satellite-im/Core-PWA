@@ -1,20 +1,31 @@
 // eslint-disable-next-line import/named
-import { Cluster, Connection, PublicKey } from '@solana/web3.js'
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
 
 /**
  * Utility function to convert the string from config into a
  * solana Cluster string
  * @param network a generic string from the config file
- * @returns a Solana Cluster type ('mainnet-beta | testnet | devnet')
+ * @returns rpc url for the given cluster
  */
-export const getClusterFromNetworkConfig = (network: string): Cluster => {
+export const getClusterFromNetworkConfig = (network: string): string => {
   switch (network) {
     case 'mainnet-beta':
-      return network
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_MAINNET_RPC ||
+        clusterApiUrl(network)
+      )
     case 'testnet':
-      return network
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_TESTNET_RPC ||
+        clusterApiUrl(network)
+      )
+    case 'local':
+      return 'http://localhost:8899'
     default:
-      return 'devnet'
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_DEVNET_RPC ||
+        clusterApiUrl('devnet')
+      )
   }
 }
 
@@ -87,25 +98,6 @@ export function stringToBuffer(stringToConvert: string, length: number) {
  */
 export function stringFromBuffer(bufferToConvert: Buffer) {
   return Buffer.from(bufferToConvert).toString('utf-8').replace(/\0.*$/g, '')
-}
-
-/**
- * Waits until a given Solana account exists on the network
- * @param connection Solana connection instance
- * @param accountKey Account public key to wait for
- */
-export async function waitForAccount(
-  connection: Connection,
-  accountKey: PublicKey,
-) {
-  while (true) {
-    const accountInfo = await connection.getAccountInfo(accountKey)
-    if (accountInfo === null) {
-      continue
-    } else {
-      break
-    }
-  }
 }
 
 /**

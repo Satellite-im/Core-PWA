@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { Commitment } from '@solana/web3.js'
+import { Commitment, clusterApiUrl } from '@solana/web3.js'
 
 export const Config = {
   debug: true,
@@ -52,9 +52,13 @@ export const Config = {
   },
   solana: {
     customFaucet: 'https://faucet.satellite.one',
-    network: 'devnet',
+    network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
+    httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
+      ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
+      : undefined,
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
+    friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',
     groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
