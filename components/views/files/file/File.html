@@ -17,6 +17,7 @@
       v-if="item.liked || fileHover"
       size="1.25x"
       class="like"
+      :class="{liked : item.liked}"
       @mouseover="heartHover=true"
       @mouseleave="heartHover=false"
     />
