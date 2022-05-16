@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 
 import { mapState } from 'vuex'
+import VueI18n from 'vue-i18n'
 import { Alert, AlertType } from '~/libraries/ui/Alerts'
 import { RootState } from '~/types/store/store'
 
@@ -18,24 +19,21 @@ export default Vue.extend({
   data() {
     return {
       hidden: false,
-      AlertType,
-      translateText: '',
-      translateParameter: {},
     }
   },
   computed: {
     ...mapState({ ui: (state) => (state as RootState).ui }),
-  },
-  mounted() {
-    switch (this.alert?.type) {
-      case AlertType.DIRECT_MESSAGE: {
-        this.translateText = 'messaging.user_sent.user'
-        this.translateParameter = {
-          user: this.alert.from,
-          msgType: this.alert.type,
+    setTranslateText(): VueI18n.TranslateResult | undefined {
+      switch (this.alert?.type) {
+        case AlertType.DIRECT_MESSAGE: {
+          return this.$t('messaging.user_sent.user', {
+            user: this.alert.from,
+            msgType: this.alert.type,
+          })
         }
       }
-    }
+      return this.$t('user_sent_something.user')
+    },
   },
   methods: {
     dismiss() {
