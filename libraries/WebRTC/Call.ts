@@ -178,6 +178,9 @@ export class Call extends Emitter<CallEventListeners> {
           offerToReceiveAudio: true,
           offerToReceiveVideo: true,
         },
+        config: {
+          iceServers: Config.webrtc.iceServers,
+        },
       },
     )
     this.peers[peerId] = peer

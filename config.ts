@@ -144,6 +144,23 @@ export const Config = {
       /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
   },
   webrtc: {
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun2.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun3.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun4.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun.services.mozilla.com',
+      },
+    ],
     constraints: {
       audio: true,
       video: {
