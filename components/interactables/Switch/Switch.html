@@ -1,10 +1,15 @@
-<div class="switch-container">
+<label :class="`switch-container ${small ? 'is-small' : ''}`">
+  <input
+    type="checkbox"
+    :checked="isEnabled"
+    :disabled="isLocked"
+    @click="toggle"
+  />
   <div :class="`switch-button-control ${small ? 'is-small' : ''}`">
     <div
       class="switch-button"
       data-cy="switch-button"
       :class="{ enabled: isEnabled, locked: isLocked }"
-      @click="toggle"
     >
       <div class="sw-button"></div>
     </div>
@@ -12,10 +17,5 @@
       <slot></slot>
     </div>
   </div>
-  <p
-    :class="`switch-label ${small ? 'is-small-label' : ''}`"
-    v-if="label.length"
-  >
-    {{ label }}
-  </p>
-</div>
+  <span v-if="label" class="label">{{ label }}</span>
+</label>
