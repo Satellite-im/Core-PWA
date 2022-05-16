@@ -257,7 +257,7 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it('Assert timestamp immediately after sending message', () => {
+  it.skip('Assert timestamp immediately after sending message', () => {
     cy.chatFeaturesSendMessage(randomMessage)
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)

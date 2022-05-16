@@ -728,18 +728,15 @@ Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
 // Chat - Markdown Commands
 
 Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
-  let pastePayload = markdown + text + markdown
+  let textMarkdown = markdown + text + markdown
   // Write the text message
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
-    .paste({
-      pasteType: 'text',
-      pastePayload: pastePayload,
-    })
+    .type(textMarkdown)
   // Assert the text message is displayed before sending
   cy.get('[data-cy=editable-input]')
-    .should('have.text', pastePayload)
+    .should('have.text', textMarkdown)
     .then(() => {
       cy.get('[data-cy=send-message]').click() //sending text message
     })

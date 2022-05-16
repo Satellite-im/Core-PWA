@@ -25,7 +25,7 @@ describe('Chat Toolbar Tests', () => {
     },
   )
 
-  it('Chat - Toolbar - Validate video icon is displayed', () => {
+  it.skip('Chat - Toolbar - Validate video icon is displayed', () => {
     cy.hoverOnActiveIcon(
       '[data-cy=toolbar-enable-audio]',
       'Offline calling unavailable',

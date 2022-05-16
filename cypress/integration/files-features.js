@@ -27,7 +27,7 @@ describe('Files Features Tests', () => {
     cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
   })
 
-  it('Chat - Files - Rename Files', () => {
+  it.skip('Chat - Files - Rename Files', () => {
     //Wait until loading spinner disappears
     cy.get('.spinner', { timeout: 30000 }).should('not.exist')
 
