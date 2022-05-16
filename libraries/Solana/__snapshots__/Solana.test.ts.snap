@@ -4,11 +4,11 @@ exports[`Solana.getClusterFromNetworkConfig 0 1`] = `"https://api.mainnet-beta.s
 
 exports[`Solana.getClusterFromNetworkConfig 1 1`] = `"https://api.testnet.solana.com"`;
 
-exports[`Solana.getClusterFromNetworkConfig 2 1`] = `"https://solana-devnet-figment-proxy.satellite-im.workers.dev"`;
+exports[`Solana.getClusterFromNetworkConfig 2 1`] = `"https://api.devnet.solana.com"`;
 
-exports[`Solana.getClusterFromNetworkConfig 3 1`] = `"https://solana-devnet-figment-proxy.satellite-im.workers.dev"`;
+exports[`Solana.getClusterFromNetworkConfig 3 1`] = `"https://api.devnet.solana.com"`;
 
-exports[`Solana.getClusterFromNetworkConfig 4 1`] = `"https://solana-devnet-figment-proxy.satellite-im.workers.dev"`;
+exports[`Solana.getClusterFromNetworkConfig 4 1`] = `"https://api.devnet.solana.com"`;
 
 exports[`Solana.getClusterFromNetworkConfig 5 1`] = `"http://localhost:8899"`;
 
