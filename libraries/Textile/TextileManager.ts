@@ -11,6 +11,7 @@ import {
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
+import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 
 export default class TextileManager {
   creds?: Creds
@@ -21,6 +22,7 @@ export default class TextileManager {
   groupChatManager?: GroupChatManager
   metadataManager?: MetadataManager
   userInfoManager?: UserInfoManager
+  notificationManager?: NotificationManager
 
   constructor() {
     this.identityManager = new IdentityManager()
@@ -95,6 +97,9 @@ export default class TextileManager {
     // UserInfoManager initializes itself during the creation
     this.userInfoManager = new UserInfoManager(textile)
     await this.userInfoManager.init()
+
+    this.notificationManager = new NotificationManager(textile)
+    await this.notificationManager.init()
   }
 
   /**

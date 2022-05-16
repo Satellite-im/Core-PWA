@@ -19,6 +19,7 @@ export default {
     talk: 'Speak Freely...',
     close: 'Close',
     cancel: 'Cancel',
+    clear_all: 'Clear All',
     search: 'Search',
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
@@ -77,7 +78,7 @@ export default {
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
-      user: 'user sent you a {msgType}',
+      user: '{user} sent you a {msgType}',
     },
     user_sent_image: {
       me: 'you sent an {msgType}',

@@ -1,5 +1,6 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 import { Position, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -8,6 +9,8 @@ import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
+import { TextileError } from '~/store/textile/types'
+import { AlertType } from '~/libraries/ui/Alerts'
 
 const $Sounds = new SoundManager()
 
@@ -67,6 +70,52 @@ export default {
         dispatch('webrtc/call', { kinds: ['audio'] }, { root: true })
       },
     )
+  },
+  /**
+   * @method setNotifications
+   * @description Collects all existing notifications for a user
+   */
+  async setNotifications({ commit }: ActionsArguments<UIState>) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const notifications =
+      await $TextileManager.notificationManager?.getnotifications()
+    commit('setNotifications', notifications)
+  },
+  async sendNotification(
+    { commit, rootState }: ActionsArguments<UIState>,
+    payload: {
+      message: string
+      from: string
+      imageHash: string
+      title: string
+      type: AlertType
+    },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const notificationResponse =
+      await $TextileManager.notificationManager?.sendNotification({
+        from: payload.from,
+        id: uuidv4(),
+        title: payload.title,
+        imageHash: payload.imageHash,
+        message: payload.message,
+        type: payload.type,
+      })
+    commit('sendNotification', notificationResponse)
+  },
+  removeSeenNotification(
+    { commit, rootState }: ActionsArguments<UIState>,
+    notificationId: string,
+  ) {
+    commit('notificationSeen', notificationId)
   },
   /**
    * @method clearKeybinds

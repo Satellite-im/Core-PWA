@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { TextileError, TextileState } from './types'
-import { Config } from '~/config'
+import { TextileState, TextileError } from './types'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
   db,
@@ -23,6 +23,7 @@ import {
   UISearchResultData,
   MatchTypesEnum,
 } from '~/types/search/search'
+import { AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
@@ -218,7 +219,6 @@ export default {
       if (!message) {
         return
       }
-
       const sender = rootState.friends.all.find(
         (friend) => friend.textilePubkey === message.from,
       )
@@ -226,12 +226,23 @@ export default {
       if (!sender) {
         return
       }
-
       commit('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
+
+      dispatch(
+        'ui/sendNotification',
+        {
+          message: 'New DM',
+          from: sender.name,
+          title: `Notification`,
+          image: sender.photoHash,
+          type: AlertType.DIRECT_MESSAGE,
+        },
+        { root: true },
+      )
 
       dispatch('storeInMessage', { address: sender.address, message })
     })

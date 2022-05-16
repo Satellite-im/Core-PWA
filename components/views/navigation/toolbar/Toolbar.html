@@ -25,23 +25,26 @@
     />
   </div>
   <div class="controls">
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.alerts')"
-      :tooltipPosition="'bottom'"
-      data-cy="toolbar-alerts"
-    >
       <div
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-        @click="$data.showAlerts = !$data.showAlerts"
+        class="toggle-alerts has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+        @click='toggleAlerts'
       >
+
+        <UiCircle
+          v-if='allUnseenNotifications.length'
+          class='notification-alert'
+          :size='15'
+          color='red'
+          type='icon'
+          :data='allUnseenNotifications.length'>
+          {{allUnseenNotifications.length}}
+        </UiCircle>
         <bell-icon
           size="1x"
           :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-          color="grey"
+          color="primary"
         />
       </div>
-    </UiComingSoon>
 
     <UiFloatingContainer
       v-if="showAlerts"
@@ -53,7 +56,9 @@
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
-      <ToolbarAlerts />
+      <ToolbarAlerts
+        :notifications='allUnseenNotifications'
+      />
     </UiFloatingContainer>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button

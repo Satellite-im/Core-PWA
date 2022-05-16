@@ -1,4 +1,5 @@
 import { EmojiUsage, UIState } from './types'
+import { Alert, AlertState } from '~/libraries/ui/Alerts'
 
 const getters = {
   getSortedMostUsedEmojis: (state: UIState): EmojiUsage[] => {
@@ -9,6 +10,15 @@ const getters = {
   },
   showSidebar: (state: UIState) => {
     return state.showSidebar
+  },
+  allUnseenNotifications: (state: UIState): Alert[] => {
+    return [...state.notifications]
+      .sort((a, b) => {
+        return b.at - a.at
+      })
+      .filter((noti) => {
+        return noti.state === AlertState.UNREAD
+      })
   },
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
