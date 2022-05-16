@@ -14,10 +14,13 @@
 
     .like {
       float: right;
+      &.liked {
+        color: @pink;
+      }
     }
 
     svg:hover {
-      &:extend(.font-secondary);
+      opacity: 0.75;
     }
   }
 
