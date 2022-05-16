@@ -25,26 +25,26 @@
     />
   </div>
   <div class="controls">
-      <div
-        class="toggle-alerts has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-        @click='toggleAlerts'
+    <div
+      class="toggle-alerts has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+      @click="toggleAlerts"
+    >
+      <UiCircle
+        v-if="allUnseenNotifications.length"
+        class="notification-alert"
+        :size="15"
+        color="red"
+        type="icon"
+        :data="allUnseenNotifications.length"
       >
-
-        <UiCircle
-          v-if='allUnseenNotifications.length'
-          class='notification-alert'
-          :size='15'
-          color='red'
-          type='icon'
-          :data='allUnseenNotifications.length'>
-          {{allUnseenNotifications.length}}
-        </UiCircle>
-        <bell-icon
-          size="1x"
-          :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-          color="primary"
-        />
-      </div>
+        {{allUnseenNotifications.length}}
+      </UiCircle>
+      <bell-icon
+        size="1x"
+        :class="`control-icon ${showAlerts ? 'primary' : ''}`"
+        color="primary"
+      />
+    </div>
 
     <UiFloatingContainer
       v-if="showAlerts"
@@ -56,9 +56,7 @@
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
-      <ToolbarAlerts
-        :notifications='allUnseenNotifications'
-      />
+      <ToolbarAlerts :notifications="allUnseenNotifications" />
     </UiFloatingContainer>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
