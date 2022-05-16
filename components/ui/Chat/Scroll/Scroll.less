@@ -59,7 +59,8 @@
   width: calc(@full - @normal-spacing * 1.8);
   margin-left: @normal-spacing;
   border-radius: 0 0 @corner-rounding @corner-rounding;
-  z-index: @base-z-index + 11;
+
+  &:extend(.first-layer);
   padding: (@light-spacing / 2) @light-spacing;
   span {
     float: right;

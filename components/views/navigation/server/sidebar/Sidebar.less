@@ -13,11 +13,6 @@
   display: flex;
   flex-direction: column;
   padding-bottom: @normal-spacing;
-  z-index: @base-z-index;
-
-  .servers {
-    z-index: @base-z-index + 3;
-  }
 
   .sidebar-inner {
     &:extend(.round-corners);
@@ -37,7 +32,6 @@
 
     .toggle-sidebar {
       position: absolute;
-      z-index: @base-z-index;
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
       &:extend(.font-accent);
@@ -128,7 +122,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
-    z-index: 3;
+    &:extend(.first-layer);
     &:extend(.background-dark-gradient);
     padding-bottom: @normal-spacing;
     .sidebar-inner-streaming {
@@ -136,5 +130,13 @@
     }
     width: @sidebar-size-mobile !important;
     min-width: @sidebar-size-mobile !important;
+
+    .servers {
+      &:extend(.first-layer);
+    }
+
+    .toggle-sidebar {
+      &:extend(.second-layer);
+    }
   }
 }

@@ -63,7 +63,11 @@
   bottom: @light-spacing;
   left: @normal-spacing;
   cursor: pointer;
-  z-index: @base-z-index;
+
+  &::before {
+    overflow: visible;
+    &:extend(.third-layer);
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

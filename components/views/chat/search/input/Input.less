@@ -30,7 +30,8 @@
     font-size: @text-size;
     background: transparent;
     outline: 0;
-    z-index: @base-z-index;
+
+    &:extend(.first-layer);
     scrollbar-width: 0;
   }
   display: inline-block;
@@ -54,8 +55,8 @@
   height: 20px;
   background: transparent;
   border-color: transparent;
-  z-index: 2;
   cursor: pointer;
+  &:extend(.first-layer);
 }
 .search-icon {
   &:extend(.font-muted);
@@ -65,7 +66,7 @@
   width: 30px;
   height: 30px;
   text-align: center;
-  z-index: 0;
+  &:extend(.base-layer);
   cursor: pointer;
 }
 .search-placeholder {
@@ -90,7 +91,7 @@
   &:extend(.full-width);
   &:extend(.round-corners);
   padding: 3px 6px;
-  z-index: @base-z-index + 2;
+  &:extend(.first-layer);
   position: absolute;
   left: 0;
   margin-top: @light-spacing * 1.5;
@@ -130,7 +131,8 @@
   position: absolute;
   left: 0;
   margin-top: @light-spacing * 1.5;
-  z-index: @base-z-index + 2;
+
+  &:extend(.first-layer);
 }
 
 .search-recommend-group {
@@ -168,7 +170,8 @@
   position: absolute;
   left: 0;
   margin-top: 4px;
-  z-index: @base-z-index + 2;
+
+  &:extend(.first-layer);
   background: @semitransparent-lighter-gradient !important;
   padding: 12px 6px;
   display: flex;

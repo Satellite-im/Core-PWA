@@ -60,7 +60,8 @@
     padding: 8px 12px;
     &:extend(.bordered);
     &:extend(.round-corners);
-    z-index: @base-z-index + 2;
+
+    &:extend(.first-layer);
     animation: @animation-speed fadeIn;
     animation-fill-mode: both;
     opacity: 0;

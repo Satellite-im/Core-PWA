@@ -67,7 +67,8 @@
 
   &.unread {
     position: relative;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
 
     .label {
       position: absolute;

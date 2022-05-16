@@ -21,9 +21,9 @@
     height: 25px;
     .close-button {
       position: absolute;
-      z-index: 10;
       right: @normal-spacing;
       top: @normal-spacing;
+      &:extend(.first-layer);
     }
   }
   .is-text {
@@ -48,13 +48,13 @@
     margin-top: @xlarge-spacing;
   }
   position: fixed;
-  z-index: 3;
   width: 350px;
   max-width: calc(@full - 2rem);
   top: 4rem;
   left: 4rem;
   padding: @normal-spacing;
   overflow: hidden;
+  &:extend(.first-layer);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

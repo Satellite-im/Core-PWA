@@ -1,6 +1,6 @@
 #mediastream {
   position: absolute;
-  z-index: @base-z-index + 12; // Keep +1 wrt .new-message-alert z-index in ChatScroll.less
+  &:extend(.second-layer);
   top: @toolbar-height;
   height: auto;
   max-height: 25.5rem;
@@ -29,7 +29,7 @@
         position: absolute;
         width: 100% !important;
         height: 100% !important;
-        z-index: 100;
+        &:extend(.third-layer);
       }
       .video-stream-container {
         height: 100%;
@@ -52,7 +52,8 @@
           right: 0;
           bottom: 0;
           padding: 1rem;
-          z-index: @base-z-index + 2;
+
+          &:extend(.first-layer);
           .indicator {
             margin-left: @light-spacing;
           }
@@ -98,6 +99,7 @@
     max-height: unset;
     height: calc(@full - @toolbar-height - @light-spacing);
     margin-bottom: 1rem;
+
     #media {
       justify-content: center;
       flex-direction: row;

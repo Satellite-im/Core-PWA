@@ -13,7 +13,8 @@
     justify-self: flex-end;
   }
   position: fixed;
-  z-index: @base-z-index + 101;
+
+  &:extend(.second-layer);
   background: @red;
   padding: (@light-spacing / 2) @normal-spacing;
   font-size: @text-size;

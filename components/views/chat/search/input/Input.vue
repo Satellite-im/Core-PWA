@@ -664,7 +664,8 @@ export default Vue.extend({
     .vc-popover-content {
       height: 0px !important;
     }
-    z-index: -1;
+
+    &:extend(.background-layer);
   }
 }
 </style>

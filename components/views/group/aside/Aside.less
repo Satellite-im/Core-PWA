@@ -13,7 +13,8 @@
   width: 100%;
   flex-direction: column;
   padding-bottom: @light-spacing;
-  z-index: @base-z-index;
+
+  &:extend(.first-layer);
 }
 
 .info-toggle {
@@ -22,7 +23,7 @@
   cursor: pointer;
   left: -5rem;
   top: 1.8rem;
-  z-index: 999;
+  &:extend(.third-layer);
 }
 
 #top-info {
@@ -80,7 +81,8 @@
   height: @full;
   flex-direction: column;
   padding-bottom: @light-spacing;
-  z-index: @base-z-index;
+
+  &:extend(.first-layer);
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -91,7 +93,8 @@
     height: @full;
     flex-direction: column;
     padding-bottom: @light-spacing;
-    z-index: @base-z-index;
+
+    &:extend(.first-layer);
   }
 
   .info-toggle {

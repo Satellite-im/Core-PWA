@@ -441,7 +441,7 @@ input.date-input {
     &:extend(.blur-less);
     font-family: @primary-font !important;
     color: @secondary-text !important;
-    z-index: 100000 !important;
+    &:extend(.fourth-layer);
   }
 }
 .input {
@@ -486,7 +486,8 @@ input.date-input {
 .select.is-primary:not(:hover)::after,
 .select:not(.is-multiple):not(.is-loading):hover::after {
   border-color: @secondary-text;
-  z-index: @base-z-index;
+
+  &:extend(.first-layer);
 }
 
 .select.is-primary:hover::after,

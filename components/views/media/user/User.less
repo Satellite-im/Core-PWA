@@ -23,7 +23,8 @@
   top: 0;
   right: 0;
   padding: 1rem;
-  z-index: @base-z-index + 2;
+
+  &:extend(.first-layer);
   .indicator {
     margin-left: @light-spacing;
   }
@@ -34,7 +35,8 @@
     position: absolute;
     top: calc(@half - 38.5px);
     left: calc(@half - 32.5px);
-    z-index: @base-z-index;
+
+    &:extend(.first-layer);
   }
 
   .calling {
@@ -45,7 +47,8 @@
   .tag {
     justify-self: flex-end;
     align-self: flex-end;
-    z-index: @base-z-index;
+
+    &:extend(.first-layer);
   }
   &:extend(.background-primary);
   width: 100%;
