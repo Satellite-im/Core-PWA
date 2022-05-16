@@ -4,24 +4,20 @@
     <img v-if="alert.content.image" :src="alert.content.image" />
     <UiCircle
       v-if="!alert.content.image"
-      type='random'
+      type="random"
       data-cy="circle-without-picture"
     />
   </div>
-  <div class='info-holder'>
+  <div class="info-holder">
     <div class="a-heading">
       <!--Alert title-->
       <TypographySubtitle :size="6" :text="alert.content.title" />
       <!--Alert timestamp-->
-      <TypographyText
-        :text="$dayjs(alert.at).fromNow()"
-        class="timestamp"
-      />
+      <TypographyText :text="$dayjs(alert.at).fromNow()" class="timestamp" />
     </div>
     <!--Alert description-->
     <div class="description">
-      <TypographyText
-        :text="setTranslateText" />
+      <TypographyText :text="setTranslateText" />
     </div>
   </div>
   <InteractablesClose :action="dismiss" />
