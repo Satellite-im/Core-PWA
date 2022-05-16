@@ -1,24 +1,38 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Chat Toolbar Tests', () => {
-  it('Chat - Toolbar - Validate audio icon is displayed', () => {
-    //Import account
-    cy.importAccount(randomPIN, recoverySeed)
+describe('Chat Toolbar Tests', () => {
+  it(
+    'Chat - Toolbar - Validate audio icon is displayed',
+    { retries: 2 },
+    () => {
+      //Import account
+      cy.importAccount(randomPIN, recoverySeed)
 
-    //Ensure messages are displayed before starting
-    cy.validateChatPageIsLoaded()
-    cy.goToConversation('cypress friend')
-    cy.hoverOnActiveIcon('[data-cy=toolbar-enable-audio]')
-  })
+      //Ensure messages are displayed before starting
+      cy.validateChatPageIsLoaded()
+      cy.goToConversation('cypress friend')
+      cy.hoverOnActiveIcon(
+        '[data-cy=toolbar-enable-audio]',
+        'Offline calling unavailable',
+      )
+    },
+  )
 
   it('Chat - Toolbar - Validate video icon is displayed', () => {
-    cy.hoverOnActiveIcon('[data-cy=toolbar-enable-video]')
+    cy.hoverOnActiveIcon(
+      '[data-cy=toolbar-enable-audio]',
+      'Offline calling unavailable',
+    )
   })
 
-  it('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
+  it.skip('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
     cy.get('[data-cy=toolbar-alerts]').should('be.visible')
     cy.hoverOnComingSoonIcon(
       '[data-cy=toolbar-alerts] > .tooltip-container',
@@ -34,9 +48,12 @@ describe.skip('Chat Toolbar Tests', () => {
     )
   })
 
+  it('Chat - Toolbar - Validate new group icon is displayed', () => {
+    cy.hoverOnActiveIcon('[data-cy=toolbar-new-group]', 'New Group')
+  })
+
   it('Chat - Toolbar - Marketplace icon is displayed', () => {
-    cy.get('[data-cy=toolbar-marketplace]').should('be.visible')
-    cy.hoverOnComingSoonIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
+    cy.hoverOnActiveIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
   })
 
   it('Chat - Toolbar - Wallet icon shows Coming Soon', () => {

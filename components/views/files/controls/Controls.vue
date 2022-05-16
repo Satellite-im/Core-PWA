@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -10,6 +10,7 @@ import {
   XIcon,
 } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
+import { SettingsRoutes } from '~/store/ui/types'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -33,12 +34,11 @@ export default Vue.extend({
     return {
       text: '' as string,
       errors: [] as Array<string | TranslateResult>,
-      status: '' as string | TranslateResult,
-      progress: 100 as number,
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['ui', 'settings']),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   methods: {
     /**
@@ -46,6 +46,19 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
@@ -64,17 +77,21 @@ export default Vue.extend({
      */
     async addFolder() {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
       this.$emit('forceRender')
     },
 
@@ -90,7 +107,10 @@ export default Vue.extend({
      */
     async handleFile(originalFiles: File[]) {
       this.errors = []
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.prepare'),
+      )
 
       // if these files go over the storage limit, prevent upload
       if (
@@ -99,7 +119,7 @@ export default Vue.extend({
           this.$FileSystem.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
-        this.$store.commit('ui/setIsLoadingFileIndex', false)
+        this.$store.commit('ui/setFilesUploadStatus', '')
         this.errors.push(this.$t('pages.files.errors.storage_limit'))
         return
       }
@@ -115,7 +135,7 @@ export default Vue.extend({
       const sameNameResults: File[] = emptyFileResults.filter((file) => {
         return !this.$FileSystem.currentDirectory.hasChild(file.name)
       })
-      const nsfwResults: Promise<{ file: File; nsfw: boolean }>[] =
+      const files: { file: File; nsfw: boolean }[] = await Promise.all(
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
@@ -140,19 +160,20 @@ export default Vue.extend({
           }
 
           return { file, nsfw }
-        })
+        }),
+      )
 
-      const files: File[] = []
-
-      for await (const el of nsfwResults) {
-        if (!el.nsfw) {
-          files.push(el.file)
-        }
-      }
       for (const file of files) {
         try {
-          this.status = this.$t('pages.files.controls.upload', [file.name])
-          await this.$FileSystem.uploadFile(file, this.setProgress)
+          this.$store.commit(
+            'ui/setFilesUploadStatus',
+            this.$t('pages.files.status.upload', [file.file.name]),
+          )
+          await this.$FileSystem.uploadFile(
+            file.file,
+            file.nsfw,
+            this.setProgress,
+          )
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -160,12 +181,14 @@ export default Vue.extend({
 
       // only update index if files have been updated
       if (files.length) {
-        this.status = this.$t('pages.files.controls.index')
+        this.$store.commit(
+          'ui/setFilesUploadStatus',
+          this.$t('pages.files.status.index'),
+        )
         await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       }
 
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.status = ''
+      this.$store.commit('ui/setFilesUploadStatus', '')
 
       // re-render so new files show up
       this.$emit('forceRender')
@@ -179,18 +202,21 @@ export default Vue.extend({
       if (emptyFileResults.length !== sameNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.duplicate_name'))
       }
-      if (nsfwResults.length !== files.length) {
-        this.errors.push(this.$t('errors.chat.contains_nsfw'))
-      }
     },
     /**
      * @method setProgress
      * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
+     * we encountered a bug where % was getting set to 105, math.min fixes that
      * @param num current progress in bytes
      * @param size total file size in bytes
      */
-    setProgress(num: number, size: number) {
-      this.progress = Math.floor((num / size) * 100)
+    setProgress(num: number, size: number, name: string) {
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.upload', [
+          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
+        ]),
+      )
     },
   },
 })

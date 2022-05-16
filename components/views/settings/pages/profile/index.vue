@@ -2,11 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
-import { ClipboardIcon } from 'satellite-lucide-icons'
+import { EditIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { AccountsState } from '~/store/accounts/types'
+import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -16,19 +17,19 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'ProfileSettings',
   components: {
-    ClipboardIcon,
+    EditIcon,
   },
   layout: 'settings',
   data() {
     return {
       profileInfo: sampleProfileInfo,
       croppedImage: '',
-      showCropper: false,
       featureReadyToShow: false,
     }
   },
   computed: {
     ...mapState(['accounts', 'ui']),
+    ...mapGetters('textile', ['getInitialized']),
     isSmallScreen(): Boolean {
       // @ts-ignore
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
@@ -42,6 +43,9 @@ export default Vue.extend({
       const hash = this.accounts.details.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    showCropper(): boolean {
+      return this.ui.modals[ModalWindows.CROP]
+    },
   },
   methods: {
     /**
@@ -50,7 +54,10 @@ export default Vue.extend({
      * @example
      */
     toggleCropper() {
-      this.showCropper = !this.showCropper
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.CROP,
+        state: !this.ui.modals[ModalWindows.CROP],
+      })
     },
     /**
      * @method openFileDialog DocsTODO
@@ -58,6 +65,8 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
+      if (!this.getInitialized) return
+
       const fileInput = this.$refs.file as HTMLElement
       fileInput.click()
     },
@@ -71,6 +80,8 @@ export default Vue.extend({
       const fileInput = this.$refs.file as HTMLInputElement
       this.croppedImage = image
       fileInput.value = ''
+
+      this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO

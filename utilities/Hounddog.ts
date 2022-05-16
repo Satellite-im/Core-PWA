@@ -8,7 +8,6 @@ import { Friend } from '~/types/ui/friends'
 
 // Hounddog, is used to clean up searching and finding data in our application.
 export default class Hounddog {
-  private _WebRTC: WebRTC
   private _TextileManager: TextileManager
   private _SolanaManager: SolanaManager
   private _Store: {
@@ -16,7 +15,6 @@ export default class Hounddog {
   }
 
   constructor(store: { state: RootState }) {
-    this._WebRTC = Vue.prototype.$WebRTC
     this._TextileManager = Vue.prototype.$TextileManager
     this._SolanaManager = Vue.prototype.$SolanaManager
     this._Store = store
@@ -70,7 +68,7 @@ export default class Hounddog {
    */
   getActiveFriend(state: FriendsState): Friend | undefined {
     return state.all.find((f) => {
-      return f.activeChat === true
+      return f.state === 'online'
     })
   }
 

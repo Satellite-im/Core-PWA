@@ -7,7 +7,7 @@
   />
   <div v-if="showCropper" class="cropper-mask" />
   <div class="modal-body">
-    <form v-on:submit="confirm">
+    <form @submit="confirm">
       <div class="custom-modal-content">
         <div class="columns">
           <div class="column image">
@@ -23,7 +23,7 @@
               class="input-file"
               type="file"
               @change="selectImage"
-              accept="image/*"
+              :accept="acceptableImageFormats"
             />
             <InteractablesButton
               :action="() => $refs.file.click()"

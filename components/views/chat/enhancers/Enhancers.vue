@@ -5,12 +5,12 @@ import { mapGetters, mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 import { Friend } from '~/types/ui/friends'
+import { EmojiUsage } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
     convertRem: (value: string) => number
     toggleEnhancers: () => void
-    openEmoji: () => void
     clickEvent: () => void
     resetSearch: () => void
   }
@@ -39,11 +39,11 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
-    mostUsedEmojis() {
+    mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 10)
     },
     route: {
-      get() {
+      get(): string {
         return this.ui.enhancers.route
       },
       set(newRoute: string) {
@@ -53,8 +53,6 @@ export default Vue.extend({
             show: true,
             route: newRoute,
           })
-        } else if (newRoute === 'emotes') {
-          this.openEmoji()
         }
         this.resetSearch()
       },
@@ -62,52 +60,13 @@ export default Vue.extend({
   },
   watch: {
     route() {
-      this.openEmoji()
       this.resetSearch()
     },
-    'ui.enhancers.show'(value) {
-      if (value) {
-        this.openEmoji()
-        return
-      }
+    'ui.enhancers.show'() {
       this.resetSearch()
     },
-  },
-  mounted() {
-    this.openEmoji()
   },
   methods: {
-    /**
-     * @method openEmoji DocsTODO
-     * @description
-     * @param
-     * @example
-     */
-    openEmoji() {
-      if (this.route !== 'emotes') return
-      this.$nextTick(() => {
-        setTimeout(() => {
-          /* For avoid double toggle of emoji Invoker */
-          // @ts-ignore
-          if (!this.$refs.emojiPicker) this.$refs.emojiInvoker?.click()
-        }, 0)
-      })
-    },
-    /**
-     * @method navbarClickHandler
-     * @description Without this handler user can click on the navbar padding and emojis will disappear
-     */
-    navbarClickHandler(event: Event) {
-      const target = event.target as Element
-      const button = target.closest('button')
-      if (!button) {
-        this.openEmoji()
-      }
-    },
-    /**
-     * Adds emoji to current text input
-     * (emoji: any) Comes from <picker/> select event
-     */
     /**
      * @method addEmoji
      * @description Adds emoji to either the users current chatbar or a messages emoji reactions depending on state of this.ui.settingReaction.status
@@ -181,7 +140,7 @@ export default Vue.extend({
       ) {
         this.$store.commit('ui/toggleEnhancers', {
           show: !this.ui.enhancers.show,
-          floating: !!this.$device.isMobile,
+          floating: this.$device.isMobile,
         })
       }
       if (this.ui.settingReaction.status) {

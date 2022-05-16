@@ -1,82 +1,50 @@
 <template src="./Upload.html"></template>
-
 <script lang="ts">
-import { FilePlusIcon, PlusIcon, XIcon } from 'satellite-lucide-icons'
+import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
-import { UploadDropItemType, FileType } from '~/types/files/file'
+import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
+import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
+import { Group } from '~/store/groups/types'
 const converter = require('heic-convert')
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    files: UploadDropItemType[]
-    uploadStatus: boolean
-    count_error: boolean
-    loadPicture: (item: UploadDropItemType, callback: Function) => void
-    cancelUpload: () => void
-    finishUploads: () => void
-    dispatchFile: (file: UploadDropItemType) => void
-    alertNsfwFile: () => void
-  }
-}
 
 export default Vue.extend({
   name: 'Upload',
   components: {
     PlusIcon,
     FilePlusIcon,
-    XIcon,
   },
   props: {
     type: {
       type: String,
       default: '',
     },
-    editable: {
-      type: Boolean,
-    },
     recipient: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<Friend | Group>,
+      default: null,
+    },
+    files: {
+      type: Array as PropType<UploadDropItemType[]>,
       default: null,
     },
   },
   data() {
     return {
-      files: [] as Array<UploadDropItemType>,
-      uploadStatus: false,
-      count_error: false,
-      progress: 0,
-      ipfsHash: false,
-      selectedFile: false,
-      imageURL: '',
-      fileClass: false,
-      error: false,
-      aiScanning: false,
       fileAmount: 0,
-      containsNsfw: false,
-      alertNsfw: false,
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'chat', 'textile']),
-    activeFriend() {
+    ...mapState({
+      consentScan: (state) => (state as RootState).settings.consentScan,
+    }),
+    activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
-  },
-  watch: {
-    recipient() {
-      this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
-      this.$parent.$data.showFilePreview = this.files.length > 0
-    },
-  },
-  mounted() {
-    this.files = cloneDeep(this.chat.files?.[this.recipient?.address]) ?? []
-    this.$parent.$data.showFilePreview = this.files.length > 0
   },
   methods: {
     /**
@@ -88,6 +56,27 @@ export default Vue.extend({
       if (this.$refs.quickUpload)
         (this.$refs.quickUpload as HTMLFormElement).value = ''
     },
+    handleFileClick() {
+      this.resetFileUpload()
+      if (!this.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
+
+      setTimeout(() => {
+        if (this.$refs.quickUpload)
+          (this.$refs.quickUpload as HTMLFormElement).click()
+      }, 200)
+    },
     /**
      * @method handleFile
      * @description Handles file in event object by NSFW checking and then loading it. Triggered when a file is changed on the input.
@@ -97,27 +86,24 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
       this.$store.dispatch('ui/setChatbarFocus')
-
-      if (this.editable) {
+      if (this.recipient) {
         const newFiles: File[] = [...event.target.files]
-        this.$parent.$data.showFilePreview = newFiles.length > 0
-        if (newFiles.length + this.$data.files.length > 8) {
-          this.count_error = true
+
+        if (newFiles.length + this.files.length > 8) {
+          this.$store.commit('chat/setCountError', true)
+
           return
         }
-
         const address = this.recipient?.address
-
         if (
           !address &&
+          (this.recipient as Group).id &&
           !RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            (this.recipient as Group).id.split('|')[1],
           )
         )
           return
-
-        this.count_error = false
-
+        this.$store.commit('chat/setCountError', false)
         for (let i = 0; i < newFiles.length; i++) {
           if (await isHeic(newFiles[i])) {
             const buffer = new Uint8Array(await newFiles[i].arrayBuffer())
@@ -142,11 +128,9 @@ export default Vue.extend({
               nsfw: { status: false, checking: false },
               url: '',
             }
-
             return result
           }),
         )
-
         for (const uploadFile of filesToUpload) {
           if (uploadFile.file.size <= Config.nsfwPictureLimit) {
             uploadFile.nsfw.checking = true
@@ -167,20 +151,14 @@ export default Vue.extend({
             }),
           )
         }
-
-        this.files.push(...filesToUpload)
-        this.$data.uploadStatus = true
       }
-    },
-    handleTouchPreview(event: Event) {
-      event.stopPropagation()
     },
     /**
      * @method loadPicture
-     * @description Creates data URL from file and pushes it to url in the components data object (this.$data.url = the new created data URL)
+     * @description Creates data URL from file and pushes it to url in the components data object (this.url = the new created data URL)
      * @param file File to load
      * @param callback Function to be called after the data URL is created
-     * @example this.loadPicture(this.$data.file)
+     * @example this.loadPicture(this.file)
      */
     loadPicture(item: UploadDropItemType, callback: Function) {
       if (!item.file) return
@@ -194,81 +172,47 @@ export default Vue.extend({
       reader.readAsDataURL(item.file)
     },
     /**
-     * @method cancelUpload
-     * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
-     * @example @click="cancelUpload"
-     */
-    cancelUpload() {
-      this.files = []
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.uploadStatus = false
-      this.count_error = false
-      this.$parent.$data.showFilePreview = false
-    },
-    removeUploadItem(index: number) {
-      this.files.splice(index, 1)
-      if (this.$data.files.length === 0) {
-        document.body.style.cursor = PropCommonEnum.DEFAULT
-        this.uploadStatus = false
-        this.count_error = false
-        this.$parent.$data.showFilePreview = false
-        this.$store.commit('chat/deleteFiles', this.recipient.address)
-        this.$store.dispatch('textile/clearUploadStatus')
-        if (this.textile.messageLoading)
-          this.$store.commit('textile/setMessageLoading', { loading: false })
-        return
-      }
-      this.$store.commit('chat/setFiles', {
-        files: this.files,
-        address: this.recipient.address,
-      })
-    },
-    closeNsfwAlert() {
-      this.$data.alertNsfw = false
-      this.cancelUpload()
-    },
-    /**
      * @method finishUploads
      * @description Keeps track of how many files have been uploaded
      */
     finishUploads() {
-      this.$data.fileAmount--
-      if (this.$data.fileAmount === 0) {
-        if (this.$data.containsNsfw) {
-          this.$data.alertNsfw = true
+      this.fileAmount--
+      if (this.fileAmount === 0) {
+        if (this.$store.state.chat.containsNsfw) {
           this.alertNsfwFile()
         }
-        if (!this.$data.containsNsfw) {
-          this.cancelUpload()
+        if (!this.$store.state.chat.containsNsfw) {
+          this.$emit('cancelUpload')
           document.body.style.cursor = PropCommonEnum.DEFAULT
           this.$store.dispatch('textile/clearUploadStatus')
         }
       }
     },
     alertNsfwFile() {
-      this.$data.alertNsfw = true
+      this.$store.commit('chat/setAlertNsfw', true)
+
       setTimeout(() => {
-        this.$data.alertNsfw = false
-        this.$data.containsNsfw = false
-        this.cancelUpload()
+        this.$store.commit('chat/setAlertNsfw', false)
+        this.$store.commit('chat/setContainsNsfw', false)
+        this.$emit('cancelUpload')
         document.body.style.cursor = PropCommonEnum.DEFAULT
         this.$store.dispatch('textile/clearUploadStatus')
-      }, 5000)
+      }, 500000)
     },
     /**
      * @method dispatchFile
      * @description Sends a singular file to textile.
      */
-    async dispatchFile(file: FileType) {
+    async dispatchFile(file: UploadDropItemType) {
       if (
+        (this.recipient as Group).id &&
         RegExp(this.$Config.regex.uuidv4).test(
-          this.recipient.textilePubkey.split('|')[1],
+          (this.recipient as Group).id.split('|')[1],
         )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {
-            groupID: this.recipient?.textilePubkey,
+            groupID: (this.recipient as Group)?.id,
             file,
           })
           .then(() => {
@@ -284,7 +228,7 @@ export default Vue.extend({
       } else {
         await this.$store
           .dispatch('textile/sendFileMessage', {
-            to: this.recipient?.textilePubkey,
+            to: (this.recipient as Friend)?.textilePubkey,
             file,
           })
           .then(() => {
@@ -305,28 +249,21 @@ export default Vue.extend({
      */
     async sendMessage() {
       const nsfwCheck: UploadDropItemType[] = []
-
       for (const file of this.files) {
         if (!file.nsfw.status) {
           nsfwCheck.push(file)
         } else {
-          this.$data.containsNsfw = true
-          if (this.$data.files.length === 1) {
-            this.alertNsfwFile()
-          }
+          this.$store.commit('chat/setContainsNsfw', true)
+          this.alertNsfwFile()
         }
       }
-
-      this.$data.fileAmount = nsfwCheck.length
-
+      this.fileAmount = nsfwCheck.length
       for (const file of nsfwCheck) {
         await this.dispatchFile(file)
       }
-
       this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
   },
 })
 </script>
-
 <style scoped lang="less" src="./Upload.less"></style>

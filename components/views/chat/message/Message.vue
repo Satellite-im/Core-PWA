@@ -12,7 +12,7 @@ import {
   convertTimestampToDate,
 } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
-import { ContextMenuItem } from '~/store/ui/types'
+import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
@@ -266,12 +266,11 @@ export default Vue.extend({
         floating: true,
       })
     },
-    quickReaction(emoji: String) {
-      this.$store.dispatch('ui/addReaction', {
-        emoji,
-        reactor: this.$mock.user.name,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
+    quickReaction(emoji: EmojiUsage) {
+      this.$store.dispatch('textile/sendReactionMessage', {
+        to: this.message.to,
+        emoji: emoji.content,
+        reactTo: this.message.id,
       })
     },
     /**

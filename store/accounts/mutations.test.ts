@@ -4,6 +4,7 @@ import mutations from '~/store/accounts/mutations'
 describe('init', () => {
   let inst: any
   const state: AccountsState = {
+    initialized: false,
     storePin: true,
     loading: true,
     locked: true,
@@ -15,9 +16,11 @@ describe('init', () => {
     error: 'error',
     encryptedPhrase: 'encryptedPhrase',
     registered: true,
+    registry: true,
     details: {
       name: '',
       address: '',
+      peerId: '',
       status: '',
       state: 'idle',
       unreadCount: 123,
@@ -30,6 +33,8 @@ describe('init', () => {
     },
     registrationStatus: RegistrationStatus.UNKNOWN,
     lastVisited: 'lastVisited',
+    initialized: false,
+    registry: false,
   }
 
   beforeEach(() => {
@@ -116,6 +121,20 @@ describe('init', () => {
 
     expect(localStateForUnitTest).toMatchObject({
       active: 'aktif',
+    })
+  })
+
+  it('should setProfilePicture', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: {
+        profilePicture: 'https://satellite.im/images/logo.webp',
+      },
     })
   })
 

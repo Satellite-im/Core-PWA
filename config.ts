@@ -6,7 +6,11 @@ export const Config = {
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: 'https://hub.textile.io',
+    browser:
+      process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.edge.satellite.one',
+    apiUrl:
+      process.env.NUXT_ENV_TEXTILE_API_URL ||
+      'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
@@ -15,6 +19,7 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
+  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
@@ -139,6 +144,23 @@ export const Config = {
       /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
   },
   webrtc: {
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun2.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun3.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun4.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun.services.mozilla.com',
+      },
+    ],
     constraints: {
       audio: true,
       video: {

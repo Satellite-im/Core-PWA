@@ -418,7 +418,6 @@ describe('init', () => {
             typingState: 'NOT_TYPING',
             item: {},
             pending: true,
-            activeChat: true,
             encryptedTextilePubkey: '',
             name: 'Taurus Nix',
             address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',

@@ -5,4 +5,7 @@ export interface ChatState {
   replies: ReplyObj[]
   chatTexts: ChatTextObj[]
   files: { [key: string]: UploadDropItemType[] }
+  countError: Boolean
+  alertNsfw: Boolean
+  containsNsfw: Boolean
 }

@@ -7,44 +7,49 @@
       <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
     </div>
     <div class="controls">
-      <UiLoadersSpinner v-if="isLoading" class="control disabled" spinning />
+      <UiLoadersSpinner
+        v-if="isDownloading"
+        class="control disabled"
+        spinning
+      />
       <a
         v-else
+        @click="download"
         :data-tooltip="$t('controls.download')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="file.url"
-        target="_blank"
-        :download="name"
       >
         <download-icon size="1x" />
       </a>
       <a
         :data-tooltip="$t('controls.share_link')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :class="{'disabled' : ui.isLoadingFileIndex}"
-        v-on="ui.isLoadingFileIndex ? {} : {click: share}"
+        :class="{'disabled' : isFilesIndexLoading}"
+        v-on="isFilesIndexLoading ? {} : {click: share}"
       >
         <link-icon size="1x" />
       </a>
       <div
         :data-tooltip="$t('ui.close')"
         @click="$emit('close')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+        class="has-tooltip has-tooltip-primary has-tooltip-bottom control control--close"
       >
         <x-icon size="1x" />
       </div>
     </div>
   </div>
-  <UiProgress v-if="isLoading" :progress="progress" />
-  <img v-else-if="file.thumbnail" class="file-image" :src="file.thumbnail" />
+  <div v-if="file.thumbnail" class="image-container">
+    <img
+      :src="file.thumbnail"
+      :class="{'blur-image' : file.nsfw && blockNsfw}"
+    />
+  </div>
   <div v-else class="no-preview">
+    <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
     <a
+      v-else
+      @click="download"
       :data-tooltip="$t('controls.download')"
       class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :class="{'disabled' : isLoading}"
-      :href="file.url"
-      target="_blank"
-      :download="name"
     >
       <download-icon size="1x" class="file-icon" />
     </a>

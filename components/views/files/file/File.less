@@ -14,10 +14,13 @@
 
     .like {
       float: right;
+      &.liked {
+        color: @pink;
+      }
     }
 
     svg:hover {
-      &:extend(.font-secondary);
+      opacity: 0.75;
     }
   }
 
@@ -38,10 +41,15 @@
     }
   }
 
-  .image-preview {
+  .image-container {
+    overflow: hidden;
     height: 162px;
-    object-fit: cover;
     filter: brightness(0.75);
+    .image-preview {
+      height: 162px;
+      width: @full;
+      object-fit: cover;
+    }
   }
 
   .text-container {

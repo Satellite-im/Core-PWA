@@ -17,6 +17,8 @@ export interface ExportFile extends ExportSharedProps {
   size: number
   description: string
   thumbnail: string
+  extension: string
+  nsfw: boolean
 }
 
 export interface ExportDirectory extends ExportSharedProps {

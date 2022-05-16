@@ -15,6 +15,7 @@ const mutations = {
     state: TextileState,
     {
       address,
+      type,
       messages,
       limit,
       skip,
@@ -22,6 +23,7 @@ const mutations = {
       active = true,
     }: {
       address: string
+      type: 'group' | 'friend'
       messages: Message[]
       limit: number
       skip: number
@@ -50,6 +52,7 @@ const mutations = {
     state.conversations = {
       ...state.conversations,
       [address]: {
+        type,
         messages: tracked.messages,
         replies: tracked.replies,
         reactions: tracked.reactions,

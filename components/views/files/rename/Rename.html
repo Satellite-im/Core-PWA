@@ -1,13 +1,14 @@
-<div class="rename">
+<div class="rename" data-cy="files-rename">
   <InteractablesClose :action="closeModal" />
   <TypographyTitle :size="3" :text="$t('modal.rename')" />
   <InteractablesInputGroup
     type="primary"
     v-model="text"
     :action="rename"
-    :loading="ui.isLoadingFileIndex"
-    :disabled="ui.isLoadingFileIndex"
+    :loading="isFilesIndexLoading"
+    :disabled="isFilesIndexLoading"
     ref="inputGroup"
+    data-cy="files-rename-input"
   >
     <save-icon size="1.3x" />
   </InteractablesInputGroup>

@@ -6,25 +6,25 @@ describe('Solana.getClusterFromNetworkConfig', () => {
     const result: any = Solana.getClusterFromNetworkConfig('mainnet-beta')
     expect(result).toMatchSnapshot()
   })
-})
-test('1', () => {
-  const result: any = Solana.getClusterFromNetworkConfig('testnet')
-  expect(result).toMatchSnapshot()
-})
+  test('1', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('testnet')
+    expect(result).toMatchSnapshot()
+  })
 
-test('2', () => {
-  const result: any = Solana.getClusterFromNetworkConfig('West')
-  expect(result).toMatchSnapshot()
-})
+  test('2', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('West')
+    expect(result).toMatchSnapshot()
+  })
 
-test('3', () => {
-  const result: any = Solana.getClusterFromNetworkConfig('North')
-  expect(result).toMatchSnapshot()
-})
+  test('3', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('North')
+    expect(result).toMatchSnapshot()
+  })
 
-test('4', () => {
-  const result: any = Solana.getClusterFromNetworkConfig('')
-  expect(result).toMatchSnapshot()
+  test('4', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('')
+    expect(result).toMatchSnapshot()
+  })
 })
 
 describe('Solana.sleep', () => {
@@ -82,5 +82,69 @@ describe('Solana.publicKeyFromSeeds', () => {
       const param3: any = new web3.PublicKey(1)
       await Solana.publicKeyFromSeeds(param1, 'This is a Text', param3)
     })
+
+    test('1', async () => {
+      const param1: any = new web3.PublicKey(
+        Buffer.from('Hello, World', 'utf8'),
+      )
+      const param3: any = new web3.PublicKey(
+        Buffer.from('Hello, Venus', 'utf8'),
+      )
+      await Solana.publicKeyFromSeed(param1, '', param3)
+    })
+  })
+})
+
+describe('Solana.waitForAccount', () => {
+  test('0', async () => {
+    const param1: any = new web3.Connection('http://localhost:8899')
+    const param2: any = new web3.PublicKey(10)
+    try {
+      await Solana.waitForAccount(param1, param2)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+    }
+  })
+  test('1', async () => {
+    const param1: any = {
+      getAccountInfo: () => {
+        return true
+      },
+    }
+    const param2: any = new web3.PublicKey(10)
+    try {
+      await Solana.waitForAccount(param1, param2)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+    }
+  })
+  test('2', async () => {
+    const param1: any = {
+      getAccountInfo: () => {
+        return undefined
+      },
+    }
+    const param2: any = new web3.PublicKey(10)
+    try {
+      await Solana.waitForAccount(param1, param2)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+    }
+  })
+})
+
+describe('Solana.stringToBuffer', () => {
+  test('0', () => {
+    const param1 = 'Hello, World'
+    const result: any = Solana.stringToBuffer(param1, param1.length)
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('Solana.stringFromBuffer', () => {
+  test('0', () => {
+    const param1 = Buffer.from('Hello, World', 'utf8')
+    const result: any = Solana.stringFromBuffer(param1)
+    expect(result).toMatchSnapshot()
   })
 })

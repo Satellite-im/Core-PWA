@@ -15,7 +15,9 @@ import PeerId, { createFromB58String, createFromPrivKey } from 'peer-id'
 import { pipe } from 'it-pipe'
 import Emitter from './Emitter'
 import { WireMessage } from './types'
-import { Call } from './Call'
+import type { CallPeerDescriptor } from './Call'
+import logger from '~/plugins/local/logger'
+import { ConversationParticipant } from '~/store/conversation/types'
 
 enum P2PProtocols {
   COMMUNICATION_BUS = '/sattest/chat/1.0.0',
@@ -30,7 +32,42 @@ interface P2PListeners {
   'peer:refuse': (data: { peerId: PeerId; payload: unknown }) => void
   'peer:data': (data: { peerId: PeerId; payload: unknown }) => void
   'peer:typing': (data: { peerId: PeerId; payload: unknown }) => void
-  'peer:announce': (data: { peerId: PeerId }) => void
+  'peer:announce': (data: {
+    peerId: PeerId
+    payload: ConversationParticipant
+  }) => void
+  'peer:destroy': (data: { peerId: PeerId; payload: unknown }) => void
+  'peer:hangup': (data: { peerId: PeerId; payload: unknown }) => void
+  'peer:screenshare': (data: {
+    peerId: PeerId
+    payload: { streamId: string }
+  }) => void
+  'peer:mute': (data: {
+    peerId: PeerId
+    payload: {
+      callId: string
+      streamId: string
+      trackId: string
+      kind: string
+    }
+  }) => void
+  'peer:unmute': (data: {
+    peerId: PeerId
+    payload: {
+      callId: string
+      streamId: string
+      trackId: string
+      kind: string
+    }
+  }) => void
+  'peer:call': (data: {
+    peerId: PeerId
+    payload: {
+      callId: string
+      peers?: CallPeerDescriptor[]
+      signal?: SignalData
+    }
+  }) => void
 }
 
 type P2PMessage = {
@@ -66,6 +103,10 @@ export class Peer2Peer extends Emitter<P2PListeners> {
     return this._peerId
   }
 
+  get id() {
+    return this._peerId?.toB58String()
+  }
+
   async init(opts?: InitializationOptions) {
     if (opts) {
       this._peerId = await this._getPeerIdByType(opts.privateKey)
@@ -80,8 +121,22 @@ export class Peer2Peer extends Emitter<P2PListeners> {
       addresses: {
         listen: [
           '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-          // '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+          '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
         ],
+      },
+      config: {
+        peerDiscovery: {
+          mdns: {
+            enabled: true,
+          },
+          webRTCStar: {
+            enabled: true,
+          },
+        },
+        pubsub: {
+          enabled: true,
+          canRelayMessage: true,
+        },
       },
       peerId: this.peerId,
       connectionManager: {
@@ -180,8 +235,20 @@ export class Peer2Peer extends Emitter<P2PListeners> {
           const peerId = connection.remotePeer
           const message = JSON.parse(msg)
 
-          if (message.type === 'peer:announce') {
-            this.emit('peer:announce', { peerId })
+          if (
+            [
+              'peer:call',
+              'peer:answer',
+              'peer:destroy',
+              'peer:announce',
+              'peer:refuse',
+              'peer:hangup',
+              'peer:mute',
+              'peer:unmute',
+              'peer:screenshare',
+            ].includes(message.type)
+          ) {
+            this.emit(message.type, { peerId, ...message })
             return
           }
 
@@ -195,6 +262,14 @@ export class Peer2Peer extends Emitter<P2PListeners> {
 
           if (message.type === 'REFUSE') {
             this.emit('peer:refuse', {
+              peerId,
+              payload: message.payload,
+            })
+            return
+          }
+
+          if (message.type === 'HANGUP') {
+            this.emit('peer:hangup', {
               peerId,
               payload: message.payload,
             })
@@ -224,7 +299,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
         }
       })
     } catch (error) {
-      console.error(error)
+      logger.log('libp2p', `Peer message error: ${error}`)
     }
   }
 
@@ -244,6 +319,9 @@ export class Peer2Peer extends Emitter<P2PListeners> {
   }
 
   async sendMessage(message: P2PMessage, peerId: PeerId | string) {
+    if (!peerId) {
+      throw new Error('peerId is required')
+    }
     const peer = peerId instanceof PeerId ? peerId : createFromB58String(peerId)
     if (!this._node) return
 

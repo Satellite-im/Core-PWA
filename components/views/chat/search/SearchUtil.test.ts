@@ -137,4 +137,34 @@ describe('SearchUtil.default.filterSearchRecommendResult', () => {
     })
     expect(result).toMatchSnapshot()
   })
+
+  test('6', () => {
+    const result: any = SearchUtil.default.filterSearchRecommendResult([], null)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('7', () => {
+    const result: any = SearchUtil.default.filterSearchRecommendResult(
+      {
+        has: [
+          {
+            name: 'name',
+            address: 'address',
+            avatar: 'avatar',
+            key: 'key',
+            value: 'value',
+          },
+        ],
+      },
+      {
+        command: '',
+        Empty: '',
+        value: { toLowerCase: () => '' },
+        index: 1,
+        cursorStart: 2,
+        cursorEnd: 3,
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
 })

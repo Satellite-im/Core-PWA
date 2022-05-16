@@ -1,7 +1,7 @@
 <template src="./File.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   LinkIcon,
   HeartIcon,
@@ -17,6 +17,7 @@ import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -47,13 +48,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns {string} if directory, child count. if file, size
      */
     getSubtext(): string {
       return this.item instanceof Directory
-        ? this.item.content.length + ' items'
+        ? this.$tc('pages.files.item_count', this.item.content.length)
         : this.$filesize((this.item as Fil).size)
     },
     /**
@@ -114,7 +119,7 @@ export default Vue.extend({
      * @description Open rename modal
      */
     rename() {
-      this.$store.commit('ui/setRenameItem', this.item.name)
+      this.$store.commit('ui/setRenameItem', this.item)
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.RENAME_FILE,
         state: !this.ui.modals[ModalWindows.RENAME_FILE],

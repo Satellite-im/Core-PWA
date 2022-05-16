@@ -1,4 +1,4 @@
-<div id="toolbar">
+<div id="toolbar" v-if="recipient">
   <div class="circle-container">
     <UiUserState
       :user="user"
@@ -7,43 +7,44 @@
     />
     <UiCircle
       :type="src ? 'image' : 'random'"
+      data-cy="friend-chat-circle"
       :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
       :size="35"
       :source="src"
       @click="openProfile"
-      v-if="!$device.isMobile && !isGroup(recipient)"
+      v-if="!$device.isMobile && recipient.type !== 'group'"
     />
-    <GroupIcon v-else-if="isGroup(recipient)" :group="getGroup()" />
+    <GroupIcon v-else-if="recipient.type === 'group'" :group="recipient" />
   </div>
   <div class="user-info">
-    <TypographyTitle
-      :size="6"
-      :text="isGroup(recipient) ? getGroup().name : user.name"
-    />
+    <TypographyTitle :size="6" :text="recipient.name" />
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="isGroup(recipient) ? `Members: ${getGroup().members.length}` : user.status"
+      :text="recipient.type === 'group' ? `Members: ${group && group.members && group.members.length}` : user.status || ''"
     />
   </div>
   <div class="controls">
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.alerts')"
-      :tooltipPosition="'bottom'"
-      data-cy="toolbar-alerts"
-    >
       <div
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-        @click="$data.showAlerts = !$data.showAlerts"
+        class="toggle-alerts has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
+        @click='toggleAlerts'
       >
+
+        <UiCircle
+          v-if='allUnseenNotifications.length'
+          class='notification-alert'
+          :size='15'
+          color='red'
+          type='icon'
+          :data='allUnseenNotifications.length'>
+          {{allUnseenNotifications.length}}
+        </UiCircle>
         <bell-icon
           size="1x"
           :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-          color="grey"
+          color="primary"
         />
       </div>
-    </UiComingSoon>
 
     <UiFloatingContainer
       v-if="showAlerts"
@@ -55,7 +56,9 @@
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
-      <ToolbarAlerts />
+      <ToolbarAlerts
+        :notifications='allUnseenNotifications'
+      />
     </UiFloatingContainer>
     <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
@@ -97,6 +100,7 @@
     <div
       v-if="!isGroup(recipient)"
       class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
+      data-cy="toolbar-new-group"
       :data-tooltip="$t('pages.chat.new_group')"
       @click="toggleModal('creategroup')"
     >
@@ -117,7 +121,7 @@
     <div
       v-if="!$device.isMobile"
       class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom control-button"
-      @click="() => toggleModal(ModalWindows.CALLTOACTION)"
+      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
       data-tooltip="Marketplace"
       data-cy="toolbar-marketplace"
     >

@@ -1,4 +1,4 @@
-<div class="is-group">
+<div v-if="group.avatar" class="is-group">
   <span class="wrapper-circle" v-on:click="showQuickProfile">
     <UiCircle
       :type="src ? 'image' :'random'"
@@ -14,14 +14,13 @@
       </span>
       <TypographyText :text="timestamp" :data-cy="`chat-timestamp`" />
     </div>
-    <div class="group-messages">
-      <Message
-        v-for="message in group.messages"
-        :group="group"
-        :message="message"
-        :from="username"
-        :key="message.id"
-      />
+    <div class="group-message">
+      <Message :group="group" :message="group.message" :from="username" />
     </div>
+  </div>
+</div>
+<div v-else class="group-same">
+  <div class="group-messages">
+    <Message :group="group" :message="group.message" :from="username" />
   </div>
 </div>

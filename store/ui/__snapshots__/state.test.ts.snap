@@ -29,11 +29,13 @@ Object {
     "route": "emotes",
     "show": false,
   },
+  "fileDownloadList": Array [],
   "filePreview": undefined,
   "fileSort": Object {
     "asc": true,
     "category": "modified",
   },
+  "filesUploadStatus": "",
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
@@ -41,7 +43,6 @@ Object {
   },
   "glyphModalPack": "",
   "hoveredGlyphInfo": undefined,
-  "isLoadingFileIndex": false,
   "isReacted": false,
   "isScrollOver": false,
   "isTyping": false,
@@ -51,6 +52,7 @@ Object {
     "changelog": false,
     "createServer": false,
     "creategroup": false,
+    "crop": false,
     "error": false,
     "glyph": false,
     "groupInvite": Object {
@@ -65,18 +67,14 @@ Object {
     "walletMini": false,
   },
   "mostEmojiUsed": Array [],
+  "notifications": Array [],
   "quickProfile": false,
   "quickProfilePosition": Object {
     "x": 0,
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "recentReactions": Array [
-    "👍",
-    "😂",
-    "♥️",
-  ],
-  "renameCurrentName": undefined,
+  "renameItem": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",

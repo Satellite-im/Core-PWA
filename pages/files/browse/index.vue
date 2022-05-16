@@ -2,11 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
 
 export default Vue.extend({
@@ -20,6 +21,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters('textile', ['getInitialized']),
     sort: {
       set(value: FileSort) {
         this.$store.commit('ui/setFileSort', value)
@@ -33,10 +35,27 @@ export default Vue.extend({
        */
     },
     directory(): Item[] {
+      if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
+        return (
+          this.$data.counter &&
+          this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
+        )
+      }
       return (
         this.$data.counter &&
-        this.fileSystem.currentDirectory.sortedContent(this.sort)
+        this.fileSystem.sortContent(this.sort, this.fileSystem.content)
       )
+    },
+  },
+  watch: {
+    '$route.query.route': {
+      handler(value) {
+        this.fileSystem.goBackToDirectory('root')
+        // if invalid route, reset to default
+        if (!Object.values(FileAsideRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+        }
+      },
     },
   },
   methods: {
@@ -56,7 +75,7 @@ export default Vue.extend({
      */
     handle(item: Item) {
       if (item instanceof Fil) {
-        this.$store.commit('ui/setFilePreview', item.name)
+        this.$store.commit('ui/setFilePreview', item)
       }
       if (item instanceof Directory) {
         this.fileSystem.openDirectory(item.name)
@@ -68,13 +87,16 @@ export default Vue.extend({
      * @param {Item} item
      */
     async like(item: Item) {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
       item.toggleLiked()
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
       this.forceRender()
     },
     /**
@@ -83,13 +105,21 @@ export default Vue.extend({
      * @param {Item} item
      */
     async remove(item: Item) {
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
       if (item instanceof Fil) {
+        this.$store.commit(
+          'ui/setFilesUploadStatus',
+          this.$t('pages.files.status.delete', [item.name]),
+        )
         await this.$FileSystem.removeFile(item.id)
       }
-      this.$FileSystem.removeChild(item.name)
+      this.$FileSystem.removeChild(item.name, item.parent)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
+      this.$store.commit('ui/setFilesUploadStatus', '')
+
       this.forceRender()
     },
     /**

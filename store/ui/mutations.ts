@@ -1,18 +1,19 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
+  FileSort,
   Flair,
-  Theme,
-  UIState,
+  Position,
   RecentGlyph,
   SettingsRoutes,
-  Position,
-  FileSort,
+  Theme,
+  UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { Fil } from '~/libraries/Files/Fil'
 import { ImageMessage } from '~/types/textile/mailbox'
+import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -51,8 +52,8 @@ export default {
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
   },
-  setFilePreview(state: UIState, name: string) {
-    state.filePreview = name
+  setFilePreview(state: UIState, file: Fil) {
+    state.filePreview = file
   },
   setChatImageOverlay(state: UIState, image: ImageMessage | undefined) {
     state.chatImageOverlay = image
@@ -309,15 +310,6 @@ export default {
   setHoveredGlyphInfo(state: UIState, values: Object | undefined) {
     state.hoveredGlyphInfo = values
   },
-  updateRecentReactions(state: UIState, emoji: string) {
-    const newRecentReactions = state.recentReactions
-    if (!state.recentReactions.includes(emoji)) {
-      newRecentReactions.unshift(emoji)
-      newRecentReactions.pop()
-    }
-
-    state.recentReactions = newRecentReactions
-  },
   setGlyphMarketplaceView(state: UIState, values: Object) {
     state.glyphMarketplaceView = values
   },
@@ -347,6 +339,21 @@ export default {
       count: 1,
     })
   },
+  sendNotification(state: UIState, notification: Alert) {
+    state.notifications.push(notification)
+  },
+  setNotifications(state: UIState, notifications: Array<Alert>) {
+    state.notifications = notifications
+  },
+  clearAllNotifications(state: UIState) {
+    state.notifications.forEach((notification) => {
+      notification.state = AlertState.READ
+    })
+  },
+  notificationSeen(state: UIState, notificationId: string) {
+    state.notifications.find((item) => item.id === notificationId).state =
+      AlertState.READ
+  },
   updateTheme(state: UIState, theme: Theme) {
     state.theme.base = theme
   },
@@ -356,16 +363,25 @@ export default {
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setIsLoadingFileIndex(state: UIState, status: boolean) {
-    state.isLoadingFileIndex = status
-  },
-  setRenameItem(state: UIState, name: string) {
-    state.renameCurrentName = name
+  setRenameItem(state: UIState, name: Item) {
+    state.renameItem = name
   },
   setFileSort(state: UIState, sort: FileSort) {
     state.fileSort = sort
   },
   setSwiperSlideIndex(state: UIState, index: number) {
     state.swiperSlideIndex = index
+  },
+  setFilesUploadStatus(state: UIState, value: string) {
+    state.filesUploadStatus = value
+  },
+  addFileDownload(state: UIState, name: string) {
+    state.fileDownloadList.push(name)
+  },
+  removeFileDownload(state: UIState, name: string) {
+    const index = state.fileDownloadList.indexOf(name)
+    if (index > -1) {
+      state.fileDownloadList.splice(index, 1)
+    }
   },
 }

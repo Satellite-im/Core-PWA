@@ -7,12 +7,12 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
-import { ActionsArguments, RootState } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
+import { ActionsArguments } from '~/types/store/store'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 export default {
   /**
@@ -279,6 +279,32 @@ export default {
       commit('updateTextilePubkey', preGeneratedTextilePubKey)
     dispatch('startup', payerAccount)
   },
+
+  /**
+   * @method updateProfilePhoto
+   * @description update profile photo of the user on the Solana blockchain
+   * @param image
+   * @example
+   * ```typescript
+   * this.$store.dispatch(
+   *  'accounts/updateProfilePhoto', image
+   * );
+   * ```
+   */
+  async updateProfilePhoto(
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
+    image: string,
+  ) {
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+
+    const imagePath = await uploadPicture(image)
+
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
+    await usersProgram.setPhotoHash(imagePath)
+
+    commit('setProfilePicture', imagePath)
+  },
+
   /**
    * @method initializeEncryptionEngine
    * @description Initializes the Crypto class with the current user keypair
@@ -297,31 +323,28 @@ export default {
     await $Crypto.init(userAccount)
   },
   async startup(
-    { dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
     const { initialized: webrtcInitialized } = rootState.webrtc
 
+    commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
+
     await db.initializeSearchIndexes()
 
     const { pin } = state
-    if (!textileInitialized && pin) {
-      await dispatch(
-        'textile/initialize',
-        {
-          id: payerAccount?.publicKey.toBase58(),
-          pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
-        },
-        { root: true },
-      )
-    }
+    await dispatch('loadTextileAndRelated', {
+      initTextile: !textileInitialized && pin,
+      payerPublicKey: payerAccount?.publicKey.toBase58(),
+    })
+    await dispatch('friends/initialize', {}, { root: true })
 
-    if (!webrtcInitialized && $SolanaManager.payerAccount?.secretKey) {
-      dispatch(
+    if ($SolanaManager.payerAccount?.secretKey) {
+      await dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {
@@ -337,8 +360,30 @@ export default {
     }
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
-    dispatch('friends/initialize', {}, { root: true })
-    dispatch('groups/initialize', {}, { root: true })
+  },
+  async loadTextileAndRelated(
+    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
+    {
+      initTextile,
+      payerPublicKey,
+    }: { initTextile?: boolean; payerPublicKey?: string },
+  ) {
+    if (initTextile) {
+      const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+      const { pin } = state
+      await dispatch(
+        'textile/initialize',
+        {
+          id: payerPublicKey,
+          pass: pin,
+          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+        },
+        { root: true },
+      )
+    }
+
+    await dispatch('groups/initialize', {}, { root: true })
+    commit('textile/textileInitialized', true, { root: true })
   },
 }
 

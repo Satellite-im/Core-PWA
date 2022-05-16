@@ -21,48 +21,6 @@
     &:extend(.font-secondary);
   }
 
-  .reply-container {
-    .emoji-reactions {
-      margin-top: 0;
-      margin-left: 3rem;
-      position: relative;
-    }
-    .is-reply {
-      .circle {
-        margin-top: 0.3rem;
-        cursor: pointer;
-      }
-
-      .reply-body {
-        .reply-heading {
-          display: inline-flex;
-          flex-direction: row;
-          align-items: center;
-
-          .is-text {
-            margin-left: @light-spacing;
-            font-size: @micro-text-size;
-            &:extend(.font-muted);
-            display: flex;
-            align-items: flex-end;
-            height: 1.2rem;
-          }
-        }
-
-        .reply-content {
-          position: relative;
-        }
-        margin-left: 0.75rem;
-        &:extend(.full-width);
-      }
-      &:extend(.full-width);
-      padding: 0.5rem;
-      display: flex;
-      margin-bottom: 0.25rem;
-    }
-    display: flex;
-    flex-direction: column;
-  }
   &:extend(.bordered);
   &:extend(.round-corners);
   padding: (@light-spacing / 2) @light-spacing;

@@ -40,8 +40,14 @@
     >
       <InteractablesSwitch v-model="consentScan" />
     </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.nsfw.title')"
+      :text="$t('pages.privacy.nsfw.subtitle')"
+    >
+      <InteractablesSwitch v-model="blockNsfw" />
+    </SettingsUnit>
   </div>
-  <div class="columns is-desktop">
+  <!-- <div class="columns is-desktop">
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
       :text="$t('pages.privacy.serverType.subtitle')"
@@ -53,7 +59,7 @@
         class="form-control"
       />
     </SettingsUnit>
-  </div>
+  </div> -->
 
   <div
     v-if="serverType === 'own'"

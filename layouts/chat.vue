@@ -51,6 +51,7 @@
             <menu-icon
               v-if="!showSidebar || $device.isMobile"
               class="toggle--sidebar"
+              data-cy="toggle-sidebar"
               size="1.2x"
               full-width
               @click="toggleMenu"
@@ -80,9 +81,8 @@
               :prevent-scroll-offset="10"
               :older-messages-scroll-offset="300"
               :class="
-                $store.state.friends.all.find(
-                  (friend) => friend.address === $store.state.webrtc.activeCall,
-                )
+                $store.state.webrtc.activeCall &&
+                $store.state.webrtc.activeCall.callId
                   ? 'media-open'
                   : 'media-unopen'
               "
@@ -134,6 +134,9 @@ import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { hexToRGB } from '~/utilities/Colors'
 import { DataStateType } from '~/store/dataState/types'
+import { SettingsRoutes } from '~/store/ui/types'
+import type { Friend } from '~/types/ui/friends'
+import type { Group } from '~/types/messaging'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -186,27 +189,30 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'ui', 'media', 'friends', 'groups', 'dataState']),
+    ...mapState([
+      'audio',
+      'ui',
+      'media',
+      'friends',
+      'groups',
+      'dataState',
+      'settings',
+      'conversation',
+    ]),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     DataStateType: () => DataStateType,
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient() {
-      // It should not happen that someone tries to write to himself, but we should check
-      // anyway
-      const isMe =
-        this.$route.params.address === this.$typedStore.state.accounts.active
-
-      const groupId = this.$route.params.id
-
-      const recipient = groupId
-        ? { textilePubkey: groupId }
-        : isMe
-        ? null
-        : this.$typedStore.state.friends.all.find(
-            (friend) => friend.address === this.$route.params.address,
-          )
+      const recipient =
+        this.conversation.type === 'group'
+          ? this.groups.all.find(
+              (group: Group) => group.id === this.conversation.id,
+            )
+          : this.friends.all.find(
+              (friend: Friend) => friend.peerId === this.conversation.id,
+            )
       return recipient
     },
     flairColor() {
@@ -226,6 +232,10 @@ export default Vue.extend({
     },
   },
   watch: {
+    recipient: {
+      handler() {},
+      immediate: true,
+    },
     showSidebar(newValue, oldValue) {
       if (newValue !== oldValue) {
         newValue
@@ -262,6 +272,21 @@ export default Vue.extend({
      * @example v-on:drop="handleDrop"
      */
     handleDrop(e: DragEvent) {
+      e.preventDefault()
+
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
       if (e?.dataTransfer) {
         this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
       }

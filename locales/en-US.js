@@ -19,6 +19,7 @@ export default {
     talk: 'Speak Freely...',
     close: 'Close',
     cancel: 'Cancel',
+    clear_all: 'Clear All',
     search: 'Search',
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
@@ -36,6 +37,8 @@ export default {
     not_connected: 'not connected',
     online: 'online',
     offline: 'offline',
+    participant: 'participant',
+    participants: 'participants',
   },
   wallet: {
     wallet: 'Wallet',
@@ -73,9 +76,18 @@ export default {
     many_typing: 'many users are typing',
     new_messages: 'New Messages',
     say_hi: 'Say hi! 👋',
-    user_sent: 'user sent you a {msgType}',
-    user_sent_image: 'user sent you an {msgType}',
-    user_sent_something: 'user sent you something',
+    user_sent: {
+      me: 'you sent a {msgType}',
+      user: '{user} sent you a {msgType}',
+    },
+    user_sent_image: {
+      me: 'you sent an {msgType}',
+      user: 'user sent you an {msgType}',
+    },
+    user_sent_something: {
+      me: 'you sent something',
+      user: 'user sent you something',
+    },
     pinned: {
       archived_messages: 'Archived Messages',
       new: 'New',
@@ -97,6 +109,7 @@ export default {
     headphones: 'Audio',
     video: 'Video',
     call: 'Call',
+    screen: 'Share Screen',
     mute: 'Mute',
     toggle: 'Toggle',
     deafen: 'Deafen',
@@ -130,12 +143,16 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
-      rename: 'Rename is complete',
+      item_count: '0 items | 1 item | {count} items',
+      status: {
+        prepare: 'Preparing files for upload',
+        upload: 'Uploading {0}',
+        delete: 'Deleting {0}',
+        index: 'Updating remote index',
+      },
       controls: {
         new_file: 'New File',
         name_folder: 'Name Folder...',
-        upload: 'Uploading {0}',
-        index: 'Updating remote index',
       },
       browse: {
         files: 'Files',
@@ -150,7 +167,13 @@ export default {
         free_tier: 'Free Tier',
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
+        default: 'Default',
+        recent: 'Recent',
+        deleted: 'Deleted',
+        favorited: 'Favorited',
         shared_items: 'Shared Items',
+        shared_folders: 'Shared Folders',
+        links: 'Links',
         coming_soon: 'Coming soon',
       },
       upload: {
@@ -169,6 +192,9 @@ export default {
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',
+        enable_consent:
+          'Please consent to file scanning in your privacy settings',
+        lost: 'Cannot find file, please try again later',
       },
     },
     unlock: {
@@ -208,12 +234,16 @@ export default {
       serverType: {
         title: 'Signaling Servers',
         subtitle:
-          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and cpu usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
       },
       consentScan: {
-        title: 'Consents to having files scanned',
+        title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to having my files auto-scanned against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material',
+          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
+      },
+      nsfw: {
+        title: 'Block NSFW content',
+        subtitle: 'If selected, NSFW content will be obscured.',
       },
       ownInfo: {
         title: 'Set my own Signaling Server',
@@ -229,7 +259,6 @@ export default {
         publicServer: 'Only Public Signaling Servers',
         userDefinedServer: 'Set my own',
       },
-      continue: 'Continue',
       register: {
         title: 'Register Username Publicly',
         subtitle:
@@ -248,7 +277,7 @@ export default {
       embeds: {
         title: 'Enable External Embeds',
         subtitle:
-          'Allow Satellite to fetch data from external sites in order to expand links like Spotify, YouTube, and more.',
+          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
       },
     },
     settings: {
@@ -398,6 +427,8 @@ export default {
         devices: 'Connected Devices',
         no_devices: 'No connected devices found.',
         no_status: 'No status set.',
+        reveal_phrase: 'Reveal Phrase',
+        hide_phrase: 'Hide Phrase',
       },
       personalize: {
         flair: 'Flair',
@@ -419,7 +450,7 @@ export default {
         network: 'Network',
         allow_embeds: 'Allow Embeds',
         allow_embeds_description:
-          'Have Satellite try to load videos and link previews. This sends a request to the URL someone shares with you to get more information/embed the content from the source and may allow the site to track you.',
+          'Have Satellite try to load videos and link previews. This sends a request to the URL someone shares with you to get more information/to embed the content from the source and may allow the site to track you.',
       },
       storage: {
         title: 'Storage',
@@ -534,9 +565,7 @@ export default {
       mnemonic_not_present: 'Problem with passphrase, please try again.',
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
-    },
-    sign_in: {
-      invalid_file: 'Unable to upload, invalid file.',
+      invalid_file: 'Please upload a valid image type such as JPG, PNG or SVG',
     },
     friends: {
       request_already_sent: 'You have already sent a request to this user',

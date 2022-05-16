@@ -13,9 +13,11 @@ export type User = {
   badge?: BadgeType
   userAccount?: any
   mailboxId?: string
+  peerId?: string
   textilePubkey?: string
   lastUpdate: number
   metadata?: FriendMetadata
+  streams?: Map<string, MediaStream>
 }
 
 export interface UserRegistrationData {

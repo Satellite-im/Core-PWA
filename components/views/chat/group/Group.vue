@@ -54,6 +54,9 @@ export default Vue.extend({
       return ''
     },
     src(): string {
+      if (!this.group?.avatar) {
+        return ''
+      }
       // To check if the sender is you we just compare the from field
       // with your textile public key
       if (this.group.from === this.$TextileManager?.getIdentityPublicKey()) {

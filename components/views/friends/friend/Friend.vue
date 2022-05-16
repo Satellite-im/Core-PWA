@@ -74,6 +74,9 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
+  beforeDestroy() {
+    this.$store.commit('ui/toggleContextMenu', false)
+  },
   methods: {
     async createFriendRequest() {
       this.loading = AddFriendEnum.SENDING

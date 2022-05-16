@@ -1,4 +1,4 @@
-<div class="result-item">
+<div class="result-item" data-cy="chat-search-result-container">
   <UiCircle
     class="avatar"
     :type="src ? 'image' : 'random'"
@@ -11,6 +11,6 @@
       <div class="username">{{ data.user.name }}</div>
       <div class="timestamp">{{ timestamp }}</div>
     </div>
-    <div class="msg">{{ data.payload }}</div>
+    <div class="msg" data-cy="chat-search-result-text">{{ data.payload }}</div>
   </div>
 </div>

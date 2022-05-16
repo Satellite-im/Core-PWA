@@ -27,7 +27,7 @@ describe('Mutate Tracks Manager', () => {
     )
   })
 
-  it('should add duplicate rack and get warning ', () => {
+  it('should add duplicate track and get warning ', () => {
     const localStateForUnitTest = { ...state }
 
     inst.addTrack(localStateForUnitTest)

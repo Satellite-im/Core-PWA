@@ -1,11 +1,12 @@
 // import { Context } from '@textile/context'
-import { Client, PrivateKey, Identity, Users } from '@textile/hub'
-
-// @ts-ignore
+import { Identity, PrivateKey } from '@textile/crypto'
+import { Client } from '@textile/hub-threads-client'
+import { Users } from '@textile/users'
 import { AuthData } from '../Interfaces'
 import { Config } from '~/config'
-import { SolanaWallet } from '~/types/solana/solana'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { SolanaWallet } from '~/types/solana/solana'
+// @ts-ignore
 
 export default class IdentityManager {
   client?: Client
@@ -123,11 +124,15 @@ export default class IdentityManager {
       throw new Error('Textile key not found')
     }
 
-    this.client = await Client.withKeyInfo({ key: Config.textile.key })
+    this.client = await Client.withKeyInfo(
+      { key: Config.textile.key },
+      Config.textile.apiUrl,
+    )
 
-    this.users = await Users.withKeyInfo({
-      key: Config.textile.key,
-    })
+    this.users = await Users.withKeyInfo(
+      { key: Config.textile.key },
+      { host: Config.textile.apiUrl },
+    )
 
     await this.users.getToken(identity)
 

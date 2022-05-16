@@ -69,6 +69,7 @@ import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import { hexToRGB } from '~/utilities/Colors'
 import useMeta from '~/components/compositions/useMeta'
+import { SettingsRoutes } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -104,8 +105,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends']),
-    ...mapGetters('ui', ['showSidebar', 'getFilesIndexLoading']),
+    ...mapState(['friends', 'settings']),
+    ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
     flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },
@@ -147,8 +148,22 @@ export default Vue.extend({
     handleDrop(e: DragEvent) {
       e.preventDefault()
 
+      if (!this.settings.consentScan) {
+        this.$toast.error(
+          this.$t('pages.files.errors.enable_consent') as string,
+          {
+            duration: 3000,
+          },
+        )
+        this.$store.commit('ui/toggleSettings', {
+          show: true,
+          defaultRoute: SettingsRoutes.PRIVACY,
+        })
+        return
+      }
+
       // if already uploading, return to prevent bucket fast-forward crash
-      if (this.getFilesIndexLoading) {
+      if (this.isFilesIndexLoading) {
         this.$toast.show(this.$t('pages.files.errors.in_progress') as string)
         return
       }

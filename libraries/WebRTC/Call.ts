@@ -1,11 +1,39 @@
 import Peer, { SignalData } from 'simple-peer'
 import PeerId from 'peer-id'
 import Emitter from './Emitter'
-import { TracksManager } from './TracksManager'
-import { CallEventListeners, TrackKind } from './types'
+import { CallEventListeners } from './types'
 import { Peer2Peer } from './Libp2p'
 import { Config } from '~/config'
-import Logger from '~/utilities/Logger'
+
+export class CallPeer extends Peer {
+  id: string
+  name: string
+  callId: string | undefined
+
+  constructor(
+    {
+      id,
+      name,
+      callId,
+    }: {
+      id: string
+      name: string
+      callId: string | undefined
+    },
+    opts?: Peer.Options,
+  ) {
+    super(opts)
+    this.callId = callId
+    this.id = id
+    this.name = name
+  }
+}
+
+export type CallPeerStreams = { [kind: string]: MediaStream }
+export type CallPeerDescriptor = {
+  id: string
+  name: string
+}
 
 /**
  * @class Call
@@ -14,103 +42,404 @@ import Logger from '~/utilities/Logger'
  */
 export class Call extends Emitter<CallEventListeners> {
   p2p: Peer2Peer
-  peerId: string
-  peer?: Peer.Instance // The Simple Peer instance for the active call
-  signalingBuffer?: Peer.SignalData // A variable to store the signaling data before the answer
-
-  stream?: MediaStream // MediaStream for the active call
-  remoteStream?: MediaStream // Remote stream received via WebRTC
-
+  localId: string
+  callId: string
+  peerDetails: CallPeerDescriptor[] = []
+  peers: { [peerId: string]: CallPeer } = {} // The Simple Peer instance for the active call
+  peerConnected: { [key: string]: boolean } = {}
+  peerDialingDisabled: { [key: string]: boolean } = {}
+  screenStreams: { [peerId: string]: string } = {}
+  streams: { [peerId: string]: CallPeerStreams } = {} // Remote stream received via WebRTC
+  tracks: { [peerId: string]: Set<MediaStreamTrack> } = {} // Remote stream received via WebRTC
+  peerSignals: { [peerId: string]: Peer.SignalData } = {} // A variable to store the signaling data before the answer
+  peerPollingInterval: any
+  peerPollingFrequency = 15000
   constraints: MediaStreamConstraints
-
-  tracksManager: TracksManager // Keep tracks of all media stream tracks
+  isCaller: { [peerId: string]: boolean } = {}
+  isCallee: { [peerId: string]: boolean } = {}
+  active: boolean = false
 
   /**
    * @constructor
    * @param peerId The PeerID used for signaling (via libp2p)
    */
-  constructor(peerId: string) {
+  constructor(
+    callId: string,
+    peers?: CallPeerDescriptor[],
+    peerSignals: { [key: string]: SignalData } = {},
+  ) {
     super()
 
+    this.callId = callId
     this.p2p = Peer2Peer.getInstance()
-    this.peerId = peerId
-    this.constraints = Config.webrtc.constraints
-    this.tracksManager = new TracksManager()
 
+    if (!this.p2p.peerId) {
+      throw new Error('local peerId not found')
+    }
+
+    this.localId = this.p2p.peerId.toB58String()
+
+    if (this.callId === this.localId) {
+      throw new Error('callId cannot be the same as localId')
+    }
+
+    this.constraints = Config.webrtc.constraints
+    this.peerDetails = peers || []
+    this.peerSignals = peerSignals || {}
     this._bindBusListeners()
   }
 
   /**
-   * @method createLocalTracks
-   * @description Generate local tracks for audio/video
-   * @param kinds Array of track kind you want to create
-   * @param constraints Media stream constraints to apply
-   * @returns The created local tracks
+   * @method isDirectCall
+   * @description Returns true if the call is direct, false otherwise
+   * @returns {boolean}
    * @example
-   * const call = new Call(peerId)
-   * call.createLocalTracks({audio: true, video: true})
+   * const isDirectCall = call.isDirectCall()
+   */
+  isDirectCall() {
+    return this.callId?.indexOf('|') === -1
+  }
+
+  /**
+   * @method requestPeerCalls
+   * @description Send a libp2p message requesting for the given peerIds to initiate a call
+   */
+  async requestPeerCalls(force = false) {
+    await Promise.all(
+      this.peerDetails.map(async (peer) => {
+        if (peer.id === this.localId) {
+          return
+        }
+        if (this.isCallee[peer.id]) {
+          return
+        }
+
+        this.isCaller[peer.id] = true
+        if (!this.peers[peer.id]) {
+          await this.initiateCall(peer.id, this.isCaller[peer.id])
+        }
+        await this.sendPeerCallRequest(peer.id, force)
+      }),
+    )
+  }
+
+  /**
+   * @method start
+   * @description It's used for initiate a call
+   * @param stream MediaStream object containing the audio/video tracks
+   */
+  async start() {
+    if (!this.active) {
+      clearInterval(this.peerPollingInterval)
+      this.peerPollingInterval = setInterval(async () => {
+        if (!this.active) return
+        await this.requestPeerCalls()
+      }, this.peerPollingFrequency)
+      this.active = true
+    }
+
+    await this.requestPeerCalls(true)
+  }
+
+  /**
+   * @method answer
+   * @description It's used for answering a call. A call request must be active before
+   * to call this method
+   * @param stream MediaStream object containing the audio/video stream
+   */
+  async answer(peerId: string) {
+    await this.initiateCall(peerId, false)
+    await this.start()
+  }
+
+  /**
+   * @method createPeer
+   * @description Creates a new Simple Peer instance
+   * @param id The PeerID of the peer
+   * @param asCaller Initiate the call as a caller
+   */
+  createPeer(peerId: string, asCaller: boolean = false) {
+    if (this.peers[peerId]) {
+      return
+    }
+    const pd = this.peerDetails.find((pd) => pd.id === peerId)
+    if (!pd) {
+      return
+    }
+    const peer = new CallPeer(
+      { ...pd, callId: this.callId },
+      {
+        initiator: asCaller || !!this.peerSignals[peerId],
+        streams: [
+          this.streams[this.localId]?.audio,
+          this.streams[this.localId]?.video,
+        ].filter(Boolean),
+        offerOptions: {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true,
+        },
+        config: {
+          iceServers: Config.webrtc.iceServers,
+        },
+      },
+    )
+    this.peers[peerId] = peer
+    this.peerDialingDisabled[peerId] = false
+    this._bindPeerListeners(peer)
+    peer.addTransceiver('audio')
+    peer.addTransceiver('video')
+    return peer
+  }
+
+  /**
+   * @method initiateCall
+   * @description locally initiates a call to the given peer
+   * @param peerId
+   * @param asCaller boolean indicating if the local peer is the caller or not
+   * @returns {Promise<void>}
+   * @example
+   * await call.initiateCall(peerId, true)
+   */
+  async initiateCall(peerId: string, asCaller: boolean = false) {
+    if (!this.peers[peerId]) {
+      this.createPeer(peerId, asCaller)
+    }
+
+    this.peerDialingDisabled[peerId] = !asCaller
+
+    const peer = this.peers[peerId]
+    if (!peer) {
+      return
+    }
+
+    const signal = this.peerSignals[peerId]
+    if (signal) {
+      await peer.signal(signal)
+      this.emit('ANSWERED', { peerId, callId: this.callId })
+      return
+    }
+
+    this.emit('OUTGOING_CALL', { peerId, callId: this.callId })
+  }
+
+  /**
+   * @method sendPeerCallRequest
+   * @description Send a call request to the given peer
+   * @param peerId
+   * @returns {Promise<void>}
+   * @example
+   * await call.sendPeerCallRequest(peerId)
+   */
+  async sendPeerCallRequest(peerId: string, force = false) {
+    if (!peerId) {
+      return
+    }
+    if (
+      !force &&
+      (this.peerConnected[peerId] || this.peerDialingDisabled[peerId])
+    ) {
+      return
+    }
+    if (!this.peers[peerId]) {
+      await this.initiateCall(peerId, true)
+    }
+
+    await this.p2p.sendMessage(
+      {
+        type: 'peer:call',
+        payload: {
+          callId: this.callId === peerId ? this.localId : this.callId,
+          peers: this.peerDetails,
+          signal: this.peerSignals[peerId],
+        },
+        sentAt: Date.now().valueOf(),
+      },
+      peerId,
+    )
+  }
+
+  /**
+   * @method setCallId
+   * @description Sets the callId of the current call
+   * @param callId
+   * @returns {void}
+   * @example
+   * call.setCallId(callId)
+   */
+  setCallId(callId: string) {
+    this.callId = callId
+  }
+
+  /**
+   * @method createLocalTracks
+   * @description Generate local streams for audio/video/screen
+   * @param kinds Array of track kinds you want to create
+   * @param constraints Media stream constraints to apply
+   * @returns The created streams
+   * @example
    */
   async createLocalTracks(
-    kinds: TrackKind[],
+    kinds: string[],
     constraints?: MediaStreamConstraints,
   ) {
     if (!navigator.mediaDevices.getUserMedia) {
-      throw new Error('WebRTC not supported')
-    }
-
-    if (constraints) {
-      const constraintsUpdates = kinds.reduce(
-        (updates, kind) => ({ ...updates, [kind]: constraints[kind] }),
-        {},
+      alert(
+        "Your browser doesn't support or have permission to access your media devices. Please update your browser or review your security settings.",
       )
-      this.updateConstraints(constraintsUpdates)
+      throw new Error('WebRTC media not supported')
     }
 
-    const constraintsToApply = kinds.reduce(
-      (updates, kind) => ({ ...updates, [kind]: this.constraints[kind] }),
-      {},
+    if (kinds.includes('screen')) {
+      await this.createDisplayStream()
+    }
+
+    if (kinds.includes('audio')) {
+      await this.createAudioStream(constraints?.audio || true)
+    }
+
+    if (kinds.includes('video')) {
+      await this.createVideoStream(constraints?.video || true)
+    }
+
+    return this.streams
+  }
+
+  /**
+   * @method createAudioStream
+   * @description Create local audio stream and send it to remote peers
+   * @param constraints Media stream constraints to apply
+   * @returns {Promise<void>}
+   * @example
+   * await call.createAudioStream()
+   */
+  async createAudioStream(
+    constraints: MediaTrackConstraints | boolean | undefined,
+  ) {
+    const audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: constraints || true,
+    })
+    if (!this.streams[this.localId]) {
+      this.streams[this.localId] = {}
+    }
+    if (!this.tracks[this.localId]) {
+      this.tracks[this.localId] = new Set()
+    }
+
+    const audioTrack = audioStream.getAudioTracks()[0]
+
+    this.streams[this.localId].audio = audioStream
+    this.tracks[this.localId].add(audioTrack)
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: audioTrack,
+      kind: 'audio',
+      stream: audioStream,
+    })
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        try {
+          peer.addTrack(audioTrack, audioStream)
+        } catch (_) {}
+      }),
+    )
+  }
+
+  /**
+   * @method createVideoStream
+   * @description Create local video stream and send it to remote peers
+   * @param constraints Media stream constraints to apply
+   * @returns {Promise<void>}
+   * @example
+   * await call.createVideoStream()
+   */
+  async createVideoStream(
+    constraints: MediaTrackConstraints | boolean | undefined,
+  ) {
+    const videoStream = await navigator.mediaDevices.getUserMedia({
+      video: constraints || true,
+    })
+    if (!this.streams[this.localId]) {
+      this.streams[this.localId] = {}
+    }
+    if (!this.tracks[this.localId]) {
+      this.tracks[this.localId] = new Set()
+    }
+
+    const videoTrack = videoStream.getVideoTracks()[0]
+
+    this.streams[this.localId].video = videoStream
+    this.tracks[this.localId].add(videoTrack)
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: videoTrack,
+      kind: 'video',
+      stream: videoStream,
+    })
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        try {
+          peer.addTrack(videoTrack, videoStream)
+        } catch (_) {}
+      }),
+    )
+  }
+
+  /**
+   * @method createDisplayStream
+   * @description Create local screen stream and send it to remote peers
+   * @returns {Promise<void>}
+   * @example
+   * await call.createDisplayStream()
+   */
+  async createDisplayStream() {
+    if (!navigator.mediaDevices.getDisplayMedia) {
+      alert(
+        "Your browser doesn't support or have permission to share your screen. Please update your browser or review your security settings.",
+      )
+      throw new Error('WebRTC display media not supported')
+    }
+
+    const screenStream = await navigator.mediaDevices.getDisplayMedia()
+    if (!this.streams[this.localId]) {
+      this.streams[this.localId] = {}
+    }
+    if (!this.tracks[this.localId]) {
+      this.tracks[this.localId] = new Set()
+    }
+
+    const screenTrack = screenStream.getVideoTracks()[0]
+    screenTrack.enabled = true
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        await this.p2p.sendMessage(
+          {
+            type: 'peer:screenshare',
+            payload: {
+              streamId: screenStream.id,
+              trackId: screenTrack.id,
+            },
+            sentAt: Date.now().valueOf(),
+          },
+          peer.id,
+        )
+        try {
+          peer.addTrack(screenTrack, screenStream)
+        } catch (_) {}
+      }),
     )
 
-    await navigator.mediaDevices
-      .getUserMedia(constraintsToApply)
-      .then((stream) => (this.stream = stream))
-      .catch((err) => {
-        let message = err.message
-        if (
-          err.name === 'NotAllowedError' ||
-          err.name === 'PermissionDeniedError'
-        ) {
-          // permission denied in browser
-          message = 'errors.webRTC.permission_denied'
-        }
-        throw new Error(message)
-      })
+    this.screenStreams[this.localId] = screenStream.id
+    this.streams[this.localId].screen = screenStream
+    this.tracks[this.localId].add(screenTrack)
 
-    const { audio, video } = this.getLocalTracks()
-
-    if (audio) this.tracksManager.addTrack(audio)
-    if (video) this.tracksManager.addTrack(video)
-
-    if (audio) {
-      this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.peerId,
-        track: audio,
-      })
-    }
-
-    if (video) {
-      this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.peerId,
-        track: video,
-      })
-    } else {
-      this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.peerId,
-        track: { kind: 'video' },
-      })
-    }
-
-    return { audio, video }
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: screenTrack,
+      kind: 'screen',
+      stream: screenStream,
+    })
   }
 
   /**
@@ -120,35 +449,23 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async createNewTracks(constraints: MediaStreamConstraints) {
     if (!navigator.mediaDevices.getUserMedia) {
+      alert(
+        "Your browser doesn't support or have permission to access your media devices. Please update your browser or review your security settings.",
+      )
       throw new Error('WebRTC not supported')
     }
-    return await navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream: MediaStream) => {
-        const [audio] = stream.getAudioTracks()
-        const [video] = stream.getVideoTracks()
-        if (audio) this.tracksManager.addTrack(audio)
-        if (video) this.tracksManager.addTrack(video)
 
-        if (audio) {
-          this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.peerId,
-            track: audio,
-          })
-        }
+    if (constraints.audio) {
+      await this.createAudioStream(constraints.audio)
+    }
 
-        if (video) {
-          this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.peerId,
-            track: video,
-          })
-        }
-        return { audio, video }
-      })
-      .catch((err) => {
-        // @ts-ignore
-        Logger.log('Call.ts Error:', err)
-      })
+    if (constraints.video) {
+      await this.createVideoStream(constraints.video)
+    }
+
+    if (this.streams[this.localId].screen) {
+      await this.createDisplayStream()
+    }
   }
 
   /**
@@ -166,14 +483,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @returns the local tracks from the media stream
    */
   getLocalTracks() {
-    if (!this.stream) {
-      throw new Error('Stream not initialized')
-    }
-
-    const [audio] = this.stream.getAudioTracks()
-    const [video] = this.stream.getVideoTracks()
-
-    return { audio, video }
+    return this.tracks[this.localId]
   }
 
   /**
@@ -182,81 +492,138 @@ export class Call extends Emitter<CallEventListeners> {
    * @returns the remote tracks from the media stream
    */
   getRemoteTracks() {
-    if (!this.remoteStream) {
-      throw new Error('Remote stream not initialized')
-    }
-
-    const [audio] = this.remoteStream.getAudioTracks()
-    const [video] = this.remoteStream.getVideoTracks()
-
-    return { audio, video }
+    return Object.keys(this.tracks)
+      .filter((peerId) => peerId !== this.localId)
+      .map((peerId) => this.tracks[peerId])
+      .reduce(
+        (acc: MediaStreamTrack[], tracks) => acc.concat(Object.values(tracks)),
+        [],
+      )
   }
 
   /**
-   * @method getTrackById
-   * @description Returns a mediastreamtrack from the given id
-   * @returns a mediastream track or undefined if not found
+   * @method getTrack
+   * @description Get the given track from the local or remote stream
+   * @param trackId
+   * @returns {MediaStreamTrack} the track
    */
-  getTrackById(id: string): MediaStreamTrack | undefined {
-    return this.tracksManager.getTrack(id)
-  }
-
-  /**
-   * @method start
-   * @description It's used for initiate a call
-   * @param stream MediaStream object containing the audio/video tracks
-   * @example
-   * const call = new Call(peerId)
-   * await call.createLocalTracks({audio: true, video: true})
-   * call.start()
-   */
-  start() {
-    if (!this.stream) {
-      throw new Error('Local tracks not initialized. Create local tracks first')
-    }
-
-    // A new Simple Peer instance is created with the initiator flag set to true
-    this.peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: this.stream,
+  getTrack(trackId: string) {
+    Object.values(this.tracks).forEach((tracks) => {
+      tracks.forEach((track) => {
+        if (track.id === trackId) {
+          return track
+        }
+      })
     })
-    this._bindPeerListeners()
-
-    this.addTransceiver('audio')
-    this.addTransceiver('video')
-
-    this.emit('OUTGOING_CALL', { peerId: this.peerId })
+    return null
   }
 
   /**
-   * @method answer
-   * @description It's used for answering a call. A call request must be active before
-   * to call this method
-   * @param stream MediaStream object containing the audio/video stream
+   * @method allRemoteStreams
+   * @description get all remote streams
+   * @returns {{ [peerId: string]: { [kind: string]: MediaStream } }}
    * @example
-   * const call = new Call(peerId)
-   * call.answer(mediaStream)
+   * const remoteStreams = call.allRemoteStreams()
    */
-  answer() {
-    if (!this.signalingBuffer) {
-      throw new Error('No call to answer')
-    }
+  allRemoteStreams() {
+    return Object.keys(this.streams)
+      .filter((peerId) => peerId !== this.localId)
+      .map((peerId) => this.streams[peerId])
+  }
 
-    if (!this.stream) {
-      throw new Error('Local tracks not initialized. Create local tracks first')
-    }
+  /**
+   * @method getRemoteStreams
+   * @description get remote streams of a given type
+   * @param kind
+   * @returns {{ [peerId: string]: MediaStream }}
+   * @example
+   * const remoteStreams = call.getRemoteStreams('video')
+   */
+  getRemoteStreams(kind: string) {
+    return Object.keys(this.streams)
+      .filter((peerId) => peerId !== this.localId)
+      .map((peerId) => this.streams[peerId]?.[kind])
+  }
 
-    // A new Simple Peer instance is created with the initiator flag set to false
-    this.peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: this.stream,
-    })
-    this._bindPeerListeners()
+  /**
+   * @method getLocalStreams
+   * @description get all local streams
+   * @returns {{ [kind: string]: MediaStream }}
+   * @example
+   * const localStreams = call.getLocalStreams()
+   */
+  getLocalStreams() {
+    return this.streams[this.localId]
+  }
 
-    // Signal to the peer with previously received Signaling Data
-    this.peer.signal(this.signalingBuffer)
+  /**
+   * @method getLocalStream
+   * @description get local stream of a given type
+   * @param kind
+   * @returns {MediaStream}
+   * @example
+   * const localStream = call.getLocalStream('video')
+   */
+  getLocalStream(kind: string) {
+    return this.streams[this.localId]?.[kind]
+  }
+
+  /**
+   * @method getPeerStreams
+   * @description get all streams of a given peer
+   * @param peerId
+   * @returns {{ [kind: string]: MediaStream }}
+   * @example
+   * const peerStreams = call.getPeerStreams(peerId)
+   */
+  getPeerStreams(peerId: string) {
+    return this.streams[peerId]
+  }
+
+  /**
+   * @method getPeerStream
+   * @description get stream of a given peer and type
+   * @param peerId
+   * @param kind
+   * @returns {MediaStream}
+   * @example
+   * const peerStream = call.getPeerStream(peerId, 'video')
+   */
+  getPeerStream(peerId: string, kind: string) {
+    return this.streams[peerId]?.[kind]
+  }
+
+  /**
+   * @method hasLocalStream
+   * @description check if any local stream is available
+   * @returns {boolean}
+   * @example
+   * const hasLocalStream = call.hasLocalStream()
+   */
+  hasLocalStream() {
+    return Object.entries(this.streams[this.localId] || {}).length > 0
+  }
+
+  /**
+   * @method hasRemoteStream
+   * @description check if any remote stream is available
+   * @returns {boolean}
+   * @example
+   * const hasRemoteStream = call.hasRemoteStream()
+   */
+  hasRemoteStream() {
+    return this.allRemoteStreams().length > 0
+  }
+
+  /**
+   * @method hasRemoteTracks
+   * @description check if any remote track is available
+   * @returns {boolean}
+   * @example
+   * const hasRemoteTracks = call.hasRemoteTracks()
+   */
+  hasRemoteTracks() {
+    return this.getRemoteTracks().length > 0
   }
 
   /**
@@ -264,16 +631,20 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Signals to peer that we are denying their incoming call
    * @example call.deny()
    */
-  deny() {
-    this.p2p.sendMessage(
-      {
-        type: 'peer:refuse',
-        payload: { peerId: this.peerId },
-        sentAt: Date.now(),
-      },
-      this.peerId,
+  async deny() {
+    await Promise.all(
+      this.peerDetails.map(async (peer) => {
+        await this.p2p.sendMessage(
+          {
+            type: 'peer:hangup',
+            payload: { peerId: this.localId, callId: this.callId },
+            sentAt: Date.now().valueOf(),
+          },
+          peer.id,
+        )
+      }),
     )
-    this._onClose()
+    this.closeStreams()
   }
 
   /**
@@ -281,12 +652,31 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Hangs up active webrtc call
    * @example call.hangUp()
    */
-  hangUp() {
-    if (!this.signalingBuffer) {
-      this.deny()
-      return
-    }
-    this._onClose()
+  async hangUp() {
+    this.deny()
+    this.emit('HANG_UP', {
+      callId: this.callId,
+      peerId: this.localId,
+    })
+
+    this.destroy()
+  }
+
+  closeStreams() {
+    Object.values(this.tracks).forEach((peerTracks) => {
+      peerTracks.forEach((track) => {
+        track.stop()
+      })
+    })
+    Object.values(this.streams).forEach((peerStreams) => {
+      Object.values(peerStreams).forEach((stream) => {
+        stream.getTracks().forEach((track) => {
+          track.stop()
+        })
+      })
+    })
+    this.streams = {}
+    this.tracks = {}
   }
 
   /**
@@ -294,15 +684,23 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Destroys peer instance and all related streams and tracks
    * @example call.destroy()
    */
-  destroy() {
-    this.peer?.destroy()
-    this.stream?.getTracks().forEach((track) => track.stop())
-    this.remoteStream?.getTracks().forEach((track) => track.stop())
-
-    this.tracksManager.removeAllTracks()
-
-    delete this.peer
-    delete this.stream
+  async destroy() {
+    this.deny()
+    this.peerSignals = {}
+    this.active = false
+    this.isCallee = {}
+    this.isCaller = {}
+    clearInterval(this.peerPollingInterval)
+    this.peerDialingDisabled = {}
+    Object.values(this.peers).forEach((peer) => {
+      this.destroyPeer(peer.id)
+    })
+    this._unbindBusListeners()
+    this.peers = {}
+    this.emit('DESTROY', {
+      callId: this.callId,
+      peerId: this.localId,
+    })
   }
 
   /**
@@ -310,19 +708,57 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Mute audio or video by removing the track of the given kind
    * @param kind Kind of the track to mute
    */
-  async mute(kind: TrackKind) {
-    if (!this.stream) {
-      throw new Error('Stream not initialized. Create local tracks first')
+  async mute({
+    kind = 'audio',
+    peerId = this.localId,
+  }: {
+    kind: string
+    peerId?: string
+  }) {
+    const stream = this.streams[peerId]?.[kind]
+    if (!stream) {
+      throw new Error(
+        `webrtc/call: mute - ${kind} stream not initialized for peer: ${peerId}`,
+      )
     }
 
-    const localTracks = this.getLocalTracks()
+    let track: MediaStreamTrack
+    if (kind === 'audio') {
+      track = stream.getAudioTracks()[0]
+      track.enabled = false
+    } else if (kind === 'screen') {
+      track = stream.getVideoTracks()[0]
+      track.enabled = false
+      track.stop()
+      delete this.streams[peerId].screen
+    } else {
+      track = stream.getVideoTracks()[0]
+      track.enabled = false
+    }
 
-    if (localTracks[kind]) {
-      this.removeTrack(localTracks[kind], this.stream)
+    // tell all of the peers that we muted the track
+    if (peerId === this.localId) {
+      await Promise.all(
+        Object.values(this.peers).map(async (peer) => {
+          await this.p2p.sendMessage(
+            {
+              type: 'peer:mute',
+              payload: {
+                callId: this.callId === peer.id ? this.localId : this.callId,
+                trackId: track.id,
+                kind,
+              },
+              sentAt: Date.now().valueOf(),
+            },
+            peer.id,
+          )
+        }),
+      )
 
       this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.peerId,
-        track: localTracks[kind],
+        track,
+        kind,
+        stream,
       })
     }
   }
@@ -332,114 +768,61 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Unmute audio or video by adding a new track of the given kind
    * @param kind Kind of the track to unmute
    */
-  async unmute(kind: TrackKind) {
-    if (!this.stream) {
-      throw new Error('Stream not initialized. Create local tracks first')
+  async unmute({
+    kind,
+    peerId = this.localId,
+  }: {
+    kind: string
+    peerId?: string
+  }) {
+    if (peerId === this.localId) {
+      if (kind === 'audio' && !this.streams[peerId]?.audio) {
+        await this.createAudioStream(true)
+      } else if (kind === 'video' && !this.streams[peerId]?.video) {
+        await this.createVideoStream(true)
+      } else if (kind === 'screen' && !this.streams[peerId]?.screen) {
+        await this.createDisplayStream()
+      }
     }
 
-    const localTracks = this.getLocalTracks()
-
-    if (localTracks[kind]) {
-      throw new Error('Track already present')
+    const stream = this.streams[peerId]?.[kind]
+    if (!stream) {
+      throw new Error(
+        `webrtc/call: unmute - ${kind} stream not initialized for peer: ${peerId}`,
+      )
     }
 
-    const constraints = { [kind]: this.constraints[kind] }
+    const track: MediaStreamTrack =
+      kind === 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
+    track.enabled = true
 
-    const newTracks: any = await this.createNewTracks(constraints)
-    if (newTracks[kind]) {
-      this.addTrack(newTracks[kind], this.stream)
+    if (peerId !== this.localId) {
+      return
     }
-  }
 
-  /**
-   * @method addStream
-   * @description Adds a stream to the call
-   * @param stream MediaStream to add
-   * @example
-   * const call = new Call(peerId)
-   * call.addStream(mediaStream)
-   */
-  addStream(stream: MediaStream) {
-    this.peer?.addStream(stream)
-  }
+    // tell all of the peers that we unmuted the track
+    this.emit('LOCAL_TRACK_CREATED', {
+      track,
+      kind,
+      stream,
+    })
 
-  /**
-   * @method removeStream
-   * @description Removes a stream from the call
-   * @param stream MediaStream to remove
-   * @example
-   * const call = new Call(peerId)
-   * call.removeStream(mediaStream)
-   */
-  removeStream(stream: MediaStream) {
-    this.peer?.removeStream(stream)
-  }
-
-  /**
-   * @method addTrack
-   * @description Adds a track to the call
-   * @param track MediaStreamTrack to add
-   * @param stream Related stream
-   * @example
-   * const call = new Call(peerId)
-   * call.addTrack(newTrack, mediaStream)
-   */
-  addTrack(track: MediaStreamTrack, stream: MediaStream) {
-    this.peer?.addTrack(track, stream)
-    this.tracksManager.addTrack(track)
-    stream.addTrack(track)
-  }
-
-  /**
-   * @method removeTrack
-   * @description Removes a track from the call
-   * @param track MediaStreamTrack to remove
-   * @param stream Related stream
-   * @example
-   * const call = new Call(peerId)
-   * call.removeTrack(trackToRemove, mediaStream)
-   */
-  removeTrack(track: MediaStreamTrack, stream: MediaStream) {
-    track.stop()
-    this.peer?.removeTrack(track, stream)
-    stream.removeTrack(track)
-    this.tracksManager.removeTrack(track.id)
-  }
-
-  /**
-   * @method replaceTrack
-   * @description Replaces a track with a new one
-   * @param oldTrack old MediaStreamTrack to remove
-   * @param newTrack new MediaStreamTrack to add
-   * @param stream Related stream
-   * @example
-   * const call = new Call(peerId)
-   * call.replaceTrack(trackToRemove, trackToAdd, mediaStream)
-   */
-  replaceTrack(
-    oldTrack: MediaStreamTrack,
-    newTrack: MediaStreamTrack,
-    stream: MediaStream,
-  ) {
-    this.peer?.replaceTrack(oldTrack, newTrack, stream)
-    this.tracksManager.removeTrack(oldTrack.id)
-    this.tracksManager.addTrack(newTrack)
-  }
-
-  /**
-   * @method toggleTracks
-   * @description Enable and disable tracks
-   * @param kind Kinds of tracks (video or audio) to disable
-   * @example this.toggleTracks('audio')
-   */
-  toggleTracks(kind: string, enabled: boolean) {
-    const localTracks = this.getLocalTracks()
-    type trackType = typeof localTracks
-
-    for (const key in localTracks) {
-      const track = localTracks[key as keyof trackType]
-      if (track.kind === kind) track.enabled = enabled
-    }
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        await this.p2p.sendMessage(
+          {
+            type: 'peer:unmute',
+            payload: {
+              callId: this.callId === peer.id ? this.localId : this.callId,
+              trackId: track.id,
+              kind,
+            },
+            sentAt: Date.now().valueOf(),
+          },
+          peer.id,
+        )
+      }),
+    )
   }
 
   /**
@@ -450,7 +833,9 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    */
   addTransceiver(kind: string) {
-    this.peer?.addTransceiver(kind, undefined)
+    Object.values(this.peers).forEach((peer) => {
+      peer.addTransceiver(kind, undefined)
+    })
   }
 
   /**
@@ -462,6 +847,27 @@ export class Call extends Emitter<CallEventListeners> {
   protected _bindBusListeners() {
     this.p2p?.on('peer:signal', this._onBusSignal.bind(this))
     this.p2p?.on('peer:refuse', this._onBusRefuse.bind(this))
+    this.p2p?.on('peer:hangup', this._onBusHangup.bind(this))
+    this.p2p?.on('peer:screenshare', this._onBusScreenshare.bind(this))
+    this.p2p?.on('peer:mute', this._onBusMute.bind(this))
+    this.p2p?.on('peer:unmute', this._onBusUnmute.bind(this))
+    this.p2p?.on('peer:destroy', this._onBusDestroy.bind(this))
+  }
+
+  /**
+   * @method _unbindBusListeners
+   * @description Internal function to unbind listeners to the communiciationBus events
+   * @example
+   * this._unbindBusListeners();
+   */
+  protected _unbindBusListeners() {
+    this.p2p?.off('peer:signal', this._onBusSignal.bind(this))
+    this.p2p?.off('peer:refuse', this._onBusRefuse.bind(this))
+    this.p2p?.off('peer:hangup', this._onBusHangup.bind(this))
+    this.p2p?.off('peer:screenshare', this._onBusScreenshare.bind(this))
+    this.p2p?.off('peer:mute', this._onBusMute.bind(this))
+    this.p2p?.off('peer:unmute', this._onBusUnmute.bind(this))
+    this.p2p?.off('peer:destroy', this._onBusDestroy.bind(this))
   }
 
   /**
@@ -470,13 +876,23 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * this._bindPeerListeners()
    */
-  protected _bindPeerListeners() {
-    this.peer?.on('signal', this._onSignal.bind(this))
-    this.peer?.on('connect', this._onConnect.bind(this))
-    this.peer?.on('error', this._onError.bind(this))
-    this.peer?.on('track', this._onTrack.bind(this))
-    this.peer?.on('stream', this._onStream.bind(this))
-    this.peer?.on('close', this._onClose.bind(this))
+  protected _bindPeerListeners(peer: CallPeer) {
+    peer.on('signal', this._onSignal.bind(this, peer))
+    peer.on('connect', this._onConnect.bind(this, peer))
+    peer.on('error', this._onError.bind(this, peer))
+    peer.on('track', this._onTrack.bind(this, peer))
+    peer.on('stream', this._onStream.bind(this, peer))
+    peer.on('close', this._onClose.bind(this, peer))
+  }
+
+  /**
+   * @method _unbindPeerListeners
+   * @description Internal function to unbind listeners to the main peer events
+   * @example
+   * this._unbindPeerListeners()
+   */
+  protected _unbindPeerListeners(peer: CallPeer) {
+    peer.removeAllListeners()
   }
 
   /**
@@ -484,8 +900,8 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer signal event
    * @param data Simple Peer signaling data
    */
-  protected _onSignal(data: Peer.SignalData) {
-    this._sendSignal(data)
+  protected _onSignal(peer: CallPeer, data: Peer.SignalData) {
+    this._sendSignal(peer, data)
   }
 
   /**
@@ -493,38 +909,74 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Sends the signaling data through the communication bus
    * @param data Signaling data to send
    */
-  protected _sendSignal(data: Peer.SignalData) {
+  protected async _sendSignal(peer: CallPeer, data: Peer.SignalData) {
     if (!this.p2p) {
       throw new Error('Communication bus not found')
     }
 
-    this.p2p.sendMessage(
+    await this.p2p.sendMessage(
       {
         type: 'SIGNAL',
         payload: {
-          peerId: this.peerId,
+          callId: this.callId === peer.id ? this.localId : this.callId,
           data,
         },
-        sentAt: Date.now(),
+        sentAt: Date.now().valueOf(),
       },
-      this.peerId,
+      peer.id,
     )
   }
 
   /**
-   * @method _onConnect
-   * @description Callback for the Simple Peer signal event
+   * @method send
+   * @description send some data to connected peers
+   * @param type
+   * @param data
+   * @returns {void}
+   * @example
+   * await call.send('foo', 'test')
    */
-  protected _onConnect() {
-    this.emit('CONNECTED', { peerId: this.peerId })
+  async send(type: string, data: any) {
+    await Object.values(this.peers).map(async (peer) => {
+      await peer.send({ peerId: this.localId, type, ...data })
+    })
+  }
+
+  /**
+   * @method _onConnect
+   * @description Callback for the Simple Peer connect event
+   */
+  protected async _onConnect(peer: CallPeer) {
+    this.emit('CONNECTED', {
+      callId: this.callId,
+      peerId: peer.id,
+    })
+    if (!this.screenStreams[this.localId]) {
+      return
+    }
+
+    // tell the peer to start screen sharing
+    const screenStream = this.streams[this.localId]?.screen
+    const screenTrack = screenStream?.getVideoTracks()[0]
+    await this.p2p.sendMessage(
+      {
+        type: 'peer:screenshare',
+        payload: {
+          streamId: screenStream.id,
+          trackId: screenTrack.id,
+        },
+        sentAt: Date.now().valueOf(),
+      },
+      peer.id,
+    )
   }
 
   /**
    * @method _onError
    * @description Callback for the Simple Peer error event
    */
-  protected _onError(error: Error) {
-    this.emit('ERROR', { peerId: this.peerId, error })
+  protected _onError(peer: CallPeer, error: Error) {
+    this.emit('ERROR', { peerId: peer.id, error })
   }
 
   /**
@@ -533,26 +985,34 @@ export class Call extends Emitter<CallEventListeners> {
    * @param track MediaStreamTrack object for the audio/video tracks
    * @param stream MediaStream object for the audio/video stream
    */
-  protected _onTrack(track: MediaStreamTrack, stream: MediaStream) {
+  protected _onTrack(
+    peer: CallPeer,
+    track: MediaStreamTrack,
+    stream: MediaStream,
+  ) {
     const trackMuteListener = () => {
-      this.tracksManager.removeTrack(track.id)
-
-      track.removeEventListener('mute', trackMuteListener)
-
       this.emit('REMOTE_TRACK_REMOVED', {
-        peerId: this.peerId,
+        peerId: peer.id,
         track,
         stream,
+        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
       })
+      track.removeEventListener('mute', trackMuteListener)
     }
 
     track.addEventListener('mute', trackMuteListener)
+    if (!this.tracks[peer.id]) {
+      this.tracks[peer.id] = new Set()
+    }
+    this.tracks[peer.id].add(track)
 
-    this.tracksManager.addTrack(track)
+    this.peerConnected[peer.id] = true
+    this.peerDialingDisabled[peer.id] = true
     this.emit('REMOTE_TRACK_RECEIVED', {
-      peerId: this.peerId,
+      peerId: peer.id,
       track,
       stream,
+      kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
     })
   }
 
@@ -561,19 +1021,26 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer stream event
    * @param stream MediaStream object for the audio/video stream
    */
-  protected _onStream(stream: MediaStream) {
-    this.remoteStream = stream
-    this.emit('STREAM', { peerId: this.peerId, stream })
+  protected _onStream(peer: CallPeer, stream: MediaStream) {
+    if (!this.streams[peer.id]) {
+      this.streams[peer.id] = {}
+    }
+    const kind =
+      this.screenStreams[peer.id] === stream.id
+        ? 'screen'
+        : stream.getTracks()[0].kind
+    this.streams[peer.id][kind] = stream
+    this.emit('STREAM', { peerId: peer.id, stream, kind })
   }
 
   /**
    * @method _onClose
    * @description Callback for the Simple Peer close event
    */
-  protected _onClose() {
-    this.destroy()
-    delete this.signalingBuffer
-    this.emit('HANG_UP', { peerId: this.peerId })
+  protected _onClose(peer: CallPeer) {
+    this.peerConnected[peer.id] = false
+    this._unbindPeerListeners(peer)
+    delete this.peers[peer.id]
   }
 
   /**
@@ -581,12 +1048,65 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on signal event
    * @param message Message containing the signal data
    */
-  protected _onBusSignal(message: { peerId: PeerId; payload: any }) {
-    if (message.payload?.data?.type === 'offer' && !this.signalingBuffer) {
-      this.signalingBuffer = message.payload.data
-      this.emit('INCOMING_CALL', { peerId: this.peerId })
-    } else {
-      this.peer?.signal(message.payload.data)
+  protected async _onBusSignal(message: { peerId: PeerId; payload: any }) {
+    const peerHash = message.peerId.toB58String()
+    this.peerSignals[peerHash] = message.payload.data
+    if (
+      message.payload?.data?.type === 'offer' &&
+      !this.isCallee[peerHash] &&
+      !this.isCaller[peerHash] &&
+      !this.active
+    ) {
+      this.emit('INCOMING_CALL', {
+        peerId: peerHash,
+        callId: this.callId,
+      })
+    }
+
+    const peer = this.peers[peerHash]
+    if (!peer) {
+      return
+    }
+
+    this.peerConnected[peerHash] = true
+    await peer.signal(message.payload.data)
+  }
+
+  /**
+   * @method destroyPeer
+   * @description Destroy a peer
+   * @param peerId
+   * @returns {void}
+   * @example
+   * call.destroyPeer('peerId')
+   */
+  destroyPeer(peerId: string) {
+    if (this.streams[peerId]) {
+      Object.values(this.streams[peerId]).forEach((stream) => {
+        stream.getTracks().forEach((track) => {
+          track.stop()
+        })
+      })
+      delete this.streams[peerId]
+    }
+    const peer = this.peers[peerId]
+    if (peer) {
+      peer.destroy()
+    }
+    delete this.peers[peerId]
+    delete this.peerConnected[peerId]
+    delete this.peerSignals[peerId]
+    delete this.isCaller[peerId]
+    delete this.isCallee[peerId]
+
+    this.peerDetails = this.peerDetails.filter((peer) => peer.id !== peerId)
+
+    if (
+      Object.values(this.peers).filter((p) => p.id !== this.localId).length ===
+      0
+    ) {
+      this.active = false
+      this.destroy()
     }
   }
 
@@ -596,6 +1116,104 @@ export class Call extends Emitter<CallEventListeners> {
    * before the call started
    */
   protected _onBusRefuse() {
-    this._onClose()
+    this.deny()
+  }
+
+  /**
+   * @method _onBusHangup
+   * @description Callback for the on hangup event. Used for the hang up
+   * after the call started
+   */
+  protected _onBusHangup({ peerId }: { peerId: PeerId }) {
+    const peerHash = peerId.toB58String()
+    this.peerDialingDisabled[peerHash] = true
+    this.isCallee[peerHash] = false
+    this.isCaller[peerHash] = false
+    this.destroyPeer(peerHash)
+  }
+
+  /**
+   * @method _onBusScreenshare
+   * @description Callback for the on screenshare event
+   * @param peerId
+   * @param payload
+   */
+  protected _onBusScreenshare({
+    peerId,
+    payload: { streamId },
+  }: {
+    peerId: PeerId
+    payload: { streamId: string }
+  }) {
+    const peer = this.peers[peerId.toB58String()]
+    if (!peer) {
+      return
+    }
+    // if the stream has already been stored as video, move it to screen
+    if (this.streams[peer.id]?.video?.id === streamId) {
+      this.streams[peer.id].screen = this.streams[peer.id].video
+      delete this.streams[peer.id].video
+    }
+    this.screenStreams[peer.id] = streamId
+  }
+
+  /**
+   * @method _onBusMute
+   * @description Callback for the on mute event
+   */
+  protected _onBusMute({
+    peerId,
+    payload: { kind, trackId },
+  }: {
+    peerId: PeerId
+    payload: { kind: string; trackId: string }
+  }) {
+    const peerHash = peerId.toB58String()
+    this.emit('REMOTE_TRACK_MUTED', {
+      peerId: peerHash,
+      kind,
+      trackId,
+    })
+    Object.values(this.streams[peerId.toB58String()] || {}).forEach(
+      (stream) => {
+        const track = stream.getTrackById(trackId)
+        if (!track) return
+        track.enabled = false
+      },
+    )
+  }
+
+  /**
+   * @method _onBusMute
+   * @description Callback for the on unmute event
+   */
+  protected _onBusUnmute({
+    peerId,
+    payload: { kind, trackId },
+  }: {
+    peerId: PeerId
+    payload: { kind: string; trackId: string }
+  }) {
+    const peerHash = peerId.toB58String()
+    this.emit('REMOTE_TRACK_UNMUTED', {
+      peerId: peerHash,
+      kind,
+      trackId,
+    })
+    Object.values(this.streams[peerId.toB58String()] || {}).forEach(
+      (stream) => {
+        const track = stream.getTrackById(trackId)
+        if (!track) return
+        track.enabled = true
+      },
+    )
+  }
+
+  /**
+   * @method _onBusMute
+   * @description Callback for the on destroy event
+   */
+  protected _onBusDestroy({ peerId }: { peerId: PeerId }) {
+    this.destroyPeer(peerId.toB58String())
   }
 }

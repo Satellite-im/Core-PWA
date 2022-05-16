@@ -3,6 +3,9 @@ import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
+import { Alert } from '~/libraries/ui/Alerts'
+import { Fil } from '~/libraries/Files/Fil'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 export enum ThemeNames {
   DEFAULT = 'default',
   MOONLESS = 'moonless_night',
@@ -100,9 +103,10 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USERPROFILE = 'userProfile',
-  CALLTOACTION = 'callToAction',
+  USER_PROFILE = 'userProfile',
+  CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CROP = 'crop',
 }
 
 export interface EnhancerInfo {
@@ -141,18 +145,6 @@ export enum SettingsRoutes {
   NETWORK = 'network',
   REALMS = 'realms',
 }
-// | 'personalize'
-// | 'profile'
-// | 'audio'
-// | 'keybinds'
-// | 'accounts'
-// | 'privacy'
-// | 'developer'
-// | 'info'
-// | 'notifications'
-// | 'storage'
-// | 'network'
-// | 'realms'
 
 export interface ContextMenuItem {
   text: string | TranslateResult
@@ -169,6 +161,7 @@ export interface UIState {
   contextMenuValues: ContextMenuItem[]
   quickProfile: object | boolean
   userProfile: object
+  notifications: Alert[]
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean
@@ -178,7 +171,9 @@ export interface UIState {
   showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean
-  modals: object
+  modals: {
+    [key: string]: boolean
+  }
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
@@ -205,16 +200,16 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: string[]
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
   theme: {
     base: Theme
     flair: Flair
   }
-  isLoadingFileIndex: boolean
-  renameCurrentName?: string
-  filePreview?: string
+  filesUploadStatus: string
+  renameItem?: Item
+  filePreview?: Fil
+  fileDownloadList: string[]
   chatImageOverlay?: ImageMessage
   fileSort: FileSort
   swiperSlideIndex: number

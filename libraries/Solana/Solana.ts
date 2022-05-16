@@ -99,7 +99,6 @@ export async function waitForAccount(
   accountKey: PublicKey,
 ) {
   while (true) {
-    await sleep(3000)
     const accountInfo = await connection.getAccountInfo(accountKey)
     if (accountInfo === null) {
       continue

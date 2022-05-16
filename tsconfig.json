@@ -27,5 +27,15 @@
       "jest"
     ]
   },
-  "exclude": ["node_modules", ".nuxt", "dist", "cypress"]
+  "exclude": [
+    "node_modules",
+    ".vscode",
+    ".nuxt",
+    "dist",
+    "cypress",
+    ".husky",
+    ".github",
+    "electron",
+    "android"
+  ]
 }

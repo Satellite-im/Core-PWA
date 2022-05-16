@@ -58,18 +58,16 @@
         :size="6"
         :text="$t('pages.settings.profile.phrase.subtitle')"
       />
+      <InteractablesButton
+        :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
+        size="normal"
+        type="primary"
+        :action="togglePhrase"
+      />
       <div v-if="showPhrase" class="tag-wrap">
         <div v-for="word, i in splitPhrase" class="tag-container">
           <TypographyNumberedWord :word="word" :number="i + 1" />
         </div>
-      </div>
-      <div v-else>
-        <InteractablesButton
-          text="Reveal Phrase"
-          size="normal"
-          type="primary"
-          :action="togglePhrase"
-        />
       </div>
     </div>
   </div>

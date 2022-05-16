@@ -49,11 +49,11 @@ const mutations = {
     state.all.push(friend)
   },
   setActive(state: FriendsState, friend: Friend) {
-    state.all = state.all.map((f) => ({
-      ...f,
-      activeChat: f.address === friend.address,
-    }))
+    state.activeConversation = { type: 'friend', target: friend }
   },
+  // setActiveGroup(state: FriendsState, groupId: string) {
+  //   state.activeGroup = groupId
+  // },
   setStored(state: FriendsState, friend: Friend, isStored: boolean = true) {
     state.all = state.all.map((f) => ({
       ...f,

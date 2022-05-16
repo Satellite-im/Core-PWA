@@ -11,7 +11,7 @@
       <TypographyHorizontalRuleText :value="group.at.toString()" />
     </div>
   </div>
-  <div v-if="textile.messageLoading" class="zoop">
+  <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
     <UiLoadersLoadingBar />
   </div>
 </div>

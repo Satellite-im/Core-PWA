@@ -76,6 +76,8 @@ export default Vue.extend({
             ?.lastUpdate ?? 0
         )
       },
+      textilePubkey: (state) =>
+        (state as RootState).accounts?.details?.textilePubkey || '',
     }),
     ...mapGetters('textile', ['getConversation']),
     lastMessage() {
@@ -126,6 +128,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     clearInterval(this.$data.timestampRefreshInterval)
+    this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
     testFunc() {
@@ -135,7 +138,6 @@ export default Vue.extend({
       this.isLoading = true
       try {
         await this.$store.dispatch('friends/removeFriend', this.user)
-        this.$router.replace('/chat/direct')
       } catch (e) {
         this.$toast.success(
           this.$t('errors.friends.friend_not_removed') as string,
@@ -172,23 +174,25 @@ export default Vue.extend({
       }
     },
     getDescriptionFromMessage(message: Message) {
+      const sender = message.from === this.textilePubkey ? 'me' : 'user'
+
       switch (message.type) {
         case MessagingTypesEnum.TEXT:
           return (message as TextMessage).payload
         case MessagingTypesEnum.FILE:
-          return this.$t('messaging.user_sent', {
+          return this.$t(`messaging.user_sent.${sender}`, {
             msgType: 'file',
           })
         case MessagingTypesEnum.GLYPH:
-          return this.$t('messaging.user_sent', {
+          return this.$t(`messaging.user_sent.${sender}`, {
             msgType: 'glyph',
           })
         case MessagingTypesEnum.IMAGE:
-          return this.$t('messaging.user_sent_image', {
+          return this.$t(`messaging.user_sent_image.${sender}`, {
             msgType: 'image',
           })
         default:
-          return this.$t('messaging.user_sent_something')
+          return this.$t(`messaging.user_sent_something.${sender}`)
       }
     },
   },

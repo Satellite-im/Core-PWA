@@ -1,21 +1,27 @@
-<div :class="`alert ${localAlert.state} ${hidden ? 'hidden' : 'shown'}`">
+<div :class="`alert  ${hidden ? 'hidden' : 'shown'}`">
   <div>
     <!--Optional alert image -->
-    <img v-if="localAlert.content.image" :src="localAlert.content.image" />
+    <img v-if="alert.content.image" :src="alert.content.image" />
+    <UiCircle
+      v-if="!alert.content.image"
+      type='random'
+      data-cy="circle-without-picture"
+    />
   </div>
-  <div>
+  <div class='info-holder'>
     <div class="a-heading">
       <!--Alert title-->
-      <TypographySubtitle :size="6" :text="localAlert.content.title" />
+      <TypographySubtitle :size="6" :text="alert.content.title" />
       <!--Alert timestamp-->
       <TypographyText
-        :text="$dayjs(localAlert.at).fromNow()"
+        :text="$dayjs(alert.at).fromNow()"
         class="timestamp"
       />
     </div>
     <!--Alert description-->
     <div class="description">
-      <TypographyText :text="localAlert.content.description" />
+      <TypographyText
+        :text="setTranslateText" />
     </div>
   </div>
   <InteractablesClose :action="dismiss" />

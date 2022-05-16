@@ -1,10 +1,14 @@
+import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
 import { Fil } from '../Fil'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemErrors } from '../errors/Errors'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 
 Date.now = jest.fn(() => 1645617999076)
 const dateNow = Date.now()
+jest.mock('uuid')
+uuidv4.mockImplementation(() => 'testid')
 
 describe('Test FileSystem Directory', () => {
   const mockFileData = {

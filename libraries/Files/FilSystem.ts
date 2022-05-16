@@ -1,4 +1,5 @@
 import { matchSorter } from 'match-sorter'
+import { FileSortEnum } from '../Enums/enums'
 import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
@@ -12,6 +13,7 @@ import {
 } from './types/filesystem'
 import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
+import { FileSort } from '~/store/ui/types'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })
@@ -99,22 +101,39 @@ export class FilSystem {
 
   /**
    * @getter flat
-   * @returns {ExportItem[]} flattened list of files in order to check if file exists
+   * @returns {Fil[]} flattened list of files
    */
-  get flat(): ExportItem[] {
-    const flatDeepByKey = (
-      data: Array<ExportItem | ExportFile>,
-      key: keyof ExportDirectory | keyof ExportFile,
-    ) => {
-      return data.reduce((prev, el) => {
-        prev.push(el)
-        if (el[key]) {
-          prev.push(...flatDeepByKey(el[key], key))
-        }
-        return prev
-      }, [])
-    }
-    return flatDeepByKey(this.export.content, 'children')
+  get flat(): Fil[] {
+    return this._flatDeepByKey(this.root.content, 'content').filter(
+      (item: Item) => item instanceof Fil,
+    )
+  }
+
+  /**
+   * @getter recentFiles
+   * @returns {Fil[]} most recent 15 files, sorted by modified date
+   */
+  get recentFiles(): Fil[] {
+    return this.flat
+      .sort((a: Item, b: Item) => b.modified - a.modified)
+      .slice(0, 14)
+  }
+
+  /**
+   * @method _flatDeepByKey
+   * @description recursively flattens all directories
+   * @param {Item[]} data current directory items (starting with root, then calls itself when a child dir is found)
+   * @param {keyof Directory} key in this case, 'content' getter
+   * @returns {Item[]} flattened list of files and directories
+   */
+  private _flatDeepByKey(data: Item[], key: keyof Directory) {
+    return data.reduce((prev, el) => {
+      prev.push(el)
+      if (el[key]) {
+        prev.push(...this._flatDeepByKey(el[key], key))
+      }
+      return prev
+    }, [])
   }
 
   /**
@@ -122,13 +141,7 @@ export class FilSystem {
    * @returns {number} total size of all tracked files
    */
   get totalSize(): number {
-    return this.flat.reduce(
-      (total, curr) =>
-        (Object.values(FILE_TYPE) as string[]).includes(curr.type)
-          ? total + (curr as ExportFile).size
-          : total,
-      0,
-    )
+    return this.flat.reduce((total, curr) => total + curr.size, 0)
   }
 
   /**
@@ -137,6 +150,36 @@ export class FilSystem {
    */
   get percentStorageUsed(): number {
     return (this.totalSize / Config.personalFilesLimit) * 100
+  }
+
+  /**
+   * @method sortContent
+   * @param {FileSort} sort current sort key and asc/desc boolean
+   * @param {Item[]} items to be sorted, will either be current directory or special list (recent)
+   * @returns {Item[]} array of sorted content
+   */
+  sortContent(sort: FileSort, items: Item[]): Item[] {
+    const key = sort.category
+    if (key === FileSortEnum.SIZE) {
+      return items.sort(
+        sort.asc
+          ? (a: Item, b: Item) => a[key] - b[key]
+          : (a: Item, b: Item) => b[key] - a[key],
+      )
+    }
+    if (key === FileSortEnum.MODIFIED) {
+      return items.sort(
+        sort.asc
+          ? (a: Item, b: Item) => b[key] - a[key]
+          : (a: Item, b: Item) => a[key] - b[key],
+      )
+    }
+
+    return items.sort(
+      sort.asc
+        ? (a: Item, b: Item) => a[key].localeCompare(b[key])
+        : (a: Item, b: Item) => b[key].localeCompare(a[key]),
+    )
   }
 
   /**
@@ -157,6 +200,8 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
+        nsfw,
       } = item
       return {
         id,
@@ -168,6 +213,8 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
+        nsfw,
       }
     }
     const { id, name, liked, shared, type, modified } = item
@@ -213,6 +260,8 @@ export class FilSystem {
         description,
         modified,
         thumbnail,
+        extension,
+        nsfw,
       } = item as ExportFile
       const type = item.type as FILE_TYPE
       this.createFile({
@@ -225,6 +274,8 @@ export class FilSystem {
         type,
         modified,
         thumbnail,
+        extension,
+        nsfw,
       })
     }
     if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
@@ -248,7 +299,6 @@ export class FilSystem {
   public createFile({
     id,
     name,
-    file,
     size,
     liked,
     shared,
@@ -256,10 +306,11 @@ export class FilSystem {
     type,
     modified,
     thumbnail,
+    extension,
+    nsfw,
   }: {
     id?: string
     name: string
-    file?: File
     size: number
     liked?: boolean
     shared?: boolean
@@ -267,11 +318,12 @@ export class FilSystem {
     type?: FILE_TYPE
     modified?: number
     thumbnail?: string
+    extension?: string
+    nsfw: boolean
   }): Fil | null {
     const newFile = new Fil({
       id,
       name,
-      file,
       size,
       liked,
       shared,
@@ -279,6 +331,8 @@ export class FilSystem {
       type,
       modified,
       thumbnail,
+      extension,
+      nsfw,
     })
     const inserted = this.addChild(newFile)
     return inserted ? newFile : null
@@ -313,18 +367,26 @@ export class FilSystem {
   /**
    * @method addChild
    * @argument {Item} child item to add to the filesystem
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {boolean} returns truthy if the child was added
    */
-  public addChild(child: Item): boolean {
+  public addChild(child: Item, parentDir?: Directory): boolean {
+    if (parentDir) {
+      return parentDir.addChild(child)
+    }
     return this.currentDirectory.addChild(child)
   }
 
   /**
    * @method getChild
    * @argument {string} childName name of the child to fetch
-   * @returns {Directory | Item} returns directory or Fil
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
+   * @returns {Item} Directory or Fil in question
    */
-  public getChild(childName: string): Item {
+  public getChild(childName: string, parentDir?: Directory | null): Item {
+    if (parentDir) {
+      return parentDir.getChild(childName)
+    }
     return this.currentDirectory.getChild(childName)
   }
 
@@ -342,9 +404,13 @@ export class FilSystem {
   /**
    * @method removeChild
    * @argument {string} childName name of the child to remove
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {boolean} returns truthy if child was removed
    */
-  public removeChild(childName: string): boolean {
+  public removeChild(childName: string, parentDir?: Directory | null): boolean {
+    if (parentDir) {
+      return parentDir.removeChild(childName)
+    }
     return this.currentDirectory.removeChild(childName)
   }
 
@@ -352,17 +418,22 @@ export class FilSystem {
    * @method removeChild
    * @argument {string} currentName name of the child to remove
    * @argument {string} newName
+   * @argument {Directory | null} parentDir optional parent directory, this is needed for special routes like recent files
    * @returns {Item | null} returns new item or null if no item exists
    */
-  public renameChild(currentName: string, newName: string): Item | null {
-    const item = this.getChild(currentName)
+  public renameChild(
+    currentName: string,
+    newName: string,
+    parentDir?: Directory | null,
+  ): Item | null {
+    const item = this.getChild(currentName, parentDir)
     if (!item) {
       return null
     }
 
     item.name = newName
-    this.removeChild(currentName)
-    this.addChild(item)
+    this.removeChild(currentName, parentDir)
+    this.addChild(item, parentDir)
     return item
   }
 

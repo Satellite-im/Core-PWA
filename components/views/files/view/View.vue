@@ -1,7 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -10,8 +10,7 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { filetypeextension } from 'magic-bytes.js'
-import { Fil } from '~/libraries/Files/Fil'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -22,77 +21,42 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  data() {
-    return {
-      file: undefined as Fil | undefined,
-      name: '' as string,
-      progress: 0 as number,
-    }
-  },
   computed: {
-    ...mapState(['ui']),
-    isLoading(): boolean {
-      return this.progress >= 0 && this.progress < 100
+    ...mapState({
+      file: (state) => (state as RootState).ui.filePreview,
+      fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
+      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
+    isDownloading(): boolean {
+      return this.file?.name
+        ? this.fileDownloadList.includes(this.file.name)
+        : false
     },
-  },
-  /**
-   */
-  async created() {
-    this.file = this.$FileSystem.getChild(this.ui.filePreview) as Fil
-    this.name = this.file?.name
-
-    // if no file data available, pull encrypted file from textile bucket
-    if (!this.file.file) {
-      const fsFil: Fil = this.$FileSystem.getChild(this.file.name) as Fil
-      fsFil.file = await this.$TextileManager.bucket?.pullFile(
-        this.file.id,
-        this.file.name,
-        this.file.type,
-        this.file.size,
-        this.setProgress,
-      )
-    }
-    // file extension according to file name
-    const fileExt = this.file.name
-      .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
-      .toLowerCase()
-    // you only need the first 256 bytes or so to confirm file type
-    const buffer = new Uint8Array(
-      await this.file.file.slice(0, 256).arrayBuffer(),
-    )
-    // file extension according to byte data
-    const dataExt = filetypeextension(buffer)[0]
-
-    // magicbytes declares svg as xml, so we need to manually check
-    const decodedFile = new TextDecoder().decode(buffer)
-    if (decodedFile.includes('xmlns="http://www.w3.org/2000/svg"')) {
-      // if corrupted, set .svg extension
-      if (fileExt !== 'svg') {
-        this.name += '.svg'
-      }
-      return
-    }
-
-    // if corrupted txt file
-    if (!dataExt && fileExt !== 'txt') {
-      this.name += '.txt'
-      return
-    }
-
-    // if corrupted file with wrong extension, force the correct one
-    if (fileExt !== dataExt && dataExt) {
-      this.name += `.${dataExt}`
-    }
   },
   methods: {
     /**
-     * @method setProgress
-     * @description set progress (% out of 100) while file is being pulled from textile bucket. passed as a callback
-     * @param num current progress in bytes
-     * @param size total file size in bytes
+     * @method download
+     * @description download file using stream saver, apply original extension if it was removed
+     * add name to store so the user doesn't start another download of the same file
+     * also takes a bit to get started for large files, this adds loading indicator
      */
-    setProgress(num: number, size: number) {
-      this.progress = Math.floor((num / size) * 100)
+    async download() {
+      if (this.file) {
+        this.$store.commit('ui/addFileDownload', this.file.name)
+        const fileExt = this.file.name
+          .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+          .toLowerCase()
+
+        await this.$TextileManager.bucket?.pullFileStream(
+          this.file.id,
+          this.file.extension === fileExt
+            ? this.file.name
+            : (this.file.name += `.${this.file.extension}`),
+          this.file.size,
+        )
+        this.$store.commit('ui/removeFileDownload', this.file.name)
+      }
     },
     /**
      * @method share

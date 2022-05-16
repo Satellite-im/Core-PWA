@@ -89,7 +89,6 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
-    { src: '~/plugins/thirdparty/vuetify.ts' },
     { src: '~/plugins/thirdparty/swiper.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
@@ -202,6 +201,9 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
       config.node = {
         fs: 'empty',
         encoding: 'empty',
@@ -234,6 +236,7 @@ export default defineNuxtConfig({
     },
     transpile: ['libp2p'],
     babel: {
+      plugins: ['lodash'],
       compact: true,
     },
   },
@@ -244,7 +247,7 @@ export default defineNuxtConfig({
   },
   webpack: {
     watchOptions: {
-      ignored: '/node_modules/',
+      ignored: ['/node_modules/', '/.vscode/'],
     },
     stats: 'verbose',
   },

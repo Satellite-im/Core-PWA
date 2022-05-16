@@ -1,18 +1,15 @@
 <template src="./Create.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { UserRegistrationData } from '~/types/ui/user'
-import { isEmbeddableImage } from '~/utilities/FileType'
+import Vue from 'vue'
+import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
+import blobToBase64 from '~/utilities/BlobToBase64'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+const convert = require('heic-convert')
 
 export default Vue.extend({
   name: 'CreateUser',
-  props: {
-    onConfirm: {
-      type: Function as PropType<(userData: UserRegistrationData) => void>,
-      required: true,
-    },
-  },
   data() {
     return {
       showCropper: false,
@@ -37,6 +34,27 @@ export default Vue.extend({
       }
       return true
     },
+    /**
+     * @method acceptableImageFormats
+     * @description embeddable types plus HEIC since we can convert
+     * ios doesn't support advanced <input> accept
+     * @returns {string} comma separated list of types
+     */
+    acceptableImageFormats(): string {
+      return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
+        ? 'image/*'
+        : [
+            FILE_TYPE.APNG,
+            FILE_TYPE.AVIF,
+            FILE_TYPE.GIF,
+            FILE_TYPE.JPG,
+            FILE_TYPE.PNG,
+            FILE_TYPE.WEBP,
+            FILE_TYPE.SVG,
+            FILE_TYPE.HEIC,
+            FILE_TYPE.HEIF,
+          ].join(',')
+    },
   },
   methods: {
     /**
@@ -54,65 +72,66 @@ export default Vue.extend({
      * @example
      */
     async selectImage(e: Event) {
+      this.error = ''
       this.isLoading = true
-
       const target = e.target as HTMLInputElement
 
-      if (target.value === null) {
+      // make sure there's file data available
+      if (target.value === null || !target.files?.length) {
         this.isLoading = false
         return
       }
 
-      const files = target.files
-
-      if (!files?.length) {
-        this.isLoading = false
-        return
-      }
-
-      const isEmbeddable = await isEmbeddableImage(files[0])
-
-      if (!isEmbeddable) {
-        this.error = this.$t('errors.sign_in.invalid_file') as string
-        this.isLoading = false
-        return
-      }
+      // only one file allowed on this upload, this is an easier variable name to deal with
+      let file = target.files[0]
 
       // stop upload if picture is too large for nsfw scan
-      if (files[0].size > this.$Config.nsfwPictureLimit) {
+      if (file.size > this.$Config.nsfwPictureLimit) {
         this.error = this.$t('errors.accounts.file_too_large') as string
         this.isLoading = false
         return
       }
 
-      // stop upload if picture is nsfw
-      try {
-        const nsfw = await this.$Security.isNSFW(files[0])
-        if (nsfw) {
-          this.error = this.$t('errors.chat.contains_nsfw') as string
-          this.isLoading = false
-          return
-        }
-      } catch (err: any) {
-        this.$Logger.log('error', 'file upload error')
-        this.error = this.$t(err.message) as string
+      // if heic, convert and then set file to png version
+      if (await isHeic(file)) {
+        const buffer = new Uint8Array(await file.arrayBuffer())
+        const oBuffer = await convert({
+          buffer,
+          format: 'PNG', // output format
+          quality: 1,
+        })
+        file = new File([oBuffer.buffer], 'profilePic.png', {
+          type: 'image/png',
+        })
+      }
+
+      // if invalid file type, prevent upload. this needs to be added since safari mobile doesn't fully support <input> accept
+      if (!(await isEmbeddableImage(file))) {
+        this.error = this.$t('errors.accounts.invalid_file') as string
         this.resetFileInput()
         this.isLoading = false
         return
       }
 
-      this.error = ''
-
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          this.imageUrl = e.target.result.toString()
-          this.toggleCropper()
+      // if nsfw, prevent upload
+      try {
+        if (await this.$Security.isNSFW(file)) {
+          this.error = this.$t('errors.chat.contains_nsfw') as string
+          this.resetFileInput()
           this.isLoading = false
+          return
         }
+      } catch (e: any) {
+        this.$Logger.log('error', 'file upload error', e)
+        this.error = this.$t('errors.accounts.invalid_file') as string
+        this.resetFileInput()
+        this.isLoading = false
+        return
       }
 
-      reader.readAsDataURL(files[0])
+      this.imageUrl = await blobToBase64(file)
+      this.toggleCropper()
+      this.isLoading = false
     },
     /**
      * @method resetFileInput
@@ -136,7 +155,6 @@ export default Vue.extend({
      */
     setCroppedImage(image: string) {
       this.croppedImage = image
-
       this.resetFileInput()
     },
     /**
@@ -147,19 +165,20 @@ export default Vue.extend({
      */
     confirm(e: Event) {
       e.preventDefault()
-      if (this.isLoading) return false
+      if (this.isLoading) {
+        return false
+      }
       if (!this.accountValidLength) {
         this.error = this.$t('user.registration.username_error') as string
         return false
       }
       this.error = ''
 
-      this.onConfirm({
+      this.$emit('confirm', {
         username: this.name,
         photoHash: this.croppedImage,
         status: this.status,
       })
-      return true
     },
   },
 })

@@ -2,8 +2,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
+import { RootState } from '~/types/store/store'
+import { Directory } from '~/libraries/Files/Directory'
 
 export default Vue.extend({
   components: {
@@ -18,14 +20,27 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
+      currentName: '' as string,
+      parent: null as Directory | null,
       error: '' as string,
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      renameItem: (state) => (state as RootState).ui.renameItem,
+    }),
+    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   mounted() {
-    this.text = this.ui.renameCurrentName
+    if (!this.renameItem) {
+      this.error = this.$t('pages.files.errors.lost') as string
+      return
+    }
+    // extract data we need from store and then clear to avoid vuex outside mutation error
+    this.text = this.renameItem.name
+    this.currentName = this.renameItem.name
+    this.parent = this.renameItem.parent
+    this.$store.commit('ui/setRenameItem', undefined)
     this.$nextTick(() => {
       // extension string including .
       const extString = this.text.slice(
@@ -48,16 +63,18 @@ export default Vue.extend({
      */
     async rename() {
       try {
-        this.$FileSystem.renameChild(this.ui.renameCurrentName, this.text)
+        this.$FileSystem.renameChild(this.currentName, this.text, this.parent)
       } catch (e: any) {
         this.error = this.$t(e?.message) as string
         return
       }
       this.closeModal()
-      this.$store.commit('ui/setIsLoadingFileIndex', true)
+      this.$store.commit(
+        'ui/setFilesUploadStatus',
+        this.$t('pages.files.status.index'),
+      )
       await this.$TextileManager.bucket?.updateIndex(this.$FileSystem.export)
-      this.$store.commit('ui/setIsLoadingFileIndex', false)
-      this.$toast.show(this.$t('pages.files.rename') as string)
+      this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },
 })

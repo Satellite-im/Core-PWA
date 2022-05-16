@@ -5,6 +5,7 @@ import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
 import { Fil } from '~/libraries/Files/Fil'
+import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)
@@ -2157,648 +2158,6 @@ describe('mutations.default.sendMessage', () => {
   })
 })
 
-describe.skip('mutations.default.addReaction', () => {
-  test('0', () => {
-    const object: any = [
-      [
-        'An error occurred processing your request.',
-        'No error',
-        'Wait time out reached, while waiting for results',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-      [
-        'cannot be found.',
-        'Counterparty sent error: %s',
-        'Could not find a submission object for message from xqueue',
-        'Could not find a grader object for message from xqueue',
-      ],
-      [
-        'Error selecting from database',
-        '',
-        'No error',
-        'Error selecting from database',
-      ],
-      [
-        'Uploaded file was not added to the resource. ',
-        'Error:',
-        'No response',
-        'Error in retrieving email.',
-      ],
-    ]
-    const object2: any = [
-      [
-        'Internal Server Error\n',
-        'does not exist',
-        '\n\nThe first error message:\n',
-        'No response',
-      ],
-      [
-        'Uploaded file was not added to the resource. ',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'TypeError exception should be raised',
-        'No os dependencies found. ',
-      ],
-      [
-        'Uploaded file was not added to the resource. ',
-        'Unable to allocate address',
-        'To force deletion of the LAG use delete_force: True',
-        'Message recipient is not the grader, the person being graded, or the controller',
-      ],
-      [
-        'Message originator is not the grader, or the person being graded',
-        'Error:',
-        'Error getting key from: %s',
-        'Unable to allocate address',
-      ],
-    ]
-    const object3: any = [
-      [
-        '\n\nThe first error message:\n',
-        'Exception not raised: %s',
-        '<error_message>%s</error_message>',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'Could not find a grader object for message from xqueue',
-        'Unable to allocate address',
-        'Counterparty sent error: %s',
-        'Invalid [%s] value. %s',
-      ],
-      [
-        'missing encoding',
-        'New Error ',
-        'cannot be found.',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-      [
-        'Message recipient is the same as originator',
-        "Top level object in 'override.yml' needs to be an object",
-        'No os dependencies found. ',
-        'Connection is closed',
-      ],
-    ]
-    const object4: any = [
-      [
-        'No os dependencies found. ',
-        'Unknown Error',
-        'Could not find an existing submission in location.  rubric is original.',
-        'There is a mismatch',
-      ],
-      [
-        '\n\nThe first error message:\n',
-        'Message recipient is the same as originator',
-        'Invalid Invitation Token.',
-        'Could not find an existing submission in location.  rubric is original.',
-      ],
-      [
-        'unexpected error',
-        'Internal Server Error\n',
-        'Unknown Error',
-        'TypeError exception should be raised',
-      ],
-      [
-        'Grader id does not match submission id that was passed in',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'No os dependencies found. ',
-        'cannot be found.',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const result: any = mutations.default.addReaction(
-      { messages: object5, isReacted: true },
-      {
-        id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
-        groupID: 'bc23a9d531064583ace8f67dad60f6bb',
-        replyID: '9876',
-        messageID: 'c466a48309794261b64a4f02cfcc3d64',
-        emoji: 'Jean-Philippe',
-        reactor: {
-          reactions: [
-            '9876',
-            'bc23a9d531064583ace8f67dad60f6bb',
-            'da7588892',
-            'c466a48309794261b64a4f02cfcc3d64',
-          ],
-          reactors: [false, true, false, true],
-        },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('1', () => {
-    const object: any = [
-      [
-        'does not exist',
-        'This is an exception, voilà',
-        'Unable to allocate address',
-        'Missing FileUri configuration',
-      ],
-      ['No error', 'does not exist', 'Error:', 'unexpected error'],
-      [
-        'Could not find an existing submission in location.  rubric is original.',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Connection is closed',
-        "Top level object in 'override.yml' needs to be an object",
-      ],
-      [
-        'Counterparty sent error: %s',
-        'Ran out of iterations',
-        'Warning: ',
-        "Top level object in 'override.yml' needs to be an object",
-      ],
-    ]
-    const object2: any = [
-      [
-        'Uploaded file was not added to the resource. ',
-        'Connection is closed',
-        'Bad Authentication data',
-        'Message originator is not the grader, or the person being graded',
-      ],
-      [
-        'No error',
-        'Could not find a grader object for message from xqueue',
-        'Could not find an existing submission in location.  rubric is original.',
-        'Unknown Error',
-      ],
-      [
-        'cannot be found.',
-        "Top level object in 'override.yml' needs to be an object",
-        '',
-        'Connection is closed',
-      ],
-      [
-        'does not exist',
-        'the specified credentials were rejected by the server',
-        'No error',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-    ]
-    const object3: any = [
-      [
-        'No updates are to be performed.',
-        'This is an exception, voilà',
-        'New Error ',
-        'Unknown error',
-      ],
-      [
-        'the specified credentials were rejected by the server',
-        'No os dependencies found. ',
-        'Warning: ',
-        'Sorry, This video cannot be accessed via this website',
-      ],
-      [
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Unable to allocate address',
-        'Could not find a submission object for message from xqueue',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'Connection is closed',
-        'The app does not exist',
-        'Unknown Error',
-        'Error getting key from: %s',
-      ],
-    ]
-    const object4: any = [
-      [
-        'No os dependencies found. ',
-        'Error:',
-        'Empty name specified',
-        'Sorry, This video cannot be accessed via this website',
-      ],
-      [
-        'the specified credentials were rejected by the server',
-        'This is an exception, voilà',
-        'unexpected error',
-        'does not exist',
-      ],
-      [
-        'New Error ',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Wait time out reached, while waiting for results',
-        'No updates are to be performed.',
-      ],
-      [
-        'cannot be found.',
-        'Uploaded file was not added to the resource. ',
-        'TypeError exception should be raised',
-        'No updates are to be performed.',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const result: any = mutations.default.addReaction(
-      { messages: object5, isReacted: false },
-      {
-        id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
-        groupID: '9876',
-        replyID: 'bc23a9d531064583ace8f67dad60f6bb',
-        messageID: '9876',
-        emoji: 'George',
-        reactor: {
-          reactions: [
-            'c466a48309794261b64a4f02cfcc3d64',
-            'bc23a9d531064583ace8f67dad60f6bb',
-            'da7588892',
-            '9876',
-          ],
-          reactors: [true, true, true, true],
-        },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('2', () => {
-    const object: any = [
-      [
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Invalid Invitation Token.',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Sorry, The video you are looking for does not exist.',
-      ],
-      [
-        'No response',
-        'Error in retrieving email.',
-        'missing encoding',
-        'Invalid [%s] value. %s',
-      ],
-      [
-        'does not exist',
-        'Invalid [%s] value. %s',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Mock Error Message',
-      ],
-      [
-        'No os dependencies found. ',
-        'Could not find an existing submission in location.  rubric is original.',
-        'Message recipient is the same as originator',
-        'Message originator is not the grader, or the person being graded',
-      ],
-    ]
-    const object2: any = [
-      [
-        'Bad Authentication data',
-        'Error:',
-        'No os dependencies found. ',
-        'No error',
-      ],
-      [
-        'Invalid Invitation Token.',
-        'invalid option',
-        'Unknown Error',
-        'Error selecting from database',
-      ],
-      [
-        'No response',
-        'Unable to allocate address',
-        '\n\nThe first error message:\n',
-        'Unable to allocate address',
-      ],
-      [
-        'Wait time out reached, while waiting for results',
-        'Grader id does not match submission id that was passed in',
-        'No os dependencies found. ',
-        'Internal Server Error\n',
-      ],
-    ]
-    const object3: any = [
-      [
-        'The line-by-line profiler can only be used in dev.',
-        'To force deletion of the LAG use delete_force: True',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Internal Server Error\n',
-      ],
-      [
-        'Invalid Invitation Token.',
-        'unexpected error',
-        'the specified credentials were rejected by the server',
-        'Unable to allocate address',
-      ],
-      [
-        'New Error ',
-        'There is a mismatch',
-        'Invalid Invitation Token.',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-      [
-        'To force deletion of the LAG use delete_force: True',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        '',
-        'Wait time out reached, while waiting for results',
-      ],
-    ]
-    const object4: any = [
-      [
-        'Could not find a submission object for message from xqueue',
-        'Error getting key from: %s',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'cannot be found.',
-      ],
-      ['No response', 'Unknown Error', 'No response', 'Warning: '],
-      [
-        'Could not find a submission object for message from xqueue',
-        'Invalid Invitation Token.',
-        'New Error ',
-        'The app does not exist',
-      ],
-      [
-        'Internal Server Error\n',
-        'No updates are to be performed.',
-        'missing encoding',
-        'Uploaded file was not added to the resource. ',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const result: any = mutations.default.addReaction(
-      { messages: object5, isReacted: true },
-      {
-        id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
-        groupID: 'bc23a9d531064583ace8f67dad60f6bb',
-        replyID: 'bc23a9d531064583ace8f67dad60f6bb',
-        messageID: 'da7588892',
-        emoji: 'Pierre Edouard',
-        reactor: {
-          reactions: [
-            '9876',
-            'c466a48309794261b64a4f02cfcc3d64',
-            'bc23a9d531064583ace8f67dad60f6bb',
-            '12345',
-          ],
-          reactors: [true, true, true, true],
-        },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('3', () => {
-    const object: any = [
-      [
-        'the specified credentials were rejected by the server',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Unable to allocate address',
-        'Could not find a grader object for message from xqueue',
-      ],
-      [
-        'Message originator is not the grader, or the person being graded',
-        'Ran out of iterations',
-        'No updates are to be performed.',
-        'There is a mismatch',
-      ],
-      [
-        'Mock Error Message',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Mock Error Message',
-        'Connection is closed',
-      ],
-      [
-        'missing encoding',
-        'Invalid Invitation Token.',
-        'There is a mismatch',
-        '',
-      ],
-    ]
-    const object2: any = [
-      [
-        'Grader id does not match submission id that was passed in',
-        'There is a mismatch',
-        'Bad Authentication data',
-        'Error selecting from database',
-      ],
-      [
-        'No error',
-        "Top level object in 'override.yml' needs to be an object",
-        'Message originator is not the grader, or the person being graded',
-        'No error',
-      ],
-      [
-        'Grader id does not match submission id that was passed in',
-        'Error getting key from: %s',
-        'Message recipient is the same as originator',
-        'Error getting key from: %s',
-      ],
-      ['', 'Mock Error Message', 'Bad Authentication data', 'New Error '],
-    ]
-    const object3: any = [
-      [
-        'Grader id does not match submission id that was passed in',
-        '<error_message>%s</error_message>',
-        'cannot be found.',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-      [
-        'Sorry, The video you are looking for does not exist.',
-        'TypeError exception should be raised',
-        'To force deletion of the LAG use delete_force: True',
-        'the specified credentials were rejected by the server',
-      ],
-      [
-        'No updates are to be performed.',
-        'No error',
-        'Could not find an existing submission in location.  rubric is original.',
-        'Sorry, The video you are looking for does not exist.',
-      ],
-      [
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Message recipient is the same as originator',
-        'New Error ',
-        '',
-      ],
-    ]
-    const object4: any = [
-      [
-        'No updates are to be performed.',
-        'the specified credentials were rejected by the server',
-        'TypeError exception should be raised',
-        'Exception not raised: %s',
-      ],
-      [
-        'unexpected error',
-        'TypeError exception should be raised',
-        'Internal Server Error\n',
-        'Unknown error',
-      ],
-      [
-        'Exception not raised: %s',
-        'Unable to allocate address',
-        'Could not find a submission object for message from xqueue',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'Could not find a submission object for message from xqueue',
-        'does not exist',
-        'Invalid [%s] value. %s',
-        'ValueError exception should be raised',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const result: any = mutations.default.addReaction(
-      { messages: object5, isReacted: true },
-      {
-        id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
-        groupID: 'da7588892',
-        replyID: '12345',
-        messageID: 'da7588892',
-        emoji: 'Jean-Philippe',
-        reactor: {
-          reactions: [
-            'c466a48309794261b64a4f02cfcc3d64',
-            '9876',
-            '12345',
-            'da7588892',
-          ],
-          reactors: [false, true, true, true],
-        },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('4', () => {
-    const object: any = [
-      [
-        'unexpected error',
-        'Invalid [%s] value. %s',
-        'Bad Authentication data',
-        '\n\nThe first error message:\n',
-      ],
-      [
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'the specified credentials were rejected by the server',
-        'missing encoding',
-        'This is an exception, voilà',
-      ],
-      [
-        'Could not find an existing submission in location.  rubric is original.',
-        'Warning: ',
-        'This is an exception, voilà',
-        'Error selecting from database',
-      ],
-      [
-        'the specified credentials were rejected by the server',
-        'Unknown Error',
-        'No updates are to be performed.',
-        'Warning: ',
-      ],
-    ]
-    const object2: any = [
-      [
-        'Mock Error Message',
-        'Error:',
-        'Error selecting from database',
-        'Unknown Error',
-      ],
-      [
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'cannot be found.',
-        'No error',
-        'Could not find a submission object for message from xqueue',
-      ],
-      [
-        'No error',
-        'Invalid Invitation Token.',
-        'Error:',
-        'Uploaded file was not added to the resource. ',
-      ],
-      [
-        'Unable to allocate address',
-        '<error_message>%s</error_message>',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Error in retrieving email.',
-      ],
-    ]
-    const object3: any = [
-      [
-        'There is a mismatch',
-        'unexpected error',
-        'Invalid Invitation Token.',
-        'Error:',
-      ],
-      [
-        'Message originator is not the grader, or the person being graded',
-        'ValueError exception should be raised',
-        'Sorry, The video you are looking for does not exist.',
-        'Error selecting from database',
-      ],
-      [
-        'Error:',
-        'Unable to allocate address',
-        'No response',
-        '\n\nThe first error message:\n',
-      ],
-      [
-        'This is an exception, voilà',
-        'Unknown Error',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Error getting key from: %s',
-      ],
-    ]
-    const object4: any = [
-      [
-        'Mock Error Message',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'Exception not raised: %s',
-        'cannot be found.',
-      ],
-      [
-        'No updates are to be performed.',
-        'Could not find a grader object for message from xqueue',
-        'Error:',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'Could not find a submission object for message from xqueue',
-        'No os dependencies found. ',
-        'Warning: ',
-        'Could not find a submission object for message from xqueue',
-      ],
-      [
-        'missing encoding',
-        'cannot be found.',
-        'The line-by-line profiler can only be used in dev.',
-        'invalid option',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const result: any = mutations.default.addReaction(
-      { messages: object5, isReacted: true },
-      {
-        id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
-        groupID: 'da7588892',
-        replyID: '9876',
-        messageID: 'da7588892',
-        emoji: 'Edmond',
-        reactor: {
-          reactions: [
-            'c466a48309794261b64a4f02cfcc3d64',
-            '12345',
-            'da7588892',
-            'c466a48309794261b64a4f02cfcc3d64',
-          ],
-          reactors: [true, false, true, false],
-        },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('5', () => {
-    const result: any = mutations.default.addReaction(
-      { messages: [], isReacted: true },
-      {
-        id: '',
-        groupID: '',
-        replyID: '',
-        messageID: '',
-        emoji: '',
-        reactor: { reactions: [], reactors: [] },
-      },
-    )
-    expect(result).toMatchSnapshot()
-  })
-})
-
 describe('mutations', () => {
   const initialRootState: any = {
     accounts: {
@@ -2876,7 +2235,6 @@ describe('mutations', () => {
           typingState: 'NOT_TYPING',
           item: {},
           pending: true,
-          activeChat: true,
           encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -3078,16 +2436,16 @@ describe('mutations', () => {
           artist: 'Dina Brodsky',
           id: '0903',
           stickerURLs: [
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/hawk.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/ducklings.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/owl.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/penguins.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/robin.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/stork.png',
-            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/yellow_bird.png',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/hawk.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/ducklings.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/owl.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/penguins.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/robin.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/stork.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/yellow_bird.webp',
           ],
         },
-        url: 'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/ducklings.png',
+        url: 'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/ducklings.webp',
         count: 1,
       },
       {
@@ -3097,21 +2455,21 @@ describe('mutations', () => {
           artist: 'John Treanor',
           id: '0123',
           stickerURLs: [
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/AHH.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/AHHcloseup.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Coy_02.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Cry.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Cry2.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Laugh.png',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Luv.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Luv_02.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Sad3.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsDownNew.48.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsUP.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsUPNew.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/AHH.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/AHHcloseup.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Coy_02.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Cry.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Cry2.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Laugh.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Luv.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Luv_02.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Sad3.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsDownNew.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsUP.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsUPNew.gif',
           ],
         },
-        url: 'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Coy_02.gif',
+        url: 'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Coy_02.gif',
         count: 1,
       },
       {
@@ -3121,21 +2479,21 @@ describe('mutations', () => {
           artist: 'John Treanor',
           id: '0123',
           stickerURLs: [
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/AHH.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/AHHcloseup.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Coy_02.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Cry.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Cry2.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Laugh.png',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Luv.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Luv_02.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/Sad3.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsDownNew.48.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsUP.gif',
-            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsUPNew.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/AHH.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/AHHcloseup.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Coy_02.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Cry.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Cry2.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Laugh.webp',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Luv.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Luv_02.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/Sad3.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsDownNew.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsUP.gif',
+            'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsUPNew.gif',
           ],
         },
-        url: 'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/ThumbsUP.gif',
+        url: 'https://satellite.mypinata.cloud/ipfs/QmaBFFeJksvrfEhwbKYkzbgm7bKFWzHhRECqGxgB52LeHg/$1/ThumbsUP.gif',
         count: 1,
       },
     ],
@@ -3152,6 +2510,8 @@ describe('mutations', () => {
       },
     },
     isLoadingFileIndex: true,
+    fileDownloadList: ['string'],
+    renameItem: {},
   }
 
   test('togglePinned', () => {
@@ -3230,7 +2590,7 @@ describe('mutations', () => {
   })
   test('setFilePreview', () => {
     const mockFileData = {
-      name: 'TestFile.png',
+      name: 'TestFile.webp',
       hash: '0x0aef',
       size: 4235,
       liked: false,
@@ -3269,13 +2629,18 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.toggleEnhancers(localizedState, {})
     expect(localizedState.enhancers).toBe(localizedState.enhancers)
-    // As paradoxical as it may seem here, this is very much normal. Consider the following ternary operation:
-    //
-    // typeof options.floating !== 'undefined'
-    // ? options.floating
-    // : state.enhancers.floating,
-    //
-    // If we do not pass an object (options) containing the floating property (options.floating), it will fall back to the existing value it has: which is what `state.enhancers.floating` has. Hence, what we're doing is checking if the state we are checking (state.enhancers) would be mutated if there were no options being passed into it.
+    /*
+     As paradoxical as it may seem here, this is very much normal. Consider the following ternary operation:
+    
+     typeof options.floating !== 'undefined'
+     ? options.floating
+     : state.enhancers.floating,
+    
+     If we do not pass an object (options) containing the floating property (options.floating),
+     it will fall back to the existing value it has: which is what `state.enhancers.floating` has.
+     Hence, what we're doing is checking if the state we are checking (state.enhancers) would be mutated
+     if there were no options being passed into it.
+     */
   })
   test('sendMessage with the same lastMessageSender', () => {
     const localizedState = { ...initialState }
@@ -3734,15 +3099,16 @@ describe('mutations', () => {
     mutations.default.setChatbarFocus(localizedState, true)
     expect(localizedState.chatbarFocus).toBeTruthy()
   })
-  test('setIsLoadingFileIndex', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setIsLoadingFileIndex(localizedState, false)
-    expect(localizedState.isLoadingFileIndex).toBeFalsy()
-  })
   test('setRenameItem', () => {
     const localizedState = { ...initialState }
-    mutations.default.setRenameItem(localizedState, 'new name')
-    expect(localizedState.renameCurrentName).toBe('new name')
+    const mockDirectoryData = {
+      name: 'Test Directory',
+      liked: false,
+      shared: false,
+      type: DIRECTORY_TYPE.DEFAULT,
+    }
+    mutations.default.setRenameItem(localizedState, mockDirectoryData)
+    expect(localizedState.renameItem).toBe(mockDirectoryData)
   })
   test('setSettingsRoute', () => {
     const localizedState = { ...initialState }
@@ -3854,16 +3220,6 @@ describe('mutations', () => {
     mutations.default.setHoveredGlyphInfo(localizedState, object)
     expect(localizedState.hoveredGlyphInfo).toBe(object)
   })
-  test('updateRecentReactions with existing emoji', () => {
-    const localizedState = { ...initialState }
-    mutations.default.updateRecentReactions(localizedState, '😡')
-    expect(localizedState.recentReactions).toContain('😡')
-  })
-  test('updateRecentReactions with new emoji', () => {
-    const localizedState = { ...initialState }
-    mutations.default.updateRecentReactions(localizedState, '😁')
-    expect(localizedState.recentReactions).toContain('😁')
-  })
   test('updateMostUsedEmoji with existing emoji', () => {
     const localizedState = { ...initialState }
     const object = {
@@ -3899,20 +3255,20 @@ describe('mutations', () => {
         artist: 'Dina Brodsky',
         id: '0903',
         stickerURLs: [
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/hawk.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/ducklings.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/owl.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/penguins.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/robin.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/stork.png',
-          'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/yellow_bird.png',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
+          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
         ],
       },
-      url: 'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/ducklings.png',
+      url: 'https://satellite.mypinata.cloud/ipfs/QmXrmiCxkyfpsAY18qzVBPv9TpCbTUToowQEsYy1Pm5C9b/$1/ducklings.webp',
       count: 2, // Since this glyph has been used before, it will be incremented from 1 to 2.
     }
     mutations.default.updateRecentGlyphs(localizedState, object)
-    expect(localizedState.recentGlyphs).toContainEqual(object)
+    expect(localizedState.recentGlyphs).toMatchSnapshot()
   })
   test('updateMostUsedGlyph with new emoji', () => {
     const localizedState = { ...initialState }
@@ -4066,6 +3422,1419 @@ describe('mutations', () => {
     }
     mutations.default.setFileSort(localizedState, argument)
     expect(localizedState.fileSort).toBe(argument)
+  })
+  test('setFilesUploadStatus', () => {
+    const localizedState = { ...initialState }
+    mutations.default.setFilesUploadStatus(localizedState, 'process')
+    expect(localizedState.filesUploadStatus).toBe('process')
+  })
+  test('addFileDownload', () => {
+    const localizedState = { ...initialState }
+    mutations.default.addFileDownload(localizedState, 'process')
+    expect(localizedState.fileDownloadList).toEqual(
+      expect.arrayContaining(['process']),
+    )
+  })
+  test('removeFileDownload with query found', () => {
+    const localizedState = { ...initialState }
+    mutations.default.removeFileDownload(localizedState, 'process')
+    expect(localizedState.fileDownloadList).not.toEqual(
+      expect.arrayContaining(['process']),
+    )
+  })
+  test('removeFileDownload with query not found', () => {
+    const localizedState = { ...initialState }
+    mutations.default.removeFileDownload(localizedState, 'not-in-array')
+    expect(localizedState.fileDownloadList).not.toEqual(
+      expect.arrayContaining(['not-in-array']),
+    )
+  })
+})
+
+describe('mutations.default.setContextMenuPosition', () => {
+  test('0', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: 320, y: 380 },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: 90, y: 70 },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: 550, y: 50 },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: 550, y: 400 },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: 380, y: 410 },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.setContextMenuPosition(
+      { contextMenuPosition: {} },
+      { x: Infinity, y: Infinity },
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.toggleEnhancers', () => {
+  test('0', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: false,
+          position: 100,
+          defaultWidth: 390,
+          defaultHeight: 100,
+          containerWidth: 0,
+        },
+      },
+      {
+        show: false,
+        floating: true,
+        position: 100,
+        defaultWidth: 480,
+        defaultHeight: 100,
+        containerWidth: 1080,
+        route: 'emotes',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: true,
+          position: 100,
+          defaultWidth: 150,
+          defaultHeight: -100,
+          containerWidth: 200,
+        },
+      },
+      {
+        show: true,
+        floating: true,
+        position: 320,
+        defaultWidth: 9,
+        defaultHeight: 0,
+        containerWidth: 5,
+        route: 'emotes',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: false,
+          position: 2,
+          defaultWidth: 150,
+          defaultHeight: -5.48,
+          containerWidth: 1.5,
+        },
+      },
+      {
+        show: true,
+        floating: true,
+        position: 100,
+        defaultWidth: 680,
+        defaultHeight: 1,
+        containerWidth: 576,
+        route: 'emotes',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: false,
+          position: 9,
+          defaultWidth: 0,
+          defaultHeight: -5.48,
+          containerWidth: 12000,
+        },
+      },
+      {
+        show: false,
+        floating: true,
+        position: 2,
+        defaultWidth: 0.0,
+        defaultHeight: -5.48,
+        containerWidth: 720,
+        route: 'emotes',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: true,
+          position: 0,
+          defaultWidth: 8,
+          defaultHeight: 100,
+          containerWidth: 1.5,
+        },
+      },
+      {
+        show: false,
+        floating: false,
+        position: 320,
+        defaultWidth: 16,
+        defaultHeight: -5.48,
+        containerWidth: 1000,
+        route: 'emotes',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.toggleEnhancers(
+      {
+        enhancers: {
+          floating: false,
+          position: NaN,
+          defaultWidth: NaN,
+          defaultHeight: NaN,
+          containerWidth: NaN,
+        },
+      },
+      {
+        show: false,
+        floating: false,
+        position: NaN,
+        defaultWidth: NaN,
+        defaultHeight: NaN,
+        containerWidth: NaN,
+        route: '',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.toggleSettings', () => {
+  test('0', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: 'https://croplands.org/app/a/reset?token=' },
+      'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: 'https://' },
+      'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: 'http://base.com' },
+      'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: 'https://twitter.com/path?abc' },
+      'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: 'https://croplands.org/app/a/confirm?t=' },
+      'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20baseProfile%3D%22full%22%20width%3D%22undefined%22%20height%3D%22undefined%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22grey%22%2F%3E%3Ctext%20x%3D%22NaN%22%20y%3D%22NaN%22%20font-size%3D%2220%22%20alignment-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3Eundefinedxundefined%3C%2Ftext%3E%3C%2Fsvg%3E',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.toggleSettings(
+      { settingsRoute: '' },
+      '',
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.setIsScrollOver', () => {
+  test('0', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: 404 },
+      429,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: 404 },
+      200,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: 500 },
+      500,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: 429 },
+      404,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: 404 },
+      404,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.setIsScrollOver(
+      { unreadMessage: Infinity },
+      Infinity,
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.setShowOlderMessagesInfo', () => {
+  test('0', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo(
+      'Alabama',
+      true,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo(
+      'Florida',
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo(
+      'Florida',
+      true,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo(
+      'Île-de-France',
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo(
+      'Alabama',
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.setShowOlderMessagesInfo('', false)
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.setIsReacted', () => {
+  test('0', () => {
+    const result: any = mutations.default.setIsReacted('Abruzzo', 404)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.setIsReacted('Île-de-France', 429)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.setIsReacted('Abruzzo', 200)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.setIsReacted('Abruzzo', 429)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.setIsReacted('Abruzzo', 400)
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.setIsReacted('', -Infinity)
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.setTypingUser', () => {
+  test('0', () => {
+    const result: any = mutations.default.setTypingUser(
+      'Alabama',
+      'Pierre Edouard',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.setTypingUser('Alabama', 'George')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.setTypingUser('Alabama', 'Michael')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.setTypingUser('Florida', 'Anas')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.setTypingUser('Abruzzo', 'Michael')
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.setTypingUser('', '')
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.sendMessage', () => {
+  test('0', () => {
+    const object: any = [
+      [
+        'Counterparty sent error: %s',
+        'No os dependencies found. ',
+        'invalid option',
+        'No response',
+      ],
+      [
+        'New Error ',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'Could not find an existing submission in location.  rubric is original.',
+        'Counterparty sent error: %s',
+      ],
+      [
+        'The line-by-line profiler can only be used in dev.',
+        'Sorry, The video you are looking for does not exist.',
+        'cannot be found.',
+        'Connection is closed',
+      ],
+      [
+        'Error:',
+        "Top level object in 'override.yml' needs to be an object",
+        'No response',
+        'Unable to allocate address',
+      ],
+    ]
+    const object2: any = [
+      [
+        'TypeError exception should be raised',
+        'Bad Authentication data',
+        'ValueError exception should be raised',
+        'Uploaded file was not added to the resource. ',
+      ],
+      [
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'the specified credentials were rejected by the server',
+        'The app does not exist',
+        'Invalid Invitation Token.',
+      ],
+      [
+        '',
+        'TypeError exception should be raised',
+        'There is a mismatch',
+        'Counterparty sent error: %s',
+      ],
+      [
+        'Unable to allocate address',
+        'New Error ',
+        'missing encoding',
+        'Message recipient is not the grader, the person being graded, or the controller',
+      ],
+    ]
+    const object3: any = [
+      [
+        'Grader id does not match submission id that was passed in',
+        'No updates are to be performed.',
+        'No error',
+        'Unknown Error',
+      ],
+      [
+        'Uploaded file was not added to the resource. ',
+        '\n\nThe first error message:\n',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'Missing FileUri configuration',
+      ],
+      [
+        'New Error ',
+        'Message recipient is the same as originator',
+        'Sorry, The video you are looking for does not exist.',
+        'Sorry, The video you are looking for does not exist.',
+      ],
+      [
+        'Unknown error',
+        'Ran out of iterations',
+        'No updates are to be performed.',
+        'An error occurred processing your request.',
+      ],
+    ]
+    const object4: any = [
+      [
+        'Ran out of iterations',
+        'No response',
+        'Uploaded file was not added to the resource. ',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+      [
+        'Error selecting from database',
+        'Counterparty sent error: %s',
+        '<error_message>%s</error_message>',
+        'Could not find a submission object for message from xqueue',
+      ],
+      [
+        'Grader id does not match submission id that was passed in',
+        'Could not find a submission object for message from xqueue',
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'Message originator is not the grader, or the person being graded',
+      ],
+      [
+        'Invalid Invitation Token.',
+        'Exception not raised: %s',
+        '',
+        'An error occurred processing your request.',
+      ],
+    ]
+    const object5: any = [object, object2, object3, object4]
+    const result: any = mutations.default.sendMessage(
+      { unreadMessage: 400, length: 32, messages: object5, isScrollOver: true },
+      {
+        value: 'Elio',
+        user: { from: './path/to/file', address: '192.168.1.5' },
+      },
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const object: any = [
+      [
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'Invalid Invitation Token.',
+        'New Error ',
+        '\n\nThe first error message:\n',
+      ],
+      ['Error:', 'Unknown Error', 'No response', 'Error in retrieving email.'],
+      [
+        'ValueError exception should be raised',
+        'Internal Server Error\n',
+        'Bad Authentication data',
+        'Missing FileUri configuration',
+      ],
+      [
+        'Counterparty sent error: %s',
+        'Unknown Error',
+        'Mock Error Message',
+        'Error:',
+      ],
+    ]
+    const object2: any = [
+      [
+        'Internal Server Error\n',
+        'Counterparty sent error: %s',
+        'Error:',
+        "Top level object in 'override.yml' needs to be an object",
+      ],
+      [
+        'Warning: ',
+        'Could not find an existing submission in location.  rubric is original.',
+        'An error occurred processing your request.',
+        'No updates are to be performed.',
+      ],
+      [
+        'Wait time out reached, while waiting for results',
+        'The line-by-line profiler can only be used in dev.',
+        'To force deletion of the LAG use delete_force: True',
+        'Could not find an existing submission in location.  rubric is original.',
+      ],
+      [
+        '<error_message>%s</error_message>',
+        'Warning: ',
+        '',
+        'Missing FileUri configuration',
+      ],
+    ]
+    const object3: any = [
+      [
+        'Error getting key from: %s',
+        'Internal Server Error\n',
+        'Internal Server Error\n',
+        'Message originator is not the grader, or the person being graded',
+      ],
+      [
+        'Unknown error',
+        "Top level object in 'override.yml' needs to be an object",
+        'Mock Error Message',
+        '\n\nThe first error message:\n',
+      ],
+      [
+        'does not exist',
+        'Invalid [%s] value. %s',
+        'does not exist',
+        'There is a mismatch',
+      ],
+      [
+        'Error in retrieving email.',
+        'Error getting key from: %s',
+        'Invalid data: No data found in any of the field(s)!!!',
+        'unexpected error',
+      ],
+    ]
+    const object4: any = [
+      [
+        'No error',
+        'Counterparty sent error: %s',
+        'Message originator is not the grader, or the person being graded',
+        '',
+      ],
+      [
+        'Sorry, The video you are looking for does not exist.',
+        'No os dependencies found. ',
+        '',
+        'Uploaded file was not added to the resource. ',
+      ],
+      [
+        'To force deletion of the LAG use delete_force: True',
+        'invalid option',
+        'Error getting key from: %s',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+      [
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'Warning: ',
+        'Invalid Invitation Token.',
+      ],
+    ]
+    const object5: any = [object, object2, object3, object4]
+    const result: any = mutations.default.sendMessage(
+      { unreadMessage: 200, length: 64, messages: object5, isScrollOver: true },
+      {
+        value: 'Elio',
+        user: { from: 'C:\\\\path\\to\\file.ext', address: '192.168.1.5' },
+      },
+      true,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const object: any = [
+      [
+        'Message recipient is the same as originator',
+        'No os dependencies found. ',
+        'missing encoding',
+        'ValueError exception should be raised',
+      ],
+      [
+        'Bad Authentication data',
+        '\n\nThe first error message:\n',
+        '',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+      [
+        'Message recipient is not the grader, the person being graded, or the controller',
+        'No os dependencies found. ',
+        '\n\nThe first error message:\n',
+        'Sorry, The video you are looking for does not exist.',
+      ],
+      [
+        'TypeError exception should be raised',
+        'invalid option',
+        'Unknown Error',
+        'invalid option',
+      ],
+    ]
+    const object2: any = [
+      [
+        'Could not find an existing submission in location.  rubric is original.',
+        'invalid option',
+        'Message originator is not the grader, or the person being graded',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+      [
+        'Internal Server Error\n',
+        'This is an exception, voilà',
+        'Error getting key from: %s',
+        'The app does not exist',
+      ],
+      [
+        'Message recipient is the same as originator',
+        'Error in retrieving email.',
+        'the specified credentials were rejected by the server',
+        'There is a mismatch',
+      ],
+      ['Invalid Invitation Token.', 'No response', '', 'Unknown Error'],
+    ]
+    const object3: any = [
+      [
+        'Message recipient is not the grader, the person being graded, or the controller',
+        'New Error ',
+        'Sorry, This video cannot be accessed via this website',
+        'the specified credentials were rejected by the server',
+      ],
+      [
+        '<error_message>%s</error_message>',
+        'Sorry, This video cannot be accessed via this website',
+        'Error selecting from database',
+        'There is a mismatch',
+      ],
+      [
+        'missing encoding',
+        'Error getting key from: %s',
+        'Unable to allocate address',
+        'invalid option',
+      ],
+      [
+        'Counterparty sent error: %s',
+        'Message recipient is the same as originator',
+        'Sorry, The video you are looking for does not exist.',
+        'Could not find a submission object for message from xqueue',
+      ],
+    ]
+    const object4: any = [
+      [
+        'Invalid [%s] value. %s',
+        'No os dependencies found. ',
+        'Invalid [%s] value. %s',
+        'Could not find a grader object for message from xqueue',
+      ],
+      [
+        'New Error ',
+        'the specified credentials were rejected by the server',
+        'Unable to allocate address',
+        'cannot be found.',
+      ],
+      [
+        'Message recipient is not the grader, the person being graded, or the controller',
+        'Unable to allocate address',
+        '<error_message>%s</error_message>',
+        'Unknown Error',
+      ],
+      [
+        'New Error ',
+        'No response',
+        'Uploaded file was not added to the resource. ',
+        '<error_message>%s</error_message>',
+      ],
+    ]
+    const object5: any = [object, object2, object3, object4]
+    const result: any = mutations.default.sendMessage(
+      {
+        unreadMessage: 429,
+        length: 64,
+        messages: object5,
+        isScrollOver: false,
+      },
+      {
+        value: 'Elio',
+        user: { from: 'path/to/folder/', address: '192.168.1.5' },
+      },
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const object: any = [
+      [
+        'does not exist',
+        'The app does not exist',
+        'No response',
+        '\n\nThe first error message:\n',
+      ],
+      [
+        'Error:',
+        'ValueError exception should be raised',
+        'Mock Error Message',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+      ],
+      [
+        'Could not find a submission object for message from xqueue',
+        'Could not find a submission object for message from xqueue',
+        'TypeError exception should be raised',
+        'TypeError exception should be raised',
+      ],
+      [
+        'missing encoding',
+        'the specified credentials were rejected by the server',
+        'There is a mismatch',
+        'To force deletion of the LAG use delete_force: True',
+      ],
+    ]
+    const object2: any = [
+      [
+        'An error occurred processing your request.',
+        'Missing FileUri configuration',
+        '',
+        'Internal Server Error\n',
+      ],
+      [
+        'Error in retrieving email.',
+        'Could not find an existing submission in location.  rubric is original.',
+        'does not exist',
+        'New Error ',
+      ],
+      [
+        'The line-by-line profiler can only be used in dev.',
+        'Counterparty sent error: %s',
+        'does not exist',
+        '<error_message>%s</error_message>',
+      ],
+      [
+        'Invalid data: No data found in any of the field(s)!!!',
+        'Counterparty sent error: %s',
+        'ValueError exception should be raised',
+        'missing encoding',
+      ],
+    ]
+    const object3: any = [
+      [
+        'Message recipient is the same as originator',
+        'Mock Error Message',
+        'Wait time out reached, while waiting for results',
+        'Missing FileUri configuration',
+      ],
+      [
+        'cannot be found.',
+        'Grader id does not match submission id that was passed in',
+        'No os dependencies found. ',
+        'An error occurred processing your request.',
+      ],
+      [
+        'Error getting key from: %s',
+        'Message recipient is the same as originator',
+        'New Error ',
+        'the specified credentials were rejected by the server',
+      ],
+      ['The app does not exist', '', 'Warning: ', 'Invalid [%s] value. %s'],
+    ]
+    const object4: any = [
+      [
+        'Error:',
+        'Message recipient is the same as originator',
+        'Grader id does not match submission id that was passed in',
+        'Message recipient is the same as originator',
+      ],
+      [
+        'unexpected error',
+        'Could not find an existing submission in location.  rubric is original.',
+        'No os dependencies found. ',
+        'Error in retrieving email.',
+      ],
+      [
+        'Unknown Error',
+        'Message originator is not the grader, or the person being graded',
+        'the specified credentials were rejected by the server',
+        'Internal Server Error\n',
+      ],
+      [
+        'Error selecting from database',
+        'Grader id does not match submission id that was passed in',
+        '\n\nThe first error message:\n',
+        'Mock Error Message',
+      ],
+    ]
+    const object5: any = [object, object2, object3, object4]
+    const result: any = mutations.default.sendMessage(
+      { unreadMessage: 404, length: 0, messages: object5, isScrollOver: true },
+      {
+        value: 'Dillenberg',
+        user: { from: './path/to/file', address: '0.0.0.0' },
+      },
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const object: any = [
+      [
+        'The app does not exist',
+        'Invalid Invitation Token.',
+        'There is a mismatch',
+        'Exception not raised: %s',
+      ],
+      [
+        'This is an exception, voilà',
+        '',
+        'Unable to allocate address',
+        'The app does not exist',
+      ],
+      [
+        'Could not find a grader object for message from xqueue',
+        'missing encoding',
+        'Could not find an existing submission in location.  rubric is original.',
+        'The line-by-line profiler can only be used in dev.',
+      ],
+      [
+        'Warning: ',
+        'Error getting key from: %s',
+        'The app does not exist',
+        'Error selecting from database',
+      ],
+    ]
+    const object2: any = [
+      [
+        "Top level object in 'override.yml' needs to be an object",
+        'the specified credentials were rejected by the server',
+        'Message recipient is not the grader, the person being graded, or the controller',
+        'Error:',
+      ],
+      [
+        'Uploaded file was not added to the resource. ',
+        'There is a mismatch',
+        'Unknown Error',
+        '\n\nThe first error message:\n',
+      ],
+      [
+        'This is an exception, voilà',
+        "Top level object in 'override.yml' needs to be an object",
+        'Unknown error',
+        'Invalid [%s] value. %s',
+      ],
+      [
+        'cannot be found.',
+        'Error:',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'Error:',
+      ],
+    ]
+    const object3: any = [
+      [
+        'No os dependencies found. ',
+        'An error occurred processing your request.',
+        "Top level object in 'override.yml' needs to be an object",
+        'Bad Authentication data',
+      ],
+      [
+        'Error:',
+        'invalid option',
+        'TypeError exception should be raised',
+        'Error selecting from database',
+      ],
+      [
+        'Error getting key from: %s',
+        'No os dependencies found. ',
+        'Missing FileUri configuration',
+        'Warning: ',
+      ],
+      [
+        'Ran out of iterations',
+        'The app does not exist',
+        'ValueError exception should be raised',
+        'There is a mismatch',
+      ],
+    ]
+    const object4: any = [
+      [
+        'Could not find an existing submission in location.  rubric is original.',
+        'Missing FileUri configuration',
+        'missing encoding',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+      ],
+      [
+        'Error getting key from: %s',
+        'Invalid data: No data found in any of the field(s)!!!',
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'cannot be found.',
+      ],
+      [
+        'TypeError exception should be raised',
+        'Error:',
+        'The line-by-line profiler can only be used in dev.',
+        'missing encoding',
+      ],
+      [
+        'cannot be found.',
+        'Unable to allocate address',
+        'Invalid [%s] value. %s',
+        'Error selecting from database',
+      ],
+    ]
+    const object5: any = [object, object2, object3, object4]
+    const result: any = mutations.default.sendMessage(
+      { unreadMessage: 400, length: 0, messages: object5, isScrollOver: true },
+      {
+        value: 'elio@example.com',
+        user: { from: 'C:\\\\path\\to\\file.ext', address: '0.0.0.0' },
+      },
+      false,
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.sendMessage(
+      {
+        unreadMessage: Infinity,
+        length: Infinity,
+        messages: [],
+        isScrollOver: true,
+      },
+      { value: '', user: { from: '', address: '' } },
+      true,
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.addReaction', () => {
+  test('0', () => {
+    const object: any = [
+      [
+        'Could not find a grader object for message from xqueue',
+        'Error in retrieving email.',
+        'New Error ',
+        'Message recipient is not the grader, the person being graded, or the controller',
+      ],
+      [
+        'No os dependencies found. ',
+        'Could not find a submission object for message from xqueue',
+        'Error in retrieving email.',
+        'invalid option',
+      ],
+      [
+        'Missing FileUri configuration',
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'Unknown Error',
+        'Warning: ',
+      ],
+      [
+        'invalid option',
+        'Error in retrieving email.',
+        'Message originator is not the grader, or the person being graded',
+        'Message originator is not the grader, or the person being graded',
+      ],
+    ]
+    const result: any = mutations.default.addReaction(
+      { messages: object, isReacted: true },
+      {
+        id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+        groupID: '9876',
+        replyID: '12345',
+        messageID: '9876',
+        emoji: 'Identity',
+        reactor: '9876',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const object: any = [
+      [
+        'Could not find a grader object for message from xqueue',
+        'Message recipient is the same as originator',
+        'New Error ',
+        'An error occurred processing your request.',
+      ],
+      [
+        'Invalid Invitation Token.',
+        'The app does not exist',
+        'invalid option',
+        'invalid option',
+      ],
+      [
+        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
+        'Invalid data: No data found in any of the field(s)!!!',
+        '',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+      [
+        'Message recipient is not the grader, the person being graded, or the controller',
+        'does not exist',
+        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
+        'An error occurred processing your request.',
+      ],
+    ]
+    const result: any = mutations.default.addReaction(
+      { messages: object, isReacted: true },
+      {
+        id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+        groupID: 'bc23a9d531064583ace8f67dad60f6bb',
+        replyID: 'bc23a9d531064583ace8f67dad60f6bb',
+        messageID: 'bc23a9d531064583ace8f67dad60f6bb',
+        emoji: 'Quality',
+        reactor: 'da7588892',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const object: any = [
+      [
+        'Grader id does not match submission id that was passed in',
+        'Invalid data: No data found in any of the field(s)!!!',
+        'This is an exception, voilà',
+        'The line-by-line profiler can only be used in dev.',
+      ],
+      [
+        'Internal Server Error\n',
+        'Connection is closed',
+        'Mock Error Message',
+        'Unable to allocate address',
+      ],
+      [
+        'Unable to allocate address',
+        'Error getting key from: %s',
+        'Message recipient is not the grader, the person being graded, or the controller',
+        '<error_message>%s</error_message>',
+      ],
+      [
+        'Unable to allocate address',
+        'Sorry, This video cannot be accessed via this website',
+        'Connection is closed',
+        'does not exist',
+      ],
+    ]
+    const result: any = mutations.default.addReaction(
+      { messages: object, isReacted: true },
+      {
+        id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
+        groupID: '12345',
+        replyID: '9876',
+        messageID: 'da7588892',
+        emoji: 'Quality',
+        reactor: '12345',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const object: any = [
+      [
+        'TypeError exception should be raised',
+        'Mock Error Message',
+        'cannot be found.',
+        'This is an exception, voilà',
+      ],
+      [
+        'No updates are to be performed.',
+        'This is an exception, voilà',
+        'Unknown Error',
+        'Ran out of iterations',
+      ],
+      [
+        'Missing FileUri configuration',
+        'New Error ',
+        'No response',
+        'does not exist',
+      ],
+      [
+        'To force deletion of the LAG use delete_force: True',
+        'Invalid [%s] value. %s',
+        'Exception not raised: %s',
+        'Invalid data: No data found in any of the field(s)!!!',
+      ],
+    ]
+    const result: any = mutations.default.addReaction(
+      { messages: object, isReacted: false },
+      {
+        id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
+        groupID: 'da7588892',
+        replyID: '9876',
+        messageID: 'c466a48309794261b64a4f02cfcc3d64',
+        emoji: 'Interactions',
+        reactor: 'da7588892',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const object: any = [
+      [
+        '',
+        'Bad Authentication data',
+        'Error getting key from: %s',
+        'The app does not exist',
+      ],
+      [
+        'Error:',
+        'Mock Error Message',
+        'Error in retrieving email.',
+        'Connection is closed',
+      ],
+      [
+        'Unknown error',
+        'Missing FileUri configuration',
+        'Could not find an existing submission in location.  rubric is original.',
+        'TypeError exception should be raised',
+      ],
+      [
+        'does not exist',
+        'Error in retrieving email.',
+        'This is an exception, voilà',
+        'Message recipient is the same as originator',
+      ],
+    ]
+    const result: any = mutations.default.addReaction(
+      { messages: object, isReacted: false },
+      {
+        id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+        groupID: 'da7588892',
+        replyID: 'c466a48309794261b64a4f02cfcc3d64',
+        messageID: 'da7588892',
+        emoji: 'Implementation',
+        reactor: 'bc23a9d531064583ace8f67dad60f6bb',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.addReaction(
+      { messages: [], isReacted: true },
+      {
+        id: '',
+        groupID: '',
+        replyID: '',
+        messageID: '',
+        emoji: '',
+        reactor: '',
+      },
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.updateMostUsedEmoji', () => {
+  test('0', () => {
+    const result: any = mutations.default.updateMostUsedEmoji(
+      { mostEmojiUsed: { find: () => '', push: () => Infinity } },
+      { code: '', name: '', emoji: '' },
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.updateRecentGlyphs', () => {
+  test('0', () => {
+    const result: any = mutations.default.updateRecentGlyphs(
+      { recentGlyphs: { find: () => '', push: () => NaN } },
+      { url: '', pack: '' },
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.sendNotification', () => {
+  test('0', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => 256 } } },
+      'transmit bluetooth bus',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => 0 } } },
+      'reboot neural card',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => 256 } } },
+      'synthesize wireless microchip',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => 256 } } },
+      'reboot neural card',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => 32 } } },
+      'reboot neural card',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.sendNotification(
+      { notifications: { allNotifications: { push: () => NaN } } },
+      '',
+    )
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.clearAllNotifications', () => {
+  test('0', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => 'Pierre Edouard' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => 'Michael' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => 'Jean-Philippe' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => 'George' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => 'Edmond' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.clearAllNotifications({
+      notifications: { allNotifications: { forEach: () => '' } },
+    })
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('mutations.default.notificationSeen', () => {
+  test('0', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => 'Michael' } } },
+      'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('1', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => 'Pierre Edouard' } } },
+      'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('2', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => 'Edmond' } } },
+      '7289708e-b17a-477c-8a77-9ab575c4b4d8',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('3', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => 'George' } } },
+      'a85a8e6b-348b-4011-a1ec-1e78e9620782',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('4', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => 'Anas' } } },
+      '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const result: any = mutations.default.notificationSeen(
+      { notifications: { allNotifications: { map: () => '' } } },
+      '',
+    )
+    expect(result).toMatchSnapshot()
   })
 })
 

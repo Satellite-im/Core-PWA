@@ -5,7 +5,6 @@ const randomStatus = faker.lorem.word() // generate random status
 const filepathNsfw = 'images/negative-create-account-test.png'
 
 describe('Create Account - Negative Tests', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   it('Try to create account with PIN less than 5 digits', () => {
     //Enter PIN screen and add an invalid pin
     cy.createAccountPINscreen('1')
@@ -21,31 +20,27 @@ describe('Create Account - Negative Tests', () => {
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
 
-    //Privacy Settings screen
-    cy.createAccountPrivacyTogglesGoNext()
-
     //Recovery Seed Screen
     cy.createAccountRecoverySeed()
 
     //Clicking without adding a username will throw an error message
+    cy.validateUserInputIsDisplayed()
     cy.get('[data-cy=sign-in-button]').click()
     cy.contains('Username must be at least 5 characters.')
   })
 
-  it.skip('Try to create account with NSFW image', () => {
+  it('Try to create account with NSFW image', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
     //Create or Import account selection screen
     cy.createAccountSecondScreen()
 
-    //Privacy Settings screen
-    cy.createAccountPrivacyTogglesGoNext()
-
     //Recovery Seed Screen
     cy.createAccountRecoverySeed()
 
     //Username and Status Input
+    cy.validateUserInputIsDisplayed()
     cy.createAccountUserInput(randomName, randomStatus)
 
     //Attempting to add NSFW image and validating error message is displayed

@@ -244,31 +244,6 @@ button {
   overflow: unset !important;
 }
 
-//Switch
-.switch-container {
-  .switch-button-control {
-    .switch-button {
-      border: 0.125rem solid var(--flair-color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-
-      .sw-button {
-        &:extend(.background-flair);
-        &:extend(.switch-off-glow-flair);
-      }
-
-      &.enabled {
-        &:extend(.background-flair);
-        &:extend(.glow-flair);
-
-        .sw-button {
-          border: 0.2rem solid var(--flair-color);
-          background: @white !important;
-        }
-      }
-    }
-  }
-}
-
 //Volume Slider
 .volume-slider .vue-slider-process,
 .vue-slider-dot-tooltip-inner {
@@ -382,13 +357,6 @@ progress.progress {
 
 .new-message-alert {
   &:extend(.background-flair);
-}
-
-// Files
-.file {
-  .file-icon {
-    &:extend(.color-flair);
-  }
 }
 
 //Search Input
@@ -529,6 +497,7 @@ input.date-input {
 
 //Icon
 .icon,
+.file-icon,
 .file-type-icon {
   &:extend(.color-flair);
 }

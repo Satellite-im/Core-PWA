@@ -44,11 +44,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      settings: {
-        suppressScrollY: !this.verticalScroll,
-        suppressScrollX: !this.horizontalScroll,
-        wheelPropagation: false,
-      },
       newMessageAlert: false,
     }
   },
@@ -61,6 +56,13 @@ export default Vue.extend({
         'enable-wrap': this.enableWrap,
         always: this.scrollbarVisibility === 'always',
         dark: this.theme === 'dark',
+      }
+    },
+    settings() {
+      return {
+        suppressScrollY: !this.verticalScroll,
+        suppressScrollX: !this.horizontalScroll,
+        wheelPropagation: false,
       }
     },
   },

@@ -27,17 +27,17 @@ const commonProperties = [
   'accounts.initialized',
   'friends.all',
   'webrtc.activeStream',
-  'webrtc.connectedPeers',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',
-  'ui.isLoadingFileIndex',
   'chat.files',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',
   'ui.modals',
   'ui.isScrollOver',
   'ui.filePreview',
+  'ui.filesUploadStatus',
+  'ui.fileDownloadList',
 ]
 
 const propertiesNoStorePin = [

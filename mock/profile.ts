@@ -1,11 +1,10 @@
+// @ts-ignore
+import * as url from '~/assets/img/profile.webp'
 import {
-  ProfileBadgeType,
   ProfileBadge,
+  ProfileBadgeType,
   ProfileInfo,
 } from '~/types/profile/profile'
-
-// @ts-ignore
-import * as url from '~/assets/img/profile.png'
 
 export const profileBadges = [
   {

@@ -7,18 +7,24 @@
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply v-if="recipient" />
+  <FilesUploadFilePreview
+    :recipient="recipient"
+    :files="files"
+    @cancelUpload="onCancelUpload"
+  />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview || $store.state.chat.alertNsfw || $store.state.chat.countError}"
     ref="wrap"
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
         v-if="recipient"
-        :editable="recipient ? true : false"
         :recipient="recipient"
         type="quick"
         ref="file-upload"
+        :files="files"
+        @cancelUpload="onCancelUpload"
       />
     </div>
     <div
@@ -38,7 +44,6 @@
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-
     <ChatbarControls
       :disabled="!recipient"
       :sendMessage="sendMessage"
