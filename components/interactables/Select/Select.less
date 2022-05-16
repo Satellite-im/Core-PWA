@@ -27,7 +27,7 @@
     padding-left: @normal-spacing;
     padding-right: @normal-spacing * 2;
     cursor: pointer;
-    user-select: none;
+    &:extend(.no-select);
     max-width: @full;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -59,7 +59,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      user-select: none;
+      &:extend(.no-select);
       &[disabled] {
         opacity: 0.5;
       }
