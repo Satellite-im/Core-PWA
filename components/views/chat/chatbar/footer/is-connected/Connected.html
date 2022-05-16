@@ -1,6 +1,6 @@
 <div v-if="!typing" class="is-connected">
   <circle-icon
-    :class="`status is-${ participantStatus.CONNECTED.length > 0 ? $t('ui.online') : $t('ui.offline') }`"
+    :class="`status ${ participantStatus.CONNECTED.length > 0 ? 'is-online' : 'is-offline' }`"
     size="1x"
   />
   <TypographyText

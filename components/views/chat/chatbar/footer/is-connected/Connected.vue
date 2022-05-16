@@ -19,19 +19,24 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['friends', 'conversation']),
+    // ...mapState(['friends', 'conversation']),
+    ...mapState({
+      allFriends: (state) => (state as RootState).friends.all,
+      conversationParticipants: (state) =>
+        (state as RootState).conversation.participants,
+    }),
     /**
      * @method participantStatus
      * @description Get an object that has all participants, connected, and disconnected. The filtering !== null filters out your own username
      */
     participantStatus(): object {
       return {
-        PARTICIPANTS: this.conversation.participants
+        PARTICIPANTS: this.conversationParticipants
           .filter((participant) => participant.name != null)
           .map((participant) => {
             return participant.name
           }),
-        CONNECTED: this.conversation.participants
+        CONNECTED: this.conversationParticipants
           .filter(
             (participant) =>
               participant.state === ConversationConnection.CONNECTED &&
@@ -40,7 +45,7 @@ export default Vue.extend({
           .map((participant) => {
             return participant.name
           }),
-        DISCONNECTED: this.conversation.participants
+        DISCONNECTED: this.conversationParticipants
           .filter(
             (participant) =>
               participant.state === ConversationConnection.DISCONNECTED &&
@@ -71,10 +76,7 @@ export default Vue.extend({
         }
       }
       // if there are multiple connected (2+ group) user plural
-      if (
-        this.participantStatus.PARTICIPANTS.length > 1 &&
-        this.participantStatus.CONNECTED.length > 1
-      ) {
+      if (this.participantStatus.CONNECTED.length > 1) {
         return {
           names: this.participantStatus.CONNECTED.join(', '),
           description: `${this.$t('ui.are')} ${this.$t('ui.online')}`,
@@ -100,7 +102,7 @@ export default Vue.extend({
      */
     friendConnected(friendId: string): boolean {
       return (
-        this.friends.all.find((friend) => friend.address === friendId).state ===
+        this.allFriends.find((friend) => friend.address === friendId).state ===
         'online'
       )
     },
