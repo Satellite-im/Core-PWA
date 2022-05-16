@@ -100,14 +100,166 @@ Array [
 ]
 `;
 
+exports[`mutations.default.addReaction 0 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 0 2`] = `undefined`;
+
+exports[`mutations.default.addReaction 1 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 1 2`] = `undefined`;
+
+exports[`mutations.default.addReaction 2 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 2 2`] = `undefined`;
+
+exports[`mutations.default.addReaction 3 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 3 2`] = `undefined`;
+
+exports[`mutations.default.addReaction 4 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 4 2`] = `undefined`;
+
+exports[`mutations.default.addReaction 5 1`] = `undefined`;
+
+exports[`mutations.default.addReaction 5 2`] = `undefined`;
+
 exports[`mutations.default.sendMessage 0 1`] = `undefined`;
+
+exports[`mutations.default.sendMessage 0 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 0 3`] = `undefined`;
 
 exports[`mutations.default.sendMessage 1 1`] = `undefined`;
 
+exports[`mutations.default.sendMessage 1 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 1 3`] = `undefined`;
+
 exports[`mutations.default.sendMessage 2 1`] = `undefined`;
+
+exports[`mutations.default.sendMessage 2 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 2 3`] = `undefined`;
 
 exports[`mutations.default.sendMessage 3 1`] = `undefined`;
 
+exports[`mutations.default.sendMessage 3 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 3 3`] = `undefined`;
+
 exports[`mutations.default.sendMessage 4 1`] = `undefined`;
 
+exports[`mutations.default.sendMessage 4 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 4 3`] = `undefined`;
+
 exports[`mutations.default.sendMessage 5 1`] = `undefined`;
+
+exports[`mutations.default.sendMessage 5 2`] = `undefined`;
+
+exports[`mutations.default.sendMessage 5 3`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 0 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 0 2`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 1 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 1 2`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 2 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 2 2`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 3 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 3 2`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 4 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 4 2`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 5 1`] = `undefined`;
+
+exports[`mutations.default.setContextMenuPosition 5 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 0 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 0 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 1 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 1 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 2 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 2 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 3 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 3 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 4 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 4 2`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 5 1`] = `undefined`;
+
+exports[`mutations.default.setIsScrollOver 5 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 0 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 0 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 1 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 1 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 2 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 2 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 3 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 3 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 4 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 4 2`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 5 1`] = `undefined`;
+
+exports[`mutations.default.toggleEnhancers 5 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 0 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 0 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 1 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 1 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 2 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 2 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 3 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 3 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 4 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 4 2`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 5 1`] = `undefined`;
+
+exports[`mutations.default.toggleSettings 5 2`] = `undefined`;
+
+exports[`mutations.default.updateMostUsedEmoji 0 1`] = `undefined`;
+
+exports[`mutations.default.updateMostUsedEmoji 0 2`] = `undefined`;
+
+exports[`mutations.default.updateRecentGlyphs 0 1`] = `undefined`;
+
+exports[`mutations.default.updateRecentGlyphs 0 2`] = `undefined`;

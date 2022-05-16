@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions.default.showQuickProfile 0 1`] = `undefined`;
+
+exports[`actions.default.showQuickProfile 1 1`] = `undefined`;
+
+exports[`actions.default.showQuickProfile 2 1`] = `undefined`;
+
+exports[`actions.default.showQuickProfile 3 1`] = `undefined`;
+
+exports[`actions.default.showQuickProfile 4 1`] = `undefined`;
+
+exports[`actions.default.showQuickProfile 5 1`] = `undefined`;
