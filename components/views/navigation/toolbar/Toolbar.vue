@@ -76,7 +76,11 @@ export default Vue.extend({
       groups: (state) => (state as RootState).groups,
       friends: (state) => (state as RootState).friends,
     }),
-    ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
+    ...mapGetters('ui', [
+      'showSidebar',
+      'getAlertCount',
+      'allUnseenNotifications',
+    ]),
     selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
@@ -145,8 +149,8 @@ export default Vue.extend({
       })
     },
     toggleAlerts() {
+      this.$store.commit('ui/resetAlertCounter')
       this.showAlerts = !this.showAlerts
-      this.alertsOpened = true
     },
     isGroup(thing: any) {
       return thing?.type && thing?.type === 'group'

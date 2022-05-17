@@ -20,6 +20,9 @@ const getters = {
         return noti.state === AlertState.UNREAD
       })
   },
+  getAlertCount: (state: UIState) => {
+    return state.notificationsAlertCounter
+  },
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
   },

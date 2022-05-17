@@ -114,7 +114,6 @@ export class NotificationManager {
     const name = 'notifications'
     try {
       const thread = await this.textile.client.getThread(name)
-      // await this.getnotifications()
       return ThreadID.fromString(thread.id)
     } catch (e) {
       return this.initNotificationsDB()

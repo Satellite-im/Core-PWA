@@ -30,14 +30,14 @@
       @click="toggleAlerts"
     >
       <UiCircle
-        v-if="allUnseenNotifications.length && !alertsOpened"
+        v-if="getAlertCount"
         class="notification-alert"
         :size="15"
         color="red"
         type="icon"
-        :data="allUnseenNotifications.length"
+        :data="getAlertCount"
       >
-        {{allUnseenNotifications.length}}
+        {{getAlertCount}}
       </UiCircle>
       <bell-icon
         size="1x"

@@ -12,6 +12,7 @@ const InitialUIState = (): UIState => ({
   showSidebarUsers: true,
   showSidebar: true,
   notifications: [],
+  notificationsAlertCounter: 0,
   showSearchResult: false,
   showSettings: false,
   showMedia: false,

@@ -83,6 +83,7 @@ export default {
     }
     const notifications =
       await $TextileManager.notificationManager?.getnotifications()
+    console.log(notifications)
     commit('setNotifications', notifications)
   },
   async sendNotification(

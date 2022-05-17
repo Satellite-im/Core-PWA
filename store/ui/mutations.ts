@@ -341,14 +341,21 @@ export default {
   },
   sendNotification(state: UIState, notification: Alert) {
     state.notifications.push(notification)
+    state.notificationsAlertCounter++
   },
   setNotifications(state: UIState, notifications: Array<Alert>) {
+    if (state.notificationsAlertCounter !== notifications.length) {
+      state.notificationsAlertCounter = notifications.length
+    }
     state.notifications = notifications
   },
   clearAllNotifications(state: UIState) {
     state.notifications.forEach((notification) => {
       notification.state = AlertState.READ
     })
+  },
+  resetAlertCounter(state: UIState) {
+    state.notificationsAlertCounter = 0
   },
   notificationSeen(state: UIState, notificationId: string) {
     state.notifications.find((item) => item.id === notificationId).state =
