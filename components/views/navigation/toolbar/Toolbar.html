@@ -68,7 +68,7 @@
     >
       <phone-call-icon size="1x" class="control-icon" />
     </div>
-    <!-- <div
+    <div
       :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
       ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
@@ -77,7 +77,7 @@
       @click="() => call(['audio', 'video'])"
     >
       <video-icon size="1x" class="control-icon" />
-    </div> -->
+    </div>
     <UiComingSoon
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.archived')"

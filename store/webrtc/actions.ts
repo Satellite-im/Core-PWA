@@ -382,15 +382,18 @@ const webRTCActions = {
       return
     }
 
-    function onCallIncoming({ peerId }: { peerId: string }) {
+    call.on('INCOMING_CALL', ({ peerId }) => {
       call.peerDialingDisabled[peerId] = true
+
       if (state.activeCall?.callId === call.callId) {
         call.answer(peerId)
         return
       }
+
       if (state.activeCall?.callId) {
         return
       }
+
       if (
         state.incomingCall === undefined &&
         (!call.active || state.activeCall?.callId !== call.callId)
@@ -407,59 +410,39 @@ const webRTCActions = {
         })
       }
       commit('ui/showMedia', true, { root: true })
-    }
-    call.on('INCOMING_CALL', onCallIncoming)
+    })
 
-    function onCallOutgoing({ peerId }: { peerId: string }) {
+    call.on('OUTGOING_CALL', ({ peerId }) => {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
       commit('ui/showMedia', true, { root: true })
-    }
-    call.on('OUTGOING_CALL', onCallOutgoing)
+    })
 
-    function onCallConnected({ peerId }: { peerId: string }) {
+    call.on('CONNECTED', ({ peerId }) => {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
       commit('conversation/setCalling', true, { root: true })
       commit('updateCreatedAt', Date.now())
-    }
-    call.on('CONNECTED', onCallConnected)
+    })
 
-    function onCallHangup() {
+    call.on('HANG_UP', () => {
       commit('updateCreatedAt', 0)
       commit('ui/showMedia', false, { root: true })
       commit('conversation/setCalling', false, { root: true })
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
-    }
-    call.on('HANG_UP', onCallHangup)
+    })
 
-    function onCallTrack({
-      track,
-      kind,
-    }: {
-      track: MediaStreamTrack
-      stream: MediaStream
-      kind?: string | undefined
-    }) {
+    call.on('LOCAL_TRACK_CREATED', ({ track, kind }) => {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
         muted: false,
       })
-    }
-    call.on('LOCAL_TRACK_CREATED', onCallTrack)
+    })
 
-    function onCallPeerTrack({
-      track,
-      peerId,
-      kind,
-    }: {
-      track: MediaStreamTrack
-      peerId: string
-      kind?: string
-    }) {
+    call.on('REMOTE_TRACK_RECEIVED', ({ track, peerId, kind }) => {
       $Logger.log(
         'webrtc',
         `remote track received: ${track.kind}#${track.id} from ${peerId}`,
@@ -469,35 +452,17 @@ const webRTCActions = {
         kind,
         muted: false,
       })
-    }
-    call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
+    })
 
-    function onPeerTrackUnmuted({
-      peerId,
-      trackId,
-      kind,
-    }: {
-      peerId: string
-      trackId: string
-      kind?: string
-    }) {
+    call.on('REMOTE_TRACK_UNMUTED', ({ peerId, trackId, kind }) => {
       commit('setMuted', {
         peerId,
         kind,
         muted: false,
       })
-    }
-    call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
+    })
 
-    function onRemoteTrackRemoved({
-      track,
-      peerId,
-      kind,
-    }: {
-      track: MediaStreamTrack
-      peerId: string
-      kind?: string
-    }) {
+    call.on('REMOTE_TRACK_REMOVED', ({ track, peerId, kind }) => {
       $Logger.log(
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
@@ -507,74 +472,41 @@ const webRTCActions = {
         kind,
         muted: true,
       })
-    }
-    call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
+    })
 
-    function onRemoteTrackMuted({
-      peerId,
-      trackId,
-      kind,
-    }: {
-      peerId: string
-      trackId: string
-      kind?: string
-    }) {
+    call.on('REMOTE_TRACK_MUTED', ({ peerId, trackId, kind }) => {
       commit('setMuted', {
         peerId,
         kind,
         muted: true,
       })
-    }
-    call.on('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
+    })
 
-    function onLocalTrackRemoved({
-      track,
-      kind,
-    }: {
-      track: MediaStreamTrack
-      kind?: string
-    }) {
+    call.on('LOCAL_TRACK_REMOVED', ({ track, kind }) => {
       $Logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
         muted: true,
       })
-    }
-    call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
+    })
 
-    function onStream({ peerId, kind }: { peerId: string; kind?: string }) {
+    call.on('STREAM', ({ peerId, kind }) => {
       commit('setMuted', { peerId, kind, muted: false })
-    }
-    call.on('STREAM', onStream)
+    })
 
-    function onAnswered({ peerId }: { peerId: string }) {
+    call.on('ANSWERED', ({ peerId }) => {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
-    }
-    call.on('ANSWERED', onAnswered)
+    })
 
-    function onCallDestroy() {
+    call.on('DESTROY', () => {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
       commit('conversation/setCalling', false, { root: true })
-      call.off('INCOMING_CALL', onCallIncoming)
-      call.off('OUTGOING_CALL', onCallOutgoing)
-      call.off('CONNECTED', onCallConnected)
-      call.off('HANG_UP', onCallHangup)
-      call.off('LOCAL_TRACK_CREATED', onCallTrack)
-      call.off('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
-      call.off('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
-      call.off('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
-      call.off('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
-      call.off('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
-      call.off('STREAM', onStream)
-      call.off('ANSWERED', onAnswered)
-      call.off('DESTROY', onCallDestroy)
-      $WebRTC.destroyCall(call.callId)
-    }
-    call.on('DESTROY', onCallDestroy)
+      $WebRTC.calls.delete(callId)
+    })
   },
   /**
    * @method deny
