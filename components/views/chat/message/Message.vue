@@ -309,6 +309,14 @@ export default Vue.extend({
           address,
           this.$store.state.friends,
         )
+        if (!recipient) {
+          this.$store.dispatch('textile/editTextMessage', {
+            to: this.$store.state.friends.activeConversation.target
+              .textilePubkey,
+            original: this.$props.message,
+            text: message,
+          })
+        }
         this.$store.dispatch('textile/editTextMessage', {
           to: recipient?.textilePubkey,
           original: this.$props.message,
