@@ -39,7 +39,7 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.validateCharlimit(expectedMessage, true)
   })
 
-  it('Message with more than 2048 chars - Message will only send the first 2048 chars', () => {
+  it.skip('Message with more than 2048 chars - Message will only send the first 2048 chars', () => {
     cy.get('[data-cy=send-message]').click()
     cy.contains(longMessage.slice(0, 2048)).scrollIntoView().should('exist')
     cy.contains(longMessage).should('not.exist')

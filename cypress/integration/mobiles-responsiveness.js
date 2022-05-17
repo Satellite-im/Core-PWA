@@ -13,7 +13,7 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Run responsiveness tests on several devices', () => {
+describe('Run responsiveness tests on several devices', () => {
   Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
   data.allDevices.forEach((item) => {
     beforeEach(() => {
@@ -74,24 +74,42 @@ describe.skip('Run responsiveness tests on several devices', () => {
       cy.closeModal('[data-cy=modal-cta]')
 
       //Go to last glyph and click on glyphs modal
-      cy.goToLastGlyphOnChat().click()
-      cy.validateGlyphsModal()
+      //cy.goToLastGlyphOnChat().click()
+      //cy.validateGlyphsModal()
 
       //Coming soon modal
-      cy.contains('View Glyph Pack').click()
-      cy.get('[data-cy=modal-cta]').should('be.visible')
-      cy.closeModal('[data-cy=modal-cta]')
+      //cy.contains('View Glyph Pack').click()
+      //cy.get('[data-cy=modal-cta]').should('be.visible')
+      //cy.closeModal('[data-cy=modal-cta]')
 
       //Glyph Pack Screen can be dismissed
-      cy.goToLastGlyphOnChat().click()
-      cy.get('[data-cy=glyphs-modal]').should('be.visible')
-      cy.closeModal('[data-cy=glyphs-modal]')
+      //cy.goToLastGlyphOnChat().click()
+      //cy.get('[data-cy=glyphs-modal]').should('be.visible')
+      //cy.closeModal('[data-cy=glyphs-modal]')
 
       //Glyph Selection - Coming Soon Modal
+      cy.goToConversation('cypress friend', true)
       cy.get('#glyph-toggle').click()
       cy.get('[data-cy=glyphs-marketplace]').click()
       cy.get('[data-cy=modal-cta]').should('be.visible')
       cy.closeModal('[data-cy=modal-cta]')
+
+      //Swipe on Settings Screen
+      cy.get('[data-cy=toggle-sidebar]').click() //Show main screen again
+      cy.get('#mobile-nav').should('be.visible')
+      cy.get('[data-cy=mobile-nav-settings]').click() //Click on settings
+      cy.contains('Settings').should('be.visible')
+      cy.get('#settings').realSwipe('toRight') // Swipe to the right, to go back to the left part of the screen
+      cy.contains('Personalize').should('be.visible')
+      cy.get('#settings').realSwipe('toLeft') // Swipe to the left, to go to the right part of the screen
+      cy.contains('Settings').should('be.visible')
+      cy.get('.close-button').click()
+
+      //Swipe on Chat screen to Main screen
+      cy.goToConversation('cypress friend', true)
+      cy.get('[data-cy=editable-input]').should('be.visible')
+      cy.get('body').realSwipe('toRight') // Swipe to the right, to return to main page
+      cy.get('#mobile-nav').should('be.visible')
     })
 
     it(`Release Notes Screen on ${item.description}`, () => {
