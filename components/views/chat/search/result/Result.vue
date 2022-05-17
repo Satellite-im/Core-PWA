@@ -11,6 +11,7 @@ import {
   SearchResultGroupType,
   QueryOptions,
   UISearchResult,
+  MatchTypesEnum,
 } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
 
@@ -126,10 +127,12 @@ export default Vue.extend({
         accounts: [...this.friends.all, this.accounts.details],
         queryString: this.searchQuery,
       }
+      // currently only fetch payload matches, can be refactored later
       this.result = await this.$store.dispatch('textile/searchConversations', {
         query: this.queryOptions,
         page: this.page,
         orderBy: this.orderBy,
+        fields: [MatchTypesEnum.PAYLOAD],
       })
       this.isLoading = DataStateType.Ready
     },

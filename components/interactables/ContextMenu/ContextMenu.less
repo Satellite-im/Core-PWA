@@ -3,8 +3,8 @@
   &:extend(.blur);
   &:extend(.font-secondary);
   &:extend(.round-corners);
+  &:extend(.third-layer);
   position: fixed;
-  z-index: 999;
   outline: none;
   cursor: pointer;
   padding: 8px;
@@ -44,8 +44,9 @@
 
       &:hover {
         &:extend(.background-semitransparent-lighter);
-        text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color,
-          1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
+        text-shadow: -1px 0 1px var(--flair-color), 0 1px 1px var(--flair-color),
+          1px 0 1px var(--flair-color), 0 -1px 1px var(--flair-color),
+          0 0 12px @gray;
       }
 
       &:first-of-type {

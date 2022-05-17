@@ -1,6 +1,7 @@
 // This file is used to bind local classes to vue global context
 
 import Vue from 'vue'
+import logger from './logger'
 import { Config } from '~/config'
 // Libs
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
@@ -10,19 +11,15 @@ import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import { Alerts } from '~/libraries/ui/Alerts'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
 import Hounddog from '~/utilities/Hounddog'
-import Logger from '~/utilities/Logger'
 import BucketManager from '~/libraries/Textile/BucketManager'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import Logger from '~/utilities/Logger'
 
 declare module 'vue/types/vue' {
   interface Vue {
     $Config: typeof Config
-    $WebRTC: WebRTC
-    $Peer2Peer: Peer2Peer
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
@@ -32,7 +29,6 @@ declare module 'vue/types/vue' {
     $BucketManager: BucketManager
     $Hounddog: Hounddog
     $Logger: Logger
-    $Alerts: Alerts
     $FileSystem: TextileFileSystem
   }
 }
@@ -40,7 +36,6 @@ declare module 'vue/types/vue' {
 declare module '@nuxt/types' {
   interface Context {
     $Config: typeof Config
-    $WebRTC: WebRTC
     $SolanaManager: SolanaManager
     $Sounds: SoundManager
     $Crypto: Crypto
@@ -50,12 +45,10 @@ declare module '@nuxt/types' {
     $BucketManager: BucketManager
     $Hounddog: Hounddog
     $Logger: Logger
-    $Alerts: Alerts
     $FileSystem: TextileFileSystem
   }
 }
 
-Vue.prototype.$WebRTC = new WebRTC()
 Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
@@ -64,7 +57,6 @@ Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
-Vue.prototype.$Alerts = new Alerts()
 Vue.prototype.$FileSystem = new TextileFileSystem()
 
 // Add typed store alias to Vue prototype

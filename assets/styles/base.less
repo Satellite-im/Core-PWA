@@ -244,31 +244,6 @@ button {
   overflow: unset !important;
 }
 
-//Switch
-.switch-container {
-  .switch-button-control {
-    .switch-button {
-      border: 0.125rem solid var(--flair-color);
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-
-      .sw-button {
-        &:extend(.background-flair);
-        &:extend(.switch-off-glow-flair);
-      }
-
-      &.enabled {
-        &:extend(.background-flair);
-        &:extend(.glow-flair);
-
-        .sw-button {
-          border: 0.2rem solid var(--flair-color);
-          background: @white !important;
-        }
-      }
-    }
-  }
-}
-
 //Volume Slider
 .volume-slider .vue-slider-process,
 .vue-slider-dot-tooltip-inner {
@@ -466,7 +441,7 @@ input.date-input {
     &:extend(.blur-less);
     font-family: @primary-font !important;
     color: @secondary-text !important;
-    z-index: 100000 !important;
+    &:extend(.fourth-layer);
   }
 }
 .input {
@@ -511,7 +486,8 @@ input.date-input {
 .select.is-primary:not(:hover)::after,
 .select:not(.is-multiple):not(.is-loading):hover::after {
   border-color: @secondary-text;
-  z-index: @base-z-index;
+
+  &:extend(.first-layer);
 }
 
 .select.is-primary:hover::after,

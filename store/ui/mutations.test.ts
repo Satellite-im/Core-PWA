@@ -5,6 +5,7 @@ import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { FlairColors, ThemeNames } from '~/store/ui/types'
 import { Fil } from '~/libraries/Files/Fil'
+import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 // So we don't have annoying snapshot fails. (https://stackoverflow.com/questions/42935903/jest-snapshot-testing-how-to-ignore-part-of-the-snapshot-file-in-jest-test-resu)
 Date.now = jest.fn(() => 1645617999076)
@@ -2511,6 +2512,7 @@ describe('mutations', () => {
     },
     isLoadingFileIndex: true,
     fileDownloadList: ['string'],
+    renameItem: {},
   }
 
   test('togglePinned', () => {
@@ -3100,8 +3102,14 @@ describe('mutations', () => {
   })
   test('setRenameItem', () => {
     const localizedState = { ...initialState }
-    mutations.default.setRenameItem(localizedState, 'new name')
-    expect(localizedState.renameCurrentName).toBe('new name')
+    const mockDirectoryData = {
+      name: 'Test Directory',
+      liked: false,
+      shared: false,
+      type: DIRECTORY_TYPE.DEFAULT,
+    }
+    mutations.default.setRenameItem(localizedState, mockDirectoryData)
+    expect(localizedState.renameItem).toBe(mockDirectoryData)
   })
   test('setSettingsRoute', () => {
     const localizedState = { ...initialState }
@@ -3441,5 +3449,621 @@ describe('mutations', () => {
     expect(localizedState.fileDownloadList).not.toEqual(
       expect.arrayContaining(['not-in-array']),
     )
+  })
+  test('send notification', () => {
+    const localizedState = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      notifications: [
+        {
+          _id: '01g2y9d6499169rzs5etrff48w',
+          _mod: 1652431427721842400,
+          at: 1652431426842,
+          content: {
+            description: 'New DM',
+            title: 'Notification',
+          },
+          from: 'Andre2',
+          id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+      ],
+      showSearchResult: false,
+      showSettings: false,
+      showMedia: false,
+      settingsSideBar: true,
+      settingsRoute: 'personalize',
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: {
+        x: 0,
+        y: 0,
+      },
+      quickProfilePosition: {
+        x: 0,
+        y: 0,
+      },
+      modals: {
+        callToAction: false,
+        changelog: false,
+        createServer: false,
+        creategroup: false,
+        crop: false,
+        error: false,
+        glyph: false,
+      },
+      groupInvite: {
+        isOpen: false,
+        marketplace: false,
+        newfolder: false,
+        quickchat: false,
+        renameFile: false,
+        userProfile: false,
+        wallet: false,
+        walletMini: false,
+        glyphModalPack: '',
+        chatbarContent: '',
+      },
+      replyChatbarContent: {
+        from: '',
+        id: '',
+        payload: '',
+        chatbarFocus: false,
+        fullscreen: false,
+        showPinned: false,
+      },
+      enhancers: {
+        containerWidth: 0,
+        defaultHeight: '30rem',
+        defaultWidth: '24rem',
+        floating: false,
+        position: [0, 0],
+        route: 'emotes',
+        show: false,
+        messages: [],
+        unreadMessage: 0,
+        isScrollOver: false,
+        showOlderMessagesInfo: false,
+        isTyping: false,
+        isReacted: false,
+        activeChannel: undefined,
+      },
+      settingReaction: {
+        groupID: null,
+        messageID: null,
+        status: false,
+        hoveredGlyphInfo: undefined,
+      },
+      glyphMarketplaceView: {
+        shopId: null,
+        view: 'home',
+      },
+      editMessage: {
+        from: '',
+        id: '',
+        payload: '',
+        mostEmojiUsed: [],
+        recentGlyphs: [],
+      },
+      theme: {},
+      base: {
+        class: '',
+        name: 'default',
+        text: 'Default',
+        value: 'default',
+      },
+      flair: {
+        text: 'Satellite',
+        value: '#2761fd',
+        filesUploadStatus: '',
+        renameItem: undefined,
+        filePreview: undefined,
+        fileDownloadList: [],
+        chatImageOverlay: undefined,
+      },
+      fileSort: {
+        asc: true,
+        category: 'modified',
+      },
+      swiperSlideIndex: 0,
+    }
+    mutations.default.sendNotification(localizedState, {
+      _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+      _mod: 1652432302212590600,
+      at: 1652432301322,
+      content: {
+        description: 'New DM',
+        title: 'Notification',
+      },
+      from: 'Andre2',
+      id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+      state: 'UNREAD',
+      type: 'Direct Message',
+    })
+    expect(localizedState.notifications).toEqual([
+      // Sorted in reverse
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+      {
+        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+        _mod: 1652432302212590600,
+        at: 1652432301322,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+    ])
+  })
+  test('set notification', () => {
+    const localizedState = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      notifications: [],
+      showSearchResult: false,
+      showSettings: false,
+      showMedia: false,
+      settingsSideBar: true,
+      settingsRoute: 'personalize',
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: {
+        x: 0,
+        y: 0,
+      },
+      quickProfilePosition: {
+        x: 0,
+        y: 0,
+      },
+      modals: {
+        callToAction: false,
+        changelog: false,
+        createServer: false,
+        creategroup: false,
+        crop: false,
+        error: false,
+        glyph: false,
+      },
+      groupInvite: {
+        isOpen: false,
+        marketplace: false,
+        newfolder: false,
+        quickchat: false,
+        renameFile: false,
+        userProfile: false,
+        wallet: false,
+        walletMini: false,
+        glyphModalPack: '',
+        chatbarContent: '',
+      },
+      replyChatbarContent: {
+        from: '',
+        id: '',
+        payload: '',
+        chatbarFocus: false,
+        fullscreen: false,
+        showPinned: false,
+      },
+      enhancers: {
+        containerWidth: 0,
+        defaultHeight: '30rem',
+        defaultWidth: '24rem',
+        floating: false,
+        position: [0, 0],
+        route: 'emotes',
+        show: false,
+        messages: [],
+        unreadMessage: 0,
+        isScrollOver: false,
+        showOlderMessagesInfo: false,
+        isTyping: false,
+        isReacted: false,
+        activeChannel: undefined,
+      },
+      settingReaction: {
+        groupID: null,
+        messageID: null,
+        status: false,
+        hoveredGlyphInfo: undefined,
+      },
+      glyphMarketplaceView: {
+        shopId: null,
+        view: 'home',
+      },
+      editMessage: {
+        from: '',
+        id: '',
+        payload: '',
+        mostEmojiUsed: [],
+        recentGlyphs: [],
+      },
+      theme: {},
+      base: {
+        class: '',
+        name: 'default',
+        text: 'Default',
+        value: 'default',
+      },
+      flair: {
+        text: 'Satellite',
+        value: '#2761fd',
+        filesUploadStatus: '',
+        renameItem: undefined,
+        filePreview: undefined,
+        fileDownloadList: [],
+        chatImageOverlay: undefined,
+      },
+      fileSort: {
+        asc: true,
+        category: 'modified',
+      },
+      swiperSlideIndex: 0,
+    }
+    mutations.default.setNotifications(localizedState, [
+      // Sorted in the same order
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+      {
+        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+        _mod: 1652432302212590600,
+        at: 1652432301322,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+    ])
+    expect(localizedState.notifications).toEqual([
+      // Sorted in the same order
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+      {
+        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+        _mod: 1652432302212590600,
+        at: 1652432301322,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+    ])
+  })
+  test('set all notification state to read', () => {
+    // previously they are unread
+    const localizedState = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      notifications: [
+        {
+          _id: '01g2y9d6499169rzs5etrff48w',
+          _mod: 1652431427721842400,
+          at: 1652431426842,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+        {
+          _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+          _mod: 1652432302212590600,
+          at: 1652432301322,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+      ],
+      showSearchResult: false,
+      showSettings: false,
+      showMedia: false,
+      settingsSideBar: true,
+      settingsRoute: 'personalize',
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: {
+        x: 0,
+        y: 0,
+      },
+      quickProfilePosition: {
+        x: 0,
+        y: 0,
+      },
+      modals: {
+        callToAction: false,
+        changelog: false,
+        createServer: false,
+        creategroup: false,
+        crop: false,
+        error: false,
+        glyph: false,
+      },
+      groupInvite: {
+        isOpen: false,
+        marketplace: false,
+        newfolder: false,
+        quickchat: false,
+        renameFile: false,
+        userProfile: false,
+        wallet: false,
+        walletMini: false,
+        glyphModalPack: '',
+        chatbarContent: '',
+      },
+      replyChatbarContent: {
+        from: '',
+        id: '',
+        payload: '',
+        chatbarFocus: false,
+        fullscreen: false,
+        showPinned: false,
+      },
+      enhancers: {
+        containerWidth: 0,
+        defaultHeight: '30rem',
+        defaultWidth: '24rem',
+        floating: false,
+        position: [0, 0],
+        route: 'emotes',
+        show: false,
+        messages: [],
+        unreadMessage: 0,
+        isScrollOver: false,
+        showOlderMessagesInfo: false,
+        isTyping: false,
+        isReacted: false,
+        activeChannel: undefined,
+      },
+      settingReaction: {
+        groupID: null,
+        messageID: null,
+        status: false,
+        hoveredGlyphInfo: undefined,
+      },
+      glyphMarketplaceView: {
+        shopId: null,
+        view: 'home',
+      },
+      editMessage: {
+        from: '',
+        id: '',
+        payload: '',
+        mostEmojiUsed: [],
+        recentGlyphs: [],
+      },
+      theme: {},
+      base: {
+        class: '',
+        name: 'default',
+        text: 'Default',
+        value: 'default',
+      },
+      flair: {
+        text: 'Satellite',
+        value: '#2761fd',
+        filesUploadStatus: '',
+        renameItem: undefined,
+        filePreview: undefined,
+        fileDownloadList: [],
+        chatImageOverlay: undefined,
+      },
+      fileSort: {
+        asc: true,
+        category: 'modified',
+      },
+      swiperSlideIndex: 0,
+    }
+    mutations.default.clearAllNotifications(localizedState)
+    expect(localizedState.notifications).toEqual([
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'READ',
+        type: 'Direct Message',
+      },
+      {
+        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+        _mod: 1652432302212590600,
+        at: 1652432301322,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+        state: 'READ',
+        type: 'Direct Message',
+      },
+    ])
+  })
+  test('get notification that have been read (notificationSeen)', () => {
+    const localizedState = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      notifications: [
+        {
+          _id: '01g2y9d6499169rzs5etrff48w',
+          _mod: 1652431427721842400,
+          at: 1652431426842,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+        {
+          _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+          _mod: 1652432302212590600,
+          at: 1652432301322,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+      ],
+      showSearchResult: false,
+      showSettings: false,
+      showMedia: false,
+      settingsSideBar: true,
+      settingsRoute: 'personalize',
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: {
+        x: 0,
+        y: 0,
+      },
+      quickProfilePosition: {
+        x: 0,
+        y: 0,
+      },
+      modals: {
+        callToAction: false,
+        changelog: false,
+        createServer: false,
+        creategroup: false,
+        crop: false,
+        error: false,
+        glyph: false,
+      },
+      groupInvite: {
+        isOpen: false,
+        marketplace: false,
+        newfolder: false,
+        quickchat: false,
+        renameFile: false,
+        userProfile: false,
+        wallet: false,
+        walletMini: false,
+        glyphModalPack: '',
+        chatbarContent: '',
+      },
+      replyChatbarContent: {
+        from: '',
+        id: '',
+        payload: '',
+        chatbarFocus: false,
+        fullscreen: false,
+        showPinned: false,
+      },
+      enhancers: {
+        containerWidth: 0,
+        defaultHeight: '30rem',
+        defaultWidth: '24rem',
+        floating: false,
+        position: [0, 0],
+        route: 'emotes',
+        show: false,
+        messages: [],
+        unreadMessage: 0,
+        isScrollOver: false,
+        showOlderMessagesInfo: false,
+        isTyping: false,
+        isReacted: false,
+        activeChannel: undefined,
+      },
+      settingReaction: {
+        groupID: null,
+        messageID: null,
+        status: false,
+        hoveredGlyphInfo: undefined,
+      },
+      glyphMarketplaceView: {
+        shopId: null,
+        view: 'home',
+      },
+      editMessage: {
+        from: '',
+        id: '',
+        payload: '',
+        mostEmojiUsed: [],
+        recentGlyphs: [],
+      },
+      theme: {},
+      base: {
+        class: '',
+        name: 'default',
+        text: 'Default',
+        value: 'default',
+      },
+      flair: {
+        text: 'Satellite',
+        value: '#2761fd',
+        filesUploadStatus: '',
+        renameItem: undefined,
+        filePreview: undefined,
+        fileDownloadList: [],
+        chatImageOverlay: undefined,
+      },
+      fileSort: {
+        asc: true,
+        category: 'modified',
+      },
+      swiperSlideIndex: 0,
+    }
+    mutations.default.notificationSeen(
+      localizedState,
+      '69c1ad1d-37e9-4ff5-b929-de5509512a11', // Flag this notification as READ
+    )
+    expect(localizedState.notifications).toEqual([
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'READ', // State is transformed from UNREAD to READ
+        type: 'Direct Message',
+      },
+      {
+        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+        _mod: 1652432302212590600,
+        at: 1652432301322,
+        content: { description: 'New DM', title: 'Notification' },
+        from: 'Andre2',
+        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+    ])
   })
 })

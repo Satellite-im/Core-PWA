@@ -1,0 +1,51 @@
+{
+  "dataRecovery": {
+    "accounts": [
+      {
+        "id": 1,
+        "description": "Chat User A",
+        "recoverySeed": "rookie fitness angry concert lemon unique trouble foot need step crack easy"
+      },
+      {
+        "id": 2,
+        "description": "Chat User B",
+        "recoverySeed": "allow helmet winter guide someone magic north alcohol face alpha cancel inquiry"
+      },
+      {
+        "id": 3,
+        "description": "Chat User C",
+        "recoverySeed": "bless humor leisure brain throw pelican shine amused regular head connect economy"
+      },
+      {
+        "id": 4,
+        "description": "cypress",
+        "recoverySeed": "cargo thank invest burden frog diamond invite law escape phrase iron fringe"
+      },
+      {
+        "id": 5,
+        "description": "cypress friend",
+        "recoverySeed": "shock divorce gather label draft broccoli forum example outside wall flame pretty"
+      },
+      {
+        "id": 6,
+        "description": "Snap QA",
+        "recoverySeed": "image worry kitten lyrics obvious scare keen clown clump baby guitar rate"
+      },
+      {
+        "id": 7,
+        "description": "Snap Friend",
+        "recoverySeed": "differ trial pipe oil filter affair nest avocado club castle clerk future"
+      },
+      {
+        "id": 8,
+        "description": "Chat Pair A",
+        "recoverySeed": "mobile increase debate rate boring goose demand stomach gossip panda stone rug"
+      },
+      {
+        "id": 9,
+        "description": "Chat Pair B",
+        "recoverySeed": "spring congress lock depend produce any trumpet ladder secret era device clip"
+      }
+    ]
+  }
+}

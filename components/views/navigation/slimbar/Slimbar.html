@@ -3,7 +3,7 @@
     <div
       v-if="horizontal"
       class="circle-group"
-      @click="toggleModal(ModalWindows.CALLTOACTION)"
+      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />
@@ -16,7 +16,10 @@
       </UiCircle>
     </div>
     <UiScroll verticalScroll v-if="!horizontal">
-      <div id="list-container">
+      <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
+        <UiLoadersSpinner :spinning="true" />
+      </div>
+      <div id="list-container" v-else>
         <UiHorizontalRule v-if="unreads.length > 0" />
         <div class="unreads" v-for="user in unreads">
           <Unread
@@ -76,7 +79,7 @@
       v-if="!horizontal"
       class="circle-group has-tooltip-right has-tooltip-primary"
       :data-tooltip="$t('servers.new_server')"
-      @click="toggleModal(ModalWindows.CALLTOACTION)"
+      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <UiCircle type="icon" :size="40">
         <plus-icon size="0.75x" />

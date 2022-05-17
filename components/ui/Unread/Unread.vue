@@ -59,7 +59,6 @@ export default Vue.extend({
       this.isLoading = true
       try {
         await this.$store.dispatch('friends/removeFriend', this.user)
-        this.$router.replace('/chat/direct')
       } catch (e) {
         this.$toast.success(
           this.$t('errors.friends.friend_not_removed') as string,

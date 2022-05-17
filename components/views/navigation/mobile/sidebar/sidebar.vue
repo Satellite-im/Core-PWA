@@ -52,7 +52,10 @@
             <users-icon size="1.2x" />
           </InteractablesButton>
           <span
-            v-if="friends.incomingRequests.length"
+            v-if="
+              friends.incomingRequests.length &&
+              dataState.friends === DataStateType.Ready
+            "
             :class="
               $route.path.includes('/friends/list')
                 ? 'label tag-inverted'
@@ -89,9 +92,12 @@
         class="scrolling hidden-scroll users"
       >
         <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
-          <div
-            v-if="dataState.friends !== DataStateType.Loading && users.length"
-          >
+          <UiLoadersAddress
+            v-if="dataState.friends === DataStateType.Loading"
+            :count="4"
+            inverted
+          />
+          <div v-else-if="users && users.length">
             <UiInlineNotification
               v-if="ui.unreadMessage.length"
               :text="$t('messaging.new_messages')"
@@ -119,19 +125,22 @@
               <user-plus-icon size="1.2x" />
             </InteractablesButton>
           </div>
-          <UiLoadersAddress v-else :count="4" inverted />
         </UiScroll>
       </div>
       <div v-else v-scroll-lock="true" class="scrolling hidden-scroll">
         <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
-          <div v-if="dataState.friends !== DataStateType.Loading">
+          <UiLoadersAddress
+            v-if="dataState.friends === DataStateType.Loading"
+            :count="4"
+            inverted
+          />
+          <div v-else-if="groups && groups.length">
             <GroupAside
               v-for="group in groups"
               :key="group.address"
               :selected-group="group"
             />
           </div>
-          <UiLoadersAddress v-else :count="4" inverted />
         </UiScroll>
       </div>
       <div class="new-chat-container">
@@ -286,7 +295,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding-bottom: @normal-spacing;
-  z-index: @base-z-index + 12;
+
+  &:extend(.first-layer);
   background: transparent;
 
   .sidebar-inner {
@@ -301,7 +311,7 @@ export default Vue.extend({
     .toggle-sidebar {
       cursor: pointer;
       position: absolute;
-      z-index: 11;
+      &:extend(.first-layer);
       top: 2.5rem;
       right: 1rem;
     }
@@ -348,7 +358,8 @@ export default Vue.extend({
     .toggle-sidebar {
       cursor: pointer;
       position: absolute;
-      z-index: @base-z-index + 10;
+
+      &:extend(.first-layer);
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
       &:extend(.font-accent);
@@ -433,9 +444,10 @@ export default Vue.extend({
     align-items: center;
     cursor: pointer;
     width: auto;
-    z-index: @base-z-index + 4;
+
+    &:extend(.first-layer);
     &::before {
-      z-index: @base-z-index + 8;
+      &:extend(.first-layer);
     }
   }
 }
@@ -453,7 +465,7 @@ export default Vue.extend({
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
-    z-index: 3;
+    &:extend(.first-layer);
     width: @sidebar-size-mobile;
     min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;

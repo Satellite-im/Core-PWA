@@ -1,10 +1,8 @@
 import { isEqual } from 'lodash'
-import { FileSortEnum } from '../Enums/enums'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemErrors } from './errors/Errors'
 import { Fil } from './Fil'
 import { DIRECTORY_TYPE } from './types/directory'
-import { FileSort } from '~/store/ui/types'
 
 export class Directory extends Item {
   private _children = new Map()
@@ -87,35 +85,6 @@ export class Directory extends Item {
     })
 
     return dirCopy
-  }
-
-  /**
-   * @method sortedContent
-   * @param {FileSort} sort current sort key and asc/desc boolean
-   * @returns {Item[]} array of sorted content within the CURRENT directory
-   */
-  sortedContent(sort: FileSort): Item[] {
-    const key = sort.category
-    if (key === FileSortEnum.SIZE) {
-      return this.content.sort(
-        sort.asc
-          ? (a: Item, b: Item) => a[key] - b[key]
-          : (a: Item, b: Item) => b[key] - a[key],
-      )
-    }
-    if (key === FileSortEnum.MODIFIED) {
-      return this.content.sort(
-        sort.asc
-          ? (a: Item, b: Item) => b[key] - a[key]
-          : (a: Item, b: Item) => a[key] - b[key],
-      )
-    }
-
-    return this.content.sort(
-      sort.asc
-        ? (a: Item, b: Item) => a[key].localeCompare(b[key])
-        : (a: Item, b: Item) => b[key].localeCompare(a[key]),
-    )
   }
 
   /**

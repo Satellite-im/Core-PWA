@@ -1,3 +1,8 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+const recoverySeed =
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
@@ -13,7 +18,7 @@ describe('Import Account Validations', () => {
   })
 
   it('Import account', () => {
-    cy.importAccountPINscreen(randomPIN, false, false)
+    cy.importAccountPINscreen(randomPIN)
     cy.get('[data-cy=import-account-button]', { timeout: 60000 })
       .should('be.visible')
       .click()
@@ -23,12 +28,7 @@ describe('Import Account Validations', () => {
     cy.get('[data-cy=add-passphrase]')
       .should('be.visible')
       .click()
-      .type(
-        'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}',
-        { log: false },
-        { force: true },
-      )
+      .type(recoverySeed + '{enter}', { log: false }, { force: true })
     cy.contains('Recover Account').should('be.visible').click()
-    Cypress.on('uncaught:exception', (err, runnable) => false) // temporary until AP-48 gets fixed
   })
 })

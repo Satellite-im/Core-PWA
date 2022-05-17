@@ -52,6 +52,7 @@ Object {
     "changelog": false,
     "createServer": false,
     "creategroup": false,
+    "crop": false,
     "error": false,
     "glyph": false,
     "groupInvite": Object {
@@ -66,13 +67,14 @@ Object {
     "walletMini": false,
   },
   "mostEmojiUsed": Array [],
+  "notifications": Array [],
   "quickProfile": false,
   "quickProfilePosition": Object {
     "x": 0,
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "renameCurrentName": undefined,
+  "renameItem": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",

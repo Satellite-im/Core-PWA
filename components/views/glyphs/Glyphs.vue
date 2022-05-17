@@ -33,8 +33,8 @@ export default Vue.extend({
     openMarketplace() {
       this.closeModal()
       this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALLTOACTION,
-        state: !this.ui.modals[ModalWindows.CALLTOACTION],
+        name: ModalWindows.CALL_TO_ACTION,
+        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
       /* refactor - AP-1104
        const marketInfo = find(marketGlyphs, ({ glyph }) => {

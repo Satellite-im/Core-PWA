@@ -44,7 +44,6 @@ describe('mutate incoming requests', () => {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
-        activeChat: true,
         encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -222,7 +221,6 @@ describe('mutate outgoing requests', () => {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
-        activeChat: true,
         encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -400,7 +398,6 @@ describe('mutate friends', () => {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
-        activeChat: true,
         encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -434,7 +431,6 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: false,
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -455,7 +451,6 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -476,7 +471,6 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -497,7 +491,6 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: true, // Change from false (above) to true
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -518,7 +511,6 @@ describe('mutate friends', () => {
       name: 'Yusuf Mangunwijaya',
       address: '0x1', // We will just use this
       typingState: 'TYPING', // Change the value here so we can detect it in the the expect() below
-      activeChat: true,
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -542,7 +534,6 @@ describe('mutate friends', () => {
       name: 'Y. Mangunwijaya', //  Abbreviate the name from Yusuf to Y.
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: false,
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -564,7 +555,6 @@ describe('mutate friends', () => {
       name: 'Y. Mangunwijaya',
       address: '0x1',
       typingState: 'NOT_TYPING',
-      activeChat: false,
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -1038,6 +1028,82 @@ describe('mutations.setStored', () => {
 })
 
 describe('mutations.setNote', () => {
+  test('real', () => {
+    const localState = {
+      incomingRequests: [
+        {
+          requestId: 'incomingRequestsItem0',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+          from: '',
+          userInfo: {
+            name: '',
+            servers: {},
+            status: '',
+            photoHash: '',
+          },
+        },
+      ],
+      outgoingRequests: [
+        {
+          to: '',
+          requestId: '',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+        },
+      ],
+      all: [
+        {
+          publicKey: 'NoWiFi4you',
+          localSypingState: 'NOT_TYPING',
+          item: {},
+          pending: true,
+          activeChat: true,
+          encryptedTextilePubkey: '',
+          name: 'Taurus Nix',
+          address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          account: {
+            accountId: 'Checking Account',
+            from: '.',
+            status: 429,
+            fromMailboxId: '12345',
+            toMailboxId: 'v4.0.0-rc.4',
+            to: './path/to/file',
+          },
+          textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+          status: '',
+          state: 'idle',
+          unreadCount: 123,
+          profilePicture: '',
+          badge: 'community',
+          userAccount: '',
+          mailboxId: '',
+        },
+      ],
+    }
+    const argument = {
+      id: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      note: 'zeroxzero',
+    }
+
+    mutations.setNote(localState, argument)
+    expect(localState.all).toMatchSnapshot()
+  })
+
   test('0', () => {
     const result: any = mutations.setNote(
       { all: { map: () => 'Michael' } },

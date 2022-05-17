@@ -42,7 +42,10 @@ export default class BucketManager {
     if (!Config.textile.key) {
       throw new Error('Textile key not found')
     }
-    this.buckets = await Buckets.withKeyInfo({ key: Config.textile.key })
+    this.buckets = await Buckets.withKeyInfo(
+      { key: Config.textile.key },
+      { host: Config.textile.apiUrl },
+    )
     await this.buckets.getToken(this.identity)
     const result = await this.buckets.getOrCreate(
       `hub.textile.io/ipfs/${this.identity}/${this.prefix}`,

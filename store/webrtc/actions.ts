@@ -1,17 +1,19 @@
 import Vue from 'vue'
+import type { SignalData } from 'simple-peer'
+import { ConversationParticipant } from '../conversation/types'
 import { WebRTCState } from './types'
 
 import { ActionsArguments } from '~/types/store/store'
-import WebRTC from '~/libraries/WebRTC/WebRTC'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-import { initialTracksState } from '~/store/webrtc/state'
 import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
+import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { Friend } from '~/types/ui/friends'
 
-let announceInterval
-const announceFrequency = 10 * 1000
+const announceFrequency = 5000
 const webRTCActions = {
   /**
    * @method initialized
@@ -27,8 +29,9 @@ const webRTCActions = {
       originator,
     }: { privateKeyInfo: PrivateKeyInfo; originator: string },
   ) {
-    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-    const $Logger: Logger = Vue.prototype.$Logger
+    commit('setIncomingCall', undefined)
+    commit('setActiveCall', undefined)
+    commit('conversation/setCalling', false, { root: true })
 
     $WebRTC.init(originator)
 
@@ -37,24 +40,105 @@ const webRTCActions = {
       privateKey: privateKeyInfo,
     })
     await $Peer2Peer.start()
+    await $Peer2Peer.node?.relay?.start()
 
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
       const connectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
+      if (!connectedFriend) return
+      dispatch(
+        'friends/setFriendState',
+        {
+          address: connectedFriend.address,
+          state: 'online',
+        },
+        { root: true },
+      )
+      dispatch('textile/subscribeToMailbox', {}, { root: true })
+    })
 
-      if (!connectedFriend || !connectedFriend.peerId) return
-      dispatch('createPeerConnection', connectedFriend.address)
+    $Peer2Peer.on('peer:call', async ({ payload, peerId }) => {
+      // update conversation participants with peers from call announcement
+      if (payload.peers) {
+        payload.peers.forEach((peer) => {
+          if (
+            rootState.conversation.participants.find(
+              (p) => p.peerId === peer.id,
+            )
+          ) {
+            commit(
+              'conversation/updateParticipant',
+              {
+                peerId: peer.id,
+                name: peer.name,
+              },
+              { root: true },
+            )
+          }
+        })
+      }
+
+      if (!payload.callId || payload.callId === $Peer2Peer.id) {
+        return
+      }
+
+      const call = $WebRTC.getCall(payload.callId)
+      if (!call) {
+        dispatch('createCall', payload)
+        return
+      }
+
+      if (rootState.webrtc.activeCall?.callId !== call.callId) {
+        return
+      }
+
+      const peerIdStr = peerId.toB58String()
+      if (
+        !call.peerConnected[peerIdStr] &&
+        !call.peerDialingDisabled[peerIdStr]
+      ) {
+        await call.initiateCall(peerIdStr)
+      }
     })
 
     $Peer2Peer.on('peer:disconnect', ({ peerId }) => {
+      const disconnectedParticipant = rootState.conversation.participants.find(
+        (participant: ConversationParticipant) =>
+          participant.peerId === peerId.toB58String(),
+      )
+      if (disconnectedParticipant) {
+        commit(
+          'conversation/updateParticipant',
+          {
+            peerId: disconnectedParticipant.peerId,
+            state: 'DISCONNECTED',
+          },
+          { root: true },
+        )
+      }
+
       const disconnectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
+      if (disconnectedFriend) {
+        dispatch(
+          'friends/setFriendState',
+          {
+            address: disconnectedFriend.address,
+            state: 'offline',
+          },
+          { root: true },
+        )
+      }
 
-      if (!disconnectedFriend) return
-      $WebRTC.peers.delete(disconnectedFriend.address)
-      commit('removeConnectedPeer', disconnectedFriend.address)
+      const peerHash = peerId.toB58String()
+      $WebRTC.calls.forEach((call) => {
+        if (call.peers[peerHash]) {
+          call.destroyPeer(peerHash)
+          delete call.peers[peerHash]
+        }
+      })
     })
 
     const timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
@@ -62,7 +146,6 @@ const webRTCActions = {
       const typingFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
-
       if (!typingFriend) return
 
       commit(
@@ -85,195 +168,503 @@ const webRTCActions = {
       dispatch('textile/subscribeToMailbox', {}, { root: true })
     })
 
-    $Peer2Peer.on('peer:announce', ({ peerId }) => {
+    $Peer2Peer.on('peer:announce', ({ peerId, payload }) => {
+      const requestParticipant = rootState.conversation.participants.find(
+        (p) =>
+          p.peerId === peerId.toB58String() ||
+          (payload.address && p.address === payload.address),
+      )
+      if (requestParticipant) {
+        commit(
+          'conversation/updateParticipant',
+          {
+            peerId: requestParticipant.peerId,
+            state: 'CONNECTED',
+            name: payload.name,
+            profilePicture: payload.profilePicture,
+          },
+          { root: true },
+        )
+      }
       const requestFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
-      if (!requestFriend) return
-
-      if (
-        rootState.webrtc.connectedPeers.includes(requestFriend.address) &&
-        $WebRTC.peers.has(requestFriend.address)
-      )
-        return
-
-      dispatch('createPeerConnection', requestFriend.address)
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
-    })
-
-    announceInterval = setInterval(() => {
-      // iterate friends
-      rootState.friends.all.forEach((friend) => {
-        if (
-          friend.peerId &&
-          (!$WebRTC.peers.has(friend.address) ||
-            !rootState.webrtc.connectedPeers.includes(friend.address))
-        ) {
-          $Peer2Peer.sendMessage(
-            {
-              type: 'peer:announce',
-              payload: {},
-              sentAt: Date.now().valueOf(),
-            },
-            friend.peerId,
-          )
-        } else {
-          dispatch(
-            'friends/setFriendState',
-            {
-              address: friend.address,
-              state: 'online',
-            },
-            { root: true },
-          )
-        }
-      })
-    }, announceFrequency)
-
-    commit('setInitialized', true)
-  },
-  /**
-   * @method getActivePeers
-   * @description returns an array of the user id's that have an open/active webrtc call
-   * @example
-   * this.$store.dispatch('webrtc/getActivePeers') // ['userid1', 'userid2']
-   */
-  async getActivePeers() {
-    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-    return Object.keys($WebRTC.peers)
-  },
-
-  /**
-   * @method createPeerConnection
-   * @description Connects to a secret channel and waits the peer connection to happen
-   * @param identifier Address of the current user
-   * @example
-   * this.$store.dispatch('webrtc/initialize')
-   */
-  async createPeerConnection(
-    { commit, dispatch, state, rootState }: ActionsArguments<WebRTCState>,
-    identifier: string,
-  ) {
-    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-
-    const activeFriend = rootState.friends.all.find(
-      (friend) => friend.address === identifier,
-    )
-
-    if (!activeFriend || !activeFriend.peerId) {
-      return
-    }
-    if ($WebRTC.getPeer(activeFriend.peerId)) {
-      commit('addConnectedPeer', activeFriend.address)
+      if (!requestFriend || requestFriend.state === 'online') return
       dispatch(
         'friends/setFriendState',
         {
-          address: activeFriend.address,
+          address: requestFriend.address,
           state: 'online',
         },
         { root: true },
       )
+      dispatch('textile/subscribeToMailbox', {}, { root: true })
+    })
+
+    $Peer2Peer.on(
+      'peer:mute',
+      ({ peerId, payload: { callId, trackId, kind } }) => {
+        const peerIdStr = peerId.toB58String()
+        commit('setMuted', {
+          peerId: peerIdStr,
+          kind,
+          callId,
+          trackId,
+          muted: true,
+        })
+      },
+    )
+
+    $Peer2Peer.on(
+      'peer:unmute',
+      ({ peerId, payload: { callId, trackId, kind } }) => {
+        const peerIdStr = peerId.toB58String()
+        commit('setMuted', {
+          peerId: peerIdStr,
+          kind,
+          callId,
+          trackId,
+          muted: false,
+        })
+      },
+    )
+
+    setInterval(() => {
+      if (rootState.conversation) {
+        rootState.conversation.participants
+          .filter((p) => p.peerId && p.peerId !== $Peer2Peer.id)
+          .forEach((p) => {
+            $Peer2Peer.sendMessage(
+              {
+                type: 'peer:announce',
+                payload: {
+                  name: rootState.accounts.details?.name,
+                  address: rootState.accounts.details?.address,
+                  profilePicture: rootState.accounts.details?.profilePicture,
+                },
+                sentAt: Date.now().valueOf(),
+              },
+              p.peerId as string,
+            )
+          })
+      }
+      rootState.friends.all
+        .filter((friend) => !!friend.peerId && friend.state !== 'online')
+        .forEach((friend) => {
+          $Peer2Peer.sendMessage(
+            {
+              type: 'peer:announce',
+              payload: {
+                name: rootState.accounts.details?.name,
+                address: rootState.accounts.details?.address,
+                profilePicture: rootState.accounts.details?.profilePicture,
+              },
+              sentAt: Date.now().valueOf(),
+            },
+            friend.peerId as string,
+          )
+        })
+    }, announceFrequency)
+
+    commit('setInitialized', { initialized: true, originator })
+  },
+
+  /**
+   * @method toggleMute
+   * @description - Turn on/off mute for the given stream in the active call
+   * @param peerId Peer ID of the owner of the stream
+   * @param kind Kind of the stream (audio/video/screen)
+   */
+  toggleMute(
+    { state }: ActionsArguments<WebRTCState>,
+    { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
+  ) {
+    if (!state.activeCall || !peerId) {
       return
     }
-
-    const call = $WebRTC.connect(activeFriend.peerId)
-    call.on('INCOMING_CALL', (data) => {
-      commit('setIncomingCall', data.peerId)
-      commit('ui/showMedia', true, { root: true })
-    })
-
-    call.on('OUTGOING_CALL', (data) => {
-      commit('setActiveCall', data.peerId)
-      commit('ui/showMedia', true, { root: true })
-    })
-
-    call.on('CONNECTED', (data) => {
-      commit('setIncomingCall', '')
-      commit('setActiveCall', data.peerId)
-      commit('updateCreatedAt', Date.now())
-    })
-
-    call.on('HANG_UP', (data) => {
-      commit('setIncomingCall', '')
-      commit('setActiveCall', '')
-      commit('updateCreatedAt', 0)
-      commit('updateLocalTracks', initialTracksState)
-
-      commit('updateRemoteTracks', initialTracksState)
-      commit('ui/showMedia', false, { root: true })
-    })
-
-    call.on('LOCAL_TRACK_CREATED', ({ track }) => {
-      const update = { [track.kind]: { id: track.id, muted: !track.enabled } }
-      commit('updateLocalTracks', update)
-    })
-
-    call.on('LOCAL_TRACK_REMOVED', ({ track }) => {
-      const update = { [track.kind]: { muted: true } }
-      commit('updateLocalTracks', update)
-    })
-
-    call.on('REMOTE_TRACK_RECEIVED', ({ track }) => {
-      const update = { [track.kind]: { id: track.id, muted: !track.enabled } }
-      commit('updateRemoteTracks', update)
-    })
-
-    call.on('REMOTE_TRACK_REMOVED', ({ track }) => {
-      const update = { [track.kind]: { muted: true } }
-      commit('updateRemoteTracks', update)
-    })
-
-    dispatch(
-      'friends/setFriendState',
-      {
-        address: activeFriend.address,
-        state: 'online',
-      },
-      { root: true },
-    )
-    commit('addConnectedPeer', activeFriend.address)
-  },
-  denyCall({ commit }: ActionsArguments<WebRTCState>) {
-    commit('setIncomingCall', '')
-  },
-  hangUp({ commit }: ActionsArguments<WebRTCState>) {
-    commit('setActiveCall', '')
-  },
-  async call(
-    { commit, state, dispatch, rootState }: ActionsArguments<WebRTCState>,
-    kinds: TrackKind[],
-  ) {
-    if (!state.connectedPeers) return
-
-    const $WebRTC: WebRTC = Vue.prototype.$WebRTC
-    const $Hounddog = Vue.prototype.$Hounddog
-
-    const activeFriend = $Hounddog.getActiveFriend(rootState.friends)
-
-    if (!activeFriend) return
-
-    const identifier = activeFriend.address
-
-    // Trying to call the same user while call is already active
-    if (identifier === state.activeCall) return
-
-    if (!$WebRTC.peers.has(identifier)) {
-      await dispatch('createPeerConnection', identifier)
-    }
-
-    const call = $WebRTC.getPeer(activeFriend.peerId)
+    const call = $WebRTC.getCall(state.activeCall.callId)
     if (!call) {
       return
     }
-    try {
-      await call.createLocalTracks(kinds)
-      await call.start()
-    } catch (error) {
-      if (error instanceof Error) {
-        // @ts-ignore
-        this.app.$toast.error(this.app.i18n.t(error.message) as string)
-      }
+    const isMuted = state.streamMuted[peerId]?.[kind]
+    if (isMuted) {
+      call.unmute({ peerId, kind })
+      return
     }
+    call.mute({ peerId, kind })
+  },
+
+  /**
+   * @method getActiveCalls
+   * @description returns an array containing the callId for each active webrtc call
+   * @example
+   * this.$store.dispatch('webrtc/getActiveCalls') // ['userid1', 'groupId2']
+   */
+  async getActiveCalls() {
+    return Object.keys($WebRTC.calls)
+  },
+
+  /**
+   * @method createCall
+   * @description creates a webrtc call connection to the provided peer(s)
+   * @param callID - the identifier of the group or peer
+   * @param peerIds - an array of peerIds that are part of the call
+   * @param signal - a pre-provided peer signal for dropping into ongoing calls (optional)
+   * @param peerId - the peerId of the user that initiated the call
+   * @example
+   * this.$store.dispatch('webrtc/initialize', { callId: 'userid1', peerId: 'userid2' })
+   * this.$store.dispatch('webrtc/initialize', { callId: 'groupId1', peerIds: ['userid1', 'userid2'] })
+   */
+  async createCall(
+    { commit, state, rootState }: ActionsArguments<WebRTCState>,
+    {
+      callId,
+      peerIds,
+      peers,
+      signal,
+      peerId,
+    }: {
+      callId: string
+      peerIds?: string[]
+      peers?: CallPeerDescriptor[]
+      signal?: SignalData
+      peerId?: string
+    },
+  ) {
+    const $Logger: Logger = Vue.prototype.$Logger
+    const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
+
+    $Logger.log('webrtc: creating call', callId + ' ' + peerIds)
+
+    if (!$WebRTC.initialized && state.originator) {
+      $WebRTC.init(state.originator)
+    }
+
+    const friendToPeerDescriptor = (
+      friend: Friend | ConversationParticipant,
+    ) => ({
+      id: friend.peerId || '',
+      name: friend.name,
+    })
+
+    if (!peers) {
+      peers = (
+        peerIds
+          ? (rootState.conversation.participants.filter((participant) => {
+              return participant.peerId && peerIds.includes(participant.peerId)
+            }) as ConversationParticipant[])
+          : ([
+              rootState.friends.all.find((friend) => friend.peerId === callId),
+            ] as Friend[])
+      )
+        .map((friend: Friend | ConversationParticipant) =>
+          friendToPeerDescriptor(friend),
+        )
+        .concat({
+          id: $Peer2Peer.id as string,
+          name: rootState.accounts.details?.name as string,
+        })
+    }
+
+    const localId: string = $Peer2Peer.id as string
+    const usedCallId = callId === localId ? peerId : callId
+    if (!usedCallId) {
+      throw new Error('webrtc: invalid callId provided: ' + callId)
+    }
+    const call = $WebRTC.connect(
+      usedCallId,
+      peers,
+      signal && peerId ? { [peerId]: signal } : {},
+    )
+
+    if (!call) {
+      $Logger.log('webrtc/createCall', 'call invalid')
+      return
+    }
+
+    function onCallIncoming({ peerId }: { peerId: string }) {
+      call.peerDialingDisabled[peerId] = true
+      if (state.activeCall?.callId === call.callId) {
+        call.answer(peerId)
+        return
+      }
+      if (state.activeCall?.callId) {
+        return
+      }
+      if (
+        state.incomingCall === undefined &&
+        (!call.active || state.activeCall?.callId !== call.callId)
+      ) {
+        const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'
+        $Logger.log(
+          'webrtc/incomingCall',
+          `incoming call #${call.callId} (${type})`,
+        )
+        commit('setIncomingCall', {
+          callId: call.callId,
+          peerId,
+          type,
+        })
+      }
+      commit('ui/showMedia', true, { root: true })
+    }
+    call.on('INCOMING_CALL', onCallIncoming)
+
+    function onCallOutgoing({ peerId }: { peerId: string }) {
+      commit('setIncomingCall', undefined)
+      commit('setActiveCall', { callId, peerId })
+      commit('ui/showMedia', true, { root: true })
+    }
+    call.on('OUTGOING_CALL', onCallOutgoing)
+
+    function onCallConnected({ peerId }: { peerId: string }) {
+      commit('setIncomingCall', undefined)
+      commit('setActiveCall', { callId, peerId })
+      commit('conversation/setCalling', true, { root: true })
+      commit('updateCreatedAt', Date.now())
+    }
+    call.on('CONNECTED', onCallConnected)
+
+    function onCallHangup() {
+      commit('updateCreatedAt', 0)
+      commit('ui/showMedia', false, { root: true })
+      commit('conversation/setCalling', false, { root: true })
+      commit('setIncomingCall', undefined)
+      commit('setActiveCall', undefined)
+    }
+    call.on('HANG_UP', onCallHangup)
+
+    function onCallTrack({
+      track,
+      kind,
+    }: {
+      track: MediaStreamTrack
+      stream: MediaStream
+      kind?: string | undefined
+    }) {
+      $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
+      commit('setMuted', {
+        peerId: $Peer2Peer.id,
+        kind,
+        muted: false,
+      })
+    }
+    call.on('LOCAL_TRACK_CREATED', onCallTrack)
+
+    function onCallPeerTrack({
+      track,
+      peerId,
+      kind,
+    }: {
+      track: MediaStreamTrack
+      peerId: string
+      kind?: string
+    }) {
+      $Logger.log(
+        'webrtc',
+        `remote track received: ${track.kind}#${track.id} from ${peerId}`,
+      )
+      commit('setMuted', {
+        peerId,
+        kind,
+        muted: false,
+      })
+    }
+    call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
+
+    function onPeerTrackUnmuted({
+      peerId,
+      trackId,
+      kind,
+    }: {
+      peerId: string
+      trackId: string
+      kind?: string
+    }) {
+      commit('setMuted', {
+        peerId,
+        kind,
+        muted: false,
+      })
+    }
+    call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
+
+    function onRemoteTrackRemoved({
+      track,
+      peerId,
+      kind,
+    }: {
+      track: MediaStreamTrack
+      peerId: string
+      kind?: string
+    }) {
+      $Logger.log(
+        'webrtc',
+        `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
+      )
+      commit('setMuted', {
+        peerId,
+        kind,
+        muted: true,
+      })
+    }
+    call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
+
+    function onRemoteTrackMuted({
+      peerId,
+      trackId,
+      kind,
+    }: {
+      peerId: string
+      trackId: string
+      kind?: string
+    }) {
+      commit('setMuted', {
+        peerId,
+        kind,
+        muted: true,
+      })
+    }
+    call.on('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
+
+    function onLocalTrackRemoved({
+      track,
+      kind,
+    }: {
+      track: MediaStreamTrack
+      kind?: string
+    }) {
+      $Logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
+      commit('setMuted', {
+        peerId: $Peer2Peer.id,
+        kind,
+        muted: true,
+      })
+    }
+    call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
+
+    function onStream({ peerId, kind }: { peerId: string; kind?: string }) {
+      commit('setMuted', { peerId, kind, muted: false })
+    }
+    call.on('STREAM', onStream)
+
+    function onAnswered({ peerId }: { peerId: string }) {
+      commit('setIncomingCall', undefined)
+      commit('setActiveCall', { callId, peerId })
+    }
+    call.on('ANSWERED', onAnswered)
+
+    function onCallDestroy() {
+      commit('setIncomingCall', undefined)
+      commit('setActiveCall', undefined)
+      commit('updateCreatedAt', 0)
+      commit('conversation/setCalling', false, { root: true })
+      call.off('INCOMING_CALL', onCallIncoming)
+      call.off('OUTGOING_CALL', onCallOutgoing)
+      call.off('CONNECTED', onCallConnected)
+      call.off('HANG_UP', onCallHangup)
+      call.off('LOCAL_TRACK_CREATED', onCallTrack)
+      call.off('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
+      call.off('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
+      call.off('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
+      call.off('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
+      call.off('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
+      call.off('STREAM', onStream)
+      call.off('ANSWERED', onAnswered)
+      call.off('DESTROY', onCallDestroy)
+      $WebRTC.destroyCall(call.callId)
+    }
+    call.on('DESTROY', onCallDestroy)
+  },
+  /**
+   * @method deny
+   * @description denies an incoming call
+   * @example
+   * this.$store.dispatch('webrtc/deny')
+   */
+  denyCall({ state }: ActionsArguments<WebRTCState>) {
+    if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
+    if (state.incomingCall) {
+      $WebRTC.getCall(state.incomingCall.callId)?.destroy()
+    }
+  },
+  /**
+   * @method hangUp
+   * @description hangs up the active call
+   * @example
+   * this.$store.dispatch('webrtc/hangUp')
+   */
+  hangUp({ state, commit }: ActionsArguments<WebRTCState>) {
+    if (state.activeCall) {
+      $WebRTC.getCall(state.activeCall.callId)?.destroy()
+    }
+    commit('setActiveCall', undefined)
+    commit('setIncomingCall', undefined)
+  },
+  /**
+   * @method call
+   * @description dials an outbound call to the active peer(s) (rootState.conversation.id)
+   * @param kinds - an array of media kinds to be sent (audio, video, screen)
+   * @example
+   * this.$store.dispatch('webrtc/call')
+   */
+  async call(
+    { dispatch, commit, rootState }: ActionsArguments<WebRTCState>,
+    { kinds }: { kinds: TrackKind[] },
+  ) {
+    const $Logger: Logger = Vue.prototype.$Logger
+    const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
+
+    const activeConversation = rootState.conversation
+    if (!activeConversation.id) {
+      $Logger.log(
+        'webrtc',
+        `call - conversation not initialized or id not found`,
+      )
+      return
+    }
+
+    const peerIds = activeConversation.participants
+      .map((p) => p.peerId)
+      .filter(Boolean)
+    if (peerIds.length === 0) {
+      $Logger.log('webrtc', `call - conversation has no participants`)
+      return
+    }
+
+    const callId = activeConversation.id
+    if (!callId) {
+      $Logger.log('webrtc', `call - callId not found: ${callId}`)
+      return
+    }
+
+    if (!$WebRTC.calls.has(callId)) {
+      $Logger.log('webrtc', `call - call not found: ${callId}, creating...`)
+      await dispatch('createCall', {
+        callId,
+        peerIds,
+        initiate: true,
+      })
+    }
+
+    const call = $WebRTC.getCall(callId)
+    if (!call) {
+      $Logger.log('webrtc', `call - call not ready: ${callId}`)
+      return
+    }
+
+    commit('setStreamMuted', {
+      peerId: $Peer2Peer.id,
+      audio: !kinds.includes('audio'),
+      video: !kinds.includes('video'),
+      screen: !kinds.includes('screen'),
+    })
+
+    commit('setIncomingCall', undefined)
+    commit('setActiveCall', { callId })
+    commit('updateCreatedAt', Date.now())
+    await call.createLocalTracks(kinds)
+    await call.start()
   },
 }
 

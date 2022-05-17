@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions.default.initialize 0 1`] = `undefined`;
+
+exports[`actions.default.initialize 1 1`] = `undefined`;
+
+exports[`actions.default.initialize 2 1`] = `undefined`;
+
+exports[`actions.default.initialize 3 1`] = `undefined`;
+
+exports[`actions.default.initialize 4 1`] = `undefined`;
+
+exports[`actions.default.initialize 5 1`] = `undefined`;
+
+exports[`actions.default.setConversation 0 1`] = `undefined`;
+
+exports[`actions.default.setConversation 1 1`] = `undefined`;
+
+exports[`actions.default.setConversation 2 1`] = `undefined`;
+
+exports[`actions.default.setConversation 3 1`] = `undefined`;
+
+exports[`actions.default.setConversation 4 1`] = `undefined`;

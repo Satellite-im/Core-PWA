@@ -1,12 +1,16 @@
 // eslint-disable-next-line import/named
-import { Commitment } from '@solana/web3.js'
+import { Commitment, clusterApiUrl } from '@solana/web3.js'
 
 export const Config = {
   debug: true,
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: 'https://hub.textile.io',
+    browser:
+      process.env.NUXT_ENV_TEXTILE_BROWSER || 'https://hub.edge.satellite.one',
+    apiUrl:
+      process.env.NUXT_ENV_TEXTILE_API_URL ||
+      'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
@@ -15,6 +19,7 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
+  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
@@ -47,9 +52,13 @@ export const Config = {
   },
   solana: {
     customFaucet: 'https://faucet.satellite.one',
-    network: 'devnet',
+    network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
+    httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
+      ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
+      : undefined,
     serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
     friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
+    friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',
     groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
     defaultPreflightCommitment: 'confirmed' as Commitment,
@@ -139,6 +148,23 @@ export const Config = {
       /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
   },
   webrtc: {
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun2.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun3.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun4.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun.services.mozilla.com',
+      },
+    ],
     constraints: {
       audio: true,
       video: {

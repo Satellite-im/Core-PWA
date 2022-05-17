@@ -1,43 +1,38 @@
 import { EventEmitter } from 'events'
 import {
+  IdlTypes,
+  Program,
+  Provider,
+  utils,
+  Wallet,
+} from '@project-serum/anchor'
+import { TypeDef } from '@project-serum/anchor/dist/cjs/program/namespace/types'
+import {
+  GetProgramAccountsFilter,
+  KeyedAccountInfo,
+  PublicKey,
   SystemProgram,
   Transaction,
-  TransactionInstruction,
-  PublicKey,
-  sendAndConfirmTransaction,
-  SYSVAR_RENT_PUBKEY,
-  Keypair,
-  // eslint-disable-next-line import/named
-  ConfirmOptions,
-  // eslint-disable-next-line import/named
-  KeyedAccountInfo,
-  // eslint-disable-next-line import/named
-  GetProgramAccountsFilter,
 } from '@solana/web3.js'
 import base58 from 'micro-base58'
+import { Friends, IDL } from './FriendsProgram.idl'
 import {
-  encodeInstructionData,
-  friendLayout,
-  parseFriendAccount,
-  parseFriendAccounts,
-} from './FriendsProgram.layout'
-import {
-  CreateFriendParams,
   FriendAccount,
   FriendsEvents,
   FriendStatus,
 } from './FriendsProgram.types'
-
-import { Seeds, publicKeyFromSeeds } from '~/libraries/Solana/Solana'
-
-import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { Config } from '~/config'
+import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
 
-export const FRIENDS_PROGRAM_ID = new PublicKey(Config.solana.friendsProgramId)
+export const FRIENDS_PROGRAM_ID = new PublicKey(
+  Config.solana.friendsProgramExId,
+)
 
 export default class FriendsProgram extends EventEmitter {
-  solana?: Solana
-  subscriptions?: { [eventName: string]: number }
+  protected solana?: Solana
+  protected program?: Program<Friends>
+  protected subscriptions?: { [eventName: string]: number }
+
   constructor(solana: Solana) {
     super()
     if (solana) {
@@ -52,615 +47,415 @@ export default class FriendsProgram extends EventEmitter {
    */
   init(solana: Solana) {
     this.solana = solana
-  }
 
-  /**
-   * @method createDerivedAccount
-   * Utility function to create derived accounts that are owned by the friends program
-   * @param seedKey the seed key to generate the account
-   * @param seedString the seed string to generate the account
-   * @param params instruction params containing the friend public key
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the public key of the generated account
-   */
-  async createDerivedAccount(
-    seedKey: PublicKey,
-    seedString: string,
-    params: CreateFriendParams,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
+    const payer = this._getPayer()
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
-
-    const { base, key } = await publicKeyFromSeeds(
-      [seedKey.toBytes(), params.createAccount.friend.friendKey],
-      seedString,
-      FRIENDS_PROGRAM_ID,
-    )
-
-    const instruction = new TransactionInstruction({
-      keys: [
-        { pubkey: payerAccount.publicKey, isSigner: true, isWritable: true },
-        { pubkey: seedKey, isSigner: false, isWritable: false },
-        { pubkey: base[0], isSigner: false, isWritable: false },
-        { pubkey: key, isSigner: false, isWritable: true },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData(params),
-    })
-
-    const transaction = new Transaction().add(instruction)
-
-    await sendAndConfirmTransaction(connection, transaction, [payerAccount], {
+    const provider = new Provider(this.solana.connection, new Wallet(payer), {
       commitment: Config.solana.defaultCommitment,
-      preflightCommitment: Config.solana.defaultPreflightCommitment,
-      ...confirmOptionsOverride,
     })
-    return key
+
+    this.program = new Program<Friends>(IDL, FRIENDS_PROGRAM_ID, provider)
   }
 
   /**
-   * @method createFriend
-   * Generates and initializes a friend account that represent the
-   * friendship of 2 accounts
-   * @param userFromKey the public key of the user that sent the request
-   * @param userToKey the public key of the recipient
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the public key of the generated friend account
+   * @method _getSolana
+   * Get the solana instance for friends
+   * @returns the solana instance
    */
-  async createFriend(
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
+  protected _getSolana() {
     if (!this.solana) {
+      throw new Error('Solana not initialized')
+    }
+
+    return this.solana
+  }
+
+  /**
+   * @method _getProgram
+   * Returns the anchor program instance for friends
+   * @returns the anchor program instance
+   */
+  protected _getProgram() {
+    if (!this.program) {
       throw new Error('Friends program not initialized')
     }
 
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
-    if (!userFromKey) return null
-
-    const params = {
-      createAccount: {
-        friend: { friendKey: userToKey.toBytes() },
-      },
-    }
-    const friendKey = await this.createDerivedAccount(
-      userFromKey,
-      Seeds.Friend,
-      params,
-      confirmOptionsOverride,
-    )
-
-    if (!friendKey) throw new Error('Derived account error')
-
-    return friendKey
+    return this.program
   }
 
   /**
-   * @method initFriendRequest
-   * Generate the transaction object for a new friend request to be sent
-   * @param friendKey the public key of the friend account that
-   * has been derived in straight order (fromKey first and toKey after)
-   * @param friend2Key the public key of the friend account that
-   * has been derived in mirrored order (toKey first and fromKey after)
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param fromPaddedBuffer the buffer representation of the encrypted textile
-   * mailbox id related to the sender
-   * @returns the generated transaction object
+   * @method _getPayer
+   * Retrieve the active account from Solana wallet
+   * @returns the payer account
    */
-  initFriendRequest(
-    friendKey: PublicKey,
-    friend2Key: PublicKey,
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-    fromPaddedBuffer: Uint8Array,
-  ) {
-    return new TransactionInstruction({
-      keys: [
-        { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: friend2Key, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: true, isWritable: false },
-        { pubkey: userToKey, isSigner: false, isWritable: true },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData({
-        makeRequest: {
-          tex: [
-            fromPaddedBuffer.slice(0, 32),
-            fromPaddedBuffer.slice(32, 64),
-            fromPaddedBuffer.slice(64, 96),
-            fromPaddedBuffer.slice(96, 128),
-          ],
-        },
-      }),
-    })
-  }
+  protected _getPayer() {
+    const payer = this.solana?.getActiveAccount()
 
-  /**
-   * @method initAcceptFriendRequest
-   * Generate the transaction object to accept a friend request
-   * @param friendKey the public key of the friend account that contains the
-   * friend request to be accepted
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param toPaddedBuffer the buffer representation of the encrypted textile
-   * mailbox id related to the recipient
-   * @returns the generated transaction object
-   */
-  initAcceptFriendRequest(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-    toPaddedBuffer: Uint8Array,
-  ) {
-    return new TransactionInstruction({
-      keys: [
-        { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: false, isWritable: true },
-        { pubkey: userToKey, isSigner: true, isWritable: false },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData({
-        acceptRequest: {
-          tex: [
-            toPaddedBuffer.slice(0, 32),
-            toPaddedBuffer.slice(32, 64),
-            toPaddedBuffer.slice(64, 96),
-            toPaddedBuffer.slice(96, 128),
-          ],
-        },
-      }),
-    })
-  }
-
-  /**
-   * @method initDenyFriendRequest
-   * Generates the transaction object to be sent to deny an existing friend
-   * request
-   * @param friendKey the public key of the friend request to be denied
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @returns a transaction object ready to be sent through the network
-   */
-  initDenyFriendRequest(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-  ) {
-    return new TransactionInstruction({
-      keys: [
-        { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: false, isWritable: true },
-        { pubkey: userToKey, isSigner: true, isWritable: false },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData({
-        denyRequest: {},
-      }),
-    })
-  }
-
-  /**
-   * @method initRemoveFriendRequest
-   * Generates the transaction object to be sent to remove an existing friend
-   * request
-   * @param friendKey the public key of the friend request to be removed
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @returns a transaction object ready to be sent through the network
-   */
-  initRemoveFriendRequest(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-  ) {
-    return new TransactionInstruction({
-      keys: [
-        { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: true, isWritable: false },
-        { pubkey: userToKey, isSigner: false, isWritable: true },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData({
-        removeRequest: {},
-      }),
-    })
-  }
-
-  /**
-   * @method initRemoveFriend
-   * Generates the transaction object to be sent to remove an existing friend
-   * @param friendKey the public key of the friend account to be removed
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param initiator a flag that indicates if the request was initially sent by the current user
-   * @returns a transaction object ready to be sent through the network
-   */
-  initRemoveFriend(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToKey: PublicKey,
-    initiator: boolean,
-  ) {
-    return new TransactionInstruction({
-      keys: [
-        { pubkey: friendKey, isSigner: false, isWritable: true },
-        { pubkey: userFromKey, isSigner: initiator, isWritable: false },
-        { pubkey: userToKey, isSigner: !initiator, isWritable: false },
-        { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
-      ],
-      programId: FRIENDS_PROGRAM_ID,
-      data: encodeInstructionData({
-        removeFriend: {},
-      }),
-    })
-  }
-
-  /**
-   * @method createFriendRequest
-   * Generates and sends a transaction to create a new frend request and register
-   * it on the network
-   * @param friendKey the public key of the friend account that
-   * has been derived in straight order (fromKey first and toKey after)
-   * @param friend2Key the public key of the friend account that
-   * has been derived in mirrored order (toKey first and fromKey after)
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param fromPaddedBuffer the buffer representation of the encrypted textile
-   * mailbox id related to the sender
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the id of the transaction that has been sent
-   */
-  createFriendRequest(
-    friendKey: PublicKey,
-    friend2Key: PublicKey,
-    userFromAccount: Keypair,
-    userToKey: PublicKey,
-    fromPaddedBuffer: Uint8Array,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
+    if (!payer) {
+      throw new Error('Missing payer')
     }
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
-
-    const transaction = new Transaction().add(
-      this.initFriendRequest(
-        friendKey,
-        friend2Key,
-        userFromAccount.publicKey,
-        userToKey,
-        fromPaddedBuffer,
-      ),
-    )
-
-    return sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payerAccount, userFromAccount],
-      {
-        commitment: Config.solana.defaultCommitment,
-        preflightCommitment: Config.solana.defaultPreflightCommitment,
-        ...confirmOptionsOverride,
-      },
-    )
+    return payer
   }
 
   /**
-   * @method acceptFriendRequest
-   * Generates and sends a transaction to accept an existing friend request. It can
-   * be done only by the recipient of the request
-   * @param friendKey the public key of the friend account that contains the
-   * friend request to be accepted
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param toPaddedBuffer the buffer representation of the encrypted textile
-   * mailbox id related to the recipient
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the id of the transaction that has been sent
+   * @method getPayer
+   * Retrieve the active account from Solana wallet
+   * @returns the payer account
    */
-  acceptFriendRequest(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToAccount: Keypair,
-    toPaddedBuffer: Uint8Array,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
-
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
-
-    const transaction = new Transaction().add(
-      this.initAcceptFriendRequest(
-        friendKey,
-        userFromKey,
-        userToAccount.publicKey,
-        toPaddedBuffer,
-      ),
-    )
-
-    return sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payerAccount, userToAccount],
-      {
-        commitment: Config.solana.defaultCommitment,
-        preflightCommitment: Config.solana.defaultPreflightCommitment,
-        ...confirmOptionsOverride,
-      },
-    )
+  getPayer() {
+    return this._getPayer()
   }
 
   /**
-   * @method denyFriendRequest
-   * Generates and sends a transaction to deny an existing friend request. It can
-   * be done only by the recipient of the request
-   * @param friendKey the public key of the friend request to be denied
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the id of the transaction that has been sent
+   * @method makeRequest
+   * Make friend request
+   * @param request friend request account publickey
+   * @param first sender or recipient public key, whichever is greater (in bytes)
+   * @param second sender or recipient public key, whichever is smaller (in bytes)
+   * @param k textile encryption key for sender
+   * @returns transaction hash string of make friend request
    */
-  denyFriendRequest(
-    friendKey: PublicKey,
-    userFromKey: PublicKey,
-    userToAccount: Keypair,
-    confirmOptionsOverride?: ConfirmOptions,
+  async makeRequest(
+    request: PublicKey,
+    first: PublicKey,
+    second: PublicKey,
+    k: String,
   ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
+    const program = this._getProgram()
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
-
-    const transaction = new Transaction().add(
-      this.initDenyFriendRequest(
-        friendKey,
-        userFromKey,
-        userToAccount.publicKey,
-      ),
-    )
-
-    return sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payerAccount, userToAccount],
-      {
-        commitment: Config.solana.defaultCommitment,
-        preflightCommitment: Config.solana.defaultPreflightCommitment,
-        ...confirmOptionsOverride,
+    const payer = this._getPayer()
+    const tx = await program.rpc.makeRequest(first, second, k, {
+      accounts: {
+        request,
+        user: payer.publicKey,
+        payer: payer.publicKey,
+        systemProgram: SystemProgram.programId,
       },
-    )
+      signers: [payer],
+    })
+    return tx
   }
 
   /**
-   * @method removeFriendRequest
-   * Generates and sends a transaction to remove an existing friend request. It can
-   * be done only by the original sender of the request
-   * @param friendKey the public key of the friend account to be removed
-   * @param userFromKey the public key of the sender
-   * @param userToKey the public key of the recipient
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the id of the transaction that has been sent
+   * @method denyRequest
+   * Deny friend request
+   * @param request friend request account public key
+   * @returns transaction hash string of deny friend request
    */
-  removeFriendRequest(
-    friendKey: PublicKey,
-    userFromAccount: Keypair,
-    userToKey: PublicKey,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
+  async denyRequest(request: PublicKey) {
+    const program = this._getProgram()
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
+    const payer = this._getPayer()
 
-    const transaction = new Transaction().add(
-      this.initRemoveFriendRequest(
-        friendKey,
-        userFromAccount.publicKey,
-        userToKey,
-      ),
-    )
-
-    return sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payerAccount, userFromAccount],
-      {
-        commitment: Config.solana.defaultCommitment,
-        preflightCommitment: Config.solana.defaultPreflightCommitment,
-        ...confirmOptionsOverride,
+    const tx = await program.rpc.denyRequest({
+      accounts: {
+        request,
+        user: payer.publicKey,
       },
-    )
+      signers: [payer],
+    })
+    return tx
+  }
+
+  /**
+   * @method acceptRequest
+   * Accept friend request
+   * @param request friend request account public key
+   * @param k textile encryption key for recipient
+   * @returns transaction hash of accept friend request
+   */
+  async acceptRequest(request: PublicKey, k: String) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const tx = await program.rpc.acceptRequest(k, {
+      accounts: {
+        request,
+        user: payer.publicKey,
+      },
+      signers: [payer],
+    })
+    return tx
+  }
+
+  /**
+   * @method removeRequest
+   * Remove friend request
+   * @param request friend request account public key
+   */
+  async removeRequest(request: PublicKey) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const tx = await program.rpc.removeRequest({
+      accounts: {
+        request,
+        user: payer.publicKey,
+      },
+      signers: [payer],
+    })
+    return tx
+  }
+
+  /**
+   * @method closeRequest
+   * Close friend request from sender's side
+   * @param request friend request account public key
+   */
+  async closeRequest(request: PublicKey) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const tx = await program.rpc.closeRequest({
+      accounts: {
+        request,
+        user: payer.publicKey,
+        payer: payer.publicKey,
+      },
+      signers: [payer],
+    })
+    return tx
   }
 
   /**
    * @method removeFriend
-   * Generates and sends a transaction to remove an existing friend. It can be
-   * done by both the sender and the recipient
-   * @param friendAccount the keypair related to the friend account
-   * @param confirmOptionsOverride Solana confirm options to be eventually
-   * overwritten (eg. commitment, preflightCommitment)
-   * @returns the id of the transaction that has been sent
+   * Remove friend
+   * @param request friend request account public key
    */
-  removeFriend(
-    friendAccount: FriendAccount,
-    signer: Keypair,
-    confirmOptionsOverride?: ConfirmOptions,
-  ) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
+  async removeFriend(request: PublicKey) {
+    const program = this._getProgram()
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) return null
+    const payer = this._getPayer()
 
-    const friendAccountKey = new PublicKey(friendAccount.accountId)
-    const userFromKey = new PublicKey(friendAccount.from)
-    const userToKey = new PublicKey(friendAccount.to)
-
-    const isInitiator = userFromKey.toBase58() === signer.publicKey.toBase58()
-
-    const transaction = new Transaction().add(
-      this.initRemoveFriend(
-        friendAccountKey,
-        userFromKey,
-        userToKey,
-        isInitiator,
-      ),
-    )
-
-    return sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payerAccount, signer],
-      {
-        commitment: Config.solana.defaultCommitment,
-        preflightCommitment: Config.solana.defaultPreflightCommitment,
-        ...confirmOptionsOverride,
+    const tx = await program.rpc.removeFriend({
+      accounts: {
+        request,
+        user: payer.publicKey,
       },
-    )
+      signers: [payer],
+    })
+    return tx
   }
 
   /**
-   * @method getFriend
-   * Retrieves a friend account from a given public key
-   * @param friendKey the public key of the friend account
-   * @returns the raw friend account object
+   * @method removeFriendAndCloseAccount
+   * Remove friend and close friend request account
+   * @param request friend request account public key
+   * @param closeAccountAndRefund original sender public key to refund after closing the account
    */
-  async getFriend(friendKey: PublicKey) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
+  async removeFriendAndCloseAccount(
+    request: PublicKey,
+    closeAccountAndRefund?: PublicKey,
+  ) {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const removeFriendInstruction = program.instruction.removeFriend({
+      accounts: {
+        request,
+        user: payer.publicKey,
+      },
+      signers: [payer],
+    })
+
+    const atomicTransaction = new Transaction()
+
+    atomicTransaction.add(removeFriendInstruction)
+
+    if (closeAccountAndRefund) {
+      const closeRequestInstruction = program.instruction.closeRequest({
+        accounts: {
+          request,
+          user: payer.publicKey,
+          payer: closeAccountAndRefund,
+        },
+        signers: [payer],
+      })
+
+      atomicTransaction.add(closeRequestInstruction)
     }
 
-    const { connection } = this.solana
-    const accountInfo = await connection.getAccountInfo(
-      friendKey,
-      Config.solana.defaultCommitment,
-    )
-
-    if (accountInfo === null) {
-      return null
-      //   throw new Error('Error: cannot find the account')
-    }
-    return friendLayout.decode(Buffer.from(accountInfo.data))
+    return program.provider.send(atomicTransaction)
   }
 
   /**
-   * @method getParsedFriend
-   * Retrieves a friend account from a given public key and parses it
-   * @param friendKey the public key of the friend account
-   * @returns the parsed friend object
-   */
-  async getParsedFriend(friendKey: PublicKey) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
-
-    const { connection } = this.solana
-    const accountInfo = await connection.getAccountInfo(
-      friendKey,
-      Config.solana.defaultCommitment,
-    )
-
-    if (accountInfo === null) {
-      return null
-    }
-
-    // friendLayout.decode(Buffer.from(accountInfo.data))
-
-    return parseFriendAccount({ pubkey: friendKey, account: accountInfo })
-  }
-
-  /**
-   * @method computeFriendAccountKey
-   * Computes the friend account key from 2 given public keys
-   * @param userFromKey the public key to be used at position 0
-   * @param userToKey the public key to be used at position 1
+   * @method computeAccountKeys
+   * Computes the friend account public key from 2 given public keys
+   * @param from the public key to be used at position 0
+   * @param to the public key to be used at position 1
    * @returns the computed public key
    */
-  async computeFriendAccountKey(userFromKey: PublicKey, userToKey: PublicKey) {
-    const { key } = await publicKeyFromSeeds(
-      [userFromKey.toBytes(), userToKey.toBytes()],
-      Seeds.Friend,
-      FRIENDS_PROGRAM_ID,
-    )
+  public computeAccountKeys(from: PublicKey, to: PublicKey) {
+    const program = this._getProgram()
 
-    return key
+    const [first, second] = [from, to].sort((a: PublicKey, b: PublicKey) => {
+      const aValue = parseInt(a.toBuffer().toString('hex'), 16)
+      const bValue = parseInt(b.toBuffer().toString('hex'), 16)
+      return bValue - aValue
+    })
+
+    const request = utils.publicKey.findProgramAddressSync(
+      [first.toBuffer(), second.toBuffer()],
+      program.programId,
+    )
+    return { request: request[0], first, second }
   }
 
   /**
-   * @method getFriendAccountsByStatus
-   * Gets all the friend accounts related to the program, filtered by the
-   * given status code
+   * @method getIncomingAccountsByStatus
+   * Gets all incoming friend accounts related to the program, filtered by the given status code
+   * @param status the status code to filter
+   * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
+   * @returns a list of incoming filtered by status
+   */
+  async getIncomingAccountsByStatus(
+    status: FriendStatus,
+  ): Promise<FriendAccount[]> {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const statusAndToKey = base58(
+      Buffer.from([status, ...payer.publicKey.toBytes()]),
+    )
+
+    const incomingTemp = await program.account.friendRequest.all([
+      {
+        memcmp: { offset: 32 + 8, bytes: statusAndToKey },
+      },
+    ])
+
+    const incoming = incomingTemp.map(this._parseAccount)
+    return incoming
+  }
+
+  /**
+   * @method getOutgoingAccountsByStatus
+   * Gets all outgoing friend accounts related to the program, filtered by given status code
+   * @param status the status code to filter
+   * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
+   * @returns a list of outgoing filtered by status
+   */
+  async getOutgoingAccountsByStatus(
+    status: FriendStatus,
+  ): Promise<FriendAccount[]> {
+    const program = this._getProgram()
+
+    const payer = this._getPayer()
+
+    const fromKeyAndStatus = base58(
+      Buffer.from([...payer.publicKey.toBytes(), status]),
+    )
+
+    const outgoingTemp = await program.account.friendRequest.all([
+      {
+        memcmp: { offset: 8, bytes: fromKeyAndStatus },
+      },
+    ])
+
+    const outgoing = outgoingTemp.map(this._parseAccount)
+    return outgoing
+  }
+
+  /**
+   * @method getAccountsByStatus
+   * Gets all the friend accounts related to the program, filtered by given status code
    * @param status the status code to filter
    * (0 not assigned, 1 pending, 2 accepted, 3 refused, 4 removed)
    * @returns a list of incoming and outgoing requests filtered by status
    */
-  async getFriendAccountsByStatus(status: FriendStatus) {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
-
-    const { connection } = this.solana
-
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) {
-      throw new Error('User account not found')
-    }
-
-    const fromKeyAndStatus = base58(
-      Buffer.from([...payerAccount.publicKey.toBytes(), status]),
-    )
-
-    const statusAndToKey = base58(
-      Buffer.from([status, ...payerAccount.publicKey.toBytes()]),
-    )
-
-    const outgoing = await connection.getProgramAccounts(FRIENDS_PROGRAM_ID, {
-      filters: [{ memcmp: { offset: 0, bytes: fromKeyAndStatus } }],
-    })
-
-    const incoming = await connection.getProgramAccounts(FRIENDS_PROGRAM_ID, {
-      filters: [{ memcmp: { offset: 32, bytes: statusAndToKey } }],
-    })
-
+  async getAccountsByStatus(
+    status: FriendStatus,
+  ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
+    const [incoming, outgoing] = await Promise.all([
+      this.getIncomingAccountsByStatus(status),
+      this.getOutgoingAccountsByStatus(status),
+    ])
     return {
-      incoming: parseFriendAccounts(incoming),
-      outgoing: parseFriendAccounts(outgoing),
+      incoming,
+      outgoing,
+    }
+  }
+
+  /**
+   * @method getAccount
+   * Retrieves a friend account from a given public key
+   * @param accountKey the public key of the friend account
+   * @returns the raw friend account object
+   */
+  async getAccount(accountKey: PublicKey) {
+    const program = this._getProgram()
+    try {
+      const account = await program.account.friendRequest.fetch(accountKey)
+      return this._parseAccount({ publicKey: accountKey, account })
+    } catch (error) {
+      return null
+    }
+  }
+
+  /**
+   * @method getAccountStatus
+   * Retrieves a friend account from a given public key
+   * @param accountKey the public key of the friend account
+   * @returns the account status code
+   */
+  async getAccountStatus(accountKey: PublicKey) {
+    const program = this._getProgram()
+    try {
+      const account = await program.account.friendRequest.fetch(accountKey)
+      return this._parseAccount({ publicKey: accountKey, account }).status
+    } catch (error) {
+      return FriendStatus.UNINITALIZED
+    }
+  }
+
+  /**
+   * @method _parseAccount
+   * Parse the account as FriendAccount
+   * @param account
+   * @returns the account
+   */
+  protected _parseAccount({
+    publicKey,
+    account,
+  }: {
+    publicKey: PublicKey
+    account: TypeDef<Friends['accounts'][0], IdlTypes<Friends>>
+  }): FriendAccount {
+    const {
+      from,
+      to,
+      status: statusObject,
+      fromEncryptedKey,
+      toEncryptedKey,
+    }: {
+      from: PublicKey
+      to: PublicKey
+      status: any
+      fromEncryptedKey: any
+      toEncryptedKey: any
+    } = account
+    const status = statusObject.pending
+      ? FriendStatus.PENDING
+      : statusObject.accepted
+      ? FriendStatus.ACCEPTED
+      : statusObject.denied
+      ? FriendStatus.DENIED
+      : statusObject.removed
+      ? FriendStatus.REMOVED
+      : FriendStatus.UNINITALIZED
+    return {
+      accountId: publicKey.toString(),
+      from: from.toString(),
+      status,
+      to: to.toString(),
+      fromMailboxId: fromEncryptedKey as string,
+      toMailboxId: toEncryptedKey as string,
     }
   }
 
@@ -674,40 +469,37 @@ export default class FriendsProgram extends EventEmitter {
    */
   buildEventHandler(friendEvent: FriendsEvents) {
     return ({ accountId, accountInfo }: KeyedAccountInfo) => {
-      const parsedFriend = parseFriendAccount({
-        pubkey: accountId,
-        account: accountInfo,
-      })
-      this.emit(friendEvent, parsedFriend)
+      const program = this._getProgram()
+      const account: TypeDef<
+        Friends['accounts'][0],
+        IdlTypes<Friends>
+      > = program.account.friendRequest.coder.accounts.decode(
+        'friendRequest',
+        accountInfo.data,
+      )
+      this.emit(
+        friendEvent,
+        this._parseAccount({ publicKey: accountId, account }),
+      )
     }
   }
 
   /**
-   * @method subscribeToFriendsEvents
+   * @method subscribeToEvents
    * Subscribes to all friends events internally
    * External listeners can be registered using the addEventListener function
    */
-  subscribeToFriendsEvents() {
-    if (!this.solana) {
-      throw new Error('Friends program not initialized')
-    }
+  subscribeToEvents() {
+    const solana = this._getSolana()
+    const payer = this._getPayer()
+    const { connection } = solana
 
-    const { connection } = this.solana
-    const payerAccount = this.solana.getActiveAccount()
-    if (!payerAccount) {
-      throw new Error('User account not found')
-    }
-
-    // Filter for incoming requests checks the status and the recipient
-    // public key starting from a 32 byte offset because the account is
-    // formatted that way
-    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const incomingRequestBytes = base58(
-      Buffer.from([FriendStatus.PENDING, ...payerAccount.publicKey.toBytes()]),
+      Buffer.from([FriendStatus.PENDING, ...payer.publicKey.toBytes()]),
     )
 
     const incomingRequestsFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 32, bytes: incomingRequestBytes },
+      memcmp: { offset: 32 + 8, bytes: incomingRequestBytes },
     }
 
     connection.onProgramAccountChange(
@@ -723,11 +515,11 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const newFriendFromOutgoingBytes = base58(
-      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.ACCEPTED]),
+      Buffer.from([...payer.publicKey.toBytes(), FriendStatus.ACCEPTED]),
     )
 
     const newFriendFromOutgoingFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 0, bytes: newFriendFromOutgoingBytes },
+      memcmp: { offset: 8, bytes: newFriendFromOutgoingBytes },
     }
 
     connection.onProgramAccountChange(
@@ -741,11 +533,11 @@ export default class FriendsProgram extends EventEmitter {
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestDeniedBytes = base58(
-      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REFUSED]),
+      Buffer.from([...payer.publicKey.toBytes(), FriendStatus.DENIED]),
     )
 
     const friendRequestDeniedFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 0, bytes: friendRequestDeniedBytes },
+      memcmp: { offset: 8, bytes: friendRequestDeniedBytes },
     }
 
     connection.onProgramAccountChange(
@@ -760,34 +552,52 @@ export default class FriendsProgram extends EventEmitter {
     // original sender of the friend request
     // This filter checks the sender public key (our) and the status
     // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    const friendRemovedBytes = base58(
+      Buffer.from([...payer.publicKey.toBytes(), FriendStatus.REMOVED]),
+    )
+
+    const friendRemovedFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 8, bytes: friendRemovedBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
+      Config.solana.defaultCommitment,
+      [friendRemovedFilter],
+    )
+
+    const friendRemovedMirroredBytes = base58(
+      Buffer.from([FriendStatus.REMOVED, ...payer.publicKey.toBytes()]),
+    )
+
+    const friendRemovedMirroredFilter: GetProgramAccountsFilter = {
+      memcmp: { offset: 32 + 8, bytes: friendRemovedMirroredBytes },
+    }
+
+    connection.onProgramAccountChange(
+      FRIENDS_PROGRAM_ID,
+      this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
+      Config.solana.defaultCommitment,
+      [friendRemovedMirroredFilter],
+    )
+
+    // Filter for remove friend requests checks only if an incoming request has been removed
+    // This filter checks the status and recipient public key
+    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
     const friendRequestRemovedBytes = base58(
-      Buffer.from([...payerAccount.publicKey.toBytes(), FriendStatus.REMOVED]),
+      Buffer.from([FriendStatus.REQUEST_REMOVED, ...payer.publicKey.toBytes()]),
     )
 
     const friendRequestRemovedFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 0, bytes: friendRequestRemovedBytes },
+      memcmp: { offset: 32 + 8, bytes: friendRequestRemovedBytes },
     }
 
     connection.onProgramAccountChange(
       FRIENDS_PROGRAM_ID,
-      this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
+      this.buildEventHandler(FriendsEvents.REQUEST_REMOVED),
       Config.solana.defaultCommitment,
       [friendRequestRemovedFilter],
-    )
-
-    const friendRequestRemovedMirroredBytes = base58(
-      Buffer.from([FriendStatus.REMOVED, ...payerAccount.publicKey.toBytes()]),
-    )
-
-    const friendRequestRemovedMirroredFilter: GetProgramAccountsFilter = {
-      memcmp: { offset: 32, bytes: friendRequestRemovedMirroredBytes },
-    }
-
-    connection.onProgramAccountChange(
-      FRIENDS_PROGRAM_ID,
-      this.buildEventHandler(FriendsEvents.FRIEND_REMOVED),
-      Config.solana.defaultCommitment,
-      [friendRequestRemovedMirroredFilter],
     )
   }
 
@@ -804,19 +614,5 @@ export default class FriendsProgram extends EventEmitter {
     callback: (friendAccount?: FriendAccount) => void,
   ) {
     this.addListener(type, callback)
-  }
-
-  /**
-   * @method removeEventListener
-   * Removes an event listener. It's a wrapper to the
-   * inherited removeListener function from EventEmitter
-   * @param type type of the event to subscribe
-   * @param listener callback function to be removed
-   */
-  removeEventListener(
-    type: FriendsEvents,
-    listener: (friendAccount?: FriendAccount) => void,
-  ) {
-    this.removeListener(type, listener)
   }
 }

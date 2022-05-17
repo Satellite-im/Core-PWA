@@ -7,6 +7,7 @@ import {
   MicIcon,
   MicOffIcon,
   HeadphonesIcon,
+  HeadphonesOffIcon,
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
@@ -14,12 +15,15 @@ import {
 import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
   components: {
     MicIcon,
     MicOffIcon,
     HeadphonesIcon,
+    HeadphonesOffIcon,
     VideoIcon,
     VideoOffIcon,
   },
@@ -29,12 +33,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState(['audio', 'video', 'webrtc', 'accounts']),
     audioMuted(): boolean {
-      return this.webrtc.localTracks.audio.muted
+      return this.audio.muted || this.webrtc.streamMuted[p2p.id]?.audio
     },
     videoMuted(): boolean {
-      return this.webrtc.localTracks.video.muted
+      return this.video.disabled || this.webrtc.streamMuted[p2p.id]?.video
+    },
+    screenMuted(): boolean {
+      return this.webrtc.streamMuted[p2p.id]?.screen
     },
   },
   methods: {
@@ -43,55 +50,22 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async toggleMute() {
-      this.isLoading = true
-      const muted = this.audioMuted
-
-      const { activeCall } = this.webrtc
-
-      const call = this.$WebRTC.getPeer(activeCall)
-
-      if (call) {
-        if (muted) {
-          await call.unmute(WebRTCEnum.AUDIO)
-          this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
-        } else {
-          await call.mute(WebRTCEnum.AUDIO)
-          this.$store.dispatch('sounds/playSound', Sounds.MUTE)
-        }
+    async toggleMute(kind = 'audio') {
+      if (kind === 'audio') {
+        this.$store.dispatch('audio/toggleMute')
+        return
       }
-      this.isLoading = false
-    },
-    /**
-     * @method toggleDeafen DocsTODO
-     * @description
-     * @example
-     */
-    toggleDeafen() {
-      this.$store.dispatch('audio/toggleDeafen')
-    },
-    /**
-     * @method toggleVideo DocsTODO
-     * @description
-     * @example
-     */
-    async toggleVideo() {
-      this.isLoading = true
-      const muted = this.videoMuted
 
-      const { activeCall } = this.webrtc
-
-      const call = this.$WebRTC.getPeer(activeCall)
-
-      if (call) {
-        if (muted) {
-          await call.unmute(WebRTCEnum.VIDEO)
-          this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
-        } else {
-          await call.mute(WebRTCEnum.VIDEO)
-          this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
-        }
+      if (kind === 'video') {
+        this.$store.dispatch('video/toggle')
+        return
       }
+
+      this.$store.dispatch('webrtc/toggleMute', { kind })
+    },
+    async toggleDeafen() {
+      this.isLoading = true
+      this.$store.dispatch('audio/toggleDeafen', {}, { root: true })
       this.isLoading = false
     },
   },

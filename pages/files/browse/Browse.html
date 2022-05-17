@@ -1,4 +1,9 @@
-<div id="files" class="hidden-scroll" v-scroll-lock="true">
+<div
+  id="files"
+  data-cy="files-screen"
+  class="hidden-scroll"
+  v-scroll-lock="true"
+>
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
     <FilesFilepath />
@@ -10,8 +15,9 @@
         :changeView="changeView"
         @forceRender="forceRender"
       />
+      <UiLoadersGenericContent :count="3" v-if="!getInitialized" />
       <TypographyText
-        v-if="!directory.length"
+        v-else-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
       <FilesList

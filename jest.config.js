@@ -1,6 +1,11 @@
 module.exports = {
   preset: 'ts-jest',
-  setupFiles: ['jest-canvas-mock', 'dotenv/config', './jest-setup.js'],
+  setupFiles: [
+    'jest-canvas-mock',
+    'dotenv/config',
+    './jest-setup.js',
+    'jsdom-worker',
+  ],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',

@@ -27,7 +27,7 @@
     padding-left: @normal-spacing;
     padding-right: @normal-spacing * 2;
     cursor: pointer;
-    user-select: none;
+    &:extend(.no-select);
     max-width: @full;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -46,7 +46,8 @@
     max-width: @full;
     left: 0;
     right: 0;
-    z-index: @base-z-index + 100;
+
+    &:extend(.second-layer);
     margin-top: @light-spacing;
     div {
       height: @normal-spacing * 2;
@@ -58,7 +59,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      user-select: none;
+      &:extend(.no-select);
       &[disabled] {
         opacity: 0.5;
       }

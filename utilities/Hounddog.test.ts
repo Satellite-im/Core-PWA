@@ -83,7 +83,6 @@ describe("Retrieving friend's profile", () => {
           typingState: 'NOT_TYPING',
           item: {},
           pending: true,
-          activeChat: true,
           encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -219,7 +218,7 @@ describe("Retrieving friend's profile", () => {
         'Apollonius of Perga laws of physics colonies paroxysm of global death Jean-François Champollion emerged into consciousness.',
     }
 
-    const result: any = inst.friendExists(state.friends, payload)
+    const result: any = inst.friendExists(state.friends, payload.address)
     expect(result).toMatchSnapshot()
   })
 })
@@ -300,7 +299,6 @@ describe('Retrieve WebRTC calls with success', () => {
           typingState: 'NOT_TYPING',
           item: {},
           pending: true,
-          activeChat: true,
           encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -435,7 +433,6 @@ describe('Retrieve WebRTC calls with failure', () => {
           typingState: 'NOT_TYPING',
           item: {},
           pending: true,
-          activeChat: true,
           encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f', // Pay attention to this, in this describe block we will not set this address for the active call so that we get a failure result

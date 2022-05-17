@@ -3,7 +3,7 @@
     position: relative;
     flex: 1;
     &:extend(.full-width);
-    height: calc(@full - 3rem);
+    height: calc(@full - 52px);
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none;
@@ -40,7 +40,8 @@
   bottom: 100% !important;
   margin-bottom: @light-spacing;
   overflow: hidden;
-  z-index: @base-z-index + 100;
+
+  &:extend(.first-layer);
   margin-right: 1rem;
   &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
@@ -93,7 +94,7 @@
 .emoji-picker .emojis span {
   display: inline-block;
   cursor: pointer;
-  user-select: none;
+  &:extend(.no-select);
   padding: 0.2rem;
   border-radius: 5px;
 }

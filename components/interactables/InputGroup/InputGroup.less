@@ -7,9 +7,16 @@
 .control:nth-child(1) {
   &:extend(.full-width);
 }
-.button,
-.button span {
+.button {
   &:extend(.inline-flex-content-centered);
+
+  span {
+    &:extend(.inline-flex-content-centered);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+  }
 }
 .has-addons {
   &:extend(.bordered);

@@ -58,7 +58,7 @@ export default Vue.extend({
      */
     getSubtext(): string {
       return this.item instanceof Directory
-        ? this.item.content.length + ' items'
+        ? this.$tc('pages.files.item_count', this.item.content.length)
         : this.$filesize((this.item as Fil).size)
     },
     /**
@@ -119,7 +119,7 @@ export default Vue.extend({
      * @description Open rename modal
      */
     rename() {
-      this.$store.commit('ui/setRenameItem', this.item.name)
+      this.$store.commit('ui/setRenameItem', this.item)
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.RENAME_FILE,
         state: !this.ui.modals[ModalWindows.RENAME_FILE],

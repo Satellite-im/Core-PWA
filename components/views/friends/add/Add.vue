@@ -44,6 +44,11 @@ export default Vue.extend({
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
+      if (!this.accountID.length) {
+        this.error = ''
+        this.friend = null
+        return
+      }
       if (this.accountID.length >= 40) {
         return await this.searchFriend()
       }

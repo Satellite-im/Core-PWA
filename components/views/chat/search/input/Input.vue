@@ -15,14 +15,8 @@ import {
   SearchRecommend,
   SearchRecommendResultItem,
   SearchOption,
+  SearchCommandMeta,
 } from '~/types/search/search'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    isEmpty: Boolean
-    isFocus: Boolean
-  }
-}
 
 export default Vue.extend({
   components: {
@@ -58,7 +52,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    searchOptions() {
+    searchOptions(): SearchCommandMeta[] {
       return SearchUtil.getCommandMetaList()
     },
 
@@ -77,7 +71,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    isEmptyCommand() {
+    isEmptyCommand(): boolean {
       if (
         this.current != null &&
         this.current.command === '' &&
@@ -93,7 +87,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    isOption() {
+    isOption(): boolean {
       if (this.isFocus && (this.isEmpty || this.isHas || this.isEmptyCommand)) {
         return true
       }
@@ -105,7 +99,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    isHas() {
+    isHas(): boolean {
       if (this.current == null || this.current.value !== '') {
         return false
       }
@@ -120,7 +114,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    isDate() {
+    isDate(): boolean {
       if (this.current == null || this.current.value !== '') {
         return false
       }
@@ -139,7 +133,7 @@ export default Vue.extend({
      * @description
      * @returns
      */
-    isSearch() {
+    isSearch(): boolean {
       if (this.isEmpty || !this.isFocus || this.current == null) {
         return false
       }
@@ -670,7 +664,8 @@ export default Vue.extend({
     .vc-popover-content {
       height: 0px !important;
     }
-    z-index: -1;
+
+    &:extend(.background-layer);
   }
 }
 </style>

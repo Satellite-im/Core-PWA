@@ -1,10 +1,11 @@
-<template src="./Connected.html" />
+<template src="./Connected.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
-import { Config } from '~/config'
+import { RootState } from '~/types/store/store'
+import { ConversationParticipant } from '~/store/conversation/types'
 
 export default Vue.extend({
   components: {
@@ -18,21 +19,45 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'webrtc', 'friends']),
-  },
-  methods: {
+    ...mapState({
+      allFriends: (state) => (state as RootState).friends.all,
+    }),
+    ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
     /**
-     * @method friendConnected
-     * @description Send the user ID/address in, get a boolean of it the signal is currently open
-     * @param friendId Address of the current user
-     * @example
-     * friendConnected('user1') // true
+     * @method participantsText
+     * @description builds translated string for online/offline status
      */
-    friendConnected(friendId: string): boolean {
-      if (this.webrtc) {
-        return this.webrtc.connectedPeers.includes(friendId)
+    participantsText(): string {
+      // if DM with single person
+      if (this.otherParticipants.length === 1) {
+        return this.$tc(
+          this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
+          1,
+          {
+            name: this.otherParticipants[0].name,
+          },
+        )
       }
-      return false
+      // if group
+      return this.$tc('ui.online', this.onlineParticipants.length, {
+        name: this.onlineParticipants
+          .map((p: ConversationParticipant) => p.name)
+          .join(', '),
+      })
+    },
+    /**
+     * @method connectedStatus
+     * @description sets css class
+     */
+    connectedStatus(): string {
+      return this.onlineParticipants.length ? 'is-online' : 'is-offline'
+    },
+  },
+  watch: {
+    'conversation.participants': {
+      handler() {},
+      deep: true,
+      immediate: true,
     },
   },
 })

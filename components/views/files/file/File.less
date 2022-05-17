@@ -10,14 +10,18 @@
     width: @full;
     padding: @normal-spacing;
     position: absolute;
-    z-index: @base-z-index + 1;
+
+    &:extend(.first-layer);
 
     .like {
       float: right;
+      &.liked {
+        color: @pink;
+      }
     }
 
     svg:hover {
-      &:extend(.font-secondary);
+      opacity: 0.75;
     }
   }
 

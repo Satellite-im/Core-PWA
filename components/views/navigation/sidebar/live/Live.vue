@@ -27,31 +27,13 @@ export default Vue.extend({
   methods: {
     hangUp() {
       if (!this.webrtc.activeCall) return
-      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      call?.hangUp()
       this.$store.dispatch('webrtc/hangUp')
-      this.$store.commit('ui/fullscreen', false)
     },
     activeChat() {
       this.$store.commit('ui/fullscreen', false)
     },
     async call(kinds: TrackKind[]) {
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
-      if (!activeFriend) return
-      const identifier = activeFriend.address
-      if (!this.webrtc.connectedPeers.includes(identifier)) {
-        await this.$store.dispatch('webrtc/createPeerConnection', identifier)
-        if (!this.webrtc.connectedPeers.includes(identifier)) return
-      }
-      // Trying to call the same user while call is already active
-      if (activeFriend.peerId === this.$store.state.webrtc.activeCall) {
-        return
-      }
-      const call = this.$WebRTC.getPeer(activeFriend.peerId)
-      const tracks = await call.createLocalTracks(kinds)
-      await call.start()
+      await this.$store.dispatch('webrtc/call', { kinds })
     },
   },
 })

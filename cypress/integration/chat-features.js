@@ -1,17 +1,19 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
-const { utimes } = require('fs')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
-const randomTextToCopy = faker.lorem.sentence() // generate random sentence
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 let imageURL
 let randomTextEdited = randomMessage + randomNumber
 
 describe('Chat Features Tests', () => {
-  it('Chat - Send message on chat', () => {
+  it('Chat - Send message on chat', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -27,40 +29,17 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  it('Chat - Edit message on chat', () => {
+  it.skip('Chat - Edit message on chat', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it('Chat - Message edited shows edited status', () => {
+  it.skip('Chat - Message edited shows edited status', () => {
+    cy.get('[data-cy=message-edited]').last().parents()
+
     cy.contains(randomMessage + randomNumber)
       .parents('[data-cy=message-container]')
-      .find('[data-cy=message-edited]')
+      .find('[data-cy=message-edited]', { timeout: 30000 })
       .should('contain', '(edited)')
-  })
-
-  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
-    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
-    cy.hoverOnComingSoonIcon(
-      '#chatbar-controls > span > .tooltip-container',
-      'Send Money\nComing Soon',
-    )
-  })
-
-  it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
-    // Emoji picker is displayed  when clicking on its button
-    cy.get('#emoji-toggle').click()
-    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
-      'contain',
-      'Emoji',
-    )
-    cy.get('#emoji-toggle').click()
-  })
-
-  it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
-    // Glyphs picker is displayed when clicking on its button
-    cy.get('#glyph-toggle').click()
-    cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
-    cy.get('#glyph-toggle').click()
   })
 
   it('Chat - Copy paste text', () => {
@@ -84,14 +63,14 @@ describe('Chat Features Tests', () => {
       .should('equal', 'granted')
 
     //Copying the latest text message sent
-    cy.contains(randomTextEdited).last().scrollIntoView().rightclick()
+    cy.contains(randomMessage).last().scrollIntoView().rightclick()
     cy.contains('Copy Message').realClick()
 
     //Validating that text messsage copied matches with actual clipboard value
     cy.window()
       .its('navigator.clipboard')
       .invoke('readText')
-      .should('equal', randomTextEdited)
+      .should('equal', randomMessage)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
         cy.get('[data-cy=editable-input]').realClick().paste({
@@ -100,7 +79,7 @@ describe('Chat Features Tests', () => {
         })
       })
     // Validating that editable input text matches with pasted value
-    cy.get('[data-cy=editable-input]').should('have.text', randomTextEdited)
+    cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
   })
 
   it.skip('Chat - Copy paste images', () => {
@@ -130,38 +109,56 @@ describe('Chat Features Tests', () => {
     cy.get('.file-info > .title').should('contain', 'logo.png')
   })
 
+  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
+    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
+    cy.hoverOnComingSoonIcon(
+      '#chatbar-controls > span > .tooltip-container',
+      'Send Money\nComing Soon',
+    )
+  })
+
+  it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
+    // Emoji picker is displayed  when clicking on its button
+    cy.get('#emoji-toggle').click()
+    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
+      'contain',
+      'Emoji',
+    )
+    cy.get('#emoji-toggle').click()
+  })
+
+  it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
+    // Glyphs picker is displayed when clicking on its button
+    cy.get('#glyph-toggle').click()
+    cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
+    cy.get('#glyph-toggle').click()
+  })
+
   it('Chat - Validate User ID can be copied when clicked on it', () => {
-    // Moving this at the end of execution to avoid issues on CI when running chat tests
-    cy.get('[data-cy=toggle-sidebar]').click()
+    //Click on toggle-sidebar only if app is collapsed
+    cy.get('#app-wrap').then(($appWrap) => {
+      if ($appWrap.hasClass('is-collapsed')) {
+        cy.get('[data-cy=toggle-sidebar]').click()
+      }
+    })
+
+    //Start validation
     cy.chatFeaturesProfileName('cypress')
+    cy.get('[data-cy=hamburger-button]').click()
   })
 
   it('Chat - Add a note to user profile', () => {
-    cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
-    cy.contains('Add Note').should('be.visible')
-    cy.get('[data-cy=profile-add-note] > .cte-input')
-      .should('contain', 'Click to add note')
-      .click()
-      .type('This is a test note{enter}')
-    cy.get('[data-cy=profile]').find('.close-button').click()
+    cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'add')
   })
 
   it('Chat - Assert note from user profile', () => {
-    cy.get('[data-cy=friend-chat-circle]').click()
-    cy.get('[data-cy=profile]').should('be.visible')
-    cy.get('[data-cy=profile-add-note] > .cte-input')
-      .should('contain', 'This is a test note')
-      .click()
-      .clear()
-      .type('{enter}') // removing note added before
-    cy.get('[data-cy=profile]').find('.close-button').click()
+    cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
   })
 
   it('Chat - Search - Text message - Exact match', () => {
     //Get text from last chat-message and look for it in search bar
     cy.get('[data-cy=chat-message]')
-      .contains(randomTextEdited)
+      .contains(randomMessage)
       .last()
       .invoke('text')
       .then(($message) => {
@@ -169,7 +166,7 @@ describe('Chat Features Tests', () => {
       })
 
     //Assert results and close search modal
-    cy.assertFirstMatchOnSearch(randomTextEdited)
+    cy.assertFirstMatchOnSearch(randomMessage)
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 
@@ -190,7 +187,7 @@ describe('Chat Features Tests', () => {
 
   it('Chat - Search Results - Pagination is displayed when more than 10 matches are found', () => {
     //Look for a word showing more than 10 results in chat and ensure pagination is displayed
-    cy.searchFromTextInChat('omnis')
+    cy.searchFromTextInChat('9876543210')
     cy.get('[data-cy=chat-search-result-pagination]').should('exist')
   })
 
@@ -220,8 +217,8 @@ describe('Chat Features Tests', () => {
 
   it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
     //Search for a random number and assert results
-    cy.searchFromTextInChat(randomNumber)
-    cy.assertFirstMatchOnSearch(randomNumber)
+    cy.searchFromTextInChat('1234567890')
+    cy.assertFirstMatchOnSearch('1234567890')
 
     //Validate that pagination is not displayed and close search modal
     cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')

@@ -16,7 +16,11 @@
         </UiScroll>
       </swiper-slide>
       <swiper-slide class="not-sidebar hidden-scroll" v-scroll-lock="true">
-        <UiScroll verticalScroll enableWrap scrollbarVisibility="scroll">
+        <UiScroll
+          :verticalScroll="verticalScroll"
+          enableWrap
+          scrollbarVisibility="scroll"
+        >
           <menu-icon
             v-if="$device.isMobile"
             size="1.5x"

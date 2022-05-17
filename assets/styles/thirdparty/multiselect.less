@@ -21,7 +21,8 @@ fieldset[disabled] .multiselect {
   border-radius: @full;
   border: 2px solid transparent;
   box-shadow: 0 0 0 1px transparent;
-  z-index: @base-z-index + 4;
+
+  &:extend(.first-layer);
 }
 .multiselect__spinner:before {
   animation: spinning 2.4s cubic-bezier(0.41, 0.26, 0.2, 0.62);
@@ -66,7 +67,7 @@ fieldset[disabled] .multiselect {
   opacity: 0.6;
 }
 .multiselect--active {
-  z-index: @base-z-index + 3;
+  &:extend(.first-layer);
   .multiselect__tags {
     &:extend(.round-corners);
   }
@@ -156,7 +157,7 @@ fieldset[disabled] .multiselect {
 }
 .multiselect__tag-icon:focus,
 .multiselect__tag-icon:hover {
-  background: @primary-color-alt;
+  background: @primary-color;
 }
 .multiselect__tag-icon:focus:after,
 .multiselect__tag-icon:hover:after {

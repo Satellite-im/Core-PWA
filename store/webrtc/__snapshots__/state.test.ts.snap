@@ -2,30 +2,11 @@
 
 exports[`init should return the initial settings state 1`] = `
 Object {
-  "activeCall": "",
-  "activeStream": Object {
-    "createdAt": 0,
-  },
-  "connectedPeers": Array [],
-  "incomingCall": "",
+  "activeCall": undefined,
+  "createdAt": 0,
+  "incomingCall": undefined,
   "initialized": false,
-  "localTracks": Object {
-    "audio": Object {
-      "muted": false,
-    },
-    "video": Object {
-      "muted": false,
-    },
-  },
-  "peerCalls": Object {},
-  "remoteTracks": Object {
-    "audio": Object {
-      "muted": false,
-    },
-    "video": Object {
-      "muted": false,
-    },
-  },
-  "streaming": true,
+  "originator": "",
+  "streamMuted": Object {},
 }
 `;

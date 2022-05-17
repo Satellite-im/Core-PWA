@@ -1,31 +1,32 @@
-import { resourceLimits } from 'worker_threads'
 import Vue from 'vue'
 import { TextileState, TextileError } from './types'
-import { ActionsArguments, RootState } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileConfig } from '~/types/textile/manager'
-import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
-import { UploadDropItemType } from '~/types/files/file'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
   db,
   DexieConversation,
   DexieMessage,
 } from '~/libraries/SatelliteDB/SatelliteDB'
-import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import { FilSystem } from '~/libraries/Files/FilSystem'
-import { AccountsError } from '~/store/accounts/types'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
+import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import { AccountsError } from '~/store/accounts/types'
 import { Group } from '~/store/groups/types'
+import { UploadDropItemType } from '~/types/files/file'
 import {
-  UISearchResult,
   QueryOptions,
   SearchOrderType,
+  UISearchResult,
   UISearchResultData,
+  MatchTypesEnum,
 } from '~/types/search/search'
+import { AlertType } from '~/libraries/ui/Alerts'
+import { ActionsArguments, RootState } from '~/types/store/store'
+import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
+import { TextileConfig } from '~/types/textile/manager'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -56,7 +57,6 @@ export default {
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
-    commit('textileInitialized', true)
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
     const fsExport = $TextileManager.bucket?.index
@@ -90,12 +90,12 @@ export default {
    */
   async fetchMessages(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { address, setActive = true }: { address: string; setActive: boolean },
+    { address, setActive = false }: { address: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
-      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
     const friend = rootState.friends.all.find((fr) => fr.address === address)
@@ -161,7 +161,25 @@ export default {
     // add the messages to the search index
     db.search.conversationMessages.upsertAll(messages)
 
+    if (setActive) {
+      commit('setActiveConversation', friend.address)
+      if (friend.peerId) {
+        commit(
+          'conversation/setConversation',
+          {
+            id: friend.peerId,
+            type: 'friend',
+            calling: false,
+            participants: [],
+          },
+          { root: true },
+        )
+        dispatch('conversation/addParticipant', friend.address, { root: true })
+      }
+    }
+
     commit('setConversation', {
+      type: 'friend',
       address: friend.address,
       messages: conversation,
       limit: query.limit,
@@ -170,7 +188,6 @@ export default {
     })
 
     commit('friends/setActive', friend, { root: true })
-
     commit('setConversationLoading', { loading: false })
     commit('setMessageLoading', { loading: false })
 
@@ -202,7 +219,6 @@ export default {
       if (!message) {
         return
       }
-
       const sender = rootState.friends.all.find(
         (friend) => friend.textilePubkey === message.from,
       )
@@ -210,12 +226,23 @@ export default {
       if (!sender) {
         return
       }
-
       commit('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
+
+      dispatch(
+        'ui/sendNotification',
+        {
+          message: 'New DM',
+          from: sender.name,
+          title: `Notification`,
+          image: sender.photoHash,
+          type: AlertType.DIRECT_MESSAGE,
+        },
+        { root: true },
+      )
 
       dispatch('storeInMessage', { address: sender.address, message })
     })
@@ -609,9 +636,6 @@ export default {
       })
 
     const msg = { conversation: address, ...message }
-    db.search.conversationMessages.upsert(msg)
-
-    // replace old message with new edited version
     if (message.editedAt) {
       db.conversationMessages
         .get(message.id)
@@ -639,25 +663,39 @@ export default {
     { groupId, setActive = true }: { groupId: string; setActive: boolean },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
-
     commit('setConversationLoading', { loading: true })
-
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
-
     const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
-
     const group = getGroup(rootState, groupId)
-
     const conversation = await $GroupChatManager.getConversation({
       group,
       query,
     })
 
+    if (setActive) {
+      dispatch(
+        'conversation/setConversation',
+        {
+          id: groupId,
+          type: 'group',
+          calling: false,
+          participants: [],
+        },
+        { root: true },
+      )
+      dispatch(
+        'conversation/addParticipants',
+        group.members.map((m) => m.address),
+        { root: true },
+      )
+      commit('setActiveConversation', groupId)
+    }
+
     commit('setConversation', {
+      type: 'group',
       address: groupId,
       messages: conversation,
       limit: query.limit,
@@ -685,7 +723,6 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.sentbox)) {
       return
     }
-
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
@@ -736,7 +773,9 @@ export default {
           payload: message,
           type: 'text',
         })
-        .catch((e) => console.log('error', e))
+        .catch((e) => {
+          Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
+        })
 
       commit('addMessageToConversation', {
         address: groupId,
@@ -746,7 +785,7 @@ export default {
 
       dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
-      console.log(e)
+      Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
       commit('setMessageLoading', { loading: false })
     }
@@ -941,10 +980,12 @@ export default {
       query,
       page,
       orderBy,
+      fields,
     }: {
       query: QueryOptions
       page: number
       orderBy: SearchOrderType
+      fields: MatchTypesEnum[]
     },
   ): Promise<UISearchResult> {
     const { queryString, accounts, dateRange, perPage } = query
@@ -967,6 +1008,7 @@ export default {
       }`,
       {
         fuzzy: 0.3,
+        fields,
       },
     )
 

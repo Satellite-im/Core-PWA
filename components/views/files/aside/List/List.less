@@ -1,0 +1,18 @@
+li {
+  cursor: pointer;
+  padding: @xlight-spacing @light-spacing;
+  margin: 0.2rem -@light-spacing;
+  display: inline-flex;
+  align-items: center;
+  border-radius: @corner-rounding-smaller;
+  &:extend(.full-width);
+  &:extend(.no-select);
+
+  &:hover {
+    background: @foreground;
+  }
+
+  svg {
+    margin-right: @light-spacing;
+  }
+}

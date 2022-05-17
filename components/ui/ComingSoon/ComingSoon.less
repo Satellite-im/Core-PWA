@@ -1,6 +1,6 @@
 .coming-soon-container {
   &:before {
-    z-index: @base-z-index + 200 !important;
+    &:extend(.third-layer);
   }
   .coming-soon {
     pointer-events: none;
@@ -29,10 +29,10 @@
     content: 'Coming Soon';
     position: absolute;
     font-size: 2.5em;
-    z-index: 999;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     color: white;
+    &:extend(.third-layer);
   }
 }

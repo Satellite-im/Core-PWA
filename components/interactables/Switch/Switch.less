@@ -3,86 +3,77 @@
   align-content: flex-end;
   margin: @light-spacing 0;
   align-items: center;
+  gap: 10px;
 
-  .is-small {
+  input {
+    position: absolute;
+    appearance: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  &.is-small {
     transform: scale(0.75);
     transform-origin: 0;
   }
 
-  .switch-label {
-    display: inline-block;
-    margin-left: 10px;
-    padding-top: 3px;
-  }
+  .switch-button {
+    position: relative;
+    height: 1.6rem;
+    width: calc(1.6rem * 2);
+    border-radius: 1.6rem;
+    transition: all @animation-speed-micro ease-in-out;
+    cursor: pointer;
+    border: 0.125rem solid var(--flair-color);
+    box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
 
-  .is-small-label {
-    padding-top: 4.5px;
-    margin-left: -5px;
-    font-size: 12px;
-  }
+    &::after {
+      &:extend(.background-flair);
+      &:extend(.switch-off-glow-flair);
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 0;
+      height: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+      width: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+      border-radius: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
+      transition: transform @animation-speed-micro ease-in-out;
+      transform: translateY(-50%) translateX(1px);
+    }
 
-  .switch-button-control {
-    display: inline-block;
+    &.enabled {
+      &:extend(.background-flair);
+      &:extend(.glow-flair);
+      box-shadow: none;
 
-    .switch-button {
-      position: relative;
-      height: 1.6rem;
-      width: calc(1.6rem * 2);
-      border-radius: 1.6rem;
-      transition: all @animation-speed-micro ease-in-out;
-      cursor: pointer;
-
-      .sw-button {
-        position: absolute;
-        top: 50%;
-        height: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
-        width: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
-        border-radius: calc(1.6rem - (2 * 0.125rem) - 0.125rem);
-        transition: transform @animation-speed-micro ease-in-out;
-        transform: translateY(-50%) translateX(1px);
+      &::after {
+        height: calc(1.6rem - (2 * 0.125rem));
+        width: calc(1.6rem - (2 * 0.125rem));
+        border-radius: calc(1.6rem - (2 * 0.125rem));
+        transform: translateY(-50%)
+          translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
+        border: 0.2rem solid var(--flair-color);
+        background: @white !important;
       }
+    }
 
-      &.enabled {
-        box-shadow: none;
+    &.locked {
+      border-color: @gray;
 
-        .sw-button {
-          height: calc(1.6rem - (2 * 0.125rem));
-          width: calc(1.6rem - (2 * 0.125rem));
-          border-radius: calc(1.6rem - (2 * 0.125rem));
-          transform: translateY(-50%)
-            translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
-        }
-      }
-
-      &.locked {
+      &::after {
         border-color: @gray;
-        .sw-button {
-          border-color: @gray;
-          background: @gray !important;
-          box-shadow: -5px 0px 20px -2px @gray !important;
-        }
-      }
-
-      &.locked.enabled {
-        box-shadow: unset !important;
         background: @gray !important;
-        .sw-button {
-          background: @white !important;
-        }
+        box-shadow: -5px 0px 20px -2px @gray !important;
       }
     }
-    .switch-button.locked {
-      .sw-button {
-        border-color: @gray;
-        .sw-button {
-          border-color: @gray;
-          background: @gray !important;
-          box-shadow: -5px 0px 20px -2px @gray !important;
-        }
+
+    &.locked.enabled {
+      box-shadow: unset !important;
+      background: @gray !important;
+      ::after {
+        background: @white !important;
       }
-    }
-    .switch-button-label {
-      margin-left: 10px;
     }
   }
 }

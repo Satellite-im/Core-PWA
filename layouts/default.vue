@@ -7,15 +7,11 @@
     </v-style>
   </div>
 </template>
-<script lang="ts">
-import Vue from 'vue'
+
+<script setup lang="ts">
 import useMeta from '~/components/compositions/useMeta'
 
-export default Vue.extend({
-  setup() {
-    useMeta()
-  },
-})
+useMeta()
 </script>
 <style lang="less">
 @import 'bulma/css/bulma.css';
@@ -27,10 +23,22 @@ export default Vue.extend({
   src: url('~assets/fonts/SpaceMono-Regular.ttf');
 }
 @font-face {
+  font-family: 'SpaceMono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('~assets/fonts/SpaceMono-Bold.ttf');
+}
+@font-face {
   font-family: @secondary-font;
   font-style: normal;
   font-weight: 400;
   src: url('~assets/fonts/Poppins-Regular.ttf');
+}
+@font-face {
+  font-family: @secondary-font;
+  font-style: normal;
+  font-weight: 700;
+  src: url('~assets/fonts/Poppins-Bold.ttf');
 }
 p {
   font-family: @secondary-font;

@@ -19,6 +19,7 @@ export default {
     talk: 'Speak Freely...',
     close: 'Close',
     cancel: 'Cancel',
+    clear_all: 'Clear All',
     search: 'Search',
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
@@ -32,10 +33,8 @@ export default {
     is: 'is',
     live: 'Live',
     edited: 'edited',
-    connected: 'connected',
-    not_connected: 'not connected',
-    online: 'online',
-    offline: 'offline',
+    online: 'All Users are offline | {name} is online | {name} are online',
+    offline: '{name} is not connected',
   },
   wallet: {
     wallet: 'Wallet',
@@ -75,7 +74,7 @@ export default {
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
-      user: 'user sent you a {msgType}',
+      user: '{user} sent you a {msgType}',
     },
     user_sent_image: {
       me: 'you sent an {msgType}',
@@ -106,6 +105,7 @@ export default {
     headphones: 'Audio',
     video: 'Video',
     call: 'Call',
+    screen: 'Share Screen',
     mute: 'Mute',
     toggle: 'Toggle',
     deafen: 'Deafen',
@@ -139,6 +139,7 @@ export default {
       add_favorite: 'Added to favorites',
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
+      item_count: '0 items | 1 item | {count} items',
       status: {
         prepare: 'Preparing files for upload',
         upload: 'Uploading {0}',
@@ -162,7 +163,13 @@ export default {
         free_tier: 'Free Tier',
         upgrade: 'Upgrade',
         quick_access: 'Quick Access',
+        default: 'Default',
+        recent: 'Recent',
+        deleted: 'Deleted',
+        favorited: 'Favorited',
         shared_items: 'Shared Items',
+        shared_folders: 'Shared Folders',
+        links: 'Links',
         coming_soon: 'Coming soon',
       },
       upload: {
@@ -183,6 +190,7 @@ export default {
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
           'Please consent to file scanning in your privacy settings',
+        lost: 'Cannot find file, please try again later',
       },
     },
     unlock: {

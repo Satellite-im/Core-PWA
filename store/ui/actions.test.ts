@@ -6,9 +6,8 @@ import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import SoundManager from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import { TextileError } from '~/store/textile/types'
 Vue.prototype.$TextileManager = new TextileManager()
-
-const $Sounds = new SoundManager()
 
 const initialRootState: any = {
   accounts: {
@@ -509,5 +508,112 @@ describe('init', () => {
       null,
     )
     expect(result).toBeUndefined()
+  })
+  test('removeSeenNotification', async () => {
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const localInitState = { ...initialState }
+    const payload = '01g2y9d6499169rzs5etrff48w'
+    await actions.default.removeSeenNotification(
+      { commit, localInitState, rootState },
+      payload,
+    )
+    expect(commit).toHaveBeenCalledWith('notificationSeen', payload)
+  })
+  test('sendNotification with initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.sendNotification = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'notification response',
+      })
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(true)
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+
+    await actions.default.sendNotification(
+      { commit, rootState },
+      {
+        message: 'message',
+        from: 'from',
+        imageHash: 'imageHash',
+        title: 'title',
+        type: 'DEV',
+      },
+    )
+    expect(commit).toHaveBeenCalledWith('sendNotification', {
+      note: 'notification response',
+    })
+  })
+  test('sendNotification without an initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(false)
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+
+    try {
+      await actions.default.sendNotification(
+        { commit, rootState },
+        {
+          message: 'message',
+          from: 'from',
+          imageHash: 'imageHash',
+          title: 'title',
+          type: 'DEV',
+        },
+      )
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        TextileError.MAILBOX_MANAGER_NOT_INITIALIZED,
+      )
+    }
+  })
+  test('sendNotification with initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.getnotifications = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'notification response',
+      })
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(true)
+
+    const commit = jest.fn()
+
+    await actions.default.setNotifications({ commit })
+    expect(commit).toHaveBeenCalledWith('setNotifications', {
+      note: 'notification response',
+    })
+  })
+  test('setNotifications without an initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(false)
+
+    const commit = jest.fn()
+
+    try {
+      await actions.default.setNotifications({ commit })
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        TextileError.MAILBOX_MANAGER_NOT_INITIALIZED,
+      )
+    }
   })
 })

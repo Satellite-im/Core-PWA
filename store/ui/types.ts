@@ -3,6 +3,9 @@ import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
+import { Alert } from '~/libraries/ui/Alerts'
+import { Fil } from '~/libraries/Files/Fil'
+import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 export enum ThemeNames {
   DEFAULT = 'default',
   MOONLESS = 'moonless_night',
@@ -100,9 +103,10 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USERPROFILE = 'userProfile',
-  CALLTOACTION = 'callToAction',
+  USER_PROFILE = 'userProfile',
+  CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CROP = 'crop',
 }
 
 export interface EnhancerInfo {
@@ -157,6 +161,7 @@ export interface UIState {
   contextMenuValues: ContextMenuItem[]
   quickProfile: object | boolean
   userProfile: object
+  notifications: Alert[]
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean
@@ -202,8 +207,8 @@ export interface UIState {
     flair: Flair
   }
   filesUploadStatus: string
-  renameCurrentName?: string
-  filePreview?: string
+  renameItem?: Item
+  filePreview?: Fil
   fileDownloadList: string[]
   chatImageOverlay?: ImageMessage
   fileSort: FileSort

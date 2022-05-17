@@ -10,7 +10,9 @@
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
+      <TypographyText v-if="!getInitialized" :text="note" class="loading" />
       <InteractablesClickToEdit
+        v-show="getInitialized"
         ref="noteRef"
         v-model="note"
         data-cy="profile-add-note"
@@ -22,7 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default Vue.extend({
   data() {
@@ -32,9 +34,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends', 'ui']),
+    ...mapGetters('textile', ['getInitialized']),
     note: {
       get(): string {
-        return this.ui?.userProfile?.metadata?.note ?? ''
+        return (
+          this.ui?.userProfile?.metadata?.note ??
+          this.$t('modal.profile.about.click_note')
+        )
       },
       set(note: string) {
         const { userProfile } = this.ui
@@ -89,5 +95,9 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
   gap: @normal-spacing;
+}
+
+.loading {
+  cursor: progress;
 }
 </style>

@@ -128,12 +128,13 @@ export default Vue.extend({
     /**
      * @method showQuickProfile DocsTODO
      * @description
-     * @param e
+     * @param {MouseEvent} e - Click event
+     * @param {string} textilePublicKey - The author of reply
      * @example
      */
-    showQuickProfile(e: MouseEvent) {
+    showQuickProfile(e: MouseEvent, textilePublicKey: string) {
       this.$store.dispatch('ui/showQuickProfile', {
-        textilePublicKey: this.$props.message.from,
+        textilePublicKey,
         position: { x: e.x, y: e.y },
       })
     },

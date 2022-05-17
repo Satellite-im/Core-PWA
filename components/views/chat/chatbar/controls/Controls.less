@@ -11,7 +11,7 @@
     background-color: transparent;
     color: @white;
     &:before {
-      z-index: @base-z-index + 200 !important;
+      &:extend(.first-layer);
     }
     &[disabled] {
       cursor: not-allowed !important;

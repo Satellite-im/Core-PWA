@@ -7,6 +7,7 @@ import {
 
 export interface Conversation {
   [key: string]: {
+    type: 'friend' | 'group'
     messages: MessagesTracker
     replies: RepliesTracker
     reactions: ReactionsTracker

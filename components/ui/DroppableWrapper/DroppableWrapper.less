@@ -12,12 +12,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    user-select: none;
+    &:extend(.no-select);
     pointer-events: none;
     background-color: transparent;
     border: 5px solid transparent;
     transition: 0.2s ease-in-out;
-    z-index: 100;
+    &:extend(.third-layer);
   }
   &.droppableWrapper--active {
     &:after {

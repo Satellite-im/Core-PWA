@@ -6,6 +6,12 @@ import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { Group, GroupMember } from '~/store/groups/types'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ConversationParticipant } from '~/store/conversation/types'
+
+const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
   props: {
@@ -35,82 +41,37 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'friends', 'webrtc']),
+    ...mapState([
+      'ui',
+      'accounts',
+      'friends',
+      'groups',
+      'webrtc',
+      'conversation',
+    ]),
     isActiveCall() {
-      return this.friends.all.find(
-        (friend: any) =>
-          friend.activeChat && friend.peerId === this.webrtc.activeCall,
+      return (
+        this.webrtc.activeCall &&
+        this.webrtc.activeCall.callId === this.conversation.id
       )
-    },
-    localAudioMuted() {
-      return this.webrtc.localTracks.audio.muted
-    },
-    remoteAudioMuted() {
-      return this.webrtc.remoteTracks.audio.muted
     },
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
         : this.users.slice(0, this.maxViewableUsers)
     },
-    activeCall() {
-      return this.$store.state.friends.all.some(
-        (friend: any) => friend.peerId === this.webrtc.activeCall,
+    localParticipant() {
+      return { ...this.accounts.details, peerId: p2p.id }
+    },
+    remoteParticipants() {
+      return this.conversation.participants.filter(
+        (participant: ConversationParticipant) => participant.peerId !== p2p.id,
       )
     },
-    localVideoStream() {
+    activeCall() {
       const { activeCall } = this.webrtc
-      const { id, muted } = this.webrtc.localTracks.video
-
-      if (muted) {
-        return null
-      }
-
-      const call = this.$WebRTC.getPeer(activeCall)
-      if (!call) return null
-      const localVideoTrack = call.getTrackById(id)
-      return localVideoTrack ? new MediaStream([localVideoTrack]) : null
-    },
-    remoteVideoStream() {
-      const { activeCall } = this.webrtc
-      const { id, muted } = this.webrtc.remoteTracks.video
-
-      if (muted) {
-        return null
-      }
-
-      const call = this.$WebRTC.getPeer(activeCall)
-      if (!call) return null
-
-      const remoteVideoTrack = call.getTrackById(id)
-      return remoteVideoTrack ? new MediaStream([remoteVideoTrack]) : null
-    },
-    remoteAudioStream() {
-      const { activeCall } = this.webrtc
-      const { id, muted } = this.webrtc.remoteTracks.audio
-
-      if (muted) {
-        return null
-      }
-
-      const call = this.$WebRTC.getPeer(activeCall)
-      if (!call) return null
-      const remoteAudioTrack = call.getTrackById(id)
-      return remoteAudioTrack ? new MediaStream([remoteAudioTrack]) : null
-    },
-    remoteTracks() {
-      const { id, muted } = this.webrtc.remoteTracks.audio
-
-      return Boolean(id || muted)
-    },
-    recipient() {
-      const isMe = this.$route.params.address === this.accounts.active
-      const recipient = isMe
-        ? null
-        : this.friends.all.find(
-            (friend: Friend) => friend.address === this.$route.params.address,
-          )
-      return recipient
+      const call = $WebRTC.getCall(activeCall.callId)
+      return call
     },
     ...mapState(['audio']),
   },
@@ -246,14 +207,7 @@ export default Vue.extend({
   beforeMount() {
     // TODO: Create mixin/library that will handle call rejoining and closing
     window.onbeforeunload = (e) => {
-      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
-
-      if (call) {
-        call.hangUp()
-        this.$store.dispatch('webrtc/hangUp')
-        this.$store.commit('ui/fullscreen', false)
-      }
-      return undefined
+      this.$store.dispatch('webrtc/hangUp')
     }
   },
   methods: {

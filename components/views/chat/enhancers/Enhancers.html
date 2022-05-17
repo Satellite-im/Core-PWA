@@ -6,7 +6,6 @@
     left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px',
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
-  @click.stop
 >
   <div class="navbar">
     <InteractablesButtonGroup
@@ -31,23 +30,16 @@
     </InteractablesButtonGroup>
   </div>
   <div id="container">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
+    <UiSimpleScroll
+      scrollMode="vertical"
+      scrollShow="scroll"
       v-if="ui.enhancers.route === 'emotes'"
     >
       <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
         <div
-          ref="emojiInvoker"
-          slot="emoji-invoker"
-          slot-scope="{ events: { click: clickEvent }, display, emojis }"
-          v-bind:events.click="clickEvent"
-          @click.stop="clickEvent"
-        />
-        <div
           slot="emoji-picker"
           ref="emojiPicker"
-          slot-scope="{ emojis, insert, display }"
+          slot-scope="{ emojis, insert }"
         >
           <div class="emoji-picker">
             <div class="emoji-picker__search">
@@ -89,7 +81,7 @@
           </div>
         </div>
       </emoji-picker>
-    </UiScroll>
+    </UiSimpleScroll>
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'" />
   </div>
 </div>

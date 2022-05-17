@@ -4,7 +4,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-import PeerId from 'peer-id'
 
 import Upload from '../../files/upload/Upload.vue'
 import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
@@ -17,23 +16,9 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { UploadDropItemType } from '~/types/files/file'
+import { Group } from '~/types/messaging'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    sendMessage: Function
-    text: string
-    updateText: Function
-    handleUpload: Function
-    throttleTyping: Function
-    typingNotifHandler: Function
-    smartTypingStart: Function
-    clearChatbar: Function
-    handleChatBorderRadius: Function
-    files: UploadDropItemType[]
-  }
-}
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -42,7 +27,7 @@ export default Vue.extend({
   },
   props: {
     recipient: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<Friend | Group>,
       default: () => {},
     },
   },
@@ -55,21 +40,18 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile']),
     ...mapGetters('chat', ['getFiles']),
+    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile', 'conversation']),
     activeFriend() {
-      return this.$Hounddog.getActiveFriend(this.friends)
+      return this.conversation?.participants?.[0]
     },
-    /**
-     * Computes the amount of characters left
-     */
     /**
      * @method charlimit DocsTODO
      * @description Checks if current text is longer than the max character limit
      * @returns Boolean based on if the current text length is longer than the max character limit
      * @example
      */
-    charlimit() {
+    charlimit(): boolean {
       return this.text.length > this.$Config.chat.maxChars
     },
     /**
@@ -78,7 +60,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    hasCommand() {
+    hasCommand(): boolean {
       const parsedCommand = parseCommand(this.ui.chatbarContent)
       const currentCommand = commands.find(
         (cmd) => cmd.name === parsedCommand.name.toLowerCase(),
@@ -93,7 +75,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    commandPreview() {
+    commandPreview(): boolean {
       // Hide commands for early access
       // return hasCommandPreview(this.ui.chatbarContent)
       return false
@@ -104,7 +86,7 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    isValidCommand() {
+    isValidCommand(): boolean {
       const currentText = parseCommand(
         this.ui.chatbarContent,
       ).name.toLowerCase()
@@ -121,7 +103,7 @@ export default Vue.extend({
        * @returns String of chatbars current text
        * @example const currText = this.get()
        */
-      get() {
+      get(): string {
         return this.ui.chatbarContent
       },
       /**
@@ -133,15 +115,14 @@ export default Vue.extend({
       set(value: string) {
         this.$store.dispatch('ui/setChatbarContent', {
           content: value,
-          userId: this.$props.recipient?.address,
+          userId: this.recipient?.address,
         })
       },
     },
-    placeholder() {
-      if (!this.hasCommand && this.$data.text === '') {
-        return this.$t('ui.talk')
-      }
-      return ''
+    placeholder(): string {
+      return !this.hasCommand && this.text === ''
+        ? (this.$t('ui.talk') as string)
+        : ''
     },
   },
   watch: {
@@ -149,15 +130,18 @@ export default Vue.extend({
       handler() {
         const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
         if (activeFriend)
-          this.$data.recipientTyping =
+          this.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
       },
+    },
+    'conversation.participants': {
+      handler() {},
       deep: true,
     },
     'recipient.address': {
-      handler() {
+      handler(value) {
         const findItem = this.chat.chatTexts.find(
-          (item: any) => item.userId === this.$props.recipient?.address,
+          (item: any) => item.userId === value,
         )
         const message = findItem ? findItem.value : ''
         this.$refs.editable?.resetHistory()
@@ -171,6 +155,8 @@ export default Vue.extend({
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
         }
+
+        this.onRecipientChangeResetUploadState(value)
       },
     },
   },
@@ -181,13 +167,13 @@ export default Vue.extend({
         mutation.type === 'chat/setFiles'
       ) {
         if (this.recipient) {
-          this.$data.files = this.getFiles(this.recipient?.address)
+          this.files = this.getFiles(this.recipient?.address)
         }
       }
 
       if (mutation.type === 'chat/deleteFiles') {
         if (this.recipient) {
-          this.$data.files = []
+          this.files = []
         }
       }
     })
@@ -202,29 +188,7 @@ export default Vue.extend({
     typingNotifHandler(
       state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
     ) {
-      const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
-      if (activeFriend) {
-        try {
-          const p2p = Peer2Peer.getInstance()
-
-          if (!activeFriend.peerId) return
-
-          p2p.sendMessage(
-            {
-              type: 'TYPING_STATE',
-              payload: { state: 'TYPING' },
-              sentAt: Date.now(),
-            },
-            PeerId.createFromB58String(activeFriend.peerId),
-          )
-          // const activePeer = this.$WebRTC.getPeer(activeFriend.address)
-          // activePeer?.send('TYPING_STATE', { state })
-        } catch (error: any) {
-          this.$Logger.log('cannot send after peer is destroyed', 'ERROR', {
-            error,
-          })
-        }
-      }
+      // TODO use conversation participants
     },
     /**
      * @method throttleTyping
@@ -296,25 +260,25 @@ export default Vue.extend({
         }
         if (
           this.ui.replyChatbarContent.from &&
-          !RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
+          !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
         ) {
           this.$store.dispatch('textile/sendReplyMessage', {
-            to: this.recipient.textilePubkey,
+            to: (this.recipient as Friend).textilePubkey,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
           return
         }
-        // Check if it's a group
+
         if (
           RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            (this.recipient as Group)?.id?.split('|')[1],
           )
         ) {
           if (this.ui.replyChatbarContent.from) {
             this.$store.dispatch('textile/sendGroupReplyMessage', {
-              to: this.recipient.textilePubkey,
+              to: (this.recipient as Group).id,
               text: value,
               replyTo: this.ui.replyChatbarContent.messageID,
               replyType: MessagingTypesEnum.TEXT,
@@ -323,16 +287,16 @@ export default Vue.extend({
             return
           }
           this.$store.dispatch('textile/sendGroupMessage', {
-            groupId: this.recipient.textilePubkey,
+            groupId: (this.recipient as Group).id,
             message: value,
           })
         } else {
           this.$store.dispatch('textile/sendTextMessage', {
-            to: this.recipient.textilePubkey,
+            to: (this.recipient as Friend).textilePubkey,
             text: value,
           })
         }
-        this.$data.nsfwUploadError = false
+        this.nsfwUploadError = false
       }
     },
     /**
@@ -379,6 +343,12 @@ export default Vue.extend({
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$store.commit('chat/setContainsNsfw', false)
       this.$store.commit('chat/setCountError', false)
+    },
+    onRecipientChangeResetUploadState(recipient: string) {
+      this.files = this.getFiles(recipient)
+      this.$store.commit('chat/setContainsNsfw', false)
+      this.$store.commit('chat/setCountError', false)
+      this.$store.commit('chat/setAlertNsfw', false)
     },
     beforeDestroy() {
       this.unsubscribe()

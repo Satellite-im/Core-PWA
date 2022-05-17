@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { Call } from './Call'
+import type { SignalData } from 'simple-peer'
+import { Call, CallPeerDescriptor } from './Call'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
 import { WebRTCEventListeners } from '~/libraries/WebRTC/types'
@@ -10,7 +11,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   originator?: string
   // If this is undefined, the WebRTC services cannot run
   initialized?: boolean
-  peers: Map<string, Call>
+  calls: Map<string, Call>
 
   // --- Internal ---
   //
@@ -20,7 +21,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   constructor() {
     super()
     this._fnQueue = []
-    this.peers = new Map()
+    this.calls = new Map()
   }
 
   /**
@@ -34,7 +35,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
 
     this.initialized = true
     this._runQueue()
-    this.emit('INIT')
+    super.emit('INIT')
 
     Vue.prototype.$Logger.log('WebRTC', 'Initialized', {
       originator: this.originator,
@@ -42,13 +43,13 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   }
 
   /**
-   * @computed peerCount
-   * @description Get the total count of connected peers
+   * @computed callCount
+   * @description Get the total count of connected calls
    * @returns
    * @example
    */
-  get peerCount(): number {
-    return this.peers ? this.peers.size : 0
+  get callCount(): number {
+    return this.calls ? this.calls.size : 0
   }
 
   // --- Private Methods ---
@@ -75,27 +76,30 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method _connect
    * @description Internal abstraction of connect to allow for connection queueing
-   * @param peerId identifier of peer we're connecting to
+   * @param callId identifier of call we're connecting to
    * @param channel Secret communication channel you want to connect with
    * @returns
    * @example
    */
-  connect(peerId: string): Call {
+  connect(
+    callId: string,
+    peers?: CallPeerDescriptor[],
+    peerSignals?: { [key: string]: SignalData },
+  ): Call {
     if (!this.initialized || !this.originator) {
       throw new Error(WebRTCError.NOT_INITIALIZED)
     }
 
-    // Avoid multiple connections to the same peer
-    if (this.peers.has(peerId)) {
-      const peer = this.getPeer(peerId)
-      if (!peer) {
-        throw new Error(WebRTCError.PEER_NOT_FOUND)
-      }
+    let call = this.calls.get(callId)
+    if (call) {
+      // @ts-ignore
+      call.peerSignals = peerSignals
+      return call
     }
 
-    const peer = new Call(peerId)
-    this.peers.set(peerId, peer)
-    return peer
+    call = new Call(callId, peers, peerSignals)
+    this.calls.set(callId, call)
+    return call
   }
 
   // --- Public Methods ---
@@ -109,19 +113,34 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @returns
    * @example
    */
-  exists(peerId: string): boolean {
-    if (!this.peers) return false
-    return this.peers.has(peerId)
+  exists(callId: string): boolean {
+    return this.calls?.has(callId)
   }
 
   /**
-   * @method getPeer
-   * @description Get a Call from the list of connected peers
-   * @param peerId identifier of peer we're seeking
+   * @method getCall
+   * @description Get a Call from the list of connected calls
+   * @param peerId identifier of group or peer we're seeking
    * @returns
    * @example
    */
-  getPeer(peerId: string): Call | undefined {
-    return this.peers.get(peerId)
+  getCall(callId: string): Call | undefined {
+    return this.calls?.get(callId)
+  }
+
+  /**
+   * @method destroyCall
+   * @description Remove a call from the list of connected calls
+   * @param peerId identifier of group or peer we're seeking
+   */
+  destroyCall(callId: string) {
+    const call = this.calls.get(callId)
+    if (!call) {
+      return
+    }
+    call.destroy(true, false)
+    this.calls.delete(callId)
   }
 }
+
+export const $WebRTC = new WebRTC()

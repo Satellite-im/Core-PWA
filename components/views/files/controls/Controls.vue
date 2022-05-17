@@ -135,7 +135,7 @@ export default Vue.extend({
       const sameNameResults: File[] = emptyFileResults.filter((file) => {
         return !this.$FileSystem.currentDirectory.hasChild(file.name)
       })
-      const files: Promise<{ file: File; nsfw: boolean }>[] =
+      const files: { file: File; nsfw: boolean }[] = await Promise.all(
         sameNameResults.map(async (file: File) => {
           // convert heic to jpg for scan. return original heic if sfw
           if (await isHeic(file)) {
@@ -160,9 +160,10 @@ export default Vue.extend({
           }
 
           return { file, nsfw }
-        })
+        }),
+      )
 
-      for await (const file of files) {
+      for (const file of files) {
         try {
           this.$store.commit(
             'ui/setFilesUploadStatus',

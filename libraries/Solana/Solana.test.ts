@@ -25,6 +25,11 @@ describe('Solana.getClusterFromNetworkConfig', () => {
     const result: any = Solana.getClusterFromNetworkConfig('')
     expect(result).toMatchSnapshot()
   })
+
+  test('5', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('local')
+    expect(result).toMatchSnapshot()
+  })
 })
 
 describe('Solana.sleep', () => {
@@ -92,38 +97,6 @@ describe('Solana.publicKeyFromSeeds', () => {
       )
       await Solana.publicKeyFromSeed(param1, '', param3)
     })
-  })
-})
-
-describe('Solana.waitForAccount', () => {
-  test('0', async () => {
-    const param1: any = new web3.Connection('http://localhost:8899')
-    const param2: any = new web3.PublicKey(10)
-    try {
-      await Solana.waitForAccount(param1, param2)
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-    }
-  })
-  test('1', async () => {
-    web3.Connection.getAccountInfo = jest.fn().mockResolvedValueOnce(null)
-    const param1: any = new web3.Connection('http://localhost:8899')
-    const param2: any = new web3.PublicKey(10)
-    try {
-      await Solana.waitForAccount(param1, param2)
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-    }
-  })
-  test('2', async () => {
-    web3.Connection.getAccountInfo = jest.fn().mockResolvedValueOnce(true)
-    const param1: any = new web3.Connection('http://localhost:8899')
-    const param2: any = new web3.PublicKey(10)
-    try {
-      await Solana.waitForAccount(param1, param2)
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-    }
   })
 })
 

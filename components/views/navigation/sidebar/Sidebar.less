@@ -12,7 +12,6 @@
   display: flex;
   flex-direction: column;
   padding-bottom: @normal-spacing;
-  z-index: @base-z-index + 12;
   background: transparent;
 
   .sidebar-inner {
@@ -65,7 +64,6 @@
     .toggle-sidebar {
       cursor: pointer;
       position: absolute;
-      z-index: @base-z-index + 10;
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
       &:extend(.font-accent);
@@ -106,13 +104,15 @@
 
   .label {
     position: absolute;
+    text-align: center;
     top: 0.25rem;
     right: 0.25rem;
-    font-size: @micro-text-size;
+    font-size: @mini-text-size;
     background-color: var(--flair-color);
     border-radius: 2px;
-    line-height: 1.2;
-    padding: 0.15rem 0.25rem;
+    line-height: 1;
+    padding: 0.25rem;
+    min-width: 18px;
     &:extend(.font-primary);
     font-family: @primary-font;
   }
@@ -159,10 +159,6 @@
     float: right;
     cursor: pointer;
     width: auto;
-    z-index: @base-z-index + 4;
-    &::before {
-      z-index: @base-z-index + 8;
-    }
   }
 }
 
@@ -179,7 +175,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #sidebar {
-    z-index: 3;
+    &:extend(.first-layer);
     width: @sidebar-size-mobile;
     min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;
@@ -193,6 +189,15 @@
         var(--app-height) - @sidebar-inner-offset -
           @mobile-sidebar-inner-streaming-pad
       );
+    }
+  }
+
+  .flexy {
+    .quick-chat {
+      &:extend(.second-layer);
+      &::before {
+        &:extend(.second-layer);
+      }
     }
   }
 

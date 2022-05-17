@@ -4,7 +4,7 @@
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.mute')"
-    :action="toggleMute"
+    :action="() => toggleMute('audio')"
     :text="$t('controls.mic')"
     :loading="isLoading"
     loadingText=""
@@ -17,10 +17,11 @@
     size="small"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.deafen')"
-    :action="toggleDeafen"
+    :action="() => toggleDeafen()"
     :text="$t('controls.headphones')"
   >
-    <headphones-icon size="1x"></headphones-icon>
+    <headphones-off-icon v-if="audio.deafened" size="1x"></headphones-off-icon>
+    <headphones-icon v-else size="1x"></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
     :type="videoMuted ? 'danger' : 'dark'"
@@ -28,7 +29,7 @@
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only hast-tooltip-hidden-touch"
     :data-tooltip="$t('controls.toggle')"
     :text="$t('controls.video')"
-    :action="toggleVideo"
+    :action="() => toggleMute('video')"
     :loading="isLoading"
     loadingText=""
   >

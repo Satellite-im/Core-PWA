@@ -34,7 +34,7 @@
 }
 
 .modal {
-  z-index: @base-z-index + 103;
+  &:extend(.first-layer);
   position: absolute;
 }
 .close {
@@ -46,7 +46,8 @@
   height: 30px;
   font-size: 14pt;
   cursor: pointer;
-  z-index: @base-z-index + 5;
+
+  &:extend(.first-layer);
 }
 .label {
   padding: 0 !important;
@@ -85,7 +86,8 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    z-index: @base-z-index + 102;
+
+    &:extend(.first-layer);
     background: transparent !important;
     backdrop-filter: @light-blur;
   }

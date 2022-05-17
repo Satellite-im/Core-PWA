@@ -31,9 +31,12 @@ export default Vue.extend({
     },
   },
   watch: {
-    allPrerequisitesReady(nextValue) {
-      if (!nextValue) return
-      this.eventuallyRedirect()
+    allPrerequisitesReady: {
+      handler(nextValue) {
+        if (!nextValue) return
+        this.eventuallyRedirect()
+      },
+      immediate: true,
     },
   },
   mounted() {

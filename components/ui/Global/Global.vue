@@ -6,6 +6,10 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { Friend } from '~/types/ui/friends'
+
+const p2p = Peer2Peer.getInstance()
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -16,7 +20,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Global',
   computed: {
-    ...mapState(['ui', 'media', 'webrtc']),
+    ...mapState(['ui', 'media', 'webrtc', 'conversation']),
     ModalWindows: () => ModalWindows,
   },
   mounted() {
@@ -68,30 +72,41 @@ export default Vue.extend({
      * @example
      */
     async acceptCall(kinds: TrackKind[]) {
-      if (this.webrtc.activeCall) {
-        this.hangUp()
+      this.$store.commit('webrtc/setStreamMuted', {
+        peerId: p2p.id,
+        audio: true,
+        video: true,
+        screen: true,
+      })
+      const { callId, peerId } = this.webrtc.incomingCall
+      const call = $WebRTC.getCall(callId)
+      if (!call) {
+        return
       }
 
-      const identifier = this.webrtc.incomingCall
-      const call = this.$WebRTC.getPeer(identifier)
+      const redirectId =
+        this.webrtc.incomingCall.type === 'group'
+          ? `groups/${callId}`
+          : `direct/${
+              this.$store.state.friends.all.find(
+                (f: Friend) => f.peerId === peerId,
+              )?.address || 'error'
+            }`
 
-      if (!call) return
-
-      if (call) {
-        try {
-          await call.createLocalTracks(kinds)
-          await call.answer()
-        } catch (error) {
-          if (error instanceof Error) {
-            this.$toast.error(this.$t(error.message) as string)
-          }
+      try {
+        await call.createLocalTracks(kinds)
+        await call.answer(peerId)
+      } catch (error) {
+        if (error instanceof Error) {
+          this.$toast.error(this.$t(error.message) as string)
         }
       }
 
-      const callingPath = `/chat/direct/${identifier}`
+      const callingPath = `/chat/${redirectId}`
       if (this.$route.path !== callingPath) {
         this.$router.push(callingPath)
       }
+
       if (this.ui.showSettings) {
         this.$store.commit('ui/toggleSettings', { show: false })
       }
@@ -102,11 +117,8 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      const identifier = this.webrtc.incomingCall
-
-      const call = this.$WebRTC.getPeer(identifier)
-      if (call) call.deny()
-
+      this.$store.commit('webrtc/setIncomingCall', undefined)
+      this.$store.commit('ui/fullscreen', false)
       this.$store.dispatch('webrtc/denyCall')
     },
     /**
@@ -115,11 +127,9 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      if (!this.webrtc.activeCall) return
-      const call = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      if (call) call.hangUp()
-      this.$store.dispatch('webrtc/hangUp')
+      this.$store.commit('webrtc/setIncomingCall', undefined, { root: true })
       this.$store.commit('ui/fullscreen', false)
+      this.$store.dispatch('webrtc/hangUp')
     },
     /**
      * @method share

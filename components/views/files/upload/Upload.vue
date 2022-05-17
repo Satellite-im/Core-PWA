@@ -9,6 +9,8 @@ import { isHeic } from '~/utilities/FileType'
 import { UploadDropItemType } from '~/types/files/file'
 import { Friend } from '~/types/ui/friends'
 import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
+import { Group } from '~/store/groups/types'
 const converter = require('heic-convert')
 
 export default Vue.extend({
@@ -22,11 +24,8 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    editable: {
-      type: Boolean,
-    },
     recipient: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<Friend | Group>,
       default: null,
     },
     files: {
@@ -36,17 +35,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      progress: 0,
-      ipfsHash: false,
-      selectedFile: false,
-      imageURL: '',
-      fileClass: false,
-      aiScanning: false,
       fileAmount: 0,
     }
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState({
+      consentScan: (state) => (state as RootState).settings.consentScan,
+    }),
     activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
     },
@@ -63,7 +58,7 @@ export default Vue.extend({
     },
     handleFileClick() {
       this.resetFileUpload()
-      if (!this.settings.consentScan) {
+      if (!this.consentScan) {
         this.$toast.error(
           this.$t('pages.files.errors.enable_consent') as string,
           {
@@ -91,7 +86,7 @@ export default Vue.extend({
     async handleFile(event: any) {
       this.$store.dispatch('textile/clearUploadStatus')
       this.$store.dispatch('ui/setChatbarFocus')
-      if (this.editable) {
+      if (this.recipient) {
         const newFiles: File[] = [...event.target.files]
 
         if (newFiles.length + this.files.length > 8) {
@@ -102,8 +97,9 @@ export default Vue.extend({
         const address = this.recipient?.address
         if (
           !address &&
+          (this.recipient as Group).id &&
           !RegExp(this.$Config.regex.uuidv4).test(
-            this.recipient.textilePubkey.split('|')[1],
+            (this.recipient as Group).id.split('|')[1],
           )
         )
           return
@@ -209,13 +205,14 @@ export default Vue.extend({
      */
     async dispatchFile(file: UploadDropItemType) {
       if (
+        (this.recipient as Group).id &&
         RegExp(this.$Config.regex.uuidv4).test(
-          this.recipient.textilePubkey.split('|')[1],
+          (this.recipient as Group).id.split('|')[1],
         )
       ) {
         await this.$store
           .dispatch('textile/sendGroupFileMessage', {
-            groupID: this.recipient?.textilePubkey,
+            groupID: (this.recipient as Group)?.id,
             file,
           })
           .then(() => {
@@ -231,7 +228,7 @@ export default Vue.extend({
       } else {
         await this.$store
           .dispatch('textile/sendFileMessage', {
-            to: this.recipient?.textilePubkey,
+            to: (this.recipient as Friend)?.textilePubkey,
             file,
           })
           .then(() => {

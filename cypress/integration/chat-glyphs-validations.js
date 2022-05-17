@@ -1,10 +1,14 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
-  'useful wedding venture reopen forest lawsuit essence hamster kitchen bundle level tower{enter}'
+  dataRecovery.accounts
+    .filter((item) => item.description === 'cypress')
+    .map((item) => item.recoverySeed) + '{enter}'
 
 describe.skip('Chat - Sending Glyphs Tests', () => {
-  it('Send a glyph on chat', () => {
+  it('Send a glyph on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -29,7 +33,7 @@ describe.skip('Chat - Sending Glyphs Tests', () => {
     cy.goToLastGlyphOnChat()
   })
 
-  it('Send a glyph from the recents section', () => {
+  it.skip('Send a glyph from the recents section', () => {
     //Send a glyph from recents section
     cy.get('#glyph-toggle').click()
     cy.get('#glyphs').should('be.visible')

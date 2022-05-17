@@ -1,37 +1,28 @@
 import { Call } from '~/libraries/WebRTC/Call'
 
+export type PeerMutedState = {
+  audio: boolean
+  video: boolean
+  screen: boolean
+}
+export type StreamMutedState = {
+  [key: string]: PeerMutedState
+}
+
 export interface WebRTCState {
   initialized: boolean
-  incomingCall: string
-  activeCall: string
-  connectedPeers: string[]
-  streaming: Boolean
-  peerCalls: {
-    [key: string]: Call
+  streamMuted: StreamMutedState
+  originator: string
+  activeCall?: {
+    callId: string
+    peerId: string
   }
-  activeStream: {
-    createdAt: number
+  incomingCall?: {
+    callId: string
+    peerId: string
+    type: 'group' | 'friend'
   }
-  remoteTracks: {
-    audio: {
-      id?: string
-      muted?: boolean
-    }
-    video: {
-      id?: string
-      muted?: boolean
-    }
-  }
-  localTracks: {
-    audio: {
-      id?: string
-      muted?: boolean
-    }
-    video: {
-      id?: string
-      muted?: boolean
-    }
-  }
+  createdAt: number
 }
 
 export enum WebRTCError {

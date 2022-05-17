@@ -1,4 +1,4 @@
-import { TextileState } from './types'
+import { Conversation, TextileState } from './types'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { Message } from '~/types/textile/mailbox'
@@ -15,6 +15,7 @@ const mutations = {
     state: TextileState,
     {
       address,
+      type,
       messages,
       limit,
       skip,
@@ -22,6 +23,7 @@ const mutations = {
       active = true,
     }: {
       address: string
+      type: 'group' | 'friend'
       messages: Message[]
       limit: number
       skip: number
@@ -50,6 +52,7 @@ const mutations = {
     state.conversations = {
       ...state.conversations,
       [address]: {
+        type,
         messages: tracked.messages,
         replies: tracked.replies,
         reactions: tracked.reactions,
@@ -63,7 +66,7 @@ const mutations = {
     }
   },
   resetConversation(state: TextileState, { address }: { address: string }) {
-    state.conversations = {
+    state.conversations = <Conversation>{
       ...state.conversations,
       [address]: {
         messages: {},
@@ -88,6 +91,9 @@ const mutations = {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
+    if (!state.conversations[address]) {
+      return
+    }
     // No need to copy since we are going to update the whole conversation object
     const {
       messages,
@@ -114,7 +120,7 @@ const mutations = {
     const tracked = updateMessageTracker([message], initialValues)
     const msgValues = Object.values(tracked.messages)
 
-    state.conversations = {
+    state.conversations = <Conversation>{
       ...state.conversations,
       [address]: {
         messages: tracked.messages,
