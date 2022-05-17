@@ -31,9 +31,7 @@ export default Vue.extend({
       // if DM with single person
       if (this.otherParticipants.length === 1) {
         return this.$tc(
-          this.onlineParticipants.length
-            ? 'ui.online_status'
-            : 'ui.offline_status',
+          this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
           1,
           {
             name: this.otherParticipants[0].name,
@@ -41,7 +39,7 @@ export default Vue.extend({
         )
       }
       // if group
-      return this.$tc('ui.online_status', this.onlineParticipants.length, {
+      return this.$tc('ui.online', this.onlineParticipants.length, {
         name: this.onlineParticipants
           .map((p: ConversationParticipant) => p.name)
           .join(', '),
