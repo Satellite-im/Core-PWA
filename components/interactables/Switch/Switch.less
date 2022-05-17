@@ -25,7 +25,7 @@
     border-radius: 1.6rem;
     transition: all @animation-speed-micro ease-in-out;
     cursor: pointer;
-    border: 0.125rem solid var(--flair-color);
+    border: 0.125rem solid @flair-color;
     box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
 
     &::after {
@@ -53,7 +53,7 @@
         border-radius: calc(1.6rem - (2 * 0.125rem));
         transform: translateY(-50%)
           translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
-        border: 0.2rem solid var(--flair-color);
+        border: 0.2rem solid @flair-color;
         background: @white !important;
       }
     }
