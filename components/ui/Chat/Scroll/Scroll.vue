@@ -75,15 +75,12 @@ export default Vue.extend({
     },
   },
   mounted() {
-    const scrollObserver = new ResizeObserver((entities) => {
+    this.scrollObserver = new ResizeObserver(() => {
       // Autoscroll to the bottom only if the user is at the bottom of the chat
       !this.ui.isScrollOver && this.autoScrollToBottom()
     })
-
-    this.scrollObserver = scrollObserver.observe(
-      this.$refs.scrollRef,
-      this.$refs.scrollContent,
-    )
+    this.scrollObserver.observe(this.$refs.scrollRef)
+    this.scrollObserver.observe(this.$refs.scrollContent)
   },
   beforeDestroy() {
     if (this.scrollObserver) this.scrollObserver.disconnect()
