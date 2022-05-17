@@ -304,7 +304,9 @@ export default Vue.extend({
       })
 
       if (message !== this.$props.message.payload) {
-        const recipient = this.$Hounddog.getActiveFriend(
+        const { address } = this.$route.params
+        const recipient = this.$Hounddog.findFriendByAddress(
+          address,
           this.$store.state.friends,
         )
         this.$store.dispatch('textile/editTextMessage', {
