@@ -53,10 +53,11 @@ export default Vue.extend({
       }
     },
     sendGlyph() {
-      const activeFriend = this.$Hounddog.getActiveFriend(
+      const { id, address } = this.$route.params
+      const activeFriend = this.$Hounddog.findFriendByAddress(
+        address,
         this.$store.state.friends,
       )
-      const { id } = this.$route.params
 
       if (!this.src) return
       if (!activeFriend && !id) return
