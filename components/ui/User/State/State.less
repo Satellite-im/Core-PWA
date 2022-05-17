@@ -3,14 +3,21 @@
   display: flex;
   align-items: center;
 
+  --circle-radius: 6px;
+  --border-width: 2px;
+
+  &.is-large {
+    --circle-radius: 10px;
+  }
+
   .circle {
-    mask: radial-gradient(circle 8px at 86% 86%, #0000 98%, #000) 100% 100%/100%
-      100% no-repeat;
+    mask: radial-gradient(
+        circle calc(var(--circle-radius) + var(--border-width)) at 86% 86%,
+        #0000 98%,
+        #000
+      )
+      100% 100%/100% 100% no-repeat;
     overflow: hidden;
-    &.is-large {
-      mask: radial-gradient(circle 12px at 86% 86%, #0000 98%, #000) 100% 100%/100%
-        100% no-repeat;
-    }
   }
 
   .status {
@@ -18,17 +25,10 @@
     left: 86%;
     top: 86%;
     border-radius: 50%;
-    width: 12px;
-    height: 12px;
-    margin-top: -6px;
-    margin-left: -6px;
-
-    &.is-large {
-      width: 20px;
-      height: 20px;
-      margin-top: -10px;
-      margin-left: -10px;
-    }
+    width: calc(var(--circle-radius) * 2);
+    height: calc(var(--circle-radius) * 2);
+    margin-top: calc(-1 * var(--circle-radius));
+    margin-left: calc(-1 * var(--circle-radius));
 
     &.is-online {
       background-color: @green;

@@ -1,11 +1,6 @@
 <div v-if="group.avatar" class="is-group">
   <span class="wrapper-circle" v-on:click="showQuickProfile">
-    <UiCircle
-      :type="src ? 'image' :'random'"
-      :seed="address"
-      :size="36"
-      :source="src"
-    />
+    <UiCircle :type="src ? 'image' :'random'" :seed="address" :source="src" />
   </span>
   <div class="group-body">
     <div class="group-heading">

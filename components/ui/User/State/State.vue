@@ -3,10 +3,10 @@
     class="user-state"
     data-cy="user-state"
     :style="`width:${size}px; height:${size}px`"
+    :class="{ 'is-large': size > 36 }"
   >
     <UiCircle
       data-cy="satellite-circle-profile"
-      :class="{ 'is-large': size > 36 }"
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="size"
@@ -16,7 +16,7 @@
     <div
       v-if="user.state !== 'mobile' && !isTyping"
       class="status"
-      :class="{ [`is-${user.state}`]: user.state, 'is-large': size > 36 }"
+      :class="{ [`is-${user.state}`]: user.state }"
     />
     <smartphone-icon
       v-else-if="user.state === 'mobile'"
