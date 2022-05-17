@@ -1,4 +1,4 @@
-import { TextileState } from './types'
+import { Conversation, TextileState } from './types'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { Message } from '~/types/textile/mailbox'
@@ -66,7 +66,7 @@ const mutations = {
     }
   },
   resetConversation(state: TextileState, { address }: { address: string }) {
-    state.conversations = {
+    state.conversations = <Conversation>{
       ...state.conversations,
       [address]: {
         messages: {},
@@ -117,7 +117,7 @@ const mutations = {
     const tracked = updateMessageTracker([message], initialValues)
     const msgValues = Object.values(tracked.messages)
 
-    state.conversations = {
+    state.conversations = <Conversation>{
       ...state.conversations,
       [address]: {
         messages: tracked.messages,

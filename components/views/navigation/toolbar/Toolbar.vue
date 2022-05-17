@@ -83,6 +83,7 @@ export default Vue.extend({
       | Friend
       | { textilePubkey: string; type: string }
       | null
+      | unknown
       | undefined {
       // It should not happen that someone tries to write to himself, but we should check
       // anyway
@@ -95,14 +96,14 @@ export default Vue.extend({
 
       return this.conversation.type === 'group' ? this.group : this.friend
     },
-    group() {
+    group(): any {
       return this.$store.state.groups.all.find(
-        (g) => g.id === this.$route.params.id,
+        (g: { id: string }) => g.id === this.$route.params.id,
       )
     },
-    friend() {
+    friend(): any {
       return this.$store.state.friends.all.find(
-        (f) => f.address === this.$route.params.address,
+        (f: { address: string }) => f.address === this.$route.params.address,
       )
     },
     showSearchResult: {
