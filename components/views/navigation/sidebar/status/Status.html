@@ -5,9 +5,8 @@
   />
   <div
     class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
-    v-on:click="$toast.show($t('ui.copied'))"
     :data-tooltip="$t('controls.copy_id')"
-    v-clipboard:copy="accounts.active"
+    @click="copyId"
   >
     <TypographyTitle
       data-cy="user-name"

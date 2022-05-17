@@ -98,7 +98,6 @@
     "v-click-outside": "^3.1.2",
     "v-scroll-lock": "^1.3.1",
     "vue-awesome-swiper": "^4.1.1",
-    "vue-clipboard2": "^0.3.3",
     "vue-croppie": "^2.0.2",
     "vue-custom-scrollbar": "^1.4.3",
     "vue-emoji-picker": "git+https://git@github.com/Satellite-im/vue-emoji-picker#build-satellite",
