@@ -32,13 +32,8 @@
 
 #app {
   display: flex;
-<<<<<<< HEAD
-  &:extend(.no-select);
-  height: var(--app-height);
-=======
   user-select: none;
   height: @app-height;
->>>>>>> ae79e77b (refactor(style): rebase)
 
   .swiper {
     width: 100%;
@@ -70,14 +65,8 @@
     position: absolute;
     top: @xlarge-spacing;
     left: @normal-spacing;
-<<<<<<< HEAD
-    color: @primary-color;
-    filter: @primary-text-glow;
-    &:extend(.fourth-layer);
-=======
     &:extend(.filter-glow);
-    z-index: @base-z-index + 1;
->>>>>>> ae79e77b (refactor(style): rebase)
+    &:extend(.fourth-layer);
   }
 
   .dynamic-content {

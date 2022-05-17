@@ -15,7 +15,7 @@
 
   .notification-alert {
     position: fixed;
-    z-index: 1;
+    &:extend(.first-layer);
   }
 
   .toggle-alerts {
@@ -105,7 +105,7 @@
   }
 
   .alerts-floating-container {
-    z-index: 100;
+    &:extend(.fourth-layer);
     &.side-open {
       margin-right: 1.2rem;
     }
