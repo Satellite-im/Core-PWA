@@ -1,11 +1,11 @@
-<template src="./Connected.html" />
+<template src="./Connected.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
-import { Config } from '~/config'
-import { ConversationConnection } from '~/store/conversation/types.ts'
+import { RootState } from '~/types/store/store'
+import { ConversationParticipant } from '~/store/conversation/types'
 
 export default Vue.extend({
   components: {
@@ -19,70 +19,36 @@ export default Vue.extend({
     },
   },
   computed: {
-    // ...mapState(['friends', 'conversation']),
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
-      conversationParticipants: (state) =>
-        (state as RootState).conversation.participants,
     }),
-    /**
-     * @method participantStatus
-     * @description Get an object that has all participants, connected, and disconnected. The filtering !== null filters out your own username
-     */
-    participantStatus(): object {
-      return {
-        PARTICIPANTS: this.conversationParticipants
-          .filter((participant) => participant.name != null)
-          .map((participant) => {
-            return participant.name
-          }),
-        CONNECTED: this.conversationParticipants
-          .filter(
-            (participant) =>
-              participant.state === ConversationConnection.CONNECTED &&
-              participant.name != null,
-          )
-          .map((participant) => {
-            return participant.name
-          }),
-        DISCONNECTED: this.conversationParticipants
-          .filter(
-            (participant) =>
-              participant.state === ConversationConnection.DISCONNECTED &&
-              participant.name != null,
-          )
-          .map((participant) => {
-            return participant.name
-          }),
-      }
-    },
+    ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
     /**
      * @method participantsText
-     * @description three possible strings returned, one for single user, one for multiple users, or no participants (used only for groups)
+     * @description
      */
-    participantsText(): object {
-      // if there is only one participant (DM) OR there is only one connected user (1 of group chat), use singular
-      if (
-        this.participantStatus.PARTICIPANTS.length === 1 ||
-        this.participantStatus.CONNECTED.length === 1
-      ) {
-        return {
-          names: this.participantStatus.PARTICIPANTS[0],
-          description: `${this.$t('ui.is')} ${
-            this.participantStatus.CONNECTED.length
-              ? this.$t('ui.online')
-              : this.$t('ui.offline')
-          }`,
-        }
+    participantsText(): string {
+      // if DM with single person
+      if (this.otherParticipants.length === 1) {
+        return this.$tc(
+          this.onlineParticipants.length
+            ? 'ui.online_status'
+            : 'ui.offline_status',
+          1,
+          {
+            name: this.otherParticipants[0].name,
+          },
+        )
       }
-      // if there are multiple connected (2+ group) user plural
-      if (this.participantStatus.CONNECTED.length > 1) {
-        return {
-          names: this.participantStatus.CONNECTED.join(', '),
-          description: `${this.$t('ui.are')} ${this.$t('ui.online')}`,
-        }
-      }
-      return { names: null, description: this.$t('ui.all_offline') }
+      // if group
+      return this.$tc('ui.online_status', this.onlineParticipants.length, {
+        name: this.onlineParticipants
+          .map((p: ConversationParticipant) => p.name)
+          .join(', '),
+      })
+    },
+    isOnline(): string {
+      return this.onlineParticipants.length ? 'is-online' : 'is-offline'
     },
   },
   watch: {
@@ -90,21 +56,6 @@ export default Vue.extend({
       handler() {},
       deep: true,
       immediate: true,
-    },
-  },
-  methods: {
-    /**
-     * @method friendConnected
-     * @description Send the user ID/address in, get a boolean of it the signal is currently open
-     * @param friendId Address of the current user
-     * @example
-     * friendConnected('user1') // true
-     */
-    friendConnected(friendId: string): boolean {
-      return (
-        this.allFriends.find((friend) => friend.address === friendId).state ===
-        'online'
-      )
     },
   },
 })

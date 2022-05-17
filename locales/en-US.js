@@ -40,6 +40,9 @@ export default {
     all_offline: 'All Users are Offline',
     participant: 'participant',
     participants: 'participants',
+    online_status:
+      'All Users are Offline | {name} is online | {name} are online',
+    offline_status: '{name} is offline',
   },
   wallet: {
     wallet: 'Wallet',

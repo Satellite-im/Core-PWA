@@ -1,17 +1,4 @@
 <div v-if="!typing" class="is-connected">
-  <circle-icon
-    :class="`status ${ participantStatus.CONNECTED.length > 0 ? 'is-online' : 'is-offline' }`"
-    size="1x"
-  />
-  <TypographyText
-    :text="participantsText.names"
-    data-cy="user-connected"
-    :size="6"
-    class="bolded"
-  />
-  <TypographyText
-    :text="participantsText.description"
-    data-cy="user-connected"
-    :size="6"
-  />
+  <circle-icon class="status" :class="isOnline" size="1x" />
+  <TypographyText :text="participantsText" data-cy="user-connected" :size="6" />
 </div>
