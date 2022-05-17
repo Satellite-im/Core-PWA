@@ -426,8 +426,11 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
 })
 
-Cypress.Commands.add('goToLastImageOnChat', () => {
-  cy.get('[data-cy=chat-image]').last().scrollIntoView().should('exist')
+Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
+  cy.get('[data-cy=chat-image]', { timeout: waitTime })
+    .last()
+    .scrollIntoView()
+    .should('be.visible')
 })
 
 // Chat - Send Files Commands
