@@ -1,10 +1,11 @@
-<template src="./Connected.html" />
+<template src="./Connected.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
-import { Config } from '~/config'
+import { RootState } from '~/types/store/store'
+import { ConversationParticipant } from '~/store/conversation/types'
 
 export default Vue.extend({
   components: {
@@ -18,36 +19,38 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'webrtc', 'friends', 'conversation']),
-    onlineParticipants() {
-      return this.conversation.participants
-        .filter((participant) => participant.state === 'CONNECTED')
-        .map((participant) => participant.name)
+    ...mapState({
+      allFriends: (state) => (state as RootState).friends.all,
+    }),
+    ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
+    /**
+     * @method participantsText
+     * @description builds translated string for online/offline status
+     */
+    participantsText(): string {
+      // if DM with single person
+      if (this.otherParticipants.length === 1) {
+        return this.$tc(
+          this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
+          1,
+          {
+            name: this.otherParticipants[0].name,
+          },
+        )
+      }
+      // if group
+      return this.$tc('ui.online', this.onlineParticipants.length, {
+        name: this.onlineParticipants
+          .map((p: ConversationParticipant) => p.name)
+          .join(', '),
+      })
     },
-    onlineParticipantsText() {
-      if (this.onlineParticipants.length === 1) {
-        return `${this.onlineParticipants[0]} ${this.$t('ui.is')} ${this.$t(
-          'ui.online',
-        )}`
-      }
-      if (this.onlineParticipants.length > 4) {
-        return `${this.onlineParticipants.length} ${this.$t(
-          'ui.participants',
-        )} ${this.$t('ui.are')} ${this.$t('ui.online')}`
-      }
-      if (this.onlineParticipants.length) {
-        return `${this.onlineParticipants.join(', ')} ${this.$t(
-          'ui.are',
-        )} ${this.$t('ui.online')}`
-      }
-      if (this.conversation.participants.length === 1) {
-        return `${this.conversation.participants[0]} ${this.$t(
-          'ui.is',
-        )} ${this.$t('ui.offline')}`
-      }
-      return `${this.conversation.participants.join(', ')} ${this.$t(
-        'ui.are',
-      )} ${this.$t('ui.offline')}`
+    /**
+     * @method connectedStatus
+     * @description sets css class
+     */
+    connectedStatus(): string {
+      return this.onlineParticipants.length ? 'is-online' : 'is-offline'
     },
   },
   watch: {
@@ -55,21 +58,6 @@ export default Vue.extend({
       handler() {},
       deep: true,
       immediate: true,
-    },
-  },
-  methods: {
-    /**
-     * @method friendConnected
-     * @description Send the user ID/address in, get a boolean of it the signal is currently open
-     * @param friendId Address of the current user
-     * @example
-     * friendConnected('user1') // true
-     */
-    friendConnected(friendId: string): boolean {
-      return (
-        this.friends.all.find((friend) => friend.address === friendId).state ===
-        'online'
-      )
     },
   },
 })
