@@ -67,7 +67,7 @@ export default {
       getCorrectKeybind(callActiveChat),
       (event: KeyboardEvent) => {
         event.preventDefault()
-        dispatch('webrtc/call', { kinds: ['audio'] }, { root: true })
+        dispatch('webrtc/call', ['audio'], { root: true })
       },
     )
   },
