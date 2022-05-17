@@ -33,8 +33,8 @@ export default {
     is: 'is',
     live: 'Live',
     edited: 'edited',
-    online: 'All Users are Offline | {name} is online | {name} are online',
-    offline: '{name} is offline',
+    online: 'All Users are offline | {name} is online | {name} are online',
+    offline: '{name} is not connected',
   },
   wallet: {
     wallet: 'Wallet',
