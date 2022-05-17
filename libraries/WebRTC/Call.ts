@@ -684,10 +684,8 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Destroys peer instance and all related streams and tracks
    * @example call.destroy()
    */
-  async destroy(andDeny = true, andEmit = true) {
-    if (andDeny) {
-      this.deny()
-    }
+  async destroy() {
+    this.deny()
     this.peerSignals = {}
     this.active = false
     this.isCallee = {}
@@ -699,12 +697,10 @@ export class Call extends Emitter<CallEventListeners> {
     })
     this._unbindBusListeners()
     this.peers = {}
-    if (andEmit) {
-      this.emit('DESTROY', {
-        callId: this.callId,
-        peerId: this.localId,
-      })
-    }
+    this.emit('DESTROY', {
+      callId: this.callId,
+      peerId: this.localId,
+    })
   }
 
   /**
@@ -865,13 +861,13 @@ export class Call extends Emitter<CallEventListeners> {
    * this._unbindBusListeners();
    */
   protected _unbindBusListeners() {
-    this.p2p?.off('peer:signal', this._onBusSignal)
-    this.p2p?.off('peer:refuse', this._onBusRefuse)
-    this.p2p?.off('peer:hangup', this._onBusHangup)
-    this.p2p?.off('peer:screenshare', this._onBusScreenshare)
-    this.p2p?.off('peer:mute', this._onBusMute)
-    this.p2p?.off('peer:unmute', this._onBusUnmute)
-    this.p2p?.off('peer:destroy', this._onBusDestroy)
+    this.p2p?.off('peer:signal', this._onBusSignal.bind(this))
+    this.p2p?.off('peer:refuse', this._onBusRefuse.bind(this))
+    this.p2p?.off('peer:hangup', this._onBusHangup.bind(this))
+    this.p2p?.off('peer:screenshare', this._onBusScreenshare.bind(this))
+    this.p2p?.off('peer:mute', this._onBusMute.bind(this))
+    this.p2p?.off('peer:unmute', this._onBusUnmute.bind(this))
+    this.p2p?.off('peer:destroy', this._onBusDestroy.bind(this))
   }
 
   /**
@@ -896,12 +892,7 @@ export class Call extends Emitter<CallEventListeners> {
    * this._unbindPeerListeners()
    */
   protected _unbindPeerListeners(peer: CallPeer) {
-    peer.off('signal', this._onSignal)
-    peer.off('connect', this._onConnect)
-    peer.off('error', this._onError)
-    peer.off('track', this._onTrack)
-    peer.off('stream', this._onStream)
-    peer.off('close', this._onClose)
+    peer.removeAllListeners()
   }
 
   /**
@@ -1049,7 +1040,6 @@ export class Call extends Emitter<CallEventListeners> {
   protected _onClose(peer: CallPeer) {
     this.peerConnected[peer.id] = false
     this._unbindPeerListeners(peer)
-    this.destroyPeer(peer.id)
     delete this.peers[peer.id]
   }
 
@@ -1091,11 +1081,6 @@ export class Call extends Emitter<CallEventListeners> {
    * call.destroyPeer('peerId')
    */
   destroyPeer(peerId: string) {
-    const peer = this.peers[peerId]
-    if (peer) {
-      peer.destroy()
-    }
-
     if (this.streams[peerId]) {
       Object.values(this.streams[peerId]).forEach((stream) => {
         stream.getTracks().forEach((track) => {
@@ -1104,7 +1089,10 @@ export class Call extends Emitter<CallEventListeners> {
       })
       delete this.streams[peerId]
     }
-
+    const peer = this.peers[peerId]
+    if (peer) {
+      peer.destroy()
+    }
     delete this.peers[peerId]
     delete this.peerConnected[peerId]
     delete this.peerSignals[peerId]
