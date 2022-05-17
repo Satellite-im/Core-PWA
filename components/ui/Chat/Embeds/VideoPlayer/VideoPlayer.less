@@ -1,6 +1,5 @@
 video {
   &:extend(.round-corners);
-  &:extend(.glow-primary);
   overflow: hidden;
 }
 
@@ -51,18 +50,6 @@ video {
   &:hover {
     background: transparent !important;
   }
-}
-.plyr__control--overlaid {
-  &:extend(.glow-primary);
-  &:hover {
-    &:extend(.glow-primary);
-    background: @primary-color !important;
-  }
-  background: @primary-color !important;
-}
-
-.plyr--full-ui input[type='range'] {
-  color: @primary-color !important;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

@@ -233,7 +233,7 @@ export default Vue.extend({
     }
 
     .toggle-sidebar {
-      color: @primary-color;
+      color: @satellite-color;
     }
 
     .icon-button {

@@ -20,7 +20,7 @@
     &:extend(.full-width);
     position: relative;
     height: 170px;
-    background: @primary-color;
+    background: @satellite-color;
     background-position: center;
     background-size: cover;
   }
@@ -44,8 +44,6 @@
         border-radius: 20px;
         &:extend(.font-secondary);
         font-size: 12px;
-        &:extend(.background-primary-gradient);
-        &:extend(.glow-primary);
       }
       display: flex;
       align-items: flex-end;
@@ -58,6 +56,7 @@
     padding: 16px;
     &:extend(.background-semitransparent-dark);
   }
+  &:extend(.font-primary);
   font-family: @primary-font;
   &:extend(.round-corners);
   overflow: hidden;

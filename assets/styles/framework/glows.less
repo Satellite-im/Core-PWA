@@ -1,18 +1,27 @@
-@primary-glow: 0 5px 14px -5px @primary-color;
+@satellite-glow: 0 5px 14px -5px @satellite-color;
 @flair-glow: 0 5px 14px -5px @flair-color;
+@switch-off-flair-glow: -5px 0px 20px -2px @flair-color;
+@flair-glow-secondary: 0 5px 14px -5px @flair-color-secondary;
+@switch-off-flair-glow-secondary: -5px 0px 20px -2px @flair-color-secondary;
+
 @white-glow: 0 5px 14px -5px @white;
 @danger-glow: 0 5px 14px -5px @red;
 
 @white-text-glow: drop-shadow(0px 5px 8px rgba(255, 255, 255, 0.5));
-@primary-text-glow: drop-shadow(0px 5px 8px rgba(39, 97, 253, 0.5));
+@satellite-text-glow: drop-shadow(
+  0px 5px 8px rgba(var(--satellite-color-rgb), 0.5)
+);
 
 @ui-shadow: 0 10px 20px 0 #080b0f3b;
 
 .glow-flair {
   box-shadow: @flair-glow;
 }
-.glow-primary {
-  box-shadow: @primary-glow;
+.glow-flair-secondary {
+  box-shadow: @flair-glow-secondary;
+}
+.glow-satellite {
+  box-shadow: @satellite-glow;
 }
 .glow-white {
   box-shadow: @white-glow;
@@ -23,6 +32,13 @@
 .filter-glow {
   filter: @white-text-glow;
 }
-.filter-glow-accent {
-  filter: @primary-text-glow;
+.filter-glow-satellite {
+  filter: @satellite-text-glow;
+}
+
+.switch-off-glow-flair {
+  box-shadow: @switch-off-flair-glow;
+}
+.switch-off-glow-flair-secondary {
+  box-shadow: @switch-off-flair-glow-secondary;
 }

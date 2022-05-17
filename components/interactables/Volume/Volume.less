@@ -6,13 +6,12 @@
     min-height: 1px;
   }
   .vue-slider-dot-tooltip-inner {
-    &:extend(.background-primary);
     &::after {
       width: 0;
       height: 0;
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
-      border-left: 5px solid @primary-color;
+      border-left: 5px solid @satellite-color;
       margin-left: -1px;
     }
     border-color: transparent;
@@ -22,10 +21,6 @@
 
   .vue-slider-rail {
     background: @gray;
-  }
-
-  .vue-slider-process {
-    &:extend(.background-primary);
   }
 
   .vue-slider-dot-handle {
@@ -50,7 +45,7 @@
       &::after {
         width: 0;
         height: 0;
-        border-top: 5px solid @primary-color;
+        border-top: 5px solid @satellite-color;
         border-bottom: 5px solid transparent;
         border-left: 5px solid transparent;
         margin-left: -1px;

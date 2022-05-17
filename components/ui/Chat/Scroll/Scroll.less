@@ -21,7 +21,6 @@
   height: 100%;
 
   /* Custom Scroll for Firefox */
-  scrollbar-color: @primary-color transparent;
   scrollbar-width: thin;
 
   /* Scroll Width */
@@ -39,7 +38,6 @@
 
   /* Scroll Handle */
   &::-webkit-scrollbar-thumb {
-    &:extend(.background-primary);
     &:extend(.round-corners);
   }
 
@@ -53,7 +51,6 @@
 
 .new-message-alert {
   position: absolute;
-  &:extend(.background-primary);
   cursor: pointer;
   font-size: 14px;
   width: calc(@full - @normal-spacing * 1.8);

@@ -39,7 +39,6 @@ export default Vue.extend({
 
 <style scoped lang="less">
 .chip-item {
-  &:extend(.background-primary);
   .fa-times {
     margin-bottom: -2px;
     margin-left: @light-spacing;

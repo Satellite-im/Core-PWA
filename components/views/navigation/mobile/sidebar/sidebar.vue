@@ -362,8 +362,7 @@ export default Vue.extend({
       &:extend(.first-layer);
       top: @normal-spacing * 2.5;
       right: @normal-spacing;
-      &:extend(.font-accent);
-      &:extend(.filter-glow-accent);
+      &:extend(.filter-glow);
     }
   }
 
@@ -398,7 +397,6 @@ export default Vue.extend({
     top: 0.25rem;
     right: 0.25rem;
     font-size: @micro-text-size;
-    &:extend(.background-primary);
     border-radius: 2px;
     line-height: 1.2;
     padding: 0.15rem 0.25rem;

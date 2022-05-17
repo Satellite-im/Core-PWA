@@ -1,4 +1,5 @@
 :root {
+  --app-height: 100vh;
   --flair-color: #b53471;
   --flair-color-rgb: 181, 52, 113;
 }
@@ -23,7 +24,7 @@
 
   //------------- Ui Colors -------------
   @border-color: @gray;
-  @flair-glow: 0 5px 14px -5px var(--flair-color);
+  @flair-glow: 0 5px 14px -5px @flair-color;
 
   //------------- Ui Flair -------------
   @border: 1px solid @border-color;
@@ -33,11 +34,6 @@
   }
   .background-alt {
     background: @graydient !important;
-  }
-
-  ::selection {
-    &:extend(.font-secondary);
-    background: var(--flair-color) !important;
   }
 
   /* Only for Safari to fix selection text background */
@@ -55,7 +51,6 @@
   .horizontal-rule,
   .vertical-divider {
     background: @midground !important;
-    caret-color: var(--flair-color) !important;
   }
 
   .control-icon.active,
@@ -66,13 +61,12 @@
   #mobile-nav {
     div {
       svg {
-        color: @white !important;
+        &:extend(.font-primary);
       }
       &.active {
         border-radius: @half;
-        color: var(--flair-color) !important;
         svg {
-          color: var(--flair-color) !important;
+          &:extend(.font-flair);
         }
       }
       &:extend(.inline-flex-centered);
@@ -97,39 +91,4 @@
     backdrop-filter: unset !important;
     box-shadow: none !important;
   }
-
-  // Media
-  #mediastream {
-    .user,
-    .tag {
-      background: var(--flair-color) !important;
-    }
-    .tag {
-      box-shadow: @flair-glow !important;
-    }
-  }
-}
-
-.tag {
-  .tag-number {
-    background: var(--flair-color) !important;
-  }
-}
-
-.context-menu {
-  p:hover {
-    background: var(--flair-color) !important;
-  }
-}
-
-.filterbox {
-  .filter-options {
-    input[type='checkbox'] {
-      accent-color: var(--flair-color);
-    }
-  }
-}
-
-.edit-message {
-  border-color: var(--flair-color) !important;
 }

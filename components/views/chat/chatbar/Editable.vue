@@ -358,7 +358,7 @@ export default Vue.extend({
       }
 
       .md-url {
-        color: @primary-color;
+        color: @satellite-color;
       }
 
       .md-lang {
