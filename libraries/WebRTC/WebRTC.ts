@@ -138,7 +138,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
     if (!call) {
       return
     }
-    call.destroy()
+    call.destroy(true, false)
     this.calls.delete(callId)
   }
 }
