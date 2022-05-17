@@ -68,6 +68,7 @@ Object {
   },
   "mostEmojiUsed": Array [],
   "notifications": Array [],
+  "notificationsAlertCounter": 0,
   "quickProfile": false,
   "quickProfilePosition": Object {
     "x": 0,
@@ -108,7 +109,6 @@ Object {
     },
   },
   "unreadMessage": 0,
-  "notificationsAlertCounter": 0,
   "userProfile": Object {},
 }
 `;
