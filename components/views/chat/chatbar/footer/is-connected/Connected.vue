@@ -25,7 +25,7 @@ export default Vue.extend({
     ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
     /**
      * @method participantsText
-     * @description
+     * @description builds translated string for online/offline status
      */
     participantsText(): string {
       // if DM with single person
@@ -47,7 +47,11 @@ export default Vue.extend({
           .join(', '),
       })
     },
-    isOnline(): string {
+    /**
+     * @method connectedStatus
+     * @description sets css class
+     */
+    connectedStatus(): string {
       return this.onlineParticipants.length ? 'is-online' : 'is-offline'
     },
   },

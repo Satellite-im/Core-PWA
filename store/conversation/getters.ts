@@ -14,7 +14,7 @@ const getters = {
   },
   /**
    * @method onlineParticipants
-   * @description array of online participants
+   * @description array of online participants other than yourself
    */
   onlineParticipants: (
     state: ConversationState,
