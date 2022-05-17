@@ -49,7 +49,7 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
       })
     })
     // Use visit Mobile command instead of visit for mobile devices
-    cy.visitMobile('/')
+    cy.visit('/')
   }
   cy.wait(1000)
   cy.get('body').then(($body) => {
