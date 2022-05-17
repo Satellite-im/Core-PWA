@@ -18,7 +18,7 @@ export default Vue.extend({
     },
     src: {
       type: String,
-      default: '',
+      required: true,
     },
     pack: {
       type: Object as PropType<Glyph>,
@@ -53,13 +53,15 @@ export default Vue.extend({
       }
     },
     sendGlyph() {
-      const activeFriend = this.$Hounddog.getActiveFriend(
+      const { id, address } = this.$route.params
+      const activeFriend = this.$Hounddog.findFriendByAddress(
+        address,
         this.$store.state.friends,
       )
-      const { id } = this.$route.params
 
-      if (!this.src) return
-      if (!activeFriend && !id) return
+      if (!activeFriend && !id) {
+        return
+      }
 
       if (id) {
         this.$store.dispatch('textile/sendGroupGlyphMessage', {
@@ -67,29 +69,21 @@ export default Vue.extend({
           src: this.src,
           pack: this.pack.name,
         })
-        this.$store.commit('ui/updateRecentGlyphs', {
-          pack: this.pack,
-          url: this.src,
-        })
-        this.$store.commit('ui/toggleEnhancers', {
-          show: false,
-          floating: !!this.$device.isMobile,
-        })
       } else {
         this.$store.dispatch('textile/sendGlyphMessage', {
           to: activeFriend?.textilePubkey,
           src: this.src,
           pack: this.pack.name,
         })
-        this.$store.commit('ui/updateRecentGlyphs', {
-          pack: this.pack,
-          url: this.src,
-        })
-        this.$store.commit('ui/toggleEnhancers', {
-          show: false,
-          floating: !!this.$device.isMobile,
-        })
       }
+      this.$store.commit('ui/updateRecentGlyphs', {
+        pack: this.pack,
+        url: this.src,
+      })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: false,
+        floating: this.$device.isMobile,
+      })
     },
     setLoaded() {
       this.isLoaded = true

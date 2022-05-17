@@ -67,7 +67,7 @@ describe('Chat features with two accounts', () => {
     cy.validateAllOptionsInContextMenu('@lastMessage', optionsMessage)
   })
 
-  it('Send glyph to user B', () => {
+  it.skip('Send glyph to user B', () => {
     cy.chatFeaturesSendGlyph()
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
@@ -76,13 +76,13 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Context Menu Options - Glyph Message', () => {
+  it.skip('Context Menu Options - Glyph Message', () => {
     let optionsGlyph = ['Add Reaction', 'Reply']
     cy.get('[data-cy=chat-glyph]').last().as('lastGlyph')
     cy.validateAllOptionsInContextMenu('@lastGlyph', optionsGlyph)
   })
 
-  it('Glyphs messages cannot be edited', () => {
+  it.skip('Glyphs messages cannot be edited', () => {
     cy.get('[data-cy=chat-glyph]').last().scrollIntoView()
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
@@ -194,7 +194,7 @@ describe('Chat features with two accounts', () => {
       .should('have.text', '😄')
   })
 
-  it('Assert glyph received from user A', () => {
+  it.skip('Assert glyph received from user A', () => {
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSecondAccountSrc) => {
@@ -251,7 +251,7 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@fileToReact', '😄')
   })
 
-  it('Add reactions to glyph in chat', () => {
+  it.skip('Add reactions to glyph in chat', () => {
     cy.get('[data-cy=chat-glyph]').last().as('glyphToReact')
     cy.reactToChatElement('@glyphToReact', '[title="smile"]')
     cy.validateChatReaction('@glyphToReact', '😄')

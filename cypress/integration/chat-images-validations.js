@@ -11,7 +11,7 @@ const jpgImagePath = 'cypress/fixtures/images/jpeg-test.jpg'
 const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 
-describe('Chat - Sending Images Tests', () => {
+describe.skip('Chat - Sending Images Tests', () => {
   it('PNG image is sent successfully on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
