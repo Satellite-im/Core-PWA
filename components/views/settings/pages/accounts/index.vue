@@ -1,4 +1,4 @@
-<template src="./Accounts.html" />
+<template src="./Accounts.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -40,6 +40,10 @@ export default Vue.extend({
      */
     togglePhrase() {
       this.$data.showPhrase = !this.$data.showPhrase
+    },
+    copyPhrase() {
+      this.$envinfo.navigator.clipboard.writeText(this.accounts.active)
+      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

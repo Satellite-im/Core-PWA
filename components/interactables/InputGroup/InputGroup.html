@@ -8,13 +8,14 @@
     <div class="control" data-cy="add-input">
       <input
         v-model="internalText"
-        :class="`input is-${size} is-${type}`"
+        class="input"
+        :class="[`is-${size} is-${type}`, {'disabled' : disabled || loading}]"
         :readonly="readonly"
         :type="inputKind"
         data-cy="input-group"
         :placeholder="placeholder"
-        :maxLength="textLimit? limitCount : $Config.chat.maxChars"
-        :disabled="disabled"
+        :maxLength="maxLength"
+        :disabled="disabled || loading"
         v-on:keyup.enter="action"
         @input="update"
         ref="input"
@@ -22,23 +23,9 @@
     </div>
     <div class="control" data-cy="submit-input">
       <a
-        :disabled="disabled"
-        :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
-        v-on:click="() => !disabled ? action() : null"
-        v-if="!copyContent.length"
-      >
-        <UiLoadersSpinner v-if="loading" spinning />
-        <span v-else>
-          <slot></slot>
-          {{ buttonText }}
-        </span>
-      </a>
-      <a
-        :disabled="disabled"
-        :class="`button is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`"
-        v-on:click="action"
-        v-clipboard:copy="copyContent"
-        v-else
+        class="button"
+        :class="[`is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`, {'disabled' : disabled || loading}]"
+        @click="() => disabled || loading ? null : action()"
       >
         <UiLoadersSpinner v-if="loading" spinning />
         <span v-else>
@@ -48,5 +35,5 @@
       </a>
     </div>
   </div>
-  <span v-if="textLimit" class="char-limit"> {{ textLength }} </span>
+  <span v-if="showLimit" class="char-limit"> {{ textLength }} </span>
 </div>
