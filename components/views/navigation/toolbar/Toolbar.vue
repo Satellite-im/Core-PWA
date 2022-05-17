@@ -63,6 +63,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
+      alertsOpened: false,
     }
   },
   computed: {
@@ -145,6 +146,7 @@ export default Vue.extend({
     },
     toggleAlerts() {
       this.showAlerts = !this.showAlerts
+      this.alertsOpened = true
     },
     isGroup(thing: any) {
       return thing?.type && thing?.type === 'group'

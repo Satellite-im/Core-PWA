@@ -30,7 +30,7 @@
       @click="toggleAlerts"
     >
       <UiCircle
-        v-if="allUnseenNotifications.length"
+        v-if="allUnseenNotifications.length && !alertsOpened"
         class="notification-alert"
         :size="15"
         color="red"
