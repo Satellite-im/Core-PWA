@@ -6,9 +6,8 @@ import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import SoundManager from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
+import { TextileError } from '~/store/textile/types'
 Vue.prototype.$TextileManager = new TextileManager()
-
-const $Sounds = new SoundManager()
 
 const initialRootState: any = {
   accounts: {
@@ -86,6 +85,7 @@ const initialRootState: any = {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
+        activeChat: true,
         encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
@@ -509,67 +509,111 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
-})
-
-describe('actions.default.clearKeybinds', () => {
-  test('0', async () => {
-    await actions.default.clearKeybinds(false)
-  })
-
-  test('1', async () => {
-    await actions.default.clearKeybinds(true)
-  })
-})
-
-describe('actions.default.showQuickProfile', () => {
-  test('0', () => {
-    const result: any = actions.default.showQuickProfile(
-      'commit 03ccef2ffa982df061ae86ca8730cd9ad0af05b3\r\nAuthor: Ladarius Zboncak <Ricky.Schultz37@hotmail.com>\r\nDate: Wed Jul 28 2021 16:52:11 GMT+0200 (Central European Summer Time)\r\n\r\n    program wireless program\r\n',
-      'Alabama',
+  test('removeSeenNotification', async () => {
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const localInitState = { ...initialState }
+    const payload = '01g2y9d6499169rzs5etrff48w'
+    await actions.default.removeSeenNotification(
+      { commit, localInitState, rootState },
+      payload,
     )
-    expect(result).toMatchSnapshot()
+    expect(commit).toHaveBeenCalledWith('notificationSeen', payload)
   })
+  test('sendNotification with initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.sendNotification = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'notification response',
+      })
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(true)
 
-  test('1', () => {
-    const result: any = actions.default.showQuickProfile(
-      'commit d3f6bf9bcee016096098e88aced2d5afdc68c424\r\nAuthor: Edna Rice <Shanie.Pagac@yahoo.com>\r\nDate: Wed Jul 28 2021 22:05:49 GMT+0200 (Central European Summer Time)\r\n\r\n    bypass cross-platform hard drive\r\n',
-      'Abruzzo',
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+
+    await actions.default.sendNotification(
+      { commit, rootState },
+      {
+        message: 'message',
+        from: 'from',
+        imageHash: 'imageHash',
+        title: 'title',
+        type: 'DEV',
+      },
     )
-    expect(result).toMatchSnapshot()
+    expect(commit).toHaveBeenCalledWith('sendNotification', {
+      note: 'notification response',
+    })
   })
+  test('sendNotification without an initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(false)
 
-  test('2', () => {
-    const result: any = actions.default.showQuickProfile(
-      'commit f20ba84baadcbd1f3a45d95e9bb5aef588f4e902\r\nAuthor: Marty Douglas <Rubie_Boehm29@yahoo.com>\r\nDate: Thu Jul 29 2021 09:06:18 GMT+0200 (Central European Summer Time)\r\n\r\n    override solid state microchip\r\n',
-      'Alabama',
-    )
-    expect(result).toMatchSnapshot()
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+
+    try {
+      await actions.default.sendNotification(
+        { commit, rootState },
+        {
+          message: 'message',
+          from: 'from',
+          imageHash: 'imageHash',
+          title: 'title',
+          type: 'DEV',
+        },
+      )
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        TextileError.MAILBOX_MANAGER_NOT_INITIALIZED,
+      )
+    }
   })
+  test('sendNotification with initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.getnotifications = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'notification response',
+      })
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(true)
 
-  test('3', () => {
-    const result: any = actions.default.showQuickProfile(
-      'commit e6d1117d97e7cc250166120d2eee1c2662c58150\r\nAuthor: Keagan Cole <Crystal69@gmail.com>\r\nDate: Thu Jul 29 2021 05:36:16 GMT+0200 (Central European Summer Time)\r\n\r\n    override wireless alarm\r\n',
-      'Île-de-France',
-    )
-    expect(result).toMatchSnapshot()
+    const commit = jest.fn()
+
+    await actions.default.setNotifications({ commit })
+    expect(commit).toHaveBeenCalledWith('setNotifications', {
+      note: 'notification response',
+    })
   })
+  test('setNotifications without an initialized mailbox manager', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.notificationManager = jest.fn()
+    TMConstructor.notificationManager.isInitialized = jest
+      .fn()
+      .mockReturnValueOnce(false)
 
-  test('4', () => {
-    const result: any = actions.default.showQuickProfile(
-      'commit e6d1117d97e7cc250166120d2eee1c2662c58150\r\nAuthor: Keagan Cole <Crystal69@gmail.com>\r\nDate: Thu Jul 29 2021 05:36:16 GMT+0200 (Central European Summer Time)\r\n\r\n    override wireless alarm\r\n',
-      'Abruzzo',
-    )
-    expect(result).toMatchSnapshot()
-  })
+    const commit = jest.fn()
 
-  test('5', () => {
-    const result: any = actions.default.showQuickProfile('', '')
-    expect(result).toMatchSnapshot()
-  })
-})
-
-describe('actions.default.showProfile', () => {
-  test('0', async () => {
-    await actions.default.showProfile('', '')
+    try {
+      await actions.default.setNotifications({ commit })
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        TextileError.MAILBOX_MANAGER_NOT_INITIALIZED,
+      )
+    }
   })
 })
