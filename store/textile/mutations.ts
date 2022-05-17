@@ -91,6 +91,9 @@ const mutations = {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
+    if (!state.conversations[address]) {
+      return
+    }
     // No need to copy since we are going to update the whole conversation object
     const {
       messages,
