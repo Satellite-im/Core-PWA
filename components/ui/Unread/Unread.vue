@@ -71,12 +71,18 @@ export default Vue.extend({
       this.$store.dispatch('ui/showProfile', this.user)
     },
     navigateToUser() {
-      if (
-        this.$route.params.address === this.user.address &&
-        this.$device.isMobile
-      ) {
-        this.$store.commit('ui/showSidebar', false)
+      if (this.$route.params.address === this.user.address) {
+        if (this.$device.isMobile) {
+          this.$store.commit('ui/showSidebar', false)
+        }
+        return
       }
+      this.$store.dispatch('conversation/setConversation', {
+        id: this.user.address,
+        type: 'friend',
+        participants: [this.user],
+        calling: false,
+      })
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
   },

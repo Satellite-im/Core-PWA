@@ -111,7 +111,12 @@
               :isTyping="ui.isTyping.address === thing.address"
               :isSelected="thing.address === $route.params.address"
             />
-            <GroupClickable v-else :group="thing" :key="thing.id" />
+            <GroupClickable
+              v-else
+              :group="thing"
+              :key="thing.id"
+              :isSelected="thing.id === $route.params.id"
+            />
           </div>
         </div>
         <div
