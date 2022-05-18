@@ -33,21 +33,21 @@ export default Vue.extend({
      * @description
      * @example
      */
-    closeNetworkErrorPopup: throttle(function () {
+    closeNetworkErrorPopup() {
       this.$store.commit('ui/toggleErrorNetworkModal', {
         state: false,
         action: null,
       })
-    }, Config.modal.errorNetworkActionThrottle),
+    },
     /**
      * @method tryAgain
      * @description
      * @example
      */
-    tryAgain() {
+    tryAgain: throttle(function () {
       this.$store.state.ui.modals.errorNetwork.action()
       this.closeNetworkErrorPopup()
-    },
+    }, Config.modal.errorNetworkActionThrottle),
   },
 })
 </script>
