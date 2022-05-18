@@ -10,6 +10,7 @@
     @update="_searchFriend"
     v-model="accountID"
     :loading="searching"
+    :autofocus="hasNoFriends"
   >
     <user-plus-icon size="1x" />
   </InteractablesInputGroup>

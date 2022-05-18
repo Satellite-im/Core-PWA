@@ -35,6 +35,9 @@ export default Vue.extend({
     friendInviteUrl(): string {
       return `${location.origin}/#/friends/list/${this.accounts.active}`
     },
+    hasNoFriends() {
+      return this.$store.state.friends.all.length === 0
+    },
   },
   mounted() {
     if (this.$route.params && this.$route.params.id) {
