@@ -87,12 +87,12 @@ export default Vue.extend({
             : this.$t('context.fav'),
           func: this.like,
         },
-        {
-          text: this.item.shared
-            ? this.$t('context.unshare')
-            : this.$t('context.share'),
-          func: this.share,
-        },
+        // {
+        //   text: this.item.shared
+        //     ? this.$t('context.unshare')
+        //     : this.$t('context.share'),
+        //   func: this.share,
+        // },
         { text: this.$t('context.rename'), func: this.rename },
         { text: this.$t('context.delete'), func: this.remove },
       ]
