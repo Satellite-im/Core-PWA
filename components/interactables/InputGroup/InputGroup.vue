@@ -27,6 +27,14 @@ export default Vue.extend({
       default: false,
     },
     /**
+     * autofocus the input on mount
+     */
+    autofocus: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    /**
      * Abstraction of native "type"
      */
     inputKind: {
@@ -127,6 +135,11 @@ export default Vue.extend({
     text() {
       this.internalText = this.text
     },
+  },
+  mounted() {
+    if (this.autofocus) {
+      this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
+    }
   },
   methods: {
     /**
