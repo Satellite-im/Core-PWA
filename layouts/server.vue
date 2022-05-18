@@ -72,7 +72,7 @@
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
       :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
-      {{ flairColor[1] }};}
+      {{ flairColor[1] }}; --flair-color-rgb:{{ flairColor[2] }};}
     </v-style>
   </div>
 </template>

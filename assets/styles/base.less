@@ -2,6 +2,7 @@
   --app-height: 100vh;
   --flair-color: @satellite-color;
   --flair-color-secondary: @satellite-color-secondary;
+  --flair-color-rgb: @satellite-color-rgb;
 }
 
 * {
@@ -329,7 +330,7 @@ button {
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     ::selection {
-      background: rgba(var(--flair-color), 0.99) !important;
+      background: rgba(var(--flair-color-rgb), 0.99) !important;
     }
   }
 }

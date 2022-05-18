@@ -18,15 +18,15 @@ export type Theme = {
 }
 
 export const FlairColors: any = {
-  SATELLITE: ['#2761fd', '#286CFE'],
-  PEACH: ['#ED4C67', '#ED5672'],
-  PINK: ['#FDA7DF', '#FDB1E9'],
-  LIME: ['#A3CB38', '#AED542'],
-  PURPLE: ['#6F1E51', '#80215D'],
-  LAVENDER: ['#9980FA', '#A891FF'],
-  SUNFLOWER: ['#FFC312', '#FACA3E'],
-  DEEP_BLUE: ['#30336b', '#2D328A'],
-  VOID: ['#2C3A47', '#36434F'],
+  SATELLITE: ['#2761fd', '#286CFE', '39, 97, 253'],
+  PEACH: ['#ED4C67', '#ED5672', '237, 76, 103'],
+  PINK: ['#FDA7DF', '#FDB1E9', '253, 167, 223'],
+  LIME: ['#A3CB38', '#AED542', '163, 203, 56'],
+  PURPLE: ['#6F1E51', '#80215D', '111, 30, 81'],
+  LAVENDER: ['#9980FA', '#A891FF', '153, 128, 250'],
+  SUNFLOWER: ['#FFC312', '#FACA3E', '255, 195, 18'],
+  DEEP_BLUE: ['#30336b', '#2D328A', '48, 51, 107'],
+  VOID: ['#2C3A47', '#36434F', '44, 58, 71'],
 }
 
 export type FlairColor = { primary: string; secondary: string }
