@@ -54,11 +54,15 @@ export default Vue.extend({
      */
     toggleMute(kind = 'audio') {
       this.isLoading = true
-      this.$store.dispatch(
-        'webrtc/toggleMute',
-        { kind, peerId: p2p.id },
-        { root: true },
-      )
+      try {
+        this.$store.dispatch(
+          'webrtc/toggleMute',
+          { kind, peerId: p2p.id },
+          { root: true },
+        )
+      } catch (e) {
+        console.log(E)
+      }
       this.isLoading = false
     },
     /**
