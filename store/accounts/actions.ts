@@ -8,11 +8,10 @@ import {
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import BlockchainClient from '~/libraries/BlockchainClient'
 
 export default {
   /**
@@ -92,19 +91,21 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
-    const solanaWallet = await $SolanaManager.createRandomKeypair()
+    await $BlockchainClient.initRandom()
+    const userWallet = $BlockchainClient.account
 
-    if (!solanaWallet.mnemonic) {
+    if (!userWallet.mnemonic) {
       throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
-    await commit('setPhrase', solanaWallet.mnemonic)
+    await commit('setPhrase', userWallet.mnemonic)
 
     const encryptedPhrase = await $Crypto.encryptWithPassword(
-      solanaWallet.mnemonic,
+      userWallet.mnemonic,
       pin,
     )
 
@@ -149,7 +150,7 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
 
     const mnemonic = state.phrase
 
@@ -157,9 +158,9 @@ export default {
       throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
     }
 
-    await $SolanaManager.initializeFromMnemonic(mnemonic)
+    await $BlockchainClient.initFromMnemonic(mnemonic)
 
-    const payerAccount = $SolanaManager.getActiveAccount()
+    const payerAccount = $BlockchainClient.payerAccount
 
     if (!payerAccount) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
@@ -167,9 +168,7 @@ export default {
 
     commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    const userInfo = await usersProgram.getCurrentUserInfo()
+    const userInfo = await $BlockchainClient.getCurrentUserInfo()
 
     if (userInfo === null) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
@@ -204,7 +203,7 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
 
     if (!state.initialized) {
       const mnemonic = state.phrase
@@ -213,28 +212,26 @@ export default {
         throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
       }
 
-      await $SolanaManager.initializeFromMnemonic(mnemonic)
+      await $BlockchainClient.initFromMnemonic(mnemonic)
     }
 
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
-    const balance = await $SolanaManager.getCurrentAccountBalance()
+    const balance = await $BlockchainClient.getBalance()
 
     if (balance === 0) {
       commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
-      await $SolanaManager.requestAirdrop()
+      await $BlockchainClient.requestAirdrop()
     }
 
-    const payerAccount = await $SolanaManager.getActiveAccount()
+    const payerAccount = await $BlockchainClient.payerAccount
 
     if (!payerAccount) {
       commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    const userInfo = await usersProgram.getCurrentUserInfo()
+    const userInfo = await $BlockchainClient.getCurrentUserInfo()
 
     if (userInfo) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
@@ -252,7 +249,7 @@ export default {
         {
           id: payerAccount?.publicKey.toBase58(),
           pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+          wallet: $BlockchainClient.account,
         },
         { root: true },
       )
@@ -260,7 +257,11 @@ export default {
 
     const imagePath = await uploadPicture(userData.image)
 
-    await usersProgram.create(userData.name, imagePath, userData.status)
+    await $BlockchainClient.createUser(
+      userData.name,
+      imagePath,
+      userData.status,
+    )
 
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
 
@@ -295,12 +296,11 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     image: string,
   ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
 
     const imagePath = await uploadPicture(image)
 
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-    await usersProgram.setPhotoHash(imagePath)
+    await $BlockchainClient.setPhotoHash(imagePath)
 
     commit('setProfilePicture', imagePath)
   },
@@ -326,7 +326,7 @@ export default {
     { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
@@ -342,13 +342,13 @@ export default {
     })
     await dispatch('friends/initialize', {}, { root: true })
 
-    if ($SolanaManager.payerAccount?.secretKey) {
+    if ($BlockchainClient.payerAccount?.secretKey) {
       await dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {
             type: 'ed25519',
-            privateKey: $SolanaManager.payerAccount?.secretKey,
+            privateKey: $BlockchainClient.payerAccount?.secretKey,
           },
           originator: payerAccount.publicKey.toBase58(),
         },
@@ -368,14 +368,15 @@ export default {
     }: { initTextile?: boolean; payerPublicKey?: string },
   ) {
     if (initTextile) {
-      const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+      const $BlockchainClient: BlockchainClient =
+        Vue.prototype.$BlockchainClient
       const { pin } = state
       await dispatch(
         'textile/initialize',
         {
           id: payerPublicKey,
           pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
+          wallet: $BlockchainClient.account,
         },
         { root: true },
       )

@@ -16,6 +16,8 @@ import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 import Hounddog from '~/utilities/Hounddog'
 import BucketManager from '~/libraries/Textile/BucketManager'
 import Logger from '~/utilities/Logger'
+import BlockchainClient from '~/libraries/BlockchainClient'
+import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -58,7 +60,7 @@ Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$FileSystem = new TextileFileSystem()
-
+Vue.prototype.$BlockchainClient = new BlockchainClient(new SolanaAdapter())
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {

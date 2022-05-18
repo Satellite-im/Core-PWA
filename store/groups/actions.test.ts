@@ -384,12 +384,4 @@ describe('module.exportForTesting', () => {
       )
     }
   })
-  test('getUserAccount without initializing User', () => {
-    try {
-      const result = module.exportForTesting.getUserAccount()
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty('message', GroupsError.USER_NOT_INITIALIZED)
-    }
-  })
 })

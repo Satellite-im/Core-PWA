@@ -1,5 +1,5 @@
 import { Client, Identity, Users } from '@textile/hub'
-import { SolanaWallet } from '../solana/solana'
+import { Account } from '~/libraries/BlockchainClient/interfaces'
 
 export interface StorageConfig {
   id: string
@@ -7,7 +7,7 @@ export interface StorageConfig {
 }
 
 export interface TextileConfig extends StorageConfig {
-  wallet?: SolanaWallet
+  wallet?: Account
 }
 
 export interface Creds {
@@ -19,7 +19,7 @@ export interface TextileInitializationData {
   identity: Identity
   client: Client
   users: Users
-  wallet: SolanaWallet
+  wallet: Account
 }
 
 export type TextileImage = {

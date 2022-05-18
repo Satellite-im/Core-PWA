@@ -119,7 +119,7 @@ export class UserInfoManager {
   async getThreadName(): Promise<string> {
     const crypto = new Crypto()
     const name = crypto.signMessageWithKey(
-      this.textile.wallet.keypair.secretKey,
+      Buffer.from(this.textile.wallet.privateKey),
       `csam`,
     )
 
