@@ -28,8 +28,8 @@ export default Vue.extend({
     return {
       contextMenuValues: [
         { text: this.$t('context.send'), func: this.testFunc },
-        { text: this.$t('context.voice'), func: this.testFunc },
-        { text: this.$t('context.video'), func: this.testFunc },
+        // { text: this.$t('context.voice'), func: this.testFunc },
+        // { text: this.$t('context.video'), func: this.testFunc },
         { text: this.$t('context.remove'), func: this.testFunc },
       ],
     }
