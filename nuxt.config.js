@@ -81,7 +81,6 @@ export default defineNuxtConfig({
   plugins: [
     // Third Party
     { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
-    { src: '~/plugins/thirdparty/clipboard.ts' },
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
