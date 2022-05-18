@@ -42,17 +42,30 @@ export default Vue.extend({
   },
   watch: {
     allPrerequisitesReady(nextValue) {
+      console.log(nextValue)
       if (!nextValue) return
       this.$router.replace('/chat/direct')
     },
   },
+  mounted() {
+    if (this.allPrerequisitesReady) {
+      this.$router.replace('/chat/direct')
+    }
+  },
   methods: {
     async confirm(userData: UserRegistrationData) {
-      this.$store.dispatch('accounts/registerUser', {
-        name: userData.username,
-        image: userData.photoHash,
-        status: userData.status,
-      })
+      try {
+        await this.$store.dispatch('accounts/registerUser', {
+          name: userData.username,
+          image: userData.photoHash,
+          status: userData.status,
+        })
+      } catch (error: any) {
+        this.$store.commit('ui/toggleErrorNetworkModal', {
+          state: true,
+          action: () => this.confirm(userData),
+        })
+      }
     },
   },
 })

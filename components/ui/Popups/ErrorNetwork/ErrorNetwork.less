@@ -1,0 +1,45 @@
+.error-network-container {
+  &:extend(.modal-gradient);
+  padding: 1rem;
+
+  .modal-body {
+    .custom-modal-content {
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .title {
+        font-size: 1.9rem;
+        color: @secondary-text;
+        margin-top: 2rem;
+        text-align: center;
+      }
+
+      .subtitle {
+        color: @secondary-text;
+        margin-top: 0.5rem;
+      }
+
+      .mascot {
+        width: 15rem;
+        height: 15rem;
+      }
+
+      .action {
+        width: 100%;
+
+        .text {
+          margin: 0 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: @mobile-breakpoint) {
+  .error-network-container {
+    max-width: 550px;
+  }
+}

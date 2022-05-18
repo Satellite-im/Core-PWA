@@ -75,10 +75,17 @@ export default Vue.extend({
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           this.$router.replace('/auth/register')
+          return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
           this.$router.replace('/setup/disclaimer')
+          return
         }
+
+        this.$store.commit('ui/toggleErrorNetworkModal', {
+          state: true,
+          action: this.loadAccount,
+        })
       }
     },
   },

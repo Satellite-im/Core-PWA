@@ -127,6 +127,12 @@ export default {
       contact:
         'Oops! Something went wrong! Help us improve your experience by sending an error report',
     },
+    error_network: {
+      title: 'Oops! Please Stand By',
+      subtitle:
+        "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your pin to connect or try again later.",
+      action: 'Try Again',
+    },
   },
   files: {
     files: 'Files',

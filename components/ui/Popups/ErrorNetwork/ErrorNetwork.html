@@ -1,0 +1,21 @@
+<div class="error-network-container">
+  <div class="modal-body">
+    <div class="custom-modal-content">
+      <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
+      <TypographyTitle :text="$t('popups.error_network.title')" class="title" />
+      <TypographyText
+        :text="$t('popups.error_network.subtitle')"
+        :size="6"
+        class="subtitle"
+      />
+      <InteractablesButton type="primary" class="action" :action="tryAgain">
+        <refresh-cw-icon size="1.5x" />
+        <TypographyText
+          :text="$t('popups.error_network.action')"
+          :size="6"
+          class="text"
+        />
+      </InteractablesButton>
+    </div>
+  </div>
+</div>

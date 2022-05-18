@@ -54,6 +54,10 @@ Object {
     "creategroup": false,
     "crop": false,
     "error": false,
+    "errorNetwork": Object {
+      "action": null,
+      "isOpen": false,
+    },
     "glyph": false,
     "groupInvite": Object {
       "isOpen": false,
