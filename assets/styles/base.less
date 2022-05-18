@@ -319,6 +319,11 @@ button {
   }
 }
 
+::selection {
+  &:extend(.font-secondary);
+  &:extend(.background-flair);
+}
+
 /* Only for Safari to fix selection text background */
 
 @media not all and (min-resolution: 0.001dpcm) {
@@ -900,8 +905,13 @@ strong {
 //------------- Navigation -------------
 
 #mobile-nav {
-  .active {
-    &:extend(.font-flair);
+  div {
+    .active {
+      &:extend(.font-flair);
+      svg {
+        &:extend(.font-flair);
+      }
+    }
   }
 }
 
