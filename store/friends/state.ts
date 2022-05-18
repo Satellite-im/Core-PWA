@@ -4,7 +4,7 @@ const InitialFriendsState: FriendsState = {
   incomingRequests: [],
   outgoingRequests: [],
   all: [],
-  activeConversation: null,
+  activeConversation: undefined,
 }
 
 export default () => InitialFriendsState

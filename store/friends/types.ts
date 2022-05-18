@@ -6,6 +6,10 @@ export interface FriendsState {
   incomingRequests: IncomingRequest[]
   outgoingRequests: OutgoingRequest[]
   all: Friend[]
+  activeConversation?: {
+    type: string
+    target: Friend
+  }
 }
 
 export enum FriendsError {

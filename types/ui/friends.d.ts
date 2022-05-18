@@ -29,6 +29,7 @@ export interface Friend extends EncryptedFriend {
   stored: Boolean
   account: FriendAccount
   address: string
+  name: string
   // possibly break these out into different types. These optional fields come up in the friends list, add, request area
   request?: IncomingRequest
   photoHash?: string
