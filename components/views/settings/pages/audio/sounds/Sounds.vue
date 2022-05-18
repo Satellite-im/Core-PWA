@@ -24,6 +24,11 @@ export default Vue.extend({
     toggleSound(key: Sounds, value: boolean) {
       this.$store.commit('sounds/set', { key, value })
     },
+    toggleSounds(keys: Sounds[], value: boolean) {
+      for (const key of keys) {
+        this.$store.commit('sounds/set', { key, value })
+      }
+    },
   },
 })
 </script>
