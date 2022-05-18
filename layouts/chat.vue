@@ -249,6 +249,10 @@ export default Vue.extend({
       }
     },
   },
+  beforeDestroy() {
+    // reset active conversation on chat leave
+    this.$store.commit('textile/setActiveConversation', '')
+  },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
 
