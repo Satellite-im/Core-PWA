@@ -20,14 +20,14 @@
       >
         <download-icon size="1x" />
       </a>
-      <a
+      <!-- <a
         :data-tooltip="$t('controls.share_link')"
         class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
         :class="{'disabled' : isFilesIndexLoading}"
         v-on="isFilesIndexLoading ? {} : {click: share}"
       >
         <link-icon size="1x" />
-      </a>
+      </a> -->
       <div
         :data-tooltip="$t('ui.close')"
         @click="$emit('close')"
