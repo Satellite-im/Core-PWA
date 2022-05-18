@@ -167,7 +167,7 @@ describe('Chat Text and Sending Links Validations', () => {
       .should('have.text', '*To Do')
   })
 
-  it('User should be able to use "\\" to write a single "" in chat', () => {
+  it.skip('User should be able to use "\\" to write a single "" in chat', () => {
     cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
@@ -188,7 +188,7 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.sendMessageWithMarkdown(randomMessage, '~~')
   })
 
-  it('User should use markdown "<>" to insert an autolink', () => {
+  it.skip('User should use markdown "<>" to insert an autolink', () => {
     let locatorURL = 'a[href="' + randomURL + '"]'
     let autolink = '<' + randomURL + '>'
     cy.chatFeaturesSendMessage(autolink, false)
