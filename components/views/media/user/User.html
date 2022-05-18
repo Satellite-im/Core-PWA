@@ -1,6 +1,8 @@
 <div v-if="call" class="user">
   <div class="indicators">
-    <mic-off-icon class="indicator" v-if="audioMuted" size="1.2x" />
+    <div class="indicator" v-if="muted.audio">
+      <mic-off-icon />
+    </div>
   </div>
 
   <div v-if="screenStream">
