@@ -6,6 +6,7 @@ export default {
     marketplace: 'Marketplace\nComing Soon',
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
+    group_call: 'Group Call\nComing Soon',
     sidebar_search: 'Friends and Group search\ncoming soon',
   },
   global: {
