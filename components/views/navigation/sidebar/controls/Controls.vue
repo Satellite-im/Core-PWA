@@ -35,10 +35,10 @@ export default Vue.extend({
   computed: {
     ...mapState(['audio', 'video', 'webrtc', 'accounts']),
     audioMuted(): boolean {
-      return this.audio.muted || this.webrtc.streamMuted[p2p.id]?.audio
+      return this.webrtc.streamMuted[p2p.id]?.audio
     },
     videoMuted(): boolean {
-      return this.video.disabled || this.webrtc.streamMuted[p2p.id]?.video
+      return this.webrtc.streamMuted[p2p.id]?.video
     },
     screenMuted(): boolean {
       return this.webrtc.streamMuted[p2p.id]?.screen
@@ -51,17 +51,13 @@ export default Vue.extend({
      * @example
      */
     async toggleMute(kind = 'audio') {
-      if (kind === 'audio') {
-        this.$store.dispatch('audio/toggleMute')
-        return
-      }
-
-      if (kind === 'video') {
-        this.$store.dispatch('video/toggle')
-        return
-      }
-
-      this.$store.dispatch('webrtc/toggleMute', { kind })
+      this.isLoading = true
+      this.$store.dispatch(
+        'webrtc/toggleMute',
+        { kind, peerId: p2p.id },
+        { root: true },
+      )
+      this.isLoading = false
     },
     async toggleDeafen() {
       this.isLoading = true
