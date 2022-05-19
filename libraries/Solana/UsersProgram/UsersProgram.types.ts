@@ -119,6 +119,84 @@ export type Users = {
         },
       ]
     },
+    {
+      name: 'setBannerImageHash'
+      accounts: [
+        {
+          name: 'user'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'signer'
+          isMut: false
+          isSigner: true
+        },
+        {
+          name: 'payer'
+          isMut: true
+          isSigner: true
+        },
+      ]
+      args: [
+        {
+          name: 'bannerImageHash'
+          type: 'string'
+        },
+      ]
+    },
+    {
+      name: 'setExtraOne'
+      accounts: [
+        {
+          name: 'user'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'signer'
+          isMut: false
+          isSigner: true
+        },
+        {
+          name: 'payer'
+          isMut: true
+          isSigner: true
+        },
+      ]
+      args: [
+        {
+          name: 'extra1'
+          type: 'string'
+        },
+      ]
+    },
+    {
+      name: 'setExtraTwo'
+      accounts: [
+        {
+          name: 'user'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'signer'
+          isMut: false
+          isSigner: true
+        },
+        {
+          name: 'payer'
+          isMut: true
+          isSigner: true
+        },
+      ]
+      args: [
+        {
+          name: 'extra2'
+          type: 'string'
+        },
+      ]
+    },
   ]
   accounts: [
     {
@@ -138,6 +216,18 @@ export type Users = {
             name: 'status'
             type: 'string'
           },
+          {
+            name: 'bannerImageHash'
+            type: 'string'
+          },
+          {
+            name: 'extra1'
+            type: 'string'
+          },
+          {
+            name: 'extra2'
+            type: 'string'
+          },
         ]
       }
     },
@@ -152,6 +242,16 @@ export type Users = {
       code: 6001
       name: 'PayerMismatch'
       msg: 'Account was not created by provided user'
+    },
+    {
+      code: 6002
+      name: 'IncorrectField'
+      msg: 'The field is too short or too long'
+    },
+    {
+      code: 6003
+      name: 'InputError'
+      msg: 'Parameters order mismatch'
     },
   ]
 }
@@ -277,6 +377,84 @@ export const IDL: Users = {
         },
       ],
     },
+    {
+      name: 'setBannerImageHash',
+      accounts: [
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'signer',
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: 'bannerImageHash',
+          type: 'string',
+        },
+      ],
+    },
+    {
+      name: 'setExtraOne',
+      accounts: [
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'signer',
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: 'extra1',
+          type: 'string',
+        },
+      ],
+    },
+    {
+      name: 'setExtraTwo',
+      accounts: [
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'signer',
+          isMut: false,
+          isSigner: true,
+        },
+        {
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: 'extra2',
+          type: 'string',
+        },
+      ],
+    },
   ],
   accounts: [
     {
@@ -296,6 +474,18 @@ export const IDL: Users = {
             name: 'status',
             type: 'string',
           },
+          {
+            name: 'bannerImageHash',
+            type: 'string',
+          },
+          {
+            name: 'extra1',
+            type: 'string',
+          },
+          {
+            name: 'extra2',
+            type: 'string',
+          },
         ],
       },
     },
@@ -310,6 +500,16 @@ export const IDL: Users = {
       code: 6001,
       name: 'PayerMismatch',
       msg: 'Account was not created by provided user',
+    },
+    {
+      code: 6002,
+      name: 'IncorrectField',
+      msg: 'The field is too short or too long',
+    },
+    {
+      code: 6003,
+      name: 'InputError',
+      msg: 'Parameters order mismatch',
     },
   ],
 }

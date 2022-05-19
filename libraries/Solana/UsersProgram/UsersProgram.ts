@@ -162,6 +162,9 @@ export default class UsersProgram extends EventEmitter {
       name: userInfo.name as string,
       photoHash: userInfo.photoHash as string,
       status: userInfo.status as string,
+      bannerImageHash: userInfo.bannerImageHash as string,
+      extra1: userInfo.extra1 as string,
+      extra2: userInfo.extra2 as string,
     }
   }
 
@@ -239,6 +242,63 @@ export default class UsersProgram extends EventEmitter {
     const { program, userPDA, payer } = await this._getUpdateOpts()
 
     return program.rpc.setStatus(statusMessage, {
+      accounts: {
+        user: userPDA[0],
+        signer: payer.publicKey,
+        payer: payer.publicKey,
+      },
+      signers: [payer],
+    })
+  }
+
+  /**
+   * @method setBannerImageHash
+   * Allow the user to update the profile banner image
+   * @param bannerImageHash profile banner image IPFS hash
+   * @returns the transaction signature
+   */
+  async setBannerImageHash(bannerImageHash: string): Promise<string> {
+    const { program, userPDA, payer } = await this._getUpdateOpts()
+
+    return program.rpc.setBannerImageHash(bannerImageHash, {
+      accounts: {
+        user: userPDA[0],
+        signer: payer.publicKey,
+        payer: payer.publicKey,
+      },
+      signers: [payer],
+    })
+  }
+
+  /**
+   * @method setExtraOne
+   * Allow the user to update the first extra field of profile
+   * @param value extra field value
+   * @returns the transaction signature
+   */
+  async setExtraOne(value: string): Promise<string> {
+    const { program, userPDA, payer } = await this._getUpdateOpts()
+
+    return program.rpc.setExtraOne(value, {
+      accounts: {
+        user: userPDA[0],
+        signer: payer.publicKey,
+        payer: payer.publicKey,
+      },
+      signers: [payer],
+    })
+  }
+
+  /**
+   * @method setExtraTwo
+   * Allow the user to update the second extra field of profile
+   * @param value extra field value
+   * @returns the transaction signature
+   */
+  async setExtraTwo(value: string): Promise<string> {
+    const { program, userPDA, payer } = await this._getUpdateOpts()
+
+    return program.rpc.setExtraTwo(value, {
       accounts: {
         user: userPDA[0],
         signer: payer.publicKey,
