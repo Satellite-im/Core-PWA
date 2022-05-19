@@ -112,26 +112,3 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less" src="./Modal.less"></style>
-<style lang="less">
-#settings {
-  width: calc(100vw - 96px);
-  height: calc(100vh - 96px);
-  max-width: 1528px;
-  max-height: 888px;
-  margin: auto;
-}
-#settings.is-collapsed
-  > div.sidebar.is-secondary-background
-  > section
-  > div.aside-menu.hidden-scroll
-  > svg {
-  right: 0.9rem !important;
-}
-#settings.is-collapsed
-  > div.sidebar.is-secondary-background
-  > section
-  > div.aside-menu.hidden-scroll
-  > aside {
-  display: none;
-}
-</style>
