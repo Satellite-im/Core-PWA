@@ -75,7 +75,7 @@ body {
 }
 
 .toasted-container .toasted {
-  background: @flair-gradient;
+  background: @flair-gradient !important ;
   color: @secondary-text !important;
   font-family: @primary-font;
 }
@@ -180,6 +180,10 @@ button {
       &:extend(.background-flair-gradient);
     }
 
+    &.disabled {
+      background: @text-muted;
+    }
+
     &:focus {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
@@ -196,8 +200,8 @@ button {
       &:extend(.background-flair-gradient);
     }
 
-    &:focus:not(.active) {
-      &:extend(.glow-flair);
+    &.disabled {
+      background: @text-muted;
     }
   }
 
@@ -214,7 +218,7 @@ button {
     border-color: @foreground;
 
     &:hover,
-    &:focus:not(.active) {
+    &.active {
       background: @foreground;
       border-color: @foreground;
       &:extend(.font-secondary);
@@ -236,7 +240,7 @@ button {
       &:extend(.font-secondary);
     }
 
-    &:focus:not(:active) {
+    .active {
       &:extend(.glow-flair);
     }
   }
@@ -246,9 +250,10 @@ button {
     &:extend(.glow-danger);
     &:extend(.background-danger-gradient);
 
-    &:hover {
-      &:extend(.glow-danger);
+    &:hover,
+    &:focus:not(:active) {
       &:extend(.background-danger-gradient);
+      box-shadow: @danger-glow !important;
     }
   }
 
@@ -257,9 +262,9 @@ button {
     &:extend(.glow-danger);
 
     &:hover,
-    &:focus {
+    &:focus:not(:active) {
       &:extend(.background-danger-gradient);
-      &:extend(.glow-danger);
+      box-shadow: @danger-glow !important;
     }
   }
 }
