@@ -4,7 +4,7 @@ const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
   dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
+    .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Verify passphrase does not get stored in localstorage', () => {

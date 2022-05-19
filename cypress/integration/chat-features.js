@@ -7,7 +7,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const recoverySeed =
   dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
+    .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 let imageURL
 let randomTextEdited = randomMessage + randomNumber
@@ -21,7 +21,7 @@ describe('Chat Features Tests', () => {
     cy.validateChatPageIsLoaded()
 
     // Validate message is sent
-    cy.goToConversation('cypress friend')
+    cy.goToConversation('Only Text Friend')
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -143,7 +143,7 @@ describe('Chat Features Tests', () => {
     })
 
     //Start validation
-    cy.chatFeaturesProfileName('cypress')
+    cy.chatFeaturesProfileName('Only Text')
     cy.get('[data-cy=hamburger-button]').click()
   })
 

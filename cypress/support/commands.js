@@ -736,7 +736,10 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
-    .type(textMarkdown)
+    .paste({
+      pasteType: 'text',
+      pastePayload: textMarkdown,
+    })
   // Assert the text message is displayed before sending
   cy.get('[data-cy=editable-input]')
     .should('have.text', textMarkdown)
