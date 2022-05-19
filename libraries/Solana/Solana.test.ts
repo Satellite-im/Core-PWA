@@ -1,7 +1,7 @@
 import { web3 } from '@project-serum/anchor'
 import * as Solana from '~/libraries/Solana/Solana'
 
-describe('Solana.getClusterFromNetworkConfig', () => {
+describe.skip('Solana.getClusterFromNetworkConfig', () => {
   test('0', () => {
     const result: any = Solana.getClusterFromNetworkConfig('mainnet-beta')
     expect(result).toMatchSnapshot()
