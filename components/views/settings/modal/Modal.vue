@@ -114,8 +114,11 @@ export default Vue.extend({
 <style scoped lang="less" src="./Modal.less"></style>
 <style lang="less">
 #settings {
-  width: 90vw;
-  height: 90vh;
+  width: calc(100vw - 96px);
+  height: calc(100vh - 96px);
+  max-width: 1528px;
+  max-height: 888px;
+  margin: auto;
 }
 #settings.is-collapsed
   > div.sidebar.is-secondary-background
