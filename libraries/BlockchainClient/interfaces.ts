@@ -171,4 +171,5 @@ export interface Adapter {
   removeGroupListeners(keys: string[]): Promise<void>
   getGroupById(id: string): Promise<Group>
   getGroupUsers(groupId: string): Promise<string[]>
+  addGroupsListener(cb: (value: Group) => void): Promise<string[]>
 }

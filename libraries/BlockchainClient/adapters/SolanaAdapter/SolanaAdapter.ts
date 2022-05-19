@@ -326,4 +326,9 @@ export default class SolanaAdapter implements Adapter {
     this.groupsProgram = new GroupChatsProgram(this.solanaManager)
     return await this.groupsProgram.getGroupUsers(groupId)
   }
+
+  async addGroupsListener(cb: (value: Group) => void): Promise<string[]> {
+    this.groupsProgram = new GroupChatsProgram(this.solanaManager)
+    return this.groupsProgram.addGroupsListener(cb)
+  }
 }

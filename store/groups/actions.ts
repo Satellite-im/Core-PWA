@@ -168,7 +168,7 @@ export default {
       await dispatch('unsubscribeFromGroupsUpdate')
     }
     const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
-    const ids = await $BlockchainClient.addGroupInviteListener((payload) => {
+    const ids = await $BlockchainClient.addGroupsListener((payload) => {
       commit('updateGroup', payload)
       dispatch('fetchGroupMembers', payload.id)
     })

@@ -434,4 +434,13 @@ export default class BlockchainClient {
   async getGroupUsers(groupId: string): Promise<string[]> {
     return await this.adapter.getGroupUsers(groupId)
   }
+
+  /**
+   * Register event listener for group updates
+   * @param cb
+   * @returns {string[]} array of addresses for unsubscribe
+   */
+  addGroupsListener(cb: (value: Group) => void): Promise<string[]> {
+    return this.adapter.addGroupsListener(cb)
+  }
 }
