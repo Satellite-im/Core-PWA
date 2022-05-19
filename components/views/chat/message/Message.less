@@ -9,9 +9,8 @@
 }
 
 .is-message {
-  color: @text;
+  &:extend(.font-primary);
   .pinned-message {
-    border: 1px solid @primary-color;
     &:extend(.round-corners);
     padding: @normal-spacing;
     margin-top: @normal-spacing;
@@ -21,7 +20,6 @@
       top: -(@light-spacing);
       left: @light-spacing;
       padding: 0 @light-spacing;
-      &:extend(.background-primary);
       border-radius: @corner-rounding-smaller;
       font-size: @mini-text-size;
       position: absolute;

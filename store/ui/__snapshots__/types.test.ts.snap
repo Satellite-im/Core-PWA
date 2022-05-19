@@ -4,39 +4,75 @@ exports[`check flair constants should return the flair constants 1`] = `
 Array [
   Object {
     "text": "Satellite",
-    "value": "#2761fd",
+    "value": Array [
+      "#2761fd",
+      "#286CFE",
+      "39, 97, 253",
+    ],
   },
   Object {
     "text": "Peach",
-    "value": "#ED4C67",
+    "value": Array [
+      "#ED4C67",
+      "#ED5672",
+      "237, 76, 103",
+    ],
   },
   Object {
     "text": "Pink",
-    "value": "#FDA7DF",
+    "value": Array [
+      "#FDA7DF",
+      "#FDB1E9",
+      "253, 167, 223",
+    ],
   },
   Object {
     "text": "Lime",
-    "value": "#A3CB38",
+    "value": Array [
+      "#A3CB38",
+      "#AED542",
+      "163, 203, 56",
+    ],
   },
   Object {
     "text": "Purple",
-    "value": "#6F1E51",
+    "value": Array [
+      "#6F1E51",
+      "#80215D",
+      "111, 30, 81",
+    ],
   },
   Object {
     "text": "Lavender",
-    "value": "#9980FA",
+    "value": Array [
+      "#9980FA",
+      "#A891FF",
+      "153, 128, 250",
+    ],
   },
   Object {
     "text": "Sunflower",
-    "value": "#FFC312",
+    "value": Array [
+      "#FFC312",
+      "#FACA3E",
+      "255, 195, 18",
+    ],
   },
   Object {
     "text": "Deep",
-    "value": "#30336b",
+    "value": Array [
+      "#30336b",
+      "#2D328A",
+      "48, 51, 107",
+    ],
   },
   Object {
     "text": "Void",
-    "value": "#2C3A47",
+    "value": Array [
+      "#2C3A47",
+      "#36434F",
+      "44, 58, 71",
+    ],
   },
 ]
 `;

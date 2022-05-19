@@ -155,10 +155,6 @@ fieldset[disabled] .multiselect {
   &:extend(.font-white);
   font-size: 14px;
 }
-.multiselect__tag-icon:focus,
-.multiselect__tag-icon:hover {
-  background: @primary-color;
-}
 .multiselect__tag-icon:focus:after,
 .multiselect__tag-icon:hover:after {
   &:extend(.font-white);
@@ -367,12 +363,4 @@ fieldset[disabled] .multiselect {
   border-radius: @corner-rounding !important;
   font-size: @text-size !important;
   height: 235px !important;
-
-  .vc-weekday {
-    color: @primary-color !important;
-  }
-  .vc-highlight {
-    background: @primary-gradient !important;
-    &:extend(.glow-primary);
-  }
 }

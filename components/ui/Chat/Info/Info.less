@@ -15,18 +15,15 @@
       margin-right: 8px;
     }
   }
-  &--primary {
-    background-color: var(--flair-color);
-  }
   &--danger {
-    color: @secondary-text;
-    background-color: @red;
-    box-shadow: @danger-glow;
+    &:extend(.font-secondary);
+    &:extend(.background-danger);
+    &:extend(.glow-danger);
   }
   &--warning {
-    background-color: @orange;
+    &:extend(.background-warning);
   }
   &--success {
-    background-color: @green;
+    &:extend(.background-success);
   }
 }

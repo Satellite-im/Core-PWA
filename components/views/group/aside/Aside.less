@@ -19,7 +19,6 @@
 
 .info-toggle {
   font-size: 20px;
-  &:extend(.font-accent);
   cursor: pointer;
   left: -5rem;
   top: 1.8rem;
@@ -54,11 +53,6 @@
     background: @semitransparent-lightest-gradient !important;
     cursor: pointer;
     font-size: @tiny-icon-size !important;
-
-    &:hover {
-      background: @primary-gradient !important;
-      &:extend(.glow-primary);
-    }
   }
 }
 

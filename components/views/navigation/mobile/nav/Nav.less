@@ -13,7 +13,7 @@
       rgba(36, 40, 57, 0.9) 0.04%,
       rgba(34, 44, 63, 0) 99.95%
     ),
-    #121216;
+    @darker;
   position: fixed;
   bottom: 0;
   display: inline-flex;
@@ -29,9 +29,5 @@
     justify-content: center;
     &:extend(.font-secondary);
     font-size: @small-icon-size;
-  }
-
-  .active {
-    &:extend(.font-accent);
   }
 }

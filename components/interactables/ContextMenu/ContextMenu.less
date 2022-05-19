@@ -20,10 +20,9 @@
     font-size: 14px;
 
     &:hover {
-      &:extend(.background-primary);
       &.red {
         &:extend(.font-secondary);
-        background: @red !important;
+        &:extend(.background-danger);
       }
     }
   }
@@ -44,9 +43,8 @@
 
       &:hover {
         &:extend(.background-semitransparent-lighter);
-        text-shadow: -1px 0 1px var(--flair-color), 0 1px 1px var(--flair-color),
-          1px 0 1px var(--flair-color), 0 -1px 1px var(--flair-color),
-          0 0 12px @gray;
+        text-shadow: -1px 0 1px @flair-color, 0 1px 1px @flair-color,
+          1px 0 1px @flair-color, 0 -1px 1px @flair-color, 0 0 12px @gray;
       }
 
       &:first-of-type {

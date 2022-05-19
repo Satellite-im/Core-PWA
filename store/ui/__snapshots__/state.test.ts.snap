@@ -108,7 +108,11 @@ Object {
     },
     "flair": Object {
       "text": "Satellite",
-      "value": "#2761fd",
+      "value": Array [
+        "#2761fd",
+        "#286CFE",
+        "39, 97, 253",
+      ],
     },
   },
   "unreadMessage": 0,

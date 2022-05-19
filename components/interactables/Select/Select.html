@@ -6,8 +6,21 @@
     :class="{'custom-select': true, open, up, down: !up}"
     data-cy="custom-select"
   >
-    <div class="selected" data-cy="custom-select-value" @click="toggleOpen()">
-      {{ getSelectLabel() }}
+    <div
+      v-if="colorSupport"
+      class="selected"
+      data-cy="custom-select-value"
+      @click="toggleOpen()"
+    >
+      {{ getSelectLabelColor }}
+    </div>
+    <div
+      v-else
+      class="selected"
+      data-cy="custom-select-value"
+      @click="toggleOpen()"
+    >
+      {{ getSelectLabel }}
     </div>
     <div class="items">
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
@@ -20,7 +33,7 @@
           <div
             class="color"
             v-if="colorSupport"
-            :style="{ background: option.value }"
+            :style="{background: renderBgGradient(option)}"
           >
             {{ option.text }}
           </div>

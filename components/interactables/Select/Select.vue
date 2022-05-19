@@ -31,7 +31,7 @@ export default Vue.extend({
      * The default selected value out of the options provided
      */
     selected: {
-      type: [String, Number, Boolean],
+      type: [String, Number, Boolean, Array],
       default: false,
     },
     /**
@@ -71,6 +71,46 @@ export default Vue.extend({
       open: false,
       up: false,
     }
+  },
+  computed: {
+    /**
+     * @method getSelectLabel DocsTODO
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
+    getSelectLabel() {
+      if (this.selectedValue) {
+        const item: any = (this.options as Array<SelectOption>).find(
+          (opt: SelectOption) => opt.value === this.selectedValue,
+        )
+        if (item) return item.text
+      }
+      return this.placeholder
+    },
+
+    /**
+     * @method getSelectLabelColor DocsTODO
+     * @description
+     * @param
+     * @returns
+     * @example
+     */
+    getSelectLabelColor() {
+      if (this.selectedValue) {
+        const item: any = (this.options as Array<SelectOption>).find(
+          (opt: SelectOption) =>
+            Array.isArray(this.selectedValue) &&
+            Array.isArray(opt.value) &&
+            this.selectedValue.length === opt.value.length &&
+            this.selectedValue.every((val, index) => val === opt.value[index]),
+        )
+
+        if (item) return item.text
+      }
+      return this.placeholder
+    },
   },
   watch: {
     /**
@@ -115,21 +155,16 @@ export default Vue.extend({
       this.up = elementRect.top > bodyRect.bottom / 2
       this.open = !this.open
     },
+
     /**
-     * @method getSelectLabel DocsTODO
+     * @method renderBgGradient DocsTODO
      * @description
      * @param
      * @returns
      * @example
      */
-    getSelectLabel() {
-      if (this.selectedValue) {
-        const item: any = (this.options as Array<SelectOption>).find(
-          (opt: SelectOption) => opt.value === this.selectedValue,
-        )
-        if (item) return item.text
-      }
-      return this.placeholder
+    renderBgGradient(option) {
+      return `linear-gradient( 40deg, ${option.value[0]} 40%, ${option.value[1]}  100% )`
     },
   },
 })

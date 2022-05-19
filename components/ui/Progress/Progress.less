@@ -1,18 +1,16 @@
-.progress::-webkit-progress-value {
-  background: @primary-color;
-}
-.progress::-moz-progress-bar {
-  background: @primary-color;
-}
-.progress::-ms-fill {
-  background: @primary-color;
-  border: none;
-}
 .progress {
-  border: 1px solid @primary-color;
   background: transparent;
   margin-bottom: @light-spacing;
-}
-.progress::-webkit-progress-bar {
-  background: transparent;
+  &::-webkit-progress-bar {
+    background: transparent;
+  }
+
+  &::-ms-fill {
+    border: none;
+    &:extend(.background-flair);
+  }
+
+  &::-moz-progress-bar {
+    &:extend(.background-flair);
+  }
 }

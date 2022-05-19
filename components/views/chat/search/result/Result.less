@@ -15,7 +15,6 @@
   font-size: @text-size;
 
   &-header {
-    &:extend(.font-accent);
     font-size: @title-text;
     display: flex;
     justify-content: space-between;
@@ -28,12 +27,9 @@
 
     .date-input {
       &:extend(.font-secondary);
-      &:extend(.background-primary-gradient);
-      &:extend(.glow-primary);
       border-radius: 1rem;
       height: 28px;
       font-size: @text-size;
-      border: 1px solid @primary-color;
       outline: none;
       line-height: 1.2;
       padding: 0 10px 0 10px;
@@ -55,19 +51,16 @@
     .add-more-filters {
       outline: none;
       border: none;
-      &:extend(.font-accent);
       background: transparent;
       line-height: 32px;
       border-radius: 16px;
       padding: 0 10px;
       cursor: pointer;
       &:hover {
-        &:extend(.background-primary);
-        color: white;
+        &:extend(.font-primary);
       }
       &:active {
-        &:extend(.background-primary);
-        color: white;
+        &:extend(.font-primary);
       }
     }
     .container-filter {

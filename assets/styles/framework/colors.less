@@ -12,8 +12,13 @@
 @darker-alt: rgb(9, 9, 12);
 @black: #000;
 
-@primary-color: #2761fd;
+@satellite-color: #2761fd;
+@satellite-color-secondary: #286cfe;
+@satellite-color-rgb: 'rgb(39, 97, 253)';
 @flair-color: var(--flair-color);
+@flair-color-secondary: var(--flair-color-secondary);
+@flair-color-rgb: var(--flair-color-rgb);
+
 @scrollbar-color: @flair-color;
 
 @secondary-text: #dae0ff;
@@ -33,8 +38,8 @@
 @white: #fff;
 
 // ---------- Fonts ----------
-.font-accent {
-  color: @primary-color;
+.font-flair {
+  color: @flair-color;
 }
 .font-primary {
   color: @text;
@@ -153,16 +158,8 @@
   ),
   -webkit-radial-gradient(bottom left, #121822, rgba(0, 0, 0, 0) 20%),
   -webkit-radial-gradient(top right, #1b2638, rgba(0, 0, 0, 0) 68%), #16171d;
-@primary-gradient: linear-gradient(
-  40deg,
-  rgba(39, 97, 253, 1) 0%,
-  rgba(40, 109, 254, 1) 100%
-);
-@danger-gradient: linear-gradient(
-  40deg,
-  rgba(231, 76, 60, 1) 0%,
-  rgba(231, 60, 89, 1) 100%
-);
+
+@danger-gradient: linear-gradient(40deg, rgba(231, 76, 60, 1) 0%, @red 100%);
 @background-gradient: linear-gradient(
   328deg,
   #16171d 0%,
@@ -175,7 +172,11 @@
   #131217 32%,
   #121b28 100%
 );
-@flair-gradient: linear-gradient(40deg, @flair-color 0%, @flair-color 100%);
+@flair-gradient: linear-gradient(
+  40deg,
+  @flair-color 40%,
+  @flair-color-secondary 100%
+);
 @modal-gradient: linear-gradient(
     163.91deg,
     rgba(48, 52, 71, 0.5) 0%,
@@ -187,16 +188,22 @@
     rgba(36, 40, 57, 0.9) 0.04%,
     rgba(34, 44, 63, 0) 99.95%
   ),
-  linear-gradient(0deg, #121216, #121216);
+  linear-gradient(0deg, @darker, @darker);
 
 .background-flair {
   background: @flair-color;
 }
-.background-primary {
-  background: @primary-color;
+.background-flair-secondary {
+  background: @flair-color-secondary;
 }
-.background-primary-gradient {
-  background: @primary-gradient;
+.background-success {
+  background: @green;
+}
+.background-warning {
+  background: @orange;
+}
+.background-danger {
+  background: @red;
 }
 .background-danger-gradient {
   background: @danger-gradient;
@@ -213,7 +220,10 @@
 .background-gradient-alt {
   background: @background-gradient-alt;
 }
-
 .modal-gradient {
   background: @modal-gradient;
+}
+
+.border-flair-small {
+  border: 1px solid @flair-color;
 }

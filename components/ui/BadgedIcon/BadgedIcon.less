@@ -1,9 +1,4 @@
 .badged-icon {
-  &:extend(.font-accent);
-  .dynamic-icon {
-    filter: drop-shadow(0px 3px 2px @primary-color);
-  }
-
   .center {
     display: inline-flex;
     justify-content: center;
@@ -18,15 +13,6 @@
   }
 
   .tag {
-    &:not(body).is-dark {
-      .tag-number {
-        background: @primary-color;
-      }
-      background: @background;
-    }
-    &:not(body).is-primary {
-      &:extend(.background-primary);
-    }
     position: absolute;
     padding: 0.25rem;
     right: -0.25rem;
