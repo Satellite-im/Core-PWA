@@ -16,6 +16,7 @@ export const Config = {
     fsTable: 'sat.json',
     bucketName: 'personal-files',
   },
+  env: process.env.ENVIRONMENT,
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },

@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      changeLog: (state) => (state as RootState).ui.modals.changelog,
       accounts: (state) => (state as RootState).accounts,
     }),
     storePin: {
@@ -56,6 +56,7 @@ export default Vue.extend({
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
+    console.log(this.$Config)
 
     this.$store.commit('accounts/lock')
   },
@@ -69,7 +70,7 @@ export default Vue.extend({
     toggleChangelogVisibility(): void {
       this.$store.commit('ui/toggleModal', {
         name: 'changelog',
-        state: !this.ui.modals.changelog,
+        state: !this.changeLog,
       })
     },
     /**
