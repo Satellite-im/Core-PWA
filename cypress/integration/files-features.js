@@ -5,7 +5,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const randomNumber = faker.datatype.number() // generate random number
 const recoverySeed =
   dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
+    .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Files Features Tests', () => {
@@ -17,7 +17,7 @@ describe('Files Features Tests', () => {
     cy.validateChatPageIsLoaded()
 
     // Validate message is sent
-    cy.goToConversation('cypress friend')
+    cy.goToConversation('Only Text Friend')
 
     //Click on toggle button and then on files
     cy.get('[data-cy=toggle-sidebar]').click()

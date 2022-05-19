@@ -4,7 +4,7 @@ const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const recoverySeed =
   dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
+    .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 const randomMessage = faker.lorem.sentence() // generate random sentence
@@ -20,7 +20,7 @@ describe('Chat Text and Sending Links Validations', () => {
 
     //Ensure messages are displayed before starting
     cy.validateChatPageIsLoaded()
-    cy.goToConversation('cypress friend')
+    cy.goToConversation('Only Text Friend')
   })
 
   it('Message with more than 2048 chars - Counter get reds', () => {

@@ -363,7 +363,7 @@ describe('Chat features with two accounts', () => {
     cy.get('@reactionToMessage').should(
       'have.css',
       'background-image',
-      'linear-gradient(40deg, rgb(39, 97, 253) 0%, rgb(39, 97, 253) 100%)',
+      'linear-gradient(40deg, rgb(39, 97, 253) 40%, rgb(40, 108, 254) 100%)',
     )
   })
 })

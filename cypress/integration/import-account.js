@@ -1,7 +1,7 @@
 import { dataRecovery } from '../fixtures/test-data-accounts.json'
 const recoverySeed =
   dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
+    .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
