@@ -1,10 +1,10 @@
-<template src="./Alert.html" />
+<template src="./Alert.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
 import { mapState } from 'vuex'
-import VueI18n from 'vue-i18n'
+import { TranslateResult } from 'vue-i18n'
 import { Alert, AlertType } from '~/libraries/ui/Alerts'
 import { RootState } from '~/types/store/store'
 
@@ -12,18 +12,12 @@ export default Vue.extend({
   props: {
     alert: {
       type: Object as PropType<Alert>,
-      required: false,
-      default: () => {},
+      required: true,
     },
-  },
-  data() {
-    return {
-      hidden: false,
-    }
   },
   computed: {
     ...mapState({ ui: (state) => (state as RootState).ui }),
-    setTranslateText(): VueI18n.TranslateResult | undefined {
+    setTranslateText(): TranslateResult | undefined {
       switch (this.alert?.type) {
         case AlertType.DIRECT_MESSAGE: {
           return this.$t('messaging.user_sent.user', {
@@ -36,9 +30,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    dismiss() {
-      this.$store.dispatch('ui/removeSeenNotification', this.alert.id)
-      this.$data.hidden = true
+    removeNotification() {
+      this.$store.commit('ui/removeNotification', this.alert.id)
     },
   },
 })

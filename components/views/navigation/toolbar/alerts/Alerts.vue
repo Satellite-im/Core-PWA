@@ -1,4 +1,4 @@
-<template src="./Alerts.html" />
+<template src="./Alerts.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'

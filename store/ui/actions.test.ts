@@ -509,17 +509,6 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
-  test('removeSeenNotification', async () => {
-    const commit = jest.fn()
-    const rootState = { ...initialRootState }
-    const localInitState = { ...initialState }
-    const payload = '01g2y9d6499169rzs5etrff48w'
-    await actions.default.removeSeenNotification(
-      { commit, localInitState, rootState },
-      payload,
-    )
-    expect(commit).toHaveBeenCalledWith('notificationSeen', payload)
-  })
   test('sendNotification with initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
