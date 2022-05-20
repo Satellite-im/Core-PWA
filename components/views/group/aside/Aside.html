@@ -6,7 +6,6 @@
   </div>
   <div id="actions">
     <UiCircle
-      :size="35"
       type="icon"
       icon="user"
       alt="$t('pages.chat.add_member')"
@@ -15,7 +14,6 @@
       v-on:click="groupInvite(selectedGroup)"
     />
     <UiCircle
-      :size="35"
       type="icon"
       icon="message-square"
       alt="$t('pages.chat.switch_chat')"
@@ -24,14 +22,13 @@
       v-on:click="navigateToGroup(selectedGroup.id)"
     />
     <UiCircle
-      :size="35"
       type="icon"
       icon="layout"
       alt="$t('pages.chat.start_watch_party')"
       :data-tooltip="$t('pages.chat.start_watch_party')"
       class="has-tooltip-primary"
     />
-    <UiCircle :size="35" type="icon" icon="more-vertical" />
+    <UiCircle type="icon" icon="more-vertical" />
   </div>
   <UiHorizontalRule />
   <div id="members">

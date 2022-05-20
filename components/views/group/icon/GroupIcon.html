@@ -18,7 +18,7 @@
   </div>
   <div v-else>
     <div v-for="member in group.members" class="group-single">
-      <UiCircle type="image" :source="getSource(member)" :size="35" />
+      <UiCircle type="image" :source="getSource(member)" />
     </div>
   </div>
   <span v-if="group.members.length > 3" class="label"

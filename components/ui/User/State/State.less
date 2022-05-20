@@ -3,37 +3,41 @@
   display: flex;
   align-items: center;
 
+  --circle-radius: 6px;
+  --border-width: 2px;
+
+  &.is-large {
+    --circle-radius: 10px;
+  }
+
   .circle {
-    mask: radial-gradient(circle 8px at 85.35% 85.35%, #0000 98%, #000) 100%
-      100%/100% 100% no-repeat;
+    mask: radial-gradient(
+        circle calc(var(--circle-radius) + var(--border-width)) at 86% 86%,
+        #0000 98%,
+        #000
+      )
+      100% 100%/100% 100% no-repeat;
     overflow: hidden;
   }
 
   .status {
     position: absolute;
-    left: 85.35%;
-    top: 85.35%;
-    font-size: @text-size;
-    text-shadow: 0 0 3px #000;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    align-content: center;
+    left: 86%;
+    top: 86%;
+    border-radius: 50%;
+    width: calc(var(--circle-radius) * 2);
+    height: calc(var(--circle-radius) * 2);
+    margin-top: calc(-1 * var(--circle-radius));
+    margin-left: calc(-1 * var(--circle-radius));
 
-    circle {
-      stroke: transparent;
-      paint-order: stroke;
-    }
     &.is-online {
-      &:extend(.color-success);
-      fill: @green;
+      background-color: @green;
     }
     &.is-offline {
-      &:extend(.font-gray);
-      fill: @gray;
+      background-color: @gray;
     }
     &.is-idle {
-      &:extend(.color-warning);
-      fill: @yellow;
+      background-color: @yellow;
     }
   }
 

@@ -10,7 +10,7 @@ export default Vue.extend({
      */
     size: {
       type: Number,
-      default: 45,
+      default: 36,
       required: false,
     },
     /**
