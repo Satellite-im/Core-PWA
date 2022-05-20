@@ -1,6 +1,8 @@
+import { cloneDeep, Dictionary } from 'lodash'
 import { FriendsState } from './types'
-import { Friend } from '~/types/ui/friends'
+import { Friend, OutgoingRequest } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
+import { getAlphaSorted } from '~/libraries/ui/Friends'
 
 const getters = {
   /**
@@ -89,6 +91,27 @@ const getters = {
     return state.all.some(
       (friend: Friend) =>
         friend.address === rootState.webrtc.activeCall?.peerId,
+    )
+  },
+
+  /**
+   * @name alphaSortedFriends
+   * @description Get friends sorted by alpha
+   * @returns dictionary of Friends
+   */
+  alphaSortedFriends: (state: FriendsState): Dictionary<Friend[]> => {
+    return getAlphaSorted(state.all)
+  },
+
+  /**
+   * @name alphaSortedOutgoing
+   * @description Get outgoing requests sorted by alpha
+   * @returns dictionary of Friends
+   */
+  alphaSortedOutgoing: (state: FriendsState): OutgoingRequest[] => {
+    return cloneDeep(state.outgoingRequests).sort(
+      (a: OutgoingRequest, b: OutgoingRequest) =>
+        (a.userInfo?.name ?? '').localeCompare(b.userInfo?.name ?? ''),
     )
   },
 }
