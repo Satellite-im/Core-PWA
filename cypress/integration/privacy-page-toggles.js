@@ -95,7 +95,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     })
   })
 
-  it('Privacy page - Verify all non-locked toggles can be switched to enable', () => {
+  it.skip('Privacy page - Verify all non-locked toggles can be switched to enable', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
@@ -111,7 +111,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     })
   })
 
-  it('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
+  it.skip('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
@@ -130,7 +130,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     cy.get('.close-button').click()
   })
 
-  it('Privacy page - Validate that last values selected were saved correcty', () => {
+  it.skip('Privacy page - Validate that last values selected were saved correcty', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
