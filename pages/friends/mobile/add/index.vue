@@ -22,13 +22,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
+import { mapState, mapGetters } from 'vuex'
 import { ArrowLeftIcon } from 'satellite-lucide-icons'
 import { DataStateType } from '~/store/dataState/types'
-
-import { getAlphaSorted } from '~/libraries/ui/Friends'
-import { OutgoingRequest } from '~/types/ui/friends'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {
@@ -51,15 +47,7 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['friends', 'dataState']),
-    alphaSortedFriends() {
-      return getAlphaSorted(this.friends.all)
-    },
-    alphaSortedOutgoing() {
-      return cloneDeep(this.friends.outgoingRequests).sort(
-        (a: OutgoingRequest, b: OutgoingRequest) =>
-          a.userInfo.name.localeCompare(b.userInfo.name),
-      )
-    },
+    ...mapGetters('friends', ['alphaSortedFriends', 'alphaSortedOutgoing']),
   },
   watch: {
     '$route.query'() {
