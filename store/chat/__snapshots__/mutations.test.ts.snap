@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`misc module.default.addFile with empty files array 1`] = `Array []`;
+
 exports[`module.default.addFile 0 1`] = `undefined`;
 
 exports[`module.default.addFile 1 1`] = `undefined`;

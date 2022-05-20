@@ -234,22 +234,11 @@ describe('misc', () => {
     module.default.addFile(state, obj)
     expect(state.files[obj.address]).toEqual([obj.file])
   })
-  test.skip('draft module.default.addFile with non-empty files array', () => {
-    const state = {
-      replies: object,
-      chatTexts: object2,
-      files: [
-        {
-          file: 'path_file_0',
-          nsfw: { checking: false, status: false },
-          url: 'string',
-        },
-      ],
-    }
+  test('module.default.addFile with empty files array', () => {
     const obj = {
       file: {
-        file: 'path',
-        url: 'string',
+        file: 'path2',
+        url: 'string2',
         nsfw: {
           checking: false,
           status: false,
@@ -258,7 +247,7 @@ describe('misc', () => {
       address: 'address1',
     }
     module.default.addFile(state, obj)
-    expect(state.files[obj.address]).toEqual([obj.file])
+    expect(state.files).toMatchSnapshot()
   })
   test('module.default.setFiles', () => {
     const state = { replies: object, chatTexts: object2, files: object3 }
