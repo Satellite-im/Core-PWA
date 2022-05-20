@@ -1,5 +1,3 @@
-import { Call } from '~/libraries/WebRTC/Call'
-
 export type PeerMutedState = {
   audio: boolean
   video: boolean

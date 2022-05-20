@@ -1,4 +1,4 @@
-import { Dexie, IndexableType } from 'dexie'
+import { Dexie } from 'dexie'
 import SearchIndex from './SearchIndex'
 import { Message } from '~/types/textile/mailbox'
 import { Config } from '~/config'

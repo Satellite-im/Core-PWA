@@ -1,5 +1,4 @@
 import { TranslateResult } from 'vue-i18n'
-import { string } from 'io-ts'
 import { ImageMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'

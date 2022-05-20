@@ -1,11 +1,7 @@
-import { clusterApiUrl, Connection, Keypair, PublicKey } from '@solana/web3.js'
+import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import * as bip39 from 'bip39'
 import * as ed25519 from 'ed25519-hd-key'
-import {
-  getClusterFromNetworkConfig,
-  publicKeyFromSeed,
-  sleep,
-} from '../Solana'
+import { getClusterFromNetworkConfig, publicKeyFromSeed } from '../Solana'
 import { Config } from '~/config'
 import { SolanaWallet } from '~/types/solana/solana'
 
