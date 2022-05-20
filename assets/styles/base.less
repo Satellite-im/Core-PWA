@@ -709,24 +709,66 @@ video {
   .header {
     &:extend(.background-flair);
   }
+  &:extend(.color-flair);
 }
 
-// Inputs
-.has-tooltip-primary {
-  &:before {
-    background: transparent;
-    background: @semitransparent-dark-gradient !important;
-    &:extend(.blur-less);
-    font-family: @primary-font !important;
-    color: @secondary-text !important;
-    &:extend(.fourth-layer);
+li .is-active,
+li.active,
+input.date-input {
+  &:extend(.background-flair);
+  &:extend(.glow-flair);
+  border: none !important;
+}
+
+// ------------- Ui Elements-------------
+
+* {
+  border-color: var(--flair-color);
+}
+
+// Chatbar
+#chatbar {
+  .chatbar-controls {
+    .send-message-btn {
+      &:extend(.color-flair);
+    }
   }
 }
-input[type='checkbox'] {
-  accent-color: @flair-color;
-  &:extend(.font-primary);
+
+.is-chatbar-reply {
+  &:extend(.background-flair);
 }
 
+//Tooltip
+.v-popper__popper {
+  &.v-popper--theme-tooltip {
+    .v-popper__inner {
+      background: @semitransparent-dark-gradient;
+      &:extend(.blur-less);
+      font-family: @primary-font;
+      color: @secondary-text;
+      font-size: 0.75em;
+    }
+    .v-popper__arrow-inner {
+      border-color: @midground;
+    }
+
+    .v-popper__arrow-outer {
+      border-color: @midground;
+    }
+  }
+
+  &.v-popper__popper--show-from .v-popper__wrapper {
+    transform: scale(0.5);
+  }
+
+  &.v-popper__popper--show-to .v-popper__wrapper {
+    transform: none;
+    transition: transform 0.15s;
+  }
+}
+
+//Inputs
 .input {
   &:extend(.input-bg);
   &:extend(.font-primary);

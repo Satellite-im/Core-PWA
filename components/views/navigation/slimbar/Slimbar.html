@@ -77,8 +77,8 @@
     </div>
     <div
       v-if="!horizontal"
-      class="circle-group has-tooltip-right has-tooltip-primary"
-      :data-tooltip="$t('servers.new_server')"
+      class="circle-group"
+      v-tooltip.right="$t('servers.new_server')"
       @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <UiCircle type="icon" :size="40">
@@ -86,9 +86,9 @@
       </UiCircle>
     </div>
     <div
-      class="circle-group has-tooltip-right has-tooltip-primary"
+      class="circle-group"
       data-cy="settings"
-      :data-tooltip="$t('pages.settings.settings')"
+      v-tooltip.right="$t('pages.settings.settings')"
       v-on:click="$store.commit('ui/toggleSettings', { show: true })"
     >
       <UiCircle type="icon" :size="40">

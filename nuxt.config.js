@@ -89,6 +89,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
     { src: '~/plugins/thirdparty/swiper.ts' },
+    { src: '~/plugins/thirdparty/tooltip.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
