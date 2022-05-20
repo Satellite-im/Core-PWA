@@ -1,4 +1,4 @@
-<template src="./Alerts.html" />
+<template src="./Alerts.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -7,21 +7,16 @@ import { Alert, AlertState } from '~/libraries/ui/Alerts'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  props: {
-    notifications: {
-      type: Array as PropType<Array<Alert>>,
-      default: () => [],
-      required: false,
-    },
-  },
   computed: {
-    ...mapState({ ui: (state) => (state as RootState).ui }),
+    ...mapState({
+      notifications: (state) => (state as RootState).ui.notifications,
+    }),
     ...mapGetters('ui', ['allUnseenNotifications']),
     AlertState: () => AlertState,
   },
   methods: {
     clearNotifications() {
-      this.$store.commit('ui/clearAllNotifications')
+      this.$store.commit('ui/setNotifications', [])
     },
   },
 })

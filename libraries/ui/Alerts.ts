@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
 export enum AlertType {
   FRIEND_REQUEST = 'FRIEND_REQUEST',
   MISSED_CALL = 'MISSED_CALL',
@@ -26,15 +24,6 @@ export type Alert = {
   state?: AlertState
   type: AlertType
   from: string
-  content: {
-    title: string
-    description: string
-    image?: string
-  }
-}
-
-export type AlertTemplate = {
-  type: AlertType
   content: {
     title: string
     description: string

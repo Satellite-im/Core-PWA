@@ -186,7 +186,7 @@ export default {
   ) {
     state.replyChatbarContent = message
   },
-  settingReaction(state: UIState, status: boolean) {
+  settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug
   },
   /**
@@ -357,9 +357,8 @@ export default {
       notification.state = AlertState.READ
     })
   },
-  notificationSeen(state: UIState, notificationId: string) {
-    state.notifications.find((item) => item.id === notificationId).state =
-      AlertState.READ
+  removeNotification(state: UIState, id: string) {
+    state.notifications = state.notifications.filter((item) => item.id !== id)
   },
   updateTheme(state: UIState, theme: Theme) {
     state.theme.base = theme

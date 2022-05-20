@@ -144,6 +144,7 @@ export default Vue.extend({
       })
     },
     toggleAlerts() {
+      this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts
     },
     isGroup(thing: any) {

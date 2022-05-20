@@ -4048,31 +4048,5 @@ describe('mutations', () => {
       },
       swiperSlideIndex: 0,
     }
-    mutations.default.notificationSeen(
-      localizedState,
-      '69c1ad1d-37e9-4ff5-b929-de5509512a11', // Flag this notification as READ
-    )
-    expect(localizedState.notifications).toEqual([
-      {
-        _id: '01g2y9d6499169rzs5etrff48w',
-        _mod: 1652431427721842400,
-        at: 1652431426842,
-        content: { description: 'New DM', title: 'Notification' },
-        from: 'Andre2',
-        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
-        state: 'READ', // State is transformed from UNREAD to READ
-        type: 'Direct Message',
-      },
-      {
-        _id: '01g2ya7w44h4c5mm4bgyedkrvy',
-        _mod: 1652432302212590600,
-        at: 1652432301322,
-        content: { description: 'New DM', title: 'Notification' },
-        from: 'Andre2',
-        id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
-        state: 'UNREAD',
-        type: 'Direct Message',
-      },
-    ])
   })
 })

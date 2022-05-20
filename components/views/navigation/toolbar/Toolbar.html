@@ -56,7 +56,7 @@
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
-      <ToolbarAlerts :notifications="allUnseenNotifications" />
+      <ToolbarAlerts />
     </UiFloatingContainer>
     <template v-if="conversation.type === 'friend'">
       <div
