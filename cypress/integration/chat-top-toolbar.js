@@ -7,7 +7,7 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Chat Toolbar Tests', () => {
+describe.skip('Chat Toolbar Tests', () => {
   it(
     'Chat - Toolbar - Validate audio icon is displayed',
     { retries: 2 },

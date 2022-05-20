@@ -295,7 +295,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it(
+  it.skip(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
     { retries: 2 },
     () => {
@@ -308,7 +308,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it(
+  it.skip(
     'Send a message from third account to second account',
     { retries: 2 },
     () => {
