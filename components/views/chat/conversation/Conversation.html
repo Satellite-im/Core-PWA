@@ -1,17 +1,23 @@
 <div id="conversation">
-  <UiLoadersMessage :count="3" v-if="loading" />
-  <div class="group" v-for="group in messages" v-else>
-    <div v-if="group.type === 'group'">
-      <Group :group="group" :key="group.id" :groupId="groupId" />
+  <UiChatScroll
+    ref="chatScroll"
+    :prevent-scroll-offset="10"
+    :older-messages-scroll-offset="300"
+  >
+    <UiChatEncrypted />
+    <div class="group" v-for="group in messages">
+      <div v-if="group.type === 'group'">
+        <Group :group="group" :key="group.id" :groupId="groupId" />
+      </div>
+      <div v-if="group.type === 'caret_divider'">
+        <UiCaretDivider text="New Messages" />
+      </div>
+      <div v-else-if="group.type === 'divider'">
+        <TypographyHorizontalRuleText :value="group.at.toString()" />
+      </div>
     </div>
-    <div v-if="group.type === 'caret_divider'">
-      <UiCaretDivider text="New Messages" />
+    <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
+      <UiLoadersLoadingBar />
     </div>
-    <div v-else-if="group.type === 'divider'">
-      <TypographyHorizontalRuleText :value="group.at.toString()" />
-    </div>
-  </div>
-  <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
-    <UiLoadersLoadingBar />
-  </div>
+  </UiChatScroll>
 </div>

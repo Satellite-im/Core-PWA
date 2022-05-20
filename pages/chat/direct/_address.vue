@@ -28,7 +28,9 @@ export default Vue.extend({
 
       const { messages, replies, reactions } = conversation
 
-      return groupMessages(messages, replies, reactions)
+      const gm = groupMessages(messages, replies, reactions)
+      console.log('groupMessages', gm)
+      return gm
     },
     // Get the active friend
     friend() {

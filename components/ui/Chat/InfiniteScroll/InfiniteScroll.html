@@ -1,0 +1,8 @@
+<div ref="root">
+  <slot v-if="isIntersecting" name="placeholder">
+    <div>Loading...</div>
+  </slot>
+  <slot v-if="isComplete" name="no-more">
+    <div>No more data.</div>
+  </slot>
+</div>

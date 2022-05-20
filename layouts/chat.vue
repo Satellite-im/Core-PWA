@@ -68,7 +68,7 @@
               :max-viewable-users="10"
               :fullscreen-max-viewable-users="20"
             />
-            <UiChatScroll
+            <!--            <UiChatScroll
               ref="chatScroll"
               :prevent-scroll-offset="10"
               :older-messages-scroll-offset="300"
@@ -77,7 +77,8 @@
               :user="recipient"
             >
               <Nuxt />
-            </UiChatScroll>
+            </UiChatScroll>-->
+            <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
             <UiChatInfo
               v-if="showOlderMessageInfo"

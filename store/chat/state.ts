@@ -1,5 +1,18 @@
 import { ChatState } from './types'
 
+export const initialCurrentChat = {
+  messages: [],
+  page: 1,
+  size: 30,
+  hasNextPage: true,
+  direction: 'top' as 'top',
+  isMessagesLoading: false,
+  lastLoadedMessageId: '',
+  isScrollOver: true,
+  isFirstVisit: true,
+  offset: 0,
+}
+
 const InitialChatState = (): ChatState => ({
   replies: [],
   chatTexts: [],
@@ -7,6 +20,7 @@ const InitialChatState = (): ChatState => ({
   countError: false,
   alertNsfw: false,
   containsNsfw: false,
+  currentChat: initialCurrentChat,
 })
 
 export default InitialChatState
