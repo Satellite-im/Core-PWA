@@ -28,9 +28,10 @@ export interface RootState {
 
 export type RootStore = Store<RootState>
 
-export type ActionsArguments<StateType> = {
+export type ActionsArguments<StateType, GettersType> = {
   commit: Commit
   state: StateType
   dispatch: Dispatch
   rootState: RootState
+  getters: GettersType
 }

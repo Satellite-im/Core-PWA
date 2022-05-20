@@ -10,6 +10,7 @@ import {
   FriendsError,
   FriendsState,
 } from './types'
+import FriendGetters from './getters'
 import { DataStateType } from '~/store/dataState/types'
 import { TextileError } from '~/store/textile/types'
 import Crypto from '~/libraries/Crypto/Crypto'
@@ -28,7 +29,6 @@ import { AccountsError } from '~/store/accounts/types'
 import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
-import Hounddog from '~/utilities/Hounddog'
 
 export default {
   async initialize({
@@ -126,14 +126,19 @@ export default {
    * @example
    */
   async fetchFriendDetails(
-    { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
+    {
+      commit,
+      state,
+      rootState,
+      dispatch,
+      getters,
+    }: ActionsArguments<FriendsState, typeof FriendGetters>,
     friendAccount: FriendAccount,
-  ) {
+  ): Promise<void> {
     // First grab the users from local db
     const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
     const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    const $Hounddog: Hounddog = Vue.prototype.$Hounddog
 
     // Check if the request was originally sent by the current user (outgoing)
     // and then accepted, or the other way round
@@ -164,7 +169,7 @@ export default {
       ).bytes,
     )
 
-    const friendExists = $Hounddog.friendExists(state, friendKey)
+    const friendExists = getters.friendExists(state)(friendKey)
 
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
