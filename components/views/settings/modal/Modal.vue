@@ -36,17 +36,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    'ui.showSettings': {
-      handler(newSValue) {
-        if (newSValue && this.$device.isMobile) {
-          setTimeout(() => {
-            this.changeRoute('profile')
-          }, 100)
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
     'ui.settingsRoute'(val) {
       this.$store.commit('ui/toggleModal', {
         name: ModalWindows.CROP,
@@ -55,7 +44,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.showSidebar(false)
+    this.showSidebar(this.$device.isMobile)
   },
   methods: {
     /**
