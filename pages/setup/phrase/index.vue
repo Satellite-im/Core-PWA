@@ -23,7 +23,10 @@ export default Vue.extend({
       return num % 2
     },
     confirm() {
-      this.$router.replace('/')
+      this.$router.push({
+        name: this.localeRoute('index')?.name,
+        params: this.$route.params,
+      })
     },
   },
 })

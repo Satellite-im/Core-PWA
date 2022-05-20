@@ -293,8 +293,9 @@ export default class SolanaManager {
    * 1 lamport = 0.000000001 SOL
    * @returns
    */
-  async requestAirdrop() {
+  async requestAirdrop(accessCode?: string) {
     if (!this.payerAccount) return null
+    console.log('airdorp requests', accessCode)
 
     let signature
 
@@ -309,6 +310,7 @@ export default class SolanaManager {
         },
         body: JSON.stringify({
           address: this.payerAccount?.publicKey.toBase58(),
+          accessCode,
         }),
       })
 

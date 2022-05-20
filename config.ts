@@ -16,7 +16,7 @@ export const Config = {
     fsTable: 'sat.json',
     bucketName: 'personal-files',
   },
-  env: process.env.ENVIRONMENT,
+  env: process.env.NUXT_ENV_ENVIRONMENT,
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
   },
@@ -52,7 +52,9 @@ export const Config = {
         ],
   },
   solana: {
-    customFaucet: 'https://faucet.satellite.one',
+    customFaucet:
+      process.env.NUXT_ENV_EARLY_ACCESS_FAUCET_URL ||
+      'https://faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }

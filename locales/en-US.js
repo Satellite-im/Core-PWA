@@ -215,6 +215,7 @@ export default {
       placeholder: 'Enter Pin...',
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
+      code_heading: 'Please enter your access code',
       enter_code: 'Enter access code...',
       bad_code: 'Please enter a valid code',
       good_code: 'Access code verified',

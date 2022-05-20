@@ -44,4 +44,5 @@ export interface UserRegistrationPayload {
   name: string
   image: string
   status: string
+  accessCode?: string
 }

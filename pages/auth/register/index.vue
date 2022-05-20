@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { TranslateResult } from 'vue-i18n'
 import { mapState, mapGetters } from 'vuex'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
@@ -23,10 +24,10 @@ export default Vue.extend({
         (state as RootState).accounts.registrationStatus,
     }),
     ...mapGetters(['allPrerequisitesReady']),
-    hasToRegister() {
+    hasToRegister(): boolean {
       return this.registrationStatus === RegistrationStatus.UNKNOWN
     },
-    registrationStep() {
+    registrationStep(): TranslateResult {
       switch (this.registrationStatus) {
         case RegistrationStatus.IN_PROGRESS:
           return this.$i18n.t('user.registration.reg_status.in_progress')
@@ -40,13 +41,12 @@ export default Vue.extend({
           return this.$i18n.t('user.loading.loading_account')
       }
     },
-    isRegistered() {
+    isRegistered(): boolean {
       return this.registrationStatus === RegistrationStatus.REGISTERED
     },
   },
   watch: {
     allPrerequisitesReady(nextValue) {
-      console.log(nextValue)
       if (!nextValue) return
       this.$router.replace('/chat/direct')
     },
@@ -63,6 +63,7 @@ export default Vue.extend({
           name: userData.username,
           image: userData.photoHash,
           status: userData.status,
+          accessCode: this.$route.params.accessCode,
         })
       } catch (error: any) {
         this.$store.commit('ui/toggleErrorNetworkModal', {

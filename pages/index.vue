@@ -76,7 +76,10 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/loadAccount')
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          this.$router.replace('/auth/register')
+          this.$router.push({
+            name: this.localeRoute('auth-register')?.name,
+            params: this.$route.params,
+          })
           return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {

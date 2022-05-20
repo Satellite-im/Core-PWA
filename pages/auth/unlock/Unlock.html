@@ -1,58 +1,64 @@
 <div class="container">
   <div class="decryption-body">
-    <div class="early-access">
-      <!-- fix rendering with env -->
-      <InteractablesInput
-        v-if="true"
+    <div v-if="requestAccessCode" class="early-access">
+      <TypographySubtitle :size="6" :text="$t('pages.unlock.code_heading')" />
+      <InteractablesInputGroup
         v-model="accessCode"
         class="code-input"
         size="small"
         :type="!isValidCode && codeMessage ? 'danger' : 'primary'"
         :placeholder="$t('pages.unlock.enter_code')"
         :maxLength="10"
-      />
+        :action="checkCode"
+        :loading="isCheckingCode"
+        :disabled="isValidCode"
+      >
+        <chevron-right-icon size="1x" />
+      </InteractablesInputGroup>
       <TypographyText
         v-if="codeMessage"
         :class="isValidCode ? 'green' : 'red'"
         :text="codeMessage"
       />
     </div>
-    <div v-if="!accounts.pinHash" class="create_pin_section">
-      <info-icon size="0.8x" />
-      <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
-      <TypographyText :text="$t('pages.unlock.create_pin')" />
-      <TypographyText :text="$t('pages.unlock.dont_forget')" />
-    </div>
-    <InteractablesInputGroup
-      v-model="pin"
-      size="small"
-      input-kind="password"
-      :type="error ? 'danger' : 'primary'"
-      data-cy="pin-label"
-      :label-text="accounts.pinHash ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose')"
-      :placeholder="$t('pages.unlock.placeholder')"
-      :loading="decrypting"
-      :action="accounts.pinHash ? decrypt : create"
-    >
-      <unlock-icon size="1x" v-if="accounts.pinHash" />
-      <chevron-right-icon size="1x" v-else />
-    </InteractablesInputGroup>
-    <TypographyError v-if="error" :text="$t(error)" />
-    <InteractablesSwitch
-      v-model="storePin"
-      small
-      :label="$t('pages.unlock.store_pin')"
-    />
-    <br />
-    <a v-if="getPinHash" class="delete-link" @click="deleteAccount">
-      {{$t('pages.unlock.delete_account_label')}}
-    </a>
-    <div class="realm-container">
-      <InteractablesRealm />
-    </div>
+    <template v-else>
+      <div v-if="!accounts.pinHash" class="create_pin_section">
+        <info-icon size="0.8x" />
+        <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
+        <TypographyText :text="$t('pages.unlock.create_pin')" />
+        <TypographyText :text="$t('pages.unlock.dont_forget')" />
+      </div>
+      <InteractablesInputGroup
+        v-model="pin"
+        size="small"
+        input-kind="password"
+        :type="error ? 'danger' : 'primary'"
+        data-cy="pin-label"
+        :label-text="accounts.pinHash ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose')"
+        :placeholder="$t('pages.unlock.placeholder')"
+        :loading="decrypting"
+        :action="accounts.pinHash ? decrypt : create"
+      >
+        <unlock-icon size="1x" v-if="accounts.pinHash" />
+        <chevron-right-icon size="1x" v-else />
+      </InteractablesInputGroup>
+      <TypographyError v-if="error" :text="$t(error)" />
+      <InteractablesSwitch
+        v-model="storePin"
+        small
+        :label="$t('pages.unlock.store_pin')"
+      />
+      <br />
+      <a v-if="accounts.pinHash" class="delete-link" @click="deleteAccount">
+        {{$t('pages.unlock.delete_account_label')}}
+      </a>
+      <div class="realm-container">
+        <InteractablesRealm />
+      </div>
+    </template>
+    <UiUpdateModal v-if="changeLog" />
   </div>
-  <span @click="toggleChangelogVisibility">
+  <div @click="toggleChangelogVisibility">
     <UiVersion name version />
-  </span>
-  <UiUpdateModal v-if="changeLog" />
+  </div>
 </div>

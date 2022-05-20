@@ -23,6 +23,8 @@ export default Vue.extend({
       accessCode: '' as string,
       isValidCode: false as boolean,
       codeMessage: '' as string,
+      requestAccessCode: true as boolean,
+      isCheckingCode: false as boolean,
     }
   },
   computed: {
@@ -39,25 +41,11 @@ export default Vue.extend({
       },
     },
   },
-  watch: {
-    accessCode(val: string) {
-      if (val.length !== 10) {
-        this.codeMessage = ''
-        return
-      }
-      this.isValidCode = Math.random() < 0.5
-      this.codeMessage = (
-        this.isValidCode
-          ? this.$t('pages.unlock.good_code')
-          : this.$t('pages.unlock.bad_code')
-      ) as string
-    },
-  },
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
-    console.log(this.$Config)
-
+    this.requestAccessCode =
+      this.$Config.env === 'EARLY_ACCESS' && !this.accounts.pinHash
     this.$store.commit('accounts/lock')
   },
   methods: {
@@ -93,6 +81,10 @@ export default Vue.extend({
             this.$toast.error(this.$t(e.message) as string)
             this.$router.replace('/setup/disclaimer')
           }
+          this.$router.push({
+            name: this.localeRoute('setup-disclaimer')?.name,
+            params: { accessCode: this.accessCode },
+          })
         } else {
           this.$router.replace('/')
         }
@@ -110,10 +102,6 @@ export default Vue.extend({
      * @example
      */
     async create() {
-      if (!this.isValidCode) {
-        this.codeMessage = this.$t('pages.unlock.bad_code') as string
-        return
-      }
       try {
         await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
@@ -124,6 +112,33 @@ export default Vue.extend({
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
       location.reload()
+    },
+
+    async checkCode() {
+      this.codeMessage = ''
+      this.isCheckingCode = true
+      const res = await fetch(
+        `${this.$Config.solana.customFaucet}/checkCode/${this.accessCode}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const jsonRes = await res.json()
+      this.isValidCode = jsonRes.status === 'success'
+      this.codeMessage = (
+        this.isValidCode
+          ? this.$t('pages.unlock.good_code')
+          : this.$t('pages.unlock.bad_code')
+      ) as string
+      this.isCheckingCode = false
+      if (this.isValidCode) {
+        setTimeout(() => {
+          this.requestAccessCode = false
+        }, 1000)
+      }
     },
   },
 })
