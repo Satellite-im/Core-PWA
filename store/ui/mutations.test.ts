@@ -3177,6 +3177,15 @@ describe('mutations', () => {
 
     // This would not throw an error, because it will just create a new key with the boolean as a value
   })
+  test('toggleErrorNetworkModal', () => {
+    const localizedState = { ...initialState }
+    const argument = { state: true, action: null }
+    mutations.default.toggleErrorNetworkModal(localizedState, argument)
+    expect(localizedState.modals.errorNetwork).toMatchObject({
+      isOpen: argument.state,
+      action: argument.action,
+    })
+  })
   test('setMessages', () => {
     const localizedState = { ...initialState }
     const array = ['message']
