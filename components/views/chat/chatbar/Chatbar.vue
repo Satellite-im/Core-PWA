@@ -41,6 +41,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('chat', ['getFiles']),
+    ...mapGetters('friends', ['getActiveFriend']),
     ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile', 'conversation']),
     activeFriend() {
       return this.conversation?.participants?.[0]
@@ -128,7 +129,7 @@ export default Vue.extend({
   watch: {
     'friends.all': {
       handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        const activeFriend = this.getActiveFriend()
         if (activeFriend)
           this.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
