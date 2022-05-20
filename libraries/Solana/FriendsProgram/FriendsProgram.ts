@@ -410,7 +410,7 @@ export default class FriendsProgram extends EventEmitter {
       const account = await program.account.friendRequest.fetch(accountKey)
       return this._parseAccount({ publicKey: accountKey, account }).status
     } catch (error) {
-      return FriendStatus.UNINITALIZED
+      return FriendStatus.UNINITIALIZED
     }
   }
 
@@ -448,7 +448,7 @@ export default class FriendsProgram extends EventEmitter {
       ? FriendStatus.DENIED
       : statusObject.removed
       ? FriendStatus.REMOVED
-      : FriendStatus.UNINITALIZED
+      : FriendStatus.UNINITIALIZED
     return {
       accountId: publicKey.toString(),
       from: from.toString(),
