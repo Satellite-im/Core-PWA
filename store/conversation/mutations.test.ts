@@ -1,3 +1,8 @@
+import {
+  ConversationState,
+  ConversationConnection,
+  ConversationActivity,
+} from './types'
 import * as mutations from '~/store/conversation/mutations'
 
 describe('mutations.default.setConversation', () => {
@@ -75,5 +80,51 @@ describe('mutations.default.setConversation', () => {
       { id: '', type: '', calling: '', participants: '' },
     )
     expect(result).toMatchSnapshot()
+  })
+})
+
+describe('misc', () => {
+  let initialState: ConversationState = {
+    id: '',
+    type: 'friend',
+    calling: false,
+    participants: [],
+  }
+
+  test('mutations.default.setCalling', () => {
+    const state = { ...initialState }
+    const argument = true
+
+    mutations.default.setCalling(state, argument)
+    expect(state.calling).toBeTruthy()
+  })
+  test('mutations.default.setCalling', () => {
+    const state = { ...initialState }
+    const argument = false
+
+    mutations.default.setCalling(state, argument)
+    expect(state.calling).toBeFalsy()
+  })
+  test('mutations.default.setParticipants', () => {
+    const state = { ...initialState }
+    const argument = false
+
+    mutations.default.setParticipants(state, argument)
+    expect(state.participants).toEqual([])
+  })
+  test('mutations.default.setParticipants', () => {
+    const state = { ...initialState }
+    const argument = {
+      peerId: 'peerId',
+      address: 'address',
+      name: 'name',
+      profilePicture: 'profilePicture',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+
+    mutations.default.setParticipants(state, argument)
+    expect(state.participants).toEqual(argument)
   })
 })
