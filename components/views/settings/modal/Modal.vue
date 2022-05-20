@@ -101,23 +101,3 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less" src="./Modal.less"></style>
-<style lang="less">
-#settings {
-  width: 90vw;
-  height: 90vh;
-}
-#settings.is-collapsed
-  > div.sidebar.is-secondary-background
-  > section
-  > div.aside-menu.hidden-scroll
-  > svg {
-  right: 0.9rem !important;
-}
-#settings.is-collapsed
-  > div.sidebar.is-secondary-background
-  > section
-  > div.aside-menu.hidden-scroll
-  > aside {
-  display: none;
-}
-</style>
