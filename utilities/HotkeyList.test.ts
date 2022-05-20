@@ -1,4 +1,4 @@
-import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+import { macShortcuts, windowsShortcuts } from '~/utilities/HotkeyList'
 
 describe('check windowsShortcuts constants', () => {
   const inst: any = windowsShortcuts

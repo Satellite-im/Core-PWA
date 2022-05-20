@@ -1,8 +1,8 @@
-import * as actions from '~/store/chat/actions'
-import { UploadDropItemType } from '~/types/files/file'
 import { RegistrationStatus } from '~/store/accounts/types'
+import * as actions from '~/store/chat/actions'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
+import { UploadDropItemType } from '~/types/files/file'
 import { RootState } from '~/types/store/store'
 
 describe('actions.default.setChatText', () => {

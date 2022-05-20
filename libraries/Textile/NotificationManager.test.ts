@@ -1,5 +1,5 @@
-import * as hub from '@textile/hub'
 import * as web3 from '@solana/web3.js'
+import * as hub from '@textile/hub'
 import * as NotificationManager from '~/libraries/Textile/NotificationManager'
 
 describe('NotificationManager.NotificationManager.isInitialized', () => {

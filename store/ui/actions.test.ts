@@ -1,12 +1,11 @@
-import Vue from 'vue'
 import Mousetrap from 'mousetrap'
-import * as actions from '~/store/ui/actions'
+import Vue from 'vue'
+import TextileManager from '~/libraries/Textile/TextileManager'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
-import SoundManager from '~/libraries/SoundManager/SoundManager'
-import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileError } from '~/store/textile/types'
+import * as actions from '~/store/ui/actions'
 Vue.prototype.$TextileManager = new TextileManager()
 
 const initialRootState: any = {
