@@ -87,7 +87,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it('Send image to user B', () => {
+  it.skip('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -106,7 +106,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
-  it('Send file to user B', () => {
+  it.skip('Send file to user B', () => {
     cy.chatFeaturesSendFile(fileLocalPath)
     cy.get('[data-cy=chat-file]')
       .last()
@@ -202,7 +202,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert image received from user A', () => {
+  it.skip('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -210,7 +210,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert file received from user A', () => {
+  it.skip('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
@@ -321,7 +321,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it(
+  it.skip(
     'React to other users reaction - Load Account User A',
     { retries: 2 },
     () => {
@@ -334,7 +334,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it('React to other users reaction - Execute validation', () => {
+  it.skip('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)

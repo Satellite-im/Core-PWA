@@ -13,7 +13,7 @@ let urlToValidate = 'https://www.satellite.im'
 let urlToValidateTwo = 'http://www.satellite.im'
 let urlToValidateThree = 'www.satellite.im'
 
-describe('Chat Text and Sending Links Validations', () => {
+describe.skip('Chat Text and Sending Links Validations', () => {
   it('Load account for validation', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
