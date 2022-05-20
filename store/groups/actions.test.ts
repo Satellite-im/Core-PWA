@@ -4,7 +4,6 @@ import { GroupsError } from './types'
 import { Config } from '~/config'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
 
 Vue.prototype.$Config = Config
 Vue.prototype.$TextileManager = new TextileManager()

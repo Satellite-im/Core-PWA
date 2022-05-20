@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import { TextileError } from './types'
-import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
-import * as actions from '~/store/textile/actions'
-import * as Logger from '~/utilities/Logger'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 import { Config } from '~/config'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
+import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
+import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
+import TextileManager from '~/libraries/Textile/TextileManager'
+import * as actions from '~/store/textile/actions'
+import * as Logger from '~/utilities/Logger'
 
 Vue.prototype.$Config = Config
 

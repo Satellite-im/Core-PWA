@@ -1,4 +1,4 @@
-import { toHTML, htmlTag } from './Markdown'
+import { htmlTag, toHTML } from './Markdown'
 const assert = require('assert').strict
 
 const htmlFromMarkdown = function (source: string) {

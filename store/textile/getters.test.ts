@@ -1,16 +1,4 @@
 import * as getters from '~/store/textile/getters'
-import {
-  decryptedMessage,
-  fileMessage,
-  glyphMessage,
-  imageMessage,
-  mediaMessage,
-  messageEncoder,
-  messageFromThread,
-  reactionMessage,
-  replyMessage,
-  textMessage,
-} from '~/libraries/Textile/encoders'
 
 describe('init', () => {
   let inst: any
@@ -57,7 +45,7 @@ describe('getters.default.getInitialized', () => {
 
 describe('getters.default.getConversation', () => {
   test('0', () => {
-    let localState = {
+    const localState = {
       initialized: true,
       activeConversation: '9876',
       conversations: {
@@ -106,7 +94,7 @@ describe('getters.default.getConversation', () => {
 
 describe('getters.default.getConversationMessages', () => {
   test('0', () => {
-    let localState = {
+    const localState = {
       initialized: true,
       activeConversation: '9876',
       conversations: {

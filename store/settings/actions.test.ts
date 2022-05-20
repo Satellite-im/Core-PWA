@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { TextileError } from '../textile/types'
 import * as actions from './actions'
 import { SettingsError } from './types'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
