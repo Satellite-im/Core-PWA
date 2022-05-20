@@ -4,7 +4,6 @@
 import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/store/groups/types'
-import { Message } from '~/types/textile/mailbox'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -22,6 +21,11 @@ export default Vue.extend({
         motd: '',
       }),
       required: true,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {
@@ -46,6 +50,12 @@ export default Vue.extend({
      */
     navigateToGroup(address: string) {
       this.$router.push(`/chat/groups/${address}`)
+      this.$store.dispatch('conversation/setConversation', {
+        id: this.group.id,
+        type: 'group',
+        calling: false,
+        participants: this.group.members,
+      })
     },
   },
 })
