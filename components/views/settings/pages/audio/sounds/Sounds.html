@@ -15,7 +15,7 @@
   />
   <SettingsPagesAudioSoundsItem
     :value="sound(Sounds.MUTE)"
-    @toggle="toggleSound(Sounds.MUTE, $event)"
+    @toggle="toggleSounds([Sounds.MUTE, Sounds.UNMUTE], $event)"
     :title="$t('pages.settings.notifications.sounds.mute')"
   />
   <SettingsPagesAudioSoundsItem
