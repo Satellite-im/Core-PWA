@@ -5,7 +5,7 @@ Array [
   Object {
     "activity": "ACTIVE",
     "address": "address2",
-    "name": null,
+    "name": "name2",
     "peerId": "peerId2",
     "profilePicture": "profilePicture2",
     "state": "CONNECTED",
