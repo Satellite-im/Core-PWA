@@ -1,6 +1,5 @@
 <template src="./Add.html"></template>
 <script lang="ts">
-import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
 
@@ -8,12 +7,11 @@ import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
-import ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -22,8 +20,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      size: 150,
-      featureReadyToShow: false,
       error: '',
       accountID: '',
       searching: false,
@@ -31,9 +27,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState({
+      myAccountID: (state) => (state as RootState).accounts.active,
+      allFriends: (state) => (state as RootState).friends.all,
+    }),
     friendInviteUrl(): string {
-      return `${location.origin}/#/friends/list/${this.accounts.active}`
+      return `${location.origin}/#/friends/list/${this.myAccountID}`
     },
   },
   mounted() {
@@ -59,23 +58,19 @@ export default Vue.extend({
       this.friend = null
       this.searching = true
       const accountID = this.accountID.trim()
-      if (accountID === this.$store.state.accounts.active) {
+      if (accountID === this.myAccountID) {
         this.error = this.$t('friends.self_add') as string
         return
       }
       if (
-        this.$store.state.friends.all.filter(
-          (f: Friend) => f?.account?.accountId === accountID,
-        ).length === 1
+        this.allFriends.some((f: Friend) => f?.account?.accountId === accountID)
       ) {
         this.error = this.$t('friends.already_friend') as string
         return
       }
       this.error = ''
       try {
-        const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-        const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
+        const usersProgram: UsersProgram = new UsersProgram(this.$SolanaManager)
         const friend = await usersProgram.getUserInfo(accountID)
         if (!friend) {
           this.error = this.$t('friends.not_found') as string

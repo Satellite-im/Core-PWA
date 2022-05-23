@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { ContextMenuItem } from '~/store/ui/types'
+import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
@@ -14,7 +14,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
     ...mapState(['settings', 'ui']),
-    mostUsedEmojis() {
+    mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 4)
     },
   },
