@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
-import WebRTC from '~/libraries/WebRTC/WebRTC'
 import { FriendsState } from '~/store/friends/types'
 import { RootState } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'

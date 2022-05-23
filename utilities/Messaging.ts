@@ -4,7 +4,7 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
-import { Group, MessageGroup, UIReaction, UIReply } from '~/types/messaging'
+import { MessageGroup, UIReaction, UIReply } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
 import {
   FileMessage,

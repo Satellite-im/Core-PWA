@@ -1,5 +1,4 @@
 import * as t from 'io-ts'
-import { SignalData } from 'simple-peer'
 
 export const wireBaseMessage = t.type({
   type: t.string,

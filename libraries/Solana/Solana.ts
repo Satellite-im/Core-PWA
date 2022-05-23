@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js'
+import { PublicKey, clusterApiUrl } from '@solana/web3.js'
 
 /**
  * Utility function to convert the string from config into a
