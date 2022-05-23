@@ -86,7 +86,7 @@ data.allDevices.forEach((item) => {
         cy.validateURLComingSoonModal()
       })
 
-      it(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
