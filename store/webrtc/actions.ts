@@ -12,6 +12,7 @@ import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import { Friend } from '~/types/ui/friends'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -276,7 +277,7 @@ const webRTCActions = {
    * @param kind Kind of the stream (audio/video/screen)
    */
   toggleMute(
-    { state }: ActionsArguments<WebRTCState>,
+    { state, dispatch }: ActionsArguments<WebRTCState>,
     { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
   ) {
     if (!state.activeCall || !peerId) {
@@ -289,9 +290,11 @@ const webRTCActions = {
     const isMuted = state.streamMuted[peerId]?.[kind]
     if (isMuted) {
       call.unmute({ peerId, kind })
+      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
     call.mute({ peerId, kind })
+    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
   /**
