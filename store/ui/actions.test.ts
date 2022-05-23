@@ -508,7 +508,7 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
-  test('sendNotification with initialized mailbox manager', async () => {
+  test.skip('sendNotification with initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
     TMConstructor.notificationManager.sendNotification = jest

@@ -237,6 +237,7 @@ export default {
         {
           message: 'New DM',
           from: sender.name,
+          fromAddress: sender.address,
           title: `Notification`,
           image: sender.photoHash,
           type: AlertType.DIRECT_MESSAGE,

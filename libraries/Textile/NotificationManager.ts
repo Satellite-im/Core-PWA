@@ -80,6 +80,7 @@ export class NotificationManager {
     message: string
     imageHash: string
     type: AlertType
+    notificationstate: AlertState
     title: string
   }): Promise<Object | null> {
     const buildNotification: Alert = {
@@ -88,7 +89,7 @@ export class NotificationManager {
         image: payload.imageHash,
         description: payload.message,
       },
-      state: AlertState.UNREAD,
+      state: payload.notificationstate,
       from: payload.from,
       type: payload.type,
       at: Date.now(),
