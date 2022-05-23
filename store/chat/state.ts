@@ -3,13 +3,12 @@ import { ChatState } from './types'
 export const initialCurrentChat = {
   messages: [],
   page: 1,
-  size: 30,
+  size: 10,
   hasNextPage: true,
   direction: 'top' as 'top',
   isMessagesLoading: false,
   lastLoadedMessageId: '',
   isScrollOver: true,
-  isFirstVisit: true,
   offset: 0,
 }
 

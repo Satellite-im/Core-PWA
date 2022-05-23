@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { DataStateType } from '~/store/dataState/types'
 import { RootState } from '~/types/store/store'
@@ -20,18 +19,6 @@ export default Vue.extend({
     }),
     ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('friends', ['findFriendByAddress']),
-    groupedMessages() {
-      const { address } = this.$route.params
-      const conversation = this.$typedStore.state.textile.conversations[address]
-
-      if (!conversation) return []
-
-      const { messages, replies, reactions } = conversation
-
-      const gm = groupMessages(messages, replies, reactions)
-      console.log('groupMessages', gm)
-      return gm
-    },
     // Get the active friend
     friend() {
       const { address } = this.$route.params

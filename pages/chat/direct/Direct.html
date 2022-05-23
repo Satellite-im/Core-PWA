@@ -3,5 +3,5 @@
     :count="3"
     v-if="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
   />
-  <Conversation :messages="groupedMessages" v-else />
+  <Conversation v-else />
 </div>

@@ -1,23 +1,42 @@
-<div id="conversation">
+<div id="conversation" class="conversation">
   <UiChatScroll
     ref="chatScroll"
     :prevent-scroll-offset="10"
     :older-messages-scroll-offset="300"
   >
-    <UiChatEncrypted />
-    <div class="group" v-for="group in messages">
-      <div v-if="group.type === 'group'">
-        <Group :group="group" :key="group.id" :groupId="groupId" />
+    <div class="conversation-content">
+      <div
+        class="group"
+        v-for="group in messages"
+        :key="group.id"
+        :id="group.id"
+      >
+        <div v-if="group.type === 'group'">
+          <Group :group="group" />
+        </div>
+        <div v-if="group.type === 'caret_divider'">
+          <UiCaretDivider text="New Messages" />
+        </div>
+        <div v-else-if="group.type === 'divider'">
+          <TypographyHorizontalRuleText :value="group.at.toString()" />
+        </div>
       </div>
-      <div v-if="group.type === 'caret_divider'">
-        <UiCaretDivider text="New Messages" />
-      </div>
-      <div v-else-if="group.type === 'divider'">
-        <TypographyHorizontalRuleText :value="group.at.toString()" />
+      <div
+        v-if="textile.messageLoading"
+        data-cy="loading-indicator"
+        class="zoop"
+      >
+        <UiLoadersLoadingBar />
       </div>
     </div>
-    <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
-      <UiLoadersLoadingBar />
-    </div>
+    <UiChatInfiniteScroll
+      class="conversation-infiniteScroll"
+      :class="{ 'is-reversed': direction === 'top' }"
+      :options="options"
+      @intersect="handleIntersect"
+    >
+      <template #placeholder> Loading messages </template>
+      <template #no-more> <UiChatEncrypted /> </template>
+    </UiChatInfiniteScroll>
   </UiChatScroll>
 </div>

@@ -19,6 +19,5 @@ export interface ICurrentChat {
   isMessagesLoading: boolean
   lastLoadedMessageId: string
   isScrollOver: boolean
-  isFirstVisit: boolean
   offset: number
 }

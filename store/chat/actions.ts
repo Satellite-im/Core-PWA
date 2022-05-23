@@ -40,4 +40,70 @@ export default {
       address: recipientAddress,
     })
   },
+  loadMessages(
+    { state, commit, rootState }: ActionsArguments<ChatState>,
+    conversationId: string,
+  ) {
+    commit('setCurrentChat', { isMessagesLoading: true })
+    const conversation = rootState.textile.conversations[conversationId]
+
+    if (!conversation?.groupedMessages) {
+      return
+    }
+
+    const { groupedMessages: allMessages } = conversation
+
+    const { messages, page, size, hasNextPage, direction, offset } =
+      state.currentChat
+
+    if (!hasNextPage) {
+      return
+    }
+
+    let from: number
+    let to: number
+
+    switch (direction) {
+      // from bottom to top
+      case 'top':
+        from = Math.max(allMessages?.length + offset - size * page, 0)
+        to = Math.max(allMessages?.length + offset - size * (page - 1), 0)
+        break
+      // from top to bottom
+      default:
+        from = size * (page - 1)
+        to = page * size
+        break
+    }
+
+    console.log('from', from)
+    console.log('to', to)
+
+    const newMessages = allMessages?.slice(from, to)
+
+    if (!newMessages?.length) {
+      commit('setCurrentChat', {
+        hasNextPage: false,
+        isMessagesLoading: false,
+      })
+      return
+    }
+
+    const getLastLoadedMessageId = () => {
+      if (direction === 'top') {
+        return newMessages[newMessages.length - 1].id
+      }
+      return newMessages[0].id
+    }
+
+    commit('setCurrentChat', {
+      messages:
+        direction === 'top'
+          ? [...newMessages, ...messages]
+          : [...messages, ...newMessages],
+      page: page + 1,
+      isMessagesLoading: false,
+      lastLoadedMessageId: getLastLoadedMessageId(),
+    })
+  },
 }

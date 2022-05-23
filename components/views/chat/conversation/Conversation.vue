@@ -1,27 +1,63 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { MessageGroup } from '~/types/messaging'
-
 export default Vue.extend({
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
+  props: {},
+  computed: {
+    ...mapState(['ui', 'textile', 'chat']),
+    options() {
+      return {
+        threshold: 0,
+        rootMargin: '100px 0px 0px 0px',
+        root: this.$refs.chatScroll,
+      }
     },
-    messages: {
-      type: Array as PropType<MessageGroup>,
-      default: () => [],
+    messages() {
+      return this.chat.currentChat.messages
     },
-    groupId: {
-      type: String,
-      default: '',
+    direction() {
+      return this.chat.currentChat.direction
+    },
+    conversationId() {
+      return this.$route.params?.address
     },
   },
-  computed: {
-    ...mapState(['ui', 'textile']),
+  beforeDestroy() {
+    this.$store.commit('chat/resetCurrentChat')
+  },
+  methods: {
+    scrollToMessage(messageId: string) {
+      if (!messageId) {
+        return
+      }
+      this.$nextTick(() => {
+        const messageNode = document.getElementById(messageId)
+        if (!messageNode) {
+          return
+        }
+        messageNode.scrollIntoView({
+          block: this.direction === 'bottom' ? 'end' : 'start',
+          behavior: 'auto',
+        })
+      })
+    },
+    loadMore() {
+      this.$store.dispatch('chat/loadMessages', this.conversationId)
+    },
+    handleIntersect({ loaded, complete }) {
+      if (
+        this.chat.currentChat.hasNextPage &&
+        !this.chat.currentChat.isMessagesLoading
+      ) {
+        this.loadMore()
+        this.scrollToMessage(this.chat.currentChat.lastLoadedMessageId)
+        loaded()
+      } else {
+        complete()
+      }
+    },
   },
 })
 </script>
