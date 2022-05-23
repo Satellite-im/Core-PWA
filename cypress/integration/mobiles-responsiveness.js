@@ -47,7 +47,7 @@ data.allDevices.forEach((item) => {
         cy.createAccountSubmit()
       })
 
-      it(`Import Account on ${item.description}`, { retries: 2 }, () => {
+      it.skip(`Import Account on ${item.description}`, { retries: 2 }, () => {
         cy.importAccount(randomPIN, recoverySeed, true)
         //Validate profile name displayed
         cy.validateChatPageIsLoaded(true)
@@ -56,7 +56,7 @@ data.allDevices.forEach((item) => {
         cy.goToConversation('cypress friend', true)
       })
 
-      it(`Chat Features - Send Messages on ${item.description}`, () => {
+      it.skip(`Chat Features - Send Messages on ${item.description}`, () => {
         // Click to hamburger button to display chat if app wrap is open (chat not displayed)
         cy.get('#app-wrap').then(($appWrap) => {
           if ($appWrap.hasClass('is-open')) {
@@ -68,7 +68,7 @@ data.allDevices.forEach((item) => {
         cy.chatFeaturesSendMessage(randomMessage)
       })
 
-      it(`Chat Features - Send Emoji on ${item.description}`, () => {
+      it.skip(`Chat Features - Send Emoji on ${item.description}`, () => {
         cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
       })
 
@@ -76,13 +76,13 @@ data.allDevices.forEach((item) => {
         cy.chatFeaturesEditMessage(randomMessage, randomNumber)
       })
 
-      it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
         cy.get('[data-cy=toggle-sidebar]').click() // return to main screen
         cy.get('[data-cy=mobile-nav-marketplace]').click() // go to Marketplace icon
         cy.validateComingSoonModal()
       })
 
-      it(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
         cy.validateURLComingSoonModal()
       })
 
@@ -110,7 +110,7 @@ data.allDevices.forEach((item) => {
         cy.closeModal('[data-cy=glyphs-modal]')
       })
 
-      it(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
+      it.skip(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
         //Glyph Selection - Coming Soon Modal
         cy.goToConversation('cypress friend', true)
         cy.get('#glyph-toggle').click()
@@ -119,7 +119,7 @@ data.allDevices.forEach((item) => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it(`Swipe on Settings Screen on ${item.description}`, () => {
+      it.skip(`Swipe on Settings Screen on ${item.description}`, () => {
         //Swipe on Settings Screen
         cy.get('[data-cy=toggle-sidebar]').click() //Show main screen again
         cy.get('#mobile-nav').should('be.visible')
@@ -132,7 +132,7 @@ data.allDevices.forEach((item) => {
         cy.get('.close-button').click()
       })
 
-      it(`Swipe on Chat Screen on ${item.description}`, () => {
+      it.skip(`Swipe on Chat Screen on ${item.description}`, () => {
         //Swipe on Chat screen to Main screen
         cy.goToConversation('cypress friend', true)
         cy.get('[data-cy=editable-input]').should('be.visible')

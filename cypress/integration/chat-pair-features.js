@@ -21,7 +21,7 @@ const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL
 
-describe('Chat features with two accounts', () => {
+describe.skip('Chat features with two accounts', () => {
   it(
     'Ensure chat window from first account is displayed',
     { retries: 2 },
@@ -67,7 +67,7 @@ describe('Chat features with two accounts', () => {
     cy.validateAllOptionsInContextMenu('@lastMessage', optionsMessage)
   })
 
-  it.skip('Send glyph to user B', () => {
+  it('Send glyph to user B', () => {
     cy.chatFeaturesSendGlyph()
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
@@ -76,18 +76,18 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Context Menu Options - Glyph Message', () => {
+  it('Context Menu Options - Glyph Message', () => {
     let optionsGlyph = ['Add Reaction', 'Reply']
     cy.get('[data-cy=chat-glyph]').last().as('lastGlyph')
     cy.validateAllOptionsInContextMenu('@lastGlyph', optionsGlyph)
   })
 
-  it.skip('Glyphs messages cannot be edited', () => {
+  it('Glyphs messages cannot be edited', () => {
     cy.get('[data-cy=chat-glyph]').last().scrollIntoView()
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it.skip('Send image to user B', () => {
+  it('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -106,7 +106,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
-  it.skip('Send file to user B', () => {
+  it('Send file to user B', () => {
     cy.chatFeaturesSendFile(fileLocalPath)
     cy.get('[data-cy=chat-file]')
       .last()
@@ -194,7 +194,7 @@ describe('Chat features with two accounts', () => {
       .should('have.text', '😄')
   })
 
-  it.skip('Assert glyph received from user A', () => {
+  it('Assert glyph received from user A', () => {
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSecondAccountSrc) => {
@@ -202,7 +202,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert image received from user A', () => {
+  it('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -210,7 +210,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert file received from user A', () => {
+  it('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
@@ -251,13 +251,13 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@fileToReact', '😄')
   })
 
-  it.skip('Add reactions to glyph in chat', () => {
+  it('Add reactions to glyph in chat', () => {
     cy.get('[data-cy=chat-glyph]').last().as('glyphToReact')
     cy.reactToChatElement('@glyphToReact', '[title="smile"]')
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it.skip('Assert timestamp immediately after sending message', () => {
+  it('Assert timestamp immediately after sending message', () => {
     cy.chatFeaturesSendMessage(randomMessage)
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -295,7 +295,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip(
+  it(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
     { retries: 2 },
     () => {
@@ -308,7 +308,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip(
+  it(
     'Send a message from third account to second account',
     { retries: 2 },
     () => {
@@ -321,7 +321,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip(
+  it(
     'React to other users reaction - Load Account User A',
     { retries: 2 },
     () => {
@@ -334,7 +334,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip('React to other users reaction - Execute validation', () => {
+  it('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
