@@ -395,10 +395,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async createDisplayStream() {
     if (!navigator.mediaDevices.getDisplayMedia) {
-      alert(
-        "Your browser doesn't support or have permission to share your screen. Please update your browser or review your security settings.",
-      )
-      throw new Error('WebRTC display media not supported')
+      throw new Error('errors.webRTC.permission_denied')
     }
 
     let screenStream: MediaStream
@@ -406,10 +403,7 @@ export class Call extends Emitter<CallEventListeners> {
     try {
       screenStream = await navigator.mediaDevices.getDisplayMedia()
     } catch (e) {
-      alert(
-        "Your browser doesn't have permission to share your screen. Please review your security settings.",
-      )
-      throw e
+      throw new Error('errors.webRTC.permission_denied')
     }
 
     if (!this.streams[this.localId]) {

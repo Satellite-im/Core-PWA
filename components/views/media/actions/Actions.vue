@@ -55,14 +55,18 @@ export default Vue.extend({
      */
     toggleMute(kind: keyof PeerMutedState) {
       this.isLoading = true
-      if (kind === 'audio') {
-        this.$store.dispatch('audio/toggleMute', {}, { root: true })
-      } else {
-        this.$store.dispatch(
-          'webrtc/toggleMute',
-          { kind, peerId: p2p.id },
-          { root: true },
-        )
+      try {
+        if (kind === 'audio') {
+          this.$store.dispatch('audio/toggleMute', {}, { root: true })
+        } else {
+          this.$store.dispatch(
+            'webrtc/toggleMute',
+            { kind, peerId: p2p.id },
+            { root: true },
+          )
+        }
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
       }
       this.isLoading = false
     },
