@@ -16,9 +16,11 @@ export interface RawUser {
 export interface User {
   address: string
   name: string
-  servers?: any
-  status: string
   photoHash: string
+  status: string
+  bannerImageHash: string
+  extra1: string
+  extra2: string
 }
 
 export interface Group {

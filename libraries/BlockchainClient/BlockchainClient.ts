@@ -179,7 +179,7 @@ export default class BlockchainClient {
    * @returns {Promise<User | null>}
    * */
   async getUserInfo(userAddress: string): Promise<User | null> {
-    return this.adapter.getUserInfo(userAddress)
+    return await this.adapter.getUserInfo(userAddress)
   }
 
   /**
