@@ -1,23 +1,16 @@
 import {
-  ConfirmOptions,
   Keypair,
   PublicKey,
   RpcResponseAndContext,
   SignatureResult,
 } from '@solana/web3.js'
 import {
-  AcceptFriendRequestParams,
   Account,
   Adapter,
-  DenyFriendRequestParams,
   FriendAccount,
   FriendsEvents,
   FriendStatus,
   Group,
-  IncomingFriendRequest,
-  OutgoingFriendRequest,
-  RemoveFriendParams,
-  RemoveFriendRequestParams,
   User,
 } from './interfaces'
 
@@ -190,10 +183,6 @@ export default class BlockchainClient {
   }
 
   /**
-   * Friends Program
-   * /
-   
-   /**
    * @method addFriendEventListener
    * Add event listener
    * @param {string} eventName
@@ -334,10 +323,6 @@ export default class BlockchainClient {
   async closeFriendRequest(request: PublicKey): Promise<string> {
     return this.adapter.closeFriendRequest(request)
   }
-
-  /**
-   * Group Program
-   */
 
   /**
    * @method createGroup

@@ -1,11 +1,7 @@
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { encode as base58encode, decode as base58decode } from 'micro-base58'
 import { SolanaWallet } from '~/types/solana/solana'
-import {
-  Account,
-  FriendStatus,
-  Status,
-} from '~/libraries/BlockchainClient/interfaces'
+import { Account } from '~/libraries/BlockchainClient/interfaces'
 
 export const accountFromWallet = (wallet: SolanaWallet): Account => {
   return {

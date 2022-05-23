@@ -1,29 +1,18 @@
 import {
-  ConfirmOptions,
   Keypair,
   PublicKey,
   RpcResponseAndContext,
   SignatureResult,
 } from '@solana/web3.js'
 import {
-  AcceptFriendRequestParams,
   Account,
   Adapter,
   CreateUserParams,
-  DenyFriendRequestParams,
-  FindFriendsParams,
   FriendsEvents,
-  RemoveFriendParams,
-  RemoveFriendRequestParams,
-  SendFriendRequestParams,
   User,
   Group,
 } from '../../interfaces'
-import {
-  accountFromWallet,
-  publicKeyFromAddress,
-  walletFromAccount,
-} from './utils'
+import { accountFromWallet, walletFromAccount } from './utils'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
@@ -31,7 +20,6 @@ import {
   FriendAccount,
   FriendStatus,
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
-import { FriendsError } from '~/store/friends/types'
 import { AccountsError } from '~/store/accounts/types'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
@@ -56,7 +44,6 @@ export default class SolanaAdapter implements Adapter {
   constructor() {
     this.solanaManager = new SolanaManager()
     this.usersProgram = null
-    // this.friendsProgram = null
   }
 
   async initUserProgram(): Promise<void> {
@@ -128,10 +115,6 @@ export default class SolanaAdapter implements Adapter {
     }
   }
 
-  /**
-   * User Program
-   */
-
   async getUserInfo(address: string): Promise<User | null> {
     try {
       this.usersProgram = new UsersProgram(this.solanaManager)
@@ -187,27 +170,20 @@ export default class SolanaAdapter implements Adapter {
     return 'null'
   }
 
-  /**
-   * Friends Program
-   */
-
   async addEventListener(
     type: FriendsEvents,
     callback: (data?: FriendAccount) => void,
   ) {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     this.friendsProgram.addEventListener(type, callback)
   }
 
   async getFriendsByStatus(
     status: FriendStatus,
   ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.getAccountsByStatus(status)
   }
 
   async subscribeToEvents(): Promise<void> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     this.friendsProgram.subscribeToEvents()
   }
 
@@ -215,17 +191,14 @@ export default class SolanaAdapter implements Adapter {
     from: PublicKey,
     to: PublicKey,
   ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.computeAccountKeys(from, to)
   }
 
   async getFriendsPayer(): Promise<Keypair> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return this.friendsProgram.getPayer()
   }
 
   async getAccountStatus(accountKey: PublicKey): Promise<FriendStatus> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return this.friendsProgram.getAccountStatus(accountKey)
   }
 
@@ -235,42 +208,32 @@ export default class SolanaAdapter implements Adapter {
     second: PublicKey,
     k: String,
   ): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.makeRequest(request, first, second, k)
   }
 
   async getFriendAccount(accountKey: PublicKey): Promise<FriendAccount | null> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.getAccount(accountKey)
   }
 
   async acceptFriendRequest(request: PublicKey, k: String): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.acceptRequest(request, k)
   }
 
   async removeFriendRequest(request: PublicKey): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.removeRequest(request)
   }
 
   async denyFriendRequest(request: PublicKey): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.denyRequest(request)
   }
 
   async removeFriend(request: PublicKey): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return await this.friendsProgram.removeFriend(request)
   }
 
   closeFriendRequest(request: PublicKey): Promise<string> {
-    // this.friendsProgram = new FriendsProgram(this.solanaManager)
     return this.friendsProgram.closeRequest(request)
   }
-  /**
-   * Group Program
-   */
 
   async createGroup(groupId: string, name: string): Promise<Group> {
     this.groupsProgram = new GroupChatsProgram(this.solanaManager)
