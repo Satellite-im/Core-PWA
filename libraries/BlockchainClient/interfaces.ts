@@ -92,7 +92,7 @@ export interface RemoveFriendParams {
 }
 
 export enum FriendStatus {
-  UNINITALIZED,
+  UNINITIALIZED,
   PENDING,
   ACCEPTED,
   DENIED,
