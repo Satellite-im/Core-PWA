@@ -124,7 +124,32 @@ describe('misc', () => {
       updatedAt: 123,
     }
 
-    mutations.default.setParticipants(state, argument)
-    expect(state.participants).toEqual(argument)
+    mutations.default.setParticipants(state, [argument])
+    expect(state.participants).toEqual([argument])
+  })
+  test('mutations.default.addParticipant', () => {
+    const state = { ...initialState }
+    const argument = {
+      peerId: 'peerId',
+      address: 'address',
+      name: 'name',
+      profilePicture: 'profilePicture',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    const argument2 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+
+    mutations.default.setParticipants(state, [argument]) // Initial set
+    mutations.default.addParticipant(state, argument2) // Append
+    expect(state.participants).toEqual([argument, argument2])
   })
 })
