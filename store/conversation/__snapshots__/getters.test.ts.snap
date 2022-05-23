@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`misc onlineParticipants 1`] = `
+Array [
+  Object {
+    "activity": "ACTIVE",
+    "address": "address2",
+    "name": null,
+    "peerId": "peerId2",
+    "profilePicture": "profilePicture2",
+    "state": "CONNECTED",
+    "updatedAt": 123,
+  },
+]
+`;
+
+exports[`misc otherParticipants 1`] = `
+Array [
+  Object {
+    "activity": "ACTIVE",
+    "address": "address",
+    "name": "name",
+    "peerId": "peerId",
+    "profilePicture": "profilePicture",
+    "state": "CONNECTED",
+    "updatedAt": 123,
+  },
+]
+`;
