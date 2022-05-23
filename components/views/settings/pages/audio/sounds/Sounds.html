@@ -15,18 +15,13 @@
   />
   <SettingsPagesAudioSoundsItem
     :value="sound(Sounds.MUTE)"
-    @toggle="toggleSound(Sounds.MUTE, $event)"
+    @toggle="toggleSounds([Sounds.MUTE, Sounds.UNMUTE], $event)"
     :title="$t('pages.settings.notifications.sounds.mute')"
   />
   <SettingsPagesAudioSoundsItem
     :value="sound(Sounds.DEAFEN)"
-    @toggle="toggleSound(Sounds.DEAFEN, $event)"
+    @toggle="toggleSounds([Sounds.DEAFEN, Sounds.UNDEAFEN], $event)"
     :title="$t('pages.settings.notifications.sounds.deafen')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.UNDEAFEN)"
-    @toggle="toggleSound(Sounds.UNDEAFEN, $event)"
-    :title="$t('pages.settings.notifications.sounds.undeafen')"
   />
   <SettingsPagesAudioSoundsItem
     :value="sound(Sounds.UPLOAD)"
