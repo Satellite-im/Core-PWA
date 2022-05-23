@@ -14,7 +14,8 @@ export const Config = {
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
     fsTable: 'sat.json',
-    bucketName: 'personal-files',
+    privateBucket: 'personal-files',
+    sharedBucket: 'shared-files',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',

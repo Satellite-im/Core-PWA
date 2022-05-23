@@ -1,6 +1,6 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
-import { Bucket } from '../remote/textile/Bucket'
+import { PrivateBucket } from '../remote/textile/PrivateBucket'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemExport } from '../types/filesystem'
 
@@ -41,9 +41,9 @@ describe('Test FileSystem Directory', () => {
       users: 'Users',
       wallet: 'SolanaWallet',
     }
-    const bucket = new Bucket(initializationData)
+    const bucket = new PrivateBucket(initializationData)
 
-    expect(bucket.index).toBeNull()
+    expect(bucket.index).toBeUndefined()
   })
   it.skip('initialize bucket', async () => {
     const initializationData = {
@@ -54,7 +54,7 @@ describe('Test FileSystem Directory', () => {
       users: 'Users',
       wallet: 'SolanaWallet',
     }
-    const bucket = new Bucket(initializationData)
+    const bucket = new PrivateBucket(initializationData)
     try {
       await bucket.init('init')
     } catch (error) {

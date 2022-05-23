@@ -3,7 +3,7 @@ import Vue from 'vue'
 import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
-import { Bucket } from './remote/textile/Bucket'
+import { PrivateBucket } from './remote/textile/PrivateBucket'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { mimeType, isHeic, isMimeEmbeddableImage } from '~/utilities/FileType'
@@ -13,9 +13,9 @@ const convert = require('heic-convert')
 export class TextileFileSystem extends FilSystem {
   /**
    * @getter bucket
-   * @returns {Bucket} bucket global to upload files to textile
+   * @returns {PrivateBucket} bucket global to upload files to textile
    */
-  get bucket(): Bucket {
+  get bucket(): PrivateBucket {
     return Vue.prototype.$TextileManager.bucket
   }
 

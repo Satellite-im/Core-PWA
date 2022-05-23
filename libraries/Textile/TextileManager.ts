@@ -1,4 +1,4 @@
-import { Bucket } from '../Files/remote/textile/Bucket'
+import { PrivateBucket } from '../Files/remote/textile/PrivateBucket'
 import { MetadataManager } from './MetadataManager'
 import { UserInfoManager } from './UserManager'
 import { Config } from '~/config'
@@ -18,7 +18,7 @@ export default class TextileManager {
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
   bucketManager?: BucketManager
-  bucket?: Bucket
+  bucket?: PrivateBucket
   groupChatManager?: GroupChatManager
   metadataManager?: MetadataManager
   userInfoManager?: UserInfoManager
@@ -80,8 +80,11 @@ export default class TextileManager {
     await this.bucketManager.init().catch((e) => console.log(e))
 
     // Initialize bucket
-    this.bucket = new Bucket(textile)
-    await this.bucket.init(Config.textile.bucketName)
+    this.bucket = new PrivateBucket(textile)
+    await this.bucket.init({
+      name: Config.textile.privateBucket,
+      encrypted: true,
+    })
 
     // GroupChatManager initializes itself during the creation
     this.groupChatManager = new GroupChatManager(

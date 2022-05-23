@@ -1,28 +1,18 @@
 // Remote file management
 import { FileSystemErrors } from '../../errors/Errors'
-import { Fil } from '../../Fil'
-import { RFMInterface } from '../interface/RFM.interface'
 import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
-export abstract class RFM implements RFMInterface {
+export abstract class RFM {
   constructor() {
     if (this.constructor.name === 'RFM')
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
   }
 
-  updateIndex(index: FileSystemExport): void {
-    throw new Error(FileSystemErrors.METHOD_MISSING)
-  }
+  abstract updateIndex(index: FileSystemExport): void
 
-  get index(): FileSystemExport | null {
-    throw new Error(FileSystemErrors.METHOD_MISSING)
-  }
+  abstract get index(): FileSystemExport | undefined
 
-  delete(file: Fil): boolean {
-    throw new Error(FileSystemErrors.METHOD_MISSING)
-  }
+  abstract pullFile(id: string, name: string, size: number): void
 
-  upload(file: File, name: string, meta: any): string {
-    throw new Error(FileSystemErrors.METHOD_MISSING)
-  }
+  abstract removeFile(name: string): void
 }
