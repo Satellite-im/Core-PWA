@@ -6,7 +6,7 @@
     <!--      class="circle"-->
     <!--      :user="recipient"-->
     <!--      :src="src"-->
-    <!--      :clickHandler="openProfile"-->
+    <!--      @click="openProfile"-->
     <!--    />-->
     <UiUserState v-if="!isGroup" class="circle" :user="recipient" :src="src" />
     <GroupIcon v-else :group="recipient" />
