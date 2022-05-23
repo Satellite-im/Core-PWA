@@ -1,4 +1,3 @@
-import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 
@@ -23,57 +22,6 @@ export const Notifications = class Notifications {
         })
       }
     }
-
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
-      // These are shown in the notification as options the user can interact with outside of the app
-      LocalNotifications.registerActionTypes({
-        types: [
-          {
-            id: 'CHAT_MESSAGE',
-            actions: [
-              {
-                id: 'view',
-                title: 'View',
-              },
-              {
-                id: 'dismiss',
-                title: 'Dismiss',
-                destructive: true,
-              },
-              {
-                id: 'respond',
-                title: 'Respond',
-                input: true,
-              },
-            ],
-          },
-        ],
-      })
-
-      // This notification channel allows the notification to be sent and pop over the screen and other apps
-      LocalNotifications.createChannel({
-        id: 'pop-notifications',
-        name: 'Pop notifications',
-        description: 'Pop notifications',
-        importance: 5,
-        visibility: 1,
-      })
-    }
-  }
-
-  /**
-   * @method registerNotificationWatch DocsTODO
-   * @description
-   * @returns
-   * @example
-   */
-  registerNotificationWatch(): any {
-    return LocalNotifications.addListener(
-      'localNotificationReceived',
-      (notification: any) => {
-        return notification
-      },
-    )
   }
 
   /**
@@ -90,27 +38,7 @@ export const Notifications = class Notifications {
     ) {
       Notification.requestPermission()
     }
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
-      // and maybe iOS?
-      LocalNotifications.requestPermissions().then((result: any) => {
-        return result
-      })
-    }
   }
-
-  /* Not sure if this section will be needed yet - in web and android it is not
-   revokeNotificationPermission(): void {
-     if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
-        // Notification api for web doesn't let us revoke, has to happen in browser
-     }
-     if (this.currentPlatform === 'android') {
-        // do something, android doesnt seem to require us asking
-        ;(LocalNotifications as any).requestPermissions().then((result: any) => {
-        LocalNotifications.register()
-          alert(result)
-        })
-     }
-   } */
 
   /**
    * @method sendNotifications DocsTODO
@@ -133,31 +61,6 @@ export const Notifications = class Notifications {
       await new Notification(type, {
         tag: titleText,
         body: message,
-      })
-    }
-
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            title: titleText,
-            body: message,
-            id: new Date().getTime(),
-            schedule: {
-              at: new Date(new Date().getTime() + 3000),
-              allowWhileIdle: true,
-            },
-            actionTypeId: 'CHAT_MESSAGE',
-            extra: null,
-            attachments: [
-              {
-                id: 'face',
-                url: 'res://ic_launcher.png',
-              },
-            ],
-            channelId: 'pop-notifications',
-          },
-        ],
       })
     }
   }

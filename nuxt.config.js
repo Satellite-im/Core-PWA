@@ -4,7 +4,6 @@ import pkg from './package.json'
 export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js',
-    'merge-options': 'merge-options/index.js',
   },
   bridge: {
     nitro: false,
