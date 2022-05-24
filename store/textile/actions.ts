@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
 import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
-import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import { MessageRouteEnum, MessagingTypesEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
@@ -215,15 +215,47 @@ export default {
     })
 
     if (isActiveConversation) {
+      const { messages, isScrollOver, lastLoadedMessageId, offset } =
+        rootState.chat.currentChat
+
+      let messageId: string = ''
+
+      if (message.type === MessagingTypesEnum.REACTION) {
+        messageId = message.reactedTo
+      } else if (message.type === MessagingTypesEnum.REPLY) {
+        messageId = message.repliedTo
+      } else {
+        messageId = message.id
+      }
+
       const newGroupedMessages = state.conversations[address].groupedMessages
 
+      const isExistMessageIndex = messages.findIndex(
+        (m: Message) => m.id === messageId,
+      )
+
+      // update existed message
+      if (isExistMessageIndex !== -1) {
+        const newMessages = [...messages]
+        newMessages[isExistMessageIndex] = newGroupedMessages.find(
+          (message) => message.id === messageId,
+        )
+        commit(
+          'chat/setCurrentChat',
+          {
+            messages: newMessages,
+          },
+          { root: true },
+        )
+        return
+      }
+
+      // add new messages
       const diffGroupedMessages =
         newGroupedMessages.length - oldGroupedMessages.length
 
       if (diffGroupedMessages) {
         const newMessages = newGroupedMessages.slice(oldGroupedMessages.length)
-        const { messages, isScrollOver, lastLoadedMessageId, offset } =
-          rootState.chat.currentChat
 
         commit(
           'chat/setCurrentChat',

@@ -10,6 +10,7 @@ export const initialCurrentChat = {
   lastLoadedMessageId: '',
   isScrollOver: true,
   offset: 0,
+  showOlderMessagesInfo: false,
 }
 
 const InitialChatState = (): ChatState => ({

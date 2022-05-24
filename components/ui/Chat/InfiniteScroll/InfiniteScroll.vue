@@ -1,23 +1,31 @@
 <template src="./InfiniteScroll.html" />
 
-<script>
+<script lang="ts">
+import { PropType } from 'vue'
+
 const defaultOptions = {
-  threshold: 0,
+  threshold: 0 as number | number[],
   rootMargin: '0px',
   root: null,
+}
+
+declare interface BaseComponentData {
+  scrollObserver: IntersectionObserver | null
+  isIntersecting: boolean
+  isComplete: boolean
 }
 
 export default {
   name: 'InfiniteScroll',
   props: {
     options: {
-      type: Object,
+      type: Object as PropType<typeof defaultOptions>,
       default: () => defaultOptions,
       required: false,
     },
   },
   emits: ['intersect'],
-  data() {
+  data(): BaseComponentData {
     return {
       scrollObserver: null,
       isIntersecting: false,

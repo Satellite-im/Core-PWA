@@ -29,6 +29,16 @@
         <UiLoadersLoadingBar />
       </div>
     </div>
+    <UiChatInfo
+      v-if="showOlderMessageInfo"
+      :caption="$t('pages.chat.older_messages')"
+      class="conversation-info"
+      type="primary"
+      @click="handleClick()"
+    >
+      <chevron-down-icon size="1.5x" />
+      {{ $t('pages.chat.recent_messages') }}
+    </UiChatInfo>
     <UiChatInfiniteScroll
       class="conversation-infiniteScroll"
       :class="{ 'is-reversed': direction === 'top' }"

@@ -76,15 +76,13 @@ export default {
         break
     }
 
-    console.log('from', from)
-    console.log('to', to)
-
     const newMessages = allMessages?.slice(from, to)
 
     if (!newMessages?.length) {
       commit('setCurrentChat', {
         hasNextPage: false,
         isMessagesLoading: false,
+        lastLoadedMessageId: messages[0].id,
       })
       return
     }

@@ -18,6 +18,5 @@ export interface ICurrentChat {
   direction: 'top' | 'bottom'
   isMessagesLoading: boolean
   lastLoadedMessageId: string
-  isScrollOver: boolean
   offset: number
 }

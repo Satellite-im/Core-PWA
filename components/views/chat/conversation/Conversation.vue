@@ -2,8 +2,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { ChevronDownIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    ChevronDownIcon,
+  },
   props: {},
   computed: {
     ...mapState(['ui', 'textile', 'chat']),
@@ -22,6 +26,9 @@ export default Vue.extend({
     },
     conversationId() {
       return this.$route.params?.address
+    },
+    showOlderMessageInfo() {
+      return this.ui.showOlderMessagesInfo
     },
   },
   beforeDestroy() {
@@ -57,6 +64,9 @@ export default Vue.extend({
       } else {
         complete()
       }
+    },
+    handleClick() {
+      this.$refs.chatScroll?.autoScrollToBottom()
     },
   },
 })
