@@ -3,6 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
 import { FileMessage } from '~/types/textile/mailbox'
+// @ts-ignore
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({

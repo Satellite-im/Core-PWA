@@ -17,6 +17,7 @@ import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { UserThreadData } from '~/types/textile/user'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
+import { Config } from '~/config'
 
 export default {
   /**
@@ -410,13 +411,13 @@ async function uploadPicture(image: string) {
     })
 
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  $TextileManager.bucketManager?.getBucket()
-  const result = await $TextileManager.bucketManager?.pushFile(
+  const path = await $TextileManager.sharedBucket?.pushFile(
     imageFile,
     imageFile.name,
+    () => {},
   )
 
-  return result?.path.root.toString() ?? ''
+  return Config.textile.browser + path
 }
 
 export const exportForTesting = {

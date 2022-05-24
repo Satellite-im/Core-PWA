@@ -16,7 +16,7 @@ export class TextileFileSystem extends FilSystem {
    * @returns {PrivateBucket} bucket global to upload files to textile
    */
   get bucket(): PrivateBucket {
-    return Vue.prototype.$TextileManager.bucket
+    return Vue.prototype.$TextileManager.privateBucket
   }
 
   /**

@@ -1,12 +1,11 @@
-import { BucketAbstract } from '../abstracts/Bucket.abstract'
+import Vue from 'vue'
+import { BucketAbstract } from '~/libraries/Files/remote/abstracts/Bucket.abstract'
 import { Config } from '~/config'
-import {
-  FileSystemExport,
-  FILESYSTEM_TYPE,
-} from '~/libraries/Files/types/filesystem'
+import { FileSystemExport } from '~/libraries/Files/types/filesystem'
 
 export class PrivateBucket extends BucketAbstract {
   private _index?: FileSystemExport
+
   /**
    * @getter
    * @returns file system export data
@@ -19,18 +18,11 @@ export class PrivateBucket extends BucketAbstract {
    * @method init
    * @description Initializes bucket
    * @param name bucket name
-   * @returns {Promise<FileSystemExport>} a promise that resolves when the initialization completes
    */
-  async init({
-    name,
-    encrypted,
-  }: {
-    name: string
-    encrypted: boolean
-  }): Promise<FileSystemExport> {
+  async init({ name, encrypted }: { name: string; encrypted: boolean }) {
     await this.getBucket({ name, encrypted })
     if (!this._buckets || !this._key) {
-      throw new Error('woah')
+      throw new Error('Bucket or bucket key not found')
     }
     try {
       const data = []
@@ -45,16 +37,9 @@ export class PrivateBucket extends BucketAbstract {
           type: 'application/json',
         }).text(),
       )
-
-      if (!this._index) throw new Error('Index not found')
-
-      return this._index
+      Vue.prototype.$Logger.log('File System', 'Initialized')
     } catch (e) {
-      return {
-        type: FILESYSTEM_TYPE.DEFAULT,
-        version: 1,
-        content: [],
-      }
+      Vue.prototype.$Logger.log('File System', 'Not Found')
     }
   }
 

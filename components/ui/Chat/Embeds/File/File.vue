@@ -24,6 +24,15 @@ export default Vue.extend({
       return isMimeEmbeddableImage(this.file.type)
     },
   },
+  methods: {
+    download() {
+      this.$TextileManager.sharedBucket?.pullFile(
+        this.file.id,
+        this.file.name,
+        this.file.size,
+      )
+    },
+  },
 })
 </script>
 <style lang="less" scoped src="./File.less"></style>

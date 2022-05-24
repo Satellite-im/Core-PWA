@@ -6,12 +6,7 @@
       <TypographySubtitle :size="6" :text="`${file.name}`" />
       <TypographyText :text="`${file.type} - ${getFileSize}`" />
     </div>
-    <a
-      :href="file.url"
-      target="_blank"
-      class="button is-primary"
-      data-cy="chat-file"
-    >
+    <a @click="download" class="button is-primary" data-cy="chat-file">
       <download-icon size="1x" class="download" />
     </a>
   </template>

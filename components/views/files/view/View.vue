@@ -57,7 +57,7 @@ export default Vue.extend({
           .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
-        await this.$TextileManager.bucket?.pullFile(
+        await this.$TextileManager.privateBucket?.pullFile(
           this.file.id,
           this.file.extension === fileExt
             ? this.file.name

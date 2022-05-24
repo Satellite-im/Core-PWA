@@ -1,7 +1,10 @@
 import { Buckets, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
 import { Config } from '~/config'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+import {
+  FileSystemExport,
+  SharedBucketIndex,
+} from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
 import { TextileError } from '~/store/textile/types'
@@ -17,7 +20,7 @@ export abstract class BucketAbstract extends RFM {
     this._textile = textile
   }
 
-  abstract get index(): FileSystemExport | undefined
+  abstract get index(): FileSystemExport | SharedBucketIndex | undefined
 
   /**
    * @method getBucket
@@ -25,7 +28,7 @@ export abstract class BucketAbstract extends RFM {
    * @param param0 bucket name and encrypted status
    * @returns a promise that resolves when the initialization completes
    */
-  async getBucket({ name, encrypted }: { name: string; encrypted: boolean }) {
+  async getBucket({ name, encrypted }: { name: string; encrypted?: boolean }) {
     if (!Config.textile.key) {
       throw new Error('Textile key not found')
     }
@@ -54,8 +57,13 @@ export abstract class BucketAbstract extends RFM {
    * @param {File} file file to be uploaded
    * @param {string} path uuid to maintain unique bucket paths
    * @param {Function} progressCallback used to show progress meter in componment that calls this method
+   * @returns {string} path to file, used moreso for shared buckets
    */
-  async pushFile(file: File, path: string, progressCallback: Function) {
+  async pushFile(
+    file: File,
+    path: string,
+    progressCallback: Function,
+  ): Promise<string> {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
@@ -75,6 +83,7 @@ export abstract class BucketAbstract extends RFM {
       },
     )
     this._root = res.root
+    return res.path.path
   }
 
   private _getStream(file: File) {

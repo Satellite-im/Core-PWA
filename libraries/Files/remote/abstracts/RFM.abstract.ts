@@ -1,6 +1,9 @@
 // Remote file management
 import { FileSystemErrors } from '../../errors/Errors'
-import { FileSystemExport } from '~/libraries/Files/types/filesystem'
+import {
+  FileSystemExport,
+  SharedBucketIndex,
+} from '~/libraries/Files/types/filesystem'
 
 export abstract class RFM {
   constructor() {
@@ -8,9 +11,9 @@ export abstract class RFM {
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
   }
 
-  abstract updateIndex(index: FileSystemExport): void
+  abstract updateIndex(index: FileSystemExport | SharedBucketIndex): void
 
-  abstract get index(): FileSystemExport | undefined
+  abstract get index(): FileSystemExport | SharedBucketIndex | undefined
 
   abstract pullFile(id: string, name: string, size: number): void
 

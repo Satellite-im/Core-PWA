@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
+import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -62,7 +63,7 @@ export default {
 
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
-    const fsExport = $TextileManager.bucket?.index
+    const fsExport = $TextileManager.privateBucket?.index
 
     if (fsExport) {
       const $FileSystem: FilSystem = Vue.prototype.$FileSystem
@@ -326,21 +327,20 @@ export default {
     commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const path = `/${file.file.name}`
-    $TextileManager.bucketManager?.getBucket()
-    const result = await $TextileManager.bucketManager?.pushFile(
+    const id = uuidv4()
+    const path = await $TextileManager.sharedBucket?.pushFile(
       file.file,
-      path,
+      id,
       (progress: number) => {
         commit('setUploadingFileProgress', {
-          progress,
+          progress: Math.floor((progress / file.file.size) * 100),
           name: file.file.name,
         })
       },
     )
     /* If already canceled */
     if (!rootState.textile.messageLoading) return
-    const fileURL = `${Config.textile.browser}${result?.root}${path}`
+    const fileURL = Config.textile.browser + path
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
@@ -356,6 +356,7 @@ export default {
             name: file.file.name,
             size: file.file.size,
             type: file.file.type,
+            id,
           },
           type: 'file',
         },
@@ -845,11 +846,10 @@ export default {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const group = getGroup(rootState, groupID)
-    const path = `/${file.file.name}`
-    $TextileManager.bucketManager?.getBucket()
-    const result = await $TextileManager.bucketManager?.pushFile(
+    const id = uuidv4()
+    const path = await $TextileManager.sharedBucket?.pushFile(
       file.file,
-      path,
+      id,
       (progress: number) => {
         commit('setUploadingFileProgress', {
           progress,
@@ -857,7 +857,7 @@ export default {
         })
       },
     )
-    const fileURL = `${Config.textile.browser}${result?.root}${path}`
+    const fileURL = Config.textile.browser + path
 
     const sendFileResult =
       await $TextileManager.groupChatManager?.sendMessage<'file'>(group, {
@@ -1038,11 +1038,11 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
-    if (!$TextileManager.bucket) {
+    if (!$TextileManager.privateBucket) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
 
-    await $TextileManager.bucket.updateIndex($FileSystem.export)
+    await $TextileManager.privateBucket.updateIndex($FileSystem.export)
     dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
     })
