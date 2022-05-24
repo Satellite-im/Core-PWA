@@ -1089,12 +1089,11 @@ export default {
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
     const callback = (update?: Update<UserThreadData>) => {
       if (!update || !update.instance) return
-      console.log('update', update.instance)
       if (
         update.instance.filesVersion &&
         rootState.textile.userThread.filesVersion !== $FileSystem.version
       ) {
-        console.log('todo - update file system based on bucket index')
+        // todo - update file system AP-1477
       }
       commit('textile/setUserThreadData', update.instance, { root: true })
     }
