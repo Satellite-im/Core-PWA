@@ -57,7 +57,7 @@ export default {
    * @example
    */
   async fetchFriendRequests({ commit }: ActionsArguments<FriendsState>) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const { incoming, outgoing } = await $BlockchainClient.getFriendsByStatus(
       FriendStatus.PENDING,
@@ -93,7 +93,7 @@ export default {
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const { incoming, outgoing } = await $BlockchainClient.getFriendsByStatus(
       FriendStatus.ACCEPTED,
@@ -123,7 +123,7 @@ export default {
     friendAccount: FriendAccount,
   ) {
     // First grab the users from local db
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $Hounddog: Hounddog = Vue.prototype.$Hounddog
 
@@ -284,7 +284,7 @@ export default {
     commit,
     rootState,
   }: ActionsArguments<FriendsState>) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     $BlockchainClient.subscribeToEvents()
 
@@ -352,7 +352,7 @@ export default {
     { commit }: ActionsArguments<FriendsState>,
     { friendToKey }: CreateFriendRequestArguments,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -421,7 +421,7 @@ export default {
     { commit, dispatch }: ActionsArguments<FriendsState>,
     { friendRequest }: AcceptFriendRequestArguments,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -485,7 +485,7 @@ export default {
     { commit }: ActionsArguments<FriendsState>,
     friendRequest: FriendRequest,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const payerAccount = await $BlockchainClient.payerAccount
 
@@ -514,7 +514,7 @@ export default {
     { commit }: ActionsArguments<FriendsState>,
     friendRequest: OutgoingRequest,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const payerAccount = $BlockchainClient.payerAccount
 
@@ -542,7 +542,7 @@ export default {
     { commit }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const payerAccount = await $BlockchainClient.payerAccount
 
@@ -566,7 +566,7 @@ export default {
    * @example
    */
   async closeAccount({}: ActionsArguments<FriendsState>, accountId: string) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const payerAccount = await $BlockchainClient.payerAccount
 
     if (!payerAccount) {

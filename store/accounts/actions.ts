@@ -91,7 +91,7 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
@@ -150,7 +150,7 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const mnemonic = state.phrase
 
@@ -203,7 +203,7 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     if (!state.initialized) {
       const mnemonic = state.phrase
@@ -296,7 +296,7 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     image: string,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const imagePath = await uploadPicture(image)
 
@@ -326,7 +326,7 @@ export default {
     { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
@@ -368,8 +368,7 @@ export default {
     }: { initTextile?: boolean; payerPublicKey?: string },
   ) {
     if (initTextile) {
-      const $BlockchainClient: BlockchainClient =
-        Vue.prototype.$BlockchainClient
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       const { pin } = state
       await dispatch(
         'textile/initialize',

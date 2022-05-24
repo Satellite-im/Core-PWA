@@ -18,7 +18,7 @@ const getGroupChatManager = (): GroupChatManager => {
 }
 
 const getUserAccount = () => {
-  const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+  const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
   const account = $BlockchainClient.account
 
   if (!account) {
@@ -46,7 +46,7 @@ export default {
     { commit }: ActionsArguments<GroupsState>,
     { name }: { name: string },
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const groupChatManager = getGroupChatManager()
 
     const groupId = await groupChatManager.createGroupConversation()
@@ -68,7 +68,7 @@ export default {
       { root: true },
     )
 
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const { address } = getUserAccount()
 
     const groups = await $BlockchainClient.getUserGroups(address)
@@ -109,7 +109,7 @@ export default {
     {}: ActionsArguments<GroupsState>,
     { group, recipient }: { group: Group; recipient: string },
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     await $BlockchainClient.inviteToGroup(group.id, recipient)
   },
 
@@ -127,7 +127,7 @@ export default {
       await dispatch('unsubscribeFromGroupInvites')
     }
 
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const id = $BlockchainClient.addGroupInviteListener((payload) => {
       commit('addGroup', { ...payload, members: [] })
       dispatch('fetchGroupMembers', payload.id)
@@ -147,8 +147,7 @@ export default {
     commit,
   }: ActionsArguments<GroupsState>) {
     if (state.inviteSubscription) {
-      const $BlockchainClient: BlockchainClient =
-        Vue.prototype.$BlockchainClient
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       await $BlockchainClient.unsubscribeGroupInvite(state.inviteSubscription)
       commit('setInviteSubscription', null)
     }
@@ -167,7 +166,7 @@ export default {
     if (state.groupSubscriptions.length) {
       await dispatch('unsubscribeFromGroupsUpdate')
     }
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const ids = await $BlockchainClient.addGroupsListener((payload) => {
       commit('updateGroup', payload)
       dispatch('fetchGroupMembers', payload.id)
@@ -186,8 +185,7 @@ export default {
     groupId: string,
   ) {
     if (!state.groupSubscriptions.includes(groupId)) {
-      const $BlockchainClient: BlockchainClient =
-        Vue.prototype.$BlockchainClient
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       const id = await $BlockchainClient.addGroupListener(
         groupId,
         (payload) => {
@@ -208,7 +206,7 @@ export default {
     state,
     commit,
   }: ActionsArguments<GroupsState>) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     if (state.groupSubscriptions.length) {
       await $BlockchainClient.removeGroupListeners(state.groupSubscriptions)
       commit('setGroupSubscriptions', [])
@@ -226,8 +224,7 @@ export default {
     groupId: string,
   ) {
     if (!state.all.find((group) => group.id === groupId)) {
-      const $BlockchainClient: BlockchainClient =
-        Vue.prototype.$BlockchainClient
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       const group = await $BlockchainClient.getGroupById(groupId)
 
       commit('addGroup', group)
@@ -243,7 +240,7 @@ export default {
     { commit }: ActionsArguments<GroupsState>,
     groupId: string,
   ) {
-    const $BlockchainClient: BlockchainClient = Vue.prototype.$BlockchainClient
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     const addresses = await $BlockchainClient.getGroupUsers(groupId)
     const members = await $BlockchainClient.getUsersInfo(addresses)

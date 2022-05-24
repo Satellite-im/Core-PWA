@@ -4,9 +4,9 @@
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["Dexie", "minisearch"],
-  "nuxt.isNuxtApp": true,
-  "[typescript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  }
+  "cSpell.words": [
+    "Dexie",
+    "minisearch"
+  ],
+  "nuxt.isNuxtApp": true
 }

@@ -4,6 +4,7 @@ import {
   RpcResponseAndContext,
   SignatureResult,
 } from '@solana/web3.js'
+import SolanaAdapter from './adapters/SolanaAdapter'
 import {
   Account,
   Adapter,
@@ -15,12 +16,21 @@ import {
 } from './interfaces'
 
 export default class BlockchainClient {
+  private static instance: BlockchainClient // eslint-disable-line no-use-before-define
   private adapter: Adapter
   private _account?: Account
   private _payerAccount?: Keypair
 
-  constructor(adapter: Adapter) {
+  private constructor(adapter: Adapter) {
     this.adapter = adapter
+  }
+
+  public static getInstance(): BlockchainClient {
+    if (!BlockchainClient.instance) {
+      BlockchainClient.instance = new BlockchainClient(new SolanaAdapter())
+    }
+
+    return BlockchainClient.instance
   }
 
   /**
@@ -179,7 +189,7 @@ export default class BlockchainClient {
    * @returns {Promise<User | null>}
    * */
   async getUserInfo(userAddress: string): Promise<User | null> {
-    return await this.adapter.getUserInfo(userAddress)
+    return this.adapter.getUserInfo(userAddress)
   }
 
   /**
@@ -212,7 +222,7 @@ export default class BlockchainClient {
    *  @method subscribeToEvents
    *  Subscribe to events
    */
-  async subscribeToEvents(): Promise<void> {
+  subscribeToEvents(): void {
     this.adapter.subscribeToEvents()
   }
 
@@ -236,7 +246,7 @@ export default class BlockchainClient {
    * @returns the payer account
    */
   async getFriendsPayer(): Promise<Keypair> {
-    return await this.adapter.getFriendsPayer()
+    return this.adapter.getFriendsPayer()
   }
 
   /**
@@ -263,7 +273,7 @@ export default class BlockchainClient {
     second: PublicKey,
     k: String,
   ): Promise<string> {
-    return await this.adapter.makeFriendRequest(request, first, second, k)
+    return this.adapter.makeFriendRequest(request, first, second, k)
   }
 
   /**
@@ -284,7 +294,7 @@ export default class BlockchainClient {
    * @returns transaction hash of accept friend request
    */
   async acceptFriendRequest(request: PublicKey, k: String): Promise<string> {
-    return await this.adapter.acceptFriendRequest(request, k)
+    return this.adapter.acceptFriendRequest(request, k)
   }
 
   /**
@@ -293,7 +303,7 @@ export default class BlockchainClient {
    * @param request friend request account public key
    */
   async removeFriendRequest(request: PublicKey): Promise<string> {
-    return await this.adapter.removeFriendRequest(request)
+    return this.adapter.removeFriendRequest(request)
   }
 
   /**
@@ -331,7 +341,7 @@ export default class BlockchainClient {
    * @param name Group name
    */
   async createGroup(groupId: string, name: string): Promise<Group> {
-    return await this.adapter.createGroup(groupId, name)
+    return this.adapter.createGroup(groupId, name)
   }
 
   /**
@@ -341,13 +351,13 @@ export default class BlockchainClient {
    * @returns Promise<Group[]>
    */
   async getUserGroups(address: string | PublicKey): Promise<Group[]> {
-    return await this.adapter.getUserGroups(address)
+    return this.adapter.getUserGroups(address)
   }
 
   async getGroupsUsers(
     groupIds: string[],
   ): Promise<{ id: string; users: string[] }[]> {
-    return await this.adapter.getGroupsUsers(groupIds)
+    return this.adapter.getGroupsUsers(groupIds)
   }
 
   /**
@@ -390,7 +400,7 @@ export default class BlockchainClient {
     id: string,
     cb: (value: Group) => void,
   ): Promise<string> {
-    return await this.adapter.addGroupListener(id, cb)
+    return this.adapter.addGroupListener(id, cb)
   }
 
   /**
@@ -408,7 +418,7 @@ export default class BlockchainClient {
    * @returns Promise<Group>
    */
   async getGroupById(groupId: string): Promise<Group> {
-    return await this.adapter.getGroupById(groupId)
+    return this.adapter.getGroupById(groupId)
   }
 
   /**
@@ -417,7 +427,7 @@ export default class BlockchainClient {
    * @returns Promise<string[]> array of user addresses
    */
   async getGroupUsers(groupId: string): Promise<string[]> {
-    return await this.adapter.getGroupUsers(groupId)
+    return this.adapter.getGroupUsers(groupId)
   }
 
   /**

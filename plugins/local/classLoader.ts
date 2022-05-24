@@ -1,12 +1,10 @@
 // This file is used to bind local classes to vue global context
 
 import Vue from 'vue'
-import logger from './logger'
 import { Config } from '~/config'
 // Libs
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import SoundManager from '~/libraries/SoundManager/SoundManager'
-import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
@@ -60,7 +58,7 @@ Vue.prototype.$Config = Config
 Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$FileSystem = new TextileFileSystem()
-Vue.prototype.$BlockchainClient = new BlockchainClient(new SolanaAdapter())
+Vue.prototype.$BlockchainClient = BlockchainClient.getInstance()
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {

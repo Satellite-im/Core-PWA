@@ -72,7 +72,7 @@ export default Vue.extend({
       this.error = ''
       try {
         const $BlockchainClient: BlockchainClient =
-          Vue.prototype.$BlockchainClient
+          BlockchainClient.getInstance()
 
         const friend = await $BlockchainClient.getUserInfo(accountID)
         if (!friend) {

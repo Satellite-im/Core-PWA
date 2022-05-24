@@ -29,6 +29,11 @@ export default class SolanaAdapter implements Adapter {
   private groupsProgram: GroupChatsProgram | null = null
   private _friendsProgram: FriendsProgram | null = null
 
+  constructor() {
+    this.solanaManager = new SolanaManager()
+    this.usersProgram = null
+  }
+
   get friendsProgram(): FriendsProgram {
     if (this._friendsProgram) return this._friendsProgram
     if (this.solanaManager.isInitialized()) {
@@ -39,11 +44,6 @@ export default class SolanaAdapter implements Adapter {
     throw new Error(
       'Unable to get FriendsProgram instance: Solana not initialized yet',
     )
-  }
-
-  constructor() {
-    this.solanaManager = new SolanaManager()
-    this.usersProgram = null
   }
 
   async initUserProgram(): Promise<void> {
