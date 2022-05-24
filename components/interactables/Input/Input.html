@@ -16,6 +16,7 @@
       :placeholder="placeholder"
       @input="update"
       ref="input"
+      :maxLength="maxLength"
     />
     <button
       v-if="deleteIcon && internalText.length"

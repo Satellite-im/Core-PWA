@@ -89,6 +89,10 @@ export default Vue.extend({
       required: false,
       default: false,
     },
+    maxLength: {
+      type: Number,
+      default: 256,
+    },
   },
   data() {
     return {
