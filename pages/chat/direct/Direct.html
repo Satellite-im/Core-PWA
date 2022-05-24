@@ -1,6 +1,6 @@
 <div id="direct">
   <UiLoadersMessage
-    :count="3"
+    :count="6"
     v-if="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
   />
   <Conversation v-else />

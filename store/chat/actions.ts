@@ -82,7 +82,7 @@ export default {
       commit('setCurrentChat', {
         hasNextPage: false,
         isMessagesLoading: false,
-        lastLoadedMessageId: messages[0].id,
+        lastLoadedMessageId: messages[0] && messages[0].id,
       })
       return
     }
