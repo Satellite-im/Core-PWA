@@ -103,7 +103,7 @@
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
           />
-          <div v-for="(thing,i) in usersAndGroups">
+          <div v-for="thing in usersAndGroups">
             <User
               v-if="!thing.admin"
               :key="thing.address"

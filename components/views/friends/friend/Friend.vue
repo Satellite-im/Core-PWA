@@ -2,7 +2,6 @@
 <script lang="ts">
 import { PublicKey } from '@solana/web3.js'
 import Vue, { PropType } from 'vue'
-
 import {
   XIcon,
   CheckIcon,
@@ -11,17 +10,11 @@ import {
   CircleIcon,
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
-
+import { ContextMenuItem } from '~/store/ui/types'
 import { Friend } from '~/types/ui/friends'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { AddFriendEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    removeFriend: () => void
-  }
-}
 
 export default Vue.extend({
   components: {
@@ -59,9 +52,6 @@ export default Vue.extend({
     return {
       loadCheck: false,
       loading: '' as AddFriendEnum,
-      contextMenuValues: [
-        { text: this.$t('context.remove'), func: this.removeFriend },
-      ],
     }
   },
   computed: {
@@ -72,6 +62,9 @@ export default Vue.extend({
         this.friend?.request?.userInfo?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    contextMenuValues(): ContextMenuItem[] {
+      return [{ text: this.$t('context.remove'), func: this.removeFriend }]
+    },
   },
   beforeDestroy() {
     this.$store.commit('ui/toggleContextMenu', false)
@@ -81,7 +74,7 @@ export default Vue.extend({
       this.loading = AddFriendEnum.SENDING
       try {
         await this.$store.dispatch('friends/createFriendRequest', {
-          friendToKey: new PublicKey(this.$props.friend.account.accountId),
+          friendToKey: new PublicKey(this.friend.account.accountId),
         })
         this.$emit('requestSent', '')
       } catch (e: any) {
@@ -95,11 +88,11 @@ export default Vue.extend({
       this.loadCheck = true
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
-          friendRequest: this.$props.friend.request,
+          friendRequest: this.friend.request,
         })
         const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
         this.$store.commit('textile/setConversation', {
-          address: this.$props.friend.address,
+          address: this.friend.address,
           messages: [],
           limit: query.limit,
           skip: query.skip,
@@ -117,7 +110,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch(
           'friends/denyFriendRequest',
-          this.$props.friend.request,
+          this.friend.request,
         )
       } finally {
         this.loading = AddFriendEnum.EMPTY
@@ -140,14 +133,14 @@ export default Vue.extend({
       try {
         await this.$store.dispatch(
           'friends/removeFriendRequest',
-          this.$props.friend.request,
+          this.friend.request,
         )
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }
     },
     sendMessageRequest() {
-      this.$router.push(`/chat/direct/${this.$props.friend.address}`)
+      this.$router.push(`/chat/direct/${this.friend.address}`)
     },
   },
 })

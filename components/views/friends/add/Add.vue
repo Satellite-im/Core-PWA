@@ -1,14 +1,11 @@
 <template src="./Add.html"></template>
 <script lang="ts">
-import { PublicKey } from '@solana/web3.js'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
-
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -20,8 +17,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      size: 150,
-      featureReadyToShow: false,
       error: '',
       accountID: '',
       searching: false,
@@ -29,9 +24,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState({
+      myAccountID: (state) => (state as RootState).accounts.active,
+      allFriends: (state) => (state as RootState).friends.all,
+    }),
     friendInviteUrl(): string {
-      return `${location.origin}/#/friends/list/${this.accounts.active}`
+      return `${location.origin}/#/friends/list/${this.myAccountID}`
     },
   },
   mounted() {
@@ -45,6 +43,7 @@ export default Vue.extend({
       if (!this.accountID.length) {
         this.error = ''
         this.friend = null
+        this.searching = false
         return
       }
       if (this.accountID.length >= 40) {
@@ -57,14 +56,12 @@ export default Vue.extend({
       this.friend = null
       this.searching = true
       const accountID = this.accountID.trim()
-      if (accountID === this.$store.state.accounts.active) {
+      if (accountID === this.myAccountID) {
         this.error = this.$t('friends.self_add') as string
         return
       }
       if (
-        this.$store.state.friends.all.filter(
-          (f: Friend) => f?.account?.accountId === accountID,
-        ).length === 1
+        this.allFriends.some((f: Friend) => f?.account?.accountId === accountID)
       ) {
         this.error = this.$t('friends.already_friend') as string
         return
@@ -75,6 +72,7 @@ export default Vue.extend({
           BlockchainClient.getInstance()
 
         const friend = await $BlockchainClient.getUserInfo(accountID)
+
         if (!friend) {
           this.error = this.$t('friends.not_found') as string
           return
@@ -95,14 +93,17 @@ export default Vue.extend({
 
       this.searching = false
     },
-    onFriendRequestSent(error: string) {
+    onFriendRequestSent(error?: string) {
+      if (error) {
+        this.error = error
+        return
+      }
       this.friend = null
       this.accountID = ''
-      if (!error) {
-        this.$toast.show(this.$t('friends.request_sent') as string)
-      } else {
-        this.error = error
-      }
+      // @ts-ignore
+      const input = this.$refs.input.$refs.input as HTMLInputElement
+      input.value = ''
+      this.$toast.show(this.$t('friends.request_sent') as string)
     },
   },
 })
