@@ -11,6 +11,7 @@
     :placeholder="$t('friends.search_placeholder')"
     :maxLength="44"
     @update="_searchFriend"
+    ref="input"
     autofocus
   />
   <TypographyError v-if="error" :text="$t(error)" />

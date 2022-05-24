@@ -2,14 +2,12 @@
 <script lang="ts">
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
-
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import { RootState } from '~/types/store/store'
 
@@ -46,6 +44,7 @@ export default Vue.extend({
       if (!this.accountID.length) {
         this.error = ''
         this.friend = null
+        this.searching = false
         return
       }
       if (this.accountID.length >= 40) {
@@ -92,14 +91,17 @@ export default Vue.extend({
 
       this.searching = false
     },
-    onFriendRequestSent(error: string) {
+    onFriendRequestSent(error?: string) {
+      if (error) {
+        this.error = error
+        return
+      }
       this.friend = null
       this.accountID = ''
-      if (!error) {
-        this.$toast.show(this.$t('friends.request_sent') as string)
-      } else {
-        this.error = error
-      }
+      // @ts-ignore
+      const input = this.$refs.input.$refs.input as HTMLInputElement
+      input.value = ''
+      this.$toast.show(this.$t('friends.request_sent') as string)
     },
   },
 })
