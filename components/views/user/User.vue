@@ -173,7 +173,7 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      if (this.user.address === this.$store.state.textile.activeConversation) {
+      if (this.user.address === this.$route.params.address) {
         this.$store.dispatch('ui/setChatbarFocus')
         return
       }

@@ -74,9 +74,12 @@ export default Vue.extend({
       if (this.$route.params.address === this.user.address) {
         if (this.$device.isMobile) {
           this.$store.commit('ui/showSidebar', false)
+        } else {
+          this.$store.dispatch('ui/setChatbarFocus')
         }
         return
       }
+
       this.$store.dispatch('conversation/setConversation', {
         id: this.user.address,
         type: 'friend',
