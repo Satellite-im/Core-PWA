@@ -8,7 +8,7 @@ const getPlatform = () => {
     return 'android'
   }
 
-  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+  if (/iPad|iPhone/.test(userAgent) && !(window as any).MSStream) {
     return 'ios'
   }
 
