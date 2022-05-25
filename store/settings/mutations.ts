@@ -51,8 +51,8 @@ const mutations = {
   setTimezone(state: SettingsState, value: string) {
     state.timezone = value
   },
-  removeAppState(state: SettingsState, value: boolean) {
-    state.removeState = value
+  removeAppState(state: SettingsState) {
+    state.removeState = true
   },
   setServerType(state: SettingsState, value: string) {
     state.serverType = value

@@ -29,6 +29,9 @@
       :label="$t('pages.unlock.store_pin')"
     />
     <br />
+    <a v-if="getPinHash" class="delete-link" @click="deleteAccount">
+      Not you? Create or import an account
+    </a>
     <div class="realm-container">
       <InteractablesRealm />
     </div>
