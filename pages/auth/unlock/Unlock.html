@@ -30,7 +30,7 @@
     />
     <br />
     <a v-if="getPinHash" class="delete-link" @click="deleteAccount">
-      Not you? Create or import an account
+      {{$t('pages.unlock.delete_account_label')}}
     </a>
     <div class="realm-container">
       <InteractablesRealm />
