@@ -6,6 +6,7 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import * as Hounddog from '~/utilities/Hounddog'
 import { DataStateType } from '~/store/dataState/types'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
+import BlockchainClient from '~/libraries/BlockchainClient'
 
 jest.genMockFromModule('~/libraries/Solana/FriendsProgram/FriendsProgram')
 jest.mock('~/libraries/Solana/FriendsProgram/FriendsProgram')
@@ -249,11 +250,85 @@ describe('default functions', () => {
       { root: true },
     )
   })
-  /* test('module.default.removeFriend without payer account', async () => {
+  test('module.default.removeFriend without payer account', async () => {
+    const BCConstructor = BlockchainClient
+    BCConstructor.getInstance = jest.fn().mockReturnValueOnce({
+      payerAccount: false,
+    })
+
+    const dispatch = jest.fn()
+    const commit = jest.fn()
+    const state = {
+      incomingRequests: [
+        {
+          requestId: 'incomingRequestsItem0',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+          from: '',
+          userInfo: {
+            name: '',
+            servers: {},
+            status: '',
+            photoHash: '',
+          },
+        },
+      ],
+      outgoingRequests: [
+        {
+          to: '',
+          requestId: '',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+        },
+      ],
+      all: [
+        {
+          publicKey: 'NoWiFi4you',
+          localSypingState: 'NOT_TYPING',
+          item: {},
+          pending: true,
+          activeChat: true,
+          encryptedTextilePubkey: '',
+          name: 'Taurus Nix',
+          address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          account: {
+            accountId: 'Checking Account',
+            from: '.',
+            status: 429,
+            fromMailboxId: '12345',
+            toMailboxId: 'v4.0.0-rc.4',
+            to: './path/to/file',
+          },
+          textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+          status: '',
+          state: 'idle',
+          unreadCount: 123,
+          profilePicture: '',
+          badge: 'community',
+          userAccount: '',
+          mailboxId: '',
+        },
+      ],
+    }
+
+    await module.default.initialize({ dispatch, commit, state })
     const SMConstructor = Vue.prototype.$SolanaManager
     SMConstructor.getActiveAccount = jest.fn().mockReturnValueOnce(false)
 
-    const commit = jest.fn()
     try {
       await module.default.removeFriend(
         { commit },
@@ -288,7 +363,7 @@ describe('default functions', () => {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', AccountsError.PAYER_NOT_PRESENT)
     }
-  }) */
+  })
   test.skip('module.default.removeFriend with payer account', async () => {
     const SMConstructor = Vue.prototype.$SolanaManager
     SMConstructor.getActiveAccount = jest.fn().mockReturnValueOnce(true) // this is the payer account
