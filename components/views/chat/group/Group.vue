@@ -73,7 +73,6 @@ export default Vue.extend({
 
       // Try to find the friend you are talking to
       const friend = this.findFriendByKey(this.group.from)
-      console.log(this.group.from)
 
       if (friend?.profilePicture) {
         return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
