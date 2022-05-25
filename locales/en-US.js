@@ -205,6 +205,7 @@ export default {
       create: 'Create Account Pin',
       placeholder: 'Enter Pin...',
       store_pin: 'Store Pin? (Less Secure)',
+      delete_account_label: 'Not you? Create or import an account',
     },
     loading: {
       loading: 'Linking Satellites...',

@@ -1,17 +1,19 @@
 import Vue from 'vue'
+import { Dexie } from 'dexie'
 import { TextileError } from '../textile/types'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { SettingsError, SettingsState } from '~/store/settings/types'
 import { ActionsArguments } from '~/types/store/store'
+import { Config } from '~/config'
 
 export default {
-  async clearLocalStorage({ commit }: ActionsArguments<SettingsState>) {
+  async clearLocalStorage() {
     try {
-      await db.delete()
+      if (await Dexie.exists(Config.indexedDbName)) {
+        await db.delete()
+      }
       localStorage.clear()
-      commit('removeAppState', true)
-      location.reload()
     } catch (e) {
       throw new Error(SettingsError.DATABASE_NOT_CLEARED)
     }

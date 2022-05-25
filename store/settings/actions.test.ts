@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { Dexie } from 'dexie'
 import * as actions from './actions'
 import { SettingsError } from './types'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
@@ -24,10 +25,8 @@ describe('actions.default', () => {
   test('actions.default.clearLocalStorage successful', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     db.delete = jest.fn().mockReturnValue(true)
-    const commit = jest.fn()
-    await actions.default.clearLocalStorage({ commit })
-    expect(window.location.reload).toHaveBeenCalled()
-    expect(commit).toHaveBeenCalledWith('removeAppState', true)
+    Dexie.exists = jest.fn().mockReturnValue(true)
+    await actions.default.clearLocalStorage()
   })
 
   test('actions.default.clearLocalStorage error', async () => {
@@ -36,8 +35,7 @@ describe('actions.default', () => {
       db.delete = jest.fn().mockImplementation(() => {
         throw new Error('mock error')
       })
-      const commit = jest.fn()
-      await actions.default.clearLocalStorage({ commit })
+      await actions.default.clearLocalStorage()
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
