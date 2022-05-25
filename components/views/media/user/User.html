@@ -28,7 +28,7 @@
       type="random"
       :seed="user.address"
       :size="$device.isMobile ? 36 : 65"
-      :class="`${!audioStream ? 'calling' : ''}`"
+      :class="`${audioStream ? 'calling' : ''}`"
       :source="user.profilePicture"
     />
     <TypographyTag :text="user.name" inverted />
