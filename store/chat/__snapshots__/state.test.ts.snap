@@ -7,7 +7,7 @@ Object {
   "containsNsfw": false,
   "countError": false,
   "currentChat": Object {
-    "direction": "top",
+    "direction": "TOP",
     "hasNextPage": true,
     "isMessagesLoading": false,
     "isScrollOver": true,

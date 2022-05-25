@@ -1,11 +1,12 @@
 import { ChatState } from './types'
+import { ScrollDirections } from '~/types/chat/chat'
 
 export const initialCurrentChat = {
   messages: [],
   page: 1,
   size: 10,
   hasNextPage: true,
-  direction: 'top' as 'top',
+  direction: ScrollDirections.TOP,
   isMessagesLoading: false,
   lastLoadedMessageId: '',
   isScrollOver: true,

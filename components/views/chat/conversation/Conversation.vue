@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
+import { ScrollDirections } from '~/types/chat/chat'
 
 export default Vue.extend({
   components: {
@@ -23,6 +24,9 @@ export default Vue.extend({
     },
     direction() {
       return this.chat.currentChat.direction
+    },
+    isReversedScroll() {
+      return this.direction === ScrollDirections.TOP
     },
     conversationId() {
       return this.$route.params?.address
@@ -45,7 +49,7 @@ export default Vue.extend({
           return
         }
         messageNode.scrollIntoView({
-          block: this.direction === 'bottom' ? 'end' : 'start',
+          block: this.direction === ScrollDirections.TOP ? 'start' : 'end',
           behavior: 'auto',
         })
       })

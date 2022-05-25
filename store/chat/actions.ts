@@ -2,7 +2,7 @@ import { ChatState } from './types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 
 import { ActionsArguments } from '~/types/store/store'
-import { ChatTextObj } from '~/types/chat/chat'
+import { ChatTextObj, ScrollDirections } from '~/types/chat/chat'
 import { UploadDropItemType } from '~/types/files/file'
 
 export default {
@@ -65,7 +65,7 @@ export default {
 
     switch (direction) {
       // from bottom to top
-      case 'top':
+      case ScrollDirections.TOP:
         from = Math.max(allMessages?.length + offset - size * page, 0)
         to = Math.max(allMessages?.length + offset - size * (page - 1), 0)
         break
@@ -88,7 +88,7 @@ export default {
     }
 
     const getLastLoadedMessageId = () => {
-      if (direction === 'top') {
+      if (direction === ScrollDirections.TOP) {
         return newMessages[newMessages.length - 1].id
       }
       return newMessages[0].id
@@ -96,7 +96,7 @@ export default {
 
     commit('setCurrentChat', {
       messages:
-        direction === 'top'
+        direction === ScrollDirections.TOP
           ? [...newMessages, ...messages]
           : [...messages, ...newMessages],
       page: page + 1,

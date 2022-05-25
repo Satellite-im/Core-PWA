@@ -41,7 +41,7 @@
     </UiChatInfo>
     <UiChatInfiniteScroll
       class="conversation-infiniteScroll"
-      :class="{ 'is-reversed': direction === 'top' }"
+      :class="{ 'is-reversed': isReversedScroll }"
       :options="options"
       @intersect="handleIntersect"
     >
