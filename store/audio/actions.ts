@@ -19,11 +19,13 @@ export default {
     })
 
     if (call) {
-      if (muted) {
-        call.mute({ kind: 'audio' })
-      } else {
-        call.unmute({ kind: 'audio' })
-      }
+      return
+    }
+
+    if (muted) {
+      call.mute({ kind: 'audio' })
+    } else {
+      call.unmute({ kind: 'audio' })
     }
   },
   /**
