@@ -13,8 +13,6 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 const p2p = Peer2Peer.getInstance()
 
@@ -35,13 +33,13 @@ export default Vue.extend({
   computed: {
     ...mapState(['audio', 'video', 'webrtc', 'accounts']),
     audioMuted(): boolean {
-      return this.webrtc.streamMuted[p2p.id]?.audio
+      return this.audio.muted
     },
     videoMuted(): boolean {
-      return this.webrtc.streamMuted[p2p.id]?.video
+      return p2p.id && this.webrtc.streamMuted[p2p.id]?.video
     },
     screenMuted(): boolean {
-      return this.webrtc.streamMuted[p2p.id]?.screen
+      return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
     },
   },
   methods: {
@@ -52,11 +50,7 @@ export default Vue.extend({
      */
     async toggleMute(kind = 'audio') {
       this.isLoading = true
-      this.$store.dispatch(
-        'webrtc/toggleMute',
-        { kind, peerId: p2p.id },
-        { root: true },
-      )
+      this.$store.dispatch('audio/toggleMute', {}, { root: true })
       this.isLoading = false
     },
     async toggleDeafen() {
