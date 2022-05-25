@@ -15,7 +15,6 @@ export default {
       }
       localStorage.clear()
     } catch (e) {
-      console.log(e)
       throw new Error(SettingsError.DATABASE_NOT_CLEARED)
     }
   },
