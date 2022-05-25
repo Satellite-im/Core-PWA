@@ -3,6 +3,7 @@ import PeerId from 'peer-id'
 import Emitter from './Emitter'
 import { CallEventListeners } from './types'
 import { Peer2Peer } from './Libp2p'
+import { WebRTCErrors } from './errors/Errors'
 import { Config } from '~/config'
 
 export class CallPeer extends Peer {
@@ -395,7 +396,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async createDisplayStream() {
     if (!navigator.mediaDevices.getDisplayMedia) {
-      throw new Error('errors.webRTC.permission_denied')
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
     let screenStream: MediaStream
@@ -403,7 +404,7 @@ export class Call extends Emitter<CallEventListeners> {
     try {
       screenStream = await navigator.mediaDevices.getDisplayMedia()
     } catch (e) {
-      throw new Error('errors.webRTC.permission_denied')
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
     if (!this.streams[this.localId]) {
