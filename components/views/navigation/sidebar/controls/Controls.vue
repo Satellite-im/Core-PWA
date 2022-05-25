@@ -14,6 +14,7 @@ import {
 
 import { mapState } from 'vuex'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { PeerMutedState } from '~/store/webrtc/types'
 const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
@@ -48,7 +49,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async toggleMute(kind = 'audio') {
+    async toggleMute(kind: keyof PeerMutedState) {
       this.isLoading = true
       this.$store.dispatch('audio/toggleMute', {}, { root: true })
       this.isLoading = false
