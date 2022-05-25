@@ -203,6 +203,12 @@ export default Vue.extend({
         kinds,
       })
     },
+    handleCall() {
+      if (!this.enableRTC || this.webrtc.activeCall) {
+        return
+      }
+      this.call(['audio'])
+    },
   },
 })
 </script>
