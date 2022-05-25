@@ -1,4 +1,4 @@
-<template src="./Actions.html" />
+<template src="./Actions.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
