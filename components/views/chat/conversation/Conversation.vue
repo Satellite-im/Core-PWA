@@ -9,7 +9,12 @@ export default Vue.extend({
   components: {
     ChevronDownIcon,
   },
-  props: {},
+  props: {
+    groupId: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
     ...mapState(['ui', 'textile', 'chat']),
     options() {
@@ -65,9 +70,9 @@ export default Vue.extend({
         this.loadMore()
         this.scrollToMessage(this.chat.currentChat.lastLoadedMessageId)
         loaded()
-      } else {
-        complete()
+        return
       }
+      complete()
     },
     handleClick() {
       this.$refs.chatScroll?.autoScrollToBottom()

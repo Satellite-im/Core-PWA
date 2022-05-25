@@ -44,10 +44,17 @@ export default {
     { state, commit, rootState }: ActionsArguments<ChatState>,
     conversationId: string,
   ) {
+    if (!conversationId) {
+      return
+    }
+
     commit('setCurrentChat', { isMessagesLoading: true })
+
     const conversation = rootState.textile.conversations[conversationId]
 
+    // if conversations are empty or found conversation does not have groupedMessages
     if (!conversation?.groupedMessages) {
+      commit('setCurrentChat', { isMessagesLoading: false })
       return
     }
 

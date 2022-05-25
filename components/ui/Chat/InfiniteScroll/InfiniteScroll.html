@@ -1,8 +1,8 @@
 <div ref="root">
   <slot v-if="isIntersecting" name="placeholder">
-    <div>Loading...</div>
+    <div>{{ $t('pages.chat.infinite_scroll.loading') }}</div>
   </slot>
   <slot v-if="isComplete" name="no-more">
-    <div>No more data.</div>
+    <div>{{ $t('pages.chat.infinite_scroll.no_more') }}</div>
   </slot>
 </div>

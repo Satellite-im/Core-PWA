@@ -5,16 +5,11 @@
     :older-messages-scroll-offset="300"
   >
     <div class="conversation-content">
-      <div
-        class="group"
-        v-for="group in messages"
-        :key="group.id"
-        :id="group.id"
-      >
+      <div class="group" v-for="group in messages" :id="group.id">
         <div v-if="group.type === 'group'">
-          <Group :group="group" />
+          <Group :group="group" :key="group.id" :groupId="groupId" />
         </div>
-        <div v-if="group.type === 'caret_divider'">
+        <div v-else-if="group.type === 'caret_divider'">
           <UiCaretDivider text="New Messages" />
         </div>
         <div v-else-if="group.type === 'divider'">
