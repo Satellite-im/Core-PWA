@@ -10,7 +10,7 @@ import {
   FriendsError,
   FriendsState,
 } from './types'
-import FriendGetters from './getters'
+import { FriendsGetters } from './getters'
 import { DataStateType } from '~/store/dataState/types'
 import { TextileError } from '~/store/textile/types'
 import Crypto from '~/libraries/Crypto/Crypto'
@@ -128,11 +128,10 @@ export default {
   async fetchFriendDetails(
     {
       commit,
-      state,
       rootState,
       dispatch,
       getters,
-    }: ActionsArguments<FriendsState, typeof FriendGetters>,
+    }: ActionsArguments<FriendsState, FriendsGetters>,
     friendAccount: FriendAccount,
   ): Promise<void> {
     // First grab the users from local db
@@ -168,8 +167,7 @@ export default {
         new PublicKey(friendKey).toBytes(),
       ).bytes,
     )
-
-    const friendExists = getters.friendExists(state)(friendKey)
+    const friendExists = getters.friendExists(friendKey)
 
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,

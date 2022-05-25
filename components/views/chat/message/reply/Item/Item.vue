@@ -35,7 +35,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'friends', 'accounts']),
-    ...mapGetters('friends', ['findFriend']),
+    ...mapGetters('friends', ['findFriendByKey']),
     address() {
       if (!this.reply.from) {
         return ''
@@ -63,7 +63,7 @@ export default Vue.extend({
       }
 
       // Try to find the friend you are talking to
-      const friend = this.findFriend(this.reply.from)
+      const friend = this.findFriendByKey(this.reply.from)
 
       if (friend?.profilePicture) {
         return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
