@@ -152,4 +152,109 @@ describe('misc', () => {
     mutations.default.addParticipant(state, argument2) // Append
     expect(state.participants).toEqual([argument, argument2])
   })
+  test('mutations.default.updateParticipant', () => {
+    const state = { ...initialState }
+    const argument = {
+      peerId: 'peerId',
+      address: 'address',
+      name: 'name',
+      profilePicture: 'profilePicture',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    const argument2 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+
+    mutations.default.setParticipants(state, [argument]) // Initial set
+    mutations.default.addParticipant(state, argument2) // Append
+    expect(state.participants).toEqual([argument, argument2])
+
+    const argument3 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.DISCONNECTED, // From CONNECTED to DISCONNECTED
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    mutations.default.updateParticipant(state, argument3)
+    expect(state.participants).toEqual([argument, argument3])
+  })
+  test('mutations.default.updateParticipant with no participant entry to update', () => {
+    const state = { ...initialState }
+    const argument = {
+      peerId: 'peerId',
+      address: 'address',
+      name: 'name',
+      profilePicture: 'profilePicture',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+
+    mutations.default.setParticipants(state, [argument]) // Initial set
+    expect(state.participants).toEqual([argument])
+
+    const argument3 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.DISCONNECTED, // From CONNECTED to DISCONNECTED
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    const result = mutations.default.updateParticipant(state, argument3)
+    expect(state.participants).toEqual([argument]) // Entry does not have argument3 because it does not exist
+    expect(result).toBe(undefined)
+  })
+  test('mutations.default.updateParticipant with identical updated entry', () => {
+    const state = { ...initialState }
+    const argument = {
+      peerId: 'peerId',
+      address: 'address',
+      name: 'name',
+      profilePicture: 'profilePicture',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    const argument2 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.CONNECTED,
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+
+    mutations.default.setParticipants(state, [argument]) // Initial set
+    mutations.default.addParticipant(state, argument2) // Append
+    expect(state.participants).toEqual([argument, argument2])
+
+    const argument3 = {
+      peerId: 'peerId2',
+      address: 'address2',
+      name: 'name2',
+      profilePicture: 'profilePicture2',
+      state: ConversationConnection.CONNECTED, // Still CONNECTED
+      activity: ConversationActivity.ACTIVE,
+      updatedAt: 123,
+    }
+    const result = mutations.default.updateParticipant(state, argument3)
+    expect(state.participants).toEqual([argument, argument2])
+    expect(state.participants).toEqual([argument, argument3])
+    // Both argument 2 and argument 3 are identical; both assertions will return true
+    expect(result).toBe(undefined)
+  })
 })
