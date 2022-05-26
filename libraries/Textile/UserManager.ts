@@ -51,9 +51,9 @@ export class UserInfoManager {
 
   /**
    * Find the current user consent info
-   * @returns returns the current user's info
+   * @returns the current user's info
    */
-  private async _findRecord(): Promise<UserThreadData | undefined> {
+  async getUserRecord(): Promise<UserThreadData | undefined> {
     const query = Query.where('userAddress').eq(this.textile.wallet.address)
     const [record] = await this.textile.client.find<UserThreadData>(
       this.threadID,
@@ -61,10 +61,6 @@ export class UserInfoManager {
       query,
     )
     return record
-  }
-
-  async getUserRecord(): Promise<UserThreadData | undefined> {
-    return await this._findRecord()
   }
 
   /**
@@ -81,7 +77,7 @@ export class UserInfoManager {
     blockNsfw?: boolean
     filesVersion?: number
   }): Promise<UserThreadData | undefined> {
-    const record = await this._findRecord()
+    const record = await this.getUserRecord()
     if (!record) {
       await this.textile.client.create(this.threadID, CollectionName, [
         {
@@ -91,7 +87,7 @@ export class UserInfoManager {
           filesVersion,
         },
       ])
-      return await this._findRecord()
+      return this.getUserRecord()
     }
     if (typeof consentToScan === 'boolean') {
       record.consentToScan = consentToScan
