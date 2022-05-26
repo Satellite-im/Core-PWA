@@ -24,6 +24,7 @@ export default {
 
     if (muted) {
       call.mute({ kind: 'audio' })
+      return
     }
     call.unmute({ kind: 'audio' })
   },
