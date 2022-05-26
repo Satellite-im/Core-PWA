@@ -11,6 +11,8 @@ import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
 import { AlertState, AlertType } from '~/libraries/ui/Alerts'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const $Sounds = new SoundManager()
 
@@ -90,8 +92,9 @@ export default {
     payload: {
       message: string
       from: string
-      group?: string
+      groupName?: string
       groupId?: string
+      groupURL?: string
       fromAddress?: string
       imageHash: string
       activeUser?: string
@@ -104,13 +107,17 @@ export default {
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
-    if (rootState.textile.activeConversation !== payload.fromAddress) {
+    console.log(rootState.textile.activeConversation === payload.groupURL)
+    if (
+      rootState.textile.activeConversation !== payload.fromAddress ||
+      rootState.textile.activeConversation !== payload.groupURL
+    ) {
       const notificationResponse =
         await $TextileManager.notificationManager?.sendNotification({
           from: payload.from,
           id: uuidv4(),
           title: payload.title,
-          group: payload.group,
+          groupName: payload.groupName,
           groupId: payload.groupId,
           notificationState: AlertState.UNREAD,
           fromAddress: payload.fromAddress,
@@ -119,7 +126,10 @@ export default {
           type: payload.type,
         })
 
-      commit('sendNotification', notificationResponse)
+      const userId = $TextileManager.getIdentityPublicKey()
+      if (userId !== payload.fromAddress) {
+        commit('sendNotification', notificationResponse)
+      }
     }
   },
   /**

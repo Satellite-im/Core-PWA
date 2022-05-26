@@ -81,7 +81,7 @@ export class NotificationManager {
     imageHash: string
     type: AlertType
     fromAddress?: string
-    group?: string
+    groupName?: string
     groupId?: string
     notificationState: AlertState
     title: string
@@ -96,7 +96,7 @@ export class NotificationManager {
       from: payload.from,
       fromName: payload.from,
       fromAddress: payload.fromAddress,
-      group: payload.group,
+      group: payload.groupName,
       groupId: payload.groupId,
       type: payload.type,
       at: Date.now(),
