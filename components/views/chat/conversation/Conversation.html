@@ -7,9 +7,14 @@
     enable-wrap
   >
     <div class="conversation-content">
-      <div class="group" v-for="group in messages" :id="group.id">
+      <div
+        class="group"
+        v-for="group in messages"
+        :id="group.id"
+        :key="group.id"
+      >
         <div v-if="group.type === 'group'">
-          <Group :group="group" :key="group.id" :groupId="groupId" />
+          <Group :group="group" :groupId="groupId" />
         </div>
         <div v-else-if="group.type === 'caret_divider'">
           <UiCaretDivider text="New Messages" />
