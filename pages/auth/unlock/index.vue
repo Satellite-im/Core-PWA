@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { Dexie } from 'dexie'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 
@@ -87,13 +88,11 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/unlock', this.$data.pin)
 
         if (this.getPhrase === '') {
-          // if user deleted local storage manually via dev console, clear indexeddb as well
-          if (
-            (await indexedDB.databases())
-              .map((db) => db.name)
-              .includes(this.$Config.indexedDbName)
-          ) {
-            indexedDB.deleteDatabase(this.$Config.indexedDbName)
+          // manually clear local storage and indexeddb if it exists
+          try {
+            await this.$store.dispatch('settings/clearLocalStorage')
+          } catch (e: any) {
+            this.$toast.error(this.$t(e.message) as string)
           }
           this.$router.replace('/setup/disclaimer')
         } else {
@@ -119,6 +118,10 @@ export default Vue.extend({
       } catch (error: any) {
         this.error = error.message
       }
+    },
+    async deleteAccount() {
+      await this.$store.dispatch('settings/clearLocalStorage')
+      location.reload()
     },
   },
 })

@@ -2387,10 +2387,9 @@ describe('mutations misc', () => {
       serverType: 'et',
       ownInfo: 'maxime',
     }
-    const passedInValue = false
 
-    mutations.default.removeAppState(localState, passedInValue)
-    expect(localState.removeState).toBe(passedInValue)
+    mutations.default.removeAppState(localState)
+    expect(localState.removeState).toBe(true)
   })
 
   test('mutations.default.setServerType', () => {

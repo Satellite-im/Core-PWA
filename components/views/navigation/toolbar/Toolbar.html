@@ -64,7 +64,7 @@
         data-cy="toolbar-enable-audio"
         :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
         v-if="server"
-        @click="() => call(['audio'])"
+        @click="handleCall"
       >
         <phone-call-icon size="1x" class="control-icon" />
       </div>
@@ -81,7 +81,7 @@
           ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
           :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
           v-if="server"
-          @click="() => call(['audio'])"
+          @click="handleCall"
         >
           <phone-call-icon size="1x" class="control-icon" color="grey" />
         </div>
