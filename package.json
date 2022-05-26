@@ -12,6 +12,11 @@
     "start": "nuxi start",
     "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
+    "android-generate": "nuxt generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..",
+    "electron-mac": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-mac",
+    "electron-start": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:start",
+    "electron-windows": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-windows",
+    "electron-linux": "yarn generate && npx cap update @capacitor-community/electron && npx cap copy @capacitor-community/electron && npx cap sync @capacitor-community/electron && cd electron && yarn && yarn electron:build-linux",
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "test": "jest",
@@ -23,6 +28,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@capacitor-community/electron": "^3.1.0",
+    "@capacitor/android": "^3.1.2",
+    "@capacitor/camera": "^1.3.0",
+    "@capacitor/core": "^3.1.2",
+    "@capacitor/ios": "^3.1.2",
+    "@capacitor/local-notifications": "^1.1.0",
     "@creativebulma/bulma-tooltip": "^1.2.0",
     "@nuxtjs/device": "^2.1.0",
     "@nuxtjs/pwa": "^3.3.5",
@@ -144,6 +155,14 @@
     "ts-jest": "^27.1.3",
     "typescript": "^4.5.5",
     "url-polyfill": "^1.1.12"
+  },
+  "capacitor": {
+    "android": {
+      "src": "android"
+    },
+    "electron": {
+      "src": "electron"
+    }
   },
   "description": "<img src=\"https://i.imgur.com/PdJwuII.png\" height=\"65px\" />",
   "main": ".eslintrc.js",
