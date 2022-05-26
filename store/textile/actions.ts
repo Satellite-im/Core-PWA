@@ -30,6 +30,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -715,6 +716,8 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const MailboxManager = $TextileManager.mailboxManager
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     if (!MailboxManager) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
@@ -731,7 +734,7 @@ export default {
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
 
-    await $GroupChatManager.listenToGroupMessages((message) => {
+    await $GroupChatManager.listenToGroupMessages(async (message) => {
       if (!message) {
         return
       }
@@ -741,6 +744,22 @@ export default {
         sender: MessageRouteEnum.INBOUND,
         message,
       })
+
+      const userInfo = await usersProgram.getUserInfo(message.sender)
+      dispatch(
+        'ui/sendNotification',
+        {
+          message: 'New DM',
+          from: userInfo?.name,
+          fromAddress: userInfo?.address,
+          title: `Notification`,
+          group: group.name,
+          groupId: message.from,
+          image: userInfo?.photoHash,
+          type: AlertType.GROUP_MESSAGE,
+        },
+        { root: true },
+      )
 
       dispatch('storeInMessage', { address: groupId, message })
     }, group)

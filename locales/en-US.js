@@ -85,6 +85,9 @@ export default {
       me: 'you sent something',
       user: 'user sent you something',
     },
+    user_sent_group_message: {
+      user: '{user} posted in {group}',
+    },
     pinned: {
       archived_messages: 'Archived Messages',
       new: 'New',

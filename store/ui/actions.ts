@@ -90,8 +90,11 @@ export default {
     payload: {
       message: string
       from: string
-      fromAddress: string
+      group?: string
+      groupId?: string
+      fromAddress?: string
       imageHash: string
+      activeUser?: string
       title: string
       type: AlertType
     },
@@ -107,7 +110,10 @@ export default {
           from: payload.from,
           id: uuidv4(),
           title: payload.title,
+          group: payload.group,
+          groupId: payload.groupId,
           notificationState: AlertState.UNREAD,
+          fromAddress: payload.fromAddress,
           imageHash: payload.imageHash,
           message: payload.message,
           type: payload.type,

@@ -348,6 +348,7 @@ export default {
     })
   },
   sendNotification(state: UIState, notification: Alert) {
+    // $store?
     state.notifications.push(notification)
   },
   setNotifications(state: UIState, notifications: Array<Alert>) {

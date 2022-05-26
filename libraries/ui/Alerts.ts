@@ -23,7 +23,10 @@ export type Alert = {
   id?: string
   state?: AlertState
   type: AlertType
-  from: string
+  fromName: string
+  fromAddress?: string
+  group?: string
+  groupId?: string
   content: {
     title: string
     description: string

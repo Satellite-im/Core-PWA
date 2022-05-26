@@ -80,6 +80,9 @@ export class NotificationManager {
     message: string
     imageHash: string
     type: AlertType
+    fromAddress?: string
+    group?: string
+    groupId?: string
     notificationState: AlertState
     title: string
   }): Promise<Object | null> {
@@ -91,6 +94,10 @@ export class NotificationManager {
       },
       state: payload.notificationState,
       from: payload.from,
+      fromName: payload.from,
+      fromAddress: payload.fromAddress,
+      group: payload.group,
+      groupId: payload.groupId,
       type: payload.type,
       at: Date.now(),
       id: payload.id,
