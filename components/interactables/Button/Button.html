@@ -5,7 +5,7 @@
   :type="htmlType"
   ref="button"
 >
-  <UiGlowingCursorArea :hide="$attrs['data-popper-shown'] ? true : false">
+  <UiGlowingCursorArea :hide="!!$attrs['data-popper-shown']">
     <!-- If the button is in the loading state -->
     <div class="spinner" v-if="loading">
       <!-- Loading Spinner -->
