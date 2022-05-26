@@ -39,6 +39,12 @@ export default Vue.extend({
     showOlderMessageInfo() {
       return this.ui.showOlderMessagesInfo
     },
+    isMediaOpen() {
+      return (
+        this.$store.state.webrtc.activeCall &&
+        this.$store.state.webrtc.activeCall.callId
+      )
+    },
   },
   beforeDestroy() {
     this.$store.commit('chat/resetCurrentChat')

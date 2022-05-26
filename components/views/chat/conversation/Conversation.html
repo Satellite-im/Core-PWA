@@ -3,6 +3,8 @@
     ref="chatScroll"
     :prevent-scroll-offset="10"
     :older-messages-scroll-offset="300"
+    :class="{'media-open': isMediaOpen}"
+    enable-wrap
   >
     <div class="conversation-content">
       <div class="group" v-for="group in messages" :id="group.id">
