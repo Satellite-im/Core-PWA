@@ -18,15 +18,14 @@ export default {
       root: true,
     })
 
-    if (call) {
+    if (!call) {
       return
     }
 
     if (muted) {
       call.mute({ kind: 'audio' })
-    } else {
-      call.unmute({ kind: 'audio' })
     }
+    call.unmute({ kind: 'audio' })
   },
   /**
    * @method toggleDeafen
