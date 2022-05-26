@@ -2,8 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
-import { Dexie } from 'dexie'
+import { mapState } from 'vuex'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { RootState } from '~/types/store/store'
@@ -79,7 +78,6 @@ export default Vue.extend({
             await this.$store.dispatch('settings/clearLocalStorage')
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
-            this.$router.replace('/setup/disclaimer')
           }
           this.$router.push({
             name: this.localeRoute('setup-disclaimer')?.name,

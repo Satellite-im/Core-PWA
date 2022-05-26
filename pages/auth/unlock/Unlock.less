@@ -19,36 +19,35 @@
         opacity: 0.75;
       }
     }
-  }
-
-  .early-access {
-    margin-bottom: @normal-spacing;
-    .code-input {
-      margin-bottom: @light-spacing;
+    .early-access {
+      margin-bottom: @normal-spacing;
+      .code-input {
+        margin-bottom: @light-spacing;
+      }
+      p {
+        font-size: 16px;
+      }
     }
-    p {
-      font-size: 16px;
+
+    .create_pin_section {
+      margin-bottom: @normal-spacing;
+      &:extend(.background-semitransparent-dark);
+      &:extend(.round-corners);
+      &:extend(.bordered);
+      &:extend(.more-pad-sides);
+
+      .subtitle {
+        margin: 0;
+        &:extend(.font-secondary);
+      }
     }
-  }
 
-  .create_pin_section {
-    margin-bottom: @normal-spacing;
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.more-pad-sides);
-
-    .subtitle {
-      margin: 0;
-      &:extend(.font-secondary);
+    .realm-container {
+      &:extend(.full-width);
+      display: inline-flex;
+      justify-content: center;
+      margin-top: @normal-spacing;
     }
-  }
-
-  .realm-container {
-    &:extend(.full-width);
-    display: inline-flex;
-    justify-content: center;
-    margin-top: @normal-spacing;
   }
 }
 
