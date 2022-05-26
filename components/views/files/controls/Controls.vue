@@ -39,7 +39,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      filesUploadStatus: (state) => (state as RootState).ui.filesUploadStatus,
       consentToScan: (state) =>
         (state as RootState).textile.userThread.consentToScan,
     }),
