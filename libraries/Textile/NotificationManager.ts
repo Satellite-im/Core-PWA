@@ -104,7 +104,6 @@ export class NotificationManager {
     if (!this.threadId) {
       throw new Error('Manager not initialized')
     }
-
     const notificationId = await this.textile.client.create(
       this.threadID,
       CollectionName,
