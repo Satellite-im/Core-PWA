@@ -66,7 +66,7 @@ export default Vue.extend({
     },
     muted() {
       return (
-        (this.user?.peerId && this.webrtc.streamMuted[this.user.peerId]) || {
+        (this.user?.peerId && this.webrtc.streamMuted[this.user.peerId]) ?? {
           audio: true,
           video: true,
           screen: true,
