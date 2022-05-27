@@ -1,7 +1,5 @@
 import { Connection, MuxedStream, create } from 'libp2p'
 // @ts-ignore
-// import WS from 'libp2p-websockets'
-// @ts-ignore
 import Mplex from 'libp2p-mplex'
 // @ts-ignore
 import secio from 'libp2p-secio'
