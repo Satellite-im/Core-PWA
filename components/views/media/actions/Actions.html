@@ -1,19 +1,19 @@
 <div id="actions">
   <div
     class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-cy="call-video"
     data-tooltip="Video"
   >
     <InteractablesButton
       class="left"
+      data-cy="call-video"
       :type="videoMuted ? 'danger' : 'dark'"
       size="small"
       :action="() => toggleMute('video')"
       :loading="isLoading"
       loadingText=""
     >
-      <video-icon v-if="!videoMuted" size="1.2x" />
-      <video-off-icon v-else size="1.2x" />
+      <video-icon data-cy="video-unmuted" v-if="!videoMuted" size="1.2x" />
+      <video-off-icon data-cy="video-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
@@ -23,16 +23,18 @@
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
+      data-cy="call-audio"
       :action="() => toggleMute('audio')"
       :loading="isLoading"
       loadingText=""
     >
-      <mic-icon v-if="!audioMuted" size="1.2x" />
-      <mic-off-icon v-else size="1.2x" />
+      <mic-icon data-cy="audio-unmuted" v-if="!audioMuted" size="1.2x" />
+      <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
     class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
+    data-cy="call-screen-share"
     :data-tooltip="$t('controls.screen')"
   >
     <InteractablesButton
@@ -42,17 +44,21 @@
       :loading="isLoading"
       loadingText=""
     >
-      <screen-share-icon v-if="!screenMuted" size="1.2x" />
-      <screen-share-off-icon v-else size="1.2x" />
+      <screen-share-icon
+        data-cy="screen-unmuted"
+        v-if="!screenMuted"
+        size="1.2x"
+      />
+      <screen-share-off-icon data-cy="screen-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
     class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-cy="call-hangup"
     data-tooltip="Hangup"
   >
     <InteractablesButton
       class="right"
+      data-cy="call-hangup"
       type="danger"
       size="small"
       :action="() => hangUp()"

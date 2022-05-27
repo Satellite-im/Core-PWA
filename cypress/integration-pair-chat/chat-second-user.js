@@ -6,12 +6,12 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(250) // generate random sentence
 
-describe.skip('Chat features with two accounts at the same time - Second User', () => {
+describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeed)
+
     //Validate Chat Screen is loaded
     cy.validateChatPageIsLoaded()
 
@@ -19,19 +19,88 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
   })
 
   it('Receive Incoming Video Call', () => {
+    //Click on toggle sidebar to display sidebar
+    cy.get('[data-cy=toggle-sidebar]').click()
+
+    //Answer remote videocall
     cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call-accept]').click()
+
+    //Wait until all validations from other user are completed
+    cy.wait(120000)
   })
 
-  it('Answer Incoming Video Call', () => {
-    cy.get('[data-cy=incoming-call-accept-video]')
+  it('Mute microphone', () => {
+    //Click again on button to mute mic from chat button
+    cy.get('[data-cy=call-audio]').click()
+
+    // Microphone buttons from chat screen and sidebar will show as muted
+    cy.get('[data-cy=audio-muted]').should('be.visible')
+    cy.get('[data-cy=sidebar-mic-muted]').should('be.visible')
+  })
+
+  it('Enable camera', () => {
+    //Activate local camera
+    cy.get('[data-cy=call-video]').click()
+
+    // Local Camera is loaded
+    cy.get('[data-cy=local-video]')
+      .find('[data-cy=video-stream]')
       .should('be.visible')
-      .click()
-      .then(() => {
-        cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('be.visible')
-        cy.get('#local-video').should('be.visible')
-        cy.wait(60000)
-        cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
-      })
+      .and('have.class', 'loaded')
+
+    //Video buttons show as unmuted
+    cy.get('[data-cy=video-unmuted]').should('be.visible')
+    cy.get('[data-cy=sidebar-video-unmuted]').should('be.visible')
+    cy.wait(30000)
+  })
+
+  it('Disable camera', () => {
+    //Turn off local camera
+    cy.get('[data-cy=call-video]').click()
+
+    // Local Camera is not loaded
+    cy.get('[data-cy=local-video]')
+      .find('[data-cy=video-stream]')
+      .should('not.exist')
+
+    //Video buttons show as unmuted
+    cy.get('[data-cy=video-unmuted]').should('be.visible')
+    cy.get('[data-cy=sidebar-video-muted]').should('be.visible')
+    cy.wait(30000)
+  })
+
+  it('Enable screenshare', () => {
+    //Enable screenshare
+    cy.get('[data-cy=call-screen-share]').click()
+
+    // Local Screenshare is loaded
+    cy.get('[data-cy=local-video]')
+      .find('[data-cy=screen-stream]')
+      .should('be.visible')
+      .and('have.class', 'loaded')
+
+    //Screen share button show enabled
+    cy.get('[data-cy=screen-unmuted]').should('be.visible')
+    cy.wait(30000)
+  })
+
+  it('Disable screenshare', () => {
+    //Disable screenshare
+    cy.get('[data-cy=call-screen-share]').click()
+
+    // Local Screenshare is no longer visible
+    cy.get('[data-cy=local-video]')
+      .find('[data-cy=screen-stream]')
+      .should('not.exist')
+
+    //Screen share button show enabled
+    cy.get('[data-cy=screen-muted]').should('be.visible')
+    cy.wait(60000)
+  })
+
+  it('Call finished on remote side should end call in local side', () => {
+    cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('not.exist')
   })
 
   it('Type a long message in chat bar without sending it', () => {
@@ -43,5 +112,32 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
         .type(longMessage)
         .clear()
     }
+  })
+
+  it('Call to User A', () => {
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]')
+      .click()
+      .then(() => {
+        cy.get('[data-cy=mediastream]').should('be.visible')
+      })
+    cy.wait(30000)
+  })
+
+  it('Refresh tab to finish the videocall', () => {
+    cy.reload()
+    //Once that decrypt account page is displayed enter pin again
+  })
+
+  it('Call again to User A', () => {
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]')
+      .click()
+      .then(() => {
+        cy.get('[data-cy=mediastream]').should('be.visible')
+      })
+
+    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
+    cy.wait(30000)
   })
 })

@@ -10,27 +10,31 @@
     v-bind:direction="direction"
     @returned-value="receivedValue"
   />
-  <div class="volume-icon" v-if="!plain">
+  <div class="volume-icon" data-cy="volume-icon" v-if="!plain">
     <volume-2-icon
       v-if="volume >= 70"
+      data-cy="volume-at-max"
       @click="toggleSlider"
       size="1.2x"
       class="fa-fw"
     />
     <volume-1-icon
       v-if="volume > 30 && volume < 70"
+      data-cy="volume-less-than-70"
       @click="toggleSlider"
       size="1.2x"
       class="fa-fw"
     />
     <volume-icon
       v-if="volume > 0 && volume <= 30"
+      data-cy="volume-less-than-30"
       @click="toggleSlider"
       size="1.2x"
       class="fa-fw"
     />
     <volume-x-icon
       v-if="volume == 0"
+      data-cy="volume-at-min"
       @click="toggleSlider"
       size="1.2x"
       class="fa-fw"

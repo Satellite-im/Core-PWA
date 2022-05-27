@@ -5,27 +5,42 @@
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.mute')"
     :action="() => toggleMute('audio')"
+    data-cy="sidebar-mic-button"
     :text="$t('controls.mic')"
     :loading="isLoading"
     loadingText=""
   >
-    <mic-off-icon v-if="audioMuted" size="1x"></mic-off-icon>
-    <mic-icon v-else size="1x"></mic-icon>
+    <mic-off-icon
+      data-cy="sidebar-mic-muted"
+      v-if="audioMuted"
+      size="1x"
+    ></mic-off-icon>
+    <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x"></mic-icon>
   </InteractablesButton>
   <InteractablesButton
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
+    data-cy="sidebar-audio-button"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only has-tooltip-hidden-touch"
     :data-tooltip="$t('controls.deafen')"
     :action="() => toggleDeafen()"
     :text="$t('controls.headphones')"
   >
-    <headphones-off-icon v-if="audio.deafened" size="1x"></headphones-off-icon>
-    <headphones-icon v-else size="1x"></headphones-icon>
+    <headphones-off-icon
+      data-cy="sidebar-audio-deafened"
+      v-if="audio.deafened"
+      size="1x"
+    ></headphones-off-icon>
+    <headphones-icon
+      data-cy="sidebar-audio-not-deafened"
+      v-else
+      size="1x"
+    ></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
     :type="videoMuted ? 'danger' : 'dark'"
     size="small"
+    data-cy="sidebar-video-button"
     class="has-tooltip has-tooltip-primary has-tooltip-top has-tooltip-desktop-only hast-tooltip-hidden-touch"
     :data-tooltip="$t('controls.toggle')"
     :text="$t('controls.video')"
@@ -33,7 +48,11 @@
     :loading="isLoading"
     loadingText=""
   >
-    <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>
-    <video-icon v-else size="1x"></video-icon>
+    <video-off-icon
+      data-cy="sidebar-video-muted"
+      v-if="videoMuted"
+      size="1x"
+    ></video-off-icon>
+    <video-icon data-cy="sidebar-video-unmuted" v-else size="1x"></video-icon>
   </InteractablesButton>
 </div>
