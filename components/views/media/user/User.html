@@ -31,7 +31,7 @@
       :seed="user.address"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
-      :class="`${!audioStream ? 'calling' : ''}`"
+      :class="{calling: audioStream}"
       :source="user.profilePicture"
     />
     <TypographyTag :text="user.name" inverted />

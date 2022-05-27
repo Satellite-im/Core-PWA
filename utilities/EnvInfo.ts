@@ -8,7 +8,6 @@ export const EnvInfo = class EnvInfo {
   debugInfo: any = undefined
   process: any = undefined
   navigator: Navigator = navigator
-
   constructor() {
     // https://capacitorjs.com/docs/v2/basics/utilities#getplatform
     // their doc has return type of string but lets use an enum
