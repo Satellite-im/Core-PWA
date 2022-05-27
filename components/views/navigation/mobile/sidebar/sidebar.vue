@@ -146,8 +146,7 @@
       <div class="new-chat-container">
         <InteractablesButton
           v-if="!isNoFriends"
-          class="has-tooltip has-tooltip-left has-tooltip-primary has-tooltip-hidden-touch new-chat"
-          data-tooltip="New Chat"
+          class="new-chat"
           type="primary"
           :action="gotoNewMessage"
         >

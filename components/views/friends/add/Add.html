@@ -2,27 +2,27 @@
   <TypographyTitle :size="6" :text="$t('friends.add')" />
   <TypographyText :text="$t('friends.add_description')" />
   <UiSpacer :height="10" />
-  <InteractablesInputGroup
+  <!-- max size of solana public key is 44 https://docs.solana.com/cli/transfer-tokens#receive-tokens -->
+  <InteractablesInput
+    v-model="accountID"
     class="search-container"
     type="primary"
     size="small"
     :placeholder="$t('friends.search_placeholder')"
+    :maxLength="44"
     @update="_searchFriend"
-    v-model="accountID"
-    :loading="searching"
+    ref="input"
     autofocus
-  >
-    <user-plus-icon size="1x" />
-  </InteractablesInputGroup>
-  <TypographyError v-if="error" :text="$t(error)" class="error" />
+  />
+  <TypographyError v-if="error" :text="$t(error)" />
+  <UiLoadersLoadingBar v-else-if="searching" />
   <FriendsFriend
-    v-if="friend"
+    v-else-if="friend"
     :friend="friend"
     @requestSent="onFriendRequestSent"
     send
   />
-  <span v-if="featureReadyToShow">
-    <UiSpacer :height="10" />
+  <!-- <UiSpacer :height="10" />
     <TypographyHorizontalRuleText plaintext value="OR" />
     <UiSpacer :height="10" />
     <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
@@ -42,11 +42,10 @@
             </div>
             <div class="column">
               <TypographyText :text="$t('friends.friend_code')" />
-              <qrcode-vue :value="friendInviteUrl" :size="size" level="H" />
+              <qrcode-vue :value="friendInviteUrl" :size="150" level="H" />
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </span>
+    </div> -->
 </div>

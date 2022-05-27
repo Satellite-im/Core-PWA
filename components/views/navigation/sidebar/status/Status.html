@@ -3,11 +3,7 @@
     :user="{address: accounts.active, state: accounts.details.state}"
     :src="src"
   />
-  <div
-    class="user-info has-tooltip has-tooltip-top has-tooltip-primary"
-    :data-tooltip="$t('controls.copy_id')"
-    @click="copyId"
-  >
+  <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
     <TypographyTitle
       data-cy="user-name"
       :text="accounts.details.name"

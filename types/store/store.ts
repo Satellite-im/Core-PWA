@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Store, Commit, Dispatch } from 'vuex'
 import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
@@ -11,6 +10,7 @@ import { SettingsState } from '~/store/settings/types'
 import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
+import { ChatState } from '~/store/chat/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -24,13 +24,18 @@ export interface RootState {
   ui: UIState
   settings: SettingsState
   conversation: ConversationState
+  chat: ChatState
 }
 
 export type RootStore = Store<RootState>
 
-export type ActionsArguments<StateType> = {
+export type ActionsArguments<StateType, GetterType = any> = {
   commit: Commit
   state: StateType
   dispatch: Dispatch
   rootState: RootState
+  getters: {
+    // @ts-ignore fix later by requiring a getter type after building it for other namespaces
+    [K in keyof GetterType]: ReturnType<GetterType[K]>
+  }
 }

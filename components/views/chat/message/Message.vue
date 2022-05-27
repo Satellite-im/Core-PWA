@@ -1,7 +1,7 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
@@ -63,6 +63,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'textile', 'accounts']),
+    ...mapGetters('friends', ['findFriendByAddress']),
     hasReactions(): boolean {
       return (
         this.$props.message.reactions && this.$props.message.reactions.length
@@ -305,10 +306,8 @@ export default Vue.extend({
 
       if (message !== this.$props.message.payload) {
         const { address } = this.$route.params
-        const recipient = this.$Hounddog.findFriendByAddress(
-          address,
-          this.$store.state.friends,
-        )
+        const recipient = this.findFriendByAddress(address)
+
         if (!recipient) {
           this.$store.dispatch('textile/editTextMessage', {
             to: this.$store.state.friends.activeConversation.target

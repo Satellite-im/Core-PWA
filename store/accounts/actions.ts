@@ -333,17 +333,17 @@ export default {
 
     commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
 
-    await db.initializeSearchIndexes()
+    db.initializeSearchIndexes()
 
     const { pin } = state
     dispatch('loadTextileAndRelated', {
       initTextile: !textileInitialized && pin,
       payerPublicKey: payerAccount?.publicKey.toBase58(),
     })
-    await dispatch('friends/initialize', {}, { root: true })
+    dispatch('friends/initialize', {}, { root: true })
 
     if ($SolanaManager.payerAccount?.secretKey) {
-      await dispatch(
+      dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {

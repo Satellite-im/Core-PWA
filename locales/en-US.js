@@ -105,6 +105,7 @@ export default {
     mic: 'Mic',
     headphones: 'Audio',
     video: 'Video',
+    hang_up: 'Hang Up',
     call: 'Call',
     screen: 'Share Screen',
     mute: 'Mute',
@@ -205,6 +206,7 @@ export default {
       create: 'Create Account Pin',
       placeholder: 'Enter Pin...',
       store_pin: 'Store Pin? (Less Secure)',
+      delete_account_label: 'Not you? Create or import an account',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -502,6 +504,8 @@ export default {
       },
     },
     chat: {
+      archived_messages: 'Archived Messages',
+      add_channel: 'Add Channel',
       group_invite: 'Invite new member',
       group_invite_description:
         'Select one of your friends to add him to the group',

@@ -10,8 +10,7 @@
       v-if="loading !== 'decline'"
       type="success"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.accept')"
+      v-tooltip.bottom="$t('friends.accept')"
       :loading="loading === 'accept'"
       :disabled="loadCheck"
       :action="acceptFriendRequest"
@@ -22,8 +21,7 @@
       v-if="loading !== 'accept'"
       type="danger"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.decline')"
+      v-tooltip.bottom="$t('friends.decline')"
       :loading="loading === 'decline'"
       :action="declineFriendRequest"
     >
@@ -34,8 +32,7 @@
     <InteractablesButton
       type="danger"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.unblock')"
+      v-tooltip.bottom="$t('friends.unblock')"
       :action="() => {}"
     >
       <x-icon size="1x" />
@@ -45,8 +42,7 @@
     <InteractablesButton
       type="primary"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.send')"
+      v-tooltip.bottom="$t('friends.send')"
       :loading="loading === 'sending'"
       :action="createFriendRequest"
     >
@@ -57,8 +53,7 @@
     <InteractablesButton
       type="danger"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
-      :data-tooltip="$t('friends.cancel')"
+      v-tooltip.bottom="$t('friends.cancel')"
       :loading="loading === 'options'"
       :action="cancelRequest"
     >
@@ -70,9 +65,8 @@
       v-if="loading !== 'options'"
       type="primary"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-desktop-only"
       data-cy="friend-send-message"
-      :data-tooltip="$t('friends.message')"
+      v-tooltip.bottom="$t('friends.message')"
       :action="sendMessageRequest"
     >
       <message-square-icon size="1x" />
@@ -80,8 +74,7 @@
     <InteractablesButton
       type="primary"
       size="small"
-      class="has-tooltip has-tooltip-primary has-tooltip-bottom has-tooltip-hidden-touch"
-      :data-tooltip="$t('friends.options')"
+      v-tooltip.bottom="$t('friends.options')"
       :loading="loading === 'options'"
       :action="contextMenu"
     >

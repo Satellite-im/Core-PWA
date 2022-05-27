@@ -26,9 +26,18 @@
   }
 
   .decryption-body {
-    min-width: 250px;
     align-self: center;
     margin-bottom: 25vh;
+    .delete-link {
+      display: flex;
+      font-family: @secondary-font;
+      font-size: 10pt;
+      color: white;
+      margin-top: @normal-spacing;
+      &:hover {
+        opacity: 0.75;
+      }
+    }
   }
 
   .version {

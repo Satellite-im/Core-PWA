@@ -1,7 +1,7 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { UIMessage, Group } from '~/types/messaging'
 import {
   getUsernameFromState,
@@ -35,6 +35,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'friends', 'accounts']),
+    ...mapGetters('friends', ['findFriendByKey']),
     address() {
       if (!this.reply.from) {
         return ''
@@ -62,7 +63,7 @@ export default Vue.extend({
       }
 
       // Try to find the friend you are talking to
-      const friend = this.$Hounddog.findFriend(this.reply.from, this.friends)
+      const friend = this.findFriendByKey(this.reply.from)
 
       if (friend?.profilePicture) {
         return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
