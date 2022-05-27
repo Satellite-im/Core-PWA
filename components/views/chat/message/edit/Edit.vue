@@ -52,6 +52,9 @@ export default Vue.extend({
   },
   methods: {
     saveMessage() {
+      if (this.$data.content.length === 0) {
+        return
+      }
       this.$emit('commitMessage', this.$data.content.slice(0, this.maxChars))
     },
     cancelMessage() {
@@ -64,6 +67,7 @@ export default Vue.extend({
       switch (event.key) {
         case KeybindingEnum.ENTER:
           if (!event.shiftKey) {
+            event.preventDefault()
             this.saveMessage()
           }
           break
