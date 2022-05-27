@@ -15,7 +15,7 @@
       <InteractablesInputGroup
         readonly
         type="primary"
-        :action="copyPhrase"
+        :action="copyAddress"
         :text="accounts.active"
       >
         <clipboard-icon size="1x" />
@@ -23,12 +23,12 @@
     </div>
   </div>
 
-  <div class="columns is-desktop" v-if="featureReadyToShow">
+  <!-- <div class="columns is-desktop">
     <div class="column">
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
       <InteractablesInput readonly type="primary" :text="accounts.gasPrice" />
     </div>
-  </div>
+  </div> -->
 
   <UiSpacer :height="20" />
 
@@ -57,16 +57,26 @@
         :size="6"
         :text="$t('pages.settings.profile.phrase.subtitle')"
       />
-      <InteractablesButton
-        :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
-        size="normal"
-        type="primary"
-        :action="togglePhrase"
-      />
+      <div class="button-container">
+        <InteractablesButton
+          :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
+          size="normal"
+          type="primary"
+          :action="togglePhrase"
+        />
+        <InteractablesButton
+          :text="$t('pages.settings.accounts.copy_phrase')"
+          size="normal"
+          type="primary"
+          :action="copyPhrase"
+        />
+      </div>
       <div v-if="showPhrase" class="tag-wrap">
-        <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord :word="word" :number="i + 1" />
-        </div>
+        <TypographyNumberedWord
+          v-for="word, i in splitPhrase"
+          :word="word"
+          :number="i + 1"
+        />
       </div>
     </div>
   </div>
