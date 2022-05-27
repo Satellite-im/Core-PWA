@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <div v-if="screenStream">
+  <div v-if="screenStream" class="video-stream-container">
     <video
       class="video-stream screen-stream"
       :src-object.prop="screenStream"
@@ -14,7 +14,7 @@
     ></video>
   </div>
 
-  <div v-else-if="videoStream">
+  <div v-else-if="videoStream" class="video-stream-container">
     <video
       class="video-stream"
       :src-object.prop="videoStream"
