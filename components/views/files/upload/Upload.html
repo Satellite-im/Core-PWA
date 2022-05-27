@@ -7,7 +7,7 @@
     multiple
   />
   <a
-    v-on="getInitialized ? { click: handleFileClick } : {}"
+    @click="handleFileClick"
     v-tooltip.top="$t('global.upload')"
     class="has-tooltip has-tooltip-top has-tooltip-primary upload-button"
     :class="{disabled : !recipient}"
