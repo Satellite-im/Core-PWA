@@ -107,7 +107,7 @@ export default {
           from: payload.from,
           id: uuidv4(),
           title: payload.title,
-          notificationstate: AlertState.UNREAD,
+          notificationState: AlertState.UNREAD,
           imageHash: payload.imageHash,
           message: payload.message,
           type: payload.type,
