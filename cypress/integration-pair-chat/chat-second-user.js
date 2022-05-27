@@ -15,6 +15,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     //Validate Chat Screen is loaded
     cy.validateChatPageIsLoaded()
 
+    //Open a chat conversation
     cy.goToConversation('Chat Pair A')
   })
 
@@ -27,7 +28,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=incoming-call-accept]').click()
 
     //Wait until all validations from other user are completed
-    cy.wait(120000)
+    cy.wait(30000)
   })
 
   it('Mute microphone', () => {
@@ -96,7 +97,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-muted]').should('be.visible')
-    cy.wait(60000)
+    cy.wait(30000)
   })
 
   it('Call finished on remote side should end call in local side', () => {
@@ -104,17 +105,15 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('Type a long message in chat bar without sending it', () => {
-    //Attempt 3 times to ensure that if second account loads before, first account will see the typing indicator
-    for (let times = 0; times < 3; times++) {
-      cy.get('[data-cy=editable-input]')
-        .should('be.visible')
-        .trigger('input')
-        .type(longMessage)
-        .clear()
-    }
+    //Type a long message
+    cy.get('[data-cy=editable-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(longMessage)
+      .clear()
   })
 
-  it('Call to User A', () => {
+  it('Call to User A for a second time', () => {
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()
@@ -125,11 +124,17 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('Refresh tab to finish the videocall', () => {
+    //Refresh page
     cy.reload()
-    //Once that decrypt account page is displayed enter pin again
+
+    //Validate Chat Screen is loaded again after refreshing
+    cy.validateChatPageIsLoaded()
+
+    //Go to conversation
+    cy.goToConversation('Chat Pair A')
   })
 
-  it('Call again to User A', () => {
+  it('Call again to User A for a third time', () => {
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()

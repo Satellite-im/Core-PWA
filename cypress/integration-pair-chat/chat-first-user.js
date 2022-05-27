@@ -15,6 +15,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     //Validate Chat Screen is loaded
     cy.validateChatPageIsLoaded()
 
+    //Open a chat conversation with Chat Pair B
     cy.goToConversation('Chat Pair B')
   })
 
@@ -28,9 +29,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()
       .then(() => {
-        cy.get('[data-cy=mediastream]', { timeout: 180000 }).should(
-          'be.visible',
-        )
+        cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('be.visible')
       })
   })
 
@@ -168,13 +167,13 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=sidebar-mic-muted]').should('be.visible')
   })
 
-  it.skip('Remote user can have microphone active - Mute indicator will not be displayed', () => {
+  it('Remote user can have microphone active - Mute indicator will not be displayed', () => {
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=muted-indicator]')
       .should('not.exist')
   })
 
-  it.skip('Remote user can have microphone muted - Mute indicator will be displayed', () => {
+  it('Remote user can have microphone muted - Mute indicator will be displayed', () => {
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=muted-indicator]', { timeout: 60000 })
       .should('be.visible')
@@ -209,7 +208,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=sidebar-video-unmuted]').should('be.visible')
   })
 
-  it.skip('Remote user can enable video - Remote camera will be displayed', () => {
+  it('Remote user can enable video - Remote camera will be displayed', () => {
     // Remote Camera is loaded
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=video-stream]', { timeout: 30000 })
@@ -217,7 +216,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .and('have.class', 'loaded')
   })
 
-  it.skip('Validate video call show local and remote video', () => {
+  it('Validate video call show local and remote video', () => {
     //Both videos can be displayed at the same time
     // Local Camera is loaded
     cy.get('[data-cy=local-video]')
@@ -246,7 +245,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=sidebar-video-muted]').should('be.visible')
   })
 
-  it.skip('Remote user can disable video - Remote camera will not be displayed', () => {
+  it('Remote user can disable video - Remote camera will not be displayed', () => {
     // Remote Camera is loaded
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=video-stream]', { timeout: 30000 })
@@ -280,7 +279,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=screen-muted]').should('be.visible')
   })
 
-  it.skip('Remote screen share - User can see remote screen instead of remote camera', () => {
+  it('Remote screen share - User can see remote screen instead of remote camera', () => {
     // Remote Screenshare is loaded
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=screen-stream]', { timeout: 30000 })
@@ -288,7 +287,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .and('have.class', 'loaded')
   })
 
-  it.skip('Remote screen share stopped - User will stop seeing the remote screen', () => {
+  it('Remote screen share stopped - User will stop seeing the remote screen', () => {
     // Remote Screenshare is removed
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=screen-stream]', { timeout: 30000 })
@@ -305,42 +304,24 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=volume-icon]').should('be.visible').click()
   })
 
-  it('Videocall Audio Indicator - User can set volume at minimum', () => {
+  it('Videocall Audio Indicator - User can see the volume slider', () => {
     cy.get('[data-cy=volume-slider]').should('be.visible')
-    cy.get('.vue-slider-dot-handle').click()
+  })
 
-    const downArrowPress = '{downArrow}'.repeat(100)
-    cy.get('.vue-slider-dot').type(downArrowPress)
-    cy.get('.vue-slider-dot').should('have.attr', 'aria-valuenow', 0)
+  it('Videocall Audio Indicator - When audio is deafened appears as muted', () => {
+    // Click on deafen audio button
+    cy.get('[data-cy=sidebar-audio-button]').click()
+    cy.get('[data-cy=sidebar-audio-deafened]').should('be.visible')
+
+    //Ensure that volume indicator appears as muted
     cy.get('[data-cy=volume-at-min]').should('be.visible')
-  })
 
-  it('Videocall Audio Indicator - User can set volume at less than 30', () => {
-    const upArrowPress = '{upArrow}'.repeat(25)
-    cy.get('.vue-slider-dot')
-      .should('have.attr', 'aria-valuenow', 0)
-      .type(upArrowPress)
-    cy.get('.vue-slider-dot').invoke('aria-valuenow', '25')
-    cy.get('[data-cy=volume-less-than-30]').should('be.visible')
-  })
+    // Undeafen audio button
+    cy.get('[data-cy=sidebar-audio-button]').click()
+    cy.get('[data-cy=sidebar-audio-not-deafened]').should('be.visible')
 
-  it('Videocall Audio Indicator - User can set volume at less than 70', () => {
-    const upArrowPress = '{upArrow}'.repeat(35)
-    cy.get('.vue-slider-dot')
-      .should('have.attr', 'aria-valuenow', 25)
-      .type(upArrowPress)
-    cy.get('.vue-slider-dot').invoke('aria-valuenow', '60')
-    cy.get('[data-cy=volume-less-than-30]').should('be.visible')
-    cy.get('[data-cy=volume-less-than-70]').should('be.visible')
-  })
-
-  it('Videocall Audio Indicator - User can set volume at maximum', () => {
-    const upArrowPress = '{upArrow}'.repeat(60)
-    cy.get('.vue-slider-dot')
-      .should('have.attr', 'aria-valuenow', 40)
-      .type(upArrowPress)
-    cy.get('.vue-slider-dot').invoke('aria-valuenow', '100')
-    cy.get('[data-cy=volume-at-max]').should('be.visible')
+    //Ensure that volume indicator does not appear as muted
+    cy.get('[data-cy=volume-at-min]').should('not.exist')
   })
 
   it('Videocall Audio Indicator - Slider can be hidden again', () => {
@@ -378,19 +359,19 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   //Is typing indicator is displayed
 
-  it.skip('Validate that is typing message is displayed', () => {
-    cy.contains('typing', { timeout: 180000 }).should('be.visible')
+  it('Validate that is typing message is displayed', () => {
+    cy.contains('typing', { timeout: 60000 }).should('be.visible')
   })
 
   //New call tests
 
-  it.skip('User can deny an incoming call', () => {
+  it('User can deny an incoming call', () => {
     //Deny incoming videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-deny]').click()
   })
 
-  it.skip('Refreshing tab should end call', () => {
+  it('Refreshing tab should end call', () => {
     cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')
@@ -399,8 +380,8 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('not.exist')
   })
 
-  it.skip('When closing tab should end a phone call', () => {
-    cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
+  it('When closing tab should end a phone call', () => {
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')
 
