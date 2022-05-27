@@ -31,7 +31,7 @@
 
       <more-vertical-icon
         v-if="featureReadyToShow"
-        class="icon-button has-tooltip-bottom"
+        class="icon-button"
         size="1.2x"
         full-width
         @click="contextMenu"

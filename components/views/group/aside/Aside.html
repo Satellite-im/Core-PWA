@@ -9,24 +9,21 @@
       type="icon"
       icon="user"
       alt="$t('pages.chat.add_member')"
-      :data-tooltip="$t('pages.chat.add_member')"
-      class="has-tooltip-primary"
+      v-tooltip.top="$t('pages.chat.add_member')"
       v-on:click="groupInvite(selectedGroup)"
     />
     <UiCircle
       type="icon"
       icon="message-square"
       alt="$t('pages.chat.switch_chat')"
-      :data-tooltip="$t('pages.chat.switch_chat')"
-      class="has-tooltip-primary"
+      v-tooltip.top="$t('pages.chat.switch_chat')"
       v-on:click="navigateToGroup(selectedGroup.id)"
     />
     <UiCircle
       type="icon"
       icon="layout"
       alt="$t('pages.chat.start_watch_party')"
-      :data-tooltip="$t('pages.chat.start_watch_party')"
-      class="has-tooltip-primary"
+      v-tooltip.top="$t('pages.chat.start_watch_party')"
     />
     <UiCircle type="icon" icon="more-vertical" />
   </div>

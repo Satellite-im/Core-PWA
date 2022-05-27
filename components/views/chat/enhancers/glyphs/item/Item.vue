@@ -1,6 +1,7 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import { Glyph } from '~/types/ui/glyph'
 import loadImg from '~/assets/img/glyphLoader.webp'
 
@@ -33,6 +34,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters('friends', ['findFriendByAddress']),
     getSrc(): string {
       return this.isLoaded ? this.src.replace('$1', 'small') : loadImg
     },
@@ -54,10 +56,7 @@ export default Vue.extend({
     },
     sendGlyph() {
       const { id, address } = this.$route.params
-      const activeFriend = this.$Hounddog.findFriendByAddress(
-        address,
-        this.$store.state.friends,
-      )
+      const activeFriend = this.findFriendByAddress(address)
 
       if (!activeFriend && !id) {
         return
