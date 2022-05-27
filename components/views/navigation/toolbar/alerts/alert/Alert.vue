@@ -27,12 +27,10 @@ export default Vue.extend({
           })
         }
         case AlertType.GROUP_MESSAGE: {
-          if (this.alert.fromAddress !== this.getActiveAccount) {
-            return this.$t('messaging.user_sent_group_message.user', {
-              user: this.alert.fromName,
-              group: this.alert.group,
-            })
-          }
+          return this.$t('messaging.user_sent_group_message.user', {
+            user: this.alert.fromName,
+            group: this.alert.group,
+          })
         }
       }
       return this.$t('user_sent_something.user')

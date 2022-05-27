@@ -746,12 +746,13 @@ export default {
       })
 
       const userInfo = await usersProgram.getUserInfo(message.sender)
+      const urlMatch = groupId ? message.to : message.from
       dispatch(
         'ui/sendNotification',
         {
           message: 'New DM',
           from: userInfo?.name,
-          fromAddress: message.from,
+          fromAddress: urlMatch,
           title: `Notification`,
           groupName: group.name,
           groupId,

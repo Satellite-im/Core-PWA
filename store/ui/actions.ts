@@ -107,11 +107,8 @@ export default {
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
-    console.log(rootState.textile.activeConversation === payload.groupURL)
-    if (
-      rootState.textile.activeConversation !== payload.fromAddress ||
-      rootState.textile.activeConversation !== payload.groupURL
-    ) {
+    console.log(rootState.textile.activeConversation, payload.groupURL)
+    if (rootState.textile.activeConversation !== payload.fromAddress) {
       const notificationResponse =
         await $TextileManager.notificationManager?.sendNotification({
           from: payload.from,
