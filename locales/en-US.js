@@ -434,6 +434,7 @@ export default {
         no_status: 'No status set.',
         reveal_phrase: 'Reveal Phrase',
         hide_phrase: 'Hide Phrase',
+        copy_phrase: 'Copy Phrase',
       },
       personalize: {
         flair: 'Flair',
