@@ -105,6 +105,7 @@ export default {
     mic: 'Mic',
     headphones: 'Audio',
     video: 'Video',
+    hang_up: 'Hang Up',
     call: 'Call',
     screen: 'Share Screen',
     mute: 'Mute',
@@ -503,6 +504,8 @@ export default {
       },
     },
     chat: {
+      archived_messages: 'Archived Messages',
+      add_channel: 'Add Channel',
       group_invite: 'Invite new member',
       group_invite_description:
         'Select one of your friends to add him to the group',

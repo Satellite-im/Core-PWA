@@ -24,10 +24,7 @@
     />
   </div>
   <div class="controls">
-    <div
-      class="toggle-alerts has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-      @click="toggleAlerts"
-    >
+    <div class="toggle-alerts" @click="toggleAlerts">
       <UiCircle
         v-if="allUnseenNotifications.length"
         class="notification-alert"
@@ -51,7 +48,7 @@
       heading="Alerts"
       :width="25"
       :height="25"
-      :class="`has-tooltip-hidden-touch alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
+      :class="`alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
       :customStyles="$device.isMobile"
       :toggleMethod="() => $data.showAlerts = false"
     >
@@ -59,10 +56,9 @@
     </UiFloatingContainer>
     <template v-if="conversation.type === 'friend'">
       <div
-        :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-        ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+        :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+        v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
         data-cy="toolbar-enable-audio"
-        :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
         v-if="server"
         @click="handleCall"
       >
@@ -77,9 +73,8 @@
         data-cy="toolbar-enable-audio"
       >
         <div
-          :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-          ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
-          :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
+          :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+          v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
           v-if="server"
           @click="handleCall"
         >
@@ -88,10 +83,9 @@
       </UiComingSoon>
     </template>
     <!-- <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-      ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
-      :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
+      v-tooltip.bottom="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="server"
       @click="() => call(['audio', 'video'])"
     >
@@ -104,9 +98,8 @@
       data-cy="toolbar-archived-messages"
     >
       <div
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
         :class="ui.showPinned ? 'primary' : ''"
-        data-tooltip="Archived Messages"
+        v-tooltip.bottom="$t('pages.chat.archived_messages')"
         @click="() => {
         $store.commit('ui/togglePinned', !ui.showPinned)
       }"
@@ -116,17 +109,17 @@
     </UiComingSoon>
     <div
       v-if="!isGroup(recipient)"
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
+      class="control-button"
       data-cy="toolbar-new-group"
-      :data-tooltip="$t('pages.chat.new_group')"
+      v-tooltip.bottom="$t('pages.chat.new_group')"
       @click="toggleModal('creategroup')"
     >
       <users-icon size="1x" class="control-icon" />
     </div>
     <div
       v-else
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
-      :data-tooltip="$t('pages.chat.add_member')"
+      class="control-button"
+      v-tooltip.bottom="$t('pages.chat.add_member')"
       @click="groupInvite(getGroup())"
     >
       <user-plus-icon size="1x" class="control-icon" />
@@ -137,9 +130,9 @@
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <div
       v-if="!$device.isMobile"
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom control-button"
+      class="market-place control-button"
       @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      data-tooltip="Marketplace"
+      v-tooltip.bottom="$t('market_place.title')"
       data-cy="toolbar-marketplace"
     >
       <shopping-bag-icon class="control-icon" size="1x" />
@@ -151,9 +144,8 @@
       data-cy="toolbar-wallet"
     >
       <div
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom"
         @click="() => toggleModal(ModalWindows.WALLET)"
-        data-tooltip="Wallet"
+        v-tooltip.bottom="$t('wallet.wallet')"
       >
         <wallet-icon class="control-icon" size="1x" color="grey" />
       </div>

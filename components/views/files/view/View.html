@@ -15,23 +15,24 @@
       <a
         v-else
         @click="download"
-        :data-tooltip="$t('controls.download')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+        v-tooltip.bottom="$t('controls.download')"
+        class="control"
       >
         <download-icon size="1x" />
       </a>
-      <!-- <a
-        :data-tooltip="$t('controls.share_link')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+      <!-- 
+      <a
+        v-tooltip.bottom="$t('controls.share_link')"
+        class="control"
         :class="{'disabled' : isFilesIndexLoading}"
         v-on="isFilesIndexLoading ? {} : {click: share}"
       >
         <link-icon size="1x" />
       </a> -->
       <div
-        :data-tooltip="$t('ui.close')"
+        v-tooltip.bottom="$t('ui.close')"
         @click="$emit('close')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control control--close"
+        class="control control--close"
       >
         <x-icon size="1x" />
       </div>
@@ -45,12 +46,7 @@
   </div>
   <div v-else class="no-preview">
     <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
-    <a
-      v-else
-      @click="download"
-      :data-tooltip="$t('controls.download')"
-      class="has-tooltip has-tooltip-primary has-tooltip-top"
-    >
+    <a v-else @click="download" v-tooltip.top="$t('controls.download')">
       <download-icon size="1x" class="file-icon" />
     </a>
     <TypographyTitle :size="4" :text="file.name" />

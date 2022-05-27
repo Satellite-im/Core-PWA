@@ -9,8 +9,8 @@
   <label
     v-if="type == 'quick'"
     @click="handleFileClick"
-    :data-tooltip="$t('global.upload')"
-    :class="`has-tooltip has-tooltip-top has-tooltip-primary upload-label ${recipient ? 'active' : 'inactive'}`"
+    v-tooltip.top="$t('global.upload')"
+    :class="`upload-label ${recipient ? 'active' : 'inactive'}`"
   >
     <plus-icon size="1.2x" class="control-icon" />
   </label>
