@@ -42,15 +42,15 @@ export default {
       { root: true },
     )
 
+    await dispatch('fetchFriends', {})
+    await dispatch('fetchFriendRequests', {})
+    await dispatch('subscribeToFriendsEvents', {})
+
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Ready },
       { root: true },
     )
-
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
   },
   /**
    * @method fetchFriendRequests DocsTODO
@@ -108,9 +108,11 @@ export default {
 
     // Concat incoming and outgoing friends into a single array
     // and fetch user info for each friend
-    incoming
-      .concat(outgoing)
-      .forEach((friendData) => dispatch('fetchFriendDetails', friendData))
+    const friendData = incoming.concat(outgoing)
+
+    for (let i = 0; i < friendData.length; i++) {
+      await dispatch('fetchFriendDetails', friendData[i])
+    }
 
     commit(
       'dataState/setDataState',

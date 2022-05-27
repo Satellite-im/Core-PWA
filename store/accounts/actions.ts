@@ -344,7 +344,7 @@ export default {
       initTextile: !textileInitialized && pin,
       payerPublicKey: payerAccount?.publicKey.toBase58(),
     })
-    dispatch('friends/initialize', {}, { root: true })
+    await dispatch('friends/initialize', {}, { root: true })
 
     if ($SolanaManager.payerAccount?.secretKey) {
       dispatch(
