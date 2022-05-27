@@ -510,7 +510,7 @@ describe('mutate friends', () => {
     const payload: any = {
       name: 'Yusuf Mangunwijaya',
       address: '0x1', // We will just use this
-      typingState: 'TYPING', // Change the value here so we can detect it in the the expect() below
+      typingState: 'NOT_TYPING', // Change the value here so we can detect it in the the expect() below
       account: {
         accountId: 'Checking Account',
         from: '.',
@@ -524,7 +524,29 @@ describe('mutate friends', () => {
 
     inst.setTyping(InitialFriendsState, {
       id: payload.address,
-      typingState: 'TYPING',
+      // typingState: 'TYPING',
+    })
+    expect(InitialFriendsState.all).toMatchSnapshot()
+  })
+  test('set typing state but non-identical address', () => {
+    const payload: any = {
+      name: 'Yusuf Mangunwijaya',
+      address: '0x1', // We will just use this
+      typingState: 'TYPING', // Change the value here so we can detect it in the the expect() below
+      account: {
+        accountId: 'Checking Account',
+        from: '.',
+        status: 429,
+        fromMailboxId: '12345',
+        toMailboxId: 'v4.0.0-rc.4',
+        to: './path/to/file',
+      },
+      textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=429',
+    }
+
+    inst.setTyping(InitialFriendsState, {
+      id: '0x2', // 0x2 rather than 0x1
+      typingState: undefined,
     })
     expect(InitialFriendsState.all).toMatchSnapshot()
   })
@@ -1097,6 +1119,81 @@ describe('mutations.setNote', () => {
     }
     const argument = {
       id: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      note: 'zeroxzero',
+    }
+
+    mutations.setNote(localState, argument)
+    expect(localState.all).toMatchSnapshot()
+  })
+  test('real but non-identical id', () => {
+    const localState = {
+      incomingRequests: [
+        {
+          requestId: 'incomingRequestsItem0',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+          from: '',
+          userInfo: {
+            name: '',
+            servers: {},
+            status: '',
+            photoHash: '',
+          },
+        },
+      ],
+      outgoingRequests: [
+        {
+          to: '',
+          requestId: '',
+          account: {
+            accountId: '',
+            from: '',
+            status: 123,
+            fromMailboxId: '',
+            toMailboxId: '',
+            to: '',
+          },
+          pending: true,
+        },
+      ],
+      all: [
+        {
+          publicKey: 'NoWiFi4you',
+          localSypingState: 'NOT_TYPING',
+          item: {},
+          pending: true,
+          activeChat: true,
+          encryptedTextilePubkey: '',
+          name: 'Taurus Nix',
+          address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          account: {
+            accountId: 'Checking Account',
+            from: '.',
+            status: 429,
+            fromMailboxId: '12345',
+            toMailboxId: 'v4.0.0-rc.4',
+            to: './path/to/file',
+          },
+          textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+          status: '',
+          state: 'idle',
+          unreadCount: 123,
+          profilePicture: '',
+          badge: 'community',
+          userAccount: '',
+          mailboxId: '',
+        },
+      ],
+    }
+    const argument = {
+      id: '1xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f', // 1x rather than 0x
       note: 'zeroxzero',
     }
 
