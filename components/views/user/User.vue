@@ -18,16 +18,7 @@ import {
 } from '~/utilities/Messaging'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    testFunc: () => void
-    navigateToUser: () => void
-    handleShowProfile: () => void
-    removeUser: () => void
-    getDescriptionFromMessage: (message: Message) => string
-  }
-}
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -54,13 +45,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      contextMenuValues: [
-        { text: this.$t('context.send'), func: this.navigateToUser },
-        { text: this.$t('context.voice'), func: this.testFunc },
-        { text: this.$t('context.video'), func: this.testFunc },
-        { text: this.$t('context.profile'), func: this.handleShowProfile },
-        { text: this.$t('context.remove'), func: this.removeUser },
-      ],
       existConversation: false,
       isLoading: false,
       timestamp: convertTimestampToDate(
@@ -69,17 +53,6 @@ export default Vue.extend({
       ),
       timestampRefreshInterval: null,
     }
-  },
-  mounted() {
-    Array.from(
-      (this.$refs.subtitle as HTMLElement).getElementsByClassName('spoiler'),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
-      })
-    })
   },
   computed: {
     ...mapState({
@@ -91,31 +64,56 @@ export default Vue.extend({
         )
       },
       textilePubkey: (state) =>
-        (state as RootState).accounts?.details?.textilePubkey || '',
+        (state as RootState).accounts?.details?.textilePubkey ?? '',
     }),
     ...mapGetters('textile', ['getConversation']),
-    lastMessage() {
+    contextMenuValues(): ContextMenuItem[] {
+      return this.user.state === 'online'
+        ? [
+            { text: this.$t('context.send'), func: this.navigateToUser },
+            { text: this.$t('context.voice'), func: this.testFunc },
+            { text: this.$t('context.video'), func: this.testFunc },
+            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            { text: this.$t('context.remove'), func: this.removeUser },
+          ]
+        : [
+            { text: this.$t('context.send'), func: this.navigateToUser },
+            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            { text: this.$t('context.remove'), func: this.removeUser },
+          ]
+    },
+
+    lastMessage(): string {
       const conversation = this.getConversation(this.user.address)
       const lastMessage = conversation?.lastMessage
 
       return lastMessage
         ? this.getDescriptionFromMessage(lastMessage)
-        : this.$t('messaging.say_hi')
+        : (this.$t('messaging.say_hi') as string)
     },
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
+    unreadMessageCount(): string {
+      if (!this.user.unreadCount) {
+        return ''
+      }
+      if (this.user.unreadCount < 100) {
+        return this.user.unreadCount.toString()
+      }
+      return '99+'
+    },
   },
   watch: {
     userConversationLastUpdate: {
       handler(lastUpdate) {
-        if (this.$data.timestampRefreshInterval) {
-          clearInterval(this.$data.timestampRefreshInterval)
+        if (this.timestampRefreshInterval) {
+          clearInterval(this.timestampRefreshInterval)
         }
 
-        this.$data.existConversation = lastUpdate > 0
-        this.$data.timestamp = convertTimestampToDate(
+        this.existConversation = lastUpdate > 0
+        this.timestamp = convertTimestampToDate(
           this.$t('friends.details'),
           lastUpdate,
         )
@@ -124,7 +122,7 @@ export default Vue.extend({
           if (
             timePassed === this.getConversation(this.user.address)?.lastUpdate
           ) {
-            this.$data.timestamp = convertTimestampToDate(
+            this.timestamp = convertTimestampToDate(
               this.$t('friends.details'),
               timePassed,
             )
@@ -140,6 +138,17 @@ export default Vue.extend({
       immediate: true,
     },
   },
+  mounted() {
+    Array.from(
+      (this.$refs.subtitle as HTMLElement).getElementsByClassName('spoiler'),
+    ).forEach((spoiler) => {
+      spoiler.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        spoiler.classList.add('spoiler-open')
+      })
+    })
+  },
   beforeDestroy() {
     clearInterval(this.$data.timestampRefreshInterval)
     this.$store.commit('ui/toggleContextMenu', false)
@@ -153,7 +162,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('friends/removeFriend', this.user)
       } catch (e) {
-        this.$toast.success(
+        this.$toast.error(
           this.$t('errors.friends.friend_not_removed') as string,
         )
       } finally {
@@ -186,38 +195,26 @@ export default Vue.extend({
       })
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
-    async handleShowProfile() {
+    handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
     },
-
-    getFormattedUnreads(value: Number) {
-      if (value < 100) {
-        return value.toString()
-      }
-      if (value >= 100) {
-        return '99+'
-      }
-    },
-    getDescriptionFromMessage(message: Message) {
+    getDescriptionFromMessage(message: Message): string {
       const sender = message.from === this.textilePubkey ? 'me' : 'user'
 
       switch (message.type) {
         case MessagingTypesEnum.TEXT:
           return (message as TextMessage).payload
         case MessagingTypesEnum.FILE:
-          return this.$t(`messaging.user_sent.${sender}`, {
-            msgType: 'file',
-          })
         case MessagingTypesEnum.GLYPH:
           return this.$t(`messaging.user_sent.${sender}`, {
-            msgType: 'glyph',
-          })
+            msgType: message.type,
+          }) as string
         case MessagingTypesEnum.IMAGE:
           return this.$t(`messaging.user_sent_image.${sender}`, {
             msgType: 'image',
-          })
+          }) as string
         default:
-          return this.$t(`messaging.user_sent_something.${sender}`)
+          return this.$t(`messaging.user_sent_something.${sender}`) as string
       }
     },
     /**

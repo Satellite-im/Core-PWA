@@ -16,10 +16,7 @@
   </div>
   <div class="user-chat-details">
     <TypographyText :size="6" :text="timestamp" v-if="existConversation" />
-    <TypographyTag
-      :text="getFormattedUnreads(user.unreads)"
-      v-if="user.unreads > 0"
-    />
+    <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" />
   </div>
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
