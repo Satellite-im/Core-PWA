@@ -13,6 +13,7 @@ declare interface BaseComponentData {
   scrollObserver: IntersectionObserver | null
   isIntersecting: boolean
   isComplete: boolean
+  debounceTimeout: ReturnType<typeof setTimeout> | null
 }
 
 export default {
@@ -30,17 +31,21 @@ export default {
       scrollObserver: null,
       isIntersecting: false,
       isComplete: false,
+      debounceTimeout: null,
     }
   },
   mounted() {
     this.scrollObserver = new IntersectionObserver(([entry]) => {
+      clearTimeout(this.debounceTimeout)
       if (entry && entry.isIntersecting && this.$refs.root) {
         this.isIntersecting = true
         this.scrollObserver.unobserve(this.$refs.root)
         this.$emit('intersect', {
           loaded: () => {
-            this.isIntersecting = false
-            this.scrollObserver.observe(this.$refs.root)
+            this.debounceTimeout = setTimeout(() => {
+              this.isIntersecting = false
+              this.scrollObserver.observe(this.$refs.root)
+            }, 100)
           },
           complete: () => {
             this.scrollObserver?.disconnect()

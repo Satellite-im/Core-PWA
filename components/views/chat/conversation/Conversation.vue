@@ -19,7 +19,7 @@ export default Vue.extend({
     ...mapState(['ui', 'textile', 'chat']),
     options() {
       return {
-        threshold: 0,
+        threshold: [0, 0.25, 0.5, 0.75, 1],
         rootMargin: '100px 0px 0px 0px',
         root: this.$refs.chatScroll,
       }
@@ -54,6 +54,7 @@ export default Vue.extend({
       if (!messageId) {
         return
       }
+
       this.$nextTick(() => {
         const messageNode = document.getElementById(messageId)
         if (!messageNode) {
