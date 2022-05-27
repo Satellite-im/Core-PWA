@@ -2,7 +2,7 @@
 <script lang="ts">
 import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
@@ -42,9 +42,6 @@ export default Vue.extend({
     ...mapState({
       consentScan: (state) => (state as RootState).settings.consentScan,
     }),
-    activeFriend(): Friend | undefined {
-      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
-    },
   },
   methods: {
     /**

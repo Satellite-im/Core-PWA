@@ -18,6 +18,8 @@ import {
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
 import { Group } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
+import { ConversationParticipant } from '~/store/conversation/types'
 
 export default Vue.extend({
   components: {
@@ -41,8 +43,16 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('chat', ['getFiles']),
-    ...mapState(['ui', 'friends', 'webrtc', 'chat', 'textile', 'conversation']),
-    activeFriend() {
+    ...mapGetters('friends', ['getActiveFriend']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      friends: (state) => (state as RootState).friends,
+      webrtc: (state) => (state as RootState).webrtc,
+      chat: (state) => (state as RootState).chat,
+      textile: (state) => (state as RootState).textile,
+      conversation: (state) => (state as RootState).conversation,
+    }),
+    activeFriend(): ConversationParticipant {
       return this.conversation?.participants?.[0]
     },
     /**
@@ -128,7 +138,7 @@ export default Vue.extend({
   watch: {
     'friends.all': {
       handler() {
-        const activeFriend = this.$Hounddog.getActiveFriend(this.friends)
+        const activeFriend = this.getActiveFriend
         if (activeFriend)
           this.recipientTyping =
             activeFriend.typingState === PropCommonEnum.TYPING
