@@ -5,11 +5,14 @@
     border: none;
     position: absolute;
   }
-  .control-icon {
-    justify-self: flex-start;
-    align-self: flex-start;
-    font-size: @larger-icon-size;
-    width: unset;
+
+  .upload-button {
+    color: #fff;
+    display: inline-flex;
+    .control-icon {
+      font-size: @larger-icon-size;
+      width: unset;
+    }
   }
   .loading-bar {
     max-width: @half;
@@ -18,29 +21,4 @@
   display: inline-flex;
   justify-self: flex-start;
   align-self: flex-start;
-}
-.button {
-  position: relative;
-  overflow: hidden;
-  margin-left: @xlight-spacing;
-}
-.upload-label {
-  display: inline-flex;
-  cursor: pointer;
-}
-.upload-button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  height: 20px;
-  width: 20px;
-}
-.feather {
-  height: 20px;
-  width: 20px;
-}
-.inactive {
-  cursor: not-allowed !important;
 }

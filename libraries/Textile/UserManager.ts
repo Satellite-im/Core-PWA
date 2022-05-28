@@ -3,7 +3,7 @@ import { ThreadID } from '@textile/threads-id'
 import { userinfoSchema } from './schema'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { UserdataFromThread } from '~/types/textile/user'
+import { UserThreadData } from '~/types/textile/user'
 
 const CollectionName = 'userInfo'
 
@@ -51,69 +51,60 @@ export class UserInfoManager {
 
   /**
    * Find the current user consent info
-   * @returns returns the current user's info
+   * @returns the current user's info
    */
-  private async _findRecord(): Promise<UserdataFromThread | null> {
-    const query = Query.where('user_address').eq(this.textile.wallet.address)
-    const [record] = await this.textile.client.find<UserdataFromThread>(
+  async getUserRecord(): Promise<UserThreadData | undefined> {
+    const query = Query.where('userAddress').eq(this.textile.wallet.address)
+    const [record] = await this.textile.client.find<UserThreadData>(
       this.threadID,
       CollectionName,
       query,
     )
-    return record || null
-  }
-
-  async getUserRecord(): Promise<UserdataFromThread | null> {
-    return await this._findRecord()
+    return record
   }
 
   /**
-   * @method setConsent
-   * Set consent data for csam
+   * @method updateRecord
+   * @description update any of the optional params on threaddb. creates record if it doesn't exist
+   * @returns updated record
    */
-  async setConsent({
-    consentScan,
-    consentDate,
+  async updateRecord({
+    consentToScan,
+    blockNsfw,
+    filesVersion,
   }: {
-    consentScan: boolean
-    consentDate: number
-  }): Promise<void> {
-    const record = await this._findRecord()
-    if (record) {
-      record.consent_scan = consentScan
-      record.consent_date = consentDate
-      await this.textile.client.save(this.threadID, CollectionName, [record])
-      return
+    consentToScan?: boolean
+    blockNsfw?: boolean
+    filesVersion?: number
+  }): Promise<UserThreadData | undefined> {
+    const record = await this.getUserRecord()
+    if (!record) {
+      await this.textile.client.create(this.threadID, CollectionName, [
+        {
+          userAddress: this.textile.wallet.address,
+          consentToScan,
+          blockNsfw,
+          filesVersion,
+        },
+      ])
+      return this.getUserRecord()
     }
-    await this.textile.client.create(this.threadID, CollectionName, [
-      {
-        user_address: this.textile.wallet.address,
-        created_at: Date.now(),
-        consent_scan: consentScan,
-        consent_date: consentDate,
-      },
-    ])
-  }
-
-  /**
-   * @method setBlockNsfw
-   * @description set whether nsfw content should be blocked
-   * @param {boolean} blockNsfw true to block, false for show
-   */
-  async setBlockNsfw(blockNsfw: boolean): Promise<void> {
-    const record = await this._findRecord()
-    if (record) {
-      record.block_nsfw = blockNsfw
+    if (typeof consentToScan === 'boolean') {
+      record.consentToScan = consentToScan
+      record.consentUpdated = Date.now()
       await this.textile.client.save(this.threadID, CollectionName, [record])
-      return
+      return record
     }
-    await this.textile.client.create(this.threadID, CollectionName, [
-      {
-        user_address: this.textile.wallet.address,
-        created_at: Date.now(),
-        block_nsfw: blockNsfw,
-      },
-    ])
+    if (typeof blockNsfw === 'boolean') {
+      record.blockNsfw = blockNsfw
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return record
+    }
+    if (filesVersion) {
+      record.filesVersion = filesVersion
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return record
+    }
   }
 
   async getThreadName(): Promise<string> {

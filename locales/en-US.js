@@ -284,6 +284,7 @@ export default {
         subtitle:
           'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
       },
+      updating: 'Updating remote settings',
     },
     settings: {
       settings: 'Settings',
@@ -595,6 +596,7 @@ export default {
       friend_not_found: 'Friend not found',
       mailbox_manager_not_found: 'Mailbox manager not found',
       mailbox_manager_not_initialized: 'Mailbox manager not initialized',
+      bucket_not_initialized: 'Bucket not initialized',
     },
     storage: {
       database_not_cleared: 'Could not clear database',
