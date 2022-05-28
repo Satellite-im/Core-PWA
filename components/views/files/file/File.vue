@@ -50,7 +50,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
     ...mapGetters('ui', ['isFilesIndexLoading']),
     /**

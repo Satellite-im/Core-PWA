@@ -105,6 +105,7 @@ export default {
     mic: 'Mic',
     headphones: 'Audio',
     video: 'Video',
+    hang_up: 'Hang Up',
     call: 'Call',
     screen: 'Share Screen',
     mute: 'Mute',
@@ -283,6 +284,7 @@ export default {
         subtitle:
           'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
       },
+      updating: 'Updating remote settings',
     },
     settings: {
       settings: 'Settings',
@@ -433,6 +435,7 @@ export default {
         no_status: 'No status set.',
         reveal_phrase: 'Reveal Phrase',
         hide_phrase: 'Hide Phrase',
+        copy_phrase: 'Copy Phrase',
       },
       personalize: {
         flair: 'Flair',
@@ -503,6 +506,8 @@ export default {
       },
     },
     chat: {
+      archived_messages: 'Archived Messages',
+      add_channel: 'Add Channel',
       group_invite: 'Invite new member',
       group_invite_description:
         'Select one of your friends to add him to the group',
@@ -591,6 +596,7 @@ export default {
       friend_not_found: 'Friend not found',
       mailbox_manager_not_found: 'Mailbox manager not found',
       mailbox_manager_not_initialized: 'Mailbox manager not initialized',
+      bucket_not_initialized: 'Bucket not initialized',
     },
     storage: {
       database_not_cleared: 'Could not clear database',

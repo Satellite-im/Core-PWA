@@ -3,7 +3,6 @@ import { AccountsError, RegistrationStatus } from '../accounts/types'
 import * as module from './actions'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import * as Hounddog from '~/utilities/Hounddog'
 import { DataStateType } from '~/store/dataState/types'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -17,127 +16,10 @@ const mockFPLogger = {
 
 FriendsProgram.mockImplementation(() => mockFPLogger)
 
-const HounddogDefault = Hounddog.default
-Vue.prototype.$Hounddog = new HounddogDefault({
-  accounts: {
-    storePin: true,
-    loading: true,
-    locked: true,
-    pin: '',
-    pinHash: '',
-    active: '',
-    gasPrice: '',
-    phrase: '',
-    error: '',
-    encryptedPhrase: '',
-    registered: true,
-    details: {
-      name: '',
-      address: '',
-      status: '',
-      state: 'idle',
-      unreadCount: 123,
-      profilePicture: '',
-      badge: 'community',
-      userAccount: '',
-      mailboxId: '',
-      textilePubkey: '',
-    },
-    registrationStatus: RegistrationStatus.IN_PROGRESS,
-    lastVisited: '',
-  },
-  dataState: {
-    files: DataStateType.Empty,
-    friends: DataStateType.Loading,
-    search: DataStateType.Ready,
-  },
-  friends: {
-    incomingRequests: [
-      {
-        requestId: '',
-        account: {
-          accountId: '',
-          from: '',
-          status: 123,
-          fromMailboxId: '',
-          toMailboxId: '',
-          to: '',
-        },
-        pending: true,
-        from: '',
-        userInfo: {
-          name: '',
-          servers: {},
-          status: '',
-          photoHash: '',
-        },
-      },
-    ],
-    outgoingRequests: [
-      {
-        to: '',
-        requestId: '',
-        account: {
-          accountId: '',
-          from: '',
-          status: 123,
-          fromMailboxId: '',
-          toMailboxId: '',
-          to: '',
-        },
-        pending: true,
-      },
-    ],
-    all: [
-      {
-        publicKey: 'NoWiFi4you',
-        typingState: 'NOT_TYPING',
-        item: {},
-        pending: true,
-        activeChat: true,
-        encryptedTextilePubkey: '',
-        name: 'Taurus Nix',
-        address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
-        account: {
-          accountId: 'Checking Account',
-          from: '.',
-          status: 429,
-          fromMailboxId: '12345',
-          toMailboxId: 'v4.0.0-rc.4',
-          to: './path/to/file',
-        },
-        textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
-        status: '',
-        state: 'idle',
-        unreadCount: 123,
-        profilePicture: '',
-        badge: 'community',
-        userAccount: '',
-        mailboxId: '',
-      },
-    ],
-  },
-  textile: {
-    initialized: true,
-    conversations: {},
-    conversationLoading: true,
-    messageLoading: true,
-    uploadProgress: {
-      abc: {
-        progress: 42,
-        finished: false,
-        name: 'file.pdf',
-      },
-    },
-  },
-})
 Vue.prototype.$SolanaManager = new SolanaManager()
 
 describe('default functions', () => {
   test('module.default.initialize', async () => {
-    const HounddogConstructor = Vue.prototype.$Hounddog
-
-    HounddogConstructor.friendExists = jest.fn().mockReturnValueOnce(true)
     const mockData = [
       {
         key: '1',

@@ -38,6 +38,7 @@ const commonProperties = [
   'ui.filePreview',
   'ui.filesUploadStatus',
   'ui.fileDownloadList',
+  'textile.userThread',
 ]
 
 const propertiesNoStorePin = [

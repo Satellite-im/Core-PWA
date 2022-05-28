@@ -22,6 +22,14 @@ export class FilSystem {
   private _version: number = 1
 
   /**
+   * @getter version
+   * @returns {number} current version
+   */
+  get version(): number {
+    return this._version
+  }
+
+  /**
    * @getter currentDirectory
    * @returns {Directory} containing the current active directory
    */
@@ -92,7 +100,7 @@ export class FilSystem {
   get export(): FileSystemExport {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
-      version: this._version++,
+      version: ++this._version,
       content: this.root.content.map((item) => {
         return this.exportChildren(item)
       }),

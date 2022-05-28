@@ -19,6 +19,7 @@ export default Vue.extend({
       friendsExist: (state) => (state as RootState).friends?.all?.length > 0,
     }),
     ...mapGetters('textile', ['getInitialized']),
+    ...mapGetters('friends', ['findFriendByAddress']),
     groupedMessages() {
       const { address } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[address]
@@ -34,7 +35,7 @@ export default Vue.extend({
       const { address } = this.$route.params
       const { friends } = this.$store.state
 
-      return this.$Hounddog?.findFriendByAddress(address, friends)
+      return this.findFriendByAddress(address)
     },
   },
   watch: {
@@ -52,7 +53,7 @@ export default Vue.extend({
           const { address } = this.$route.params
           const { friends } = this.$store.state
 
-          const friend = this.$Hounddog?.findFriendByAddress(address, friends)
+          const friend = this.findFriendByAddress(address)
 
           if (address && friend) {
             this.$store.dispatch('textile/fetchMessages', {
@@ -71,7 +72,7 @@ export default Vue.extend({
           const { address } = this.$route.params
           const { friends } = this.$store.state
 
-          const friend = this.$Hounddog?.findFriendByAddress(address, friends)
+          const friend = this.findFriendByAddress(address)
 
           if (address && friend) return
 

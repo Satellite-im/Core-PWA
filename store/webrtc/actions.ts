@@ -12,6 +12,7 @@ import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import { Friend } from '~/types/ui/friends'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -276,7 +277,7 @@ const webRTCActions = {
    * @param kind Kind of the stream (audio/video/screen)
    */
   toggleMute(
-    { state }: ActionsArguments<WebRTCState>,
+    { state, dispatch, commit }: ActionsArguments<WebRTCState>,
     { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
   ) {
     if (!state.activeCall || !peerId) {
@@ -287,11 +288,14 @@ const webRTCActions = {
       return
     }
     const isMuted = state.streamMuted[peerId]?.[kind]
+    commit('audio/setMuted', isMuted)
     if (isMuted) {
       call.unmute({ peerId, kind })
+      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
     call.mute({ peerId, kind })
+    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
   /**
@@ -422,6 +426,9 @@ const webRTCActions = {
       commit('setActiveCall', { callId, peerId })
       commit('conversation/setCalling', true, { root: true })
       commit('updateCreatedAt', Date.now())
+      if (rootState.audio.muted) {
+        call.mute({ peerId: localId, kind: 'audio' })
+      }
     }
     call.on('CONNECTED', onCallConnected)
 
@@ -446,8 +453,11 @@ const webRTCActions = {
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted: false,
+        muted: rootState.audio.muted,
       })
+      if (rootState.audio.muted) {
+        call.mute({ peerId: localId, kind: 'audio' })
+      }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 
@@ -469,6 +479,9 @@ const webRTCActions = {
         kind,
         muted: false,
       })
+      if (rootState.audio.muted) {
+        call.mute({ peerId: localId, kind: 'audio' })
+      }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 

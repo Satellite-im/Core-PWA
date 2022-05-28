@@ -1,7 +1,7 @@
 <div class="message-actions">
   <div
-    class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('ui.emotes')"
+    class="reply-command"
+    v-tooltip.top="$t('ui.emotes')"
     @click="emojiReaction"
   >
     <smile-icon
@@ -11,30 +11,30 @@
   </div>
   <div
     v-if="!hideReply"
-    class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('messaging.reply')"
+    class="reply-command"
+    v-tooltip.top="$t('messaging.reply')"
     @click="setReplyChatbarContent"
   >
     <corner-down-right-icon size="1x" :class="'control-icon'" />
   </div>
   <div
-    class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('messaging.pin')"
+    class="reply-command"
+    v-tooltip.top="$t('messaging.pin')"
     v-if="featureReadyToShow"
   >
     <archive-icon size="1x" :class="'control-icon'" />
   </div>
   <div
-    class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('controls.edit')"
+    class="reply-command"
+    v-tooltip.top="$t('controls.edit')"
     v-if="isEditable"
     @click="editMessage"
   >
     <edit-icon size="1x" :class="'control-icon'" />
   </div>
   <div
-    class="reply-command has-tooltip has-tooltip-primary"
-    :data-tooltip="$t('ui.more')"
+    class="reply-command"
+    v-tooltip.top="$t('ui.more')"
     v-if="hasMoreSettings"
   >
     <more-vertical-icon size="1x" :class="'control-icon'" />

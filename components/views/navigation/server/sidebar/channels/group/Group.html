@@ -3,10 +3,7 @@
     <chevron-right-icon size="0.8x" v-if="collapsed" />
     <chevron-down-icon size="0.8x" v-else />
     <span class="server-sidebar-group-name">{{group.name}}</span>
-    <div
-      class="has-tooltip has-tooltip-primary has-tooltip-top add-channel"
-      data-tooltip="Add Channel"
-    >
+    <div class="add-channel" v-tooltip.top="$t(pages.chat.add_channel)">
       <plus-icon size="1x" />
     </div>
   </h5>

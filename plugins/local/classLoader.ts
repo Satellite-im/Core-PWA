@@ -11,7 +11,6 @@ import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
-import Hounddog from '~/utilities/Hounddog'
 import BucketManager from '~/libraries/Textile/BucketManager'
 import Logger from '~/utilities/Logger'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -27,7 +26,6 @@ declare module 'vue/types/vue' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $BucketManager: BucketManager
-    $Hounddog: Hounddog
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }
@@ -43,7 +41,6 @@ declare module '@nuxt/types' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $BucketManager: BucketManager
-    $Hounddog: Hounddog
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }
@@ -55,7 +52,6 @@ Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
-Vue.prototype.$Hounddog = new Hounddog(Vue.prototype.$store)
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$FileSystem = new TextileFileSystem()
 Vue.prototype.$BlockchainClient = BlockchainClient.getInstance()

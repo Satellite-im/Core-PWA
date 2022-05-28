@@ -70,16 +70,16 @@
 
     <div class="tabs sidebar-selector padded no-top-pad flexy">
       <div
-        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
-        data-tooltip="New Chat"
+        class="quick-chat"
+        v-tooltip.top="$t('pages.chat.new_chat')"
         @click="()=>toggleModal('quickchat')"
         v-if="!$device.isMobile && toggleView"
       >
         <plus-circle-icon size="1x" />
       </div>
       <div
-        class="quick-chat has-tooltip has-tooltip-top has-tooltip-primary"
-        data-tooltip="New Group"
+        class="quick-chat"
+        v-tooltip.top="$t(pages.chat.new_group)"
         @click="()=>toggleModal('creategroup')"
         v-if="!$device.isMobile && !toggleView"
       >

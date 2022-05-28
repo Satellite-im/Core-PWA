@@ -1,9 +1,5 @@
 <div id="actions">
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-cy="call-video"
-    data-tooltip="Video"
-  >
+  <div data-cy="call-video" v-tooltip.top="$t('controls.video')">
     <InteractablesButton
       class="left"
       :type="videoMuted ? 'danger' : 'dark'"
@@ -16,10 +12,7 @@
       <video-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    :data-tooltip="$t('controls.mute')"
-  >
+  <div v-tooltip.top="$t('controls.mute')">
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
@@ -31,10 +24,7 @@
       <mic-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    :data-tooltip="$t('controls.screen')"
-  >
+  <div v-tooltip.top="$t('controls.screen')">
     <InteractablesButton
       :type="screenMuted ? 'danger' : 'dark'"
       size="small"
@@ -46,11 +36,7 @@
       <screen-share-off-icon v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-cy="call-hangup"
-    data-tooltip="Hangup"
-  >
+  <div data-cy="call-hangup" v-tooltip.top="$t('controls.hang_up')">
     <InteractablesButton
       class="right"
       type="danger"

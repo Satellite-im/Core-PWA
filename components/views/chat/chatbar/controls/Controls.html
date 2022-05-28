@@ -7,9 +7,9 @@
     <!-- to add disable color to icon, had to add color="grey" to the icon -->
     <button
       id="send-money-toggle"
-      :data-tooltip="$t('wallet.send_money')"
+      v-tooltip.top="$t('wallet.send_money')"
       @click="toggleMiniWallet"
-      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+      class="control-tooltip-wrap"
       :disabled="disabled"
     >
       <banknote-icon size="1x" :class="`control-icon `" color="grey" />
@@ -17,9 +17,9 @@
   </UiComingSoon>
   <button
     id="glyph-toggle"
-    :data-tooltip="$t('ui.glyphs')"
+    v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+    class="control-tooltip-wrap"
     :disabled="disabled"
   >
     <box-select-icon
@@ -29,9 +29,9 @@
   </button>
   <button
     id="emoji-toggle"
-    :data-tooltip="$t('ui.emotes')"
+    v-tooltip.top="$t('ui.emotes')"
     @click="toggleEnhancers('emotes')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+    class="control-tooltip-wrap"
     :disabled="disabled"
   >
     <smile-icon
@@ -40,8 +40,8 @@
     />
   </button>
   <button
-    :data-tooltip="$t('ui.send')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch send-message-btn"
+    v-tooltip.top="$t('ui.send')"
+    class="control-tooltip-wrap send-message-btn"
     data-cy="send-message"
     :disabled="disabled"
     @click="sendMessage"

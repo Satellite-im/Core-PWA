@@ -20,10 +20,6 @@ export default Vue.extend({
     FilePlusIcon,
   },
   props: {
-    type: {
-      type: String,
-      default: '',
-    },
     recipient: {
       type: Object as PropType<Friend | Group>,
       default: null,
@@ -40,7 +36,8 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      consentScan: (state) => (state as RootState).settings.consentScan,
+      consentToScan: (state) =>
+        (state as RootState).textile.userThread.consentToScan,
     }),
     activeFriend(): Friend | undefined {
       return this.$Hounddog.getActiveFriend(this.$store.state.friends)
@@ -58,7 +55,7 @@ export default Vue.extend({
     },
     handleFileClick() {
       this.resetFileUpload()
-      if (!this.consentScan) {
+      if (!this.consentToScan) {
         this.$toast.error(
           this.$t('pages.files.errors.enable_consent') as string,
           {
@@ -72,10 +69,8 @@ export default Vue.extend({
         return
       }
 
-      setTimeout(() => {
-        if (this.$refs.quickUpload)
-          (this.$refs.quickUpload as HTMLFormElement).click()
-      }, 200)
+      if (this.$refs.quickUpload)
+        (this.$refs.quickUpload as HTMLFormElement).click()
     },
     /**
      * @method handleFile

@@ -8,5 +8,9 @@ Object {
   "initialized": false,
   "messageLoading": false,
   "uploadProgress": Object {},
+  "userThread": Object {
+    "blockNsfw": true,
+    "consentToScan": false,
+  },
 }
 `;

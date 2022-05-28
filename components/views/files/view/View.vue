@@ -25,7 +25,7 @@ export default Vue.extend({
     ...mapState({
       file: (state) => (state as RootState).ui.filePreview,
       fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
-      blockNsfw: (state) => (state as RootState).settings.blockNsfw,
+      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
     ...mapGetters('ui', ['isFilesIndexLoading']),
     isDownloading(): boolean {

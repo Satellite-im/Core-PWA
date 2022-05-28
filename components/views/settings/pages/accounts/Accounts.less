@@ -1,14 +1,14 @@
+.button-container {
+  display: flex;
+  gap: @normal-spacing;
+  button {
+    min-width: 135px; //avoid layout shift when text changes
+  }
+}
+
 .tag-wrap {
   display: flex;
   flex-wrap: wrap;
-  margin-top: @light-spacing;
-  .tag-container {
-    display: inline-block;
-    margin: 0.25rem;
-    flex: 1;
-
-    .tag {
-      &:extend(.full-width);
-    }
-  }
+  margin-top: @normal-spacing;
+  gap: @light-spacing;
 }

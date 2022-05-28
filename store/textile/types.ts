@@ -4,6 +4,7 @@ import {
   ReactionsTracker,
   RepliesTracker,
 } from '~/types/textile/mailbox'
+import { UserThreadData } from '~/types/textile/user'
 
 export interface Conversation {
   [key: string]: {
@@ -21,7 +22,7 @@ export interface Conversation {
 }
 export interface TextileState {
   initialized: boolean
-  activeConversation: string
+  activeConversation?: string
   conversations: Conversation
   conversationLoading: boolean
   messageLoading: boolean
@@ -32,6 +33,7 @@ export interface TextileState {
       name: string
     }
   }
+  userThread: UserThreadData
 }
 
 export enum TextileError {
@@ -41,4 +43,5 @@ export enum TextileError {
   MAILBOX_MANAGER_NOT_INITIALIZED = 'errors.textile.mailbox_manager_not_initialized',
   METADATA_MANAGER_NOT_FOUND = 'errors.textile.metadata_manager_not_found',
   USERINFO_MANAGER_NOT_FOUND = 'errors.textile.userinfo_manager_not_found',
+  BUCKET_NOT_INITIALIZED = 'errors.textile.bucket_not_initialized',
 }

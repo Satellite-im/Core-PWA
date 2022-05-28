@@ -10,6 +10,7 @@ import {
   FriendsError,
   FriendsState,
 } from './types'
+import { FriendsGetters } from './getters'
 import { DataStateType } from '~/store/dataState/types'
 import { TextileError } from '~/store/textile/types'
 import Crypto from '~/libraries/Crypto/Crypto'
@@ -25,7 +26,6 @@ import { AccountsError } from '~/store/accounts/types'
 import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
-import Hounddog from '~/utilities/Hounddog'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
 export default {
@@ -119,13 +119,17 @@ export default {
    * @example
    */
   async fetchFriendDetails(
-    { commit, state, rootState, dispatch }: ActionsArguments<FriendsState>,
+    {
+      commit,
+      rootState,
+      dispatch,
+      getters,
+    }: ActionsArguments<FriendsState, FriendsGetters>,
     friendAccount: FriendAccount,
-  ) {
+  ): Promise<void> {
     // First grab the users from local db
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    const $Hounddog: Hounddog = Vue.prototype.$Hounddog
 
     // Check if the request was originally sent by the current user (outgoing)
     // and then accepted, or the other way round
@@ -155,8 +159,7 @@ export default {
         new PublicKey(friendKey).toBytes(),
       ).bytes,
     )
-
-    const friendExists = $Hounddog.friendExists(state, friendKey)
+    const friendExists = getters.friendExists(friendKey)
 
     const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
       account: friendAccount,
