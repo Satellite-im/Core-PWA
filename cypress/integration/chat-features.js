@@ -113,7 +113,7 @@ describe('Chat Features Tests', () => {
     cy.hoverOnComingSoonIcon(
       '#chatbar-controls > span > .tooltip-container',
       'Send Money\nComing Soon',
-    ) //skipped due to bug
+    ) //skipped due to bug - AP-1660
   })
 
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
