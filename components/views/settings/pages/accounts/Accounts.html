@@ -74,6 +74,7 @@
       <div v-if="showPhrase" class="tag-wrap">
         <TypographyNumberedWord
           v-for="word, i in splitPhrase"
+          :key="i"
           :word="word"
           :number="i + 1"
         />
