@@ -291,7 +291,7 @@ describe('Chat features with two accounts', () => {
             let regexTimestamp = '((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))'
             expect($text).to.match(regexTimestamp)
           }) //skipped due to  ''CypressError: `match` requires its argument be a `RegExp`.
-        // You passed: `((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))`''
+        // You passed: `((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))`'' - AP-1666
       })
   })
 
