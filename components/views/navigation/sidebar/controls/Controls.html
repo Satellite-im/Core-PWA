@@ -2,7 +2,7 @@
   <InteractablesButton
     :type="audioMuted ? 'danger' : 'dark'"
     size="small"
-    v-tooltip.top="$t('controls.mute')"
+    v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')"
     :action="() => toggleMute('audio')"
     :text="$t('controls.mic')"
     :loading="isLoading"
@@ -14,7 +14,7 @@
   <InteractablesButton
     :type="audio.deafened ? 'danger' : 'dark'"
     size="small"
-    v-tooltip.top="$t('controls.deafen')"
+    v-tooltip.top="audio.deafened ? $t('controls.undeafen') : $t('controls.deafen')"
     :action="() => toggleDeafen()"
     :text="$t('controls.headphones')"
   >
@@ -24,7 +24,7 @@
   <InteractablesButton
     :type="videoMuted ? 'danger' : 'dark'"
     size="small"
-    v-tooltip.top="$t('controls.toggle')"
+    v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
     :text="$t('controls.video')"
     :action="() => toggleMute('video')"
     :loading="isLoading"
