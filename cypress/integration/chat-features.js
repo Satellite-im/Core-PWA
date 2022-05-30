@@ -50,7 +50,7 @@ describe('Chat Features Tests', () => {
           permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
           //make the permission trigger by allowing the current origin only
           origin: window.location.origin,
-        }, //skipped due to bug
+        }, //skipped due to bug - AP-1659
       }),
     )
 
