@@ -5,7 +5,6 @@ import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { DataStateType } from '~/store/dataState/types'
-import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
 
