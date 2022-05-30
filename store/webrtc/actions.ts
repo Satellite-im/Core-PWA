@@ -288,7 +288,6 @@ const webRTCActions = {
       return
     }
     const isMuted = state.streamMuted[peerId]?.[kind]
-    commit('audio/setMuted', isMuted)
     if (isMuted) {
       await call.unmute({ peerId, kind })
       dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
@@ -320,7 +319,7 @@ const webRTCActions = {
    * this.$store.dispatch('webrtc/initialize', { callId: 'groupId1', peerIds: ['userid1', 'userid2'] })
    */
   async createCall(
-    { commit, state, rootState }: ActionsArguments<WebRTCState>,
+    { commit, state, rootState, dispatch }: ActionsArguments<WebRTCState>,
     {
       callId,
       peerIds,
@@ -429,6 +428,7 @@ const webRTCActions = {
       if (rootState.audio.muted) {
         call.mute({ peerId: localId, kind: 'audio' })
       }
+      commit('video/setDisabled', true, { root: true })
     }
     call.on('CONNECTED', onCallConnected)
 
@@ -450,10 +450,16 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
+      let muted = false
+      if (kind === 'audio') {
+        muted = rootState.audio.muted
+      } else if (kind === 'video') {
+        muted = rootState.video.disabled
+      }
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted: rootState.audio.muted,
+        muted,
       })
       if (rootState.audio.muted) {
         call.mute({ peerId: localId, kind: 'audio' })

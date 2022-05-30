@@ -41,7 +41,7 @@ export default Vue.extend({
       return this.audio.muted
     },
     videoMuted(): boolean {
-      return p2p.id && this.webrtc.streamMuted[p2p.id]?.video
+      return this.video.disabled
     },
     screenMuted(): boolean {
       return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
@@ -57,7 +57,9 @@ export default Vue.extend({
       this.isLoading = true
       try {
         if (kind === 'audio') {
-          this.$store.dispatch('audio/toggleMute', {}, { root: true })
+          this.$store.dispatch('audio/toggleMute', undefined, { root: true })
+        } else if (kind === 'video') {
+          this.$store.dispatch('video/toggleMute', undefined, { root: true })
         } else {
           await this.$store.dispatch(
             'webrtc/toggleMute',
