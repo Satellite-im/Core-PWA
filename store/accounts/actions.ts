@@ -1,6 +1,5 @@
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
-import { Update } from '@textile/hub-threads-client'
 import {
   AccountsError,
   AccountsState,
@@ -14,10 +13,6 @@ import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
-import { UserThreadData } from '~/types/textile/user'
-import { UserInfoManager } from '~/libraries/Textile/UserManager'
-import { FilSystem } from '~/libraries/Files/FilSystem'
-import { Config } from '~/config'
 
 export default {
   /**
@@ -411,13 +406,13 @@ async function uploadPicture(image: string) {
     })
 
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  const path = await $TextileManager.sharedBucket?.pushFile(
+  const res = await $TextileManager.sharedBucket?.pushFile(
     imageFile,
     imageFile.name,
     () => {},
   )
 
-  return Config.textile.browser + path
+  return res?.path.root.toString() ?? ''
 }
 
 export const exportForTesting = {

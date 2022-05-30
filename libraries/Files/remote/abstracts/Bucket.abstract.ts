@@ -1,4 +1,4 @@
-import { Buckets, Root } from '@textile/buckets'
+import { Buckets, PushPathResult, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
 import { Config } from '~/config'
 import {
@@ -63,7 +63,7 @@ export abstract class Bucket extends RFM {
     file: File,
     path: string,
     progressCallback: Function,
-  ): Promise<string> {
+  ): Promise<PushPathResult> {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
@@ -83,7 +83,7 @@ export abstract class Bucket extends RFM {
       },
     )
     this._root = res.root
-    return res.path.path
+    return res
   }
 
   private _getStream(file: File) {
