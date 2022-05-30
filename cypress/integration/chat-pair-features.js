@@ -226,7 +226,7 @@ describe('Chat features with two accounts', () => {
       .invoke('text')
       .then(($text) => {
         expect($text).to.contain('now')
-      }) //skipped due to bug
+      }) //skipped due to bug - AP-1662
   })
 
   it('Add reactions to text message in chat', () => {
