@@ -10,9 +10,8 @@ const recoverySeed =
     .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 let imageURL
-let randomTextEdited = randomMessage + randomNumber
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   it('Chat - Send message on chat', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -29,11 +28,11 @@ describe.skip('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  it.skip('Chat - Edit message on chat', () => {
+  it('Chat - Edit message on chat', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it.skip('Chat - Message edited shows edited status', () => {
+  it('Chat - Message edited shows edited status', () => {
     cy.get('[data-cy=message-edited]').last().parents()
 
     cy.contains(randomMessage + randomNumber)
@@ -42,7 +41,7 @@ describe.skip('Chat Features Tests', () => {
       .should('contain', '(edited)')
   })
 
-  it('Chat - Copy paste text', () => {
+  it.skip('Chat - Copy paste text', () => {
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
       Cypress.automation('remote:debugger:protocol', {
@@ -51,7 +50,7 @@ describe.skip('Chat Features Tests', () => {
           permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
           //make the permission trigger by allowing the current origin only
           origin: window.location.origin,
-        },
+        }, //skipped due to bug
       }),
     )
 
@@ -105,16 +104,16 @@ describe.skip('Chat Features Tests', () => {
         })
       })
     // Validating that preview of image is displayed and matches with image filename copied from clipboard
-    cy.get('.file-item').should('exist')
+    cy.get('.file-item').should('exist') //seems this is no longer available, test needs to be updated
     cy.get('.file-info > .title').should('contain', 'logo.png')
   })
 
-  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
+  it.skip('Chat - Verify when clicking on Send Money, coming soon appears', () => {
     // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
       '#chatbar-controls > span > .tooltip-container',
       'Send Money\nComing Soon',
-    )
+    ) //skipped due to bug
   })
 
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
