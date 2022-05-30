@@ -11,9 +11,10 @@ import {
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
-import { ImageMessage } from '~/types/textile/mailbox'
+import { FileMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { Fil } from '~/libraries/Files/Fil'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -55,7 +56,7 @@ export default {
   setFilePreview(state: UIState, file: Fil) {
     state.filePreview = file
   },
-  setChatImageOverlay(state: UIState, image: ImageMessage | undefined) {
+  setChatImageOverlay(state: UIState, image: FileMessage | undefined) {
     state.chatImageOverlay = image
   },
   toggleEnhancers(state: UIState, options: EnhancerInfo) {

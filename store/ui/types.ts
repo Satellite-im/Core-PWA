@@ -1,5 +1,5 @@
 import { TranslateResult } from 'vue-i18n'
-import { ImageMessage } from '~/types/textile/mailbox'
+import { FileMessage } from '~/types/textile/mailbox'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
@@ -212,7 +212,7 @@ export interface UIState {
   renameItem?: Item
   filePreview?: Fil
   fileDownloadList: string[]
-  chatImageOverlay?: ImageMessage
+  chatImageOverlay?: FileMessage
   fileSort: FileSort
   swiperSlideIndex: number
 }

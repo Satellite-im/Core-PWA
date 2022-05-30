@@ -1,7 +1,6 @@
 import {
   FileMessage,
   GlyphMessage,
-  ImageMessage,
   ReplyMessage,
   TextMessage,
 } from './textile/mailbox'
@@ -23,7 +22,6 @@ type ConvertToUIMessage<T> = T & {
 
 export type UIMessage =
   | ConvertToUIMessage<FileMessage>
-  | ConvertToUIMessage<ImageMessage>
   | ConvertToUIMessage<TextMessage>
   | ConvertToUIMessage<GlyphMessage>
 
