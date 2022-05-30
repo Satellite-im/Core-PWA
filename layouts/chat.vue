@@ -201,6 +201,7 @@ export default Vue.extend({
         (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
+    ...mapGetters('textile', ['getInitialized']),
     DataStateType: () => DataStateType,
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
@@ -255,10 +256,6 @@ export default Vue.extend({
     // reset active conversation on chat leave
     this.$store.commit('textile/setActiveConversation', '')
   },
-  beforeDestroy() {
-    // reset active conversation on chat leave
-    this.$store.commit('textile/setActiveConversation', '')
-  },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
 
@@ -283,6 +280,10 @@ export default Vue.extend({
      */
     handleDrop(e: DragEvent) {
       e.preventDefault()
+
+      if (!this.getInitialized) {
+        return
+      }
 
       if (!this.consentToScan) {
         this.$toast.error(
