@@ -1,13 +1,11 @@
-import { BucketAbstract } from '~/libraries/Files/remote/abstracts/Bucket.abstract'
+import Vue from 'vue'
+import { Bucket } from '~/libraries/Files/remote/abstracts/Bucket.abstract'
 import { Config } from '~/config'
-import {
-  FILESYSTEM_TYPE,
-  SharedBucketIndex,
-} from '~/libraries/Files/types/filesystem'
+import { SharedBucketIndex } from '~/libraries/Files/types/filesystem'
+import { TextileError } from '~/store/textile/types'
 
-export class SharedBucket extends BucketAbstract {
+export class SharedBucket extends Bucket {
   private _index: SharedBucketIndex = {
-    type: FILESYSTEM_TYPE.DEFAULT,
     version: 1,
     content: [],
   }
@@ -28,8 +26,9 @@ export class SharedBucket extends BucketAbstract {
   async init({ name }: { name: string }) {
     await this.getBucket({ name })
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
+    Vue.prototype.$Logger.log('Shared Bucket', 'Initialized')
     // todo - add index tracking capabilities to shared bucket
     // try {
     //   const data = []
@@ -56,7 +55,7 @@ export class SharedBucket extends BucketAbstract {
    */
   async updateIndex(index: SharedBucketIndex) {
     if (!this._buckets || !this._key) {
-      throw new Error('Bucket or bucket key not found')
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     this._index = index
     const res = await this._buckets.pushPath(

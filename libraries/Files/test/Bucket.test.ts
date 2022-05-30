@@ -2,7 +2,7 @@ import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { PrivateBucket } from '../remote/textile/PrivateBucket'
 import { DIRECTORY_TYPE } from '../types/directory'
-import { FileSystemExport } from '../types/filesystem'
+import { FILESYSTEM_TYPE, PrivateBucketIndex } from '../types/filesystem'
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -30,7 +30,7 @@ describe('Test FileSystem Directory', () => {
     fs.openDirectory('dir')
     fs.addChild(file2)
 
-    const ex: FileSystemExport = fs.export
+    const ex: PrivateBucketIndex = fs.export
 
     expect(ex.version + 1).toEqual(fs.export.version)
   })
@@ -43,7 +43,11 @@ describe('Test FileSystem Directory', () => {
     }
     const bucket = new PrivateBucket(initializationData)
 
-    expect(bucket.index).toBeUndefined()
+    expect(bucket.index).toStrictEqual({
+      type: FILESYSTEM_TYPE.DEFAULT,
+      version: 1,
+      content: [],
+    })
   })
   it.skip('initialize bucket', async () => {
     const initializationData = {

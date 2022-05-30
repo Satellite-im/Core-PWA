@@ -63,12 +63,6 @@ export default {
 
     commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
 
-    const fsExport = $TextileManager.privateBucket?.index
-
-    if (fsExport) {
-      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      await $FileSystem.import(fsExport)
-    }
     const record = await $TextileManager.userInfoManager?.getUserRecord()
     if (!record) {
       await dispatch('updateUserThreadData', {
@@ -1038,11 +1032,11 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
-    if (!$TextileManager.privateBucket) {
+    if (!$TextileManager.personalBucket) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
 
-    await $TextileManager.privateBucket.updateIndex($FileSystem.export)
+    await $TextileManager.personalBucket.updateIndex($FileSystem.export)
     dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
     })

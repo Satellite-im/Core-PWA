@@ -2,14 +2,14 @@ import { Buckets, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
 import { Config } from '~/config'
 import {
-  FileSystemExport,
+  PrivateBucketIndex,
   SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
 import { TextileError } from '~/store/textile/types'
 
-export abstract class BucketAbstract extends RFM {
+export abstract class Bucket extends RFM {
   protected _textile?: TextileInitializationData
   protected _buckets?: Buckets
   protected _key?: Root['key']
@@ -20,7 +20,7 @@ export abstract class BucketAbstract extends RFM {
     this._textile = textile
   }
 
-  abstract get index(): FileSystemExport | SharedBucketIndex | undefined
+  abstract get index(): PrivateBucketIndex | SharedBucketIndex | undefined
 
   /**
    * @method getBucket
@@ -134,13 +134,13 @@ export abstract class BucketAbstract extends RFM {
   /**
    * @method removeFile
    * @description Remove file from bucket
-   * @param {string} name file name
+   * @param {string} id file path in bucket
    */
-  async removeFile(name: string) {
+  async removeFile(id: string) {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
-    const res = await this._buckets.removePath(this._key, name, {
+    const res = await this._buckets.removePath(this._key, id, {
       root: this._root,
     })
     if (res.root) {

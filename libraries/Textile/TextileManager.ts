@@ -17,7 +17,7 @@ export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
-  privateBucket?: PrivateBucket
+  personalBucket?: PrivateBucket
   sharedBucket?: SharedBucket
   groupChatManager?: GroupChatManager
   metadataManager?: MetadataManager
@@ -77,10 +77,9 @@ export default class TextileManager {
       name: Config.textile.sharedBucket,
     })
 
-    // Initialize bucket
-    this.privateBucket = new PrivateBucket(textile)
-    await this.privateBucket.init({
-      name: Config.textile.privateBucket,
+    this.personalBucket = new PrivateBucket(textile)
+    await this.personalBucket.init({
+      name: Config.textile.personalBucket,
       encrypted: true,
     })
 

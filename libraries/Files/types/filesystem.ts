@@ -28,8 +28,7 @@ export interface ExportDirectory extends ExportSharedProps {
 
 export type ExportItem = ExportFile | ExportDirectory
 
-// private file system export
-export type FileSystemExport = {
+export type PrivateBucketIndex = {
   type: FILESYSTEM_TYPE
   version: number
   content: Array<ExportItem>
@@ -44,7 +43,6 @@ export interface SharedBucketIndexItem {
 }
 
 export type SharedBucketIndex = {
-  type: FILESYSTEM_TYPE
   version: number
   content: SharedBucketIndexItem[]
 }
