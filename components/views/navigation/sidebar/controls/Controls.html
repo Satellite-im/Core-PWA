@@ -28,6 +28,7 @@
     :text="$t('controls.video')"
     :action="() => toggleMute('video')"
     :loading="isLoading"
+    :disabled="!inCall"
     loadingText=""
   >
     <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>

@@ -37,10 +37,13 @@ export default Vue.extend({
       return this.audio.muted
     },
     videoMuted(): boolean {
-      return this.video.disabled
+      return this.inCall ? this.video.disabled : false
     },
     screenMuted(): boolean {
       return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
+    },
+    inCall(): boolean {
+      return this.webrtc.activeCall !== undefined
     },
   },
   methods: {
@@ -54,7 +57,7 @@ export default Vue.extend({
       try {
         if (kind === 'audio') {
           this.$store.dispatch('audio/toggleMute', undefined, { root: true })
-        } else if (kind === 'video') {
+        } else if (kind === 'video' && this.inCall) {
           this.$store.dispatch('video/toggleMute', undefined, { root: true })
         }
       } catch (e: any) {
