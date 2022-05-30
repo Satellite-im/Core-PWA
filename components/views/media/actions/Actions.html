@@ -1,5 +1,8 @@
 <div id="actions">
-  <div v-tooltip.top="$t('controls.video')">
+  <div
+    data-cy="call-video"
+    v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
+  >
     <InteractablesButton
       class="left"
       :type="videoMuted ? 'danger' : 'dark'"
@@ -13,7 +16,7 @@
       <video-off-icon data-cy="video-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div v-tooltip.top="$t('controls.mute')">
+  <div v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')">
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
@@ -26,7 +29,9 @@
       <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div v-tooltip.top="$t('controls.screen')">
+  <div
+    v-tooltip.top="screenMuted ? $t('controls.screen') : $t('controls.stop_streaming')"
+  >
     <InteractablesButton
       :type="screenMuted ? 'danger' : 'dark'"
       size="small"

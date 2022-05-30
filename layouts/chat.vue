@@ -136,6 +136,7 @@ import { DataStateType } from '~/store/dataState/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import type { Friend } from '~/types/ui/friends'
 import type { Group } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -188,17 +189,19 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState([
-      'audio',
-      'ui',
-      'media',
-      'friends',
-      'groups',
-      'dataState',
-      'settings',
-      'conversation',
-    ]),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      ui: (state) => (state as RootState).ui,
+      media: (state) => (state as RootState).media,
+      friends: (state) => (state as RootState).friends,
+      groups: (state) => (state as RootState).groups,
+      dataState: (state) => (state as RootState).dataState,
+      conversation: (state) => (state as RootState).conversation,
+      consentToScan: (state) =>
+        (state as RootState).textile.userThread.consentToScan,
+    }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
+    ...mapGetters('textile', ['getInitialized']),
     DataStateType: () => DataStateType,
     selectedGroup() {
       return this.$route.params.id // TODO: change with groupid - AP-400
@@ -253,10 +256,6 @@ export default Vue.extend({
     // reset active conversation on chat leave
     this.$store.commit('textile/setActiveConversation', '')
   },
-  beforeDestroy() {
-    // reset active conversation on chat leave
-    this.$store.commit('textile/setActiveConversation', '')
-  },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
 
@@ -282,7 +281,11 @@ export default Vue.extend({
     handleDrop(e: DragEvent) {
       e.preventDefault()
 
-      if (!this.settings.consentScan) {
+      if (!this.getInitialized) {
+        return
+      }
+
+      if (!this.consentToScan) {
         this.$toast.error(
           this.$t('pages.files.errors.enable_consent') as string,
           {

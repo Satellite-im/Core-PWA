@@ -3,7 +3,8 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
-describe('Privacy Settings Page - Toggles Tests', () => {
+describe.skip('Privacy Settings Page - Toggles Tests', () => {
+  // skipped due to textile taking 45s
   it('Privacy Page - Validate existing toggles', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
@@ -95,7 +96,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     })
   })
 
-  it.skip('Privacy page - Verify all non-locked toggles can be switched to enable', () => {
+  it('Privacy page - Verify all non-locked toggles can be switched to enable', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
@@ -111,7 +112,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     })
   })
 
-  it.skip('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
+  it('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
@@ -130,7 +131,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     cy.get('.close-button').click()
   })
 
-  it.skip('Privacy page - Validate that last values selected were saved correcty', () => {
+  it('Privacy page - Validate that last values selected were saved correcty', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 

@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -15,20 +16,21 @@ export default Vue.extend({
   data() {
     return {
       showPhrase: false,
-      featureReadyToShow: false,
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+    }),
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
+      get(): boolean {
         return this.accounts.storePin
       },
     },
-    splitPhrase(): Array<String> {
+    splitPhrase(): string[] {
       return this.accounts.phrase.split(' ')
     },
   },
@@ -39,10 +41,14 @@ export default Vue.extend({
      * @example
      */
     togglePhrase() {
-      this.$data.showPhrase = !this.$data.showPhrase
+      this.showPhrase = !this.showPhrase
+    },
+    copyAddress() {
+      navigator.clipboard.writeText(this.accounts.active)
+      this.$toast.show(this.$t('ui.copied') as string)
     },
     copyPhrase() {
-      this.$envinfo.navigator.clipboard.writeText(this.accounts.active)
+      navigator.clipboard.writeText(this.accounts.phrase)
       this.$toast.show(this.$t('ui.copied') as string)
     },
   },

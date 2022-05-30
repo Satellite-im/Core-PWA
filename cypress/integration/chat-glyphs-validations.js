@@ -7,7 +7,7 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Chat - Sending Glyphs Tests', () => {
+describe('Chat - Sending Glyphs Tests', () => {
   it('Send a glyph on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -33,7 +33,7 @@ describe.skip('Chat - Sending Glyphs Tests', () => {
     cy.goToLastGlyphOnChat()
   })
 
-  it.skip('Send a glyph from the recents section', () => {
+  it('Send a glyph from the recents section', () => {
     //Send a glyph from recents section
     cy.get('#glyph-toggle').click()
     cy.get('#glyphs').should('be.visible')

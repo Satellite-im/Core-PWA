@@ -8,7 +8,7 @@ export type User = {
   address: string
   status?: string
   state: UserState
-  unreadCount?: Number
+  unreadCount?: number
   profilePicture?: string
   badge?: BadgeType
   userAccount?: any

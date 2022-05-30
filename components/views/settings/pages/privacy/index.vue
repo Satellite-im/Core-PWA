@@ -1,20 +1,32 @@
-<template src="./Privacy.html" />
+<template src="./Privacy.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { Themes, Flairs, ThemeNames } from '~/store/ui/types.ts'
+import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import { validURL } from '~/libraries/ui/Common'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'PrivacySettings',
   layout: 'settings',
   data() {
     return {
-      maxChars: this.$Config.chat.maxChars,
-      formatError: false,
-      lengthError: false,
-      serverTypes: [
+      formatError: false as boolean,
+      lengthError: false as boolean,
+      loading: '' as string,
+    }
+  },
+  computed: {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+      settings: (state) => (state as RootState).settings,
+      userThread: (state) => (state as RootState).textile.userThread,
+    }),
+    ...mapGetters('textile', ['getInitialized']),
+    serverTypes(): { text: TranslateResult; value: string }[] {
+      return [
         {
           text: this.$t('pages.privacy.ownInfo.satelliteServer'),
           value: 'satellite',
@@ -23,80 +35,85 @@ export default Vue.extend({
           text: this.$t('pages.privacy.ownInfo.publicServer'),
           value: 'public',
         },
-      ],
-    }
-  },
-  computed: {
-    ...mapState(['ui', 'accounts', 'settings']),
+      ]
+    },
     serverType: {
       set(state) {
         this.$store.commit('settings/setServerType', state)
       },
-      get() {
+      get(): string {
         return this.settings.serverType
       },
     },
     ownInfo: {
-      set(state) {
-        if (validURL(state) && state.length < this.maxChars + 1) {
+      set(state: string) {
+        if (validURL(state) && state.length < this.$Config.chat.maxChars + 1) {
           this.formatError = false
           this.lengthError = false
           this.$store.commit('settings/setOwnInfo', state)
           return
         }
-        if (state.length > this.maxChars) {
+        if (state.length > this.$Config.chat.maxChars) {
           this.lengthError = true
         }
         if (!validURL(state)) {
           this.formatError = true
         }
       },
-      get() {
+      get(): string {
         return this.settings.ownInfo
       },
     },
     registry: {
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.registry
       },
     },
     storePin: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.storePin
       },
     },
     embeddedLinks: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/embeddedLinks', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.embeddedLinks
       },
     },
     consentScan: {
-      set(state) {
-        this.$store.dispatch('settings/setConsentScan', state)
+      async set(consentToScan: boolean) {
+        this.loading = 'consentScan'
+        await this.$store.dispatch('textile/updateUserThreadData', {
+          consentToScan,
+        })
+        this.loading = ''
       },
-      get() {
-        return this.settings.consentScan
+      get(): boolean {
+        return this.userThread.consentToScan
       },
     },
     blockNsfw: {
-      set(state) {
-        this.$store.dispatch('settings/setBlockNsfw', state)
+      async set(blockNsfw: boolean) {
+        this.loading = 'blockNsfw'
+        await this.$store.dispatch('textile/updateUserThreadData', {
+          blockNsfw,
+        })
+        this.loading = ''
       },
-      get() {
-        return this.settings.blockNsfw
+      get(): boolean {
+        return this.userThread.blockNsfw
       },
     },
     displayCurrentActivity: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/displayCurrentActivity', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.displayCurrentActivity
       },
     },

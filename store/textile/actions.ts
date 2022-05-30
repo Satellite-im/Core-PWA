@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { TextileState, TextileError } from './types'
+import { Update } from '@textile/hub-threads-client'
+import { TextileError, TextileState } from './types'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
@@ -27,6 +28,8 @@ import { AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
+import { UserInfoManager } from '~/libraries/Textile/UserManager'
+import { UserThreadData } from '~/types/textile/user'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -48,7 +51,7 @@ export default {
    * @param config Textile configuration (id, pass, wallet)
    */
   async initialize(
-    { commit }: ActionsArguments<TextileState>,
+    { commit, dispatch }: ActionsArguments<TextileState>,
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -66,20 +69,16 @@ export default {
       await $FileSystem.import(fsExport)
     }
     const record = await $TextileManager.userInfoManager?.getUserRecord()
-    if (record) {
-      /* Log CSAM Consent Data for future ticket as Hogan requested */
-      Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
-      if (record.consent_scan !== undefined) {
-        commit('settings/setConsentScan', record.consent_scan, {
-          root: true,
-        })
-      }
-      if (record.block_nsfw !== undefined) {
-        commit('settings/setBlockNsfw', record.block_nsfw, {
-          root: true,
-        })
-      }
+    if (!record) {
+      await dispatch('updateUserThreadData', {
+        consentToScan: false,
+        blockNsfw: true,
+      })
+      return textilePublicKey
     }
+    /* Log CSAM Consent Data for future ticket as Hogan requested */
+    Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
+    commit('setUserThreadData', record)
     return textilePublicKey
   },
   /**
@@ -1029,5 +1028,79 @@ export default {
       )
     }
     return { data: data.slice(skip, perPage * page), totalRows: result?.length }
+  },
+
+  /**
+   * @description export filesystem index to textile bucket and update threaddb version
+   */
+  async exportFileSystem({ dispatch }: ActionsArguments<TextileState>) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+
+    if (!$TextileManager.bucket) {
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
+    }
+
+    await $TextileManager.bucket.updateIndex($FileSystem.export)
+    dispatch('updateUserThreadData', {
+      filesVersion: $FileSystem.version,
+    })
+  },
+
+  /**
+   * @description update threaddb record, then reflect the update in store.
+   * do not await threaddb work so the toggle switch is smooth
+   */
+  async updateUserThreadData(
+    { commit }: ActionsArguments<TextileState>,
+    {
+      consentToScan,
+      blockNsfw,
+      filesVersion,
+    }: {
+      consentToScan?: boolean
+      blockNsfw?: boolean
+      filesVersion?: number
+    },
+  ) {
+    const $UserInfoManager: UserInfoManager =
+      Vue.prototype.$TextileManager.userInfoManager
+
+    if (!$UserInfoManager) {
+      throw new Error(TextileError.USERINFO_MANAGER_NOT_FOUND)
+    }
+
+    commit(
+      'setUserThreadData',
+      await $UserInfoManager.updateRecord({
+        consentToScan,
+        blockNsfw,
+        filesVersion,
+      }),
+    )
+  },
+
+  /**
+   * @description listen for user data thread changes and update store accordingly
+   */
+  async listenToThread({ commit, rootState }: ActionsArguments<TextileState>) {
+    const $UserInfoManager: UserInfoManager =
+      Vue.prototype.$TextileManager?.userInfoManager
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+    const callback = (update?: Update<UserThreadData>) => {
+      if (!update || !update.instance) return
+      if (
+        update.instance.filesVersion &&
+        rootState.textile.userThread.filesVersion !== $FileSystem.version
+      ) {
+        // todo - update file system AP-1477
+      }
+      commit('textile/setUserThreadData', update.instance, { root: true })
+    }
+    $UserInfoManager.textile.client.listen(
+      $UserInfoManager.threadID,
+      [],
+      callback,
+    )
   },
 }

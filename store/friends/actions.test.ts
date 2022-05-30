@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import { AccountsError, RegistrationStatus } from '../accounts/types'
+import { AccountsError } from '../accounts/types'
 import * as module from './actions'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
+import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { DataStateType } from '~/store/dataState/types'
-import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 
 jest.genMockFromModule('~/libraries/Solana/FriendsProgram/FriendsProgram')
 jest.mock('~/libraries/Solana/FriendsProgram/FriendsProgram')

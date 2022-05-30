@@ -48,9 +48,9 @@
     />
   </div>
   <TypographyText
-    v-if="ui.filesUploadStatus"
+    v-if="filesUploadStatus"
     class="status"
-    :text="ui.filesUploadStatus"
+    :text="filesUploadStatus"
     :size="6"
   />
   <div class="error-container" v-if="errors.length">

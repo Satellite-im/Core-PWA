@@ -69,6 +69,7 @@ import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'FilesLayout',
@@ -104,8 +105,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends', 'settings']),
+    ...mapState({
+      friends: (state) => (state as RootState).friends,
+      consentToScan: (state) =>
+        (state as RootState).textile.userThread.consentToScan,
+    }),
     ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
+    ...mapGetters('textile', ['getInitialized']),
     flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },
@@ -144,7 +150,11 @@ export default Vue.extend({
     handleDrop(e: DragEvent) {
       e.preventDefault()
 
-      if (!this.settings.consentScan) {
+      if (!this.getInitialized) {
+        return
+      }
+
+      if (!this.consentToScan) {
         this.$toast.error(
           this.$t('pages.files.errors.enable_consent') as string,
           {

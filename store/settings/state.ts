@@ -14,8 +14,6 @@ const InitialSettingsState = (): SettingsState => ({
   userDeniedAudioAccess: false,
   keybinds: KeybindTypes,
   embeddedLinks: true,
-  consentScan: false,
-  blockNsfw: true,
   displayCurrentActivity: true,
   removeState: false,
   serverType: 'satellite',

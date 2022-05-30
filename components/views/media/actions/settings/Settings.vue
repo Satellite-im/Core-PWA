@@ -18,7 +18,6 @@ import {
 
 declare module 'vue/types/vue' {
   interface Vue {
-    settings: any
     setupDefaults: () => void
     getUserPermissions: () => Promise<any>
     requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>

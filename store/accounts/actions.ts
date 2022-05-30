@@ -1,5 +1,6 @@
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
+import { Update } from '@textile/hub-threads-client'
 import {
   AccountsError,
   AccountsState,
@@ -13,6 +14,9 @@ import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { UserThreadData } from '~/types/textile/user'
+import { UserInfoManager } from '~/libraries/Textile/UserManager'
+import { FilSystem } from '~/libraries/Files/FilSystem'
 
 export default {
   /**
@@ -382,6 +386,7 @@ export default {
     }
 
     await dispatch('groups/initialize', {}, { root: true })
+    await dispatch('textile/listenToThread', {}, { root: true })
     commit('textile/textileInitialized', true, { root: true })
   },
 }

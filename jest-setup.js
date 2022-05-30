@@ -7,7 +7,7 @@ Blob.prototype.arrayBuffer = Blob.prototype.arrayBuffer || myArrayBuffer
 function myArrayBuffer() {
   // this: File or Blob
   return new Promise((resolve) => {
-    let fr = new FileReader()
+    const fr = new FileReader()
     fr.onload = () => {
       resolve(fr.result)
     }
