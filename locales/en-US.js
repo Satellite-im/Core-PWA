@@ -585,7 +585,7 @@ export default {
     friends: {
       request_already_sent: 'You have already sent a request to this user',
       request_already_accepted: 'This user is already in your friends',
-      request_not_found: 'Friend request not found',
+      request_not_found: 'Unavailable, try again later',
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
       friend_not_removed: 'Could not remove friend',
