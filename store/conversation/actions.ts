@@ -6,7 +6,7 @@ import { ActionsArguments } from '~/types/store/store'
 
 const actions = {
   /**
-   * @method intialize
+   * @method initialize
    * @description Initialize the conversation store
    * @example
    * store.dispatch('conversation/initialize');

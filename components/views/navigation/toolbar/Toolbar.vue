@@ -131,7 +131,7 @@ export default Vue.extend({
     },
     ModalWindows: () => ModalWindows,
     src(): string {
-      // @ts-ignore curently reading user as type Server. Will likely be reworked with server update
+      // @ts-ignore currently reading user as type Server. Will likely be reworked with server update
       const hash = this.server?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },

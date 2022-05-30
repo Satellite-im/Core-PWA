@@ -127,7 +127,7 @@ export const UserPermissions = {
     /**
      * @method requestUserPermissions DocsTODO
      * @description Requests user permission to access their media devices such as webcams and microphones
-     * @param permission Object with contraints for which permissions to request
+     * @param permission Object with constraints for which permissions to request
      * @returns Promise that resolves to a MediaStream object
      * @example
      */

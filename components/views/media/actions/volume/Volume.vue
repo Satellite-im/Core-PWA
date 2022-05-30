@@ -73,7 +73,7 @@ export default Vue.extend({
       }
     },
     /**
-     * @method recievedValue DocsTODO
+     * @method receivedValue DocsTODO
      * @description
      * @param volume
      * @example
