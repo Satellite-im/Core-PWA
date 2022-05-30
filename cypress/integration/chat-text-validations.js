@@ -13,7 +13,7 @@ let urlToValidate = 'https://www.satellite.im'
 let urlToValidateTwo = 'http://www.satellite.im'
 let urlToValidateThree = 'www.satellite.im'
 
-describe.skip('Chat Text and Sending Links Validations', () => {
+describe('Chat Text and Sending Links Validations', () => {
   it('Load account for validation', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
@@ -39,7 +39,7 @@ describe.skip('Chat Text and Sending Links Validations', () => {
     cy.validateCharlimit(expectedMessage, true)
   })
 
-  it.skip('Message with more than 2048 chars - Message will only send the first 2048 chars', () => {
+  it('Message with more than 2048 chars - Message will only send the first 2048 chars', () => {
     cy.get('[data-cy=send-message]').click()
     cy.contains(longMessage.slice(0, 2048)).scrollIntoView().should('exist')
     cy.contains(longMessage).should('not.exist')
@@ -166,13 +166,14 @@ describe.skip('Chat Text and Sending Links Validations', () => {
       .scrollIntoView()
       .should('have.text', '*To Do')
   })
-
-  it.skip('User should be able to use "\\" to write a single "" in chat', () => {
+  // prettier-ignore
+  // added prettier-ignore due to prettier removing the \ below
+  it('User should be able to use "\\" to write a single "" in chat', () => {
     cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
       .then(($message) => {
-        cy.getAttached($message).scrollIntoView().should('have.text', '*To Do')
+        cy.getAttached($message).scrollIntoView().should('have.text', '\*To Do')
       })
   })
 
@@ -199,7 +200,7 @@ describe.skip('Chat Text and Sending Links Validations', () => {
           .scrollIntoView()
           .should('have.attr', 'href', randomURL)
           .and('have.text', randomURL)
-      })
+      }) //skipped due to test needs to be updated, works manually
   })
 
   it('User should use markdown "||" to insert an spoiler', () => {
