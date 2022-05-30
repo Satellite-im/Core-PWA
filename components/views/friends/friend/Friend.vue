@@ -112,6 +112,7 @@ export default Vue.extend({
           'friends/denyFriendRequest',
           this.friend.request,
         )
+      } catch (e) {
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }
@@ -135,6 +136,7 @@ export default Vue.extend({
           'friends/removeFriendRequest',
           this.friend.request,
         )
+      } catch (e) {
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }
