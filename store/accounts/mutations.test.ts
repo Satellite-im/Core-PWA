@@ -33,8 +33,6 @@ describe('init', () => {
     },
     registrationStatus: RegistrationStatus.UNKNOWN,
     lastVisited: 'lastVisited',
-    initialized: false,
-    registry: false,
   }
 
   beforeEach(() => {
