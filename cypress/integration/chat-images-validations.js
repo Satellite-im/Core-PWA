@@ -54,5 +54,5 @@ describe('Chat - Sending Images Tests', () => {
     //Send Invalid Image
     cy.chatFeaturesSendImage(invalidImagePath, 'incorrect-image.png')
     cy.goToLastImageOnChat()
-  }) //skipped due to DOM issue
+  }) //skipped due to DOM issue - AP-1665
 })
