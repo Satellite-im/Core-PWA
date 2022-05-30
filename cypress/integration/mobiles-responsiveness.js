@@ -1,5 +1,5 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
 import { data } from '../fixtures/mobile-devices.json'
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
 
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
@@ -47,7 +47,7 @@ data.allDevices.forEach((item) => {
         cy.createAccountSubmit()
       })
 
-      it.skip(`Import Account on ${item.description}`, { retries: 2 }, () => {
+      it(`Import Account on ${item.description}`, { retries: 2 }, () => {
         cy.importAccount(randomPIN, recoverySeed, true)
         //Validate profile name displayed
         cy.validateChatPageIsLoaded(true)
@@ -56,7 +56,7 @@ data.allDevices.forEach((item) => {
         cy.goToConversation('cypress friend', true)
       })
 
-      it.skip(`Chat Features - Send Messages on ${item.description}`, () => {
+      it(`Chat Features - Send Messages on ${item.description}`, () => {
         // Click to hamburger button to display chat if app wrap is open (chat not displayed)
         cy.get('#app-wrap').then(($appWrap) => {
           if ($appWrap.hasClass('is-open')) {
@@ -68,36 +68,38 @@ data.allDevices.forEach((item) => {
         cy.chatFeaturesSendMessage(randomMessage)
       })
 
-      it.skip(`Chat Features - Send Emoji on ${item.description}`, () => {
+      it(`Chat Features - Send Emoji on ${item.description}`, () => {
         cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
       })
 
-      it.skip(`Chat Features - Edit Messages on ${item.description}`, () => {
+      it(`Chat Features - Edit Messages on ${item.description}`, () => {
         cy.chatFeaturesEditMessage(randomMessage, randomNumber)
       })
 
-      it.skip(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
+      it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
         cy.get('[data-cy=toggle-sidebar]').click() // return to main screen
         cy.get('[data-cy=mobile-nav-marketplace]').click() // go to Marketplace icon
         cy.validateComingSoonModal()
       })
 
-      it.skip(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
+      it(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
         cy.validateURLComingSoonModal()
       })
 
-      it.skip(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
+      it(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
       it.skip(`Glyphs Modal on ${item.description}`, () => {
         //Go to last glyph and click on glyphs modal
+        //skipped due to bug
         cy.goToLastGlyphOnChat().click()
         cy.validateGlyphsModal()
       })
 
       it.skip(`Glyphs Modal - Coming Soon on ${item.description}`, () => {
         //Coming soon modal
+        //skipped due to bug
         cy.contains('View Glyph Pack').click()
         cy.get('[data-cy=modal-cta]').should('be.visible')
         cy.closeModal('[data-cy=modal-cta]')
@@ -105,12 +107,13 @@ data.allDevices.forEach((item) => {
 
       it.skip(`Glyphs Pack Screen can be dismissed on ${item.description}`, () => {
         //Glyph Pack Screen can be dismissed
+        //skipped due to bug
         cy.goToLastGlyphOnChat().click()
         cy.get('[data-cy=glyphs-modal]').should('be.visible')
         cy.closeModal('[data-cy=glyphs-modal]')
       })
 
-      it.skip(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
+      it(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
         //Glyph Selection - Coming Soon Modal
         cy.goToConversation('cypress friend', true)
         cy.get('#glyph-toggle').click()

@@ -8,6 +8,8 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe.skip('Chat Toolbar Tests', () => {
+  //skipped due to all these works manually but
+  //Cypress is failing, probably because we refactored the tooltips
   it(
     'Chat - Toolbar - Validate audio icon is displayed',
     { retries: 2 },
@@ -25,14 +27,14 @@ describe.skip('Chat Toolbar Tests', () => {
     },
   )
 
-  it.skip('Chat - Toolbar - Validate video icon is displayed', () => {
+  it('Chat - Toolbar - Validate video icon is displayed', () => {
     cy.hoverOnActiveIcon(
       '[data-cy=toolbar-enable-audio]',
       'Offline calling unavailable',
     )
   })
 
-  it.skip('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
+  it('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
     cy.get('[data-cy=toolbar-alerts]').should('be.visible')
     cy.hoverOnComingSoonIcon(
       '[data-cy=toolbar-alerts] > .tooltip-container',
@@ -77,19 +79,19 @@ describe.skip('Chat Toolbar Tests', () => {
     cy.closeModal('[data-cy=modal-cta]')
   })
 
-  it.skip('Chat - Glyph Pack screen is displayed', () => {
+  it('Chat - Glyph Pack screen is displayed', () => {
     cy.chatFeaturesSendGlyph()
     cy.goToLastGlyphOnChat().click()
     cy.validateGlyphsModal()
   })
 
-  it.skip('Chat - Glyph Pack - Coming Soon modal', () => {
+  it('Chat - Glyph Pack - Coming Soon modal', () => {
     cy.contains('View Glyph Pack').click()
     cy.get('[data-cy=modal-cta]').should('be.visible')
     cy.closeModal('[data-cy=modal-cta]')
   })
 
-  it.skip('Chat - Glyph Pack screen can be dismissed', () => {
+  it('Chat - Glyph Pack screen can be dismissed', () => {
     cy.goToLastGlyphOnChat().click()
     cy.get('[data-cy=glyphs-modal]').should('be.visible')
     cy.closeModal('[data-cy=glyphs-modal]')

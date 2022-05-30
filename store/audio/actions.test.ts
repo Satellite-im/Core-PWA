@@ -1,5 +1,5 @@
-import * as actions from '~/store/audio/actions'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import * as actions from '~/store/audio/actions'
 
 describe('actions.default.toggleMute', () => {
   test('0', async () => {

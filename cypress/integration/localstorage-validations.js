@@ -20,6 +20,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it.skip('Create Account and validate localstorage values are as expected', () => {
+    // skipped due to test needs to be updated
     // Create Account process executed
     cy.createAccount(randomPIN)
 
@@ -42,6 +43,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it.skip('Import Account and verify passphrase is not saved in localstorage', () => {
+    // skipped due to test needs to be updated
     // Import Account process executed
     cy.importAccount(randomPIN, recoverySeed)
 

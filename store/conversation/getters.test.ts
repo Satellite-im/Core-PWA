@@ -1,7 +1,7 @@
 import {
+  ConversationActivity,
   ConversationConnection,
   ConversationParticipant,
-  ConversationActivity,
   ConversationState,
 } from './types'
 import * as module from '~/store/conversation/getters'

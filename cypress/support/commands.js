@@ -91,7 +91,6 @@ Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
   cy.get('[data-cy=submit-input]').click()
   cy.get('[data-cy=create-account-button]').click()
   cy.get('.title').should('contain', 'Recovery Seed')
-  cy.contains('Continue').click()
   cy.contains('I Saved It').click()
   cy.validateUserInputIsDisplayed()
   cy.get('[data-cy=username-input]')

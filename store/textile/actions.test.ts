@@ -45,6 +45,7 @@ describe('actions.default.initialize', () => {
 
       // Mocks for the arguments
       const commit = jest.fn()
+      const dispatch = jest.fn()
       const JestTextileManager = Vue.prototype.$TextileManager
       JestTextileManager.init = jest.fn()
       JestTextileManager.getIdentityPublicKey = jest.fn()
@@ -52,7 +53,10 @@ describe('actions.default.initialize', () => {
       JestTextileManager.bucket = jest.fn()
       JestTextileManager.bucket.index = fs.export
 
-      await actions.default.initialize({ commit }, { id: 'id', pass: 'pass' })
+      await actions.default.initialize(
+        { commit, dispatch },
+        { id: 'id', pass: 'pass' },
+      )
 
       expect(JestTextileManager.init).toHaveBeenCalled()
       expect(JestTextileManager.init).toHaveBeenCalledWith({
@@ -70,7 +74,69 @@ describe('actions.default.initialize', () => {
       console.error(error)
     }
   })
-  test('initialize without record.consent_scan', async () => {
+  test('initialize with record', async () => {
+    try {
+      // Mocks so we have a fs.export
+      const mockFileData = {
+        name: 'TestFile4.png',
+        hash: '0x0aef',
+        size: 42345,
+        descrption: 'Test file description',
+      }
+
+      const mockDirectoryData = {
+        name: 'dir4',
+        liked: false,
+        shared: false,
+        type: DIRECTORY_TYPE.DEFAULT,
+      }
+
+      const file = new Fil(mockFileData)
+      const file2 = new Fil({ ...mockFileData, name: 'testPng4.png' })
+      const fs = new FilSystem()
+
+      fs.addChild(file)
+      fs.createDirectory(mockDirectoryData)
+      fs.openDirectory('dir')
+      fs.addChild(file2)
+
+      // Mocks for the arguments
+      const commit = jest.fn()
+      const dispatch = jest.fn()
+      const JestTextileManager = Vue.prototype.$TextileManager
+      JestTextileManager.init = jest.fn()
+      JestTextileManager.getIdentityPublicKey = jest.fn()
+      JestTextileManager.getIdentityPublicKey.mockReturnValueOnce('public key')
+      JestTextileManager.bucket = jest.fn()
+      JestTextileManager.bucket.index = fs.export
+      JestTextileManager.userInfoManager = jest.fn()
+      JestTextileManager.userInfoManager.getUserRecord = jest
+        .fn()
+        .mockReturnValueOnce('record')
+
+      await actions.default.initialize(
+        { commit, dispatch },
+        { id: 'id', pass: 'pass' },
+      )
+
+      expect(JestTextileManager.init).toHaveBeenCalled()
+      expect(JestTextileManager.init).toHaveBeenCalledWith({
+        id: 'id',
+        pass: 'pass',
+      })
+      expect(JestTextileManager.getIdentityPublicKey).toHaveBeenCalled()
+      expect(commit).toHaveBeenCalledWith(
+        'accounts/updateTextilePubkey',
+        'public key',
+        { root: true },
+      )
+      expect(commit).toHaveBeenCalledWith('setUserThreadData', 'record')
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
+  })
+  test('initialize without record', async () => {
     try {
       // Mocks so we have a fs.export
       const mockFileData = {
@@ -98,6 +164,7 @@ describe('actions.default.initialize', () => {
 
       // Mocks for the arguments
       const commit = jest.fn()
+      const dispatch = jest.fn()
       const JestTextileManager = Vue.prototype.$TextileManager
       JestTextileManager.init = jest.fn()
       JestTextileManager.getIdentityPublicKey = jest.fn()
@@ -107,11 +174,12 @@ describe('actions.default.initialize', () => {
       JestTextileManager.userInfoManager = jest.fn()
       JestTextileManager.userInfoManager.getUserRecord = jest
         .fn()
-        .mockReturnValueOnce({
-          consent_scan: true,
-        })
+        .mockReturnValueOnce(false)
 
-      await actions.default.initialize({ commit }, { id: 'id', pass: 'pass' })
+      await actions.default.initialize(
+        { commit, dispatch },
+        { id: 'id', pass: 'pass' },
+      )
 
       expect(JestTextileManager.init).toHaveBeenCalled()
       expect(JestTextileManager.init).toHaveBeenCalledWith({
@@ -124,79 +192,10 @@ describe('actions.default.initialize', () => {
         'public key',
         { root: true },
       )
-      expect(commit).toHaveBeenCalledWith(
-        'textile/updateUserThreadData',
-        true,
-        {
-          root: true,
-        },
-      )
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error)
-    }
-  })
-  test('initialize without record.block_nsfw', async () => {
-    try {
-      // Mocks so we have a fs.export
-      const mockFileData = {
-        name: 'TestFile2.png',
-        hash: '0x0aef',
-        size: 42345,
-        descrption: 'Test file description',
-      }
-
-      const mockDirectoryData = {
-        name: 'dir2',
-        liked: false,
-        shared: false,
-        type: DIRECTORY_TYPE.DEFAULT,
-      }
-
-      const file = new Fil(mockFileData)
-      const file2 = new Fil({ ...mockFileData, name: 'testPng4.png' })
-      const fs = new FilSystem()
-
-      fs.addChild(file)
-      fs.createDirectory(mockDirectoryData)
-      fs.openDirectory('dir')
-      fs.addChild(file2)
-
-      // Mocks for the arguments
-      const commit = jest.fn()
-      const JestTextileManager = Vue.prototype.$TextileManager
-      JestTextileManager.init = jest.fn()
-      JestTextileManager.getIdentityPublicKey = jest.fn()
-      JestTextileManager.getIdentityPublicKey.mockReturnValueOnce('public key')
-      JestTextileManager.bucket = jest.fn()
-      JestTextileManager.bucket.index = fs.export
-      JestTextileManager.userInfoManager = jest.fn()
-      JestTextileManager.userInfoManager.getUserRecord = jest
-        .fn()
-        .mockReturnValueOnce({
-          block_nsfw: true,
-        })
-
-      await actions.default.initialize({ commit }, { id: 'id', pass: 'pass' })
-
-      expect(JestTextileManager.init).toHaveBeenCalled()
-      expect(JestTextileManager.init).toHaveBeenCalledWith({
-        id: 'id',
-        pass: 'pass',
+      expect(dispatch).toHaveBeenCalledWith('updateUserThreadData', {
+        consentToScan: false,
+        blockNsfw: true,
       })
-      expect(JestTextileManager.getIdentityPublicKey).toHaveBeenCalled()
-      expect(commit).toHaveBeenCalledWith(
-        'accounts/updateTextilePubkey',
-        'public key',
-        { root: true },
-      )
-      expect(commit).toHaveBeenCalledWith(
-        'textile/updateUserThreadData',
-        true,
-        {
-          root: true,
-        },
-      )
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)

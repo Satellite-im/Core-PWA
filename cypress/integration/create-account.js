@@ -79,7 +79,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it.skip(
+  it(
     'Create account successfully without image after attempting to add a NSFW picture',
     { retries: 2 },
     () => {
@@ -116,7 +116,7 @@ describe('Create Account Validations', () => {
     },
   )
 
-  it.skip(
+  it(
     'Create account without image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
@@ -153,6 +153,7 @@ describe('Create Account Validations', () => {
   )
 
   it.skip(
+    //skipped due to bug AP-1630
     'Create account with valid image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
