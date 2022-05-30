@@ -506,6 +506,7 @@ export default {
       },
     },
     chat: {
+      alerts: 'Alerts',
       archived_messages: 'Archived Messages',
       add_channel: 'Add Channel',
       group_invite: 'Invite new member',
