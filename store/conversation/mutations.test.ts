@@ -1,7 +1,7 @@
 import {
-  ConversationState,
-  ConversationConnection,
   ConversationActivity,
+  ConversationConnection,
+  ConversationState,
 } from './types'
 import * as mutations from '~/store/conversation/mutations'
 
@@ -84,7 +84,7 @@ describe('mutations.default.setConversation', () => {
 })
 
 describe('misc', () => {
-  let initialState: ConversationState = {
+  const initialState: ConversationState = {
     id: '',
     type: 'friend',
     calling: false,

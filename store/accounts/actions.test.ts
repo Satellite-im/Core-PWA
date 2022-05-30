@@ -2,13 +2,13 @@ import * as web3 from '@solana/web3.js'
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock'
 import Vue from 'vue'
 import { AccountsError, RegistrationStatus } from './types'
-import { DataStateType } from '~/store/dataState/types'
 import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import * as accounts from '~/store/accounts/actions'
 import InitialAccountsState from '~/store/accounts/state'
+import { DataStateType } from '~/store/dataState/types'
 
 Vue.prototype.$Config = Config
 Vue.prototype.$TextileManager = new TextileManager()
