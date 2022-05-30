@@ -66,13 +66,13 @@
         background: @gray !important;
         box-shadow: -5px 0px 20px -2px @gray !important;
       }
-    }
 
-    &.locked.enabled {
-      box-shadow: unset !important;
-      background: @gray !important;
-      ::after {
-        background: @white !important;
+      &.enabled {
+        box-shadow: unset !important;
+        background: @gray !important;
+        &::after {
+          background: @white !important;
+        }
       }
     }
   }
