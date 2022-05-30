@@ -322,7 +322,7 @@ export default {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const id = uuidv4()
-    const path = await $TextileManager.sharedBucket?.pushFile(
+    const res = await $TextileManager.sharedBucket?.pushFile(
       file.file,
       id,
       (progress: number) => {
@@ -334,7 +334,6 @@ export default {
     )
     /* If already canceled */
     if (!rootState.textile.messageLoading) return
-    const fileURL = Config.textile.browser + path
     const friend = rootState.friends.all.find((fr) => fr.textilePubkey === to)
 
     if (!friend) {
@@ -346,11 +345,11 @@ export default {
         {
           to: friend.textilePubkey,
           payload: {
-            url: fileURL,
+            id,
+            url: Config.textile.browser + res?.path.path,
             name: file.file.name,
             size: file.file.size,
             type: file.file.type,
-            id,
           },
           type: 'file',
         },
@@ -841,7 +840,7 @@ export default {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const group = getGroup(rootState, groupID)
     const id = uuidv4()
-    const path = await $TextileManager.sharedBucket?.pushFile(
+    const res = await $TextileManager.sharedBucket?.pushFile(
       file.file,
       id,
       (progress: number) => {
@@ -851,13 +850,13 @@ export default {
         })
       },
     )
-    const fileURL = Config.textile.browser + path
 
     const sendFileResult =
       await $TextileManager.groupChatManager?.sendMessage<'file'>(group, {
         to: groupID,
         payload: {
-          url: fileURL,
+          id,
+          url: Config.textile.browser + res?.path.path,
           name: file.file.name,
           size: file.file.size,
           type: file.file.type,
