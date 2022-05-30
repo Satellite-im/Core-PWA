@@ -39,9 +39,6 @@ export default Vue.extend({
       consentToScan: (state) =>
         (state as RootState).textile.userThread.consentToScan,
     }),
-    activeFriend(): Friend | undefined {
-      return this.$Hounddog.getActiveFriend(this.$store.state.friends)
-    },
   },
   methods: {
     /**
