@@ -1,10 +1,10 @@
-import { FriendsState } from './types'
 import * as module from './getters'
-import {
-  ConversationConnection,
-  ConversationActivity,
-} from '~/store/conversation/types'
+import { FriendsState } from './types'
 import { RegistrationStatus } from '~/store/accounts/types'
+import {
+  ConversationActivity,
+  ConversationConnection,
+} from '~/store/conversation/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'

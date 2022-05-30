@@ -1,13 +1,13 @@
 import * as module from './actions'
-import {
-  ConversationConnection,
-  ConversationActivity,
-} from '~/store/conversation/types'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { RegistrationStatus } from '~/store/accounts/types'
+import {
+  ConversationActivity,
+  ConversationConnection,
+} from '~/store/conversation/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 // Commented out for later development.
 // import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
