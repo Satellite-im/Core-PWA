@@ -1,0 +1,22 @@
+name: Cypress Pair testing using Cypress Docker Image
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node12.18.3-chrome87-ff82
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run pair chat testing
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./
+          install: false
+          start: yarn dev
+          command: xvfb-run npx cypress run --browser Chrome
+          wait-on: http://localhost:3000
+          wait-on-timeout: 300
