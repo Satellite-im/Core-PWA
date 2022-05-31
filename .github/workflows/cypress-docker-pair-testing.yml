@@ -2,7 +2,7 @@ name: Cypress Pair testing using Cypress Docker Image
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited]]
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   cypress-run:
