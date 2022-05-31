@@ -84,6 +84,7 @@ export default Vue.extend({
       if (this.$el && this.autoScroll) {
         this.$nextTick(() => {
           this.$el.scrollTop = this.$el.scrollHeight
+          this.$store.commit('ui/setIsScrollOver', false)
         })
       }
     },

@@ -104,8 +104,8 @@ export default {
     commit('setCurrentChat', {
       messages:
         direction === ScrollDirections.TOP
-          ? [...newMessages, ...messages]
-          : [...messages, ...newMessages],
+          ? newMessages.concat(messages)
+          : messages.concat(newMessages),
       page: page + 1,
       isMessagesLoading: false,
       lastLoadedMessageId: getLastLoadedMessageId(),

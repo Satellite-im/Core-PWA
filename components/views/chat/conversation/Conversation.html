@@ -45,7 +45,6 @@
       class="conversation-infiniteScroll"
       :class="{ 'is-reversed': isReversedScroll }"
       :options="options"
-      :data-id="chat.currentChat.lastLoadedMessageId"
       @intersect="handleIntersect"
     >
       <template #placeholder> Loading messages </template>

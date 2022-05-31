@@ -2,7 +2,11 @@ import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
 import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
-import { MessageRouteEnum, MessagingTypesEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import {
+  MessageRouteEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
@@ -260,7 +264,7 @@ export default {
         commit(
           'chat/setCurrentChat',
           {
-            messages: [...messages, ...newMessages],
+            messages: messages.concat(newMessages),
             lastLoadedMessageId: !isScrollOver
               ? newMessages[newMessages.length - 1].id
               : lastLoadedMessageId,
