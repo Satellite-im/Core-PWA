@@ -28,7 +28,7 @@ export interface ExportDirectory extends ExportSharedProps {
 
 export type ExportItem = ExportFile | ExportDirectory
 
-export type PrivateBucketIndex = {
+export type PersonalBucketIndex = {
   type: FILESYSTEM_TYPE
   version: number
   content: Array<ExportItem>

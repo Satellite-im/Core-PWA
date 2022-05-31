@@ -1,6 +1,6 @@
 import { MetadataManager } from './MetadataManager'
 import { UserInfoManager } from './UserManager'
-import { PrivateBucket } from '~/libraries/Files/remote/textile/PrivateBucket'
+import { PersonalBucket } from '~/libraries/Files/remote/textile/PersonalBucket'
 import { SharedBucket } from '~/libraries/Files/remote/textile/SharedBucket'
 import { Config } from '~/config'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
@@ -17,7 +17,7 @@ export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
-  personalBucket?: PrivateBucket
+  personalBucket?: PersonalBucket
   sharedBucket?: SharedBucket
   groupChatManager?: GroupChatManager
   metadataManager?: MetadataManager
@@ -77,7 +77,7 @@ export default class TextileManager {
       name: Config.textile.sharedBucket,
     })
 
-    this.personalBucket = new PrivateBucket(textile)
+    this.personalBucket = new PersonalBucket(textile)
     await this.personalBucket.init({
       name: Config.textile.personalBucket,
       encrypted: true,

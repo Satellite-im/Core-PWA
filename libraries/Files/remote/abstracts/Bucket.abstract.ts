@@ -2,7 +2,7 @@ import { Buckets, PushPathResult, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
 import { Config } from '~/config'
 import {
-  PrivateBucketIndex,
+  PersonalBucketIndex,
   SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
@@ -20,7 +20,7 @@ export abstract class Bucket extends RFM {
     this._textile = textile
   }
 
-  abstract get index(): PrivateBucketIndex | SharedBucketIndex | undefined
+  abstract get index(): PersonalBucketIndex | SharedBucketIndex | undefined
 
   /**
    * @method getBucket

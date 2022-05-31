@@ -3,13 +3,13 @@ import { Bucket } from '~/libraries/Files/remote/abstracts/Bucket.abstract'
 import { Config } from '~/config'
 import {
   FILESYSTEM_TYPE,
-  PrivateBucketIndex,
+  PersonalBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { TextileError } from '~/store/textile/types'
 
-export class PrivateBucket extends Bucket {
-  private _index: PrivateBucketIndex = {
+export class PersonalBucket extends Bucket {
+  private _index: PersonalBucketIndex = {
     type: FILESYSTEM_TYPE.DEFAULT,
     version: 1,
     content: [],
@@ -19,7 +19,7 @@ export class PrivateBucket extends Bucket {
    * @getter
    * @returns file system export data
    */
-  get index(): PrivateBucketIndex {
+  get index(): PersonalBucketIndex {
     return this._index
   }
 
@@ -56,10 +56,10 @@ export class PrivateBucket extends Bucket {
 
   /**
    * @method updateIndex
-   * @param index PrivateBucketIndex
+   * @param index PersonalBucketIndex
    * @description sets file system import data
    */
-  async updateIndex(index: PrivateBucketIndex) {
+  async updateIndex(index: PersonalBucketIndex) {
     if (!this._buckets || !this._key) {
       throw new Error('Bucket or bucket key not found')
     }

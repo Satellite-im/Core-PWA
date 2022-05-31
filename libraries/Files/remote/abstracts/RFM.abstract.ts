@@ -1,7 +1,7 @@
 // Remote file management
 import { FileSystemErrors } from '../../errors/Errors'
 import {
-  PrivateBucketIndex,
+  PersonalBucketIndex,
   SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 
@@ -11,7 +11,7 @@ export abstract class RFM {
       throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
   }
 
-  abstract get index(): PrivateBucketIndex | SharedBucketIndex | undefined
+  abstract get index(): PersonalBucketIndex | SharedBucketIndex | undefined
 
   abstract getBucket({
     name,
@@ -27,5 +27,5 @@ export abstract class RFM {
 
   abstract removeFile(name: string): void
 
-  abstract updateIndex(index: PrivateBucketIndex | SharedBucketIndex): void
+  abstract updateIndex(index: PersonalBucketIndex | SharedBucketIndex): void
 }

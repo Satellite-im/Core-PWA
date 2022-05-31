@@ -1,8 +1,8 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
-import { PrivateBucket } from '../remote/textile/PrivateBucket'
+import { PersonalBucket } from '../remote/textile/PersonalBucket'
 import { DIRECTORY_TYPE } from '../types/directory'
-import { FILESYSTEM_TYPE, PrivateBucketIndex } from '../types/filesystem'
+import { FILESYSTEM_TYPE, PersonalBucketIndex } from '../types/filesystem'
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -30,7 +30,7 @@ describe('Test FileSystem Directory', () => {
     fs.openDirectory('dir')
     fs.addChild(file2)
 
-    const ex: PrivateBucketIndex = fs.export
+    const ex: PersonalBucketIndex = fs.export
 
     expect(ex.version + 1).toEqual(fs.export.version)
   })
@@ -41,7 +41,7 @@ describe('Test FileSystem Directory', () => {
       users: 'Users',
       wallet: 'SolanaWallet',
     }
-    const bucket = new PrivateBucket(initializationData)
+    const bucket = new PersonalBucket(initializationData)
 
     expect(bucket.index).toStrictEqual({
       type: FILESYSTEM_TYPE.DEFAULT,
@@ -58,7 +58,7 @@ describe('Test FileSystem Directory', () => {
       users: 'Users',
       wallet: 'SolanaWallet',
     }
-    const bucket = new PrivateBucket(initializationData)
+    const bucket = new PersonalBucket(initializationData)
     try {
       await bucket.init('init')
     } catch (error) {
