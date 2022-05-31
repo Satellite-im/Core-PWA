@@ -845,7 +845,7 @@ export default {
       id,
       (progress: number) => {
         commit('setUploadingFileProgress', {
-          progress,
+          progress: Math.floor((progress / file.file.size) * 100),
           name: file.file.name,
         })
       },
