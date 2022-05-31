@@ -18,6 +18,8 @@ jobs:
         run: |
           chmod -R 777 /github/home
           chmod -R 777 cypress
+          unset ELECTRON_RUN_AS_NODE
+          export ELECTRON_RUN_AS_NODE=1
       - name: Cypress run pair chat testing
         uses: cypress-io/github-action@v2
         with:
