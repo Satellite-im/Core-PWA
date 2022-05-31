@@ -55,4 +55,17 @@ describe('Verify passphrase does not get stored in localstorage', () => {
       cy.validatePassphraseLocalStorage()
     })
   })
+
+  it('Logout user on /unlock page', () => {
+    cy.visit('/')
+    cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=create-account-button]').click()
+    cy.contains('I Saved It').click()
+    cy.visit('/')
+    cy.contains('Not you? Create or import an account').click()
+    cy.contains('Not you? Create or import an account', {
+      timeout: 30000,
+    }).should('not.exist')
+  })
 })
