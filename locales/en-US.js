@@ -92,9 +92,9 @@ export default {
       files: 'Files',
     },
     edit: {
-      escape_to: 'escape to ',
+      escape_to: 'escape to',
       cancel: 'cancel',
-      enter_to: ' • enter to ',
+      enter_to: 'enter to',
       save: 'save',
     },
   },
