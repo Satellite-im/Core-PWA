@@ -93,7 +93,6 @@ export class NotificationManager {
         description: payload.message,
       },
       state: payload.notificationState,
-      from: payload.from,
       fromName: payload.from,
       fromAddress: payload.fromAddress,
       group: payload.groupName,
