@@ -13,7 +13,7 @@ export const Config = {
       'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
-    fsTable: 'sat.json',
+    bucketIndex: 'sat.json',
     personalBucket: 'personal-files',
     sharedBucket: 'shared-files',
   },

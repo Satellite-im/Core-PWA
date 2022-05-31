@@ -34,7 +34,7 @@ export class SharedBucket extends Bucket {
     //   const data = []
     //   for await (const bytes of this._buckets.pullPath(
     //     this._key,
-    //     Config.textile.fsTable,
+    //     Config.textile.bucketIndex,
     //   )) {
     //     data.push(bytes)
     //   }
@@ -60,7 +60,7 @@ export class SharedBucket extends Bucket {
     this._index = index
     const res = await this._buckets.pushPath(
       this._key,
-      Config.textile.fsTable,
+      Config.textile.bucketIndex,
       Buffer.from(JSON.stringify(index)),
       { root: this._root },
     )

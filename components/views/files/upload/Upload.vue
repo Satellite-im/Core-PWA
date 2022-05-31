@@ -3,7 +3,6 @@
 import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
 import { UploadDropItemType } from '~/types/files/file'
@@ -124,18 +123,16 @@ export default Vue.extend({
           }),
         )
         for (const uploadFile of filesToUpload) {
-          if (uploadFile.file.size <= Config.nsfwPictureLimit) {
-            uploadFile.nsfw.checking = true
-            try {
-              uploadFile.nsfw.status = await this.$Security.isNSFW(
-                uploadFile.file,
-              )
-            } catch (err) {
-              uploadFile.nsfw.status = true
-              uploadFile.nsfw.checking = false
-            }
+          uploadFile.nsfw.checking = true
+          try {
+            uploadFile.nsfw.status = await this.$Security.isNSFW(
+              uploadFile.file,
+            )
+          } catch (err) {
+            uploadFile.nsfw.status = true
             uploadFile.nsfw.checking = false
           }
+          uploadFile.nsfw.checking = false
           this.loadPicture(uploadFile, () =>
             this.$store.commit('chat/addFile', {
               file: uploadFile,
