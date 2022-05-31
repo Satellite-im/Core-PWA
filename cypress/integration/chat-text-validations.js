@@ -203,7 +203,7 @@ describe('Chat Text and Sending Links Validations', () => {
       }) //skipped due to test needs to be updated, works manually - AP-1667
   })
 
-  it('User should use markdown "||" to insert an spoiler', () => {
+  it.skip('User should use markdown "||" to insert an spoiler', () => {
     cy.sendMessageWithMarkdown(randomMessage, '||')
   })
 })
