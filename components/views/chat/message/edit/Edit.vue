@@ -10,15 +10,6 @@ import { Config } from '~/config'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import Editable from '~/components/views/chat/chatbar/Editable.vue'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    saveMessage: Function
-    cancelMessage: Function
-    lengthCount: number
-    charlimit: boolean
-  }
-}
-
 export default Vue.extend({
   components: {
     SmileIcon,
@@ -40,19 +31,23 @@ export default Vue.extend({
     }
   },
   computed: {
-    lengthCount() {
-      return this.$data.content.length
+    lengthCount(): number {
+      return this.content.length
     },
-    charlimit() {
+    charlimit(): boolean {
       return this.lengthCount > this.maxChars
     },
   },
   mounted() {
-    this.$data.content = this.$props.message
+    this.content = this.message
   },
   methods: {
     saveMessage() {
-      this.$emit('commitMessage', this.$data.content.slice(0, this.maxChars))
+      if (this.content.trim().length === 0) {
+        this.$toast.error(this.$t('errors.chat.empty_message_error') as string)
+        return
+      }
+      this.$emit('commitMessage', this.content.slice(0, this.maxChars))
     },
     cancelMessage() {
       this.$emit('cancelMessage')
@@ -64,6 +59,7 @@ export default Vue.extend({
       switch (event.key) {
         case KeybindingEnum.ENTER:
           if (!event.shiftKey) {
+            event.preventDefault()
             this.saveMessage()
           }
           break
