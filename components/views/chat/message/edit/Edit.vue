@@ -43,7 +43,8 @@ export default Vue.extend({
   },
   methods: {
     saveMessage() {
-      if (this.content.length === 0) {
+      if (this.content.trim().length === 0) {
+        this.$toast.error(this.$t('errors.chat.empty_message_error') as string)
         return
       }
       this.$emit('commitMessage', this.content.slice(0, this.maxChars))
