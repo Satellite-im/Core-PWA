@@ -7,7 +7,7 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.20.0-chrome87-ff82
+    container: cypress/base:16.13.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2
