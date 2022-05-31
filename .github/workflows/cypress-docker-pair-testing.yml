@@ -8,7 +8,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     container:
-      image: cypress/included:9.5.1-node16.14.0-slim-chrome99-ff97
+      image: cypress/base:16.13.0
       options: --user 1001
     
     steps:
