@@ -19,8 +19,7 @@ jobs:
           chmod -R 777 /github/home
           chmod -R 777 cypress
           unset ELECTRON_RUN_AS_NODE
-          export ELECTRON_RUN_AS_NODE=1
-          /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
+          Xvfb :99 &
           export DISPLAY=:99
       - name: Create env file
         run: |
@@ -41,7 +40,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: sudo xvfb-run -e /dev/stdout npm run cy:chat
+          command: npm run cy:chat
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Artifacts
