@@ -1,0 +1,51 @@
+name: Cypress Pair testing using Cypress Docker Image
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.13.0-chrome95-ff94
+      options: --user 1001
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set permissions
+        run: |
+          chmod -R 777 /github/home
+          chmod -R 777 cypress
+          unset ELECTRON_RUN_AS_NODE
+          /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
+          export DISPLAY=:99
+      - name: Create env file
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          echo NUXT_ENV_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
+          cat .env
+      - name: Read .env file
+        id: envfile
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./.env
+      - name: Echo .env
+        run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Cypress run pair chat testing
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./
+          install: false
+          start: yarn dev
+          command: npm run cy:chat
+          wait-on: http://localhost:3000
+          wait-on-timeout: 300
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots-chat-pair
+          path: cypress/screenshots-chat-pair
