@@ -25,5 +25,3 @@ jobs:
           command: npm run cy:chat
           wait-on: http://localhost:3000
           wait-on-timeout: 300
-        env:
-         CYPRESS_CACHE_FOLDER: '${GITHUB_WORKSPACE}/.cypress-cache
