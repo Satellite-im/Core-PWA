@@ -23,4 +23,4 @@ jobs:
           start: yarn dev
           command: npm run cy:chrome
           wait-on: http://localhost:3000
-          wait-on-timeout: 30
+          wait-on-timeout: 300
