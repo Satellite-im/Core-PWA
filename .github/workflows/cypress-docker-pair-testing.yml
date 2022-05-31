@@ -8,7 +8,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     container:
-      image: cypress/base:16.13.0
+      image: cypress/included:9.4.1
       options: --user 1001
     
     steps:
