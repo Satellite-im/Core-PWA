@@ -7,7 +7,9 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    container: cypress/base:16.13.0
+    container:
+      image: cypress/included:9.5.4
+      options: --user 1001
     
     steps:
       - name: Checkout
