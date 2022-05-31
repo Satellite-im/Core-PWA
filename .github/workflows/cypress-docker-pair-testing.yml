@@ -21,6 +21,6 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: npm run cy:chrome
+          command: npm run cy:chat
           wait-on: http://localhost:3000
           wait-on-timeout: 300
