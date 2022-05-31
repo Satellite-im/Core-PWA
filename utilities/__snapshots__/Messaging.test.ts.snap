@@ -5,7 +5,6 @@ Array [
   Object {
     "fileMessage": "",
     "glyphMessage": "",
-    "imageMessage": "",
     "mediaMessage": "",
     "reactionMessage": "",
     "reactions": Array [],
@@ -16,7 +15,6 @@ Array [
   Object {
     "fileMessage": "",
     "glyphMessage": "",
-    "imageMessage": "",
     "mediaMessage": "",
     "reactionMessage": "",
     "reactions": Array [],
@@ -32,7 +30,6 @@ Object {
   "0": Object {
     "fileMessage": "",
     "glyphMessage": "",
-    "imageMessage": "",
     "mediaMessage": "",
     "reactionMessage": "",
     "replyMessage": "text1",
@@ -64,7 +61,6 @@ Object {
     "undefined": Object {
       "fileMessage": "",
       "glyphMessage": "",
-      "imageMessage": "",
       "mediaMessage": "",
       "reactionMessage": "",
       "replyMessage": "text1",
@@ -83,7 +79,6 @@ Object {
     "undefined": Object {
       "fileMessage": "",
       "glyphMessage": "",
-      "imageMessage": "",
       "mediaMessage": "",
       "reactionMessage": "",
       "replyMessage": "text1",
@@ -104,7 +99,6 @@ Object {
       Object {
         "fileMessage": "",
         "glyphMessage": "",
-        "imageMessage": "",
         "mediaMessage": "",
         "reactionMessage": "",
         "replyMessage": "text1",
@@ -126,7 +120,6 @@ Object {
       Object {
         "fileMessage": "",
         "glyphMessage": "",
-        "imageMessage": "",
         "mediaMessage": "",
         "reactionMessage": "",
         "replyMessage": "text1",
@@ -144,7 +137,6 @@ Object {
     "undefined": Object {
       "fileMessage": "",
       "glyphMessage": "",
-      "imageMessage": "",
       "mediaMessage": "",
       "reactionMessage": "",
       "replyMessage": "text1",

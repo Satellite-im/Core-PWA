@@ -445,7 +445,7 @@ export class Call extends Emitter<CallEventListeners> {
   /**
    * @method createNewTracks
    * @description Creates new media stream and returns tracks
-   * @param constraints Media stream contraints to apply
+   * @param constraints Media stream constraints to apply
    */
   async createNewTracks(constraints: MediaStreamConstraints) {
     if (!navigator.mediaDevices.getUserMedia) {
@@ -471,7 +471,7 @@ export class Call extends Emitter<CallEventListeners> {
   /**
    * @method updateConstraints
    * @description Updates the constraints property
-   * @param constraints Media stream contraints to apply from now on
+   * @param constraints Media stream constraints to apply from now on
    */
   updateConstraints(constraints: MediaStreamConstraints) {
     this.constraints = { ...this.constraints, ...constraints }

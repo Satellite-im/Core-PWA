@@ -238,7 +238,7 @@ export default Vue.extend({
     },
     /**
      * @method containsOnlyEmoji
-     * @description Check wether or not a string only contains an emoji
+     * @description Check whether or not a string only contains an emoji
      * @param str String to check against
      */
     containsOnlyEmoji(str: string): boolean {
