@@ -17,7 +17,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.goToConversation('Chat Pair B')
   })
 
-  it('Validate video call show local and remote video', () => {
+  it.skip('Validate video call show local and remote video', () => {
     cy.get('[data-cy=toolbar-enable-video]')
       .click()
       .then(() => {
@@ -37,7 +37,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       })
   })
 
-  it('Validate that is typing message is displayed', () => {
+  it.skip('Validate that is typing message is displayed', () => {
     cy.contains('typing', { timeout: 180000 }).should('be.visible')
   })
 })
