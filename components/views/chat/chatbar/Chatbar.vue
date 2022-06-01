@@ -348,7 +348,6 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Chatbar.less"></style>
 <style lang="less">
 .messageuser {
   &.editable-container {
