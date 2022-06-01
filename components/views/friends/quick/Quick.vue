@@ -27,7 +27,7 @@ export default Vue.extend({
         this.closeModal()
         return
       }
-      if (!this.name || this.name.length < 3) {
+      if (!this.name || this.name.length < 3 || this.name.length > 64) {
         this.error = this.$t('errors.chat.group_name') as string
         return
       }
