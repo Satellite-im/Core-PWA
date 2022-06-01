@@ -1,10 +1,8 @@
-<div
-  id="quick-chat"
-  :class="`quick-chat ${ui.showMedia ? 'quick-chat--compact' : ''}`"
-  v-if="ui.modals.quickchat"
->
-  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
-  <TypographyText :text="$t('pages.chat.new_chat_description')" />
+<div class="quick-chat" :class="{compact : ui.showMedia}">
+  <div>
+    <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
+    <TypographyText :text="$t('pages.chat.new_chat_description')" />
+  </div>
   <SettingsPagesUserSearch
     v-model="friends"
     :placeholder="$t('servers.create.select_friends_placeholder')"
@@ -22,14 +20,13 @@
     v-model="name"
   />
   <small class="error has-text-danger error" v-if="error">{{error}}</small>
-  <div v-if="friends.length" class="submit-container">
-    <InteractablesButton
-      type="primary"
-      size="small"
-      :text="$t('pages.chat.chat_now')"
-      class="create-server-btn"
-      :action="confirm"
-      :loading="isLoading"
-    />
-  </div>
+  <InteractablesButton
+    v-if="friends.length"
+    type="primary"
+    size="small"
+    class="create-server-btn"
+    :text="$t('pages.chat.chat_now')"
+    :action="confirm"
+    :loading="isLoading"
+  />
 </div>

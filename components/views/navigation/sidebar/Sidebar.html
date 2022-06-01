@@ -85,11 +85,14 @@
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
+    <FriendsQuick
+      v-if="ui.modals.quickchat"
+      v-click-outside="()=>toggleModal('quickchat')"
+    />
     <div
+      v-if="ui.showSidebarUsers"
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
-      v-if="ui.showSidebarUsers"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <UiLoadersAddress
@@ -99,8 +102,8 @@
         />
         <div v-else-if="users && users.length">
           <UiInlineNotification
-            :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
+            :text="$t('messaging.new_messages')"
           />
           <div v-for="thing in usersAndGroups">
             <User
