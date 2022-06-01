@@ -4,12 +4,13 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   name: 'Quick',
   data() {
     return {
-      friends: [],
+      friends: [] as Friend[],
       isLoading: false,
       error: '',
       name: '',
@@ -20,10 +21,6 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
-      if (!this.name || this.name.length < 3) {
-        this.error = this.$t('errors.chat.group_name') as string
-        return
-      }
       // if only 1 friend, direct to DM instead
       if (this.friends.length === 1) {
         this.$router.push(`/chat/direct/${this.friends[0].address}`)
@@ -31,6 +28,11 @@ export default Vue.extend({
           name: 'quickchat',
           state: false,
         })
+        return
+      }
+      if (!this.name || this.name.length < 3) {
+        this.error = this.$t('errors.chat.group_name') as string
+        return
       }
       // create group
       try {

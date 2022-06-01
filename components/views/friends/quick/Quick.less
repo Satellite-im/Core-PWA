@@ -14,6 +14,10 @@
   max-height: 24rem;
   gap: @normal-spacing;
 
+  &.compact {
+    left: @servers-size + 2rem;
+  }
+
   .subtitle {
     margin-bottom: @light-spacing;
     font-size: @text-size;
@@ -21,10 +25,6 @@
 
   button {
     align-self: flex-end;
-  }
-
-  &.compact {
-    left: @servers-size + 2rem;
   }
 }
 
