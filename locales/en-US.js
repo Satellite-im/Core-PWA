@@ -785,6 +785,7 @@ export default {
     voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
+    leave_group: 'Leave Group',
     profile: 'Profile',
     // message
     edit: 'Edit Message',

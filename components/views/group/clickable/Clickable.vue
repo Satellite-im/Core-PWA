@@ -24,7 +24,7 @@ export default Vue.extend({
         { text: this.$t('context.send'), func: this.testFunc },
         // { text: this.$t('context.voice'), func: this.testFunc },
         // { text: this.$t('context.video'), func: this.testFunc },
-        { text: this.$t('context.remove'), func: this.testFunc },
+        { text: this.$t('context.leave_group'), func: this.leaveGroup },
       ],
     }
   },
@@ -32,13 +32,24 @@ export default Vue.extend({
     testFunc(): void {
       this.$Logger.log('Group.vue Context', 'Test Function')
     },
+    async leaveGroup(): Promise<void> {
+      try {
+        await this.$store.dispatch('groups/leaveGroup', {
+          group: this.group,
+        })
+      } catch (e) {
+        // this.$toast.success(
+        //   this.$t('errors.friends.friend_not_removed') as string,
+        // )
+      }
+    },
     /**
      * @method navigateToGroup
      * @description Navigates to a groups page by pushing "/chat/groups/" + groups address to router
      * @param address The groups address you'd like to route to
      * @example v-on:click="navigateToGroup(group.address)"
      */
-    navigateToGroup(address: string) {
+    navigateToGroup(address: string): void {
       this.$router.push(`/chat/groups/${address}`)
       this.$store.dispatch('conversation/setConversation', {
         id: this.group.id,

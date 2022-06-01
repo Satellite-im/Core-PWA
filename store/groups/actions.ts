@@ -48,7 +48,7 @@ export default {
    * @example
    */
   async createGroup(
-    { commit }: ActionsArguments<GroupsState>,
+    _: ActionsArguments<GroupsState>,
     { name }: { name: string },
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -59,6 +59,20 @@ export default {
     await $BlockchainClient.createGroup(groupId, name)
 
     return groupId
+  },
+
+  /**
+   * @method leaveGroup
+   * @description leave a group chat
+   */
+  async leaveGroup(
+    { commit }: ActionsArguments<GroupsState>,
+    { group }: { group: Group },
+  ) {
+    const groupChatProgram = getGroupChatProgram()
+    await groupChatProgram.leave(group.id)
+    await groupChatProgram.removeGroupListener(group.address)
+    commit('removeGroup', group.id)
   },
 
   /**

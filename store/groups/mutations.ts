@@ -7,6 +7,9 @@ const mutations = {
   addGroup(state: GroupsState, group: Group) {
     state.all.push(group)
   },
+  removeGroup(state: GroupsState, groupId: string) {
+    state.all = state.all.filter((group) => group.id !== groupId)
+  },
   updateGroup(state: GroupsState, group: Group) {
     state.all = state.all.map((item) =>
       item.id !== group.id ? item : { ...item, ...group },
