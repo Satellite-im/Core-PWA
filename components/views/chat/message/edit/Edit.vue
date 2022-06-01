@@ -6,7 +6,7 @@ import Vue from 'vue'
 import { SmileIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
-import Editable from '~/components/views/chat/chatbar/editable/Editable.vue'
+import Editable from '~/components/views/chat/chatbar/Editable.vue'
 
 export default Vue.extend({
   components: {

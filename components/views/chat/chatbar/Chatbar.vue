@@ -349,3 +349,24 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang="less" src="./Chatbar.less"></style>
+<style lang="less">
+.messageuser {
+  &.editable-container {
+    > div {
+      padding: 14px 0;
+    }
+  }
+  blockquote {
+    border-left: 4px solid @text-muted;
+    padding-left: @light-spacing;
+  }
+  p {
+    font-size: @text-size !important;
+    .chatbar-tag {
+      &:extend(.round-corners);
+      background: @midground;
+      padding: @xlight-spacing;
+    }
+  }
+}
+</style>
