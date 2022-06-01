@@ -99,10 +99,6 @@
 
     &.fullscreen-media {
       .media-open {
-        flex: 0;
-      }
-      #chatbar {
-        height: 0;
         margin-top: 0;
       }
       .scroll-area {
@@ -115,6 +111,10 @@
       }
       #mediastream {
         height: calc(@full - @toolbar-height - @light-spacing);
+        &:extend(.fifth-layer);
+      }
+      .chat-scroll-content {
+        overflow: hidden;
       }
     }
   }
