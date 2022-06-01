@@ -3,10 +3,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { mapGetters, mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import { Alert, AlertType } from '~/libraries/ui/Alerts'
-import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -16,8 +14,6 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState({ ui: (state) => (state as RootState).ui }),
-    ...mapGetters('accounts', ['getActiveAccount']),
     setTranslateText(): TranslateResult | undefined {
       switch (this.alert?.type) {
         case AlertType.DIRECT_MESSAGE: {
