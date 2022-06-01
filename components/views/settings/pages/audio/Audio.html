@@ -168,6 +168,17 @@
           :text="$t('pages.settings.video.sources.permissionDeniedMessage')"
         />
       </span>
+
+    </SettingsUnit>
+    <SettingsUnit
+      v-if="getInitialized"
+      :title="$t('pages.settings.video.flipVideo.title')"
+      :text="$t('pages.settings.video.flipVideo.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="flipVideo"
+        :isLocked="loading.includes('flipVideo')"
+      />
     </SettingsUnit>
   </div>
 
@@ -198,4 +209,5 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
+  <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
 </div>

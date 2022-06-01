@@ -401,6 +401,10 @@ export default {
               "Select which video device you'd like to share your beautiful smile from.",
           },
         },
+        flipVideo: {
+          title: 'Mirror Video',
+          subtitle: 'Gaze upon your reflection with mirrored video enabled.',
+        },
       },
       screen: {
         title: 'Screen Share',
