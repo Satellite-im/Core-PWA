@@ -14,10 +14,8 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
-import { PeerMutedState } from '~/store/webrtc/types'
 const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
@@ -53,7 +51,7 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    async toggleMute(kind: keyof PeerMutedState) {
+    async toggleMute(kind: WebRTCEnum) {
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
