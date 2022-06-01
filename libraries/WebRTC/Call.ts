@@ -3,7 +3,10 @@ import PeerId from 'peer-id'
 import Emitter from './Emitter'
 import { CallEventListeners } from './types'
 import { Peer2Peer } from './Libp2p'
+import { WebRTCErrors } from './errors/Errors'
 import { Config } from '~/config'
+
+const PERMISSION_DENIED_BY_SYSTEM = 'Permission denied by system'
 
 export class CallPeer extends Peer {
   id: string
@@ -395,13 +398,23 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async createDisplayStream() {
     if (!navigator.mediaDevices.getDisplayMedia) {
-      alert(
-        "Your browser doesn't support or have permission to share your screen. Please update your browser or review your security settings.",
-      )
-      throw new Error('WebRTC display media not supported')
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
-    const screenStream = await navigator.mediaDevices.getDisplayMedia()
+    let screenStream: MediaStream
+
+    try {
+      screenStream = await navigator.mediaDevices.getDisplayMedia()
+    } catch (e) {
+      if (
+        e instanceof DOMException &&
+        e.message.includes(PERMISSION_DENIED_BY_SYSTEM)
+      ) {
+        throw new Error(WebRTCErrors.PERMISSION_DENIED)
+      }
+      return
+    }
+
     if (!this.streams[this.localId]) {
       this.streams[this.localId] = {}
     }
@@ -791,9 +804,7 @@ export class Call extends Emitter<CallEventListeners> {
 
     const stream = this.streams[peerId]?.[kind]
     if (!stream) {
-      throw new Error(
-        `webrtc/call: unmute - ${kind} stream not initialized for peer: ${peerId}`,
-      )
+      return
     }
 
     const track: MediaStreamTrack =
