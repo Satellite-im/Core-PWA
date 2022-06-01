@@ -6,7 +6,7 @@ import {
   SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
+import { RFM } from '~/libraries/Files/interface/RFM.interface'
 import { TextileError } from '~/store/textile/types'
 
 export abstract class Bucket implements RFM {
