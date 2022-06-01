@@ -4,7 +4,6 @@ export enum TextileErrors {
 
 export enum FileSystemErrors {
   // internal
-  RFM_ABSTRACT_ONLY = 'RFM class is Abstract. It can only be extended',
   ITEM_ABSTRACT_ONLY = 'Item class is Abstract. It can only be extended',
   // user facing - Item
   NO_EMPTY_STRING = 'pages.files.errors.no_empty',

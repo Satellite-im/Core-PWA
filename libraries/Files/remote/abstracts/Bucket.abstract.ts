@@ -9,18 +9,18 @@ import { TextileInitializationData } from '~/types/textile/manager'
 import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
 import { TextileError } from '~/store/textile/types'
 
-export abstract class Bucket extends RFM {
+export abstract class Bucket implements RFM {
   protected _textile?: TextileInitializationData
   protected _buckets?: Buckets
   protected _key?: Root['key']
   protected _root?: Root | Root['path']
 
   constructor(textile: TextileInitializationData) {
-    super()
     this._textile = textile
   }
 
   abstract get index(): PersonalBucketIndex | SharedBucketIndex | undefined
+  abstract updateIndex(index: PersonalBucketIndex | SharedBucketIndex): void
 
   /**
    * @method getBucket

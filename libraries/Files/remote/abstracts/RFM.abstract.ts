@@ -1,31 +1,19 @@
 // Remote file management
-import { FileSystemErrors } from '../../errors/Errors'
 import {
   PersonalBucketIndex,
   SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 
-export abstract class RFM {
-  constructor() {
-    if (this.constructor.name === 'RFM')
-      throw new Error(FileSystemErrors.RFM_ABSTRACT_ONLY)
-  }
+export interface RFM {
+  get index(): PersonalBucketIndex | SharedBucketIndex | undefined
 
-  abstract get index(): PersonalBucketIndex | SharedBucketIndex | undefined
+  getBucket({ name, encrypted }: { name: string; encrypted?: boolean }): void
 
-  abstract getBucket({
-    name,
-    encrypted,
-  }: {
-    name: string
-    encrypted: boolean
-  }): void
+  pushFile(file: File, path: string, progressCallback: Function): void
 
-  abstract pushFile(file: File, path: string, progressCallback: Function): void
+  pullFile(id: string, name: string, size: number): void
 
-  abstract pullFile(id: string, name: string, size: number): void
+  removeFile(name: string): void
 
-  abstract removeFile(name: string): void
-
-  abstract updateIndex(index: PersonalBucketIndex | SharedBucketIndex): void
+  updateIndex(index: PersonalBucketIndex | SharedBucketIndex): void
 }
