@@ -598,7 +598,7 @@ export default {
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
-      group_name: 'Enter a group name longer than 3, up to 64 characters',
+      group_name: 'Enter a group name of at least 3 characters, up to 64',
     },
     textile: {
       friend_not_found: 'Friend not found',
