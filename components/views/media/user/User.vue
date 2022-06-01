@@ -101,6 +101,10 @@ export default Vue.extend({
         (this.streams as CallPeerStreams)?.screen
       )
     },
+    src(): string {
+      const hash = this.user.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   watch: {
     muted() {},
