@@ -4,6 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 import { ScrollDirections } from '~/types/chat/chat'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -16,7 +17,14 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'textile', 'chat']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      showOlderMessageInfo: (state) =>
+        (state as RootState).ui.showOlderMessagesInfo,
+      textile: (state) => (state as RootState).textile,
+      currentChat: (state) => (state as RootState).chat.currentChat,
+      webrtc: (state) => (state as RootState).webrtc,
+    }),
     options() {
       return {
         threshold: [0, 0.25, 0.5, 0.75, 1],
@@ -24,26 +32,14 @@ export default Vue.extend({
         root: this.$refs.chatScroll,
       }
     },
-    messages() {
-      return this.chat.currentChat.messages
-    },
-    direction() {
-      return this.chat.currentChat.direction
-    },
     isReversedScroll() {
-      return this.direction === ScrollDirections.TOP
+      return this.currentChat.direction === ScrollDirections.TOP
     },
     conversationId() {
       return this.$route.params?.address
     },
-    showOlderMessageInfo() {
-      return this.ui.showOlderMessagesInfo
-    },
     isMediaOpen() {
-      return (
-        this.$store.state.webrtc.activeCall &&
-        this.$store.state.webrtc.activeCall.callId
-      )
+      return this.webrtc.activeCall && this.webrtc.activeCall.callId
     },
   },
   beforeDestroy() {
@@ -61,7 +57,10 @@ export default Vue.extend({
           return
         }
         messageNode.scrollIntoView({
-          block: this.direction === ScrollDirections.TOP ? 'start' : 'end',
+          block:
+            this.currentChat.direction === ScrollDirections.TOP
+              ? 'start'
+              : 'end',
           behavior: 'auto',
         })
       })
@@ -70,12 +69,9 @@ export default Vue.extend({
       this.$store.dispatch('chat/loadMessages', this.conversationId)
     },
     handleIntersect({ loaded, complete }) {
-      if (
-        this.chat.currentChat.hasNextPage &&
-        !this.chat.currentChat.isMessagesLoading
-      ) {
+      if (this.currentChat.hasNextPage && !this.currentChat.isMessagesLoading) {
         this.loadMore()
-        this.scrollToMessage(this.chat.currentChat.lastLoadedMessageId)
+        this.scrollToMessage(this.currentChat.lastLoadedMessageId)
         loaded()
         return
       }
