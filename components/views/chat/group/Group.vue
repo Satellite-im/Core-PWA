@@ -16,15 +16,11 @@ export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      default: () => ({
-        at: 0,
-        from: '',
-        to: '',
-      }),
+      required: true,
     },
     groupId: {
       type: String as PropType<string>,
-      default: () => '',
+      required: true,
     },
   },
   data() {
@@ -39,19 +35,20 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'friends', 'accounts', 'groups']),
     ...mapGetters('friends', ['findFriendByKey']),
-    address() {
+    ...mapGetters('settings', ['getTimezone']),
+    address(): string {
       return (
         this.groupMember?.name ||
         getAddressFromState(this.group.from, this.$store.state)
       )
     },
-    username() {
+    username(): string {
       return (
         this.groupMember?.name ||
         getUsernameFromState(this.group.from, this.$store.state)
       )
     },
-    badge() {
+    badge(): string {
       return ''
     },
     src(): string {
@@ -84,6 +81,12 @@ export default Vue.extend({
       return this.groups.all
         .find((it: Group) => it.id === this.groupId)
         ?.members?.find((it: GroupMember) => it.address === this.group.sender)
+    },
+    formattedTimestamp(): string {
+      return this.$dayjs(this.group.at)
+        .local()
+        .tz(this.getTimezone)
+        .format('LT')
     },
   },
   created() {

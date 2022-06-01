@@ -15,10 +15,9 @@
   .group-body {
     .group-heading {
       .is-text {
-        margin-left: @light-spacing;
-        // line-height: 1;
-        font-size: @micro-text-size;
         &:extend(.font-muted);
+        font-size: @micro-text-size;
+        margin-left: @light-spacing;
         display: flex;
         align-items: flex-end;
         height: 1.2rem;
@@ -28,7 +27,7 @@
       flex-direction: row;
       align-items: center;
     }
-    margin-left: 0.75rem;
+    margin-left: @normal-spacing;
     &:extend(.full-width);
   }
 
@@ -37,5 +36,26 @@
   margin-top: @light-spacing;
 }
 .group-same {
-  margin-left: calc(35px + 0.75rem);
+  display: flex;
+  align-items: center;
+  .timestamp {
+    &:extend(.font-muted);
+    display: none;
+    font-size: @micro-text-size;
+    width: 52px;
+  }
+  .group-messages {
+    flex-grow: 1;
+    margin-left: 3.25rem;
+  }
+
+  &:focus,
+  &:hover {
+    .timestamp {
+      display: block;
+    }
+    .group-messages {
+      margin-left: 0;
+    }
+  }
 }

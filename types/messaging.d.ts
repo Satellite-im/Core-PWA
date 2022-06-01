@@ -40,6 +40,7 @@ export type Group = {
   from: string
   to: string
   messages: Array<UIMessage> | null
+  sender?: string
 }
 
 export type MessageGroup = Array<Group | Divider>
