@@ -17,6 +17,8 @@
     type="dark"
     input-kind="text"
     :placeholder="$t('pages.chat.new_group_name')"
+    :minLength="3"
+    :maxLength="64"
   />
   <TypographyError v-if="error" :text="error" small />
   <InteractablesButton
