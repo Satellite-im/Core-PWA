@@ -24,10 +24,7 @@ export default Vue.extend({
       // if only 1 friend, direct to DM instead
       if (this.friends.length === 1) {
         this.$router.push(`/chat/direct/${this.friends[0].address}`)
-        this.$store.commit('ui/toggleModal', {
-          name: 'quickchat',
-          state: false,
-        })
+        this.closeModal()
         return
       }
       if (!this.name || this.name.length < 3) {
@@ -51,16 +48,19 @@ export default Vue.extend({
           ),
         )
         // close quickchat modal after redirecting to chat
-        this.$store.commit('ui/toggleModal', {
-          name: ModalWindows.QUICK_CHAT,
-          state: false,
-        })
+        this.closeModal()
         this.$router.push(`/chat/groups/${groupId}`)
       } catch (e: any) {
         this.error = `Failed to create group: ${e.message}`
       } finally {
         this.isLoading = false
       }
+    },
+    closeModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.QUICK_CHAT,
+        state: false,
+      })
     },
   },
 })
