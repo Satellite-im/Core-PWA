@@ -69,6 +69,7 @@ export default {
     { commit }: ActionsArguments<GroupsState>,
     { group }: { group: Group },
   ) {
+    // TODO: handle leave for admin of group (adminLeave)
     const groupChatProgram = getGroupChatProgram()
     await groupChatProgram.leave(group.id)
     await groupChatProgram.removeGroupListener(group.address)
