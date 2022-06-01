@@ -56,9 +56,9 @@ export default Vue.extend({
     async toggleMute(kind: keyof PeerMutedState) {
       this.isLoading = true
       try {
-        if (kind === 'audio') {
+        if (kind === WebRTCEnum.AUDIO) {
           this.$store.dispatch('audio/toggleMute', undefined, { root: true })
-        } else if (kind === 'video') {
+        } else if (kind === WebRTCEnum.VIDEO) {
           this.$store.dispatch('video/toggleMute', undefined, { root: true })
         } else {
           await this.$store.dispatch(
