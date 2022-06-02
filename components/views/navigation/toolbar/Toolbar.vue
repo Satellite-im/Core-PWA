@@ -17,7 +17,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState, mapGetters } from 'vuex'
-import { Group } from '~/store/groups/types'
+import { Group, GroupMember } from '~/store/groups/types'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
@@ -76,18 +76,16 @@ export default Vue.extend({
     },
     enableRTC(): boolean {
       if (this.conversation.type === 'group') {
-        const group = this.$typedStore.state.groups.all.find(
+        const group = this.groups.all.find(
           (group) => group.id === this.conversation.id,
         )
         const members = group?.members.map((m) => m.address)
-        return this.$typedStore.state.friends.all.some(
+        return this.friends.all.some(
           (friend: Friend) =>
             members?.includes(friend.address) && friend.state === 'online',
         )
       }
-      return this.$typedStore.state.friends.all.some(
-        (friend) => friend.state === 'online',
-      )
+      return this.friends.all.some((friend) => friend.state === 'online')
     },
     ModalWindows: () => ModalWindows,
     src(): string {
@@ -96,6 +94,16 @@ export default Vue.extend({
     },
     isGroup(): boolean {
       return 'members' in this.recipient
+    },
+    subtitleText(): string {
+      if (this.isGroup) {
+        const names = this.recipient.members.map(
+          (member: GroupMember) => member.name,
+        )
+        return names.join(', ')
+      }
+
+      return this.recipient.status
     },
   },
   methods: {

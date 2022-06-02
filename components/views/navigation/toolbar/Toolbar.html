@@ -1,26 +1,19 @@
 <div id="toolbar" v-if="recipient">
   <div class="circle-container">
     <UiUserState
+      v-if="!isGroup"
+      class="circle"
       :user="recipient"
-      v-if="!recipient || $device.isMobile"
       :clickHandler="openProfile"
     />
-    <UiCircle
-      :type="src ? 'image' : 'random'"
-      data-cy="friend-chat-circle"
-      :seed="`${recipient ? recipient.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
-      :source="src"
-      @click="openProfile"
-      v-if="!$device.isMobile && recipient.type !== 'group'"
-    />
-    <GroupIcon v-else-if="recipient.type === 'group'" :group="recipient" />
+    <GroupIcon v-else :group="recipient" />
   </div>
   <div class="user-info">
     <TypographyTitle :size="6" :text="recipient.name" />
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="recipient.type === 'group' ? `Members: ${group && group.members && group.members.length}` : recipient.status || ''"
+      :text="subtitleText"
     />
   </div>
   <div class="controls">

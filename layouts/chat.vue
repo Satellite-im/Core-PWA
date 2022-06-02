@@ -128,7 +128,7 @@ import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
-import { SettingsRoutes } from '~/store/ui/types'
+import { FlairColor, SettingsRoutes } from '~/store/ui/types'
 import type { Friend } from '~/types/ui/friends'
 import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
@@ -198,10 +198,10 @@ export default Vue.extend({
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('textile', ['getInitialized']),
     DataStateType: () => DataStateType,
-    selectedGroup() {
+    selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
-    recipient() {
+    recipient(): Friend | Group {
       const recipient =
         this.conversation.type === 'group'
           ? this.groups.all.find(
@@ -212,13 +212,13 @@ export default Vue.extend({
             )
       return recipient
     },
-    flairColor() {
+    flairColor(): FlairColor {
       return this.ui.theme.flair.value
     },
-    showOlderMessageInfo() {
+    showOlderMessageInfo(): boolean {
       return this.ui.showOlderMessagesInfo
     },
-    isNoFriends() {
+    isNoFriends(): boolean {
       return (
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
