@@ -2,11 +2,7 @@ import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
 import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
-import {
-  MessageRouteEnum,
-  MessagingTypesEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
+import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
@@ -21,7 +17,7 @@ import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { Group } from '~/store/groups/types'
-import { ChatFileUpload } from '~/store/chat/types'
+import { UploadDropItemType } from '~/types/files/file'
 import {
   QueryOptions,
   SearchOrderType,
@@ -35,8 +31,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
-import { MessageGroup } from '~/types/messaging'
-import BlockchainClient from '~/libraries/BlockchainClient'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -62,13 +57,8 @@ export default {
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
     await $TextileManager.init(config)
-    commit('setFileSystem', {
-      totalSize: $FileSystem.totalSize,
-      percentageUsed: $FileSystem.percentStorageUsed,
-    })
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
@@ -200,91 +190,13 @@ export default {
     // TODO: only for testing
     dispatch('subscribeToMailbox')
   },
-  addMessageToConversation(
-    { state, commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    {
-      address,
-      sender,
-      message,
-    }: { address: string; sender: string; message: Message },
-  ) {
-    const isActiveConversation = state.activeConversation === address
-
-    let oldGroupedMessages: MessageGroup = []
-
-    if (isActiveConversation) {
-      oldGroupedMessages = state.conversations[address].groupedMessages
-    }
-
-    commit('addMessageToConversation', {
-      address,
-      sender,
-      message,
-    })
-
-    if (isActiveConversation) {
-      const { messages, isScrollOver, lastLoadedMessageId, offset } =
-        rootState.chat.currentChat
-
-      let messageId: string = ''
-
-      if (message.type === MessagingTypesEnum.REACTION) {
-        messageId = message.reactedTo
-      } else if (message.type === MessagingTypesEnum.REPLY) {
-        messageId = message.repliedTo
-      } else {
-        messageId = message.id
-      }
-
-      const newGroupedMessages = state.conversations[address].groupedMessages
-
-      const isExistMessageIndex = messages.findIndex(
-        (m: Message) => m.id === messageId,
-      )
-
-      // update existed message
-      if (isExistMessageIndex !== -1) {
-        const newMessages = [...messages]
-        newMessages[isExistMessageIndex] = newGroupedMessages.find(
-          (message) => message.id === messageId,
-        )
-        commit(
-          'chat/setCurrentChat',
-          {
-            messages: newMessages,
-          },
-          { root: true },
-        )
-        return
-      }
-
-      // add new messages
-      const diffGroupedMessages =
-        newGroupedMessages.length - oldGroupedMessages.length
-
-      if (diffGroupedMessages) {
-        const newMessages = newGroupedMessages.slice(oldGroupedMessages.length)
-
-        commit(
-          'chat/setCurrentChat',
-          {
-            messages: messages.concat(newMessages),
-            lastLoadedMessageId: !isScrollOver
-              ? newMessages[newMessages.length - 1].id
-              : lastLoadedMessageId,
-            offset: offset - diffGroupedMessages,
-          },
-          { root: true },
-        )
-      }
-    }
-  },
   /**
    * @description Subscribes to the user mailbox, if not already subscribed, and eventually
    * updates messages in the active chat
    * @param param0 Action Arguments
    */
   async subscribeToMailbox({
+    commit,
     rootState,
     dispatch,
   }: ActionsArguments<TextileState>) {
@@ -295,14 +207,9 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
-    if (!MailboxManager.isInitialized()) {
-      await MailboxManager.init()
-    }
-
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }
-
     MailboxManager.listenToInboxMessages((message) => {
       if (!message) {
         return
@@ -314,8 +221,7 @@ export default {
       if (!sender) {
         return
       }
-
-      dispatch('addMessageToConversation', {
+      commit('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
@@ -328,7 +234,7 @@ export default {
           from: sender.name,
           fromAddress: sender.address,
           title: `Notification`,
-          imageHash: sender.profilePicture,
+          image: sender.profilePicture,
           type: AlertType.DIRECT_MESSAGE,
         },
         { root: true },
@@ -392,7 +298,7 @@ export default {
       },
     )
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -400,25 +306,18 @@ export default {
     dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
+  clearUploadStatus({ commit }: ActionsArguments<TextileState>) {
+    commit('clearUploadProgress', {})
+  },
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
-   * @param param1 address, file to upload, address and index for updating upload progress in store
-   * file: ChatFileUpload to be sent users bucket for textile
+   * @param param1 an object containing the recipient address (textile public key),
+   * file: UploadDropItemType to be sent users bucket for textile
    */
   async sendFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    {
-      to,
-      file,
-      address,
-      index,
-    }: {
-      to: string
-      file: ChatFileUpload
-      address: string
-      index: number
-    },
+    { to, file }: { to: string; file: UploadDropItemType },
   ) {
     commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
@@ -428,15 +327,10 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit(
-          'chat/setFileProgress',
-          {
-            address,
-            index,
-            progress: Math.floor((progress / file.file.size) * 100),
-          },
-          { root: true },
-        )
+        commit('setUploadingFileProgress', {
+          progress: Math.floor((progress / file.file.size) * 100),
+          name: file.file.name,
+        })
       },
     )
     /* If already canceled */
@@ -457,13 +351,12 @@ export default {
             name: file.file.name,
             size: file.file.size,
             type: file.file.type,
-            nsfw: file.nsfw,
           },
           type: 'file',
         },
       )
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -507,7 +400,7 @@ export default {
         type: 'reaction',
       },
     )
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -568,7 +461,7 @@ export default {
       },
     )
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -605,7 +498,7 @@ export default {
       editingAt: Date.now(),
     } as Message
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: editingMessage,
@@ -618,7 +511,7 @@ export default {
     })
 
     if (result) {
-      dispatch('addMessageToConversation', {
+      commit('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
@@ -628,7 +521,7 @@ export default {
         message: result,
       })
     } else {
-      dispatch('addMessageToConversation', {
+      commit('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: original,
@@ -675,7 +568,7 @@ export default {
       },
     )
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -817,7 +710,8 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const MailboxManager = $TextileManager.mailboxManager
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     if (!MailboxManager) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
@@ -843,13 +737,12 @@ export default {
       if (!message) {
         return
       }
-
-      dispatch('addMessageToConversation', {
+      commit('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-      const userInfo = await $BlockchainClient.getUserInfo(message.sender)
+      const userInfo = await usersProgram.getUserInfo(message.sender)
       const urlMatch = groupId ? message.to : message.from
       await Promise.all([
         dispatch(
@@ -863,7 +756,7 @@ export default {
             groupId,
             id: uuidv4(),
             groupURL: message.to,
-            imageHash: userInfo?.photoHash,
+            image: userInfo?.photoHash,
             type: AlertType.GROUP_MESSAGE,
           },
           { root: true },
@@ -904,11 +797,13 @@ export default {
           Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
         })
 
-      dispatch('addMessageToConversation', {
+      commit('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
       })
+
+      dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
       Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
@@ -948,7 +843,7 @@ export default {
       type: 'glyph',
     })
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -960,22 +855,12 @@ export default {
   /**
    * @description Sends a File message to a given group
    * @param param0 Action Arguments
-   * @param param1 address, file to upload, address and index for updating upload progress in store
-   * file: ChatFileUpload to be sent users bucket for textile
+   * @param param1 an object containing the recipient address (textile public key),
+   * file: UploadDropItemType to be sent users bucket for textile
    */
   async sendGroupFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    {
-      groupID,
-      file,
-      address,
-      index,
-    }: {
-      groupID: string
-      file: ChatFileUpload
-      address: string
-      index: number
-    },
+    { groupID, file }: { groupID: string; file: UploadDropItemType },
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -985,15 +870,10 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit(
-          'chat/setFileProgress',
-          {
-            address,
-            index,
-            progress: Math.floor((progress / file.file.size) * 100),
-          },
-          { root: true },
-        )
+        commit('setUploadingFileProgress', {
+          progress: Math.floor((progress / file.file.size) * 100),
+          name: file.file.name,
+        })
       },
     )
 
@@ -1006,12 +886,11 @@ export default {
           name: file.file.name,
           size: file.file.size,
           type: file.file.type,
-          nsfw: file.nsfw,
         },
         type: 'file',
       })
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -1069,7 +948,7 @@ export default {
       replyType,
     })
 
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -1101,7 +980,7 @@ export default {
       reactedTo: reactTo,
       type: 'reaction',
     })
-    dispatch('addMessageToConversation', {
+    commit('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -1115,7 +994,7 @@ export default {
    * @returns  search result object
    */
   async searchConversations(
-    { state }: ActionsArguments<TextileState>,
+    {}: ActionsArguments<TextileState>,
     {
       query,
       page,
@@ -1149,7 +1028,6 @@ export default {
       {
         fuzzy: 0.3,
         fields,
-        filter: (result) => result.conversation === state.activeConversation,
       },
     )
 
@@ -1175,7 +1053,7 @@ export default {
   /**
    * @description export filesystem index to textile bucket and update threaddb version
    */
-  async exportFileSystem({ dispatch, commit }: ActionsArguments<TextileState>) {
+  async exportFileSystem({ dispatch }: ActionsArguments<TextileState>) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
@@ -1186,10 +1064,6 @@ export default {
     await $TextileManager.personalBucket.updateIndex($FileSystem.export)
     dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
-    })
-    commit('setFileSystem', {
-      totalSize: $FileSystem.totalSize,
-      percentageUsed: $FileSystem.percentStorageUsed,
     })
   },
 

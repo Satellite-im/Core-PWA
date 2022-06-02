@@ -1,4 +1,5 @@
 import { Query, ThreadID, Update } from '@textile/hub'
+import { TranslateResult } from 'vue-i18n'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
@@ -115,13 +116,12 @@ export class NotificationManager {
       CollectionName,
       Query.where('_id').eq(notificationId[0]),
     )
-    const makeNotificationMessage = `New message from ${payload.from}`
+    const makeNotificationMessage = `${payload.from} sent a new ${payload.type}`
 
     const browserNotification = new Notifications()
-    await browserNotification.sendNotifications(
+    browserNotification.sendNotification(
       payload.type,
       payload.title,
-      payload.imageHash,
       makeNotificationMessage,
     )
     return notification[0]
