@@ -25,7 +25,7 @@ export default Vue.extend({
         case AlertType.GROUP_MESSAGE: {
           return this.$t('messaging.user_sent_group_message.user', {
             user: this.alert.fromName,
-            group: this.alert.group,
+            group: this.alert.groupName,
           })
         }
       }

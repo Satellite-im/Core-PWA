@@ -93,6 +93,7 @@ export default {
       message: string
       from: string
       groupName?: string
+      id: string
       groupId?: string
       groupURL?: string
       fromAddress?: string
@@ -108,22 +109,21 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
     if (rootState.textile.activeConversation !== payload.fromAddress) {
-      const notificationResponse =
-        await $TextileManager.notificationManager?.sendNotification({
-          from: payload.from,
-          id: uuidv4(),
-          title: payload.title,
-          groupName: payload.groupName,
-          groupId: payload.groupId,
-          notificationState: AlertState.UNREAD,
-          fromAddress: payload.fromAddress,
-          imageHash: payload.imageHash,
-          message: payload.message,
-          type: payload.type,
-        })
-
       const userId = $TextileManager.getIdentityPublicKey()
       if (userId !== payload.fromAddress) {
+        const notificationResponse =
+          await $TextileManager.notificationManager?.sendNotification({
+            from: payload.from,
+            title: payload.title,
+            groupName: payload.groupName,
+            groupId: payload.groupId,
+            id: payload.id,
+            notificationState: AlertState.UNREAD,
+            fromAddress: payload.fromAddress,
+            imageHash: payload.imageHash,
+            message: payload.message,
+            type: payload.type,
+          })
         commit('sendNotification', notificationResponse)
       }
     }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
+import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
 import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -635,6 +636,7 @@ export default {
       .modify((conversation: DexieConversation) => {
         conversation.lastInbound = message.at
       })
+    console.log('counter')
 
     const msg = { conversation: address, ...message }
     if (message.editedAt) {
@@ -756,6 +758,7 @@ export default {
           title: `Notification`,
           groupName: group.name,
           groupId,
+          id: uuidv4(),
           groupURL: message.to,
           image: userInfo?.photoHash,
           type: AlertType.GROUP_MESSAGE,
