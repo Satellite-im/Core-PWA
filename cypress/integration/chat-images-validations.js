@@ -26,7 +26,7 @@ describe('Chat - Sending Images Tests', () => {
 
     //Send PNG Image
     cy.chatFeaturesSendImage(pngImagePath, 'logo.png')
-    cy.goToLastImageOnChat(60000) // first image sent takes more time
+    cy.goToLastImageOnChat(90000) // first image sent takes more time
   })
 
   it('JPG image is sent successfully on chat', () => {
