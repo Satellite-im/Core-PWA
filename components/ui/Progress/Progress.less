@@ -1,16 +1,27 @@
-.progress {
-  background: transparent;
+progress {
+  width: 100%;
+  height: 12px;
+  overflow: hidden;
+  color: @flair-color;
+  accent-color: @flair-color;
+  border-radius: 9999px;
   margin-bottom: @light-spacing;
+  background: transparent;
+  &:extend(.border-flair-small);
+
   &::-webkit-progress-bar {
     background: transparent;
   }
+}
 
-  &::-ms-fill {
-    border: none;
-    &:extend(.background-flair);
-  }
+progress::-moz-progress-bar {
+  background: @flair-color;
+}
 
-  &::-moz-progress-bar {
-    &:extend(.background-flair);
-  }
+progress::-ms-fill {
+  background: @flair-color;
+}
+
+progress::-webkit-progress-value {
+  background: @flair-color;
 }
