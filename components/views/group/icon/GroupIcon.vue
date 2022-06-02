@@ -8,11 +8,6 @@ export default Vue.extend({
   props: {
     group: {
       type: Object as PropType<Group>,
-      default: () => ({
-        name: '',
-        address: '',
-        motd: '',
-      }),
       required: true,
     },
   },

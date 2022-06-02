@@ -4,8 +4,8 @@
   @click="() => {$emit('click')}"
 >
   <img
-    :src="source"
     v-if="type === 'image' && source"
+    :src="source"
     alt="Circle Image"
     :class="`${square ? 'is-square' : 'is-rounded'} image`"
     data-cy="circle-has-picture"

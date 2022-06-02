@@ -5,21 +5,11 @@ import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/store/groups/types'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    testFunc: () => void
-  }
-}
 export default Vue.extend({
   mixins: [ContextMenu],
   props: {
     group: {
       type: Object as PropType<Group>,
-      default: () => ({
-        name: '',
-        address: '',
-        motd: '',
-      }),
       required: true,
     },
     isSelected: {
