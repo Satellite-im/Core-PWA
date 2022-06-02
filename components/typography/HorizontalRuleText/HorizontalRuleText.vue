@@ -5,7 +5,6 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import dayjs from 'dayjs'
 
 export default Vue.extend({
   props: {
@@ -22,7 +21,7 @@ export default Vue.extend({
     text() {
       return this.plaintext
         ? this.value
-        : dayjs(parseInt(this.value)).format('MMMM DD')
+        : this.$dayjs(parseInt(this.value)).format('MMMM DD')
     },
   },
 })
