@@ -2,15 +2,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { Config } from '~/config'
 import { Group } from '~/types/messaging'
 import {
   getUsernameFromState,
   getAddressFromState,
-  refreshTimestampInterval,
-  convertTimestampToDate,
 } from '~/utilities/Messaging'
 import { GroupMember } from '~/store/groups/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -19,21 +17,17 @@ export default Vue.extend({
       required: true,
     },
     groupId: {
-      type: String as PropType<string>,
+      type: String,
       required: true,
     },
   },
-  data() {
-    return {
-      timestampRefreshInterval: null,
-      timestamp: convertTimestampToDate(
-        this.$t('friends.details'),
-        this.group.at,
-      ),
-    }
-  },
   computed: {
-    ...mapState(['ui', 'friends', 'accounts', 'groups']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      friends: (state) => (state as RootState).friends,
+      accounts: (state) => (state as RootState).accounts,
+      groups: (state) => (state as RootState).groups,
+    }),
     ...mapGetters('friends', ['findFriendByKey']),
     ...mapGetters('settings', ['getTimezone']),
     username(): string {
@@ -71,34 +65,17 @@ export default Vue.extend({
 
       return ''
     },
-    groupMember(): GroupMember | null {
+    groupMember(): GroupMember | undefined {
       return this.groups.all
-        .find((it: Group) => it.id === this.groupId)
+        .find((it) => it.id === this.groupId)
         ?.members?.find((it: GroupMember) => it.address === this.group.sender)
     },
-    formattedTimestamp(): string {
+    timestamp(): string {
       return this.$dayjs(this.group.at)
         .local()
         .tz(this.getTimezone)
         .format('LT')
     },
-  },
-  created() {
-    const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(
-        this.$t('friends.details'),
-        timePassed,
-      )
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.group.at,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval,
-    )
-  },
-  beforeDestroy() {
-    clearInterval(this.$data.timestampRefreshInterval)
   },
   methods: {
     /**
@@ -111,7 +88,7 @@ export default Vue.extend({
     showQuickProfile(e: MouseEvent) {
       const openQuickProfile = () => {
         this.$store.dispatch('ui/showQuickProfile', {
-          textilePublicKey: this.$props.group.from,
+          textilePublicKey: this.group.from,
           position: { x: e.x, y: e.y },
         })
       }
