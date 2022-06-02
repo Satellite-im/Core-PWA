@@ -56,12 +56,7 @@
               full-width
               @click="toggleMenu"
             />
-            <Toolbar
-              v-if="recipient"
-              id="toolbar"
-              :server="recipient"
-              :user="recipient"
-            />
+            <Toolbar v-if="recipient" id="toolbar" :recipient="recipient" />
             <Media
               v-if="$device.isMobile"
               :fullscreen="ui.fullscreen"
@@ -135,7 +130,7 @@ import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import type { Friend } from '~/types/ui/friends'
-import type { Group } from '~/types/messaging'
+import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {

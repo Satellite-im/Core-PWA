@@ -1,14 +1,14 @@
 <div id="toolbar" v-if="recipient">
   <div class="circle-container">
     <UiUserState
-      :user="user"
-      v-if="!server || $device.isMobile"
+      :user="recipient"
+      v-if="!recipient || $device.isMobile"
       :clickHandler="openProfile"
     />
     <UiCircle
       :type="src ? 'image' : 'random'"
       data-cy="friend-chat-circle"
-      :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
+      :seed="`${recipient ? recipient.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
       :source="src"
       @click="openProfile"
       v-if="!$device.isMobile && recipient.type !== 'group'"
@@ -20,7 +20,7 @@
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
-      :text="recipient.type === 'group' ? `Members: ${group && group.members && group.members.length}` : user.status || ''"
+      :text="recipient.type === 'group' ? `Members: ${group && group.members && group.members.length}` : recipient.status || ''"
     />
   </div>
   <div class="controls">
@@ -63,7 +63,7 @@
         :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
         v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
         data-cy="toolbar-enable-audio"
-        v-if="server"
+        v-if="recipient"
         @click="handleCall"
       >
         <phone-call-icon size="1x" class="control-icon" />
@@ -79,7 +79,7 @@
         <div
           :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
           v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
-          v-if="server"
+          v-if="recipient"
           @click="handleCall"
         >
           <phone-call-icon size="1x" class="control-icon" color="grey" />
@@ -90,7 +90,7 @@
       :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
       v-tooltip.bottom="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
-      v-if="server"
+      v-if="recipient"
       @click="() => call(['audio', 'video'])"
     >
       <video-icon size="1x" class="control-icon" />
@@ -112,7 +112,7 @@
       </div>
     </UiComingSoon>
     <div
-      v-if="!isGroup(recipient)"
+      v-if="!isGroup"
       class="control-button"
       data-cy="toolbar-new-group"
       v-tooltip.bottom="$t('pages.chat.new_group')"
@@ -124,7 +124,7 @@
       v-else
       class="control-button"
       v-tooltip.bottom="$t('pages.chat.add_member')"
-      @click="groupInvite(getGroup())"
+      @click="groupInvite"
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
@@ -166,7 +166,7 @@
     <SearchResult
       v-if="!$device.isMobile && searchQuery"
       :searchQuery="searchQuery"
-      :user="user"
+      :user="recipient"
       @toggle="toggleSearchResult"
     />
     <ToolbarPinned v-if="ui.showPinned" />
