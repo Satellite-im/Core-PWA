@@ -168,7 +168,7 @@ describe('Chat Text and Sending Links Validations', () => {
   })
   // prettier-ignore
   // added prettier-ignore due to prettier removing the \ below
-  it('User should be able to use "\\" to write a single "" in chat', () => {
+  it.skip('User should be able to use "\\" to write a single "" in chat', () => {
     cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
