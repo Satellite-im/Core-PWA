@@ -97,13 +97,20 @@ export default Vue.extend({
     },
     subtitleText(): string {
       if (this.isGroup) {
-        const names = this.recipient.members.map(
+        const names = (this.recipient as Group).members.map(
           (member: GroupMember) => member.name,
         )
         return names.join(', ')
       }
-
-      return this.recipient.status
+      return (this.recipient as Friend).status
+    },
+    callTooltipText(): string {
+      if (this.isGroup) {
+        return this.$t('coming_soon.group_call') as string
+      }
+      return this.enableRTC
+        ? (this.$t('controls.call') as string)
+        : (this.$t('controls.not_connected') as string)
     },
   },
   methods: {
@@ -171,6 +178,9 @@ export default Vue.extend({
       })
     },
     handleCall() {
+      if (this.isGroup) {
+        return
+      }
       if (!this.enableRTC || this.webrtc.activeCall) {
         return
       }

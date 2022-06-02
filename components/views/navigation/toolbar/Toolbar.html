@@ -51,34 +51,19 @@
     >
       <ToolbarAlerts />
     </UiFloatingContainer>
-    <template v-if="conversation.type === 'friend'">
-      <div
-        :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
-        v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
-        data-cy="toolbar-enable-audio"
-        v-if="recipient"
-        @click="handleCall"
-      >
-        <phone-call-icon size="1x" class="control-icon" />
-      </div>
-    </template>
-    <template v-else>
-      <UiComingSoon
-        v-if="!$device.isMobile"
-        :tooltipText="$t('coming_soon.group_call')"
-        :tooltipPosition="'bottom'"
-        data-cy="toolbar-enable-audio"
-      >
-        <div
-          :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
-          v-tooltip.bottom="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
-          v-if="recipient"
-          @click="handleCall"
-        >
-          <phone-call-icon size="1x" class="control-icon" color="grey" />
-        </div>
-      </UiComingSoon>
-    </template>
+    <div
+      :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      v-tooltip.bottom="callTooltipText"
+      data-cy="toolbar-enable-audio"
+      v-if="recipient"
+      @click="handleCall"
+    >
+      <phone-call-icon
+        size="1x"
+        class="control-icon"
+        :color="isGroup ? 'grey' : ''"
+      />
+    </div>
     <!-- <div
       :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
