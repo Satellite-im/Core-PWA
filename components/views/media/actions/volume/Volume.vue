@@ -45,6 +45,17 @@ export default Vue.extend({
       showSlider: false,
     }
   },
+  watch: {
+    // Bind stream audio element volume to slider volume
+    volume(value: number) {
+      const audioStream = document.getElementById(
+        'audio-stream',
+      ) as HTMLAudioElement
+      if (audioStream) {
+        audioStream.volume = value / 100
+      }
+    },
+  },
   mounted() {
     document.addEventListener('click', this.hideSlider)
   },
