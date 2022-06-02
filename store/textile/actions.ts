@@ -328,7 +328,7 @@ export default {
           from: sender.name,
           fromAddress: sender.address,
           title: `Notification`,
-          imageHash: sender.profilePicture,
+          image: sender.profilePicture,
           type: AlertType.DIRECT_MESSAGE,
         },
         { root: true },
