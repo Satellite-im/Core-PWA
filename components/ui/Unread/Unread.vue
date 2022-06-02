@@ -4,15 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/user'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    testFunc: () => void
-    navigateToUser: () => void
-    handleShowProfile: () => void
-    removeUser: () => void
-  }
-}
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Unread',
@@ -20,12 +12,6 @@ export default Vue.extend({
   props: {
     user: {
       type: Object as PropType<User>,
-      default: () => ({
-        name: '',
-        address: '',
-        profilePicture: '',
-        unreadCount: 0,
-      }),
       required: true,
     },
     active: {
@@ -35,13 +21,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      contextMenuValues: [
-        { text: this.$t('context.send'), func: this.navigateToUser },
-        { text: this.$t('context.voice'), func: this.testFunc },
-        { text: this.$t('context.video'), func: this.testFunc },
-        { text: this.$t('context.profile'), func: this.handleShowProfile },
-        { text: this.$t('context.remove'), func: this.removeUser },
-      ],
       isLoading: false,
     }
   },
@@ -49,6 +28,15 @@ export default Vue.extend({
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    contextMenuValues(): ContextMenuItem[] {
+      return [
+        { text: this.$t('context.send'), func: this.navigateToUser },
+        { text: this.$t('context.voice'), func: this.testFunc },
+        { text: this.$t('context.video'), func: this.testFunc },
+        { text: this.$t('context.profile'), func: this.handleShowProfile },
+        { text: this.$t('context.remove'), func: this.removeUser },
+      ]
     },
   },
   methods: {
@@ -60,7 +48,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('friends/removeFriend', this.user)
       } catch (e) {
-        this.$toast.success(
+        this.$toast.error(
           this.$t('errors.friends.friend_not_removed') as string,
         )
       } finally {

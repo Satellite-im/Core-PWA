@@ -20,8 +20,8 @@
         <UiLoadersSpinner :spinning="true" />
       </div>
       <div id="list-container" v-else>
-        <UiHorizontalRule v-if="unreads.length > 0" />
-        <div class="unreads" v-for="user in unreads">
+        <UiHorizontalRule v-if="friendsWithUnreadMessages.length" />
+        <div class="unreads" v-for="user in friendsWithUnreadMessages">
           <Unread
             :key="user.address"
             :user="user"
@@ -46,7 +46,7 @@
       </div>
     </UiScroll>
     <div id="list-container" v-else>
-      <div class="unreads" v-for="user in unreads">
+      <div class="unreads" v-for="user in friendsWithUnreadMessages">
         <Unread
           :key="user.address"
           :user="user"
