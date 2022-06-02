@@ -276,7 +276,7 @@ const webRTCActions = {
    * @param peerId Peer ID of the owner of the stream
    * @param kind Kind of the stream (audio/video/screen)
    */
-  toggleMute(
+  async toggleMute(
     { state, dispatch, commit }: ActionsArguments<WebRTCState>,
     { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
   ) {
@@ -290,11 +290,11 @@ const webRTCActions = {
     const isMuted = state.streamMuted[peerId]?.[kind]
     commit('audio/setMuted', isMuted)
     if (isMuted) {
-      call.unmute({ peerId, kind })
+      await call.unmute({ peerId, kind })
       dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
-    call.mute({ peerId, kind })
+    await call.mute({ peerId, kind })
     dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
@@ -572,6 +572,7 @@ const webRTCActions = {
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
       commit('conversation/setCalling', false, { root: true })
+      commit('ui/fullscreen', false, { root: true })
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
       call.off('CONNECTED', onCallConnected)

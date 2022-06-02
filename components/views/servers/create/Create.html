@@ -1,59 +1,78 @@
 <div class="create-server-container">
-    <InteractablesImageCropper v-if="showCropper" :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
-        :imageUrl="imageUrl" />
-    <div v-if="showCropper" class="cropper-mask" />
-    <div class='modal-body'>
-        <div class="custom-modal-content">
-        <div class="columns">
-            <div class="column image">
-                <UiCircle type="image" :source="croppedImage" :size="120" />
-            </div>
-            <div class="column align">
-                <TypographyText class="set-photo-title" :text="$t('servers.create.photo_text')" />
-                <input ref="file" class="input-file" type="file" @change="selectImage" accept="image/*"></input>
-                <InteractablesButton
-                    :action="() => $refs.file.click()" 
-                    type="primary" 
-                    size="small"
-                    :text="$t('servers.create.photo_button')" />
-            </div>
+  <InteractablesImageCropper
+    v-if="showCropper"
+    :setCroppedImage="setCroppedImage"
+    :toggleCropper="toggleCropper"
+    :imageUrl="imageUrl"
+  />
+  <div v-if="showCropper" class="cropper-mask" />
+  <div class="modal-body">
+    <div class="custom-modal-content">
+      <div class="columns">
+        <div class="column image">
+          <UiCircle type="image" :source="croppedImage" :size="120" />
         </div>
-        <div style="clear: both;"></div>
-
-        <div class="input-container">
-            <span class="label">{{$t('servers.create.server_name')}}</span>
-            <InteractablesInput 
-                :placeholder="$t('servers.create.server_name_placeholder')" 
-                v-model="name"
-                input-kind="text" 
-                type="primary" />
+        <div class="column align">
+          <TypographyText
+            class="set-photo-title"
+            :text="$t('servers.create.photo_text')"
+          />
+          <input
+            ref="file"
+            class="input-file"
+            type="file"
+            @change="selectImage"
+            accept="image/*"
+          />
+          <InteractablesButton
+            :action="() => $refs.file.click()"
+            type="primary"
+            size="small"
+            :text="$t('servers.create.photo_button')"
+          />
         </div>
+      </div>
+      <div style="clear: both"></div>
 
-        <div class="input-container">
-            <span class="label">{{$t('servers.create.select_friends')}}</span>
-            <!-- <InteractablesInput 
+      <div class="input-container">
+        <span class="label">{{$t('servers.create.server_name')}}</span>
+        <InteractablesInput
+          :placeholder="$t('servers.create.server_name_placeholder')"
+          v-model="name"
+          input-kind="text"
+          type="primary"
+        />
+      </div>
+
+      <div class="input-container">
+        <span class="label">{{$t('servers.create.select_friends')}}</span>
+        <!-- <InteractablesInput 
                 :placeholder="$t('servers.create.select_friends_placeholder')"
                 input-kind="text" 
                 outlined 
                 type="primary" /> -->
-            <SettingsPagesUserSearch
-                v-model="friends"
-                :placeholder="$t('servers.create.select_friends_placeholder')"
-                size="small" type="primary" drop="top" />
-        </div>
+        <SettingsPagesUserSearch
+          v-model="friends"
+          :placeholder="$t('servers.create.select_friends_placeholder')"
+          size="small"
+          type="primary"
+          drop="top"
+        />
+      </div>
 
-        <p class="red" v-if="error">{{error}}</p>
+      <p class="red" v-if="error">{{error}}</p>
     </div>
 
-        <!-- <hr class="divider"> -->
-        <div class="submit-container">
-            <InteractablesButton 
-                type="primary"
-                size="small"
-                fullwidth
-                :text="$t('servers.create.create_server')"
-                class="create-server-btn"
-                :action="confirm"/>
-        </div>
+    <!-- <hr class="divider"> -->
+    <div class="submit-container">
+      <InteractablesButton
+        type="primary"
+        size="small"
+        fullwidth
+        :text="$t('servers.create.create_server')"
+        class="create-server-btn"
+        :action="confirm"
+      />
     </div>
+  </div>
 </div>

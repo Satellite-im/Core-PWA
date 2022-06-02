@@ -111,6 +111,7 @@ export default Vue.extend({
         (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
+    ...mapGetters('textile', ['getInitialized']),
     flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },
@@ -148,6 +149,10 @@ export default Vue.extend({
      */
     handleDrop(e: DragEvent) {
       e.preventDefault()
+
+      if (!this.getInitialized) {
+        return
+      }
 
       if (!this.consentToScan) {
         this.$toast.error(

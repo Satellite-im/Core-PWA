@@ -367,7 +367,7 @@ describe('', () => {
     const commit = jest.fn()
     const state = { ...GroupsInitialState }
 
-    module.default.addGroup({ commit, state }, 'non-existant-id')
+    module.default.addGroup({ commit, state }, 'non-existent-id')
     expect(commit).toHaveBeenCalledWith('addGroup')
   })
 })

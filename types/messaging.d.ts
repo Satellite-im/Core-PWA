@@ -1,7 +1,6 @@
 import {
   FileMessage,
   GlyphMessage,
-  ImageMessage,
   ReplyMessage,
   TextMessage,
 } from './textile/mailbox'
@@ -23,7 +22,6 @@ type ConvertToUIMessage<T> = T & {
 
 export type UIMessage =
   | ConvertToUIMessage<FileMessage>
-  | ConvertToUIMessage<ImageMessage>
   | ConvertToUIMessage<TextMessage>
   | ConvertToUIMessage<GlyphMessage>
 
@@ -42,6 +40,7 @@ export type Group = {
   from: string
   to: string
   messages: Array<UIMessage> | null
+  sender?: string
 }
 
 export type MessageGroup = Array<Group | Divider>

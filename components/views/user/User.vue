@@ -140,7 +140,9 @@ export default Vue.extend({
   },
   mounted() {
     Array.from(
-      (this.$refs.subtitle as HTMLElement).getElementsByClassName('spoiler'),
+      (this.$refs.subtitle as HTMLElement).getElementsByClassName(
+        'spoiler-container',
+      ),
     ).forEach((spoiler) => {
       spoiler.addEventListener('click', (e) => {
         e.preventDefault()
@@ -238,7 +240,7 @@ export default Vue.extend({
     },
     /**
      * @method containsOnlyEmoji
-     * @description Check wether or not a string only contains an emoji
+     * @description Check whether or not a string only contains an emoji
      * @param str String to check against
      */
     containsOnlyEmoji(str: string): boolean {

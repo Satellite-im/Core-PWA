@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
@@ -11,6 +12,9 @@ export default Vue.extend({
       target: null as EventTarget | null,
       dragging: false as boolean,
     }
+  },
+  computed: {
+    ...mapGetters('textile', ['getInitialized']),
   },
   methods: {
     handleDrop(e: DragEvent) {
@@ -22,6 +26,9 @@ export default Vue.extend({
      * @description Event handler that define target that was entered
      */
     handleDragenter(e: DragEvent) {
+      if (!this.getInitialized) {
+        return
+      }
       // do not show hovered effect if draggable item type include text
       if (
         Array.prototype.some.call(e.dataTransfer?.items, (item) =>

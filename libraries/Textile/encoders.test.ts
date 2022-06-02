@@ -3,7 +3,6 @@ import {
   exportedForTesting,
   fileMessage,
   glyphMessage,
-  imageMessage,
   mediaMessage,
   messageEncoder,
   messageFromThread,
@@ -28,9 +27,6 @@ describe('check all constants', () => {
   })
   it('fileMessage to return correctly', () => {
     expect(fileMessage).toMatchSnapshot()
-  })
-  it('imageMessage to return correctly', () => {
-    expect(imageMessage).toMatchSnapshot()
   })
   it('textMessage to return correctly', () => {
     expect(textMessage).toMatchSnapshot()

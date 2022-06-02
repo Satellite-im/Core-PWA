@@ -9,7 +9,7 @@ const recoverySeed =
 
 describe.skip('Chat Toolbar Tests', () => {
   //skipped due to all these works manually but
-  //Cypress is failing, probably because we refactored the tooltips
+  //Cypress is failing, probably because we refactored the tooltips - AP-1668
   it(
     'Chat - Toolbar - Validate audio icon is displayed',
     { retries: 2 },

@@ -78,6 +78,10 @@ body {
   background: @flair-gradient !important ;
   color: @secondary-text !important;
   font-family: @primary-font;
+
+  &.error {
+    background: @danger-gradient !important;
+  }
 }
 
 //Loading
@@ -1009,20 +1013,21 @@ li.active {
         animation-duration: 500ms;
       }
     }
+  }
+}
 
-    .spoiler-container {
-      cursor: pointer;
-      background-color: @gray;
-      border-radius: @corner-rounding-smaller;
-      .spoiler {
-        opacity: 0;
-      }
-
-      .spoiler-open {
-        cursor: text;
-        background-color: @darker-transparent;
-        opacity: 1;
-      }
+.spoiler-container {
+  cursor: pointer;
+  background-color: @gray;
+  border-radius: @corner-rounding-smaller;
+  .spoiler {
+    opacity: 0;
+  }
+  &.spoiler-open {
+    cursor: text;
+    background-color: transparent;
+    .spoiler {
+      opacity: 1;
     }
   }
 }

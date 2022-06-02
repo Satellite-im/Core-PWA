@@ -14,7 +14,7 @@ const path = require('path')
 
 describe('Chat - Sending Images Tests', () => {
   const downloadsFolder = Cypress.config('downloadsFolder')
-  it('PNG image is sent successfully on chat', { retries: 2 }, () => {
+  it.skip('PNG image is sent successfully on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -26,7 +26,7 @@ describe('Chat - Sending Images Tests', () => {
 
     //Send PNG Image
     cy.chatFeaturesSendImage(pngImagePath, 'logo.png')
-    cy.goToLastImageOnChat(60000) // first image sent takes more time
+    cy.goToLastImageOnChat(90000) // first image sent takes more time
   })
 
   it('JPG image is sent successfully on chat', () => {
@@ -54,5 +54,5 @@ describe('Chat - Sending Images Tests', () => {
     //Send Invalid Image
     cy.chatFeaturesSendImage(invalidImagePath, 'incorrect-image.png')
     cy.goToLastImageOnChat()
-  }) //skipped due to DOM issue
+  }) //skipped due to DOM issue - AP-1665
 })

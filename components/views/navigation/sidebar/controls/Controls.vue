@@ -51,10 +51,14 @@ export default Vue.extend({
      */
     async toggleMute(kind: keyof PeerMutedState) {
       this.isLoading = true
-      if (kind === 'audio') {
-        this.$store.dispatch('audio/toggleMute', {}, { root: true })
-      } else if (kind === 'video') {
-        this.$store.dispatch('video/toggleMute', {}, { root: true })
+      try {
+        if (kind === 'audio') {
+          this.$store.dispatch('audio/toggleMute', {}, { root: true })
+        } else if (kind === 'video') {
+          this.$store.dispatch('video/toggleMute', {}, { root: true })
+        }
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
       }
       this.isLoading = false
     },

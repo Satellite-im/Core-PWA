@@ -41,9 +41,13 @@
     margin: 0 -@light-spacing 0 0;
     justify-content: space-between;
     & > div {
-      padding: 0 @light-spacing;
-      a {
-        margin-right: @light-spacing;
+      display: flex;
+      margin: 0 @light-spacing;
+      > div {
+        &:not(:last-child)::after {
+          content: '•';
+          margin: 0 @light-spacing;
+        }
       }
     }
   }

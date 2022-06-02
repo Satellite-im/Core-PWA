@@ -53,16 +53,20 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    toggleMute(kind: keyof PeerMutedState) {
+    async toggleMute(kind: keyof PeerMutedState) {
       this.isLoading = true
-      if (kind === 'audio') {
-        this.$store.dispatch('audio/toggleMute', {}, { root: true })
-      } else {
-        this.$store.dispatch(
-          'webrtc/toggleMute',
-          { kind, peerId: p2p.id },
-          { root: true },
-        )
+      try {
+        if (kind === 'audio') {
+          this.$store.dispatch('audio/toggleMute', {}, { root: true })
+        } else {
+          await this.$store.dispatch(
+            'webrtc/toggleMute',
+            { kind, peerId: p2p.id },
+            { root: true },
+          )
+        }
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
       }
       this.isLoading = false
     },

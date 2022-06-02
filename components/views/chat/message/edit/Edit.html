@@ -12,10 +12,14 @@
   </div>
   <div class="edit-message-bottom">
     <div>
-      {{$t('messaging.edit.escape_to')}}
-      <a @click="cancelMessage">{{$t('messaging.edit.cancel')}}</a>
-      {{$t('messaging.edit.enter_to')}}
-      <a @click="saveMessage">{{$t('messaging.edit.save')}}</a>
+      <div>
+        {{$t('messaging.edit.escape_to')}}
+        <a @click="cancelMessage">{{$t('messaging.edit.cancel')}}</a>
+      </div>
+      <div>
+        {{$t('messaging.edit.enter_to')}}
+        <a @click="saveMessage">{{$t('messaging.edit.save')}}</a>
+      </div>
     </div>
     <div>{{lengthCount}}/{{maxChars}}</div>
   </div>

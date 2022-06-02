@@ -263,7 +263,7 @@ export default class Crypto {
   /**
    * @function isInitialized
    * @description Checks if the current instance is initialized
-   * @returns a boolean value wether the instance has been initialized or not
+   * @returns a boolean value whether the instance has been initialized or not
    */
   isInitialized() {
     return this.signingKey !== undefined

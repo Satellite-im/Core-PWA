@@ -99,7 +99,7 @@ export default Vue.extend({
         })
       } catch (e: any) {
         this.loadCheck = false
-        throw new Error(e)
+        this.$toast.error(this.$t('errors.friends.request_not_found') as string)
       } finally {
         this.loadCheck = false
         this.loading = AddFriendEnum.EMPTY
@@ -112,6 +112,7 @@ export default Vue.extend({
           'friends/denyFriendRequest',
           this.friend.request,
         )
+      } catch (e) {
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }
@@ -135,6 +136,7 @@ export default Vue.extend({
           'friends/removeFriendRequest',
           this.friend.request,
         )
+      } catch (e) {
       } finally {
         this.loading = AddFriendEnum.EMPTY
       }

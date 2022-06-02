@@ -522,12 +522,14 @@ describe('init', () => {
 
     const commit = jest.fn()
     const rootState = { ...initialRootState }
+    rootState.textile.activeConversation = 'not_fromAddress'
 
     await actions.default.sendNotification(
       { commit, rootState },
       {
         message: 'message',
         from: 'from',
+        fromAddress: 'fromAddress',
         imageHash: 'imageHash',
         title: 'title',
         type: 'DEV',

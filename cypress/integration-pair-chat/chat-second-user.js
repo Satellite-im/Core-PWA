@@ -18,11 +18,11 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.goToConversation('Chat Pair A')
   })
 
-  it('Receive Incoming Video Call', () => {
+  it.skip('Receive Incoming Video Call', () => {
     cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
   })
 
-  it('Answer Incoming Video Call', () => {
+  it.skip('Answer Incoming Video Call', () => {
     cy.get('[data-cy=incoming-call-accept-video]')
       .should('be.visible')
       .click()

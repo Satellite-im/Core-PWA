@@ -168,7 +168,7 @@ describe('Chat Text and Sending Links Validations', () => {
   })
   // prettier-ignore
   // added prettier-ignore due to prettier removing the \ below
-  it('User should be able to use "\\" to write a single "" in chat', () => {
+  it.skip('User should be able to use "\\" to write a single "" in chat', () => {
     cy.chatFeaturesSendMessage('\\*To Do', false)
     cy.get('[data-cy=chat-message]')
       .last()
@@ -200,10 +200,10 @@ describe('Chat Text and Sending Links Validations', () => {
           .scrollIntoView()
           .should('have.attr', 'href', randomURL)
           .and('have.text', randomURL)
-      }) //skipped due to test needs to be updated, works manually
+      }) //skipped due to test needs to be updated, works manually - AP-1667
   })
 
-  it('User should use markdown "||" to insert an spoiler', () => {
+  it.skip('User should use markdown "||" to insert an spoiler', () => {
     cy.sendMessageWithMarkdown(randomMessage, '||')
   })
 })

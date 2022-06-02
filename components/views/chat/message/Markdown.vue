@@ -1,5 +1,5 @@
 <template>
-  <div v-html="text" ref="message-row" />
+  <div ref="message-row" v-html="text" />
 </template>
 
 <script lang="ts">
@@ -15,7 +15,7 @@ export default Vue.extend({
   mounted() {
     Array.from(
       (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
-        'spoiler',
+        'spoiler-container',
       ),
     ).forEach((spoiler) => {
       spoiler.addEventListener('click', (e) => {

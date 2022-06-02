@@ -14,7 +14,11 @@
             : 'sidebar-search'
         "
       >
-        <UiComingSoon area-cover>
+        <UiComingSoon
+          :tooltip-text="$t('coming_soon.sidebar_search')"
+          :tooltip-position="'bottom'"
+          disabled
+        >
           <InteractablesInput
             :placeholder="`${$t('ui.search')}...`"
             size="small"

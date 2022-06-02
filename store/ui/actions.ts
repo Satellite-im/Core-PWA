@@ -10,7 +10,7 @@ import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
-import { AlertType } from '~/libraries/ui/Alerts'
+import { AlertState, AlertType } from '~/libraries/ui/Alerts'
 
 const $Sounds = new SoundManager()
 
@@ -90,6 +90,7 @@ export default {
     payload: {
       message: string
       from: string
+      fromAddress: string
       imageHash: string
       title: string
       type: AlertType
@@ -100,16 +101,20 @@ export default {
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
-    const notificationResponse =
-      await $TextileManager.notificationManager?.sendNotification({
-        from: payload.from,
-        id: uuidv4(),
-        title: payload.title,
-        imageHash: payload.imageHash,
-        message: payload.message,
-        type: payload.type,
-      })
-    commit('sendNotification', notificationResponse)
+    if (rootState.textile.activeConversation !== payload.fromAddress) {
+      const notificationResponse =
+        await $TextileManager.notificationManager?.sendNotification({
+          from: payload.from,
+          id: uuidv4(),
+          title: payload.title,
+          notificationState: AlertState.UNREAD,
+          imageHash: payload.imageHash,
+          message: payload.message,
+          type: payload.type,
+        })
+
+      commit('sendNotification', notificationResponse)
+    }
   },
   /**
    * @method clearKeybinds
