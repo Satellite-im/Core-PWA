@@ -1,9 +1,9 @@
 <template src="./Alerts.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { AlertState } from '~/libraries/ui/Alerts'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({

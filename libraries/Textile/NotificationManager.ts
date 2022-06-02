@@ -95,7 +95,7 @@ export class NotificationManager {
       state: payload.notificationState,
       fromName: payload.from,
       fromAddress: payload.fromAddress,
-      group: payload.groupName,
+      groupName: payload.groupName,
       groupId: payload.groupId,
       type: payload.type,
       at: Date.now(),

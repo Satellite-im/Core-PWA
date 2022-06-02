@@ -25,7 +25,7 @@ export type Alert = {
   type: AlertType
   fromName: string
   fromAddress?: string
-  group?: string
+  groupName?: string
   groupId?: string
   content: {
     title: string
