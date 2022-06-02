@@ -65,5 +65,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="less" src="./InfiniteScroll.less"></style>
