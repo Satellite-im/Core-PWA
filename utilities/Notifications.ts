@@ -136,6 +136,30 @@ export const Notifications = class Notifications {
       })
     }
 
+    if (this.currentPlatform === PlatformTypeEnum.WEB) {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: titleText,
+            body: message,
+            id: new Date().getTime(),
+            schedule: {
+              at: new Date(new Date().getTime() + 1000),
+              allowWhileIdle: true,
+            },
+            actionTypeId: 'CHAT_MESSAGE',
+            extra: null,
+            attachments: [
+              {
+                id: 'face',
+                url: 'res://ic_launcher.png',
+              },
+            ],
+          },
+        ],
+      }).then((what) => console.log(what))
+    }
+
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({
         notifications: [

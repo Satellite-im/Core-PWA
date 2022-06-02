@@ -1,7 +1,7 @@
 <div class="alert">
   <div>
     <!--Optional alert image -->
-    <img v-if="alert.content.image" :src="alert.content.image" />
+    <img v-if="alert.content.image" :src="alertImage" />
     <UiCircle v-else type="random" data-cy="circle-without-picture" />
   </div>
   <div class="info-holder">
