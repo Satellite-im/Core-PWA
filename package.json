@@ -22,8 +22,8 @@
     "test": "jest",
     "summary": "jest test --coverage --coverageReporters=text-summary",
     "cy:run": "cypress run --browser chrome headless",
-    "cy:first": "cypress run --config-file cypress-first-user.json --browser chrome",
-    "cy:second": "cypress run --config-file cypress-second-user.json --browser chrome",
+    "cy:first": "xvfb-run -a cypress run --config-file cypress-first-user.json --browser chrome",
+    "cy:second": "xvfb-run -a cypress run --config-file cypress-second-user.json --browser chrome",
     "cy:chat": "concurrently npm:cy:first npm:cy:second",
     "prepare": "husky install"
   },
