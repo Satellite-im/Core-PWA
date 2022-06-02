@@ -36,12 +36,6 @@ export default Vue.extend({
     ...mapState(['ui', 'friends', 'accounts', 'groups']),
     ...mapGetters('friends', ['findFriendByKey']),
     ...mapGetters('settings', ['getTimezone']),
-    address(): string {
-      return (
-        this.groupMember?.name ||
-        getAddressFromState(this.group.from, this.$store.state)
-      )
-    },
     username(): string {
       return (
         this.groupMember?.name ||
