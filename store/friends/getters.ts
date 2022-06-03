@@ -26,6 +26,7 @@ export interface FriendsGetters {
   ): boolean
   alphaSortedFriends(state: FriendsState): Dictionary<Friend[]>
   alphaSortedOutgoing(state: FriendsState): OutgoingRequest[]
+  friendsWithUnreadMessages(state: FriendsState): Friend[]
 }
 
 const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
@@ -126,6 +127,9 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
       (a: OutgoingRequest, b: OutgoingRequest) =>
         (a.userInfo?.name ?? '').localeCompare(b.userInfo?.name ?? ''),
     )
+  },
+  friendsWithUnreadMessages: (state: FriendsState): Friend[] => {
+    return state.all.filter((friend) => friend.unreadCount)
   },
 }
 

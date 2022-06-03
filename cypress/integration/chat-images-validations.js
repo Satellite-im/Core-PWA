@@ -14,7 +14,7 @@ const path = require('path')
 
 describe('Chat - Sending Images Tests', () => {
   const downloadsFolder = Cypress.config('downloadsFolder')
-  it.skip('PNG image is sent successfully on chat', { retries: 2 }, () => {
+  it('PNG image is sent successfully on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
