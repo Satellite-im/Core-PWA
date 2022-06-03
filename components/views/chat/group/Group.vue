@@ -3,10 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Group } from '~/types/messaging'
-import {
-  getUsernameFromState,
-  getAddressFromState,
-} from '~/utilities/Messaging'
+import { getUsernameFromState } from '~/utilities/Messaging'
 import { GroupMember } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
 
@@ -75,6 +72,12 @@ export default Vue.extend({
         .local()
         .tz(this.getTimezone)
         .format('LT')
+    },
+    address(): string {
+      if (this.group.sender) {
+        return this.group.sender
+      }
+      return this.accounts.details?.address ?? ''
     },
   },
   methods: {
