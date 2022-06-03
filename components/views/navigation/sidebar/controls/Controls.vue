@@ -16,6 +16,7 @@ import { mapState } from 'vuex'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { PeerMutedState } from '~/store/webrtc/types'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { RootState } from '~/types/store/store'
 const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
@@ -33,7 +34,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc', 'accounts']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+      accounts: (state) => (state as RootState).accounts,
+    }),
     audioMuted(): boolean {
       return this.audio.muted
     },

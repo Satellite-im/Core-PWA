@@ -16,6 +16,7 @@ import {
 import { mapState } from 'vuex'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { RootState } from '~/types/store/store'
 const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
@@ -34,7 +35,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+    }),
     audioMuted(): boolean {
       return this.audio.muted
     },
@@ -51,7 +56,7 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    async toggleMute(kind: WebRTCEnum) {
+    toggleMute(kind: WebRTCEnum) {
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
@@ -59,7 +64,7 @@ export default Vue.extend({
         } else if (kind === WebRTCEnum.VIDEO) {
           this.$store.dispatch('video/toggleMute', undefined, { root: true })
         } else {
-          await this.$store.dispatch(
+          this.$store.dispatch(
             'webrtc/toggleMute',
             { kind, peerId: p2p.id },
             { root: true },
