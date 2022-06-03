@@ -18,7 +18,6 @@ import { UserThreadData } from '~/types/textile/user'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 
-
 export default {
   /**
    * @method setPin
@@ -349,7 +348,7 @@ export default {
     dispatch('friends/initialize', {}, { root: true })
 
     if ($BlockchainClient.payerAccount?.secretKey) {
-        dispatch(
+      dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {

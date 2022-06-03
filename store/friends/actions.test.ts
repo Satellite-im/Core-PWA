@@ -7,7 +7,6 @@ import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { DataStateType } from '~/store/dataState/types'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
-
 jest.genMockFromModule('~/libraries/Solana/FriendsProgram/FriendsProgram')
 jest.mock('~/libraries/Solana/FriendsProgram/FriendsProgram')
 
