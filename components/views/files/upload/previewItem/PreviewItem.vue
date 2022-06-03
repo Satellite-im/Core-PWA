@@ -10,6 +10,7 @@ import {
 } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -21,14 +22,13 @@ export default Vue.extend({
   props: {
     item: {
       type: Object as PropType<UploadDropItemType>,
-      default: () => {},
+      required: true,
     },
   },
   computed: {
-    ...mapState(['textile']),
-    currentProgress() {
-      return this.textile.uploadProgress
-    },
+    ...mapState({
+      uploadProgress: (state) => (state as RootState).textile.uploadProgress,
+    }),
   },
   methods: {
     /**
@@ -41,7 +41,6 @@ export default Vue.extend({
      */
     isEmbedableImage(filename: string): boolean {
       if (!filename) return false
-      // eslint-disable-next-line prefer-regex-literals
       const imageFormatsRegex = new RegExp(Config.regex.image)
       return imageFormatsRegex.test(filename.toLowerCase())
     },
