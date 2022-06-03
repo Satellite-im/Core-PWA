@@ -31,20 +31,18 @@ import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 
 export default {
-  async initialize({
-    dispatch,
-    commit,
-    state,
-  }: ActionsArguments<FriendsState>) {
+  async initialize({ dispatch, commit }: ActionsArguments<FriendsState>) {
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
 
-    await dispatch('fetchFriends', {})
-    await dispatch('fetchFriendRequests', {})
-    await dispatch('subscribeToFriendsEvents', {})
+    await Promise.all([
+      dispatch('fetchFriends', {}),
+      dispatch('fetchFriendRequests', {}),
+      dispatch('subscribeToFriendsEvents', {}),
+    ])
 
     commit(
       'dataState/setDataState',
@@ -110,9 +108,9 @@ export default {
     // and fetch user info for each friend
     const friendData = incoming.concat(outgoing)
 
-    for (let i = 0; i < friendData.length; i++) {
-      await dispatch('fetchFriendDetails', friendData[i])
-    }
+    await Promise.all(
+      friendData.map((data) => dispatch('fetchFriendDetails', data)),
+    )
 
     commit(
       'dataState/setDataState',
