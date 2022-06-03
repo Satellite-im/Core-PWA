@@ -19,7 +19,8 @@
       ref="input"
       :maxLength="maxLength"
       :minLength="minLength"
-      @keydown.space="(event) => preventLeadingSpace(event)"
+      @keydown.space="preventLeadingSpace"
+      @paste="preventEmptyPaste"
     />
     <button
       v-if="deleteIcon && internalText.length"

@@ -130,10 +130,22 @@ export default Vue.extend({
     },
     /**
      * @method preventLeadingSpace
-     * @description Sets internalText in data to an empty string
+     * @description Prevent space if empty input
      */
-    preventLeadingSpace(event: Event) {
+    preventLeadingSpace(event: KeyboardEvent) {
       if (!this.internalText.toString().length) {
+        event.preventDefault()
+      }
+    },
+    /**
+     * @method preventEmptyPaste
+     * @description Prevent space if empty input
+     */
+    preventEmptyPaste(event: ClipboardEvent) {
+      if (
+        event.clipboardData &&
+        !event.clipboardData.getData('Text').trim().length
+      ) {
         event.preventDefault()
       }
     },
