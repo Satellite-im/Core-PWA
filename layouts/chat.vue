@@ -225,10 +225,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    recipient: {
-      handler() {},
-      immediate: true,
-    },
     showSidebar(newValue, oldValue) {
       if (newValue !== oldValue) {
         newValue
