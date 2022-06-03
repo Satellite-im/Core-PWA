@@ -97,6 +97,10 @@ export default Vue.extend({
       type: Number,
       default: 0,
     },
+    invalid: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -123,6 +127,15 @@ export default Vue.extend({
     clearSearch() {
       this.internalText = ''
       this.update()
+    },
+    /**
+     * @method preventLeadingSpace
+     * @description Sets internalText in data to an empty string
+     */
+    preventLeadingSpace(event: Event) {
+      if (!this.internalText.toString().length) {
+        event.preventDefault()
+      }
     },
   },
 })

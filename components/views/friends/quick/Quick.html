@@ -19,6 +19,7 @@
     :placeholder="$t('pages.chat.new_group_name')"
     :minLength="3"
     :maxLength="64"
+    :invalid="Boolean(trueLength) && trueLength < 3"
   />
   <TypographyError v-if="error" :text="error" small />
   <InteractablesButton

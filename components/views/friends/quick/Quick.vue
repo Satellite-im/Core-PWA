@@ -6,6 +6,8 @@ import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
 import { Friend } from '~/types/ui/friends'
 
+import { stringLength } from '~/utilities/Emoji'
+
 export default Vue.extend({
   name: 'Quick',
   data() {
@@ -18,6 +20,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
+    // need accurate length in case user entered emojis/white space
+    trueLength(): number {
+      return stringLength(this.name.trim())
+    },
   },
   methods: {
     async confirm() {
@@ -27,7 +33,7 @@ export default Vue.extend({
         this.closeModal()
         return
       }
-      if (!this.name || this.name.length < 3 || this.name.length > 64) {
+      if (!this.name || this.trueLength < 3 || this.trueLength > 64) {
         this.error = this.$t('errors.chat.group_name') as string
         return
       }
