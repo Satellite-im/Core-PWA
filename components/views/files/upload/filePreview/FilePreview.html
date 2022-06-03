@@ -1,5 +1,5 @@
 <div
-  :class="`${files.length > 0 ? 'bordered file-preview' : 'file-preview'}`"
+  :class="`${files.length > 0 ? 'bordered file-preview' : 'empty file-preview'}`"
   @touchmove="handleTouchPreview"
   @touchstart="handleTouchPreview"
   @touchend="handleTouchPreview"
@@ -21,7 +21,7 @@
     </div>
   </div>
   <template v-if="files.length > 0">
-    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
+    <UiSimpleScroll scrollMode="horizontal" scrollShow="scroll">
       <div class="file-list">
         <FilesUploadPreviewItem
           :item="item"

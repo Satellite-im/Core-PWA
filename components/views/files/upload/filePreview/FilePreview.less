@@ -5,7 +5,13 @@
   background-color: #181f2c;
   border-bottom-color: rgba(87, 101, 116, 0.3);
   border-radius: @corner-rounding @corner-rounding 0 0;
-  padding: 0 @normal-spacing;
+  padding: @xlight-spacing @normal-spacing;
+
+  .file-list {
+    height: fit-content;
+    display: flex;
+    flex-wrap: nowrap;
+  }
 
   .file-error {
     display: flex;
@@ -16,5 +22,10 @@
     .close-button {
       cursor: pointer;
     }
+  }
+
+  &.empty {
+    height: 0px;
+    padding: 0px;
   }
 }
