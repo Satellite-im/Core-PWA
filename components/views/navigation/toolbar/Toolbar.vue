@@ -17,8 +17,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState, mapGetters } from 'vuex'
-import { Group, Server } from '~/types/ui/core'
-import { User } from '~/types/ui/user'
+import { Group, GroupMember } from '~/store/groups/types'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
@@ -44,17 +43,8 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    server: {
-      type: Object as PropType<Server>,
-      default: () => {},
-    },
-    user: {
-      type: Object as PropType<User>,
-      default: () => ({
-        name: '',
-        address: '',
-        status: '',
-      }),
+    recipient: {
+      type: Object as PropType<Group | Friend>,
       required: true,
     },
   },
@@ -76,36 +66,6 @@ export default Vue.extend({
       friends: (state) => (state as RootState).friends,
     }),
     ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
-    selectedGroup(): string {
-      return this.$route.params.id // TODO: change with groupid - AP-400
-    },
-    recipient():
-      | Friend
-      | { textilePubkey: string; type: string }
-      | null
-      | unknown
-      | undefined {
-      // It should not happen that someone tries to write to himself, but we should check
-      // anyway
-      const isMe =
-        this.$route.params.address === this.$typedStore.state.accounts.active
-
-      if (isMe) {
-        return null
-      }
-
-      return this.conversation.type === 'group' ? this.group : this.friend
-    },
-    group(): any {
-      return this.$store.state.groups.all.find(
-        (g: { id: string }) => g.id === this.$route.params.id,
-      )
-    },
-    friend(): any {
-      return this.$store.state.friends.all.find(
-        (f: { address: string }) => f.address === this.$route.params.address,
-      )
-    },
     showSearchResult: {
       set(state): void {
         this.$store.commit('ui/showSearchResult', state)
@@ -116,39 +76,53 @@ export default Vue.extend({
     },
     enableRTC(): boolean {
       if (this.conversation.type === 'group') {
-        const group = this.$typedStore.state.groups.all.find(
+        const group = this.groups.all.find(
           (group) => group.id === this.conversation.id,
         )
         const members = group?.members.map((m) => m.address)
-        return this.$typedStore.state.friends.all.some(
+        return this.friends.all.some(
           (friend: Friend) =>
             members?.includes(friend.address) && friend.state === 'online',
         )
       }
-      return this.$typedStore.state.friends.all.some(
-        (friend) => friend.state === 'online',
-      )
+      return this.friends.all.some((friend) => friend.state === 'online')
     },
     ModalWindows: () => ModalWindows,
     src(): string {
-      // @ts-ignore currently reading user as type Server. Will likely be reworked with server update
-      const hash = this.server?.profilePicture
+      const hash = this.recipient?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    isGroup(): boolean {
+      return 'members' in this.recipient
+    },
+    subtitleText(): string {
+      if (this.isGroup) {
+        const names = (this.recipient as Group).members.map(
+          (member: GroupMember) => member.name,
+        )
+        return names.join(', ')
+      }
+      return (this.recipient as Friend).status
+    },
+    callTooltipText(): string {
+      if (this.isGroup) {
+        return this.$t('coming_soon.group_call') as string
+      }
+      return this.enableRTC
+        ? (this.$t('controls.call') as string)
+        : (this.$t('controls.not_connected') as string)
     },
   },
   methods: {
-    groupInvite(group: Group) {
+    groupInvite() {
       this.$store.commit('ui/toggleModal', {
         name: 'groupInvite',
-        state: { isOpen: true, group },
+        state: { isOpen: true, group: this.recipient },
       })
     },
     toggleAlerts() {
       this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts
-    },
-    isGroup(thing: any) {
-      return thing?.type && thing?.type === 'group'
     },
     /**
      * @method handleChange DocsTODO
@@ -186,14 +160,14 @@ export default Vue.extend({
      * @description This updates the state to show/hide the specific modal you pass in
      * @example toggleModal(ModalWindows.WALLET)
      */
-    toggleModal(modalName: keyof ModalWindows) {
+    toggleModal(modalName: ModalWindows) {
       this.$store.commit('ui/toggleModal', {
         name: modalName,
         state: !this.ui.modals[modalName],
       })
     },
     openProfile() {
-      this.$store.dispatch('ui/showProfile', this.user)
+      this.$store.dispatch('ui/showProfile', this.recipient)
     },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC) {
@@ -204,6 +178,9 @@ export default Vue.extend({
       })
     },
     handleCall() {
+      if (this.isGroup) {
+        return
+      }
       if (!this.enableRTC || this.webrtc.activeCall) {
         return
       }

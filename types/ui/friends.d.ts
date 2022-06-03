@@ -36,6 +36,7 @@ export interface Friend extends EncryptedFriend {
   metadata?: FriendMetadata
   peerId?: string
   call?: Call
+  status: string
 }
 
 export interface OutgoingRequest extends FriendRequest {
