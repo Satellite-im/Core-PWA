@@ -146,11 +146,11 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=hamburger-button]').click()
   })
 
-  it('Chat - Add a note to user profile', () => {
+  it.skip('Chat - Add a note to user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'add')
   })
 
-  it('Chat - Assert note from user profile', () => {
+  it.skip('Chat - Assert note from user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
   })
 })
