@@ -114,7 +114,7 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('settings/audioInput', state)
       },
-      get(): any {
+      get(): string {
         return this.settings.audioInput
       },
     },
@@ -131,7 +131,7 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('settings/videoInput', state)
       },
-      get(): any {
+      get(): string {
         return this.settings.videoInput
       },
     },

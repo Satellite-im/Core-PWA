@@ -168,7 +168,6 @@
           :text="$t('pages.settings.video.sources.permissionDeniedMessage')"
         />
       </span>
-
     </SettingsUnit>
     <SettingsUnit
       v-if="getInitialized"
@@ -180,6 +179,7 @@
         :isLocked="loading.includes('flipVideo')"
       />
     </SettingsUnit>
+    <UiLoadersGenericContent class="column unit" :count="1" v-else />
   </div>
 
   <!-- Screen Share -->

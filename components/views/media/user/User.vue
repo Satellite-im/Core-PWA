@@ -41,7 +41,7 @@ export default Vue.extend({
   props: {
     user: {
       type: Object as PropType<User>,
-      default: () => {},
+      required: true,
     },
     calling: {
       type: Boolean,
@@ -61,7 +61,7 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
       webrtc: (state) => (state as RootState).webrtc,
-      userThread: (state) => (state as RootState).textile.userThread,
+      flipVideo: (state) => (state as RootState).textile.userThread.flipVideo,
     }),
     call() {
       return (
@@ -110,9 +110,6 @@ export default Vue.extend({
     src(): string {
       const hash = this.user.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
-    flipVideo() {
-      return this.userThread.flipVideo
     },
   },
   watch: {

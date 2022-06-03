@@ -14,10 +14,10 @@
     ></video>
   </div>
 
-  <div v-else-if="true" class="video-stream-container">
+  <div v-else-if="videoStream" class="video-stream-container">
     <video
       class="video-stream"
-      :class="{ 'flip-video': flipVideo }"
+      :class="{flip: flipVideo}"
       :src-object.prop="videoStream"
       playsinline
       :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"
