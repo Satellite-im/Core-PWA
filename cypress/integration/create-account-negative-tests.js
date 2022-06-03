@@ -5,7 +5,7 @@ const randomStatus = faker.lorem.word() // generate random status
 const filepathNsfw = 'images/negative-create-account-test.png'
 
 describe('Create Account - Negative Tests', () => {
-  it.skip('Try to create account with PIN less than 5 digits', () => {
+  it('Try to create account with PIN less than 5 digits', () => {
     //Enter PIN screen and add an invalid pin
     cy.createAccountPINscreen('1')
 
@@ -13,7 +13,7 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Pin must be at least 5 characters.')
   })
 
-  it.skip('Try to create account without username', () => {
+  it('Try to create account without username', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -29,7 +29,7 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Username must be at least 5 characters.')
   })
 
-  it.skip('Try to create account with NSFW image', () => {
+  it('Try to create account with NSFW image', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -51,7 +51,7 @@ describe('Create Account - Negative Tests', () => {
     )
   })
 
-  it('Logout user on /unlock page', () => {
+  it.skip('Logout user on /unlock page', () => {
     // skipped due to textile/solana issues
     cy.visit('/')
     cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
