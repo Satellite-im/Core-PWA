@@ -735,7 +735,6 @@ export default {
     const group = getGroup(rootState, groupId)
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
-
     await $GroupChatManager.listenToGroupMessages(async (message) => {
       if (!message) {
         return
@@ -749,7 +748,8 @@ export default {
 
       const userInfo = await usersProgram.getUserInfo(message.sender)
       const urlMatch = groupId ? message.to : message.from
-      dispatch(
+      console.log(message)
+      await dispatch(
         'ui/sendNotification',
         {
           message: 'New DM',
@@ -766,7 +766,7 @@ export default {
         { root: true },
       )
 
-      dispatch('storeInMessage', { address: groupId, message })
+      await dispatch('storeInMessage', { address: groupId, message })
     }, group)
   },
   /**
