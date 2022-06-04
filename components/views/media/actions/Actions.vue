@@ -60,9 +60,9 @@ export default Vue.extend({
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
-          this.$store.dispatch('audio/toggleMute', undefined, { root: true })
+          this.$store.dispatch('audio/toggleMute')
         } else if (kind === WebRTCEnum.VIDEO) {
-          this.$store.dispatch('video/toggleMute', undefined, { root: true })
+          this.$store.dispatch('video/toggleMute')
         } else {
           this.$store.dispatch(
             'webrtc/toggleMute',
@@ -87,4 +87,5 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Actions.less"></style>
+<style scoped lang="less" src="./Actions.less">
+</style>
