@@ -182,10 +182,7 @@ describe('', () => {
     }
     const rootState = { ...initialRootState }
     module.default.toggleMute({ state, commit, dispatch, rootState })
-    expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
-    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
-      root: true,
-    })
+    expect(commit).toHaveBeenCalledWith('toggleCamera', state.disabled)
   })
   test('1', () => {
     const commit = jest.fn()
@@ -195,10 +192,7 @@ describe('', () => {
     }
     const rootState = { ...initialRootState }
     module.default.toggleMute({ state, commit, dispatch, rootState })
-    expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
-    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
-      root: true,
-    })
+    expect(commit).toHaveBeenCalledWith('toggleCamera', state.disabled)
   })
   test.skip('2', () => {
     // This is
@@ -214,8 +208,8 @@ describe('', () => {
       //   mute: jest.fn(),
       //   unmute: jest.fn(),
     }
-    module.default.toggle({ state, commit, dispatch, rootState })
-    expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
+    module.default.toggleMute({ state, commit, dispatch, rootState })
+    expect(commit).toHaveBeenCalledWith('toggleCamera', state.disabled)
     // Unsuccessful mock here for WebRTC's Call function.
     // expect(rootState.webrtc.activeCall).toHaveBeenCalledWith({
     //   kind: 'audio',
