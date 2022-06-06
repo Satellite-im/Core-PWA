@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
@@ -17,12 +18,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
-    isInvalid(): boolean {
+    ...mapState({
+      showMedia: (state) => (state as RootState).ui.showMedia,
+    }),
+    isInvalidName(): boolean {
       return (
         !this.name ||
-        this.name.trim().length < 3 ||
-        this.name.trim().length > 64
+        this.name.trim().length < this.$Config.chat.groupNameMinLength ||
+        this.name.trim().length > this.$Config.chat.groupNameMaxLength
       )
     },
   },
@@ -34,7 +37,7 @@ export default Vue.extend({
         this.closeModal()
         return
       }
-      if (this.isInvalid) {
+      if (this.isInvalidName) {
         this.error = this.$t('errors.chat.group_name') as string
         return
       }
@@ -54,7 +57,6 @@ export default Vue.extend({
             }),
           ),
         )
-        // close quickchat modal after redirecting to chat
         this.closeModal()
         this.$router.push(`/chat/groups/${groupId}`)
       } catch (e: any) {

@@ -1,4 +1,4 @@
-<div class="quick-chat" :class="{compact : ui.showMedia}">
+<div class="quick-chat" :class="{compact : showMedia}">
   <div>
     <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
     <TypographyText :text="$t('pages.chat.new_chat_description')" />
@@ -17,9 +17,9 @@
     type="dark"
     input-kind="text"
     :placeholder="$t('pages.chat.new_group_name')"
-    :minLength="3"
-    :maxLength="64"
-    :invalid="isInvalid"
+    :minLength="$Config.chat.groupNameMinLength"
+    :maxLength="$Config.chat.groupNameMaxLength"
+    :invalid="isInvalidName"
   />
   <TypographyError v-if="error" :text="error" small />
   <InteractablesButton
