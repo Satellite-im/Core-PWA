@@ -13,7 +13,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapGetters('settings', ['getTimezone']),
+    ...mapGetters('settings', ['getTimestamp', 'getFullTimestamp']),
     src(): string {
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
@@ -22,19 +22,19 @@ export default Vue.extend({
       const msgTimestamp = this.$dayjs(this.data.at)
       // if today
       if (this.$dayjs().isSame(msgTimestamp, 'day')) {
-        return `${this.$t('search.result.today')} ${msgTimestamp
-          .local()
-          .tz(this.getTimezone)
-          .format('LT')}`
+        return (
+          this.$t('search.result.today') + ' ' + this.getTimestamp(this.data.at)
+        )
       }
       // if yesterday
       if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
-        return `${this.$t('search.result.yesterday')} ${msgTimestamp
-          .local()
-          .tz(this.getTimezone)
-          .format('LT')}`
+        return (
+          this.$t('search.result.yesterday') +
+          ' ' +
+          this.getTimestamp(this.data.at)
+        )
       }
-      return msgTimestamp.local().tz(this.getTimezone).format('L LT')
+      return this.getFullTimestamp(this.data.at)
     },
   },
 })
