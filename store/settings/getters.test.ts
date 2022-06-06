@@ -1,24 +1,9 @@
-import { CaptureMouseTypes, KeybindTypes } from '~/store/settings/types'
+import InitialSettingsState from '~/store/settings/state'
 import getters from '~/store/settings/getters'
 
 const state = {
-  audioInput: '',
-  audioOutput: '',
-  videoInput: '',
-  captureMouse: CaptureMouseTypes.always,
-  noiseSuppression: true,
-  echoCancellation: true,
-  bitrate: 96000,
-  sampleSize: 24,
+  ...InitialSettingsState(),
   timezone: 'Europe/Paris',
-  userHasGivenAudioAccess: false,
-  userDeniedAudioAccess: false,
-  keybinds: KeybindTypes,
-  embeddedLinks: true,
-  displayCurrentActivity: true,
-  removeState: false,
-  serverType: 'satellite',
-  ownInfo: '',
 }
 
 describe('settings.getters', () => {
