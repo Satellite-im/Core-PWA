@@ -250,64 +250,63 @@ export default Vue.extend({
     /**
      * @method sendMessage
      * @description Sends message by calling the sendMessage action with current data and
-     * then setting all related feilds to their default (empty)
+     * then setting all related fields to their default (empty)
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      if (!this.recipient) {
+        return
+      }
       // @ts-ignore
       await this.$refs['file-upload']?.sendMessage()
-      if (this.recipient) {
-        /* enforce limit as max chars when sending */
-        const value =
-          this.text.length > this.$Config.chat.maxChars
-            ? this.text.slice(0, this.$Config.chat.maxChars)
-            : this.text
-        this.text = ''
-        const isEmpty = value.trim().length === 0
-        if (isEmpty) return
-        if (!this.recipient || isEmpty) {
-          return
-        }
-        if (
-          this.ui.replyChatbarContent.from &&
-          !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
-        ) {
-          this.$store.dispatch('textile/sendReplyMessage', {
-            to: (this.recipient as Friend).textilePubkey,
+      // return if input is empty or over max length
+      if (
+        this.text.length > this.$Config.chat.maxChars ||
+        !this.text.trim().length
+      ) {
+        return
+      }
+      const value = this.text
+      this.text = ''
+      if (
+        this.ui.replyChatbarContent.from &&
+        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
+      ) {
+        this.$store.dispatch('textile/sendReplyMessage', {
+          to: (this.recipient as Friend).textilePubkey,
+          text: value,
+          replyTo: this.ui.replyChatbarContent.messageID,
+          replyType: MessagingTypesEnum.TEXT,
+        })
+        return
+      }
+
+      if (
+        RegExp(this.$Config.regex.uuidv4).test(
+          (this.recipient as Group)?.id?.split('|')[1],
+        )
+      ) {
+        if (this.ui.replyChatbarContent.from) {
+          this.$store.dispatch('textile/sendGroupReplyMessage', {
+            to: (this.recipient as Group).id,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
           })
+          this.text = ''
           return
         }
-
-        if (
-          RegExp(this.$Config.regex.uuidv4).test(
-            (this.recipient as Group)?.id?.split('|')[1],
-          )
-        ) {
-          if (this.ui.replyChatbarContent.from) {
-            this.$store.dispatch('textile/sendGroupReplyMessage', {
-              to: (this.recipient as Group).id,
-              text: value,
-              replyTo: this.ui.replyChatbarContent.messageID,
-              replyType: MessagingTypesEnum.TEXT,
-            })
-            this.text = ''
-            return
-          }
-          this.$store.dispatch('textile/sendGroupMessage', {
-            groupId: (this.recipient as Group).id,
-            message: value,
-          })
-        } else {
-          this.$store.dispatch('textile/sendTextMessage', {
-            to: (this.recipient as Friend).textilePubkey,
-            text: value,
-          })
-        }
-        this.nsfwUploadError = false
+        this.$store.dispatch('textile/sendGroupMessage', {
+          groupId: (this.recipient as Group).id,
+          message: value,
+        })
+      } else {
+        this.$store.dispatch('textile/sendTextMessage', {
+          to: (this.recipient as Friend).textilePubkey,
+          text: value,
+        })
       }
+      this.nsfwUploadError = false
     },
     /**
      * @method handlePaste
