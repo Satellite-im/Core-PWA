@@ -22,13 +22,13 @@
     <headphones-icon v-else size="1x"></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
+    v-if="inCall"
     :type="videoMuted ? 'danger' : 'dark'"
     size="small"
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
     :text="$t('controls.video')"
     :action="() => toggleMute('video')"
     :loading="isLoading"
-    :disabled="!inCall"
     loadingText=""
   >
     <video-off-icon v-if="videoMuted" size="1x"></video-off-icon>
