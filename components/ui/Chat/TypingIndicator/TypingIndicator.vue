@@ -22,7 +22,7 @@ export default Vue.extend({
    */
   methods: {
     checkUsersTyping() {
-      if (this.users.length <= 3 && this.users.length !== 0) {
+      if (this.users.length <= 3 && this.users.length) {
         return 1
       }
       if (this.users.length > 3) {
