@@ -18,14 +18,11 @@ const getGroupChatManager = (): GroupChatManager => {
 }
 
 const getUserAccount = () => {
-  const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-  const account = $BlockchainClient.account
-
-  if (!account) {
+  try {
+    return BlockchainClient.getInstance().account
+  } catch (e) {
     throw new Error(GroupsError.USER_NOT_INITIALIZED)
   }
-
-  return account
 }
 
 export default {

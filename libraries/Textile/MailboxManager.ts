@@ -45,7 +45,7 @@ export class MailboxManager {
   async init(): Promise<string> {
     const users: Users = this.textile.users
     this.mailboxID = await users.setupMailbox()
-
+    window.console.log('Init: ' + this.mailboxID)
     return this.mailboxID
   }
 
@@ -170,7 +170,6 @@ export class MailboxManager {
     this.listeners.inbox = this.buildCallback(onMessage, () => {
       delete this.listeners.inbox
     })
-
     this.textile.users.watchInbox(this.mailboxID, this.listeners.inbox)
   }
 

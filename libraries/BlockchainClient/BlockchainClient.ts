@@ -54,13 +54,17 @@ export default class BlockchainClient {
    * */
   get payerAccount(): Keypair {
     if (!this._payerAccount) {
-      throw new Error('Keypair is not initialized')
+      throw new Error('PayerAccount is not initialized')
     }
     return this._payerAccount
   }
 
   get isInitialized(): boolean {
     return !!this._account
+  }
+
+  get isPayerInitialized(): boolean {
+    return !!this._payerAccount
   }
 
   /**

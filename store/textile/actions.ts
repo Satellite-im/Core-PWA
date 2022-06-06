@@ -210,6 +210,10 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
     }
 
+    if (!MailboxManager.isInitialized()) {
+      await MailboxManager.init()
+    }
+
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }

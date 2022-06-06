@@ -165,11 +165,11 @@ export default {
 
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
-    const payerAccount = $BlockchainClient.payerAccount
-
-    if (!payerAccount) {
+    if (!$BlockchainClient.isPayerInitialized) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
+
+    const payerAccount = $BlockchainClient.payerAccount
 
     commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
