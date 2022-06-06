@@ -1,6 +1,6 @@
 import { ConversationParticipant, ConversationState } from './types'
 
-const actions = {
+const mutations = {
   setConversation(
     state: ConversationState,
     payload: {
@@ -60,4 +60,4 @@ const actions = {
     })
   },
 }
-export default actions
+export default mutations
