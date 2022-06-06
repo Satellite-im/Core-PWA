@@ -35,8 +35,6 @@
           />
           <Sidebar
             v-if="!$device.isMobile"
-            :users="friends.all"
-            :groups="groups.all"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />

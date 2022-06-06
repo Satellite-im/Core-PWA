@@ -97,7 +97,7 @@
           :count="4"
           inverted
         />
-        <div v-else-if="users && users.length">
+        <div v-else-if="friends.all && friends.all.length">
           <UiInlineNotification
             :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div
-          v-else-if="dataState.friends !== DataStateType.Loading && !users.length"
+          v-else-if="dataState.friends !== DataStateType.Loading && !friends.all.length"
           class="mascot-container"
         >
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
