@@ -7,11 +7,13 @@
 
 //Generic
 html {
+  &:extend(.full-height);
+  &:extend(.full-width);
   overflow: hidden;
 }
 
 body {
-  &:extend(.app-height);
+  &:extend(.full-height);
   &:extend(.full-width);
   &:extend(.background-gradient);
   margin: 0 !important;
