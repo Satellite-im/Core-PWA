@@ -115,7 +115,6 @@ export class NotificationManager {
       CollectionName,
       Query.where('_id').eq(notificationId[0]),
     )
-    console.log(notification, payload.id)
     return notification[0]
   }
 
