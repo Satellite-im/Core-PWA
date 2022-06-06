@@ -72,7 +72,7 @@ data.allDevices.forEach((item) => {
         cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
       })
 
-      it(`Chat Features - Edit Messages on ${item.description}`, () => {
+      it.skip(`Chat Features - Edit Messages on ${item.description}`, () => {
         cy.chatFeaturesEditMessage(randomMessage, randomNumber)
       })
 
