@@ -15,6 +15,7 @@ import { groupChatSchema } from '~/libraries/Textile/schema'
 import { AccountsError } from '~/store/accounts/types'
 import {
   ConversationQuery,
+  MailboxSubscriptionType,
   Message,
   MessageCallback,
   MessageFromThread,
@@ -327,6 +328,10 @@ export class GroupChatManager {
       threadID: ThreadID.fromString(thread),
       collectionName: collection,
     }
+  }
+
+  isSubscribed(): boolean {
+    return Boolean(this.listeners.message)
   }
 
   /**

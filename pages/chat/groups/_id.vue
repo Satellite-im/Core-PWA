@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { groupMessages } from '~/utilities/Messaging'
+import { MessageGroup } from '~/types/messaging'
 
 export default Vue.extend({
   name: 'GroupMessages',
@@ -18,7 +19,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['media']),
     ...mapGetters('textile', ['getInitialized']),
-    groupedMessages() {
+    groupedMessages(): MessageGroup {
       const { id } = this.$route.params
       const conversation = this.$typedStore.state.textile.conversations[id]
 

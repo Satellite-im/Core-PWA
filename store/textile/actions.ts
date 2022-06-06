@@ -636,7 +636,6 @@ export default {
       .modify((conversation: DexieConversation) => {
         conversation.lastInbound = message.at
       })
-    console.log('counter')
 
     const msg = { conversation: address, ...message }
     if (message.editedAt) {
@@ -731,6 +730,9 @@ export default {
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
+    if ($TextileManager.groupChatManager?.isSubscribed()) {
+      return
+    }
 
     const group = getGroup(rootState, groupId)
 
@@ -739,34 +741,32 @@ export default {
       if (!message) {
         return
       }
-
       commit('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-
       const userInfo = await usersProgram.getUserInfo(message.sender)
       const urlMatch = groupId ? message.to : message.from
-      console.log(message)
-      await dispatch(
-        'ui/sendNotification',
-        {
-          message: 'New DM',
-          from: userInfo?.name,
-          fromAddress: urlMatch,
-          title: `Notification`,
-          groupName: group.name,
-          groupId,
-          id: uuidv4(),
-          groupURL: message.to,
-          image: userInfo?.photoHash,
-          type: AlertType.GROUP_MESSAGE,
-        },
-        { root: true },
-      )
-
-      await dispatch('storeInMessage', { address: groupId, message })
+      await Promise.all([
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: 'New DM',
+            from: userInfo?.name,
+            fromAddress: urlMatch,
+            title: `Notification`,
+            groupName: group.name,
+            groupId,
+            id: uuidv4(),
+            groupURL: message.to,
+            image: userInfo?.photoHash,
+            type: AlertType.GROUP_MESSAGE,
+          },
+          { root: true },
+        ),
+        dispatch('storeInMessage', { address: groupId, message }),
+      ])
     }, group)
   },
   /**
