@@ -1,9 +1,8 @@
 <template src="./Sidebar.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
-import { sortBy } from 'lodash'
 import {
   UsersIcon,
   UserPlusIcon,
