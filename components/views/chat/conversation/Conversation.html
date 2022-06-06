@@ -47,7 +47,12 @@
       :options="options"
       @intersect="handleIntersect"
     >
-      <template #placeholder> Loading messages </template>
+      <template #placeholder>
+        <div class="conversation-loader">
+          <UiLoadersSpinner class="conversation-loader-spinner" spinning />
+          {{ $t('pages.chat.infinite_scroll.loading') }}
+        </div>
+      </template>
       <template #no-more> <UiChatEncrypted /> </template>
     </UiChatInfiniteScroll>
   </UiChatScroll>
