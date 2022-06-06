@@ -45,7 +45,6 @@ export class MailboxManager {
   async init(): Promise<string> {
     const users: Users = this.textile.users
     this.mailboxID = await users.setupMailbox()
-    window.console.log('Init: ' + this.mailboxID)
     return this.mailboxID
   }
 
