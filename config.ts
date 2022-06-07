@@ -51,7 +51,7 @@ export const Config = {
         ],
   },
   solana: {
-    customFaucet: 'https://faucet.satellite.one',
+    customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
