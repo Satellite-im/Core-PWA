@@ -7,10 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: TestCoverage
-       id: testCoverage
-       uses: anuraag016/Jest-Coverage-Diff@master
-       with:
-        fullCoverageDiff: false // defaults to false, if made true whole coverage report is commented with the diff
-        runCommand: “npx jest --collectCoverageFrom=‘[\“src/**/*.{js,jsx,ts,tsx}\“]’ --coverage --collectCoverage=true --coverageDirectory=‘./’ --coverageReporters=‘json-summary’ --forceExit --detectOpenHandles test/.*test.*”
-        delta: 0.5
+       - uses: raulanatol/jest-coverage-comment-action@main
+         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jest-command: 'yarn test jest-ci'
