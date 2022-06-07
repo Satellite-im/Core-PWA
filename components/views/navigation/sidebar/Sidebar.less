@@ -19,7 +19,7 @@
     margin-top: @normal-spacing;
     &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
-    max-height: calc(var(--app-height) - @sidebar-inner-offset);
+    max-height: calc(@app-height - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
     padding-bottom: @normal-spacing;
@@ -72,7 +72,7 @@
 
   .sidebar-inner-streaming {
     max-height: calc(
-      var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad
+      @app-height - @sidebar-inner-offset - @sidebar-inner-streaming-pad
     );
   }
 
@@ -179,13 +179,13 @@
     min-width: @sidebar-size-mobile;
     padding-bottom: @mobile-nav-size;
     .sidebar-inner {
-      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      max-height: calc(@app-height - @mobile-sidebar-inner-offset);
       box-shadow: none;
       background: none;
     }
     .sidebar-inner-streaming {
       max-height: calc(
-        var(--app-height) - @sidebar-inner-offset -
+        @app-height - @sidebar-inner-offset -
           @mobile-sidebar-inner-streaming-pad
       );
     }
@@ -222,7 +222,7 @@
     max-width: @sidebar-size;
     min-width: @sidebar-size-mobile;
     sidebar-inner {
-      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      max-height: calc(@app-height - @mobile-sidebar-inner-offset);
       .users {
         .inline-notification {
           width: 100vw - 32rem !important;
