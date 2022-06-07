@@ -1,0 +1,13 @@
+name: Comment test coverage
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Launch the action
+        uses: ewjoachim/coverage-comment-action@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
