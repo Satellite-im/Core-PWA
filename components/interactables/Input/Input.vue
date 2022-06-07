@@ -93,6 +93,14 @@ export default Vue.extend({
       type: Number,
       default: 256,
     },
+    minLength: {
+      type: Number,
+      default: 0,
+    },
+    invalid: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -119,6 +127,27 @@ export default Vue.extend({
     clearSearch() {
       this.internalText = ''
       this.update()
+    },
+    /**
+     * @method preventLeadingSpace
+     * @description Prevent space if empty input
+     */
+    preventLeadingSpace(event: KeyboardEvent) {
+      if (!this.internalText.toString().length) {
+        event.preventDefault()
+      }
+    },
+    /**
+     * @method preventEmptyPaste
+     * @description Prevent space if empty input
+     */
+    preventEmptyPaste(event: ClipboardEvent) {
+      if (
+        event.clipboardData &&
+        !event.clipboardData.getData('Text').trim().length
+      ) {
+        event.preventDefault()
+      }
     },
   },
 })

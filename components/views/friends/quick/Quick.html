@@ -1,10 +1,8 @@
-<div
-  id="quick-chat"
-  :class="`quick-chat ${ui.showMedia ? 'quick-chat--compact' : ''}`"
-  v-if="ui.modals.quickchat"
->
-  <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
-  <TypographyText :text="$t('pages.chat.new_chat_description')" />
+<div class="quick-chat" :class="{compact : showMedia}">
+  <div>
+    <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
+    <TypographyText :text="$t('pages.chat.new_chat_description')" />
+  </div>
   <SettingsPagesUserSearch
     v-model="friends"
     :placeholder="$t('servers.create.select_friends_placeholder')"
@@ -12,24 +10,25 @@
     type="primary"
     drop="top"
   />
-  <InteractablesInput
-    v-if="friends.length > 1"
-    size="small"
-    input-kind="text"
-    type="dark"
-    :placeholder="$t('pages.chat.new_group_name')"
-    class="search"
-    v-model="name"
-  />
-  <small class="error has-text-danger error" v-if="error">{{error}}</small>
-  <div v-if="friends.length" class="submit-container">
-    <InteractablesButton
-      type="primary"
+  <template v-if="friends.length > 1">
+    <InteractablesInput
+      v-model="name"
       size="small"
-      :text="$t('pages.chat.chat_now')"
-      class="create-server-btn"
-      :action="confirm"
-      :loading="isLoading"
+      type="dark"
+      input-kind="text"
+      :placeholder="$t('pages.chat.new_group_name')"
+      :minLength="$Config.chat.groupNameMinLength"
+      :maxLength="$Config.chat.groupNameMaxLength"
+      :invalid="isInvalidName && Boolean(error)"
     />
-  </div>
+    <TypographyError v-if="error" :text="error" small />
+  </template>
+  <InteractablesButton
+    v-if="friends.length"
+    type="primary"
+    size="small"
+    :text="$t('pages.chat.chat_now')"
+    :action="confirm"
+    :loading="isLoading"
+  />
 </div>

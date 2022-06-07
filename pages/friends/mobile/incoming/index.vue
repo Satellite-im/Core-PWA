@@ -97,7 +97,6 @@ import { FriendRequest } from '~/types/ui/friends'
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {
   interface Vue {
-    friends: any
     initRoute: () => void
   }
 }

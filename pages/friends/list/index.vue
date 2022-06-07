@@ -8,7 +8,6 @@ import { DataStateType } from '~/store/dataState/types'
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {
   interface Vue {
-    friends: any
     initRoute: () => void
   }
 }

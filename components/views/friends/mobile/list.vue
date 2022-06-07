@@ -110,7 +110,6 @@ import ContextMenu from '~/components/mixins/UI/ContextMenu'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    friends: any
     initRoute: () => void
     searchResult: () => Friend[]
     navigateToBlock: () => void

@@ -516,7 +516,7 @@ export default {
       add_channel: 'Add Channel',
       group_invite: 'Invite new member',
       group_invite_description:
-        'Select one of your friends to add him to the group',
+        'Select one of your friends to add them to the group',
       new_message: 'messages',
       jump_to_current: 'View New Messages',
       chat_now: 'chat now',
@@ -598,6 +598,7 @@ export default {
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
+      group_name: 'Enter a group name of at least 3 characters, up to 64',
     },
     textile: {
       friend_not_found: 'Friend not found',

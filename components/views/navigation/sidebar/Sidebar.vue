@@ -20,6 +20,7 @@ import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
+import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -58,8 +59,12 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends', 'groups']),
     ...mapState({
+      ui: (state) => (state as RootState).ui,
+      dataState: (state) => (state as RootState).dataState,
+      media: (state) => (state as RootState).media,
+      friends: (state) => (state as RootState).friends,
+      groups: (state) => (state as RootState).groups,
       conversations: (state) =>
         (state as RootState).textile.conversations || [],
     }),
@@ -89,7 +94,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    toggleModal(type: 'quickchat' | 'creategroup') {
+    toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {
       this.$store.commit('ui/toggleModal', {
         name: type,
         state: !this.ui.modals[type],

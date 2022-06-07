@@ -111,6 +111,8 @@ export const Config = {
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
+    groupNameMinLength: 3,
+    groupNameMaxLength: 64,
   },
   account: {
     minimumAccountLength: 5,
