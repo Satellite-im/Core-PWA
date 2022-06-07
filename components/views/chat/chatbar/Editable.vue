@@ -345,6 +345,7 @@ export default Vue.extend({
     word-break: break-word;
     white-space: break-spaces !important;
     .chat-row-content {
+      padding-right: 5px;
       .emoji {
         font-style: initial;
       }

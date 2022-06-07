@@ -1,7 +1,7 @@
 #chatbar {
   position: relative;
   margin-top: @light-spacing;
-  &:extend(.third-layer);
+  &:extend(.first-layer);
   &:extend(.full-width);
   .chat-label {
     font-size: @mini-text-size;
@@ -104,12 +104,6 @@
     }
 
     .editable-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      padding-top: @light-spacing;
-      padding-bottom: @light-spacing;
       min-height: @chatbar-input-height;
       max-height: 50vh;
     }
