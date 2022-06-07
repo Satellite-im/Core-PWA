@@ -42,7 +42,7 @@
       >
         <InteractablesSwitch
           v-model="consentScan"
-          :isLocked="loading === 'consentScan'"
+          :isLocked="loading.includes('consentScan')"
         />
       </SettingsUnit>
       <SettingsUnit
@@ -51,11 +51,14 @@
       >
         <InteractablesSwitch
           v-model="blockNsfw"
-          :isLocked="loading === 'blockNsfw'"
+          :isLocked="loading.includes('blockNsfw')"
         />
       </SettingsUnit>
     </div>
-    <TypographyText v-if="loading" :text="$t('pages.privacy.updating')" />
+    <TypographyText
+      v-if="loading.length"
+      :text="$t('pages.privacy.updating')"
+    />
     <!-- <div class="columns is-desktop">
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"

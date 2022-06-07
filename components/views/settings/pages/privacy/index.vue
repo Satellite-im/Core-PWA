@@ -14,7 +14,7 @@ export default Vue.extend({
     return {
       formatError: false as boolean,
       lengthError: false as boolean,
-      loading: '' as string,
+      loading: [] as string[],
     }
   },
   computed: {
@@ -87,11 +87,11 @@ export default Vue.extend({
     },
     consentScan: {
       async set(consentToScan: boolean) {
-        this.loading = 'consentScan'
+        this.loading.push('consentScan')
         await this.$store.dispatch('textile/updateUserThreadData', {
           consentToScan,
         })
-        this.loading = ''
+        this.loading.splice(this.loading.indexOf('consentScan'), 1)
       },
       get(): boolean {
         return this.userThread.consentToScan
@@ -99,11 +99,11 @@ export default Vue.extend({
     },
     blockNsfw: {
       async set(blockNsfw: boolean) {
-        this.loading = 'blockNsfw'
+        this.loading.push('blockNsfw')
         await this.$store.dispatch('textile/updateUserThreadData', {
           blockNsfw,
         })
-        this.loading = ''
+        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
       },
       get(): boolean {
         return this.userThread.blockNsfw
