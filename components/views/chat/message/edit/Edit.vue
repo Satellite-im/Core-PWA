@@ -1,11 +1,9 @@
 <template src="./Edit.html"></template>
 
 <script lang="ts">
-import { number } from 'io-ts'
 import Vue from 'vue'
 
-// @ts-ignore
-import { SmileIcon } from 'vue-feather-icons'
+import { SmileIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import Editable from '~/components/views/chat/chatbar/Editable.vue'

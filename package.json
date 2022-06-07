@@ -95,7 +95,6 @@
     "vue-croppie": "^2.0.2",
     "vue-custom-scrollbar": "^1.4.3",
     "vue-emoji-picker": "git+https://git@github.com/Satellite-im/vue-emoji-picker#build-satellite",
-    "vue-feather-icons": "^5.1.0",
     "vue-markdown": "^2.2.4",
     "vue-multiselect": "^2.1.6",
     "vue-plyr": "^7.0.0",
