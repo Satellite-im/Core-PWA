@@ -31,26 +31,24 @@ import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 
 export default {
-  async initialize({
-    dispatch,
-    commit,
-    state,
-  }: ActionsArguments<FriendsState>) {
+  async initialize({ dispatch, commit }: ActionsArguments<FriendsState>) {
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
 
+    await Promise.all([
+      dispatch('fetchFriends', {}),
+      dispatch('fetchFriendRequests', {}),
+      dispatch('subscribeToFriendsEvents', {}),
+    ])
+
     commit(
       'dataState/setDataState',
       { key: 'friends', value: DataStateType.Ready },
       { root: true },
     )
-
-    dispatch('friends/fetchFriends', {}, { root: true })
-    dispatch('friends/fetchFriendRequests', {}, { root: true })
-    dispatch('friends/subscribeToFriendsEvents', {}, { root: true })
   },
   /**
    * @method fetchFriendRequests DocsTODO
@@ -108,9 +106,11 @@ export default {
 
     // Concat incoming and outgoing friends into a single array
     // and fetch user info for each friend
-    incoming
-      .concat(outgoing)
-      .forEach((friendData) => dispatch('fetchFriendDetails', friendData))
+    const friendData = incoming.concat(outgoing)
+
+    await Promise.all(
+      friendData.map((data) => dispatch('fetchFriendDetails', data)),
+    )
 
     commit(
       'dataState/setDataState',

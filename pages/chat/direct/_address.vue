@@ -33,7 +33,6 @@ export default Vue.extend({
     // Get the active friend
     friend() {
       const { address } = this.$route.params
-      const { friends } = this.$store.state
 
       return this.findFriendByAddress(address)
     },
@@ -51,11 +50,8 @@ export default Vue.extend({
       handler(nextValue) {
         if (nextValue) {
           const { address } = this.$route.params
-          const { friends } = this.$store.state
 
-          const friend = this.findFriendByAddress(address)
-
-          if (address && friend) {
+          if (address && this.friend) {
             this.$store.dispatch('textile/fetchMessages', {
               address,
               setActive: true,
@@ -72,9 +68,7 @@ export default Vue.extend({
           const { address } = this.$route.params
           const { friends } = this.$store.state
 
-          const friend = this.findFriendByAddress(address)
-
-          if (address && friend) return
+          if (address && this.friend) return
 
           // If no address is specified, but we have at least one friend, we can redirect to
           // a chat with the first friend in the list
