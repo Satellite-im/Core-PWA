@@ -1,11 +1,10 @@
-<template src="./Footer.html" />
+<template src="./Footer.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { toArray } from 'lodash'
 import { CircleIcon } from 'satellite-lucide-icons'
-import { Config } from '~/config'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -27,12 +26,11 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     lengthCount() {
-      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
-      return `${toArray(this.ui.chatbarContent).length}/${
-        this.$Config.chat.maxChars
-      }`
+      return `${this.ui.chatbarContent.length}/${this.$Config.chat.maxChars}`
     },
   },
 })
