@@ -10,18 +10,19 @@
     type="primary"
     drop="top"
   />
-  <InteractablesInput
-    v-if="friends.length > 1"
-    v-model="name"
-    size="small"
-    type="dark"
-    input-kind="text"
-    :placeholder="$t('pages.chat.new_group_name')"
-    :minLength="$Config.chat.groupNameMinLength"
-    :maxLength="$Config.chat.groupNameMaxLength"
-    :invalid="isInvalidName && Boolean(error)"
-  />
-  <TypographyError v-if="error" :text="error" small />
+  <template v-if="friends.length > 1">
+    <InteractablesInput
+      v-model="name"
+      size="small"
+      type="dark"
+      input-kind="text"
+      :placeholder="$t('pages.chat.new_group_name')"
+      :minLength="$Config.chat.groupNameMinLength"
+      :maxLength="$Config.chat.groupNameMaxLength"
+      :invalid="isInvalidName && Boolean(error)"
+    />
+    <TypographyError v-if="error" :text="error" small />
+  </template>
   <InteractablesButton
     v-if="friends.length"
     type="primary"
