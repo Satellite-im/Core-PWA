@@ -203,6 +203,18 @@ export default Vue.extend({
         })
       }
     },
+    'audio.volume': {
+      handler(volume) {
+        // Bind stream audio element volume to slider volume
+        const audioStreamElements = document.getElementsByClassName(
+          'remote-audio-stream',
+        ) as HTMLCollectionOf<HTMLAudioElement>
+
+        for (const audioStreamElement of audioStreamElements) {
+          audioStreamElement.volume = volume / 100
+        }
+      },
+    },
   },
   beforeMount() {
     // TODO: Create mixin/library that will handle call rejoining and closing

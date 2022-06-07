@@ -142,6 +142,18 @@ export default Vue.extend({
       loadVideos()
     })
   },
+  updated() {
+    // When audio is streamed, initialize stream volume to current volume.
+    if (!this.isLocal && !this.audio.deafened && this.audioStream) {
+      const audioStreamElements = document.getElementsByClassName(
+        `remote-audio-stream`,
+      ) as HTMLCollectionOf<HTMLAudioElement>
+
+      for (const audioStreamElement of audioStreamElements) {
+        audioStreamElement.volume = this.audio.volume / 100
+      }
+    }
+  },
 })
 </script>
 

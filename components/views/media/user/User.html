@@ -33,10 +33,11 @@
     />
     <TypographyTag :text="user.name" inverted />
   </div>
-  <div
-    v-if="!isLocal && !audio.deafened && audioStream"
-    class="audio-stream-container"
-  >
-    <audio :src-object.prop="audioStream" autoplay />
+    <div
+      v-if="!isLocal && !audio.deafened && audioStream"
+      class="audio-stream-container"
+    >
+      <audio :id="`audio-stream-${audioStream.id}`" :class="`${isLocal ? 'local' : 'remote'}-audio-stream`" :src-object.prop="audioStream" autoplay />
+    </div>
   </div>
 </div>
