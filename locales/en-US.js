@@ -680,7 +680,6 @@ export default {
     sent: 'Sent',
     no_friend_request: 'You have no new friend requests.',
     outgoing: 'Outgoing requests',
-    all: 'List of friends',
     blocked_friends: 'Blocked friends',
     blocked: 'Blocked',
     no_blocked: 'You have no blocked users, yay!',

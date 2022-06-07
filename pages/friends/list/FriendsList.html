@@ -65,20 +65,14 @@
       </div>
       <div class="column is-half-desktop">
         <!-- Friends List -->
-        <div
-          v-if="Object.entries(alphaSortedFriends).length && $device.isMobile"
-          class="padded_divider"
-        >
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
-        </div>
         <div v-if="dataState.friends === DataStateType.Loading">
           <UiLoadersFriend :count="5" />
         </div>
         <div v-else>
-          <div v-for="entry in Object.entries(alphaSortedFriends)">
-            <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
+          <div v-for="(value, key) in alphaSortedFriends" :key="key">
+            <span class="alpha-divider">{{ key }}</span>
             <FriendsFriend
-              v-for="friend in entry[1]"
+              v-for="friend in value"
               :friend="friend"
               :key="friend.address"
             />
