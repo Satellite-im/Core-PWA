@@ -38,7 +38,6 @@ export default Vue.extend({
         if (nextValue) {
           const { id } = this.$route.params
           this.getMessages(id)
-          this.subscribeToGroup(id)
           this.fetchGroupMembers(id)
         }
       },
@@ -51,12 +50,6 @@ export default Vue.extend({
       this.$data.groupMessages = await this.$store.dispatch(
         'textile/fetchGroupMessages',
         { groupId: id, setActive: true },
-      )
-    },
-    async subscribeToGroup(id: string) {
-      this.$data.groupMessages = await this.$store.dispatch(
-        'textile/subscribeToGroup',
-        { groupId: id },
       )
     },
     async fetchGroupMembers(id: string) {

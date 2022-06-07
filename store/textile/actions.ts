@@ -730,11 +730,14 @@ export default {
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
-    if ($TextileManager.groupChatManager?.isSubscribed()) {
+    if ($TextileManager.groupChatManager?.isSubscribed(groupId)) {
       return
     }
-
-    const group = getGroup(rootState, groupId)
+    let group: Group | undefined
+    try {
+      group = getGroup(rootState, groupId)
+    } catch {}
+    if (!group) return
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
     await $GroupChatManager.listenToGroupMessages(async (message) => {
