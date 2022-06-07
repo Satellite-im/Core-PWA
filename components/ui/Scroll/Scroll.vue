@@ -1,4 +1,4 @@
-<template src="./Scroll.html" />
+<template src="./Scroll.html"></template>
 
 <script>
 import Vue from 'vue'
