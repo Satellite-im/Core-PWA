@@ -6,36 +6,73 @@ import { RootState } from '~/types/store/store'
 import { getAlphaSorted } from '~/libraries/ui/Friends'
 
 export interface FriendsGetters {
+  /**
+   * @description Find friends based on textilePubkey
+   * @argument key Identifier for the search (query)
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   findFriendByKey(
     state: FriendsState,
   ): (identifier: string) => Friend | undefined
+  /**
+   * @description Find friends who are currently active by address
+   * @argument {string} address Address as the identifier for the search (query)
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   findFriendByAddress(
     state: FriendsState,
   ): (address: string) => Friend | undefined
+  /**
+   * @description Find friends who are currently active
+   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
+   */
   getActiveFriend(state: FriendsState): Friend | undefined
+  /**
+   * @argument address Address of the friend you are looking for
+   * @returns {boolean} whether friend exists
+   */
   friendExists(state: FriendsState): (address: string) => boolean
+  /**
+   * @name matchesActiveCall
+   * @description Find the first retrieved active call
+   * @returns object containing an active call in the form of the Friend interface if an active call are found, returns undefined if no active calls are found
+   */
   matchesActiveCall(
     state: FriendsState,
     getters: FriendsGetters,
     rootState: RootState,
   ): Friend | undefined
+  /**
+   * @name matchesSomeActiveCall
+   * @descriptionFind at minimum a single active call in the array (state), a single active call being found will return true; else it returns false
+   * @returns True if an active call are found, False if no active calls are found
+   */
   matchesSomeActiveCall(
     state: FriendsState,
     getters: FriendsGetters,
     rootState: RootState,
   ): boolean
+  /**
+   * @name alphaSortedFriends
+   * @description Get friends sorted by alpha
+   * @returns dictionary of Friends
+   */
   alphaSortedFriends(state: FriendsState): Dictionary<Friend[]>
+  /**
+   * @name alphaSortedOutgoing
+   * @description Get outgoing requests sorted by alpha
+   * @returns array of requests
+   */
   alphaSortedOutgoing(state: FriendsState): OutgoingRequest[]
+  /**
+   * @name friendsWithUnreadMessages
+   * @description filter friends based on the presence of unread messages
+   * @returns array of friends
+   */
   friendsWithUnreadMessages(state: FriendsState): Friend[]
 }
 
 const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
-  /**
-   * @name findFriend
-   * @description Find friends based on identifiers {name,address,textilePubkey}
-   * @argument identifier Identifier for the search (query)
-   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
-   */
   findFriendByKey:
     (state: FriendsState) =>
     (key: Friend['textilePubkey']): Friend | undefined => {
@@ -43,44 +80,19 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
         return f.textilePubkey === key
       })
     },
-  /**
-   * @name findFriendByAddress
-   * @description Find friends who are currently active by address
-   * @argument {string} address Address as the identifier for the search (query)
-   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
-   */
   findFriendByAddress:
     (state: FriendsState) =>
     (address: string): Friend | undefined => {
       return state.all.find((fr: Friend) => fr.address === address)
     },
-
-  /**
-   * @name getActiveFriend
-   * @description Find friends who are currently active
-   * @returns object containing an active friend in the form of the Friend interface if an active friend are found, returns undefined if no values satisfy the query
-   */
   getActiveFriend: (state: FriendsState): Friend | undefined => {
     return state.all.find((f) => f.state === 'online')
   },
-
-  /** @function
-   * Determine the existence of a friend
-   * @name friendExists
-   * @argument address Address of the friend you are looking for
-   * @returns True if friend is found (exists), False if friend is not found (does not exist)
-   */
   friendExists:
     (state: FriendsState) =>
     (address: string): boolean => {
       return state.all.some((fr: Friend) => fr.address === address)
     },
-
-  /**
-   * @name matchesActiveCall
-   * @description Find the first retrieved active call
-   * @returns object containing an active call in the form of the Friend interface if an active call are found, returns undefined if no active calls are found
-   */
   matchesActiveCall: (
     state: FriendsState,
     getters: FriendsGetters,
@@ -91,12 +103,6 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
         friend.address === rootState.webrtc.activeCall?.peerId,
     )
   },
-
-  /**
-   * @name matchesSomeActiveCall
-   * @descriptionFind at minimum a single active call in the array (state), a single active call being found will return true; else it returns false
-   * @returns True if an active call are found, False if no active calls are found
-   */
   matchesSomeActiveCall: (
     state: FriendsState,
     getters: FriendsGetters,
@@ -107,21 +113,9 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
         friend.address === rootState.webrtc.activeCall?.peerId,
     )
   },
-
-  /**
-   * @name alphaSortedFriends
-   * @description Get friends sorted by alpha
-   * @returns dictionary of Friends
-   */
   alphaSortedFriends: (state: FriendsState): Dictionary<Friend[]> => {
     return getAlphaSorted(state.all)
   },
-
-  /**
-   * @name alphaSortedOutgoing
-   * @description Get outgoing requests sorted by alpha
-   * @returns array of requests
-   */
   alphaSortedOutgoing: (state: FriendsState): OutgoingRequest[] => {
     return cloneDeep(state.outgoingRequests).sort(
       (a: OutgoingRequest, b: OutgoingRequest) =>
