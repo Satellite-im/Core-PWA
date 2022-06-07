@@ -136,9 +136,14 @@ export default Vue.extend({
       })
       this.isLoading = DataStateType.Ready
     },
-    handleClickPaginate(pageNum: number) {
+    async handleClickPaginate(pageNum: number) {
       this.page = pageNum
-      this.fetchResult()
+      await this.fetchResult()
+      if (!this.$refs.scrollRef) {
+        return
+      }
+      const scrollEl = this.$refs.scrollRef as Vue
+      scrollEl.$el.scrollTop = 0
     },
     onChange(value: any) {
       this.queryOptions = {
