@@ -48,7 +48,7 @@ export default {
    * @example
    */
   async createGroup(
-    _: ActionsArguments<GroupsState>,
+    {}: ActionsArguments<GroupsState>,
     { name }: { name: string },
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -66,12 +66,19 @@ export default {
    * @description leave a group chat
    */
   async leaveGroup(
-    { commit }: ActionsArguments<GroupsState>,
+    { commit, rootState }: ActionsArguments<GroupsState>,
     { group }: { group: Group },
   ) {
-    // TODO: handle leave for admin of group (adminLeave)
     const groupChatProgram = getGroupChatProgram()
-    await groupChatProgram.leave(group.id)
+    const myAddress = rootState.accounts.active
+    if (group.admin !== myAddress || group.members.length === 1) {
+      await groupChatProgram.leave(group.id)
+    } else {
+      // todo - select new admin logic. for now, just select a new user that isn't you
+      const newAdmin =
+        group.members.find((m) => m.address !== myAddress)?.address ?? ''
+      await groupChatProgram.adminLeave(group.id, newAdmin)
+    }
     await groupChatProgram.removeGroupListener(group.address)
     commit('removeGroup', group.id)
   },

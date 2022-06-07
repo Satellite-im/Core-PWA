@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/store/groups/types'
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   mixins: [ContextMenu],
@@ -18,15 +19,15 @@ export default Vue.extend({
       required: false,
     },
   },
-  data() {
-    return {
-      contextMenuValues: [
+  computed: {
+    contextMenuValues(): ContextMenuItem[] {
+      return [
         { text: this.$t('context.send'), func: this.testFunc },
         // { text: this.$t('context.voice'), func: this.testFunc },
         // { text: this.$t('context.video'), func: this.testFunc },
         { text: this.$t('context.leave_group'), func: this.leaveGroup },
-      ],
-    }
+      ]
+    },
   },
   methods: {
     testFunc(): void {
@@ -37,10 +38,9 @@ export default Vue.extend({
         await this.$store.dispatch('groups/leaveGroup', {
           group: this.group,
         })
-      } catch (e) {
-        // this.$toast.success(
-        //   this.$t('errors.friends.friend_not_removed') as string,
-        // )
+      } catch (e: any) {
+        this.$Logger.log('group', 'cannot leave', e)
+        this.$toast.error(this.$t('errors.friends.leaving_group') as string)
       }
     },
     /**
