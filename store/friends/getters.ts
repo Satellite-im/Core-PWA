@@ -33,7 +33,6 @@ export interface FriendsGetters {
    */
   friendExists(state: FriendsState): (address: string) => boolean
   /**
-   * @name matchesActiveCall
    * @description Find the first retrieved active call
    * @returns object containing an active call in the form of the Friend interface if an active call are found, returns undefined if no active calls are found
    */
@@ -43,7 +42,6 @@ export interface FriendsGetters {
     rootState: RootState,
   ): Friend | undefined
   /**
-   * @name matchesSomeActiveCall
    * @descriptionFind at minimum a single active call in the array (state), a single active call being found will return true; else it returns false
    * @returns True if an active call are found, False if no active calls are found
    */
@@ -53,19 +51,16 @@ export interface FriendsGetters {
     rootState: RootState,
   ): boolean
   /**
-   * @name alphaSortedFriends
    * @description Get friends sorted by alpha
    * @returns dictionary of Friends
    */
   alphaSortedFriends(state: FriendsState): Dictionary<Friend[]>
   /**
-   * @name alphaSortedOutgoing
    * @description Get outgoing requests sorted by alpha
    * @returns array of requests
    */
   alphaSortedOutgoing(state: FriendsState): OutgoingRequest[]
   /**
-   * @name friendsWithUnreadMessages
    * @description filter friends based on the presence of unread messages
    * @returns array of friends
    */
