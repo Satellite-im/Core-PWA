@@ -19,7 +19,7 @@
     :placeholder="$t('pages.chat.new_group_name')"
     :minLength="$Config.chat.groupNameMinLength"
     :maxLength="$Config.chat.groupNameMaxLength"
-    :invalid="isInvalidName"
+    :invalid="isInvalidName && Boolean(error)"
   />
   <TypographyError v-if="error" :text="error" small />
   <InteractablesButton
