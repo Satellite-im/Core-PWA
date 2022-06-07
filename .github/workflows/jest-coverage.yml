@@ -4,9 +4,11 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: raulanatol/jest-coverage-comment-action@v1.2.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}'
+    coverage:
+        permissions:
+          checks: write
+          pull-requests: write
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: ArtiomTr/jest-coverage-report-action@v2
