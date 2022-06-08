@@ -465,7 +465,7 @@ export default {
           friendAccountKey,
           encryptedTextilePublicKey,
         )
-
+        await dispatch('textile/subscribeToMailbox', {}, { root: true })
         // Request has been successfully accepted
         // fetch the friend details
         dispatch('fetchFriendDetails', account)

@@ -355,8 +355,8 @@ describe('', () => {
 
   test('module.default.initialize', () => {
     const dispatch = jest.fn()
-
-    module.default.initialize({ dispatch })
+    const state = { ...GroupsInitialState }
+    module.default.initialize({ dispatch, state })
     expect(dispatch).toHaveBeenCalledWith('fetchGroups')
     expect(dispatch).toHaveBeenCalledWith('subscribeToGroupInvites')
     expect(dispatch).toHaveBeenCalledWith('subscribeToGroupsUpdate')

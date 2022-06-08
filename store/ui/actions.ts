@@ -11,6 +11,8 @@ import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
 import { AlertState, AlertType } from '~/libraries/ui/Alerts'
+import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const $Sounds = new SoundManager()
 
@@ -90,8 +92,13 @@ export default {
     payload: {
       message: string
       from: string
-      fromAddress: string
+      groupName?: string
+      id: string
+      groupId?: string
+      groupURL?: string
+      fromAddress?: string
       imageHash: string
+      activeUser?: string
       title: string
       type: AlertType
     },
@@ -102,18 +109,23 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
     if (rootState.textile.activeConversation !== payload.fromAddress) {
-      const notificationResponse =
-        await $TextileManager.notificationManager?.sendNotification({
-          from: payload.from,
-          id: uuidv4(),
-          title: payload.title,
-          notificationState: AlertState.UNREAD,
-          imageHash: payload.imageHash,
-          message: payload.message,
-          type: payload.type,
-        })
-
-      commit('sendNotification', notificationResponse)
+      const userId = $TextileManager.getIdentityPublicKey()
+      if (userId !== payload.fromAddress) {
+        const notificationResponse =
+          await $TextileManager.notificationManager?.sendNotification({
+            from: payload.from,
+            title: payload.title,
+            groupName: payload.groupName,
+            groupId: payload.groupId,
+            id: payload.id,
+            notificationState: AlertState.UNREAD,
+            fromAddress: payload.fromAddress,
+            imageHash: payload.imageHash,
+            message: payload.message,
+            type: payload.type,
+          })
+        commit('sendNotification', notificationResponse)
+      }
     }
   },
   /**
