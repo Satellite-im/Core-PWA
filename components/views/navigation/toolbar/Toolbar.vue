@@ -85,7 +85,11 @@ export default Vue.extend({
             members?.includes(friend.address) && friend.state === 'online',
         )
       }
-      return this.friends.all.some((friend) => friend.state === 'online')
+      // Check current recipient is on the user's friends list
+      const friend = this.friends.all.find(
+        (f) => f.address === this.recipient.address,
+      )
+      return friend?.state === 'online'
     },
     ModalWindows: () => ModalWindows,
     src(): string {
