@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'UserPicker',
@@ -12,20 +13,21 @@ export default Vue.extend({
     filter: '',
   }),
   computed: {
-    ...mapState(['friends']),
-    filteredFriends() {
+    ...mapState({
+      friends: (state) => (state as RootState).friends.all,
+    }),
+    filteredFriends(): Friend[] {
       if (this.filter) {
         const filterLower = this.filter.toLowerCase()
-        return this.friends.all.filter((friend: Friend) => {
+        return this.friends.filter((friend: Friend) => {
           return friend.name.toLowerCase().includes(filterLower)
         })
       }
-      return this.friends.all
+      return this.friends
     },
   },
   watch: {
     selected() {
-      console.log('emit', this.selected)
       this.$emit('input', this.selected)
     },
   },
