@@ -50,6 +50,9 @@
             v-model="name"
             input-kind="text"
             type="primary"
+            :minLength="$Config.account.minLength"
+            :maxLength="$Config.account.maxLength"
+            :invalid="isInvalidName && Boolean(error)"
           />
         </div>
 

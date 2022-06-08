@@ -15,7 +15,6 @@ export default Vue.extend({
   data() {
     return {
       showCropper: false,
-      creating: '',
       croppedImage: '',
       imageUrl: '',
       name: '',
@@ -33,11 +32,12 @@ export default Vue.extend({
      * @description If the account isn't the length specified in the config, this returns False, true if correct length
      * @example this.accountValidLength
      */
-    accountValidLength(): boolean {
-      if (this.name.trim().length < this.$Config.account.minimumAccountLength) {
-        return false
-      }
-      return true
+    isInvalidName(): boolean {
+      return (
+        !this.name ||
+        this.name.trim().length < this.$Config.account.minLength ||
+        this.name.trim().length > this.$Config.account.maxLength
+      )
     },
     /**
      * @method acceptableImageFormats
@@ -169,14 +169,18 @@ export default Vue.extend({
      * @example this.onConfirm()
      */
     confirm(e: Event) {
-      e.preventDefault()
       if (this.isLoading) {
-        return false
+        return
       }
-      if (!this.accountValidLength) {
-        this.error = this.$t('user.registration.username_error') as string
-        return false
+      if (this.isInvalidName) {
+        this.error = this.$t('user.registration.username_error', {
+          min: this.$Config.account.minLength,
+          max: this.$Config.account.maxLength,
+        }) as string
+        return
       }
+      e.preventDefault()
+
       this.error = ''
 
       this.$emit('confirm', {
