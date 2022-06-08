@@ -6,30 +6,24 @@ import { SettingsState } from '~/store/settings/types'
 export interface SettingsGetters {
   /**
    * @description return localized timestamp
-   * @argument {number} timestamp unix timestamp
+   * @argument {number} time unix timestamp
    * @returns {string} formatted time
    * @example (23423424) => 2:49 PM
+   * @example (23423424, full) => 6/6/22 2:49 PM
    */
-  getTimestamp(state: SettingsState): (timestamp: number) => string
-  /**
-   * @description return localized timestamp, including date
-   * @argument {number} timestamp unix timestamp
-   * @returns {string} formatted time and date
-   * @example (23423424) => 6/6/22 2:49 PM
-   */
-  getFullTimestamp(state: SettingsState): (timestamp: number) => string
+  getTimestamp(
+    state: SettingsState,
+  ): ({ time, full }: { time: number; full?: boolean }) => string
 }
 
 const getters: GetterTree<SettingsState, RootState> & SettingsGetters = {
   getTimestamp:
     (state: SettingsState) =>
-    (timestamp: number): string => {
-      return extendedDayjs(timestamp).local().tz(state.timezone).format('LT')
-    },
-  getFullTimestamp:
-    (state: SettingsState) =>
-    (timestamp: number): string => {
-      return extendedDayjs(timestamp).local().tz(state.timezone).format('L LT')
+    ({ time, full }): string => {
+      return extendedDayjs(time)
+        .local()
+        .tz(state.timezone)
+        .format(full ? 'L LT' : 'LT')
     },
 }
 

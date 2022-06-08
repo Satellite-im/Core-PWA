@@ -68,7 +68,7 @@ export default Vue.extend({
         ?.members?.find((it: GroupMember) => it.address === this.group.sender)
     },
     timestamp(): string {
-      return this.getTimestamp(this.group.at)
+      return this.getTimestamp({ time: this.group.at })
     },
     address(): string {
       if (this.group.sender) {

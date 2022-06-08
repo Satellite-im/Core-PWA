@@ -8,11 +8,14 @@ const state = {
 
 describe('settings.getters', () => {
   test('getTimestamp', () => {
-    const actual = getters.getTimestamp(state)(1654486643615)
+    const actual = getters.getTimestamp(state)({ time: 1654486643615 })
     expect(actual).toMatchSnapshot()
   })
   test('getFullTimestamp', () => {
-    const actual = getters.getFullTimestamp(state)(1654486643615)
+    const actual = getters.getTimestamp(state)({
+      time: 1654486643615,
+      full: true,
+    })
     expect(actual).toMatchSnapshot()
   })
 })

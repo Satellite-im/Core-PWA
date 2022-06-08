@@ -54,7 +54,7 @@ export default Vue.extend({
       return getUsernameFromState(this.reply.from, this.$store.state)
     },
     timestamp() {
-      return this.getTimestamp(this.reply.at)
+      return this.getTimestamp({ time: this.reply.at })
     },
     src(): string {
       // To check if the sender is you we just compare the from field
