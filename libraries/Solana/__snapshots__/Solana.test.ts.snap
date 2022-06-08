@@ -1,17 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Solana.getClusterFromNetworkConfig 0 1`] = `"https://api.mainnet-beta.solana.com/"`;
-
-exports[`Solana.getClusterFromNetworkConfig 1 1`] = `"https://api.testnet.solana.com"`;
-
-exports[`Solana.getClusterFromNetworkConfig 2 1`] = `"https://api.devnet.solana.com"`;
-
-exports[`Solana.getClusterFromNetworkConfig 3 1`] = `"https://api.devnet.solana.com"`;
-
-exports[`Solana.getClusterFromNetworkConfig 4 1`] = `"https://api.devnet.solana.com"`;
-
-exports[`Solana.getClusterFromNetworkConfig 5 1`] = `"http://localhost:8899"`;
-
 exports[`Solana.sleep 0 1`] = `Promise {}`;
 
 exports[`Solana.sleep 1 1`] = `Promise {}`;

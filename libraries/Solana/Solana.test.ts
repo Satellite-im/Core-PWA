@@ -1,34 +1,22 @@
 import { web3 } from '@project-serum/anchor'
 import * as Solana from '~/libraries/Solana/Solana'
 
-describe.skip('Solana.getClusterFromNetworkConfig', () => {
+describe('Solana.getClusterFromNetworkConfig', () => {
   test('0', () => {
     const result: any = Solana.getClusterFromNetworkConfig('mainnet-beta')
-    expect(result).toMatchSnapshot()
+    expect(result).toBe('https://api.mainnet-beta.solana.com/')
   })
   test('1', () => {
     const result: any = Solana.getClusterFromNetworkConfig('testnet')
-    expect(result).toMatchSnapshot()
+    expect(result).toBe('https://api.testnet.solana.com')
   })
-
   test('2', () => {
-    const result: any = Solana.getClusterFromNetworkConfig('West')
-    expect(result).toMatchSnapshot()
-  })
-
-  test('3', () => {
-    const result: any = Solana.getClusterFromNetworkConfig('North')
-    expect(result).toMatchSnapshot()
-  })
-
-  test('4', () => {
-    const result: any = Solana.getClusterFromNetworkConfig('')
-    expect(result).toMatchSnapshot()
-  })
-
-  test('5', () => {
     const result: any = Solana.getClusterFromNetworkConfig('local')
-    expect(result).toMatchSnapshot()
+    expect(result).toBe('http://localhost:8899')
+  })
+  test('3', () => {
+    const result: any = Solana.getClusterFromNetworkConfig('random_string')
+    expect(result).toBe('https://api.devnet.solana.com')
   })
 })
 
