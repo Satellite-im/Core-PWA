@@ -57,7 +57,7 @@ export default Vue.extend({
     ...mapGetters('textile', ['getConversation']),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
-      return this.user.state === 'online'
+      return this.enableRTC
         ? [
             { text: this.$t('context.send'), func: this.navigateToUser },
             { text: this.$t('context.voice'), func: this.handleCall },
@@ -125,9 +125,6 @@ export default Vue.extend({
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
-    // testFunc() {
-    //   this.$Logger.log('User Context', 'Test func')
-    // },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC) {
         return
