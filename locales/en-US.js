@@ -30,11 +30,9 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    are: 'are',
-    is: 'is',
     live: 'Live',
     edited: 'edited',
-    online: 'All Users are offline | {name} is online | {name} are online',
+    online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
   },
   wallet: {
@@ -69,8 +67,7 @@ export default {
     groups: 'Groups',
     pin: 'Pin',
     reply: 'Reply',
-    typing: 'typing',
-    many_typing: 'many users are typing',
+    typing: '{user} is typing | {user} are typing',
     new_messages: 'New Messages',
     say_hi: 'Say hi! 👋',
     user_sent: {

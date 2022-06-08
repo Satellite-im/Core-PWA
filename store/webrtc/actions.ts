@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import type { SignalData } from 'simple-peer'
-import { ConversationParticipant } from '../conversation/types'
+import {
+  ConversationActivity,
+  ConversationParticipant,
+} from '../conversation/types'
 import { WebRTCState } from './types'
 
 import { ActionsArguments } from '~/types/store/store'
