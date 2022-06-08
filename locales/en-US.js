@@ -684,7 +684,7 @@ export default {
     blocked_friends: 'Blocked friends',
     blocked: 'Blocked',
     no_blocked: 'You have no blocked users, yay!',
-    search_placeholder: 'Some User...',
+    search_placeholder: 'Search friends...',
     add: 'Add Friend',
     add_description:
       "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
