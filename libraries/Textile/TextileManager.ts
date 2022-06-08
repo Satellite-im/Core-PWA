@@ -1,17 +1,17 @@
 import { MetadataManager } from './MetadataManager'
 import { UserInfoManager } from './UserManager'
+import { Config } from '~/config'
 import { PersonalBucket } from '~/libraries/Files/remote/textile/PersonalBucket'
 import { SharedBucket } from '~/libraries/Files/remote/textile/SharedBucket'
-import { Config } from '~/config'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 import {
   Creds,
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
-import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 
 export default class TextileManager {
   creds?: Creds
@@ -70,36 +70,35 @@ export default class TextileManager {
     }
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
-    await this.mailboxManager.init()
-
     this.sharedBucket = new SharedBucket(textile)
-    await this.sharedBucket.init({
-      name: Config.textile.sharedBucket,
-    })
-
     this.personalBucket = new PersonalBucket(textile)
-    await this.personalBucket.init({
-      name: Config.textile.personalBucket,
-      encrypted: true,
-    })
-
     // GroupChatManager initializes itself during the creation
     this.groupChatManager = new GroupChatManager(
       textile,
       textile.wallet.address,
       textile.identity,
     )
-    await this.groupChatManager.init()
     // MetadataManager initializes itself during the creation
     this.metadataManager = new MetadataManager(textile)
-    await this.metadataManager.init()
-
     // UserInfoManager initializes itself during the creation
     this.userInfoManager = new UserInfoManager(textile)
-    await this.userInfoManager.init()
-
     this.notificationManager = new NotificationManager(textile)
-    await this.notificationManager.init()
+
+    // await all the managers to be initialized
+    await Promise.all([
+      this.mailboxManager.init(),
+      this.sharedBucket.init({
+        name: Config.textile.sharedBucket,
+      }),
+      this.personalBucket.init({
+        name: Config.textile.personalBucket,
+        encrypted: true,
+      }),
+      this.groupChatManager.init(),
+      this.metadataManager.init(),
+      this.userInfoManager.init(),
+      this.notificationManager.init(),
+    ])
   }
 
   /**
