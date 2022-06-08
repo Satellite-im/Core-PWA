@@ -73,6 +73,7 @@ export default {
       await dispatch('updateUserThreadData', {
         consentToScan: false,
         blockNsfw: true,
+        flipVideo: true,
       })
       return textilePublicKey
     }
@@ -1057,10 +1058,12 @@ export default {
     {
       consentToScan,
       blockNsfw,
+      flipVideo,
       filesVersion,
     }: {
       consentToScan?: boolean
       blockNsfw?: boolean
+      flipVideo?: boolean
       filesVersion?: number
     },
   ) {
@@ -1076,6 +1079,7 @@ export default {
       await $UserInfoManager.updateRecord({
         consentToScan,
         blockNsfw,
+        flipVideo,
         filesVersion,
       }),
     )

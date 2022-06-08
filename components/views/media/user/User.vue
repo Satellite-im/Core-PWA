@@ -13,6 +13,7 @@ import { User } from '~/types/ui/user'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 import { PeerMutedState } from '~/store/webrtc/types'
+import { RootState } from '~/types/store/store'
 
 async function loadVideos() {
   const videos = document.querySelectorAll(
@@ -40,7 +41,7 @@ export default Vue.extend({
   props: {
     user: {
       type: Object as PropType<User>,
-      default: () => {},
+      required: true,
     },
     calling: {
       type: Boolean,
@@ -56,7 +57,12 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+      flipVideo: (state) => (state as RootState).textile.userThread.flipVideo,
+    }),
     call() {
       return (
         this.user?.peerId &&
