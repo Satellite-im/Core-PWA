@@ -475,11 +475,11 @@ export default {
     dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
-      message: sendFileResult,
+      message: { ...sendFileResult, width: file.width, height: file.height },
     })
     await dispatch('storeMessage', {
       address: friend.address,
-      message: sendFileResult,
+      message: { ...sendFileResult, width: file.width, height: file.height },
     })
     commit('setMessageLoading', { loading: false })
   },
@@ -1032,11 +1032,11 @@ export default {
     dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
-      message: sendFileResult,
+      message: { ...sendFileResult, width: file.width, height: file.height },
     })
     dispatch('storeMessage', {
       address: groupID,
-      message: sendFileResult,
+      message: { ...sendFileResult, width: file.width, height: file.height },
     })
   },
   /**
