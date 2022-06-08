@@ -19,7 +19,6 @@ import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
 import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
-import { ConversationParticipant } from '~/store/conversation/types'
 
 export default Vue.extend({
   components: {
@@ -36,7 +35,6 @@ export default Vue.extend({
   data() {
     return {
       showEmojiPicker: false,
-      recipientTyping: false,
       nsfwUploadError: false,
       files: [] as Array<UploadDropItemType>,
     }
@@ -52,9 +50,6 @@ export default Vue.extend({
       textile: (state) => (state as RootState).textile,
       conversation: (state) => (state as RootState).conversation,
     }),
-    activeFriend(): ConversationParticipant {
-      return this.conversation?.participants?.[0]
-    },
     /**
      * @method charlimit DocsTODO
      * @description Checks if current text is longer than the max character limit
@@ -136,18 +131,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    'friends.all': {
-      handler() {
-        const activeFriend = this.getActiveFriend
-        if (activeFriend)
-          this.recipientTyping =
-            activeFriend.typingState === PropCommonEnum.TYPING
-      },
-    },
-    'conversation.participants': {
-      handler() {},
-      deep: true,
-    },
     'recipient.address': {
       handler(value) {
         const findItem = this.chat.chatTexts.find(
