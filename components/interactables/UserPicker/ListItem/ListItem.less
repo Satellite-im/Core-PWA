@@ -1,0 +1,19 @@
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: @light-spacing;
+  cursor: pointer;
+  padding: @light-spacing;
+  padding-right: @normal-spacing;
+
+  &:hover {
+    background: @semitransparent-light-gradient;
+  }
+
+  .name {
+    font-size: @mini-text-size;
+    flex-grow: 1;
+
+  }
+}
