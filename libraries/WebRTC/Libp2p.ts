@@ -233,8 +233,6 @@ export class Peer2Peer extends Emitter<P2PListeners> {
           const peerId = connection.remotePeer
           const message = JSON.parse(msg)
 
-          console.log(msg)
-
           if (
             [
               'peer:call',
