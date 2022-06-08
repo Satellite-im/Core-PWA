@@ -4,8 +4,8 @@ const mutations = {
   mute(state: AudioState) {
     state.muted = !state.muted
   },
-  setMuted(state: AudioState, muted: boolean) {
-    state.muted = muted
+  setMuted(state: AudioState) {
+    state.muted = !state.muted
   },
   deafen(state: AudioState) {
     const isDeafened = state.deafened
