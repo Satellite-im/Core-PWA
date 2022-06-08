@@ -215,7 +215,6 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }
-
     MailboxManager.listenToInboxMessages((message) => {
       if (!message) {
         return
@@ -759,7 +758,7 @@ export default {
             from: userInfo?.name,
             fromAddress: urlMatch,
             title: `Notification`,
-            groupName: group.name,
+            groupName: group?.name,
             groupId,
             id: uuidv4(),
             groupURL: message.to,
@@ -1111,7 +1110,11 @@ export default {
   /**
    * @description listen for user data thread changes and update store accordingly
    */
-  async listenToThread({ commit, rootState }: ActionsArguments<TextileState>) {
+  async listenToThread({
+    commit,
+    rootState,
+    dispatch,
+  }: ActionsArguments<TextileState>) {
     const $UserInfoManager: UserInfoManager =
       Vue.prototype.$TextileManager?.userInfoManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
@@ -1125,6 +1128,7 @@ export default {
       }
       commit('textile/setUserThreadData', update.instance, { root: true })
     }
+    await dispatch('textile/subscribeToMailbox', {}, { root: true })
     $UserInfoManager.textile.client.listen(
       $UserInfoManager.threadID,
       [],

@@ -1,7 +1,5 @@
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
-import { Update } from '@textile/hub-threads-client'
-import nextTick from 'vue'
 import {
   AccountsError,
   AccountsState,

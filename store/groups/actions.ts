@@ -145,7 +145,6 @@ export default {
     if (state.inviteSubscription !== null) {
       await dispatch('unsubscribeFromGroupInvites')
     }
-
     const id = getGroupChatProgram().addInviteListener((payload) => {
       commit('addGroup', { ...payload, members: [] })
       dispatch('fetchGroupMembers', payload.id)
@@ -200,6 +199,7 @@ export default {
     { state, dispatch, commit }: ActionsArguments<GroupsState>,
     groupId: string,
   ) {
+    await dispatch('textile/subscribeToGroup', { groupId }, { root: true })
     if (!state.groupSubscriptions.includes(groupId)) {
       const id = await getGroupChatProgram().addGroupListener(
         groupId,
@@ -240,7 +240,6 @@ export default {
     if (!state.all.find((group) => group.id === groupId)) {
       const groupProgram = getGroupChatProgram()
       const group = await groupProgram.getGroupById(groupId)
-
       commit('addGroup', group)
     }
   },
