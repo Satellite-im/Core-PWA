@@ -17,13 +17,13 @@ export default Vue.extend({
       friends: (state) => (state as RootState).friends.all,
     }),
     filteredFriends(): Friend[] {
-      if (this.filter) {
-        const filterLower = this.filter.toLowerCase()
-        return this.friends.filter((friend: Friend) => {
-          return friend.name.toLowerCase().includes(filterLower)
-        })
+      if (!this.filter) {
+        return this.friends
       }
-      return this.friends
+      const filterLower = this.filter.toLowerCase()
+      return this.friends.filter((friend: Friend) => {
+        return friend.name.toLowerCase().includes(filterLower)
+      })
     },
   },
   watch: {
