@@ -120,17 +120,9 @@ describe('default functions', () => {
       { root: true },
     )
 
-    expect(dispatch).toBeCalledWith('friends/fetchFriends', {}, { root: true })
-    expect(dispatch).toBeCalledWith(
-      'friends/fetchFriendRequests',
-      {},
-      { root: true },
-    )
-    expect(dispatch).toBeCalledWith(
-      'friends/subscribeToFriendsEvents',
-      {},
-      { root: true },
-    )
+    expect(dispatch).toBeCalledWith('fetchFriends', {})
+    expect(dispatch).toBeCalledWith('fetchFriendRequests', {})
+    expect(dispatch).toBeCalledWith('subscribeToFriendsEvents', {})
   })
   test('module.default.removeFriend without payer account', async () => {
     const BCConstructor = BlockchainClient

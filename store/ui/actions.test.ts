@@ -508,6 +508,59 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
+  test('showProfile with no passed-in user metadata argument', async () => {
+    const TMConstructor = Vue.prototype.$TextileManager
+    TMConstructor.metadataManager = jest.fn()
+    TMConstructor.metadataManager.getFriendMetadata = jest
+      .fn()
+      .mockReturnValueOnce({
+        note: 'friend metadata',
+      })
+
+    const commit = jest.fn()
+    const rootState = { ...initialRootState }
+    const dispatch = jest.fn()
+    const argument = rootState.friends.all
+
+    argument.metadata = {
+      publicKey: 'NoWiFi4you',
+      typingState: 'NOT_TYPING',
+      item: {},
+      pending: true,
+      encryptedTextilePubkey: '',
+      name: 'Taurus Nix',
+      address: 'QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi', // ADDRESS FOR PEER ID
+      account: {
+        accountId: 'Checking Account',
+        from: '.',
+        status: 429,
+        fromMailboxId: '12345',
+        toMailboxId: 'v4.0.0-rc.4',
+        to: './path/to/file',
+      },
+      textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+      status: '',
+      state: 'idle',
+      unreadCount: 123,
+      profilePicture: '',
+      badge: 'community',
+      userAccount: '',
+      mailboxId: '',
+      metadata: {
+        // Notice this existing metadata
+        note: 'metadata',
+      },
+    }
+
+    const result = await actions.default.showProfile(
+      { commit, rootState, dispatch },
+      argument,
+    )
+    expect(
+      TMConstructor.metadataManager.getFriendMetadata,
+    ).not.toHaveBeenCalled() // Because it has metadata, the function should note be called
+    expect(result).toBeUndefined()
+  })
   test('sendNotification with initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()

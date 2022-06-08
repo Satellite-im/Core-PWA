@@ -1,7 +1,7 @@
+import { WebRTCEnum } from '~/libraries/Enums/enums'
+
 export type PeerMutedState = {
-  audio: boolean
-  video: boolean
-  screen: boolean
+  [key in WebRTCEnum]: boolean
 }
 export type StreamMutedState = {
   [key: string]: PeerMutedState

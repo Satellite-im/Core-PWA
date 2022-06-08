@@ -65,13 +65,10 @@
           <div class="column is-half-desktop">
             <!-- Friends List -->
             <div v-if="dataState.friends !== DataStateType.Loading">
-              <div
-                v-for="entry in Object.entries(alphaSortedFriends)"
-                :key="entry[0].toUpperCase()"
-              >
-                <span class="alpha-divider">{{ entry[0].toUpperCase() }}</span>
+              <div v-for="(value, key) in filteredList" :key="key">
+                <span class="alpha-divider">{{ key }}</span>
                 <FriendsFriend
-                  v-for="friend in entry[1]"
+                  v-for="friend in value"
                   :key="friend.address"
                   :friend="friend"
                 />
@@ -95,28 +92,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   MenuIcon,
   UserPlusIcon,
   UserCheckIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
+import { Dictionary } from 'lodash'
 import { DataStateType } from '~/store/dataState/types'
-
-import { getAlphaSorted } from '~/libraries/ui/Friends'
 import { Friend } from '~/types/ui/friends'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
+import { RootState } from '~/types/store/store'
+import { ContextMenuItem } from '~/store/ui/types'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    friends: any
-    initRoute: () => void
-    searchResult: () => Friend[]
-    navigateToBlock: () => void
-    swiperSlideIndex: number
-  }
-}
 export default Vue.extend({
   name: 'FriendsList',
   components: {
@@ -132,45 +121,44 @@ export default Vue.extend({
       route: 'active',
       featureReadyToShow: false,
       search: '',
-      contextMenuValues: [
-        {
-          text: this.$t('friends.blocked_friends'),
-          func: this.navigateToBlock,
-        },
-      ],
     }
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['friends', 'dataState']),
-    alphaSortedFriends() {
-      return getAlphaSorted(this.searchResult())
-    },
-
-    isNoFriends() {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      friends: (state) => (state as RootState).friends,
+      dataState: (state) => (state as RootState).dataState,
+    }),
+    ...mapGetters('friends', [
+      'alphaSortedFriends',
+      'alphaSortedFriendsSearch',
+    ]),
+    isNoFriends(): boolean {
       return (
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
       )
     },
-    swiperSlideIndex() {
-      return this.$store.state.ui.swiperSlideIndex
+    swiperSlideIndex(): number {
+      return this.ui.swiperSlideIndex
     },
-    showSidebar() {
+    showSidebar(): boolean {
       return this.$store.state.ui.showSidebar
+    },
+    contextMenuValues(): ContextMenuItem[] {
+      return [
+        {
+          text: this.$t('friends.blocked_friends'),
+          func: this.navigateToBlock,
+        },
+      ]
+    },
+    filteredList(): Dictionary<Friend[]> {
+      return this.alphaSortedFriendsSearch(this.search)
     },
   },
   methods: {
-    /**
-     * @method searchResult
-     * @description filter the friends list by search
-     * @returns returns the filtered friends list by search keyword
-     */
-    searchResult(): Friend[] {
-      return this.friends.all.filter((user: Friend) =>
-        user.name.toLowerCase().includes(this.search.toLowerCase()),
-      )
-    },
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.showSidebar)
       if (this.$device.isMobile) {

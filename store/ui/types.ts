@@ -109,6 +109,7 @@ export enum ModalWindows {
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
   CROP = 'crop',
+  CREATE_GROUP = 'creategroup',
 }
 
 export interface EnhancerInfo {
@@ -174,7 +175,7 @@ export interface UIState {
   showSearchResult: boolean
   showSidebar: boolean
   modals: {
-    [key: string]: boolean | object
+    [key in ModalWindows]: boolean | object
   }
   glyphModalPack: string
   chatbarContent: string

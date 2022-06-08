@@ -1,5 +1,7 @@
+import type { AudioState } from './types'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ActionsArguments } from '~/types/store/store'
 
 export default {
   /**
@@ -7,8 +9,11 @@ export default {
    * @description Toggles mute for outgoing audio
    * @example @click="toggleMute"
    */
-  toggleMute({ state, commit, dispatch, rootState }: any) {
-    const muted = !state.muted
+  toggleMute(
+    { state, commit, dispatch, rootState }: ActionsArguments<AudioState>,
+    muted: boolean,
+  ) {
+    muted = muted ?? !state.muted
     const { activeCall } = rootState.webrtc
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
 

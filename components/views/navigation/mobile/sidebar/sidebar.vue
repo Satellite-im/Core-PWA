@@ -89,7 +89,7 @@
         horizontal
       />
 
-      <FriendsQuick v-click-outside="toggleModal" />
+      <FriendsQuick v-if="ui.modals.quickchat" v-click-outside="toggleModal" />
       <div
         v-if="ui.showSidebarUsers"
         v-scroll-lock="true"

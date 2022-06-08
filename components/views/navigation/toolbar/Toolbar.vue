@@ -89,7 +89,7 @@ export default Vue.extend({
     },
     ModalWindows: () => ModalWindows,
     src(): string {
-      const hash = this.recipient?.profilePicture
+      const hash = (this.recipient as Friend).profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     isGroup(): boolean {

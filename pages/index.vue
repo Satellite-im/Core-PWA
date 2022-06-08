@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { AccountsError } from '~/store/accounts/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Main',
@@ -19,12 +20,13 @@ export default Vue.extend({
     return {}
   },
   computed: {
-    ...mapGetters('accounts', ['getEncryptedPhrase', 'getActiveAccount']),
     ...mapGetters(['allPrerequisitesReady']),
-    ...mapState(['accounts']),
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+    }),
     // Helper method for prettier loading messages
     loadingStep(): string {
-      switch (this.getActiveAccount) {
+      switch (this.accounts.active) {
         default:
           return this.$i18n.t('user.loading.loading_account').toString()
       }
@@ -41,7 +43,7 @@ export default Vue.extend({
   },
   mounted() {
     // Handle the case that the wallet is not found
-    if (this.getEncryptedPhrase === '') {
+    if (this.accounts.encryptedPhrase === '') {
       this.$router.replace('/setup/disclaimer')
       return
     }

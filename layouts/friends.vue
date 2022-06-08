@@ -34,8 +34,6 @@
           <Sidebar
             v-if="!$device.isMobile"
             :show-menu="toggleMenu"
-            :users="friends.all"
-            :groups="groups.all"
             :sidebar="showSidebar"
           />
         </swiper-slide>

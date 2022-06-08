@@ -11,7 +11,13 @@
       <div class="custom-modal-content">
         <div class="columns">
           <div class="column image">
-            <UiCircle type="image" :source="croppedImage" :size="120" />
+            <UiCircle
+              type="image"
+              :type="croppedImage ? 'image' : 'random'"
+              :seed="accountAddress"
+              :source="croppedImage"
+              :size="120"
+            />
           </div>
           <div class="column align">
             <TypographyText

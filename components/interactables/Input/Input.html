@@ -9,7 +9,8 @@
   >
     <input
       v-model="internalText"
-      :class="`input is-${size} is-${type}`"
+      class="input"
+      :class="{invalid : invalid, [`is-${size} is-${type}`]: true}"
       :readonly="readonly"
       :disabled="disabled"
       :type="inputKind"
@@ -17,6 +18,9 @@
       @input="update"
       ref="input"
       :maxLength="maxLength"
+      :minLength="minLength"
+      @keydown.space="preventLeadingSpace"
+      @paste="preventEmptyPaste"
     />
     <button
       v-if="deleteIcon && internalText.length"

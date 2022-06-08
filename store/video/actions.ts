@@ -4,22 +4,29 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 const videoActions = {
-  toggle(
+  toggleMute(
     { state, commit, dispatch, rootState }: ActionsArguments<VideoState>,
-    disabled = !state.disabled,
+    disabled?: boolean,
   ) {
+    disabled = disabled ?? !state.disabled
     const { activeCall } = rootState.webrtc
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
 
     commit('setDisabled', disabled)
 
-    if (disabled) {
-      if (call) call.unmute({ kind: 'audio' })
-      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
+    dispatch('sounds/playSound', disabled ? Sounds.MUTE : Sounds.UNMUTE, {
+      root: true,
+    })
+
+    if (!call) {
       return
     }
-    if (call) call.mute({ kind: 'audio' })
-    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
+
+    if (disabled) {
+      call.mute({ kind: 'video' })
+      return
+    }
+    call.unmute({ kind: 'video' })
   },
 }
 

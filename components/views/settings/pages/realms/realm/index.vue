@@ -9,7 +9,7 @@ export default Vue.extend({
   props: {
     realm: {
       type: Object as PropType<Realm>,
-      default: {},
+      default: () => ({}),
     },
   },
   computed: {

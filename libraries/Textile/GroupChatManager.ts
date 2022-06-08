@@ -15,6 +15,7 @@ import { groupChatSchema } from '~/libraries/Textile/schema'
 import { AccountsError } from '~/store/accounts/types'
 import {
   ConversationQuery,
+  MailboxSubscriptionType,
   Message,
   MessageCallback,
   MessageFromThread,
@@ -29,7 +30,9 @@ export class GroupChatManager {
   textile: TextileInitializationData
   identity: Identity
   listeners: {
-    message?: (reply?: Update<any> | undefined, err?: Error | undefined) => void
+    message: {
+      [id: string]: (reply?: Update<any>, err?: Error) => void
+    }
   }
 
   constructor(
@@ -40,7 +43,9 @@ export class GroupChatManager {
     this.identity = identity
     this.textile = textile
     this.senderAddress = senderAddress
-    this.listeners = {}
+    this.listeners = {
+      message: {},
+    }
   }
 
   get threadID() {
@@ -154,12 +159,12 @@ export class GroupChatManager {
     onMessage: MessageCallback,
     group: { id: string; encryptionKey: string },
   ) {
-    this.listeners.message = (
+    this.listeners.message[group.id] = (
       update?: Update<MessageFromThread>,
       err?: any,
     ) => {
       if (update === undefined && err === undefined) {
-        delete this.listeners.message
+        delete this.listeners.message[group.id]
         return
       }
 
@@ -175,7 +180,7 @@ export class GroupChatManager {
     await this.textile.client.listen(
       threadID,
       [{ collectionName }],
-      this.listeners.message,
+      this.listeners.message[group.id],
     )
   }
 
@@ -327,6 +332,10 @@ export class GroupChatManager {
       threadID: ThreadID.fromString(thread),
       collectionName: collection,
     }
+  }
+
+  isSubscribed(id: string): boolean {
+    return !!this.listeners.message?.[id]
   }
 
   /**

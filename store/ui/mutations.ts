@@ -12,7 +12,7 @@ import {
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { FileMessage } from '~/types/textile/mailbox'
-import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Fil } from '~/libraries/Files/Fil'
 
@@ -357,6 +357,11 @@ export default {
     state.notifications.forEach((notification) => {
       notification.state = AlertState.READ
     })
+  },
+  updateGroupNotifications(state: UIState) {
+    state.notifications = state.notifications.filter(
+      (item) => item.type !== AlertType.GROUP_MESSAGE,
+    )
   },
   removeNotification(state: UIState, id: string) {
     state.notifications = state.notifications.filter((item) => item.id !== id)

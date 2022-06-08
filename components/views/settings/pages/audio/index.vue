@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   Bitrates,
   SampleSizes,
@@ -13,6 +13,7 @@ import {
   UserPermissions,
 } from '~/components/mixins/UserPermissions'
 import { CaptureMouseTypes } from '~/store/settings/types'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   // 3. Declare augmentation for Vue
@@ -47,6 +48,7 @@ export default Vue.extend({
       stream: null,
       featureReadyToShow: false,
       updateInterval: null,
+      loading: [] as string[],
       captureMouses: [
         {
           value: CaptureMouseTypes.always,
@@ -64,7 +66,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['settings', 'audio']),
+    ...mapState({
+      userThread: (state) => (state as RootState).textile.userThread,
+      settings: (state) => (state as RootState).settings,
+      audio: (state) => (state as RootState).audio,
+    }),
+    ...mapGetters('textile', ['getInitialized']),
     // React to v-model changes to echoCancellation and update
     // the state accordingly with the mutation
     isEchoCancellation: {
@@ -72,7 +79,7 @@ export default Vue.extend({
         this.$store.commit('settings/echoCancellation', state)
         this.setConstraint('echoCancellation', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.echoCancellation
       },
     },
@@ -81,7 +88,7 @@ export default Vue.extend({
         this.$store.commit('settings/noiseSuppression', state)
         this.setConstraint('noiseSuppression', state)
       },
-      get() {
+      get(): boolean {
         return this.settings.noiseSuppression
       },
     },
@@ -90,7 +97,7 @@ export default Vue.extend({
         this.$store.commit('settings/bitrate', state)
         this.setConstraint('sampleRate', state)
       },
-      get() {
+      get(): number {
         return this.settings.bitrate
       },
     },
@@ -99,7 +106,7 @@ export default Vue.extend({
         this.$store.commit('settings/sampleSize', state)
         this.setConstraint('sampleSize', state)
       },
-      get() {
+      get(): number {
         return this.settings.sampleSize
       },
     },
@@ -107,7 +114,7 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('settings/audioInput', state)
       },
-      get() {
+      get(): string {
         return this.settings.audioInput
       },
     },
@@ -116,7 +123,7 @@ export default Vue.extend({
         this.$store.commit('settings/audioOutput', state)
         this.setConstraint('volume', state)
       },
-      get() {
+      get(): string {
         return this.settings.audioOutput
       },
     },
@@ -124,7 +131,7 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('settings/videoInput', state)
       },
-      get() {
+      get(): string {
         return this.settings.videoInput
       },
     },
@@ -132,8 +139,20 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('settings/captureMouse', state)
       },
-      get() {
+      get(): string {
         return this.settings.captureMouse
+      },
+    },
+    flipVideo: {
+      async set(flipVideo: boolean) {
+        this.loading.push('flipVideo')
+        await this.$store.dispatch('textile/updateUserThreadData', {
+          flipVideo,
+        })
+        this.loading.splice(this.loading.indexOf('flipVideo'), 1)
+      },
+      get(): boolean {
+        return this.userThread.flipVideo
       },
     },
   },

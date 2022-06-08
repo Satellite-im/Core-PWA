@@ -195,6 +195,7 @@ describe('actions.default.initialize', () => {
       expect(dispatch).toHaveBeenCalledWith('updateUserThreadData', {
         consentToScan: false,
         blockNsfw: true,
+        flipVideo: true,
       })
     } catch (error) {
       // eslint-disable-next-line no-console
