@@ -2,6 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
 import blobToBase64 from '~/utilities/BlobToBase64'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
@@ -23,6 +25,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState({
+      accountAddress: (state) => (state as RootState).accounts.active,
+    }),
     /**
      * @method accountValidLength
      * @description If the account isn't the length specified in the config, this returns False, true if correct length
