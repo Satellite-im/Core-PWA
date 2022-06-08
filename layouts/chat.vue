@@ -72,12 +72,7 @@
               ref="chatScroll"
               :prevent-scroll-offset="10"
               :older-messages-scroll-offset="300"
-              :class="
-                $store.state.webrtc.activeCall &&
-                $store.state.webrtc.activeCall.callId
-                  ? 'media-open'
-                  : 'media-unopen'
-              "
+              :class="{ 'media-open': isActiveCall }"
               enable-wrap
               :user="recipient"
             >
@@ -191,6 +186,7 @@ export default Vue.extend({
       conversation: (state) => (state as RootState).conversation,
       consentToScan: (state) =>
         (state as RootState).textile.userThread.consentToScan,
+      webrtc: (state) => (state as RootState).webrtc,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('textile', ['getInitialized']),
@@ -219,6 +215,12 @@ export default Vue.extend({
       return (
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
+      )
+    },
+    isActiveCall() {
+      return (
+        this.webrtc.activeCall &&
+        this.webrtc.activeCall.callId === this.conversation.id
       )
     },
   },
