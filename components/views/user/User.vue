@@ -73,12 +73,14 @@ export default Vue.extend({
             { text: this.$t('context.send'), func: this.navigateToUser },
             { text: this.$t('context.voice'), func: this.testFunc },
             { text: this.$t('context.video'), func: this.testFunc },
-            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+            // { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
           ]
         : [
             { text: this.$t('context.send'), func: this.navigateToUser },
-            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+            //   { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
           ]
     },
