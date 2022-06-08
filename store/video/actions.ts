@@ -20,7 +20,7 @@ const videoActions = {
       call.unmute({ kind: 'video' })
       return
     }
-    call.unmute({ kind: 'video' })
+    call.mute({ kind: 'video' })
   },
 }
 

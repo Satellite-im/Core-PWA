@@ -57,6 +57,7 @@ export default Vue.extend({
      * @example
      */
     toggleMute(kind: WebRTCEnum) {
+      // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
@@ -87,5 +88,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Actions.less">
-</style>
+<style scoped lang="less" src="./Actions.less"></style>

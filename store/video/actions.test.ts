@@ -8,15 +8,22 @@ import {
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
-// Commented out for later development.
-// import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
-// jest.mock('~/libraries/WebRTC/WebRTC')
-// $WebRTC.mockImplementation(() => {
-//   getCall: {
-//     return false
-//   }
-// })
+jest.mock('~/libraries/WebRTC/WebRTC', () => ({
+  $WebRTC: {
+    getCall: jest.fn(),
+  },
+}))
+const muteMock = jest.fn()
+const unmuteMock = jest.fn()
+$WebRTC.getCall.mockReturnValue({
+  mute: muteMock,
+  unmute: unmuteMock,
+})
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 describe('', () => {
   const initialRootState: RootState = {
@@ -133,7 +140,10 @@ describe('', () => {
     webrtc: {
       initialized: true,
       incomingCall: undefined,
-      activeCall: undefined,
+      activeCall: {
+        callId: 'call-id',
+        peerId: 'peer-id',
+      },
       streamMuted: {},
     },
     settings: {
@@ -177,45 +187,30 @@ describe('', () => {
       disabled: true,
     },
   }
-  test('0', () => {
+  test('Should mute video', () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
     const state = {
       disabled: true,
     }
     const rootState = { ...initialRootState }
+
     module.default.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('toggleCamera')
+    expect(muteMock).toHaveBeenCalledWith({ kind: 'video' })
   })
-  test('1', () => {
+
+  test('Should unmute video', () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
     const state = {
       disabled: false,
     }
+
     const rootState = { ...initialRootState }
+
     module.default.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('toggleCamera')
-  })
-  test.skip('2', () => {
-    // This is
-    const commit = jest.fn()
-    const dispatch = jest.fn()
-    const state = {
-      disabled: false,
-    }
-    const rootState = { ...initialRootState }
-    rootState.webrtc.activeCall = {
-      callId: 'something',
-      peerId: 'something',
-      //   mute: jest.fn(),
-      //   unmute: jest.fn(),
-    }
-    module.default.toggleMute({ state, commit, dispatch, rootState })
-    expect(commit).toHaveBeenCalledWith('toggleCamera')
-    // Unsuccessful mock here for WebRTC's Call function.
-    // expect(rootState.webrtc.activeCall).toHaveBeenCalledWith({
-    //   kind: 'audio',
-    // })
+    expect(unmuteMock).toHaveBeenCalledWith({ kind: 'video' })
   })
 })
