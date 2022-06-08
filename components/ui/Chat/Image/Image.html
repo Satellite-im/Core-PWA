@@ -17,6 +17,7 @@
     <img
       class="is-image"
       :class="{'blur-image' : image.nsfw && blockNsfw}"
+      :style="{ width: `${size.width}px`, height: `${size.height}px` }"
       :src="image.url"
       @click="clickHandler"
       @error="onImageError"

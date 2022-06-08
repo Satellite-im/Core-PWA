@@ -70,6 +70,7 @@
     <UiChatEmbedsFile
       v-else-if="message.type === 'file'"
       :file="message.payload"
+      :size="{width: message.width, height: message.height}"
     />
     <MessageReactions
       v-if="!hideActions && hasReactions"
