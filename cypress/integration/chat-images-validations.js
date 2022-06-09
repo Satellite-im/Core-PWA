@@ -29,7 +29,7 @@ describe('Chat - Sending Images Tests', () => {
     // cy.goToLastImageOnChat(90000) // first image sent takes more time
   })
 
-  it('JPG image is sent successfully on chat', () => {
+  it.skip('JPG image is sent successfully on chat', () => {
     //Send JPG Image
     cy.chatFeaturesSendImage(jpgImagePath, 'jpeg-test.jpg')
     cy.goToLastImageOnChat(30000)
