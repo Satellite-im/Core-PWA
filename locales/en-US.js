@@ -117,7 +117,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit',
+    edit: 'Edit\nComing soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -712,7 +712,7 @@ export default {
     },
   },
   market_place: {
-    title: 'Marketplace',
+    title: 'Marketplace\nComing soon',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',

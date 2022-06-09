@@ -10,6 +10,14 @@
     justify-content: center;
     cursor: pointer;
 
+    &.coming-soon,
+    &.coming-soon:hover {
+      cursor: not-allowed;
+      svg {
+        color: grey;
+      }
+    }
+
     &:hover {
       &:extend(.background-semitransparent-light);
       .control-icon {
