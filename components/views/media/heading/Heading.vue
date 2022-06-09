@@ -1,10 +1,10 @@
-<template src="./Heading.html" />
+<template src="./Heading.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
-
 import { mapState } from 'vuex'
+
 export default Vue.extend({
   components: {
     MaximizeIcon,
@@ -13,6 +13,7 @@ export default Vue.extend({
   data() {
     return {
       elapsedTimeLabel: '',
+      timer: undefined as NodeJS.Timeout | undefined,
     }
   },
   computed: {
@@ -20,7 +21,6 @@ export default Vue.extend({
   },
   mounted() {
     this.$store.commit('ui/fullscreen', false)
-    this.timer = false
     this.setTimer()
   },
   beforeDestroy() {
@@ -43,7 +43,9 @@ export default Vue.extend({
       }
     },
     elapsedTime(start: number): void {
-      if (!start) return
+      if (!this.webrtc.activeCall || !start) {
+        return
+      }
       const duration = this.$dayjs.duration(Date.now() - start)
       const hours = duration.hours()
       this.elapsedTimeLabel = `${this.$t('ui.live')} ${
@@ -51,21 +53,13 @@ export default Vue.extend({
       }${duration.format('mm:ss')}`
     },
     setTimer() {
-      this.$store.commit('webrtc/updateCreatedAt', Date.now())
-      if (this.webrtc?.activeCall) {
-        if (!this.timer) {
-          this.elapsedTime(this.webrtc.createdAt)
-          this.timer = setInterval(() => {
-            this.elapsedTime(this.webrtc.createdAt)
-          }, 1000)
-        }
-      }
+      this.elapsedTime(this.webrtc.createdAt)
+      this.timer = setInterval(() => {
+        this.elapsedTime(this.webrtc.createdAt)
+      }, 1000)
     },
     clearTimer() {
-      if (this.timer) {
-        clearInterval(this.timerId)
-        this.timer = false
-      }
+      clearInterval(this.timer)
     },
   },
 })

@@ -682,7 +682,6 @@ const webRTCActions = {
 
     commit('setIncomingCall', undefined)
     commit('setActiveCall', { callId })
-    commit('updateCreatedAt', Date.now())
     await call.createLocalTracks(kinds)
     await call.start()
   },
