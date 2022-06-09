@@ -785,7 +785,7 @@ export default {
     delete: 'Delete',
     // friends
     send: 'Send Message',
-    voice: 'Voice Call',
+    voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     profile: 'Profile',
