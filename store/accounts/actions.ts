@@ -13,7 +13,6 @@ import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
-
 export default {
   /**
    * @method setPin

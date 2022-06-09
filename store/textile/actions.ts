@@ -32,6 +32,7 @@ import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+import BlockchainClient from '~/libraries/BlockchainClient'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -714,8 +715,7 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const MailboxManager = $TextileManager.mailboxManager
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     if (!MailboxManager) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
@@ -746,7 +746,7 @@ export default {
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-      const userInfo = await usersProgram.getUserInfo(message.sender)
+      const userInfo = await $BlockchainClient.getUserInfo(message.sender)
       const urlMatch = groupId ? message.to : message.from
       await Promise.all([
         dispatch(
