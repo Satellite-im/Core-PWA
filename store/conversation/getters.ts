@@ -1,4 +1,5 @@
 import {
+  ConversationActivity,
   ConversationConnection,
   ConversationParticipant,
   ConversationState,
@@ -22,6 +23,18 @@ const getters = {
   ): ConversationParticipant[] => {
     return getters.otherParticipants.filter(
       (participant) => participant.state === ConversationConnection.CONNECTED,
+    )
+  },
+  /**
+   * @method typingParticipants
+   * @description array of online participants other than yourself
+   */
+  typingParticipants: (
+    state: ConversationState,
+    getters: { otherParticipants: ConversationParticipant[] },
+  ): ConversationParticipant[] => {
+    return getters.otherParticipants.filter(
+      (participant) => participant.activity === ConversationActivity.TYPING,
     )
   },
 }

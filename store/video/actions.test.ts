@@ -181,9 +181,9 @@ describe('', () => {
       disabled: true,
     }
     const rootState = { ...initialRootState }
-    module.default.toggle({ state, commit, dispatch, rootState })
+    module.default.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
-    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
+    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
       root: true,
     })
   })
@@ -194,9 +194,9 @@ describe('', () => {
       disabled: false,
     }
     const rootState = { ...initialRootState }
-    module.default.toggle({ state, commit, dispatch, rootState })
+    module.default.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
-    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
+    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
       root: true,
     })
   })

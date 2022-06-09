@@ -169,6 +169,17 @@
         />
       </span>
     </SettingsUnit>
+    <SettingsUnit
+      v-if="getInitialized"
+      :title="$t('pages.settings.video.flipVideo.title')"
+      :text="$t('pages.settings.video.flipVideo.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="flipVideo"
+        :isLocked="loading.includes('flipVideo')"
+      />
+    </SettingsUnit>
+    <UiLoadersGenericContent class="column unit" :count="1" v-else />
   </div>
 
   <!-- Screen Share -->
@@ -198,4 +209,5 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
+  <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
 </div>

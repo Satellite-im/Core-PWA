@@ -1,6 +1,6 @@
 <div class="container">
   <div class="decryption-body">
-    <div v-if="!getPinHash" class="create_pin_section">
+    <div v-if="!accounts.pinHash" class="create_pin_section">
       <info-icon size="0.8x" />
       <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
       <TypographyText text="Create a pin to protect your account." />
@@ -14,10 +14,10 @@
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
       :data-cy="`pin-label`"
-      :label-text="`${getPinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'}`"
+      :label-text="accounts.pinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="decrypting"
-      :action="getPinHash ? decrypt : create"
+      :action="accounts.pinHash ? decrypt : create"
     >
       <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
       <chevron-right-icon size="1x" v-else />
@@ -29,7 +29,7 @@
       :label="$t('pages.unlock.store_pin')"
     />
     <br />
-    <a v-if="getPinHash" class="delete-link" @click="deleteAccount">
+    <a v-if="accounts.pinHash" class="delete-link" @click="deleteAccount">
       {{$t('pages.unlock.delete_account_label')}}
     </a>
     <div class="realm-container">

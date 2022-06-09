@@ -96,19 +96,20 @@ export default Vue.extend({
       this.close()
     },
     openProfile() {
-      this.close()
       if (this.user) {
         const isMe = this.user.address === this.accounts.active
 
         if (isMe) {
+          this.close()
           this.$store.commit('ui/toggleSettings', {
             show: true,
             defaultRoute: 'profile',
           })
-          return
+          // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+          // return
         }
-
-        this.$store.dispatch('ui/showProfile', this.user)
+        // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+        // this.$store.dispatch('ui/showProfile', this.user)
       }
     },
   },

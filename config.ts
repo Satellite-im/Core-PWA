@@ -52,7 +52,7 @@ export const Config = {
         ],
   },
   solana: {
-    customFaucet: 'https://faucet.satellite.one',
+    customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
@@ -112,6 +112,8 @@ export const Config = {
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
+    groupNameMinLength: 3,
+    groupNameMaxLength: 64,
   },
   account: {
     minimumAccountLength: 5,

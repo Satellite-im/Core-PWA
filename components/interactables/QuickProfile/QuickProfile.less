@@ -8,7 +8,7 @@
     height: 3rem;
     margin: -@normal-spacing -@normal-spacing calc(@normal-spacing + 20px) -@normal-spacing;
     position: relative;
-    #userIcon,
+    // #userIcon, // TODO: Re-enable this when the profile is implemented
     #closeIcon {
       cursor: pointer;
     }
@@ -54,6 +54,10 @@
   padding: @normal-spacing;
   overflow: hidden;
   &:extend(.first-layer);
+  .clickable {
+    // TODO: Remove this class when profile is re-implemented
+    cursor: pointer;
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {

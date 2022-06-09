@@ -31,6 +31,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
+import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -68,6 +69,7 @@ export default {
       await dispatch('updateUserThreadData', {
         consentToScan: false,
         blockNsfw: true,
+        flipVideo: true,
       })
       return textilePublicKey
     }
@@ -208,7 +210,6 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }
-
     MailboxManager.listenToInboxMessages((message) => {
       if (!message) {
         return
@@ -709,6 +710,8 @@ export default {
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const MailboxManager = $TextileManager.mailboxManager
+    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
 
     if (!MailboxManager) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
@@ -720,23 +723,46 @@ export default {
     if (!$TextileManager.groupChatManager?.isInitialized()) {
       throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
     }
-
-    const group = getGroup(rootState, groupId)
+    if ($TextileManager.groupChatManager?.isSubscribed(groupId)) {
+      return
+    }
+    let group: Group | undefined
+    try {
+      group = getGroup(rootState, groupId)
+    } catch {}
+    if (!group) return
 
     const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
-
-    await $GroupChatManager.listenToGroupMessages((message) => {
+    await $GroupChatManager.listenToGroupMessages(async (message) => {
       if (!message) {
         return
       }
-
       commit('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.INBOUND,
         message,
       })
-
-      dispatch('storeInMessage', { address: groupId, message })
+      const userInfo = await usersProgram.getUserInfo(message.sender)
+      const urlMatch = groupId ? message.to : message.from
+      await Promise.all([
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: 'New DM',
+            from: userInfo?.name,
+            fromAddress: urlMatch,
+            title: `Notification`,
+            groupName: group?.name,
+            groupId,
+            id: uuidv4(),
+            groupURL: message.to,
+            image: userInfo?.photoHash,
+            type: AlertType.GROUP_MESSAGE,
+          },
+          { root: true },
+        ),
+        dispatch('storeInMessage', { address: groupId, message }),
+      ])
     }, group)
   },
   /**
@@ -1050,10 +1076,12 @@ export default {
     {
       consentToScan,
       blockNsfw,
+      flipVideo,
       filesVersion,
     }: {
       consentToScan?: boolean
       blockNsfw?: boolean
+      flipVideo?: boolean
       filesVersion?: number
     },
   ) {
@@ -1069,6 +1097,7 @@ export default {
       await $UserInfoManager.updateRecord({
         consentToScan,
         blockNsfw,
+        flipVideo,
         filesVersion,
       }),
     )
@@ -1077,7 +1106,11 @@ export default {
   /**
    * @description listen for user data thread changes and update store accordingly
    */
-  async listenToThread({ commit, rootState }: ActionsArguments<TextileState>) {
+  async listenToThread({
+    commit,
+    rootState,
+    dispatch,
+  }: ActionsArguments<TextileState>) {
     const $UserInfoManager: UserInfoManager =
       Vue.prototype.$TextileManager?.userInfoManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
@@ -1091,6 +1124,7 @@ export default {
       }
       commit('textile/setUserThreadData', update.instance, { root: true })
     }
+    await dispatch('textile/subscribeToMailbox', {}, { root: true })
     $UserInfoManager.textile.client.listen(
       $UserInfoManager.threadID,
       [],

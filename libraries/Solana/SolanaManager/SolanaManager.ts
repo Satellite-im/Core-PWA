@@ -324,10 +324,10 @@ export default class SolanaManager {
         1000000000,
       )
     }
-
-    return this.connection.confirmTransaction(
-      signature,
-      Config.solana.defaultCommitment,
-    )
+    await this.connection
+      .confirmTransaction(signature, Config.solana.defaultCommitment)
+      .catch((e) => {
+        // console.log('error confirming transaction', e) //TODO: error handler
+      })
   }
 }

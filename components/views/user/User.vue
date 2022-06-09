@@ -11,11 +11,6 @@ import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { User } from '~/types/ui/user'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
-import { Config } from '~/config'
-import {
-  refreshTimestampInterval,
-  convertTimestampToDate,
-} from '~/utilities/Messaging'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
@@ -47,42 +42,39 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      timestamp: convertTimestampToDate(
-        this.$t('friends.details'),
-        this.$store.state.textile.conversations[this.user.address]?.lastUpdate,
-      ),
       timestampRefreshInterval: null,
     }
   },
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      userConversationLastUpdate(state) {
-        return (
-          (state as RootState).textile.conversations[this.user.address]
-            ?.lastUpdate ?? 0
-        )
-      },
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
+      conversations: (state) => (state as RootState).textile?.conversations,
     }),
     ...mapGetters('textile', ['getConversation']),
+    ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
       return this.user.state === 'online'
         ? [
             { text: this.$t('context.send'), func: this.navigateToUser },
             { text: this.$t('context.voice'), func: this.testFunc },
             { text: this.$t('context.video'), func: this.testFunc },
-            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+            // { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
           ]
         : [
             { text: this.$t('context.send'), func: this.navigateToUser },
-            { text: this.$t('context.profile'), func: this.handleShowProfile },
+            // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
+            //   { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
           ]
     },
-
+    hasMessaged(): boolean {
+      const lastMessage = this.getConversation(this.user.address)?.lastMessage
+      return !!lastMessage
+    },
     lastMessage(): string {
       const conversation = this.getConversation(this.user.address)
       const lastMessage = conversation?.lastMessage
@@ -104,38 +96,10 @@ export default Vue.extend({
       }
       return '99+'
     },
-  },
-  watch: {
-    userConversationLastUpdate: {
-      handler(lastUpdate) {
-        if (this.timestampRefreshInterval) {
-          clearInterval(this.timestampRefreshInterval)
-        }
-
-        this.existConversation = lastUpdate > 0
-        this.timestamp = convertTimestampToDate(
-          this.$t('friends.details'),
-          lastUpdate,
-        )
-
-        const setTimestamp = (timePassed: number) => {
-          if (
-            timePassed === this.getConversation(this.user.address)?.lastUpdate
-          ) {
-            this.timestamp = convertTimestampToDate(
-              this.$t('friends.details'),
-              timePassed,
-            )
-          }
-        }
-
-        this.$data.timestampRefreshInterval = refreshTimestampInterval(
-          lastUpdate,
-          setTimestamp,
-          Config.chat.timestampUpdateInterval,
-        )
-      },
-      immediate: true,
+    timestamp(): string {
+      return this.getTimestamp({
+        time: this.conversations[this.user.address]?.lastUpdate,
+      })
     },
   },
   mounted() {

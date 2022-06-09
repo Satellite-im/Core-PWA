@@ -30,8 +30,6 @@
           />
           <Sidebar
             v-if="!$device.isMobile"
-            :users="friends.all"
-            :groups="$mock.groups"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />

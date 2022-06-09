@@ -3,17 +3,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { Dexie } from 'dexie'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
-
-declare module 'vue/types/vue' {
-  // 3. Declare augmentation for Vue
-  interface Vue {
-    error: string
-    decrypt: () => Promise<any>
-  }
-}
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'UnlockScreen',
@@ -32,13 +24,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('accounts', ['getPinHash', 'getPhrase']),
-    ...mapState(['ui', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+    }),
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
+      get(): boolean {
         return !this.accounts ? false : this.accounts.storePin
       },
     },
@@ -68,8 +62,8 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    getIcon(): String {
-      if (this.getPinHash) {
+    getIcon(): string {
+      if (this.accounts.pinHash) {
         return 'unlocked'
       }
       return 'locked'
@@ -81,13 +75,13 @@ export default Vue.extend({
      * @example
      */
     async decrypt() {
-      this.$data.decrypting = true
+      this.decrypting = true
       this.error = ''
 
       try {
-        await this.$store.dispatch('accounts/unlock', this.$data.pin)
+        await this.$store.dispatch('accounts/unlock', this.pin)
 
-        if (this.getPhrase === '') {
+        if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
           try {
             await this.$store.dispatch('settings/clearLocalStorage')
@@ -100,10 +94,10 @@ export default Vue.extend({
         }
       } catch (error: any) {
         this.error = error.message
-        this.$data.pin = ''
+        this.pin = ''
       }
 
-      this.$data.decrypting = false
+      this.decrypting = false
     },
     // Create & store a new pin, then decrypt.
     /**
@@ -113,7 +107,7 @@ export default Vue.extend({
      */
     async create() {
       try {
-        await this.$store.dispatch('accounts/setPin', this.$data.pin)
+        await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
       } catch (error: any) {
         this.error = error.message

@@ -1,6 +1,6 @@
 import { SoundsState } from './types'
 
-const InitialSettingsState = (): SoundsState => ({
+const InitialSoundsState = (): SoundsState => ({
   newMessage: true,
   hangup: true,
   call: true,
@@ -12,4 +12,4 @@ const InitialSettingsState = (): SoundsState => ({
   connected: true,
 })
 
-export default InitialSettingsState
+export default InitialSoundsState

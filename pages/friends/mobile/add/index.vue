@@ -22,17 +22,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { ArrowLeftIcon } from 'satellite-lucide-icons'
 import { DataStateType } from '~/store/dataState/types'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
-declare module 'vue/types/vue' {
-  interface Vue {
-    friends: any
-    initRoute: () => void
-  }
-}
 export default Vue.extend({
   name: 'FriendsList',
   components: {
@@ -47,7 +41,6 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['friends', 'dataState']),
-    ...mapGetters('friends', ['alphaSortedFriends', 'alphaSortedOutgoing']),
   },
   watch: {
     '$route.query'() {

@@ -45,7 +45,6 @@ export default class GroupCrypto {
       invite.groupId,
       encryptionKey,
     )
-
     if (!groupId || !encryptionKey) {
       throw new Error('Unable to decrypt group invite')
     }

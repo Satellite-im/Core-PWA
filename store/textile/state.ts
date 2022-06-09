@@ -10,6 +10,7 @@ const InitialTextileState = (): TextileState => ({
   userThread: {
     consentToScan: false,
     blockNsfw: true,
+    flipVideo: true,
   },
 })
 

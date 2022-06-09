@@ -6,12 +6,6 @@ import { mapState, mapGetters } from 'vuex'
 import { DataStateType } from '~/store/dataState/types'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
-declare module 'vue/types/vue' {
-  interface Vue {
-    friends: any
-    initRoute: () => void
-  }
-}
 export default Vue.extend({
   name: 'FriendsList',
   layout: 'friends',

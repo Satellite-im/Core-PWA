@@ -4,5 +4,6 @@ export interface UserThreadData {
   consentToScan: boolean
   consentUpdated?: number
   blockNsfw: boolean
+  flipVideo: boolean
   filesVersion?: number
 }

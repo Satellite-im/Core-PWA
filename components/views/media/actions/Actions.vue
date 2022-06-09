@@ -14,10 +14,9 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
-import { PeerMutedState } from '~/store/webrtc/types'
+import { RootState } from '~/types/store/store'
 const p2p = Peer2Peer.getInstance()
 
 export default Vue.extend({
@@ -36,12 +35,16 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+    }),
     audioMuted(): boolean {
       return this.audio.muted
     },
     videoMuted(): boolean {
-      return p2p.id && this.webrtc.streamMuted[p2p.id]?.video
+      return this.video.disabled
     },
     screenMuted(): boolean {
       return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
@@ -53,13 +56,15 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    async toggleMute(kind: keyof PeerMutedState) {
+    toggleMute(kind: WebRTCEnum) {
       this.isLoading = true
       try {
-        if (kind === 'audio') {
-          this.$store.dispatch('audio/toggleMute', {}, { root: true })
+        if (kind === WebRTCEnum.AUDIO) {
+          this.$store.dispatch('audio/toggleMute', undefined, { root: true })
+        } else if (kind === WebRTCEnum.VIDEO) {
+          this.$store.dispatch('video/toggleMute', undefined, { root: true })
         } else {
-          await this.$store.dispatch(
+          this.$store.dispatch(
             'webrtc/toggleMute',
             { kind, peerId: p2p.id },
             { root: true },

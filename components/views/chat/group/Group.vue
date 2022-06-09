@@ -26,7 +26,7 @@ export default Vue.extend({
       groups: (state) => (state as RootState).groups,
     }),
     ...mapGetters('friends', ['findFriendByKey']),
-    ...mapGetters('settings', ['getTimezone']),
+    ...mapGetters('settings', ['getTimestamp']),
     username(): string {
       return (
         this.groupMember?.name ||
@@ -68,10 +68,7 @@ export default Vue.extend({
         ?.members?.find((it: GroupMember) => it.address === this.group.sender)
     },
     timestamp(): string {
-      return this.$dayjs(this.group.at)
-        .local()
-        .tz(this.getTimezone)
-        .format('LT')
+      return this.getTimestamp({ time: this.group.at })
     },
     address(): string {
       if (this.group.sender) {

@@ -11,13 +11,6 @@ export default Vue.extend({
   components: {
     CircleIcon,
   },
-  props: {
-    typing: {
-      type: Boolean,
-      default: false,
-      required: false,
-    },
-  },
   computed: {
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
@@ -51,13 +44,6 @@ export default Vue.extend({
      */
     connectedStatus(): string {
       return this.onlineParticipants.length ? 'is-online' : 'is-offline'
-    },
-  },
-  watch: {
-    'conversation.participants': {
-      handler() {},
-      deep: true,
-      immediate: true,
     },
   },
 })
