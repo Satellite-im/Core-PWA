@@ -39,7 +39,7 @@ export default Vue.extend({
           group: this.group,
         })
       } catch (e: any) {
-        this.$Logger.log('group', 'cannot leave', e)
+        console.log(e)
         this.$toast.error(this.$t('errors.friends.leaving_group') as string)
       }
     },

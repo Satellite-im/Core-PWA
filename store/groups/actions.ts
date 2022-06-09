@@ -71,7 +71,9 @@ export default {
   ) {
     const groupChatProgram = getGroupChatProgram()
     const myAddress = rootState.accounts.active
-    if (group.admin !== myAddress || group.members.length === 1) {
+    if (group.members.length === 1) {
+      await groupChatProgram.close(group.id)
+    } else if (group.admin !== myAddress) {
       await groupChatProgram.leave(group.id)
     } else {
       // todo - select new admin logic. for now, just select a new user that isn't you

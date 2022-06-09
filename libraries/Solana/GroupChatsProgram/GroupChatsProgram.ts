@@ -467,6 +467,31 @@ export default class GroupChatsProgram extends EventEmitter {
   }
 
   /**
+   * @method close
+   * User close group, will be called if you are the only remaining member
+   * @param groupId
+   */
+  async close(groupId: string) {
+    const payer = this.payer
+    const groupKey = this.groupAddressFromId(groupId)
+
+    const group = await this.getGroup(groupKey)
+
+    const inviteePDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
+
+    await this.program.rpc.close({
+      accounts: {
+        group: groupKey,
+        invitation: inviteePDA[0],
+        signer: payer.publicKey,
+        invitationSender: group.admin,
+        creator: group.creator,
+      },
+      signers: [payer],
+    })
+  }
+
+  /**
    * Update group name
    * @param id {string} group id
    * @param name {string} new group name
