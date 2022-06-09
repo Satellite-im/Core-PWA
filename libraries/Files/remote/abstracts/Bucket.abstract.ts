@@ -1,44 +1,34 @@
-import { Buckets, Root } from '@textile/buckets'
+import { Buckets, PushPathResult, Root } from '@textile/buckets'
 import { createWriteStream } from 'streamsaver'
 import { Config } from '~/config'
 import {
-  FileSystemExport,
-  FILESYSTEM_TYPE,
+  PersonalBucketIndex,
+  SharedBucketIndex,
 } from '~/libraries/Files/types/filesystem'
 import { TextileInitializationData } from '~/types/textile/manager'
-import { RFM } from '~/libraries/Files/remote/abstracts/RFM.abstract'
-import { RFMInterface } from '~/libraries/Files/remote/interface/RFM.interface'
+import { RFM } from '~/libraries/Files/interface/RFM.interface'
 import { TextileError } from '~/store/textile/types'
 
-export class Bucket extends RFM implements RFMInterface {
-  private _textile: TextileInitializationData
-  private _index: FileSystemExport | null = null
-  private _buckets: Buckets | null
-  private _key: Root['key'] | null
-  private _root: Root | Root['path'] = ''
+export abstract class Bucket implements RFM {
+  protected _textile?: TextileInitializationData
+  protected _buckets?: Buckets
+  protected _key?: Root['key']
+  protected _root?: Root | Root['path']
 
   constructor(textile: TextileInitializationData) {
-    super()
     this._textile = textile
-    this._buckets = null
-    this._key = null
   }
 
-  /**
-   * @getter
-   * @returns file system export data
-   */
-  get index(): FileSystemExport | null {
-    return this._index
-  }
+  abstract get index(): PersonalBucketIndex | SharedBucketIndex | undefined
+  abstract updateIndex(index: PersonalBucketIndex | SharedBucketIndex): void
 
   /**
-   * @method init
+   * @method getBucket
    * @description Initializes bucket
-   * @param name bucket name
+   * @param param0 bucket name and encrypted status
    * @returns a promise that resolves when the initialization completes
    */
-  async init(name: string): Promise<FileSystemExport> {
+  async getBucket({ name, encrypted }: { name: string; encrypted?: boolean }) {
     if (!Config.textile.key) {
       throw new Error('Textile key not found')
     }
@@ -47,69 +37,17 @@ export class Bucket extends RFM implements RFMInterface {
       { key: Config.textile.key },
       { host: Config.textile.apiUrl },
     )
+    if (!this._textile?.identity) {
+      throw new Error('textile not initialized')
+    }
     await this._buckets.getToken(this._textile.identity)
 
-    const result = await this._buckets.getOrCreate(name, { encrypted: true })
+    const result = await this._buckets.getOrCreate(name, { encrypted })
 
     if (!result.root) throw new Error(`failed to open bucket ${name}`)
 
     this._key = result.root.key
     this._root = result.root
-
-    try {
-      const data = []
-      for await (const bytes of this._buckets.pullPath(
-        this._key,
-        Config.textile.fsTable,
-      )) {
-        data.push(bytes)
-      }
-      this._index = JSON.parse(
-        await new Blob(data, {
-          type: 'application/json',
-        }).text(),
-      )
-
-      if (!this._index) throw new Error('Index not found')
-
-      return this._index
-    } catch (e) {
-      return {
-        type: FILESYSTEM_TYPE.DEFAULT,
-        version: 1,
-        content: [],
-      }
-    }
-  }
-
-  /**
-   * @method updateIndex
-   * @param index FileSystemExport
-   * @description sets file system import data
-   */
-  async updateIndex(index: FileSystemExport) {
-    if (!this._buckets || !this._key) {
-      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
-    }
-    this._index = index
-    const res = await this._buckets.pushPath(
-      this._key,
-      Config.textile.fsTable,
-      Buffer.from(JSON.stringify(index)),
-      { root: this._root },
-    )
-    this._root = res.root
-  }
-
-  /**
-   * @method ipnsLink
-   * @returns {Promise<string>} ipns bucket link
-   */
-  async ipnsLink(): Promise<string> {
-    if (!this._buckets || !this._key) {
-      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
-    }
-    return (await this._buckets.links(this._key)).ipns
   }
 
   /**
@@ -119,8 +57,13 @@ export class Bucket extends RFM implements RFMInterface {
    * @param {File} file file to be uploaded
    * @param {string} path uuid to maintain unique bucket paths
    * @param {Function} progressCallback used to show progress meter in componment that calls this method
+   * @returns {string} path to file, used moreso for shared buckets
    */
-  async pushFile(file: File, path: string, progressCallback: Function) {
+  async pushFile(
+    file: File,
+    path: string,
+    progressCallback: Function,
+  ): Promise<PushPathResult> {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
@@ -140,6 +83,7 @@ export class Bucket extends RFM implements RFMInterface {
       },
     )
     this._root = res.root
+    return res
   }
 
   private _getStream(file: File) {
@@ -166,13 +110,13 @@ export class Bucket extends RFM implements RFMInterface {
   }
 
   /**
-   * @method pullFileStream
+   * @method pullFile
    * @description fetch encrypted file from bucket
    * @param {string} id file path in bucket
    * @param {string} name file name
    * @param {number} size file size to show progress in browser
    */
-  async pullFileStream(id: string, name: string, size: number) {
+  async pullFile(id: string, name: string, size: number) {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
@@ -190,13 +134,13 @@ export class Bucket extends RFM implements RFMInterface {
   /**
    * @method removeFile
    * @description Remove file from bucket
-   * @param {string} name file name
+   * @param {string} id file path in bucket
    */
-  async removeFile(name: string) {
+  async removeFile(id: string) {
     if (!this._buckets || !this._key) {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
-    const res = await this._buckets.removePath(this._key, name, {
+    const res = await this._buckets.removePath(this._key, id, {
       root: this._root,
     })
     if (res.root) {

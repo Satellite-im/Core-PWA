@@ -13,7 +13,6 @@ import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
-import BucketManager from '~/libraries/Textile/BucketManager'
 import Logger from '~/utilities/Logger'
 
 declare module 'vue/types/vue' {
@@ -25,7 +24,6 @@ declare module 'vue/types/vue' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
-    $BucketManager: BucketManager
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }
@@ -40,7 +38,6 @@ declare module '@nuxt/types' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
-    $BucketManager: BucketManager
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }

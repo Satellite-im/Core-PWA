@@ -28,8 +28,21 @@ export interface ExportDirectory extends ExportSharedProps {
 
 export type ExportItem = ExportFile | ExportDirectory
 
-export type FileSystemExport = {
+export type PersonalBucketIndex = {
   type: FILESYSTEM_TYPE
   version: number
   content: Array<ExportItem>
+}
+
+export interface SharedBucketIndexItem {
+  id: string
+  name: string
+  url: string
+  size: number
+  nsfw: boolean
+}
+
+export type SharedBucketIndex = {
+  version: number
+  content: SharedBucketIndexItem[]
 }

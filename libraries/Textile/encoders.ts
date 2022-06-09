@@ -77,6 +77,7 @@ const fileMessagePayload = t.type({
     name: t.string,
     size: t.number,
     type: t.string,
+    id: t.string,
   }),
 })
 
