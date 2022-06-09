@@ -137,8 +137,8 @@ export const Notifications = class Notifications {
       await new Notification(`${type} ${titleText}`, {
         tag: String(new Date().getTime()),
         body: message,
-        icon: '/icon.png',
-        badge: '/icon.png',
+        icon: `${this.$Config.textile.browser}/ipfs/${image}`,
+        badge: `${this.$Config.textile.browser}/ipfs/${image}`,
       })
     }
     // if (this.currentPlatform === PlatformTypeEnum.WEB) {
