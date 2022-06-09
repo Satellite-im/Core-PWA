@@ -1,4 +1,3 @@
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import * as actions from '~/store/audio/actions'
 import { RegistrationStatus } from '~/store/accounts/types'
 import {
@@ -8,6 +7,25 @@ import {
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
+import { AudioState } from '~/store/audio/types'
+import initialAudioState from '~/store/audio/state'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+
+jest.mock('~/libraries/WebRTC/WebRTC', () => ({
+  $WebRTC: {
+    getCall: jest.fn(),
+  },
+}))
+const muteMock = jest.fn()
+const unmuteMock = jest.fn()
+$WebRTC.getCall.mockReturnValue({
+  mute: muteMock,
+  unmute: unmuteMock,
+})
+afterEach(() => {
+  jest.clearAllMocks()
+})
 
 describe('actions.default.toggleMute', () => {
   const initialRootState: RootState = {
@@ -124,7 +142,10 @@ describe('actions.default.toggleMute', () => {
     webrtc: {
       initialized: true,
       incomingCall: undefined,
-      activeCall: undefined,
+      activeCall: {
+        callId: 'call-id',
+        peerId: 'peer-id',
+      },
       streamMuted: {},
     },
     settings: {
@@ -164,32 +185,39 @@ describe('actions.default.toggleMute', () => {
         },
       ],
     },
+    audio: initialAudioState(),
   }
-  test('0', () => {
+
+  test('Should mute audio', () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
-    const state = {
+    const state: AudioState = {
+      ...initialAudioState(),
       muted: true,
     }
     const rootState = { ...initialRootState }
-    actions.default.toggleMute({ state, commit, dispatch, rootState }, false)
-    expect(commit).toHaveBeenCalledWith('setMuted', !state.muted)
-    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
-      root: true,
-    })
-  })
-  test('1', () => {
-    const commit = jest.fn()
-    const dispatch = jest.fn()
-    const state = {
-      muted: false,
-    }
-    const rootState = { ...initialRootState }
-    actions.default.toggleMute({ state, commit, dispatch, rootState }, true)
-    expect(commit).toHaveBeenCalledWith('setMuted', !state.muted)
+    actions.default.toggleMute({ state, commit, dispatch, rootState })
+    expect(commit).toHaveBeenCalledWith('toggleMute')
     expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
       root: true,
     })
+    expect(muteMock).toHaveBeenCalledWith({ kind: 'audio' })
+  })
+
+  test('Should unmute audio', () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+    const state: AudioState = {
+      ...initialAudioState(),
+      muted: false,
+    }
+    const rootState = { ...initialRootState }
+    actions.default.toggleMute({ state, commit, dispatch, rootState })
+    expect(commit).toHaveBeenCalledWith('toggleMute')
+    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
+      root: true,
+    })
+    expect(unmuteMock).toHaveBeenCalledWith({ kind: 'audio' })
   })
 })
 

@@ -18,7 +18,7 @@ export default {
     const { activeCall } = rootState.webrtc
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
 
-    commit('setMuted')
+    commit('toggleMute')
 
     dispatch('sounds/playSound', state.muted ? Sounds.MUTE : Sounds.UNMUTE, {
       root: true,

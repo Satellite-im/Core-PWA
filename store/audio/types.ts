@@ -1,12 +1,12 @@
 export interface AudioState {
-  previousVolume: number
-  inputVolume: number
-  muted: boolean
-  volume: number
-  deafened: boolean
+  previousVolume: Number
+  inputVolume: Number
+  muted: Boolean
+  volume: Number
+  deafened: Boolean
   sounds: {
-    inboundMedia: number
-    outboundMedia: number
-    system: number
+    inboundMedia: Number
+    outboundMedia: Number
+    system: Number
   }
 }
