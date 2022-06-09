@@ -543,6 +543,10 @@ export default {
       new_group_name: 'Add a group name here...',
       older_messages: 'You are viewing older messages',
       recent_messages: 'Go to most recent messages',
+      infinite_scroll: {
+        loading: 'Loading messages ...',
+        no_more: 'No more data.',
+      },
     },
     newMessage: {
       new_message: 'New Message',

@@ -1,6 +1,7 @@
 import { ChatState } from './types'
-import { ReplyObj, ChatTextObj } from '~/types/chat/chat'
+import { ReplyObj, ChatTextObj, ICurrentChat } from '~/types/chat/chat'
 import { UploadDropItemType } from '~/types/files/file'
+import { initialCurrentChat } from '~/store/chat/state'
 
 const mutations = {
   chatText(state: ChatState, req: ChatTextObj) {
@@ -60,6 +61,12 @@ const mutations = {
   },
   setContainsNsfw(state: ChatState, containsNsfw: Boolean) {
     state.containsNsfw = containsNsfw
+  },
+  setCurrentChat(state: ChatState, currentChat: ICurrentChat) {
+    state.currentChat = { ...state.currentChat, ...currentChat }
+  },
+  resetCurrentChat(state: ChatState) {
+    state.currentChat = initialCurrentChat
   },
 }
 
