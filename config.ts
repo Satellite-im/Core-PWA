@@ -116,7 +116,8 @@ export const Config = {
     groupNameMaxLength: 64,
   },
   account: {
-    minimumAccountLength: 5,
+    minLength: 5,
+    maxLength: 32,
   },
   profile: {
     noteMaxChars: 256,

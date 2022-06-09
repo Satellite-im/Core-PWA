@@ -38,7 +38,10 @@ export default Vue.extend({
         return
       }
       if (this.isInvalidName) {
-        this.error = this.$t('errors.chat.group_name') as string
+        this.error = this.$t('errors.chat.group_name', {
+          min: this.$Config.chat.groupNameMinLength,
+          max: this.$Config.chat.groupNameMaxLength,
+        }) as string
         return
       }
       // create group

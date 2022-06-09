@@ -602,7 +602,8 @@ export default {
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
-      group_name: 'Enter a group name of at least 3 characters, up to 64',
+      group_name:
+        'Enter a group name of at least {min} characters, up to {max}',
     },
     textile: {
       friend_not_found: 'Friend not found',
@@ -656,7 +657,8 @@ export default {
         'Customize how the world sees you, choose something memorable.',
       username: 'Username',
       username_placeholder: 'Neil Spaceman...',
-      username_error: 'Username must be at least 5 characters.',
+      username_error:
+        'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
       reg_status: {
