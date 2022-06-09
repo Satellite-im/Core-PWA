@@ -26,7 +26,7 @@ export default Vue.extend({
       required: false,
     },
     scrollTopOnChange: {
-      type: [String, Boolean, Number, Array],
+      type: [String, Boolean],
       default: '',
       required: false,
     },
