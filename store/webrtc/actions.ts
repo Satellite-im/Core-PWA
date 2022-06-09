@@ -524,11 +524,6 @@ const webRTCActions = {
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
       )
-      commit('setMuted', {
-        peerId,
-        kind,
-        muted: true,
-      })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
 
