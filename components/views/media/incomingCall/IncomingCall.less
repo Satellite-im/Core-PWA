@@ -38,10 +38,13 @@
 
 .user-info {
   .user-name {
+    &:extend(.ellipsis);
     color: #fff;
     font-size: 25px;
     font-family: @primary-font;
     margin-bottom: 0;
+    width: 100%;
+    text-align: center;
   }
   .user-status {
     opacity: 0.5;
