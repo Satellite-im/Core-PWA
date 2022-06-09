@@ -137,7 +137,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it('Assert message received from user A', () => {
+  it.skip('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -146,7 +146,7 @@ describe('Chat features with two accounts', () => {
       .should('exist')
   })
 
-  it('Message not sent by same user cannot be edited', () => {
+  it.skip('Message not sent by same user cannot be edited', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -154,7 +154,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
   })
 
-  it('User should be able to reply a message', () => {
+  it.skip('User should be able to reply a message', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -162,7 +162,7 @@ describe('Chat features with two accounts', () => {
     cy.chatFeaturesReplyMessage('Chat User A', '@lastmessage', textReply)
   })
 
-  it('Reply to message shows as collapsed first', () => {
+  it.skip('Reply to message shows as collapsed first', () => {
     //reply path
     cy.getReply(randomMessage)
     cy.get('@reply-preview')
@@ -170,7 +170,7 @@ describe('Chat features with two accounts', () => {
       .should('contain', 'Reply from Chat User B')
   })
 
-  it('Reply to message is displayed by clicking on it', () => {
+  it.skip('Reply to message is displayed by clicking on it', () => {
     cy.getReply(randomMessage)
     cy.get('@reply-preview').click()
     cy.get('[data-cy=reply-message]').should('have.text', textReply)
@@ -179,21 +179,21 @@ describe('Chat features with two accounts', () => {
       .should('contain', 'Collapse')
   })
 
-  it('Reply to message is not displayed when clicking on Collapse', () => {
+  it.skip('Reply to message is not displayed when clicking on Collapse', () => {
     cy.get('[data-cy=reply-close]').scrollIntoView().click()
     cy.get('[data-cy=reply-message]').should('not.exist')
     cy.getReply(randomMessage)
     cy.get('@reply-preview').should('exist').scrollIntoView()
   })
 
-  it('Assert emoji received from user A', () => {
+  it.skip('Assert emoji received from user A', () => {
     cy.get('[data-cy=chat-message] > span')
       .last()
       .scrollIntoView()
       .should('have.text', '😄')
   })
 
-  it('Assert glyph received from user A', () => {
+  it.skip('Assert glyph received from user A', () => {
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSecondAccountSrc) => {
@@ -201,7 +201,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert image received from user A', () => {
+  it.skip('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -209,7 +209,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert file received from user A', () => {
+  it.skip('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
@@ -229,7 +229,7 @@ describe('Chat features with two accounts', () => {
       }) //skipped due to bug - AP-1662
   })
 
-  it('Add reactions to text message in chat', () => {
+  it.skip('Add reactions to text message in chat', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -238,19 +238,19 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it('Add reactions to image in chat', () => {
+  it.skip('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
   })
 
-  it('Add reactions to file in chat', () => {
+  it.skip('Add reactions to file in chat', () => {
     cy.get('[data-cy=chat-file]').last().as('fileToReact')
     cy.reactToChatElement('@fileToReact', '[title="smile"]')
     cy.validateChatReaction('@fileToReact', '😄')
   })
 
-  it('Add reactions to glyph in chat', () => {
+  it.skip('Add reactions to glyph in chat', () => {
     cy.get('[data-cy=chat-glyph]').last().as('glyphToReact')
     cy.reactToChatElement('@glyphToReact', '[title="smile"]')
     cy.validateChatReaction('@glyphToReact', '😄')
@@ -334,7 +334,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it('React to other users reaction - Execute validation', () => {
+  it.skip('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
