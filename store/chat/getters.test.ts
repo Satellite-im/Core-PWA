@@ -1,23 +1,14 @@
-import { ChatState } from './types'
 import * as module from '~/store/chat/getters'
+import InitialChatState from '~/store/chat/state'
 
 describe('misc', () => {
-  const InitialChatState = (): ChatState => ({
-    replies: [],
-    chatTexts: [],
-    files: {},
-    countError: false,
-    alertNsfw: false,
-    containsNsfw: false,
-  })
-
   test('getFiles', () => {
     const argument = 'address1'
     const testFile = new File(['hello'], 'test_fil.txt', {
       type: 'text/plain',
     })
-    const localState = { ...InitialChatState }
-    localState.files = {
+    const state = { ...InitialChatState() }
+    state.files = {
       address1: {
         file: testFile,
         url: 'url',
@@ -28,19 +19,18 @@ describe('misc', () => {
       },
     }
 
-    const firstFunction = module.default.getFiles(localState)
+    const firstFunction = module.default.getFiles(state)
     const result = firstFunction(argument)
 
-    expect(result).toBe(localState.files[argument])
+    expect(result).toBe(state.files[argument])
   })
 
   test('getFiles but not found', () => {
-    const argument = 'address1'
     const testFile = new File(['hello'], 'test_fil.txt', {
       type: 'text/plain',
     })
-    const localState = { ...InitialChatState }
-    localState.files = {
+    const state = { ...InitialChatState() }
+    state.files = {
       address1: {
         file: testFile,
         url: 'url',
@@ -51,7 +41,7 @@ describe('misc', () => {
       },
     }
 
-    const firstFunction = module.default.getFiles(localState)
+    const firstFunction = module.default.getFiles(state)
     const result = firstFunction('address2')
 
     expect(result).toEqual([])

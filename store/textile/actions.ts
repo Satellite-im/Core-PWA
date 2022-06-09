@@ -21,7 +21,7 @@ import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { Group } from '~/store/groups/types'
-import { UploadDropItemType } from '~/types/files/file'
+import { ChatFileUpload } from '~/store/chat/types'
 import {
   QueryOptions,
   SearchOrderType,
@@ -400,18 +400,15 @@ export default {
     dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
-  clearUploadStatus({ commit }: ActionsArguments<TextileState>) {
-    commit('clearUploadProgress', {})
-  },
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
-   * file: UploadDropItemType to be sent users bucket for textile
+   * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, file }: { to: string; file: UploadDropItemType },
+    { to, file }: { to: string; file: ChatFileUpload },
   ) {
     commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
@@ -950,11 +947,11 @@ export default {
    * @description Sends a File message to a given group
    * @param param0 Action Arguments
    * @param param1 an object containing the recipient address (textile public key),
-   * file: UploadDropItemType to be sent users bucket for textile
+   * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendGroupFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupID, file }: { groupID: string; file: UploadDropItemType },
+    { groupID, file }: { groupID: string; file: ChatFileUpload },
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager

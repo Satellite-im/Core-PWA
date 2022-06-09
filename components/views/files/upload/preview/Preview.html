@@ -1,0 +1,25 @@
+<div
+  class="file-preview"
+  :class="{bordered : files.length}"
+  @touchmove="handleTouchPreview"
+  @touchstart="handleTouchPreview"
+  @touchend="handleTouchPreview"
+>
+  <div v-if="countError" class="file-error">
+    <TypographyError :text="$t('errors.chat.drop_file_count')" />
+    <div class="close-button">
+      <x-icon size="1x" class="has-text-danger" @click="countError = false" />
+    </div>
+  </div>
+  <UiScroll v-if="files.length" horizontalScroll scrollbarVisibility="scroll">
+    <div class="file-list">
+      <FilesUploadPreviewItem
+        v-for="(item, index) in files"
+        :item="item"
+        :index="index"
+        :key="index"
+        @removeUploadItem="removeUploadItem(index)"
+      />
+    </div>
+  </UiScroll>
+</div>

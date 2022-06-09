@@ -19,9 +19,8 @@ const InitialChatState = (): ChatState => ({
   chatTexts: [],
   files: {},
   countError: false,
-  alertNsfw: false,
-  containsNsfw: false,
   currentChat: initialCurrentChat,
+  uploadProgress: {},
 })
 
 export default InitialChatState

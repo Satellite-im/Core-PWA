@@ -2,12 +2,13 @@
   <input
     :type="recipient ? `file` : `hidden`"
     id="quick-upload"
-    ref="quickUpload"
+    ref="upload"
+    @click="resetFileInput"
     @change="handleFile"
     multiple
   />
   <a
-    @click="handleFileClick"
+    @click="clickFileInput"
     v-tooltip.top="$t('global.upload')"
     class="has-tooltip has-tooltip-top has-tooltip-primary upload-button"
     :class="{disabled : !recipient}"

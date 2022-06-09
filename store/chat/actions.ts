@@ -1,26 +1,21 @@
-import { ChatState } from './types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-
 import { ActionsArguments } from '~/types/store/store'
-import { ChatTextObj, ScrollDirections } from '~/types/chat/chat'
-import { UploadDropItemType } from '~/types/files/file'
+import { ScrollDirections } from '~/types/chat/chat'
+import { ChatState, ChatText, ChatFileUpload } from '~/store/chat/types'
 
 export default {
-  setChatText(
-    { commit, dispatch }: ActionsArguments<ChatState>,
-    req: ChatTextObj,
-  ) {
+  setChatText({ commit }: ActionsArguments<ChatState>, req: ChatText) {
     commit('chatText', req)
   },
   removeUploadItem(
-    { commit, rootState, dispatch }: ActionsArguments<ChatState>,
+    { commit, rootState }: ActionsArguments<ChatState>,
     {
       itemIndex,
       files,
       recipientAddress,
     }: {
       itemIndex: number
-      files: UploadDropItemType[]
+      files: ChatFileUpload[]
       recipientAddress: string
     },
   ) {
@@ -28,15 +23,12 @@ export default {
       document.body.style.cursor = PropCommonEnum.DEFAULT
       commit('setCountError', false)
       commit('deleteFiles', recipientAddress)
-      dispatch('textile/clearUploadStatus')
       if (rootState.textile.messageLoading)
         commit('textile/setMessageLoading', { loading: false })
     }
 
     commit('setFiles', {
-      files: files.filter(
-        (file: UploadDropItemType, i: number) => i !== itemIndex,
-      ),
+      files: files.filter((file: ChatFileUpload, i: number) => i !== itemIndex),
       address: recipientAddress,
     })
   },

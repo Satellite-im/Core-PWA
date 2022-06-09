@@ -1,29 +1,19 @@
 <div
   id="chatbar"
   ref="chatbar"
-  :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
+  :class="{'has-reply' : ui.replyChatbarContent.id}"
 >
   <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
-  <ChatbarReply v-if="recipient" />
-  <FilesUploadFilePreview
-    :recipient="recipient"
-    :files="files"
-    @cancelUpload="onCancelUpload"
-  />
+  <ChatbarReply />
+  <FilesUploadPreview />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': files.length > 0 || ui.replyChatbarContent.id || commandPreview || $store.state.chat.alertNsfw || $store.state.chat.countError}"
-    ref="wrap"
+    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': isSharpCorners}"
   >
     <div class="control-wrap file-upload-wrap">
-      <FilesUpload
-        :recipient="recipient"
-        ref="file-upload"
-        :files="files"
-        @cancelUpload="onCancelUpload"
-      />
+      <FilesUpload ref="file-upload" />
     </div>
     <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
@@ -36,17 +26,13 @@
       ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient) && !textile.messageLoading"
+      :enabled="!textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-    <ChatbarControls
-      :disabled="!recipient"
-      :sendMessage="sendMessage"
-      id="chatbar-controls"
-    />
+    <ChatbarControls id="chatbar-controls" :sendMessage="sendMessage" />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

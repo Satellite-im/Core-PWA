@@ -2,7 +2,7 @@ import { RegistrationStatus } from '~/store/accounts/types'
 import * as actions from '~/store/chat/actions'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
-import { UploadDropItemType } from '~/types/files/file'
+import { ChatFileUpload } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import { ScrollDirections } from '~/types/chat/chat'
 import {
@@ -36,7 +36,7 @@ describe('actions.default.removeUploadItem', () => {
       { userId: '12345', value: 'elio@example.com' },
       { userId: '9876', value: 'elio@example.com' },
     ]
-    const object3: UploadDropItemType[] = [
+    const object3: ChatFileUpload[] = [
       {
         file: 'path_file_0',
         nsfw: { checking: false, status: false },
@@ -254,7 +254,6 @@ describe('actions.default.removeUploadItem', () => {
       'deleteFiles',
       'bc23a9d531064583ace8f67dad60f6bb',
     )
-    expect(dispatch).toBeCalledWith('textile/clearUploadStatus')
 
     // Because rootState.textile.messageLoading is true, commit will be called with this.
     expect(commit).toBeCalledWith('textile/setMessageLoading', {
@@ -432,7 +431,6 @@ describe('actions.default.removeUploadItem', () => {
       'deleteFiles',
       'bc23a9d531064583ace8f67dad60f6bb',
     )
-    expect(dispatch).toBeCalledWith('textile/clearUploadStatus')
 
     // Because rootState.textile.messageLoading is false, commit will *not* be called with this.
     expect(commit).not.toBeCalledWith('textile/setMessageLoading', {

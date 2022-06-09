@@ -1,6 +1,5 @@
-import { ChatState } from './types'
+import { ChatState, ChatFileUpload } from './types'
 import * as module from '~/store/chat/mutations'
-import { UploadDropItemType } from '~/types/files/file'
 
 describe('module.default.setChatReply', () => {
   test('0', () => {
@@ -216,7 +215,7 @@ describe('misc', () => {
     { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     { replyId: '12345', value: false },
   ]
-  const object3: UploadDropItemType[] = []
+  const object3: ChatFileUpload[] = []
   const state = { replies: object, chatTexts: object2, files: object3 }
 
   test('module.default.addFile with empty files array', () => {
@@ -1039,8 +1038,6 @@ describe('misc', () => {
     chatTexts: [],
     files: {},
     countError: false,
-    alertNsfw: false,
-    containsNsfw: false,
     currentChat: {
       direction: 'TOP',
       hasNextPage: true,
@@ -1062,24 +1059,6 @@ describe('misc', () => {
     module.default.setCountError(localState, argument)
 
     expect(localState.countError).toEqual(argument)
-  })
-
-  test('module.setAlertNsfw', () => {
-    const argument = true
-    const localState = { ...InitialChatState }
-
-    module.default.setAlertNsfw(localState, argument)
-
-    expect(localState.alertNsfw).toEqual(argument)
-  })
-
-  test('module.setContainsNsfw', () => {
-    const argument = true
-    const localState = { ...InitialChatState }
-
-    module.default.setContainsNsfw(localState, argument)
-
-    expect(localState.containsNsfw).toEqual(argument)
   })
 
   test('module.setCurrentChat', () => {

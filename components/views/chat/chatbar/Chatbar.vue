@@ -1,13 +1,9 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-
-import Upload from '../../files/upload/Upload.vue'
-import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
-
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { Friend } from '~/types/ui/friends'
 import {
@@ -16,32 +12,17 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { UploadDropItemType } from '~/types/files/file'
 import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
+import { ChatText } from '~/store/chat/types'
 
 export default Vue.extend({
   components: {
     TerminalIcon,
-    Upload,
-    FilePreview,
-  },
-  props: {
-    recipient: {
-      type: Object as PropType<Friend | Group>,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      showEmojiPicker: false,
-      nsfwUploadError: false,
-      files: [] as Array<UploadDropItemType>,
-    }
   },
   computed: {
     ...mapGetters('chat', ['getFiles']),
-    ...mapGetters('friends', ['getActiveFriend']),
+    ...mapGetters('conversation', ['recipient']),
     ...mapState({
       ui: (state) => (state as RootState).ui,
       friends: (state) => (state as RootState).friends,
@@ -101,6 +82,14 @@ export default Vue.extend({
       // return currentCommand && isArgsValid(currentCommand, currentArgs)
       return false
     },
+    isSharpCorners(): boolean {
+      return (
+        Boolean(this.getFiles?.length) ||
+        Boolean(this.ui.replyChatbarContent.id) ||
+        this.commandPreview ||
+        this.chat.countError
+      )
+    },
     text: {
       /**
        * @method get
@@ -134,7 +123,7 @@ export default Vue.extend({
     'recipient.address': {
       handler(value) {
         const findItem = this.chat.chatTexts.find(
-          (item: any) => item.userId === value,
+          (item: ChatText) => item.userId === value,
         )
         const message = findItem ? findItem.value : ''
         this.$refs.editable?.resetHistory()
@@ -148,28 +137,8 @@ export default Vue.extend({
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
         }
-
-        this.onRecipientChangeResetUploadState(value)
       },
     },
-  },
-  created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (
-        mutation.type === 'chat/addFile' ||
-        mutation.type === 'chat/setFiles'
-      ) {
-        if (this.recipient) {
-          this.files = this.getFiles(this.recipient?.address)
-        }
-      }
-
-      if (mutation.type === 'chat/deleteFiles') {
-        if (this.recipient) {
-          this.files = []
-        }
-      }
-    })
   },
   methods: {
     /**
@@ -278,7 +247,6 @@ export default Vue.extend({
           text: value,
         })
       }
-      this.nsfwUploadError = false
     },
     /**
      * @method handlePaste
@@ -299,37 +267,20 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: Array<object>, e: Event) {
-      const arrOfFiles: File[] = [...items]
+      const files: File[] = [...items]
         .filter((f: any) => {
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f: any) => f.getAsFile())
-      if (arrOfFiles.length) {
+      if (files.length) {
         e.preventDefault()
-        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
+        const handleFileExpectEvent = { target: { files } }
         // @ts-ignore
         this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
       }
     },
     handleChatTextFromOutside(text: string) {
       this.$refs.editable?.handleTextFromOutside(text)
-    },
-    /**
-     * @method cancelUpload
-     * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
-     * @example @click="cancelUpload"
-     */
-    onCancelUpload() {
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/setContainsNsfw', false)
-      this.$store.commit('chat/setCountError', false)
-    },
-    onRecipientChangeResetUploadState(recipient: string) {
-      this.files = this.getFiles(recipient)
-      this.$store.commit('chat/setContainsNsfw', false)
-      this.$store.commit('chat/setCountError', false)
-      this.$store.commit('chat/setAlertNsfw', false)
     },
     beforeDestroy() {
       this.unsubscribe()

@@ -2,9 +2,7 @@
 
 exports[`state.default 0 1`] = `
 Object {
-  "alertNsfw": false,
   "chatTexts": Array [],
-  "containsNsfw": false,
   "countError": false,
   "currentChat": Object {
     "direction": "TOP",
@@ -20,5 +18,6 @@ Object {
   },
   "files": Object {},
   "replies": Array [],
+  "uploadProgress": Object {},
 }
 `;
