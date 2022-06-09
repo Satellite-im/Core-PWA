@@ -2,6 +2,7 @@
   <div class="content">
     <div class="gradient-cover" data-cy="incoming-call"></div>
     <div
+      v-if="Boolean(caller)"
       class="caller"
       :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
     >
