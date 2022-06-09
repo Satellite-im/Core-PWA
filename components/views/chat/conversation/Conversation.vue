@@ -36,7 +36,7 @@ export default Vue.extend({
       return this.currentChat.direction === ScrollDirections.TOP
     },
     conversationId() {
-      return this.$route.params?.address
+      return this.$route.params?.address || this.$route.params?.id
     },
     isMediaOpen() {
       return this.webrtc.activeCall && this.webrtc.activeCall.callId

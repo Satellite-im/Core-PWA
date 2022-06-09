@@ -1,7 +1,7 @@
 <div id="group">
   <UiLoadersMessage
     :count="6"
-    v-if="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
+    v-if="$store.state.textile.conversationLoading || !getInitialized"
   />
   <Conversation v-else :groupId="groupID" />
 </div>
