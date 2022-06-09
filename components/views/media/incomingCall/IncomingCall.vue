@@ -35,23 +35,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['conversation', 'groups', 'friends']),
-    group() {
-      return (
-        this.callType === 'group' &&
-        this.$store.state.groups.all.find(
-          (g: any) => g.id === this.$store.state.webrtc.incomingCall?.callId,
-        )
-      )
-    },
-    friend() {
-      return (
-        this.callType === 'friend' &&
-        this.$store.state.friends.all.find(
-          (f: any) =>
-            f.peerId === this.$store.state.webrtc.incomingCall?.callId,
-        )
-      )
-    },
     callType() {
       return this.$store.state.webrtc.incomingCall?.callId &&
         RegExp(this.$Config.regex.uuidv4).test(
@@ -59,6 +42,24 @@ export default Vue.extend({
         )
         ? 'group'
         : 'friend'
+    },
+    caller() {
+      if (!this.callType) {
+        return
+      }
+      if (this.callType === 'friend') {
+        return this.$store.state.friends.all.find(
+          (f: any) =>
+            f.peerId === this.$store.state.webrtc.incomingCall?.callId,
+        )
+      }
+      return this.$store.state.groups.all.find(
+        (g: any) => g.id === this.$store.state.webrtc.incomingCall?.callId,
+      )
+    },
+    callerAvatar(): string {
+      const hash = this.caller?.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   watch: {

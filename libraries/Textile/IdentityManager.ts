@@ -3,9 +3,9 @@ import { Identity, PrivateKey } from '@textile/crypto'
 import { Client } from '@textile/hub-threads-client'
 import { Users } from '@textile/users'
 import { AuthData } from '../Interfaces'
+import { Account } from '../BlockchainClient/interfaces'
 import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { SolanaWallet } from '~/types/solana/solana'
 // @ts-ignore
 
 export default class IdentityManager {
@@ -65,13 +65,13 @@ export default class IdentityManager {
    * @param wallet a Solana Wallet instance
    * @returns the identity
    */
-  async initFromWallet(wallet: SolanaWallet): Promise<Identity> {
+  async initFromWallet(wallet: Account): Promise<Identity> {
     const cryptoInstance = new Crypto()
 
     const secret = await cryptoInstance.hash('Satellite.im')
     const message = this.generateMessageForEntropy(wallet.address, secret)
     const signedText = await cryptoInstance.signMessageWithKey(
-      wallet.keypair.secretKey,
+      Buffer.from(wallet.privateKey),
       message,
     )
     const hash = await cryptoInstance.hash(signedText)

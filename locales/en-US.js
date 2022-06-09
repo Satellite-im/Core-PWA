@@ -117,7 +117,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit',
+    edit: 'Edit\nComing soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -542,6 +542,10 @@ export default {
       new_group_name: 'Add a group name here...',
       older_messages: 'You are viewing older messages',
       recent_messages: 'Go to most recent messages',
+      infinite_scroll: {
+        loading: 'Loading messages ...',
+        no_more: 'No more data.',
+      },
     },
     newMessage: {
       new_message: 'New Message',
@@ -602,7 +606,8 @@ export default {
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
-      group_name: 'Enter a group name of at least 3 characters, up to 64',
+      group_name:
+        'Enter a group name of at least {min} characters, up to {max}',
     },
     textile: {
       friend_not_found: 'Friend not found',
@@ -656,7 +661,8 @@ export default {
         'Customize how the world sees you, choose something memorable.',
       username: 'Username',
       username_placeholder: 'Neil Spaceman...',
-      username_error: 'Username must be at least 5 characters.',
+      username_error:
+        'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
       reg_status: {
@@ -712,7 +718,7 @@ export default {
     },
   },
   market_place: {
-    title: 'Marketplace',
+    title: 'Marketplace\nComing soon',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',

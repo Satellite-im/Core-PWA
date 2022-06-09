@@ -11,6 +11,7 @@ import {
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 import { UIMessage } from '~/types/messaging'
+import { ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -19,12 +20,6 @@ export default Vue.extend({
     ArchiveIcon,
     EditIcon,
     MoreVerticalIcon,
-  },
-  data() {
-    return {
-      hasMoreSettings: false,
-      featureReadyToShow: false,
-    }
   },
   props: {
     setReplyChatbarContent: {
@@ -55,6 +50,12 @@ export default Vue.extend({
       }),
     },
   },
+  data() {
+    return {
+      hasMoreSettings: false,
+      featureReadyToShow: false,
+    }
+  },
   computed: {
     ...mapState(['ui', 'accounts']),
     isEditable(): boolean {
@@ -62,6 +63,15 @@ export default Vue.extend({
         this.message.from === this.accounts.details.textilePubkey &&
         !(this.message.type === 'glyph' || this.message.type === 'file')
       )
+    },
+    ModalWindows: () => ModalWindows,
+  },
+  methods: {
+    toggleModal(modalName: ModalWindows) {
+      this.$store.commit('ui/toggleModal', {
+        name: modalName,
+        state: !this.ui.modals[modalName],
+      })
     },
   },
 })

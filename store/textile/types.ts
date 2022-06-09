@@ -4,6 +4,7 @@ import {
   ReactionsTracker,
   RepliesTracker,
 } from '~/types/textile/mailbox'
+import { MessageGroup } from '~/types/messaging'
 import { UserThreadData } from '~/types/textile/user'
 
 export interface Conversation {
@@ -12,6 +13,7 @@ export interface Conversation {
     messages: MessagesTracker
     replies: RepliesTracker
     reactions: ReactionsTracker
+    groupedMessages: MessageGroup
     lastInbound: number // the last time a message was received by any member of conversation, other than account owner
     lastUpdate: number // the last time a message was received by any member of conversation, including account owner
     lastMessage: MessageTrackerValues | null

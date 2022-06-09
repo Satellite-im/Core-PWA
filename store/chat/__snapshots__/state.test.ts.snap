@@ -6,6 +6,18 @@ Object {
   "chatTexts": Array [],
   "containsNsfw": false,
   "countError": false,
+  "currentChat": Object {
+    "direction": "TOP",
+    "hasNextPage": true,
+    "isMessagesLoading": false,
+    "isScrollOver": true,
+    "lastLoadedMessageId": "",
+    "messages": Array [],
+    "offset": 0,
+    "page": 1,
+    "showOlderMessagesInfo": false,
+    "size": 10,
+  },
   "files": Object {},
   "replies": Array [],
 }

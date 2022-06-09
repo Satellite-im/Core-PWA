@@ -25,10 +25,10 @@
     <archive-icon size="1x" :class="'control-icon'" />
   </div>
   <div
-    class="reply-command"
+    class="reply-command coming-soon"
     v-tooltip.top="$t('controls.edit')"
     v-if="isEditable"
-    @click="editMessage"
+    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
   >
     <edit-icon size="1x" :class="'control-icon'" />
   </div>

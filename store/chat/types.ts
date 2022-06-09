@@ -1,4 +1,4 @@
-import { ReplyObj, ChatTextObj } from '~/types/chat/chat'
+import { ReplyObj, ChatTextObj, ICurrentChat } from '~/types/chat/chat'
 import { UploadDropItemType } from '~/types/files/file'
 
 export interface ChatState {
@@ -8,4 +8,5 @@ export interface ChatState {
   countError: Boolean
   alertNsfw: Boolean
   containsNsfw: Boolean
+  currentChat: ICurrentChat
 }
