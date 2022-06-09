@@ -169,6 +169,7 @@ export default Vue.extend({
      * @example this.onConfirm()
      */
     confirm(e: Event) {
+      e.preventDefault()
       if (this.isLoading) {
         return
       }
@@ -179,8 +180,6 @@ export default Vue.extend({
         }) as string
         return
       }
-      e.preventDefault()
-
       this.error = ''
 
       this.$emit('confirm', {
