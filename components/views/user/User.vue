@@ -14,6 +14,7 @@ import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
 
 export default Vue.extend({
   components: {
@@ -51,15 +52,16 @@ export default Vue.extend({
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
       conversations: (state) => (state as RootState).textile?.conversations,
+      activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
     ...mapGetters('textile', ['getConversation']),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
-      return this.user.state === 'online'
+      return this.enableRTC
         ? [
             { text: this.$t('context.send'), func: this.navigateToUser },
-            { text: this.$t('context.voice'), func: this.testFunc },
-            { text: this.$t('context.video'), func: this.testFunc },
+            { text: this.$t('context.voice'), func: this.handleCall },
+            // { text: this.$t('context.video'), func: this.testFunc },
             // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
             // { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
@@ -101,6 +103,9 @@ export default Vue.extend({
         time: this.conversations[this.user.address]?.lastUpdate,
       })
     },
+    enableRTC(): boolean {
+      return this.user.state === 'online'
+    },
   },
   mounted() {
     Array.from(
@@ -120,8 +125,20 @@ export default Vue.extend({
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
-    testFunc() {
-      this.$Logger.log('User Context', 'Test func')
+    async call(kinds: TrackKind[]) {
+      if (!this.enableRTC) {
+        return
+      }
+      await this.$store.dispatch('webrtc/call', {
+        kinds,
+      })
+    },
+    handleCall() {
+      if (!this.enableRTC || this.activeCall) {
+        return
+      }
+      this.navigateToUser()
+      this.call(['audio'])
     },
     async removeUser() {
       this.isLoading = true

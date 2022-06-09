@@ -52,7 +52,7 @@ export default Vue.extend({
     isActiveCall() {
       return (
         this.webrtc.activeCall &&
-        this.webrtc.activeCall.callId === this.conversation.id
+        this.webrtc.activeCall.peerId === this.conversation.id
       )
     },
     computedUsers() {

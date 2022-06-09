@@ -11,8 +11,8 @@ const actions = {
    * @example
    * store.dispatch('conversation/initialize');
    */
-  initialize(state: ActionsArguments<ConversationState>) {
-    state.commit('setConversation', {
+  initialize({ commit }: ActionsArguments<ConversationState>) {
+    commit('setConversation', {
       id: '',
       type: 'friend',
       calling: false,
@@ -26,7 +26,7 @@ const actions = {
    * store.dispatch('conversation/setConversation', conversation);
    */
   setConversation(
-    state: ActionsArguments<ConversationState>,
+    { commit }: ActionsArguments<ConversationState>,
     payload: {
       id: string
       type: 'friend' | 'group'
@@ -34,7 +34,7 @@ const actions = {
       participants: Array<ConversationParticipant>
     },
   ) {
-    state.commit('setConversation', payload)
+    commit('setConversation', payload)
   },
   /**
    * @method setCalling
@@ -42,8 +42,11 @@ const actions = {
    * @example
    * store.dispatch('conversation/setCalling', true);
    */
-  setCalling(state: ActionsArguments<ConversationState>, calling: boolean) {
-    state.commit('setCalling', calling)
+  setCalling(
+    { commit }: ActionsArguments<ConversationState>,
+    calling: boolean,
+  ) {
+    commit('setCalling', calling)
   },
   /**
    * @method addParticipant
