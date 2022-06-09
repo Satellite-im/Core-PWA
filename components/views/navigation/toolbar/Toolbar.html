@@ -112,15 +112,16 @@
     <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <div
+    <UiComingSoon
       v-if="!$device.isMobile"
-      class="market-place control-button"
+      class="market-place control-button coming-soon"
       @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      v-tooltip.bottom="$t('market_place.title')"
+      :tooltipText="$t('market_place.title')"
+      :tooltipPosition="'bottom'"
       data-cy="toolbar-marketplace"
     >
-      <shopping-bag-icon class="control-icon" size="1x" />
-    </div>
+      <shopping-bag-icon class="control-icon" size="1x" color="grey" />
+    </UiComingSoon>
     <UiComingSoon
       v-if="!$device.isMobile"
       :tooltipText="$t('coming_soon.wallet')"

@@ -712,7 +712,7 @@ export default {
     },
   },
   market_place: {
-    title: 'Marketplace',
+    title: 'Marketplace\nComing soon',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',
