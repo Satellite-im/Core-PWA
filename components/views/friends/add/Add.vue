@@ -8,8 +8,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-import { RootState } from '~/types/store/store'
+import BlockchainClient from '~/libraries/BlockchainClient'
 
 export default Vue.extend({
   components: {
@@ -69,8 +68,11 @@ export default Vue.extend({
       }
       this.error = ''
       try {
-        const usersProgram: UsersProgram = new UsersProgram(this.$SolanaManager)
-        const friend = await usersProgram.getUserInfo(accountID)
+        const $BlockchainClient: BlockchainClient =
+          BlockchainClient.getInstance()
+
+        const friend = await $BlockchainClient.getUserInfo(accountID)
+
         if (!friend) {
           this.error = this.$t('friends.not_found') as string
           return
