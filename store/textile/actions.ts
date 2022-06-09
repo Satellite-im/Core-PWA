@@ -863,7 +863,7 @@ export default {
             groupId,
             id: uuidv4(),
             groupURL: message.to,
-            image: userInfo?.photoHash,
+            imageHash: userInfo?.photoHash,
             type: AlertType.GROUP_MESSAGE,
           },
           { root: true },

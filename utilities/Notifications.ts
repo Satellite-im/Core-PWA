@@ -1,6 +1,7 @@
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
@@ -11,6 +12,7 @@ export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
   sendNotification: any = this.sendNotifications
+  $Config: typeof Config = Config
 
   constructor() {
     const envinfo = new EnvInfo()
@@ -117,12 +119,14 @@ export const Notifications = class Notifications {
    * @description
    * @param type
    * @param titleText
+   * @param image
    * @param message
    * @example
    */
   async sendNotifications(
     type: string,
     titleText: string,
+    image: string,
     message: string,
   ): Promise<void> {
     if (
@@ -135,12 +139,11 @@ export const Notifications = class Notifications {
         body: message,
       })
     }
-
     if (this.currentPlatform === PlatformTypeEnum.WEB) {
       await LocalNotifications.schedule({
         notifications: [
           {
-            title: titleText,
+            title: `${type} ${titleText}`,
             body: message,
             id: new Date().getTime(),
             schedule: {
@@ -152,12 +155,12 @@ export const Notifications = class Notifications {
             attachments: [
               {
                 id: 'face',
-                url: 'res://ic_launcher.png',
+                url: `${this.$Config.textile.browser}/ipfs/${image}`,
               },
             ],
           },
         ],
-      }).then((what) => console.log(what))
+      })
     }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
