@@ -9,6 +9,7 @@ export enum RegistrationStatus {
 }
 
 export interface AccountsState {
+  passPhrase: any
   initialized: boolean
   storePin: boolean
   registry: boolean

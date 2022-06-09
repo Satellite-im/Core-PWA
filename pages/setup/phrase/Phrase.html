@@ -22,7 +22,13 @@
         </div>
       </div>
     </div>
-    <UiSpacer :size="45" />
+    <UiSpacer :height="45" />
+    <span class="copy-text-container" @click="copyPhrase">
+      <clipboard-icon class="copy-text" size="1x" />
+      <TypographyText class="copy-text" :text="'Copy to Clipboard'" :size="6" />
+    </span>
+
+    <UiSpacer :height="20" />
     <InteractablesButton
       full-width
       :text="$t('pages.phrase.done')"
