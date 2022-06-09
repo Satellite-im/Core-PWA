@@ -2,7 +2,11 @@ import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
 import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
-import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import {
+  MessageRouteEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
@@ -31,6 +35,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
+import { MessageGroup } from '~/types/messaging'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
@@ -191,13 +196,91 @@ export default {
     // TODO: only for testing
     dispatch('subscribeToMailbox')
   },
+  addMessageToConversation(
+    { state, commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    {
+      address,
+      sender,
+      message,
+    }: { address: string; sender: string; message: Message },
+  ) {
+    const isActiveConversation = state.activeConversation === address
+
+    let oldGroupedMessages: MessageGroup = []
+
+    if (isActiveConversation) {
+      oldGroupedMessages = state.conversations[address].groupedMessages
+    }
+
+    commit('addMessageToConversation', {
+      address,
+      sender,
+      message,
+    })
+
+    if (isActiveConversation) {
+      const { messages, isScrollOver, lastLoadedMessageId, offset } =
+        rootState.chat.currentChat
+
+      let messageId: string = ''
+
+      if (message.type === MessagingTypesEnum.REACTION) {
+        messageId = message.reactedTo
+      } else if (message.type === MessagingTypesEnum.REPLY) {
+        messageId = message.repliedTo
+      } else {
+        messageId = message.id
+      }
+
+      const newGroupedMessages = state.conversations[address].groupedMessages
+
+      const isExistMessageIndex = messages.findIndex(
+        (m: Message) => m.id === messageId,
+      )
+
+      // update existed message
+      if (isExistMessageIndex !== -1) {
+        const newMessages = [...messages]
+        newMessages[isExistMessageIndex] = newGroupedMessages.find(
+          (message) => message.id === messageId,
+        )
+        commit(
+          'chat/setCurrentChat',
+          {
+            messages: newMessages,
+          },
+          { root: true },
+        )
+        return
+      }
+
+      // add new messages
+      const diffGroupedMessages =
+        newGroupedMessages.length - oldGroupedMessages.length
+
+      if (diffGroupedMessages) {
+        const newMessages = newGroupedMessages.slice(oldGroupedMessages.length)
+
+        commit(
+          'chat/setCurrentChat',
+          {
+            messages: messages.concat(newMessages),
+            lastLoadedMessageId: !isScrollOver
+              ? newMessages[newMessages.length - 1].id
+              : lastLoadedMessageId,
+            offset: offset - diffGroupedMessages,
+          },
+          { root: true },
+        )
+      }
+    }
+  },
   /**
    * @description Subscribes to the user mailbox, if not already subscribed, and eventually
    * updates messages in the active chat
    * @param param0 Action Arguments
    */
   async subscribeToMailbox({
-    commit,
     rootState,
     dispatch,
   }: ActionsArguments<TextileState>) {
@@ -215,6 +298,7 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }
+
     MailboxManager.listenToInboxMessages((message) => {
       if (!message) {
         return
@@ -226,7 +310,8 @@ export default {
       if (!sender) {
         return
       }
-      commit('addMessageToConversation', {
+
+      dispatch('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
@@ -303,7 +388,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -361,7 +446,7 @@ export default {
         },
       )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -405,7 +490,7 @@ export default {
         type: 'reaction',
       },
     )
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -466,7 +551,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -503,7 +588,7 @@ export default {
       editingAt: Date.now(),
     } as Message
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: editingMessage,
@@ -516,7 +601,7 @@ export default {
     })
 
     if (result) {
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
@@ -526,7 +611,7 @@ export default {
         message: result,
       })
     } else {
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: original,
@@ -573,7 +658,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -741,7 +826,8 @@ export default {
       if (!message) {
         return
       }
-      commit('addMessageToConversation', {
+
+      dispatch('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.INBOUND,
         message,
@@ -801,7 +887,7 @@ export default {
           Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
         })
 
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
@@ -847,7 +933,7 @@ export default {
       type: 'glyph',
     })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -894,7 +980,7 @@ export default {
         type: 'file',
       })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -952,7 +1038,7 @@ export default {
       replyType,
     })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -984,7 +1070,7 @@ export default {
       reactedTo: reactTo,
       type: 'reaction',
     })
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,

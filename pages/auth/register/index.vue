@@ -46,7 +46,6 @@ export default Vue.extend({
   },
   watch: {
     allPrerequisitesReady(nextValue) {
-      console.log(nextValue)
       if (!nextValue) return
       this.$router.replace('/chat/direct')
     },
