@@ -2,6 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
+import { ModalWindows } from '~/store/ui/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -48,9 +50,19 @@ export default Vue.extend({
       required: false,
     },
   },
+  computed: {
+    ...mapState(['ui']),
+    ModalWindows: () => ModalWindows,
+  },
   methods: {
     preventClickthrough(event: Event) {
       event.stopPropagation()
+    },
+    toggleModal(modalName: ModalWindows) {
+      this.$store.commit('ui/toggleModal', {
+        name: modalName,
+        state: !this.ui.modals[modalName],
+      })
     },
   },
 })
