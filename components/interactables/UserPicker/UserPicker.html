@@ -1,0 +1,16 @@
+<div class="user-picker">
+  <InteractablesInput
+    v-model="filter"
+    size="small"
+    type="dark"
+    :placeholder="$t('servers.create.select_friends_placeholder')"
+  />
+  <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <InteractablesUserPickerListItem
+      v-for="friend in filteredFriends"
+      :friend="friend"
+      :selected="isSelected(friend)"
+      @click="toggle(friend)"
+    />
+  </UiScroll>
+</div>
