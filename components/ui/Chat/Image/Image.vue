@@ -2,7 +2,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
-import { FileMessage } from '~/types/textile/mailbox'
+import { FileMessagePayload } from '../Embeds/File/types'
+// @ts-ignore
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
@@ -20,7 +21,7 @@ export default Vue.extend({
       default: false,
     },
     image: {
-      type: Object as PropType<FileMessage>,
+      type: Object as PropType<FileMessagePayload>,
       required: true,
     },
   },

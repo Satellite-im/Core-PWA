@@ -407,13 +407,13 @@ async function uploadPicture(image: string) {
     })
 
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  $TextileManager.bucketManager?.getBucket()
-  const result = await $TextileManager.bucketManager?.pushFile(
+  const res = await $TextileManager.sharedBucket?.pushFile(
     imageFile,
     imageFile.name,
+    () => {},
   )
 
-  return result?.path.root.toString() ?? ''
+  return res?.path.root.toString() ?? ''
 }
 
 export const exportForTesting = {

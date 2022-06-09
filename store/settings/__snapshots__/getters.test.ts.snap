@@ -1,13 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getters.default.getTimezone 0 1`] = `"Europe/Paris"`;
+exports[`settings.getters getFullTimestamp 1`] = `"06/06/2022 5:37 AM"`;
 
-exports[`getters.default.getTimezone 1 1`] = `"Asia/Yakutsk"`;
-
-exports[`getters.default.getTimezone 2 1`] = `"Europe/Paris"`;
-
-exports[`getters.default.getTimezone 3 1`] = `"Asia/Tehran"`;
-
-exports[`getters.default.getTimezone 4 1`] = `"Europe/Berlin"`;
-
-exports[`getters.default.getTimezone 5 1`] = `""`;
+exports[`settings.getters getTimestamp 1`] = `"5:37 AM"`;

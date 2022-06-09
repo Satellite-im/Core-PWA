@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
-import { FileMessage } from '~/types/textile/mailbox'
+import { FileMessagePayload } from './types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 
 export default Vue.extend({
@@ -12,7 +12,7 @@ export default Vue.extend({
   },
   props: {
     file: {
-      type: Object as PropType<FileMessage>,
+      type: Object as PropType<FileMessagePayload>,
       required: true,
     },
   },
@@ -22,6 +22,15 @@ export default Vue.extend({
     },
     isEmbeddable(): boolean {
       return isMimeEmbeddableImage(this.file.type)
+    },
+  },
+  methods: {
+    download() {
+      this.$TextileManager.sharedBucket?.pullFile(
+        this.file.id,
+        this.file.name,
+        this.file.size,
+      )
     },
   },
 })
