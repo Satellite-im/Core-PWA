@@ -19,7 +19,6 @@ export default Vue.extend({
     ...mapState(['ui', 'webrtc']),
   },
   mounted() {
-    this.$store.commit('ui/fullscreen', false)
     this.timer = false
     this.setTimer()
   },
