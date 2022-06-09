@@ -139,11 +139,6 @@ export default Vue.extend({
     async handleClickPaginate(pageNum: number) {
       this.page = pageNum
       await this.fetchResult()
-      if (!this.$refs.scrollRef) {
-        return
-      }
-      const scrollEl = this.$refs.scrollRef as Vue
-      scrollEl.$el.scrollTop = 0
     },
     onChange(value: any) {
       this.queryOptions = {

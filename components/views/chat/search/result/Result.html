@@ -76,7 +76,11 @@
       @toggleOrder="toggleOrderBy"
     />
     <div class="search-result-content">
-      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
+      <UiSimpleScroll
+        :scrollTopOnChange="page"
+        scrollMode="vertical"
+        scrollShow="scroll"
+      >
         <div class="search-result-inner">
           <SearchResultItem
             v-for="item, i in result.data"

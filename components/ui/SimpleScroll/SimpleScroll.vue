@@ -25,6 +25,21 @@ export default Vue.extend({
       default: '',
       required: false,
     },
+    scrollTopOnChange: {
+      type: [String, Boolean, Number, Array],
+      default: '',
+      required: false,
+    },
+  },
+  watch: {
+    scrollTopOnChange: {
+      handler(val) {
+        if (!this.$refs.simplescrollbar) {
+          return
+        }
+        this.$refs.simplescrollbar.scrollTop = 0
+      },
+    },
   },
 })
 </script>
