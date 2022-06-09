@@ -27,3 +27,17 @@ Array [
   },
 ]
 `;
+
+exports[`misc typingParticipants 1`] = `
+Array [
+  Object {
+    "activity": "TYPING",
+    "address": "address2",
+    "name": "name2",
+    "peerId": "peerId2",
+    "profilePicture": "profilePicture2",
+    "state": "CONNECTED",
+    "updatedAt": 123,
+  },
+]
+`;
