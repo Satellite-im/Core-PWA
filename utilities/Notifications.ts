@@ -188,6 +188,29 @@ export const Notifications = class Notifications {
         ],
       })
     }
+    // if (this.currentPlatform === PlatformTypeEnum.WEB) {
+    //   await LocalNotifications.schedule({
+    //     notifications: [
+    //       {
+    //         title: `${type} ${titleText}`,
+    //         body: message,
+    //         id: new Date().getTime(),
+    //         schedule: {
+    //           at: new Date(new Date().getTime() + 1000),
+    //           allowWhileIdle: true,
+    //         },
+    //         actionTypeId: 'CHAT_MESSAGE',
+    //         extra: null,
+    //         attachments: [
+    //           {
+    //             id: 'face',
+    //             url: `${this.$Config.textile.browser}/ipfs/${image}`,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   })
+    // }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({
