@@ -1,5 +1,4 @@
 import { Query, ThreadID, Update } from '@textile/hub'
-import { TranslateResult } from 'vue-i18n'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'

@@ -11,6 +11,7 @@ const isSupported = (): boolean =>
 export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
+  sendNotification: any = this.sendNotifications
   $Config: typeof Config = Config
 
   constructor() {
@@ -168,7 +169,7 @@ export const Notifications = class Notifications {
       await LocalNotifications.schedule({
         notifications: [
           {
-            title: titleText,
+            title: `${type} ${titleText}`,
             body: message,
             id: new Date().getTime(),
             schedule: {
@@ -180,12 +181,12 @@ export const Notifications = class Notifications {
             attachments: [
               {
                 id: 'face',
-                url: 'res://ic_launcher.png',
+                url: `${this.$Config.textile.browser}/ipfs/${image}`,
               },
             ],
           },
         ],
-      }).then((what) => console.log(what))
+      })
     }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
