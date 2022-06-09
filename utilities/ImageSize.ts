@@ -1,3 +1,5 @@
+import { Config } from '~/config'
+
 export const getOriginalSizeFromDataUrl = (
   file: File,
 ): Promise<{ width: number; height: number }> => {
@@ -15,10 +17,6 @@ export const getOriginalSizeFromDataUrl = (
   })
 }
 
-const baseSize = 300
-// size to which if exceeds, we will resize accordingly to the aspect ratio
-const maxSize = 400
-
 export const getSizeFromAspectRatio = ({
   width,
 
@@ -28,18 +26,30 @@ export const getSizeFromAspectRatio = ({
 
   height: number
 }) => {
-  if (width > maxSize || height > maxSize) {
+  if (
+    width > Config.chat.imageDimensions.maxWidth ||
+    height > Config.chat.imageDimensions.maxHeight
+  ) {
     const ratio = width / height
 
     if (ratio < 1) {
-      return { width: baseSize, height: baseSize / ratio }
+      return {
+        width: Math.round(Config.chat.imageDimensions.maxHeight * ratio),
+        height: Config.chat.imageDimensions.maxHeight,
+      }
     }
 
     if (ratio > 1) {
-      return { width: baseSize * ratio, height: baseSize }
+      return {
+        width: Config.chat.imageDimensions.maxWidth,
+        height: Math.round(Config.chat.imageDimensions.maxWidth / ratio),
+      }
     }
 
-    return { width: baseSize, height: baseSize }
+    return {
+      width: Config.chat.imageDimensions.base,
+      height: Config.chat.imageDimensions.base,
+    }
   }
 
   return { width, height }
