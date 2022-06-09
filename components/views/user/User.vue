@@ -43,7 +43,6 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      timestampRefreshInterval: null,
     }
   },
   computed: {
@@ -120,10 +119,6 @@ export default Vue.extend({
       })
     })
   },
-  beforeDestroy() {
-    clearInterval(this.$data.timestampRefreshInterval)
-    this.$store.commit('ui/toggleContextMenu', false)
-  },
   methods: {
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC) {
@@ -191,10 +186,6 @@ export default Vue.extend({
         case MessagingTypesEnum.GLYPH:
           return this.$t(`messaging.user_sent.${sender}`, {
             msgType: message.type,
-          }) as string
-        case MessagingTypesEnum.IMAGE:
-          return this.$t(`messaging.user_sent_image.${sender}`, {
-            msgType: 'image',
           }) as string
         default:
           return this.$t(`messaging.user_sent_something.${sender}`) as string

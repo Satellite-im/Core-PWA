@@ -1,9 +1,9 @@
 <div
   class="user"
   data-cy="sidebar-user"
-  v-bind:class="{'is-loading' : isLoading , 'is-selected' : isSelected}"
+  :class="{'is-loading' : isLoading , 'is-selected' : isSelected}"
   @contextmenu="contextMenu"
-  v-on:click="navigateToUser"
+  @click="navigateToUser"
 >
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
   <div class="user-info">
