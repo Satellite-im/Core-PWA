@@ -115,6 +115,7 @@ export const Config = {
     groupNameMinLength: 3,
     groupNameMaxLength: 64,
     uploadMaxLength: 8, // 8 files at a time
+    imageDimensions: { maxWidth: 400, maxHeight: 300, base: 300 },
   },
   account: {
     minLength: 5,
