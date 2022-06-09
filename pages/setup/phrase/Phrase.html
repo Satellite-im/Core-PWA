@@ -25,7 +25,11 @@
     <UiSpacer :height="45" />
     <span class="copy-text-container" @click="copyPhrase">
       <clipboard-icon class="copy-text" size="1x" />
-      <TypographyText class="copy-text" :text="'Copy to Clipboard'" :size="6" />
+      <TypographyText
+        class="copy-text"
+        :text="$t('pages.settings.accounts.copy_phrase')"
+        :size="6"
+      />
     </span>
 
     <UiSpacer :height="20" />
