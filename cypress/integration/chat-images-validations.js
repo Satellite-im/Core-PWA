@@ -35,7 +35,7 @@ describe('Chat - Sending Images Tests', () => {
     cy.goToLastImageOnChat(30000)
   })
 
-  it('Save Image from Chat', () => {
+  it.skip('Save Image from Chat', () => {
     // Go to last image (jpeg), right click and select on context menu Save Image
     cy.goToLastImageOnChat(30000).as('lastImage')
     cy.selectContextMenuOption('@lastImage', 'Save Image')

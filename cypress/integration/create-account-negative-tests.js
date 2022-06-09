@@ -26,7 +26,7 @@ describe('Create Account - Negative Tests', () => {
     //Clicking without adding a username will throw an error message
     cy.validateUserInputIsDisplayed()
     cy.get('[data-cy=sign-in-button]').click()
-    cy.contains('Username must be at least 5 characters.')
+    cy.contains('Enter a username of at least 5 characters, up to 32')
   })
 
   it('Try to create account with NSFW image', () => {
