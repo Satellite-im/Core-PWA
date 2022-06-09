@@ -11,6 +11,7 @@ const isSupported = (): boolean =>
 export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
+  sendNotification: any = this.sendNotifications
   $Config: typeof Config = Config
 
   constructor() {
@@ -133,42 +134,16 @@ export const Notifications = class Notifications {
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
       // browser notification api
-      await new Notification(`${type} ${titleText}`, {
-        tag: String(new Date().getTime()),
+      await new Notification(type, {
+        tag: titleText,
         body: message,
-        icon: `${this.$Config.textile.browser}/ipfs/${image}`,
-        badge: `${this.$Config.textile.browser}/ipfs/${image}`,
       })
     }
-    // if (this.currentPlatform === PlatformTypeEnum.WEB) {
-    //   await LocalNotifications.schedule({
-    //     notifications: [
-    //       {
-    //         title: `${type} ${titleText}`,
-    //         body: message,
-    //         id: new Date().getTime(),
-    //         schedule: {
-    //           at: new Date(new Date().getTime() + 1000),
-    //           allowWhileIdle: true,
-    //         },
-    //         actionTypeId: 'CHAT_MESSAGE',
-    //         extra: null,
-    //         attachments: [
-    //           {
-    //             id: 'face',
-    //             url: `${this.$Config.textile.browser}/ipfs/${image}`,
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   })
-    // }
-
     if (this.currentPlatform === PlatformTypeEnum.WEB) {
       await LocalNotifications.schedule({
         notifications: [
           {
-            title: titleText,
+            title: `${type} ${titleText}`,
             body: message,
             id: new Date().getTime(),
             schedule: {
@@ -180,12 +155,12 @@ export const Notifications = class Notifications {
             attachments: [
               {
                 id: 'face',
-                url: 'res://ic_launcher.png',
+                url: `${this.$Config.textile.browser}/ipfs/${image}`,
               },
             ],
           },
         ],
-      }).then((what) => console.log(what))
+      })
     }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
