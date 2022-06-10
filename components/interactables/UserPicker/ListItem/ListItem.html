@@ -1,10 +1,10 @@
 <div class="list-item" @click="$emit('click', $event)">
-    <UiCircle
-      :type="src ? 'image' : 'random'"
-      :seed="friend.address"
-      :size="32"
-      :source="src"
-    />
+  <UiCircle
+    :type="src ? 'image' : 'random'"
+    :seed="friend.address"
+    :size="32"
+    :source="src"
+  />
   <div class="name">{{friend.name}}</div>
-  <InteractablesCheckbox :value="selected"/>
+  <InteractablesCheckbox :value="selected" />
 </div>
