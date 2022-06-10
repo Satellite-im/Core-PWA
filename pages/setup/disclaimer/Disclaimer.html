@@ -13,6 +13,13 @@
     />
     <InteractablesButton
       full-width
+      data-cy="connect-account-button"
+      type="dark"
+      :action="() => { connectPhantom() }"
+      :text="$t('pages.disclaimer.connect')"
+    />
+    <InteractablesButton
+      full-width
       data-cy="import-account-button"
       type="dark"
       :action="() => { importAccount() }"

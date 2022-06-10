@@ -124,7 +124,7 @@ export interface OutgoingFriendRequest extends FriendAccount {
 export interface Adapter {
   setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
-  initUserProgram(): Promise<void>
+
   getAccountFromMnemonic(mnemonic: string): Promise<Account | null>
   getAccountBalance(account: Account): Promise<number | null>
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>

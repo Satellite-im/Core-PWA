@@ -18,6 +18,10 @@ export default Vue.extend({
     importAccount() {
       this.$router.push('importAccount')
     },
+    async connectPhantom() {
+      await this.$store.dispatch('accounts/connectPhantom')
+      this.$router.push('/auth/register')
+    },
   },
 })
 </script>
