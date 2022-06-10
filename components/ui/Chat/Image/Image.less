@@ -9,7 +9,6 @@
       cursor: pointer;
       width: @full;
       object-fit: cover;
-      border-radius: @corner-rounding;
       max-width: 300px;
       &:extend(.round-corners);
       &:extend(.no-select);
@@ -62,10 +61,4 @@
 
 .size-text {
   margin-bottom: 10px;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .is-image {
-    &:extend(.full-width);
-  }
 }
