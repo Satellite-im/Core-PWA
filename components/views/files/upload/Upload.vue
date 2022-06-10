@@ -85,13 +85,13 @@ export default Vue.extend({
             const buffer = new Uint8Array(await file.arrayBuffer())
             const outBuffer = await convert({
               buffer,
-              format: 'JPEG',
+              format: 'PNG',
               quality: 1,
             })
-            const fileJpg = new File([outBuffer.buffer], `${file.name}.jpg`, {
-              type: 'image/jpeg',
+            const filePng = new File([outBuffer.buffer], `${file.name}.png`, {
+              type: 'image/png',
             })
-            return { file: fileJpg, nsfw: await this.$Security.isNSFW(fileJpg) }
+            return { file: filePng, nsfw: await this.$Security.isNSFW(filePng) }
           }
 
           // handle non heic
