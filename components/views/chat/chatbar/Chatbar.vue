@@ -201,6 +201,8 @@ export default Vue.extend({
       if (!this.recipient) {
         return
       }
+      // keep recipient in case user changes chats quickly after send
+      const recipient = this.recipient
       // if there are any files attached to this chat, send
       await this.sendFiles()
       // return if input is empty or over max length
@@ -214,10 +216,10 @@ export default Vue.extend({
       this.text = ''
       if (
         this.ui.replyChatbarContent.from &&
-        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
+        !RegExp(this.$Config.regex.uuidv4).test((recipient as Group)?.id)
       ) {
         this.$store.dispatch('textile/sendReplyMessage', {
-          to: (this.recipient as Friend).textilePubkey,
+          to: (recipient as Friend).textilePubkey,
           text: value,
           replyTo: this.ui.replyChatbarContent.messageID,
           replyType: MessagingTypesEnum.TEXT,
@@ -227,12 +229,12 @@ export default Vue.extend({
 
       if (
         RegExp(this.$Config.regex.uuidv4).test(
-          (this.recipient as Group)?.id?.split('|')[1],
+          (recipient as Group)?.id?.split('|')[1],
         )
       ) {
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendGroupReplyMessage', {
-            to: (this.recipient as Group).id,
+            to: (recipient as Group).id,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
@@ -241,12 +243,12 @@ export default Vue.extend({
           return
         }
         this.$store.dispatch('textile/sendGroupMessage', {
-          groupId: (this.recipient as Group).id,
+          groupId: (recipient as Group).id,
           message: value,
         })
       } else {
         this.$store.dispatch('textile/sendTextMessage', {
-          to: (this.recipient as Friend).textilePubkey,
+          to: (recipient as Friend).textilePubkey,
           text: value,
         })
       }
@@ -293,13 +295,15 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendFiles() {
+      // keep recipient in case user changes chats
+      const recipient = this.recipient
       for (const [index, file] of this.getFiles.entries()) {
         if (this.isGroup) {
           await this.$store
             .dispatch('textile/sendGroupFileMessage', {
-              groupID: (this.recipient as Group)?.id,
+              groupID: (recipient as Group)?.id,
               file,
-              address: this.recipient.address,
+              address: recipient.address,
               index,
             })
             .catch((error) => {
@@ -311,9 +315,9 @@ export default Vue.extend({
         } else {
           await this.$store
             .dispatch('textile/sendFileMessage', {
-              to: (this.recipient as Friend)?.textilePubkey,
+              to: (recipient as Friend)?.textilePubkey,
               file,
-              address: this.recipient.address,
+              address: recipient.address,
               index,
             })
             .catch((error) => {
@@ -325,7 +329,7 @@ export default Vue.extend({
         }
       }
       document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/deleteFiles', this.recipient.address)
+      this.$store.commit('chat/deleteFiles', recipient.address)
     },
   },
 })

@@ -16,7 +16,7 @@
     <TypographyText :size="6" :text="item.file.name" class="ellipsis" />
     <div v-if="item.progress > 0 && item.progress <= 100">
       <UiProgress :progress="item.progress" />
-      <TypographySubtitle :text="`${item.progress.toFixed(2)}% Uploaded...`" />
+      <TypographySubtitle :text="`${item.progress}% Uploaded...`" />
     </div>
   </div>
 </div>
