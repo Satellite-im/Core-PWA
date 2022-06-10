@@ -81,5 +81,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Controls.less">
-</style>
+<style scoped lang="less" src="./Controls.less"></style>
