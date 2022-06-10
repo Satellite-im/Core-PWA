@@ -6,7 +6,13 @@
     :placeholder="$t('servers.create.select_friends_placeholder')"
   />
   <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <TypographyText
+      v-if="!filteredFriends.length"
+      :text="$t('servers.create.user_picker_empty')"
+      class="empty-results-text"
+    />
     <InteractablesUserPickerListItem
+      v-else
       v-for="friend in filteredFriends"
       :friend="friend"
       :selected="isSelected(friend)"

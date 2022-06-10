@@ -564,6 +564,7 @@ export default {
       select_friends: 'Invite your friends to this server',
       server_name_error: 'Server name must be at least 5 characters.',
       select_friends_placeholder: 'Search friends...',
+      user_picker_empty: 'No friends found',
     },
   },
   conversation: {
