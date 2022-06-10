@@ -23,20 +23,23 @@
       </div>
     </div>
     <UiSpacer :height="45" />
-    <span class="copy-text-container" @click="copyPhrase">
-      <clipboard-icon class="copy-text" size="1x" />
-      <TypographyText
-        class="copy-text"
-        :text="$t('pages.settings.accounts.copy_phrase')"
-        :size="6"
-      />
-    </span>
-
-    <UiSpacer :height="20" />
-    <InteractablesButton
-      full-width
-      :text="$t('pages.phrase.done')"
-      :action="confirm"
-    />
+    <div class="columns is-mobile">
+      <div class="column">
+        <InteractablesButton
+          full-width
+          :text="$t('pages.settings.accounts.copy_phrase')"
+          :action="copyPhrase"
+        >
+          <clipboard-icon size="1x" />
+        </InteractablesButton>
+      </div>
+      <div class="column">
+        <InteractablesButton
+          full-width
+          :text="$t('pages.phrase.done')"
+          :action="confirm"
+        />
+      </div>
+    </div>
   </div>
 </div>
