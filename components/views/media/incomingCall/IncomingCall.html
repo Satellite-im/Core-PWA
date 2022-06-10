@@ -7,8 +7,16 @@
       :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
     >
       <div
+        v-if="callerAvatar"
         class="user-profile-picture"
         v-bind:style="`background:url(${callerAvatar})`"
+      />
+      <UiCircle
+        v-else
+        class="user-profile-placeholder"
+        type="random"
+        :seed="caller.address"
+        :size="120"
       />
       <div class="user-info">
         <p class="user-name" :title="caller.name">{{caller.name}}</p>
