@@ -1,31 +1,4 @@
-<template>
-  <UiScroll
-    vertical-scroll
-    scrollbar-visibility="scroll"
-    class="editable-container"
-  >
-    <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
-    <div
-      ref="editable"
-      :contenteditable="enabled"
-      autocapitalize="off"
-      class="editable-input"
-      data-cy="editable-input"
-      @selectstart="onSelectStart"
-      @input="onInput"
-      @keydown="handleInputKeydown"
-      @keyup="handleInputKeyup"
-      @paste="handleInputPaste"
-      @drop="handleDrop"
-      @focus="onFocus"
-      @blur="onBlur"
-    >
-      <div class="chat-row-content">
-        <span><br /></span>
-      </div>
-    </div>
-  </UiScroll>
-</template>
+<template src="./Editable.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -307,60 +280,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less">
-// non-Retina-specific stuff here
-@media not screen and (-webkit-min-device-pixel-ratio: 2),
-  not screen and (min--moz-device-pixel-ratio: 2),
-  not screen and (-o-min-device-pixel-ratio: 2/1),
-  not screen and (min-device-pixel-ratio: 2),
-  not screen and (min-resolution: 192dpi),
-  not screen and (min-resolution: 2dppx) {
-  .editable-container {
-    .chat-row-content {
-      // Chrome bug for emoji spacing on non-retina screens
-      .emoji {
-        letter-spacing: 4px;
-      }
-    }
-  }
-}
-
-.editable-container {
-  position: relative;
-  width: 100%;
-
-  .placeholder {
-    color: @text-muted;
-    position: absolute;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    left: 0;
-    right: 0;
-    &:extend(.background-layer);
-    &:extend(.no-select);
-  }
-
-  .editable-input {
-    width: 100%;
-    display: inline-block;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    white-space: break-spaces !important;
-
-    .chat-row-content {
-      .emoji {
-        font-style: initial;
-      }
-
-      .md-symbol {
-        color: @gray;
-      }
-
-      .md-lang {
-        color: @green;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="less" src="./Editable.less"></style>

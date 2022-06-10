@@ -26,7 +26,7 @@
       ref="searchResult"
       :class="`user-search-list ${drop} ${dropDown && filteredResult.length ? 'active' : ''}`"
     >
-      <UiScroll verticalScroll scrollbarVisibility="scroll">
+      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <ul class="user-search-result">
           <li
             :class="{'active':i==selection}"
@@ -41,7 +41,7 @@
             </span>
           </li>
         </ul>
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 </div>

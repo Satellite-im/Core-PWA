@@ -95,7 +95,7 @@
         v-scroll-lock="true"
         class="scrolling hidden-scroll users"
       >
-        <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
+        <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
           <UiLoadersAddress
             v-if="dataState.friends === DataStateType.Loading"
             :count="4"
@@ -129,10 +129,10 @@
               <user-plus-icon size="1.2x" />
             </InteractablesButton>
           </div>
-        </UiScroll>
+        </UiSimpleScroll>
       </div>
       <div v-else v-scroll-lock="true" class="scrolling hidden-scroll">
-        <UiScroll vertical-scroll scrollbar-visibility="scroll" enable-wrap>
+        <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
           <UiLoadersAddress
             v-if="dataState.friends === DataStateType.Loading"
             :count="4"
@@ -145,7 +145,7 @@
               :selected-group="group"
             />
           </div>
-        </UiScroll>
+        </UiSimpleScroll>
       </div>
       <div class="new-chat-container">
         <InteractablesButton

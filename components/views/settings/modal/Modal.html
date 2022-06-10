@@ -6,14 +6,14 @@
       ref="settingSwiper"
     >
       <swiper-slide class="sidebar is-secondary-background">
-        <UiScroll verticalScroll>
+        <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
           <SettingsSidebar
             :title="$t('pages.settings.settings')"
             :toggleable="$device.isMobile"
             :toggle="toggleSidebar"
             :handleRouteChange="changeRoute"
           />
-        </UiScroll>
+        </UiSimpleScroll>
       </swiper-slide>
       <swiper-slide class="not-sidebar hidden-scroll" v-scroll-lock="true">
         <UiScroll

@@ -1,7 +1,7 @@
 <div
   id="simple-scrollbar"
   v-scroll-lock="true"
-  :class="{'scrollbar-always-visible': scrollShow === 'always' , 'scrollbar-vertical': scrollMode === 'vertical', 'scrollbar-horizontal': scrollMode === 'horizontal'}"
+  :class="[{'scrollbar-always-visible': scrollShow === 'always' , 'scrollbar-vertical': scrollMode === 'vertical', 'scrollbar-horizontal': scrollMode === 'horizontal'}, containerClass]"
   v-if="Object.keys(this.$slots).length !== 0"
 >
   <div class="wrapper">

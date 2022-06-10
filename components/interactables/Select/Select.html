@@ -23,7 +23,7 @@
       {{ getSelectLabel }}
     </div>
     <div class="items">
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <div
           v-for="(option, i) of options"
           :key="i"
@@ -41,7 +41,7 @@
             >{{ option.text }}</span
           >
         </div>
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 </div>

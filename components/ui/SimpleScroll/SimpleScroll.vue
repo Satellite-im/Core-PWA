@@ -20,6 +20,11 @@ export default Vue.extend({
       default: 'scroll',
       required: false,
     },
+    containerClass: {
+      type: String,
+      default: '',
+      required: false,
+    },
   },
 })
 </script>
