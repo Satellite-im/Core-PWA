@@ -74,98 +74,80 @@ describe('mutations.default.mute', () => {
   })
 })
 
-describe('mutations.default.setMuted', () => {
+describe('mutations.default.toggleMute', () => {
   test('0', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: 100,
-        inputVolume: 100,
-        muted: false,
-        volume: -100,
-        deafened: false,
-        sounds: { inboundMedia: 10.0, outboundMedia: 10.23, system: -1.0 },
-      },
-      true,
-    )
+    const result: any = mutations.default.toggleMute({
+      previousVolume: 100,
+      inputVolume: 100,
+      muted: false,
+      volume: -100,
+      deafened: false,
+      sounds: { inboundMedia: 10.0, outboundMedia: 10.23, system: -1.0 },
+    })
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: 0,
-        inputVolume: -100,
-        muted: true,
-        volume: -1,
-        deafened: true,
-        sounds: { inboundMedia: -0.5, outboundMedia: -29.45, system: 0.5 },
-      },
-      true,
-    )
+    const result: any = mutations.default.toggleMute({
+      previousVolume: 0,
+      inputVolume: -100,
+      muted: true,
+      volume: -1,
+      deafened: true,
+      sounds: { inboundMedia: -0.5, outboundMedia: -29.45, system: 0.5 },
+    })
     expect(result).toMatchSnapshot()
   })
 
   test('2', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: 0,
-        inputVolume: -100,
-        muted: true,
-        volume: 0,
-        deafened: false,
-        sounds: { inboundMedia: 10.0, outboundMedia: 0.0, system: 0.0 },
-      },
-      true,
-    )
+    const result: any = mutations.default.toggleMute({
+      previousVolume: 0,
+      inputVolume: -100,
+      muted: true,
+      volume: 0,
+      deafened: false,
+      sounds: { inboundMedia: 10.0, outboundMedia: 0.0, system: 0.0 },
+    })
     expect(result).toMatchSnapshot()
   })
 
   test('3', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: -1,
-        inputVolume: 0,
-        muted: true,
-        volume: 100,
-        deafened: true,
-        sounds: { inboundMedia: -29.45, outboundMedia: -0.5, system: 0.5 },
-      },
-      true,
-    )
+    const result: any = mutations.default.toggleMute({
+      previousVolume: -1,
+      inputVolume: 0,
+      muted: true,
+      volume: 100,
+      deafened: true,
+      sounds: { inboundMedia: -29.45, outboundMedia: -0.5, system: 0.5 },
+    })
     expect(result).toMatchSnapshot()
   })
 
   test('4', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: -100,
-        inputVolume: -1,
-        muted: false,
-        volume: 1,
-        deafened: true,
-        sounds: { inboundMedia: 0.0, outboundMedia: 0.0, system: -1.0 },
-      },
-      true,
-    )
+    const result: any = mutations.default.toggleMute({
+      previousVolume: -100,
+      inputVolume: -1,
+      muted: false,
+      volume: 1,
+      deafened: true,
+      sounds: { inboundMedia: 0.0, outboundMedia: 0.0, system: -1.0 },
+    })
     expect(result).toMatchSnapshot()
   })
 
   test('5', () => {
-    const result: any = mutations.default.setMuted(
-      {
-        previousVolume: -Infinity,
-        inputVolume: -Infinity,
-        muted: true,
-        volume: -Infinity,
-        deafened: false,
-        sounds: {
-          inboundMedia: -Infinity,
-          outboundMedia: -Infinity,
-          system: -Infinity,
-        },
+    const result: any = mutations.default.toggleMute({
+      previousVolume: -Infinity,
+      inputVolume: -Infinity,
+      muted: true,
+      volume: -Infinity,
+      deafened: false,
+      sounds: {
+        inboundMedia: -Infinity,
+        outboundMedia: -Infinity,
+        system: -Infinity,
       },
-      true,
-    )
+    })
     expect(result).toMatchSnapshot()
   })
 })

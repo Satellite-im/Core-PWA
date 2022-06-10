@@ -459,10 +459,13 @@ const webRTCActions = {
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted,
+        muted:
+          kind === 'audio' ? rootState.audio.muted : rootState.video.disabled,
       })
-      if (rootState.audio.muted) {
+      if (kind === 'audio' && rootState.audio.muted) {
         call.mute({ peerId: localId, kind: 'audio' })
+      } else if (kind === 'video' && rootState.video.disabled) {
+        call.mute({ peerId: localId, kind: 'video' })
       }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -521,11 +524,6 @@ const webRTCActions = {
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
       )
-      commit('setMuted', {
-        peerId,
-        kind,
-        muted: true,
-      })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
 
