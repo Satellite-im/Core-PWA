@@ -174,6 +174,7 @@ export default {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
+    // require the privatekey
     dispatch('initializeEncryptionEngine', payerAccount)
 
     commit('setUserDetails', {
