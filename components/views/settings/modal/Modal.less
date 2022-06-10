@@ -56,6 +56,13 @@ p {
     width: 100%;
     box-sizing: border-box;
     &:extend(.background-semitransparent-dark);
+
+    #simple-scrollbar.modal-container {
+      width: calc(@full - @sidebar-size);
+      height: @full;
+      padding: @xlarge-spacing;
+      box-sizing: border-box;
+    }
   }
 }
 

@@ -2,13 +2,12 @@
   height: @full;
   width: @slimbar-size;
   min-width: @slimbar-size;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   pointer-events: none;
   padding-left: 0.6rem;
   padding-top: @normal-spacing;
-
-  &:extend(.first-layer);
 
   .circle-group {
     margin: @normal-spacing 0;
@@ -27,10 +26,9 @@
     margin-bottom: unset;
   }
 
-  .servers {
-    .circle {
-      margin: 0.25rem 0;
-    }
+  .circle {
+    margin: 0.25rem 0;
+    &:extend(.first-layer);
   }
 
   .unreads {
@@ -53,6 +51,12 @@
     width: 200px;
     overflow: hidden;
     display: flex;
+  }
+  #list-container-vertical {
+    height: fit-content;
+    max-height: calc(@full - 11rem);
+    pointer-events: auto;
+    box-sizing: border-box;
   }
   #list-container {
     height: fit-content;
@@ -88,6 +92,10 @@
     margin-bottom: unset;
   }
 
+  .circle {
+    margin: 0 @light-spacing;
+  }
+
   .servers {
     &::-webkit-scrollbar {
       display: none;
@@ -97,7 +105,6 @@
       align-items: center;
     }
     .circle {
-      margin: 0 @light-spacing;
       position: relative;
     }
     display: inline-flex;

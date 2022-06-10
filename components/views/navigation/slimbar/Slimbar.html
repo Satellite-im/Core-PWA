@@ -1,51 +1,26 @@
 <div :id="horizontal ? 'servers-horizontal-list' : 'servers-vertical-list'">
-  <div class="servers">
-    <div
-      v-if="horizontal"
-      class="circle-group"
-      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <UiCircle type="icon" :size="40">
-        <plus-icon size="0.75x" />
-      </UiCircle>
+  <div
+    v-if="horizontal"
+    class="circle-group"
+    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
+  >
+    <UiCircle type="icon" :size="40">
+      <plus-icon size="0.75x" />
+    </UiCircle>
+  </div>
+
+  <div v-on:click="$router.push('/chat/direct')" class="circle-group">
+    <UiCircle type="icon" :size="40">
+      <satellite-icon size="0.75x" />
+    </UiCircle>
+  </div>
+  <div id="list-container-vertical" v-if="!horizontal">
+    <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
+      <UiLoadersSpinner :spinning="true" />
     </div>
 
-    <div v-on:click="$router.push('/chat/direct')" class="circle-group">
-      <UiCircle type="icon" :size="40">
-        <satellite-icon size="0.75x" />
-      </UiCircle>
-    </div>
-    <UiScroll verticalScroll v-if="!horizontal">
-      <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
-        <UiLoadersSpinner :spinning="true" />
-      </div>
-      <div id="list-container" v-else>
-        <UiHorizontalRule v-if="friendsWithUnreadMessages.length" />
-        <div class="unreads" v-for="user in friendsWithUnreadMessages">
-          <Unread
-            :key="user.address"
-            :user="user"
-            :active="$route.params.address === user.address"
-          />
-        </div>
-        <UiHorizontalRule v-if="servers.length > 0" />
-        <UiComingSoon :tooltipText="$t('coming_soon.communities')">
-          <div
-            class="server"
-            v-for="server in servers"
-            v-on:click="$router.push('/server/chat')"
-          >
-            <UiCircle
-              type="random"
-              :size="40"
-              :seed="server.address"
-              :name="server.name"
-            />
-          </div>
-        </UiComingSoon>
-      </div>
-    </UiScroll>
-    <div id="list-container" v-else>
+    <UiHorizontalRule v-if="friendsWithUnreadMessages.length" />
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll" v-else>
       <div class="unreads" v-for="user in friendsWithUnreadMessages">
         <Unread
           :key="user.address"
@@ -54,13 +29,9 @@
         />
       </div>
 
-      <UiVerticalRule v-if="servers.length > 0" />
+      <UiHorizontalRule />
 
-      <UiComingSoon
-        :tooltipText="$t('coming_soon.communities')"
-        :horizontal="horizontal"
-        :tooltipPosition="'bottom'"
-      >
+      <UiComingSoon :tooltipText="$t('coming_soon.communities')">
         <div
           class="server"
           v-for="server in servers"
@@ -74,26 +45,56 @@
           />
         </div>
       </UiComingSoon>
+    </UiSimpleScroll>
+  </div>
+  <div id="list-container" v-else>
+    <div class="unreads" v-for="user in friendsWithUnreadMessages">
+      <Unread
+        :key="user.address"
+        :user="user"
+        :active="$route.params.address === user.address"
+      />
     </div>
-    <div
-      v-if="!horizontal"
-      class="circle-group"
-      v-tooltip.right="$t('servers.new_server')"
-      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
+
+    <UiVerticalRule v-if="servers.length > 0" />
+
+    <UiComingSoon
+      :tooltipText="$t('coming_soon.communities')"
+      :horizontal="horizontal"
+      :tooltipPosition="'bottom'"
     >
-      <UiCircle type="icon" :size="40">
-        <plus-icon size="0.75x" />
-      </UiCircle>
-    </div>
-    <div
-      class="circle-group"
-      data-cy="settings"
-      v-tooltip.right="$t('pages.settings.settings')"
-      v-on:click="$store.commit('ui/toggleSettings', { show: true })"
-    >
-      <UiCircle type="icon" :size="40">
-        <settings-icon size="0.75x" />
-      </UiCircle>
-    </div>
+      <div
+        class="server"
+        v-for="server in servers"
+        v-on:click="$router.push('/server/chat')"
+      >
+        <UiCircle
+          type="random"
+          :size="40"
+          :seed="server.address"
+          :name="server.name"
+        />
+      </div>
+    </UiComingSoon>
+  </div>
+  <div
+    v-if="!horizontal"
+    class="circle-group"
+    v-tooltip.right="$t('servers.new_server')"
+    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
+  >
+    <UiCircle type="icon" :size="40">
+      <plus-icon size="0.75x" />
+    </UiCircle>
+  </div>
+  <div
+    class="circle-group"
+    data-cy="settings"
+    v-tooltip.right="$t('pages.settings.settings')"
+    v-on:click="$store.commit('ui/toggleSettings', { show: true })"
+  >
+    <UiCircle type="icon" :size="40">
+      <settings-icon size="0.75x" />
+    </UiCircle>
   </div>
 </div>
