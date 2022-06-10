@@ -24,7 +24,7 @@
         </div>
       </div>
       <div
-        v-if="textile.messageLoading"
+        v-if="textile.messageLoading || !initializingStatus"
         data-cy="loading-indicator"
         class="zoop"
       >

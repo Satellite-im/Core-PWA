@@ -80,7 +80,7 @@
             </UiChatScroll>-->
             <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
-            <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
+            <Chatbar ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
