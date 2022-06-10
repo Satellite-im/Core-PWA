@@ -287,9 +287,6 @@ export default Vue.extend({
     handleChatTextFromOutside(text: string) {
       this.$refs.editable?.handleTextFromOutside(text)
     },
-    beforeDestroy() {
-      this.unsubscribe()
-    },
     /**
      * @method sendFiles
      * @description Sends action to Upload the file to textile.
