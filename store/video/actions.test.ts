@@ -1,5 +1,4 @@
 import * as module from './actions'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { RegistrationStatus } from '~/store/accounts/types'
 import {
   ConversationActivity,
