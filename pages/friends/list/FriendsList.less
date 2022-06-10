@@ -7,11 +7,34 @@
 }
 
 #friends {
-  padding: @normal-spacing 0 0 0;
-  margin-top: 2.5rem;
+  width: @full;
+  height: @full;
+  overflow: hidden;
+  padding: 3.5em 0;
+  box-sizing: border-box;
   @media only screen and (max-width: @mobile-breakpoint) {
-    margin-top: 0;
+    padding: @normal-spacing 0;
   }
+
+  .columns {
+    width: @full;
+    height: @full;
+    box-sizing: border-box;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+
+    .is-half {
+      width: @half;
+    }
+  }
+}
+
+#friends-list {
+  width: @full;
+  height: @full;
+  overflow: hidden;
 }
 
 .scrolling {

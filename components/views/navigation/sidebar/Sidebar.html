@@ -94,7 +94,7 @@
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
     >
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <UiLoadersAddress
           v-if="dataState.friends === DataStateType.Loading"
           :count="4"
@@ -138,7 +138,7 @@
           </InteractablesButton>
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 

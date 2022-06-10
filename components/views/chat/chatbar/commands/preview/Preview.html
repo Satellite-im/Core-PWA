@@ -5,7 +5,7 @@
 >
   <TypographySubtitle :size="6" text="Commands" />
   <div id="commands" class="hidden-scroll" v-scroll-lock="true">
-    <UiScroll verticalScroll scrollbarVisibility="scroll">
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
       <div
         v-for="command in commands"
         class="command"
@@ -22,6 +22,6 @@
         </span>
         - <span class="command-desc">{{ command.description }}</span>
       </div>
-    </UiScroll>
+    </UiSimpleScroll>
   </div>
 </div>

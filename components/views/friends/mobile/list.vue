@@ -48,20 +48,20 @@
       class="search-input"
     />
     <div class="scrolling hidden-scroll friends">
-      <UiScroll vertical-scroll enable-wrap scrollbar-visibility="scroll">
-        <div v-if="isNoFriends" class="no-friend">
-          <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
-          <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
-          <InteractablesButton
-            :text="$t('friends.add') + 's'"
-            size="small"
-            type="primary"
-            :action="navigateAddFriend"
-          >
-            <user-plus-icon size="1.2x" />
-          </InteractablesButton>
-        </div>
-        <div v-else class="columns friends-list">
+      <div v-if="isNoFriends" class="no-friend">
+        <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
+        <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
+        <InteractablesButton
+          :text="$t('friends.add') + 's'"
+          size="small"
+          type="primary"
+          :action="navigateAddFriend"
+        >
+          <user-plus-icon size="1.2x" />
+        </InteractablesButton>
+      </div>
+      <UiSimpleScroll v-else scroll-mode="vertical" scroll-show="scroll">
+        <div class="columns friends-list">
           <div class="column is-half-desktop">
             <!-- Friends List -->
             <div v-if="dataState.friends !== DataStateType.Loading">
@@ -83,9 +83,8 @@
             <div v-else>
               <UiLoadersFriend :count="5" />
             </div>
-          </div>
-        </div>
-      </UiScroll>
+          </div></div
+      ></UiSimpleScroll>
     </div>
   </div>
 </template>
@@ -214,7 +213,6 @@ export default Vue.extend({
 }
 
 #friends-list {
-  margin-top: @normal-spacing;
   height: calc(var(--app-height) - @sidebar-inner-offset);
   .top-bar {
     flex-flow: row;
