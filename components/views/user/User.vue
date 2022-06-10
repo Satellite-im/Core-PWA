@@ -119,6 +119,10 @@ export default Vue.extend({
       })
     })
   },
+  beforeDestroy() {
+    // ensure the user can't click context menu options after a friend has been removed
+    this.$store.commit('ui/toggleContextMenu', false)
+  },
   methods: {
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC) {
