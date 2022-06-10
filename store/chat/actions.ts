@@ -1,4 +1,3 @@
-import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { ActionsArguments } from '~/types/store/store'
 import { ScrollDirections } from '~/types/chat/chat'
 import { ChatState, ChatText, ChatFileUpload } from '~/store/chat/types'
@@ -6,31 +5,6 @@ import { ChatState, ChatText, ChatFileUpload } from '~/store/chat/types'
 export default {
   setChatText({ commit }: ActionsArguments<ChatState>, req: ChatText) {
     commit('chatText', req)
-  },
-  removeUploadItem(
-    { commit, rootState }: ActionsArguments<ChatState>,
-    {
-      itemIndex,
-      files,
-      recipientAddress,
-    }: {
-      itemIndex: number
-      files: ChatFileUpload[]
-      recipientAddress: string
-    },
-  ) {
-    if (files.length === 1) {
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      commit('setCountError', false)
-      commit('deleteFiles', recipientAddress)
-      if (rootState.textile.messageLoading)
-        commit('textile/setMessageLoading', { loading: false })
-    }
-
-    commit('setFiles', {
-      files: files.filter((file: ChatFileUpload, i: number) => i !== itemIndex),
-      address: recipientAddress,
-    })
   },
   loadMessages(
     { state, commit, rootState }: ActionsArguments<ChatState>,
