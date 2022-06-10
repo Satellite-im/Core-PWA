@@ -161,10 +161,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
   private async _getPeerIdByType(publicKeyInfo: PublicKeyInfo) {
     switch (publicKeyInfo.type) {
       case 'ed25519': {
-<<<<<<< HEAD
-=======
         window.console.log('publicKeyInfo', publicKeyInfo)
->>>>>>> 28385821 (chore(add): mdofied the action and integrate publickey support)
         const publicKey =
           await keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
             publicKeyInfo.publicKey,
