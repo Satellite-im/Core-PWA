@@ -1,6 +1,6 @@
 <template>
   <div id="friends-blocked" v-scroll-lock="true" class="hidden-scroll">
-    <UiScroll vertical-scroll enable-wrap scrollbar-visibility="scroll">
+    <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
       <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
       <div class="columns">
         <div class="column top-bar">
@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-    </UiScroll>
+    </UiSimpleScroll>
   </div>
 </template>
 

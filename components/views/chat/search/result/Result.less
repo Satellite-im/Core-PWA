@@ -11,8 +11,12 @@
   width: 80%;
   top: @toolbar-height - 9rem;
   border: @light-border !important;
-  &:extend(.first-layer);
+  &:extend(.second-layer);
   font-size: @text-size;
+  height: @full;
+  overflow: hidden;
+  box-sizing: border-box;
+  max-height: calc(100vh - 25rem);
 
   &-header {
     font-size: @title-text;
@@ -78,7 +82,8 @@
     }
   }
   &-content {
-    height: calc(100vh - 32rem) !important;
+    height: @full;
+    max-height: calc(100vh - 35rem);
   }
   &-inner {
     display: flex;
