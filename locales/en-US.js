@@ -7,7 +7,7 @@ export default {
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
-    sidebar_search: 'Friends and Group search\ncoming soon',
+    sidebar_search: 'Friends and Group Search\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
@@ -113,7 +113,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit\nComing soon',
+    edit: 'Edit\nComing Soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
