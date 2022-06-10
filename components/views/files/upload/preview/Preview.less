@@ -1,26 +1,13 @@
 .file-preview {
   width: calc(@full - 2rem);
-  margin: 0 1rem;
-  background-color: #181f2c;
+  margin: 0 @normal-spacing;
+  padding: @normal-spacing;
+  &:extend(.background-semitransparent-light);
   border-bottom-color: rgba(87, 101, 116, 0.3);
   border-radius: @corner-rounding @corner-rounding 0 0;
-  padding: @xlight-spacing @normal-spacing;
-
   .file-list {
-    height: fit-content;
     display: flex;
-    flex-wrap: nowrap;
-  }
-
-  .file-error {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: @large-spacing 0;
-
-    .close-button {
-      cursor: pointer;
-    }
+    gap: @normal-spacing;
   }
 
   &.empty {

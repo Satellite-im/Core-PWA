@@ -221,21 +221,6 @@ describe('misc', () => {
   test('module.default.addFile with empty files array', () => {
     const obj = {
       file: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-      address: 'address1',
-    }
-    module.default.addFile(state, obj)
-    expect(state.files[obj.address]).toEqual([obj.file])
-  })
-  test('module.default.addFile with empty files array', () => {
-    const obj = {
-      file: {
         file: 'path2',
         url: 'string2',
         nsfw: {
@@ -247,44 +232,6 @@ describe('misc', () => {
     }
     module.default.addFile(state, obj)
     expect(state.files).toMatchSnapshot()
-  })
-  test('module.default.setFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
-      files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-
-      address: 'address1',
-    }
-
-    module.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
-  })
-  test('module.default.deleteFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
-      files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-
-      address: 'address1',
-    }
-
-    module.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
-    module.default.deleteFiles(state, obj.address)
-    expect(state.files).not.toEqual(obj.files)
   })
 })
 

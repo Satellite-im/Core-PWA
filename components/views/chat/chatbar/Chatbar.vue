@@ -21,8 +21,11 @@ export default Vue.extend({
     TerminalIcon,
   },
   computed: {
-    ...mapGetters('chat', ['getFiles']),
-    ...mapGetters('conversation', ['recipient']),
+    ...mapGetters({
+      recipient: 'conversation/recipient',
+      getFiles: 'chat/getFiles',
+      isGroup: 'conversation/isGroup',
+    }),
     ...mapState({
       ui: (state) => (state as RootState).ui,
       friends: (state) => (state as RootState).friends,
@@ -198,8 +201,8 @@ export default Vue.extend({
       if (!this.recipient) {
         return
       }
-      // @ts-ignore
-      await this.$refs['file-upload']?.sendMessage()
+      // if there are any files attached to this chat, send
+      await this.sendFiles()
       // return if input is empty or over max length
       if (
         this.text.length > this.$Config.chat.maxChars ||
@@ -276,7 +279,7 @@ export default Vue.extend({
         e.preventDefault()
         const handleFileExpectEvent = { target: { files } }
         // @ts-ignore
-        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+        this.$refs.upload?.handleFile(handleFileExpectEvent)
       }
     },
     handleChatTextFromOutside(text: string) {
@@ -284,6 +287,45 @@ export default Vue.extend({
     },
     beforeDestroy() {
       this.unsubscribe()
+    },
+    /**
+     * @method sendFiles
+     * @description Sends action to Upload the file to textile.
+     */
+    async sendFiles() {
+      for (const [index, file] of this.getFiles.entries()) {
+        if (this.isGroup) {
+          await this.$store
+            .dispatch('textile/sendGroupFileMessage', {
+              groupID: (this.recipient as Group)?.id,
+              file,
+              address: this.recipient.address,
+              index,
+            })
+            .catch((error) => {
+              if (error) {
+                this.$Logger.log('file send error', error)
+                document.body.style.cursor = PropCommonEnum.DEFAULT
+              }
+            })
+        } else {
+          await this.$store
+            .dispatch('textile/sendFileMessage', {
+              to: (this.recipient as Friend)?.textilePubkey,
+              file,
+              address: this.recipient.address,
+              index,
+            })
+            .catch((error) => {
+              if (error) {
+                this.$Logger.log('file send error', error)
+                document.body.style.cursor = PropCommonEnum.DEFAULT
+              }
+            })
+        }
+      }
+      document.body.style.cursor = PropCommonEnum.DEFAULT
+      this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
   },
 })

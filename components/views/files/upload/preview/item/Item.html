@@ -2,31 +2,21 @@
   <button class="close" @click="$emit('removeUploadItem')">
     <x-icon size="1x" />
   </button>
-  <div class="preview">
+  <div v-if="item.thumbnail" class="image-container">
     <img
-      v-if="item.thumbnail"
+      :class="{'blur-image' : item.nsfw && blockNsfw}"
       :src="item.thumbnail"
-      class="thumbnail"
-      :class="{blur : item.nsfw}"
+      draggable="false"
     />
-    <file-icon v-else size="1x" class="control-icon" />
   </div>
-  <div class="file-info">
-    <TypographyTitle :size="6" :text="item.file.name" />
-    <div>
-      <div v-for="upload in uploadProgress">
-        <div v-if="upload.name === item.file.name">
-          <div v-if="upload.progress !== 100">
-            <UiProgress :progress="upload.progress" type="loading" />
-            <TypographySubtitle
-              :text="`${upload.progress.toFixed(2)}% Uploaded...`"
-            />
-          </div>
-          <div v-if="upload.progress >= 100">
-            <file-plus-icon />
-          </div>
-        </div>
-      </div>
+  <div v-else class="icon-container">
+    <file-icon size="3x" class="control-icon" />
+  </div>
+  <div>
+    <TypographyText :size="6" :text="item.file.name" class="ellipsis" />
+    <div v-if="item.progress > 0 && item.progress <= 100">
+      <UiProgress :progress="item.progress" />
+      <TypographySubtitle :text="`${item.progress.toFixed(2)}% Uploaded...`" />
     </div>
   </div>
 </div>

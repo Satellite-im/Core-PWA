@@ -10,10 +10,12 @@ const convert = require('heic-convert')
  * @method _createThumbnail
  * @description create thumbnail if embeddable image format
  * @param {File} file
+ * @param {number} width desired thumnail width px
  * @returns {Promise<string>} base64 thumbnail
  */
 export default async function createThumbnail(
   file: File,
+  width: number,
 ): Promise<string | undefined> {
   if (await isHeic(file)) {
     const buffer = new Uint8Array(await file.arrayBuffer())
@@ -28,7 +30,7 @@ export default async function createThumbnail(
     if (await _tooLarge(fileJpg)) {
       return
     }
-    return blobToBase64(await skaler(fileJpg, { width: 400 }))
+    return blobToBase64(await skaler(fileJpg, { width }))
   }
 
   const type = await mimeType(file)
@@ -44,7 +46,7 @@ export default async function createThumbnail(
   if (await _tooLarge(file)) {
     return
   }
-  return blobToBase64(await skaler(file, { width: 400 }))
+  return blobToBase64(await skaler(file, { width }))
 }
 
 /**

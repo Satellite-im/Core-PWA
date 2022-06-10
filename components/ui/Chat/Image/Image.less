@@ -2,8 +2,18 @@
   padding: @light-spacing 0;
   border-radius: @corner-rounding;
 
-  .is-image {
-    cursor: pointer;
+  .image-container {
+    overflow: hidden;
+    max-width: 300px;
+    .is-image {
+      cursor: pointer;
+      width: @full;
+      object-fit: cover;
+      border-radius: @corner-rounding;
+      max-width: 300px;
+      &:extend(.round-corners);
+      &:extend(.no-select);
+    }
   }
 
   &-placeholder {
@@ -24,12 +34,6 @@
 
 .text {
   margin-top: 5px;
-}
-
-.is-normal-image {
-  &:extend(.round-corners);
-  max-width: 300px;
-  &:extend(.no-select);
 }
 
 .file-info {
@@ -61,7 +65,7 @@
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  .is-normal-image {
+  .is-image {
     &:extend(.full-width);
   }
 }

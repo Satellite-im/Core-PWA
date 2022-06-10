@@ -7,13 +7,14 @@
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply />
-  <FilesUploadPreview />
+  <FilesUploadError v-if="chat.countError" />
+  <FilesUploadPreview v-if="getFiles.length" />
   <div
     class="chatbar-wrap"
     :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': isSharpCorners}"
   >
     <div class="control-wrap file-upload-wrap">
-      <FilesUpload ref="file-upload" />
+      <FilesUpload ref="upload" />
     </div>
     <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"

@@ -3,13 +3,10 @@
 import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { isHeic } from '~/utilities/FileType'
 import { ChatFileUpload } from '~/store/chat/types'
-import { Friend } from '~/types/ui/friends'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-import { Group } from '~/store/groups/types'
 import createThumbnail from '~/utilities/Thumbnail'
 const convert = require('heic-convert')
 
@@ -24,8 +21,10 @@ export default Vue.extend({
         (state as RootState).textile.userThread.consentToScan,
       recipientType: (state) => (state as RootState).conversation.type,
     }),
-    ...mapGetters({ files: 'chat/getFiles' }),
-    ...mapGetters('conversation', ['recipient', 'isGroup']),
+    ...mapGetters({
+      getFiles: 'chat/getFiles',
+      recipient: 'conversation/recipient',
+    }),
   },
   methods: {
     /**
@@ -73,13 +72,13 @@ export default Vue.extend({
       }
       const newFiles: File[] = [...event.target.files]
 
-      if (newFiles.length + this.files.length > 8) {
+      if (newFiles.length + this.getFiles.length > 8) {
         this.$store.commit('chat/setCountError', true)
         return
       }
       const address = this.recipient?.address
 
-      const filesToAdd: ChatFileUpload[] = await Promise.all(
+      const filesToAdd: { file: File; nsfw: boolean }[] = await Promise.all(
         newFiles.map(async (file: File) => {
           // if heic, convert to jpeg so recipient can see in browser
           if (await isHeic(file)) {
@@ -110,45 +109,14 @@ export default Vue.extend({
       // set files to show preview, do not send
       for (const file of filesToAdd) {
         this.$store.commit('chat/addFile', {
-          file: { ...file, thumbnail: await createThumbnail(file.file) },
+          file: {
+            ...file,
+            progress: 0,
+            thumbnail: await createThumbnail(file.file, 200),
+          },
           address,
         })
       }
-    },
-    /**
-     * @method sendMessage
-     * @description Sends action to Upload the file to textile.
-     * called from Chatbar.vue
-     */
-    async sendMessage() {
-      for (const file of this.files) {
-        if (this.isGroup) {
-          await this.$store
-            .dispatch('textile/sendGroupFileMessage', {
-              groupID: (this.recipient as Group)?.id,
-              file,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        } else {
-          await this.$store
-            .dispatch('textile/sendFileMessage', {
-              to: (this.recipient as Friend)?.textilePubkey,
-              file,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        }
-      }
-      this.$store.commit('chat/deleteFiles', this.recipient.address)
     },
 
     /**

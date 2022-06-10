@@ -32,7 +32,7 @@ export class TextileFileSystem extends FilSystem {
       type: Object.values(FILE_TYPE).includes(file.type as FILE_TYPE)
         ? (file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: await createThumbnail(file),
+      thumbnail: await createThumbnail(file, 400),
       nsfw,
     })
   }

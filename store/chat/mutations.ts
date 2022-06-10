@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { ICurrentChat } from '~/types/chat/chat'
 import { initialCurrentChat } from '~/store/chat/state'
 import {
@@ -40,22 +41,33 @@ const mutations = {
   ) {
     state.files[address]
       ? state.files[address].push(file)
-      : (state.files[address] = [file])
+      : Vue.set(state.files, address, [file])
+    // Vue can't detect new objects automatically, hence set syntax https://forum.vuejs.org/t/mutation-not-updating-data-in-vuex/102124
   },
-  setFiles(
+  removeFile(
     state: ChatState,
     {
-      files,
       address,
+      index,
     }: {
-      files: ChatFileUpload[]
       address: string
+      index: number
     },
   ) {
-    state.files[address] = files
+    state.files[address].splice(index, 1)
+  },
+  setFileProgress(
+    state: ChatState,
+    {
+      address,
+      index,
+      progress,
+    }: { address: string; index: number; progress: number },
+  ) {
+    state.files[address][index].progress = progress
   },
   deleteFiles(state: ChatState, address: string) {
-    delete state.files[address]
+    Vue.delete(state.files, address)
   },
   setCountError(state: ChatState, countError: boolean) {
     state.countError = countError

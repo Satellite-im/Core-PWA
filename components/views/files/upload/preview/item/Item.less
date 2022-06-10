@@ -1,82 +1,44 @@
 .file-item {
-  position: relative;
-  border: 1px solid #57657480;
-  background-color: #3a3a5030;
-  border-radius: @corner-rounding;
-  padding: @normal-spacing @light-spacing @light-spacing;
-  display: inline-block;
   width: 224px;
-  margin: @light-spacing @light-spacing;
-  &:first-child {
-    margin-left: 0;
-  }
-  &:last-child {
-    margin-right: 0;
-  }
+  min-width: 224px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+  border-color: @light-gray;
+  border-radius: @corner-rounding;
+  padding: @large-spacing @normal-spacing @light-spacing @normal-spacing;
+  &:extend(.background-semitransparent-lighter);
+  &:extend(.bordered);
   .close {
+    border: none;
     position: absolute;
+    color: @flair-color;
+    background-color: transparent;
     top: @xlight-spacing;
     right: @xlight-spacing;
-    background-color: transparent;
-    color: @flair-color;
     cursor: pointer;
-    border: none;
   }
 
-  .file-info {
-    .title {
-      width: 100%;
-      font-size: @text-size;
-      overflow-x: hidden;
-      overflow-y: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      margin-bottom: 0;
-      line-height: 1.25;
-    }
-
-    .subtitle {
-      font-size: @mini-text-size;
-      margin-bottom: 0;
-      display: block;
-    }
-  }
-
-  .nsfw-text {
-    display: block;
-    h1 {
-      display: block;
-      margin: 0 @light-spacing 0 0 !important;
-      font-size: @title-text;
-      overflow-x: hidden;
-      overflow-y: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    width: 100%;
-    margin-top: @light-spacing;
-  }
-
-  .preview {
-    margin: @light-spacing;
-    width: 192px;
+  .image-container {
+    overflow: hidden;
     height: 110px;
-    position: relative;
+    img {
+      height: 110px;
+      width: @full;
+      object-fit: cover;
+      border-radius: @corner-rounding;
+    }
   }
-
-  .thumbnail {
-    width: 100%;
-    height: 100%;
-    border-radius: @corner-rounding;
-    aspect-ratio: 1/1;
-    object-fit: cover;
+  .icon-container {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
   }
-
-  .blur {
-    filter: blur(8px);
-    -webkit-filter: blur(8px);
-    -moz-filter: blur(8px);
-    -o-filter: blur(8px);
-    -ms-filter: blur(8px);
+  .subtitle {
+    font-size: @mini-text-size;
+    margin-bottom: 0;
+    display: block;
   }
 }

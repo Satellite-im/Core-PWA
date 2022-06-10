@@ -20,7 +20,6 @@ const InitialChatState = (): ChatState => ({
   files: {},
   countError: false,
   currentChat: initialCurrentChat,
-  uploadProgress: {},
 })
 
 export default InitialChatState

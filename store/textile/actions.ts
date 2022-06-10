@@ -403,12 +403,22 @@ export default {
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address (textile public key),
+   * @param param1 address, file to upload, address and index for updating upload progress in store
    * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, file }: { to: string; file: ChatFileUpload },
+    {
+      to,
+      file,
+      address,
+      index,
+    }: {
+      to: string
+      file: ChatFileUpload
+      address: string
+      index: number
+    },
   ) {
     commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
@@ -418,10 +428,15 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit('setUploadingFileProgress', {
-          progress: Math.floor((progress / file.file.size) * 100),
-          name: file.file.name,
-        })
+        commit(
+          'chat/setFileProgress',
+          {
+            address,
+            index,
+            progress: Math.floor((progress / file.file.size) * 100),
+          },
+          { root: true },
+        )
       },
     )
     /* If already canceled */
@@ -442,6 +457,7 @@ export default {
             name: file.file.name,
             size: file.file.size,
             type: file.file.type,
+            nsfw: file.nsfw,
           },
           type: 'file',
         },
@@ -946,12 +962,22 @@ export default {
   /**
    * @description Sends a File message to a given group
    * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address (textile public key),
+   * @param param1 address, file to upload, address and index for updating upload progress in store
    * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendGroupFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupID, file }: { groupID: string; file: ChatFileUpload },
+    {
+      groupID,
+      file,
+      address,
+      index,
+    }: {
+      groupID: string
+      file: ChatFileUpload
+      address: string
+      index: number
+    },
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -961,10 +987,15 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit('setUploadingFileProgress', {
-          progress: Math.floor((progress / file.file.size) * 100),
-          name: file.file.name,
-        })
+        commit(
+          'chat/setFileProgress',
+          {
+            address,
+            index,
+            progress: Math.floor((progress / file.file.size) * 100),
+          },
+          { root: true },
+        )
       },
     )
 
@@ -977,6 +1008,7 @@ export default {
           name: file.file.name,
           size: file.file.size,
           type: file.file.type,
+          nsfw: file.nsfw,
         },
         type: 'file',
       })

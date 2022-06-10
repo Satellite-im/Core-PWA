@@ -13,6 +13,7 @@ export interface ChatText {
 export interface ChatFileUpload {
   file: File
   nsfw: boolean
+  progress: number
   thumbnail?: string // base64, scaled down
 }
 
@@ -22,11 +23,4 @@ export interface ChatState {
   files: { [key: string]: ChatFileUpload[] }
   countError: boolean
   currentChat: ICurrentChat
-  uploadProgress: {
-    [key: string]: {
-      // key is uuid, cant use name in case two uploaded files have the same name
-      name: string
-      progress: number // as a percentage
-    }
-  }
 }
