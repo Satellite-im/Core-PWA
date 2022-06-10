@@ -1,8 +1,4 @@
-<div
-  id="chatbar"
-  ref="chatbar"
-  :class="{'has-reply' : ui.replyChatbarContent.id}"
->
+<div id="chatbar" ref="chatbar">
   <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
