@@ -8,12 +8,7 @@
     <!--      :src="src"-->
     <!--      :clickHandler="openProfile"-->
     <!--    />-->
-    <UiUserState
-      v-if="!isGroup"
-      class="circle"
-      :user="recipient"
-      :src="src"
-    />
+    <UiUserState v-if="!isGroup" class="circle" :user="recipient" :src="src" />
     <GroupIcon v-else :group="recipient" />
   </div>
   <div class="user-info">

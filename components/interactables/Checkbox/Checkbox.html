@@ -1,4 +1,8 @@
 <div class="checkbox" :class="{checked: value}">
   <check-icon />
-  <input type="checkbox" :checked="value" @change="$emit('input', $event.target.checked)">
+  <input
+    type="checkbox"
+    :checked="value"
+    @change="$emit('input', $event.target.checked)"
+  />
 </div>

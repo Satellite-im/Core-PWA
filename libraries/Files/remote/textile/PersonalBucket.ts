@@ -50,9 +50,9 @@ export class PersonalBucket extends Bucket {
       await $FileSystem.import(this._index)
       Vue.prototype.$Logger.log('File System', 'Initialized')
     } catch (e) {
-      Vue.prototype.$Logger.log('File System', 'index not found') 
-      // if the user has not uploaded anything, they do not have a files 
-      //index which can cause this console message
+      Vue.prototype.$Logger.log('File System', 'index not found')
+      // if the user has not uploaded anything, they do not have a files
+      // index which can cause this console message
     }
   }
 
