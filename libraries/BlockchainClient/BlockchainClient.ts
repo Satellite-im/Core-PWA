@@ -90,6 +90,7 @@ export default class BlockchainClient {
    * @param {string} mnemonic
    * @returns {Promise<void>}
    */
+<<<<<<< HEAD
   async initFromMnemonic(mnemonic?: string): Promise<void> {
     await this._getAdapter()
       .getAccountFromMnemonic(mnemonic)
@@ -105,6 +106,19 @@ export default class BlockchainClient {
           this._payerAccount = account
         }
       })
+=======
+  async initFromMnemonic(mnemonic: string): Promise<void> {
+    await this.adapter.getAccountFromMnemonic(mnemonic).then((account) => {
+      if (account) {
+        this._account = account
+      }
+    })
+    await this.adapter.getPayerAccount().then((account) => {
+      if (account) {
+        this._payerAccount = account
+      }
+    })
+>>>>>>> 28385821 (chore(add): mdofied the action and integrate publickey support)
   }
 
   /**

@@ -364,8 +364,13 @@ export default {
     })
     await dispatch('friends/initialize', {}, { root: true })
 
+<<<<<<< HEAD
     // needed the public key
     if (payerAccount.publicKey) {
+=======
+    if (payerAccount.publicKey) {
+      window.console.log()
+>>>>>>> 28385821 (chore(add): mdofied the action and integrate publickey support)
       dispatch(
         'webrtc/initialize',
         {

@@ -6,13 +6,18 @@ import {
 } from '../conversation/types'
 import { WebRTCState } from './types'
 import { Config } from '~/config'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
+import {
+  Peer2Peer,
+  PublicKeyInfo,
+  PrivateKeyInfo,
+} from '~/libraries/WebRTC/Libp2p'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
+import { Friend } from '~/types/ui/friends'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
-import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
 
 const announceFrequency = 5000
