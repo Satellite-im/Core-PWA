@@ -15,9 +15,6 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    initializingStatus: {
-      type: Boolean,
-    },
   },
   computed: {
     ...mapState({
