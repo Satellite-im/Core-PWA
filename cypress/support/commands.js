@@ -142,7 +142,7 @@ Cypress.Commands.add('createAccountSecondScreen', () => {
 
 Cypress.Commands.add('createAccountRecoverySeed', () => {
   cy.contains('Recovery Seed', { timeout: 15000 }).should('be.visible')
-  cy.get('#custom-cursor-area').click()
+  cy.contains('I Saved It').click()
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
