@@ -53,7 +53,7 @@ export default class PhantomAdapter implements Adapter {
   }
 
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null> {
-    throw new Error('Method not implemented.')
+    throw new Error('Method not implemented..')
   }
 
   async createUser(_params: CreateUserParams): Promise<boolean> {
