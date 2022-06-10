@@ -342,13 +342,14 @@ export default {
     })
     await dispatch('friends/initialize', {}, { root: true })
 
-    if ($BlockchainClient.payerAccount?.secretKey) {
+    if (payerAccount.publicKey) {
+      window.console.log()
       dispatch(
         'webrtc/initialize',
         {
-          privateKeyInfo: {
+          publicKeyInfo: {
             type: 'ed25519',
-            privateKey: $BlockchainClient.payerAccount?.secretKey,
+            publicKey: payerAccount.publicKey.toBytes(),
           },
           originator: payerAccount.publicKey.toBase58(),
         },

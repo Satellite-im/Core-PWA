@@ -9,7 +9,11 @@ import WStar from 'libp2p-webrtc-star'
 import { SignalData } from 'simple-peer'
 import LibP2PCrypto, { keys } from 'libp2p-crypto'
 import type Libp2p from 'libp2p/dist/src/index'
-import PeerId, { createFromB58String, createFromPrivKey } from 'peer-id'
+import PeerId, {
+  createFromB58String,
+  createFromPrivKey,
+  createFromPubKey,
+} from 'peer-id'
 import { pipe } from 'it-pipe'
 import Emitter from './Emitter'
 import { WireMessage } from './types'
@@ -81,8 +85,13 @@ export interface PrivateKeyInfo {
   type: SupportedKeyType
 }
 
+export interface PublicKeyInfo {
+  publicKey: Uint8Array
+  type: SupportedKeyType
+}
+
 interface InitializationOptions {
-  privateKey: PrivateKeyInfo
+  publickey: PublicKeyInfo
 }
 
 export class Peer2Peer extends Emitter<P2PListeners> {
@@ -107,7 +116,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
 
   async init(opts?: InitializationOptions) {
     if (opts) {
-      this._peerId = await this._getPeerIdByType(opts.privateKey)
+      this._peerId = await this._getPeerIdByType(opts.publickey)
     }
 
     this._node = await create({
@@ -148,15 +157,16 @@ export class Peer2Peer extends Emitter<P2PListeners> {
     this._bindProtocols()
   }
 
-  private async _getPeerIdByType(privateKeyInfo: PrivateKeyInfo) {
-    switch (privateKeyInfo.type) {
+  private async _getPeerIdByType(publicKeyInfo: PublicKeyInfo) {
+    switch (publicKeyInfo.type) {
       case 'ed25519': {
-        const privateKey =
-          await keys.supportedKeys.ed25519.unmarshalEd25519PrivateKey(
-            privateKeyInfo.privateKey,
+        window.console.log('publicKeyInfo', publicKeyInfo)
+        const publicKey =
+          await keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
+            publicKeyInfo.publicKey,
           )
 
-        return createFromPrivKey(privateKey.bytes)
+        return createFromPubKey(publicKey.bytes)
       }
 
       default: {

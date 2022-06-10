@@ -122,6 +122,7 @@ export interface OutgoingFriendRequest extends FriendAccount {
 }
 
 export interface Adapter {
+  initUserProgram(): Promise<void>
   setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
 

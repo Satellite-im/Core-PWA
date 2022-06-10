@@ -79,7 +79,7 @@ export default class BlockchainClient {
         this._account = account
       }
     })
-    await this.adapter.getActiveAccount().then((account) => {
+    await this.adapter.getPayerAccount().then((account) => {
       if (account) {
         this._payerAccount = account
       }

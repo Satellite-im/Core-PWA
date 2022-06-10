@@ -9,7 +9,7 @@ import Logger from '~/utilities/Logger'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
+import { Peer2Peer, PublicKeyInfo } from '~/libraries/WebRTC/Libp2p'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import { Friend } from '~/types/ui/friends'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -26,9 +26,12 @@ const webRTCActions = {
   async initialize(
     { commit, rootState, dispatch }: ActionsArguments<WebRTCState>,
     {
-      privateKeyInfo,
+      publicKeyInfo,
       originator,
-    }: { privateKeyInfo: PrivateKeyInfo; originator: string },
+    }: {
+      originator: string
+      publicKeyInfo: PublicKeyInfo
+    },
   ) {
     commit('setIncomingCall', undefined)
     commit('setActiveCall', undefined)
@@ -38,7 +41,7 @@ const webRTCActions = {
 
     const $Peer2Peer = Peer2Peer.getInstance()
     await $Peer2Peer.init({
-      privateKey: privateKeyInfo,
+      publickey: publicKeyInfo,
     })
     await $Peer2Peer.start()
     await $Peer2Peer.node?.relay?.start()
