@@ -1,10 +1,30 @@
+import { StringToHashBucketFastInputs } from '@tensorflow/tfjs'
 import { Config } from '~/config'
 
-export const getOriginalSizeFromDataUrl = (
-  file: File,
-): Promise<{ width: number; height: number }> => {
-  const fileAsDataURL = window.URL.createObjectURL(file)
+export const shouldFileSizeBeFixed = (type: string) => {
+  if (type.match('image.*')) {
+    return true
+  }
 
+  return false
+}
+
+export const getGlyphSource = ({
+  source,
+  sizeType,
+}: {
+  source: string
+  sizeType: string
+}): string => {
+  if (source.includes('/$1/')) {
+    return source.replace('$1', sizeType)
+  }
+  return source
+}
+
+export const getOriginalSizeFromDataUrl = (
+  url: string,
+): Promise<{ width: number; height: number }> => {
   return new Promise((resolve) => {
     const img = new Image()
     img.onload = () => {
@@ -13,7 +33,7 @@ export const getOriginalSizeFromDataUrl = (
         width: img.width,
       })
     }
-    img.src = fileAsDataURL
+    img.src = url
   })
 }
 

@@ -656,7 +656,21 @@ export default {
    */
   async sendGlyphMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, src, pack }: { to: string; src: string; pack: string },
+    {
+      to,
+      src,
+      pack,
+      width,
+      height,
+      sizeType,
+    }: {
+      to: string
+      src: string
+      pack: string
+      width: number
+      height: number
+      sizeType: string
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -687,9 +701,12 @@ export default {
     dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
-      message: result,
+      message: { ...result, width, height, sizeType },
     })
-    await dispatch('storeMessage', { address: friend.address, message: result })
+    await dispatch('storeMessage', {
+      address: friend.address,
+      message: { ...result, width, height, sizeType },
+    })
 
     commit('setMessageLoading', { loading: false })
   },
@@ -941,7 +958,21 @@ export default {
    */
   async sendGroupGlyphMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupID, src, pack }: { groupID: string; src: string; pack: string },
+    {
+      groupID,
+      src,
+      pack,
+      width,
+      height,
+      sizeType,
+    }: {
+      groupID: string
+      src: string
+      pack: string
+      width: number
+      height: number
+      sizeType: string
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -969,9 +1000,12 @@ export default {
     dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
-      message: result,
+      message: { ...result, width, height, sizeType },
     })
-    dispatch('storeMessage', { address: groupID, message: result })
+    dispatch('storeMessage', {
+      address: groupID,
+      message: { ...result, width, height, sizeType },
+    })
 
     commit('setMessageLoading', { loading: false })
   },
