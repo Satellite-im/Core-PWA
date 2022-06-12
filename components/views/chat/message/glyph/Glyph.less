@@ -1,15 +1,17 @@
-.glyph {
-  display: block;
-  width: 192px;
-  height: 192px;
-  aspect-ratio: 1/1;
-  object-fit: cover;
+.image-container {
+  &:extend(.flex-centered);
   cursor: pointer;
-}
 
-@media only screen and (max-width: @mobile-breakpoint) {
   .glyph {
-    max-width: 176px;
-    height: auto;
+    &:extend(.full-width);
+    &:extend(.full-height);
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    &.visible {
+      visibility: visible;
+    }
   }
 }

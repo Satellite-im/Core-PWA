@@ -32,6 +32,7 @@ export default Vue.extend({
       placeholderSrc: placeholderImage,
       placeholderText: this.$t('errors.chat.failed_load'),
       usePlaceholder: false,
+      loading: true,
     }
   },
   computed: {
@@ -45,6 +46,9 @@ export default Vue.extend({
     },
     onImageError() {
       this.usePlaceholder = true
+    },
+    onImageLoad() {
+      this.loading = false
     },
   },
 })

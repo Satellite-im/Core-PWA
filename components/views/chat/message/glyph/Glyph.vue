@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { getGlyphSource } from '~/utilities/ImageSize'
 
 export default Vue.extend({
   props: {
@@ -13,14 +14,24 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    size: {
+      type: Object as PropType<{ width: number; height: number }>,
+      required: true,
+    },
+    sizeType: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      loading: true,
+    }
   },
   computed: {
     ...mapState(['ui']),
-    getSource(): string {
-      if (this.source.includes('/$1/')) {
-        return this.source.replace('$1', 'small')
-      }
-      return this.source
+    getSource() {
+      return getGlyphSource({ source: this.source, sizeType: this.sizeType })
     },
   },
   methods: {
@@ -30,6 +41,9 @@ export default Vue.extend({
         state: !this.ui.modals.glyph,
       })
       this.$store.commit('ui/setGlyphModalPack', this.pack)
+    },
+    onImageLoad() {
+      this.loading = false
     },
   },
 })

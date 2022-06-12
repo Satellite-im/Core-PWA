@@ -13,14 +13,21 @@
       {{placeholderText}}
     </figcaption>
   </figure>
-  <div v-else class="image-container">
+  <div
+    v-else
+    class="image-container"
+    :style="{ width: `${size.width}px`, height: `${size.height}px` }"
+  >
+    <div v-if="loading" class="image-loader">
+      <UiLoadersLoadingBar />
+    </div>
     <img
       class="is-image"
-      :class="{'blur-image' : image.nsfw && blockNsfw}"
-      :style="{ width: `${size.width}px`, height: `${size.height}px` }"
+      :class="`${(image.nsfw && blockNsfw) && 'blur-image'} ${ loading ? 'hidden' : 'visible'}`"
       :src="image.url"
       @click="clickHandler"
       @error="onImageError"
+      @load="onImageLoad"
       data-cy="chat-image"
     />
   </div>

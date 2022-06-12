@@ -3,15 +3,23 @@
   border-radius: @corner-rounding;
 
   .image-container {
-    overflow: hidden;
-    max-width: 300px;
+    &:extend(.flex-centered);
+  
     .is-image {
       cursor: pointer;
       width: @full;
+      height: @full;
       object-fit: cover;
-      max-width: 300px;
       &:extend(.round-corners);
       &:extend(.no-select);
+  
+      &.hidden {
+        visibility: hidden;
+      }
+  
+      &.visible {
+        visibility: visible;
+      }
     }
   }
 
