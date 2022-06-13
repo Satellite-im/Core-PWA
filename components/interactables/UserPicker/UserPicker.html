@@ -15,8 +15,8 @@
     type="dark"
     :placeholder="$t('servers.create.select_friends_placeholder')"
   />
-  <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-    <TypographyText
+  <UiSimpleScroll scrollMode="vertical" scrollShow="scroll"
+    ><TypographyText
       v-if="!filteredFriends.length"
       :text="$t('servers.create.user_picker_empty')"
       class="empty-results-text"
@@ -29,5 +29,5 @@
       :selected="isSelected(friend)"
       @click="toggle(friend)"
     />
-  </UiScroll>
+  </UiSimpleScroll>
 </div>

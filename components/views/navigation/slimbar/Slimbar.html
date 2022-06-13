@@ -15,11 +15,13 @@
     </UiCircle>
   </div>
   <div id="list-container-vertical" v-if="!horizontal">
+    <UiHorizontalRule
+      v-if="friendsWithUnreadMessages.length && friendsDS !== DataStateType.Loading"
+    />
     <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
       <UiLoadersSpinner :spinning="true" />
     </div>
 
-    <UiHorizontalRule v-if="friendsWithUnreadMessages.length" />
     <UiSimpleScroll scrollMode="vertical" scrollShow="scroll" v-else>
       <div class="unreads" v-for="user in friendsWithUnreadMessages">
         <Unread
