@@ -28,11 +28,13 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  it('Chat - Edit message on chat', () => {
+  it.skip('Chat - Edit message on chat', () => {
+    // skipped because edit feature is coming soon
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
-  it('Chat - Message edited shows edited status', () => {
+  it.skip('Chat - Message edited shows edited status', () => {
+    // skipped because edit feature is coming soon
     cy.get('[data-cy=message-edited]').last().parents()
 
     cy.contains(randomMessage + randomNumber)
