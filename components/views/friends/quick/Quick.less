@@ -4,18 +4,14 @@
   &:extend(.first-layer);
   &:extend(.bordered);
   &:extend(.blur);
-  position: fixed;
+  position: absolute;
   width: 18rem;
-  top: 11rem;
+  top: 100%;
+  left: 13px;
   padding: @light-spacing @light-spacing @normal-spacing;
-  left: @sidebar-size + 2rem;
   display: flex;
   flex-direction: column;
   gap: @normal-spacing;
-
-  &.compact {
-    left: @servers-size + 2rem;
-  }
 
   .subtitle {
     margin-bottom: @light-spacing;
