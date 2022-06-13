@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: flex-start;
   pointer-events: none;
-  padding-left: 0.6rem;
+  padding-left: 0.5rem;
   padding-top: @normal-spacing;
 
   .circle-group {
@@ -34,7 +34,7 @@
   .unreads {
     position: relative;
     .unread {
-      margin: 0.5rem 0;
+      padding: 0.25rem 0;
     }
   }
 
@@ -57,6 +57,10 @@
     max-height: calc(@full - 11rem);
     pointer-events: auto;
     box-sizing: border-box;
+
+    #simple-scrollbar {
+      max-height: calc(@full - 3rem);
+    }
   }
   #list-container {
     height: fit-content;
@@ -73,6 +77,10 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .horizontal-rule-padding {
+    margin-right: @scroll-bar-size * 2;
   }
 }
 

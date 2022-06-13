@@ -16,6 +16,7 @@
   </div>
   <div id="list-container-vertical" v-if="!horizontal">
     <UiHorizontalRule
+      class="horizontal-rule-padding"
       v-if="friendsWithUnreadMessages.length && friendsDS !== DataStateType.Loading"
     />
     <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
@@ -25,6 +26,26 @@
     <UiSimpleScroll scrollMode="vertical" scrollShow="scroll" v-else>
       <div class="unreads" v-for="user in friendsWithUnreadMessages">
         <Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        /><Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        /><Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        /><Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        /><Unread
+          :key="user.address"
+          :user="user"
+          :active="$route.params.address === user.address"
+        /><Unread
           :key="user.address"
           :user="user"
           :active="$route.params.address === user.address"
