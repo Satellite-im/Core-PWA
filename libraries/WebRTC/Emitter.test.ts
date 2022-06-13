@@ -1,10 +1,12 @@
 import * as Emitter from '~/libraries/WebRTC/Emitter'
 
-describe('Emitter.default.on', () => {
+const EmitterDefault = Emitter.default
+
+describe('EmitterDefault.on', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new Emitter.default()
+    inst = new EmitterDefault()
   })
 
   test('0', () => {
