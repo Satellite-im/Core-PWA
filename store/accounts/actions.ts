@@ -160,6 +160,7 @@ export default {
 
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
+    // this will create an error since it responds a keyapair, which is not a valid format for Phantom
     if (!$BlockchainClient.isPayerInitialized) {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
@@ -327,7 +328,6 @@ export default {
     { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile

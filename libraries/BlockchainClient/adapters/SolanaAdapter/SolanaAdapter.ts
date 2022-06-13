@@ -74,7 +74,10 @@ export default class SolanaAdapter implements Adapter {
     return this.solanaManager.getCurrentAccountBalance()
   }
 
-  async getAccountFromMnemonic(mnemonic: string): Promise<Account | null> {
+  async getAccountFromMnemonic(mnemonic?: string): Promise<Account | null> {
+    if (!mnemonic) {
+      throw new Error('Mnemonic is required when working with Solana directly')
+    }
     await this.solanaManager.initializeFromMnemonic(mnemonic)
     const wallet = this.solanaManager.getMainSolanaWalletInstance()
     if (wallet) {

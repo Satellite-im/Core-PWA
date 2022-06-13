@@ -73,7 +73,7 @@ export default class BlockchainClient {
    * @param {string} mnemonic
    * @returns {Promise<void>}
    */
-  async initFromMnemonic(mnemonic: string): Promise<void> {
+  async initFromMnemonic(mnemonic?: string): Promise<void> {
     await this.adapter.getAccountFromMnemonic(mnemonic).then((account) => {
       if (account) {
         this._account = account

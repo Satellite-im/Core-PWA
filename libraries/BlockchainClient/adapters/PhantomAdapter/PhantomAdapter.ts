@@ -18,11 +18,11 @@ import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 import PhantomUser from '~/libraries/Phantom/PhantomUser/PhantomUser'
 
 export default class PhantomAdapter implements Adapter {
-  private readonly phantomManager: PhantomManager
+  private readonly $PhantomManager: PhantomManager = new PhantomManager()
   private phantomUser: PhantomUser | null = null
 
-  constructor(phantomManager: PhantomManager) {
-    this.phantomManager = phantomManager
+  constructor() {
+    this.$PhantomManager = new PhantomManager()
   }
 
   initUserProgram(): Promise<void> {
@@ -31,8 +31,8 @@ export default class PhantomAdapter implements Adapter {
 
   _getPhantomUser(): PhantomUser {
     if (!this.phantomUser) {
-      if (this.phantomManager.getAdapter().connected) {
-        this.phantomUser = new PhantomUser(this.phantomManager)
+      if (this.$PhantomManager.getAdapter().connected) {
+        this.phantomUser = new PhantomUser(this.$PhantomManager)
         return this.phantomUser
       }
       throw new Error('Phantom user is not initialized')
@@ -48,12 +48,21 @@ export default class PhantomAdapter implements Adapter {
     throw new Error('Method not implemented.')
   }
 
-  getAccountFromMnemonic(_mnemonic: string): Promise<Account | null> {
-    throw new Error('Method not implemented.')
+  // here we don't need the mnemonic, since this function only triggers the wallet connection
+  async getAccountFromMnemonic(_mnemonic?: string): Promise<Account | null> {
+    try {
+      this.$PhantomManager.initWallet()
+      const account: Account = {
+        address: this.$PhantomManager.getwalletPublicKey().toBase58(),
+      }
+      return account
+    } catch (e) {
+      return null
+    }
   }
 
   async getAccountBalance(_account: Account): Promise<number | null> {
-    return await this.phantomManager.getCurrentAccountBalance()
+    return await this.$PhantomManager.getCurrentAccountBalance()
   }
 
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null> {

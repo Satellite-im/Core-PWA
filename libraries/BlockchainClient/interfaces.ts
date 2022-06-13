@@ -36,7 +36,7 @@ export interface Group {
 
 export interface Account {
   mnemonic?: string
-  privateKey: string
+  privateKey?: string
   path?: string
   address: string
 }
@@ -126,7 +126,7 @@ export interface Adapter {
   setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
 
-  getAccountFromMnemonic(mnemonic: string): Promise<Account | null>
+  getAccountFromMnemonic(mnemonic?: string): Promise<Account | null>
   getAccountBalance(account: Account): Promise<number | null>
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>
   createUser(params: CreateUserParams): Promise<boolean>
