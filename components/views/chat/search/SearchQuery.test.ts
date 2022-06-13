@@ -290,7 +290,6 @@ describe('SearchQuery.default.deleteItemFrom', () => {
 })
 
 describe('SearchQuery.default.deleteItemAt', () => {
-  let inst8: any
   let inst6: any
   let inst5: any
   let inst4: any
@@ -299,7 +298,6 @@ describe('SearchQuery.default.deleteItemAt', () => {
   let inst2: any
 
   beforeEach(() => {
-    inst8 = new SearchQueryDefault()
     inst6 = new SearchQueryDefault()
     inst5 = new SearchQueryDefault()
     inst4 = new SearchQueryDefault()
@@ -341,7 +339,6 @@ describe('SearchQuery.default.deleteItemAt', () => {
 
 describe('SearchQuery.default.setQuery', () => {
   let inst9: any
-  let inst7: any
   let inst5: any
   let inst4: any
   let inst3: any
@@ -350,7 +347,6 @@ describe('SearchQuery.default.setQuery', () => {
 
   beforeEach(() => {
     inst9 = new SearchQueryDefault()
-    inst7 = new SearchQueryDefault()
     inst5 = new SearchQueryDefault()
     inst4 = new SearchQueryDefault()
     inst3 = new SearchQueryDefault()
@@ -498,6 +494,19 @@ describe('SearchQuery.default._parseQuery', () => {
 
   test('5', () => {
     const result: any = inst9._parseQuery('', -Infinity)
+    expect(result).toMatchSnapshot()
+  })
+})
+
+describe('SearchQuery.default._hasAncestor', () => {
+  let inst: any
+
+  beforeEach(() => {
+    inst = new SearchQuery.default()
+  })
+
+  test('0', () => {
+    const result: any = inst._hasAncestor('', '')
     expect(result).toMatchSnapshot()
   })
 })
