@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" :class="`chip-item size-${size}`">
+  <div :class="`chip-item size-${size}`">
     <UiCircle
       v-if="friend"
       :type="src ? 'image' : 'random'"
@@ -10,7 +10,7 @@
     <div class="text">
       {{ text }}
     </div>
-    <x-icon size="1x" @click="hide" />
+    <x-icon size="1x" @click="$emit('delete')" />
   </div>
 </template>
 
@@ -42,25 +42,10 @@ export default Vue.extend({
       default: undefined,
     },
   },
-  data() {
-    return {
-      show: true,
-    }
-  },
   computed: {
     src(): string {
       const hash = this.friend.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
-  },
-  methods: {
-    /**
-     * @method hide
-     * @description Hides chip element
-     */
-    hide() {
-      this.show = false
-      this.$emit('delete')
     },
   },
 })
