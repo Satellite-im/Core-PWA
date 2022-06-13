@@ -1,6 +1,6 @@
 import { ActionsArguments } from '~/types/store/store'
 import { ScrollDirections } from '~/types/chat/chat'
-import { ChatState, ChatText, ChatFileUpload } from '~/store/chat/types'
+import { ChatState, ChatText } from '~/store/chat/types'
 
 export default {
   setChatText({ commit }: ActionsArguments<ChatState>, req: ChatText) {

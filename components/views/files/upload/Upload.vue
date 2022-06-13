@@ -4,7 +4,6 @@ import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { isHeic } from '~/utilities/FileType'
-import { ChatFileUpload } from '~/store/chat/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import createThumbnail from '~/utilities/Thumbnail'
@@ -19,7 +18,6 @@ export default Vue.extend({
     ...mapState({
       consentToScan: (state) =>
         (state as RootState).textile.userThread.consentToScan,
-      recipientType: (state) => (state as RootState).conversation.type,
     }),
     ...mapGetters({
       getFiles: 'chat/getFiles',
