@@ -157,7 +157,7 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
     )
   },
   friendsWithUnreadMessages: (state: FriendsState): Friend[] => {
-    return state.all // .filter((friend) => friend.unreadCount)
+    return state.all.filter((friend) => friend.unreadCount)
   },
 }
 
