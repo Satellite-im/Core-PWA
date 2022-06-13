@@ -118,7 +118,7 @@ export class NotificationManager {
     const makeNotificationMessage = `New message from ${payload.from}`
 
     const browserNotification = new Notifications()
-    browserNotification.sendNotification(
+    await browserNotification.sendNotifications(
       payload.type,
       payload.title,
       payload.imageHash,
