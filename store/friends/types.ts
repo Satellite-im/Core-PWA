@@ -1,7 +1,9 @@
 import { PublicKey } from '@solana/web3.js'
+import { uniqBy } from 'lodash'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
+
 export interface FriendsState {
   incomingRequests: IncomingRequest[]
   outgoingRequests: OutgoingRequest[]
@@ -68,42 +70,10 @@ export function friendAccountToOutgoingRequest(
  * Utility function that checks if the current list
  * of outgoing/incoming requests contains any duplicate
  * @param list the list we want check
- * @returns an array containing no duplicated requests, the most recent request is kept if any duplicated was found
+ * @returns an array containing no duplicated requests, the first request is kept if any duplicated was found
  */
 export function friendListFilterDuplicates(
   list: Array<OutgoingRequest | IncomingRequest>,
 ): Array<OutgoingRequest | IncomingRequest> {
-  const keptDuplicates: Array<OutgoingRequest | IncomingRequest> | [] = []
-  const allDuplicates: Array<OutgoingRequest | IncomingRequest> | [] = []
-
-  list.map((item) => {
-    const duplicatedItems: any = list.filter(
-      (listItem) => item.requestId === listItem.requestId,
-    )
-
-    if (duplicatedItems.length > 1) {
-      allDuplicates.concat(duplicatedItems)
-      keptDuplicates.push(duplicatedItems.at(-1))
-    }
-
-    return item
-  })
-
-  if (allDuplicates) {
-    const newList = list
-
-    allDuplicates.map((duplicatedItem) => {
-      const index = newList.indexOf(duplicatedItem)
-      if (index > -1) {
-        newList.splice(index, 1)
-      }
-      return duplicatedItem
-    })
-
-    keptDuplicates.map((keptDuplicateItem) => newList.push(keptDuplicateItem))
-
-    return newList
-  }
-
-  return list
+  return uniqBy(list, 'requestId')
 }
