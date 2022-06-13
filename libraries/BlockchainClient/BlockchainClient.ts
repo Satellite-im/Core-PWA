@@ -349,6 +349,31 @@ export default class BlockchainClient {
   }
 
   /**
+   * @method leaveGroup
+   * @param groupId Group id
+   */
+  async leaveGroup(groupId: string): Promise<void> {
+    this.adapter.leaveGroup(groupId)
+  }
+
+  /**
+   * @method leaveGroup
+   * @param groupId Group id
+   * @param recipient new admin address
+   */
+  async adminLeaveGroup(groupId: string, recipient: string): Promise<void> {
+    this.adapter.adminLeaveGroup(groupId, recipient)
+  }
+
+  /**
+   * @method closeGroup
+   * @param groupId Group id
+   */
+  async closeGroup(groupId: string): Promise<void> {
+    this.adapter.closeGroup(groupId)
+  }
+
+  /**
    * @method getUserGroups
    * Returns groups the user is a member of
    * @param address {string} user address
@@ -405,6 +430,14 @@ export default class BlockchainClient {
     cb: (value: Group) => void,
   ): Promise<string> {
     return this.adapter.addGroupListener(id, cb)
+  }
+
+  /**
+   * Remove group updates listeners
+   * @param key
+   */
+  async removeGroupListener(key: string): Promise<void> {
+    this.adapter.removeGroupListener(key)
   }
 
   /**

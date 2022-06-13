@@ -170,8 +170,12 @@ export interface Adapter {
   addGroupInviteListener(cb: (group: Group) => void): Promise<string>
   unsubscribeGroupInviteListener(id: number): Promise<void>
   addGroupListener(id: string, cb: (value: Group) => void): Promise<string>
+  removeGroupListener(key: string): Promise<void>
   removeGroupListeners(keys: string[]): Promise<void>
   getGroupById(id: string): Promise<Group>
   getGroupUsers(groupId: string): Promise<string[]>
   addGroupsListener(cb: (value: Group) => void): Promise<string[]>
+  leaveGroup(groupId: string): Promise<void>
+  adminLeaveGroup(groupId: string, receipient: string): Promise<void>
+  closeGroup(groupId: string): Promise<void>
 }

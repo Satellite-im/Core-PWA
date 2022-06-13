@@ -69,19 +69,20 @@ export default {
     { commit, rootState }: ActionsArguments<GroupsState>,
     { group }: { group: Group },
   ) {
-    const groupChatProgram = getGroupChatProgram()
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+
     const myAddress = rootState.accounts.active
     if (group.members.length === 1) {
-      await groupChatProgram.close(group.id)
+      await $BlockchainClient.closeGroup(group.id)
     } else if (group.admin !== myAddress) {
-      await groupChatProgram.leave(group.id)
+      await $BlockchainClient.leaveGroup(group.id)
     } else {
       // todo - select new admin logic. for now, just select a new user that isn't you
       const newAdmin =
         group.members.find((m) => m.address !== myAddress)?.address ?? ''
-      await groupChatProgram.adminLeave(group.id, newAdmin)
+      await $BlockchainClient.adminLeaveGroup(group.id, newAdmin)
     }
-    await groupChatProgram.removeGroupListener(group.address)
+    await $BlockchainClient.removeGroupListener(group.address)
     commit('removeGroup', group.id)
   },
 

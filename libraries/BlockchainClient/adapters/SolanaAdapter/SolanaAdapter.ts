@@ -275,9 +275,14 @@ export default class SolanaAdapter implements Adapter {
     return this.groupsProgram.addGroupListener(id, cb)
   }
 
+  async removeGroupListener(key: string): Promise<void> {
+    this.groupsProgram = new GroupChatsProgram(this.solanaManager)
+    this.groupsProgram.removeGroupListener(key)
+  }
+
   async removeGroupListeners(keys: string[]): Promise<void> {
     this.groupsProgram = new GroupChatsProgram(this.solanaManager)
-    return this.groupsProgram.removeGroupListeners(keys)
+    this.groupsProgram.removeGroupListeners(keys)
   }
 
   async getGroupById(id: string): Promise<Group> {
@@ -293,5 +298,20 @@ export default class SolanaAdapter implements Adapter {
   async addGroupsListener(cb: (value: Group) => void): Promise<string[]> {
     this.groupsProgram = new GroupChatsProgram(this.solanaManager)
     return this.groupsProgram.addGroupsListener(cb)
+  }
+
+  async leaveGroup(groupId: string): Promise<void> {
+    this.groupsProgram = new GroupChatsProgram(this.solanaManager)
+    return this.groupsProgram.leave(groupId)
+  }
+
+  async adminLeaveGroup(groupId: string, recipient: string): Promise<void> {
+    this.groupsProgram = new GroupChatsProgram(this.solanaManager)
+    return this.groupsProgram.adminLeave(groupId, recipient)
+  }
+
+  async closeGroup(groupId: string): Promise<void> {
+    this.groupsProgram = new GroupChatsProgram(this.solanaManager)
+    return this.groupsProgram.close(groupId)
   }
 }
