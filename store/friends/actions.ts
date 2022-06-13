@@ -7,6 +7,7 @@ import {
   CreateFriendRequestArguments,
   friendAccountToIncomingRequest,
   friendAccountToOutgoingRequest,
+  friendListFilterDuplicates,
   FriendsError,
   FriendsState,
 } from './types'
@@ -75,8 +76,8 @@ export default {
       }),
     )
 
-    commit('setIncomingRequests', incomingRequests)
-    commit('setOutgoingRequests', outgoingRequests)
+    commit('setIncomingRequests', friendListFilterDuplicates(incomingRequests))
+    commit('setOutgoingRequests', friendListFilterDuplicates(outgoingRequests))
   },
 
   /**
