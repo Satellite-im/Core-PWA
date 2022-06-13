@@ -1,6 +1,5 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
-import { v4 as uuidv4 } from 'uuid'
 import { Position, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -11,8 +10,6 @@ import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
 import { AlertState, AlertType } from '~/libraries/ui/Alerts'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 
 const $Sounds = new SoundManager()
 
