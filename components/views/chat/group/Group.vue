@@ -74,7 +74,11 @@ export default Vue.extend({
       if (this.group.sender) {
         return this.group.sender
       }
-      return this.accounts.details?.address ?? ''
+      if (this.group.from === this.accounts.details?.textilePubkey) {
+        return this.accounts.details?.address
+      }
+      const friend = this.findFriendByKey(this.group.from)
+      return friend.address
     },
   },
   methods: {
