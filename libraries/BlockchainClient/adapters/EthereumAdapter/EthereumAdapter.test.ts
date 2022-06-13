@@ -1,9 +1,10 @@
 import * as EthereumAdapter from '~/libraries/BlockchainClient/adapters/EthereumAdapter/EthereumAdapter'
-describe('EthereumAdapter.default.acceptFriendRequest', () => {
+const EthereumAdapterDefault = EthereumAdapter.default
+describe('EthereumAdapterDefault.acceptFriendRequest', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new EthereumAdapter.default()
+    inst = new EthereumAdapterDefault()
   })
 
   test('0', () => {
