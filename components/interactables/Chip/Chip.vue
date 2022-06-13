@@ -10,7 +10,7 @@
     <div class="text">
       {{ text }}
     </div>
-    <x-icon size="1x" @click="$emit('delete')" />
+    <x-icon class="delete-icon" size="1x" @click="$emit('delete')" />
   </div>
 </template>
 
@@ -60,8 +60,6 @@ export default Vue.extend({
   flex-shrink: 0;
   flex-direction: row;
   align-items: center;
-  margin-right: @light-spacing;
-  margin-bottom: @light-spacing;
   padding: @xlight-spacing;
   border-radius: @corner-rounding-xxlarge;
   color: white;
@@ -73,6 +71,10 @@ export default Vue.extend({
 
   &.size-small {
     font-size: @mini-text-size;
+  }
+
+  .delete-icon {
+    cursor: pointer;
   }
 }
 </style>

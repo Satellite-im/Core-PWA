@@ -47,4 +47,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./UserPicker.less"></style>
+<style scoped lang="less" src="./UserPicker.less"></style>
