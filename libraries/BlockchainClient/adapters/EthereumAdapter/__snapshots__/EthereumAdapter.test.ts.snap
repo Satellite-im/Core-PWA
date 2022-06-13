@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EthereumAdapter.default.acceptFriendRequest 0 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 0 1`] = `Promise {}`;
 
-exports[`EthereumAdapter.default.acceptFriendRequest 1 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 1 1`] = `Promise {}`;
 
-exports[`EthereumAdapter.default.acceptFriendRequest 2 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 2 1`] = `Promise {}`;
 
-exports[`EthereumAdapter.default.acceptFriendRequest 3 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 3 1`] = `Promise {}`;
 
-exports[`EthereumAdapter.default.acceptFriendRequest 4 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 4 1`] = `Promise {}`;
 
-exports[`EthereumAdapter.default.acceptFriendRequest 5 1`] = `Promise {}`;
+exports[`EthereumAdapterDefault.acceptFriendRequest 5 1`] = `Promise {}`;
