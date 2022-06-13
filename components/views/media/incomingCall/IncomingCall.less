@@ -8,7 +8,8 @@
 }
 
 .caller {
-  height: 100%;
+  height: @full;
+  text-align: center;
 }
 
 .user-profile-picture {
@@ -16,6 +17,13 @@
   background-position: center !important;
   height: 80%;
   &:extend(.full-width);
+}
+
+.user-profile-placeholder {
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  margin-left: -60px;
 }
 
 .gradient-cover {
@@ -80,6 +88,11 @@
   .content {
     &:extend(.full-width);
     height: @full;
+    width: @full;
+  }
+
+  .user-profile-placeholder {
+    bottom: 300px;
   }
 
   .user-info {
