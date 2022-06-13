@@ -1,20 +1,32 @@
 <template src="./UserPicker.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'UserPicker',
+  props: {
+    exclude: {
+      type: Array as PropType<String[]>,
+      default: () => [],
+    },
+  },
   data: () => ({
     selected: [] as Friend[],
     filter: '',
   }),
   computed: {
     ...mapState({
-      friends: (state) => (state as RootState).friends.all,
+      friends(state) {
+        const all = (state as RootState).friends.all
+        if (!this.exclude.length) {
+          return all
+        }
+        return all.filter((friend) => !this.exclude.includes(friend.address))
+      },
     }),
     filteredFriends(): Friend[] {
       if (!this.filter) {
