@@ -63,6 +63,13 @@ p {
       padding: @xlarge-spacing;
       box-sizing: border-box;
     }
+
+    @media only screen and (max-width: @mobile-breakpoint) {
+      #simple-scrollbar.modal-container {
+        width: @full;
+        padding-bottom: @mobile-nav-size;
+      }
+    }
   }
 }
 
