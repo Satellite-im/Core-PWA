@@ -594,6 +594,7 @@ const webRTCActions = {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
+      dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
     }
     call.on('DESTROY', onCallDestroy)
   },
