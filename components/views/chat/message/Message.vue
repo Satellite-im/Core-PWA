@@ -136,6 +136,8 @@ export default Vue.extend({
       setTimestamp,
       Config.chat.timestampUpdateInterval,
     )
+
+    console.log(this.$props.message)
   },
   beforeDestroy() {
     clearInterval(this.$data.timestampRefreshInterval)

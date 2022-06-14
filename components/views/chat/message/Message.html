@@ -53,7 +53,7 @@
       v-if="message.type === 'glyph'"
       :source="message.payload"
       :pack="message.pack"
-      :size="{width: message.width, height: message.height}"
+      :size="{width: message.payload.width, height: message.payload.height}"
       :sizeType="message.sizeType"
     />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
@@ -72,7 +72,7 @@
     <UiChatEmbedsFile
       v-else-if="message.type === 'file'"
       :file="message.payload"
-      :size="{width: message.width, height: message.height}"
+      :size="{width: message.payload.width, height: message.payload.height}"
     />
     <MessageReactions
       v-if="!hideActions && hasReactions"
