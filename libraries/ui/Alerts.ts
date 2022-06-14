@@ -1,6 +1,7 @@
 export enum AlertType {
   FRIEND_REQUEST = 'FRIEND_REQUEST',
-  MISSED_CALL = 'MISSED_CALL',
+  MISSED_CALL = 'Missed Call',
+  INCOMING_CALL = 'Incoming Call',
   FILES_FULL = 'FILES_FULL',
   FILE_UPLOADED = 'FILE_UPLOADED',
   FILE_NSFW = 'FILE_NSFW',

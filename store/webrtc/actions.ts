@@ -614,6 +614,24 @@ const webRTCActions = {
     call.on('ANSWERED', onAnswered)
 
     function onCallDestroy() {
+      if (rootState.webrtc.incomingCall !== undefined) {
+        const callerInfo = rootState.friends.all.find((friend) => {
+          return friend.account.from === state.originator
+        })
+        console.log(callerInfo)
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: 'Missed Call',
+            from: callerInfo?.name,
+            fromAddress: callerInfo?.address,
+            imageHash: callerInfo?.photoHash,
+            title: `Notification`,
+            type: AlertType.MISSED_CALL,
+          },
+          { root: true },
+        )
+      }
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
