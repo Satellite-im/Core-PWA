@@ -36,9 +36,7 @@ export default Vue.extend({
     clickHandler(event: MouseEvent): void {
       this.$store.commit('ui/setChatImageOverlay', this.image)
     },
-    onImageError(event) {
-      console.log(event)
-
+    onImageError() {
       this.usePlaceholder = true
     },
   },
