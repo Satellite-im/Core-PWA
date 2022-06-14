@@ -17,8 +17,8 @@ export default Vue.extend({
       friendsDS: (state) => (state as RootState).dataState.friends,
       friendsExist: (state) => (state as RootState).friends?.all?.length > 0,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('friends', ['findFriendByAddress']),
+    ...mapGetters('textile', ['getInitialized']),
     // Get the active friend
     friend() {
       const { address } = this.$route.params
