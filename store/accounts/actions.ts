@@ -409,9 +409,7 @@ async function uploadPicture(image: string) {
   const res = await $TextileManager.sharedBucket?.pushFile(
     imageFile,
     imageFile.name,
-    () => {
-      /* TODO document why this arrow function is empty */
-    },
+    () => {},
   )
 
   return res?.path.root.toString() ?? ''
