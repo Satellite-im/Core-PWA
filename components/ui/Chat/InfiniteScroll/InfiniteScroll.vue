@@ -43,7 +43,6 @@ export default {
         this.$emit('intersect', {
           loaded: () => {
             this.debounceTimeout = setTimeout(() => {
-              this.isIntersecting = false
               this.scrollObserver.observe(this.$refs.root)
             }, 100)
           },
