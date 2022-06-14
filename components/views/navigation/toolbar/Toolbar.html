@@ -100,7 +100,10 @@
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
-    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
+    <GroupInvite
+      v-click-outside="()=>toggleModal('groupInvite')"
+      :group="recipient"
+    />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <UiComingSoon

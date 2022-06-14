@@ -1,13 +1,20 @@
 <template src="./Invite.html" />
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
+import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'GroupInvite',
+  props: {
+    group: {
+      type: Object as PropType<Group>,
+      required: true,
+    },
+  },
   data() {
     return {
       recipients: [] as Friend[],
@@ -19,10 +26,9 @@ export default Vue.extend({
   computed: {
     ...mapState({
       modal: (state) => (state as RootState).ui.modals.groupInvite,
-      participants: (state) => (state as RootState).conversation.participants,
     }),
-    participantAddresses() {
-      return this.participants.map((p) => p.address)
+    groupMembers() {
+      return this.group.members.map((p) => p.address)
     },
   },
   methods: {

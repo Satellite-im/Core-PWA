@@ -3,7 +3,7 @@
   <TypographyText :text="$t('pages.chat.group_invite_description')" />
   <InteractablesUserPicker
     v-model="recipients"
-    :exclude="participantAddresses"
+    :exclude="groupMembers"
     address-lookup
   />
   <small v-if="error" class="error has-text-danger error">{{error}}</small>
