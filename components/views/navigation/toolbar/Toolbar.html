@@ -101,6 +101,7 @@
       <user-plus-icon size="1x" class="control-icon" />
     </div>
     <GroupInvite
+      v-if="modals.groupInvite"
       v-click-outside="()=>toggleModal('groupInvite')"
       :group="recipient"
     />

@@ -24,9 +24,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      modal: (state) => (state as RootState).ui.modals.groupInvite,
-    }),
     groupMembers() {
       return this.group.members.map((p) => p.address)
     },
