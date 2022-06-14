@@ -115,7 +115,9 @@ export const mediaMessage = t.intersection([
 ])
 
 const glyphMessagePayload = t.type({
-  payload: t.string,
+  payload: t.type({
+    src: t.string,
+  }),
   pack: t.string,
 })
 

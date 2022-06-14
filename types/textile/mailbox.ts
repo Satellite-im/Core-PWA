@@ -70,9 +70,11 @@ export interface MessagePayloads {
   }
   text: Omit<TextMessage, 'id' | 'at' | 'from'>
   glyph: Omit<GlyphMessage, 'id' | 'at' | 'from'> & {
-    width: number
-    height: number
-    sizeType: string
+    payload: {
+      width: number
+      height: number
+      sizeType: string
+    }
   }
 }
 

@@ -309,7 +309,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, pack: string } & { type: \\"glyph\\" })",
+  "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { src: string }, pack: string } & { type: \\"glyph\\" })",
   "types": Array [
     IntersectionType {
       "_tag": "IntersectionType",
@@ -422,7 +422,7 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ payload: string, pack: string }",
+      "name": "{ payload: { src: string }, pack: string }",
       "props": Object {
         "pack": StringType {
           "_tag": "StringType",
@@ -432,12 +432,22 @@ IntersectionType {
           "name": "string",
           "validate": [Function],
         },
-        "payload": StringType {
-          "_tag": "StringType",
+        "payload": InterfaceType {
+          "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "string",
+          "name": "{ src: string }",
+          "props": Object {
+            "src": StringType {
+              "_tag": "StringType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "string",
+              "validate": [Function],
+            },
+          },
           "validate": [Function],
         },
       },
@@ -1867,7 +1877,7 @@ UnionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, pack: string } & { type: \\"glyph\\" })",
+      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { src: string }, pack: string } & { type: \\"glyph\\" })",
       "types": Array [
         IntersectionType {
           "_tag": "IntersectionType",
@@ -1980,7 +1990,7 @@ UnionType {
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ payload: string, pack: string }",
+          "name": "{ payload: { src: string }, pack: string }",
           "props": Object {
             "pack": StringType {
               "_tag": "StringType",
@@ -1990,12 +2000,22 @@ UnionType {
               "name": "string",
               "validate": [Function],
             },
-            "payload": StringType {
-              "_tag": "StringType",
+            "payload": InterfaceType {
+              "_tag": "InterfaceType",
               "decode": [Function],
               "encode": [Function],
               "is": [Function],
-              "name": "string",
+              "name": "{ src: string }",
+              "props": Object {
+                "src": StringType {
+                  "_tag": "StringType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "string",
+                  "validate": [Function],
+                },
+              },
               "validate": [Function],
             },
           },

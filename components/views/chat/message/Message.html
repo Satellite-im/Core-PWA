@@ -51,10 +51,10 @@
     </template>
     <MessageGlyph
       v-if="message.type === 'glyph'"
-      :source="message.payload"
+      :source="message.payload.src"
       :pack="message.pack"
       :size="{width: message.payload.width, height: message.payload.height}"
-      :sizeType="message.sizeType"
+      :sizeType="message.payload.sizeType"
     />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent
