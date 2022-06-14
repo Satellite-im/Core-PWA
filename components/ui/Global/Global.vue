@@ -117,7 +117,6 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.commit('webrtc/setIncomingCall', undefined)
       this.$store.commit('ui/fullscreen', false)
       this.$store.dispatch('webrtc/denyCall')
     },

@@ -600,11 +600,14 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/deny')
    */
-  denyCall({ state }: ActionsArguments<WebRTCState>) {
-    if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
-    if (state.incomingCall) {
-      $WebRTC.getCall(state.incomingCall.callId)?.destroy()
+  denyCall({ state, commit }: ActionsArguments<WebRTCState>) {
+    if (state.activeCall) {
+      $WebRTC.getCall(state.activeCall.callId)?.hangUp()
     }
+    if (state.incomingCall) {
+      $WebRTC.getCall(state.incomingCall.callId)?.hangUp()
+    }
+    commit('setIncomingCall', undefined)
   },
   /**
    * @method hangUp
