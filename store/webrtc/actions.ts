@@ -603,11 +603,12 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/deny')
    */
-  denyCall({ state }: ActionsArguments<WebRTCState>) {
+  denyCall({ state, dispatch }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
     if (state.incomingCall) {
       $WebRTC.getCall(state.incomingCall.callId)?.destroy()
     }
+    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method hangUp
@@ -615,12 +616,13 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/hangUp')
    */
-  hangUp({ state, commit }: ActionsArguments<WebRTCState>) {
+  hangUp({ state, commit, dispatch }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) {
       $WebRTC.getCall(state.activeCall.callId)?.destroy()
     }
     commit('setActiveCall', undefined)
     commit('setIncomingCall', undefined)
+    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method call
