@@ -1,48 +1,74 @@
 <div id="profile-settings" :class="isSmallScreen? 'profile-small-screen' : ''">
-  <div>
-    <SettingsProfilePicture :image="profileInfo.imageUrl" />
-  </div>
-  
+  <SettingsProfileBanner />
+
   <div class="profile-layout">
     <div class="profile-left">
-      <SettingsProfileCard :info="profileInfo" />
+      <SettingsProfileCard :info="sampleProfileInfo" />
     </div>
     <div class="profile-right">
       <div class="profile-main">
         <div class="columns is-desktop">
           <div class="column">
-            <TypographyTitle :size="6" :text="$t('pages.settings.profile.title')" />
-            <TypographySubtitle :size="6" :text="$t('pages.settings.profile.subtitle')" />
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.profile.title')"
+            />
+            <TypographySubtitle
+              :size="6"
+              :text="$t('pages.settings.profile.subtitle')"
+            />
           </div>
         </div>
-        
+
         <div class="profile-image-cropper" v-if="showCropper">
           <div class="content">
-            <InteractablesImageCropper :setCroppedImage='setCroppedImage' :toggleCropper="toggleCropper"
-              :imageUrl="profileInfo.imageUrl" />
-            <div class="cropper-mask"></div> 
-          </div>  
+            <InteractablesImageCropper
+              :setCroppedImage="setCroppedImage"
+              :toggleCropper="toggleCropper"
+              :imageUrl="image"
+            />
+            <div class="cropper-mask"></div>
+          </div>
         </div>
-        
+
         <div class="columns is-mobile">
           <div class="column profile-photo-column">
-            <div :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']">
-              <input ref="file" class="input-file" type="file" @change="selectProfileImage" accept="image/*"></input>
-              <UiCircle :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' " :source="src" seed="0x0000000000000000000000000000000000000000" :size="isSmallScreen ? 55 : 75"/>
-              <UiCircle 
-                type="icon" 
+            <div
+              :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']"
+            >
+              <input
+                ref="file"
+                class="input-file"
+                type="file"
+                @change="selectProfileImage"
+                :accept="acceptableImageFormats"
+              />
+              <UiCircle
+                :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' "
                 @click="openFileDialog"
+                :source="src"
+                :seed="accounts.active"
+                :size="isSmallScreen ? 55 : 75"
+              />
+              <!-- removing until it can be styled better -->
+              <!-- <UiCircle
+                type="icon"
                 icon="plus"
-                color="#000" 
+                color="#000"
                 :size="18"
-                class="plus-button" />
+                class="plus-button"
+              /> -->
             </div>
           </div>
           <div class="column username-column">
-            <TypographyTitle :size="isSmallScreen ? 6 : 4" text="RetroPronghorn" :class="isSmallScreen ? 'mg-quarter' : 'mg-half'" />
-            <InteractablesInputGroup
+            <TypographyTitle
+              :size="isSmallScreen ? 6 : 4"
+              :text="accounts.details.name"
+              :class="isSmallScreen ? 'mg-quarter' : 'mg-half'"
+            />
+            <!-- <InteractablesInputGroup
               class="username"
-              v-model="profileInfo.status"
+              v-model="status"
               size="small"
               input-kind="text"
               type="primary"
@@ -50,19 +76,25 @@
               :action="() => {}"
             >
               <edit-icon size="1x" />
-            </InteractablesInputGroup>
+            </InteractablesInputGroup> -->
+            <TypographyText :text="accounts.details.status" />
           </div>
         </div>
       </div>
-      
+
       <UiSpacer :height="isSmallScreen ? 10 : 24" />
-      <div class="columns is-desktop" v-if="featureReadyToShow">
+      <!-- <div class="columns is-desktop">
         <div class="column">
-          <TypographyTitle :size="6" :text="$t('pages.settings.profile.info.title')" />
-          <TypographySubtitle :size="6" :text="$t('pages.settings.profile.info.subtitle')" />
+          <TypographyTitle
+            :size="6"
+            :text="$t('pages.settings.profile.info.title')"
+          />
+          <TypographySubtitle
+            :size="6"
+            :text="$t('pages.settings.profile.info.subtitle')"
+          />
         </div>
-      </div>
-      
+      </div> -->
     </div>
   </div>
 </div>
