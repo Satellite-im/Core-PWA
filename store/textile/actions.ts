@@ -467,19 +467,23 @@ export default {
             size: file.file.size,
             type: file.file.type,
             nsfw: file.nsfw,
+            width: file.width,
+            height: file.width,
           },
           type: 'file',
         },
       )
 
+    console.log(sendFileResult)
+
     dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
-      message: { ...sendFileResult, width: file.width, height: file.height },
+      message: sendFileResult,
     })
     await dispatch('storeMessage', {
       address: friend.address,
-      message: { ...sendFileResult, width: file.width, height: file.height },
+      message: sendFileResult,
     })
     commit('setMessageLoading', { loading: false })
   },
@@ -695,17 +699,20 @@ export default {
         payload: src,
         pack,
         type: 'glyph',
+        width,
+        height,
+        sizeType,
       },
     )
 
     dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
-      message: { ...result, width, height, sizeType },
+      message: result,
     })
     await dispatch('storeMessage', {
       address: friend.address,
-      message: { ...result, width, height, sizeType },
+      message: result,
     })
 
     commit('setMessageLoading', { loading: false })
@@ -995,16 +1002,19 @@ export default {
       payload: src,
       pack,
       type: 'glyph',
+      width,
+      height,
+      sizeType,
     })
 
     dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
-      message: { ...result, width, height, sizeType },
+      message: result,
     })
     dispatch('storeMessage', {
       address: groupID,
-      message: { ...result, width, height, sizeType },
+      message: result,
     })
 
     commit('setMessageLoading', { loading: false })
@@ -1059,6 +1069,8 @@ export default {
           size: file.file.size,
           type: file.file.type,
           nsfw: file.nsfw,
+          width: file.width,
+          height: file.height,
         },
         type: 'file',
       })
@@ -1066,11 +1078,11 @@ export default {
     dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
-      message: { ...sendFileResult, width: file.width, height: file.height },
+      message: sendFileResult,
     })
     dispatch('storeMessage', {
       address: groupID,
-      message: { ...sendFileResult, width: file.width, height: file.height },
+      message: sendFileResult,
     })
   },
   /**

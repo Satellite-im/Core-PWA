@@ -65,9 +65,15 @@ export type MessageTypes = keyof MTypes
 export interface MessagePayloads {
   reply: Omit<ReplyMessage, 'id' | 'at' | 'from'>
   reaction: Omit<ReactionMessage, 'id' | 'at' | 'from'>
-  file: Omit<FileMessage, 'id' | 'at' | 'from'>
+  file: Omit<FileMessage, 'id' | 'at' | 'from'> & {
+    payload: { width?: number; height?: number }
+  }
   text: Omit<TextMessage, 'id' | 'at' | 'from'>
-  glyph: Omit<GlyphMessage, 'id' | 'at' | 'from'>
+  glyph: Omit<GlyphMessage, 'id' | 'at' | 'from'> & {
+    width: number
+    height: number
+    sizeType: string
+  }
 }
 
 export type MessagePayload = MessagePayloads[keyof MessagePayloads]

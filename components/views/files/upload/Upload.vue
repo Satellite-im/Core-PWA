@@ -115,15 +115,25 @@ export default Vue.extend({
 
       // set files to show preview, do not send
       for (const file of filesToAdd) {
+        const isFileSizeFixed = shouldFileSizeBeFixed(file.file.type)
         const thumbnail = await createThumbnail(file.file, 200)
-        this.$store.commit('chat/addFile', {
+        const payload = {
           file: {
             ...file,
             progress: 0,
             thumbnail: thumbnail ? await blobToBase64(thumbnail) : '',
           },
           address,
-        })
+        }
+
+        if (isFileSizeFixed) {
+          const fileAsDataURL = window.URL.createObjectURL(file.file)
+          const originalSize = await getOriginalSizeFromDataUrl(fileAsDataURL)
+
+          payload.file = {...payload.file, ...getSizeFromAspectRatio(originalSize)}
+        }
+
+        this.$store.commit('chat/addFile', payload)
       }
     },
   },
