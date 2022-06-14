@@ -1,22 +1,21 @@
-import type { SignalData } from 'simple-peer'
 import Vue from 'vue'
-import {
-  ConversationActivity,
-  ConversationParticipant,
-} from '../conversation/types'
+import type { SignalData } from 'simple-peer'
+import { ConversationParticipant } from '../conversation/types'
 import { WebRTCState } from './types'
-import { Config } from '~/config'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
-import { TrackKind } from '~/libraries/WebRTC/types'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+
 import { ActionsArguments } from '~/types/store/store'
-import { Friend } from '~/types/ui/friends'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import Logger from '~/utilities/Logger'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { Config } from '~/config'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
+import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
+import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { Friend } from '~/types/ui/friends'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { AlertType } from '~/libraries/ui/Alerts'
 
 const announceFrequency = 5000
-
 const webRTCActions = {
   /**
    * @method initialized
@@ -45,39 +44,7 @@ const webRTCActions = {
     await $Peer2Peer.start()
     await $Peer2Peer.node?.relay?.start()
 
-    $Peer2Peer.on('peer:discovery', ({ peerId }) => {
-      const connectedFriend = rootState.friends.all.find(
-        (friend) => friend.peerId === peerId.toB58String(),
-      )
-
-      if (!connectedFriend) return
-
-      dispatch(
-        'friends/setFriendState',
-        {
-          address: connectedFriend.address,
-          state: 'online',
-        },
-        { root: true },
-      )
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
-    })
-
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
-      const connectedParticipant = rootState.conversation.participants.find(
-        (participant: ConversationParticipant) =>
-          participant.peerId === peerId.toB58String(),
-      )
-      if (connectedParticipant) {
-        commit(
-          'conversation/updateParticipant',
-          {
-            peerId: connectedParticipant.peerId,
-            state: 'CONNECTED',
-          },
-          { root: true },
-        )
-      }
       const connectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
@@ -178,12 +145,14 @@ const webRTCActions = {
 
     const timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
     $Peer2Peer.on('peer:typing', ({ peerId }) => {
+      const typingFriend = rootState.friends.all.find(
+        (friend) => friend.peerId === peerId.toB58String(),
+      )
+      if (!typingFriend) return
+
       commit(
-        'conversation/updateParticipant',
-        {
-          peerId: peerId.toB58String(),
-          activity: ConversationActivity.TYPING,
-        },
+        'friends/setTyping',
+        { id: typingFriend.address, typingState: PropCommonEnum.TYPING },
         { root: true },
       )
 
@@ -192,11 +161,8 @@ const webRTCActions = {
 
       timeoutMap[peerId.toB58String()] = setTimeout(() => {
         commit(
-          'conversation/updateParticipant',
-          {
-            peerId: peerId.toB58String(),
-            activity: ConversationActivity.NOT_TYPING,
-          },
+          'friends/setTyping',
+          { id: typingFriend.address, typingState: PropCommonEnum.NOT_TYPING },
           { root: true },
         )
       }, Config.chat.typingInputThrottle * 3)
@@ -285,7 +251,7 @@ const webRTCActions = {
           })
       }
       rootState.friends.all
-        .filter((friend) => !!friend.peerId)
+        .filter((friend) => !!friend.peerId && friend.state !== 'online')
         .forEach((friend) => {
           $Peer2Peer.sendMessage(
             {
@@ -304,26 +270,7 @@ const webRTCActions = {
 
     commit('setInitialized', { initialized: true, originator })
   },
-  /**
-   * @method sendTyping
-   * @description - send the TYPING event to the other conversation participants
-   */
-  sendTyping({ commit, rootState, dispatch }: ActionsArguments<WebRTCState>) {
-    const $Peer2Peer = Peer2Peer.getInstance()
 
-    rootState.conversation?.participants
-      .filter((p) => p.peerId && p.peerId !== $Peer2Peer.id)
-      .forEach((p) => {
-        $Peer2Peer.sendMessage(
-          {
-            type: 'TYPING_STATE',
-            payload: null,
-            sentAt: Date.now().valueOf(),
-          },
-          p.peerId as string,
-        )
-      })
-  },
   /**
    * @method toggleMute
    * @description - Turn on/off mute for the given stream in the active call
@@ -463,14 +410,14 @@ const webRTCActions = {
           type,
         })
       }
-      dispatch('sounds/playSound', Sounds.CALL, { root: true })
+      commit('ui/showMedia', true, { root: true })
     }
     call.on('INCOMING_CALL', onCallIncoming)
 
     function onCallOutgoing({ peerId }: { peerId: string }) {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
-      dispatch('sounds/playSound', Sounds.CALL, { root: true })
+      commit('ui/showMedia', true, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
 
@@ -483,12 +430,12 @@ const webRTCActions = {
         call.mute({ peerId: localId, kind: 'audio' })
       }
       commit('video/setDisabled', true, { root: true })
-      dispatch('sounds/stopSound', Sounds.CALL, { root: true })
     }
     call.on('CONNECTED', onCallConnected)
 
     function onCallHangup() {
       commit('updateCreatedAt', 0)
+      commit('ui/showMedia', false, { root: true })
       commit('conversation/setCalling', false, { root: true })
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
@@ -504,14 +451,20 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
-      if (!kind) {
-        return
+      let muted = false
+      if (kind === 'audio') {
+        muted = rootState.audio.muted
+      } else if (kind === 'video') {
+        muted = rootState.video.disabled
       }
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted: false,
+        muted,
       })
+      if (rootState.audio.muted) {
+        call.mute({ peerId: localId, kind: 'audio' })
+      }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 
@@ -533,6 +486,9 @@ const webRTCActions = {
         kind,
         muted: false,
       })
+      if (rootState.audio.muted) {
+        call.mute({ peerId: localId, kind: 'audio' })
+      }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
@@ -566,6 +522,11 @@ const webRTCActions = {
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
       )
+      commit('setMuted', {
+        peerId,
+        kind,
+        muted: true,
+      })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
 
@@ -614,6 +575,24 @@ const webRTCActions = {
     call.on('ANSWERED', onAnswered)
 
     function onCallDestroy() {
+      if (rootState.webrtc.incomingCall !== undefined) {
+        const callerInfo = rootState.friends.all.find((friend) => {
+          return friend.account.from === state.originator
+        })
+        console.log(callerInfo)
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: 'Missed Call',
+            from: callerInfo?.name,
+            fromAddress: callerInfo?.address,
+            imageHash: callerInfo?.photoHash,
+            title: `Notification`,
+            type: AlertType.MISSED_CALL,
+          },
+          { root: true },
+        )
+      }
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
@@ -633,8 +612,6 @@ const webRTCActions = {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
-      dispatch('sounds/stopSound', Sounds.CALL, { root: true })
-      dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
     }
     call.on('DESTROY', onCallDestroy)
   },
