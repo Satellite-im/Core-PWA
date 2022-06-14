@@ -3,15 +3,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   computed: {
     ...mapState(['conversation', 'friends']),
     ...mapState('webrtc', ['elapsedTime', 'activeCall']),
-    ...mapGetters('webrtc', ['isBackgroundCall']),
-    caller() {
+    caller(): Friend {
       return this.friends.all.find(
-        (f: any) => f.peerId === this.activeCall?.callId,
+        (f: Friend) => f.peerId === this.activeCall?.callId,
       )
     },
   },

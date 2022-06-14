@@ -91,5 +91,5 @@
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
-  <UiBackgroundCall />
+  <UiBackgroundCall v-if="isBackgroundCall" />
 </div>

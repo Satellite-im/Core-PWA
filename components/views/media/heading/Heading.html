@@ -1,5 +1,10 @@
 <div id="media-heading">
-  <TypographyTag v-if="elapsedTime" :text="`${$t('ui.live')} ${elapsedTime}`" />
+  <TypographyTag
+    v-if="elapsedTime"
+    :text="$t('ui.live', {
+    time: elapsedTime
+  })"
+  />
   <div class="spacer"></div>
   <transition name="media-fullscreen" mode="out-in">
     <div

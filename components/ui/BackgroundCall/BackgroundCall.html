@@ -1,8 +1,4 @@
-<div
-  class="background-call"
-  v-if="isBackgroundCall"
-  @click="navigateToActiveConversation"
->
+<div class="background-call" @click="navigateToActiveConversation">
   {{$t('ui.background_call')}}
   <span v-if="caller" class="background-call-name">{{caller.name}}</span>
   <span v-if="elapsedTime">- {{elapsedTime}}</span>
