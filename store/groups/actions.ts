@@ -112,11 +112,20 @@ export default {
    * @example
    */
   async sendGroupInvite(
-    {}: ActionsArguments<GroupsState>,
+    { dispatch }: ActionsArguments<GroupsState>,
     { group, recipient }: { group: Group; recipient: string },
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     await $BlockchainClient.inviteToGroup(group.id, recipient)
+
+    dispatch(
+      'textile/sendGroupMessage',
+      {
+        groupId: group.id,
+        message: `\`I added ${recipient} to the chat\``,
+      },
+      { root: true },
+    )
   },
 
   /**
