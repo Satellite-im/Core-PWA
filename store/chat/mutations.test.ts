@@ -1041,6 +1041,18 @@ describe('misc', () => {
     countError: false,
     alertNsfw: false,
     containsNsfw: false,
+    currentChat: {
+      direction: 'TOP',
+      hasNextPage: true,
+      isMessagesLoading: false,
+      isScrollOver: true,
+      lastLoadedMessageId: '',
+      messages: [],
+      offset: 0,
+      page: 1,
+      showOlderMessagesInfo: false,
+      size: 10,
+    },
   })
 
   test('module.setCountError', () => {
@@ -1068,5 +1080,44 @@ describe('misc', () => {
     module.default.setContainsNsfw(localState, argument)
 
     expect(localState.containsNsfw).toEqual(argument)
+  })
+
+  test('module.setCurrentChat', () => {
+    const argument = {
+      direction: 'BOTTOM',
+      hasNextPage: true,
+      isMessagesLoading: false,
+      isScrollOver: true,
+      lastLoadedMessageId: '',
+      messages: [],
+      offset: 0,
+      page: 1,
+      showOlderMessagesInfo: false,
+      size: 10,
+    }
+    const localState = { ...InitialChatState }
+
+    module.default.setCurrentChat(localState, argument)
+
+    expect(localState.currentChat).toEqual(argument)
+  })
+
+  test('module.resetCurrentChat', () => {
+    const localState = { ...InitialChatState }
+
+    module.default.resetCurrentChat(localState)
+
+    expect(localState.currentChat).toEqual({
+      direction: 'TOP',
+      hasNextPage: true,
+      isMessagesLoading: false,
+      isScrollOver: true,
+      lastLoadedMessageId: '',
+      messages: [],
+      offset: 0,
+      page: 1,
+      showOlderMessagesInfo: false,
+      size: 10,
+    })
   })
 })
