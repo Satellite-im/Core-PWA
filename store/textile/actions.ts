@@ -474,8 +474,6 @@ export default {
         },
       )
 
-    console.log(sendFileResult)
-
     dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
@@ -696,12 +694,9 @@ export default {
       friend.textilePubkey,
       {
         to: friend.textilePubkey,
-        payload: src,
+        payload: { src, width, height, sizeType },
         pack,
         type: 'glyph',
-        width,
-        height,
-        sizeType,
       },
     )
 
