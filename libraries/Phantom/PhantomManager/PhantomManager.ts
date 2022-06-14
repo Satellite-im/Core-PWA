@@ -7,7 +7,7 @@ export default class PhantomManager {
   clusterApiUrl: string
   connection: Connection
   walletPublicKey: PublicKey | null
-  provider = this.getProvider()
+  provider = this._getProvider()
   $PhantomWalletAdapter: PhantomWalletAdapter = new PhantomWalletAdapter()
 
   constructor() {
@@ -34,10 +34,10 @@ export default class PhantomManager {
   }
 
   /**
-   * @method getProvider
+   * @method _getProvider
    * @returns a provider for the wallet
    */
-  getProvider() {
+  _getProvider() {
     if ('solana' in window) {
       // @ts-ignore
       const provider = window.solana
@@ -46,6 +46,17 @@ export default class PhantomManager {
       }
     }
     window.open('https://phantom.app/', '_blank')
+  }
+
+  /**
+   * @method _getConnection
+   * @returns return the connectiomn
+   */
+  _getConnection(): Connection {
+    if (!this.connection) {
+      throw new Error('PhantomManager is not initialized')
+    }
+    return this.connection
   }
 
   /**

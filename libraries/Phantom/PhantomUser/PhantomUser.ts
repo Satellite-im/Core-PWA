@@ -26,7 +26,7 @@ export default class PhantomUser extends EventEmitter {
   init(phantomManager: PhantomManager) {
     this.phantomManager = phantomManager
 
-    const provider = this._getPhantomManager().getProvider()
+    const provider = this._getPhantomManager()._getProvider()
 
     this.program = new Program<Users>(
       IDL,
@@ -142,14 +142,14 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
     const signed = await $PhantomWalletAdapter?.signTransaction(tx)
     const sent = await $PhantomWalletAdapter?.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -226,14 +226,14 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
     const signed = await $PhantomWalletAdapter.signTransaction(tx)
     const sent = await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -255,14 +255,14 @@ export default class PhantomUser extends EventEmitter {
       },
     })
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
     const signed = await $PhantomWalletAdapter.signTransaction(tx)
     return await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -287,14 +287,14 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
     const signed = await $PhantomWalletAdapter.signTransaction(tx)
     const sent = await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -319,7 +319,7 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
@@ -327,7 +327,7 @@ export default class PhantomUser extends EventEmitter {
 
     return await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -352,7 +352,7 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
@@ -360,7 +360,7 @@ export default class PhantomUser extends EventEmitter {
 
     return await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 
@@ -385,7 +385,7 @@ export default class PhantomUser extends EventEmitter {
     })
 
     tx.recentBlockhash = (
-      await this._getPhantomManager().connection.getLatestBlockhash()
+      await this._getPhantomManager()._getConnection().getLatestBlockhash()
     ).blockhash
 
     tx.feePayer = payer
@@ -393,7 +393,7 @@ export default class PhantomUser extends EventEmitter {
 
     return await $PhantomWalletAdapter.sendTransaction(
       signed,
-      this._getPhantomManager().connection,
+      this._getPhantomManager()._getConnection(),
     )
   }
 }
