@@ -40,7 +40,6 @@ const commonProperties = [
   'ui.filesUploadStatus',
   'ui.fileDownloadList',
   'textile.userThread',
-  'chat.uploadProgress',
 ]
 
 const propertiesNoStorePin = [
