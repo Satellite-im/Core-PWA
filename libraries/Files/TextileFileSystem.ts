@@ -4,6 +4,7 @@ import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
 import { PersonalBucket } from './remote/textile/PersonalBucket'
 import createThumbnail from '~/utilities/Thumbnail'
+import blobToBase64 from '~/utilities/BlobToBase64'
 
 export class TextileFileSystem extends FilSystem {
   /**
@@ -25,6 +26,8 @@ export class TextileFileSystem extends FilSystem {
     const id = uuidv4()
     await this.bucket.pushFile(file, id, progressCallback)
 
+    const thumbnail = await createThumbnail(file, 400)
+
     this.createFile({
       id,
       name: file.name,
@@ -32,7 +35,7 @@ export class TextileFileSystem extends FilSystem {
       type: Object.values(FILE_TYPE).includes(file.type as FILE_TYPE)
         ? (file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: await createThumbnail(file, 400),
+      thumbnail: thumbnail ? await blobToBase64(thumbnail) : '',
       nsfw,
     })
   }

@@ -5,7 +5,7 @@
   <div v-if="item.thumbnail" class="image-container">
     <img
       :class="{'blur-image' : item.nsfw && blockNsfw}"
-      :src="item.thumbnail"
+      :src="url"
       draggable="false"
     />
   </div>

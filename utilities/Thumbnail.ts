@@ -3,7 +3,6 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { isHeic, isMimeEmbeddableImage, mimeType } from '~/utilities/FileType'
-import blobToBase64 from '~/utilities/BlobToBase64'
 const convert = require('heic-convert')
 
 /**
@@ -16,7 +15,7 @@ const convert = require('heic-convert')
 export default async function createThumbnail(
   file: File,
   width: number,
-): Promise<string | undefined> {
+): Promise<File | undefined> {
   if (await isHeic(file)) {
     const buffer = new Uint8Array(await file.arrayBuffer())
     const outputBuffer = await convert({
@@ -30,7 +29,7 @@ export default async function createThumbnail(
     if (await _tooLarge(fileJpg)) {
       return
     }
-    return blobToBase64(await skaler(fileJpg, { width }))
+    return await skaler(fileJpg, { width })
   }
 
   const type = await mimeType(file)
@@ -41,12 +40,12 @@ export default async function createThumbnail(
 
   // svg cannot be used with skaler, set thumbnail based on full size
   if (type === FILE_TYPE.SVG) {
-    return blobToBase64(file)
+    return file
   }
   if (await _tooLarge(file)) {
     return
   }
-  return blobToBase64(await skaler(file, { width }))
+  return await skaler(file, { width })
 }
 
 /**
@@ -62,6 +61,7 @@ function _tooLarge(file: File): Promise<boolean> {
     img.onload = () => {
       const envInfo = new EnvInfo()
       const maxDimension = Math.max(img.width, img.height)
+      URL.revokeObjectURL(img.src)
       if (maxDimension > Config.canvasLimits[envInfo.currentPlatform]) {
         resolve(true)
       }

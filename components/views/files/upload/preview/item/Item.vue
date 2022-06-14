@@ -17,10 +17,22 @@ export default Vue.extend({
       required: true,
     },
   },
+  data: () => ({
+    url: '',
+  }),
+
   computed: {
     ...mapState({
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
+  },
+  mounted() {
+    if (this.item.thumbnail) {
+      this.url = URL.createObjectURL(this.item.thumbnail)
+    }
+  },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.url)
   },
 })
 </script>
