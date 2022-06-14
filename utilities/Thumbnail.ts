@@ -10,7 +10,7 @@ const convert = require('heic-convert')
  * @description create thumbnail if embeddable image format
  * @param {File} file
  * @param {number} width desired thumnail width px
- * @returns {Promise<string>} base64 thumbnail
+ * @returns {Promise<File | undefined>} scaled down file IF embeddable image. undefined if not
  */
 export default async function createThumbnail(
   file: File,
