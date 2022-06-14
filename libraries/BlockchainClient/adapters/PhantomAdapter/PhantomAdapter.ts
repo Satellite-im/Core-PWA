@@ -16,10 +16,12 @@ import {
 } from '../../interfaces'
 import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 import PhantomUser from '~/libraries/Phantom/PhantomUser/PhantomUser'
+import PhantomFriend from '~/libraries/Phantom/PhantomFriend/PhantomFriend'
 
 export default class PhantomAdapter implements Adapter {
   private readonly $PhantomManager: PhantomManager = new PhantomManager()
   private phantomUser: PhantomUser | null = null
+  private phantomFriend: PhantomFriend | null = null
 
   constructor() {
     this.$PhantomManager = new PhantomManager()
@@ -38,6 +40,17 @@ export default class PhantomAdapter implements Adapter {
       throw new Error('Phantom user is not initialized')
     }
     return this.phantomUser
+  }
+
+  _getPhantomFriend(): PhantomFriend {
+    if (!this.phantomFriend) {
+      if (this.$PhantomManager.getAdapter().connected) {
+        this.phantomFriend = new PhantomFriend(this.$PhantomManager)
+        return this.phantomFriend
+      }
+      throw new Error('Phantom friend is not initialized')
+    }
+    return this.phantomFriend
   }
 
   async setPhotoHash(_photoHash: string): Promise<string> {
@@ -107,28 +120,28 @@ export default class PhantomAdapter implements Adapter {
     }
   }
 
-  getFriendsByStatus(
+  async getFriendsByStatus(
     _status: FriendStatus,
   ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
-    throw new Error('Method not implemented.')
+    return await this._getPhantomFriend().getAccountsByStatus(_status)
   }
 
-  subscribeToEvents(): Promise<void> {
-    throw new Error('Method not implemented.')
+  async subscribeToEvents(): Promise<void> {
+    this._getPhantomFriend().subscribeToEvents()
   }
 
   addEventListener(
     _type: FriendsEvents,
     _callback: (data?: FriendAccount | undefined) => void,
   ): void {
-    throw new Error('Method not implemented.')
+    this._getPhantomFriend().addEventListener(_type, _callback)
   }
 
-  computeAccountKeys(
+  async computeAccountKeys(
     _from: PublicKey,
     _to: PublicKey,
   ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomFriend().computeAccountKeys(_from, _to)
   }
 
   getFriendsPayer(): Promise<Keypair> {
@@ -136,40 +149,47 @@ export default class PhantomAdapter implements Adapter {
   }
 
   getAccountStatus(_accountKey: PublicKey): Promise<FriendStatus> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomFriend().getAccountStatus(_accountKey)
   }
 
-  makeFriendRequest(
+  async makeFriendRequest(
     _request: PublicKey,
     _first: PublicKey,
     _second: PublicKey,
     _k: String,
   ): Promise<string> {
-    throw new Error('Method not implemented.')
+    return await this._getPhantomFriend().makeRequest(
+      _request,
+      _first,
+      _second,
+      _k,
+    )
   }
 
-  getFriendAccount(_accountKey: PublicKey): Promise<FriendAccount | null> {
-    throw new Error('Method not implemented.')
+  async getFriendAccount(
+    _accountKey: PublicKey,
+  ): Promise<FriendAccount | null> {
+    return await this._getPhantomFriend().getAccount(_accountKey)
   }
 
-  acceptFriendRequest(_request: PublicKey, _k: String): Promise<string> {
-    throw new Error('Method not implemented.')
+  async acceptFriendRequest(_request: PublicKey, _k: String): Promise<string> {
+    return await this._getPhantomFriend().acceptRequest(_request, _k)
   }
 
-  denyFriendRequest(_request: PublicKey): Promise<string> {
-    throw new Error('Method not implemented.')
+  async denyFriendRequest(_request: PublicKey): Promise<string> {
+    return await this._getPhantomFriend().denyRequest(_request)
   }
 
-  removeFriendRequest(_request: PublicKey): Promise<string> {
-    throw new Error('Method not implemented.')
+  async removeFriendRequest(_request: PublicKey): Promise<string> {
+    return await this._getPhantomFriend().removeRequest(_request)
   }
 
-  removeFriend(_request: PublicKey): Promise<string> {
-    throw new Error('Method not implemented.')
+  async removeFriend(_request: PublicKey): Promise<string> {
+    return await this._getPhantomFriend().removeFriend(_request)
   }
 
-  closeFriendRequest(_request: PublicKey): Promise<string> {
-    throw new Error('Method not implemented.')
+  async closeFriendRequest(_request: PublicKey): Promise<string> {
+    return await this._getPhantomFriend().closeRequest(_request)
   }
 
   getPayerAccount(): Promise<Keypair | undefined> {
