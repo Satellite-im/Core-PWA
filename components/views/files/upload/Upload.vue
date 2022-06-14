@@ -70,7 +70,10 @@ export default Vue.extend({
       }
       const newFiles: File[] = [...event.target.files]
 
-      if (newFiles.length + this.getFiles.length > 8) {
+      if (
+        newFiles.length + this.getFiles.length >
+        this.$Config.chat.uploadMaxLength
+      ) {
         this.$store.commit('chat/setCountError', true)
         return
       }

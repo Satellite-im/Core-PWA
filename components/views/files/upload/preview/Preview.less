@@ -5,12 +5,12 @@
   &:extend(.background-semitransparent-light);
   border-bottom-color: rgba(87, 101, 116, 0.3);
   border-radius: @corner-rounding @corner-rounding 0 0;
+
+  &.no-round {
+    border-radius: 0;
+  }
   .file-list {
     display: flex;
     gap: @normal-spacing;
-  }
-
-  &.empty {
-    padding: 0px;
   }
 }

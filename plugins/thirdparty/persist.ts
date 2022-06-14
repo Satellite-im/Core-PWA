@@ -31,6 +31,7 @@ const commonProperties = [
   'ui.replyChatbarContent',
   'ui.editMessage',
   'chat.files',
+  'chat.countError',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',
   'ui.modals',

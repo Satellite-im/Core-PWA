@@ -2,10 +2,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   computed: {
+    ...mapState({
+      countError: (state) => (state as RootState).chat.countError,
+    }),
     ...mapGetters({
       getFiles: 'chat/getFiles',
       recipient: 'conversation/recipient',
