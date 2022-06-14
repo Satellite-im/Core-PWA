@@ -1,5 +1,4 @@
 import { PublicKey } from '@solana/web3.js'
-import { uniqBy } from 'lodash'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
@@ -64,16 +63,4 @@ export function friendAccountToOutgoingRequest(
     pending: false,
     userInfo,
   }
-}
-
-/**
- * Utility function that checks if the current list
- * of outgoing/incoming requests contains any duplicate
- * @param list the list we want check
- * @returns an array containing no duplicated requests, the first request is kept if any duplicated was found
- */
-export function friendListFilterDuplicates(
-  list: Array<OutgoingRequest | IncomingRequest>,
-): Array<OutgoingRequest | IncomingRequest> {
-  return uniqBy(list, 'requestId')
 }

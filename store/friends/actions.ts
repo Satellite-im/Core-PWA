@@ -2,12 +2,12 @@ import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
 import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
+import { uniqBy } from 'lodash'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
   friendAccountToIncomingRequest,
   friendAccountToOutgoingRequest,
-  friendListFilterDuplicates,
   FriendsError,
   FriendsState,
 } from './types'
@@ -76,8 +76,8 @@ export default {
       }),
     )
 
-    commit('setIncomingRequests', friendListFilterDuplicates(incomingRequests))
-    commit('setOutgoingRequests', friendListFilterDuplicates(outgoingRequests))
+    commit('setIncomingRequests', uniqBy(incomingRequests, 'requestId'))
+    commit('setOutgoingRequests', uniqBy(outgoingRequests, 'requestId'))
   },
 
   /**
