@@ -2,6 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
+
 export interface FriendsState {
   incomingRequests: IncomingRequest[]
   outgoingRequests: OutgoingRequest[]
