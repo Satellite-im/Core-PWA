@@ -9,16 +9,28 @@
     </UiCircle>
   </div>
 
-  <div v-on:click="$router.push('/chat/direct')" class="circle-group">
+  <div
+    v-on:click="$router.push('/chat/direct')"
+    class="circle-group"
+    v-if="horizontal"
+  >
     <UiCircle type="icon" :size="40">
       <satellite-icon size="0.75x" />
     </UiCircle>
   </div>
-  <div id="list-container-vertical" v-if="!horizontal">
+
+  <div id="list-container-vertical" v-else>
+    <div v-on:click="$router.push('/chat/direct')" class="circle-group">
+      <UiCircle type="icon" :size="40">
+        <satellite-icon size="0.75x" />
+      </UiCircle>
+    </div>
+
     <UiHorizontalRule
       class="horizontal-rule-padding"
       v-if="friendsWithUnreadMessages.length && friendsDS !== DataStateType.Loading"
     />
+
     <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
       <UiLoadersSpinner :spinning="true" />
     </div>
@@ -49,6 +61,25 @@
         </div>
       </UiComingSoon>
     </UiSimpleScroll>
+    <div
+      class="circle-group"
+      v-tooltip.right="$t('servers.new_server')"
+      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
+    >
+      <UiCircle type="icon" :size="40">
+        <plus-icon size="0.75x" />
+      </UiCircle>
+    </div>
+    <div
+      class="circle-group"
+      data-cy="settings"
+      v-tooltip.right="$t('pages.settings.settings')"
+      v-on:click="$store.commit('ui/toggleSettings', { show: true })"
+    >
+      <UiCircle type="icon" :size="40">
+        <settings-icon size="0.75x" />
+      </UiCircle>
+    </div>
   </div>
   <div id="list-container" v-else>
     <div class="unreads" v-for="user in friendsWithUnreadMessages">
@@ -79,25 +110,5 @@
         />
       </div>
     </UiComingSoon>
-  </div>
-  <div
-    v-if="!horizontal"
-    class="circle-group"
-    v-tooltip.right="$t('servers.new_server')"
-    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
-  >
-    <UiCircle type="icon" :size="40">
-      <plus-icon size="0.75x" />
-    </UiCircle>
-  </div>
-  <div
-    class="circle-group"
-    data-cy="settings"
-    v-tooltip.right="$t('pages.settings.settings')"
-    v-on:click="$store.commit('ui/toggleSettings', { show: true })"
-  >
-    <UiCircle type="icon" :size="40">
-      <settings-icon size="0.75x" />
-    </UiCircle>
   </div>
 </div>

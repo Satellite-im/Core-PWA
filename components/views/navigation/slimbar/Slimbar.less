@@ -6,8 +6,7 @@
   flex-direction: column;
   justify-content: flex-start;
   pointer-events: none;
-  padding-left: 0.5rem;
-  padding-top: @normal-spacing;
+  box-sizing: border-box;
 
   .circle-group {
     margin: @normal-spacing 0;
@@ -27,14 +26,14 @@
   }
 
   .circle {
-    margin: 0.25rem 0;
+    margin: @xlight-spacing 0;
     &:extend(.first-layer);
   }
 
   .unreads {
     position: relative;
     .unread {
-      padding: 0.25rem 0;
+      padding: @xlight-spacing 0;
     }
   }
 
@@ -45,26 +44,21 @@
     &:extend(.first-layer);
   }
 
-  .scroll-area {
-    height: auto;
-    max-height: calc(@full - 10rem);
-    width: 200px;
-    overflow: hidden;
-    display: flex;
-  }
   #list-container-vertical {
-    height: fit-content;
-    max-height: calc(@full - 11rem);
+    display: flex;
+    flex-direction: column;
+    height: @full;
     pointer-events: auto;
     box-sizing: border-box;
+    padding-left: @light-spacing;
+    padding-top: @normal-spacing;
 
     #simple-scrollbar {
-      max-height: calc(@full - 3rem);
+      height: auto;
     }
   }
   #list-container {
     height: fit-content;
-    max-height: calc(@full - 10rem);
     position: relative;
     pointer-events: auto;
   }
