@@ -273,6 +273,18 @@ a.link {
     }
   }
 
+  &.is-success,
+  .is-success {
+    &:extend(.glow-success);
+    &:extend(.background-success-gradient);
+
+    &:hover,
+    &:focus:not(:active) {
+      &:extend(.background-success-gradient);
+      box-shadow: @success-glow !important;
+    }
+  }
+
   &.is-danger.is-outlined {
     &:extend(.color-danger);
     &:extend(.glow-danger);

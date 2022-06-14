@@ -122,6 +122,18 @@
   rgba(192, 57, 43, 0.5) 100%
 );
 
+@semitransparent-red-gradient: linear-gradient(
+  0deg,
+  rgba(231, 76, 60, 0.5) 0%,
+  rgba(192, 57, 43, 0.5) 100%
+);
+
+@semitransparent-green-gradient: linear-gradient(
+  0deg,
+  rgba(0, 184, 148, 0.5) 0%,
+  rgba(0, 184, 148, 1) 100%
+);
+
 .background-semitransparent-dark {
   background: @semitransparent-dark-gradient;
 }
@@ -136,6 +148,9 @@
 }
 .background-semitransparent-danger {
   background: @semitransparent-red-gradient;
+}
+.background-semitransparent-success {
+  background: @semitransparent-green-gradient;
 }
 
 // Solid Gradients
