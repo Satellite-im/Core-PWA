@@ -95,7 +95,11 @@
         v-scroll-lock="true"
         class="scrolling hidden-scroll users"
       >
-        <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
+        <UiSimpleScroll
+          scroll-mode="vertical"
+          scroll-show="scroll"
+          :container-class="isNoFriends ? 'no-friends-scrollbar' : ''"
+        >
           <UiLoadersAddress
             v-if="dataState.friends === DataStateType.Loading"
             :count="4"
@@ -318,13 +322,20 @@ export default Vue.extend({
       top: 2.5rem;
       right: 1rem;
     }
+
+    #simple-scrollbar.no-friend-scrollbar {
+      display: flex;
+      align-items: center;
+    }
+
     .no-friends {
       &:extend(.full-width);
       display: inline-flex;
       justify-content: center;
       flex-direction: column;
       align-items: center;
-      height: calc(100% - @sidebar-inner-offset);
+      height: @full;
+      padding-bottom: @xlarge-spacing;
 
       .button {
         margin-top: @normal-spacing;

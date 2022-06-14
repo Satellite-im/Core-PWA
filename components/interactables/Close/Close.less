@@ -15,9 +15,18 @@
   cursor: pointer;
 }
 
+.wrapper .close-button {
+  right: 0;
+  top: 0;
+}
+
 @media only screen and (max-width: @mobile-breakpoint) {
   .close-button {
     right: @normal-spacing;
     top: @normal-spacing;
+  }
+
+  .wrapper .close-button {
+    top: @large-spacing;
   }
 }
