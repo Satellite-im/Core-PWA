@@ -1,11 +1,9 @@
-<template src="./Invite.html" />
+<template src="./Invite.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
 import { Group } from '~/store/groups/types'
-import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'GroupInvite',
@@ -24,7 +22,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    groupMembers() {
+    groupMembers(): string[] {
       return this.group.members.map((p) => p.address)
     },
   },
@@ -38,7 +36,7 @@ export default Vue.extend({
           this.recipients.map(
             async (recipient) =>
               await this.$store.dispatch('groups/sendGroupInvite', {
-                group: this.modal.group,
+                group: this.group,
                 recipient: recipient.address,
               }),
           ),
