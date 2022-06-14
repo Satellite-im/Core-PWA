@@ -86,7 +86,8 @@ export default Vue.extend({
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
-            { text: this.$t('context.edit'), func: this.editMessage },
+            // { text: this.$t('context.edit'), func: this.editMessage },
+            // skipped due to edit message is now coming soon and this shouldn't appear on context menu
           ]
         }
         // another persons text message
