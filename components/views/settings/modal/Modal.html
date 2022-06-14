@@ -16,10 +16,10 @@
         </UiSimpleScroll>
       </swiper-slide>
       <swiper-slide class="not-sidebar hidden-scroll" v-scroll-lock="true">
-        <UiScroll
-          :verticalScroll="verticalScroll"
-          enableWrap
-          scrollbarVisibility="scroll"
+        <UiSimpleScroll
+          containerClass="modal-container"
+          scrollMode="vertical"
+          scrollShow="scroll"
         >
           <menu-icon
             v-if="$device.isMobile"
@@ -65,7 +65,7 @@
           <SettingsPagesPrivacy
             v-if="this.ui.settingsRoute === SettingsRoutes.PRIVACY"
           />
-        </UiScroll>
+        </UiSimpleScroll>
       </swiper-slide>
     </swiper>
   </div>
