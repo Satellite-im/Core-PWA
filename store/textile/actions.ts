@@ -36,7 +36,6 @@ import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import { MessageGroup } from '~/types/messaging'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
