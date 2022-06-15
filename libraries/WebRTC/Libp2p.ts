@@ -15,6 +15,7 @@ import PeerId, {
   createFromPubKey,
 } from 'peer-id'
 import { pipe } from 'it-pipe'
+import { Keypair } from '@solana/web3.js'
 import Emitter from './Emitter'
 import { WireMessage } from './types'
 import type { CallPeerDescriptor } from './Call'

@@ -1,5 +1,10 @@
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
+import PeerId, {
+  createFromB58String,
+  createFromPrivKey,
+  createFromPubKey,
+} from 'peer-id'
 import {
   AccountsError,
   AccountsState,
@@ -12,6 +17,9 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import PhantomAdapter from '~/libraries/BlockchainClient/adapters/PhantomAdapter/PhantomAdapter'
+import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 
 export default {
   /**
@@ -37,6 +45,7 @@ export default {
     commit('setPin', pin)
     commit('setPinHash', pinHash)
   },
+
   /**
    * @method unlock
    * @description performs all the actions to unlock the app by
@@ -76,6 +85,7 @@ export default {
 
     commit('unlock', pin)
   },
+
   /**
    * @method generateWallet
    * @description Generates a new Solana hierarchical wallet
@@ -92,7 +102,7 @@ export default {
     }
 
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-
+    $BlockchainClient.setAdapter(new SolanaAdapter())
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
     await $BlockchainClient.initRandom()
@@ -111,6 +121,7 @@ export default {
 
     commit('setEncryptedPhrase', encryptedPhrase)
   },
+
   /**
    * @method setRecoverMnemonic
    * @description Encrypts the wallet mnemonic phrase using the user pin
@@ -136,6 +147,7 @@ export default {
 
     await commit('setEncryptedPhrase', encryptedPhrase)
   },
+
   /**
    * @method loadAccount
    * @description Performs all the action needed to retrieve the user account
@@ -185,6 +197,7 @@ export default {
 
     dispatch('startup', payerAccount)
   },
+
   /**
    * @method registerUser
    * @description Registers a new user on the Solana blockchain
@@ -343,6 +356,7 @@ export default {
     })
     await dispatch('friends/initialize', {}, { root: true })
 
+    // needed the public key
     if (payerAccount.publicKey) {
       window.console.log()
       dispatch(
@@ -386,6 +400,27 @@ export default {
     await dispatch('groups/initialize', {}, { root: true })
     await dispatch('textile/listenToThread', {}, { root: true })
     commit('textile/textileInitialized', true, { root: true })
+  },
+
+  /**
+   * @param method connectPhantom
+   * @description changes the adapter to phantom
+   **/
+  async connectPhantom({ commit, state }: ActionsArguments<AccountsState>) {
+    const { pin } = state
+
+    if (!pin) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+
+    const $PhantomWallet = new PhantomManager()
+    await $PhantomWallet.initWallet()
+    const message = `To avoid digital dognappers,
+    sign below to authenticate with CryptoCorgis`
+    const encodedMessage = new TextEncoder().encode(message)
+    window.console.log(
+      await $PhantomWallet.getAdapter().signMessage(encodedMessage),
+    )
   },
 }
 

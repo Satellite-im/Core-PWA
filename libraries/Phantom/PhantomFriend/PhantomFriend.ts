@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { Program, web3, utils, IdlTypes } from '@project-serum/anchor'
+import { Program, utils, IdlTypes } from '@project-serum/anchor'
 
 import {
   GetProgramAccountsFilter,

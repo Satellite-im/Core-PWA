@@ -4,7 +4,6 @@ import {
   RpcResponseAndContext,
   SignatureResult,
 } from '@solana/web3.js'
-import SolanaAdapter from './adapters/SolanaAdapter'
 import {
   Account,
   Adapter,
@@ -17,20 +16,38 @@ import {
 
 export default class BlockchainClient {
   private static instance: BlockchainClient // eslint-disable-line no-use-before-define
-  private adapter: Adapter
+  private adapter: Adapter | null = null
   private _account?: Account
   private _payerAccount?: Keypair
 
-  private constructor(adapter: Adapter) {
-    this.adapter = adapter
-  }
-
   public static getInstance(): BlockchainClient {
     if (!BlockchainClient.instance) {
-      BlockchainClient.instance = new BlockchainClient(new SolanaAdapter())
+      BlockchainClient.instance = new BlockchainClient()
     }
 
     return BlockchainClient.instance
+  }
+
+  /**
+   * @method _setAdapter
+   * Set adapter
+   * @param {Adapter} adapter
+   * @returns {void}
+   **/
+  setAdapter(adapter: Adapter): void {
+    this.adapter = adapter
+  }
+
+  /**
+   * @method _getAdapter
+   * Get adapter
+   * @returns {Adapter}
+   */
+  _getAdapter(): Adapter {
+    if (!this.adapter) {
+      throw new Error('Adapter is not set')
+    }
+    return this.adapter
   }
 
   /**
@@ -74,16 +91,20 @@ export default class BlockchainClient {
    * @returns {Promise<void>}
    */
   async initFromMnemonic(mnemonic?: string): Promise<void> {
-    await this.adapter.getAccountFromMnemonic(mnemonic).then((account) => {
-      if (account) {
-        this._account = account
-      }
-    })
-    await this.adapter.getPayerAccount().then((account) => {
-      if (account) {
-        this._payerAccount = account
-      }
-    })
+    await this._getAdapter()
+      .getAccountFromMnemonic(mnemonic)
+      .then((account) => {
+        if (account) {
+          this._account = account
+        }
+      })
+    await this._getAdapter()
+      .getPayerAccount()
+      .then((account) => {
+        if (account) {
+          this._payerAccount = account
+        }
+      })
   }
 
   /**
@@ -92,7 +113,7 @@ export default class BlockchainClient {
    * @returns {Promise<void>}
    */
   async initRandom(): Promise<void> {
-    this._account = await this.adapter.createRandomAccount()
+    this._account = await this._getAdapter().createRandomAccount()
   }
 
   /**
@@ -108,7 +129,7 @@ export default class BlockchainClient {
     photoHash: string,
     status: string,
   ): Promise<boolean> {
-    return this.adapter.createUser({
+    return this._getAdapter().createUser({
       name,
       photoHash,
       status,
@@ -122,7 +143,7 @@ export default class BlockchainClient {
    * @param {string} photoHash profile picture IPFS hash
    */
   async setPhotoHash(photoHash: string): Promise<string> {
-    return this.adapter.setPhotoHash(photoHash)
+    return this._getAdapter().setPhotoHash(photoHash)
   }
 
   /**
@@ -132,7 +153,7 @@ export default class BlockchainClient {
    * @returns {Promise<User>} user object
    */
   getUser(address: string): Promise<User | null> {
-    return this.adapter.getUserInfo(address)
+    return this._getAdapter().getUserInfo(address)
   }
 
   /**
@@ -141,7 +162,7 @@ export default class BlockchainClient {
    * @returns User[]
    */
   getUsersInfo(addresses: string[]): Promise<User[]> {
-    return this.adapter.getUsersInfo(addresses)
+    return this._getAdapter().getUsersInfo(addresses)
   }
 
   /**
@@ -150,7 +171,7 @@ export default class BlockchainClient {
    * @returns {Promise<User>} user object
    */
   async getCurrentUser(): Promise<User | null> {
-    return this.adapter.getUserInfo(this.account.address)
+    return this._getAdapter().getUserInfo(this.account.address)
   }
 
   /**
@@ -159,7 +180,7 @@ export default class BlockchainClient {
    * @returns {Promise<number | null>} balance amount or null
    */
   async getBalance(): Promise<number | null> {
-    return this.adapter.getAccountBalance(this.account)
+    return this._getAdapter().getAccountBalance(this.account)
   }
 
   /**
@@ -169,7 +190,7 @@ export default class BlockchainClient {
    * @returns {Promise<RpcResponseAndContext<SignatureResult> | null>}
    */
   async requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null> {
-    return this.adapter.requestAirdrop()
+    return this._getAdapter().requestAirdrop()
   }
 
   /**
@@ -179,11 +200,11 @@ export default class BlockchainClient {
    * @returns {Promise<User | null>}
    */
   async getCurrentUserInfo(): Promise<User | null> {
-    return this.adapter.getUserInfo(this.account.address)
+    return this._getAdapter().getUserInfo(this.account.address)
   }
 
   initUserProgram(): Promise<void> {
-    return this.adapter.initUserProgram()
+    return this._getAdapter().initUserProgram()
   }
 
   /**
@@ -193,7 +214,7 @@ export default class BlockchainClient {
    * @returns {Promise<User | null>}
    * */
   async getUserInfo(userAddress: string): Promise<User | null> {
-    return this.adapter.getUserInfo(userAddress)
+    return this._getAdapter().getUserInfo(userAddress)
   }
 
   /**
@@ -207,7 +228,7 @@ export default class BlockchainClient {
     type: FriendsEvents,
     callback: (data?: FriendAccount) => void,
   ): Promise<void> {
-    await this.adapter.addEventListener(type, callback)
+    await this._getAdapter().addEventListener(type, callback)
   }
 
   /**
@@ -219,7 +240,7 @@ export default class BlockchainClient {
   async getFriendsByStatus(
     status: FriendStatus,
   ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }> {
-    return this.adapter.getFriendsByStatus(status)
+    return this._getAdapter().getFriendsByStatus(status)
   }
 
   /**
@@ -227,7 +248,7 @@ export default class BlockchainClient {
    *  Subscribe to events
    */
   subscribeToEvents(): void {
-    this.adapter.subscribeToEvents()
+    this._getAdapter().subscribeToEvents()
   }
 
   /**
@@ -241,7 +262,7 @@ export default class BlockchainClient {
     from: PublicKey,
     to: PublicKey,
   ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }> {
-    return this.adapter.computeAccountKeys(from, to)
+    return this._getAdapter().computeAccountKeys(from, to)
   }
 
   /**
@@ -250,7 +271,7 @@ export default class BlockchainClient {
    * @returns the payer account
    */
   async getFriendsPayer(): Promise<Keypair> {
-    return this.adapter.getFriendsPayer()
+    return this._getAdapter().getFriendsPayer()
   }
 
   /**
@@ -259,7 +280,7 @@ export default class BlockchainClient {
    * @returns {Promise<FriendStatus>}
    */
   async getAccountStatus(accountKey: PublicKey): Promise<FriendStatus> {
-    return this.adapter.getAccountStatus(accountKey)
+    return this._getAdapter().getAccountStatus(accountKey)
   }
 
   /**
@@ -277,7 +298,7 @@ export default class BlockchainClient {
     second: PublicKey,
     k: String,
   ): Promise<string> {
-    return this.adapter.makeFriendRequest(request, first, second, k)
+    return this._getAdapter().makeFriendRequest(request, first, second, k)
   }
 
   /**
@@ -287,7 +308,7 @@ export default class BlockchainClient {
    * @returns the raw friend account object
    */
   async getFriendAccount(accountKey: PublicKey): Promise<FriendAccount | null> {
-    return this.adapter.getFriendAccount(accountKey)
+    return this._getAdapter().getFriendAccount(accountKey)
   }
 
   /**
@@ -298,7 +319,7 @@ export default class BlockchainClient {
    * @returns transaction hash of accept friend request
    */
   async acceptFriendRequest(request: PublicKey, k: String): Promise<string> {
-    return this.adapter.acceptFriendRequest(request, k)
+    return this._getAdapter().acceptFriendRequest(request, k)
   }
 
   /**
@@ -307,7 +328,7 @@ export default class BlockchainClient {
    * @param request friend request account public key
    */
   async removeFriendRequest(request: PublicKey): Promise<string> {
-    return this.adapter.removeFriendRequest(request)
+    return this._getAdapter().removeFriendRequest(request)
   }
 
   /**
@@ -317,7 +338,7 @@ export default class BlockchainClient {
    * @returns transaction hash string of deny friend request
    */
   async denyFriendRequest(request: PublicKey): Promise<string> {
-    return this.adapter.denyFriendRequest(request)
+    return this._getAdapter().denyFriendRequest(request)
   }
 
   /**
@@ -326,7 +347,7 @@ export default class BlockchainClient {
    * @param request friend request account public key
    */
   async removeFriend(friend: PublicKey): Promise<string> {
-    return this.adapter.removeFriend(friend)
+    return this._getAdapter().removeFriend(friend)
   }
 
   /**
@@ -335,7 +356,7 @@ export default class BlockchainClient {
    * @param request friend request account public key
    */
   async closeFriendRequest(request: PublicKey): Promise<string> {
-    return this.adapter.closeFriendRequest(request)
+    return this._getAdapter().closeFriendRequest(request)
   }
 
   /**
@@ -345,7 +366,7 @@ export default class BlockchainClient {
    * @param name Group name
    */
   async createGroup(groupId: string, name: string): Promise<Group> {
-    return this.adapter.createGroup(groupId, name)
+    return this._getAdapter().createGroup(groupId, name)
   }
 
   /**
@@ -355,13 +376,13 @@ export default class BlockchainClient {
    * @returns Promise<Group[]>
    */
   async getUserGroups(address: string | PublicKey): Promise<Group[]> {
-    return this.adapter.getUserGroups(address)
+    return this._getAdapter().getUserGroups(address)
   }
 
   async getGroupsUsers(
     groupIds: string[],
   ): Promise<{ id: string; users: string[] }[]> {
-    return this.adapter.getGroupsUsers(groupIds)
+    return this._getAdapter().getGroupsUsers(groupIds)
   }
 
   /**
@@ -371,7 +392,7 @@ export default class BlockchainClient {
    * @param recipient: recipient address
    */
   async inviteToGroup(groupId: string, recipient: string): Promise<void> {
-    await this.adapter.inviteToGroup(groupId, recipient)
+    await this._getAdapter().inviteToGroup(groupId, recipient)
   }
 
   /**
@@ -380,7 +401,7 @@ export default class BlockchainClient {
    * @param cb
    */
   async addGroupInviteListener(cb: (group: Group) => void): Promise<string> {
-    return this.adapter.addGroupInviteListener(cb)
+    return this._getAdapter().addGroupInviteListener(cb)
   }
 
   /**
@@ -390,7 +411,7 @@ export default class BlockchainClient {
    * @returns Promise<void>
    */
   async unsubscribeGroupInvite(id: number): Promise<void> {
-    return this.adapter.unsubscribeGroupInviteListener(id)
+    return this._getAdapter().unsubscribeGroupInviteListener(id)
   }
 
   /**
@@ -404,7 +425,7 @@ export default class BlockchainClient {
     id: string,
     cb: (value: Group) => void,
   ): Promise<string> {
-    return this.adapter.addGroupListener(id, cb)
+    return this._getAdapter().addGroupListener(id, cb)
   }
 
   /**
@@ -412,7 +433,7 @@ export default class BlockchainClient {
    * @param keys
    */
   async removeGroupListeners(keys: string[]): Promise<void> {
-    return this.adapter.removeGroupListeners(keys)
+    return this._getAdapter().removeGroupListeners(keys)
   }
 
   /**
@@ -422,7 +443,7 @@ export default class BlockchainClient {
    * @returns Promise<Group>
    */
   async getGroupById(groupId: string): Promise<Group> {
-    return this.adapter.getGroupById(groupId)
+    return this._getAdapter().getGroupById(groupId)
   }
 
   /**
@@ -431,7 +452,7 @@ export default class BlockchainClient {
    * @returns Promise<string[]> array of user addresses
    */
   async getGroupUsers(groupId: string): Promise<string[]> {
-    return this.adapter.getGroupUsers(groupId)
+    return this._getAdapter().getGroupUsers(groupId)
   }
 
   /**
@@ -440,6 +461,6 @@ export default class BlockchainClient {
    * @returns {string[]} array of addresses for unsubscribe
    */
   addGroupsListener(cb: (value: Group) => void): Promise<string[]> {
-    return this.adapter.addGroupsListener(cb)
+    return this._getAdapter().addGroupsListener(cb)
   }
 }
