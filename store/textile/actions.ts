@@ -468,7 +468,7 @@ export default {
             type: file.file.type,
             nsfw: file.nsfw,
             width: file.width,
-            height: file.width,
+            height: file.height,
           },
           type: 'file',
         },
