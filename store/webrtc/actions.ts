@@ -625,7 +625,7 @@ const webRTCActions = {
             message: 'Missed Call',
             from: callerInfo?.name,
             fromAddress: callerInfo?.address,
-            imageHash: callerInfo?.photoHash,
+            imageHash: callerInfo?.profilePicture,
             title: `Notification`,
             type: AlertType.MISSED_CALL,
           },

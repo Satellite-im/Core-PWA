@@ -28,6 +28,11 @@ export default Vue.extend({
             group: this.alert.groupName,
           })
         }
+        case AlertType.MISSED_CALL: {
+          return this.$t('pages.settings.notifications.missed_call_from', {
+            user: this.alert.fromName,
+          })
+        }
       }
       return this.$t('user_sent_something.user')
     },

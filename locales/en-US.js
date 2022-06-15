@@ -321,6 +321,7 @@ export default {
           denied:
             "We cannot re-prompt you for notification permission in the web version of Satellite. You need to set notifications for this site to 'ask' or 'allow'",
         },
+        missed_call_from: 'Missed call from {user}',
         send_label: 'Send Notification',
         send_placeholder: 'Content you want to appear in local notification',
         sounds: {
