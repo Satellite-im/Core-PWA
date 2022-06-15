@@ -52,7 +52,7 @@
             type="primary"
             :minLength="$Config.account.minLength"
             :maxLength="$Config.account.maxLength"
-            :invalid="isInvalidName && Boolean(error)"
+            :invalid="isInvalidName && Boolean(error.length)"
           />
         </div>
 
@@ -64,10 +64,19 @@
             v-model="status"
             input-kind="text"
             type="primary"
+            :maxLength="$Config.account.statusMaxLength"
+            :invalid="isInvalidStatus && Boolean(error.length)"
           />
         </div>
 
-        <p class="red" data-cy="error-message" v-if="error">{{error}}</p>
+        <template v-if="error.length">
+          <TypographyError
+            v-for="e in error"
+            :text="e"
+            :key="e"
+            data-cy="error-message"
+          />
+        </template>
       </div>
 
       <!-- <hr class="divider"> -->
