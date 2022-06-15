@@ -56,7 +56,7 @@ data.allDevices.forEach((item) => {
         cy.goToConversation('cypress friend', true)
       })
 
-      it(`Chat Features - Send Messages on ${item.description}`, () => {
+      it.skip(`Chat Features - Send Messages on ${item.description}`, () => {
         // Click to hamburger button to display chat if app wrap is open (chat not displayed)
         cy.get('#app-wrap').then(($appWrap) => {
           if ($appWrap.hasClass('is-open')) {
