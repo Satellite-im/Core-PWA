@@ -44,7 +44,7 @@ describe('Chat - Sending Images Tests', () => {
     cy.readFile(downloadedFile, { timeout: 15000 }).should('exist')
   })
 
-  it('GIF image is sent successfully on chat', () => {
+  it.skip('GIF image is sent successfully on chat', () => {
     //Send GIF Image
     cy.chatFeaturesSendImage(gifImagePath, 'gif-test.gif')
     cy.goToLastImageOnChat()
