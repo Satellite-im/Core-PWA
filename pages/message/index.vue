@@ -1,10 +1,8 @@
 <template src="./NewMessage.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import Vue from 'vue'
 import { ArrowLeftIcon, PencilIcon } from 'satellite-lucide-icons'
-import { DataStateType } from '~/store/dataState/types'
 import { Friend } from '~/types/ui/friends'
 
 declare module 'vue/types/vue' {
@@ -19,22 +17,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      selectedAddress: '',
-      search: '',
-      result: [],
+      friends: [] as Friend[],
+      isLoading: false,
+      error: '',
+      name: '',
     }
   },
   computed: {
-    DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile']),
-
-    /**
-     * @method searchResult
-     * @description filter friends list by search key
-     */
-    searchResult() {
-      return this.friends.all.filter((user: Friend) =>
-        user.name.toLowerCase().includes(this.search.toLowerCase()),
+    isInvalidName(): boolean {
+      return (
+        !this.name ||
+        this.name.trim().length < this.$Config.chat.groupNameMinLength ||
+        this.name.trim().length > this.$Config.chat.groupNameMaxLength
       )
     },
   },
@@ -46,26 +40,56 @@ export default Vue.extend({
     },
   },
   methods: {
-    /**
-     * @method selectUserAddress
-     * @description Select user address that wants to start chat
-     * @example ---
-     */
-    selectUserAddress(address: string) {
-      this.selectedAddress = address
-    },
-    /**
-     * @method navigateToChat
-     * @description navigate to chat page with selected address
-     */
-    navigateToChat() {
-      if (this.selectedAddress === '') {
+    async confirm() {
+      // if only 1 friend, direct to DM instead
+      if (this.friends.length === 1) {
+        const friend = this.friends[0]
+        this.$store.commit('ui/setSwiperSlideIndex', 1)
+        this.$store.commit('ui/showSidebar', false)
+        this.$store.dispatch('conversation/setConversation', {
+          id: friend.address,
+          type: 'friend',
+          participants: [friend],
+          calling: false,
+        })
+        this.$router.push(`/chat/direct/${friend.address}`)
         return
       }
-      this.$store.commit('ui/setSwiperSlideIndex', 1)
-      this.$store.commit('ui/showSidebar', false)
+      if (this.isInvalidName) {
+        this.error = this.$t('errors.chat.group_name', {
+          min: this.$Config.chat.groupNameMinLength,
+          max: this.$Config.chat.groupNameMaxLength,
+        }) as string
+        return
+      }
+      // create group
+      try {
+        this.isLoading = true
+        this.error = ''
+        const groupId = await this.$store.dispatch('groups/createGroup', {
+          name: this.name,
+        })
 
-      this.$router.push(`/chat/direct/${this.selectedAddress}`)
+        await Promise.all(
+          this.friends.map(({ address }: { address: string }) =>
+            this.$store.dispatch('groups/sendGroupInvite', {
+              group: { id: groupId },
+              recipient: address,
+            }),
+          ),
+        )
+        this.$store.commit('ui/setSwiperSlideIndex', 1)
+        this.$store.commit('ui/showSidebar', false)
+        this.$store.dispatch('conversation/setConversation', {
+          id: groupId,
+          type: 'group',
+        })
+        this.$router.push(`/chat/groups/${groupId}`)
+      } catch (e: any) {
+        this.error = `Failed to create group: ${e.message}`
+      } finally {
+        this.isLoading = false
+      }
     },
     /**
      * @method goBack

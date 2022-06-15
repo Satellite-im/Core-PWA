@@ -5,37 +5,25 @@
     </a>
     <TypographyTitle :text="$t('pages.newMessage.new_message')" :size="5" />
     <a
-      :class="selectedAddress === '' ? 'font-muted' : 'font-primary'"
       class="is-active"
-      v-on:click="() => navigateToChat()"
+      :class="friends.length ? 'font-primary' : 'font-muted'"
+      @click="confirm"
     >
       <pencil-icon />
     </a>
   </div>
-  <div class="search">
+  <InteractablesUserPicker v-model="friends" />
+  <template v-if="friends.length > 1">
     <InteractablesInput
-      v-model="search"
-      :placeholder="`${$t('ui.search')}...`"
-      input-kind="text"
-      :delete-icon="true"
+      v-model="name"
+      size="small"
       type="dark"
-      full-width
-      :autofocus="true"
+      input-kind="text"
+      :placeholder="$t('pages.chat.new_group_name')"
+      :minLength="$Config.chat.groupNameMinLength"
+      :maxLength="$Config.chat.groupNameMaxLength"
+      :invalid="isInvalidName && Boolean(error)"
     />
-  </div>
-  <div class="scrolling hidden-scroll friends">
-    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
-      <div
-        v-if="dataState.friends !== DataStateType.Loading && searchResult.length"
-      >
-        <MessageFriend
-          v-for="(friend, i) in searchResult"
-          :key="i"
-          :user="friend"
-          :selectedAddress="selectedAddress"
-          :selectUserAddress="selectUserAddress"
-        />
-      </div>
-    </UiSimpleScroll>
-  </div>
+    <TypographyError v-if="error" :text="error" small />
+  </template>
 </div>
