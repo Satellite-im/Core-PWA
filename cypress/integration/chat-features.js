@@ -21,7 +21,7 @@ describe('Chat Features Tests', () => {
 
     // Validate message is sent
     cy.goToConversation('Only Text Friend')
-    cy.chatFeaturesSendMessage(randomMessage)
+    // cy.chatFeaturesSendMessage(randomMessage)
   })
 
   it('Chat - Send Emoji on chat', () => {
