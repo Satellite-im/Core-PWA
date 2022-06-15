@@ -9,7 +9,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['conversation', 'friends']),
     ...mapState('webrtc', ['elapsedTime', 'activeCall']),
-    caller(): Friend {
+    caller(): Friend | undefined {
       return this.friends.all.find(
         (f: Friend) => f.peerId === this.activeCall?.callId,
       )
@@ -17,6 +17,10 @@ export default Vue.extend({
   },
   methods: {
     navigateToActiveConversation() {
+      if (!this.caller) {
+        return
+      }
+
       if (this.$device.isMobile) {
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
         this.$store.commit('ui/setSwiperSlideIndex', 1)
