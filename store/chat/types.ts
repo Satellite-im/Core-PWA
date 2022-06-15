@@ -14,7 +14,7 @@ export interface ChatFileUpload {
   file: File
   nsfw: boolean
   progress: number
-  thumbnail?: File // scaled down
+  thumbnail?: string // scaled down base64
 }
 
 export interface ChatState {

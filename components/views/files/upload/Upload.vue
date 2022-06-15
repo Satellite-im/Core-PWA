@@ -7,6 +7,7 @@ import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import createThumbnail from '~/utilities/Thumbnail'
+import blobToBase64 from '~/utilities/BlobToBase64'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -109,31 +110,16 @@ export default Vue.extend({
 
       // set files to show preview, do not send
       for (const file of filesToAdd) {
+        const thumbnail = await createThumbnail(file.file, 200)
         this.$store.commit('chat/addFile', {
           file: {
             ...file,
             progress: 0,
-            thumbnail: await createThumbnail(file.file, 200),
+            thumbnail: thumbnail ? await blobToBase64(thumbnail) : '',
           },
           address,
         })
       }
-    },
-
-    /**
-     * @method setProgress
-     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
-     * we encountered a bug where % was getting set to 105, math.min fixes that
-     * @param num current progress in bytes
-     * @param size total file size in bytes
-     */
-    setProgress(num: number, size: number, name: string) {
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.upload', [
-          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
-        ]),
-      )
     },
   },
 })

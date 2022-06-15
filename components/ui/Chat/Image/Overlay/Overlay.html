@@ -1,11 +1,13 @@
 <div class="image-mask" @click="closeChatImageOverlay">
-  <div class="image-container" @click.stop>
-    <img
-      :class="{'blur-image' : chatImageOverlay.nsfw && blockNsfw}"
-      :src="chatImageOverlay.url"
-    />
+  <div class="size-container">
+    <div class="image-container" @click.stop>
+      <img
+        :class="{'blur-image' : chatImageOverlay.nsfw && blockNsfw}"
+        :src="chatImageOverlay.url"
+      />
+    </div>
+    <a :href="chatImageOverlay.url" target="_blank">
+      {{ $t('files.view_original') }}
+    </a>
   </div>
-  <a class="link" :href="chatImageOverlay.url" target="_blank">
-    {{ $t('files.view_original') }}
-  </a>
 </div>

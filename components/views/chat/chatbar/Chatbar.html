@@ -23,13 +23,17 @@
       ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="!textile.messageLoading"
+      :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-    <ChatbarControls id="chatbar-controls" :sendMessage="sendMessage" />
+    <ChatbarControls
+      id="chatbar-controls"
+      :sendMessage="sendMessage"
+      :disabled="!recipient"
+    />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

@@ -1,24 +1,35 @@
 .image-mask {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.75);
   &:extend(.second-layer);
   &:extend(.absolute-coverage);
-  .image-container {
-    display: inline-flex;
-    flex-direction: column;
-    max-width: fit-content;
-    align-self: center;
-    overflow: hidden;
 
-    img {
-      &:extend(.round-corners);
-      max-height: 80vh;
-      max-width: 80vw;
-      height: auto;
-      margin: 0 auto;
+  .size-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+
+    .image-container {
+      display: flex;
+      overflow: hidden;
+
+      img {
+        &:extend(.round-corners);
+        max-height: 80vh;
+        max-width: 80vw;
+        height: auto;
+      }
+    }
+    a {
+      color: @gray;
+      display: flex;
+      margin-right: auto;
+      &:hover,
+      &:focus {
+        color: @white;
+        text-decoration: underline;
+      }
     }
   }
 }

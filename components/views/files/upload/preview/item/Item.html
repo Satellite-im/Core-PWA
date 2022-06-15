@@ -1,11 +1,15 @@
 <div class="file-item">
-  <button class="close" @click="$emit('removeUploadItem')">
+  <button
+    class="close"
+    :class="{disabled: messageLoading}"
+    @click="!messageLoading && $emit('removeUploadItem')"
+  >
     <x-icon size="1x" />
   </button>
   <div v-if="item.thumbnail" class="image-container">
     <img
       :class="{'blur-image' : item.nsfw && blockNsfw}"
-      :src="url"
+      :src="item.thumbnail"
       draggable="false"
     />
   </div>

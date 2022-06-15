@@ -24,15 +24,8 @@ export default Vue.extend({
   computed: {
     ...mapState({
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
+      messageLoading: (state) => (state as RootState).textile.messageLoading,
     }),
-  },
-  mounted() {
-    if (this.item.thumbnail) {
-      this.url = URL.createObjectURL(this.item.thumbnail)
-    }
-  },
-  beforeDestroy() {
-    URL.revokeObjectURL(this.url)
   },
 })
 </script>
