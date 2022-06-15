@@ -52,7 +52,7 @@ describe('Chat features with two accounts', () => {
       .should('have.text', '😄')
   })
 
-  it('Context Menu Options - Text Message', () => {
+  it.skip('Context Menu Options - Text Message', () => {
     let optionsMessage = [
       'Add Reaction',
       'Reply',
