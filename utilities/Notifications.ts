@@ -11,7 +11,6 @@ const isSupported = (): boolean =>
 export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
-  sendNotification: any = this.sendNotifications
   $Config: typeof Config = Config
 
   constructor() {
