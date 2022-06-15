@@ -579,7 +579,6 @@ const webRTCActions = {
         const callerInfo = rootState.friends.all.find((friend) => {
           return friend.account.from === state.originator
         })
-        console.log(callerInfo)
         dispatch(
           'ui/sendNotification',
           {
