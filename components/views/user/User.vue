@@ -162,10 +162,13 @@ export default Vue.extend({
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
         this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
+        this.$store.dispatch('ui/toggleChatbarFocus', false)
       }
 
       if (this.user.address === this.$route.params.address) {
-        this.$store.dispatch('ui/setChatbarFocus')
+        if (!this.$device.isMobile) {
+          this.$store.dispatch('ui/setChatbarFocus')
+        }
         return
       }
 
