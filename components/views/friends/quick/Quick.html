@@ -1,4 +1,4 @@
-<form class="quick-chat" :class="{compact : showMedia}" @keyup.enter="confirm">
+<div class="quick-chat" :class="{compact : showMedia}">
   <div>
     <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
     <TypographyText :text="$t('pages.chat.new_chat_description')" />
@@ -14,6 +14,8 @@
       :minLength="$Config.chat.groupNameMinLength"
       :maxLength="$Config.chat.groupNameMaxLength"
       :invalid="isInvalidName && Boolean(error)"
+      :watchEnter="true"
+      @watchEnter="confirm"
     />
     <TypographyError v-if="error" :text="error" small />
   </template>
@@ -25,4 +27,4 @@
     :loading="isLoading"
     full-width
   />
-</form>
+</div>
