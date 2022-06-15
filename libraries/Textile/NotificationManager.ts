@@ -3,6 +3,7 @@ import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 import { Notifications } from '~/utilities/Notifications'
+
 const CollectionName = 'notification'
 
 export class NotificationManager {
@@ -115,7 +116,21 @@ export class NotificationManager {
       CollectionName,
       Query.where('_id').eq(notificationId[0]),
     )
-    const makeNotificationMessage = `New message from ${payload.from}`
+    let makeNotificationMessage = ''
+    switch (payload.type) {
+      case AlertType.MISSED_CALL: {
+        makeNotificationMessage = `Missed call from ${payload.from}`
+        break
+      }
+      case AlertType.DIRECT_MESSAGE: {
+        makeNotificationMessage = `New message from ${payload.from}`
+        break
+      }
+      case AlertType.GROUP_MESSAGE: {
+        makeNotificationMessage = `New message in ${payload.groupName} from ${payload.from}`
+        break
+      }
+    }
 
     const browserNotification = new Notifications()
     await browserNotification.sendNotifications(
