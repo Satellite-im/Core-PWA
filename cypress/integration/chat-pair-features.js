@@ -35,7 +35,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it('Send message to user B', () => {
+  it.skip('Send message to user B', () => {
     cy.chatFeaturesSendMessage(randomMessage)
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -57,7 +57,6 @@ describe('Chat features with two accounts', () => {
       'Add Reaction',
       'Reply',
       'Copy Message',
-      'Edit Message',
     ]
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
