@@ -78,7 +78,7 @@ export default Vue.extend({
         return this.accounts.details?.address
       }
       const friend = this.findFriendByKey(this.group.from)
-      return friend.address
+      return friend?.address ?? ''
     },
   },
   methods: {
