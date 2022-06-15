@@ -7,6 +7,11 @@
   padding: @light-spacing;
   padding-right: @normal-spacing;
 
+  .circle,
+  .checkbox {
+    flex-shrink: 0;
+  }
+
   &:hover {
     background: @semitransparent-light-gradient;
   }
@@ -14,5 +19,6 @@
   .name {
     font-size: @mini-text-size;
     flex-grow: 1;
+    &:extend(.ellipsis);
   }
 }
