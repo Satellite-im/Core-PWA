@@ -200,9 +200,9 @@ export default Vue.extend({
       }
 
       this.$emit('confirm', {
-        username: this.name.trim(),
+        username: this.name,
         photoHash: this.croppedImage,
-        status: this.status.trim(),
+        status: this.status,
       })
     },
   },
