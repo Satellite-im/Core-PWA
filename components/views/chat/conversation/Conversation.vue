@@ -24,6 +24,7 @@ export default Vue.extend({
       textile: (state) => (state as RootState).textile,
       currentChat: (state) => (state as RootState).chat.currentChat,
       webrtc: (state) => (state as RootState).webrtc,
+      conversation: (state) => (state as RootState).conversation,
     }),
     options() {
       return {
@@ -38,8 +39,11 @@ export default Vue.extend({
     conversationId() {
       return this.$route.params?.address || this.$route.params?.id
     },
-    isMediaOpen() {
-      return this.webrtc.activeCall && this.webrtc.activeCall.callId
+    isActiveCall() {
+      return (
+        this.webrtc.activeCall &&
+        this.webrtc.activeCall.callId === this.conversation.id
+      )
     },
   },
   beforeDestroy() {
