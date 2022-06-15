@@ -107,6 +107,13 @@ export default Vue.extend({
       internalText: this.text ? this.text : '',
     }
   },
+  watch: {
+    internalText(val) {
+      if (!val.trim().length) {
+        this.internalText = ''
+      }
+    },
+  },
   mounted() {
     if (this.autofocus) {
       this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
