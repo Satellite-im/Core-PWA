@@ -45,6 +45,24 @@ const webRTCActions = {
     await $Peer2Peer.start()
     await $Peer2Peer.node?.relay?.start()
 
+    $Peer2Peer.on('peer:discovery', ({ peerId }) => {
+      const connectedFriend = rootState.friends.all.find(
+        (friend) => friend.peerId === peerId.toB58String(),
+      )
+
+      if (!connectedFriend) return
+
+      dispatch(
+        'friends/setFriendState',
+        {
+          address: connectedFriend.address,
+          state: 'online',
+        },
+        { root: true },
+      )
+      dispatch('textile/subscribeToMailbox', {}, { root: true })
+    })
+
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
       const connectedParticipant = rootState.conversation.participants.find(
         (participant: ConversationParticipant) =>
