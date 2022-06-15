@@ -1,20 +1,19 @@
 // This file is used to bind local classes to vue global context
 
 import Vue from 'vue'
-import logger from './logger'
 import { Config } from '~/config'
 // Libs
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import SoundManager from '~/libraries/SoundManager/SoundManager'
-import WebRTC from '~/libraries/WebRTC/WebRTC'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
-import BucketManager from '~/libraries/Textile/BucketManager'
 import Logger from '~/utilities/Logger'
+import BlockchainClient from '~/libraries/BlockchainClient'
+import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -25,7 +24,6 @@ declare module 'vue/types/vue' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
-    $BucketManager: BucketManager
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }
@@ -40,7 +38,6 @@ declare module '@nuxt/types' {
     $Security: Security
     $typedStore: RootStore
     $TextileManager: TextileManager
-    $BucketManager: BucketManager
     $Logger: Logger
     $FileSystem: TextileFileSystem
   }
@@ -54,7 +51,7 @@ Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$FileSystem = new TextileFileSystem()
-
+Vue.prototype.$BlockchainClient = BlockchainClient.getInstance()
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {
   get(this: Vue) {

@@ -4,7 +4,7 @@
   :style="customStyles ? {} : { maxHeight: `${height}rem`, width: `${width}rem`, top: `${offsets[0]}rem`, right: `${offsets[1]}rem` }"
 >
   <div class="wrap">
-    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
       <!-- Optional floating container label -->
       <div class="header" v-if="heading">
         <flask-conical-icon size="0.85x" />
@@ -12,6 +12,6 @@
       </div>
       <!-- Scrolling content included here -->
       <slot></slot>
-    </UiScroll>
+    </UiSimpleScroll>
   </div>
 </div>

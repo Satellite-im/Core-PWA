@@ -20,7 +20,7 @@
     padding-bottom: @normal-spacing;
     &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
-    max-height: calc(var(--app-height) - @sidebar-inner-offset);
+    max-height: calc(@app-height - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
     padding-bottom: @normal-spacing;
@@ -40,7 +40,7 @@
 
   .sidebar-inner-streaming {
     max-height: calc(
-      var(--app-height) - @sidebar-inner-offset - @sidebar-inner-streaming-pad
+      @app-height - @sidebar-inner-offset - @sidebar-inner-streaming-pad
     );
   }
 
@@ -124,7 +124,7 @@
     &:extend(.background-dark-gradient);
     padding-bottom: @normal-spacing;
     .sidebar-inner-streaming {
-      max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
+      max-height: calc(@app-height - @mobile-sidebar-inner-offset);
     }
     width: @sidebar-size-mobile !important;
     min-width: @sidebar-size-mobile !important;

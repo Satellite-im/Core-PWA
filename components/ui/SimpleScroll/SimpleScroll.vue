@@ -20,6 +20,26 @@ export default Vue.extend({
       default: 'scroll',
       required: false,
     },
+    containerClass: {
+      type: String,
+      default: '',
+      required: false,
+    },
+    scrollTopOnChange: {
+      type: [String, Boolean],
+      default: '',
+      required: false,
+    },
+  },
+  watch: {
+    scrollTopOnChange: {
+      handler(val) {
+        if (!this.$refs.simplescrollbar) {
+          return
+        }
+        this.$refs.simplescrollbar.scrollTop = 0
+      },
+    },
   },
 })
 </script>

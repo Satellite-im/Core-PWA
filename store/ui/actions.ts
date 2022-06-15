@@ -1,6 +1,5 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
-import { v4 as uuidv4 } from 'uuid'
 import { Position, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
@@ -90,8 +89,13 @@ export default {
     payload: {
       message: string
       from: string
-      fromAddress: string
+      groupName?: string
+      id: string
+      groupId?: string
+      groupURL?: string
+      fromAddress?: string
       imageHash: string
+      activeUser?: string
       title: string
       type: AlertType
     },
@@ -102,18 +106,23 @@ export default {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
     if (rootState.textile.activeConversation !== payload.fromAddress) {
-      const notificationResponse =
-        await $TextileManager.notificationManager?.sendNotification({
-          from: payload.from,
-          id: uuidv4(),
-          title: payload.title,
-          notificationState: AlertState.UNREAD,
-          imageHash: payload.imageHash,
-          message: payload.message,
-          type: payload.type,
-        })
-
-      commit('sendNotification', notificationResponse)
+      const userId = $TextileManager.getIdentityPublicKey()
+      if (userId !== payload.fromAddress) {
+        const notificationResponse =
+          await $TextileManager.notificationManager?.sendNotification({
+            from: payload.from,
+            title: payload.title,
+            groupName: payload.groupName,
+            groupId: payload.groupId,
+            id: payload.id,
+            notificationState: AlertState.UNREAD,
+            fromAddress: payload.fromAddress,
+            imageHash: payload.imageHash,
+            message: payload.message,
+            type: payload.type,
+          })
+        commit('sendNotification', notificationResponse)
+      }
     }
   },
   /**

@@ -32,13 +32,13 @@
     <div id="members-number">
       <TypographyText :size="6" :text="`Members - ${selectedGroup.members}`" />
     </div>
-    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
       <UiUser
         v-for="member in filterMembers"
         :key="member.address"
         :user="member"
         :creatorBadge="member == selectedGroup.creator"
       />
-    </UiScroll>
+    </UiSimpleScroll>
   </div>
 </div>

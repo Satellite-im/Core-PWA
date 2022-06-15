@@ -13,8 +13,9 @@ export const Config = {
       'https://webapi.hub.edge.satellite.one',
     groupChatThreadID:
       'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
-    fsTable: 'sat.json',
-    bucketName: 'personal-files',
+    bucketIndex: 'sat.json',
+    personalBucket: 'personal-files',
+    sharedBucket: 'shared-files',
   },
   ipfs: {
     gateway: 'https://satellite.mypinata.cloud/ipfs/',
@@ -51,7 +52,7 @@ export const Config = {
         ],
   },
   solana: {
-    customFaucet: 'https://faucet.satellite.one',
+    customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
@@ -111,9 +112,12 @@ export const Config = {
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
+    groupNameMinLength: 3,
+    groupNameMaxLength: 64,
   },
   account: {
-    minimumAccountLength: 5,
+    minLength: 5,
+    maxLength: 32,
   },
   profile: {
     noteMaxChars: 256,

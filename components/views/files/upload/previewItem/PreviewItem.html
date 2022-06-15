@@ -31,14 +31,10 @@
   <div class="file-info">
     <TypographyTitle :size="6" :text="item.file.name" />
     <div>
-      <div v-for="itemProgress in currentProgress">
+      <div v-for="itemProgress in uploadProgress">
         <div v-if="itemProgress.name === item.file.name">
           <div v-if="itemProgress.progress !== 100">
-            <UiProgress
-              :progress="itemProgress.progress"
-              type="loading"
-              class="loading-bar"
-            />
+            <UiProgress :progress="itemProgress.progress" type="loading" />
             <TypographySubtitle
               :text="`${itemProgress.progress.toFixed(2)}% Uploaded...`"
             />

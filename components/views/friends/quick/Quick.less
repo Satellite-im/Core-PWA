@@ -1,38 +1,29 @@
 .quick-chat {
+  &:extend(.background-semitransparent-dark);
+  &:extend(.round-corners);
+  &:extend(.first-layer);
+  &:extend(.bordered);
+  &:extend(.blur);
+  position: fixed;
+  width: 18rem;
+  top: 11rem;
+  padding: @light-spacing @light-spacing @normal-spacing;
+  left: @sidebar-size + 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  &.compact {
+    left: @servers-size + 2rem;
+  }
+
   .subtitle {
-    margin: 0;
     margin-bottom: @light-spacing;
     font-size: @text-size;
   }
 
-  .search,
-  .user-search {
-    margin-top: @normal-spacing;
-  }
-
-  .submit-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1em;
-    &:extend(.full-width);
-  }
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  &:extend(.round-corners);
-  &:extend(.bordered);
-  position: fixed;
-  width: 18rem;
-  top: 11rem;
-  padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
-  left: @sidebar-size + 2rem;
-
-  &:extend(.first-layer);
-  display: flex;
-  flex-direction: column;
-  max-height: 24rem;
-
-  &--compact {
-    left: @servers-size + 2rem;
+  button {
+    align-self: flex-end;
   }
 }
 

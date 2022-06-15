@@ -116,7 +116,7 @@ describe('Create Account Validations', () => {
     },
   )
 
-  it(
+  it.skip(
     'Create account without image after attempting to add an invalid image file',
     { retries: 2 },
     () => {

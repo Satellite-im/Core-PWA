@@ -1,9 +1,8 @@
 import { GetterTree } from 'vuex'
-import { cloneDeep, Dictionary } from 'lodash'
+import { Dictionary, groupBy } from 'lodash'
 import { FriendsState } from './types'
 import { Friend, OutgoingRequest } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
-import { getAlphaSorted } from '~/libraries/ui/Friends'
 
 export interface FriendsGetters {
   findFriendByKey(
@@ -25,7 +24,11 @@ export interface FriendsGetters {
     rootState: RootState,
   ): boolean
   alphaSortedFriends(state: FriendsState): Dictionary<Friend[]>
+  alphaSortedFriendsSearch(
+    state: FriendsState,
+  ): (searchTerm: string) => Dictionary<Friend[]>
   alphaSortedOutgoing(state: FriendsState): OutgoingRequest[]
+  friendsWithUnreadMessages(state: FriendsState): Friend[]
 }
 
 const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
@@ -113,8 +116,34 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
    * @returns dictionary of Friends
    */
   alphaSortedFriends: (state: FriendsState): Dictionary<Friend[]> => {
-    return getAlphaSorted(state.all)
+    const sorted = [...state.all].sort((a, b) => a.name.localeCompare(b.name))
+    return groupBy(sorted, (f: Friend) => {
+      if (f.name && f.name.length) {
+        return f.name.toUpperCase()[0]
+      }
+      return '-'
+    })
   },
+
+  /**
+   * @name alphaSortedFriends
+   * @description Get friends sorted by alpha
+   * @returns dictionary of Friends
+   */
+  alphaSortedFriendsSearch:
+    (state: FriendsState) =>
+    (searchTerm: string): Dictionary<Friend[]> => {
+      const filtered = state.all.filter((f) =>
+        f.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+      const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name))
+      return groupBy(sorted, (f: Friend) => {
+        if (f.name && f.name.length) {
+          return f.name.toUpperCase()[0]
+        }
+        return '-'
+      })
+    },
 
   /**
    * @name alphaSortedOutgoing
@@ -122,10 +151,13 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
    * @returns array of requests
    */
   alphaSortedOutgoing: (state: FriendsState): OutgoingRequest[] => {
-    return cloneDeep(state.outgoingRequests).sort(
+    return [...state.outgoingRequests].sort(
       (a: OutgoingRequest, b: OutgoingRequest) =>
         (a.userInfo?.name ?? '').localeCompare(b.userInfo?.name ?? ''),
     )
+  },
+  friendsWithUnreadMessages: (state: FriendsState): Friend[] => {
+    return state.all.filter((friend) => friend.unreadCount)
   },
 }
 

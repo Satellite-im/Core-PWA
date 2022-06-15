@@ -1,84 +1,79 @@
-<div
-  id="friends-list"
-  :v-scroll-lock="$device.isDesktop ? true : false"
-  :class="$device.isDesktop ? 'hidden-scroll' : '' "
->
+<div id="friends-list" :v-scroll-lock="$device.isDesktop ? true : false">
   <FriendsMobileList v-if="$device.isMobile" />
-  <UiScroll v-else verticalScroll enableWrap scrollbarVisibility="scroll">
-    <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
-    <div class="columns">
-      <div class="column is-half-desktop">
-        <!-- Friends Add -->
-        <FriendsAdd />
-        <!-- Friend Requests -->
-        <UiLoadersFriend
-          :count="1"
-          v-if="dataState.friends === DataStateType.Loading"
-        />
-        <template v-else-if="friends.incomingRequests.length">
-          <div class="padded_divider">
-            <TypographyHorizontalRuleText
-              plaintext
-              :value="$t('friends.requests')"
-            />
-          </div>
-          <FriendsFriend
-            v-for="friend in friends.incomingRequests"
-            v-if="friend.userInfo"
-            :friend="{
+  <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
+  <div class="columns" v-else>
+    <div class="column is-half">
+      <!-- Friends Add -->
+      <FriendsAdd />
+      <!-- Friend Requests -->
+      <UiLoadersFriend
+        :count="1"
+        v-if="dataState.friends === DataStateType.Loading"
+      />
+      <template v-else-if="friends.incomingRequests.length">
+        <div class="padded_divider">
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.requests')"
+          />
+        </div>
+        <FriendsFriend
+          v-for="friend in friends.incomingRequests"
+          v-if="friend.userInfo"
+          :friend="{
               name: friend.userInfo.name,
               address: friend.from,
               state: 'offline',
               status: friend.userInfo.status,
               request: friend
             }"
-            :key="friend.from"
-            request
-          />
-        </template>
-        <!-- Outgoing Requests -->
-        <UiLoadersFriend
-          :count="1"
-          v-if="dataState.friends === DataStateType.Loading"
+          :key="friend.from"
+          request
         />
-        <template v-else-if="friends.outgoingRequests.length">
-          <div class="padded_divider">
-            <TypographyHorizontalRuleText
-              plaintext
-              :value="$t('friends.outgoing')"
-            />
-          </div>
-          <FriendsFriend
-            v-for="friend in alphaSortedOutgoing"
-            v-if="friend.userInfo"
-            :friend="{
+      </template>
+      <!-- Outgoing Requests -->
+      <UiLoadersFriend
+        :count="1"
+        v-if="dataState.friends === DataStateType.Loading"
+      />
+      <template v-else-if="friends.outgoingRequests.length">
+        <div class="padded_divider">
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.outgoing')"
+          />
+        </div>
+        <FriendsFriend
+          v-for="friend in alphaSortedOutgoing"
+          v-if="friend.userInfo"
+          :friend="{
               name: friend.userInfo.name,
               address: friend.to,
               state: 'offline',
               status: friend.userInfo.status,
               request: friend
             }"
-            :key="friend.to"
-            outgoing
-          />
-        </template>
-      </div>
-      <div class="column is-half-desktop">
+          :key="friend.to"
+          outgoing
+        />
+      </template>
+    </div>
+
+    <UiSimpleScroll
+      scrollMode="vertical"
+      scrollShow="scroll"
+      containerClass="is-half"
+    >
+      <div class="friend-column">
         <!-- Friends List -->
-        <div
-          v-if="Object.entries(alphaSortedFriends).length && $device.isMobile"
-          class="padded_divider"
-        >
-          <TypographyHorizontalRuleText plaintext :value="$t('friends.all')" />
-        </div>
         <div v-if="dataState.friends === DataStateType.Loading">
           <UiLoadersFriend :count="5" />
         </div>
         <div v-else>
-          <div v-for="entry in Object.entries(alphaSortedFriends)">
-            <span class="alpha-divider">{{entry[0].toUpperCase()}}</span>
+          <div v-for="(value, key) in alphaSortedFriends" :key="key">
+            <span class="alpha-divider">{{ key }}</span>
             <FriendsFriend
-              v-for="friend in entry[1]"
+              v-for="friend in value"
               :friend="friend"
               :key="friend.address"
             />
@@ -107,6 +102,6 @@
           blocked
         />
       </div>
-    </div>
-  </UiScroll>
+    </UiSimpleScroll>
+  </div>
 </div>

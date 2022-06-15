@@ -19,7 +19,6 @@
           <Slimbar
             v-if="!$device.isMobile"
             :servers="$mock.servers"
-            :unreads="friends.all"
             :open-modal="toggleModal"
           />
           <MobileSidebar
@@ -31,8 +30,6 @@
           />
           <Sidebar
             v-if="!$device.isMobile"
-            :users="friends.all"
-            :groups="$mock.groups"
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />

@@ -2,12 +2,10 @@ import Vue from 'vue'
 import { map, uniq } from 'lodash'
 import { DataStateType } from '../dataState/types'
 import { Group, GroupMember, GroupsError, GroupsState } from './types'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import { ActionsArguments } from '~/types/store/store'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
-import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+import BlockchainClient from '~/libraries/BlockchainClient'
 
 const getGroupChatManager = (): GroupChatManager => {
   const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -18,34 +16,30 @@ const getGroupChatManager = (): GroupChatManager => {
   return $TextileManager.groupChatManager
 }
 
-const getGroupChatProgram = (): GroupChatsProgram => {
-  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  return new GroupChatsProgram($SolanaManager)
-}
-
-const getUsersProgram = (): UsersProgram => {
-  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  return new UsersProgram($SolanaManager)
-}
-
 const getUserAccount = () => {
-  const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-  const account = $SolanaManager.getActiveAccount()
-
-  if (!account) {
+  try {
+    return BlockchainClient.getInstance().account
+  } catch (e) {
     throw new Error(GroupsError.USER_NOT_INITIALIZED)
   }
-
-  return account
 }
 
 export default {
-  async initialize({ dispatch }: ActionsArguments<GroupsState>) {
+  async initialize({ dispatch, state }: ActionsArguments<GroupsState>) {
     await Promise.all([
       dispatch('fetchGroups'),
       dispatch('subscribeToGroupInvites'),
       dispatch('subscribeToGroupsUpdate'),
     ])
+    await Promise.all(
+      state.all.map(async (group) => {
+        await dispatch(
+          'textile/subscribeToGroup',
+          { groupId: group.id },
+          { root: true },
+        )
+      }),
+    )
   },
 
   /**
@@ -57,12 +51,12 @@ export default {
     { commit }: ActionsArguments<GroupsState>,
     { name }: { name: string },
   ) {
-    const groupChatProgram = getGroupChatProgram()
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const groupChatManager = getGroupChatManager()
 
     const groupId = await groupChatManager.createGroupConversation()
 
-    await groupChatProgram.create(groupId, name)
+    await $BlockchainClient.createGroup(groupId, name)
 
     return groupId
   },
@@ -79,15 +73,16 @@ export default {
       { root: true },
     )
 
-    const { publicKey } = getUserAccount()
-    const usersProgram = getUsersProgram()
-    const groupChatProgram = getGroupChatProgram()
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    const { address } = getUserAccount()
 
-    const groups = await groupChatProgram.getUserGroups(publicKey)
-    const groupsUsers = await groupChatProgram.getGroupsUsers(map(groups, 'id'))
+    const groups = await $BlockchainClient.getUserGroups(address)
+    const groupsUsers = await $BlockchainClient.getGroupsUsers(
+      map(groups, 'id'),
+    )
 
     const addresses = uniq([].concat(...(<any>map(groupsUsers, 'users'))))
-    const usersInfo = await usersProgram.getUsersInfo(addresses)
+    const usersInfo = await $BlockchainClient.getUsersInfo(addresses)
 
     const payload = groups.map((group) => {
       const members = groupsUsers
@@ -116,11 +111,20 @@ export default {
    * @example
    */
   async sendGroupInvite(
-    {}: ActionsArguments<GroupsState>,
+    { dispatch }: ActionsArguments<GroupsState>,
     { group, recipient }: { group: Group; recipient: string },
   ) {
-    const groupProgram = getGroupChatProgram()
-    await groupProgram.invite(group.id, recipient)
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    await $BlockchainClient.inviteToGroup(group.id, recipient)
+
+    dispatch(
+      'textile/sendGroupMessage',
+      {
+        groupId: group.id,
+        message: `\`I added ${recipient} to the chat\``,
+      },
+      { root: true },
+    )
   },
 
   /**
@@ -137,7 +141,8 @@ export default {
       await dispatch('unsubscribeFromGroupInvites')
     }
 
-    const id = getGroupChatProgram().addInviteListener((payload) => {
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    const id = $BlockchainClient.addGroupInviteListener((payload) => {
       commit('addGroup', { ...payload, members: [] })
       dispatch('fetchGroupMembers', payload.id)
       dispatch('subscribeToGroupUpdate', payload.id)
@@ -156,7 +161,8 @@ export default {
     commit,
   }: ActionsArguments<GroupsState>) {
     if (state.inviteSubscription) {
-      await getGroupChatProgram().unsubscribe(state.inviteSubscription)
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+      await $BlockchainClient.unsubscribeGroupInvite(state.inviteSubscription)
       commit('setInviteSubscription', null)
     }
   },
@@ -174,7 +180,8 @@ export default {
     if (state.groupSubscriptions.length) {
       await dispatch('unsubscribeFromGroupsUpdate')
     }
-    const ids = await getGroupChatProgram().addGroupsListener((payload) => {
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    const ids = await $BlockchainClient.addGroupsListener((payload) => {
       commit('updateGroup', payload)
       dispatch('fetchGroupMembers', payload.id)
     })
@@ -191,8 +198,10 @@ export default {
     { state, dispatch, commit }: ActionsArguments<GroupsState>,
     groupId: string,
   ) {
+    await dispatch('textile/subscribeToGroup', { groupId }, { root: true })
     if (!state.groupSubscriptions.includes(groupId)) {
-      const id = await getGroupChatProgram().addGroupListener(
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+      const id = await $BlockchainClient.addGroupListener(
         groupId,
         (payload) => {
           commit('updateGroup', payload)
@@ -212,8 +221,9 @@ export default {
     state,
     commit,
   }: ActionsArguments<GroupsState>) {
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     if (state.groupSubscriptions.length) {
-      await getGroupChatProgram().removeGroupListeners(state.groupSubscriptions)
+      await $BlockchainClient.removeGroupListeners(state.groupSubscriptions)
       commit('setGroupSubscriptions', [])
     }
   },
@@ -229,8 +239,8 @@ export default {
     groupId: string,
   ) {
     if (!state.all.find((group) => group.id === groupId)) {
-      const groupProgram = getGroupChatProgram()
-      const group = await groupProgram.getGroupById(groupId)
+      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+      const group = await $BlockchainClient.getGroupById(groupId)
 
       commit('addGroup', group)
     }
@@ -245,11 +255,10 @@ export default {
     { commit }: ActionsArguments<GroupsState>,
     groupId: string,
   ) {
-    const groupChatProgram = getGroupChatProgram()
-    const usersProgram = getUsersProgram()
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
-    const addresses = await groupChatProgram.getGroupUsers(groupId)
-    const members = await usersProgram.getUsersInfo(addresses)
+    const addresses = await $BlockchainClient.getGroupUsers(groupId)
+    const members = await $BlockchainClient.getUsersInfo(addresses)
     commit('setGroupMembers', { groupId, members })
   },
 
@@ -278,7 +287,5 @@ export default {
 
 export const exportForTesting = {
   getGroupChatManager,
-  getGroupChatProgram,
-  getUsersProgram,
   getUserAccount,
 }

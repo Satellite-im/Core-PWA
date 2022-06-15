@@ -62,12 +62,12 @@
         </div>
       </InteractablesTabs>
 
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <UserProfileAbout v-if="route === 'about'" />
         <UserProfileAccounts v-if="route==='accounts'" />
         <div v-if="route==='activity'">activity</div>
         <div v-if="route==='mutual'">mutual</div>
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 </div>

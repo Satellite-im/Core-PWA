@@ -80,6 +80,9 @@ export class NotificationManager {
     message: string
     imageHash: string
     type: AlertType
+    fromAddress?: string
+    groupName?: string
+    groupId?: string
     notificationState: AlertState
     title: string
   }): Promise<Object | null> {
@@ -90,7 +93,10 @@ export class NotificationManager {
         description: payload.message,
       },
       state: payload.notificationState,
-      from: payload.from,
+      fromName: payload.from,
+      fromAddress: payload.fromAddress,
+      groupName: payload.groupName,
+      groupId: payload.groupId,
       type: payload.type,
       at: Date.now(),
       id: payload.id,
@@ -98,6 +104,7 @@ export class NotificationManager {
     if (!this.threadId) {
       throw new Error('Manager not initialized')
     }
+
     const notificationId = await this.textile.client.create(
       this.threadID,
       CollectionName,

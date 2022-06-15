@@ -52,7 +52,7 @@ export default Vue.extend({
     isActiveCall() {
       return (
         this.webrtc.activeCall &&
-        this.webrtc.activeCall.callId === this.conversation.id
+        this.webrtc.activeCall.peerId === this.conversation.id
       )
     },
     computedUsers() {
@@ -202,6 +202,18 @@ export default Vue.extend({
           }
         })
       }
+    },
+    'audio.volume': {
+      handler(volume) {
+        // Bind stream audio element volume to slider volume
+        const audioStreamElements = document.getElementsByClassName(
+          'remote-audio-stream',
+        ) as HTMLCollectionOf<HTMLAudioElement>
+
+        for (const audioStreamElement of audioStreamElements) {
+          audioStreamElement.volume = volume / 100
+        }
+      },
     },
   },
   beforeMount() {

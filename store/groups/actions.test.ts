@@ -355,8 +355,8 @@ describe('', () => {
 
   test('module.default.initialize', () => {
     const dispatch = jest.fn()
-
-    module.default.initialize({ dispatch })
+    const state = { ...GroupsInitialState }
+    module.default.initialize({ dispatch, state })
     expect(dispatch).toHaveBeenCalledWith('fetchGroups')
     expect(dispatch).toHaveBeenCalledWith('subscribeToGroupInvites')
     expect(dispatch).toHaveBeenCalledWith('subscribeToGroupsUpdate')
@@ -382,14 +382,6 @@ describe('module.exportForTesting', () => {
         'message',
         GroupsError.TEXTILE_NOT_INITIALIZED,
       )
-    }
-  })
-  test('getUserAccount without initializing User', () => {
-    try {
-      const result = module.exportForTesting.getUserAccount()
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty('message', GroupsError.USER_NOT_INITIALIZED)
     }
   })
 })

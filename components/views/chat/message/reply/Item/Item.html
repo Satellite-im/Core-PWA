@@ -36,6 +36,7 @@
           :data="reply.payload"
         />
         <MessageActions
+          hideReply
           :emojiReaction="(event) => $emit('emoji-reaction', event,  reply.id)"
         />
       </div>

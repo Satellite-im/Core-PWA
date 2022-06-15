@@ -1,7 +1,7 @@
 #chatbar {
   position: relative;
   margin-top: @light-spacing;
-  &:extend(.third-layer);
+  &:extend(.first-layer);
   &:extend(.full-width);
   .chat-label {
     font-size: @mini-text-size;
@@ -56,6 +56,7 @@
     align-items: flex-end;
     width: calc(@full - (@normal-spacing * 2));
     display: inline-flex;
+    border: 1px solid transparent;
 
     &.expanded {
       border-radius: 5px;

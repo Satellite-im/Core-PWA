@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { DataStateType } from '~/store/dataState/types'
 import { RootState } from '~/types/store/store'
@@ -18,22 +17,11 @@ export default Vue.extend({
       friendsDS: (state) => (state as RootState).dataState.friends,
       friendsExist: (state) => (state as RootState).friends?.all?.length > 0,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('friends', ['findFriendByAddress']),
-    groupedMessages() {
-      const { address } = this.$route.params
-      const conversation = this.$typedStore.state.textile.conversations[address]
-
-      if (!conversation) return []
-
-      const { messages, replies, reactions } = conversation
-
-      return groupMessages(messages, replies, reactions)
-    },
+    ...mapGetters('textile', ['getInitialized']),
     // Get the active friend
     friend() {
       const { address } = this.$route.params
-      const { friends } = this.$store.state
 
       return this.findFriendByAddress(address)
     },
@@ -51,11 +39,8 @@ export default Vue.extend({
       handler(nextValue) {
         if (nextValue) {
           const { address } = this.$route.params
-          const { friends } = this.$store.state
 
-          const friend = this.findFriendByAddress(address)
-
-          if (address && friend) {
+          if (address && this.friend) {
             this.$store.dispatch('textile/fetchMessages', {
               address,
               setActive: true,
@@ -72,9 +57,7 @@ export default Vue.extend({
           const { address } = this.$route.params
           const { friends } = this.$store.state
 
-          const friend = this.findFriendByAddress(address)
-
-          if (address && friend) return
+          if (address && this.friend) return
 
           // If no address is specified, but we have at least one friend, we can redirect to
           // a chat with the first friend in the list

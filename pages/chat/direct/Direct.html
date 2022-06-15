@@ -1,7 +1,7 @@
 <div id="direct">
-  <UiChatEncrypted v-if="$route.params.address" />
-  <Conversation
-    :messages="groupedMessages"
-    :loading="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
-  />
+  <!-- <UiLoadersMessage
+    :count="6"
+    v-if="$store.state.textile.conversationLoading || (!getInitialized && friendsExist)"
+  /> -->
+  <Conversation />
 </div>

@@ -11,6 +11,7 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
+import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
   components: {
@@ -21,9 +22,14 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
+  data() {
+    return {
+      file: undefined as Fil | undefined,
+    }
+  },
   computed: {
     ...mapState({
-      file: (state) => (state as RootState).ui.filePreview,
+      filePreview: (state) => (state as RootState).ui.filePreview,
       fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
@@ -33,6 +39,9 @@ export default Vue.extend({
         ? this.fileDownloadList.includes(this.file.name)
         : false
     },
+  },
+  beforeMount() {
+    this.file = this.filePreview
   },
   methods: {
     /**
@@ -48,7 +57,7 @@ export default Vue.extend({
           .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
-        await this.$TextileManager.bucket?.pullFileStream(
+        await this.$TextileManager.personalBucket?.pullFile(
           this.file.id,
           this.file.extension === fileExt
             ? this.file.name

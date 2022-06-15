@@ -1,25 +1,26 @@
 import type { VideoState } from './types'
 import { ActionsArguments } from '~/types/store/store'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 const videoActions = {
-  toggle(
-    { state, commit, dispatch, rootState }: ActionsArguments<VideoState>,
-    disabled = !state.disabled,
-  ) {
+  toggleMute({
+    state,
+    commit,
+    dispatch,
+    rootState,
+  }: ActionsArguments<VideoState>) {
     const { activeCall } = rootState.webrtc
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
-
-    commit('setDisabled', disabled)
-
-    if (disabled) {
-      if (call) call.unmute({ kind: 'audio' })
-      dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
+    if (!call) {
       return
     }
-    if (call) call.mute({ kind: 'audio' })
-    dispatch('sounds/playSound', Sounds.MUTE, { root: true })
+    commit('toggleCamera')
+
+    if (!state.disabled) {
+      call.unmute({ kind: 'video' })
+      return
+    }
+    call.mute({ kind: 'video' })
   },
 }
 

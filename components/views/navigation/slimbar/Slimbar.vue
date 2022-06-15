@@ -1,14 +1,14 @@
-<template src="./Slimbar.html" />
+<template src="./Slimbar.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import Vue from 'vue'
+import { mapState, mapGetters } from 'vuex'
 import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
 import { ModalWindows } from '~/store/ui/types'
-import { User } from '~/types/ui/user'
 import Unread from '~/components/ui/Unread/Unread.vue'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { DataStateType } from '~/store/dataState/types'
+import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -29,10 +29,6 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    unreads: {
-      type: Array as PropType<Array<User>>,
-      default: () => [],
-    },
     servers: {
       type: Array,
       default() {
@@ -49,8 +45,9 @@ export default Vue.extend({
     DataStateType: () => DataStateType,
     ...mapState(['ui']),
     ...mapState({
-      friendsDS: (state) => state.dataState.friends,
+      friendsDS: (state) => (state as RootState).dataState.friends,
     }),
+    ...mapGetters('friends', ['friendsWithUnreadMessages']),
     ModalWindows: () => ModalWindows,
   },
   created() {

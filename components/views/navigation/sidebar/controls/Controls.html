@@ -35,6 +35,7 @@
     ></headphones-icon>
   </InteractablesButton>
   <InteractablesButton
+    v-if="inCall"
     :type="videoMuted ? 'danger' : 'dark'"
     size="small"
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"

@@ -13,6 +13,7 @@ import { User } from '~/types/ui/user'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 import { PeerMutedState } from '~/store/webrtc/types'
+import { RootState } from '~/types/store/store'
 
 async function loadVideos() {
   const videos = document.querySelectorAll(
@@ -40,7 +41,7 @@ export default Vue.extend({
   props: {
     user: {
       type: Object as PropType<User>,
-      default: () => {},
+      required: true,
     },
     calling: {
       type: Boolean,
@@ -56,7 +57,12 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
+      flipVideo: (state) => (state as RootState).textile.userThread.flipVideo,
+    }),
     call() {
       return (
         this.user?.peerId &&
@@ -101,6 +107,10 @@ export default Vue.extend({
         (this.streams as CallPeerStreams)?.screen
       )
     },
+    src(): string {
+      const hash = this.user.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
   },
   watch: {
     muted() {},
@@ -137,6 +147,18 @@ export default Vue.extend({
     this.$nextTick(() => {
       loadVideos()
     })
+  },
+  updated() {
+    // When audio is streamed, initialize stream volume to current volume.
+    if (!this.isLocal && !this.audio.deafened && this.audioStream) {
+      const audioStreamElements = document.getElementsByClassName(
+        `remote-audio-stream`,
+      ) as HTMLCollectionOf<HTMLAudioElement>
+
+      for (const audioStreamElement of audioStreamElements) {
+        audioStreamElement.volume = this.audio.volume / 100
+      }
+    }
   },
 })
 </script>

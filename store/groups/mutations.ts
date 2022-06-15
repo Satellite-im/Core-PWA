@@ -25,9 +25,10 @@ const mutations = {
     state: GroupsState,
     { groupId, members }: { groupId: string; members: GroupMember[] },
   ) {
-    state.all = state.all.map((group) =>
-      group.id === groupId ? { ...group, members } : group,
-    )
+    const group = state.all.find((g) => g.id === groupId)
+    if (group) {
+      group.members = members.sort((a, b) => a.name.localeCompare(b.name))
+    }
   },
   setGroupsLastUpdate(state: GroupsState, payload: { [key: string]: number }) {
     state.all = state.all.map((group) => ({

@@ -5,36 +5,52 @@
   --flair-color-rgb: @satellite-color-rgb;
 }
 
-* {
-  border-color: @flair-color;
+//Generic
+html {
+  &:extend(.full-height);
+  &:extend(.full-width);
+  overflow: hidden;
 }
 
-html,
 body {
-  position: fixed;
-  overflow: hidden;
-  height: @full;
+  &:extend(.full-height);
   &:extend(.full-width);
+  &:extend(.background-gradient);
+  margin: 0 !important;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+  &:extend(.font-primary);
+  font-variant-ligatures: none;
+  overflow: hidden;
   overscroll-behavior: contain;
   caret-color: @flair-color !important;
 }
 
-html {
-  &:extend(.background-gradient);
+*:focus,
+*:active {
+  outline: none;
 }
 
-body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
-  font-variant-ligatures: none;
+code {
+  &:extend(.background-semitransparent-lighter);
+  &:extend(.font-flair);
+}
+
+strong {
+  &:extend(.font-secondary);
+}
+
+a.link {
+  &:extend(.font-flair);
+
+  &:hover {
+    &:extend(.font-flair);
+    &:extend(.glow-flair);
+  }
 }
 
 .is-secondary-background {
   background: @darker;
-}
-
-#app {
-  &:extend(.font-primary);
 }
 
 // ------------- Ui Elements-------------
@@ -75,7 +91,7 @@ body {
 }
 
 .toasted-container .toasted {
-  background: @flair-gradient !important ;
+  background: @flair-gradient !important;
   color: @secondary-text !important;
   font-family: @primary-font;
 
@@ -169,12 +185,8 @@ body {
 }
 
 // Buttons
-button {
-  outline: none !important;
-  border: none !important;
-}
-
 .button {
+  border: none;
   &.active {
     &:extend(.background-flair-gradient);
     &:extend(.glow-flair);
@@ -258,6 +270,18 @@ button {
     &:focus:not(:active) {
       &:extend(.background-danger-gradient);
       box-shadow: @danger-glow !important;
+    }
+  }
+
+  &.is-success,
+  .is-success {
+    &:extend(.glow-success);
+    &:extend(.background-success-gradient);
+
+    &:hover,
+    &:focus:not(:active) {
+      &:extend(.background-success-gradient);
+      box-shadow: @success-glow !important;
     }
   }
 
@@ -398,15 +422,6 @@ button {
   }
 }
 
-// Progress
-.progress {
-  &::-webkit-progress-value {
-    &:extend(.background-flair);
-  }
-
-  &:extend(.border-flair-small);
-}
-
 //Switch
 .switch-container {
   .switch-button-control {
@@ -479,17 +494,6 @@ button {
 }
 
 //Scrollbar
-.ps__thumb-x,
-.ps__thumb-y,
-.ps__rail-x:hover > .ps__thumb-x,
-.ps__rail-x:focus > .ps__thumb-x,
-.ps__rail-x.ps--clicking .ps__thumb-x,
-.ps__rail-y:hover > .ps__thumb-y,
-.ps__rail-y:focus > .ps__thumb-y,
-.ps__rail-y.ps--clicking .ps__thumb-y {
-  background: @flair-color !important;
-}
-
 .auto-scroll {
   &::-webkit-scrollbar-thumb {
     &:extend(.background-flair);
@@ -542,10 +546,6 @@ button {
 }
 
 //Video
-video {
-  &:extend(.glow-flair);
-}
-
 .plyr__control--overlaid {
   &:extend(.glow-flair);
   &:extend(.background-flair);
@@ -583,18 +583,8 @@ video {
 // Chatbar
 #chatbar {
   .chatbar-controls {
-    div[data-tooltip='Send'] {
-      &:extend(.font-flair);
-    }
     .send-message-btn {
       &:extend(.font-flair);
-    }
-  }
-  .chatbar-wrap {
-    .control-icon {
-      &:nth-child(4) {
-        &:extend(.font-flair);
-      }
     }
   }
 
@@ -716,19 +706,7 @@ video {
   &:extend(.color-flair);
 }
 
-li .is-active,
-li.active,
-input.date-input {
-  &:extend(.background-flair);
-  &:extend(.glow-flair);
-  border: none !important;
-}
-
 // ------------- Ui Elements-------------
-
-* {
-  border-color: var(--flair-color);
-}
 
 // Chatbar
 #chatbar {
@@ -779,14 +757,16 @@ input.date-input {
     background: @semitransparent-lightest-gradient !important;
   }
 }
+
 ::placeholder {
   color: @text-muted !important;
 }
+
 .is-primary.input,
 .is-dark.input {
   &:extend(.input-bg);
   &:extend(.font-primary);
-  border: none;
+  border-color: transparent;
 
   &:active,
   &:focus {
@@ -831,10 +811,6 @@ input.date-input {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
       &:extend(.border-flair-small);
-
-      &::placeholder {
-        &:extend(.font-secondary);
-      }
     }
     .date-icon {
       &:extend(.font-secondary);
@@ -882,7 +858,6 @@ input.date-input {
   font-size: 11pt;
 }
 
-// Generic
 #aside-box {
   #actions {
     &:hover {
@@ -902,27 +877,6 @@ input.date-input {
 
 .mg-half {
   margin: @light-spacing 0 !important;
-}
-
-li.active {
-  &:extend(.background-flair-gradient);
-}
-
-*:focus {
-  outline: none;
-}
-
-*:active {
-  outline: none;
-}
-
-code {
-  &:extend(.background-semitransparent-lighter);
-  &:extend(.font-flair);
-}
-
-strong {
-  &:extend(.font-secondary);
 }
 
 .locked,
@@ -964,15 +918,6 @@ strong {
   }
 }
 
-a.link {
-  &:extend(.font-flair);
-
-  &:hover {
-    &:extend(.font-flair);
-    &:extend(.glow-flair);
-  }
-}
-
 .alpha-divider,
 .search-option-heading,
 .vc-weekday {
@@ -985,13 +930,6 @@ a.link {
     &:extend(.font-primary);
   }
   &:extend(.font-flair);
-}
-
-li .is-active,
-li.active {
-  &:extend(.background-flair);
-  &:extend(.glow-flair);
-  border: none !important;
 }
 
 .user {

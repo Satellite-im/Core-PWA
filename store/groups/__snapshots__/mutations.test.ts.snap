@@ -179,6 +179,92 @@ Object {
 }
 `;
 
+exports[`mutations.default.setGroupMembers 4 1`] = `
+Object {
+  "all": Array [
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "nihil",
+      "lastUpdate": 0,
+      "members": Array [],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [],
+      "name": "",
+      "openInvites": true,
+    },
+  ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+}
+`;
+
+exports[`mutations.default.setGroupMembers 5 1`] = `
+Object {
+  "all": Array [
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "nihil",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_3",
+          "name": "name_3",
+          "photoHash": "photoHash_3",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
+    },
+    Object {
+      "address": "",
+      "addresses": Array [],
+      "admin": "",
+      "creator": "",
+      "encryptionKey": "",
+      "id": "groupId_1",
+      "lastUpdate": 0,
+      "members": Array [
+        Object {
+          "address": "address_5_0",
+          "name": "name_5_0",
+          "photoHash": "photoHash_5_0",
+          "status": "",
+        },
+        Object {
+          "address": "address_5_1",
+          "name": "name_5_1",
+          "photoHash": "photoHash_5_1",
+          "status": "",
+        },
+      ],
+      "name": "",
+      "openInvites": true,
+    },
+  ],
+  "groupSubscriptions": Array [],
+  "inviteSubscription": null,
+}
+`;
+
 exports[`mutations.default.updateGroup 0 1`] = `undefined`;
 
 exports[`mutations.default.updateGroup 1 1`] = `undefined`;

@@ -71,10 +71,12 @@ export class UserInfoManager {
   async updateRecord({
     consentToScan,
     blockNsfw,
+    flipVideo,
     filesVersion,
   }: {
     consentToScan?: boolean
     blockNsfw?: boolean
+    flipVideo?: boolean
     filesVersion?: number
   }): Promise<UserThreadData | undefined> {
     const record = await this.getUserRecord()
@@ -84,6 +86,7 @@ export class UserInfoManager {
           userAddress: this.textile.wallet.address,
           consentToScan,
           blockNsfw,
+          flipVideo,
           filesVersion,
         },
       ])
@@ -100,6 +103,11 @@ export class UserInfoManager {
       await this.textile.client.save(this.threadID, CollectionName, [record])
       return record
     }
+    if (typeof flipVideo === 'boolean') {
+      record.flipVideo = flipVideo
+      await this.textile.client.save(this.threadID, CollectionName, [record])
+      return record
+    }
     if (filesVersion) {
       record.filesVersion = filesVersion
       await this.textile.client.save(this.threadID, CollectionName, [record])
@@ -110,7 +118,7 @@ export class UserInfoManager {
   async getThreadName(): Promise<string> {
     const crypto = new Crypto()
     const name = crypto.signMessageWithKey(
-      this.textile.wallet.keypair.secretKey,
+      Buffer.from(this.textile.wallet.privateKey),
       `csam`,
     )
 

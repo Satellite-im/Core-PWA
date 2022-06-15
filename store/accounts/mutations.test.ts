@@ -136,6 +136,19 @@ describe('init', () => {
     })
   })
 
+  it('should setProfilePicture without state.details', () => {
+    const localStateForUnitTest = { ...state }
+    localStateForUnitTest.details = undefined
+    inst.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: undefined,
+    })
+  })
+
   it('should setUserDetails', () => {
     const localStateForUnitTest = { ...state }
     const newDetails = {
@@ -153,6 +166,27 @@ describe('init', () => {
         profilePicture: newDetails.photoHash,
         address: localStateForUnitTest.active,
       },
+    })
+  })
+
+  it('should setUserPeerId', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setUserPeerId(localStateForUnitTest, 'peerId')
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: {
+        peerId: 'peerId',
+      },
+    })
+  })
+
+  it('should setUserPeerId without state.details', () => {
+    const localStateForUnitTest = { ...state }
+    localStateForUnitTest.details = undefined
+    inst.setUserPeerId(localStateForUnitTest, 'peerId')
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: undefined,
     })
   })
 

@@ -99,7 +99,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { type: \\"file\\" })",
+  "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { type: \\"file\\" })",
   "types": Array [
     IntersectionType {
       "_tag": "IntersectionType",
@@ -212,15 +212,23 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ payload: { url: string, name: string, size: number, type: string } }",
+      "name": "{ payload: { url: string, name: string, size: number, type: string, id: string } }",
       "props": Object {
         "payload": InterfaceType {
           "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ url: string, name: string, size: number, type: string }",
+          "name": "{ url: string, name: string, size: number, type: string, id: string }",
           "props": Object {
+            "id": StringType {
+              "_tag": "StringType",
+              "decode": [Function],
+              "encode": [Function],
+              "is": [Function],
+              "name": "string",
+              "validate": [Function],
+            },
             "name": StringType {
               "_tag": "StringType",
               "decode": [Function],
@@ -613,14 +621,14 @@ UnionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "(((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" })) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, reactedTo: string, type: \\"reaction\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { type: \\"file\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { type: \\"text\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { type: \\"media\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, pack: string } & { type: \\"glyph\\" }))",
+  "name": "(((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" })) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, reactedTo: string, type: \\"reaction\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { type: \\"file\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { type: \\"text\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { type: \\"media\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string, pack: string } & { type: \\"glyph\\" }))",
   "types": Array [
     TaggedUnionType {
       "_tag": "UnionType",
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" }))",
+      "name": "((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" }))",
       "tag": "replyType",
       "types": Array [
         IntersectionType {
@@ -798,7 +806,7 @@ UnionType {
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" })",
+          "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" })",
           "types": Array [
             IntersectionType {
               "_tag": "IntersectionType",
@@ -911,15 +919,23 @@ UnionType {
               "decode": [Function],
               "encode": [Function],
               "is": [Function],
-              "name": "{ payload: { url: string, name: string, size: number, type: string } }",
+              "name": "{ payload: { url: string, name: string, size: number, type: string, id: string } }",
               "props": Object {
                 "payload": InterfaceType {
                   "_tag": "InterfaceType",
                   "decode": [Function],
                   "encode": [Function],
                   "is": [Function],
-                  "name": "{ url: string, name: string, size: number, type: string }",
+                  "name": "{ url: string, name: string, size: number, type: string, id: string }",
                   "props": Object {
+                    "id": StringType {
+                      "_tag": "StringType",
+                      "decode": [Function],
+                      "encode": [Function],
+                      "is": [Function],
+                      "name": "string",
+                      "validate": [Function],
+                    },
                     "name": StringType {
                       "_tag": "StringType",
                       "decode": [Function],
@@ -1326,7 +1342,7 @@ UnionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { type: \\"file\\" })",
+      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { type: \\"file\\" })",
       "types": Array [
         IntersectionType {
           "_tag": "IntersectionType",
@@ -1439,15 +1455,23 @@ UnionType {
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ payload: { url: string, name: string, size: number, type: string } }",
+          "name": "{ payload: { url: string, name: string, size: number, type: string, id: string } }",
           "props": Object {
             "payload": InterfaceType {
               "_tag": "InterfaceType",
               "decode": [Function],
               "encode": [Function],
               "is": [Function],
-              "name": "{ url: string, name: string, size: number, type: string }",
+              "name": "{ url: string, name: string, size: number, type: string, id: string }",
               "props": Object {
+                "id": StringType {
+                  "_tag": "StringType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "string",
+                  "validate": [Function],
+                },
                 "name": StringType {
                   "_tag": "StringType",
                   "decode": [Function],
@@ -2329,7 +2353,7 @@ TaggedUnionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" }))",
+  "name": "((({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"text\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" }) | (({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: string } & { repliedTo: string, replyType: \\"media\\", type: \\"reply\\" }))",
   "tag": "replyType",
   "types": Array [
     IntersectionType {
@@ -2507,7 +2531,7 @@ TaggedUnionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" })",
+      "name": "(({ id: string, at: number, from: string, to: string } & Partial<{ readAt: number }> & Partial<{ editedAt: number }> & Partial<{ editingAt: number }>) & { payload: { url: string, name: string, size: number, type: string, id: string } } & { repliedTo: string, replyType: \\"file\\", type: \\"reply\\" })",
       "types": Array [
         IntersectionType {
           "_tag": "IntersectionType",
@@ -2620,15 +2644,23 @@ TaggedUnionType {
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ payload: { url: string, name: string, size: number, type: string } }",
+          "name": "{ payload: { url: string, name: string, size: number, type: string, id: string } }",
           "props": Object {
             "payload": InterfaceType {
               "_tag": "InterfaceType",
               "decode": [Function],
               "encode": [Function],
               "is": [Function],
-              "name": "{ url: string, name: string, size: number, type: string }",
+              "name": "{ url: string, name: string, size: number, type: string, id: string }",
               "props": Object {
+                "id": StringType {
+                  "_tag": "StringType",
+                  "decode": [Function],
+                  "encode": [Function],
+                  "is": [Function],
+                  "name": "string",
+                  "validate": [Function],
+                },
                 "name": StringType {
                   "_tag": "StringType",
                   "decode": [Function],

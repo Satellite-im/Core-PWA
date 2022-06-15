@@ -20,7 +20,7 @@
       class="search-input"
     />
     <div class="scrolling hidden-scroll friends">
-      <UiScroll vertical-scroll enable-wrap scrollbar-visibility="scroll">
+      <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
         <div class="columns friends-list">
           <div class="column is-half-desktop">
             <!-- Friend Requests -->
@@ -80,7 +80,7 @@
             </template>
           </div>
         </div>
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 </template>
@@ -97,7 +97,6 @@ import { FriendRequest } from '~/types/ui/friends'
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 declare module 'vue/types/vue' {
   interface Vue {
-    friends: any
     initRoute: () => void
   }
 }

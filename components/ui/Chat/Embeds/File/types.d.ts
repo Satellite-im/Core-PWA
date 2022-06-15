@@ -1,6 +1,7 @@
-export type FileData = {
-  filename: String
-  size: Number
-  type: String
-  src: String
+export type FileMessagePayload = {
+  url: string
+  name: string
+  size: number
+  type: string
+  id: string
 }

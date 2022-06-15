@@ -7,11 +7,17 @@
   />
   <div v-if="showCropper" class="cropper-mask" />
   <div class="modal-body">
-    <form @submit="confirm">
+    <form @submit="confirm" novalidate>
       <div class="custom-modal-content">
         <div class="columns">
           <div class="column image">
-            <UiCircle type="image" :source="croppedImage" :size="120" />
+            <UiCircle
+              type="image"
+              :type="croppedImage ? 'image' : 'random'"
+              :seed="accountAddress"
+              :source="croppedImage"
+              :size="120"
+            />
           </div>
           <div class="column align">
             <TypographyText
@@ -44,6 +50,9 @@
             v-model="name"
             input-kind="text"
             type="primary"
+            :minLength="$Config.account.minLength"
+            :maxLength="$Config.account.maxLength"
+            :invalid="isInvalidName && Boolean(error)"
           />
         </div>
 

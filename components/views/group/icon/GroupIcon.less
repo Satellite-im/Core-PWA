@@ -5,77 +5,73 @@
     border-radius: @half;
   }
 
-  .group-multi {
+  .group {
     width: 40px;
     height: 40px;
     position: relative;
 
-    & > div {
-      position: absolute;
+    &.multi {
+      & > div {
+        position: absolute;
+      }
+
+      .group-el-0 {
+        right: 0;
+        top: 0;
+      }
+
+      .group-el-1 {
+        left: 0px;
+        bottom: 5px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .group-el-2 {
+        top: 0;
+        left: 0;
+        width: 15px;
+        height: 15px;
+      }
     }
 
-    .group-el-1 {
-      left: 0px;
-      bottom: 5px;
-      width: 20px;
-      height: 20px;
+    &.double {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div {
+        position: absolute;
+      }
+
+      .group-el-0 {
+        top: 5px;
+        left: 0;
+      }
+
+      .group-el-1 {
+        bottom: 5px;
+        right: 0;
+      }
     }
 
-    .group-el-2 {
-      top: 0;
-      left: 0;
-      width: 15px;
-      height: 15px;
+    &.single {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    .group-el-0 {
-      right: 0;
-      top: 0;
-    }
-  }
-
-  .group-double {
-    width: 40px;
-    height: 40px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-
-    .group-el-0 {
-      position: absolute;
-      top: 5px;
-      left: 0;
-    }
-
-    .group-el-1 {
-      position: absolute;
-      bottom: 5px;
-      right: 0;
-    }
-  }
-
-  .group-single {
-    width: 40px;
-    height: 40px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   &.unread {
     position: relative;
-
-    &:extend(.first-layer);
 
     .label {
       position: absolute;
       bottom: 0;
       right: 0;
       font-size: @micro-text-size;
-      border-radius: @half;
+      border-radius: 16px;
       line-height: 1.2;
       padding: 0.1rem 0.27rem;
       text-align: center;

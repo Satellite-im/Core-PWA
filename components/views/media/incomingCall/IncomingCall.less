@@ -7,11 +7,23 @@
   height: 400px;
 }
 
+.caller {
+  height: @full;
+  text-align: center;
+}
+
 .user-profile-picture {
   background-size: cover !important;
   background-position: center !important;
   height: 80%;
   &:extend(.full-width);
+}
+
+.user-profile-placeholder {
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  margin-left: -60px;
 }
 
 .gradient-cover {
@@ -34,10 +46,13 @@
 
 .user-info {
   .user-name {
+    &:extend(.ellipsis);
     color: #fff;
     font-size: 25px;
     font-family: @primary-font;
     margin-bottom: 0;
+    width: 100%;
+    text-align: center;
   }
   .user-status {
     opacity: 0.5;
@@ -73,6 +88,11 @@
   .content {
     &:extend(.full-width);
     height: @full;
+    width: @full;
+  }
+
+  .user-profile-placeholder {
+    bottom: 300px;
   }
 
   .user-info {

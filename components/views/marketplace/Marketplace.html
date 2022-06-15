@@ -45,16 +45,11 @@
         </InteractablesButtonGroup>
       </div>
       <div class="listing-panel">
-        <UiScroll
-          verticalScroll
-          scrollbarVisibility="scroll"
-          enableWrap
-          noPadding
-        >
+        <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
           <MarketplaceListing v-if="subject==='Themes'" />
           <MarketplaceGlyphs v-if="subject==='Glyphs'" />
           <MarketplaceNfts v-if="subject==='NFTs'" />
-        </UiScroll>
+        </UiSimpleScroll>
       </div>
     </swiper-slide>
   </swiper>

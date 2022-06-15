@@ -1,8 +1,7 @@
 <div id="group">
-  <UiChatEncrypted />
-  <Conversation
-    :messages="groupedMessages"
-    :loading="$store.state.textile.conversationLoading || !getInitialized"
-    :groupId="groupID"
-  />
+  <!-- <UiLoadersMessage
+    :count="6"
+    v-if="$store.state.textile.conversationLoading || !getInitialized"
+  /> -->
+  <Conversation :groupId="groupID" />
 </div>

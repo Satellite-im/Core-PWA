@@ -86,7 +86,8 @@ export default Vue.extend({
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
-            { text: this.$t('context.edit'), func: this.editMessage },
+            // { text: this.$t('context.edit'), func: this.editMessage },
+            // skipped due to edit message is now coming soon and this shouldn't appear on context menu
           ]
         }
         // another persons text message
@@ -196,11 +197,11 @@ export default Vue.extend({
       this.$toast.show(this.$t('ui.copied') as string)
     },
     saveImage() {
-      const a = document.createElement('a')
-      a.setAttribute('type', 'hidden')
-      a.setAttribute('download', 'download')
-      a.href = URL.createObjectURL(this.blob)
-      a.click()
+      this.$TextileManager.sharedBucket?.pullFile(
+        this.message.payload.id,
+        this.message.payload.name,
+        this.message.payload.size,
+      )
     },
     /**
      * @method toPng

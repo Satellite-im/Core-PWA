@@ -5,7 +5,7 @@ import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
 import {
-  FileSystemExport,
+  PersonalBucketIndex,
   ExportItem,
   FILESYSTEM_TYPE,
   ExportFile,
@@ -95,9 +95,9 @@ export class FilSystem {
 
   /**
    * @getter export
-   * @returns {FileSystemExport} returns exported filesystem object
+   * @returns {PersonalBucketIndex} returns exported filesystem object
    */
-  get export(): FileSystemExport {
+  get export(): PersonalBucketIndex {
     return {
       type: FILESYSTEM_TYPE.DEFAULT,
       version: ++this._version,
@@ -242,10 +242,10 @@ export class FilSystem {
 
   /**
    * @method import
-   * @param {FileSystemExport} fs
+   * @param {PersonalBucketIndex} fs
    * @description sets global file system based on parameter. will be fetched from Bucket
    */
-  public async import(fs: FileSystemExport) {
+  public async import(fs: PersonalBucketIndex) {
     for (const item of fs.content) {
       await this.importChildren(item)
     }

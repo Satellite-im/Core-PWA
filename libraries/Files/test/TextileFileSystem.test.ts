@@ -10,9 +10,9 @@ Vue.prototype.$TextileManager = new TextileManager()
 describe('', () => {
   Vue.prototype.$TextileManager = new TextileManager()
   const TMConstructor = Vue.prototype.$TextileManager
-  TMConstructor.bucket = jest.fn()
-  TMConstructor.bucket.removeFile = jest.fn()
-  TMConstructor.bucket.pushFile = jest.fn()
+  TMConstructor.personalBucket = jest.fn()
+  TMConstructor.personalBucket.removeFile = jest.fn()
+  TMConstructor.personalBucket.pushFile = jest.fn()
   const TextileFileSystemConstructor = new TextileFileSystem()
   const inst = TextileFileSystemConstructor
   const state = inst.bucket
@@ -24,7 +24,7 @@ describe('', () => {
 
   test('TextileFileSystem.removeFile', async () => {
     await inst.removeFile('TestFile.png')
-    expect(TMConstructor.bucket.removeFile).toHaveBeenCalled()
+    expect(TMConstructor.personalBucket.removeFile).toHaveBeenCalled()
   })
 
   test('TextileFileSystem.uploadFile', async () => {
@@ -41,7 +41,7 @@ describe('', () => {
     }
 
     await inst.uploadFile(testFile, nsfw, cbFunction)
-    expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
+    expect(TMConstructor.personalBucket.pushFile).toHaveBeenCalled()
   })
 
   // This test is skipped due to it exceeding the timeout (5000 ms).
@@ -59,7 +59,7 @@ describe('', () => {
     }
 
     await inst.uploadFile(testBlobFile, nsfw, cbFunction)
-    expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
+    expect(TMConstructor.personalBucket.pushFile).toHaveBeenCalled()
   })
 
   test.skip('TextileFileSystem.uploadFile for png file', async () => {
@@ -75,6 +75,6 @@ describe('', () => {
     }
 
     await inst.uploadFile(testBlobFile, nsfw, cbFunction)
-    expect(TMConstructor.bucket.pushFile).toHaveBeenCalled()
+    expect(TMConstructor.personalBucket.pushFile).toHaveBeenCalled()
   })
 })

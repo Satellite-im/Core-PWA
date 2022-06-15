@@ -525,6 +525,108 @@ describe('mutations.default.setGroupMembers', () => {
     mutations.default.setGroupMembers(state, m3)
     expect(state).toMatchSnapshot()
   })
+
+  test('4', () => {
+    const state = getState()
+    state.all[0].id = 'nihil'
+
+    mutations.default.setGroupMembers(state, {
+      groupId: 'groupId_3',
+      members: [
+        {
+          address: 'address_3',
+          name: 'name_3',
+          photoHash: 'photoHash_3',
+          status: '',
+        },
+      ],
+    })
+
+    expect(state.all[0].members).toEqual([])
+    expect(state).toMatchSnapshot()
+  })
+
+  test('5', () => {
+    const state = getState()
+    state.all[0].id = 'nihil'
+
+    mutations.default.setGroupMembers(state, {
+      groupId: 'nihil',
+      members: [
+        {
+          address: 'address_3',
+          name: 'name_3',
+          photoHash: 'photoHash_3',
+          status: '',
+        },
+      ],
+    })
+    mutations.default.setGroupMembers(state, {
+      groupId: 'groupId_1',
+      members: [
+        {
+          address: 'address_5_0',
+          name: 'name_5_0',
+          photoHash: 'photoHash_5_0',
+          status: '',
+        },
+        {
+          address: 'address_5_1',
+          name: 'name_5_1',
+          photoHash: 'photoHash_5_1',
+          status: '',
+        },
+      ],
+    })
+
+    expect(state.all).toEqual([
+      {
+        address: '',
+        addresses: [],
+        admin: '',
+        creator: '',
+        encryptionKey: '',
+        id: 'nihil',
+        lastUpdate: 0,
+        members: [
+          {
+            address: 'address_3',
+            name: 'name_3',
+            photoHash: 'photoHash_3',
+            status: '',
+          },
+        ],
+        name: '',
+        openInvites: true,
+      },
+      {
+        address: '',
+        addresses: [],
+        admin: '',
+        creator: '',
+        encryptionKey: '',
+        id: 'groupId_1',
+        lastUpdate: 0,
+        members: [
+          {
+            address: 'address_5_0',
+            name: 'name_5_0',
+            photoHash: 'photoHash_5_0',
+            status: '',
+          },
+          {
+            address: 'address_5_1',
+            name: 'name_5_1',
+            photoHash: 'photoHash_5_1',
+            status: '',
+          },
+        ],
+        name: '',
+        openInvites: true,
+      },
+    ])
+    expect(state).toMatchSnapshot()
+  })
 })
 
 describe('misc', () => {

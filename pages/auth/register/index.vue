@@ -2,8 +2,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import { RegistrationStatus } from '~/store/accounts/types'
+import { RootState } from '~/types/store/store'
 import { UserRegistrationData } from '~/types/ui/user'
 
 export default Vue.extend({
@@ -17,13 +19,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('accounts', ['getRegistrationStatus']),
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+    }),
     ...mapGetters(['allPrerequisitesReady']),
-    hasToRegister() {
-      return this.getRegistrationStatus === RegistrationStatus.UNKNOWN
+    hasToRegister(): boolean {
+      return this.accounts.registrationStatus === RegistrationStatus.UNKNOWN
     },
-    registrationStep() {
-      switch (this.getRegistrationStatus) {
+    registrationStep(): TranslateResult {
+      switch (this.accounts.registrationStatus) {
         case RegistrationStatus.IN_PROGRESS:
           return this.$i18n.t('user.registration.reg_status.in_progress')
         case RegistrationStatus.FUNDING_ACCOUNT:
@@ -36,13 +40,12 @@ export default Vue.extend({
           return this.$i18n.t('user.loading.loading_account')
       }
     },
-    isRegistered() {
-      return this.getRegistrationStatus === RegistrationStatus.REGISTERED
+    isRegistered(): boolean {
+      return this.accounts.registrationStatus === RegistrationStatus.REGISTERED
     },
   },
   watch: {
     allPrerequisitesReady(nextValue) {
-      console.log(nextValue)
       if (!nextValue) return
       this.$router.replace('/chat/direct')
     },

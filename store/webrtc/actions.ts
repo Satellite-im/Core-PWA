@@ -276,7 +276,7 @@ const webRTCActions = {
    * @param peerId Peer ID of the owner of the stream
    * @param kind Kind of the stream (audio/video/screen)
    */
-  toggleMute(
+  async toggleMute(
     { state, dispatch, commit }: ActionsArguments<WebRTCState>,
     { peerId, kind }: { peerId: string; kind: 'audio' | 'video' | 'screen' },
   ) {
@@ -288,13 +288,12 @@ const webRTCActions = {
       return
     }
     const isMuted = state.streamMuted[peerId]?.[kind]
-    commit('audio/setMuted', isMuted)
     if (isMuted) {
-      call.unmute({ peerId, kind })
+      await call.unmute({ peerId, kind })
       dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
-    call.mute({ peerId, kind })
+    await call.mute({ peerId, kind })
     dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
@@ -320,7 +319,7 @@ const webRTCActions = {
    * this.$store.dispatch('webrtc/initialize', { callId: 'groupId1', peerIds: ['userid1', 'userid2'] })
    */
   async createCall(
-    { commit, state, rootState }: ActionsArguments<WebRTCState>,
+    { commit, state, rootState, dispatch }: ActionsArguments<WebRTCState>,
     {
       callId,
       peerIds,
@@ -429,6 +428,7 @@ const webRTCActions = {
       if (rootState.audio.muted) {
         call.mute({ peerId: localId, kind: 'audio' })
       }
+      commit('video/setDisabled', true, { root: true })
     }
     call.on('CONNECTED', onCallConnected)
 
@@ -450,13 +450,22 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
+      let muted = false
+      if (kind === 'audio') {
+        muted = rootState.audio.muted
+      } else if (kind === 'video') {
+        muted = rootState.video.disabled
+      }
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted: rootState.audio.muted,
+        muted:
+          kind === 'audio' ? rootState.audio.muted : rootState.video.disabled,
       })
-      if (rootState.audio.muted) {
+      if (kind === 'audio' && rootState.audio.muted) {
         call.mute({ peerId: localId, kind: 'audio' })
+      } else if (kind === 'video' && rootState.video.disabled) {
+        call.mute({ peerId: localId, kind: 'video' })
       }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -515,11 +524,6 @@ const webRTCActions = {
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
       )
-      commit('setMuted', {
-        peerId,
-        kind,
-        muted: true,
-      })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
 
@@ -572,6 +576,7 @@ const webRTCActions = {
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
       commit('conversation/setCalling', false, { root: true })
+      commit('ui/fullscreen', false, { root: true })
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
       call.off('CONNECTED', onCallConnected)
@@ -586,6 +591,7 @@ const webRTCActions = {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
+      dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
     }
     call.on('DESTROY', onCallDestroy)
   },
@@ -595,11 +601,12 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/deny')
    */
-  denyCall({ state }: ActionsArguments<WebRTCState>) {
+  denyCall({ state, dispatch }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
     if (state.incomingCall) {
       $WebRTC.getCall(state.incomingCall.callId)?.destroy()
     }
+    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method hangUp
@@ -607,12 +614,13 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/hangUp')
    */
-  hangUp({ state, commit }: ActionsArguments<WebRTCState>) {
+  hangUp({ state, commit, dispatch }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) {
       $WebRTC.getCall(state.activeCall.callId)?.destroy()
     }
     commit('setActiveCall', undefined)
     commit('setIncomingCall', undefined)
+    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method call
@@ -675,7 +683,6 @@ const webRTCActions = {
 
     commit('setIncomingCall', undefined)
     commit('setActiveCall', { callId })
-    commit('updateCreatedAt', Date.now())
     await call.createLocalTracks(kinds)
     await call.start()
   },

@@ -18,18 +18,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['media']),
     ...mapGetters('textile', ['getInitialized']),
-    groupedMessages() {
-      const { id } = this.$route.params
-      const conversation = this.$typedStore.state.textile.conversations[id]
-
-      if (!conversation) {
-        return []
-      }
-
-      const { messages, replies, reactions } = conversation
-
-      return groupMessages(messages, replies, reactions)
-    },
   },
   watch: {
     getInitialized: {

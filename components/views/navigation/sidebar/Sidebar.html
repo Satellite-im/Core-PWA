@@ -63,7 +63,6 @@
     <Slimbar
       v-if="$device.isMobile"
       :servers="$mock.servers"
-      :unreads="users"
       :open-modal="toggleModal"
       horizontal
     />
@@ -86,22 +85,25 @@
         <plus-circle-icon size="1x" />
       </div>
     </div>
-    <FriendsQuick v-click-outside="()=>toggleModal('quickchat')" />
+    <FriendsQuick
+      v-if="ui.modals.quickchat"
+      v-click-outside="()=>toggleModal('quickchat')"
+    />
     <div
+      v-if="ui.showSidebarUsers"
       class="scrolling hidden-scroll users"
       v-scroll-lock="true"
-      v-if="ui.showSidebarUsers"
     >
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <UiLoadersAddress
           v-if="dataState.friends === DataStateType.Loading"
           :count="4"
           inverted
         />
-        <div v-else-if="users && users.length">
+        <div v-else-if="friends.all && friends.all.length">
           <UiInlineNotification
-            :text="$t('messaging.new_messages')"
             v-if="ui.unreadMessage.length"
+            :text="$t('messaging.new_messages')"
           />
           <div v-for="thing in usersAndGroups">
             <User
@@ -120,7 +122,7 @@
           </div>
         </div>
         <div
-          v-else-if="dataState.friends !== DataStateType.Loading && !users.length"
+          v-else-if="dataState.friends !== DataStateType.Loading && !friends.all.length"
           class="mascot-container"
         >
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
@@ -136,7 +138,7 @@
           </InteractablesButton>
         </div>
         <UiLoadersAddress v-else :count="4" inverted />
-      </UiScroll>
+      </UiSimpleScroll>
     </div>
   </div>
 

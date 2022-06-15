@@ -7,7 +7,7 @@ export default {
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
-    sidebar_search: 'Friends and Group search\ncoming soon',
+    sidebar_search: 'Friends and Group Search\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
@@ -30,11 +30,9 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    are: 'are',
-    is: 'is',
     live: 'Live',
     edited: 'edited',
-    online: 'All Users are offline | {name} is online | {name} are online',
+    online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
   },
   wallet: {
@@ -69,21 +67,19 @@ export default {
     groups: 'Groups',
     pin: 'Pin',
     reply: 'Reply',
-    typing: 'typing',
-    many_typing: 'many users are typing',
+    typing: '{user} is typing | {user} are typing',
     new_messages: 'New Messages',
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
       user: '{user} sent you a {msgType}',
     },
-    user_sent_image: {
-      me: 'you sent an {msgType}',
-      user: 'user sent you an {msgType}',
-    },
     user_sent_something: {
       me: 'you sent something',
       user: 'user sent you something',
+    },
+    user_sent_group_message: {
+      user: '{user} posted in {group}',
     },
     pinned: {
       archived_messages: 'Archived Messages',
@@ -117,7 +113,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit',
+    edit: 'Edit\nComing Soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -401,6 +397,10 @@ export default {
               "Select which video device you'd like to share your beautiful smile from.",
           },
         },
+        flipVideo: {
+          title: 'Mirror Video',
+          subtitle: 'Gaze upon your reflection with mirrored video enabled.',
+        },
       },
       screen: {
         title: 'Screen Share',
@@ -516,7 +516,7 @@ export default {
       add_channel: 'Add Channel',
       group_invite: 'Invite new member',
       group_invite_description:
-        'Select one of your friends to add him to the group',
+        'Select one of your friends to add them to the group',
       new_message: 'messages',
       jump_to_current: 'View New Messages',
       chat_now: 'chat now',
@@ -538,6 +538,10 @@ export default {
       new_group_name: 'Add a group name here...',
       older_messages: 'You are viewing older messages',
       recent_messages: 'Go to most recent messages',
+      infinite_scroll: {
+        loading: 'Loading messages ...',
+        no_more: 'No more data.',
+      },
     },
     newMessage: {
       new_message: 'New Message',
@@ -556,6 +560,7 @@ export default {
       select_friends: 'Invite your friends to this server',
       server_name_error: 'Server name must be at least 5 characters.',
       select_friends_placeholder: 'Search friends...',
+      user_picker_empty: 'No friends found',
     },
   },
   conversation: {
@@ -598,6 +603,8 @@ export default {
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
+      group_name:
+        'Enter a group name of at least {min} characters, up to {max}',
     },
     textile: {
       friend_not_found: 'Friend not found',
@@ -651,7 +658,8 @@ export default {
         'Customize how the world sees you, choose something memorable.',
       username: 'Username',
       username_placeholder: 'Neil Spaceman...',
-      username_error: 'Username must be at least 5 characters.',
+      username_error:
+        'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
       reg_status: {
@@ -679,11 +687,10 @@ export default {
     sent: 'Sent',
     no_friend_request: 'You have no new friend requests.',
     outgoing: 'Outgoing requests',
-    all: 'List of friends',
     blocked_friends: 'Blocked friends',
     blocked: 'Blocked',
     no_blocked: 'You have no blocked users, yay!',
-    search_placeholder: 'Some User...',
+    search_placeholder: 'Search friends...',
     add: 'Add Friend',
     add_description:
       "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
@@ -708,7 +715,7 @@ export default {
     },
   },
   market_place: {
-    title: 'Marketplace',
+    title: 'Marketplace\nComing soon',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',
@@ -775,7 +782,7 @@ export default {
     delete: 'Delete',
     // friends
     send: 'Send Message',
-    voice: 'Voice Call',
+    voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     profile: 'Profile',

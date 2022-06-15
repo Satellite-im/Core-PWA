@@ -6,7 +6,7 @@
   padding: @normal-spacing @light-spacing @light-spacing;
   display: inline-block;
   width: 224px;
-  margin: @normal-spacing @light-spacing;
+  margin: @light-spacing @light-spacing;
   &:first-child {
     margin-left: 0;
   }
@@ -20,6 +20,7 @@
     background-color: transparent;
     color: @flair-color;
     cursor: pointer;
+    border: none;
   }
 
   .file-info {
@@ -37,6 +38,7 @@
     .subtitle {
       font-size: @mini-text-size;
       margin-bottom: 0;
+      display: block;
     }
   }
 
@@ -60,10 +62,6 @@
     width: 192px;
     height: 110px;
     position: relative;
-  }
-
-  .loading-bar {
-    max-width: 100%;
   }
 
   .thumbnail {

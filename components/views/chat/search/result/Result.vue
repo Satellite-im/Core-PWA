@@ -136,9 +136,9 @@ export default Vue.extend({
       })
       this.isLoading = DataStateType.Ready
     },
-    handleClickPaginate(pageNum: number) {
+    async handleClickPaginate(pageNum: number) {
       this.page = pageNum
-      this.fetchResult()
+      await this.fetchResult()
     },
     onChange(value: any) {
       this.queryOptions = {

@@ -4,6 +4,7 @@
     class="coming-soon-container"
     :class="`${disabled ? 'disabled' : 'grayscaled'}`"
     v-tooltip="{content:tooltipText, placement:tooltipPosition}"
+    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
   >
     <div
       :class="`coming-soon ${horizontal ? 'horizontal' : ''}`"

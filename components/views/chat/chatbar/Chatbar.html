@@ -19,7 +19,6 @@
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload
-        v-if="recipient"
         :recipient="recipient"
         ref="file-upload"
         :files="files"
@@ -49,10 +48,5 @@
       id="chatbar-controls"
     />
   </div>
-  <ChatbarFooter
-    :text="text"
-    :charlimit="charlimit"
-    :typing="recipientTyping"
-    :usersTyping="activeFriend ? [ activeFriend ] : []"
-  />
+  <ChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

@@ -24,7 +24,7 @@
     />
   </div>
   <div class="scrolling hidden-scroll friends">
-    <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
       <div
         v-if="dataState.friends !== DataStateType.Loading && searchResult.length"
       >
@@ -36,6 +36,6 @@
           :selectUserAddress="selectUserAddress"
         />
       </div>
-    </UiScroll>
+    </UiSimpleScroll>
   </div>
 </div>

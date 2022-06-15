@@ -75,19 +75,21 @@
       :perPage="queryOptions.perPage"
       @toggleOrder="toggleOrderBy"
     />
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
-      class="search-result-content"
-    >
-      <div class="search-result-inner">
-        <SearchResultItem
-          v-for="item, i in result.data"
-          :data="item"
-          :key="i"
-        />
-      </div>
-    </UiScroll>
+    <div class="search-result-content">
+      <UiSimpleScroll
+        :scrollTopOnChange="page"
+        scrollMode="vertical"
+        scrollShow="scroll"
+      >
+        <div class="search-result-inner">
+          <SearchResultItem
+            v-for="item, i in result.data"
+            :data="item"
+            :key="i"
+          />
+        </div>
+      </UiSimpleScroll>
+    </div>
     <paginate
       v-if="result.totalRows > queryOptions.perPage"
       :page-count="Math.ceil(result.totalRows/queryOptions.perPage)"

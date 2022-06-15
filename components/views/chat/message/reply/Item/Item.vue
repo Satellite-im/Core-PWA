@@ -3,9 +3,9 @@
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { UIMessage, Group } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
 import {
   getUsernameFromState,
-  convertTimestampToDate,
   getAddressFromState,
 } from '~/utilities/Messaging'
 
@@ -34,8 +34,13 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui', 'friends', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      friends: (state) => (state as RootState).friends,
+      accounts: (state) => (state as RootState).accounts,
+    }),
     ...mapGetters('friends', ['findFriendByKey']),
+    ...mapGetters('settings', ['getTimestamp']),
     address() {
       if (!this.reply.from) {
         return ''
@@ -49,10 +54,7 @@ export default Vue.extend({
       return getUsernameFromState(this.reply.from, this.$store.state)
     },
     timestamp() {
-      if (!this.reply.at) {
-        return ''
-      }
-      return convertTimestampToDate(this.$t('friends.details'), this.reply.at)
+      return this.getTimestamp({ time: this.reply.at })
     },
     src(): string {
       // To check if the sender is you we just compare the from field

@@ -11,6 +11,7 @@ Object {
   "userThread": Object {
     "blockNsfw": true,
     "consentToScan": false,
+    "flipVideo": true,
   },
 }
 `;

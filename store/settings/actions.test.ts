@@ -44,4 +44,11 @@ describe('actions.default', () => {
       )
     }
   })
+
+  test('actions.default.clearLocalStorage successful but dexies does not exist', async () => {
+    Vue.prototype.$TextileManager = new TextileManager()
+    db.delete = jest.fn().mockReturnValue(true)
+    Dexie.exists = jest.fn().mockReturnValue(undefined)
+    await actions.default.clearLocalStorage()
+  })
 })

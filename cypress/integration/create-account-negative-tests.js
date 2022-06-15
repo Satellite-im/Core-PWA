@@ -26,7 +26,7 @@ describe('Create Account - Negative Tests', () => {
     //Clicking without adding a username will throw an error message
     cy.validateUserInputIsDisplayed()
     cy.get('[data-cy=sign-in-button]').click()
-    cy.contains('Username must be at least 5 characters.')
+    cy.contains('Enter a username of at least 5 characters, up to 32')
   })
 
   it('Try to create account with NSFW image', () => {
@@ -49,5 +49,51 @@ describe('Create Account - Negative Tests', () => {
       'have.text',
       'Unable to upload file/s due to NSFW status',
     )
+  })
+
+  it.skip('Logout user on /unlock page', () => {
+    // skipped due to textile/solana issues
+    cy.visit('/')
+    cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=create-account-button]').click()
+    cy.contains('I Saved It').click()
+    cy.get('[data-cy=username-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(randomName)
+    cy.intercept(
+      {
+        method: 'POST',
+        url: 'faucet.satellite.one/*',
+      },
+      (req) => {
+        req.destroy()
+      },
+    )
+    cy.get('[data-cy=sign-in-button]').click()
+    cy.intercept(
+      {
+        method: 'POST',
+        url: 'faucet.satellite.one/*',
+      },
+      (req) => {
+        req.destroy()
+      },
+    )
+    cy.intercept(
+      {
+        method: 'POST',
+        url: 'https://solana--devnet.datahub.figment.io/*',
+      },
+      (req) => {
+        req.destroy()
+      },
+    )
+    cy.contains('Oops! Please Stand By', { timeout: 90000 }).should(
+      'be.visible',
+    )
+    cy.contains('Try Again').click()
+    cy.validateChatPageIsLoaded()
   })
 })

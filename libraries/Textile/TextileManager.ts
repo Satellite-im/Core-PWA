@@ -1,24 +1,24 @@
-import { Bucket } from '../Files/remote/textile/Bucket'
 import { MetadataManager } from './MetadataManager'
 import { UserInfoManager } from './UserManager'
 import { Config } from '~/config'
-import BucketManager from '~/libraries/Textile/BucketManager'
+import { PersonalBucket } from '~/libraries/Files/remote/textile/PersonalBucket'
+import { SharedBucket } from '~/libraries/Files/remote/textile/SharedBucket'
 import { GroupChatManager } from '~/libraries/Textile/GroupChatManager'
 import IdentityManager from '~/libraries/Textile/IdentityManager'
 import { MailboxManager } from '~/libraries/Textile/MailboxManager'
+import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 import {
   Creds,
   TextileConfig,
   TextileInitializationData,
 } from '~/types/textile/manager'
-import { NotificationManager } from '~/libraries/Textile/NotificationManager'
 
 export default class TextileManager {
   creds?: Creds
   identityManager: IdentityManager
   mailboxManager?: MailboxManager
-  bucketManager?: BucketManager
-  bucket?: Bucket
+  personalBucket?: PersonalBucket
+  sharedBucket?: SharedBucket
   groupChatManager?: GroupChatManager
   metadataManager?: MetadataManager
   userInfoManager?: UserInfoManager
@@ -70,36 +70,37 @@ export default class TextileManager {
     }
 
     this.mailboxManager = new MailboxManager(textile, textile.wallet.address)
-    await this.mailboxManager.init()
-
-    this.bucketManager = new BucketManager(
-      textile,
-      textile.identity,
-      textile.wallet.address,
-    )
-    await this.bucketManager.init().catch((e) => console.log(e))
-
-    // Initialize bucket
-    this.bucket = new Bucket(textile)
-    await this.bucket.init(Config.textile.bucketName)
-
+    this.sharedBucket = new SharedBucket(textile)
+    this.personalBucket = new PersonalBucket(textile)
     // GroupChatManager initializes itself during the creation
     this.groupChatManager = new GroupChatManager(
       textile,
       textile.wallet.address,
       textile.identity,
     )
-    await this.groupChatManager.init()
     // MetadataManager initializes itself during the creation
     this.metadataManager = new MetadataManager(textile)
-    await this.metadataManager.init()
-
     // UserInfoManager initializes itself during the creation
     this.userInfoManager = new UserInfoManager(textile)
-    await this.userInfoManager.init()
-
     this.notificationManager = new NotificationManager(textile)
-    await this.notificationManager.init()
+
+    // we ran into bugs initializing both buckets in parallel. doing sharedBucket first because it will be fast
+    await this.sharedBucket.init({
+      name: Config.textile.sharedBucket,
+    })
+
+    // await the rest of the managers
+    await Promise.all([
+      this.mailboxManager.init(),
+      this.personalBucket.init({
+        name: Config.textile.personalBucket,
+        encrypted: true,
+      }),
+      this.groupChatManager.init(),
+      this.metadataManager.init(),
+      this.userInfoManager.init(),
+      this.notificationManager.init(),
+    ])
   }
 
   /**

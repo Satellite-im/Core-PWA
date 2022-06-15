@@ -1,6 +1,6 @@
 <template>
-  <div class="vertical-rule">
-    <div />
+  <div class="vertical-container">
+    <div class="vertical-rule" />
   </div>
 </template>
 <script lang="ts">
@@ -9,12 +9,12 @@ import Vue from 'vue'
 export default Vue.extend({})
 </script>
 <style scoped lang="less">
-div {
+.vertical-rule {
   width: 1px;
   height: 40px;
   background: @splash-radial;
 }
-div.vertical-rule {
-  margin: 0 @normal-spacing;
+.vertical-container {
+  padding: 0 @normal-spacing;
 }
 </style>

@@ -4,7 +4,6 @@
     <TypographySubtitle :size="6" :text="friend.name" data-cy="friend-name" />
     <TypographyText :text="friend.status" />
   </div>
-  <div class="spacer"></div>
   <div class="controls" v-if="request">
     <InteractablesButton
       v-if="loading !== 'decline'"
