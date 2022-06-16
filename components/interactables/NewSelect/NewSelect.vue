@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import keyCodes from './keyCodes'
+import { KeybindingEnum } from '~/libraries/Enums/enums'
 
 interface SelectOption {
   value: string
@@ -75,11 +75,11 @@ export default Vue.extend({
      * @param {KeyboardEvent} event The keydown event object
      */
     checkKeyDown(event: KeyboardEvent) {
-      const key = event.which || event.keyCode
+      const key = event.key
 
       switch (key) {
-        case keyCodes.UP:
-        case keyCodes.DOWN: {
+        case KeybindingEnum.ARROW_UP:
+        case KeybindingEnum.ARROW_DOWN: {
           event.preventDefault()
           const selectedItemIndex = this.options.findIndex(
             (option) => option.value === this.value,
@@ -88,7 +88,7 @@ export default Vue.extend({
             ? this.$refs.options[selectedItemIndex]
             : this.$refs.options[0]
 
-          if (key === keyCodes.UP) {
+          if (key === KeybindingEnum.ARROW_UP) {
             // If there's an option above the selected one
             if (selectedItemIndex - 1 >= 0) {
               // Assign the previous option to nextItem
@@ -108,18 +108,18 @@ export default Vue.extend({
 
           break
         }
-        case keyCodes.HOME:
-        case keyCodes.PAGE_UP:
+        case KeybindingEnum.HOME:
+        case KeybindingEnum.PAGE_UP:
           event.preventDefault()
           this.focusFirstItem()
           break
-        case keyCodes.END:
-        case keyCodes.PAGE_DOWN:
+        case KeybindingEnum.END:
+        case KeybindingEnum.PAGE_DOWN:
           event.preventDefault()
           this.focusLastItem()
           break
-        case keyCodes.RETURN:
-        case keyCodes.ESC:
+        case KeybindingEnum.ENTER:
+        case KeybindingEnum.ESCAPE:
           event.preventDefault()
           this.hideListbox()
           this.$refs.button.focus()
@@ -127,7 +127,9 @@ export default Vue.extend({
         default: {
           // If the user typed a set of characters,
           // focus the option that matches those characters
+          console.log(key)
           const itemToFocus = this.findItemToFocus(key)
+          console.log(itemToFocus)
           if (itemToFocus) {
             this.focusItem(itemToFocus)
           }
@@ -140,11 +142,11 @@ export default Vue.extend({
      * It shows the listbox list on up/down key press.
      */
     checkShow(event: KeyboardEvent) {
-      const key = event.which || event.keyCode
+      const key = event.key
 
       switch (key) {
-        case keyCodes.UP:
-        case keyCodes.DOWN:
+        case KeybindingEnum.ARROW_UP:
+        case KeybindingEnum.ARROW_DOWN:
           event.preventDefault()
           this.showListbox()
           this.checkKeyDown(event)
@@ -181,9 +183,7 @@ export default Vue.extend({
      *
      * @param {String} key typed characters to check whether they match an option
      */
-    findItemToFocus(key) {
-      const character = String.fromCharCode(key)
-
+    findItemToFocus(key: KeyboardEvent['key']) {
       // If it's the first time the user is typing to find an option
       // set the search index to the active option
       if (!this.keysSoFar) {
@@ -192,7 +192,7 @@ export default Vue.extend({
         )
       }
 
-      this.keysSoFar += character
+      this.keysSoFar += key
       this.clearKeysSoFarAfterDelay()
 
       // Find the next matching element starting from the search index
