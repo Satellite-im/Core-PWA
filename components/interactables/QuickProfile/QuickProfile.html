@@ -7,14 +7,14 @@
   <div class="header avatar-wrapper">
     <InteractablesClose id="closeIcon" :action="close" />
     <!-- Remove class on UICircle when profile implemented and both are clickable -->
+    <!-- Clickable was removed temporarily -->
     <UiCircle
       id="userIcon"
-      :class="isMe ? 'clickable': ''"
+      :class="isMe ? '': ''"
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="45"
       :source="src"
-      @click="openProfile"
     />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
