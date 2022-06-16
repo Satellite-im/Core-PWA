@@ -4,9 +4,15 @@
 import Vue, { PropType } from 'vue'
 import keyCodes from './keyCodes'
 
-interface Options {
+interface SelectOption {
   value: string
   label: string
+}
+
+enum selectSizes {
+  small = 100,
+  medium = 150,
+  large = 200,
 }
 
 export default Vue.extend({
@@ -20,7 +26,7 @@ export default Vue.extend({
       required: true,
     },
     options: {
-      type: Array as PropType<Array<Options>>,
+      type: Array as PropType<Array<SelectOption>>,
       required: true,
     },
     placeholder: {
@@ -34,6 +40,10 @@ export default Vue.extend({
     disabled: {
       type: Boolean,
       default: false,
+    },
+    size: {
+      type: Number as PropType<selectSizes>,
+      default: selectSizes.medium,
     },
   },
   data: () => ({
