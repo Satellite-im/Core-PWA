@@ -502,7 +502,7 @@ describe('SearchQuery.default._hasAncestor', () => {
   let inst: any
 
   beforeEach(() => {
-    inst = new SearchQuery.default()
+    inst = new SearchQueryDefault()
   })
 
   test('0', () => {
