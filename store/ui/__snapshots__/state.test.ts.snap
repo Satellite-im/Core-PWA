@@ -51,7 +51,6 @@ Object {
     "callToAction": false,
     "changelog": false,
     "createServer": false,
-    "creategroup": false,
     "crop": false,
     "error": false,
     "errorNetwork": Object {
