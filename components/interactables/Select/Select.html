@@ -29,17 +29,10 @@
           :key="i"
           :disabled="option.disabled"
           @click="change(option)"
+          class="option"
+          :style="colorSupport ? 'background:' + renderBgGradient(option) : ''"
         >
-          <div
-            class="color"
-            v-if="colorSupport"
-            :style="{background: renderBgGradient(option)}"
-          >
-            {{ option.text }}
-          </div>
-          <span data-cy="custom-select-option-text" v-else
-            >{{ option.text }}</span
-          >
+          <span data-cy="custom-select-option-text">{{ option.text }}</span>
         </div>
       </UiSimpleScroll>
     </div>
