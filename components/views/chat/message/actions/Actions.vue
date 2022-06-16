@@ -12,6 +12,7 @@ import {
 import { mapState } from 'vuex'
 import { UIMessage } from '~/types/messaging'
 import { ModalWindows } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -57,10 +58,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+      isGroup: (state) => (state as RootState).conversation.type === 'group',
+    }),
     isEditable(): boolean {
       return (
-        this.message.from === this.accounts.details.textilePubkey &&
+        this.message.from === this.accounts.details?.textilePubkey &&
         !(this.message.type === 'glyph' || this.message.type === 'file')
       )
     },

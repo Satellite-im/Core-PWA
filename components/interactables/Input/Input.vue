@@ -101,11 +101,24 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    // if there is a :watchEnter true on the parent component, it will trigger the parent method on @watchEnter
+    watchEnter: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
       internalText: this.text ? this.text : '',
     }
+  },
+  watch: {
+    internalText(val) {
+      if (!val.trim().length) {
+        this.internalText = ''
+      }
+    },
   },
   mounted() {
     if (this.autofocus) {
@@ -113,6 +126,16 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method submitEnter
+     * @description emits @watchEnter in the parent if :watchEnter is true,
+     *   useful for allowing enter input on some inputs
+     */
+    submitEnter() {
+      if (this.watchEnter) {
+        this.$emit('watchEnter', this.watchEnter)
+      }
+    },
     /**
      * @method update
      * @description Emits the update event with updated internalText string

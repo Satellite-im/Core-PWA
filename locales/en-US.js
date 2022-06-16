@@ -8,6 +8,7 @@ export default {
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
     sidebar_search: 'Friends and Group Search\nComing Soon',
+    group_chat_search: 'Group Chat Search\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
@@ -26,6 +27,7 @@ export default {
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emotes: 'Emoji',
+    coming_soon: 'Coming Soon',
     glyphs: 'Glyphs',
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
@@ -113,7 +115,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit\nComing Soon',
+    edit: 'Coming Soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -662,6 +664,7 @@ export default {
         'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
+      status_error: 'Status cannot exceed {max} characters',
       reg_status: {
         unknown: 'Not registered',
         in_progress: "We're transporting your data to the Realm...",

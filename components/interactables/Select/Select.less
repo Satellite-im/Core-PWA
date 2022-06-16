@@ -28,9 +28,6 @@
     cursor: pointer;
     &:extend(.no-select);
     max-width: @full;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
   }
   .items {
     &:extend(.background-semitransparent-dark);
@@ -48,11 +45,10 @@
 
     &:extend(.second-layer);
     margin-top: @light-spacing;
-    div {
+    .option {
       height: @normal-spacing * 2;
       line-height: @normal-spacing * 2;
-      padding-left: @normal-spacing;
-      padding-right: @normal-spacing;
+      padding: 0 @light-spacing;
       cursor: pointer;
       max-width: @full;
       text-overflow: ellipsis;

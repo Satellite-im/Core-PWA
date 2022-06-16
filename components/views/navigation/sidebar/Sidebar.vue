@@ -55,14 +55,6 @@ export default Vue.extend({
       conversations: (state) =>
         (state as RootState).textile.conversations || [],
     }),
-    toggleView: {
-      get(): boolean {
-        return this.ui.showSidebarUsers
-      },
-      set(value: Boolean) {
-        this.$store.commit('ui/showSidebarUsers', value)
-      },
-    },
     usersAndGroups() {
       const combined = [...this.friends.all, ...this.groups.all]
       return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)

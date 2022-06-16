@@ -93,23 +93,13 @@
       </div>
     </UiComingSoon>
     <div
-      v-if="!isGroup"
-      class="control-button"
-      data-cy="toolbar-new-group"
-      v-tooltip.bottom="$t('pages.chat.new_group')"
-      @click="toggleModal('creategroup')"
-    >
-      <users-icon size="1x" class="control-icon" />
-    </div>
-    <div
-      v-else
+      v-if="isGroup"
       class="control-button"
       v-tooltip.bottom="$t('pages.chat.add_member')"
       @click="groupInvite"
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
-    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
     <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
@@ -138,13 +128,28 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <SearchInput
-      v-if="!$device.isMobile"
-      @search="handleSearch"
-      @change="handleChange"
-      :placeholder="$t('search.search')"
-      :searchRecommend="searchRecommend"
-    />
+    <template v-if="!$device.isMobile">
+      <UiComingSoon
+        v-if="isGroup"
+        :tooltipText="$t('coming_soon.group_chat_search')"
+        horizontal
+        tooltip-position="bottom"
+      >
+        <SearchInput
+          @search="handleSearch"
+          @change="handleChange"
+          :placeholder="$t('search.search')"
+          :searchRecommend="searchRecommend"
+        />
+      </UiComingSoon>
+      <SearchInput
+        v-else
+        @search="handleSearch"
+        @change="handleChange"
+        :placeholder="$t('search.search')"
+        :searchRecommend="searchRecommend"
+      />
+    </template>
     <SearchResult
       v-if="!$device.isMobile && searchQuery"
       :searchQuery="searchQuery"

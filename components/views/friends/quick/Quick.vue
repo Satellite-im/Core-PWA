@@ -2,9 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
-import { RootState } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
@@ -18,9 +16,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      showMedia: (state) => (state as RootState).ui.showMedia,
-    }),
     isInvalidName(): boolean {
       return (
         !this.name ||
