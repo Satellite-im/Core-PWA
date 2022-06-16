@@ -47,6 +47,20 @@ const webRTCActions = {
     await $Peer2Peer.node?.relay?.start()
 
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
+      const connectedParticipant = rootState.conversation.participants.find(
+        (participant: ConversationParticipant) =>
+          participant.peerId === peerId.toB58String(),
+      )
+      if (connectedParticipant) {
+        commit(
+          'conversation/updateParticipant',
+          {
+            peerId: connectedParticipant.peerId,
+            state: 'CONNECTED',
+          },
+          { root: true },
+        )
+      }
       const connectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
@@ -253,7 +267,7 @@ const webRTCActions = {
           })
       }
       rootState.friends.all
-        .filter((friend) => !!friend.peerId && friend.state !== 'online')
+        .filter((friend) => !!friend.peerId)
         .forEach((friend) => {
           $Peer2Peer.sendMessage(
             {
