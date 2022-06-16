@@ -16,6 +16,12 @@ export default Vue.extend({
       default: '',
     },
   },
+  data() {
+    return {
+      hasConversationBeenLoaded: false,
+      messages: [],
+    }
+  },
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
@@ -44,6 +50,23 @@ export default Vue.extend({
         this.webrtc.activeCall &&
         this.webrtc.activeCall.callId === this.conversation.id
       )
+    },
+  },
+  watch: {
+    'textile.conversationLoading'(newValue, oldValue) {
+      if (newValue !== oldValue && !newValue) {
+        this.$data.hasConversationBeenLoaded = true
+      }
+    },
+    'currentChat.messages'(newValue, oldValue) {
+      if (newValue !== oldValue && !this.$data.hasConversationBeenLoaded) {
+        this.$data.messages = this.currentChat.messages
+      }
+    },
+    'textile.messageLoading'(newValue, oldValue) {
+      if (newValue !== oldValue && !newValue) {
+        this.$data.messages = this.currentChat.messages
+      }
     },
   },
   beforeDestroy() {
