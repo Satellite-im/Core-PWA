@@ -64,6 +64,7 @@ export default Vue.extend({
       conversation: (state) => (state as RootState).conversation,
       groups: (state) => (state as RootState).groups,
       friends: (state) => (state as RootState).friends,
+      isGroup: (state) => (state as RootState).conversation.type === 'group',
     }),
     ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
     showSearchResult: {

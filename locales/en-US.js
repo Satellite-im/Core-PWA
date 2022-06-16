@@ -8,6 +8,7 @@ export default {
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
     sidebar_search: 'Friends and Group Search\nComing Soon',
+    group_chat_search: 'Group Chat Search\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
