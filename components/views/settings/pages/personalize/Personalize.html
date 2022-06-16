@@ -27,14 +27,13 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
-      <br />
-      <InteractablesSelect
-        :disabled="theme === ThemeNames.DEFAULT"
+      <InteractablesNewSelect
         v-model="flair"
-        size="small"
-        :options="flairs"
-        colorSupport
+        :options="flairOptions"
+        :label="$t('pages.settings.personalize.flair')"
+        :disabled="theme === ThemeNames.DEFAULT"
+        show-label
+        small
       />
     </div>
   </div>

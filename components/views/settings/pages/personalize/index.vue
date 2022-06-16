@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Themes, Flairs, FlairColors, ThemeNames } from '~/store/ui/types'
+import { SelectOption } from '~/types/ui/inputs'
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
@@ -17,8 +18,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    // React to v-model changes to echoCancellation and update
-    // the state accordingly with the mutation
     theme: {
       set(state) {
         const activeTheme = Themes.find((th) => {
@@ -34,20 +33,25 @@ export default Vue.extend({
         }
         this.$store.commit('ui/updateTheme', activeTheme)
       },
-      get() {
+      get(): string {
         return this.ui.theme.base.value
       },
     },
     flair: {
       set(state) {
-        const activeFlair = Flairs.find((fl) => {
-          return fl.value === state
+        const activeFlair = Flairs.find((f) => {
+          return f.text === state
         })
         this.$store.commit('ui/updateFlair', activeFlair)
       },
-      get() {
-        return this.ui.theme.flair.value
+      get(): string {
+        return this.ui.theme.flair.text
       },
+    },
+    flairOptions(): SelectOption[] {
+      return Flairs.map((f) => {
+        return { text: f.text, value: f.text, color: f.value[0] }
+      })
     },
   },
 })

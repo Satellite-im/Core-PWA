@@ -4,7 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 
-interface SelectOption {
+export interface SelectOption {
   value: string
   text: string
   color?: string
