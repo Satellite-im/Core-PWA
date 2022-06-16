@@ -37,6 +37,7 @@ import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import { MessageGroup } from '~/types/messaging'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import { Friend } from '~/types/ui/friends'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -86,7 +87,72 @@ export default {
     /* Log CSAM Consent Data for future ticket as Hogan requested */
     Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
     commit('setUserThreadData', record)
+
+    await dispatch('fetchFriendsLastMessage')
+
     return textilePublicKey
+  },
+  async fetchFriendsLastMessage({
+    rootState,
+    dispatch,
+  }: ActionsArguments<TextileState>) {
+    const friends = rootState.friends.all
+
+    if (!friends.length) {
+      return
+    }
+
+    await Promise.all(
+      friends.map((friend: Friend) =>
+        dispatch('fetchFriendLastMessage', { friend }),
+      ),
+    )
+  },
+  async fetchFriendLastMessage(
+    { state, commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    { friend }: { friend: Friend },
+  ) {
+    commit(
+      'friends/setLastMessageLoading',
+      {
+        friend,
+      },
+      {
+        root: true,
+      },
+    )
+
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    const query = { limit: 1, skip: 0 }
+
+    const messages = await $MailboxManager.getConversation({
+      friendIdentifier: friend.textilePubkey,
+      query,
+    })
+
+    let lastMessage = null
+
+    if (messages && messages.length) {
+      lastMessage = messages[messages.length - 1]
+    }
+
+    commit(
+      'friends/setLastMessage',
+      {
+        friend,
+        lastMessage,
+      },
+      {
+        root: true,
+      },
+    )
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -220,6 +286,16 @@ export default {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
+    // set up last message to friend
+    const friend = rootState.friends.all.find((fr) => fr.address === address)
+    if (friend && message) {
+      commit(
+        'friends/setLastMessage',
+        { friend, lastMessage: message },
+        { root: true },
+      )
+    }
+
     const isActiveConversation = state.activeConversation === address
 
     let oldGroupedMessages: MessageGroup = []

@@ -73,15 +73,14 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.user.address)?.lastMessage
-      return !!lastMessage
+      return !!this.user?.lastMessage
+    },
+    lastMessageLoading(): boolean {
+      return this.user.lastMessageLoading
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.user.address)
-      const lastMessage = conversation?.lastMessage
-
-      return lastMessage
-        ? this.getDescriptionFromMessage(lastMessage)
+      return this.hasMessaged
+        ? this.getDescriptionFromMessage(this.user?.lastMessage)
         : (this.$t('messaging.say_hi') as string)
     },
     src(): string {
@@ -105,19 +104,6 @@ export default Vue.extend({
     enableRTC(): boolean {
       return this.user.state === 'online'
     },
-  },
-  mounted() {
-    Array.from(
-      (this.$refs.subtitle as HTMLElement).getElementsByClassName(
-        'spoiler-container',
-      ),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
-      })
-    })
   },
   beforeDestroy() {
     // ensure the user can't click context menu options after a friend has been removed
